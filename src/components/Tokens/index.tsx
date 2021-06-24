@@ -1,0 +1,17 @@
+export { default as Inch } from "./1INCH";
+export { default as AAVE } from "./AAVE";
+export { default as BAL } from "./BAL";
+export { default as BAT } from "./BAT";
+export { default as BCH } from "./BCH";
+export { default as BTC } from "./BTC";
+export { default as COMP } from "./COMP";
+export { default as DASH } from "./DASH";
+export { default as DOT } from "./DOT";
+export { default as ETH } from "./ETH";
+export { default as EUR } from "./EUR";
+export { default as LINK } from "./LINK";
+export { default as PDEX } from "./PDEX";
+export { default as UNI } from "./UNI";
+export { default as USD } from "./USD";
+export { default as USDT } from "./USDT";
+export { default as ZAR } from "./ZAR";
