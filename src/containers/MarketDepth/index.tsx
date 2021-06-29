@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useMemo, useCallback} from 'react';
+import * as S from "./styles";
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Decimal } from '../../components/Decimal';
@@ -20,7 +21,7 @@ export const MarketDepthsComponent = () => {
     const currentMarket = useSelector(selectCurrentMarket);
     const loading = useSelector(selectOrderBookLoading);
 
-    const settings = React.useMemo(() => {
+    const settings = useMemo(() => {
         return {
               tooltip: true,
               dataKeyX: 'price',
@@ -28,7 +29,7 @@ export const MarketDepthsComponent = () => {
         };
     }, []);
 
-    const tipLayout = React.useCallback(({ volume, price, cumulativeVolume, cumulativePrice }) => {
+    const tipLayout = useCallback(({ volume, price, cumulativeVolume, cumulativePrice }) => {
         const [askCurrency, bidCurrency] = [currentMarket.base_unit.toUpperCase(), currentMarket.quote_unit.toUpperCase()];
 
         return (
@@ -41,7 +42,7 @@ export const MarketDepthsComponent = () => {
         );
     }, [currentMarket]);
 
-    const cumulative = React.useCallback((data, type) => {
+    const cumulative = useCallback((data, type) => {
         let cumulativeVolumeData = 0;
         let cumulativePriceData = 0;
 
@@ -64,13 +65,13 @@ export const MarketDepthsComponent = () => {
         });
     }, [currentMarket]);
 
-    const convertToCumulative = React.useCallback((data, type) => {
+    const convertToCumulative = useCallback((data, type) => {
         const cumulativeData = cumulative(data, type);
 
         return type === 'bid' ? cumulativeData.sort((a, b) => b.bid - a.bid) : cumulativeData.sort((a, b) => a.ask - b.ask);
     }, []);
 
-    const convertToDepthFormat = React.useMemo(() => {
+    const convertToDepthFormat = useMemo(() => {
         const resultLength = asksItems.length > bidsItems.length ? bidsItems.length : asksItems.length;
 
         const asks = asksItems.slice(0, resultLength);
@@ -82,7 +83,7 @@ export const MarketDepthsComponent = () => {
         return [...bidsVolume, ...asksVolume];
     }, [asksItems, bidsItems]);
 
-    const renderMarketDepths = React.useMemo(() => {
+    const renderMarketDepths = useMemo(() => {
         return (
             <MarketDepths
                 settings={settings}
@@ -98,8 +99,8 @@ export const MarketDepthsComponent = () => {
     }
 
     return (
-        <div className="cr-market-depth">
+        <S.Wrapper>
             {renderMarketDepths}
-        </div>
+        </S.Wrapper>
     );
 };

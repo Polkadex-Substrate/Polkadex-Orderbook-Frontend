@@ -1,4 +1,6 @@
 import { WrapperIcon } from "src/components/CustomIcon/styles";
+import { Wrapper as WrapperButton } from "src/components/CustomButton/styles"
+
 import styled, { css } from "styled-components";
 
 import { Props } from "./types";
@@ -24,7 +26,7 @@ export const ChartHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 `;
 
 export const ChartHeaderNav = styled.div`
@@ -60,6 +62,18 @@ export const ChartHeaderOptions = styled.div`
     }
   }
 `;
+
+export const ChartHeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  ${WrapperButton} {
+    :first-child{
+      margin-right: 0.5rem;
+    }
+  }
+`
+
 export const ChartContent = styled.div`
-  height: 100%;
+  height: 90%;
 `;

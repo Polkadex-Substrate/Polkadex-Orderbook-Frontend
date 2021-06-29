@@ -4,43 +4,42 @@ import { Props } from "./types";
 
 const modifier = {
   xsmall: () => css`
-    max-width: 2rem;
-    max-height: 2rem;
+    width: 2rem;
+    height: 2rem;
     padding: 0.4rem;
   `,
   small: () => css`
-    max-width: 2.5rem;
-    max-height: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0.5rem;
   `,
   normal: () => css`
-    max-width: 3rem;
-    max-height: 3rem;
+    width: 3rem;
+    height: 3rem;
     padding: 0.6rem;
   `,
   medium: () => css`
-    max-width: 3.5rem;
-    max-height: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     padding: 0.5rem;
   `,
   large: () => css`
-    max-width: 4rem;
-    max-height: 4rem;
-    padding: 0.1rem;
+    width: 4rem;
+    height: 4rem;
+    padding: 0.8rem;
   `,
   xlarge: () => css`
-    max-width: 4.5rem;
-    max-height: 4.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
     padding: 0.9rem;
   `,
 };
 
 export const Wrapper = styled.div<Partial<Props>>`
-  ${({ size, background }) => css`
+  ${({ theme }) => css`
     display: flex;
     align-items: center;
     justify-content: center;
-    ${modifier[size]};
   `}
 `;
 
@@ -67,11 +66,13 @@ export const WrapperIcon = styled(Wrapper)<Partial<Props>>`
   `}
 `;
 export const WrapperToken = styled(Wrapper)`
-  ${({ theme, background }) => css`
+  ${({ theme, background, size }) => css`
     background: ${theme.colors[background]};
     border-radius: ${theme.border.radius.large};
-    svg {
-      fill: ${theme.colors.text};
+    ${modifier[size]};
+    img {
+      width:100%;
+      height: 100%;
     }
   `}
 `;

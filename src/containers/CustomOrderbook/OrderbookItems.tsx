@@ -98,7 +98,6 @@ export const OrderbookItems = (props: TableProps) => {
     isSell,
     rowBackgroundColor = 'rgba(184, 233, 245, 0.7)',
   } = props;
-
   const handleFilter = useCallback((item: Filter) => {
     if (!item.filter) {
         setResultData(props.data);
@@ -133,8 +132,8 @@ export const OrderbookItems = (props: TableProps) => {
     const renderRowCells = useCallback((row: CellData[],isSell:boolean) => {
       return row && row.length &&
               <>
-                <span>{row[0]}</span> 
-                <S.OrderbookItemWrapper>{row[1]}</S.OrderbookItemWrapper>
+                <S.OrderbookPrice>{row[0]}</S.OrderbookPrice> 
+                <S.OrderbookAmount isSell={isSell}>{row[1]}</S.OrderbookAmount>
                 <S.OrderbookItemWrapper>{row[2]}</S.OrderbookItemWrapper>
             </>
 
@@ -144,7 +143,6 @@ export const OrderbookItems = (props: TableProps) => {
       const dataToBeMapped = resultData || rows;
       const rowElements = dataToBeMapped.map((r, i) => {
           const rowKey = String((rowKeyIndexValue !== undefined) ? r[rowKeyIndexValue] : i);
-
           return (
             <S.OrderbookItem     
               key={rowKey}
@@ -155,35 +153,37 @@ export const OrderbookItems = (props: TableProps) => {
           );
       });
 
-      const renderRowBackground = useCallback((i: number) => {
-        const rowBackgroundResult = rowBackground ? rowBackground(i) : {};
-        const style = {
-            ...rowBackgroundResult,
-            backgroundColor: rowBackgroundColor,
-        };
+    return (
+        <>
+        {rowElements}
+        </>
+    );
+}, [handleSelect, renderRowCells, resultData, selectedRowKey]);
 
-        return (rowBackground
-            ? <span key={i} style={style} className="cr-table-background__row" />
-            : null);
+    const renderRowBackground = useCallback((i: number) => {
+      const rowBackgroundResult = rowBackground ? rowBackground(i) : {};
+      const style = {
+          ...rowBackgroundResult,
+          background: rowBackgroundColor,
+      };
+
+      return (rowBackground
+          ? <S.VolumeSpan key={i} style={style} className="cr-table-background__row" />
+          : null);
     }, [rowBackground, rowBackgroundColor]);
 
-      const renderBackground = useCallback((rows: CellData[][]) => {
-        const dataToBeMapped = resultData || rows;
-        const renderBackgroundRow = (r: CellData[], i: number) => renderRowBackground(i);
 
-        return (
-            <S.OrderbookItem>
-                {rowBackground && dataToBeMapped.map(renderBackgroundRow)}
-            </S.OrderbookItem>
-        );
+    const renderBackground = useCallback((rows: CellData[][]) => {
+    const dataToBeMapped = resultData || rows;
+    const renderBackgroundRow = (r: CellData[], i: number) => renderRowBackground(i);
+
+    
+    return (
+        <S.OrderbookVolume >
+            {rowBackground && dataToBeMapped.map(renderBackgroundRow)}
+        </S.OrderbookVolume>
+    );
     }, [resultData, side, renderRowBackground, rowBackground]);
-
-      return (
-          <>
-          {rowElements}
-          </>
-      );
-  }, [handleSelect, renderRowCells, resultData, selectedRowKey]);
 
     useEffect(() => {
       if (props.filters) {
@@ -204,6 +204,7 @@ export const OrderbookItems = (props: TableProps) => {
     return (
       <>
         {renderBody(data, rowKeyIndex)}
+        {renderBackground(data)}
       </>
     )
   }

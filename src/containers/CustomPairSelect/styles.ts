@@ -36,7 +36,7 @@ export const HeaderWrapper = styled.div`
   }
 `;
 export const HeaderContainer = styled.div`
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
   ${WrapperIcon} {
     margin-left: 0.5rem;
   }

@@ -87,6 +87,7 @@ export class OrderbookTableCol extends React.PureComponent<OrderBookProps> {
         <OrderbookItems
           data={data}
           side={side}
+          rowBackground={getRowWidth}
           rowBackgroundColor={rowBackgroundColor}
           onSelect={onSelect}
           loading={loading}

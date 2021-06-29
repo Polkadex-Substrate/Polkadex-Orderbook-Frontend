@@ -4,15 +4,14 @@ import * as ReactGA from 'react-ga';
 import { IntlProvider } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Router } from 'react-router';
+import { ThemeProvider } from "styled-components";
 import { gaTrackerKey } from './api';
 import { ErrorWrapper } from './containers';
 import { useRangerConnectFetch, useReduxSelector, useSetMobileDevice } from './hooks';
 import * as mobileTranslations from './mobile/translations';
 import { selectCurrentColorTheme, selectCurrentLanguage, selectMobileDeviceState } from './modules';
 import { languageMap } from './translations';
-import { GlobalStyles } from "src/styles";
-import { ThemeProvider } from "styled-components";
-import { defaultThemes } from "src/styles";
+import { GlobalStyles, defaultThemes } from "src/styles";
 
 const gaKey = gaTrackerKey();
 const browserHistory = createBrowserHistory();

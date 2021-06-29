@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { CellData } from 'src/components/Table';
-import { CustomSkeleton } from "src/components"
+import { CustomSkeleton, mapValues } from "src/components"
 import * as S from "./styles"
 import { OrderbookTableCol } from "./OrderbookTableCol"
 export interface CombinedOrderBookProps {
@@ -102,6 +102,7 @@ public componentWillReceiveProps(next: CombinedOrderBookProps) {
       noDataBids,
       noDataMessage,
   } = this.props;
+
   return (
     <> 
     {loading ? 
@@ -170,7 +171,7 @@ const LoadingContainer = () => {
 }
 const LoadingItems = () => {
   return (
-    <S.OrderbookItem>
+    <S.OrderbookItem style={{marginBottom: '0.8rem'}}>
         <CustomSkeleton height="1.5rem" />
         <CustomSkeleton height="1.5rem" />
         <CustomSkeleton height="1.5rem"/>

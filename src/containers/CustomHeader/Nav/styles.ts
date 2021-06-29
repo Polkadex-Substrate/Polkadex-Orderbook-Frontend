@@ -1,5 +1,6 @@
 import { WrapperIcon } from "src/components/CustomIcon/styles";
 import styled, { css } from "styled-components";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     margin-right: 0.5rem;

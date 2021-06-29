@@ -13,6 +13,8 @@ export const Wrapper = styled.nav`
   justify-content: space-between;
   height: -webkit-fill-available;
   min-height: 100vh;
+  position: sticky;
+  top: 0;
 `;
 
 export const Header = styled.div`
@@ -168,13 +170,17 @@ export const LanguageNameWrapper = styled.a<StyleProps>`
   display: flex;
   align-items: center;
   cursor: pointer;
-  img {
-    margin-right: 0.5rem;
-    width: 2rem;
-    height: 2rem;
-  }
-  span {
-    margin-right: 0.5rem;
-  }
+    img {
+      margin-right: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
+    span {
+      margin-right: 0.5rem;
+    }
+    :hover {
+      opacity: ${active ? 1 : 0.8};
+      transition: ${theme.transition.default};
+    }
   `}
 `;

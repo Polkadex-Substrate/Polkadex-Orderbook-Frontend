@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Icons from "src/components/Icons";
-import * as Tokens from "src/components/Tokens";
+import * as Tokens from "src/assets/tokens";
 
 import * as S from "./styles";
 import { ITokenProps, Props } from "./types";
@@ -33,10 +33,11 @@ export const CustomIconToken = ({
   background = "secondaryBackground",
   ...props
 }: ITokenProps) => {
-  const Icon = icon ? Tokens[icon.toUpperCase()] : Tokens.PDEX;
+  const iconToken = icon ? Tokens[icon.toUpperCase()] : Tokens.PDEX;
+
   return (
     <S.WrapperToken size={size} background={background} {...props}>
-      <Icon />
+      <img src={iconToken} alt={`Token ${icon} icon`} />
     </S.WrapperToken>
   );
 };

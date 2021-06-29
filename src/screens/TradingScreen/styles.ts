@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.main`
   display: flex;
   min-height: 100vh;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   max-width: 192rem;
   margin: 0 auto;
   ${({ theme }) => css`

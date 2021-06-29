@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import * as React from 'react';
+import * as S from "./styles";
 
 // import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, TooltipPayload, XAxis, YAxis } from 'recharts';
 
@@ -14,7 +15,7 @@ import { TooltipPayload } from 'recharts/lib/numberAxis/Funnel';
 
 import { colors } from '../../constants';
 import { convertRgbToHex, getStylesValueByKey } from '../../helpers';
-
+import { defaultThemes } from "src/styles"
 export interface KeyValuePairMarketDepths {
     x: string | number;
     amt?: number;
@@ -138,27 +139,28 @@ export interface MarketDepthsSettings {
 
 const getColorSettings = (colorTheme?: string) => {
     if (colorTheme === 'light') {
+        
         return {
-            strokeAreaAskColor: colors.light.depth.strokeAreaAsk,
-            strokeAreaBidColor: colors.light.depth.strokeAreaBid,
-            strokeAxisColor: colors.light.depth.strokeAxis,
-            strokeGridColor: colors.light.depth.strokeGrid,
-            fillAreaAskColor: colors.light.depth.fillAreaAsk,
-            fillAreaBidColor: colors.light.depth.fillAreaBid,
-            gridBackgroundStartColor: colors.light.depth.gridBackgroundStart,
-            gridBackgroundEndColor: colors.light.depth.gridBackgroundEnd,
+            strokeAreaAskColor: defaultThemes.light.colors.primary,
+            strokeAreaBidColor: defaultThemes.light.colors.green,
+            strokeAxisColor: defaultThemes.light.colors.text,
+            strokeGridColor: defaultThemes.light.colors.secondaryBackground,
+            fillAreaAskColor: defaultThemes.light.colors.primary,
+            fillAreaBidColor: defaultThemes.light.colors.green,
+            gridBackgroundStartColor: defaultThemes.light.colors.secondaryBackground,
+            gridBackgroundEndColor: defaultThemes.light.colors.secondaryBackground,
         };
     }
 
     return {
-        strokeAreaAskColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.strokeAreaAsk)),
-        strokeAreaBidColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.strokeAreaBid)),
-        strokeAxisColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.strokeAxis)),
-        strokeGridColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.strokeGrid)),
-        fillAreaAskColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.fillAreaAsk)),
-        fillAreaBidColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.fillAreaBid)),
-        gridBackgroundStartColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.gridBackgroundStart)),
-        gridBackgroundEndColor: convertRgbToHex(getStylesValueByKey(colors.dark.depth.gridBackgroundEnd)),
+        strokeAreaAskColor: defaultThemes.dark.colors.primary,
+        strokeAreaBidColor: defaultThemes.dark.colors.green,
+        strokeAxisColor: defaultThemes.dark.colors.text,
+        strokeGridColor: defaultThemes.dark.colors.secondaryBackground,
+        fillAreaAskColor: defaultThemes.dark.colors.primary,
+        fillAreaBidColor: defaultThemes.dark.colors.green,
+        gridBackgroundStartColor: defaultThemes.dark.colors.secondaryBackground,
+        gridBackgroundEndColor: defaultThemes.dark.colors.secondaryBackground,
     };
 };
 
@@ -246,7 +248,7 @@ export class MarketDepths extends React.PureComponent<MarketDepthsProps> {
         const colorSettings = getColorSettings(colorTheme);
 
         return (
-            <div className={cx}>
+            <S.Wrapper>
                 <ResponsiveContainer width="100%" height={settings.height}>
                     <AreaChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
                         {this.defineGradient(colorSettings, gradientHide)}
@@ -287,7 +289,7 @@ export class MarketDepths extends React.PureComponent<MarketDepthsProps> {
                         />
                     </AreaChart>
                 </ResponsiveContainer>
-            </div>
+            </S.Wrapper>
         );
     }
 

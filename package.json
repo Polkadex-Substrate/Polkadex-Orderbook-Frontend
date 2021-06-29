@@ -141,7 +141,6 @@
         "eslint-import-resolver-webpack": "^0.12.2",
         "eslint-plugin-import": "^2.22.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "file-loader": "^1.1.11",
         "fork-ts-checker-webpack-plugin": "^5.1.0",
         "header-case-normalizer": "1.0.3",
         "html-webpack-plugin": "^4.3.0",

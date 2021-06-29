@@ -22,10 +22,10 @@ export const defaultConfig: Config = {
     usernameEnabled: false,
     gaTrackerKey: '',
     minutesUntilAutoLogout: '5',
-    msAlertDisplayTime: '5000',
-    msPricesUpdates: '1000',
+    msAlertDisplayTime: '15000',
+    msPricesUpdates: '10000',
     sessionCheckInterval: '15000',
-    balancesFetchInterval: '3000',
+    balancesFetchInterval: '30000',
     passwordEntropyStep: '14',
     storage: {
         defaultStorageLimit: '50',

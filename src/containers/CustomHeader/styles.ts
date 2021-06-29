@@ -35,11 +35,15 @@ const itemModifier = {
 export const Wrapper = styled.header`
   grid-area: Header;
   display: grid;
-  grid-template-columns: min-content min-content auto min-content;
+  grid-template-columns: min-content minmax(70rem, 127rem) auto;
   grid-gap: 2rem;
   align-items: center;
 `;
-export const Container = styled.div``;
+
+export const Container = styled.div`
+  :last-child {
+    justify-self: flex-end;
+  }`;
 
 // Information Component
 export const InformationWrapper = styled.div`

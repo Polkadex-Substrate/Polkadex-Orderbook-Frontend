@@ -121,7 +121,7 @@ export class OpenOrdersComponent extends React.Component<Props> {
             <div>{filled}%</div>
             <div>
               <button type="button" onClick={()=> this.handleCancel(index)} >
-                <CustomIcon icon="Close" background="primary" />
+                <CustomIcon icon="Close"  background="none" size="small"/>
               </button>
             </div>
           </S.ContentItem>

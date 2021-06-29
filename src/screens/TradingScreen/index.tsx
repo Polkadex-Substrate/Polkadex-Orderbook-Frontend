@@ -8,6 +8,7 @@ import { IntlProps } from 'src';
 import { incrementalOrderBook } from 'src/api';
 import { Decimal } from 'src/components';
 import "src/containers/TradingChart/TradingChart.pcss"
+import "src/containers/MarketDepth/MarketDepth.pcss"
 import {
     CustomGraph,
     CustomHeader,

@@ -1,19 +1,10 @@
 import * as React from 'react';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
-import { RouterProps } from 'react-router';
 import { compose } from 'redux';
-import {
-  CustomButton,
-  CustomDropdown,
-  CustomIcon,
-  CustomIconToken,
-  CustomSkeleton,
-  CustomTokenSearch,
-} from "src/components";
-import Nav from "src/containers/CustomHeader/Nav";
+import { CustomButton } from "src/components";
+import Nav from "./Nav";
 
 import {
-  Market,
   RootState,
   selectCurrentColorTheme,
   selectCurrentMarket,
@@ -28,35 +19,7 @@ import * as S from "./styles";
 import { CustomPairSelect } from 'src/containers';
 import { CustomToolbar } from './toolbar';
 
-import { InformationItemProps, layoutProps, PairProps } from "./types";
-import useCurrentMarket from "./useCurrentMarket";
-
-
-interface ReduxProps {
-  currentMarket: Market | undefined;
-  colorTheme: string;
-  mobileWallet: string;
-  sidebarOpened: boolean;
-  marketSelectorOpened: boolean;
-}
-
-interface DispatchProps {
-  setMobileWalletUi: typeof setMobileWalletUi;
-  toggleSidebar: typeof toggleSidebar;
-  toggleMarketSelector: typeof toggleMarketSelector;
-}
-
-interface LocationProps extends RouterProps {
-  location: {
-      pathname: string;
-  };
-}
-type CustomProps = {
-  activateMarkets?: ()=> void;
-  activateMarketsStatus: boolean;
-}
-
-type Props = ReduxProps & DispatchProps & LocationProps & CustomProps;
+import { ReduxProps, DispatchProps, Props } from "./types";
 
 class Header extends React.Component<Props> {
   public render() {
@@ -71,9 +34,6 @@ class Header extends React.Component<Props> {
           onClick={activateMarkets}
           isActive={activateMarketsStatus}
         />
-      </S.Container>
-      <S.Container>
-        <CustomPairSelect baseUnit={currentMarket.base_unit} quoteUnit={currentMarket.quote_unit} />
       </S.Container>
       <S.Container>
         <CustomToolbar/>

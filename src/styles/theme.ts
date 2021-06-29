@@ -50,6 +50,8 @@ const defaultTheme = {
     transparent: "transparent",
     none: "none",
     green: "#0CA564",
+    gradientGreen: "linear-gradient(90deg, #0CA564 0.04%, rgba(2, 192, 118, 0.3) 99.92%)",
+    gradientRed: "linear-gradient(90deg, #E6007A 0.04%, rgba(230, 0, 225, 0.3) 92.26%)",
     white: "#ffffff",
     black: "#000000",
   },
