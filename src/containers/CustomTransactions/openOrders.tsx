@@ -5,6 +5,7 @@ import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { IntlProps } from 'src';
 import { localeDate, setTradeColor } from 'src/helpers';
 import { CustomDropdown, Spinner, CustomIcon, CustomIconToken, CustomButton, Decimal, CellData, Table, CustomSkeleton  } from "src/components";
+import {CardProps} from "./types"
 
 import {
     Market,
@@ -61,12 +62,12 @@ export class OpenOrdersComponent extends React.Component<Props> {
       <>
       {list ? <S.OpenOrders> 
          <S.ContentHeader>
-              <span>Date</span>
+              <span></span>
               <span>Pair</span>
-              <span>Side</span>
-              <span>Amount {this.currentMarketData().currentAskUnit}</span>
-              <span>Price {this.currentMarketData().currentBidUnit}</span>
-              <span>Total {this.currentMarketData().currentAskUnit}</span>
+              <span>Date</span>
+              <span>Amount</span>
+              <span>Price</span>
+              <span>Total</span>
               <span>Filled</span>
               <span></span>
             </S.ContentHeader>
@@ -81,8 +82,8 @@ export class OpenOrdersComponent extends React.Component<Props> {
     )
   }
   private currentMarketData = () => {
-     const currentAskUnit = this.props.currentMarket ? this.props.currentMarket.base_unit.toUpperCase() : '';
-     const currentBidUnit = this.props.currentMarket ? this.props.currentMarket.quote_unit.toUpperCase() : '';
+    const currentAskUnit = this.props.currentMarket ? this.props.currentMarket.base_unit.toUpperCase() : '';
+    const currentBidUnit = this.props.currentMarket ? this.props.currentMarket.quote_unit.toUpperCase() : '';
     return {
       currentAskUnit,
       currentBidUnit
@@ -101,30 +102,18 @@ export class OpenOrdersComponent extends React.Component<Props> {
         const priceFixed = currentMarket ? currentMarket.price_precision : 0;
         const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
         const orderSide = side === 'buy'
-        return (
-          <S.ContentItem key={id}>
-            <S.ContentFlex>
-              <CustomIcon icon="Clock" background="transparent" />
-              {localeDate(created_at, 'fullDate')}
-            </S.ContentFlex>
-            <S.ContentFlex>
-              <CustomIconToken icon="BTC" />
-              {this.currentMarketData().currentAskUnit} / {this.currentMarketData().currentBidUnit}
-            </S.ContentFlex>
-            <S.ContentFlex>
-              <CustomIcon icon={orderSide ? 'ArrowVerticalTop' : 'ArrowVerticalBottom'} background={orderSide ? 'green' : 'primary'} size="xsmall" />
-              {side.toUpperCase()}
-            </S.ContentFlex>
-            <div>{Decimal.format(price, priceFixed, ',')} </div>
-            <div>{Decimal.format(total, amountFixed, ',')} </div>
-            <div>{Decimal.format(remainingAmount, amountFixed, ',')} </div>
-            <div>{filled}%</div>
-            <div>
-              <button type="button" onClick={()=> this.handleCancel(index)} >
-                <CustomIcon icon="Close"  background="none" size="small"/>
-              </button>
-            </div>
-          </S.ContentItem>
+        return ( <Card 
+          key={id} 
+          date={localeDate(created_at, 'fullDate')} 
+          baseUnit={this.currentMarketData().currentAskUnit} 
+          quoteUnit={this.currentMarketData().currentBidUnit}
+          side={side.toUpperCase()}
+          isSell={orderSide}
+          price={Decimal.format(price, priceFixed, ',')}
+          amount={Decimal.format(total, amountFixed, ',')}
+          total={Decimal.format(remainingAmount, amountFixed, ',')}
+          filled={filled}
+          cancel={() => this.handleCancel(index)}/>
         )
     });
 };
@@ -177,14 +166,65 @@ const LoadingTransactions = () => {
 }
 const LoadingTransactionItem = () => {
   return (
-    <S.ContentItem >
-    <div> <CustomSkeleton width='14rem' height="2rem"  style={{margin: 3}}/> </div>
-    <S.ContentFlex> <CustomSkeleton width='5rem' height="2rem" style={{marginRight: 10}}/> <CustomSkeleton width='5rem' height="2rem"  style={{margin: 3}}/>  </S.ContentFlex>
-    <div> <CustomSkeleton width='5rem' height="2rem"  style={{margin: 3}}/> </div>
-    <div> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </div>
-    <div> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </div>
-    <div> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </div>
-    <div> <CustomSkeleton width='12rem' height="2rem" style={{margin: 3}}/> </div>
-  </S.ContentItem>
+    <S.CardWrapper >
+      <S.CardContainer> 
+        <CustomSkeleton width='14rem' height="2rem"  style={{margin: 3}}/> 
+      </S.CardContainer>
+      <S.CardFlex> 
+        <CustomSkeleton width='5rem' height="2rem" style={{marginRight: 10}}/> <CustomSkeleton width='5rem' height="2rem"  style={{margin: 3}}/>  
+      </S.CardFlex>
+      <S.CardContainer> <CustomSkeleton width='5rem' height="2rem"  style={{margin: 3}}/> </S.CardContainer>
+      <S.CardContainer> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </S.CardContainer>
+      <S.CardContainer> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </S.CardContainer>
+      <S.CardContainer> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </S.CardContainer>
+      <S.CardContainer> <CustomSkeleton width='12rem' height="2rem" style={{margin: 3}}/> </S.CardContainer>
+  </S.CardWrapper>
+  )
+}
+
+const Card = ({
+date, 
+baseUnit, 
+quoteUnit,
+side,
+isSell,
+price,
+amount,
+total,
+filled,
+cancel
+}:CardProps) => {
+  return (
+    <S.CardWrapper>
+      <S.CardSideWrapper isSell={isSell}>
+        <span>{side}</span>
+      </S.CardSideWrapper>
+      <S.CardFlex>
+        <S.CardPair>
+          <CustomIconToken icon={baseUnit} background="secondaryBackgroundSolid"/>
+          <CustomIconToken icon={quoteUnit} background="secondaryBackgroundSolid" size="xsmall"/>
+        </S.CardPair>
+        <span>{baseUnit}/<strong>{quoteUnit}</strong></span>
+      </S.CardFlex>
+      <S.CardContainer>
+        <span>{date}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{price}{quoteUnit}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{amount}{baseUnit}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{total}{quoteUnit}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{filled}%</span>
+        <S.CardFilled isSell={isSell}/>
+      </S.CardContainer>
+      <S.CardContainer>
+        <CustomButton title='Cancel' icon={{icon:'Close', size:'xsmall'}} size='Small' onClick={cancel} />
+      </S.CardContainer>
+  </S.CardWrapper>
   )
 }

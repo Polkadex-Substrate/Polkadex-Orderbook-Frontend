@@ -8,7 +8,6 @@ export const PairWrapper = styled.a`
   display: flex;
   flex-direction: row;
   align-items: center;
-  cursor: pointer;
 `;
 
 export const PairItemWrapper = styled.div``;

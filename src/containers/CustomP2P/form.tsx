@@ -6,7 +6,8 @@ import {
   CustomDropdown,
   CustomIcon,
   CustomOrderInputPolkadex,
-  PercentageButton
+  PercentageButton,
+  CustomAmountInputPolkadex
 } from "src/components";
 import { AMOUNT_PERCENTAGE_ARRAY } from 'src/constants';
 
@@ -60,7 +61,7 @@ export interface OrderFormProps {
      * Amount of money in a wallet
      */
     available?: number;
-    availableQuote?:number;
+    availableQuote?: number;
     /**
      * Precision of amount, total, available, fee value
      */
@@ -88,7 +89,7 @@ export interface OrderFormProps {
     handleAmountChange: (amount: string, type: FormType) => void;
     handleChangeAmountByButton: (value: number, orderType: string | React.ReactNode, price: string, type: string) => void;
     translate: (id: string, value?: any) => string;
-    userLoggedIn: boolean
+    userLoggedIn: boolean;
 }
 
 interface OrderFormState {
@@ -100,7 +101,7 @@ interface OrderFormState {
     priceFocused: boolean;
 }
 
-export class SellForm extends React.PureComponent<OrderFormProps, OrderFormState> {
+export class Form extends React.PureComponent<OrderFormProps, OrderFormState> {
   constructor(props: OrderFormProps) {
     super(props);
     this.state = {
@@ -142,8 +143,8 @@ public componentWillReceiveProps(next: OrderFormProps) {
       className,
       from,
       to,
-      userLoggedIn,
       available,
+      userLoggedIn,
       availableQuote,
       currentMarketAskPrecision,
       currentMarketBidPrecision,
@@ -166,81 +167,81 @@ public componentWillReceiveProps(next: OrderFormProps) {
   const total = orderType === 'Market'
       ? totalPrice : safeAmount * (Number(price) || 0);
 
-  const availablePrecision = type === 'buy' ? currentMarketBidPrecision : currentMarketAskPrecision;
-  const availableCurrency = type === 'buy' ? from : to;
+  const marketOrderType = type === 'buy'
+  const availablePrecision = marketOrderType ? currentMarketBidPrecision : currentMarketAskPrecision;
+  const availableCurrency = marketOrderType ? from : to;
 
   const priceText = this.props.translate('page.body.trade.header.newOrder.content.price');
   const amountText = this.props.translate('page.body.trade.header.newOrder.content.amount');
   const submitButtonText = translate(`page.body.trade.header.newOrder.content.tabs.${type}`);
+
     return (
       <form onSubmit={()=> this.handleEnterPress}> 
-         <div style={{width: '100%', marginBottom: '1rem'}}>
-           <CustomDropdown direction="bottom" isOpacity title={this.renderDropdownTitle()}>
-            <button type="button" onClick={()=> this.handleOrderTypeChange(0)}>
-              Limit
-            </button>
-            <button type="button" onClick={()=> this.handleOrderTypeChange(1)}>
-              Market
-            </button>
-          </CustomDropdown>
-        </div>
         <CustomOrderInputPolkadex 
           background="primaryBackground" 
-          placeholder={amountText}
-          value={amount || ''}
-          name="sell"
-          label="I will sell"
-          onChange={(e) => this.handleAmountChange(e.target.value)}
-          amount= {available ? Decimal.format(available, currentMarketAskPrecision, ',') : ''}
-          //! Check OrderForm - Focus & Wrong onChange
-          token={to.toUpperCase()}>
-          {userLoggedIn && <S.ActionsPercent>{
+          name={marketOrderType ? 'buy' : 'sell'}
+          label={`I will ${marketOrderType ? 'pay' : 'sell'}`}
+          placeholder={marketOrderType ? priceText : amountText}
+          value={ marketOrderType ? Decimal.format(total, currentMarketAskPrecision + currentMarketBidPrecision, ',') : amount || ''}
+          onChange={ (e) => this.handleAmountChange(e.target.value) }
+          amount= { available ? Decimal.format(available, availablePrecision, ',') : '' } 
+          token={marketOrderType ? from.toUpperCase() : to.toUpperCase()} 
+          reset={!marketOrderType ? ()=> this.handleChangeAmountByButton(0) : null}
+          >
+            { !marketOrderType && userLoggedIn && <S.ActionsPercent>{
               AMOUNT_PERCENTAGE_ARRAY.map((value, index) => 
               <PercentageButton
                   value={value}
                   key={index}
                   onClick={this.handleChangeAmountByButton}
               />)
-          }</S.ActionsPercent>}
-          </CustomOrderInputPolkadex>
-        <S.ContentChange>  
-          <button type="button">
-            <CustomIcon icon="Swap" background="primaryBackground" size="large" />
-          </button>
-        </S.ContentChange>
-          <CustomOrderInputPolkadex 
-            background="primaryBackground" 
-            placeholder={priceText}
-            value={price || ''}
-            onChange={(e) => this.handlePriceChange(e.target.value)}
-            //! Check OrderForm - Focus & Wrong onChange
-            token={from.toUpperCase()} 
-            amount={availableQuote ? Decimal.format(availableQuote, currentMarketAskPrecision, ',') : ''}
-            name='amount'
-            label="Price"
-            />
-        
+            }</S.ActionsPercent>}
+        </CustomOrderInputPolkadex> 
+        <CustomAmountInputPolkadex 
+          background="primaryBackground" 
+          name="amount" 
+          label="Price" 
+          from={from.toUpperCase()} 
+          to={to.toUpperCase()} 
+          value={price || 0.0000000}          
+          action={()=> console.log("testing")}
+          placeholder={priceText}
+          onChange={(e) => this.handlePriceChange(e.target.value)} 
+        />
+
+        <CustomOrderInputPolkadex 
+          background="primaryBackground" 
+          name="receive"
+          label="I will receive"
+          placeholder='Receive Amount'
+          value={marketOrderType ? amount || '' : `${orderType === 'Market' ? '~' : ''} ${Decimal.format(total, currentMarketBidPrecision + currentMarketAskPrecision, ',')}`} 
+          amount={availableQuote ? Decimal.format(availableQuote, currentMarketAskPrecision, ',') : '' }
+          disabled 
+          readOnly
+          token={marketOrderType ? to.toUpperCase() : from.toUpperCase()} 
+         >
+            {marketOrderType && userLoggedIn && <S.ActionsPercent>{
+              AMOUNT_PERCENTAGE_ARRAY.map((value, index) => 
+              <PercentageButton
+                  value={value}
+                  key={index}
+                  onClick={this.handleChangeAmountByButton}
+              />)
+            }</S.ActionsPercent>}
+         </CustomOrderInputPolkadex>
+
         <S.ContentAction>
           <CustomButton 
-            type="submit"
-            title={submitButtonText}
-            disabled={this.checkButtonIsDisabled()}
-            onClick={this.handleSubmit}
+          title={submitButtonText} 
+          type="submit"
+          disabled={this.checkButtonIsDisabled()}
+          onClick={this.handleSubmit}
           />
-          <div>
-          {userLoggedIn && `I will receive: ${orderType === 'Market' ? '~;' : ''} ${Decimal.format(total, currentMarketAskPrecision + currentMarketBidPrecision, ',')} ${from.toUpperCase()}`}
-          </div>
-         
         </S.ContentAction>
       </form>
     )
   }
-  private handleOrderTypeChange = (index: number) => {
-    const { orderTypesIndex } = this.props;
-    this.setState({
-        orderType: orderTypesIndex[index],
-    });
-};
+
 
 private handleFieldFocus = (field: string | undefined) => {
     const priceText = this.props.translate('page.body.trade.header.newOrder.content.price');
@@ -262,12 +263,6 @@ private handleFieldFocus = (field: string | undefined) => {
             break;
     }
 };
-
-private renderDropdownTitle = () => {
-  return <S.DropdownWrapper>
-      {this.state.orderType}
-  </S.DropdownWrapper>
-}
 
 private handlePriceChange = (value: string) => {
     const { currentMarketBidPrecision, currentMarketFilters } = this.props;
@@ -314,7 +309,11 @@ private handleSubmit = () => {
     this.handlePriceChange('');
     this.props.handleAmountChange('', this.props.type);
 };
-
+private renderDropdownTitle = () => {
+  return <S.DropdownWrapper>
+      {this.state.orderType}
+  </S.DropdownWrapper>
+}
 private checkButtonIsDisabled = (): boolean => {
     const { disabled, available, amount, totalPrice } = this.props;
     const { isPriceValid, orderType, priceMarket, price } = this.state;
@@ -330,7 +329,6 @@ private checkButtonIsDisabled = (): boolean => {
 private handleEnterPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
         event.preventDefault();
-
         this.handleSubmit();
     }
 };

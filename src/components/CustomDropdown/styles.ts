@@ -14,21 +14,17 @@ const wrapperModifiers = {
   right: () => css`
     left: 100%;
     margin-left: 1rem;
-    margin-bottom: 1rem;
     bottom: 0;
   `,
   left: () => css`
     right: 100%;
-    margin-right: 1rem;
     top: 0;
   `,
   top: () => css`
     bottom: 100%;
-    margin-bottom: 1rem;
   `,
   bottom: () => css`
     top: 100%;
-    margin-top: 1rem;
     right: 0;
   `,
 };
@@ -68,7 +64,6 @@ export const Overlay = styled.div<Pick<Props, "isOpacity">>`
 export const Wrapper = styled.div<StyleProps>`
   ${({ theme, isOpen }) => css`
     position: relative;
-    width: fit-content;
     ${Content},
     ${Overlay} {
       transition: transform 0.2s ease-in, opacity ${theme.transition.default};

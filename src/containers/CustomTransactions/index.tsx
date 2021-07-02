@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Tabs, TabContent, TabHeader, CustomButton } from "src/components";
 import { MyTradeHistory } from "./myTradeHistory";
-import { OpenOrders } from "./openOrdersComponent"
+import { OpenOrders } from "./openOrders"
 import * as S from "./styles";
 
 export const CustomTransactions = () => {

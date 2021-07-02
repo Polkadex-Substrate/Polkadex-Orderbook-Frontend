@@ -96,6 +96,7 @@ const light = {
       "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
     tertiaryBackground: "#F9FBFC99",
     secondaryBackgroundSolid: "#E8ECF2",
+    quaternaryBackground: '#272934',
     text: "#000000",
   },
   shadow: {
@@ -122,6 +123,7 @@ const dark = {
     gradientBackground: "#1F2029",
     tertiaryBackground: "#2E303C",
     secondaryBackgroundSolid: "#2F3340",
+    quaternaryBackground: '#272934',
     text: "#f5f5f5",
   },
   shadow: {

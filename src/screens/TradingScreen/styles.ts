@@ -17,7 +17,7 @@ export const Container = styled.div`
     "Header Header Header"
     "Graph Graph P2P"
     "Transactions Transactions Transactions";
-  grid-template-columns: auto minmax(100rem, 140rem ) minmax(32rem, 36rem);
+  grid-template-columns: auto minmax(90rem, 140rem ) minmax(32rem, 36rem);
   grid-template-rows: min-content min-content min-content;
   grid-gap: 1rem;
   flex: 1;

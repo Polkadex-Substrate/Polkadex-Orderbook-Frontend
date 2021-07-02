@@ -1,10 +1,11 @@
 import React, { ChangeEvent, useState } from "react";
 import { CustomButton, CustomIcon } from "src/components";
+import { CustomTokenSelect } from "src/containers";
 import { useReduxSelector } from "src/hooks";
 import { selectUserLoggedIn } from "src/modules";
 
 import * as S from "./styles";
-import { OrderInputProps, Props } from "./types";
+import { OrderInputProps, Props, AmountInputProps } from "./types";
 
 export const CustomInputPolkadex = ({
   error,
@@ -34,52 +35,71 @@ export const CustomInputPolkadex = ({
   );
 };
 
-export const CustomOrderInputPolkadex = ({ isBuy = false, background, value, amount, name, label, token, children, disabled, ...props }: OrderInputProps) =>{ 
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn)
+export const CustomOrderInputPolkadex = ({ 
+  isBuy = false, 
+  background, 
+  value, 
+  amount, 
+  name, 
+  label, 
+  token, 
+  children, 
+  reset, 
+  disabled, 
+  ...props }: OrderInputProps) =>{ 
   return(
-  <S.Wrapper background={background}>
-    <S.OrderInputHeader>
-      {userLoggedIn && amount && (
-      <p>
-        <strong>{amount}</strong> {token} Available
-      </p>)
-      }
-      
-    </S.OrderInputHeader>
-    <S.OrderInputContent>
-      <label htmlFor={name}>{label}</label>
-      <S.OrderInputContentData>
-        <S.OrderInputContentActions>
-        <input
-          value={value}
-          name={name}
-          {...props}
-        />
-          <span>~ 0</span>
-        </S.OrderInputContentActions>
-        <S.OrderInputContentActions>
-          {/* {isBuy && (
-            <div>
-              <CustomButton title="Max" size="Small" />
-            </div>
-          )} */}
-          <S.OrderInputContentBox>
-            <span>{token}</span>
-            <button type="button" onClick={() => console.log("Change..")}>
-              USD
-            </button>
-          </S.OrderInputContentBox>
-        </S.OrderInputContentActions>
-      </S.OrderInputContentData>
-    </S.OrderInputContent>
-    {children && (
-      <S.OrderInputFooter>
-        {children}
-      </S.OrderInputFooter>
-    )}
-  </S.Wrapper>
+  <S.Main >
+     <label htmlFor={name}>{label}</label>
+     <S.Box background={background}>
+       <S.Header>
+        <CustomTokenSelect balance={amount} ticket={token} tokenName={token}/>
+       </S.Header>
+        <S.Content>
+          <S.Card>
+            <input
+              value={value}
+              name={name}
+              {...props}
+            />
+            <S.Actions>
+              {reset && <button type="button" onClick={reset}>Reset</button>}
+              <span>{token}</span>
+            </S.Actions>
+          </S.Card>
+          <S.Card>
+            <span>~0</span>
+            <span>USD</span>
+          </S.Card>
+          {children && (
+            <S.Card>
+              <S.OrderInputFooter>
+                {children}
+              </S.OrderInputFooter>
+            </S.Card>
+          )}
+        </S.Content>
+     </S.Box>
+  </S.Main>
 );
 }
+
+export const CustomAmountInputPolkadex = ({from, to, name, label, action, ...props}: AmountInputProps) =>{ 
+  return(
+    <S.AmountWrapper>
+      <S.AmountBox>
+        <label htmlFor={name}>{label} ({from})</label>
+        <S.AmountContainer>
+          <input {...props} />
+        </S.AmountContainer>
+      </S.AmountBox>
+      <button type="button" onClick={()=> action()}>
+        <CustomIcon icon="Swap" background="primaryBackground" size="large" />
+      </button>
+  </S.AmountWrapper>
+);
+}
+
+
 export const CustomSliderRangePolkadex = () => (
   <S.WrapperSlider>
     <input

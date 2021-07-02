@@ -1,19 +1,11 @@
 import * as React from "react"
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { connect } from 'react-redux';
 
 import {
-  FormattedMessage,
   injectIntl,
 } from 'react-intl';
 import { IntlProps } from 'src';
 
-import {
-  CustomButton,
-  CustomIcon,
-  CustomOrderInputPolkadex,
-} from "src/components";
 import { Order } from "./order"
 import { FilterPrice } from 'src/filters';
 import {
@@ -140,6 +132,7 @@ class OrderInsert extends React.PureComponent<Props, StoreProps> {
 
   const currentTicker = marketTickers[currentMarket.id];
   const defaultCurrentTicker = { last: '0' };
+  
     return (
       <S.Wrapper ref={this.orderRef}>
         <Order 

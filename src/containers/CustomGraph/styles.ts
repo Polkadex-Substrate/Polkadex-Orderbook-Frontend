@@ -69,7 +69,7 @@ export const ChartHeaderWrapper = styled.div`
 
   ${WrapperButton} {
     :first-child{
-      margin-right: 0.5rem;
+      margin-right: 1rem;
     }
   }
 `

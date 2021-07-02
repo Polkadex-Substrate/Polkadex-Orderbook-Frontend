@@ -36,6 +36,7 @@ const Nav = () => {
           isOpacity
           direction="bottom"
           title={<MyWalletHeader user={user} />}
+          style={{width: 'min-content'}}
         >
           <S.MyWallet>
             <MyWalletHeader user={user} />

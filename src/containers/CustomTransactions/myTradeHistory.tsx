@@ -53,18 +53,18 @@ export const MyTradeHistory = () => {
     const orderSide = taker_type === 'buy'
 
     return (
-      <S.ContentItem key={id} onClick={() => handleOnSelect(i)}>
-         <S.ContentFlex>
+      <S.CardWrapper key={id} onClick={() => handleOnSelect(i)}>
+         <S.CardFlex>
             <CustomIcon icon="Clock" background="transparent" />
             {higlightedDate}
-        </S.ContentFlex>
-        <S.ContentFlex>
+        </S.CardFlex>
+        <S.CardFlex>
           <CustomIcon icon={orderSide ? 'ArrowVerticalTop' : 'ArrowVerticalBottom'} background={orderSide ? 'green' : 'primary'} size="xsmall" />
           {taker_type.toUpperCase()}
-        </S.ContentFlex>
+        </S.CardFlex>
         <div>{Decimal.format(amount, amountFixed, ',')}</div>
         <div>{Decimal.format(price, priceFixed, ',')}</div>
-      </S.ContentItem>
+      </S.CardWrapper>
     )
   };
 
@@ -122,11 +122,11 @@ export const LoadingHistory = () => {
 }
 const LoadingHistoryItem = () => {
   return (
-    <S.ContentItem >
+    <S.CardWrapper >
     <div> <CustomSkeleton width='14rem' height="2rem" style={{margin: 3}}/> </div>
     <div> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}} /> </div>
     <div> <CustomSkeleton width='5rem' height="2rem" style={{margin: 3}}/> </div>
     <div> <CustomSkeleton width='8rem' height="2rem" style={{margin: 3}}/> </div>
-  </S.ContentItem>
+  </S.CardWrapper>
   )
 }

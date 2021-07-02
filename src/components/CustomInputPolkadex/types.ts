@@ -10,8 +10,10 @@ export type Props = {
   name?: string;
   icon?: IconProps;
   background?: IColors;
+  action?: () => void;
   WrapperStyle?: HTMLAttributes<HTMLDivElement>;
 } & InputHTMLAttributes<HTMLInputElement>;
+
 
 export type OrderInputProps = {
   isBuy?: boolean;
@@ -19,4 +21,12 @@ export type OrderInputProps = {
   token?: string;
   children?: ReactNode;
   label?: string;
+  reset?: () => void | null
+} & Partial<Props> ;
+
+export type AmountInputProps = {
+  from?: string | number | ReactNode
+  to?: string | number | ReactNode
+  amount?: string | number | ReactNode
+  orderType?: string | number
 } & Partial<Props> ;

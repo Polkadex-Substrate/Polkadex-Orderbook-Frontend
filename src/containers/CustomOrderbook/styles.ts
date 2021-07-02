@@ -109,7 +109,7 @@ export const OrderbookItem = styled.div`
     cursor: pointer;
     z-index: 1;
     transition: ${theme.transition.default};
-
+    position: relative;
     :hover {
       opacity: 0.8;
     }
