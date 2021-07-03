@@ -33,7 +33,7 @@ export const CustomIconToken = ({
   background = "secondaryBackground",
   ...props
 }: ITokenProps) => {
-  const iconToken = icon ? Tokens[icon.toUpperCase()] : Tokens.PDEX;
+  const iconToken = icon ? Tokens[icon.toUpperCase()] : Tokens.DEFAULT;
 
   return (
     <S.WrapperToken size={size} background={background} {...props}>

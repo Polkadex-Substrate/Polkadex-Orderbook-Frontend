@@ -1,6 +1,5 @@
-import * as React from 'react';
-
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo} from 'react';
+import { useIntl } from 'react-intl';
 import { useDispatch } from "react-redux";
 import {
   CustomButton,
@@ -12,26 +11,31 @@ import {
   TabContent,
   TabHeader,
   Tabs,
+  formatWithSeparators,
+  Decimal
 } from "src/components";
 import { useReduxSelector, useSignWithPolkadotJs } from "src/hooks";
-import { logoutFetch, selectUserInfo, selectUserLoggedIn } from "src/modules";
-
+import { logoutFetch, selectCurrencies, selectWallets, Wallet, selectMarkets, selectMarketTickers, selectWalletsLoading, selectUserInfo, selectUserLoggedIn } from 'src/modules';
+import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from 'src/constants';
+import { estimateUnitValue, estimateValue } from 'src/helpers/estimateValue';
 import * as S from "./styles";
 import { WalletProps } from "./types";
 
+interface ExtendedWallet extends Wallet {
+  spotBalance?: string;
+  spotLocked?: string;
+}
+
 const Nav = () => {
   const { fetchPolkadotJs, loading, error } = useSignWithPolkadotJs();
-
   const user = useReduxSelector(selectUserInfo);
   const isLoggedIn = useReduxSelector(selectUserLoggedIn);
-
   const dispatch = useDispatch();
 
-  const account = false;
 
   return (
     <S.Wrapper>
-      {(isLoggedIn && !!user) || account ? (
+      {isLoggedIn && !!user ? (
         <CustomDropdown
           isOpacity
           direction="bottom"
@@ -58,16 +62,39 @@ const Nav = () => {
 };
 
 export const MyWalletHeader = ({ user }: WalletProps) => {
+    const wallets = useReduxSelector(selectWallets) || [];
+    const currencies = useReduxSelector(selectCurrencies);
+    const markets = useReduxSelector(selectMarkets);
+    const tickers = useReduxSelector(selectMarketTickers);
+    const [mergedWallets, setMergedWallets] = useState<Wallet[]>([]);
+
+    useEffect(() => {
+      if (wallets.length && currencies.length) {
+          const merged = currencies.map(cur => {
+              const spotWallet = wallets.find(i => i.currency === cur.id);
+              return {
+                  ...spotWallet,
+                  balance: String(+(spotWallet?.balance || 0)),
+                  locked: String(+(spotWallet?.locked || 0)),
+              };
+          });
+
+          setMergedWallets(merged);
+      }
+  }, [wallets, currencies]);
+
+    const estimatedValue = useMemo(() => {
+      return estimateValue(VALUATION_PRIMARY_CURRENCY, currencies, mergedWallets, markets, tickers);
+  }, [currencies, mergedWallets, markets, tickers]);
+
+
   return (
     <S.MyWalletHeaderWrapper>
       <S.MyWalletHeader>
-        <img
-          src="https://gravatar.com/avatar/9eb9eec3ea8ccdb8137768f4e09bd963?d=https%3A%2F%2Fassets.codepen.io%2Finternal%2Favatars%2Fusers%2Fdefault.png&fit=crop&format=auto&height=80&version=0&width=80"
-          alt="Profile avatar"
-        />
+        <CustomIcon icon="Avatar" size="medium"/>
         <div>
-          <span>{user.email}</span>
-          <p>{user.uid}</p>
+          <S.WalletUsername>{user.username}</S.WalletUsername>
+          <p>Estimated: ≈ $ {formatWithSeparators(estimatedValue, ',')}</p>
         </div>
       </S.MyWalletHeader>
     </S.MyWalletHeaderWrapper>

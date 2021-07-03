@@ -12,8 +12,24 @@ import UNI from "./UNI.svg";
 import USDT from "./USDT.svg";
 import DASH from "./DASH.svg";
 import BTC from "./BTC.svg";
+import ADA from "./ADA.svg";
+import EUR from "./EUR.svg";
+import LTC from "./LTC.svg";
+import NGNT from "./NGNT.svg";
+import USD from "./USD.svg";
+import XRP from "./XRP.svg";
+import ZAR from "./ZAR.svg";
+import DEFAULT from "./DEFAULT.svg";
 
 export {
+  DEFAULT,
+  ADA,
+  EUR,
+  LTC,
+  NGNT,
+  USD,
+  XRP,
+  ZAR,
   AAVE,
   INCH,
   BAL,

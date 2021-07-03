@@ -25,6 +25,8 @@ ${({ theme }) => css`
       fill: ${theme.colors.text};
       display: block;
       margin: auto;
+      height: 100%;
+      width: 100%;
     }
 
 

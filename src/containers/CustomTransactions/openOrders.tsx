@@ -202,7 +202,7 @@ cancel
       <S.CardFlex>
         <S.CardPair>
           <CustomIconToken icon={baseUnit} background="secondaryBackgroundSolid"/>
-          <CustomIconToken icon={quoteUnit} background="secondaryBackgroundSolid" size="xsmall"/>
+          <CustomIconToken icon={quoteUnit} background="secondaryBackgroundSolid" size="small"/>
         </S.CardPair>
         <span>{baseUnit}/<strong>{quoteUnit}</strong></span>
       </S.CardFlex>

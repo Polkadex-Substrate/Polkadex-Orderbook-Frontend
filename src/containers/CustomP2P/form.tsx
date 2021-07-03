@@ -214,7 +214,7 @@ public componentWillReceiveProps(next: OrderFormProps) {
           name="receive"
           label="I will receive"
           placeholder='Receive Amount'
-          value={marketOrderType ? amount || '' : `${orderType === 'Market' ? '~' : ''} ${Decimal.format(total, currentMarketBidPrecision + currentMarketAskPrecision, ',')}`} 
+          value={marketOrderType ? amount || '' : `${orderType === 'Market' ? '≈' : ''} ${Decimal.format(total, currentMarketBidPrecision + currentMarketAskPrecision, ',')}`} 
           amount={availableQuote ? Decimal.format(availableQuote, currentMarketAskPrecision, ',') : '' }
           disabled 
           readOnly

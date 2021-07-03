@@ -153,26 +153,37 @@ export const MyWalletHeader = styled.div`
     padding: 1rem;
     display: flex;
     align-items: stretch;
-    img {
-      border-radius: 50%;
-      max-width: 3rem;
-      width: 100%;
-      height: 100%;
-      max-height: 3rem;
-      margin-right: 1rem;
-    }
 
-    span {
-      font-weight: 600;
-      font-size: 1.4rem;
+    ${WrapperIcon} {
+      margin-right: 0.5rem;
     }
 
     p {
       opacity: 0.7;
       font-size: 1.3rem;
+      font-weight: 500;
+      margin: 0;
     }
   `}
 `;
+
+export const WalletUsername = styled.span`
+  font-weight: 600;
+  font-size: 1.4rem;
+`
+
+export const WalletTag = styled.span`
+   ${({ theme }) => css`
+     background: ${theme.colors.primary};
+     font-size: 1rem;
+     line-height: 1;
+     border-radius: 0.3rem;
+     padding: 0.2rem;
+     font-weight: 600;
+     display: inline-block;
+   `}
+`
+
 export const MyWalletContent = styled.div``;
 export const MyWalletBox = styled.div``;
 export const MyWalletTransactions = styled.a`
