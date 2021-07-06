@@ -12,14 +12,16 @@ import {
   TabHeader,
   Tabs,
   formatWithSeparators,
-  Decimal
+  Decimal,
+  CustomThemeSwitch
 } from "src/components";
 import { useReduxSelector, useSignWithPolkadotJs } from "src/hooks";
-import { logoutFetch, selectCurrencies, selectWallets, Wallet, selectMarkets, selectMarketTickers, selectWalletsLoading, selectUserInfo, selectUserLoggedIn } from 'src/modules';
+import { logoutFetch, changeLanguage, changeUserDataFetch, selectCurrentLanguage, selectCurrencies, selectWallets, Wallet, selectMarkets, selectMarketTickers, selectWalletsLoading, selectUserInfo, selectUserLoggedIn } from 'src/modules';
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from 'src/constants';
 import { estimateUnitValue, estimateValue } from 'src/helpers/estimateValue';
 import * as S from "./styles";
-import { WalletProps } from "./types";
+import { WalletProps, LanguageNameProps } from "./types";
+import { languages } from 'src/api/config';
 
 interface ExtendedWallet extends Wallet {
   spotBalance?: string;
@@ -30,11 +32,42 @@ const Nav = () => {
   const { fetchPolkadotJs, loading, error } = useSignWithPolkadotJs();
   const user = useReduxSelector(selectUserInfo);
   const isLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const lang = useReduxSelector(selectCurrentLanguage)
   const dispatch = useDispatch();
 
+  const handleChangeLanguage = (language: string) => {
+    if (isLoggedIn) {
+        const data = user.data && JSON.parse(user.data);
+
+        if (data && data.language && data.language !== language) {
+            const payload = {
+                ...user,
+                data: JSON.stringify({
+                    ...data,
+                    language,
+                }),
+            };
+            dispatch(changeUserDataFetch({ user: payload }));
+        }
+    }
+    dispatch(changeLanguage(language));
+}; 
 
   return (
     <S.Wrapper>
+       <S.Container>
+        <button type="button" onClick={()=> console.log("Notiifcaitons")}>
+            <CustomIcon icon="Notifications" background="none" />
+          </button>
+      </S.Container>
+      <S.Container>
+        <CustomDropdown direction="bottom" isOpacity title={<CustomIcon icon="Language" />}>
+          <LanguageContent changeLanguage={handleChangeLanguage} currentLanguage={lang}/>
+        </CustomDropdown>
+      </S.Container>
+      <S.Container>
+        <CustomThemeSwitch />
+      </S.Container>
       {isLoggedIn && !!user ? (
         <CustomDropdown
           isOpacity
@@ -93,7 +126,7 @@ export const MyWalletHeader = ({ user }: WalletProps) => {
       <S.MyWalletHeader>
         <CustomIcon icon="Avatar" size="medium"/>
         <div>
-          <S.WalletUsername>{user.username}</S.WalletUsername>
+          <S.WalletUsername>Account 1 (0x9e08..1641)</S.WalletUsername>
           <p>Estimated: ≈ $ {formatWithSeparators(estimatedValue, ',')}</p>
         </div>
       </S.MyWalletHeader>
@@ -105,7 +138,12 @@ export const MyWalletContent = ({ user, disconnect }: WalletProps) => {
   return (
     <S.MyWalletContent>
       <S.MyWalletBoxWrapper>
-        <div />
+        <div>
+          <a href="/">
+          Connected with {user.email ? "Email" : `Polkadot.{js}`}
+          <CustomIcon icon="Export" background="none" size="xsmall" />
+        </a>
+          </div>
         <S.MyWalletBoxButton>
           <button type="button" onClick={disconnect}>
             Disconnnect
@@ -114,11 +152,25 @@ export const MyWalletContent = ({ user, disconnect }: WalletProps) => {
       </S.MyWalletBoxWrapper>
       <S.MyWalletInput>
         <CustomInputWalletPolkadex value={user.uid} disabled />
-        <a href="/">
-          Connected with {user.email ? "Email" : `Polkadot.{js}`}
-          <CustomIcon icon="Export" background="none" size="xsmall" />
-        </a>
       </S.MyWalletInput>
+      <S.MyWalletLinks>
+        <a href="/"> 
+          <span>Settings</span> 
+          <CustomIcon icon="ArrowRight" size="xsmall"/>
+        </a>
+        <a href="/"> 
+          <span>Trading Bots</span> 
+          <CustomIcon icon="ArrowRight" size="xsmall"/>
+        </a>
+        <a href="/"> 
+          <span>Deposit/Widtdraw</span> 
+          <CustomIcon icon="ArrowRight" size="xsmall"/>
+        </a>
+        <a href="/"> 
+          <span>Terms and Conditions</span> 
+          <CustomIcon icon="ArrowRight" size="xsmall"/>
+        </a>
+      </S.MyWalletLinks>
       <S.MyWalletTransactions href="/">See Transactions</S.MyWalletTransactions>
     </S.MyWalletContent>
   );
@@ -253,5 +305,32 @@ export const DialogStatus = ({ error, action, loading }) => {
     </S.WalletSelectContent>
   );
 };
+
+const LanguageContent = ({changeLanguage, currentLanguage}) => (
+  <S.LanguageWrapper>
+    <S.LanguageContainer>
+      <S.LanguageTitle>Language</S.LanguageTitle>
+      <S.LanguageContent>
+        {!!languages && languages.map((item, index)=> <LanguageName active={currentLanguage && currentLanguage === item} key={index} onClick={() => changeLanguage(item)} flag={item.toUpperCase()} />  ) }
+      </S.LanguageContent>
+    </S.LanguageContainer>
+  </S.LanguageWrapper>
+);
+
+const LanguageName = ({
+  flag = "En",
+  onClick,
+  active = false
+}: LanguageNameProps) => (
+  <S.LanguageNameWrapper
+    onClick={onClick}
+    active={active}
+  >
+    <CustomIcon icon={flag} background="none" />
+    <span> {flag}/{flag === 'EN' ? 'English' : 'Russian'} </span>
+  </S.LanguageNameWrapper>
+);
+
+
 
 export default Nav;

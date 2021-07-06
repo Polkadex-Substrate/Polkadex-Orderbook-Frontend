@@ -12,7 +12,7 @@ const modifier = {
   small: () => css`
     width: 2.5rem;
     height: 2.5rem;
-    padding: 0.65rem;
+    padding: 0.15rem;
     border-radius: 0.8rem;
   `,
   normal: () => css`

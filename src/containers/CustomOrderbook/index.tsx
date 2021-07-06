@@ -1,10 +1,9 @@
 import * as React from "react"
-import { CustomDropdown, Decimal, Spinner } from "src/components";
+import { CustomDropdown, Decimal, Spinner, CustomIcon } from "src/components";
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { IntlProps } from 'src';
 import { colors } from 'src/constants';
-import { CustomRecentTrades } from 'src/containers';
 import { defaultThemes } from "src/styles";
 
 import { accumulateVolume, calcMaxVolume } from 'src/helpers';
@@ -138,45 +137,30 @@ class OrderBookContainer extends React.Component<Props, State> {
     return (
       <S.Wrapper>
         <S.Header>
-          <CustomDropdown isOpacity direction='bottom' title={this.state.tab ? 'Recent Trade' : 'Orderbook'}>
-          <S.OrderbookDropdown>
-              <button type="button" onClick={()=> this.handleTab(false)}>
-                  Orderbook
-              </button>
-              <button type="button" onClick={() => this.handleTab(true)}>
-                  Recent Trades
-              </button>
-            </S.OrderbookDropdown>
-          </CustomDropdown>
+          <h2>Orderbook</h2>
           <S.Options>
-            {/* <ul>
+            <ul>
               <li>
-                <CustomIcon icon="OrdersBuy" />
+                <CustomIcon icon="OrdersBuy" size="xsmall"/>
               </li>
               <li>
-                <CustomIcon icon="OrdersAll" />
+                <CustomIcon icon="OrdersAll" size="xsmall"/>
               </li>
               <li>
-                <CustomIcon icon="OrdersSell" />
+                <CustomIcon icon="OrdersSell" size="xsmall"/>
               </li>
             </ul>
             <CustomDropdown title="001">
               <p>testing</p>
-            </CustomDropdown> */}
+            </CustomDropdown>
           </S.Options>
         </S.Header>
         <S.Content>
-          {this.state.tab ? <CustomRecentTrades /> :
-          <> 
             {orderBookLoading && !currentMarket ? <p>Loading</p> : this.orderBook(bids, asks, isLarge, formattedBaseUnit, formattedQuoteUnit)}
-          </>}
-         
-         
         </S.Content>
       </S.Wrapper>
     );
   }
-  private handleTab = (t) => this.setState({tab: t})
   private orderBook = (bids, asks, isLarge: boolean, formattedBaseUnit, formattedQuoteUnit) => {
     const { colorTheme, currentMarket } = this.props;
     const asksData = isLarge ? asks : asks.slice(0).reverse();
@@ -188,8 +172,8 @@ class OrderBookContainer extends React.Component<Props, State> {
         maxVolume={calcMaxVolume(bids, asks)}
         orderBookEntryAsks={accumulateVolume(asks)}
         orderBookEntryBids={accumulateVolume(bids)}
-        rowBackgroundColorAsks={defaultThemes.dark.colors.gradientGreen}
-        rowBackgroundColorBids={defaultThemes.dark.colors.gradientRed}
+        rowBackgroundColorAsks={defaultThemes.dark.colors.gradientRed}
+        rowBackgroundColorBids={defaultThemes.dark.colors.gradientGreen}
         dataAsks={this.renderOrderBook(asksData, 'asks', this.props.intl.formatMessage({id: 'page.noDataToShow'}), isLarge, currentMarket)}
         dataBids={this.renderOrderBook(bids, 'bids', this.props.intl.formatMessage({id: 'page.noDataToShow'}), isLarge, currentMarket)}
         lastPrice={this.lastPrice()}

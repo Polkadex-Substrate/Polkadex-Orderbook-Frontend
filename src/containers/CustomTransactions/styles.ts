@@ -6,61 +6,75 @@ import styled, { css } from "styled-components";
 import { Props } from "./types";
 
 type StyleCardProps = {
-  isSell: boolean
+  isSell?: boolean
+}
+type StyleProps = {
+  isActive?: boolean;
 }
 
 export const Wrapper = styled.section`
-  grid-area: Transactions;
-  padding: 1rem 0;
-  flex: 1;
+  ${({ theme }) => css`
+    grid-area: Transactions;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 0.5rem 0;
+  `}
 `;
 
 // Header
 export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1.5rem 1rem 1.5rem;
+    border-bottom: 1px solid;
+    border-bottom-color: ${theme.colors.secondaryBackground};
+  `}
 `;
 
 export const Tabs = styled.ul`
   ${({ theme }) => css`
-    background: ${theme.colors.gradientBackground};
-    border-radius: ${theme.border.radius.primary.small};
+    list-style: none;
   `}
-  padding: 1rem;
-  list-style: none;
+
 `;
 
-export const Tab = styled.li`
-  ${({ theme,  }) => css`
+export const Tab = styled.li<StyleProps>`
+  ${({ theme, isActive  }) => css`
     display: inline-block;
+    cursor: pointer;
+    opacity: ${isActive ? 1 : 0.6};
+    font-weight: 550;
     :not(:last-child) {
-      margin-right: 0.5rem;
+      margin-right: 1.5rem;
+    }
+    position: relative;
+
+    :before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      border-bottom: 2px solid;
+      border-bottom-color: ${isActive ? theme.colors.primary : 'transparent'};
+      bottom: -70%;
     }
   `}
 `;
 
 export const Filters = styled.div`
-  display: grid;
-  grid-template-columns: auto auto auto;
-  max-width: 50rem;
-  width: 100%;
-`;
-export const FiltersContainer = styled.div`
   display: flex;
-
-  ${WrapperDropdown}, ${WrapperCheckbox} {
-    align-self: center;
-    :first-child {
-      margin-right: 1rem;
-    }
+  justify-content: flex-end;
+  align-items: center;
+  ${WrapperCheckbox} {
+    margin-right: 1rem;
   }
 `;
 
 export const Template = styled.div`
   display: grid;
-  grid-template-columns: 0.2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr;
-  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr 0.5fr 0.3fr 1fr 1fr 0.3fr 1fr 0.3fr;
+  grid-gap: 0.5rem;
 `
 
 // Content
@@ -71,14 +85,21 @@ export const Content = styled.div`
 `;
 
 export const ContentHeader = styled(Template)`
-  margin-bottom: 1rem;
-  padding: 0 0.5rem;
-  span {
-    opacity: 0.5;
-    font-weight: 500;
-  }
+  ${({ theme }) => css`
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+    text-align: center;
+    span {
+      font-size: ${theme.font.sizes.xxsmall};
+      font-weight: 500;
+      opacity: 0.5;
+    }
+  `}
 `
-export const ContentWrapper = styled.div``
+export const ContentWrapper = styled.div`
+  padding: 0 1.5rem;
+  text-align: center;
+ `
 
 export const OpenOrders = styled.div``
 
@@ -98,12 +119,8 @@ export const MyTradeHistoryHeader = styled.div`
 // Card
 export const CardWrapper = styled(Template)`
   ${({ theme }) => css`
-    background: ${theme.colors.gradientBackground};
-    border-radius: ${theme.border.radius.primary.small};
-    padding: 0.5rem;
-    align-items:center;
     :not(:last-child) {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
   `}
 `;
@@ -127,6 +144,15 @@ export const CardContainer = styled.div`
       display: block;
       font-weight: 500;
     }
+    button {
+      color: #0090E1;
+    }
+  `}
+`
+export const Side = styled.div<StyleCardProps>`
+ ${({ theme, isSell}) => css`
+    color: ${isSell ? theme.colors.green : theme.colors.primary};
+    text-transform: capitalize;
   `}
 `
 

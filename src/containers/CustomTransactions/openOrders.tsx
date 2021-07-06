@@ -62,14 +62,15 @@ export class OpenOrdersComponent extends React.Component<Props> {
       <>
       {list ? <S.OpenOrders> 
          <S.ContentHeader>
-              <span></span>
-              <span>Pair</span>
               <span>Date</span>
-              <span>Amount</span>
+              <span>Pair</span>
+              <span>Type</span>
+              <span>Side</span>
               <span>Price</span>
-              <span>Total</span>
+              <span>Amount</span>
               <span>Filled</span>
-              <span></span>
+              <span>Total</span>
+              <span />
             </S.ContentHeader>
           {fetching ? <LoadingTransactions/> : 
             <S.ContentWrapper>
@@ -107,7 +108,7 @@ export class OpenOrdersComponent extends React.Component<Props> {
           date={localeDate(created_at, 'fullDate')} 
           baseUnit={this.currentMarketData().currentAskUnit} 
           quoteUnit={this.currentMarketData().currentBidUnit}
-          side={side.toUpperCase()}
+          side={side}
           isSell={orderSide}
           price={Decimal.format(price, priceFixed, ',')}
           amount={Decimal.format(total, amountFixed, ',')}
@@ -192,38 +193,39 @@ price,
 amount,
 total,
 filled,
+type = 'Limit',
 cancel
 }:CardProps) => {
   return (
     <S.CardWrapper>
-      <S.CardSideWrapper isSell={isSell}>
-        <span>{side}</span>
-      </S.CardSideWrapper>
-      <S.CardFlex>
-        <S.CardPair>
-          <CustomIconToken icon={baseUnit} background="secondaryBackgroundSolid"/>
-          <CustomIconToken icon={quoteUnit} background="secondaryBackgroundSolid" size="small"/>
-        </S.CardPair>
-        <span>{baseUnit}/<strong>{quoteUnit}</strong></span>
-      </S.CardFlex>
       <S.CardContainer>
         <span>{date}</span>
       </S.CardContainer>
       <S.CardContainer>
-        <span>{price}{quoteUnit}</span>
+        <span>{baseUnit}/{quoteUnit}</span>
       </S.CardContainer>
       <S.CardContainer>
-        <span>{amount}{baseUnit}</span>
+        <span>{type}</span>
       </S.CardContainer>
       <S.CardContainer>
-        <span>{total}{quoteUnit}</span>
+        <S.Side isSell={isSell}>{side}</S.Side>
       </S.CardContainer>
       <S.CardContainer>
-        <span>{filled}%</span>
-        <S.CardFilled isSell={isSell}/>
+        <span>{price}</span>
       </S.CardContainer>
       <S.CardContainer>
-        <CustomButton title='Cancel' icon={{icon:'Close', size:'xsmall'}} size='Small' onClick={cancel} />
+        <span>{amount}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{filled}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <span>{total}</span>
+      </S.CardContainer>
+      <S.CardContainer>
+        <button type="button" onClick={cancel}>
+          Cancel
+        </button>
       </S.CardContainer>
   </S.CardWrapper>
   )

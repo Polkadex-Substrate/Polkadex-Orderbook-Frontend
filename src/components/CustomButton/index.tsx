@@ -6,7 +6,7 @@ import Props from "./types";
 
 export const CustomButton = ({
   title = "Button",
-  size = "Medium",
+  size = "medium",
   icon,
   token,
   isActive = false,

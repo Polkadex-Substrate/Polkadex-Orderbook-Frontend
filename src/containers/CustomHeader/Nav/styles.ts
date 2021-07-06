@@ -1,12 +1,21 @@
 import { WrapperIcon } from "src/components/CustomIcon/styles";
 import styled, { css } from "styled-components";
 
+type StyleProps= {
+  active: boolean
+}
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    margin-right: 0.5rem;
-    width: max-content;
+    display: flex;
+    align-items: center;
   `}
 `;
+export const Container = styled.div`
+  :not(:last-child) {
+    margin-right: 1rem;
+  }
+`
 
 export const ContentWrapper = styled.div`
   ${({ theme }) => css`
@@ -141,8 +150,6 @@ export const WalletSeletActions = styled.div`
 export const MyWallet = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
-    border-radius: 1.5rem;
-    max-width: 35rem;
     width: max-content;
   `}
 `;
@@ -150,10 +157,9 @@ export const MyWallet = styled.div`
 export const MyWalletHeaderWrapper = styled.div``;
 export const MyWalletHeader = styled.div`
   ${({ theme }) => css`
-    padding: 1rem;
     display: flex;
     align-items: stretch;
-
+    padding: 1rem 2rem;
     ${WrapperIcon} {
       margin-right: 0.5rem;
     }
@@ -184,15 +190,14 @@ export const WalletTag = styled.span`
    `}
 `
 
-export const MyWalletContent = styled.div``;
+export const MyWalletContent = styled.div`
+`;
 export const MyWalletBox = styled.div``;
 export const MyWalletTransactions = styled.a`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackground};
-    border-radius: 1.5rem;
     text-align: center;
-    padding: 1.5rem 1rem;
-    border-radius: 1.5rem;
+    padding: 1.2rem;
     display: block;
     width: 100%;
     margin-top: 1.5rem;
@@ -221,6 +226,14 @@ export const MyWalletBoxWrapper = styled.div`
       padding: 0.5rem;
       border-radius: 0.4rem;
     }
+
+    a {
+      opacity: 0.7;
+      ${WrapperIcon} {
+        display: inline-block;
+        vertical-align: center;
+      }
+    }
   `}
 `;
 export const MyWalletDropdown = styled.div`
@@ -234,12 +247,69 @@ export const MyWalletDropdown = styled.div`
 `;
 export const MyWalletInput = styled.div`
   padding: 0 1.5rem;
-  a {
-    margin-top: 0.5rem;
-    opacity: 0.7;
-    ${WrapperIcon} {
-      display: inline-block;
-      vertical-align: center;
-    }
+`;
+
+// Language
+export const LanguageWrapper = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+    width: fit-content;
+  `}
+`;
+
+export const LanguageContainer = styled.div``;
+export const LanguageTitle = styled.span`
+  ${({ theme }) => css`
+    font-size: 1.2rem;
+    opacity: 0.6;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 1rem;
+  `}
+`;
+export const LanguageContent = styled.div``;
+export const LanguageCurrencyWrapper = styled.a`
+  cursor: pointer;
+  display: block;
+  :not(:last-child) {
+    margin-bottom: 1.1rem;
   }
 `;
+
+export const LanguageNameWrapper = styled.a<StyleProps>`
+  ${({ theme, active }) => css`
+  background: ${active ? theme.colors.primary : 'none'};
+  padding: 0.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+    img {
+      margin-right: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
+    span {
+      margin-right: 0.5rem;
+    }
+    :hover {
+      opacity: ${active ? 1 : 0.8};
+      transition: ${theme.transition.default};
+    }
+  `}
+`;
+
+export const MyWalletLinks = styled.div`
+  margin: 1rem 0;
+  padding: 0 1rem;
+  a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    :not(:last-child) {
+      margin-bottom: 0.8rem;
+    }
+  }
+`

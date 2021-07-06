@@ -1,10 +1,10 @@
 import { ButtonHTMLAttributes } from "react";
-import * as IIcons from "src/components/Icon/types";
+import * as IIcons from "src/components/CustomIcon/types";
 import { IColors } from "src/utils/types";
 
 type Props = {
   title: string;
-  size?: "Small" | "Medium" | "Large";
+  size?: "small" | "medium" | "large";
   icon?: IIcons.Props;
   token?: IIcons.ITokenProps;
   isActive?: boolean;

@@ -1,24 +1,28 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.main`
-  display: flex;
-  min-height: 100vh;
-  /* overflow-x: hidden; */
-  max-width: 192rem;
-  margin: 0 auto;
+export const Main = styled.main`
   ${({ theme }) => css`
+    /* overflow-x: hidden; */
+    max-width: 192rem;
+    margin: 0 auto;
     box-shadow: ${theme.shadow.primary};
+    position: relative;
   `}
-`;
+`
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   display: grid;
   grid-template-areas:
-    "Header Header Header"
-    "Graph Graph P2P"
-    "Transactions Transactions Transactions";
-  grid-template-columns: auto minmax(90rem, 140rem ) minmax(32rem, 36rem);
-  grid-template-rows: min-content min-content min-content;
+    "Graph Orderbook P2P"
+    "Transactions Market P2P";
+    grid-template-columns: 2fr 1fr 1fr;
+
+  grid-template-rows: minmax(40rem,60rem) 1fr;
   grid-gap: 1rem;
-  flex: 1;
+  padding-top: 6rem;
+  max-height: 100vh;
+
+  @media screen and (min-width: 1650px) {
+     grid-template-columns: 3.4fr 1fr 1fr;
+  }
 `;

@@ -12,8 +12,8 @@ import "src/containers/MarketDepth/MarketDepth.pcss"
 import {
     CustomGraph,
     CustomHeader,
-    CustomMarkets,
-    CustomNavigation,
+    CustomMarketTrade,
+    CustomOrderbook,
     CustomP2P,
     CustomTransactions,
 } from 'src/containers';
@@ -33,8 +33,6 @@ import { GridLayoutState, saveLayouts, selectGridLayoutState } from 'src/modules
 import { Market, marketsFetch, selectMarkets } from 'src/modules/public/markets';
 import { depthFetch } from 'src/modules/public/orderBook';
 import * as S from "./styles";
-
-const { WidthProvider, Responsive } = require('react-grid-layout');
 
 interface ReduxProps {
     currentMarket: Market | undefined;
@@ -133,28 +131,23 @@ class Trading extends React.Component<Props, StateProps> {
     }
 
     public render() {
-
-        return (
+        return (            
             <>
             {this.props.currentMarket && this.props.markets ? 
-            (
-            <S.Wrapper>    
-                <CustomNavigation activateNotification={() => this.setState({notificationsActive: !this.state.notificationsActive})} />
-                <CustomMarkets marketActive={this.state.marketActive} />
-            <S.Container>
-                <CustomHeader activateMarkets={this.handleActiveMarkets} activateMarketsStatus={this.state.marketActive} />
-                <CustomGraph/>
-                <CustomP2P/>
-                {this.props.userLoggedIn && <CustomTransactions /> }
-                
-            </S.Container>
-           </S.Wrapper> 
-           ) 
-           : <CustomLoading />}
+            (<S.Main>
+                <CustomHeader />
+                <S.Wrapper>   
+                    <CustomGraph/>
+                    <CustomOrderbook />
+                    <CustomMarketTrade />
+                    <CustomTransactions />
+                    <CustomP2P/>
+                </S.Wrapper> 
+            </S.Main>)
+            : <CustomLoading />}
             </>
         );
     }
-    private handleActiveMarkets = (e: any) => this.setState({ marketActive: !this.state.marketActive})
     
     private setMarketFromUrlIfExists = (markets: Market[]): void => {
         const urlMarket: string = getUrlPart(2, window.location.pathname);

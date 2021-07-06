@@ -128,7 +128,6 @@ public componentWillReceiveProps(next: CombinedOrderBookProps) {
         maxVolume={maxVolume}
         orderBookEntry={orderBookEntryAsks}
         onSelect={onSelectAsks}
-        isSell
       />
       <S.Select>
         <S.LastPriceWrapper>
@@ -146,6 +145,7 @@ public componentWillReceiveProps(next: CombinedOrderBookProps) {
         maxVolume={maxVolume}
         orderBookEntry={orderBookEntryBids}
         onSelect={onSelectBids}
+        isSell
       />
     </> }
     </>

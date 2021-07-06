@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { compose } from 'redux';
-import { CustomButton } from "src/components";
+import { CustomButton, CustomDropdown, CustomLogo } from "src/components";
 import Nav from "./Nav";
 
 import {
@@ -16,32 +16,22 @@ import {
   toggleSidebar,
 } from 'src/modules';
 import * as S from "./styles";
-import { CustomPairSelect } from 'src/containers';
 import { CustomToolbar } from './toolbar';
 
 import { ReduxProps, DispatchProps, Props } from "./types";
 
 class Header extends React.Component<Props> {
   public render() {
-    const { currentMarket, activateMarkets, activateMarketsStatus  } = this.props;
     
     return  (
-    <S.Wrapper>
-      <S.Container>
-        <CustomButton
-          title="Markets"
-          icon={{ icon: "Chart", background: "primaryBackground" }}
-          onClick={activateMarkets}
-          isActive={activateMarketsStatus}
-        />
-      </S.Container>
-      <S.Container>
-        <CustomToolbar/>
-      </S.Container>
-      <S.Container>
+    <S.Main>
+      <S.Col>
+        <CustomToolbar />
+      </S.Col>
+      <S.Col>
         <Nav />
-      </S.Container>
-    </S.Wrapper>
+      </S.Col>    
+    </S.Main>
   )}
 };
 

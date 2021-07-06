@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import * as S from "./styles"
+import * as S from "./styles copy"
 import {
   CustomButton,
   Decimal,

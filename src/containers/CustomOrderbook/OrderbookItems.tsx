@@ -132,8 +132,8 @@ export const OrderbookItems = (props: TableProps) => {
     const renderRowCells = useCallback((row: CellData[],isSell:boolean) => {
       return row && row.length &&
               <>
-                <S.OrderbookPrice>{row[0]}</S.OrderbookPrice> 
-                <S.OrderbookAmount isSell={isSell}>{row[1]}</S.OrderbookAmount>
+                <S.OrderbookPrice isSell={isSell}>{row[0]}</S.OrderbookPrice> 
+                <S.OrderbookAmount >{row[1]}</S.OrderbookAmount>
                 <S.OrderbookItemWrapper>{row[2]}</S.OrderbookItemWrapper>
             </>
 

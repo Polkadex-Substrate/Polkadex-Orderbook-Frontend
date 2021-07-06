@@ -32,39 +32,54 @@ const itemModifier = {
     }
   `,
 };
-export const Wrapper = styled.header`
-  grid-area: Header;
+export const Main = styled.header`
+  ${({ theme }) => css`
+    position:fixed;
+    max-width: 192rem;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: ${theme.colors.secondaryBackgroundSolid};
+    padding: 0.5rem 1rem;
+ `}
+`
+
+export const Container = styled.div``
+
+export const Col = styled.div`
+  display: flex;
+  align-items: center;
+`
+export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: min-content minmax(70rem, 127rem) auto;
   grid-gap: 2rem;
   align-items: center;
 `;
 
-export const Container = styled.div`
-  :last-child {
-    justify-self: flex-end;
-  }`;
+export const InformationContainer = styled.div` 
+  :not(:last-child) {
+    margin-right: 4rem;
+  }
+  
+  :last-child{
+    display: flex;
+    align-items: center;
+  }
+  `;
 
 // Information Component
 export const InformationWrapper = styled.div`
   ${({ theme }) => css`
-    display: grid;
+    display: flex;
     align-items: center;
-    background: ${theme.colors.gradientBackground};
-    box-shadow: ${theme.shadow.primary};
-    border-radius: 0 1rem 1rem 1rem;
-    padding: 1.2rem;
-    justify-content: space-between;
-    @media screen and (min-width: 560px) {
-      grid-template-columns: 1fr 1fr 1fr auto;
-    }
-    @media screen and (min-width: 360px) and (max-width: 560px) {
-      grid-template-columns: 1fr 1fr;
-    }
   `}
 `;
 
 export const InformationChangeWrapper = styled.div``;
+
 export const ItemWrapper = styled.div<Partial<InformationItemProps>>`
   ${({ theme, orientation, color }) => css`
     ${itemModifier[orientation]};
@@ -74,37 +89,31 @@ export const ItemWrapper = styled.div<Partial<InformationItemProps>>`
     }
     span:first-child {
       font-weight: 400;
-      font-size: 1.2rem;
-      opacity: 0.7;
+      font-size: ${theme.font.sizes.xsmall};
+      opacity: 0.8;
     }
 
     span:last-child {
       font-weight: 600;
-      font-size: 1.5rem;
       ${itemModifier[color](theme)};
+    }
+    :not(:last-child) {
+      margin-right: 2rem;
     }
   `}
 `;
 
-// Pair Component
-export const PairWrapper = styled.a`
+export const DropdownHeader = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  cursor: pointer;
+  font-weight: 600;
+
+  span { 
+    margin: 0 0.5rem 0 1rem;
+  }
 `;
 
-export const PairItemWrapper = styled.div``;
 
-export const PairWrapperCoin = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-export const PairWrapperExchange = styled.div`
-  margin: 0 2rem;
-`;
 // Header Currency
 export const HeaderWrapper = styled.div`
   div {

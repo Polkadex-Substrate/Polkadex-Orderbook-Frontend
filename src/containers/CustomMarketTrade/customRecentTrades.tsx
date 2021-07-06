@@ -79,12 +79,12 @@ const handleOnSelect = useCallback((index: string) => {
   }, [])
 
   return (
-    <S.Wrapper>
+    <>
       <Header />
-      <S.Content>
+      <S.Box>
         {currentMarket && recentTrades ? renderData() : <p>There is no data to show</p>}
-      </S.Content>
-    </S.Wrapper>
+      </S.Box>
+    </>
   )
 }
 
@@ -99,11 +99,11 @@ const Header = () => {
     }
   }, [formatMessage]);
   return (
-    <S.Header>
+    <S.HeaderBox>
       <span>{headers.time}</span>      
       <span>{headers.amount}</span>
       <span>{headers.price}</span>
-    </S.Header>
+    </S.HeaderBox>
   )
 }
 

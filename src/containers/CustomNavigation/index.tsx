@@ -74,11 +74,11 @@ export const CustomNavigation = ({ activateNotification }: Props) => {
       </S.Container>
     </S.Header>
     <S.Footer>
-      {/* <S.FooterNotifications>
+      <S.FooterNotifications>
         <button type="button" onClick={activateNotification}>
           <CustomIcon icon="Notifications" background="transparent" />
         </button>
-      </S.FooterNotifications> */}
+      </S.FooterNotifications>
       <S.FooterLanguage>
         <CustomDropdown direction="right" isOpacity title={<CustomIcon icon="Language" />}>
           <LanguageContent changeLanguage={handleChangeLanguage} currentLanguage={lang}/>

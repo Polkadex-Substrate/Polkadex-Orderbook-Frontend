@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as S from "./styles"
 
 export interface DecimalProps {
     /**
@@ -144,8 +145,8 @@ class Decimal extends React.Component<DecimalProps> {
         } else {
             return (
                 <React.Fragment>
-                    {Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)}
-                    {Decimal.getNumberAfterDot(children, fixed)}
+                    <span> {Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)} </span>
+                    <S.Opacity> {Decimal.getNumberAfterDot(children, fixed)} </S.Opacity>
                 </React.Fragment>
             );
         }
@@ -164,7 +165,7 @@ class Decimal extends React.Component<DecimalProps> {
 
         return (
             <React.Fragment>
-                <span className="cr-decimal__opacity">{val}</span>
+                <S.Opacity>{val}</S.Opacity>
                 <span>{highlighted}</span>
             </React.Fragment>
         );

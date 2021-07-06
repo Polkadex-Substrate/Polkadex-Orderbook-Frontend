@@ -4,18 +4,18 @@ import styled, { css, DefaultTheme } from "styled-components";
 import IButton from "./types";
 
 const wrapperModifier = {
-  Small: (theme: DefaultTheme) => css`
+  small: (theme: DefaultTheme) => css`
     height: 3rem;
     font-size: ${theme.font.sizes.xsmall};
     border-radius: ${theme.border.radius.small};
   `,
-  Medium: (theme: DefaultTheme) => css`
+  medium: (theme: DefaultTheme) => css`
     height: 4rem;
     font-size: ${theme.font.sizes.small};
     padding: ${theme.spacings.xxsmall};
     border-radius: ${theme.border.radius.medium};
   `,
-  Large: (theme: DefaultTheme) => css`
+  large: (theme: DefaultTheme) => css`
     height: 5rem;
     font-size: ${theme.font.sizes.medium};
     padding: ${theme.spacings.xxsmall} ${theme.spacings.xlarge};

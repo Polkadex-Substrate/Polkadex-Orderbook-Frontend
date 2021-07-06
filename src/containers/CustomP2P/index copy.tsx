@@ -35,13 +35,7 @@ import {
   formatWithSeparators,
   OrderProps,
   Decimal,
-  CustomButton, 
-  CustomIcon, 
-  TabContent, 
-  TabHeader, 
-  Tabs
 } from 'src/components';
-
 import * as S from "./styles";
 
 interface ReduxProps {
@@ -141,67 +135,29 @@ class OrderInsert extends React.PureComponent<Props, StoreProps> {
   
     return (
       <S.Wrapper ref={this.orderRef}>
-       <Tabs>
-        <h2>Place Order</h2>
-        <S.Header>
-          <TabHeader>
-            <S.TabHeader> Buy </S.TabHeader>
-          </TabHeader>
-          <TabHeader>
-            <S.TabHeader isSell={true}> Sell </S.TabHeader>
-          </TabHeader>
-        </S.Header>
-        <S.Content>
-          <TabContent>
-            <Form type="sell" />
-          </TabContent>
-          <TabContent>
-            <Form type="buy" />
-          </TabContent>
-        </S.Content>
-        <S.Footer>
-          <S.FooterTitle>
-            <h2>Assets</h2>
-            <a href="/">
-              Buy <CustomIcon icon="ArrowRight" size="xsmall" background="none" style={{padding: 1}}/>
-            </a>
-          </S.FooterTitle>
-          <S.FooterContent>
-            <S.FooterActions>
-              <button type="button">Deposit</button>
-              <button type="button">Withdraw</button>
-            </S.FooterActions>
-            <S.FooterTokens>
-              <S.FooterToken>
-                <S.FooterTokenCard>
-                  <p>PDEX</p>
-                  <div>
-                    <span>Available</span>
-                    <span>Reserved</span>
-                  </div>
-                </S.FooterTokenCard>
-                <S.FooterTokenCard>
-                  <span>884.000000</span>
-                  <span>000.000000</span>
-                </S.FooterTokenCard>
-              </S.FooterToken>
-              <S.FooterToken>
-                <S.FooterTokenCard>
-                  <p>ETH</p>
-                  <div>
-                    <span>Available</span>
-                    <span>Reserved</span>
-                  </div>
-                </S.FooterTokenCard>
-                <S.FooterTokenCard>
-                  <span>884.000000</span>
-                  <span>000.000000</span>
-                </S.FooterTokenCard>
-              </S.FooterToken>
-            </S.FooterTokens>
-          </S.FooterContent>
-        </S.Footer>
-      </Tabs>
+        <Order 
+         userLoggedIn={userLoggedIn}
+         asks={asks}
+         bids={bids}
+         disabled={executeLoading}
+         from={currentMarket.quote_unit}
+         availableBase={this.getAvailableValue(walletBase)}
+         availableQuote={this.getAvailableValue(walletQuote)}
+         onSubmit={this.handleSubmit}
+         priceMarketBuy={Number((currentTicker || defaultCurrentTicker).last)}
+         priceMarketSell={Number((currentTicker || defaultCurrentTicker).last)}
+         priceLimit={priceLimit}
+         to={currentMarket.base_unit}
+         handleSendType={this.getOrderType}
+         currentMarketAskPrecision={currentMarket.amount_precision}
+         currentMarketBidPrecision={currentMarket.price_precision}
+         width={this.state.width}
+         listenInputPrice={this.listenInputPrice}
+         defaultTabIndex={defaultTabIndex}
+         currentMarketFilters={currentMarketFilters}
+         isMobileDevice={isMobileDevice}
+         translate={this.translate}
+        />
       </S.Wrapper>
     );
   }
@@ -349,47 +305,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export const CustomP2P = injectIntl(connect(mapStateToProps, mapDispatchToProps)(OrderInsert as any)) as any;
-
-
-
-const Form = ({ type = "sell" }) => {
-  return (
-    <S.FormWrapper>
-      <Tabs>
-        <S.FormHeader>
-          <TabHeader>
-            <S.FormTabHeader>Limit</S.FormTabHeader>
-          </TabHeader>
-          <TabHeader>
-            <S.FormTabHeader>Market</S.FormTabHeader>
-          </TabHeader>
-        </S.FormHeader>
-        <S.FormContent>
-          <form onSubmit={() => console.log("Submit..")}>
-            <Input label="Price" token="ETH" placeholder="Price"/>
-            <Input label="Amount" token="PDEX" placeholder="Amount"/>
-            <p>Range</p>
-            <Input label="Total" token="ETH" placeholder="Total"/>
-            <CustomButton
-              title="Log in"
-              style={{ width: "100%", justifyContent: "center" }}
-              background="primary"
-            />
-          </form>
-        </S.FormContent>
-      </Tabs>
-    </S.FormWrapper>
-  );
-};
-
-const Input = ({ token, label, ...props }) => {
-  return (
-    <S.InputWrapper>
-      <p>{label}</p>
-      <div>
-        <input type="text" {...props} />
-        <span>{token}</span>
-      </div>
-    </S.InputWrapper>
-  );
-};

@@ -9,21 +9,17 @@ type StyleProps = {
   isSell?:boolean
 }
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.section`
   ${({ theme }) => css`
-    background: ${theme.colors.primaryBackground};
-    box-shadow: ${theme.shadow.primary};
-    border-radius: ${theme.border.radius.primary.small};
-    padding: 1.3rem;
-    min-width: 32rem;
-    max-width: 34rem;
+    grid-area: Orderbook;
+    background: ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.7rem;
+  padding: 1.5rem;;
   h2 {
     ${({ theme }) => css`
       font-size: ${theme.font.sizes.medium};
@@ -48,7 +44,8 @@ export const Options = styled.div`
   }
 `;
 export const Content = styled.div`
-  max-height: 60rem;
+ display: grid;
+ grid-template-rows: 1fr min-content 1fr;
 `;
 export const Box = styled.div``;
 export const BoxHeader = styled.div`
@@ -56,21 +53,27 @@ export const BoxHeader = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: 0.3rem;
-
+    padding: 0 1.5rem;
     span {
       font-size: ${theme.font.sizes.xxsmall};
       font-weight: 500;
       opacity: 0.5;
+      
+      :not(:first-child){
+       text-align: end;
+      }
     }
+    
   `}
 `;
 
 export const BoxContent = styled.div`
-  max-height: 20rem;
+  max-height: 22.2rem;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
   font-weight: 600;
+  padding: 0 1.5rem;
 `;
 
 export const OrderbookItemContainer = styled.div`
@@ -82,21 +85,23 @@ export const OrderbookItemContainer = styled.div`
   }
 `;
 
-export const OrderbookPrice = styled.span``
+export const OrderbookPrice = styled.span<StyleProps>`
+  ${({theme, isSell})=> css`
+    span {
+      color: ${isSell ? theme.colors.green : theme.colors.primary};
+    }
+  `}
+`
 
 export const OrderbookItemWrapper = styled.div`
   width: 100%;
+  text-align: end;
   span {
     display: inline-block;
   }
 `
 
 export const OrderbookAmount = styled(OrderbookItemWrapper)<StyleProps>`
-  ${({theme, isSell})=> css`
-    span {
-      color: ${isSell ? theme.colors.green : theme.colors.primary};
-    }
-  `}
 `;
 
 export const OrderbookItem = styled.div`
@@ -123,9 +128,7 @@ export const OrderbookItem = styled.div`
 
 export const Select = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackground};
     padding: 1rem;
-    border-radius: 0.8rem;
     text-align: center;
     margin: 0.8rem 0;
     font-weight: 600;
@@ -157,7 +160,7 @@ export const VolumeSpan = styled.span`
   display: block;
   height: 1.9rem;
   width: 30%;
-  opacity: 0.3;
+  opacity: 0.15;
   margin-bottom: 0.2rem;
 `
 
@@ -169,10 +172,13 @@ export const OrderbookDropdown = styled.div`
     border-radius: 1rem;
     text-align: left;
     width: max-content;
-
-    button:first-child {
-      margin-bottom: 1rem;
-      display: block;
+    button {
+      font-weight: bold;
+      
+      :first-child {
+        margin-bottom: 1rem;
+        display: block;
+      }
     }
   `}
 `

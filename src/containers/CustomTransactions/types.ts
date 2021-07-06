@@ -30,5 +30,6 @@ export type CardProps = {
   amount?:string | ReactNode
   total?: string | ReactNode
   filled?: string | ReactNode
+  type?: 'Limit' | 'Market'
   cancel?: () => void
 }

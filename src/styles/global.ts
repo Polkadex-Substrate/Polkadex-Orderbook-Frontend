@@ -29,7 +29,6 @@ ${({ theme }) => css`
       width: 100%;
     }
 
-
   .animation {
     animation-duration: 0.3s;
     -webkit-animation-duration: 0.3s;

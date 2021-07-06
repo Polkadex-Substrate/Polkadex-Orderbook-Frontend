@@ -12,24 +12,12 @@ export const CustomThemeSwitch = () => {
   return (
     <S.Wrapper>
       <button
-        aria-label="Change to dark mode"
-        title="Change to dark mode"
+        aria-label={`Change to ${themeSelect} mode`}
+        title={`Change to ${themeSelect} mode`}
         type="button"
-        onClick={() => dispatch(changeColorTheme("dark"))}
+        onClick={() => dispatch(changeColorTheme(themeSelect === 'dark' ? 'light' : 'dark'))}
       >
-        <CustomIcon icon="Moon" isActive={themeSelect === 'dark' ? true : false} />
-      </button>
-      <button
-        aria-label="Change to light mode"
-        title="Change to light mode"
-        type="button"
-        onClick={() =>   dispatch(changeColorTheme("light"))}
-      >
-        <CustomIcon
-          icon="Sun"
-          background="transparent"
-          isActive={themeSelect === 'light' ? true : false} 
-        />
+        <CustomIcon icon={themeSelect === 'dark' ? 'Moon' : 'Sun'} background="none" />
       </button>
     </S.Wrapper>
   );

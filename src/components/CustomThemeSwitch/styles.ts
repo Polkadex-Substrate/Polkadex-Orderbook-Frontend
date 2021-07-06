@@ -7,8 +7,6 @@ export const Wrapper = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 1rem;
-
     span {
       font-size: ${theme.font.sizes.xsmall};
     }
