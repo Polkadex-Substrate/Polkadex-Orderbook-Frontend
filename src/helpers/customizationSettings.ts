@@ -1,80 +1,88 @@
-import {
-    AVAILABLE_COLOR_TITLES,
-    CustomizationSettingsInterface,
-} from '../themes';
-
+import { AnyAction } from "redux";
+import { AVAILABLE_COLOR_TITLES } from "src/styles/ColorTitles";
+import { CustomizationSettingsInterface } from "src/styles/types";
 /*
 1. Remove all color variables from root and body elements
 */
 export const clearCustomizationSettings = () => {
-    const rootElement = document.documentElement;
-    const bodyElement = document.querySelector<HTMLElement>('body')!;
+  const rootElement = document.documentElement;
+  const bodyElement = document.querySelector<HTMLElement>("body")!;
 
-    if (rootElement) {    
-        AVAILABLE_COLOR_TITLES.reduce((result, item) => {
-            rootElement.style.removeProperty(item.key);
+  if (rootElement) {
+    AVAILABLE_COLOR_TITLES.reduce((result, item) => {
+      rootElement.style.removeProperty(item.key);
 
-            if (bodyElement) {
-                bodyElement.style.removeProperty(item.key);
-            }
+      if (bodyElement) {
+        bodyElement.style.removeProperty(item.key);
+      }
 
-            return result;
-        }, {});
-    }
-}
+      return result;
+    }, {});
+  }
+};
 
 /*
 1. Set color style variables of root and body elements
 2. Rebuild trading view chart to apply updated colors
 */
 export const applyCustomizationSettingsColors = (
-    customization?: CustomizationSettingsInterface,
-    toggleChartRebuild?: () => void,
+  customization?: CustomizationSettingsInterface,
+  toggleChartRebuild?: any
 ) => {
-    const settingsFromConfig: CustomizationSettingsInterface | undefined =
-        window.env?.palette ? JSON.parse(window.env.palette) : undefined;
-    const rootElement = document.documentElement;
-    const bodyElement = document.querySelector<HTMLElement>('body')!;
-    let shouldChartRebuild = false;
+  const settingsFromConfig: CustomizationSettingsInterface | undefined = window
+    .env?.palette
+    ? JSON.parse(window.env.palette)
+    : undefined;
+  const rootElement = document.documentElement;
+  const bodyElement = document.querySelector<HTMLElement>("body")!;
+  let shouldChartRebuild = false;
 
-    if (rootElement) {
-        AVAILABLE_COLOR_TITLES.reduce((result, item) => {
-            let darkModeColor = undefined;
-            let lightModeColor = undefined;
-    
-            if (customization?.theme_colors?.dark) {
-                darkModeColor = customization.theme_colors.dark.find((color => color.key === item.key));
-            }
+  if (rootElement) {
+    AVAILABLE_COLOR_TITLES.reduce((result, item) => {
+      let darkModeColor;
+      let lightModeColor;
 
-            if (!darkModeColor && settingsFromConfig?.theme_colors?.dark) {
-                darkModeColor = settingsFromConfig.theme_colors.dark.find((color => color.key === item.key));
-            }
+      if (customization?.theme_colors?.dark) {
+        darkModeColor = customization.theme_colors.dark.find(
+          (color) => color.key === item.key
+        );
+      }
 
-            if (customization?.theme_colors?.light) {
-                lightModeColor = customization.theme_colors.light.find((color => color.key === item.key));
-            }
+      if (!darkModeColor && settingsFromConfig?.theme_colors?.dark) {
+        darkModeColor = settingsFromConfig.theme_colors.dark.find(
+          (color) => color.key === item.key
+        );
+      }
 
-            if (!lightModeColor && settingsFromConfig?.theme_colors?.light) {
-                lightModeColor = settingsFromConfig.theme_colors.light.find((color => color.key === item.key));
-            }
+      if (customization?.theme_colors?.light) {
+        lightModeColor = customization.theme_colors.light.find(
+          (color) => color.key === item.key
+        );
+      }
 
-            if (rootElement && darkModeColor) {
-                rootElement.style.setProperty(item.key, darkModeColor.value);
-                shouldChartRebuild = true;
-            }
+      if (!lightModeColor && settingsFromConfig?.theme_colors?.light) {
+        lightModeColor = settingsFromConfig.theme_colors.light.find(
+          (color) => color.key === item.key
+        );
+      }
 
-            if (bodyElement && lightModeColor) {
-                bodyElement.style.setProperty(item.key, lightModeColor.value);
-                shouldChartRebuild = true;
-            }
+      if (rootElement && darkModeColor) {
+        rootElement.style.setProperty(item.key, darkModeColor.value);
+        shouldChartRebuild = true;
+      }
 
-            return result;
-        }, {});
-    }
+      if (bodyElement && lightModeColor) {
+        bodyElement.style.setProperty(item.key, lightModeColor.value);
+        shouldChartRebuild = true;
+      }
 
-    if (shouldChartRebuild) {
-        toggleChartRebuild && toggleChartRebuild();
-    }
+      return result;
+    }, {});
+  }
+
+  if (shouldChartRebuild) {
+    toggleChartRebuild && toggleChartRebuild();
+  }
 };
 
 /*
@@ -82,9 +90,9 @@ export const applyCustomizationSettingsColors = (
 2. Set color style variables of root and body elements and rebuild chart
 */
 export const applyCustomizationSettings = (
-    customization?: CustomizationSettingsInterface | null,
-    toggleChartRebuild?: () => void,
+  customization?: CustomizationSettingsInterface | null,
+  toggleChartRebuild?: AnyAction
 ) => {
-    clearCustomizationSettings();
-    applyCustomizationSettingsColors(customization, toggleChartRebuild);
+  clearCustomizationSettings();
+  applyCustomizationSettingsColors(customization, toggleChartRebuild);
 };

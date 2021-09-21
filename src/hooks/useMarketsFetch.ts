@@ -1,14 +1,15 @@
-import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { marketsFetch, selectShouldFetchMarkets } from '../modules/public/markets';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { marketsFetch, selectShouldFetchMarkets } from "../modules/public/markets";
+
+import { useReduxSelector } from ".";
 
 export const useMarketsFetch = () => {
-    const shouldDispatch = useSelector(selectShouldFetchMarkets);
-    const dispatch = useDispatch();
+  const shouldDispatch = useReduxSelector(selectShouldFetchMarkets);
+  const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        if (shouldDispatch) {
-            dispatch(marketsFetch());
-        }
-    }, [dispatch, shouldDispatch]);
+  useEffect(() => {
+    if (shouldDispatch) dispatch(marketsFetch());
+  }, [dispatch, shouldDispatch]);
 };

@@ -1,36 +1,55 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "lib": ["dom", "dom.iterable", "es6", "scripthost", "webworker", "es5", "es7", "es2017"],
-        "types": ["node", "jest", "webpack-env"],
-        "jsx": "react",
-        "experimentalDecorators": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "allowJs": true,
-        "baseUrl": "./",
-        "strict": false,
-        "paths": {
-            "lib/*": ["src/lib/*"],
-            "src/*": ["src/*"]
-        },
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "noImplicitAny": false,
-        "typeRoots": ["./node_modules/@types"]
-    },
-    "exclude": [
-        "node_modules",
-        "public",
-        "mocks",
-        "__mocks__",
-        "scripts",
-        "spec",
-        "jest.config.js",
-        "webpack",
-        "./src/*.test.*",
-        "./src/charting_library"
-    ]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "es6",
+      "scripthost",
+      "webworker",
+      "es5",
+      "es7",
+      "es2017"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "paths": {
+      "lib/*": ["./src/lib/*"],
+      "src/*": ["./src/*"],
+  },
+    "forceConsistentCasingInFileNames": false,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "next.config.ss"  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "mocks",
+    "__mocks__",
+    "scripts",
+    "spec",
+    "jest.config.js",
+    "webpack",
+    "./src/*.test.*",
+    "./src/charting_library"
+  ],
+  "files": ["src/styles/styled.d.ts"]
 }

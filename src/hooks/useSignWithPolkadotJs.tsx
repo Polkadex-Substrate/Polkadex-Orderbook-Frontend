@@ -62,7 +62,7 @@ export const useSignWithPolkadotJs = () => {
             captcha_response: "",
           };
           //! SignUp
-          console.log("Dispatch SignInWithPolkadotjS OpenWare Fetch:", payload );
+          console.log("Dispatch SignInWithPolkadotjS, Result?");
         } else {
           setError("No SignIn");
         }

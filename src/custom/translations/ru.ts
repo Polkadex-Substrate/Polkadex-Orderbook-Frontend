@@ -163,7 +163,6 @@ export const ru: LangType = {
     'page.body.wallets.estimated_value': 'Оценочная стоимость',
 
     'page.body.wallets.locked': 'В ордерах',
-    'page.body.wallets.balance': 'Balance',
     'page.body.wallets.balance.spot': 'Spot Balance',
     'page.body.wallets.balance.available': 'Available',
     'page.body.wallets.tabs.deposit': 'Пополнить',
@@ -413,7 +412,7 @@ export const ru: LangType = {
     'page.body.profile.apiKeys.noKeys': 'У Вас нет API ключей',
 
     'page.body.profile.apiKeys.modal.btn.show': 'Показать',
-    'page.body.profile.apiKeys.modal.btn.create': 'Создать',
+    'page.body.profile.apiKeys.modal.btn.create': 'Подтвердить',
     'page.body.profile.apiKeys.modal.btn.copy': 'Копировать',
     'page.body.profile.apiKeys.modal.btn.activate': 'Активировать',
     'page.body.profile.apiKeys.modal.btn.disabled': 'Откл.',
@@ -428,6 +427,8 @@ export const ru: LangType = {
     'page.body.profile.apiKeys.modal.note_content': `Для сохранности средств, не сообщайте свой Секретный и ключ Доступа другим.
     Если Вы забыли свой Секретный ключ, удалите его и создайте новую пару ключей.`,
     'page.body.profile.apiKeys.modal.title': 'Введите 2FA код с приложения',
+    'page.body.profile.apiKeys.modal.label': '6-ти значный Google Authenticator код',
+    'page.body.profile.apiKeys.modal.placeholder': 'Введите код',
 
     'page.body.profile.apiKeys.table.header.kid': 'Kid',
     'page.body.profile.apiKeys.table.header.algorithm': 'Алгоритм',
@@ -506,7 +507,6 @@ export const ru: LangType = {
     'page.confirm.title.profile': 'Get Verified your Profile',
     'page.confirm.title.document': 'Get Verified your Government Issued ID ',
     'page.confirm.title.address': 'Residence verification',
-    'page.confirm.title.warning': 'Please, provide all the information in English language',
 
     'page.body.kyc.phone.phoneNumber': 'Phone number',
     'page.body.kyc.phone.code': 'Enter code that you received',
@@ -527,14 +527,17 @@ export const ru: LangType = {
     'page.body.kyc.documents.uploadFile.front.title': 'Front of ID card',
     'page.body.kyc.documents.uploadFile.front.label': 'Please upload a copy of your valid ID card (Photo or scan)',
     'page.body.kyc.documents.uploadFile.front.button': 'Upload',
+    'page.body.kyc.documents.uploadFile.front.sizes': 'Maximum file size is 20MB',
     'page.body.kyc.documents.uploadFile.front.formats': 'JPG, JPEG, PNG, PDF formats',
     'page.body.kyc.documents.uploadFile.back.title': 'Back of ID card',
     'page.body.kyc.documents.uploadFile.back.label': 'Please upload a copy of your valid ID card (Photo or scan)',
     'page.body.kyc.documents.uploadFile.back.button': 'Upload',
+    'page.body.kyc.documents.uploadFile.back.sizes': 'Maximum file size is 20MB',
     'page.body.kyc.documents.uploadFile.back.formats': 'JPG, JPEG, PNG, PDF formats',
     'page.body.kyc.documents.uploadFile.selfie.title': 'Selfie image',
     'page.body.kyc.documents.uploadFile.selfie.label': 'Please upload a photo of you holding your document',
     'page.body.kyc.documents.uploadFile.selfie.button': 'Upload',
+    'page.body.kyc.documents.uploadFile.selfie.sizes': 'Maximum file size is 20MB',
     'page.body.kyc.documents.uploadFile.selfie.formats': 'JPG, JPEG, PNG, PDF formats',
 
     'page.body.kyc.address.address': 'Address',
@@ -546,8 +549,7 @@ export const ru: LangType = {
     'page.body.kyc.address.uploadFile.title': 'Proof of Address',
     'page.body.kyc.address.uploadFile.label': 'Please upload a Utility bill with your Address (Photo or scan)',
     'page.body.kyc.address.uploadFile.button': 'Upload',
-    'page.body.kyc.address.uploadFile.sizeMinMax': 'Minimum file size is {min}MB, maximum file size is {value}MB',
-    'page.body.kyc.address.uploadFile.sizeMax': 'Maximum file size is {value}MB',
+    'page.body.kyc.address.uploadFile.sizes': 'Maximum file size is 20MB',
     'page.body.kyc.address.uploadFile.formats': 'JPG, JPEG, PNG, PDF formats',
     'page.body.kyc.address.uploadFile.tip': 'Please take a photo or scan of a utility bill showing your name/surname and your address. For the verification to work, the bill must be issued in your name and less than a 3 months ago',
 
@@ -578,8 +580,6 @@ export const ru: LangType = {
     'page.body.kyc.head.phone': 'Верификация телефона',
     'page.body.kyc.head.identity': 'Верификация личности',
     'page.body.kyc.head.document': 'Верификация документов',
-    'page.body.kyc.uploadFile.error.tooBig': 'The size of selected file is too big ({value}KB)',
-    'page.body.kyc.uploadFile.error.tooSmall': 'The size of selected file is too small ({value}KB)',
 
     'page.body.lock.oops': 'Ой!',
     'page.body.lock.expired': 'Похоже, что ваш пробный период истек',
@@ -1054,10 +1054,10 @@ export const ru: LangType = {
     'page.body.internal.transfer.account.balance': 'Available balance: ',
     'page.body.internal.transfer.insufficient.balance': ' - Insufficient balance',
 
-    'page.body.internal.transfer.header.input.username': '1. Enter a valid username of a user whom you want to transfer money',
-    'page.body.internal.transfer.label.username': 'Send to account (username)',
-    'page.body.internal.transfer.placeholder.username': 'Send to account (username)',
-    'page.body.internal.transfer.notice.username': `All transactions are final! Please, double check receiver's username before sending.`,
+    'page.body.internal.transfer.header.input.username': '1. Enter a valid nickname of a user whom you want to transfer money',
+    'page.body.internal.transfer.label.username': 'Send to account (nickname)',
+    'page.body.internal.transfer.placeholder.username': 'Send to account (nickname)',
+    'page.body.internal.transfer.notice.username': `All transactions are final! Please, double check receiver's nickname before sending.`,
 
     // internal transfer - errors
     'account.internal_transfer.non_decimal_amount': 'Non decimal amount',

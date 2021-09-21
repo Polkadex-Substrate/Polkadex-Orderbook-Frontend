@@ -37,6 +37,5 @@ Access-Control-Allow-Credentials: true
     "captcha_type": "none",
     "password_min_entropy": 14,
     "wizard_step": "false",
-    "msPricesUpdates": "1000",
-    "themeSwitcher": "visible"
+    "msPricesUpdates": "1000"
 }

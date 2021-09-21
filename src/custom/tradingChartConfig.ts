@@ -1,41 +1,43 @@
 /* eslint-disable */
 import { ThemeName } from '../charting_library/charting_library.min';
-import {defaultThemes} from "src/styles"
+import { colors } from 'src/constants';
+import { convertRgbToHex, getStylesValueByKey } from '../helpers';
+
 export const customWidgetParams = {};
 
 export const customWidgetOptions = (colorTheme?: string) => {
     if (colorTheme === 'light') {
         return ({
-            toolbar_bg: defaultThemes.dark.colors.primaryBackground,
+            toolbar_bg: colors.light.chart.primary,
             loading_screen: {
-                backgroundColor: defaultThemes.dark.colors.primaryBackground,
+                backgroundColor: colors.light.chart.primary,
             },
             overrides: {
-                ['symbolWatermarkProperties.color']: defaultThemes.light.colors.primaryBackground,
+                ['symbolWatermarkProperties.color']: colors.light.chart.primary,
                 ['volumePaneSize']: 'iny',
-                ['mainSeriesProperties.candleStyle.upColor']: defaultThemes.light.colors.primary,
-                ['mainSeriesProperties.candleStyle.downColor']: defaultThemes.light.colors.green,
-                ['mainSeriesProperties.candleStyle.borderUpColor']: defaultThemes.light.colors.primary,
-                ['mainSeriesProperties.candleStyle.borderDownColor']: defaultThemes.light.colors.green,
-                ['mainSeriesProperties.candleStyle.wickUpColor']: defaultThemes.light.colors.primary,
-                ['mainSeriesProperties.candleStyle.wickDownColor']: defaultThemes.light.colors.green,
-                ['paneProperties.background']:  defaultThemes.light.colors.primaryBackground,
-                ['paneProperties.vertGridProperties.color']: defaultThemes.light.colors.primaryBackground,
+                ['mainSeriesProperties.candleStyle.upColor']: colors.light.chart.up,
+                ['mainSeriesProperties.candleStyle.downColor']: colors.light.chart.down,
+                ['mainSeriesProperties.candleStyle.borderUpColor']: colors.light.chart.up,
+                ['mainSeriesProperties.candleStyle.borderDownColor']: colors.light.chart.down,
+                ['mainSeriesProperties.candleStyle.wickUpColor']: colors.light.chart.up,
+                ['mainSeriesProperties.candleStyle.wickDownColor']: colors.light.chart.down,
+                ['paneProperties.background']:  colors.light.chart.primary,
+                ['paneProperties.vertGridProperties.color']: colors.light.chart.primary,
                 ['paneProperties.vertGridProperties.style']: 1,
-                ['paneProperties.horzGridProperties.color']: defaultThemes.light.colors.primaryBackground,
+                ['paneProperties.horzGridProperties.color']: colors.light.chart.primary,
                 ['paneProperties.horzGridProperties.style']: 1,
-                ['paneProperties.crossHairProperties.color']: defaultThemes.light.colors.primaryBackground,
+                ['paneProperties.crossHairProperties.color']: colors.light.chart.primary,
                 ['paneProperties.crossHairProperties.width']: 1,
                 ['paneProperties.crossHairProperties.style']: 1,
-                ['scalesProperties.backgroundColor']: defaultThemes.light.colors.primaryBackground,
+                ['scalesProperties.backgroundColor']: colors.light.chart.primary,
             },
             theme: 'Light' as ThemeName,
         });
     }
 
-    const primaryColor = defaultThemes.dark.colors.gradientBackground;
-    const upColor =  defaultThemes.dark.colors.primary;
-    const downColor =defaultThemes.dark.colors.green;
+    const primaryColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.primary));
+    const upColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.up));
+    const downColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.down));
 
     return ({
         toolbar_bg: primaryColor,
