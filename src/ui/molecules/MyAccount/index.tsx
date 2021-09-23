@@ -35,9 +35,9 @@ const MyAccount = ({
 export const MyAccountHeader = () => {
   const user = useReduxSelector(selectUserInfo);
 
-  const freeBalance = "1000";
+  const freeBalance = "0?";
   const isVerified = false;
-  const name = "Account 1";
+  const name = user.username;
 
   const shortAddress = user.address
     ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
@@ -53,9 +53,9 @@ export const MyAccountHeader = () => {
 export const MyAccountContent = () => {
   const user = useReduxSelector(selectUserInfo);
 
-  const freeBalance = "1000";
+  const freeBalance = "0?";
   const isVerified = false;
-  const name = "Account 1";
+  const name = user.username;
 
   const shortAddress = user.address
     ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
