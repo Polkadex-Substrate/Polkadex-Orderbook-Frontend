@@ -1,10 +1,8 @@
 import axios from "axios";
 
-import { TradingChartComponent } from "../TradingChart";
+import { TradingChartComponent } from ".";
 
 import { LibrarySymbolInfo } from "public/charting_library/datafeed-api";
-import { finexUrl, isFinexEnabled, tradeUrl } from "src/api/config";
-import { buildQueryString, getTimestampPeriod } from "src/helpers";
 import {
   klineArrayToObject,
   KlineState,
@@ -14,9 +12,10 @@ import {
 import { Market } from "src/modules/public/markets";
 import { periodMinutesToString } from "src/modules/public/ranger/helpers";
 // import { store } from "src/store";
+import { buildQueryString, getTimestampPeriod } from "src/helpers";
+import { finexUrl, isFinexEnabled, tradeUrl } from "src/api/config";
 
-export const print = (...x) =>
-  process.browser && window.console.log.apply(null, [">>>> TC", ...x]);
+export const print = (...x) => window.console.log.apply(null, [">>>> TC", ...x]);
 export interface CurrentKlineSubscription {
   marketId?: string;
   periodString?: string;

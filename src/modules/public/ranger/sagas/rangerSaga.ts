@@ -13,12 +13,9 @@ import {
 } from "redux-saga/effects";
 
 import { isFinexEnabled, rangerUrl } from "../../../../api";
-import { store } from "../../../../store";
+// import { store } from "../../../../store";
 import { pushHistoryEmit } from "../../../user/history";
-import {
-  selectOpenOrdersList,
-  userOpenOrdersUpdate,
-} from "../../../user/openOrders";
+import { selectOpenOrdersList, userOpenOrdersUpdate } from "../../../user/openOrders";
 import { userOrdersHistoryRangerData } from "../../../user/ordersHistory";
 import {
   updateP2PWalletsDataByRanger,
@@ -65,8 +62,6 @@ import {
 import { formatTicker, generateSocketURI, streamsBuilder } from "../helpers";
 import { selectSubscriptions } from "../selectors";
 
-import { p2pOrdersDataWS } from "src/modules/user/p2pOrders";
-import { p2pUserOffersUpdate } from "src/modules/user/p2pOffers";
 import { p2pOffersUpdate } from "src/modules";
 
 interface RangerBuffer {
@@ -93,8 +88,8 @@ const initRanger = (
       }
     };
     ws.onerror = (error) => {
-      window.console.log(`WebSocket error ${error}`);
-      window.console.dir(error);
+      process.browser && window.console.log(`WebSocket error ${error}`);
+      process.browser && window.console.dir(error);
     };
     ws.onclose = (event) => {
       console.log("Close..");
@@ -369,11 +364,7 @@ function* watchDisconnect(socket: WebSocket, channel: Channel<{}>) {
   socket.close();
 }
 
-function* bindSocket(
-  channel: Channel<{}>,
-  socket: WebSocket,
-  buffer: RangerBuffer
-) {
+function* bindSocket(channel: Channel<{}>, socket: WebSocket, buffer: RangerBuffer) {
   return yield all([
     call(reader, channel),
     call(writter, socket, buffer),

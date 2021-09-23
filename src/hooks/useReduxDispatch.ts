@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
-import { RootActions } from "src/store";
 
-export const useReduxDispatch = (action: RootActions) => {
+export const useReduxDispatch = (action) => {
   const dispatch = useDispatch();
   return dispatch(action);
 };

@@ -1,17 +1,23 @@
-import { BiChevronDown } from 'react-icons/bi';
+import { BiChevronRight } from "react-icons/bi";
 
-import * as S from './styles'
-import Props from './types'
+import * as S from "./styles";
+import Props from "./types";
 
-const Link = ({ title="Example", href="#", color='white', action, arrowIcon = false}: Props) => (
-  <S.Wrapper href={href} color={color} >
+const Link = ({
+  title = "Example",
+  href = "#",
+  color = "white",
+  action,
+  arrowIcon = false,
+}: Props) => (
+  <S.Wrapper href={href} color={color}>
     {title}
-    {!!arrowIcon &&
+    {!!arrowIcon && (
       <div>
-       <BiChevronRight />
+        <BiChevronRight />
       </div>
-    }
+    )}
   </S.Wrapper>
-)
+);
 
-export default Link
+export default Link;

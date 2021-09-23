@@ -33,11 +33,7 @@ export const TokenSearch = ({
       <S.ContentTokens>
         {!!tokens &&
           tokens.map((token) => (
-            <TokenItem
-              key={token.id}
-              tokenName={token.name}
-              ticket={token.ticket}
-            />
+            <TokenItem key={token.id} tokenName={token.name} ticket={token.ticket} />
           ))}
       </S.ContentTokens>
     </S.Wrapper>
@@ -53,10 +49,7 @@ const Search = ({ fullWidth = false, ...props }: SearchProps) => {
   );
 };
 
-const TokenItem = ({
-  tokenName = "Polkadex",
-  ticket = "Pdex",
-}: TokenSearchItemProps) => {
+const TokenItem = ({ tokenName = "Polkadex", ticket = "Pdex" }: TokenSearchItemProps) => {
   return (
     <S.TokenItemWrapper>
       <IconToken icon={ticket} />

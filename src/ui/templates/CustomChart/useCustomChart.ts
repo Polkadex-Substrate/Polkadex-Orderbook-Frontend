@@ -1,16 +1,18 @@
-import { useDispatch } from "react-redux";
+import { dataFeedObject, print } from "./api";
+import { widgetOptions, widgetParams } from "./config";
+import { getTradingChartTimezone } from "./timezones";
+
 import {
   IChartingLibraryWidget,
   LanguageCode,
   widget,
-} from "src/charting_library/charting_library.min";
+} from "public/charting_library/charting_library.min";
 import { stdTimezoneOffset } from "src/helpers";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
   selectChartRebuildState,
   selectCurrentColorTheme,
-  selectCurrentLanguage,
   selectCurrentMarket,
   selectKline,
   selectMarkets,
@@ -18,17 +20,12 @@ import {
 } from "src/modules";
 import { periodStringToMinutes } from "src/modules/public/ranger/helpers";
 
-import { dataFeedObject, print } from "./api";
-import { widgetOptions, widgetParams } from "./config";
-import { getTradingChartTimezone } from "./timezones";
-
 const useCustomChart = (customChartRef) => {
   const markets = useReduxSelector(selectMarkets);
   const chartRebuild = useReduxSelector(selectChartRebuildState);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const tickers = useReduxSelector(selectMarketTickers);
   const kline = useReduxSelector(selectKline);
-  const lang = useReduxSelector(selectCurrentLanguage);
   const colorTheme = useReduxSelector(selectCurrentColorTheme);
 
   let datafeed = dataFeedObject(customChartRef, markets);
@@ -88,15 +85,10 @@ const useCustomChart = (customChartRef) => {
       });
     }
   };
-  const setChart = (
-    markets: Market[],
-    currentMarket: Market,
-    colorTheme: string
-  ) => {
+  const setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {
     datafeed = dataFeedObject(customChartRef, markets);
     const currentTimeOffset = new Date().getTimezoneOffset();
-    const clockPeriod =
-      currentTimeOffset === stdTimezoneOffset(new Date()) ? "STD" : "DST";
+    const clockPeriod = currentTimeOffset === stdTimezoneOffset(new Date()) ? "STD" : "DST";
 
     if (kline.period) {
       widgetParams.interval = String(periodStringToMinutes(kline.period));
@@ -145,9 +137,7 @@ const useCustomChart = (customChartRef) => {
       datafeed: datafeed,
       interval: widgetParams.interval,
       container_id: widgetParams.containerId,
-      locale: languageIncluded(lang)
-        ? (lang as LanguageCode)
-        : ("en" as LanguageCode),
+      locale: "en" as LanguageCode,
       timezone: getTradingChartTimezone(currentTimeOffset, clockPeriod),
     };
 
@@ -179,12 +169,9 @@ const useCustomChart = (customChartRef) => {
       if (previousResolution) {
         tvWidget!
           .activeChart()
-          .setResolution(
-            String(periodStringToMinutes(previousResolution)),
-            () => {
-              print("Resolution set", previousResolution);
-            }
-          );
+          .setResolution(String(periodStringToMinutes(previousResolution)), () => {
+            print("Resolution set", previousResolution);
+          });
       }
     });
   };
@@ -192,7 +179,6 @@ const useCustomChart = (customChartRef) => {
     markets,
     chartRebuild,
     currentMarket,
-    lang,
     tickers,
     kline,
     tvWidget,

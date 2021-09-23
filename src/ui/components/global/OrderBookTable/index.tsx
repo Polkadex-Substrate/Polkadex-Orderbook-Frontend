@@ -1,11 +1,10 @@
-import { IOrderBookData } from "src/components/Graph/IGraph";
-
 import OrderBookOrder from "../OrderBookOrder";
+
 import * as S from "./styles";
 
 export type OrderBookTableProps = {
   active?: number;
-  data: IOrderBookData[];
+  data: any;
 };
 
 const OrderBookTable = ({ active = 0, data }: OrderBookTableProps) => {
@@ -21,10 +20,7 @@ const OrderBookTable = ({ active = 0, data }: OrderBookTableProps) => {
           </S.Tr>
         </S.Thead>
         <S.Tbody>
-          {data &&
-            filterBy("buy").map((item) => (
-              <OrderBookOrder key={item.id} data={item} />
-            ))}
+          {data && filterBy("buy").map((item) => <OrderBookOrder key={item.id} data={item} />)}
         </S.Tbody>
       </S.Table>
 
@@ -42,9 +38,7 @@ const OrderBookTable = ({ active = 0, data }: OrderBookTableProps) => {
         </S.Thead>
         <S.Tbody>
           {data &&
-            filterBy("sell").map((item) => (
-              <OrderBookOrder key={item.id} data={item} />
-            ))}
+            filterBy("sell").map((item) => <OrderBookOrder key={item.id} data={item} />)}
         </S.Tbody>
       </S.Table>
     </S.Wrapper>

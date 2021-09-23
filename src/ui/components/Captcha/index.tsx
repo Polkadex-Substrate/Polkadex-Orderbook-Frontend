@@ -1,18 +1,19 @@
-import { captchaId, captchaType } from "src/api/config";
-import { setRecaptchaSuccess } from "src/modules";
 import { memo, useEffect, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch } from "react-redux";
 
+import { setRecaptchaSuccess } from "src/modules";
+import { captchaId, captchaType } from "src/api/config";
+
 export const CaptchaComponent = (props) => {
   const dispatch = useDispatch();
 
-  const reCaptchaRef = useRef();
+  const reCaptchaRef = useRef<any>();
 
   useEffect(() => {
     if (props.error || props.success) {
       if (reCaptchaRef.current) {
-        reCaptchaRef.current.reset();
+        reCaptchaRef?.current?.reset();
       }
     }
   }, [props.error, props.success, reCaptchaRef]);
