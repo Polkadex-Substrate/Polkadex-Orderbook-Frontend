@@ -1,7 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { Keyring } from "@polkadot/keyring";
-
 import { API, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
 import { userData } from "../../profile";
