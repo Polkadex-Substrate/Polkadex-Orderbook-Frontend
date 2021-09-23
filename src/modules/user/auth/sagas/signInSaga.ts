@@ -3,7 +3,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { Keyring } from "@polkadot/keyring";
 import { API, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
-import { userData } from "../../profile";
+import { User, userData } from "../../profile";
 import {
   signInData,
   signInError,
@@ -18,9 +18,7 @@ const sessionsConfig: RequestOptions = {
 
 export function* signInSaga() {
   try {
-    const payload = yield call(getSignature);
-
-    const user = yield call(API.post(sessionsConfig), "/identity/sessions/signature", payload);
+    const user = yield call(() => getUserFromPolkadotWallet());
 
     yield put(userData({ user }));
     process.browser && localStorage.setItem("csrfToken", user.csrf_token);
@@ -43,7 +41,29 @@ export function* signInSaga() {
     }
   }
 }
+const getUserFromPolkadotWallet = async (): Promise<User> => {
+  const { web3Accounts, web3Enable, web3FromSource } = await import('@polkadot/extension-dapp');
 
+  // this call fires up the authorization popup
+  const extensions = await web3Enable('my cool dapp');
+
+  if (extensions.length === 0) {
+    // no extension installed, or the user did not accept the authorization
+    // in this case we should inform the use and give a link to the extension
+    throw new Error("Polkadot.js not detected")
+  }
+  const allAccounts = await web3Accounts();
+
+  const user = allAccounts[0]
+  const injector = await web3FromSource(user.meta.source);
+
+  console.log("allAccounts", user)
+  return {
+    address: user.address,
+    username: user.meta.name,
+    injector,
+  }
+}
 const getExtensionAddress = async () => {
   const keyring = new Keyring({ type: "ed25519", ss58Format: 2 });
   const mnemonic = mnemonicGenerate();
