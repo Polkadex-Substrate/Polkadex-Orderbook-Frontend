@@ -13,7 +13,7 @@ import {
 } from "redux-saga/effects";
 
 import { isFinexEnabled, rangerUrl } from "../../../../api";
-import { store } from "../../../../store";
+// import { store } from "../../../../store";
 import { pushHistoryEmit } from "../../../user/history";
 import { selectOpenOrdersList, userOpenOrdersUpdate } from "../../../user/openOrders";
 import { userOrdersHistoryRangerData } from "../../../user/ordersHistory";

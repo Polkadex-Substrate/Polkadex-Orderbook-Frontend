@@ -1,12 +1,9 @@
-import { IMarketToken } from "src/utils/Interfaces"
+import MarketToken from "../MarketToken";
 
-import MarketToken from '../MarketToken'
-import * as S from './styles'
-type Props = {
-  coins: IMarketToken[]
-}
-const MarketTable = ({ coins }: Props) => (
-<S.Wrapper>
+import * as S from "./styles";
+
+const MarketTable = ({ coins }) => (
+  <S.Wrapper>
     <S.Table>
       <S.Thead>
         <S.Tr>
@@ -16,13 +13,18 @@ const MarketTable = ({ coins }: Props) => (
         </S.Tr>
       </S.Thead>
       <S.Tbody>
-        {coins && coins.map((item:IMarketToken) => (
-          <MarketToken key={item.id} name={item.name} quote={item.quote} symbol={item.symbol} />
-        ))}
+        {coins &&
+          coins.map((item) => (
+            <MarketToken
+              key={item.id}
+              name={item.name}
+              quote={item.quote}
+              symbol={item.symbol}
+            />
+          ))}
       </S.Tbody>
     </S.Table>
+  </S.Wrapper>
+);
 
-</S.Wrapper>
-)
-
-export default MarketTable
+export default MarketTable;

@@ -3,9 +3,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
-import Icon from "../icon";
-
 import * as S from "./styles";
+
+import { Icon } from "src/ui/components";
 
 type Props = {
   position: "right" | "left";
@@ -22,12 +22,7 @@ const DateRange = ({ position = "right" }: Props) => {
 
   return (
     <S.Wrapper>
-      <Icon
-        name="Transactions"
-        background="Gray"
-        size="Medium"
-        action={() => setState(!state)}
-      />
+      <Icon icon="Transactions" background="secondaryBackground" size="medium" />
       {state && (
         <S.WrapperCalendar position={position}>
           <DatePicker

@@ -1,10 +1,9 @@
 import moment from "moment";
 
-import Icon from "../icon";
-
 import * as S from "./styles";
 
 import { ITransactionData } from "src/ui/templates/Transactions/types";
+import { Icon } from "src/ui/components";
 
 type Props = {
   data?: ITransactionData;
@@ -67,10 +66,8 @@ const TransactionOrder = ({ data, remove }: Props) => (
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        {data.status && (
-          <Icon name="Close" background="Primary" size="XSmall" action={remove} />
-        )}
-        <Icon name="Options" background="None" size="Small" />
+        {data.status && <Icon icon="Close" background="primary" size="xsmall" />}
+        <Icon icon="Options" background="none" size="small" />
       </S.ContainerActions>
     </S.Td>
   </S.Tr>

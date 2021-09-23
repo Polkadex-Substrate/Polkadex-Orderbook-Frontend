@@ -1,5 +1,5 @@
 import { AbilitiesInterface } from "src/modules";
-import { CanCan } from "src/ui/templates";
+import { CanCan } from "src/ui/templates/CanCan";
 
 export const PG_TITLE_PREFIX = "Polkadex";
 

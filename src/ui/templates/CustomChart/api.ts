@@ -13,7 +13,7 @@ import {
 } from "src/modules";
 import { Market } from "src/modules/public/markets";
 import { periodMinutesToString } from "src/modules/public/ranger/helpers";
-import { store } from "src/store";
+// import { store } from "src/store";
 
 export const print = (...x) =>
   process.browser && window.console.log.apply(null, [">>>> TC", ...x]);
@@ -134,8 +134,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
     ) => {
       const range = tradingChart.tvWidget!.activeChart().getVisibleRange();
       const period = tradingChart.tvWidget!.activeChart().resolution();
-      store.dispatch(klineUpdateTimeRange(range));
-      store.dispatch(klineUpdatePeriod(period));
+      // store.dispatch(klineUpdateTimeRange(range));
+      // store.dispatch(klineUpdatePeriod(period));
     },
     getBars: async (
       symbolInfo: LibrarySymbolInfo,

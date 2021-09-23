@@ -6,7 +6,7 @@ import {
   RootState,
   selectAbilities,
   selectLoadingAbilities,
-} from "../../../modules";
+} from "src/modules";
 
 interface ReduxProps {
   abilities: AbilitiesInterface;
@@ -54,9 +54,7 @@ class CanCanService extends React.Component<Props> {
     action: string,
     target: string,
     abilities: AbilitiesInterface
-  ) =>
-    abilities[action] &&
-    abilities[action].join("::").split("::").includes(target);
+  ) => abilities[action] && abilities[action].join("::").split("::").includes(target);
 
   public static checkFieldByAction = (
     action: string,
@@ -73,9 +71,8 @@ class CanCanService extends React.Component<Props> {
             item[target.name].includes(target.field)
         ).length) ||
       (!target.field &&
-        abilities[action].filter(
-          (item) => item instanceof Object && item[target.name]
-        ).length));
+        abilities[action].filter((item) => item instanceof Object && item[target.name])
+          .length));
 
   public render() {
     const { abilities, action, target, loading } = this.props;
@@ -100,10 +97,7 @@ class CanCanService extends React.Component<Props> {
   private checkAbilityByAction = (action: string, target: string) => {
     const { abilities } = this.props;
 
-    return (
-      abilities[action] &&
-      abilities[action].join("::").split("::").includes(target)
-    );
+    return abilities[action] && abilities[action].join("::").split("::").includes(target);
   };
 
   private checkFieldByAction = (action: string, target: TargetByField) => {
@@ -120,9 +114,8 @@ class CanCanService extends React.Component<Props> {
               item[target.name].includes(target.field)
           ).length) ||
         (!target.field &&
-          abilities[action].filter(
-            (item) => item instanceof Object && item[target.name]
-          ).length))
+          abilities[action].filter((item) => item instanceof Object && item[target.name])
+            .length))
     );
   };
 }

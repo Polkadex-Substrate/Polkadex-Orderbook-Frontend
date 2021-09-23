@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function Svg1Inch(props: React.SVGProps<SVGSVGElement>) {
+function SvgInch(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="1em"
@@ -8,8 +8,7 @@ function Svg1Inch(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <g clipPath="url(#1INCH_svg__clip0)">
         <path
           d="M17.716 14.816l-.476-3.38 4.13-2.708-3.773 1.207-.892-1.292-3.254-1.907-7.174 3.733-.372 5.696L9.1 20.36l2.526.365-1.306-2.258v-2.175l.95-1.698.965-.604 1.485 1.446v1.53l1.158 1.024 1.472.169.652.349 1.07-.323.446-1.515-.803-1.066v-.788z"
@@ -46,15 +45,11 @@ function Svg1Inch(props: React.SVGProps<SVGSVGElement>) {
       </g>
       <defs>
         <clipPath id="1INCH_svg__clip0">
-          <path
-            fill="#fff"
-            transform="matrix(-1 0 0 1 22 6)"
-            d="M0 0h18v16H0z"
-          />
+          <path fill="#fff" transform="matrix(-1 0 0 1 22 6)" d="M0 0h18v16H0z" />
         </clipPath>
       </defs>
     </svg>
   );
 }
 
-export default Svg1Inch;
+export default SvgInch;

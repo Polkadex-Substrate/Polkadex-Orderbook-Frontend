@@ -1,5 +1,4 @@
 import CustomChart from "./CustomChart";
-export * from "./Cancan";
 export * from "./MarketChart";
 export * from "./Header";
 export * from "./Markets";
