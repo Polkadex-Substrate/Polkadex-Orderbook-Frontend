@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import Props from "./types";
 
-import Icon from "src/ui/components/global/icon";
+import { Icon } from "src/ui/components";
 
 const TradeInfo = ({
   label = "Label",
@@ -11,7 +11,7 @@ const TradeInfo = ({
 }: Props) => {
   return (
     <S.Wrapper>
-      <Icon name={icon} />
+      <Icon icon={icon} />
       <div>
         <span>{label}</span>
         <span>

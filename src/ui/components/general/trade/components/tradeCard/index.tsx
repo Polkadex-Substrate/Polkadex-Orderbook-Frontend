@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-import Button from "../../../../Button";
 import TradeInfo from "../tradeInfo";
+
 // import Link from '../link'
 // import Range from '../Range'
 import * as S from "./styles";
+
+import { Button } from "src/ui/components";
 
 export type MarketOrderActionProps = {
   type?: "Sell" | "Buy";
@@ -30,7 +32,7 @@ const TradeCard = ({ type = "Buy" }: MarketOrderActionProps) => {
             </Dropdown> */}
           </S.WrapperActions>
           {/* <Range /> */}
-          <Button type="button" title={type} fullWidth={true} />
+          <Button type="button" title={type} />
         </form>
       </S.ContainerForm>
     </S.WrapperOrder>

@@ -1,5 +1,5 @@
-import WithdrawTemplate from 'templates/withdrawTemplate'
+import WithdrawTemplate from "src/ui/templates/withdrawTemplate";
 
 export default function Withdraw() {
-  return <WithdrawTemplate />
+  return <WithdrawTemplate />;
 }

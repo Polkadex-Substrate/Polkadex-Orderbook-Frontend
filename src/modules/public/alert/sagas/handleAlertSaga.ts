@@ -18,8 +18,7 @@ export function* handleAlertSaga(action: AlertPush) {
         if (
           action.payload.message.indexOf("identity.session.not_active") > -1 ||
           action.payload.message.indexOf("authz.invalid_session") > -1 ||
-          action.payload.message.indexOf("authz.client_session_mismatch") >
-            -1 ||
+          action.payload.message.indexOf("authz.client_session_mismatch") > -1 ||
           action.payload.message.indexOf("authz.csrf_token_mismatch") > -1
         ) {
           yield put(userReset());
@@ -29,14 +28,11 @@ export function* handleAlertSaga(action: AlertPush) {
           yield put(resetHistory());
         }
 
-        if (
-          action.payload.message.indexOf("identity.session.not_active") > -1
-        ) {
+        if (action.payload.message.indexOf("identity.session.not_active") > -1) {
           yield put(alertData(action.payload));
         } else {
           if (
-            action.payload.message.indexOf("authz.client_session_mismatch") >
-              -1 ||
+            action.payload.message.indexOf("authz.client_session_mismatch") > -1 ||
             action.payload.message.indexOf("authz.csrf_token_mismatch") > -1
           ) {
             yield call(callAlertData, action);
@@ -56,24 +52,20 @@ export function* handleAlertSaga(action: AlertPush) {
         }
         break;
       case 403:
-        if (
-          action.payload.message.indexOf("identity.session.invalid_otp") > -1
-        ) {
+        if (action.payload.message.indexOf("identity.session.invalid_otp") > -1) {
           yield call(callAlertData, action);
         }
         if (action.payload.message.indexOf("jwt.decode_and_verify") > -1) {
           yield call(callAlertData, action);
         }
-        if (
-          action.payload.message.indexOf("account.withdraw.not_permitted") > -1
-        ) {
+        if (action.payload.message.indexOf("account.withdraw.not_permitted") > -1) {
           yield call(callAlertData, action);
         }
 
         return;
       case 422:
         if (action.payload.message.indexOf("value.taken") > -1) {
-          window.location.replace("/");
+          process.browser && window.location.replace("/");
         } else {
           yield call(callAlertData, action);
         }

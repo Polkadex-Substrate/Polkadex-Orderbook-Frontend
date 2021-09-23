@@ -1,8 +1,10 @@
-type Props = {
-  label?: string
-  icon?: 'Wallet' | 'Exchange'
-  coin?: string
-  amount?: number
-}
+import { IIcons } from "src/utils/types";
 
-export default Props
+type Props = {
+  label?: string;
+  icon?: IIcons;
+  coin?: string;
+  amount?: number;
+};
+
+export default Props;

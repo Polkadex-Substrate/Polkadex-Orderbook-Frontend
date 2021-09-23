@@ -1,11 +1,6 @@
-import { IOrderBookData } from "src/components/Graph/IGraph";
-
 import * as S from "./styles";
 
-type Props = {
-  data: IOrderBookData;
-};
-const OrderBookOrder = ({ data }: Props) => (
+const OrderBookOrder = ({ data }) => (
   <S.Tr>
     <S.Td>{data.price}</S.Td>
     <S.Td>

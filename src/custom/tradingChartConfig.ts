@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { ThemeName } from '../charting_library/charting_library.min';
+import { ThemeName } from 'public/charting_library/charting_library.min';
 import { colors } from 'src/constants';
 import { convertRgbToHex, getStylesValueByKey } from '../helpers';
 

@@ -15,12 +15,7 @@ import {
   Tabs,
   Tag,
 } from "src/ui/components";
-import {
-  Market,
-  selectMarkets,
-  selectMarketTickers,
-  setCurrentMarket,
-} from "src/modules";
+import { Market, selectMarkets, selectMarketTickers, setCurrentMarket } from "src/modules";
 import { useReduxSelector } from "src/hooks";
 
 const defaultTickers = {
@@ -74,8 +69,7 @@ export const Markets = ({ marketActive = false }) => {
         ...item,
         last: (marketTickets[item.id] || defaultTickers).last,
         volume: (marketTickets[item.id] || defaultTickers).volume,
-        price_change_percent: (marketTickets[item.id] || defaultTickers)
-          .price_change_percent,
+        price_change_percent: (marketTickets[item.id] || defaultTickers).price_change_percent,
         price_change_percent_num: Number.parseFloat(
           (marketTickets[item.id] || defaultTickers).price_change_percent
         ),
@@ -86,9 +80,7 @@ export const Markets = ({ marketActive = false }) => {
     const allTicketsFilters = allTickets.reduce((pv, cv) => {
       const [, quote] = cv.name.toLowerCase().split("/");
       if (
-        cv.id
-          .toLowerCase()
-          .includes(fieldValue.searchFieldValue.toLowerCase()) &&
+        cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
           fieldValue.marketsTabsSelected.toLowerCase() === quote ||
           fieldValue.marketsTabsSelected.toLowerCase() === "all")
@@ -134,10 +126,7 @@ export const Markets = ({ marketActive = false }) => {
                     <li>
                       <a
                         role="button"
-                        onClick={() =>
-                          handleMarketsTabsSelected(item.toLowerCase())
-                        }
-                      >
+                        onClick={() => handleMarketsTabsSelected(item.toLowerCase())}>
                         {item}
                       </a>
                     </li>
@@ -165,11 +154,7 @@ export const Markets = ({ marketActive = false }) => {
                         key={item.id}
                         tokenIcon={item.base_unit}
                         pair={item.name}
-                        vol={Decimal.format(
-                          Number(item.volume),
-                          item.price_precision,
-                          ","
-                        )}
+                        vol={Decimal.format(Number(item.volume), item.price_precision, ",")}
                         priceFiat={Decimal.format(
                           Number(item.last),
                           item.price_precision,
@@ -192,16 +177,8 @@ export const Markets = ({ marketActive = false }) => {
   );
 };
 
-const ContentItem = ({
-  tokenIcon,
-  pair,
-  vol,
-  priceFiat,
-  price,
-  change,
-  ...props
-}: Props) => (
-  <S.ContentItemWrapper {...props}>
+const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, ...props }: Props) => (
+  <S.ContentItemWrapper>
     <S.ContentItemToken>
       {tokenIcon ? (
         <IconToken icon={tokenIcon} />
@@ -209,11 +186,7 @@ const ContentItem = ({
         <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
       )}
       <div>
-        {pair ? (
-          <p>{pair}</p>
-        ) : (
-          <Skeleton width="10rem" style={{ marginBottom: 10 }} />
-        )}
+        {pair ? <p>{pair}</p> : <Skeleton width="10rem" style={{ marginBottom: 10 }} />}
         {vol ? <span>VOL $ {vol}</span> : <Skeleton width="6rem" />}
       </div>
     </S.ContentItemToken>

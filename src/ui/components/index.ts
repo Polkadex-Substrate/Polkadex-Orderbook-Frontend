@@ -3,7 +3,6 @@ export { Captcha } from "./Captcha";
 export { Checkbox } from "./Checkbox";
 export { Decimal } from "./Decimal";
 export { Dropdown } from "./Dropdown";
-export * from "./Form";
 export * from "./Icon";
 export * from "./Input";
 export { Link } from "./Link";

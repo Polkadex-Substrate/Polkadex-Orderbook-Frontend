@@ -23,18 +23,20 @@ export interface Phone {
 export interface User {
   username?: string;
   address?: string;
-  email: string;
-  level: number;
-  otp: boolean;
-  role: string;
-  state: string;
-  uid: string;
-  profiles: UserProfile[];
+  injector
+  email?: string;
+  level?: number;
+  injector?: any;
+  otp?: boolean;
+  role?: string;
+  state?: string;
+  uid?: string;
+  profiles?: UserProfile[];
   csrf_token?: string;
   data?: string;
-  referal_uid: string | null;
-  labels: Label[];
-  phone: Phone[];
-  created_at: string;
-  updated_at: string;
+  referal_uid?: string | null;
+  labels?: Label[];
+  phone?: Phone[];
+  created_at?: string;
+  updated_at?: string;
 }

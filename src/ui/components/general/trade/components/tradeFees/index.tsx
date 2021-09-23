@@ -1,10 +1,9 @@
-import Dropdown from 'components/Dropdown'
-import Icon from 'components/global/icon'
+import * as S from "./styles";
+import Props from "./types";
 
-import * as S from './styles'
-import Props from './types'
+import { Dropdown } from "src/ui/components";
 
-const TradeFees = ({ label = 'Label', value='0.00005' }: Props) => {
+const TradeFees = ({ label = "Label", value = "0.00005" }: Props) => {
   return (
     <S.Wrapper>
       <span>{label}</span>
@@ -13,7 +12,7 @@ const TradeFees = ({ label = 'Label', value='0.00005' }: Props) => {
         <p>Example</p>
       </Dropdown>
     </S.Wrapper>
-  )
-}
+  );
+};
 
-export default TradeFees
+export default TradeFees;
