@@ -4,7 +4,6 @@ import { Keyring } from "@polkadot/keyring";
 
 import { API, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
-import { changeLanguage } from "../../../public/i18n";
 import { userData } from "../../profile";
 import {
   signInData,

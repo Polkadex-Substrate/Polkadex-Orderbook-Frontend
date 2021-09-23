@@ -5,18 +5,13 @@ import { Props, TabProps } from "./types";
 
 import { Button } from "src/ui/components/Button";
 
-export const Tabs = ({
-  defaultActiveTabIndex = 0,
-  children,
-  ...props
-}: Props) => {
+export const Tabs = ({ defaultActiveTabIndex = 0, children, ...props }: Props) => {
   const [state, setState] = useState({ activeTabIndex: defaultActiveTabIndex });
 
   // Toogle currently active tab
   const handleTabClick = (tabIndex: number) =>
     setState({
-      activeTabIndex:
-        tabIndex === state.activeTabIndex ? defaultActiveTabIndex : tabIndex,
+      activeTabIndex: tabIndex === state.activeTabIndex ? defaultActiveTabIndex : tabIndex,
     });
 
   // Clone Component
@@ -45,22 +40,15 @@ export const Tabs = ({
   );
 };
 
-export const TabHeader = ({
-  onClick,
-  tabIndex,
-  title,
-  icon,
-  ...props
-}: TabProps) => {
+export const TabHeader = ({ onClick, tabIndex, title, icon, ...props }: TabProps) => {
   return (
     <S.WrapperTab {...props}>
       <a
         onClick={(e) => {
           e.preventDefault();
           onClick(tabIndex);
-        }}
-      >
-        <Button title={title} active={props.isActive} icon={icon} />
+        }}>
+        <Button title={title} isActive={props.isActive} icon={icon} />
       </a>
     </S.WrapperTab>
   );

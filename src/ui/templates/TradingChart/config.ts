@@ -1,5 +1,5 @@
-import { DEFAULT_TRADING_VIEW_INTERVAL } from "src/constants";
 import { customWidgetOptions, customWidgetParams } from "src/custom/tradingChartConfig";
+import { DEFAULT_TRADING_VIEW_INTERVAL } from "src/constants";
 
 export const widgetParams = {
   interval: String(DEFAULT_TRADING_VIEW_INTERVAL),

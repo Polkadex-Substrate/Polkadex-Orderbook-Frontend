@@ -6,7 +6,6 @@ module.exports = {
   },
   env: {
     HOST_URL: process.env.NEXT_PUBLIC_HOST_URL || "http://localhost:8000",
-    RANGER_HOST_URL:
-      process.env.NEXT_PUBLIC_RANGER_HOST_URL || "localhost:8081",
+    RANGER_HOST_URL: process.env.NEXT_PUBLIC_RANGER_HOST_URL || "localhost:8081",
   },
 };

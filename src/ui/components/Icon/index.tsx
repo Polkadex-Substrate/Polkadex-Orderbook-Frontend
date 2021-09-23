@@ -19,8 +19,7 @@ export const Icon = ({
       isActive={isActive}
       background={background}
       hoverable={hoverable}
-      {...props}
-    >
+      {...props}>
       <Icon />
     </S.WrapperIcon>
   );

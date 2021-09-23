@@ -5,7 +5,7 @@ function Home() {
 
   router.push("trading/dashbtc");
 
-  return null;
+  return <div />;
 }
 
 export default Home;

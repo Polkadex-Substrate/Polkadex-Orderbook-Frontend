@@ -78,14 +78,7 @@ export type IIcons =
   | "Pt"
   | "De";
 
-export type ISizes =
-  | "xxsmall"
-  | "xsmall"
-  | "small"
-  | "normal"
-  | "medium"
-  | "large"
-  | "xlarge";
+export type ISizes = "xxsmall" | "xsmall" | "small" | "normal" | "medium" | "large" | "xlarge";
 
 export type ITokens =
   | "1INCH"

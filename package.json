@@ -14,7 +14,8 @@
     "generateCryptocurrencies": "svgr -d src/components/Cryptocurrencies/ public/img/cryptocurrencies/ --typescript --icon",
     "mockAPI": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockAPI.js",
     "mockWS": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockWS.js",
-    "start-mock": "npm-run-all -p dev mockAPI mockWS"
+    "start-mock": "npm-run-all -p dev mockAPI mockWS",
+    "checkTypes": "tsc --noEmit"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.1.2",

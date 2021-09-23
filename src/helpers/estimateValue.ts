@@ -9,11 +9,7 @@ export interface MarketTicker {
   [key: string]: Ticker;
 }
 
-const findMarket = (
-  askUnit: string,
-  bidUnit: string,
-  markets: Market[]
-): Market | null => {
+const findMarket = (askUnit: string, bidUnit: string, markets: Market[]): Market | null => {
   for (const market of markets) {
     if (
       (market.base_unit === askUnit && market.quote_unit === bidUnit) ||
@@ -26,11 +22,7 @@ const findMarket = (
   return null;
 };
 
-const isMarketPresent = (
-  askUnit: string,
-  bidUnit: string,
-  markets: Market[]
-): boolean => {
+const isMarketPresent = (askUnit: string, bidUnit: string, markets: Market[]): boolean => {
   return findMarket(askUnit, bidUnit, markets) !== null;
 };
 
@@ -52,15 +44,8 @@ export const estimateWithMarket = (
 ): number => {
   const formattedTargetCurrency = targetCurrency.toLowerCase();
   const formattedWalletCurrency = walletCurrency.toLowerCase();
-  const market = findMarket(
-    formattedTargetCurrency,
-    formattedWalletCurrency,
-    markets
-  );
-  const marketTicker = findMarketTicker(
-    (market && market.id) || "",
-    marketTickers
-  );
+  const market = findMarket(formattedTargetCurrency, formattedWalletCurrency, markets);
+  const marketTicker = findMarketTicker((market && market.id) || "", marketTickers);
   const targetCurrencyPrecision = handleCCYPrecision(
     currencies,
     formattedTargetCurrency,
@@ -75,10 +60,7 @@ export const estimateWithMarket = (
     if (formattedTargetCurrency === market.base_unit) {
       const precisedValue = Number(
         Decimal.format(
-          walletTotal *
-            (Number(marketTicker.last) !== 0
-              ? 1 / Number(marketTicker.last)
-              : 0),
+          walletTotal * (Number(marketTicker.last) !== 0 ? 1 / Number(marketTicker.last) : 0),
           targetCurrencyPrecision
         )
       );
@@ -86,10 +68,7 @@ export const estimateWithMarket = (
       return precisedValue;
     } else {
       const precisedValue = Number(
-        Decimal.format(
-          walletTotal * Number(marketTicker.last),
-          targetCurrencyPrecision
-        )
+        Decimal.format(walletTotal * Number(marketTicker.last), targetCurrencyPrecision)
       );
 
       return precisedValue;
@@ -175,16 +154,9 @@ export const estimateValue = (
       const formattedWalletCurrency = wallet.currency.toLowerCase();
 
       if (formattedWalletCurrency === formattedTargetCurrency) {
-        const walletTotal =
-          (Number(wallet.balance) || 0) + (Number(wallet.locked) || 0);
+        const walletTotal = (Number(wallet.balance) || 0) + (Number(wallet.locked) || 0);
         estimatedValue += walletTotal;
-      } else if (
-        isMarketPresent(
-          formattedTargetCurrency,
-          formattedWalletCurrency,
-          markets
-        )
-      ) {
+      } else if (isMarketPresent(formattedTargetCurrency, formattedWalletCurrency, markets)) {
         estimatedValue += estimateWithMarket(
           formattedTargetCurrency,
           formattedWalletCurrency,
@@ -211,10 +183,7 @@ export const estimateValue = (
     formattedTargetCurrency,
     DEFAULT_CCY_PRECISION
   );
-  const precisedEstimatedValue = Decimal.format(
-    estimatedValue,
-    targetCurrencyPrecision
-  );
+  const precisedEstimatedValue = Decimal.format(estimatedValue, targetCurrencyPrecision);
 
   return precisedEstimatedValue;
 };

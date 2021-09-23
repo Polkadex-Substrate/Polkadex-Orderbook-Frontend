@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+
 import {
   Header,
   MarketChart,
@@ -9,6 +11,8 @@ import {
 import * as S from "src/styles/home/trading";
 import { useMarketsFetch } from "src/hooks";
 import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
+// const HeaderComponent = dynamic(() => import("../components/hello"));
+
 const Trading = () => {
   useMarketsFetch();
   useMarketsTickersFetch();

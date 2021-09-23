@@ -32,11 +32,11 @@ const WrapperModifier = {
     border-radius: ${theme.border.radius.large};
   `,
   DarkGray: (theme: DefaultTheme) => css`
-    background-color: ${theme.colors.darkGray};
+    background-color: ${theme.colors.secondaryBackground};
     color: ${theme.colors.white};
   `,
   LightGray: (theme: DefaultTheme) => css`
-    background-color: ${theme.colors.lightGray};
+    background-color: ${theme.colors.secondaryBackground};
     color: ${theme.colors.black};
   `,
   None: (theme: DefaultTheme) => css`
@@ -48,7 +48,7 @@ const WrapperModifier = {
     color: ${theme.colors.white};
   `,
   Gray: (theme: DefaultTheme) => css`
-    background-color: ${theme.colors.gray};
+    background-color: ${theme.colors.secondaryBackground};
     color: ${theme.colors.white};
   `,
 };
