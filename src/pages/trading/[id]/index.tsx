@@ -1,4 +1,4 @@
-import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import {
   Header,
@@ -10,12 +10,14 @@ import {
 } from "src/ui/templates";
 import * as S from "src/styles/home/trading";
 import { useMarketsFetch } from "src/hooks";
-import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
-// const HeaderComponent = dynamic(() => import("../components/hello"));
+// import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
 
 const Trading = () => {
-  useMarketsFetch();
-  useMarketsTickersFetch();
+  const router = useRouter();
+  const { id } = router.query;
+
+  useMarketsFetch(id as string);
+  // useMarketsTickersFetch();
 
   return (
     <S.Main>
