@@ -14,5 +14,7 @@ module.exports = {
   env: {
     HOST_URL: process.env.NEXT_PUBLIC_HOST_URL || "http://localhost:8000",
     RANGER_HOST_URL: process.env.NEXT_PUBLIC_RANGER_HOST_URL || "localhost:8081",
+    PROXY_URL: process.env.PROXY_URL || "http://localhost:7000",
+    PROXY_WS_URL: process.env.PROXY_WS_URL || "http://localhost:7070",
   },
 };

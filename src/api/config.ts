@@ -7,6 +7,11 @@ export const defaultConfig: Config = {
     finexUrl: `${process.env.HOST_URL}/api/v2/finex`,
     p2pUrl: `${process.env.HOST_URL}/api/v2/p2p`,
   },
+  proxy: {
+    authUrl: `${process.env.PROXY_URL}/auth`,
+    barongTimeStampUrl: `${process.env.PROXY_URL}/pingBarong`,
+    websocketUrl: `${process.env.PROXY_WS_URL}`,
+  },
   finex: true,
   withCredentials: false,
   incrementalOrderBook: false,
@@ -47,6 +52,10 @@ Cryptobase.config.storage = {
 const convertToBoolean = (value: any): boolean => {
   return String(value) === "true";
 };
+
+export const proxyAuthUrl = () => Cryptobase.config.proxy.authUrl;
+export const proxyWsUrl = () => Cryptobase.config.proxy.websocketUrl;
+export const barongTimeStamp = () => Cryptobase.config.proxy.barongTimeStampUrl;
 
 export const tradeUrl = () => Cryptobase.config.api.tradeUrl;
 export const authUrl = () => Cryptobase.config.api.authUrl;

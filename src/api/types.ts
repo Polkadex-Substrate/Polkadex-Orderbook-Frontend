@@ -8,6 +8,11 @@ declare global {
       finexUrl: string;
       p2pUrl: string;
     };
+    proxy:{
+      authUrl:string;
+      barongTimeStampUrl:string;
+      websocketUrl:string;
+    }
     finex: string | boolean;
     withCredentials: string | boolean;
     incrementalOrderBook: string | boolean;
