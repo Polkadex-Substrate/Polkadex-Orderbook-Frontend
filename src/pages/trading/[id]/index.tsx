@@ -10,6 +10,7 @@ import {
 } from "src/ui/templates";
 import * as S from "src/styles/home/trading";
 import { useMarketsFetch } from "src/hooks";
+import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 // import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
 
 const Trading = () => {
@@ -18,6 +19,7 @@ const Trading = () => {
 
   useMarketsFetch(id as string);
   // useMarketsTickersFetch();
+  const loading = useKeyringInitalize();
 
   return (
     <S.Main>

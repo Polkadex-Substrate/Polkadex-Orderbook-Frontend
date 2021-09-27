@@ -4,6 +4,8 @@ import {
   AUTH_ENTROPY_PASSWORD_DATA,
   AUTH_ENTROPY_PASSWORD_ERROR,
   AUTH_ENTROPY_PASSWORD_FETCH,
+  AUTH_KEYRING_GENERATE_DATA,
+  AUTH_KEYRING_SIGN_IN_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_SIGN_IN_DATA,
@@ -20,6 +22,20 @@ import {
   AUTH_VERIFICATION_SUCCESS,
 } from "./constants";
 
+export interface SignUpKeyRingData {
+  type: string;
+  payload: {
+    mnemonic: string;
+    name: string;
+    password: string;
+  }
+}
+export interface SignInKeyRingData {
+  payload: {
+    name: string;
+    password: string;
+  }
+}
 export interface GeetestCaptchaResponse {
   geetest_challenge: string;
   geetest_validate: string;
@@ -46,6 +62,10 @@ export interface EntropyPasswordData {
 }
 export interface SignInFetch {
   type: typeof AUTH_SIGN_IN_FETCH;
+  payload: {
+    address: string,
+    password: string;
+  }
 }
 
 export interface SignInError {
@@ -164,8 +184,16 @@ export const entropyPasswordError = (error: CommonError): EntropyPasswordError =
   error,
 });
 
-export const signIn = (): SignInFetch => ({
+export const signInKeyRingData = (payload: SignInKeyRingData["payload"]) => ({
+  type: AUTH_KEYRING_SIGN_IN_DATA,
+  payload
+})
+export const signIn = (address: string, password: string): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,
+  payload: {
+    address,
+    password
+  }
 });
 
 export const signInData = (): SignInData => ({

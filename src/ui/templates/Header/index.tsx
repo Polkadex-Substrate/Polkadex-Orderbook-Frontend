@@ -34,7 +34,7 @@ export const Header = () => {
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-
+  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ"
   return (
     <S.Wrapper>
       <S.Container>
@@ -76,10 +76,11 @@ export const Header = () => {
               <MyAccountContent />
             </Dropdown>
           ) : (
-            <Button title="Connect to a Wallet" onClick={() => dispatch(signIn())} />
+            <Button title="Connect to a Wallet" onClick={() => dispatch(signIn(tempAddr, "password"))} />
           )}
         </S.Column>
       </S.Container>
     </S.Wrapper>
   );
 };
+//
