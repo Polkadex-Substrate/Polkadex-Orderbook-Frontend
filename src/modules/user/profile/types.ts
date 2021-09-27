@@ -23,10 +23,8 @@ export interface Phone {
 export interface User {
   username?: string;
   address?: string;
-  injector
   email?: string;
   level?: number;
-  injector?: any;
   otp?: boolean;
   role?: string;
   state?: string;
