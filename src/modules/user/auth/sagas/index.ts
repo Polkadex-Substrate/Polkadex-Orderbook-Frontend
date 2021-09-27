@@ -10,7 +10,6 @@ import {
 import { entropyPassword } from './entropyPassword';
 import { logoutSaga } from './logoutSaga';
 import { signInSaga } from './signInSaga';
-import { signUpWithKeyRing } from './signupKeyring';
 import { signUpSaga } from './signUpSaga';
 import { verificationSaga } from './verificationSaga';
 
@@ -20,5 +19,4 @@ export function* rootAuthSaga() {
     yield takeEvery(AUTH_VERIFICATION_FETCH, verificationSaga);
     yield takeEvery(AUTH_LOGOUT_FETCH, logoutSaga);
     yield takeLatest(AUTH_ENTROPY_PASSWORD_FETCH, entropyPassword);
-    yield takeLatest(AUTH_KEYRING_SIGN_UP_FETCH, signUpWithKeyRing);
 }

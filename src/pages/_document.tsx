@@ -42,6 +42,7 @@ export default class MyDocument extends Document {
         </Head>
         <body>
           <script src="/config.js"></script>
+          <script src="/polkadex.js"></script>
           <Main />
           <NextScript />
         </body>
