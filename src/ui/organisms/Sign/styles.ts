@@ -79,7 +79,7 @@ export const SignUpWrapper = styled.ul`
     margin: 1rem 0;
   }
 `;
-export const SignUpConteiner = styled.ul`
+export const SignUpContainer = styled.ul`
   p {
     ${({ theme }) => css`
       font-size: ${theme.font.sizes.xxsmall};

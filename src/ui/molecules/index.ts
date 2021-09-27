@@ -7,3 +7,5 @@ export * from "./WalletInput";
 export * from "./ThemeSwitch";
 export * from "./Input";
 export * from "./Checkbox";
+export * from "./Login";
+export * from "./SignUp";

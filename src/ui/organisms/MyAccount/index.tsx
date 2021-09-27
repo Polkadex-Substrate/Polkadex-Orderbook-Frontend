@@ -123,9 +123,3 @@ export const MyCurrentAccount = () => {
     </S.Wrapper>
   );
 };
-<select onChange={() => router.push("/")}>
-  <option disabled>Choose your language</option>
-  <option value="en-US">English</option>
-  <option value="zh-CN">Chinese</option>
-  <option value="es-ES">Spanish</option>
-</select>;

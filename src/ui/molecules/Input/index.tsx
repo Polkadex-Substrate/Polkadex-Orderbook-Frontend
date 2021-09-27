@@ -1,18 +1,20 @@
 import { useRef } from "react";
+import { Field } from "formik";
 
 import * as S from "./styles";
 import { Props, MnemonicExportProps, MnemonicProps } from "./types";
-export const Input = ({ label, ...props }: Props) => (
+export const Input = ({ label, error, ...props }: Props) => (
   <S.Wrapper>
     <label htmlFor={props.name}>
       {label}
-      <input {...props} />
+      <Field {...props} />
     </label>
+    {error && <span>{error}</span>}
   </S.Wrapper>
 );
 
 // Transform component to tags
-export const MnemonicImport = ({ label, onChange, ...props }: MnemonicProps) => {
+export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps) => {
   const inputRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -27,12 +29,12 @@ export const MnemonicImport = ({ label, onChange, ...props }: MnemonicProps) => 
     <S.Wrapper>
       <S.MnemonicContainer>
         <label htmlFor={props.name}>{label}</label>
-        <button type="button" onClick={onChange}>
+        <button type="button" onClick={handleChange}>
           Generate new seed
         </button>
       </S.MnemonicContainer>
 
-      <input ref={inputRef} {...props} />
+      <Field ref={inputRef} {...props} />
       <S.MnemonicAction ref={buttonRef} onMouseOut={handleOnMouseOut} onClick={handlePaste}>
         <span>Paste from clipboard</span>
       </S.MnemonicAction>
@@ -40,7 +42,7 @@ export const MnemonicImport = ({ label, onChange, ...props }: MnemonicProps) => 
   );
 };
 
-export const MnemonicExport = ({ label, phrases, onChange }: MnemonicExportProps) => {
+export const MnemonicExport = ({ label, phrases, handleChange }: MnemonicExportProps) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy from clipboard");
 
@@ -52,7 +54,7 @@ export const MnemonicExport = ({ label, phrases, onChange }: MnemonicExportProps
     <S.Wrapper>
       <S.MnemonicContainer>
         <label htmlFor={label}>{label}</label>
-        <button type="button" onClick={onChange}>
+        <button type="button" onClick={handleChange}>
           Import wallet
         </button>
       </S.MnemonicContainer>
