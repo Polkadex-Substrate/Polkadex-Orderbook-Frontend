@@ -57,9 +57,9 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
               <Icon icon="OrdersSell" size="xsmall" />
             </li>
           </ul>
-          <Dropdown title="001" direction="bottom">
+          {/* <Dropdown title="001" direction="bottom">
             <p>testing</p>
-          </Dropdown>
+          </Dropdown> */}
         </S.Options>
       </S.Header>
       {orderBookLoading ? (

@@ -21,6 +21,10 @@ const wrapperModifiers = {
     left: 0;
     top: 100%;
   `,
+  bottomLeft: () => css`
+    right: 0;
+    top: 100%;
+  `,
   left: () => css`
     right: 100%;
     margin-right: 1rem;

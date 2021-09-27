@@ -1,12 +1,10 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div<{ isHeader: boolean }>`
+export const Wrapper = styled.div<{ isHeader?: boolean }>`
   ${({ theme, isHeader }) => css`
     display: flex;
     align-items: center;
-    background-color: ${isHeader
-      ? theme.colors.secondaryBackground
-      : "transparent"};
+    background-color: ${isHeader ? theme.colors.secondaryBackgroundOpacity : "transparent"};
     border-radius: 1rem;
     padding: 0.6rem;
   `}
@@ -17,11 +15,12 @@ export const AccountInfo = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-left: 0.5rem;
+  flex: 1;
 `;
 
 export const AccountInfoHeader = styled.div`
   ${({ theme }) => css`
-    margin-right: 1.5rem;
+    flex: 1;
     p {
       font-size: ${theme.font.sizes.xsmall};
       font-weight: 600;
@@ -32,6 +31,13 @@ export const AccountInfoHeader = styled.div`
       display: block;
       font-size: ${theme.font.sizes.xxsmall};
     }
+  `}
+`;
+
+export const AccountInfoFlex = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
   `}
 `;
 

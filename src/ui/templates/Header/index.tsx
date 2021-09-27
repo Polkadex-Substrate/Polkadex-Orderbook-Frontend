@@ -2,8 +2,8 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Logo, MyAccountContent, MyAccountHeader, ThemeSwitch } from "src/ui/molecules";
-import { Toolbar } from "src/ui/organisms";
+import { Logo, ThemeSwitch } from "src/ui/molecules";
+import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/organisms";
 import { Button, Decimal, Dropdown } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
@@ -11,7 +11,6 @@ import {
   selectMarkets,
   selectMarketTickers,
   selectUserInfo,
-  signIn,
 } from "src/modules";
 
 const defaultTicker = {
@@ -76,7 +75,13 @@ export const Header = () => {
               <MyAccountContent />
             </Dropdown>
           ) : (
-            <Button title="Connect to a Wallet" onClick={() => dispatch(signIn())} />
+            <Dropdown
+              isOpacity
+              style={{ top: 0 }}
+              title={<Button title="Connect to a Wallet" />}
+              direction="bottomLeft">
+              <SignContent />
+            </Dropdown>
           )}
         </S.Column>
       </S.Container>

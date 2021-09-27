@@ -42,8 +42,8 @@ const modifier = {
   xlarge: () => css`
     max-width: 4.5rem;
     max-height: 4.5rem;
-    padding: 0.9rem;
-    border-radius: 1.4rem;
+    padding: 0.7rem;
+    border-radius: 1rem;
   `,
 };
 
