@@ -13,15 +13,15 @@ export interface RequestOptions {
 export type RequestBody = JsonBody | FormData;
 
 export type RequestMethod = (
-  config: RequestOptions
+config: RequestOptions
 ) => (url: string, body?: RequestBody) => Promise<AxiosResponse["data"]>;
 
 export interface ApiWrapper {
   get: RequestMethod;
   post: RequestMethod;
-  patch: RequestMethod;
-  put: RequestMethod;
-  delete: RequestMethod;
+  patch?: RequestMethod;
+  put?: RequestMethod;
+  delete?: RequestMethod;
 }
 
 export const API: ApiWrapper = {

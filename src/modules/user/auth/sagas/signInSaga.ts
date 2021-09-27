@@ -1,8 +1,6 @@
 import { call, put } from "redux-saga/effects";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { keyring } from '@polkadot/ui-keyring';
-
-import { API, RequestOptions } from "../../../../api";
+import { API, proxyRestUrl, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
 import { User, userData } from "../../profile";
 import {
@@ -12,6 +10,7 @@ import {
   signInRequire2FA,
   signUpRequireVerification,
 } from "../actions";
+import axios from "axios";
 
 const sessionsConfig: RequestOptions = {
   apiVersion: "barong",
@@ -21,6 +20,8 @@ export function* signInSaga(action: SignInFetch) {
   try {
     const { address, password } = action.payload
     const user = yield call(() => getKeyringPairFromAddress(address, password));
+    const proxyResponse = yield call(() => requestProxyAuth());
+    console.log({proxyResponse})
     yield put(userData({ user }));
     process.browser && localStorage.setItem("csrfToken", user.csrf_token);
     yield put(signInData());
@@ -42,15 +43,21 @@ export function* signInSaga(action: SignInFetch) {
   }
 }
 
-const getKeyringPairFromAddress = async (address: string, password: string)=> {
+const getKeyringPairFromAddress = async (address: string, password: string) => {
   try {
     const userPair = keyring.getPair(address)
     console.log(userPair.address, userPair.isLocked);
-     return userPair
+    return userPair
   } catch (e) {
-      throw new Error(e);
+    throw new Error(e);
   }
 };
+
+const requestProxyAuth = async () => {
+  const url = proxyRestUrl();
+  const resp = await axios.get(url + '/pingBarong')
+  return resp.data
+}
 
 const getSignature = async (pair: any) => {
   const { blake2AsHex } = await import("@polkadot/util-crypto");
