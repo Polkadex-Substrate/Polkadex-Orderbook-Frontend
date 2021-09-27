@@ -11,13 +11,14 @@ import {
 import * as S from "src/styles/home/trading";
 import { useMarketsFetch } from "src/hooks";
 import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
+import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 // const HeaderComponent = dynamic(() => import("../components/hello"));
 
 const Trading = () => {
   useMarketsFetch();
   useMarketsTickersFetch();
-
-  return (
+  const loading= useKeyringInitalize();
+  return  (
     <S.Main>
       <Header />
       <S.Wrapper>

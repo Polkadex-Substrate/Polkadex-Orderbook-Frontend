@@ -8,6 +8,10 @@ declare global {
       finexUrl: string;
       p2pUrl: string;
     };
+    proxy: {
+      restUrl: string;
+      wsUrl: string;
+    },
     finex: string | boolean;
     withCredentials: string | boolean;
     incrementalOrderBook: string | boolean;
@@ -42,4 +46,4 @@ declare global {
   }
 }
 
-export {};
+export { };

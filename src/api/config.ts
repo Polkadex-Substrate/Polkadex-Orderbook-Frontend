@@ -7,6 +7,10 @@ export const defaultConfig: Config = {
     finexUrl: `${process.env.HOST_URL}/api/v2/finex`,
     p2pUrl: `${process.env.HOST_URL}/api/v2/p2p`,
   },
+  proxy: {
+    restUrl: `${process.env.PROXY_URL}`,
+    wsUrl: `${process.env.PROXY_WS_RL}`
+  },
   finex: true,
   withCredentials: false,
   incrementalOrderBook: false,
@@ -48,6 +52,8 @@ const convertToBoolean = (value: any): boolean => {
   return String(value) === "true";
 };
 
+export const proxyRestUrl = () => Cryptobase.config.proxy.restUrl;
+export const proxyWsUrl = () => Cryptobase.config.proxy.wsUrl;
 export const tradeUrl = () => Cryptobase.config.api.tradeUrl;
 export const authUrl = () => Cryptobase.config.api.authUrl;
 export const applogicUrl = () => Cryptobase.config.api.applogicUrl;
