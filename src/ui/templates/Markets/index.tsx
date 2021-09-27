@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 import { Props } from "./types";
@@ -45,6 +46,7 @@ export const Markets = ({ marketActive = false }) => {
   const marketTickets = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // Filters
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -55,8 +57,8 @@ export const Markets = ({ marketActive = false }) => {
 
   const handleChangeMarket = (e: string) => {
     const marketToSet = markets.find((el) => el.name === e);
-    console.log(marketToSet);
     if (marketToSet) {
+      router.push(`${marketToSet.id}`, undefined, { shallow: true });
       dispatch(setCurrentMarket(marketToSet));
     }
   };
@@ -104,7 +106,7 @@ export const Markets = ({ marketActive = false }) => {
   allPairs = markets.reduce(getPairsName, allPairs);
 
   return (
-    <S.Section marketActive={marketActive}>
+    <S.Section marketActive={true}>
       <Tabs>
         <S.Header>
           <S.HeaderContainer>
@@ -177,8 +179,8 @@ export const Markets = ({ marketActive = false }) => {
   );
 };
 
-const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, ...props }: Props) => (
-  <S.ContentItemWrapper>
+const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => (
+  <S.ContentItemWrapper onClick={onClick}>
     <S.ContentItemToken>
       {tokenIcon ? (
         <IconToken icon={tokenIcon} />

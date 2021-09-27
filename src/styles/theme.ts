@@ -48,10 +48,8 @@ const defaultTheme = {
     secondaryBackground: "rgba(139,161,190,0.2)",
     secondaryBackgroundOpacity: "rgba(139,161,190,0.1)",
     gradient: "linear-gradient(47.94deg, #e6007a 0%, #6745d2 98.88%)",
-    gradientGreen:
-      "linear-gradient(90deg, #0CA564 0.04%, rgba(2, 192, 118, 0.3) 99.92%)",
-    gradientRed:
-      "linear-gradient(90deg, #E6007A 0.04%, rgba(230, 0, 225, 0.3) 92.26%)",
+    gradientGreen: "linear-gradient(90deg, #0CA564 0.04%, rgba(2, 192, 118, 0.3) 99.92%)",
+    gradientRed: "linear-gradient(90deg, #E6007A 0.04%, rgba(230, 0, 225, 0.3) 92.26%)",
     transparent: "transparent",
     none: "none",
     green: "#0CA564",
@@ -98,19 +96,16 @@ const light = {
   colors: {
     primaryBackground: "#F9FBFC",
     primaryBackgroundOpacity: "#F9FBFC99",
-    gradientBackground:
-      "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
+    gradientBackground: "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
     tertiaryBackground: "#F9FBFC99",
     secondaryBackgroundSolid: "#E8ECF2",
     text: "#000000",
   },
   shadow: {
-    primary:
-      "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
+    primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     secondary:
       "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
-    tertiary:
-      "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.02) 0px 0px 0px 1px",
+    tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.02) 0px 0px 0px 1px",
     quaternary: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
     top: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;",
   },
@@ -137,12 +132,9 @@ const dark = {
     text: "#f5f5f5",
   },
   shadow: {
-    primary:
-      "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
-    secondary:
-      "rgba(0, 0, 0, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
-    tertiary:
-      "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+    primary: "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
+    secondary: "rgba(0, 0, 0, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
+    tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
     quaternary: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
     top: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;",
   },
