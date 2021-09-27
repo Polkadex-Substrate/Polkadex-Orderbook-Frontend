@@ -13,6 +13,6 @@ export const Information = ({
 }: InformationProps) => (
   <S.Wrapper orientation={orientation} color={color}>
     <span> {label} </span>
-    <span>{text || <Skeleton width="5rem" />}</span>
+    {text ? <span>{text}</span> : <Skeleton width="5rem" />}
   </S.Wrapper>
 );

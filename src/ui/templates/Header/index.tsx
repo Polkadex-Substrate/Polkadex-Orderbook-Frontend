@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Logo, MyAccountContent, MyAccountHeader } from "src/ui/molecules";
+import { Logo, MyAccountContent, MyAccountHeader, ThemeSwitch } from "src/ui/molecules";
 import { Toolbar } from "src/ui/organisms";
 import { Button, Decimal, Dropdown } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
@@ -32,7 +32,7 @@ export const Header = () => {
 
   const getTickerValue = (value: string) =>
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
-  const bidUnit = currentMarket?.quote_unit.toUpperCase();
+  const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
   const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ"
   return (
@@ -47,7 +47,7 @@ export const Header = () => {
               Number(getTickerValue("last")),
               currentMarket?.price_precision,
               ","
-            )} ${bidUnit}`}
+            )} ${bidUnit || ""}`}
             currentPrice={
               (marketTickers[currentMarket?.id] || defaultTicker).price_change_percent
             }
@@ -56,20 +56,21 @@ export const Header = () => {
               Number(getTickerValue("volume")),
               currentMarket?.price_precision,
               ","
-            )} ${bidUnit}`}
+            )} ${bidUnit || ""}`}
             changeLow={`${Decimal.format(
               Number(getTickerValue("low")),
               currentMarket?.price_precision,
               ","
-            )} ${bidUnit}`}
+            )} ${bidUnit || ""}`}
             changeHigh={`${Decimal.format(
               Number(getTickerValue("high")),
               currentMarket?.price_precision,
               ","
-            )} ${bidUnit}`}
+            )} ${bidUnit || ""}`}
           />
         </S.Column>
         <S.Column>
+          <ThemeSwitch />
           {user.address ? (
             <Dropdown title={<MyAccountHeader />} direction="bottom">
               <MyAccountContent />

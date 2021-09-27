@@ -5,6 +5,7 @@ import { Props } from "./types";
 
 import { Dropdown } from "src/ui/components";
 import { Information, SelectPairHeader } from "src/ui/molecules";
+import { Markets } from "src/ui/templates";
 
 export const Toolbar = ({
   lastPrice,
@@ -27,8 +28,8 @@ export const Toolbar = ({
               icon={currentMarket?.base_unit || "PDEX"}
             />
           }
-          direction="bottom">
-          <p>Testing..</p>
+          direction="bottomRight">
+          <Markets />
         </Dropdown>
       </S.Container>
       <S.Container>
