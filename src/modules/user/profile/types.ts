@@ -1,4 +1,5 @@
 import { Label } from "../kyc";
+import type { InjectedExtension } from '@polkadot/extension-inject/types';
 
 export interface UserProfile {
   first_name: string;
@@ -23,10 +24,9 @@ export interface Phone {
 export interface User {
   username?: string;
   address?: string;
-  injector
   email?: string;
   level?: number;
-  injector?: any;
+  injector?: InjectedExtension;
   otp?: boolean;
   role?: string;
   state?: string;
