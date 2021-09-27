@@ -5,3 +5,4 @@ export * from "./MyAccount";
 export * from "./AssetInfo";
 export * from "./OrderInput";
 export * from "./WalletInput";
+export * from "./ThemeSwitch";

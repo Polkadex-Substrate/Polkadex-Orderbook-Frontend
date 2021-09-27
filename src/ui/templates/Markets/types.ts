@@ -1,4 +1,5 @@
 import { HTMLAttributes } from "react";
+
 import { ITokens } from "src/utils/types";
 
 export type Props = {
@@ -8,4 +9,4 @@ export type Props = {
   price?: string | number;
   change?: string | number;
   tokenIcon?: ITokens | undefined;
-} & HTMLAttributes<HTMLDivElement>;
+} & Pick<HTMLAttributes<HTMLDivElement>, "onClick">;
