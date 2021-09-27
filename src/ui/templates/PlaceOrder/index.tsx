@@ -3,15 +3,23 @@ import * as S from "./styles";
 import { Icon, TabContent, TabHeader, Tabs } from "src/ui/components";
 import { AssetInfo } from "src/ui/molecules";
 import { OrderForm } from "src/ui/organisms";
+import { usePlaceOrder } from "./usePlaceOrder";
 
 export const PlaceOrder = () => {
+  const {currentMarket} = usePlaceOrder();
+
+  
+  const handleBuyOrderClick = () => {
+    console.log(currentMarket);
+  }
+
   return (
     <S.Wrapper>
       <Tabs>
         <h2>Place Order</h2>
         <S.Header>
           <TabHeader>
-            <S.TabHeader> Buy </S.TabHeader>
+            <S.TabHeader role="button"> Buy </S.TabHeader>
           </TabHeader>
           <TabHeader>
             <S.TabHeader isSell={true}> Sell </S.TabHeader>
@@ -37,7 +45,7 @@ export const PlaceOrder = () => {
             <S.FooterActions>
               <button
                 type="button"
-                onClick={() => console.log("Transfer Interaction")}
+                onClick={handleBuyOrderClick}
               >
                 Transfer
               </button>
