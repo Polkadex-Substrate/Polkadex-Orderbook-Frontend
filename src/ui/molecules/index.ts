@@ -9,4 +9,3 @@ export * from "./Input";
 export * from "./Checkbox";
 export * from "./Login";
 export * from "./SignUp";
-export * from "./Dropdown";

@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Logo, ThemeSwitch, Dropdown } from "src/ui/molecules";
+import { Logo, ThemeSwitch } from "src/ui/molecules";
 import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/organisms";
-import { Button, Decimal } from "src/ui/components";
+import { Button, Decimal, Dropdown } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
   selectCurrentMarket,
@@ -79,8 +79,7 @@ export const Header = () => {
               isOpacity
               style={{ top: 0 }}
               title={<Button title="Connect to a Wallet" />}
-              direction="bottomLeft"
-              variant={2}>
+              direction="bottomLeft">
               <SignContent />
             </Dropdown>
           )}

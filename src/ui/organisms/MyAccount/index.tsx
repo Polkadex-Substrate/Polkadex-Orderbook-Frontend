@@ -3,7 +3,7 @@ import Link from "next/link";
 import { WalletInput } from "../../molecules";
 
 import * as S from "./styles";
-import { Props, MyCurrentAccountProps } from "./types";
+import { Props } from "./types";
 
 import { Button, Icon } from "src/ui/components";
 import { selectUserInfo } from "src/modules";
@@ -99,25 +99,24 @@ export const MyAccountContent = () => {
   );
 };
 
-export const MyCurrentAccountHeader = ({
-  name,
-  address,
-  isHeader = false,
-  ...props
-}: MyCurrentAccountProps) => {
-  const shortAddress = address
-    ? address.slice(0, 10) + "..." + address.slice(address.length - 10)
-    : "";
+export const MyCurrentAccount = () => {
+  const user = useReduxSelector(selectUserInfo);
+
+  const name = user.username || "Account X";
+
+  const shortAddress = user.address
+    ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
+    : "0x0000000...0000000";
 
   return (
-    <S.Wrapper isHeader={isHeader} {...props}>
+    <S.Wrapper isHeader>
       <Icon size="xlarge" icon="Avatar" />
       <S.AccountInfo>
         <S.AccountInfoHeader>
           <p>{name}</p>
           <S.AccountInfoFlex>
             <span>{shortAddress}</span>
-            {isHeader && <Icon icon="ArrowBottom" size="xsmall" />}
+            <Icon icon="ArrowBottom" size="xsmall" />
           </S.AccountInfoFlex>
         </S.AccountInfoHeader>
       </S.AccountInfo>

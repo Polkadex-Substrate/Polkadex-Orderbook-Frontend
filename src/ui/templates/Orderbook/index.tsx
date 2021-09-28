@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, Icon, Skeleton } from "src/ui/components";
-import { Dropdown } from "src/ui/molecules";
+import { Decimal, Dropdown, Icon, Skeleton } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,

@@ -7,7 +7,6 @@ export const Wrapper = styled.div<{ isHeader?: boolean }>`
     background-color: ${isHeader ? theme.colors.secondaryBackgroundOpacity : "transparent"};
     border-radius: 1rem;
     padding: 0.6rem;
-    flex: 1;
   `}
 `;
 
@@ -36,8 +35,10 @@ export const AccountInfoHeader = styled.div`
 `;
 
 export const AccountInfoFlex = styled.div`
-  display: flex;
-  justify-content: space-between;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+  `}
 `;
 
 export const AccountContent = styled.div`

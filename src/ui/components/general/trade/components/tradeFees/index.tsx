@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import Props from "./types";
 
-import { Dropdown } from "src/ui/molecules";
+import { Dropdown } from "src/ui/components";
 
 const TradeFees = ({ label = "Label", value = "0.00005" }: Props) => {
   return (
