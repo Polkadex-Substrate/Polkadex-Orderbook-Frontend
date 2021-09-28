@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-import { WalletInput } from "..";
+import { WalletInput } from "../../molecules";
 
 import * as S from "./styles";
 import { Props } from "./types";
 
 import { Button, Icon } from "src/ui/components";
-import { selectUserInfo, User } from "src/modules";
+import { selectUserInfo } from "src/modules";
 import { useReduxSelector } from "src/hooks";
 
 const MyAccount = ({
@@ -35,13 +35,13 @@ const MyAccount = ({
 export const MyAccountHeader = () => {
   const user = useReduxSelector(selectUserInfo);
 
-  const freeBalance = "0?";
+  const freeBalance = "0";
   const isVerified = false;
   const name = user.username;
 
   const shortAddress = user.address
     ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
-    : "";
+    : "0x00000...0000000";
 
   return (
     <MyAccount isHeader balance={freeBalance} address={shortAddress} accountName={name}>
@@ -53,13 +53,13 @@ export const MyAccountHeader = () => {
 export const MyAccountContent = () => {
   const user = useReduxSelector(selectUserInfo);
 
-  const freeBalance = "0?";
+  const freeBalance = "0";
   const isVerified = false;
   const name = user.username;
 
   const shortAddress = user.address
     ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
-    : "";
+    : "0x00000...0000000";
   return (
     <S.AccountContent>
       <MyAccount balance={freeBalance} address={shortAddress} accountName={name} />
@@ -96,5 +96,30 @@ export const MyAccountContent = () => {
         <Button title=" See Transactions" style={{ width: "100%" }}></Button>
       </S.AccountContentFooter>
     </S.AccountContent>
+  );
+};
+
+export const MyCurrentAccount = () => {
+  const user = useReduxSelector(selectUserInfo);
+
+  const name = user.username || "Account X";
+
+  const shortAddress = user.address
+    ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
+    : "0x0000000...0000000";
+
+  return (
+    <S.Wrapper isHeader>
+      <Icon size="xlarge" icon="Avatar" />
+      <S.AccountInfo>
+        <S.AccountInfoHeader>
+          <p>{name}</p>
+          <S.AccountInfoFlex>
+            <span>{shortAddress}</span>
+            <Icon icon="ArrowBottom" size="xsmall" />
+          </S.AccountInfoFlex>
+        </S.AccountInfoHeader>
+      </S.AccountInfo>
+    </S.Wrapper>
   );
 };

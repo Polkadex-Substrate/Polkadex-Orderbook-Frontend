@@ -1,6 +1,5 @@
 export * from "./Button";
 export * from "./Captcha";
-export * from "./Checkbox";
 export * from "./Decimal";
 export * from "./Dropdown";
 export * from "./Icon";
