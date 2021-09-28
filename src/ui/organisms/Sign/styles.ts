@@ -5,8 +5,7 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     background-color: #30313b;
     border-radius: 1rem;
-    min-width: 35rem;
-    max-width: 38rem;
+    width: 35rem;
     box-shadow: ${theme.shadow.tertiary};
     h4 {
       margin-bottom: 1rem;
@@ -62,24 +61,24 @@ export const ListItem = styled.li<{ isActive?: boolean }>`
   `}
 `;
 
-export const TabContent = styled.ul`
+export const TabContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.gradientBackground};
   `}
 `;
 
-export const LoginWrapper = styled.ul`
+export const LoginWrapper = styled.div`
   ${InputWrapper} {
     margin: 1rem 0;
   }
 `;
 
-export const SignUpWrapper = styled.ul`
+export const SignUpWrapper = styled.div`
   ${InputWrapper} {
     margin: 1rem 0;
   }
 `;
-export const SignUpContainer = styled.ul`
+export const SignUpContainer = styled.div`
   p {
     ${({ theme }) => css`
       font-size: ${theme.font.sizes.xxsmall};
