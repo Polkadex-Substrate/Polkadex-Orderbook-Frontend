@@ -27,7 +27,7 @@ export const Login = () => {
             <MyCurrentAccount />
             <Input
               label="Password"
-              placeholder="Enter a new password fot this account"
+              placeholder="Enter a new password for this account"
               type="password"
               name="password"
               // error={errors.password && touched.password && errors.password}

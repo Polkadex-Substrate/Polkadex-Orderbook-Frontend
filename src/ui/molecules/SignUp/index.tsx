@@ -5,6 +5,7 @@ import * as S from "./styles";
 
 import { Button } from "src/ui/components";
 import { Checkbox, Input, MnemonicImport, MnemonicExport } from "src/ui/molecules";
+import { useMnemonic } from "src/hooks/useMnemonic";
 
 const defaultValues = {
   password: "",
@@ -15,21 +16,8 @@ const defaultValues = {
 
 export const SignUp = () => {
   const [state, setstate] = useState(false);
-
-  const phrases = [
-    "witch",
-    "collapse",
-    "practice",
-    "feed",
-    "shame",
-    "open",
-    "despair",
-    "road",
-    "again",
-    "ice",
-    "least",
-    "coffee",
-  ];
+  const mnemonic: Array<string> = useMnemonic()
+  const phrases = mnemonic;
   return (
     <S.Wrapper>
       <Formik
