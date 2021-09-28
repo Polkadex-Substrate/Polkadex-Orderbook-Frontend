@@ -105,7 +105,6 @@ export const MyAccountContent = () => {
 export const MyCurrentAccount = () => {
   const userList = useReduxSelector(selectAllUserList);
   const user = userList[0]
-  console.log("user form componenct", user)
   const name = user.username || "Account X";
 
   const shortAddress = user.address

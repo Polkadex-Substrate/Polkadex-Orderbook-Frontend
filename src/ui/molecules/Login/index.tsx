@@ -21,8 +21,7 @@ export const Login = () => {
       <h4>Sign In</h4>
       <Formik
         initialValues={defaultValues}
-        validationSchema={signInValidations}
-        onSubmit={async (values) => {
+        onSubmit={ (values) => {
           console.log("VALUES:", values);
           dispatch(signIn(values.password, values.account))
         }}>
