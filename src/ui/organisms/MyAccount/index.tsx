@@ -6,8 +6,10 @@ import * as S from "./styles";
 import { Props } from "./types";
 
 import { Button, Icon } from "src/ui/components";
-import { selectUserInfo } from "src/modules";
+import { selectAllUserList, selectUserInfo, userFetch } from "src/modules";
 import { useReduxSelector } from "src/hooks";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const MyAccount = ({
   children,
@@ -51,6 +53,7 @@ export const MyAccountHeader = () => {
 };
 
 export const MyAccountContent = () => {
+
   const user = useReduxSelector(selectUserInfo);
 
   const freeBalance = "0";
@@ -100,8 +103,8 @@ export const MyAccountContent = () => {
 };
 
 export const MyCurrentAccount = () => {
-  const user = useReduxSelector(selectUserInfo);
-
+  const userList = useReduxSelector(selectAllUserList);
+  const user = userList[0]
   const name = user.username || "Account X";
 
   const shortAddress = user.address

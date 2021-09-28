@@ -20,8 +20,10 @@ import {
   PROFILE_USER_DATA,
   PROFILE_USER_ERROR,
   PROFILE_USER_FETCH,
+  PROFILE_USER_LIST_DATA,
+  PROFILE_USER_LIST_FETCH,
 } from "./constants";
-import { User } from "./types";
+import { User, UserSkeleton } from "./types";
 
 export interface ProfileState {
   passwordChange: {
@@ -34,6 +36,7 @@ export interface ProfileState {
     success?: boolean;
     error?: CommonError;
   };
+  allUsers: UserSkeleton[];
   userData: {
     user: User;
     error?: CommonError;
@@ -53,7 +56,9 @@ const ifUserIsLoggedIn = () => {
 };
 
 export const defaultUser = {
+
   username: "",
+  address: "",
   email: "",
   level: 0,
   otp: false,
@@ -67,6 +72,7 @@ export const defaultUser = {
   created_at: "",
   updated_at: "",
 };
+const initialUserList = []
 
 export const initialStateProfile: ProfileState = {
   passwordChange: {
@@ -76,6 +82,7 @@ export const initialStateProfile: ProfileState = {
     barcode: "",
     url: "",
   },
+  allUsers: initialUserList,
   userData: {
     user: defaultUser,
     isFetching: ifUserIsLoggedIn(),
@@ -177,6 +184,7 @@ export const userReducer = (
         isFetching: true,
       };
     case PROFILE_USER_DATA:
+      console.log("inside reducer", state.user)
       return {
         ...state,
         isFetching: false,
@@ -237,6 +245,24 @@ export const userReducer = (
   }
 };
 
+export const userListReducer = (state = initialUserList,
+  action: ProfileAction) => {
+  switch (action.type) {
+    case PROFILE_USER_LIST_FETCH:
+      return {
+        ...state
+      };
+    case PROFILE_USER_LIST_DATA: {
+      return {
+          ...action.payload.userList
+      }
+    };
+    default:
+      return state;
+  }
+
+
+}
 export const profileReducer = (
   state = initialStateProfile,
   action: ProfileAction
@@ -276,12 +302,18 @@ export const profileReducer = (
     case PROFILE_CHANGE_USER_DATA:
     case PROFILE_CHANGE_USER_ERROR:
       const userState = { ...state.userData };
-
       return {
         ...state,
         userData: userReducer(userState, action),
       };
 
+    case PROFILE_USER_LIST_FETCH:
+    case PROFILE_USER_LIST_DATA:
+      const allUsersState = { ...state.allUsers };
+      return {
+        ...state,
+        allUsers: userListReducer(allUsersState, action),
+      }
     default:
       return state;
   }

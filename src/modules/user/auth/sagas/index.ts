@@ -1,6 +1,7 @@
 import { takeEvery, takeLatest } from 'redux-saga/effects';
 import {
     AUTH_ENTROPY_PASSWORD_FETCH,
+    AUTH_KEYRING_SIGN_UP_FETCH,
     AUTH_LOGOUT_FETCH,
     AUTH_SIGN_IN_FETCH,
     AUTH_SIGN_UP_FETCH,

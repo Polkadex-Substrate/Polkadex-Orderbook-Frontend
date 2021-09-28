@@ -7,6 +7,7 @@ import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/
 import { Button, Decimal, Dropdown } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
+  selectAllUserList,
   selectCurrentMarket,
   selectMarkets,
   selectMarketTickers,
@@ -23,17 +24,18 @@ const defaultTicker = {
 };
 
 export const Header = () => {
-  const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const user = useReduxSelector(selectUserInfo);
-
+  const allUsers = useReduxSelector(selectAllUserList);
+  console.log({ allUsers })
+  
   const getTickerValue = (value: string) =>
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-
+  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ"
   return (
     <S.Wrapper>
       <S.Container>
@@ -88,3 +90,4 @@ export const Header = () => {
     </S.Wrapper>
   );
 };
+//
