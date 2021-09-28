@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, AllHTMLAttributes } from "react";
 
 export type Props = {
   children?: ReactNode;
@@ -7,3 +7,9 @@ export type Props = {
   address: string;
   accountName: string;
 };
+
+export type MyCurrentAccountProps = {
+  name: string;
+  address: string;
+  isHeader?: boolean;
+} & Pick<AllHTMLAttributes<HTMLDivElement>, "onClick">;
