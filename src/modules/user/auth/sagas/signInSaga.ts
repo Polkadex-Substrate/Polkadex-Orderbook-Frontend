@@ -48,7 +48,7 @@ const getKeyringPairFromAddress = async (address: string, password: string): Pro
   try {
     const userPair = keyring.getPair(address)
     const account = keyring.getAccount(address)
-    console.log(userPair.address, userPair.isLocked);
+    userPair.unlock(password)
     return {
       username: account.meta.name,
       address: userPair.address,
@@ -56,6 +56,7 @@ const getKeyringPairFromAddress = async (address: string, password: string): Pro
       keyringPair: userPair
     }
   } catch (e) {
+    console.log(e)
     throw new Error(e);
   }
 };

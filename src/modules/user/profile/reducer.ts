@@ -59,6 +59,8 @@ export const defaultUser = {
 
   username: "",
   address: "",
+  password: "",
+  keyringPair: {},
   email: "",
   level: 0,
   otp: false,
@@ -249,13 +251,11 @@ export const userListReducer = (state = initialUserList,
   action: ProfileAction) => {
   switch (action.type) {
     case PROFILE_USER_LIST_FETCH:
-      return {
-        ...state
-      };
+      return state;
     case PROFILE_USER_LIST_DATA: {
-      return {
-          ...action.payload.userList
-      }
+      return [
+        ...action.payload.userList
+      ]
     };
     default:
       return state;
