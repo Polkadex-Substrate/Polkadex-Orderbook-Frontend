@@ -6,6 +6,8 @@ import { Button } from "src/ui/components";
 import { MyCurrentAccount } from "src/ui/organisms";
 import { Input } from "src/ui/molecules";
 import { signInValidations } from "src/validations";
+import { useDispatch } from "react-redux";
+import { signIn } from "src/modules";
 
 const defaultValues = {
   password: "",
@@ -13,6 +15,7 @@ const defaultValues = {
 };
 
 export const Login = () => {
+  const dispatch = useDispatch()
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
@@ -21,6 +24,7 @@ export const Login = () => {
         validationSchema={signInValidations}
         onSubmit={async (values) => {
           console.log("VALUES:", values);
+          dispatch(signIn(values.password, values.account))
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -30,7 +34,7 @@ export const Login = () => {
               placeholder="Enter a new password for this account"
               type="password"
               name="password"
-              // error={errors.password && touched.password && errors.password}
+            // error={errors.password && touched.password && errors.password}
             />
             <Button
               title="Sign In"
@@ -40,6 +44,6 @@ export const Login = () => {
           </Form>
         )}
       </Formik>
-    </S.Wrapper>
+    </S.Wrapper >
   );
 };
