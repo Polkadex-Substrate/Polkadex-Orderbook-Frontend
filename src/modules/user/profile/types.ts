@@ -22,8 +22,9 @@ export interface Phone {
 
 export interface User {
   username: string;
-  password?: string;
+  password: string;
   address: string;
+  keyringPair: any;
   email?: string;
   level?: number;
   otp?: boolean;

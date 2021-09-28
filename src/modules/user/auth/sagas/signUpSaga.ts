@@ -9,6 +9,7 @@ import {
   SignUpFetch,
   signUpRequireVerification,
 } from "../actions";
+import keyring from "@polkadot/ui-keyring";
 
 const signUpConfig: RequestOptions = {
   apiVersion: "barong",
@@ -23,34 +24,9 @@ const configUpdateOptions = (csrfToken?: string): RequestOptions => {
 
 export function* signUpSaga(action: SignUpFetch) {
   try {
-    const data = yield call(
-      API.post(signUpConfig),
-      "/identity/users",
-      action.payload
-    );
-
-    if (data.state === "pending") {
-      yield put(signUpRequireVerification({ requireVerification: true }));
-    }
-
-    if (data.csrf_token) {
-      process.browser && localStorage.setItem("csrfToken", data.csrf_token);
-
-      if (action.callbackAction) {
-        const { scope, key, value, component } = action.callbackAction;
-        const payload = {
-          key,
-          value,
-          scope,
-        };
-
-        yield call(
-          API.put(configUpdateOptions(data.csrf_token)),
-          `/admin/${component}/secret`,
-          payload
-        );
-      }
-    }
+    const { mnemonic, password, username } = action.payload
+    const { pair, json } = keyring.addUri(mnemonic, password, { name: username });
+    const data = { username, password, address: pair.address, keyringPair: pair }
     yield put(userData({ user: data }));
     yield put(signUpData());
   } catch (error) {
