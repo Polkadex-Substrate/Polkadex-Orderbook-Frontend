@@ -16,13 +16,13 @@ export const Login = () => {
   const userList: UserSkeleton[] = useReduxSelector(selectAllUserList);
   const defaultValues = {
     password: "",
-    account: userList[0].address,
+    account: userList.length > 0 ? userList[0].address : ""
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0])
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
-      {selectedAccount.username ? (
+      {userList.length > 0 ? (
         <Formik
           initialValues={defaultValues}
           onSubmit={async (values) => {
