@@ -76,3 +76,26 @@ export const MnemonicSelect = styled.div`
     opacity: 0.6;
   }
 `;
+
+export const MnemonicImport = styled.div`
+  margin-top: 1rem;
+  ul {
+    list-style: none;
+    li {
+      display: inline-block;
+    }
+  }
+`;
+
+export const MnemonicListItem = styled.li`
+  ${({ theme }) => css`
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: ${theme.colors.secondaryBackground};
+    width: fit-content;
+    margin-bottom: 0.5rem;
+    :not(:last-child) {
+      margin-right: 0.5rem;
+    }
+  `}
+`;

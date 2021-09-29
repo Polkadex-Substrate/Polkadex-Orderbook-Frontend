@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { Field } from "formik";
 
 import * as S from "./styles";
@@ -6,10 +6,32 @@ import { MnemonicExportProps, MnemonicProps, MnemonicSelectProps } from "./types
 
 // Transform component to tags
 export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps) => {
-  const inputRef = useRef(null);
-  const buttonRef = useRef(null);
+  const [state, setState] = useState({ tags: [] });
 
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Paste from clipboard");
+  const inputRef = useRef(null);
+  // const buttonRef = useRef(null);
+
+  // const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Paste from clipboard");
+  const onInputKeyDown = (e) => {
+    const val = e.target.value;
+    const sameValue = state.tags.find((tag) => tag.toLowerCase() === val.toLowerCase());
+    const hasSpace = /\s/.test(val);
+    if (val && e.key === "Enter") {
+      if (sameValue || hasSpace) {
+        return;
+      }
+      setState({ tags: [...state.tags, val] });
+      inputRef.current.value = null;
+    } else if (e.key === "Backspace" && !val) {
+      handleRemove(state.tags.length - 1);
+    }
+  };
+  const handleRemove = (i: number) => {
+    const newTags = [...state.tags];
+    newTags.splice(i, 1);
+    setState({ tags: newTags });
+  };
+
   return (
     <S.Wrapper>
       <S.MnemonicContainer>
@@ -18,8 +40,24 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
           Generate new seed
         </button>
       </S.MnemonicContainer>
+      <S.MnemonicImport>
+        <ul>
+          {state.tags &&
+            state.tags.map((item, index) => (
+              <S.MnemonicListItem key={index}>
+                <button onClick={() => handleRemove(index)} type="button">
+                  {item}
+                </button>
+              </S.MnemonicListItem>
+            ))}
 
-      <Field {...props} />
+          <li className="input-tag__tags__input">
+            <input ref={inputRef} type="text" placeholder="tag" onKeyDown={onInputKeyDown} />
+          </li>
+        </ul>
+      </S.MnemonicImport>
+
+      {/* <Field {...props} /> */}
     </S.Wrapper>
   );
 };
