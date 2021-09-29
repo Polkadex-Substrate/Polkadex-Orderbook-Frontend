@@ -1,13 +1,17 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div<{ isHeader?: boolean }>`
-  ${({ theme, isHeader }) => css`
+export const Wrapper = styled.div<{ isHeader?: boolean; isActive?: boolean }>`
+  ${({ theme, isHeader, isActive }) => css`
     display: flex;
     align-items: center;
     background-color: ${isHeader ? theme.colors.secondaryBackgroundOpacity : "transparent"};
     border-radius: 1rem;
     padding: 0.6rem;
     flex: 1;
+    ${isActive &&
+    css`
+      background: ${theme.colors.primaryBackgroundOpacity};
+    `}
   `}
 `;
 

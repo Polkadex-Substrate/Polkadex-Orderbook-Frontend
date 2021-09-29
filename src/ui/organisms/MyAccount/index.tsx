@@ -6,10 +6,8 @@ import * as S from "./styles";
 import { Props, MyCurrentAccountProps } from "./types";
 
 import { Button, Icon } from "src/ui/components";
-import { selectAllUserList, selectUserInfo, userFetch } from "src/modules";
+import { selectUserInfo } from "src/modules";
 import { useReduxSelector } from "src/hooks";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 
 const MyAccount = ({
   children,
@@ -53,7 +51,6 @@ export const MyAccountHeader = () => {
 };
 
 export const MyAccountContent = () => {
-
   const user = useReduxSelector(selectUserInfo);
 
   const freeBalance = "0";
@@ -106,14 +103,15 @@ export const MyCurrentAccountHeader = ({
   name,
   address,
   isHeader = false,
+  isActive = false,
   ...props
 }: MyCurrentAccountProps) => {
   const shortAddress = address
-    ? address.slice(0, 10) + "..." + address.slice(address.length - 10)
+    ? address.slice(0, 12) + "..." + address.slice(address.length - 12)
     : "";
 
   return (
-    <S.Wrapper isHeader={isHeader} {...props}>
+    <S.Wrapper isActive={isActive} isHeader={isHeader} {...props}>
       <Icon size="xlarge" icon="Avatar" />
       <S.AccountInfo>
         <S.AccountInfoHeader>

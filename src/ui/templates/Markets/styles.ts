@@ -36,6 +36,7 @@ export const HeaderContainer = styled.div`
     font-size: 1.5rem;
   }
 `;
+
 export const Pairs = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
@@ -45,17 +46,19 @@ export const Pairs = styled.div`
     justify-content: space-between;
     & ul {
       list-style: none;
+    }
+  `}
+`;
 
-      & li {
-        background: ${theme.colors.primaryBackground};
-        display: inline-block;
-        padding: 0.3rem 0.5rem;
-        border-radius: 0.4rem;
-        cursor: pointer;
-        &:not(:last-child) {
-          margin-right: 0.5rem;
-        }
-      }
+export const PairListItem = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    background: ${isActive ? theme.colors.primary : theme.colors.primaryBackground};
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    &:not(:last-child) {
+      margin-right: 0.5rem;
     }
   `}
 `;
@@ -92,7 +95,7 @@ export const ContentItemToken = styled.div`
   }
 `;
 
-export const ContentItemWrapper = styled.a`
+export const ContentItemWrapper = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: 2fr 1fr minmax(4rem, 6rem);

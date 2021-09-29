@@ -12,4 +12,5 @@ export type MyCurrentAccountProps = {
   name: string;
   address: string;
   isHeader?: boolean;
+  isActive?: boolean;
 } & Pick<AllHTMLAttributes<HTMLDivElement>, "onClick">;

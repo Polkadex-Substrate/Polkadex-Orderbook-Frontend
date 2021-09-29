@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
 export const MyCurrentAccountContent = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.secondaryBackgroundSolid};
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     width: 100%;
     shadow: ${theme.shadow.primary};
