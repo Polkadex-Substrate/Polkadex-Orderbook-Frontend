@@ -46,6 +46,8 @@ import { MarketsAdminState, rootMarketsAdminSaga } from "./admin/markets";
 import { PlatformCreateState, rootPlatformCreateSaga } from "./admin/platform";
 import { P2PState, rootP2PSaga } from "./public/p2p";
 import { PaymentMethodState, rootPaymentMethodSaga } from "./user/paymentMethod";
+import {placeOrdersExecute, rootPlaceOrdersSaga } from "./user/placeOrders";
+
 
 export * from "./admin/config";
 export * from "./admin/markets";
@@ -175,5 +177,6 @@ export function* rootSaga() {
     call(rootWithdrawLimitSaga),
     call(rootQuickExchangeSaga),
     call(rootPaymentMethodSaga),
+    call(rootPlaceOrdersSaga),
   ]);
 }

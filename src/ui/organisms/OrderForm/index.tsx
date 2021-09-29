@@ -6,6 +6,8 @@ import { FormEvent, useState } from "react";
 import { useEffect } from "react";
 import { useP2P } from "src/ui/templates/PlaceOrder/useP2P";
 import { cleanPositiveFloatInput, precisionRegExp } from "src/helpers";
+import { useDispatch } from "react-redux";
+import { placeOrdersExecute } from "src/modules/user/placeOrders";
 
 export const OrderForm = () => {
   const [totalAmount, setTotalAmount] = useState<string | number>('');
@@ -13,6 +15,8 @@ export const OrderForm = () => {
     price: null,
     amount: null
   });
+  
+  const dispatch = useDispatch();
   const {currentMarket} = useP2P()
 
   useEffect(() => {    
@@ -46,6 +50,7 @@ export const OrderForm = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // call the place order 
+    // dispatch(placeOrdersExecute())
   }
 
   return (
