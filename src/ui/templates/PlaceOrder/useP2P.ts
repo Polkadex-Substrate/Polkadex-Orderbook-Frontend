@@ -1,15 +1,12 @@
 import { useReduxSelector } from "src/hooks";
 import {
-  alertPush,
-  RootState,
   selectCurrentPrice,
   selectDepthAsks,
   selectDepthBids,
-  selectMobileDeviceState,
   selectOrderExecuteLoading,
+  selectUserInfo,
   selectUserLoggedIn,
   selectWallets,
-  setCurrentPrice,
   Wallet,
   walletsFetch,
 } from "src/modules";
@@ -30,6 +27,7 @@ export const useP2P = () => {
   const wallets = useReduxSelector(selectWallets);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const userLoggeIn = useReduxSelector(selectUserLoggedIn);
+  const userInfo = useReduxSelector(selectUserInfo);
 
   const getWallet = (currency: string, wallets: Wallet[]) => {
     const currencyLower = currency.toLowerCase();
