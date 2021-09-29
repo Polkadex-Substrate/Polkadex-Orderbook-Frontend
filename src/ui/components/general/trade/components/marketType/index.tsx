@@ -3,7 +3,7 @@ import MarketTypeContentItem from "../marketTypeContent";
 
 import * as S from "./styles";
 
-import { Dropdown } from "src/ui/components";
+import {  Dropdown} from "src/ui/molecules";
 
 const MarketType = () => (
   <S.Wrapper>

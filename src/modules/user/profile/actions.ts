@@ -19,8 +19,10 @@ import {
     PROFILE_USER_DATA,
     PROFILE_USER_ERROR,
     PROFILE_USER_FETCH,
+    PROFILE_USER_LIST_DATA,
+    PROFILE_USER_LIST_FETCH,
 } from './constants';
-import { User } from './types';
+import { User, UserSkeleton } from './types';
 
 export interface ChangePasswordFetch {
     type: typeof PROFILE_CHANGE_PASSWORD_FETCH;
@@ -88,6 +90,15 @@ export interface UserInfo {
         user: User;
     };
 }
+export interface UserListData {
+    type: typeof PROFILE_USER_LIST_DATA;
+    payload: {
+        userList: Array<UserSkeleton>;
+    }
+}
+export interface UserListFetch {
+    type: typeof PROFILE_USER_LIST_FETCH
+}
 
 export interface UserError {
     type: typeof PROFILE_USER_ERROR;
@@ -147,8 +158,10 @@ export type ProfileAction =
     | ToggleUser2fa
     | ChangeUserDataFetch
     | ChangeUserData
-    | ChangeUserDataError;
-
+    | ChangeUserDataError
+    | UserListFetch
+    | UserListData;
+    
 export const changePasswordFetch = (payload: ChangePasswordFetch['payload']): ChangePasswordFetch => ({
     type: PROFILE_CHANGE_PASSWORD_FETCH,
     payload,
@@ -203,6 +216,14 @@ export const userData = (payload: UserInfo['payload']): UserInfo => ({
     type: PROFILE_USER_DATA,
     payload,
 });
+
+export const userListFetch = (): UserListFetch => ({
+    type: PROFILE_USER_LIST_FETCH,
+})
+export const userListData = (payload: UserListData["payload"]): UserListData => ({
+    type: PROFILE_USER_LIST_DATA,
+    payload,
+})
 
 export const userError = (error: CommonError): UserError => ({
     type: PROFILE_USER_ERROR,

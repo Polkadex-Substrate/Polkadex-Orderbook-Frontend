@@ -22,11 +22,12 @@ export interface Phone {
 }
 
 export interface User {
-  username?: string;
-  address?: string;
+  username: string;
+  password: string;
+  address: string;
+  keyringPair: any;
   email?: string;
   level?: number;
-  injector?: InjectedExtension;
   otp?: boolean;
   role?: string;
   state?: string;
@@ -39,4 +40,8 @@ export interface User {
   phone?: Phone[];
   created_at?: string;
   updated_at?: string;
+}
+export interface UserSkeleton {
+  username: string;
+  address: string;
 }

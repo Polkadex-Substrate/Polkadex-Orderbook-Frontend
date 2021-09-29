@@ -1,10 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { Props } from "./types";
-
-import { Wrapper as WrapperCheckbox } from "src/ui/components/Checkbox/styles";
-import { Wrapper as WrapperDropdown } from "src/ui/components/Dropdown/styles";
-import { WrapperIcon, WrapperToken } from "src/ui/components/Icon/styles";
+import { Wrapper as WrapperCheckbox } from "src/ui/molecules/Checkbox/styles";
+import { WrapperToken } from "src/ui/components/Icon/styles";
 
 type StyleCardProps = {
   isSell?: boolean;
@@ -179,9 +176,7 @@ export const CardFilled = styled.span<StyleCardProps>`
     position: absolute;
     top: 0;
     left: 0;
-    background: ${isSell
-      ? theme.colors.gradientGreen
-      : theme.colors.gradientRed};
+    background: ${isSell ? theme.colors.gradientGreen : theme.colors.gradientRed};
     height: 1rem;
     opacity: 0.5;
   `}

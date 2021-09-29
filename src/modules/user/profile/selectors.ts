@@ -1,5 +1,5 @@
 import { RootState } from '../..';
-import { User } from './types';
+import { User, UserSkeleton } from './types';
 
 export const selectChangePasswordSuccess = (state: RootState): boolean | undefined =>
     state.user.profile.passwordChange.success;
@@ -27,3 +27,6 @@ export const selectUserFetching = (state: RootState): boolean =>
 
 export const selectUserDataChange = (state: RootState): boolean | undefined =>
     state.user.profile.userData.success;
+    
+export const selectAllUserList = (state: RootState): UserSkeleton[] =>
+    state.user.profile.allUsers

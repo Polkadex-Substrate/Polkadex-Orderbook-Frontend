@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, Dropdown, Icon, Skeleton } from "src/ui/components";
+import { Decimal, Icon, Skeleton } from "src/ui/components";
+import { Dropdown } from "src/ui/molecules";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
@@ -57,9 +58,9 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
               <Icon icon="OrdersSell" size="xsmall" />
             </li>
           </ul>
-          <Dropdown title="001" direction="bottom">
+          {/* <Dropdown title="001" direction="bottom">
             <p>testing</p>
-          </Dropdown>
+          </Dropdown> */}
         </S.Options>
       </S.Header>
       {orderBookLoading ? (

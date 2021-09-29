@@ -36,6 +36,7 @@
     "d3-scale": "^3.3.0",
     "d3-time-format": "^3.0.0",
     "dinero.js": "^1.8.1",
+    "formik": "^2.2.9",
     "immutability-helper": "^3.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
@@ -61,7 +62,8 @@
     "ua-parser-js": "^0.7.28",
     "use-constant": "^1.1.0",
     "ws": "^7.4.5",
-    "yarn-run-all": "^3.1.1"
+    "yarn-run-all": "^3.1.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

@@ -8,12 +8,14 @@ export const Dropdown = ({
   children,
   direction = "left",
   isOpacity = false,
+  variant = 1,
+  ...props
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <S.Wrapper isOpen={isOpen}>
+    <S.Wrapper isOpen={isOpen} variant={variant}>
       <S.Header onClick={() => setIsOpen(!isOpen)}> {title} </S.Header>
-      <S.Content aria-hidden={!isOpen} direction={direction}>
+      <S.Content aria-hidden={!isOpen} direction={direction} {...props}>
         {children}
       </S.Content>
       <S.Overlay

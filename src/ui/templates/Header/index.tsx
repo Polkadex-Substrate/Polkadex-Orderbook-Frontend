@@ -1,17 +1,15 @@
-import { useDispatch } from "react-redux";
-
+// ? Check Header Rerender
 import * as S from "./styles";
 
-import { Logo, MyAccountContent, MyAccountHeader, ThemeSwitch } from "src/ui/molecules";
-import { Toolbar } from "src/ui/organisms";
-import { Button, Decimal, Dropdown } from "src/ui/components";
+import { Logo, ThemeSwitch, Dropdown } from "src/ui/molecules";
+import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/organisms";
+import { Button, Decimal } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
   selectCurrentMarket,
   selectMarkets,
   selectMarketTickers,
   selectUserInfo,
-  signIn,
 } from "src/modules";
 
 const defaultTicker = {
@@ -24,7 +22,6 @@ const defaultTicker = {
 };
 
 export const Header = () => {
-  const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
@@ -76,7 +73,14 @@ export const Header = () => {
               <MyAccountContent />
             </Dropdown>
           ) : (
-            <Button title="Connect to a Wallet" onClick={() => dispatch(signIn(tempAddr, "password"))} />
+            <Dropdown
+              isOpacity
+              style={{ top: 0 }}
+              title={<Button title="Connect to a Wallet" />}
+              direction="bottomLeft"
+              variant={2}>
+              <SignContent />
+            </Dropdown>
           )}
         </S.Column>
       </S.Container>

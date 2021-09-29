@@ -78,10 +78,7 @@ export const TabHeader: React.FC = ({ children }) => {
     : children;
 };
 
-export const TabContent: React.FC<{ active?: boolean }> = ({
-  active,
-  children,
-}) => {
+export const TabContent: React.FC<{ active?: boolean }> = ({ active, children }) => {
   const isActive = usePanelState();
 
   return <>{isActive || active ? children : null}</>;

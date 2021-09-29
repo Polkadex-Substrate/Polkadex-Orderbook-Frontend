@@ -1,14 +1,17 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div<{ isHeader: boolean }>`
-  ${({ theme, isHeader }) => css`
+export const Wrapper = styled.div<{ isHeader?: boolean; isActive?: boolean }>`
+  ${({ theme, isHeader, isActive }) => css`
     display: flex;
     align-items: center;
-    background-color: ${isHeader
-      ? theme.colors.secondaryBackground
-      : "transparent"};
+    background-color: ${isHeader ? theme.colors.secondaryBackgroundOpacity : "transparent"};
     border-radius: 1rem;
     padding: 0.6rem;
+    flex: 1;
+    ${isActive &&
+    css`
+      background: ${theme.colors.primaryBackgroundOpacity};
+    `}
   `}
 `;
 
@@ -17,11 +20,12 @@ export const AccountInfo = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-left: 0.5rem;
+  flex: 1;
 `;
 
 export const AccountInfoHeader = styled.div`
   ${({ theme }) => css`
-    margin-right: 1.5rem;
+    flex: 1;
     p {
       font-size: ${theme.font.sizes.xsmall};
       font-weight: 600;
@@ -33,6 +37,11 @@ export const AccountInfoHeader = styled.div`
       font-size: ${theme.font.sizes.xxsmall};
     }
   `}
+`;
+
+export const AccountInfoFlex = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const AccountContent = styled.div`
