@@ -37,7 +37,6 @@ const wrapperModifiers = {
   `,
   bottom: () => css`
     top: 100%;
-    margin-top: 1rem;
     right: 0;
   `,
   1: () => css`

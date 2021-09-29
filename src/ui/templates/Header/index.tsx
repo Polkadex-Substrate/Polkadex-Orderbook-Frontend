@@ -69,8 +69,13 @@ export const Header = () => {
         <S.Column>
           <ThemeSwitch />
           {user.address ? (
-            <Dropdown title={<MyAccountHeader />} direction="bottom">
-              <MyAccountContent />
+            <Dropdown
+              isOpacity
+              variant={2}
+              style={{ top: 0 }}
+              title={<MyAccountHeader accountName={user.username} address={user.address} />}
+              direction="bottom">
+              <MyAccountContent accountName={user.username} address={user.address} />
             </Dropdown>
           ) : (
             <Dropdown
