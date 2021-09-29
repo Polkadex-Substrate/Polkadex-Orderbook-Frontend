@@ -4,20 +4,20 @@ import { Button, TabHeader, Tabs } from "src/ui/components";
 import { OrderInput } from "src/ui/molecules";
 import { FormEvent, useState } from "react";
 import { useEffect } from "react";
-import { useP2P } from "src/ui/templates/PlaceOrder/useP2P";
 import { cleanPositiveFloatInput, precisionRegExp } from "src/helpers";
 import { useDispatch } from "react-redux";
 import { placeOrdersExecute } from "src/modules/user/placeOrders";
+import { usePlaceOrder } from "src/ui/templates/PlaceOrder/usePlaceOrder";
 
 export const OrderForm = () => {
+  const dispatch = useDispatch();
+  const {currentMarket, userInfo} = usePlaceOrder();
+
   const [totalAmount, setTotalAmount] = useState<string | number>('');
   const [orderInput, setOrderInput] = useState({
     price: null,
     amount: null
   });
-  
-  const dispatch = useDispatch();
-  const {currentMarket} = useP2P()
 
   useEffect(() => {    
     if(orderInput.price && orderInput.amount){
@@ -50,7 +50,16 @@ export const OrderForm = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // call the place order 
-    // dispatch(placeOrdersExecute())
+    dispatch(placeOrdersExecute({
+      account: userInfo.keyringPair, 
+      nonce: 1,
+      baseAsset: currentMarket.base_unit,
+      quoteAsset: currentMarket.quote_unit, 
+      ordertype: "LIMIT",
+      orderSide: "ASK",
+      quantity: orderInput.amount,
+      price: orderInput.price
+    }))
   }
 
   return (
