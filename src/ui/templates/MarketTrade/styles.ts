@@ -43,17 +43,18 @@ export const HeaderBox = styled(Template)`
 `;
 
 export const Box = styled.div`
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  max-height: 25rem;
 `;
 
-export const ItemWrapper = styled(Template)<Partial<Props>>`
+export const CardWrapper = styled(Template)<Partial<Props>>`
   ${({ theme, isSell }) => css`
     padding: 0 1rem;
     margin-bottom: 1rem;
 
     span {
-      font-weight: 600;
-
+      font-size: ${theme.font.sizes.xsmall};
       :not(:first-child) {
         text-align: end;
       }

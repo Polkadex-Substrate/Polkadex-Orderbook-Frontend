@@ -13,8 +13,6 @@ export const Toolbar = ({
   changeLow,
   changeHigh,
   color,
-  // Select PairContent
-  markets = [],
   currentMarket,
 }: Props) => {
   return (
