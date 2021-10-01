@@ -1,13 +1,8 @@
 import * as S from "./styles";
-import {
-  LanguageCurrencyProps,
-  LanguageNameProps,
-  NavProps,
-  Props,
-} from "./types";
+import { LanguageCurrencyProps, LanguageNameProps, NavProps, Props } from "./types";
 
-import { Dropdown, Icon, ThemeSwitch } from "src/ui/components";
-import { Logo } from "src/ui/molecules";
+import { Dropdown, Icon } from "src/ui/components";
+import { Logo, ThemeSwitch } from "src/ui/molecules";
 
 export const Navigation = ({ activateNotification }: Props) => (
   <S.Wrapper>
@@ -62,13 +57,7 @@ export const Navigation = ({ activateNotification }: Props) => (
   </S.Wrapper>
 );
 
-const NavItem = ({
-  active = false,
-  soon = false,
-  icon,
-  text,
-  ...props
-}: NavProps) => (
+const NavItem = ({ active = false, soon = false, icon, text, ...props }: NavProps) => (
   <S.NavWrapper active={active} icon={icon} soon={soon} {...props}>
     <S.NavContainer>
       {soon && <span>Soon</span>}
@@ -106,13 +95,8 @@ const LanguageCurrency = ({ title = "USD" }: LanguageCurrencyProps) => (
   <S.LanguageCurrencyWrapper> {title} </S.LanguageCurrencyWrapper>
 );
 
-const LanguageName = ({
-  title = "English",
-  flag = "En",
-}: LanguageNameProps) => (
-  <S.LanguageNameWrapper
-    onClick={() => console.log("Change Language to", flag)}
-  >
+const LanguageName = ({ title = "English", flag = "En" }: LanguageNameProps) => (
+  <S.LanguageNameWrapper onClick={() => console.log("Change Language to", flag)}>
     <Icon icon={flag} background="none" />
     <span> {title} </span>
   </S.LanguageNameWrapper>
