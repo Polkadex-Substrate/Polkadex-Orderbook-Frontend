@@ -1,4 +1,3 @@
-// ? Move component to Organism
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -10,20 +9,22 @@ import { MyCurrentAccountHeader } from "src/ui/organisms";
 import { Input, Dropdown } from "src/ui/molecules";
 import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
+import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const { loading } = useKeyringInitalize();
+
   const userList: UserSkeleton[] = useReduxSelector(selectAllUserList);
   const defaultValues = {
     password: "",
     account: userList.length > 0 ? userList[0].address : "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
-  console.log(userList);
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
-      {userList.length > 0 ? (
+      {userList.length > 0 && !loading ? (
         <Formik
           initialValues={defaultValues}
           onSubmit={async (values) => {
@@ -37,8 +38,8 @@ export const Login = () => {
                 style={{ width: "100%", top: 0 }}
                 title={
                   <MyCurrentAccountHeader
-                    name={selectedAccount.username || "Account"}
-                    address={selectedAccount.address}
+                    name={selectedAccount?.username || "Account"}
+                    address={selectedAccount?.address}
                     isHeader
                   />
                 }>
@@ -46,7 +47,7 @@ export const Login = () => {
                   {userList.length
                     ? userList.map((item, index) => (
                         <MyCurrentAccountHeader
-                          isActive={item.address === selectedAccount.address}
+                          isActive={item.address === selectedAccount?.address}
                           key={index}
                           name={item.username || `Account ${index}`}
                           address={item.address}

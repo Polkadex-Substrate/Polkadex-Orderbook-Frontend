@@ -10,7 +10,6 @@ import {
 } from "src/ui/templates";
 import * as S from "src/styles/home/trading";
 import { useMarketsFetch } from "src/hooks";
-import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 import { useMarketsTickersFetch } from "src/hooks/useTickersFetch";
 
 const Trading = () => {
@@ -18,7 +17,6 @@ const Trading = () => {
   const { id } = router.query;
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
-  useKeyringInitalize();
 
   if (!id) return <div />;
   return (

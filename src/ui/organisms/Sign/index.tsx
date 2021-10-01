@@ -24,7 +24,6 @@ export const SignContent = () => {
               </TabHeader>
             </S.TabHeader>
           </div>
-
           <S.TabContent>
             <TabContent>
               <SignUp />

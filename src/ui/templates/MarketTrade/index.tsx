@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
-import { Props } from "./types";
 
-import { selectCurrentMarket, selectDepthLoading } from "src/modules";
+import { selectCurrentMarket } from "src/modules";
 import { useReduxSelector } from "src/hooks";
 import {
   recentTradesFetch,
@@ -65,7 +64,6 @@ export const MarketTrade = () => {
                   time={higlightedDate}
                   price={Decimal.format(item.price, currentMarket.price_precision, ",")}
                   amount={Decimal.format(item.amount, currentMarket.amount_precision, ",")}
-                  onClick={() => console.log("....")}
                 />
               );
             })
