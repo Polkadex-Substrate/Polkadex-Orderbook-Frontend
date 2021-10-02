@@ -19,6 +19,7 @@ export const Toolbar = ({
     <S.Wrapper>
       <S.Container>
         <Dropdown
+          isOpacity
           title={
             <SelectPairHeader
               title={currentMarket?.name}

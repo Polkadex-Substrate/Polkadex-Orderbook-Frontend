@@ -22,6 +22,8 @@ const defaultTheme = {
     normal: 400,
     bold: 600,
     sizes: {
+      xxxxsmall: "1rem",
+      xxxsmall: "1.1rem",
       xxsmall: "1.2rem",
       xsmall: "1.3rem",
       small: "1.4rem",

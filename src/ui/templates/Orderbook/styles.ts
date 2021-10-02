@@ -39,11 +39,13 @@ export const Options = styled.div`
     }
   }
 `;
+
 export const Content = styled.div`
   display: grid;
   grid-template-rows: 1fr min-content 1fr;
 `;
 export const Box = styled.div``;
+
 export const BoxHeader = styled.div`
   ${({ theme }) => css`
     display: grid;
@@ -52,7 +54,7 @@ export const BoxHeader = styled.div`
     padding: 0 1rem;
 
     span {
-      font-size: ${theme.font.sizes.xxsmall};
+      font-size: ${theme.font.sizes.xxxsmall};
       font-weight: 500;
       opacity: 0.5;
 
@@ -64,15 +66,22 @@ export const BoxHeader = styled.div`
 `;
 
 export const BoxContent = styled.div`
-  max-height: 22.2rem;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  font-weight: 600;
-  padding: 0 1rem;
+  ${({ theme }) => css`
+    max-height: 22.2rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-height: 15rem;
+    position: relative;
+    font-weight: 500;
+
+    span {
+      font-size: ${theme.font.sizes.xxxsmall};
+    }
+  `}
 `;
 
-export const OrderbookItemContainer = styled.div`
+export const OrderbookCardContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
@@ -81,15 +90,22 @@ export const OrderbookItemContainer = styled.div`
   }
 `;
 
-export const OrderbookPrice = styled.span<{ isSell?: boolean }>`
+export const OrderbookPrice = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     span {
+      :first-child {
+        opacity: 0.7;
+      }
+      :last-child {
+        opacity: 1;
+        font-weight: 600;
+      }
       color: ${isSell ? theme.colors.green : theme.colors.primary};
     }
   `}
 `;
 
-export const OrderbookItemWrapper = styled.div`
+export const OrderbookCardWrapper = styled.div`
   width: 100%;
   text-align: end;
   span {
@@ -97,21 +113,21 @@ export const OrderbookItemWrapper = styled.div`
   }
 `;
 
-export const OrderbookAmount = styled(OrderbookItemWrapper)``;
+export const OrderbookAmount = styled(OrderbookCardWrapper)``;
 
-export const OrderbookItem = styled.div`
+export const OrderbookCard = styled.div`
   ${({ theme }) => css`
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 1rem;
-    align-items: center;
-    font-size: ${theme.font.sizes.xsmall};
     cursor: pointer;
-    z-index: 1;
+    padding: 0.1rem 1rem;
     transition: ${theme.transition.default};
-    position: relative;
+
     :hover {
       opacity: 0.8;
+      background: ${theme.colors.primaryBackground};
     }
 
     :not(:last-child) {
