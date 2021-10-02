@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, Dropdown, Icon, Skeleton } from "src/ui/components";
+import { Decimal, Icon, Skeleton } from "src/ui/components";
+import { Dropdown } from "src/ui/molecules";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
@@ -24,7 +25,7 @@ import {
   Ticker,
 } from "src/modules";
 import { accumulateVolume } from "src/helpers";
-export const Orderbook = ({ lastPrice = "", data = [] }) => {
+export const Orderbook = () => {
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const orderBookLoading = useReduxSelector(selectDepthLoading);
@@ -41,6 +42,88 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
 
   const currentTicker = getTickerValue(currentMarket, marketTickers);
 
+  const data = [];
+  const getLastPrice = () => {
+    let lastPrice = "";
+    if (lastRecentTrade?.market === currentMarket?.id) {
+      lastPrice = lastRecentTrade?.price;
+    } else {
+      lastPrice = currentTicker?.last;
+    }
+    return lastPrice;
+  };
+
+  const getOrderbookData = (array: string[][], side: "asks" | "bids", isLarge: boolean) => {
+    let total = accumulateVolume(array);
+    const priceFixed = currentMarket?.price_precision || 0;
+    const amountFixed = currentMarket?.amount_precision || 0;
+
+    return array.length
+      ? array.map((item, i) => {
+          const [price, volume] = item;
+
+          switch (side) {
+            case "asks":
+              total = isLarge
+                ? accumulateVolume(array)
+                : accumulateVolume(array.slice(0).reverse()).slice(0).reverse();
+
+              return [
+                <Decimal
+                  key={i}
+                  fixed={priceFixed}
+                  thousSep=","
+                  prevValue={array[i + 1] ? array[i + 1][0] : 0}>
+                  {price}
+                </Decimal>,
+                <Decimal key={i} fixed={amountFixed} thousSep=",">
+                  {volume}
+                </Decimal>,
+                <Decimal key={i} fixed={amountFixed} thousSep=",">
+                  {total[i]}
+                </Decimal>,
+              ];
+            default:
+              if (isLarge) {
+                return [
+                  <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    {total[i]}
+                  </Decimal>,
+                  <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    {volume}
+                  </Decimal>,
+                  <Decimal
+                    key={i}
+                    fixed={priceFixed}
+                    thousSep=","
+                    prevValue={array[i - 1] ? array[i - 1][0] : 0}>
+                    {price}
+                  </Decimal>,
+                ];
+              } else {
+                return [
+                  <Decimal
+                    key={i}
+                    fixed={priceFixed}
+                    thousSep=","
+                    prevValue={array[i - 1] ? array[i - 1][0] : 0}>
+                    {price}
+                  </Decimal>,
+                  <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    {volume}
+                  </Decimal>,
+                  <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    {total[i]}
+                  </Decimal>,
+                ];
+              }
+          }
+        })
+      : [[]];
+  };
+  console.log("ASKS:", asks);
+
+  console.log(getOrderbookData(asks, "asks", true));
   return (
     <S.Wrapper>
       <S.Header>
@@ -62,19 +145,19 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
           </Dropdown>
         </S.Options>
       </S.Header>
-      {orderBookLoading ? (
+      {!orderBookLoading || !currentMarket ? (
         <S.Content>
-          <OrderbookCol data={data} />
+          <OrderbookColumn data={data} />
           <S.Select>
             <S.LastPriceWrapper>
               Latest Price
               <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
-                {Decimal.format(lastPrice, currentMarket.price_precision, ",")}&nbsp;
+                {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
               </S.LastPrice>
             </S.LastPriceWrapper>
           </S.Select>
-          <OrderbookCol data={data} />
+          <OrderbookColumn data={data} />
         </S.Content>
       ) : (
         <S.Content>
@@ -89,7 +172,7 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
   );
 };
 
-const OrderbookCol = ({ baseQuote = "", baseUnit = "", data = [] }) => {
+const OrderbookColumn = ({ baseQuote = "", baseUnit = "", data = [] }) => {
   return (
     <S.Box>
       <S.BoxHeader>

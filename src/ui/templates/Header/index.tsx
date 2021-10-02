@@ -1,17 +1,15 @@
-import { useDispatch } from "react-redux";
-
+// ? Check Header Rerender
 import * as S from "./styles";
 
-import { Logo, MyAccountContent, MyAccountHeader, ThemeSwitch } from "src/ui/molecules";
-import { Toolbar } from "src/ui/organisms";
-import { Button, Decimal, Dropdown } from "src/ui/components";
+import { Logo, ThemeSwitch, Dropdown } from "src/ui/molecules";
+import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/organisms";
+import { Button, Decimal } from "src/ui/components";
 import { useReduxSelector } from "src/hooks";
 import {
   selectCurrentMarket,
   selectMarkets,
   selectMarketTickers,
   selectUserInfo,
-  signIn,
 } from "src/modules";
 
 const defaultTicker = {
@@ -24,7 +22,6 @@ const defaultTicker = {
 };
 
 export const Header = () => {
-  const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
@@ -34,7 +31,7 @@ export const Header = () => {
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ"
+  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ";
   return (
     <S.Wrapper>
       <S.Container>
@@ -72,11 +69,23 @@ export const Header = () => {
         <S.Column>
           <ThemeSwitch />
           {user.address ? (
-            <Dropdown title={<MyAccountHeader />} direction="bottom">
-              <MyAccountContent />
+            <Dropdown
+              isOpacity
+              variant={2}
+              style={{ top: 0 }}
+              title={<MyAccountHeader accountName={user.username} address={user.address} />}
+              direction="bottom">
+              <MyAccountContent accountName={user.username} address={user.address} />
             </Dropdown>
           ) : (
-            <Button title="Connect to a Wallet" onClick={() => dispatch(signIn(tempAddr, "password"))} />
+            <Dropdown
+              isOpacity
+              style={{ top: 0 }}
+              title={<Button title="Connect to a Wallet" />}
+              direction="bottomLeft"
+              variant={2}>
+              <SignContent />
+            </Dropdown>
           )}
         </S.Column>
       </S.Container>

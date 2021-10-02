@@ -3,8 +3,7 @@ import React from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Dropdown } from "src/ui/components";
-import { Information, SelectPairHeader } from "src/ui/molecules";
+import { Information, SelectPairHeader, Dropdown } from "src/ui/molecules";
 import { Markets } from "src/ui/templates";
 
 export const Toolbar = ({
@@ -14,8 +13,6 @@ export const Toolbar = ({
   changeLow,
   changeHigh,
   color,
-  // Select PairContent
-  markets = [],
   currentMarket,
 }: Props) => {
   return (

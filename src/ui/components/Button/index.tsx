@@ -13,19 +13,8 @@ export const Button = ({
   as = "button",
   ...props
 }: Props) => (
-  <S.Wrapper
-    as={as}
-    size={size}
-    isActive={isActive}
-    background={background}
-    {...props}
-  >
-    {icon || (token && icon) ? (
-      <Icon {...icon} />
-    ) : (
-      token && <IconToken {...token} />
-    )}
-
+  <S.Wrapper as={as} size={size} isActive={isActive} background={background} {...props}>
+    {icon || (token && icon) ? <Icon {...icon} /> : token && <IconToken {...token} />}
     {title}
   </S.Wrapper>
 );

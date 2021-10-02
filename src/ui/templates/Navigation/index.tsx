@@ -1,8 +1,8 @@
 import * as S from "./styles";
 import { LanguageCurrencyProps, LanguageNameProps, NavProps, Props } from "./types";
 
-import { Dropdown, Icon } from "src/ui/components";
-import { Logo, ThemeSwitch } from "src/ui/molecules";
+import { Icon } from "src/ui/components";
+import { Logo, Dropdown, ThemeSwitch } from "src/ui/molecules";
 
 export const Navigation = ({ activateNotification }: Props) => (
   <S.Wrapper>

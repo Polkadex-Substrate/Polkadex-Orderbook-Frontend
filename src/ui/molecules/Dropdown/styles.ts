@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Props, StyleProps } from "./types";
+import { Props } from "./types";
 
 const wrapperModifiers = {
   open: () => css`
@@ -9,6 +9,7 @@ const wrapperModifiers = {
   `,
   close: () => css`
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   `,
   right: () => css`
@@ -19,6 +20,10 @@ const wrapperModifiers = {
   `,
   bottomRight: () => css`
     left: 0;
+    top: 100%;
+  `,
+  bottomLeft: () => css`
+    right: 0;
     top: 100%;
   `,
   left: () => css`
@@ -32,27 +37,55 @@ const wrapperModifiers = {
   `,
   bottom: () => css`
     top: 100%;
-    margin-top: 1rem;
     right: 0;
+  `,
+  1: () => css`
+    ${Header} {
+      z-index: 31;
+    }
+    ${Content} {
+      z-index: 31;
+    }
+    ${Overlay} {
+      z-index: 30;
+    }
+  `,
+  2: () => css`
+    ${Header} {
+      z-index: 32;
+    }
+    ${Content} {
+      z-index: 32;
+    }
+    ${Overlay} {
+      z-index: 31;
+    }
+  `,
+  3: () => css`
+    ${Header} {
+      z-index: 33;
+    }
+    ${Content} {
+      z-index: 33;
+    }
+    ${Overlay} {
+      z-index: 32;
+    }
   `,
 };
 
 export const Header = styled.div`
-  ${({ theme }) => css`
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    z-index: ${theme.layers.alwaysOnTop};
-  `}
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 export const Content = styled.div<Partial<Props>>`
-  ${({ theme, direction }) => css`
+  ${({ direction }) => css`
     display: flex;
     flex-direction: column;
     position: absolute;
-    z-index: ${theme.layers.alwaysOnTop};
     width: max-content;
     ${wrapperModifiers[direction]};
   `}
@@ -65,16 +98,15 @@ export const Overlay = styled.div<Pick<Props, "isOpacity">>`
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: ${theme.layers.overlay};
     background: ${isOpacity ? theme.colors.primaryBackgroundOpacity : "none"};
     transition: opacity 0.5s ease-in-out;
   `}
 `;
 
-export const Wrapper = styled.div<StyleProps>`
-  ${({ theme, isOpen }) => css`
+export const Wrapper = styled.div<{ isOpen?: boolean; variant?: number }>`
+  ${({ theme, isOpen, variant }) => css`
     position: relative;
-    width: fit-content;
+    ${wrapperModifiers[variant]};
     ${Content},
     ${Overlay} {
       transition: transform 0.2s ease-in, opacity ${theme.transition.default};

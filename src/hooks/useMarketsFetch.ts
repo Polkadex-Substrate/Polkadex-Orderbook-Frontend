@@ -18,8 +18,6 @@ export const useMarketsFetch = (id: string) => {
 
   useEffect(() => {
     if (shouldDispatch) dispatch(marketsFetch());
-    else if (!shouldDispatch && markets) {
-      dispatch(setCurrentMarket(selectMarket));
-    }
-  }, [dispatch, shouldDispatch, markets]);
+    else if (!shouldDispatch && markets) dispatch(setCurrentMarket(selectMarket));
+  }, [dispatch, shouldDispatch, markets, selectMarket]);
 };

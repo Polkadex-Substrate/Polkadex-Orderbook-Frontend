@@ -1,8 +1,10 @@
 import { call, put } from "redux-saga/effects";
-import { keyring } from '@polkadot/ui-keyring';
+import { keyring } from "@polkadot/ui-keyring";
+import axios from "axios";
+
 import { API, proxyRestUrl, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
-import { User, userData } from "../../profile";
+import { User, userData, UserSkeleton } from "../../profile";
 import {
   signInData,
   signInError,
@@ -10,7 +12,6 @@ import {
   signInRequire2FA,
   signUpRequireVerification,
 } from "../actions";
-import axios from "axios";
 
 const sessionsConfig: RequestOptions = {
   apiVersion: "barong",
@@ -18,11 +19,11 @@ const sessionsConfig: RequestOptions = {
 
 export function* signInSaga(action: SignInFetch) {
   try {
-    const polkadexWorker = (window as any).polkadexWorker
-    const { address, password } = action.payload
-    const user = yield call(() => getKeyringPairFromAddress(address, password));
+    const polkadexWorker = (window as any).polkadexWorker;
+    const { address, password } = action.payload;
+    const user: User = yield call(() => getKeyringPairFromAddress(address, password));
     const authResponse = yield call(() => polkadexWorker.authenticate(user));
-    console.log({ authResponse })
+    console.log({ authResponse });
     yield put(userData({ user }));
     process.browser && localStorage.setItem("csrfToken", user.csrf_token);
     yield put(signInData());
@@ -44,12 +45,19 @@ export function* signInSaga(action: SignInFetch) {
   }
 }
 
-const getKeyringPairFromAddress = async (address: string, password: string) => {
+const getKeyringPairFromAddress = async (address: string, password: string): Promise<User> => {
   try {
-    const userPair = keyring.getPair(address)
-    console.log(userPair.address, userPair.isLocked);
-    return userPair
+    const userPair = keyring.getPair(address);
+    const account = keyring.getAccount(address);
+    userPair.unlock(password);
+    return {
+      username: account.meta.name,
+      address: userPair.address,
+      password,
+      keyringPair: userPair,
+    };
   } catch (e) {
+    console.log(e);
     throw new Error(e);
   }
 };

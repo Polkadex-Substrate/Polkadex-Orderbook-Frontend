@@ -125,13 +125,13 @@ export const Markets = ({ marketActive = false }) => {
               {allPairs &&
                 allPairs.map((item, i) => (
                   <TabHeader key={i}>
-                    <li>
+                    <S.PairListItem>
                       <a
                         role="button"
                         onClick={() => handleMarketsTabsSelected(item.toLowerCase())}>
                         {item}
                       </a>
-                    </li>
+                    </S.PairListItem>
                   </TabHeader>
                 ))}
             </ul>

@@ -2,10 +2,8 @@ import styled, { css } from "styled-components";
 
 import { WrapperToken } from "src/ui/components/Icon/styles";
 import { Wrapper as WrapperTag } from "src/ui/components/Tag/styles";
-type Props = {
-  marketActive: boolean;
-};
-export const Section = styled.section<Props>`
+
+export const Section = styled.section<{ marketActive?: boolean }>`
   ${({ theme, marketActive }) => css`
     margin-right: 1rem;
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -15,7 +13,7 @@ export const Section = styled.section<Props>`
     min-width: 30rem;
     width: 100%;
     box-shadow: ${theme.shadow.tertiary};
-    background: ${theme.colors.gradientBackground};
+    background: ${theme.colors.secondaryBackgroundSolid};
     & ${WrapperTag} {
       justify-self: flex-end;
     }
@@ -23,9 +21,7 @@ export const Section = styled.section<Props>`
 `;
 
 export const Header = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 1rem;
-  `}
+  margin-bottom: 1rem;
 `;
 export const HeaderContainer = styled.div`
   display: flex;
@@ -36,6 +32,7 @@ export const HeaderContainer = styled.div`
     font-size: 1.5rem;
   }
 `;
+
 export const Pairs = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
@@ -45,17 +42,19 @@ export const Pairs = styled.div`
     justify-content: space-between;
     & ul {
       list-style: none;
+    }
+  `}
+`;
 
-      & li {
-        background: ${theme.colors.primaryBackground};
-        display: inline-block;
-        padding: 0.3rem 0.5rem;
-        border-radius: 0.4rem;
-        cursor: pointer;
-        &:not(:last-child) {
-          margin-right: 0.5rem;
-        }
-      }
+export const PairListItem = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    background: ${isActive ? theme.colors.primary : theme.colors.primaryBackground};
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    &:not(:last-child) {
+      margin-right: 0.5rem;
     }
   `}
 `;
@@ -63,6 +62,7 @@ export const Pairs = styled.div`
 export const Content = styled.div`
   padding: 0.8rem;
 `;
+
 export const TableHeader = styled.div`
   ${({ theme }) => css`
     display: grid;
@@ -92,7 +92,7 @@ export const ContentItemToken = styled.div`
   }
 `;
 
-export const ContentItemWrapper = styled.a`
+export const ContentItemWrapper = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: 2fr 1fr minmax(4rem, 6rem);

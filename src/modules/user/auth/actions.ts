@@ -87,10 +87,11 @@ export interface SignInData {
 export interface SignUpFetch {
   type: typeof AUTH_SIGN_UP_FETCH;
   payload: {
-    username?: string;
-    email: string;
+    username: string;
+    mnemonic:string;
     password: string;
-    data: string;
+    email?: string;
+    data?: string;
     captcha_response?: string | GeetestCaptchaResponse;
     refid?: string;
   };
