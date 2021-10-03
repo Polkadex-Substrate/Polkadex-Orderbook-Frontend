@@ -118,6 +118,7 @@ export const OrderbookAmount = styled(OrderbookCardWrapper)``;
 export const OrderbookCard = styled.div`
   ${({ theme }) => css`
     position: relative;
+    z-index: 10;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 1rem;
@@ -126,7 +127,7 @@ export const OrderbookCard = styled.div`
     transition: ${theme.transition.default};
 
     :hover {
-      opacity: 0.8;
+      opacity: 0.5;
       background: ${theme.colors.primaryBackground};
     }
 
@@ -158,23 +159,26 @@ export const LastPrice = styled.strong<{ isPositive?: boolean }>`
 `;
 
 export const OrderbookVolume = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: column;
   left: 0;
   overflow: hidden;
-  position: absolute;
   width: 100%;
   top: 0;
   z-index: 0;
 `;
 
-export const VolumeSpan = styled.span`
-  box-sizing: border-box;
-  display: block;
-  height: 1.9rem;
-  width: 30%;
-  opacity: 0.15;
-  margin-bottom: 0.2rem;
+export const VolumeSpan = styled.span<{ isSell?: boolean }>`
+  ${({ theme, isSell }) => css`
+    box-sizing: border-box;
+    display: block;
+    height: 1.95rem;
+    opacity: 0.2;
+    margin-bottom: 1px;
+    padding-bottom: calc(0.5em * 2.5);
+    background: ${isSell ? theme.colors.gradientGreen : theme.colors.gradientRed};
+  `}
 `;
 
 export const OrderbookDropdown = styled.div`

@@ -15,7 +15,7 @@ import {
   selectMarketTickers,
   Ticker,
 } from "src/modules";
-import { accumulateVolume } from "src/helpers";
+import { accumulateVolume, calcMaxVolume } from "src/helpers";
 export const Orderbook = () => {
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
@@ -38,6 +38,7 @@ export const Orderbook = () => {
     }
     return lastPrice;
   };
+  const maxVolume = calcMaxVolume(bids, asks);
 
   return (
     <S.Wrapper>
@@ -62,7 +63,7 @@ export const Orderbook = () => {
       </S.Header>
       {!orderBookLoading || !currentMarket ? (
         <S.Content>
-          <OrderbookColumn data={asks} side="asks" />
+          <OrderbookColumn data={asks} maxVolume={maxVolume} side="asks" />
           <S.Select>
             <S.LastPriceWrapper>
               Latest Price
@@ -72,7 +73,7 @@ export const Orderbook = () => {
               </S.LastPrice>
             </S.LastPriceWrapper>
           </S.Select>
-          <OrderbookColumn data={bids} side="bids" />
+          <OrderbookColumn data={bids} maxVolume={maxVolume} side="bids" />
         </S.Content>
       ) : (
         <S.Content>
@@ -87,15 +88,28 @@ export const Orderbook = () => {
   );
 };
 
-const OrderbookColumn = ({ data = [], side = "asks", isLarge = true }) => {
+const mapValues = (maxVolume?: number, data?: number[]) => {
+  const resultData =
+    data && maxVolume && data.length
+      ? data.map((currentVolume) => {
+          // tslint:disable-next-line:no-magic-numbers
+          return { value: (currentVolume / maxVolume) * 100 };
+        })
+      : [];
+  return resultData;
+};
+const OrderbookColumn = ({ data = [], maxVolume, side = "asks", isLarge = true }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
   const formattedBaseUnit = currentMarket?.base_unit.toUpperCase();
   const formattedQuoteUnit = currentMarket?.quote_unit.toUpperCase();
   const priceFixed = currentMarket?.price_precision || 0;
   const amountFixed = currentMarket?.amount_precision || 0;
-
   const isSell = side === "asks";
+
+  const valumeData = mapValues(maxVolume, accumulateVolume(data));
+  const getRowWidth = (index: number) =>
+    valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
 
   return (
     <S.Box>
@@ -135,6 +149,16 @@ const OrderbookColumn = ({ data = [], side = "asks", isLarge = true }) => {
               </S.OrderbookCard>
             );
           })}
+        <S.OrderbookVolume>
+          {data &&
+            data.map((item, index) => (
+              <S.VolumeSpan
+                key={index}
+                isSell={isSell}
+                style={{ width: getRowWidth(index) }}
+              />
+            ))}
+        </S.OrderbookVolume>
       </S.BoxContent>
     </S.Box>
   );
