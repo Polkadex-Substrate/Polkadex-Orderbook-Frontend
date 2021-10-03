@@ -12,10 +12,7 @@ export const OrderInput = ({ token = "", label = "", ...props }: Props) => {
         {token ? (
           <span>{token}</span>
         ) : (
-          <Skeleton
-            height="10px"
-            style={{ display: "inline-block", width: "2rem" }}
-          />
+          <Skeleton height="10px" style={{ display: "inline-block", width: "2rem" }} />
         )}
       </div>
     </S.Wrapper>

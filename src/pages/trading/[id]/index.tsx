@@ -9,7 +9,12 @@ import {
   PlaceOrder,
 } from "src/ui/templates";
 import * as S from "src/styles/home/trading";
-import { useMarketsFetch, useDepthMarketsFetch, useMarketsTickersFetch } from "src/hooks";
+import {
+  useMarketsFetch,
+  useDepthMarketsFetch,
+  useMarketsTickersFetch,
+  useWalletsFetch,
+} from "src/hooks";
 
 const Trading = () => {
   const router = useRouter();
@@ -17,7 +22,7 @@ const Trading = () => {
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
   useDepthMarketsFetch();
-
+  useWalletsFetch(); // Testing..
   if (!id) return <div />;
   return (
     <S.Main>

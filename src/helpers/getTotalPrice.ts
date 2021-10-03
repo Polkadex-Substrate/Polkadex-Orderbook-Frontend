@@ -1,15 +1,11 @@
-export const getTotalPrice = (
-  amount: string,
-  priceMarket: number,
-  proposals: string[][]
-) => {
+export const getTotalPrice = (amount: string, priceMarket: string, proposals: string[][]) => {
   if (proposals.length === 0) {
-    return Number(amount) * priceMarket;
+    return Number(amount) * Number(priceMarket);
   }
 
   for (const p of proposals) {
     if (p.length < 2) {
-      return Number(amount) * priceMarket;
+      return Number(amount) * Number(priceMarket);
     }
   }
 
@@ -41,11 +37,7 @@ export const getTotalPrice = (
   return total;
 };
 
-export const getAmount = (
-  avaiblePrice: number,
-  proposals: string[][],
-  value: number
-) => {
+export const getAmount = (avaiblePrice: number, proposals: string[][], value: number) => {
   let sum = avaiblePrice * value;
 
   const list = proposals;
