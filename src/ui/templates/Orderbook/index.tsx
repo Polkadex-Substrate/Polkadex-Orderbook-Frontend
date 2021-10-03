@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -8,21 +9,26 @@ import { useReduxSelector } from "src/hooks";
 import {
   Market,
   selectCurrentMarket,
+  selectCurrentPrice,
   selectDepthAsks,
   selectDepthBids,
   selectDepthLoading,
   selectLastRecentTrade,
   selectMarketTickers,
+  setCurrentPrice,
   Ticker,
 } from "src/modules";
 import { accumulateVolume, calcMaxVolume } from "src/helpers";
 export const Orderbook = () => {
+  const dispatch = useDispatch();
+
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const orderBookLoading = useReduxSelector(selectDepthLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
   const marketTickers = useReduxSelector(selectMarketTickers);
+  const currentPrice = useReduxSelector(selectCurrentPrice);
 
   const getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) =>
     tickers[currentMarket?.id];
@@ -39,6 +45,12 @@ export const Orderbook = () => {
     return lastPrice;
   };
   const maxVolume = calcMaxVolume(bids, asks);
+
+  const handleSelectPrice = (index: string, side: "asks" | "bids") => {
+    const arr = side === "asks" ? asks : bids;
+    const priceToSet = arr[Number(index)] && Number(arr[Number(index)][0]);
+    if (currentPrice !== priceToSet) dispatch(setCurrentPrice(priceToSet));
+  };
 
   return (
     <S.Wrapper>
@@ -63,7 +75,12 @@ export const Orderbook = () => {
       </S.Header>
       {!orderBookLoading || !currentMarket ? (
         <S.Content>
-          <OrderbookColumn data={asks} maxVolume={maxVolume} side="asks" />
+          <OrderbookColumn
+            data={asks}
+            side="asks"
+            maxVolume={maxVolume}
+            handleSelectPrice={handleSelectPrice}
+          />
           <S.Select>
             <S.LastPriceWrapper>
               Latest Price
@@ -73,7 +90,12 @@ export const Orderbook = () => {
               </S.LastPrice>
             </S.LastPriceWrapper>
           </S.Select>
-          <OrderbookColumn data={bids} maxVolume={maxVolume} side="bids" />
+          <OrderbookColumn
+            data={bids}
+            side="bids"
+            maxVolume={maxVolume}
+            handleSelectPrice={handleSelectPrice}
+          />
         </S.Content>
       ) : (
         <S.Content>
@@ -98,7 +120,13 @@ const mapValues = (maxVolume?: number, data?: number[]) => {
       : [];
   return resultData;
 };
-const OrderbookColumn = ({ data = [], maxVolume, side = "asks", isLarge = true }) => {
+const OrderbookColumn = ({
+  data = [],
+  maxVolume,
+  side = "asks",
+  isLarge = true,
+  handleSelectPrice,
+}) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
   const formattedBaseUnit = currentMarket?.base_unit.toUpperCase();
@@ -126,7 +154,7 @@ const OrderbookColumn = ({ data = [], maxVolume, side = "asks", isLarge = true }
               : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
             const [price, volume] = item;
             return (
-              <S.OrderbookCard key={index}>
+              <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
                 <S.OrderbookPrice isSell={isSell}>
                   <Decimal
                     key={index}
