@@ -1,5 +1,3 @@
-// ? Move component to Organism
-
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";

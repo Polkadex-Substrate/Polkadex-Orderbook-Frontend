@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -8,9 +8,6 @@ import { Dropdown } from "src/ui/molecules";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
-  PublicTrade,
-  RootState,
-  selectCurrentColorTheme,
   selectCurrentMarket,
   selectCurrentPrice,
   selectDepthAsks,
@@ -18,29 +15,42 @@ import {
   selectDepthLoading,
   selectLastRecentTrade,
   selectMarketTickers,
-  selectMobileDeviceState,
-  selectOpenOrdersList,
   setCurrentPrice,
-  depthIncrementSubscribeResetLoading,
   Ticker,
 } from "src/modules";
-import { accumulateVolume } from "src/helpers";
-export const Orderbook = ({ lastPrice = "", data = [] }) => {
+import { accumulateVolume, calcMaxVolume } from "src/helpers";
+export const Orderbook = () => {
+  const dispatch = useDispatch();
+
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const orderBookLoading = useReduxSelector(selectDepthLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentPrice = useReduxSelector(selectCurrentPrice);
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
   const marketTickers = useReduxSelector(selectMarketTickers);
-
-  const formattedBaseUnit = currentMarket?.base_unit.toUpperCase();
-  const formattedQuoteUnit = currentMarket?.quote_unit.toUpperCase();
+  const currentPrice = useReduxSelector(selectCurrentPrice);
 
   const getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) =>
     tickers[currentMarket?.id];
 
   const currentTicker = getTickerValue(currentMarket, marketTickers);
+
+  const getLastPrice = () => {
+    let lastPrice = "";
+    if (lastRecentTrade?.market === currentMarket?.id) {
+      lastPrice = lastRecentTrade?.price;
+    } else {
+      lastPrice = currentTicker?.last;
+    }
+    return lastPrice;
+  };
+  const maxVolume = calcMaxVolume(bids, asks);
+
+  const handleSelectPrice = (index: string, side: "asks" | "bids") => {
+    const arr = side === "asks" ? asks : bids;
+    const priceToSet = arr[Number(index)] && Number(arr[Number(index)][0]);
+    if (currentPrice !== priceToSet) dispatch(setCurrentPrice(priceToSet));
+  };
 
   return (
     <S.Wrapper>
@@ -58,24 +68,34 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
               <Icon icon="OrdersSell" size="xsmall" />
             </li>
           </ul>
-          {/* <Dropdown title="001" direction="bottom">
+          <Dropdown title="001" direction="bottom">
             <p>testing</p>
-          </Dropdown> */}
+          </Dropdown>
         </S.Options>
       </S.Header>
-      {orderBookLoading ? (
+      {!orderBookLoading || !currentMarket ? (
         <S.Content>
-          <OrderbookCol data={data} />
+          <OrderbookColumn
+            data={asks}
+            side="asks"
+            maxVolume={maxVolume}
+            handleSelectPrice={handleSelectPrice}
+          />
           <S.Select>
             <S.LastPriceWrapper>
               Latest Price
               <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
-                {Decimal.format(lastPrice, currentMarket.price_precision, ",")}&nbsp;
+                {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
               </S.LastPrice>
             </S.LastPriceWrapper>
           </S.Select>
-          <OrderbookCol data={data} />
+          <OrderbookColumn
+            data={bids}
+            side="bids"
+            maxVolume={maxVolume}
+            handleSelectPrice={handleSelectPrice}
+          />
         </S.Content>
       ) : (
         <S.Content>
@@ -90,36 +110,87 @@ export const Orderbook = ({ lastPrice = "", data = [] }) => {
   );
 };
 
-const OrderbookCol = ({ baseQuote = "", baseUnit = "", data = [] }) => {
+const mapValues = (maxVolume?: number, data?: number[]) => {
+  const resultData =
+    data && maxVolume && data.length
+      ? data.map((currentVolume) => {
+          // tslint:disable-next-line:no-magic-numbers
+          return { value: (currentVolume / maxVolume) * 100 };
+        })
+      : [];
+  return resultData;
+};
+const OrderbookColumn = ({
+  data = [],
+  maxVolume,
+  side = "asks",
+  isLarge = true,
+  handleSelectPrice,
+}) => {
+  const currentMarket = useReduxSelector(selectCurrentMarket);
+
+  const formattedBaseUnit = currentMarket?.base_unit.toUpperCase();
+  const formattedQuoteUnit = currentMarket?.quote_unit.toUpperCase();
+  const priceFixed = currentMarket?.price_precision || 0;
+  const amountFixed = currentMarket?.amount_precision || 0;
+  const isSell = side === "asks";
+
+  const valumeData = mapValues(maxVolume, accumulateVolume(data));
+  const getRowWidth = (index: number) =>
+    valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
+
   return (
     <S.Box>
       <S.BoxHeader>
-        <span>Price{baseQuote}</span>
-        <span>Amount{baseUnit}</span>
-        <span>Total{baseQuote}</span>
+        <span>Price({formattedBaseUnit})</span>
+        <span>Amount({formattedQuoteUnit})</span>
+        <span>Total({formattedBaseUnit})</span>
       </S.BoxHeader>
       <S.BoxContent>
         {data &&
-          data.map((item, index) => (
-            <OrderbookCard
-              key={index}
-              price={item.price}
-              amount={item.amount}
-              total={item.total}
-            />
-          ))}
+          data.map((item, index) => {
+            const total = isLarge
+              ? accumulateVolume(data)
+              : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
+            const [price, volume] = item;
+            return (
+              <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
+                <S.OrderbookPrice isSell={isSell}>
+                  <Decimal
+                    key={index}
+                    fixed={priceFixed}
+                    thousSep=","
+                    prevValue={data[index + 1] ? data[index + 1][0] : 0}>
+                    {price}
+                  </Decimal>
+                </S.OrderbookPrice>
+                <S.OrderbookAmount>
+                  <Decimal key={index} fixed={amountFixed} thousSep=",">
+                    {volume}
+                  </Decimal>
+                </S.OrderbookAmount>
+                <S.OrderbookCardWrapper>
+                  <Decimal key={index} fixed={amountFixed} thousSep=",">
+                    {total[index]}
+                  </Decimal>
+                </S.OrderbookCardWrapper>
+              </S.OrderbookCard>
+            );
+          })}
+        <S.OrderbookVolume>
+          {data &&
+            data.map((item, index) => (
+              <S.VolumeSpan
+                key={index}
+                isSell={isSell}
+                style={{ width: getRowWidth(index) }}
+              />
+            ))}
+        </S.OrderbookVolume>
       </S.BoxContent>
     </S.Box>
   );
 };
-
-const OrderbookCard = ({ price = "", isSell = false, amount = "", total = "" }) => (
-  <S.OrderbookItem>
-    <S.OrderbookPrice isSell={isSell}>{price}</S.OrderbookPrice>
-    <S.OrderbookAmount>{amount}</S.OrderbookAmount>
-    <S.OrderbookItemWrapper>{total}</S.OrderbookItemWrapper>
-  </S.OrderbookItem>
-);
 
 const LoadingContainer = () => {
   return (
@@ -147,10 +218,10 @@ const LoadingContainer = () => {
 
 const LoadingCard = () => {
   return (
-    <S.OrderbookItem style={{ marginBottom: "0.8rem" }}>
+    <S.OrderbookCard style={{ marginBottom: "0.8rem" }}>
       <Skeleton height="1rem" />
       <Skeleton height="1rem" />
       <Skeleton height="1rem" />
-    </S.OrderbookItem>
+    </S.OrderbookCard>
   );
 };

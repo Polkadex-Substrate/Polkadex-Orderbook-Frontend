@@ -1,67 +1,87 @@
+import { useEffect, useState } from "react";
+
 import * as S from "./styles";
 
-import { Button, TabHeader, Tabs } from "src/ui/components";
+import { Button, Decimal, Skeleton, TabHeader, Tabs } from "src/ui/components";
 import { OrderInput } from "src/ui/molecules";
-import { FormEvent, useState } from "react";
-import { useEffect } from "react";
-import { cleanPositiveFloatInput, precisionRegExp } from "src/helpers";
-import { useDispatch } from "react-redux";
-import { placeOrdersExecute } from "src/modules/user/placeOrders";
-import { usePlaceOrder } from "src/ui/templates/PlaceOrder/usePlaceOrder";
+import { useReduxSelector } from "src/hooks";
+import { selectCurrentMarket, selectDepthAsks, selectDepthBids } from "src/modules";
+import {
+  cleanPositiveFloatInput,
+  getAmount,
+  precisionRegExp,
+  toCapitalize,
+} from "src/helpers";
 
-export const OrderForm = () => {
-  const dispatch = useDispatch();
-  const {currentMarket, userInfo} = usePlaceOrder();
-
-  const [totalAmount, setTotalAmount] = useState<string | number>('');
-  const [orderInput, setOrderInput] = useState({
-    price: null,
-    amount: null
+export const OrderForm = ({
+  side,
+  quoteUnit,
+  baseUnit,
+  availableQuoteAmount,
+  availableBaseAmount,
+  priceMarket,
+  totalPrice,
+  currentMarketAskPrecision,
+  currentMarketBidPrecision,
+  listenInputPrice,
+  priceLimit,
+  ...props
+}) => {
+  const [state, setState] = useState({
+    orderType: "Limit",
+    price: "",
+    priceMarket: priceMarket,
+    amountSell: "0.000000000",
+    amountBuy: "0.000000000",
   });
+  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const asks = useReduxSelector(selectDepthAsks);
+  const bids = useReduxSelector(selectDepthBids);
+  const isSellSide = side === "sell";
+  const amount = isSellSide ? state.amountSell : state.amountBuy;
+  const safePrice = totalPrice / Number(amount) || state.priceMarket;
+  const safeAmount = Number(amount) || 0;
 
-  useEffect(() => {    
-    if(orderInput.price && orderInput.amount){
-      const total = Number(orderInput.price) * Number(orderInput.amount);
-      setTotalAmount(total);
-    }
-    if(typeof orderInput.price === "string" && typeof orderInput.amount === "string") {
-      if(!orderInput.price.trim() && !orderInput.amount.trim()){
-        setTotalAmount("")
-      } 
-    }
-  }, [orderInput]);
+  const total =
+    state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
 
+  const handlePriceChange = (value: string) => {
+    const convertedValue = cleanPositiveFloatInput(String(value));
 
-  const handleFormInput = (e: FormEvent<HTMLFormElement>) => {
-    const {name, value} = e.target as any;
-    let precision = 4;
-    const convertedValue = cleanPositiveFloatInput(value);
-    if(name === 'amount') {
-      precision = currentMarket?.amount_precision;
+    if (convertedValue.match(precisionRegExp(currentMarketBidPrecision))) {
+      setState({
+        ...state,
+        price: convertedValue,
+      });
     }
-    else {
-      precision = currentMarket?.price_precision;
-    }
-    if(convertedValue.match(precisionRegExp(precision))){      
-      setOrderInput({...orderInput, [name]: convertedValue});
-    }
-  }
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // call the place order 
-    dispatch(placeOrdersExecute({
-      account: userInfo.keyringPair, 
-      nonce: 1,
-      baseAsset: currentMarket.base_unit,
-      quoteAsset: currentMarket.quote_unit, 
-      ordertype: "LIMIT",
-      orderSide: "ASK",
-      quantity: orderInput.amount,
-      price: orderInput.price
-    }))
-  }
+    listenInputPrice && listenInputPrice();
+  };
 
+  const handleAmountChange = (value: string) => {
+    const convertedValue = cleanPositiveFloatInput(String(value));
+
+    if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
+      if (isSellSide) {
+        setState({
+          ...state,
+          amountSell: convertedValue,
+        });
+      } else {
+        setState({
+          ...state,
+          amountBuy: convertedValue,
+        });
+      }
+    }
+  };
+  useEffect(() => {
+    const nextPriceLimitTruncated = Decimal.format(priceLimit, currentMarketBidPrecision);
+    if (state.orderType === "Limit" && priceLimit && nextPriceLimitTruncated !== state.price) {
+      console.log("Updating..");
+      handlePriceChange(nextPriceLimitTruncated);
+    }
+  }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
   return (
     <S.Wrapper>
       <Tabs>
@@ -74,12 +94,44 @@ export const OrderForm = () => {
           </TabHeader>
         </S.Header>
         <div>
-          <form onChange={handleFormInput} onSubmit={handleFormSubmit}>
-            <OrderInput label="Price" name="price" placeholder="Price" token={currentMarket?.base_unit.toUpperCase()} />
-            <OrderInput label="Amount" name="amount" placeholder="Amount" token={currentMarket?.quote_unit.toUpperCase()} />
-            <OrderInput label="Total" value={totalAmount} placeholder="Total" token={currentMarket?.base_unit.toUpperCase()} disabled />
+          <form onSubmit={() => console.log("Submit..")}>
+            <S.AvailableAmount>
+              <span>Available</span>
+              {availableBaseAmount || availableQuoteAmount || baseUnit || quoteUnit ? (
+                <span>
+                  {isSellSide ? availableBaseAmount : availableQuoteAmount} &nbsp;
+                  {isSellSide ? baseUnit : quoteUnit}
+                </span>
+              ) : (
+                <Skeleton width="4rem" />
+              )}
+            </S.AvailableAmount>
+            <OrderInput
+              label="Price"
+              token={isSellSide ? quoteUnit : baseUnit}
+              value={state.price || "0.000000000"}
+              onChange={(e) => handlePriceChange(e.currentTarget.value)}
+            />
+            <OrderInput
+              label="Amount"
+              token={isSellSide ? baseUnit : quoteUnit}
+              value={amount || "0.000000000"}
+              onChange={(e) => handleAmountChange(e.currentTarget.value)}
+            />
+            <OrderInput
+              value={Decimal.format(
+                total,
+                currentMarketAskPrecision + currentMarketBidPrecision,
+                ","
+              )}
+              onChange={() => console.log("Updating..")}
+              label="Total"
+              token={isSellSide ? quoteUnit : baseUnit}
+            />
             <Button
-              title="Log in"
+              type="submit"
+              title={toCapitalize(side)}
+              onClick={() => console.log("sending..")}
               style={{ width: "100%", justifyContent: "center" }}
               background="secondaryBackground"
             />

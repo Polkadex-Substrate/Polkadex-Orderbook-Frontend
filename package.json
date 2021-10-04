@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
@@ -14,7 +14,7 @@
     "generateCryptocurrencies": "svgr -d src/components/Cryptocurrencies/ public/img/cryptocurrencies/ --typescript --icon",
     "mockAPI": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockAPI.js",
     "mockWS": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockWS.js",
-    "start-mock": "npm-run-all -p dev mockAPI mockWS",
+    "start-mock": "npm-run-all -p dev mockAPI",
     "checkTypes": "tsc --noEmit"
   },
   "dependencies": {

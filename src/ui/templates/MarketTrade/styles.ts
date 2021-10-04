@@ -43,22 +43,28 @@ export const HeaderBox = styled(Template)`
 `;
 
 export const Box = styled.div`
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  max-height: 33rem;
 `;
 
-export const ItemWrapper = styled(Template)<Partial<Props>>`
+export const CardWrapper = styled(Template)<Partial<Props>>`
   ${({ theme, isSell }) => css`
     padding: 0 1rem;
     margin-bottom: 1rem;
+    font-weight: 500;
 
     span {
-      font-weight: 600;
-
+      font-size: ${theme.font.sizes.xxxsmall};
       :not(:first-child) {
         text-align: end;
       }
-      :nth-child(2) {
+      :nth-child(3) {
+        font-weight: 600;
         color: ${isSell ? theme.colors.primary : theme.colors.green};
+        span :last-child {
+          opacity: 0.7;
+        }
       }
     }
   `}

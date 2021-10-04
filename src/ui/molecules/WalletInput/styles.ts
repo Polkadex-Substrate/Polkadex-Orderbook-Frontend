@@ -7,7 +7,17 @@ export const Wrapper = styled.div`
     justify-content: space-between;
     padding: 0.7rem;
     border-radius: 0.5rem;
-    margin-top: 1rem;
     background: ${theme.colors.primaryBackground};
+    input {
+      color: ${theme.colors.text};
+      width: 100%;
+      padding-right: 0.5rem;
+    }
+    button {
+      background: ${theme.colors.secondaryBackground};
+      border-radius: 0.5rem;
+      padding: 0.3rem;
+      font-size: 1.2rem;
+    }
   `}
 `;

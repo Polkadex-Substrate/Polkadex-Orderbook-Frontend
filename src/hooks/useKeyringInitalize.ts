@@ -24,5 +24,5 @@ export const useKeyringInitalize = () => {
   useEffect(() => {
     loadKeyring();
   }, [dispatch]);
-  return loading;
+  return { loading };
 };

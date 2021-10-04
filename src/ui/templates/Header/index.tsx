@@ -31,7 +31,7 @@ export const Header = () => {
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ"
+  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ";
   return (
     <S.Wrapper>
       <S.Container>
@@ -69,8 +69,13 @@ export const Header = () => {
         <S.Column>
           <ThemeSwitch />
           {user.address ? (
-            <Dropdown title={<MyAccountHeader />} direction="bottom">
-              <MyAccountContent />
+            <Dropdown
+              isOpacity
+              variant={2}
+              style={{ top: 0 }}
+              title={<MyAccountHeader accountName={user.username} address={user.address} />}
+              direction="bottom">
+              <MyAccountContent accountName={user.username} address={user.address} />
             </Dropdown>
           ) : (
             <Dropdown

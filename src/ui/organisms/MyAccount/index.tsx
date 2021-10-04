@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import { WalletInput } from "../../molecules";
 
@@ -6,8 +6,7 @@ import * as S from "./styles";
 import { Props, MyCurrentAccountProps } from "./types";
 
 import { Button, Icon } from "src/ui/components";
-import { selectUserInfo } from "src/modules";
-import { useReduxSelector } from "src/hooks";
+import { logoutFetch } from "src/modules";
 
 const MyAccount = ({
   children,
@@ -24,7 +23,7 @@ const MyAccount = ({
           <p>
             {accountName} ({address})
           </p>
-          <span>Balance: {balance}</span>
+          <span>Balance: ~{balance}</span>
         </S.AccountInfoHeader>
         {children}
       </S.AccountInfo>
@@ -32,47 +31,34 @@ const MyAccount = ({
   );
 };
 
-export const MyAccountHeader = () => {
-  const user = useReduxSelector(selectUserInfo);
-
-  const freeBalance = "0";
-  const isVerified = false;
-  const name = user.username;
-
-  const shortAddress = user.address
-    ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
+export const MyAccountHeader = ({ balance = "0", accountName = "", address = "" }) => {
+  const shortAddress = address
+    ? address.slice(0, 7) + "..." + address.slice(address.length - 7)
     : "0x00000...0000000";
 
   return (
-    <MyAccount isHeader balance={freeBalance} address={shortAddress} accountName={name}>
-      {!isVerified && <Icon background="orange" size="xxsmall" icon="Attention" />}
-    </MyAccount>
+    <MyAccount isHeader balance={balance} address={shortAddress} accountName={accountName} />
   );
 };
 
-export const MyAccountContent = () => {
-  const user = useReduxSelector(selectUserInfo);
-
-  const freeBalance = "0";
-  const isVerified = false;
-  const name = user.username;
-
-  const shortAddress = user.address
-    ? user.address.slice(0, 5) + "..." + user.address.slice(user.address.length - 5)
+export const MyAccountContent = ({ balance = "0", accountName = "", address = "" }) => {
+  const dispatch = useDispatch();
+  const shortAddress = address
+    ? address.slice(0, 7) + "..." + address.slice(address.length - 7)
     : "0x00000...0000000";
   return (
     <S.AccountContent>
-      <MyAccount balance={freeBalance} address={shortAddress} accountName={name} />
+      <MyAccount balance={balance} address={shortAddress} accountName={accountName} />
       <S.AccountContentHeader>
         <S.AccountContentInfo>
           <a href="https://polkascan.io/polkadot/block/6323045">
             Connected with Polkadotjs
-            <Icon icon="External" size="xxsmall" />
+            <Icon icon="External" size="xxsmall" background="none" />
           </a>
-          <Button title="Disconnect" size="Small" />
+          <Button title="Disconnect" size="Small" onClick={() => dispatch(logoutFetch())} />
         </S.AccountContentInfo>
-        <WalletInput value={user.address || "..."} />
-        {!isVerified && (
+        <WalletInput value={address} />
+        {/* {!isVerified && (
           <S.AccountContentInfo>
             <Icon icon="Attention" background="orange" size="xxsmall" />
             <p>
@@ -80,7 +66,7 @@ export const MyAccountContent = () => {
               <Link href="/settings">Register now</Link>
             </p>
           </S.AccountContentInfo>
-        )}
+        )} */}
       </S.AccountContentHeader>
       <S.AccountContentSection>
         <a href="/support">
@@ -93,7 +79,10 @@ export const MyAccountContent = () => {
         </a>
       </S.AccountContentSection>
       <S.AccountContentFooter>
-        <Button title=" See Transactions" style={{ width: "100%" }}></Button>
+        <Button
+          title=" See Transactions"
+          background="none"
+          style={{ width: "100%", justifyContent: "center" }}></Button>
       </S.AccountContentFooter>
     </S.AccountContent>
   );

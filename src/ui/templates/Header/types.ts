@@ -1,4 +1,5 @@
 import { InputHTMLAttributes } from "react";
+
 import { ITokens } from "src/utils/types";
 
 export type InformationItemProps = {

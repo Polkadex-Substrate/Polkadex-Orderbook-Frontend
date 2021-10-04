@@ -13,14 +13,13 @@ export const Toolbar = ({
   changeLow,
   changeHigh,
   color,
-  // Select PairContent
-  markets = [],
   currentMarket,
 }: Props) => {
   return (
     <S.Wrapper>
       <S.Container>
         <Dropdown
+          isOpacity
           title={
             <SelectPairHeader
               title={currentMarket?.name}
