@@ -46,6 +46,7 @@ import { MarketsAdminState, rootMarketsAdminSaga } from "./admin/markets";
 import { PlatformCreateState, rootPlatformCreateSaga } from "./admin/platform";
 import { P2PState, rootP2PSaga } from "./public/p2p";
 import { PaymentMethodState, rootPaymentMethodSaga } from "./user/paymentMethod";
+import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
 
 export * from "./admin/config";
 export * from "./admin/markets";
@@ -101,6 +102,7 @@ export interface RootState {
   user: {
     abilities: AbilitiesState;
     addresses: AddressesState;
+    polkadotWallet:PolkadotWalletState;
     apiKeys: ApiKeysState;
     auth: AuthState;
     beneficiaries: BeneficiariesState;
@@ -175,5 +177,6 @@ export function* rootSaga() {
     call(rootWithdrawLimitSaga),
     call(rootQuickExchangeSaga),
     call(rootPaymentMethodSaga),
+    call(rootPolkadotWalletSaga)
   ]);
 }

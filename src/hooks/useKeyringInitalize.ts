@@ -1,8 +1,8 @@
 import keyring from "@polkadot/ui-keyring";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-
 import { userListFetch } from "src/modules";
+import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
 
 export const useKeyringInitalize = () => {
   const [loading, setLoading] = useState(true);
@@ -18,6 +18,7 @@ export const useKeyringInitalize = () => {
     }
 
     dispatch(userListFetch());
+    dispatch(polkadotWalletFetch())
     console.log("keyring crypto initalized");
     setLoading(false);
   };

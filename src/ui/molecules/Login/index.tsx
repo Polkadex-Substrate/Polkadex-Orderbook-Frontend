@@ -1,7 +1,7 @@
 // ? Move component to Organism
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -10,6 +10,8 @@ import { MyCurrentAccountHeader } from "src/ui/organisms";
 import { Input, Dropdown } from "src/ui/molecules";
 import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
+import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
+import { useExtrinsics } from "src/hooks/useExtrinsics";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,10 @@ export const Login = () => {
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
   console.log(userList);
+  useEffect(() => {
+    dispatch(polkadotWalletFetch())
+  }, [])
+
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
@@ -45,19 +51,19 @@ export const Login = () => {
                 <S.MyCurrentAccountContent>
                   {userList.length
                     ? userList.map((item, index) => (
-                        <MyCurrentAccountHeader
-                          isActive={item.address === selectedAccount.address}
-                          key={index}
-                          name={item.username || `Account ${index}`}
-                          address={item.address}
-                          onClick={() => {
-                            setFieldValue("account", item.address);
-                            setSelectedAccount(
-                              userList.find((elem) => elem.address === item.address)
-                            );
-                          }}
-                        />
-                      ))
+                      <MyCurrentAccountHeader
+                        isActive={item.address === selectedAccount.address}
+                        key={index}
+                        name={item.username || `Account ${index}`}
+                        address={item.address}
+                        onClick={() => {
+                          setFieldValue("account", item.address);
+                          setSelectedAccount(
+                            userList.find((elem) => elem.address === item.address)
+                          );
+                        }}
+                      />
+                    ))
                     : "Empty"}
                 </S.MyCurrentAccountContent>
               </Dropdown>
@@ -67,7 +73,7 @@ export const Login = () => {
                 placeholder="Enter a new password fot this account"
                 type="password"
                 name="password"
-                // error={errors.password && touched.password && errors.password}
+              // error={errors.password && touched.password && errors.password}
               />
               <Button
                 title="Sign In"
