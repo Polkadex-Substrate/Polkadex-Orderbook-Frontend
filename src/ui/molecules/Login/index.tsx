@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -9,6 +9,8 @@ import { MyCurrentAccountHeader } from "src/ui/organisms";
 import { Input, Dropdown } from "src/ui/molecules";
 import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
+import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
+import { useExtrinsics } from "src/hooks/useExtrinsics";
 import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 
 export const Login = () => {
@@ -21,6 +23,11 @@ export const Login = () => {
     account: userList.length > 0 ? userList[0].address : "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
+  console.log(userList);
+  useEffect(() => {
+    dispatch(polkadotWalletFetch())
+  }, [])
+
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
@@ -68,7 +75,7 @@ export const Login = () => {
                 placeholder="Enter a new password fot this account"
                 type="password"
                 name="password"
-                // error={errors.password && touched.password && errors.password}
+              // error={errors.password && touched.password && errors.password}
               />
               <Button
                 title="Sign In"
