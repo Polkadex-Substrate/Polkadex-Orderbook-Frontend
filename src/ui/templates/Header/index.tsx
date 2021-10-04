@@ -31,7 +31,7 @@ export const Header = () => {
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-
+  const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ";
   return (
     <S.Wrapper>
       <S.Container>

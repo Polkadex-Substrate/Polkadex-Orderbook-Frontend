@@ -50,6 +50,7 @@ export const BoxHeader = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: 0.3rem;
     padding: 0 1rem;
+
     span {
       font-size: ${theme.font.sizes.xxsmall};
       font-weight: 500;

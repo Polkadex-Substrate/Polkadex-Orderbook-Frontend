@@ -45,7 +45,7 @@ export const HeaderBox = styled(Template)`
 export const Box = styled.div`
   overflow-y: scroll;
   scrollbar-width: none;
-  max-height: 25rem;
+  max-height: 33rem;
 `;
 
 export const CardWrapper = styled(Template)<Partial<Props>>`
