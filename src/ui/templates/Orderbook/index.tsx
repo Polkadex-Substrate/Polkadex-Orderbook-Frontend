@@ -147,7 +147,7 @@ const OrderbookColumn = ({
         <span>Total({formattedBaseUnit})</span>
       </S.BoxHeader>
       <S.BoxContent>
-        {data &&
+        {data.length ?
           data.map((item, index) => {
             const total = isLarge
               ? accumulateVolume(data)
@@ -176,7 +176,7 @@ const OrderbookColumn = ({
                 </S.OrderbookCardWrapper>
               </S.OrderbookCard>
             );
-          })}
+          }) : <LoadingContainer/> }
         <S.OrderbookVolume>
           {data &&
             data.map((item, index) => (
