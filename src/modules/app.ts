@@ -40,6 +40,7 @@ import { platformCreateReducer } from "./admin/platform";
 import { quickExchangeReducer } from "./user/quickExchange";
 import { p2pReducer } from "./public/p2p";
 import { paymentMethodReducer } from "./user/paymentMethod";
+import { polkadotWalletReducer } from "./user/polkadotWallet";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -62,6 +63,7 @@ export const userReducer = combineReducers({
   addresses: addressesReducer,
   apiKeys: apiKeysReducer,
   auth: authReducer,
+  polkadotWallet: polkadotWalletReducer,
   beneficiaries: beneficiariesReducer,
   captcha: getGeetestCaptchaReducer,
   documentation: documentationReducer,
