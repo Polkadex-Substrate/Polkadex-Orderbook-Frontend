@@ -19,7 +19,8 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
     }
 }
 async function createPolkadotWalletApi() {
-    const wsProvider = new WsProvider("ws://openfinex.polkadex.trade:9994");
+    const wsProvider = new WsProvider("wss://openfinex.polkadex.trade");
+    console.log({wsProvider})
     const api = await ApiPromise.create({ provider: wsProvider, types });
     return api;
 }

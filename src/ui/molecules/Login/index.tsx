@@ -37,6 +37,7 @@ export const Login = () => {
           onSubmit={async (values) => {
             console.log("VALUES:", values);
             dispatch(signIn(values.account, values.password));
+            dispatch(polkadotWalletFetch())
           }}>
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
