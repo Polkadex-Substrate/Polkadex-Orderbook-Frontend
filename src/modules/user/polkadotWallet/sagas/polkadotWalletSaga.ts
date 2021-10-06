@@ -1,8 +1,9 @@
-import { ApiPromise, WsProvider } from '@polkadot/api';
 import { call, put } from 'redux-saga/effects';
 import { sendError } from '../../..';
 import { PolkadotWalletFetch, polkadotWalletData, InjectedAccount } from '../actions';
 import { types } from '../types'
+import  { ApiPromise, WsProvider } from '@polkadot/api';
+import { polkadexUrl } from 'src/api';
 
 
 export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
@@ -19,7 +20,9 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
     }
 }
 async function createPolkadotWalletApi(){
-    const wsProvider = new WsProvider("wss://openfinex.polkadex.trade");
+    // const { ApiPromise, WsProvider } =await import('@polkadot/api');
+    const wsUrl = polkadexUrl()
+    const wsProvider = new WsProvider(wsUrl);
     console.log({ wsProvider })
     const api = await ApiPromise.create({ provider: wsProvider, types });
     console.log({api})
