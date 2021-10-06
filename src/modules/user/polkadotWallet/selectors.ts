@@ -1,4 +1,5 @@
 import { ApiPromise } from '@polkadot/api';
+import { InjectedAccount } from '.';
 import {  RootState } from '../..';
 
 export const selectPolkadotWalletApi = (state: RootState): ApiPromise | undefined =>
@@ -7,6 +8,8 @@ export const selectPolkadotWalletApi = (state: RootState): ApiPromise | undefine
 export const selectPolkadotWalletLoading = (state: RootState): boolean =>
     state.user.polkadotWallet.loading;
 
-export const selectPolkadotWalletAccounts = (state: RootState): any =>
+export const selectPolkadotWalletAccounts = (state: RootState): InjectedAccount[] =>
     state.user.polkadotWallet.allAccounts;
 
+export const selectPolkadotWalletCurrentAccount= (state:RootState): InjectedAccount =>
+    state.user.polkadotWallet.selectedAccount
