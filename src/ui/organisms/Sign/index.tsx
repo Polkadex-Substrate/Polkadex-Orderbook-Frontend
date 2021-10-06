@@ -22,7 +22,7 @@ export const SignContent = () => {
       <S.Content>
         { !selectedAccount ?
          ( <div>
-            <h4>Select your account</h4>
+            <h4>{`Select your Polkadot{.js} account`}</h4>
             <Dropdown
                 direction="bottomLeft"
                 style={{ width: "100%", top: 0 }}

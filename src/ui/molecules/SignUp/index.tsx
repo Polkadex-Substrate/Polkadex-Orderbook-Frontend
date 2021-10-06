@@ -28,6 +28,7 @@ export const SignUp = () => {
   const dispatch = useDispatch();
   return (
     <S.Wrapper>
+      <h4>Import/export trading account</h4>
       <Formik
         initialValues={defaultValues}
         onSubmit={async (values) => {

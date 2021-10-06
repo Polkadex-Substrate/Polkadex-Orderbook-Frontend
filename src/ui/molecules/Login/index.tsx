@@ -28,7 +28,7 @@ export const Login = () => {
 
   return (
     <S.Wrapper>
-      <h4>Sign In</h4>
+      <h4>Unlock trading account</h4>
       {userList.length > 0 && !loading ? (
         <Formik
           initialValues={defaultValues}
