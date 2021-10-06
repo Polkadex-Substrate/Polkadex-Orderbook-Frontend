@@ -46,8 +46,7 @@ import { MarketsAdminState, rootMarketsAdminSaga } from "./admin/markets";
 import { PlatformCreateState, rootPlatformCreateSaga } from "./admin/platform";
 import { P2PState, rootP2PSaga } from "./public/p2p";
 import { PaymentMethodState, rootPaymentMethodSaga } from "./user/paymentMethod";
-import { rootPlaceOrdersSaga } from "./user/placeOrders";
-import { rootCancelOrdersSaga } from "./user/cancelOrders";
+import { rootPlaceOrdersSaga, rootCancelOrdersSaga } from "./user/OrdersTransactions";
 
 
 export * from "./admin/config";
