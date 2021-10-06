@@ -47,6 +47,9 @@ export const AccountInfoHeader = styled.div`
 export const AccountInfoFlex = styled.div`
   display: flex;
   justify-content: space-between;
+  span {
+    word-break: break-all;
+  }
 `;
 
 export const AccountContent = styled.div`

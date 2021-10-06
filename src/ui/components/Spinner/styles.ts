@@ -1,9 +1,16 @@
 import styled, { css } from "styled-components";
 
 import { Props } from "./types";
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-export const Wrapper = styled.div<Props>`
+export const Container = styled.div<Props>`
   ${({ theme, size, color }) => css`
+    margin-left: -2rem;
+
     &,
     &:before,
     &:after {

@@ -25,9 +25,7 @@
     "plugin:react/recommended",
     "standard",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "next",
-    "next/core-web-vitals"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -56,8 +54,6 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "space-before-function-paren": "off",
-    "camelcase": "off",
-    "@next/next/no-img-element": "off"
-
+    "camelcase": "off"
   }
 }

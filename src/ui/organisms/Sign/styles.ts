@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as InputWrapper } from "src/ui/molecules/Input/styles";
 import { Wrapper as DropdownItem } from "src/ui/organisms/MyAccount/styles";
+import { Wrapper as IconWrapper } from "src/ui/components/Icon/styles";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -27,6 +28,9 @@ export const Title = styled.div`
       font-size: ${theme.font.sizes.xsmall};
       margin-left: 1rem;
       font-weight: 500;
+    }
+    ${IconWrapper} {
+      cursor: pointer;
     }
   `}
 `;

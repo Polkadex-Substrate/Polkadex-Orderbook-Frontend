@@ -5,7 +5,7 @@ import { WalletInput } from "../../molecules";
 import * as S from "./styles";
 import { Props, MyCurrentAccountProps } from "./types";
 
-import { Button, Icon } from "src/ui/components";
+import { Button, Icon, Skeleton } from "src/ui/components";
 import { logoutFetch } from "src/modules";
 
 const MyAccount = ({
@@ -95,18 +95,23 @@ export const MyCurrentAccountHeader = ({
   isActive = false,
   ...props
 }: MyCurrentAccountProps) => {
-  const shortAddress = address
-    ? address.slice(0, 12) + "..." + address.slice(address.length - 12)
-    : "";
+  const shortAddress =
+    address && address?.length >= 40
+      ? address?.slice(0, 12) + "..." + address?.slice(address?.length - 12)
+      : address;
 
   return (
     <S.Wrapper isActive={isActive} isHeader={isHeader} {...props}>
-      <Icon size="xlarge" icon="Avatar" />
+      {name ? <Icon size="xlarge" icon="Avatar" /> : <Skeleton height="4rem" width="4rem" />}
       <S.AccountInfo>
         <S.AccountInfoHeader>
-          <p>{name}</p>
+          {name ? <p>{name}</p> : <Skeleton width="4rem" />}
           <S.AccountInfoFlex>
-            <span>{shortAddress}</span>
+            {shortAddress ? (
+              <span>{shortAddress}</span>
+            ) : (
+              <Skeleton width="12rem" style={{ marginTop: "1rem" }} />
+            )}
             {isHeader && <Icon icon="ArrowBottom" size="xsmall" />}
           </S.AccountInfoFlex>
         </S.AccountInfoHeader>
