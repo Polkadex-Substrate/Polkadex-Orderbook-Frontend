@@ -92,7 +92,7 @@ export const SignUp = () => {
               error={errors.terms && touched.terms && errors.terms}
             />
             <Button
-              title="Sign In"
+              title="Create account"
               type="submit"
               style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
             />

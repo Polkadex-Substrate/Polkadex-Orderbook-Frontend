@@ -76,7 +76,7 @@ export const Login = () => {
                 // error={errors.password && touched.password && errors.password}
               />
               <Button
-                title="Sign In"
+                title="Unlock Wallet"
                 type="submit"
                 style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
               />
