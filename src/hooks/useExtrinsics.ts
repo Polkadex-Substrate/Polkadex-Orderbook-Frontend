@@ -6,11 +6,7 @@ import { useReduxSelector } from "."
 
 export const useExtrinsics = (mainAccount: InjectedAccount) => {
     const api = useReduxSelector(selectPolkadotWalletApi);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(polkadotWalletFetch())
-    }, [dispatch, api])
-
+    
     const getInjectorFromExtension = async () => {
         const { web3FromSource } = await import('@polkadot/extension-dapp')
         const injector = await web3FromSource(mainAccount.meta.source);

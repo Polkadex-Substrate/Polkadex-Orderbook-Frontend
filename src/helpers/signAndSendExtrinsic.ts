@@ -4,13 +4,20 @@ export const signAndSendExtrinsic = (
     extrinsic: SubmittableExtrinsic<"promise", any>,
     injector: any,
     mainAddress: string) => {
-    extrinsic.signAndSend(mainAddress, { signer: injector.signer }, ({ status }) => {
-        if (status.isInBlock) {
-            console.log(`Completed at block hash #${status.asInBlock.toString()}`);
-        } else {
-            console.log(`Current status: ${status.type}`);
-        }
-    }).catch((error: any) => {
-        console.log(':( transaction failed', error);
-    });
+    return new Promise((resolve, reject) => {
+        extrinsic.signAndSend(mainAddress, { signer: injector.signer }, ({ events = [], status }) => {
+            if (status.isFinalized) {
+                events.forEach(({ event: { data, method, section }, phase }) => {
+                    console.log('', phase.toString(), `: ${section}.${method}`, data.toString());
+                });
+                console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
+                resolve({success: true})
+            }
+            else {
+                console.log(`Current status is ${status}`);
+            }
+        }).catch(error => {
+            reject({sucess:false, error})
+        })
+    })
 }

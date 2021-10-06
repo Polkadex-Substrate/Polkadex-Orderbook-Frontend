@@ -7,6 +7,7 @@ declare global {
       rangerUrl: string;
       finexUrl: string;
       p2pUrl: string;
+      polkadex:string;
     };
     proxy: {
       restUrl: string;

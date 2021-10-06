@@ -4,6 +4,7 @@ import {
     GET_POLKADOT_WALLET_FETCH,
     GET_POLKADOT_WALLET_FETCH_ERROR,
     GET_POLKADOT_WALLET_DATA,
+    SET_POLKADOT_WALLET_ACCOUNT,
 } from './constants';
 
 export interface InjectedAccount {
@@ -32,12 +33,16 @@ export interface PolkadotWalletData {
     type: typeof GET_POLKADOT_WALLET_DATA;
     payload: PolkadotWalletFetchPayload
 }
-
+export interface PolkadotWalletSetAccount {
+    type: typeof SET_POLKADOT_WALLET_ACCOUNT;
+    payload: InjectedAccount
+}
 
 export type GetPolkadotWalletAction =
     PolkadotWalletFetch
     | PolkadotWalletError
-    | PolkadotWalletData;
+    | PolkadotWalletData
+    | PolkadotWalletSetAccount;
 
 export const polkadotWalletData = (payload: PolkadotWalletFetchPayload): PolkadotWalletData => ({
     type: GET_POLKADOT_WALLET_DATA,
@@ -52,3 +57,9 @@ export const polkadotWalletError = (error: CommonError): PolkadotWalletError => 
 export const polkadotWalletFetch = (): PolkadotWalletFetch => ({
     type: GET_POLKADOT_WALLET_FETCH,
 });
+
+export const polkadotWalletSetAcccount =
+    (payload: PolkadotWalletSetAccount["payload"]): PolkadotWalletSetAccount => ({
+        type: SET_POLKADOT_WALLET_ACCOUNT,
+        payload
+})
