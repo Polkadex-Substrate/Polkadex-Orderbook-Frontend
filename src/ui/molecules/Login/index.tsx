@@ -23,14 +23,21 @@ export const Login = () => {
     account: userList.length > 0 ? userList[0].address : "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
+<<<<<<< HEAD
   console.log(userList);
   useEffect(() => {
     dispatch(polkadotWalletFetch())
   }, [])
+=======
+
+  useEffect(() => {
+    if(!selectedAccount) setSelectedAccount(userList[0])
+  }, [userList])
+>>>>>>> release-authentication
 
   return (
     <S.Wrapper>
-      <h4>Sign In</h4>
+      <h4>Unlock trading account</h4>
       {userList.length > 0 && !loading ? (
         <Formik
           initialValues={defaultValues}
@@ -78,7 +85,7 @@ export const Login = () => {
               // error={errors.password && touched.password && errors.password}
               />
               <Button
-                title="Sign In"
+                title="Unlock Wallet"
                 type="submit"
                 style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
               />
@@ -86,7 +93,7 @@ export const Login = () => {
           )}
         </Formik>
       ) : (
-        <p style={{ textAlign: "center" }}>Install Polkadot.js</p>
+        <p style={{ textAlign: "center" }}>Create a trading account</p>
       )}
     </S.Wrapper>
   );

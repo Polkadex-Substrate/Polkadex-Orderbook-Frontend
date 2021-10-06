@@ -73,7 +73,6 @@ export const Orderbook = () => {
           </Dropdown>
         </S.Options>
       </S.Header>
-      {!orderBookLoading || !currentMarket ? (
         <S.Content>
           <OrderbookColumn
             data={asks}
@@ -84,10 +83,11 @@ export const Orderbook = () => {
           <S.Select>
             <S.LastPriceWrapper>
               Latest Price
-              <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
+              {currentMarket ?   <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
-              </S.LastPrice>
+              </S.LastPrice> : <Skeleton width="3rem" style={{display: "inline-block", marginLeft:"0.5rem"}}/>}
+
             </S.LastPriceWrapper>
           </S.Select>
           <OrderbookColumn
@@ -97,15 +97,6 @@ export const Orderbook = () => {
             handleSelectPrice={handleSelectPrice}
           />
         </S.Content>
-      ) : (
-        <S.Content>
-          <LoadingContainer />
-          <S.Select>
-            <Skeleton width="4rem" style={{ display: "inline-block", marginLeft: 5 }} />
-          </S.Select>
-          <LoadingContainer />
-        </S.Content>
-      )}
     </S.Wrapper>
   );
 };
@@ -141,42 +132,41 @@ const OrderbookColumn = ({
 
   return (
     <S.Box>
-      <S.BoxHeader>
-        <span>Price({formattedBaseUnit})</span>
-        <span>Amount({formattedQuoteUnit})</span>
-        <span>Total({formattedBaseUnit})</span>
-      </S.BoxHeader>
+      {data.length ? ( <>
+        <S.BoxHeader>
+          <span>Price({formattedBaseUnit})</span>
+          <span>Amount({formattedQuoteUnit})</span>
+          <span>Total({formattedBaseUnit})</span>
+        </S.BoxHeader>
       <S.BoxContent>
-        {data.length ?
-          data.map((item, index) => {
-            const total = isLarge
-              ? accumulateVolume(data)
-              : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
-            const [price, volume] = item;
-            return (
-              <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
-                <S.OrderbookPrice isSell={isSell}>
-                  <Decimal
-                    key={index}
-                    fixed={priceFixed}
-                    thousSep=","
-                    prevValue={data[index + 1] ? data[index + 1][0] : 0}>
-                    {price}
-                  </Decimal>
-                </S.OrderbookPrice>
-                <S.OrderbookAmount>
-                  <Decimal key={index} fixed={amountFixed} thousSep=",">
-                    {volume}
-                  </Decimal>
-                </S.OrderbookAmount>
-                <S.OrderbookCardWrapper>
-                  <Decimal key={index} fixed={amountFixed} thousSep=",">
-                    {total[index]}
-                  </Decimal>
-                </S.OrderbookCardWrapper>
-              </S.OrderbookCard>
-            );
-          }) : <LoadingContainer/> }
+      {data.map((item, index) => {
+        const total = isLarge
+          ? accumulateVolume(data)
+          : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
+        const [price, volume] = item;
+        return (
+          <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
+            <S.OrderbookPrice isSell={isSell}>
+              <Decimal
+                key={index}
+                fixed={priceFixed}
+                thousSep=","
+                prevValue={data[index + 1] ? data[index + 1][0] : 0}>
+                {price}
+              </Decimal>
+            </S.OrderbookPrice>
+            <S.OrderbookAmount>
+              <Decimal key={index} fixed={amountFixed} thousSep=",">
+                {volume}
+              </Decimal>
+            </S.OrderbookAmount>
+            <S.OrderbookCardWrapper>
+              <Decimal key={index} fixed={amountFixed} thousSep=",">
+                {total[index]}
+              </Decimal>
+            </S.OrderbookCardWrapper>
+          </S.OrderbookCard>
+        )})}
         <S.OrderbookVolume>
           {data &&
             data.map((item, index) => (
@@ -188,6 +178,7 @@ const OrderbookColumn = ({
             ))}
         </S.OrderbookVolume>
       </S.BoxContent>
+      </> ) : <LoadingContainer/>}
     </S.Box>
   );
 };

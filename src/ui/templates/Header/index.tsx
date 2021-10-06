@@ -1,4 +1,3 @@
-// ? Check Header Rerender
 import * as S from "./styles";
 
 import { Logo, ThemeSwitch, Dropdown } from "src/ui/molecules";
@@ -32,6 +31,7 @@ export const Header = () => {
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
   const isPositive = /\+/.test(getTickerValue("price_change_percent"));
   const tempAddr = "FbQGLXk3NGpBE6o35K6Ddgk1aiqVKabhk1xJESGYbVrx9jQ";
+
   return (
     <S.Wrapper>
       <S.Container>
