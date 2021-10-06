@@ -23,17 +23,14 @@ export const Login = () => {
     account: userList.length > 0 ? userList[0].address : "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
-<<<<<<< HEAD
   console.log(userList);
   useEffect(() => {
     dispatch(polkadotWalletFetch())
   }, [])
-=======
 
   useEffect(() => {
     if(!selectedAccount) setSelectedAccount(userList[0])
   }, [userList])
->>>>>>> release-authentication
 
   return (
     <S.Wrapper>
