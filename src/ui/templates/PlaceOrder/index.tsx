@@ -8,7 +8,7 @@ import { OrderProps } from "./types";
 
 import { Icon, TabContent, TabHeader, Tabs } from "src/ui/components";
 import { AssetInfo } from "src/ui/molecules";
-import { OrderForm } from "src/ui/organisms";
+import { Accounts, OrderForm } from "src/ui/organisms";
 import {
   selectCurrentMarket,
   selectCurrentMarketFilters,
@@ -163,24 +163,7 @@ export const PlaceOrder = () => {
           </TabContent>
         </S.Content>
         <S.Footer>
-          <S.FooterTitle>
-            <h2>Assets</h2>
-            <a href="/">
-              Buy
-              <Icon icon="ArrowRight" size="xxsmall" />
-            </a>
-          </S.FooterTitle>
-          <div>
-            <S.FooterActions>
-              <button type="button" onClick={() => console.log("Transfer Interaction")}>
-                Transfer
-              </button>
-            </S.FooterActions>
-            <div>
-              <AssetInfo />
-              <AssetInfo />
-            </div>
-          </div>
+          <Accounts/>
         </S.Footer>
       </Tabs>
     </S.Wrapper>

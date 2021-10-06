@@ -81,14 +81,18 @@ export const Orderbook = () => {
             handleSelectPrice={handleSelectPrice}
           />
           <S.Select>
-            <S.LastPriceWrapper>
+            {
+            currentMarket ?
+            (<S.LastPriceWrapper>
               Latest Price
-              {currentMarket ?   <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
+              <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
-              </S.LastPrice> : <Skeleton width="3rem" style={{display: "inline-block", marginLeft:"0.5rem"}}/>}
+              </S.LastPrice>
+            </S.LastPriceWrapper> )
+             : <Skeleton width="3rem" style={{display: "inline-block", marginLeft:"0.5rem"}}/>
+            }
 
-            </S.LastPriceWrapper>
           </S.Select>
           <OrderbookColumn
             data={bids}
