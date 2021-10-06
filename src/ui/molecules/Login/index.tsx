@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -21,6 +21,11 @@ export const Login = () => {
     account: userList.length > 0 ? userList[0].address : "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
+
+  useEffect(() => {
+    if(!selectedAccount) setSelectedAccount(userList[0])
+  }, [userList])
+
   return (
     <S.Wrapper>
       <h4>Sign In</h4>
@@ -79,7 +84,7 @@ export const Login = () => {
           )}
         </Formik>
       ) : (
-        <p style={{ textAlign: "center" }}>Install Polkadot.js</p>
+        <p style={{ textAlign: "center" }}>Create a trading account</p>
       )}
     </S.Wrapper>
   );
