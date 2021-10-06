@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as InputWrapper } from "src/ui/molecules/Input/styles";
+import { Wrapper as DropdownItem } from "src/ui/organisms/MyAccount/styles";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background-color: #30313b;
@@ -34,6 +36,22 @@ export const Content = styled.div`
     padding: 1rem;
     border-radius: 1rem;
     background: ${theme.colors.gradientBackground};
+  `}
+`;
+
+export const SelectAccountContainer = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.colors.secondaryBackgroundSolid};
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    shadow: ${theme.shadow.primary};
+    ${DropdownItem} {
+      cursor: pointer;
+      :not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
   `}
 `;
 

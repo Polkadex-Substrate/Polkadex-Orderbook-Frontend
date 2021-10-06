@@ -28,6 +28,7 @@ export const SignUp = () => {
   const dispatch = useDispatch();
   return (
     <S.Wrapper>
+      <h4>Import/export trading account</h4>
       <Formik
         initialValues={defaultValues}
         onSubmit={async (values) => {
@@ -91,7 +92,7 @@ export const SignUp = () => {
               error={errors.terms && touched.terms && errors.terms}
             />
             <Button
-              title="Sign In"
+              title="Create account"
               type="submit"
               style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
             />

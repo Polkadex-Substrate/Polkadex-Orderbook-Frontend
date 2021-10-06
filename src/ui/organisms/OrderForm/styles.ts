@@ -7,6 +7,7 @@ export const Header = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 1.5rem;
 `;
+
 export const TabHeader = styled.div<{
   isActive?: boolean;
   isMarket?: boolean;
@@ -23,5 +24,21 @@ export const TabHeader = styled.div<{
     font-weight: 600;
     cursor: pointer;
     font-size: ${theme.font.sizes.xsmall};
+  `}
+`;
+export const AvailableAmount = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+    span {
+      display: block;
+      font-weight: 500;
+      font-size: ${theme.font.sizes.xxsmall};
+      :first-child {
+        opacity: 0.7;
+      }
+    }
   `}
 `;

@@ -24,7 +24,7 @@ export const Wrapper = styled.div`
     input {
       color: ${theme.colors.text};
       text-align: end;
-      margin-right: 1rem;
+      margin-right: 0.5rem;
       font-size: ${theme.font.sizes.small};
       line-height: 0;
     }
