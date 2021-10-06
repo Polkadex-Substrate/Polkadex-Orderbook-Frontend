@@ -4,6 +4,7 @@ import {
     GET_POLKADOT_WALLET_FETCH,
     GET_POLKADOT_WALLET_FETCH_ERROR,
     GET_POLKADOT_WALLET_DATA,
+    SET_POLKADOT_WALLET_ACCOUNT,
 } from './constants';
 
 export interface PolkadotWalletState {
@@ -41,6 +42,11 @@ export const polkadotWalletReducer = (state = initialState, action: GetPolkadotW
                 ...state,
                 loading: true,
             };
+        case SET_POLKADOT_WALLET_ACCOUNT:
+            return {
+                ...state,
+                selectedAccount: action.payload
+            }
         default:
             return state;
     }

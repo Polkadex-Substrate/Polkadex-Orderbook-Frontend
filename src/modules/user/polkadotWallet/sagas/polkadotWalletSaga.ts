@@ -8,7 +8,7 @@ import { types } from '../types'
 export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
     try {
         const api = yield call(() => createPolkadotWalletApi())
-        const allAccounts = yield call(getAllPoladotWalletAccounts);
+        const allAccounts: InjectedAccount[] = yield call(getAllPoladotWalletAccounts);
         console.log({ api, allAccounts })
         yield put(polkadotWalletData({ api, allAccounts }));
     } catch (error) {
@@ -18,19 +18,21 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
         }));
     }
 }
-async function createPolkadotWalletApi() {
+async function createPolkadotWalletApi(){
     const wsProvider = new WsProvider("wss://openfinex.polkadex.trade");
-    console.log({wsProvider})
+    console.log({ wsProvider })
     const api = await ApiPromise.create({ provider: wsProvider, types });
+    console.log({api})
     return api;
 }
-async function getAllPoladotWalletAccounts():Promise<InjectedAccount[]>{
+async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
     const { web3Accounts, web3Enable } = await import('@polkadot/extension-dapp');
     const extensions = await web3Enable('polkadot');
     if (extensions.length === 0) {
         throw new Error("no extensions installed")
     }
     const allAccounts = await web3Accounts({ ss58Format: 88 });
+    console.log("here", allAccounts)
     return allAccounts.map(account => {
         return {
             address: account.address,
