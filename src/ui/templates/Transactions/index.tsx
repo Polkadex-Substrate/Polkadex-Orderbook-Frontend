@@ -5,8 +5,12 @@ import OpenOrders from "./openOrders";
 
 import { Tabs, TabContent, TabHeader, Button } from "src/ui/components";
 import { Checkbox } from "src/ui/molecules";
+import { useReduxSelector } from "src/hooks";
+import { selectOrderTransactions } from "src/modules/user/OrdersTransactions/selectors";
 
 export const Transactions = ({ active = false }) => {
+  const orderTransactions = useReduxSelector(selectOrderTransactions);
+
   return (
     <S.Wrapper>
       <Tabs>
@@ -32,7 +36,7 @@ export const Transactions = ({ active = false }) => {
         </S.Header>
         <S.Content>
           <TabContent>
-            <OpenOrders />
+            <OpenOrders data={orderTransactions} />
           </TabContent>
           <TabContent>{/* <MyTradeHistory /> */}</TabContent>
         </S.Content>
