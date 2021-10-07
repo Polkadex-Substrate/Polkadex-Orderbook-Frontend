@@ -41,6 +41,7 @@ import { quickExchangeReducer } from "./user/quickExchange";
 import { p2pReducer } from "./public/p2p";
 import { paymentMethodReducer } from "./user/paymentMethod";
 import { polkadotWalletReducer } from "./user/polkadotWallet";
+import { orderTransactionReducer } from "./user/OrdersTransactions";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -75,6 +76,7 @@ export const userReducer = combineReducers({
   openOrders: openOrdersReducer,
   orders: ordersReducer,
   ordersHistory: ordersHistoryReducer,
+  orderTransactions: orderTransactionReducer,
   profile: profileReducer,
   sendEmailVerification: sendEmailVerificationReducer,
   userActivity: userActivityReducer,
