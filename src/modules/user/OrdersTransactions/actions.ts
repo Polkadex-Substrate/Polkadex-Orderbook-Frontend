@@ -2,12 +2,15 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { PLACE_ORDERS_EXECUTE, CANCEL_ORDERS_EXECUTE, PLACE_SINGLE_ORDER } from "./constants";
 import { orderTxn } from "./reducer";
 
-export interface PlaceOrdersExecutionPayload {
-    proxyAccount: KeyringPair | string,
-    mainAddress: string,
-    nonce: number,
-    baseAsset: string,
-    quoteAsset: string,
+export interface IOrderTransactionBase {
+    proxyKeyring: KeyringPair, 
+    mainAddress: string, 
+    nonce: number, 
+    baseAsset: string, 
+    quoteAsset: string, 
+}
+
+export interface PlaceOrdersExecutionPayload extends IOrderTransactionBase {
     ordertype: string,
     orderSide: string,
     price: number | string,
@@ -34,12 +37,8 @@ export interface IPlaceSingleOrder {
     uuid: string
 }
 
-export interface CancelOrdersExecutionPayload {
-    account: KeyringPair,
-    nonce: number,
-    baseAsset: string,
-    quoteAsset: string,
-    order_uuid: Uint8Array
+export interface CancelOrdersExecutionPayload extends IOrderTransactionBase {
+    order_uuid: string
 }
 
 export interface CancelOrdersExecutionAction {
