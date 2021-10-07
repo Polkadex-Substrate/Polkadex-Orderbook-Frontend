@@ -15,15 +15,15 @@ export interface orderTxn {
     uuid: string
 }
 
-export interface IOrdersTransaction {
+export interface OrderTransactionState {
     orders: Array<orderTxn>
 }
 
-export const initialState: IOrdersTransaction  = {
+export const initialState: OrderTransactionState = {
     orders: []
 };
   
-export const ordersReducer = (state = initialState, action: ordersTransactionAction) => {
+export const orderTransactionReducer = (state = initialState, action: ordersTransactionAction) => {
     const {type, payload}= action;
 
     switch (type) {
