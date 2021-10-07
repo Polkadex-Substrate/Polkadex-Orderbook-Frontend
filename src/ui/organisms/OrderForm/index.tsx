@@ -14,6 +14,8 @@ import {
 } from "src/helpers";
 import { useDispatch } from "react-redux";
 import { placeOrdersExecute } from "src/modules/user/OrdersTransactions";
+import { selectUserInfo } from 'src/modules/user/profile/selectors';
+import { selectPolkadotWalletCurrentAccount } from "src/modules/user/polkadotWallet";
 
 export const OrderForm = ({
   side,
@@ -40,6 +42,8 @@ export const OrderForm = ({
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const asks = useReduxSelector(selectDepthAsks);
   const bids = useReduxSelector(selectDepthBids);
+  const usersInfo = useReduxSelector(selectUserInfo);
+  const mainAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
   const isSellSide = side === "sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
   const safePrice = totalPrice / Number(amount) || state.priceMarket;
@@ -90,8 +94,8 @@ export const OrderForm = ({
     e.preventDefault();
     dispatch(
     placeOrdersExecute({
-      proxyAccount: "Charlie",
-      mainAddress: "Alice", 
+      proxyKeyring: usersInfo.keyringPair,
+      mainAddress: mainAccount.address, 
       nonce: 0,
       baseAsset: "BTC",
       quoteAsset: "USD",
