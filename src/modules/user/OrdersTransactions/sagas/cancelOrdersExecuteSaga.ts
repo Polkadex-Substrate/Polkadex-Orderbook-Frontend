@@ -1,20 +1,34 @@
 import { call, put } from 'redux-saga/effects';
-import { CancelOrdersExecutionAction } from '../actions';
+import { cancelOrdersExecute, CancelOrdersExecutionAction } from '../actions';
 
-export function* cancelOrdersSaga(action: CancelOrdersExecutionAction){
+export function* cancelOrdersSaga(action: CancelOrdersExecutionAction) {
     try {
-        const {account, nonce, baseAsset, quoteAsset, order_uuid } = action.payload;
+        const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset, order_uuid } = action.payload;
         const polkadexWorker = (window as any).polkadexWorker
         const _cancelOrder = yield call(() => polkadexWorker.cancelOrder(
-            account,
+            proxyKeyring,
+            mainAddress,
             nonce,
             baseAsset,
             quoteAsset,
             order_uuid
         ));
-        console.log({_cancelOrder});
-  
+
+        if (_cancelOrder.success) {
+            yield put(
+                cancelOrdersExecute(
+                    {
+                        proxyKeyring,
+                        mainAddress,
+                        nonce,
+                        baseAsset,
+                        quoteAsset,
+                        order_uuid
+                    }
+                )
+            )
+        }
     } catch (error) {
-        
+        console.log(error)
     }
 }
