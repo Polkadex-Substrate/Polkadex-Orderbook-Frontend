@@ -3,15 +3,13 @@ import { PlaceOrdersExecutionAction, placeSingleOrder } from '../actions';
 import { getCurrentDate } from '../utils';
 
 export function* placeOrdersSaga(action: PlaceOrdersExecutionAction) {
-
     try {
-        const { proxyAccount, mainAddress, nonce, baseAsset, quoteAsset, ordertype, orderSide, price, quantity, isSell } = action.payload;
+        const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset, ordertype, orderSide, price, quantity, isSell } = action.payload;
         const polkadexWorker = (window as any).polkadexWorker;
-        const keyringSr = (window as any).keyringSr;
 
         const _placeOrder = yield call(() => polkadexWorker.placeOrder(
-            polkadexWorker.keyring().addFromUri(`//${proxyAccount}`),
-            keyringSr.addFromUri(`//${mainAddress}`).address,
+            proxyKeyring,
+            mainAddress,
             nonce,
             baseAsset,
             quoteAsset,
