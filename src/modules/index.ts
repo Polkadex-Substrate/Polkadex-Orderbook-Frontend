@@ -46,7 +46,7 @@ import { MarketsAdminState, rootMarketsAdminSaga } from "./admin/markets";
 import { PlatformCreateState, rootPlatformCreateSaga } from "./admin/platform";
 import { P2PState, rootP2PSaga } from "./public/p2p";
 import { PaymentMethodState, rootPaymentMethodSaga } from "./user/paymentMethod";
-import { rootPlaceOrdersSaga, rootCancelOrdersSaga } from "./user/OrdersTransactions";
+import { rootPlaceOrdersSaga, rootCancelOrdersSaga, OrderTransactionState } from "./user/OrdersTransactions";
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
 
 export * from "./admin/config";
@@ -117,6 +117,7 @@ export interface RootState {
     openOrders: OpenOrdersState;
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
+    orderTransactions: OrderTransactionState;
     phone: PhoneState;
     profile: ProfileState;
     sendEmailVerification: EmailVerificationState;
