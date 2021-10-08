@@ -5,7 +5,7 @@ import { Icon } from "src/ui";
 export const Accounts = () => {
   return (
     <S.Wrapper>
-      <h3>Accounts and Assets</h3>
+      <h3>Accounts</h3>
       <S.Container>
         <AccountCard
           accountName="Main Account"
@@ -46,7 +46,7 @@ const AccountCard = ({
       <S.CardInformation>
         <span>{accountName}</span>
         <button onClick={() => console.log("Transfer interaction")}>
-          Transfer{" "}
+          Transfer
           <Icon
             icon="ArrowRight"
             background="none"

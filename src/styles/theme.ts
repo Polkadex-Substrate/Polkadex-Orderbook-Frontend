@@ -61,6 +61,7 @@ const defaultTheme = {
     purple: "#6745D2",
     blue: "#0090E1",
     overlay: "#00000030",
+    light: "rgba(0, 0, 0, 0.08)",
   },
   spacings: {
     xxxsmall: "0.5rem",

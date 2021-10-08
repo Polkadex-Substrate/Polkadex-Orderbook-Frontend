@@ -36,6 +36,7 @@ export const TabHeader = styled.div<{ isActive?: boolean; isSell?: boolean }>`
     font-size: ${theme.font.sizes.xsmall};
     font-weight: 600;
     text-align: center;
+    color: ${isActive ? theme.colors.white : theme.colors.text};
   `}
 `;
 

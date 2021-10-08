@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     background: ${theme.colors.gradientBackground};
     border-radius: 1rem;
     padding: 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid ${theme.colors.borderLight};
   `}
 `;
 

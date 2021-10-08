@@ -4,11 +4,13 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
     padding: 1.2rem 0.8rem;
-    border-radius: 0.3rem;
+    border-radius: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.2rem;
+    border: 1px solid ${theme.colors.borderLight};
+
     span,
     label {
       opacity: 0.6;

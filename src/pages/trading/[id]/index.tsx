@@ -30,9 +30,9 @@ const Trading = () => {
   if (!id) return <div />;
   return (
     <S.Main>
-      <Popup isVisible={state} size="xxSmall" onClose={() => setState(!state)}>
-        <TransferInteraction />
-      </Popup>
+      {/* <Popup isVisible={state} size="xxSmall" onClose={() => setState(!state)}>
+        <TransferInteraction onClose={() => setState(!state)} />
+      </Popup> */}
       <Header />
       <S.Wrapper>
         <MarketChart />

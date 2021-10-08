@@ -20,15 +20,13 @@ export const Section = styled.section<{ marketActive?: boolean }>`
   `}
 `;
 
-export const Header = styled.div`
-  margin-bottom: 1rem;
-`;
+export const Header = styled.div``;
 export const HeaderContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.3rem;
+    padding: 1.5rem;
     & h3 {
       font-size: 1.5rem;
     }
@@ -65,7 +63,7 @@ export const PairListItem = styled.div<{ isActive?: boolean }>`
 `;
 
 export const Content = styled.div`
-  padding: 0.8rem;
+  padding: 1.5rem;
 `;
 
 export const TableHeader = styled.div`

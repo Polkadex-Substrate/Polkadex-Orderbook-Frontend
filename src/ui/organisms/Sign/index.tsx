@@ -31,6 +31,7 @@ export const SignContent = () => {
     if (!accounts.length) dispatch(polkadotWalletFetch());
   }, [accounts, dispatch]);
 
+  console.log("ACcounts", accounts);
   return (
     <S.Wrapper>
       <S.Title>
@@ -73,7 +74,7 @@ export const SignContent = () => {
                   />
                 }>
                 <S.SelectAccountContainer>
-                  {!accounts?.length ? (
+                  {accounts?.length ? (
                     accounts.map((item, index) => (
                       <MyCurrentAccountHeader
                         isActive={selectedAccount.address === item.address}

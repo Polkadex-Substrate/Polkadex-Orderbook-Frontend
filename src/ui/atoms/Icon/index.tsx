@@ -3,6 +3,7 @@ import { ITokenProps, Props } from "./types";
 
 import * as Icons from "src/ui/atoms/Icons";
 import * as Tokens from "src/ui/atoms/Tokens";
+import { Skeleton } from "src/ui";
 
 export const Icon = ({
   icon = "Wallet",
@@ -32,6 +33,7 @@ export const IconToken = ({
   ...props
 }: ITokenProps) => {
   const Icon = icon ? Tokens[icon.toUpperCase()] : Tokens.PDEX;
+  if (!icon) return <Skeleton width="2.5rem" height="2.5rem" />;
   return (
     <S.WrapperToken size={size} background={background} {...props}>
       <Icon />

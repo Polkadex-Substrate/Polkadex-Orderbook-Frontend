@@ -108,10 +108,9 @@ export const Markets = ({ marketActive = false }) => {
               onChange={handleFieldChange}
             />
           </S.HeaderContainer>
-
           <S.Pairs>
             <ul>
-              {allPairs &&
+              {allPairs.length > 1 ? (
                 allPairs.map((item, i) => (
                   <TabHeader key={i}>
                     <S.PairListItem>
@@ -122,7 +121,10 @@ export const Markets = ({ marketActive = false }) => {
                       </a>
                     </S.PairListItem>
                   </TabHeader>
-                ))}
+                ))
+              ) : (
+                <PairsLoading />
+              )}
             </ul>
             <button type="button">
               <Icon icon="Star" background="none" />
@@ -202,8 +204,18 @@ const ContentLoading = () => (
     <ContentItem />
     <ContentItem />
     <ContentItem />
-    <ContentItem />
-    <ContentItem />
-    <ContentItem />
   </>
+);
+
+const PairsLoading = () => (
+  <>
+    <PairsLoadingCard />
+    <PairsLoadingCard />
+    <PairsLoadingCard />
+    <PairsLoadingCard />
+  </>
+);
+
+const PairsLoadingCard = () => (
+  <Skeleton width="2.5rem" style={{ display: "inline-block", marginLeft: "1rem" }} />
 );

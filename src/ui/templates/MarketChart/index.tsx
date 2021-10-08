@@ -8,7 +8,7 @@ export const MarketChart = () => {
   return (
     <S.Wrapper>
       <Tabs>
-        <S.ChartHeader>
+        <S.Header>
           <S.ChartHeaderWrapper>
             <TabHeader>
               <Button title="Market Chart" size="small" background="secondaryBackground" />
@@ -17,11 +17,11 @@ export const MarketChart = () => {
               <Button title="Deepth Chart" size="small" background="transparent" />
             </TabHeader>
           </S.ChartHeaderWrapper>
-        </S.ChartHeader>
-        <S.ChartContent>
+        </S.Header>
+        <S.Content>
           <TabContent>{/* <TradingChart /> */}</TabContent>
           <TabContent>{/* <MarketDepthsComponent /> */}</TabContent>
-        </S.ChartContent>
+        </S.Content>
       </Tabs>
     </S.Wrapper>
   );

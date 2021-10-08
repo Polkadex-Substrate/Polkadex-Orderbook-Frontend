@@ -22,7 +22,7 @@ export const Toolbar = ({
           title={
             <SelectPairHeader
               title={currentMarket?.name}
-              icon={currentMarket?.base_unit || "PDEX"}
+              icon={currentMarket?.base_unit || ""}
             />
           }
           direction="bottomRight">

@@ -48,30 +48,43 @@ export const Header = () => {
           <Toolbar
             currentMarket={currentMarket}
             markets={markets}
-            lastPrice={`${Decimal.format(
-              Number(getTickerValue("last")),
-              currentMarket?.price_precision,
-              ","
-            )} ${bidUnit || ""}`}
+            lastPrice={
+              currentMarket &&
+              `${Decimal.format(
+                Number(getTickerValue("last")),
+                currentMarket?.price_precision,
+                ","
+              )} ${bidUnit || ""}`
+            }
             currentPrice={
+              currentMarket &&
               (marketTickers[currentMarket?.id] || defaultTicker).price_change_percent
             }
             color={isPositive ? "green" : "red"}
-            volume={`${Decimal.format(
-              Number(getTickerValue("volume")),
-              currentMarket?.price_precision,
-              ","
-            )} ${bidUnit || ""}`}
-            changeLow={`${Decimal.format(
-              Number(getTickerValue("low")),
-              currentMarket?.price_precision,
-              ","
-            )} ${bidUnit || ""}`}
-            changeHigh={`${Decimal.format(
-              Number(getTickerValue("high")),
-              currentMarket?.price_precision,
-              ","
-            )} ${bidUnit || ""}`}
+            volume={
+              currentMarket &&
+              `${Decimal.format(
+                Number(getTickerValue("volume")),
+                currentMarket?.price_precision,
+                ","
+              )} ${bidUnit || ""}`
+            }
+            changeLow={
+              currentMarket &&
+              `${Decimal.format(
+                Number(getTickerValue("low")),
+                currentMarket?.price_precision,
+                ","
+              )} ${bidUnit || ""}`
+            }
+            changeHigh={
+              currentMarket &&
+              `${Decimal.format(
+                Number(getTickerValue("high")),
+                currentMarket?.price_precision,
+                ","
+              )} ${bidUnit || ""}`
+            }
           />
         </S.Column>
         <S.Column>

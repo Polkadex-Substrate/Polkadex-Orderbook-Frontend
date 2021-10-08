@@ -13,6 +13,13 @@ export const Information = ({
 }: InformationProps) => (
   <S.Wrapper orientation={orientation} color={color}>
     <span> {label} </span>
-    {text ? <span>{text}</span> : <Skeleton width="5rem" />}
+    {text ? (
+      <span>{text}</span>
+    ) : (
+      <Skeleton
+        width="5rem"
+        style={{ display: orientation === "horizontal" ? "inline-block" : "block" }}
+      />
+    )}
   </S.Wrapper>
 );

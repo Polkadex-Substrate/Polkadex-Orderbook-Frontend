@@ -16,20 +16,14 @@ export const Wrapper = styled.div`
   margin: 0 auto;
   /* grid-template-rows: minmax(40rem, 60rem) max-content; */
   grid-gap: 0.8rem;
-  padding-top: 6.4rem;
+  padding-top: 5.8rem;
   grid-template-rows: max-content;
-  grid-template-columns: auto minmax(26rem, fit-content) minmax(
-      26rem,
-      fit-content
-    );
+  grid-template-columns: auto minmax(26rem, fit-content) minmax(26rem, fit-content);
   @media screen and (min-width: 1050px) {
     grid-template-areas:
       "Graph Orderbook PlaceOrder"
       "Transactions Market PlaceOrder";
-    grid-template-columns: auto minmax(26rem, max-content) minmax(
-        26rem,
-        max-content
-      );
+    grid-template-columns: auto minmax(26rem, max-content) minmax(26rem, max-content);
   }
 
   @media screen and (max-width: 1050px) {

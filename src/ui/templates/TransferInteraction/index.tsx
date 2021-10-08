@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { AmountInput, Button, MyCurrentAccountHeader } from "src/ui";
 
-export const TransferInteraction = () => {
+export const TransferInteraction = ({ onClose }) => {
   const tokens = [];
   return (
     <S.Wrapper>
@@ -14,14 +14,11 @@ export const TransferInteraction = () => {
           title="Cancel"
           size="small"
           icon={{ icon: "Close", size: "xxsmall", background: "none" }}
+          onClick={onClose}
         />
       </S.Header>
       <S.Content>
         <form>
-          <S.Card>
-            <S.CardTitle>Amount</S.CardTitle>
-            <AmountInput data={tokens} />
-          </S.Card>
           <S.Card>
             <S.CardTitle>From</S.CardTitle>
             <MyCurrentAccountHeader
@@ -39,6 +36,10 @@ export const TransferInteraction = () => {
               name="Trading Account"
               address="Balance: 0"
             />
+          </S.Card>
+          <S.Card>
+            <S.CardTitle>Amount</S.CardTitle>
+            <AmountInput data={tokens} />
           </S.Card>
           <Button title="Confirm" isFull />
         </form>
