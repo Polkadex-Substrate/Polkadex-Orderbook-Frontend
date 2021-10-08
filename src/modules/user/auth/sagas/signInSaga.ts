@@ -22,10 +22,10 @@ export function* signInSaga(action: SignInFetch) {
     const polkadexWorker = (window as any).polkadexWorker;
     const { address, password } = action.payload;
     const user: User = yield call(() => getKeyringPairFromAddress(address, password));
-    const authResponse = yield call(() => polkadexWorker.authenticate(user));
-    console.log({ authResponse });
+    // const authResponse = yield call(() => polkadexWorker.authenticate(user));
+    // console.log({ authResponse });
+    // process.browser && localStorage.setItem("csrfToken", user.csrf_token);
     yield put(userData({ user }));
-    process.browser && localStorage.setItem("csrfToken", user.csrf_token);
     yield put(signInData());
   } catch (error) {
     if (error.code === 401 && error.message.indexOf("identity.session.missing_otp") > -1) {
