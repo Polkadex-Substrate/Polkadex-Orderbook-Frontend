@@ -86,7 +86,6 @@ export const SignContent = () => {
                       address={item?.address}
                       onClick={() => {
                         setSelectedDropDown(accounts[index]);
-                        setIsActive(false)
                       }}
                     />
                   ))
