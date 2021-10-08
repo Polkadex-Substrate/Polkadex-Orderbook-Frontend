@@ -1,10 +1,11 @@
 import { SubmittableExtrinsic } from "@polkadot/api/types"
+import { ExtrinsicResponse } from "src/hooks/useExtrinsics";
 
 export const signAndSendExtrinsic = (
     extrinsic: SubmittableExtrinsic<"promise", any>,
     injector: any,
     mainAddress: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<ExtrinsicResponse>((resolve, reject) => {
         extrinsic.signAndSend(mainAddress, { signer: injector.signer }, ({ events = [], status }) => {
             if (status.isFinalized) {
                 events.forEach(({ event: { data, method, section }, phase }) => {
@@ -17,7 +18,7 @@ export const signAndSendExtrinsic = (
                 console.log(`Current status is ${status}`);
             }
         }).catch(error => {
-            reject({sucess:false, error})
+            resolve({ success:false, error})
         })
     })
 }
