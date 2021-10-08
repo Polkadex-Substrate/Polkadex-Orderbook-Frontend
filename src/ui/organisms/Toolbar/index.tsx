@@ -3,8 +3,7 @@ import React from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Information, SelectPairHeader, Dropdown } from "src/ui/molecules";
-import { Markets } from "src/ui/templates";
+import { Markets, Information, SelectPairHeader, Dropdown } from "src/ui";
 
 export const Toolbar = ({
   lastPrice,

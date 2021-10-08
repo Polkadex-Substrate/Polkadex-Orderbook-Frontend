@@ -36,7 +36,7 @@ const wrapperModifiers = {
     margin-bottom: 1rem;
   `,
   bottom: () => css`
-    top: 100%;
+    top: 120%;
     right: 0;
   `,
   1: () => css`
@@ -98,7 +98,7 @@ export const Overlay = styled.div<Pick<Props, "isOpacity">>`
     bottom: 0;
     left: 0;
     right: 0;
-    background: ${isOpacity ? theme.colors.primaryBackgroundOpacity : "none"};
+    background: ${isOpacity ? theme.colors.overlay : "none"};
     transition: opacity 0.5s ease-in-out;
   `}
 `;

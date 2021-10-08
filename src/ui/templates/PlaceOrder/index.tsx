@@ -1,14 +1,10 @@
-import { stat } from "fs";
-
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 import { OrderProps } from "./types";
 
-import { Icon, TabContent, TabHeader, Tabs } from "src/ui/components";
-import { AssetInfo } from "src/ui/molecules";
-import { Accounts, OrderForm } from "src/ui/organisms";
+import { Accounts, OrderForm, Tabs, TabContent, TabHeader } from "src/ui";
 import {
   selectCurrentMarket,
   selectCurrentMarketFilters,
@@ -163,7 +159,7 @@ export const PlaceOrder = () => {
           </TabContent>
         </S.Content>
         <S.Footer>
-          <Accounts/>
+          <Accounts />
         </S.Footer>
       </Tabs>
     </S.Wrapper>

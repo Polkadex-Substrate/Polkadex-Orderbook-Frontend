@@ -1,8 +1,16 @@
 import * as S from "./styles";
 
-import { Logo, ThemeSwitch, Dropdown } from "src/ui/molecules";
-import { Toolbar, MyAccountContent, MyAccountHeader, SignContent } from "src/ui/organisms";
-import { Button, Decimal } from "src/ui/components";
+import {
+  Logo,
+  ThemeSwitch,
+  Dropdown,
+  Button,
+  Toolbar,
+  MyAccountContent,
+  MyAccountHeader,
+  SignContent,
+  Decimal,
+} from "src/ui";
 import { useReduxSelector } from "src/hooks";
 import {
   selectCurrentMarket,
@@ -92,4 +100,3 @@ export const Header = () => {
     </S.Wrapper>
   );
 };
-//

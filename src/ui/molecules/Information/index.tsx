@@ -3,7 +3,7 @@ import React from "react";
 import * as S from "./styles";
 import { InformationProps } from "./types";
 
-import { Skeleton } from "src/ui/components";
+import { Skeleton } from "src/ui";
 
 export const Information = ({
   orientation = "vertical",

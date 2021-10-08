@@ -2,7 +2,7 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Icon, IconToken, Skeleton } from "src/ui/components";
+import { Icon, IconToken, Skeleton } from "src/ui";
 
 export const SelectPairHeader = ({ title = "", icon = "Default" }) => {
   return (

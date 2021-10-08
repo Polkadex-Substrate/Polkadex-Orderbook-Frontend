@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { MyCurrentAccountHeader } from "..";
-
 import * as S from "./styles";
 
-import { Icon, TabHeader, TabContent, Tabs } from "src/ui/components";
-import { Dropdown, Login, SignUp } from "src/ui/molecules";
+import {
+  Tabs,
+  TabContent,
+  TabHeader,
+  MyCurrentAccountHeader,
+  Dropdown,
+  Login,
+  SignUp,
+  Icon,
+} from "src/ui";
 import {
   polkadotWalletFetch,
   polkadotWalletSetAcccount,
@@ -67,7 +73,7 @@ export const SignContent = () => {
                   />
                 }>
                 <S.SelectAccountContainer>
-                  {accounts?.length ? (
+                  {!accounts?.length ? (
                     accounts.map((item, index) => (
                       <MyCurrentAccountHeader
                         isActive={selectedAccount.address === item.address}
@@ -80,7 +86,7 @@ export const SignContent = () => {
                       />
                     ))
                   ) : (
-                    <MyCurrentAccountHeader />
+                    <Loading />
                   )}
                 </S.SelectAccountContainer>
               </Dropdown>
@@ -112,3 +118,11 @@ export const SignContent = () => {
     </S.Wrapper>
   );
 };
+
+const Loading = () => (
+  <>
+    <MyCurrentAccountHeader />
+    <MyCurrentAccountHeader />
+    <MyCurrentAccountHeader />
+  </>
+);

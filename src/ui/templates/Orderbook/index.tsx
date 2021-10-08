@@ -3,8 +3,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, Icon, Skeleton } from "src/ui/components";
-import { Dropdown } from "src/ui/molecules";
+import { Icon, Skeleton, Dropdown, Decimal } from "src/ui";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
@@ -73,34 +72,33 @@ export const Orderbook = () => {
           </Dropdown>
         </S.Options>
       </S.Header>
-        <S.Content>
-          <OrderbookColumn
-            data={asks}
-            side="asks"
-            maxVolume={maxVolume}
-            handleSelectPrice={handleSelectPrice}
-          />
-          <S.Select>
-            {
-            currentMarket ?
-            (<S.LastPriceWrapper>
+      <S.Content>
+        <OrderbookColumn
+          data={asks}
+          side="asks"
+          maxVolume={maxVolume}
+          handleSelectPrice={handleSelectPrice}
+        />
+        <S.Select>
+          {currentMarket ? (
+            <S.LastPriceWrapper>
               Latest Price
               <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
               </S.LastPrice>
-            </S.LastPriceWrapper> )
-             : <Skeleton width="3rem" style={{display: "inline-block", marginLeft:"0.5rem"}}/>
-            }
-
-          </S.Select>
-          <OrderbookColumn
-            data={bids}
-            side="bids"
-            maxVolume={maxVolume}
-            handleSelectPrice={handleSelectPrice}
-          />
-        </S.Content>
+            </S.LastPriceWrapper>
+          ) : (
+            <Skeleton width="3rem" style={{ display: "inline-block", marginLeft: "0.5rem" }} />
+          )}
+        </S.Select>
+        <OrderbookColumn
+          data={bids}
+          side="bids"
+          maxVolume={maxVolume}
+          handleSelectPrice={handleSelectPrice}
+        />
+      </S.Content>
     </S.Wrapper>
   );
 };
@@ -136,53 +134,58 @@ const OrderbookColumn = ({
 
   return (
     <S.Box>
-      {data.length ? ( <>
-        <S.BoxHeader>
-          <span>Price({formattedBaseUnit})</span>
-          <span>Amount({formattedQuoteUnit})</span>
-          <span>Total({formattedBaseUnit})</span>
-        </S.BoxHeader>
-      <S.BoxContent>
-      {data.map((item, index) => {
-        const total = isLarge
-          ? accumulateVolume(data)
-          : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
-        const [price, volume] = item;
-        return (
-          <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
-            <S.OrderbookPrice isSell={isSell}>
-              <Decimal
-                key={index}
-                fixed={priceFixed}
-                thousSep=","
-                prevValue={data[index + 1] ? data[index + 1][0] : 0}>
-                {price}
-              </Decimal>
-            </S.OrderbookPrice>
-            <S.OrderbookAmount>
-              <Decimal key={index} fixed={amountFixed} thousSep=",">
-                {volume}
-              </Decimal>
-            </S.OrderbookAmount>
-            <S.OrderbookCardWrapper>
-              <Decimal key={index} fixed={amountFixed} thousSep=",">
-                {total[index]}
-              </Decimal>
-            </S.OrderbookCardWrapper>
-          </S.OrderbookCard>
-        )})}
-        <S.OrderbookVolume>
-          {data &&
-            data.map((item, index) => (
-              <S.VolumeSpan
-                key={index}
-                isSell={isSell}
-                style={{ width: getRowWidth(index) }}
-              />
-            ))}
-        </S.OrderbookVolume>
-      </S.BoxContent>
-      </> ) : <LoadingContainer/>}
+      {data.length ? (
+        <>
+          <S.BoxHeader>
+            <span>Price({formattedBaseUnit})</span>
+            <span>Amount({formattedQuoteUnit})</span>
+            <span>Total({formattedBaseUnit})</span>
+          </S.BoxHeader>
+          <S.BoxContent>
+            {data.map((item, index) => {
+              const total = isLarge
+                ? accumulateVolume(data)
+                : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
+              const [price, volume] = item;
+              return (
+                <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>
+                  <S.OrderbookPrice isSell={isSell}>
+                    <Decimal
+                      key={index}
+                      fixed={priceFixed}
+                      thousSep=","
+                      prevValue={data[index + 1] ? data[index + 1][0] : 0}>
+                      {price}
+                    </Decimal>
+                  </S.OrderbookPrice>
+                  <S.OrderbookAmount>
+                    <Decimal key={index} fixed={amountFixed} thousSep=",">
+                      {volume}
+                    </Decimal>
+                  </S.OrderbookAmount>
+                  <S.OrderbookCardWrapper>
+                    <Decimal key={index} fixed={amountFixed} thousSep=",">
+                      {total[index]}
+                    </Decimal>
+                  </S.OrderbookCardWrapper>
+                </S.OrderbookCard>
+              );
+            })}
+            <S.OrderbookVolume>
+              {data &&
+                data.map((item, index) => (
+                  <S.VolumeSpan
+                    key={index}
+                    isSell={isSell}
+                    style={{ width: getRowWidth(index) }}
+                  />
+                ))}
+            </S.OrderbookVolume>
+          </S.BoxContent>
+        </>
+      ) : (
+        <LoadingContainer />
+      )}
     </S.Box>
   );
 };

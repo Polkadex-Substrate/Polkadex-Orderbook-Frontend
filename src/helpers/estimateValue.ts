@@ -1,9 +1,10 @@
 // eslint-disable
-import { Decimal } from "../ui/components/Decimal";
 import { DEFAULT_CCY_PRECISION } from "../constants";
 import { Currency, Market, Ticker, Wallet } from "../modules";
 
 import { handleCCYPrecision } from "./";
+
+import { Decimal } from "src/ui";
 
 export interface MarketTicker {
   [key: string]: Ticker;

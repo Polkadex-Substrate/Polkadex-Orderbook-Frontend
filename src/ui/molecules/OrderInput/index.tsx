@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Skeleton } from "src/ui/components";
+import { Skeleton } from "src/ui";
 
 export const OrderInput = ({ token = "", label = "", ...props }: Props) => {
   return (

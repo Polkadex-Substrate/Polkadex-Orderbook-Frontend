@@ -2,7 +2,7 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Skeleton } from "src/ui/components";
+import { Skeleton } from "src/ui";
 
 export default function OpenOrders({ data = [] }) {
   return (

@@ -2,7 +2,7 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Button, TabHeader, TabContent, Tabs } from "src/ui/components";
+import { Button, Tabs, TabContent, TabHeader } from "src/ui";
 
 export const MarketChart = () => {
   return (
@@ -11,18 +11,10 @@ export const MarketChart = () => {
         <S.ChartHeader>
           <S.ChartHeaderWrapper>
             <TabHeader>
-              <Button
-                title="Market Chart"
-                size="Small"
-                background="secondaryBackground"
-              />
+              <Button title="Market Chart" size="small" background="secondaryBackground" />
             </TabHeader>
             <TabHeader>
-              <Button
-                title="Deepth Chart"
-                size="Small"
-                background="transparent"
-              />
+              <Button title="Deepth Chart" size="small" background="transparent" />
             </TabHeader>
           </S.ChartHeaderWrapper>
         </S.ChartHeader>

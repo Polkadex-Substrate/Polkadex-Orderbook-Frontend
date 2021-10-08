@@ -1,16 +1,10 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
 
-import { Button } from "src/ui/components";
-import {
-  Checkbox,
-  Input,
-  MnemonicImport,
-  MnemonicExport,
-  MnemonicSelect,
-} from "src/ui/molecules";
+import { Button, Input, MnemonicImport, MnemonicExport, MnemonicSelect } from "src/ui";
 import { useMnemonic } from "src/hooks/useMnemonic";
 import { signUp } from "src/modules";
 import { selectPolkadotWalletCurrentAccount } from "src/modules/user/polkadotWallet";
@@ -28,8 +22,8 @@ export const SignUp = () => {
   const [state, setState] = useState({ isReady: false, isExport: false });
   const { mnemonic, mnemoicString } = useMnemonic({ isExport: state.isExport });
   const dispatch = useDispatch();
-  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount)
-  console.log("selectedAccount from makeproxycomponent", selectedAccount)
+  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
+  console.log("selectedAccount from makeproxycomponent", selectedAccount);
   const extrinsics = useExtrinsics(selectedAccount);
   return (
     <S.Wrapper>
@@ -44,7 +38,7 @@ export const SignUp = () => {
               mnemonic: mnemoicString,
             })
           );
-          extrinsics.sendOcexRegisterExtrinsic()
+          extrinsics.sendOcexRegisterExtrinsic();
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -97,11 +91,7 @@ export const SignUp = () => {
               label="I have saved my mnemonic seed safely"
             error={errors.terms && touched.terms && errors.terms}
             /> */}
-            <Button
-              title="Create account"
-              type="submit"
-              style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
-            />
+            <Button title="Create account" type="submit" isFull style={{ marginTop: 20 }} />
           </Form>
         )}
       </Formik>

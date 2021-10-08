@@ -3,7 +3,7 @@ import moment from "moment";
 import * as S from "./styles";
 
 import { ITransactionData } from "src/ui/templates/Transactions/types";
-import { Icon } from "src/ui/components";
+import { Icon } from "src/ui";
 
 type Props = {
   data?: ITransactionData;

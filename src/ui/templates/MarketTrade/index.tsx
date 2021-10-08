@@ -10,7 +10,7 @@ import {
   selectRecentTradesOfCurrentMarket,
 } from "src/modules/public/recentTrades";
 import { localeDate } from "src/helpers";
-import { Skeleton, Decimal } from "src/ui/components";
+import { Decimal, Skeleton } from "src/ui";
 
 const getHighLightValue = (prevValue: string, curValue: string) => {
   let highlighted = "";

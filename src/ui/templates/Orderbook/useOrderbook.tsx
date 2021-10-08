@@ -1,12 +1,7 @@
 import { useDispatch } from "react-redux";
 
-import { Decimal } from "src/ui/components";
-import {
-  accumulateVolume,
-  calcMaxVolume,
-  sortAsks,
-  sortBids,
-} from "src/helpers";
+import { Decimal } from "src/ui";
+import { accumulateVolume, calcMaxVolume, sortAsks, sortBids } from "src/helpers";
 import { useReduxSelector } from "src/hooks";
 import {
   Market,
@@ -42,10 +37,7 @@ export const useOrderbook = () => {
 
   const dispatch = useDispatch();
 
-  const getTickerValue = (
-    currentMarket: Market,
-    tickers: { [key: string]: Ticker }
-  ) => {
+  const getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) => {
     return tickers[currentMarket.id] || defaultTicker;
   };
 
@@ -56,23 +48,14 @@ export const useOrderbook = () => {
       if (lastRecentTrade?.market === currentMarket.id) {
         lastPrice = lastRecentTrade.price;
         return {
-          lastPrice: Decimal.format(
-            lastPrice,
-            currentMarket.price_precision,
-            ","
-          ),
+          lastPrice: Decimal.format(lastPrice, currentMarket.price_precision, ","),
           isPositive: Number(lastRecentTrade.price_change) >= 0,
         };
       } else {
-        const currentTicker =
-          currentMarket && getTickerValue(currentMarket, marketTickers);
+        const currentTicker = currentMarket && getTickerValue(currentMarket, marketTickers);
         lastPrice = currentTicker.last;
         return {
-          lastPrice: Decimal.format(
-            lastPrice,
-            currentMarket.price_precision,
-            ","
-          ),
+          lastPrice: Decimal.format(lastPrice, currentMarket.price_precision, ","),
           isPositive: currentTicker.price_change_percent.includes("+"),
         };
       }
@@ -108,17 +91,14 @@ export const useOrderbook = () => {
           const [price, volume] = item;
           switch (isAsks) {
             case isAsks:
-              total = accumulateVolume(arr.slice(0).reverse())
-                .slice(0)
-                .reverse();
+              total = accumulateVolume(arr.slice(0).reverse()).slice(0).reverse();
 
               return [
                 <Decimal
                   key={i}
                   fixed={priceFixed}
                   thousSep=","
-                  prevValue={arr[i + 1] ? arr[i + 1][0] : 0}
-                >
+                  prevValue={arr[i + 1] ? arr[i + 1][0] : 0}>
                   {price}
                 </Decimal>,
                 <Decimal key={i} fixed={amountFixed} thousSep=",">
@@ -134,8 +114,7 @@ export const useOrderbook = () => {
                   key={i}
                   fixed={priceFixed}
                   thousSep=","
-                  prevValue={arr[i - 1] ? arr[i - 1][0] : 0}
-                >
+                  prevValue={arr[i - 1] ? arr[i - 1][0] : 0}>
                   {price}
                 </Decimal>,
                 <Decimal key={i} fixed={amountFixed} thousSep=",">

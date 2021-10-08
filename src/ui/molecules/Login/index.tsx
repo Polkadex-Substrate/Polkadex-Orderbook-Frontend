@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
-import { Button } from "src/ui/components";
-import { MyCurrentAccountHeader } from "src/ui/organisms";
-import { Input, Dropdown } from "src/ui/molecules";
+import { Button, Input, Dropdown, MyCurrentAccountHeader } from "src/ui";
 import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
 import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
@@ -24,14 +22,14 @@ export const Login = () => {
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
   console.log(userList);
-  
-  useEffect(() => {
-    dispatch(polkadotWalletFetch())
-  }, [])
 
   useEffect(() => {
-    if(!selectedAccount) setSelectedAccount(userList[0])
-  }, [userList])
+    dispatch(polkadotWalletFetch());
+  }, []);
+
+  useEffect(() => {
+    if (!selectedAccount) setSelectedAccount(userList[0]);
+  }, [userList]);
 
   return (
     <S.Wrapper>
@@ -42,7 +40,7 @@ export const Login = () => {
           onSubmit={async (values) => {
             console.log("VALUES:", values);
             dispatch(signIn(values.account, values.password));
-            dispatch(polkadotWalletFetch())
+            dispatch(polkadotWalletFetch());
           }}>
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
@@ -81,7 +79,7 @@ export const Login = () => {
                 placeholder="Enter a new password fot this account"
                 type="password"
                 name="password"
-              // error={errors.password && touched.password && errors.password}
+                // error={errors.password && touched.password && errors.password}
               />
               <Button
                 title="Unlock Wallet"

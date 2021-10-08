@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
-import { Button, Decimal, Skeleton, TabHeader, Tabs } from "src/ui/components";
-import { OrderInput } from "src/ui/molecules";
+import { Button, Tabs, TabContent, TabHeader, Skeleton, OrderInput, Decimal } from "src/ui";
 import { useReduxSelector } from "src/hooks";
 import { selectCurrentMarket, selectDepthAsks, selectDepthBids } from "src/modules";
 import {

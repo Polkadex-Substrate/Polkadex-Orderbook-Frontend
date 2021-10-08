@@ -3,8 +3,7 @@ import * as React from "react";
 import * as S from "./styles";
 import OpenOrders from "./openOrders";
 
-import { Tabs, TabContent, TabHeader, Button } from "src/ui/components";
-import { Checkbox } from "src/ui/molecules";
+import { Button, Checkbox, Tabs, TabContent, TabHeader } from "src/ui";
 
 export const Transactions = ({ active = false }) => {
   return (
@@ -27,7 +26,7 @@ export const Transactions = ({ active = false }) => {
           </S.Tabs>
           <S.Filters>
             <Checkbox label="Hide Other Pairs" />
-            <Button title="Cancel All" size="Small" style={{ width: "fit-content" }} />
+            <Button title="Cancel All" size="small" style={{ width: "fit-content" }} />
           </S.Filters>
         </S.Header>
         <S.Content>

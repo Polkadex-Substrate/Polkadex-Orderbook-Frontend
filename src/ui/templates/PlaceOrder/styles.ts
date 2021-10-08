@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { WrapperIcon } from "src/ui/components/Icon/styles";
+import { WrapperIcon } from "src/ui/atoms/Icon/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`

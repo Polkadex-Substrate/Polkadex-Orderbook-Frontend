@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperButton } from "src/ui/components/Button/styles";
+import { Wrapper as WrapperButton } from "src/ui/molecules/Button/styles";
 
 // Chart
 export const Wrapper = styled.section`

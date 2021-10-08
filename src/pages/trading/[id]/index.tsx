@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 import {
   Header,
@@ -7,7 +8,9 @@ import {
   MarketTrade,
   Transactions,
   PlaceOrder,
-} from "src/ui/templates";
+  TransferInteraction,
+  Popup,
+} from "src/ui";
 import * as S from "src/styles/home/trading";
 import {
   useMarketsFetch,
@@ -23,9 +26,13 @@ const Trading = () => {
   useMarketsTickersFetch();
   useDepthMarketsFetch();
   useWalletsFetch(); // Testing..
+  const [state, setState] = useState(true);
   if (!id) return <div />;
   return (
     <S.Main>
+      <Popup isVisible={state} size="xxSmall" onClose={() => setState(!state)}>
+        <TransferInteraction />
+      </Popup>
       <Header />
       <S.Wrapper>
         <MarketChart />

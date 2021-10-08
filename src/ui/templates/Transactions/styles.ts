@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperCheckbox } from "src/ui/molecules/Checkbox/styles";
-import { WrapperToken } from "src/ui/components/Icon/styles";
+import { Wrapper as WrapperCheckbox } from "src/ui/atoms/Checkbox/styles";
+import { WrapperToken } from "src/ui/atoms/Icon/styles";
 
 type StyleCardProps = {
   isSell?: boolean;

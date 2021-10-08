@@ -13,7 +13,7 @@ interface ReduxProps {
   loading: boolean;
 }
 
-export interface TargetByField {
+interface TargetByField {
   name: string;
   field?: string;
 }

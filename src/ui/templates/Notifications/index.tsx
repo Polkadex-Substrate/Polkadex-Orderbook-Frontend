@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { NotificationCardProps } from "./types";
 
-import { Icon } from "src/ui/components/Icon";
+import { Icon } from "src/ui";
 
 export const Notifications = ({ notificationsActive = false }) => (
   <S.Wrapper notificationsActive={notificationsActive}>
