@@ -277,7 +277,9 @@ const mapDispatchProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatc
   klineUpdatePeriod: (payload) => dispatch(klineUpdatePeriod(payload)),
 });
 
-export const TradingChart = connect<ReduxProps, DispatchProps, {}, RootState>(
+const TradingChart = connect<ReduxProps, DispatchProps, {}, RootState>(
   reduxProps,
   mapDispatchProps
 )(TradingChartComponent);
+
+export default TradingChart;

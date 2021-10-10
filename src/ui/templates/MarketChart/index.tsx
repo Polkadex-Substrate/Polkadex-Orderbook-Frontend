@@ -1,8 +1,9 @@
-import React from "react";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Button, Tabs, TabContent, TabHeader } from "src/ui";
+import { Button, Tabs, TabContent, TabHeader, MarketDepth } from "src/ui";
+const TradingChart = dynamic(() => import("src/ui/Templates/TradingChart"), { ssr: false });
 
 export const MarketChart = () => {
   return (
@@ -19,8 +20,12 @@ export const MarketChart = () => {
           </S.ChartHeaderWrapper>
         </S.Header>
         <S.Content>
-          <TabContent>{/* <TradingChart /> */}</TabContent>
-          <TabContent>{/* <MarketDepthsComponent /> */}</TabContent>
+          <TabContent>
+            <TradingChart />
+          </TabContent>
+          <TabContent>
+            <MarketDepth />
+          </TabContent>
         </S.Content>
       </Tabs>
     </S.Wrapper>

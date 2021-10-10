@@ -15,3 +15,4 @@ export * from "./Button";
 export * from "./TokenSearch";
 export * from "./AmountInput";
 export * from "./Captcha";
+export * from "./MarketDepths";
