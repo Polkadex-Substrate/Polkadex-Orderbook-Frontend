@@ -1,10 +1,16 @@
+import { useState } from "react";
+
 import * as S from "./styles";
 
-import { Icon } from "src/ui";
+import { Icon, TransferInteraction } from "src/ui";
 
 export const Accounts = () => {
+  const [state, setState] = useState(false);
+  // Form..
+
   return (
     <S.Wrapper>
+      <TransferInteraction isActive={state} onClose={() => setState(!state)} />
       <h3>Accounts</h3>
       <S.Container>
         <AccountCard
@@ -13,6 +19,7 @@ export const Accounts = () => {
           amount="0"
           ticketInFiat="USD"
           amountInFiat="0"
+          onClick={() => setState(!state)}
         />
         <AccountCard
           accountName="Trader Account"
@@ -20,6 +27,7 @@ export const Accounts = () => {
           amount="0"
           ticketInFiat="USD"
           amountInFiat="0"
+          onClick={() => setState(!state)}
         />
       </S.Container>
     </S.Wrapper>
@@ -32,6 +40,7 @@ const AccountCard = ({
   amount = "",
   ticketInFiat = "",
   amountInFiat = "",
+  ...props
 }) => {
   return (
     <S.Card>
@@ -45,7 +54,7 @@ const AccountCard = ({
       </S.CardInformation>
       <S.CardInformation>
         <span>{accountName}</span>
-        <button onClick={() => console.log("Transfer interaction")}>
+        <button type="button" {...props}>
           Transfer
           <Icon
             icon="ArrowRight"

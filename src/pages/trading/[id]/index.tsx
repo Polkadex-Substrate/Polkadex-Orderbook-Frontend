@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 import {
   Header,
@@ -26,13 +25,10 @@ const Trading = () => {
   useMarketsTickersFetch();
   useDepthMarketsFetch();
   useWalletsFetch(); // Testing..
-  const [state, setState] = useState(true);
+
   if (!id) return <div />;
   return (
     <S.Main>
-      {/* <Popup isVisible={state} size="xxSmall" onClose={() => setState(!state)}>
-        <TransferInteraction onClose={() => setState(!state)} />
-      </Popup> */}
       <Header />
       <S.Wrapper>
         <MarketChart />

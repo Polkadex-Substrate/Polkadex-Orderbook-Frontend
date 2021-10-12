@@ -11,4 +11,3 @@ export * from "./MarketTrade";
 export * from "./TransferInteraction";
 export * from "./CanCan";
 export * from "./MarketDepth";
-export * from "./TradingChart";

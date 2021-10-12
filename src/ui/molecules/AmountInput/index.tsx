@@ -1,8 +1,10 @@
+import { Field } from "formik";
+
 import * as S from "./styles";
 
 import { Dropdown, Icon, IconToken, Skeleton } from "src/ui";
 
-export const AmountInput = ({ data = [] }) => (
+export const AmountInput = ({ data = [], error = "", ...props }) => (
   <S.Wrapper>
     <S.Header>
       <Dropdown
@@ -28,7 +30,8 @@ export const AmountInput = ({ data = [] }) => (
     </S.Header>
     <S.Content>
       <S.Column>
-        <input type="text" placeholder="Enter the amount" />
+        <Field {...props} />
+        {error && error}
         <div>
           <button>MAX</button>
           <span>PDEX</span>

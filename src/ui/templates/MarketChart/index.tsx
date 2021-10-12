@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import * as S from "./styles";
 
 import { Button, Tabs, TabContent, TabHeader, MarketDepth } from "src/ui";
-const TradingChart = dynamic(() => import("src/ui/Templates/TradingChart"), { ssr: false });
 
 export const MarketChart = () => {
   return (
@@ -21,7 +20,7 @@ export const MarketChart = () => {
         </S.Header>
         <S.Content>
           <TabContent>
-            <TradingChart />
+            <p></p>
           </TabContent>
           <TabContent>
             <MarketDepth />
