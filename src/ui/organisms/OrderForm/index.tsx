@@ -11,6 +11,10 @@ import {
   precisionRegExp,
   toCapitalize,
 } from "src/helpers";
+import { useDispatch } from "react-redux";
+import { placeOrdersExecute } from "src/modules/user/OrdersTransactions";
+import { selectUserInfo } from 'src/modules/user/profile/selectors';
+import { selectPolkadotWalletCurrentAccount } from "src/modules/user/polkadotWallet";
 
 export const OrderForm = ({
   side,
@@ -33,9 +37,12 @@ export const OrderForm = ({
     amountSell: "0.000000000",
     amountBuy: "0.000000000",
   });
+  const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const asks = useReduxSelector(selectDepthAsks);
   const bids = useReduxSelector(selectDepthBids);
+  const usersInfo = useReduxSelector(selectUserInfo);
+  const mainAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
   const isSellSide = side === "sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
   const safePrice = totalPrice / Number(amount) || state.priceMarket;
@@ -44,7 +51,7 @@ export const OrderForm = ({
   const total =
     state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
 
-  const handlePriceChange = (value: string) => {
+  const handlePriceChange = (value: string) => {    
     const convertedValue = cleanPositiveFloatInput(String(value));
 
     if (convertedValue.match(precisionRegExp(currentMarketBidPrecision))) {
@@ -81,6 +88,23 @@ export const OrderForm = ({
       handlePriceChange(nextPriceLimitTruncated);
     }
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
+
+  const handleOrders = (e) => {
+    e.preventDefault();
+    dispatch(
+    placeOrdersExecute({
+      proxyKeyring: usersInfo.keyringPair,
+      mainAddress: mainAccount.address, 
+      nonce: 0,
+      baseAsset: "BTC",
+      quoteAsset: "USD",
+      ordertype: "LIMIT",
+      orderSide: isSellSide ? "ASK": "BID",
+      price: 100,
+      quantity: 1,
+      isSell: isSellSide
+    }))
+  }
   return (
     <S.Wrapper>
       <Tabs>
@@ -93,7 +117,7 @@ export const OrderForm = ({
           </TabHeader>
         </S.Header>
         <div>
-          <form onSubmit={() => console.log("Submit..")}>
+          <form>
             <S.AvailableAmount>
               <span>Available</span>
               {availableBaseAmount || availableQuoteAmount || baseUnit || quoteUnit ? (
@@ -130,7 +154,7 @@ export const OrderForm = ({
             <Button
               type="submit"
               title={toCapitalize(side)}
-              onClick={() => console.log("sending..")}
+              onClick={handleOrders}
               style={{ width: "100%", justifyContent: "center" }}
               background="secondaryBackground"
             />
