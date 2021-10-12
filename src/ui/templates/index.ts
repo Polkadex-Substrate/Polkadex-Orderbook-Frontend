@@ -1,7 +1,6 @@
-import CustomChart from "./CustomChart";
+export * from "./Chart";
 export * from "./MarketChart";
 export * from "./Header";
-export * from "./Markets";
 export * from "./Navigation";
 export * from "./Notifications";
 export * from "./Orderbook";
@@ -9,5 +8,6 @@ export * from "./PlaceOrder";
 export * from "./Transactions";
 export * from "./LoadingSpinner";
 export * from "./MarketTrade";
-
-export { CustomChart };
+export * from "./TransferInteraction";
+export * from "./CanCan";
+export * from "./MarketDepth";

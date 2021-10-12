@@ -3,8 +3,7 @@ import React from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Information, SelectPairHeader, Dropdown } from "src/ui/molecules";
-import { Markets } from "src/ui/templates";
+import { Markets, Information, SelectPairHeader, Dropdown } from "src/ui";
 
 export const Toolbar = ({
   lastPrice,
@@ -23,7 +22,7 @@ export const Toolbar = ({
           title={
             <SelectPairHeader
               title={currentMarket?.name}
-              icon={currentMarket?.base_unit || "PDEX"}
+              icon={currentMarket?.base_unit || ""}
             />
           }
           direction="bottomRight">

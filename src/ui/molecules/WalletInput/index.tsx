@@ -2,8 +2,6 @@ import { InputHTMLAttributes, useRef } from "react";
 
 import * as S from "./styles";
 
-import { Icon } from "src/ui/components";
-
 export const WalletInput = ({ ...props }: InputHTMLAttributes<HTMLInputElement>) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy");

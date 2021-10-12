@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { MyCurrentAccountHeader } from "..";
-
 import * as S from "./styles";
 
-import { Icon, TabHeader, TabContent, Tabs, Button } from "src/ui/components";
-import { Dropdown, Login, SignUp } from "src/ui/molecules";
+import {
+  Tabs,
+  TabContent,
+  TabHeader,
+  MyCurrentAccountHeader,
+  Dropdown,
+  Login,
+  SignUp,
+  Icon,
+} from "src/ui";
 import {
   InjectedAccount,
   polkadotWalletFetch,
@@ -21,21 +27,22 @@ import { useExtrinsics } from "src/hooks/useExtrinsics";
 const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
-  type: ""
-}
+  type: "",
+};
 export const SignContent = () => {
   const dispatch = useDispatch();
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const selectedAccount= useReduxSelector(selectPolkadotWalletCurrentAccount)
-  const [selectedDropDownAccount, setSelectedDropDown] = useState<InjectedAccount>(defaultAccount)
+  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
+  const [selectedDropDownAccount, setSelectedDropDown] =
+    useState<InjectedAccount>(defaultAccount);
   const [isActive, setIsActive] = useState(true);
   useEffect(() => {
-    dispatch(polkadotWalletFetch())
-  }, [])
-
+    dispatch(polkadotWalletFetch());
+  }, []);
 
   const extrinsics = useExtrinsics(selectedDropDownAccount);
 
+  console.log("ACcounts", accounts);
   return (
     <S.Wrapper>
       <S.Title>
@@ -63,47 +70,39 @@ export const SignContent = () => {
       <S.Content>
         {!selectedAccount.address && isActive ? (
           <div>
-            <h4>{`Select the account you want to register`}</h4>
-            <Dropdown
-              direction="bottomLeft"
-              style={{ width: "100%", top: 0 }}
-              title={
-                <MyCurrentAccountHeader
-                  name={selectedDropDownAccount?.meta.name || "Select your account"}
-                  address={
-                    selectedDropDownAccount?.address || "Please install Polkadot {.js} extension"
-                  }
-                  isHeader
-                />
-              }>
-              <S.SelectAccountContainer>
-                {accounts?.length ? (
-                  accounts.map((item, index) => (
-                    <MyCurrentAccountHeader
-                      isActive={selectedDropDownAccount.address === item.address}
-                      key={index}
-                      name={`${item?.meta.name}`}
-                      address={item?.address}
-                      onClick={() => {
-                        setSelectedDropDown(accounts[index]);
-                      }}
-                    />
-                  ))
-                ) : (
-                  <MyCurrentAccountHeader />
-                )}
-              </S.SelectAccountContainer>
-            </Dropdown>
-            <Button
-              title="Register Account"
-              style={{ marginTop: "1rem", width: "100%", justifyContent: "center" }}
-              disabled={Boolean(!selectedDropDownAccount.address)}
-              onClick={async () => {
-                const { success } = await extrinsics.sendOcexRegisterExtrinsic();
-                console.log({success});
-                dispatch(polkadotWalletSetAcccount(selectedDropDownAccount));
-              }}
-            />
+            <div>
+              <h4>{`Select your Polkadot{.js} account`}</h4>
+              <Dropdown
+                direction="bottomLeft"
+                style={{ width: "100%", top: 0 }}
+                title={
+                  <MyCurrentAccountHeader
+                    name={selectedAccount?.meta.name || "Select your account"}
+                    address={
+                      selectedAccount?.address || "Please install Polkadot {.js} extension"
+                    }
+                    isHeader
+                  />
+                }>
+                <S.SelectAccountContainer>
+                  {accounts?.length ? (
+                    accounts.map((item, index) => (
+                      <MyCurrentAccountHeader
+                        isActive={selectedAccount.address === item.address}
+                        key={index}
+                        name={`${item?.meta.name}`}
+                        address={item?.address}
+                        onClick={() => {
+                          dispatch(polkadotWalletSetAcccount(accounts[index]));
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <Loading />
+                  )}
+                </S.SelectAccountContainer>
+              </Dropdown>
+            </div>
           </div>
         ) : (
           <Tabs>
@@ -131,3 +130,11 @@ export const SignContent = () => {
     </S.Wrapper>
   );
 };
+
+const Loading = () => (
+  <>
+    <MyCurrentAccountHeader />
+    <MyCurrentAccountHeader />
+    <MyCurrentAccountHeader />
+  </>
+);

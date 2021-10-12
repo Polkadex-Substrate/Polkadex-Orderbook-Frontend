@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as InputWrapper } from "src/ui/molecules/Input/styles";
+import { Wrapper as InputWrapper } from "src/ui/atoms/Input/styles";
 
 export const Wrapper = styled.ul`
   ${InputWrapper} {

@@ -1,6 +1,6 @@
 import { HTMLAttributes, InputHTMLAttributes } from "react";
 
-import { Props as IconProps } from "src/ui/components/Icon/types";
+import { Props as IconProps } from "src/ui/atoms/Icon/types";
 import { IColors } from "src/utils/types";
 
 export type Props = {

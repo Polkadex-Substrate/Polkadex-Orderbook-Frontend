@@ -29,9 +29,7 @@ const ThemeWrapper = ({ children }) => {
   // const { connected } = useRangerConnectFetch();
   if (!state) return <div />;
   return (
-    <ThemeProvider
-      theme={color === "light" ? defaultThemes.light : defaultThemes.dark}
-    >
+    <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
       {children}
     </ThemeProvider>
   );

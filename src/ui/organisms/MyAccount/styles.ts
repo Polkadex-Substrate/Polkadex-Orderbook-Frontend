@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as IconWrapper } from "src/ui/components/Icon/styles";
+import { Wrapper as IconWrapper } from "src/ui/atoms/Icon/styles";
 export const Wrapper = styled.div<{ isHeader?: boolean; isActive?: boolean }>`
   ${({ theme, isHeader, isActive }) => css`
     display: flex;
@@ -54,10 +54,10 @@ export const AccountInfoFlex = styled.div`
 
 export const AccountContent = styled.div`
   ${({ theme }) => css`
-    background-color: ${theme.colors.tertiaryBackground};
+    background-color: ${theme.colors.primaryBackground};
     border-radius: 1.4rem;
     width: 100%;
-    box-shadow: ${theme.shadow.primary};
+    box-shadow: ${theme.shadow.tertiary};
   `}
 `;
 

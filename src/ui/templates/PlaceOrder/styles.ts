@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { WrapperIcon } from "src/ui/components/Icon/styles";
+import { WrapperIcon } from "src/ui/atoms/Icon/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -36,6 +36,7 @@ export const TabHeader = styled.div<{ isActive?: boolean; isSell?: boolean }>`
     font-size: ${theme.font.sizes.xsmall};
     font-weight: 600;
     text-align: center;
+    color: ${isActive ? theme.colors.white : theme.colors.text};
   `}
 `;
 

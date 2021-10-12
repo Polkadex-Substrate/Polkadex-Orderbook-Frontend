@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { Icon } from "src/ui/components/Icon";
+import { Icon } from "src/ui";
 import { changeColorTheme, selectCurrentColorTheme } from "src/modules";
 
 export const ThemeSwitch = () => {

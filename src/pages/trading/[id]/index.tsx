@@ -7,7 +7,9 @@ import {
   MarketTrade,
   Transactions,
   PlaceOrder,
-} from "src/ui/templates";
+  TransferInteraction,
+  Popup,
+} from "src/ui";
 import * as S from "src/styles/home/trading";
 import {
   useMarketsFetch,
@@ -23,6 +25,7 @@ const Trading = () => {
   useMarketsTickersFetch();
   useDepthMarketsFetch();
   useWalletsFetch(); // Testing..
+
   if (!id) return <div />;
   return (
     <S.Main>

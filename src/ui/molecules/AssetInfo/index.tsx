@@ -1,15 +1,11 @@
 import * as S from "./styles";
 
-import { Skeleton } from "src/ui/components";
+import { Skeleton } from "src/ui";
 
 export const AssetInfo = ({ name = "", available = "", reserved = "" }) => (
   <S.Wrapper>
     <S.Container>
-      {name ? (
-        <p>{name}</p>
-      ) : (
-        <Skeleton height="10px" style={{ width: "3rem" }} />
-      )}
+      {name ? <p>{name}</p> : <Skeleton height="10px" style={{ width: "3rem" }} />}
     </S.Container>
     <S.Container>
       <span>
@@ -17,10 +13,7 @@ export const AssetInfo = ({ name = "", available = "", reserved = "" }) => (
         {reserved ? (
           <strong>{available}</strong>
         ) : (
-          <Skeleton
-            height="10px"
-            style={{ display: "inline-block", width: "5rem" }}
-          />
+          <Skeleton height="10px" style={{ display: "inline-block", width: "5rem" }} />
         )}
       </span>
       <span>
@@ -28,10 +21,7 @@ export const AssetInfo = ({ name = "", available = "", reserved = "" }) => (
         {reserved ? (
           <strong>{reserved}</strong>
         ) : (
-          <Skeleton
-            height="10px"
-            style={{ display: "inline-block", width: "5rem" }}
-          />
+          <Skeleton height="10px" style={{ display: "inline-block", width: "5rem" }} />
         )}
       </span>
     </S.Container>

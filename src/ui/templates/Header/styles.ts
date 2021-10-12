@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Link as LogoWrapper } from "src/ui/molecules/Logo/styles";
+import { Link as LogoWrapper } from "src/ui/atoms/Logo/styles";
 import { Wrapper as SwitchWrapper } from "src/ui/molecules/ThemeSwitch/styles";
 export const Wrapper = styled.header`
   ${({ theme }) => css`

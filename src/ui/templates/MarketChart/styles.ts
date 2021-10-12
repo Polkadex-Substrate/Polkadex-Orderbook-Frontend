@@ -1,17 +1,17 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperButton } from "src/ui/components/Button/styles";
+import { Wrapper as WrapperButton } from "src/ui/molecules/Button/styles";
 
-// Chart
 export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Graph;
     background: ${theme.colors.gradientBackground};
     padding: 1rem;
+    box-shadow: ${theme.shadow.tertiary};
   `}
 `;
 
-export const ChartHeader = styled.div`
+export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,6 +63,6 @@ export const ChartHeaderWrapper = styled.div`
   }
 `;
 
-export const ChartContent = styled.div`
+export const Content = styled.div`
   height: 90%;
 `;

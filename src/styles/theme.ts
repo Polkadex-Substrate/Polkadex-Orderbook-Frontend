@@ -60,6 +60,8 @@ const defaultTheme = {
     orange: "#F2994A",
     purple: "#6745D2",
     blue: "#0090E1",
+    overlay: "#00000030",
+    light: "rgba(0, 0, 0, 0.08)",
   },
   spacings: {
     xxxsmall: "0.5rem",
@@ -102,6 +104,7 @@ const light = {
     tertiaryBackground: "#F9FBFC99",
     secondaryBackgroundSolid: "#E8ECF2",
     text: "#000000",
+    borderLight: "rgba(0, 0, 0, 0.08)",
   },
   shadow: {
     primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
@@ -132,6 +135,7 @@ const dark = {
     tertiaryBackground: "#2E303C",
     secondaryBackgroundSolid: "#2F3340",
     text: "#f5f5f5",
+    borderLight: "rgba(0, 0, 0, 0.08)",
   },
   shadow: {
     primary: "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",

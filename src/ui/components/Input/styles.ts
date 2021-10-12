@@ -2,8 +2,8 @@ import styled, { css } from "styled-components";
 
 import { Props } from "./types";
 
-import { Wrapper as WrapperButton } from "src/ui/components/Button/styles";
-import { WrapperIcon } from "src/ui/components/Icon/styles";
+import { Wrapper as WrapperButton } from "src/ui/molecules/Button/styles";
+import { WrapperIcon } from "src/ui/atoms/Icon/styles";
 
 export const Wrapper = styled.div<Pick<Props, "background">>`
   ${({ theme, background }) => css`

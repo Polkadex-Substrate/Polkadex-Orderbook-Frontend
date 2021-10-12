@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import * as S from "./styles";
 
-import { Button, Decimal, Icon, Skeleton, TabHeader, Tabs } from "src/ui/components";
+import { Icon, TransferInteraction } from "src/ui";
 
 export const Accounts = () => {
+  const [state, setState] = useState(false);
+  // Form..
+
   return (
     <S.Wrapper>
-      <h3>Accounts and Assets</h3>
+      <TransferInteraction isActive={state} onClose={() => setState(!state)} />
+      <h3>Accounts</h3>
       <S.Container>
         <AccountCard
           accountName="Main Account"
@@ -15,33 +19,51 @@ export const Accounts = () => {
           amount="0"
           ticketInFiat="USD"
           amountInFiat="0"
+          onClick={() => setState(!state)}
         />
-         <AccountCard
+        <AccountCard
           accountName="Trader Account"
           ticket="PDEX"
           amount="0"
           ticketInFiat="USD"
           amountInFiat="0"
+          onClick={() => setState(!state)}
         />
       </S.Container>
     </S.Wrapper>
   );
 };
 
-const AccountCard = ({accountName = "", ticket = "", amount = "", ticketInFiat = "", amountInFiat = "" }) => {
-  return(
+const AccountCard = ({
+  accountName = "",
+  ticket = "",
+  amount = "",
+  ticketInFiat = "",
+  amountInFiat = "",
+  ...props
+}) => {
+  return (
     <S.Card>
       <S.CardInformation>
-        <span>{amount} {ticket}</span>
-        <p>~{amountInFiat} {ticketInFiat}</p>
+        <span>
+          {amount} {ticket}
+        </span>
+        <p>
+          ~{amountInFiat} {ticketInFiat}
+        </p>
       </S.CardInformation>
       <S.CardInformation>
         <span>{accountName}</span>
-        <button onClick={()=> console.log("Transfer interaction")}>Transfer <Icon icon="ArrowRight" background="none" style={{display: "inline-block", verticalAlign:"middle", padding: 0, margin: 0}}/></button>
+        <button type="button" {...props}>
+          Transfer
+          <Icon
+            icon="ArrowRight"
+            background="none"
+            style={{ display: "inline-block", verticalAlign: "middle", padding: 0, margin: 0 }}
+          />
+        </button>
       </S.CardInformation>
-      <S.CardAssets>
-          See assets
-      </S.CardAssets>
+      <S.CardAssets>See assets</S.CardAssets>
     </S.Card>
-  )
-}
+  );
+};

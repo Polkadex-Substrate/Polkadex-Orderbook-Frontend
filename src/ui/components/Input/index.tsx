@@ -3,8 +3,7 @@ import { ChangeEvent, useState } from "react";
 import * as S from "./styles";
 import { OrderInputProps, Props } from "./types";
 
-import { Button } from "src/ui/components";
-import { Icon } from "src/ui/components/Icon";
+import { Button, Icon } from "src/ui";
 
 export const Input = ({
   error,
@@ -29,13 +28,7 @@ export const Input = ({
       {label && <label htmlFor={name}>{label}</label>}
       <S.Container>
         {!!icon && <Icon {...icon} />}
-        <input
-          onChange={onChange}
-          value={value}
-          disabled={disabled}
-          name={name}
-          {...props}
-        />
+        <input onChange={onChange} value={value} disabled={disabled} name={name} {...props} />
       </S.Container>
       {!!error && <p>{error}</p>}
     </S.Wrapper>
@@ -63,7 +56,7 @@ export const OrderInput = ({ isBuy = false, background }: OrderInputProps) => (
         <S.OrderInputContentActions>
           {isBuy && (
             <div>
-              <Button title="Max" size="Small" />
+              <Button title="Max" size="small" />
             </div>
           )}
           <div>
@@ -119,13 +112,7 @@ export const InputWallet = ({
   return (
     <S.Wrapper background={background}>
       <S.WalletInputContainer>
-        <input
-          onChange={onChange}
-          value={value}
-          disabled={disabled}
-          name={name}
-          {...props}
-        />
+        <input onChange={onChange} value={value} disabled={disabled} name={name} {...props} />
         {!!icon && <Icon {...icon} />}
       </S.WalletInputContainer>
       {!!error && <p>{error}</p>}

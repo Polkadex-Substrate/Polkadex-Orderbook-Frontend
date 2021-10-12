@@ -1,11 +1,9 @@
 import { useDispatch } from "react-redux";
 
-import { WalletInput } from "../../molecules";
-
 import * as S from "./styles";
 import { Props, MyCurrentAccountProps } from "./types";
 
-import { Button, Icon, Skeleton } from "src/ui/components";
+import { WalletInput, Skeleton, Button, Icon } from "src/ui";
 import { logoutFetch } from "src/modules";
 
 const MyAccount = ({
@@ -55,7 +53,7 @@ export const MyAccountContent = ({ balance = "0", accountName = "", address = ""
             Connected with Polkadotjs
             <Icon icon="External" size="xxsmall" background="none" />
           </a>
-          <Button title="Disconnect" size="Small" onClick={() => dispatch(logoutFetch())} />
+          <Button title="Disconnect" size="xSmall" onClick={() => dispatch(logoutFetch())} />
         </S.AccountContentInfo>
         <WalletInput value={address} />
         {/* {!isVerified && (
@@ -93,6 +91,7 @@ export const MyCurrentAccountHeader = ({
   address,
   isHeader = false,
   isActive = false,
+  withButton = true,
   ...props
 }: MyCurrentAccountProps) => {
   const shortAddress =
@@ -112,7 +111,7 @@ export const MyCurrentAccountHeader = ({
             ) : (
               <Skeleton width="12rem" style={{ marginTop: "1rem" }} />
             )}
-            {isHeader && <Icon icon="ArrowBottom" size="xsmall" />}
+            {isHeader && withButton && <Icon icon="ArrowBottom" size="xsmall" />}
           </S.AccountInfoFlex>
         </S.AccountInfoHeader>
       </S.AccountInfo>

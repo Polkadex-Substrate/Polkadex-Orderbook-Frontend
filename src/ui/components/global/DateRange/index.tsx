@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 
 import * as S from "./styles";
 
-import { Icon } from "src/ui/components";
+import { Icon } from "src/ui";
 
 type Props = {
   position: "right" | "left";

@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as DropdownItem } from "src/ui/organisms/MyAccount/styles";
-import { Wrapper as InputWrapper } from "src/ui/molecules/Input/styles";
+import { Wrapper as InputWrapper } from "src/ui/atoms/Input/styles";
 
 export const Wrapper = styled.div`
   ${InputWrapper} {
@@ -16,6 +16,9 @@ export const MyCurrentAccountContent = styled.div`
     border-radius: 0.5rem;
     width: 100%;
     shadow: ${theme.shadow.primary};
+    max-height: 20rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
     ${DropdownItem} {
       cursor: pointer;
       :not(:last-child) {
