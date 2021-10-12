@@ -9,8 +9,6 @@ import { MyCurrentAccountHeader } from "src/ui/organisms";
 import { Input, Dropdown } from "src/ui/molecules";
 import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
-import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
-import { useExtrinsics } from "src/hooks/useExtrinsics";
 import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 
 export const Login = () => {
@@ -20,15 +18,10 @@ export const Login = () => {
   const userList: UserSkeleton[] = useReduxSelector(selectAllUserList);
   const defaultValues = {
     password: "",
-    account: userList.length > 0 ? userList[0].address : "",
+    account: "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
-  console.log(userList);
   
-  useEffect(() => {
-    dispatch(polkadotWalletFetch())
-  }, [])
-
   useEffect(() => {
     if(!selectedAccount) setSelectedAccount(userList[0])
   }, [userList])
@@ -40,9 +33,7 @@ export const Login = () => {
         <Formik
           initialValues={defaultValues}
           onSubmit={async (values) => {
-            console.log("VALUES:", values);
             dispatch(signIn(values.account, values.password));
-            dispatch(polkadotWalletFetch())
           }}>
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
