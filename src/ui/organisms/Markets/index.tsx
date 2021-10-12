@@ -174,7 +174,7 @@ const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }
   <S.ContentItemWrapper onClick={onClick}>
     <S.ContentItemToken>
       {tokenIcon ? (
-        <IconToken icon={tokenIcon} />
+        <IconToken size="xlarge" icon={tokenIcon} />
       ) : (
         <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
       )}

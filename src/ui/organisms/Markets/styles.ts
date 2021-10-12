@@ -52,10 +52,12 @@ export const Pairs = styled.div`
 export const PairListItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     background: ${isActive ? theme.colors.primary : theme.colors.primaryBackground};
+    color: ${isActive ? theme.colors.white : theme.colors.text};
     display: inline-block;
     padding: 0.3rem 0.5rem;
     border-radius: 0.4rem;
     cursor: pointer;
+    font-weight: 500;
     &:not(:last-child) {
       margin-right: 0.5rem;
     }

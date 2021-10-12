@@ -40,9 +40,9 @@ const modifier = {
     border-radius: 1.2rem;
   `,
   xlarge: () => css`
-    max-width: 4.5rem;
-    max-height: 4.5rem;
-    padding: 0.7rem;
+    max-width: 4.2rem;
+    max-height: 4.2rem;
+    padding: 0.5rem;
     border-radius: 1rem;
   `,
 };
@@ -77,8 +77,10 @@ export const WrapperIcon = styled(Wrapper)<Partial<Props>>`
   `}
 `;
 export const WrapperToken = styled(Wrapper)`
-  ${({ theme, background }) => css`
+  ${({ theme, background, size }) => css`
     background: ${theme.colors[background]};
+    ${modifier[size]};
+
     & svg {
       fill: ${theme.colors.text};
     }

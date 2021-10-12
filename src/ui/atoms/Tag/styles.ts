@@ -5,6 +5,7 @@ type Props = {
 export const Wrapper = styled.span<Props>`
   ${({ theme, isPositive }) => css`
     background: ${isPositive ? theme.colors.green : theme.colors.primary};
+    color: ${theme.colors.white};
     font-size: ${theme.font.sizes.xxsmall};
     padding: 0.2rem;
     border-radius: 0.5rem;
