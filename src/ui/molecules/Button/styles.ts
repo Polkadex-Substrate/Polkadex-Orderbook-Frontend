@@ -6,9 +6,9 @@ import { WrapperIcon, WrapperToken } from "src/ui/atoms/Icon/styles";
 
 const wrapperModifier = {
   xSmall: () => css`
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     border-radius: 0.2rem;
-    padding: 0.1rem 0.2rem;
+    padding: 0.3rem;
   `,
   small: () => css`
     font-size: 1.2rem;

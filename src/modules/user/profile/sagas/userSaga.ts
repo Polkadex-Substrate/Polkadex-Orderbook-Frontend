@@ -13,9 +13,12 @@ export function* userSaga(action: UserFetch) {
   try {
     console.log("in side user saga");
     const userAccount = yield call(() => getKeyringAllAccounts());
-    const user = { username: userAccount.meta.name, address: userAccount.address };
-    console.log("user saga", user.address);
-    // yield put(abilitiesFetch());
+    const user = {
+      username: userAccount.meta.name,
+      address: userAccount.address,
+      state: "active",
+    };
+    //! Verify user data ->
     yield put(userData({ user }));
   } catch (error) {
     yield put(

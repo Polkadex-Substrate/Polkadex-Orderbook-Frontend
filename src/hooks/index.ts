@@ -5,3 +5,4 @@ export * from "./useReduxSelector";
 export * from "./useDepthMarketsFetch";
 export * from "./useMarketsTickersFetch";
 export * from "./useWalletsFetch";
+export * from "./useWindowSize";

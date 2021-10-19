@@ -41,8 +41,6 @@ export const SignContent = () => {
   }, []);
 
   const extrinsics = useExtrinsics(selectedDropDownAccount);
-
-  console.log("ACcounts", accounts);
   return (
     <S.Wrapper>
       <S.Title>

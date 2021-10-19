@@ -9,6 +9,7 @@ import {
   PlaceOrder,
   TransferInteraction,
   Popup,
+  Toolbar,
 } from "src/ui";
 import * as S from "src/styles/home/trading";
 import {
@@ -16,6 +17,7 @@ import {
   useDepthMarketsFetch,
   useMarketsTickersFetch,
   useWalletsFetch,
+  useWindowSize,
 } from "src/hooks";
 
 const Trading = () => {
@@ -25,12 +27,16 @@ const Trading = () => {
   useMarketsTickersFetch();
   useDepthMarketsFetch();
   useWalletsFetch(); // Testing..
+  const { width } = useWindowSize();
 
   if (!id) return <div />;
+
   return (
     <S.Main>
       <Header />
+
       <S.Wrapper>
+        {/* {width < 990 && <Toolbar />} */}
         <MarketChart />
         <Orderbook />
         <MarketTrade />

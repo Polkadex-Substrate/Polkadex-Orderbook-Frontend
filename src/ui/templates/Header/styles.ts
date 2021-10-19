@@ -8,7 +8,6 @@ export const Wrapper = styled.header`
     width: 100%;
     background: ${theme.colors.gradientBackground};
     box-shadow: ${theme.shadow.primary};
-
     padding: 0.5rem 1rem;
     z-index: ${theme.layers.alwaysOnTop};
   `}
@@ -24,17 +23,12 @@ export const Container = styled.div`
 
 export const Column = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   ${LogoWrapper} {
     margin-right: 2rem;
   }
-  :first-child {
-    @media screen and (min-width: 1050px) {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
+
   :last-child {
     flex-direction: row;
     align-items: center;

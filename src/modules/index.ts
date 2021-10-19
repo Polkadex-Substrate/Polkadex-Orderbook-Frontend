@@ -46,7 +46,11 @@ import { MarketsAdminState, rootMarketsAdminSaga } from "./admin/markets";
 import { PlatformCreateState, rootPlatformCreateSaga } from "./admin/platform";
 import { P2PState, rootP2PSaga } from "./public/p2p";
 import { PaymentMethodState, rootPaymentMethodSaga } from "./user/paymentMethod";
-import { rootPlaceOrdersSaga, rootCancelOrdersSaga, OrderTransactionState } from "./user/OrdersTransactions";
+import {
+  rootPlaceOrdersSaga,
+  rootCancelOrdersSaga,
+  OrderTransactionState,
+} from "./user/OrdersTransactions";
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
 
 export * from "./admin/config";
@@ -55,6 +59,7 @@ export * from "./admin/platform";
 export * from "./public/alert";
 export * from "./public/blocklistAccess";
 export * from "./public/currencies";
+export * from "./user/OrdersTransactions";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
 export * from "./public/kline";
@@ -103,7 +108,7 @@ export interface RootState {
   user: {
     abilities: AbilitiesState;
     addresses: AddressesState;
-    polkadotWallet:PolkadotWalletState;
+    polkadotWallet: PolkadotWalletState;
     apiKeys: ApiKeysState;
     auth: AuthState;
     beneficiaries: BeneficiariesState;
@@ -181,6 +186,6 @@ export function* rootSaga() {
     call(rootPaymentMethodSaga),
     call(rootPlaceOrdersSaga),
     call(rootCancelOrdersSaga),
-    call(rootPolkadotWalletSaga)
+    call(rootPolkadotWalletSaga),
   ]);
 }

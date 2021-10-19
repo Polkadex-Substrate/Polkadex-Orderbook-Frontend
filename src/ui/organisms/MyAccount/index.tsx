@@ -5,6 +5,7 @@ import { Props, MyCurrentAccountProps } from "./types";
 
 import { WalletInput, Skeleton, Button, Icon } from "src/ui";
 import { logoutFetch } from "src/modules";
+import { useWindowSize } from "src/hooks";
 
 const MyAccount = ({
   children,
@@ -13,13 +14,14 @@ const MyAccount = ({
   address = "",
   accountName = "Account",
 }: Props) => {
+  const { width } = useWindowSize();
   return (
     <S.Wrapper isHeader={isHeader}>
       <Icon size="medium" icon="Avatar" />
       <S.AccountInfo>
         <S.AccountInfoHeader>
           <p>
-            {accountName} ({address})
+            {accountName} {width > 990 && `(${address})`}
           </p>
           <span>Balance: ~{balance}</span>
         </S.AccountInfoHeader>

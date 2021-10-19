@@ -20,12 +20,19 @@ export const LogoText = styled.g`
   transition-delay: 0.1s;
   transition-property: initial;
   opacity: 1;
+  @media screen and (max-width: 1080px) {
+    display: none;
+  }
 `;
 
 export const Link = styled.a<Partial<Props>>`
   ${({ size, theme }) => css`
     & svg {
       ${!!size && imageModifier[size]}
+    }
+    @media screen and (max-width: 1080px) {
+     max-width: 2.4rem;
+    }
     }
   `}
 `;

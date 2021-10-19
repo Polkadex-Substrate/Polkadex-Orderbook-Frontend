@@ -3,6 +3,12 @@ import styled, { css } from "styled-components";
 import { Props } from "./types";
 
 const modifier = {
+  xxxsmall: () => css`
+    max-width: 1rem;
+    max-height: 1rem;
+    padding: 0.1rem;
+    border-radius: 0.2rem;
+  `,
   xxsmall: () => css`
     max-width: 1.5rem;
     max-height: 1.5rem;

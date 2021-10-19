@@ -35,6 +35,7 @@ export const Wrapper = styled.div`
 
   @media screen and (max-width: 700px) {
     grid-template-areas:
+      "Toolbar"
       "Graph"
       "Orderbook"
       "PlaceOrder"

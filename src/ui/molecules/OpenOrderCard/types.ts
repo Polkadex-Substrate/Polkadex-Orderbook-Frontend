@@ -1,4 +1,4 @@
-import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
+import { ReactNode } from "react";
 
 export type Props = {
   date?: string;

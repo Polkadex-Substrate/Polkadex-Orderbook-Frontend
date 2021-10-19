@@ -25,6 +25,7 @@ export function* signInSaga(action: SignInFetch) {
     // const authResponse = yield call(() => polkadexWorker.authenticate(user));
     // console.log({ authResponse });
     // process.browser && localStorage.setItem("csrfToken", user.csrf_token);
+    user.state = "active";
     yield put(userData({ user }));
     yield put(signInData());
   } catch (error) {
