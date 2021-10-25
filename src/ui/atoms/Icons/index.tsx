@@ -58,3 +58,4 @@ export { default as Transactions } from "./Transactions";
 export { default as Wallet } from "./Wallet";
 export { default as Withdraw } from "./Withdraw";
 export { default as Empty } from "./Empty";
+export { default as Verified } from "./Verified";

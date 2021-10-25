@@ -6,7 +6,7 @@ export type Props = {
   icon: IIcons;
   size?: ISizes;
   isActive?: boolean;
-  background?: IColors;
+  background?: IColors | string;
   hoverable?: boolean;
 } & HTMLAttributes<HTMLElement>;
 
