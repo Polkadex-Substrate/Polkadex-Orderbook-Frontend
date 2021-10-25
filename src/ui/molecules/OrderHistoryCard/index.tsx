@@ -5,7 +5,7 @@ import { Props } from "./types";
 
 import { Bar, Icon, Skeleton } from "src/ui";
 
-export const OpenOrderCard = ({
+export const OrderHistoryCard = ({
   date,
   baseUnit,
   quoteUnit,
@@ -14,9 +14,9 @@ export const OpenOrderCard = ({
   price,
   amount,
   total,
-  filled,
+  executed,
   type = "Limit",
-  onCancel,
+  transactionType,
 }: Props) => {
   return (
     <S.Wrapper>
@@ -38,30 +38,22 @@ export const OpenOrderCard = ({
         <span>{price}</span>
       </S.Container>
       <S.Container>
-        <span>{amount}</span>
+        <span>{executed}</span>
       </S.Container>
       <S.Container>
-        <span>{filled}</span>
+        <span>{amount}</span>
       </S.Container>
       <S.Container>
         <span>{total}</span>
       </S.Container>
       <S.Container>
-        {filled <= 100 && (
-          <Icon
-            icon="Close"
-            size="xxxsmall"
-            background="none"
-            onClick={onCancel}
-            style={{ cursor: "pointer" }}
-          />
-        )}
+        <span>{transactionType}</span>
       </S.Container>
     </S.Wrapper>
   );
 };
 
-export const OpenOrderCardReponsive = ({
+export const OrderHistoryCardReponsive = ({
   date,
   baseUnit,
   quoteUnit,
@@ -70,9 +62,9 @@ export const OpenOrderCardReponsive = ({
   price,
   amount,
   total,
-  filled,
+  executed,
   type = "Limit",
-  onCancel,
+  transactionType,
 }: Props) => {
   return (
     <S.Box>
@@ -83,21 +75,18 @@ export const OpenOrderCardReponsive = ({
           </p>
           <span>{side}</span>
         </div>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
       </S.Header>
       <S.Content>
-        <OpenOrderInfo label="Date" value={date} />
-        <OpenOrderInfo label="Type" value={type} />
-        <OpenOrderInfo label="Price" value={price} />
-        <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Total" value={total} />
+        <OrderHistoryInfo label="Date" value={date} />
+        <OrderHistoryInfo label="Type" value={type} />
+        <OrderHistoryInfo label="Price" value={price} />
+        <OrderHistoryInfo label="Amount" value={amount} />
+        <OrderHistoryInfo label="Total" value={total} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
-          <span>Filled</span>
-          <p>100%</p>
+          <span>{executed}</span>
+          <p>{transactionType}</p>
         </S.FlexJustify>
         <Bar percent={0} />
       </S.Footer>
@@ -109,14 +98,14 @@ type InfoProps = {
   label?: string;
   value?: string | number | ReactNode;
 };
-const OpenOrderInfo = ({ label = "", value = "" }: InfoProps) => (
+const OrderHistoryInfo = ({ label = "", value = "" }: InfoProps) => (
   <S.Info>
     <span>{label}</span>
     <p>{value}</p>
   </S.Info>
 );
 
-export const LoadingTransactions = () => {
+export const OrderHistoryLoading = () => {
   return (
     <div style={{ paddingRight: "1rem", paddingLeft: "1rem" }}>
       <LoadingTransactionItem />

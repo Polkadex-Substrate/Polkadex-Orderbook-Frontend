@@ -50,6 +50,9 @@ const GlobalStyles = createGlobalStyle`
       opacity: 0;
     }
   }
+  .pg-trading-chart {
+    height: 100%;
+  }
  /* inter-100 - latin */
  @font-face {
         font-family: "Inter";

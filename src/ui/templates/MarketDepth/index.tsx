@@ -37,7 +37,7 @@ export const MarketDepth = () => {
       ];
 
       return (
-        <span className="pg-market-depth__tooltip">
+        <S.Tooltip>
           <span>
             {Decimal.format(price, currentMarket.price_precision)} {bidCurrency}
           </span>
@@ -50,7 +50,7 @@ export const MarketDepth = () => {
           <span>
             {Decimal.format(cumulativePrice, currentMarket.price_precision)} {bidCurrency}
           </span>
-        </span>
+        </S.Tooltip>
       );
     },
     [currentMarket]

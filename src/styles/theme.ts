@@ -105,6 +105,7 @@ const light = {
     secondaryBackgroundSolid: "#E8ECF2",
     text: "#000000",
     borderLight: "rgba(0, 0, 0, 0.08)",
+    inverse: "#ffffff",
   },
   shadow: {
     primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
@@ -136,6 +137,7 @@ const dark = {
     secondaryBackgroundSolid: "#2F3340",
     text: "#f5f5f5",
     borderLight: "rgba(0, 0, 0, 0.08)",
+    inverse: "#000000",
   },
   shadow: {
     primary: "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",

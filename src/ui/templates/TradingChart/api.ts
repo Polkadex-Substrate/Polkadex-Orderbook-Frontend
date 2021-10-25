@@ -3,6 +3,8 @@ import axios from "axios";
 import { TradingChartComponent } from ".";
 
 import { LibrarySymbolInfo } from "public/charting_library/datafeed-api";
+import { finexUrl, isFinexEnabled, tradeUrl } from "src/api/config";
+import { buildQueryString, getTimestampPeriod } from "src/helpers";
 import {
   klineArrayToObject,
   KlineState,
@@ -11,9 +13,7 @@ import {
 } from "src/modules";
 import { Market } from "src/modules/public/markets";
 import { periodMinutesToString } from "src/modules/public/ranger/helpers";
-// import { store } from "src/store";
-import { buildQueryString, getTimestampPeriod } from "src/helpers";
-import { finexUrl, isFinexEnabled, tradeUrl } from "src/api/config";
+import { wrapper } from "src/store";
 
 export const print = (...x) => window.console.log.apply(null, [">>>> TC", ...x]);
 export interface CurrentKlineSubscription {
@@ -133,8 +133,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
     ) => {
       const range = tradingChart.tvWidget!.activeChart().getVisibleRange();
       const period = tradingChart.tvWidget!.activeChart().resolution();
-      // store.dispatch(klineUpdateTimeRange(range));
-      // store.dispatch(klineUpdatePeriod(period));
+      wrapper.dispatch(klineUpdateTimeRange(range));
+      wrapper.dispatch(klineUpdatePeriod(period));
     },
     getBars: async (
       symbolInfo: LibrarySymbolInfo,

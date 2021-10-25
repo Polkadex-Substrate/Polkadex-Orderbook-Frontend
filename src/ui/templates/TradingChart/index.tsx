@@ -6,12 +6,12 @@ import { CurrentKlineSubscription, dataFeedObject, print } from "./api";
 import { widgetOptions, widgetParams } from "./config";
 import { getTradingChartTimezone } from "./timezones";
 
-import {
-  IChartingLibraryWidget,
-  LanguageCode,
-  widget,
-} from "public/charting_library/charting_library.min";
 import { stdTimezoneOffset } from "src/helpers";
+import { periodStringToMinutes } from "src/modules/public/ranger/helpers";
+import {
+  rangerSubscribeKlineMarket,
+  rangerUnsubscribeKlineMarket,
+} from "src/modules/public/ranger";
 import {
   KlineState,
   klineUpdatePeriod,
@@ -28,10 +28,10 @@ import {
   selectMobileDeviceState,
 } from "src/modules";
 import {
-  rangerSubscribeKlineMarket,
-  rangerUnsubscribeKlineMarket,
-} from "src/modules/public/ranger";
-import { periodStringToMinutes } from "src/modules/public/ranger/helpers";
+  IChartingLibraryWidget,
+  LanguageCode,
+  widget,
+} from "public/charting_library/charting_library.min";
 
 interface ReduxProps {
   markets: Market[];
@@ -217,8 +217,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
       try {
         this.tvWidget.remove();
       } catch (error) {
-        process.browser &&
-          window.console.log(`TradingChart unmount failed (Rebuild chart): ${error}`);
+        window.console.log(`TradingChart unmount failed (Rebuild chart): ${error}`);
       }
 
       this.setChart(markets, currentMarket, colorTheme);
@@ -281,5 +280,4 @@ const TradingChart = connect<ReduxProps, DispatchProps, {}, RootState>(
   reduxProps,
   mapDispatchProps
 )(TradingChartComponent);
-
 export default TradingChart;

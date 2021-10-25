@@ -2,7 +2,17 @@ import * as React from "react";
 
 import * as S from "./styles";
 
-import { Button, Checkbox, Tabs, TabContent, TabHeader, OpenOrders, Empty } from "src/ui";
+import {
+  Button,
+  Checkbox,
+  Tabs,
+  TabContent,
+  TabHeader,
+  OpenOrders,
+  Empty,
+  OrderHistory,
+  AvailableMessage,
+} from "src/ui";
 import { selectUserLoggedIn } from "src/modules";
 import { useReduxSelector } from "src/hooks";
 
@@ -19,7 +29,7 @@ export const Transactions = () => {
                 <S.Tab>Open Orders</S.Tab>
               </TabHeader>
               <TabHeader>
-                <S.Tab>Order History</S.Tab>
+                <S.Tab>Orders History</S.Tab>
               </TabHeader>
               <TabHeader>
                 <S.Tab>Trade History</S.Tab>
@@ -28,16 +38,20 @@ export const Transactions = () => {
                 <S.Tab>Funds</S.Tab>
               </TabHeader>
             </ul>
-            <S.Filters>
-              <Checkbox label="Hide Other Pairs" />
-              <Button title="Cancel All" size="small" style={{ width: "fit-content" }} />
-            </S.Filters>
+            <AvailableMessage>
+              <S.Filters>
+                <Checkbox label="Hide Other Pairs" />
+                <Button title="Cancel All" size="small" style={{ width: "fit-content" }} />
+              </S.Filters>
+            </AvailableMessage>
           </S.Header>
           <S.Content>
             <TabContent>
               <OpenOrders />
             </TabContent>
-            <TabContent></TabContent>
+            <TabContent>
+              <OrderHistory />
+            </TabContent>
           </S.Content>
         </Tabs>
       ) : (

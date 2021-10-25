@@ -21,14 +21,6 @@ export const Accounts = () => {
           amountInFiat="0"
           onClick={() => setState(!state)}
         />
-        <AccountCard
-          accountName="Trader Account"
-          ticket="PDEX"
-          amount="0"
-          ticketInFiat="USD"
-          amountInFiat="0"
-          onClick={() => setState(!state)}
-        />
       </S.Container>
     </S.Wrapper>
   );

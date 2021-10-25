@@ -19,7 +19,7 @@ export const Header = styled.div`
     padding: 0.5rem 1.5rem 1rem 1.5rem;
     border-bottom: 1px solid;
     border-bottom-color: ${theme.colors.secondaryBackground};
-    @media screen and (min-width: 590px) {
+    @media screen and (min-width: 700px) {
       justify-content: space-between;
       align-items: center;
       flex-direction: row;

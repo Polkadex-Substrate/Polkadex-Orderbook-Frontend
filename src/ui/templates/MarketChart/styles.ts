@@ -6,34 +6,53 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Graph;
     background: ${theme.colors.gradientBackground};
-    padding: 1rem;
     box-shadow: ${theme.shadow.tertiary};
   `}
 `;
 
 export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid;
+    border-bottom-color: ${theme.colors.secondaryBackground};
+  `}
 `;
 
-export const ChartHeaderNav = styled.div`
+export const Nav = styled.div`
   display: flex;
   align-items: center;
   ul {
     list-style: none;
-    li {
-      display: inline-block;
-      cursor: pointer;
-      :not(:last-child) {
-        margin-right: 1rem;
-      }
-    }
   }
 `;
 
-export const ChartHeaderOptions = styled.div`
+export const Li = styled.li<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    opacity: ${isActive ? 1 : 0.6};
+    font-weight: 550;
+    :before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      border-bottom: 2px solid;
+      border-bottom-color: ${isActive ? theme.colors.primary : "transparent"};
+      bottom: -70%;
+    }
+    :not(:last-child) {
+      margin-right: 1rem;
+    }
+  `}
+`;
+
+export const Actions = styled.div`
   ul {
     list-style: none;
     li {
@@ -52,17 +71,7 @@ export const ChartHeaderOptions = styled.div`
   }
 `;
 
-export const ChartHeaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-
-  ${WrapperButton} {
-    :first-child {
-      margin-right: 1rem;
-    }
-  }
-`;
-
 export const Content = styled.div`
   height: 90%;
+  min-height: 40rem;
 `;

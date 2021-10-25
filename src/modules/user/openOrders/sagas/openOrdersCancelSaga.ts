@@ -1,42 +1,33 @@
-import { call, put } from 'redux-saga/effects';
-import { alertPush, sendError } from '../../../';
-import { API, isFinexEnabled, RequestOptions } from '../../../../api';
-import { getCsrfToken, getOrderAPI } from '../../../../helpers';
-import { openOrdersCancelError, OpenOrdersCancelFetch } from '../actions';
+import { call, put, select } from "redux-saga/effects";
 
-const ordersCancelOptions = (csrfToken?: string): RequestOptions => {
-    return {
-        apiVersion: getOrderAPI(),
-        headers: { 'X-CSRF-Token': csrfToken },
-    };
-};
+import { openOrdersCancelError, OpenOrdersCancelFetch } from "../actions";
+
+import { alertPush, sendError, selectUserInfo } from "src/modules";
 
 export function* openOrdersCancelSaga(action: OpenOrdersCancelFetch) {
-    try {
-        const { order: { id, uuid } } = action.payload;
+  try {
+    const {
+      order: { uuid },
+    } = action.payload;
 
-        if (isFinexEnabled()) {
-            if (uuid) {
-                yield call(API.post(ordersCancelOptions(getCsrfToken())), `/market/orders/cancel/${uuid}`, { uuid });
-            } else {
-                yield call(API.post(ordersCancelOptions(getCsrfToken())), `/market/orders/cancel/${id}`, { id });
-            }
-        } else {
-            if (uuid) {
-                yield call(API.post(ordersCancelOptions(getCsrfToken())), `/market/orders/${uuid}/cancel`, { uuid });
-            } else {
-                yield call(API.post(ordersCancelOptions(getCsrfToken())), `/market/orders/${id}/cancel`, { id });
-            }
-        }
-
-        yield put(alertPush({ message: ['success.order.cancelling'], type: 'success'}));
-    } catch (error) {
-        yield put(sendError({
-            error,
-            processingType: 'alert',
-            extraOptions: {
-                actionError: openOrdersCancelError,
-            },
-        }));
-    }
+    const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset } = yield select(
+      selectUserInfo
+    );
+    const polkadexWorker = (window as any).polkadexWorker;
+    const _cancelOrder = yield call(() =>
+      polkadexWorker.cancelOrder(proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset, uuid)
+    );
+    if (_cancelOrder.success)
+      yield put(alertPush({ message: ["success.order.cancelling"], type: "success" }));
+  } catch (error) {
+    yield put(
+      sendError({
+        error,
+        processingType: "alert",
+        extraOptions: {
+          actionError: openOrdersCancelError,
+        },
+      })
+    );
+  }
 }

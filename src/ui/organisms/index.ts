@@ -5,3 +5,4 @@ export * from "./Sign";
 export * from "./Accounts";
 export * from "./Markets";
 export * from "./OpenOrders";
+export * from "./OrderHistory";

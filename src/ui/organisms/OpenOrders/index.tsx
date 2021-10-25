@@ -31,10 +31,8 @@ export const OpenOrders = () => {
   const { width } = useWindowSize();
 
   const handleCancel = (index: number) =>
-    //! Verify sagas
-    list && dispatch(cancelOrdersExecute({ order_uuid: list[index].id }));
+    list && dispatch(openOrdersCancelFetch({ order: list[index], list }));
 
-  //! Verify sagas
   // const handleCancelAll = () =>
   // currentMarket && dispatch(ordersCancelAllFetch({ market: currentMarket.id }));
 

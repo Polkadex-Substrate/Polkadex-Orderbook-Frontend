@@ -22,7 +22,7 @@ export const Header = () => {
       <S.Container>
         <S.Column>
           <Logo />
-          {width >= 880 && <Toolbar />}
+          {width >= 920 && <Toolbar />}
         </S.Column>
         <S.Column>
           <ThemeSwitch />

@@ -20,3 +20,5 @@ export * from "./Portal";
 export * from "./OpenOrderCard";
 export * from "./Bar";
 export * from "./Empty";
+export * from "./OrderHistoryCard";
+export * from "./AvailableMessage";

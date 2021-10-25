@@ -6,6 +6,7 @@ import { convertRgbToHex, getStylesValueByKey } from '../helpers';
 export const customWidgetParams = {};
 
 export const customWidgetOptions = (colorTheme?: string) => {
+  console.log(colorTheme)
     if (colorTheme === 'light') {
         return ({
             toolbar_bg: colors.light.chart.primary,
@@ -34,18 +35,16 @@ export const customWidgetOptions = (colorTheme?: string) => {
             theme: 'Light' as ThemeName,
         });
     }
-
-    const primaryColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.primary));
-    const upColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.up));
-    const downColor = convertRgbToHex(getStylesValueByKey(colors.dark.chart.down));
+    const upColor = colors.dark.chart.up
+    const downColor = colors.dark.chart.down
 
     return ({
-        toolbar_bg: primaryColor,
+        toolbar_bg: "#F9FBFC",
         loading_screen: {
-            backgroundColor: primaryColor,
+            backgroundColor: "#F9FBFC",
         },
         overrides: {
-            ['symbolWatermarkProperties.color']: primaryColor,
+            ['symbolWatermarkProperties.color']: "#F9FBFC",
             ['volumePaneSize']: 'iny',
             ['mainSeriesProperties.candleStyle.upColor']: upColor,
             ['mainSeriesProperties.candleStyle.downColor']: downColor,
@@ -53,15 +52,15 @@ export const customWidgetOptions = (colorTheme?: string) => {
             ['mainSeriesProperties.candleStyle.borderDownColor']: downColor,
             ['mainSeriesProperties.candleStyle.wickUpColor']: upColor,
             ['mainSeriesProperties.candleStyle.wickDownColor']: downColor,
-            ['paneProperties.background']: primaryColor,
-            ['paneProperties.vertGridProperties.color']: primaryColor,
+            ['paneProperties.background']: "#F9FBFC",
+            ['paneProperties.vertGridProperties.color']: "#F9FBFC",
             ['paneProperties.vertGridProperties.style']: 1,
-            ['paneProperties.horzGridProperties.color']: primaryColor,
+            ['paneProperties.horzGridProperties.color']: "#F9FBFC",
             ['paneProperties.horzGridProperties.style']: 1,
-            ['paneProperties.crossHairProperties.color']: primaryColor,
+            ['paneProperties.crossHairProperties.color']: "#F9FBFC",
             ['paneProperties.crossHairProperties.width']: 1,
             ['paneProperties.crossHairProperties.style']: 1,
-            ['scalesProperties.backgroundColor']: primaryColor,
+            ['scalesProperties.backgroundColor']: "#F9FBFC",
         },
         studies_overrides: {
             ['volume.volume.color.0']: downColor,

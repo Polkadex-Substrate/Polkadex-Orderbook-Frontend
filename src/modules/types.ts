@@ -31,7 +31,7 @@ export interface OrderCommon {
   created_at?: string;
   updated_at?: string;
   confirmed?: boolean;
-  uuid?: string;
+  uuid?: string | number;
   id?: number;
   kind?: OrderKind;
   trades_count?: number;
