@@ -22,3 +22,4 @@ export * from "./Bar";
 export * from "./Empty";
 export * from "./OrderHistoryCard";
 export * from "./AvailableMessage";
+export * from "./FundCard";

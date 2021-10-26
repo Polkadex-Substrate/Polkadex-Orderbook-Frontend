@@ -18,6 +18,8 @@ import {
 import * as S from "src/styles/status";
 import { Button, Icon, Logo, ThemeSwitch } from "src/ui";
 import { recentTradesFetchSaga } from "src/modules/public/recentTrades/sagas/recentTradesFetchSaga";
+import { useBarong } from "src/hooks/useBarong";
+
 function Home() {
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
@@ -33,6 +35,7 @@ function Home() {
   const currencies = useReduxSelector(selectCurrencies);
   const currenciesIsLoading = useReduxSelector(selectCurrenciesLoading);
 
+  const { ping, handlePing, runSessionExample, session, handleWsConnection } = useBarong();
   return (
     <S.Wrapper>
       <S.Header>
@@ -82,87 +85,118 @@ function Home() {
           </S.Nav>
           <S.Table>
             <Card
-              title="Fetch Markets"
-              description="/api/v2/peatio/public/markets"
+              title="GET Markets"
+              description="/api/v2/finex/public/markets"
               onClick={() => dispatch(marketsFetch())}
               dataToShow={markets}
               isLoading={marketsIsLoading}
             />
             <Card
-              title="Fetch Tickers"
+              title="GET Tickers"
               description="/api/v2/peatio/public/markets/tickers"
               onClick={() => dispatch(marketsTickersFetch())}
               dataToShow={tickers}
               isLoading={marketsIsLoading}
             />
+            {/* //!! Verify Saga (API changed to config - https://github.com/openware/baseapp/blob/master/web/src/modules/public/configs/sagas/getConfigsSaga.ts)  */}
             <Card
-              title="Fetch Currencies"
-              description="/api/v2/peatio/public/currencies"
+              title="GET Currencies"
+              description="/api/v2/peatio/public/config"
               onClick={() => dispatch(currenciesFetch())}
               dataToShow={currencies}
               isLoading={currenciesIsLoading}
             />
             <Card
-              title="Fetch Depth Market"
-              description="/api/v2/peatio/public/markets/dashbtc/depth"
+              title="GET Depth Market"
+              description="/api/v2/peatio/public/markets/{market}/depth"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch K-line"
-              description="/api/v2/finex/public/markets/dashbtc/k-line"
+              title="GET K-line"
+              description="/api/v2/peatio/public/markets/{market}/k-line"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch Recent Trades"
-              description="/api/v2/peatio/public/markets/dashbtc/trades"
+              title="GET Orderbook"
+              description="/api/v2/peatio/public/markets/{market}/order-book"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch Orders"
+              title="GET Trades"
+              description="/api/v2/peatio/market/trades"
+              onClick={() => console.log("...")}
+              dataToShow={[]}
+              isLoading={false}
+            />
+            <Card
+              title="GET Recent Trades"
+              description="/api/v2/peatio/public/markets/{market}/trades"
+              onClick={() => console.log("...")}
+              dataToShow={[]}
+              isLoading={false}
+            />
+            <Card
+              title="GET Orders"
               description={`/api/v2/peatio/market/orders?page=1&limit=10all`}
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch Cancel Order"
+              title="POST Cancel Order"
               description="/api/v2/peatio/market/orders/{id}/cancel"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch Buy Order"
+              title="POST Buy Order"
               description="/api/v2/peatio/market/orders"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch Sell Order"
+              title="POST Sell Order"
               description="/api/v2/peatio/market/orders"
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
             />
             <Card
-              title="Fetch User Auth"
-              description="..."
+              title="POST User Auth"
+              description=""
               onClick={() => console.log("...")}
               dataToShow={[]}
               isLoading={false}
+            />
+            <Card
+              title="Ping Barong"
+              description="/api/v2/barong/identity/ping"
+              onClick={handlePing}
+              dataToShow={ping.data}
+              isLoading={ping.isLoading}
+            />
+
+            <Card
+              title="Session Barong"
+              description=" /api/v2/barong/identity/sessions"
+              onClick={runSessionExample}
+              dataToShow={session.data}
+              isLoading={session.isLoading}
             />
             <Card
               title="Polkadot{.js} WS connection"
-              description="No issues"
-              type="Verified"
+              description=""
+              onClick={handleWsConnection}
             />
+            <Card title="Ranger WS connection" description="" />
           </S.Table>
         </S.Information>
       </S.Content>
