@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { API, proxyRestUrl, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
-import { User, userData, UserSkeleton } from "../../profile";
+import { ProxyAccount, userData, UserSkeleton } from "../../profile";
 import {
   signInData,
   signInError,
@@ -21,7 +21,7 @@ export function* signInSaga(action: SignInFetch) {
   try {
     const polkadexWorker = (window as any).polkadexWorker;
     const { address, password } = action.payload;
-    const user: User = yield call(() => getKeyringPairFromAddress(address, password));
+    const user: ProxyAccount = yield call(() => getKeyringPairFromAddress(address, password));
     // const authResponse = yield call(() => polkadexWorker.authenticate(user));
     // console.log({ authResponse });
     // process.browser && localStorage.setItem("csrfToken", user.csrf_token);
@@ -45,7 +45,7 @@ export function* signInSaga(action: SignInFetch) {
   }
 }
 
-const getKeyringPairFromAddress = async (address: string, password: string): Promise<User> => {
+const getKeyringPairFromAddress = async (address: string, password: string): Promise<ProxyAccount> => {
   try {
     const userPair = keyring.getPair(address);
     const account = keyring.getAccount(address);

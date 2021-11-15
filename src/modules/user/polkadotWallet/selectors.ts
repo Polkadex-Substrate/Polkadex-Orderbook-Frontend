@@ -13,5 +13,5 @@ export const selectPolkadotWalletLoading = (state: RootState): boolean =>
 export const selectPolkadotWalletAccounts = (state: RootState): InjectedAccount[] =>
   state.user.polkadotWallet.allAccounts;
 
-export const selectPolkadotWalletCurrentAccount = (state: RootState): InjectedAccount =>
+export const selectMainAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;

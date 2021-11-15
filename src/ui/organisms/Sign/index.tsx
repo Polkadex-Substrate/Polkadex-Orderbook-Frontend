@@ -13,20 +13,16 @@ import {
   polkadotWalletSetAcccount,
   resetPolkadotWallet,
   selectPolkadotWalletAccounts,
-  selectPolkadotWalletCurrentAccount,
+  selectMainAccount,
+  defaultAccount,
 } from "src/modules/user/polkadotWallet";
 import { useReduxSelector } from "src/hooks";
 import { useExtrinsics } from "src/hooks/useExtrinsics";
 
-const defaultAccount: InjectedAccount = {
-  address: "",
-  meta: {},
-  type: "",
-};
 export const SignContent = () => {
   const dispatch = useDispatch();
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount); // main addreess.
+  const selectedAccount = useReduxSelector(selectMainAccount); // main addreess.
 
   const [selectedDropDownAccount, setSelectedDropDown] =
     useState<InjectedAccount>(defaultAccount);

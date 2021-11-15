@@ -16,12 +16,16 @@ export interface PolkadotWalletState {
   allAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
 }
-
+export const defaultAccount: InjectedAccount = {
+  address: "",
+  meta: {},
+  type: "",
+};
 const initialState: PolkadotWalletState = {
   loading: false,
   getApiSuccess: false,
   allAccounts: [],
-  selectedAccount: { address: "", meta: {}, type: {} },
+  selectedAccount: defaultAccount,
 };
 
 export const polkadotWalletReducer = (

@@ -20,7 +20,7 @@ export interface Phone {
   validated_at: string | null;
 }
 
-export interface User {
+export interface ProxyAccount {
   username: string;
   password: string;
   address: string;
