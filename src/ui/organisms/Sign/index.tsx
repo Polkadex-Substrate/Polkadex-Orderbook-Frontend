@@ -10,14 +10,13 @@ import { Dropdown, Login, SignUp } from "src/ui/molecules";
 import {
   InjectedAccount,
   polkadotWalletFetch,
-  polkadotWalletSetAcccount,
+  setMainAccount,
   resetPolkadotWallet,
   selectPolkadotWalletAccounts,
   selectMainAccount,
   defaultAccount,
 } from "src/modules/user/polkadotWallet";
 import { useReduxSelector } from "src/hooks";
-import { useExtrinsics } from "src/hooks/useExtrinsics";
 
 export const SignContent = () => {
   const dispatch = useDispatch();
@@ -30,8 +29,6 @@ export const SignContent = () => {
   useEffect(() => {
     dispatch(polkadotWalletFetch());
   }, []);
-
-  const extrinsics = useExtrinsics(selectedDropDownAccount);
 
   return (
     <S.Wrapper>
@@ -97,7 +94,7 @@ export const SignContent = () => {
               style={{ marginTop: "1rem", width: "100%", justifyContent: "center" }}
               disabled={Boolean(!selectedDropDownAccount.address)}
               onClick={async () => {
-                dispatch(polkadotWalletSetAcccount(selectedDropDownAccount));
+                dispatch(setMainAccount(selectedDropDownAccount));
               }}
             />
           </div>
@@ -106,10 +103,10 @@ export const SignContent = () => {
             <div>
               <S.TabHeader>
                 <TabHeader>
-                  <S.ListItem>Step 1</S.ListItem>
+                  <S.ListItem>Create Proxy</S.ListItem>
                 </TabHeader>
                 <TabHeader>
-                  <S.ListItem>Step 2</S.ListItem>
+                  <S.ListItem>Proxy Login</S.ListItem>
                 </TabHeader>
               </S.TabHeader>
             </div>

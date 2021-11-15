@@ -21,14 +21,14 @@ export const Login = () => {
     account: "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
-  
+
   useEffect(() => {
-    if(!selectedAccount) setSelectedAccount(userList[0])
-  }, [userList])
+    if (!selectedAccount) setSelectedAccount(userList[0]);
+  }, [userList]);
 
   return (
     <S.Wrapper>
-      <h4>Unlock trading account</h4>
+      <h4>Unlock Proxy account</h4>
       {userList.length > 0 && !loading ? (
         <Formik
           initialValues={defaultValues}
@@ -69,10 +69,10 @@ export const Login = () => {
 
               <Input
                 label="Password"
-                placeholder="Enter a new password fot this account"
+                placeholder="Enter password for this account"
                 type="password"
                 name="password"
-              // error={errors.password && touched.password && errors.password}
+                // error={errors.password && touched.password && errors.password}
               />
               <Button
                 title="Unlock Wallet"
