@@ -2,24 +2,19 @@ import { stringToHex } from "@polkadot/util";
 
 import { InjectedAccount } from "src/modules/user/polkadotWallet";
 
-export interface ISignPayload {
-  main_address: string;
-  proxy_address: string;
-}
-export const signMessageUsingMain = async (
+export const signMessageUsingMainAccount = async (
   account: InjectedAccount,
-  payload: ISignPayload
+  payload: string
 ): Promise<string> => {
   const { web3FromSource } = await import("@polkadot/extension-dapp");
   const injector = await web3FromSource(account.meta.source);
-  const message = JSON.stringify(payload);
   const signRaw = injector?.signer?.signRaw;
   if (signRaw) {
     // after making sure that signRaw is defined
     // we can use it to sign our message
     const { signature } = await signRaw({
       address: account.address,
-      data: stringToHex(message),
+      data: stringToHex(payload),
       type: "bytes",
     });
     return signature;

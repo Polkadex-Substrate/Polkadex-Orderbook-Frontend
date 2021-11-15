@@ -6,7 +6,7 @@ import { ProxyAccount, userData } from "../../profile";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { InjectedAccount } from "../../polkadotWallet";
 
-import { signMessageUsingMain } from "src/helpers/polkadex/signMessage";
+import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
 
 export function* signUpSaga(action: SignUpFetch) {
   try {
@@ -36,7 +36,7 @@ export function* signUpSaga(action: SignUpFetch) {
 }
 const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: string) => {
   const payload = { main_address: mainAccount.address, proxy_address: proxyAddress };
-  const signature = await signMessageUsingMain(mainAccount, payload);
+  const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
   const data = { signature, ...payload };
   console.log(data);
 };
