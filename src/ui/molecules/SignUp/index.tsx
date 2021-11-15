@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
 
 import { Button } from "src/ui/components";
@@ -13,7 +14,8 @@ import {
 } from "src/ui/molecules";
 import { useMnemonic } from "src/hooks/useMnemonic";
 import { signUp } from "src/modules";
-
+import { selectMainAccount } from "src/modules/user/polkadotWallet";
+import { useReduxSelector } from "src/hooks";
 
 const defaultValues = {
   password: "",
@@ -25,6 +27,7 @@ const defaultValues = {
 export const SignUp = () => {
   const [state, setState] = useState({ isReady: false, isExport: false });
   const { mnemonic, mnemoicString } = useMnemonic({ isExport: state.isExport });
+  const mainAccount = useReduxSelector(selectMainAccount);
   const dispatch = useDispatch();
   return (
     <S.Wrapper>
@@ -34,6 +37,7 @@ export const SignUp = () => {
         onSubmit={async (values) => {
           dispatch(
             signUp({
+              mainAccount,
               username: values.accountName,
               password: values.password,
               mnemonic: mnemoicString,

@@ -1,4 +1,5 @@
 import { CommonError } from "../../types";
+import { InjectedAccount } from "../polkadotWallet";
 
 import {
   AUTH_ENTROPY_PASSWORD_DATA,
@@ -28,13 +29,13 @@ export interface SignUpKeyRingData {
     mnemonic: string;
     name: string;
     password: string;
-  }
+  };
 }
 export interface SignInKeyRingData {
   payload: {
     name: string;
     password: string;
-  }
+  };
 }
 export interface GeetestCaptchaResponse {
   geetest_challenge: string;
@@ -63,9 +64,9 @@ export interface EntropyPasswordData {
 export interface SignInFetch {
   type: typeof AUTH_SIGN_IN_FETCH;
   payload: {
-    address: string,
+    address: string;
     password: string;
-  }
+  };
 }
 
 export interface SignInError {
@@ -87,8 +88,9 @@ export interface SignInData {
 export interface SignUpFetch {
   type: typeof AUTH_SIGN_UP_FETCH;
   payload: {
+    mainAccount: InjectedAccount;
     username: string;
-    mnemonic:string;
+    mnemonic: string;
     password: string;
     email?: string;
     data?: string;
@@ -187,14 +189,14 @@ export const entropyPasswordError = (error: CommonError): EntropyPasswordError =
 
 export const signInKeyRingData = (payload: SignInKeyRingData["payload"]) => ({
   type: AUTH_KEYRING_SIGN_IN_DATA,
-  payload
-})
+  payload,
+});
 export const signIn = (address: string, password: string): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,
   payload: {
     address,
-    password
-  }
+    password,
+  },
 });
 
 export const signInData = (): SignInData => ({

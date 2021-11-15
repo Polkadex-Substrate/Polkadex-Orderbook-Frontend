@@ -2,6 +2,7 @@ import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import { blake2AsHex } from "@polkadot/util-crypto";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+
 import { getTimestampPeriod } from "src/helpers";
 
 export const useSignWithPolkadotJs = () => {
@@ -10,9 +11,7 @@ export const useSignWithPolkadotJs = () => {
   const dispatch = useDispatch();
 
   // Get Extension Accounts
-  const getExtensionAddress = async (): Promise<
-    InjectedAccountWithMeta | undefined
-  > => {
+  const getExtensionAddress = async (): Promise<InjectedAccountWithMeta | undefined> => {
     const polkadotExtensionDapp = await import("@polkadot/extension-dapp");
     const extension = await polkadotExtensionDapp.web3Enable("Polkadex");
     if (extension?.length > 0) {

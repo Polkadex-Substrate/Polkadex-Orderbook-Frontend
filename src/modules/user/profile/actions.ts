@@ -16,7 +16,7 @@ export interface UserFetch {
 export interface UserInfo {
   type: typeof PROFILE_USER_DATA;
   payload: {
-    user: ProxyAccount;
+    user: Partial<ProxyAccount>;
   };
 }
 export interface UserListData {

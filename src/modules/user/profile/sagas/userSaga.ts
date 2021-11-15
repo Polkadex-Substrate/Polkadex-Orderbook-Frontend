@@ -1,18 +1,15 @@
 import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
-import { API, RequestOptions } from "../../../../api";
 import { userData, userError, UserFetch } from "../actions";
-import { abilitiesFetch } from "../../abilities";
-
-const userOptions: RequestOptions = {
-  apiVersion: "barong",
-};
 
 export function* userSaga(action: UserFetch) {
   try {
     const userAccount = yield call(() => getKeyringAllAccounts());
-    const user = { username: userAccount.meta.name, address: userAccount.address };
+    const user = {
+      username: userAccount.meta.name,
+      address: userAccount.address,
+    };
     // yield put(abilitiesFetch());
     yield put(userData({ user }));
   } catch (error) {

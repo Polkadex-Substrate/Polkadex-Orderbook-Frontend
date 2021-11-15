@@ -1,4 +1,3 @@
-import { web3FromSource } from "@polkadot/extension-dapp";
 import { stringToHex } from "@polkadot/util";
 
 import { InjectedAccount } from "src/modules/user/polkadotWallet";
@@ -11,6 +10,7 @@ export const signMessageUsingMain = async (
   account: InjectedAccount,
   payload: ISignPayload
 ): Promise<string> => {
+  const { web3FromSource } = await import("@polkadot/extension-dapp");
   const injector = await web3FromSource(account.meta.source);
   const message = JSON.stringify(payload);
   const signRaw = injector?.signer?.signRaw;
