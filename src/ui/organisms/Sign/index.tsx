@@ -21,18 +21,19 @@ import { useExtrinsics } from "src/hooks/useExtrinsics";
 const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
-  type: ""
-}
+  type: "",
+};
 export const SignContent = () => {
   const dispatch = useDispatch();
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const selectedAccount= useReduxSelector(selectPolkadotWalletCurrentAccount)
-  const [selectedDropDownAccount, setSelectedDropDown] = useState<InjectedAccount>(defaultAccount)
+  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount); // main addreess.
+
+  const [selectedDropDownAccount, setSelectedDropDown] =
+    useState<InjectedAccount>(defaultAccount);
   const [isActive, setIsActive] = useState(true);
   useEffect(() => {
-    dispatch(polkadotWalletFetch())
-  }, [])
-
+    dispatch(polkadotWalletFetch());
+  }, []);
 
   const extrinsics = useExtrinsics(selectedDropDownAccount);
 
@@ -71,7 +72,8 @@ export const SignContent = () => {
                 <MyCurrentAccountHeader
                   name={selectedDropDownAccount?.meta.name || "Select your account"}
                   address={
-                    selectedDropDownAccount?.address || "Please install Polkadot {.js} extension"
+                    selectedDropDownAccount?.address ||
+                    "Please install Polkadot {.js} extension"
                   }
                   isHeader
                 />
@@ -95,12 +97,10 @@ export const SignContent = () => {
               </S.SelectAccountContainer>
             </Dropdown>
             <Button
-              title="Register Account"
+              title="Continue"
               style={{ marginTop: "1rem", width: "100%", justifyContent: "center" }}
               disabled={Boolean(!selectedDropDownAccount.address)}
               onClick={async () => {
-                const { success } = await extrinsics.sendOcexRegisterExtrinsic();
-                console.log({success});
                 dispatch(polkadotWalletSetAcccount(selectedDropDownAccount));
               }}
             />
