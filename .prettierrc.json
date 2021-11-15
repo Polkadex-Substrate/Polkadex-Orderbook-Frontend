@@ -1,4 +1,6 @@
 {
   "printWidth": 95,
-  "jsxBracketSameLine":true
+  "jsxBracketSameLine":true,
+  "endOfLine": "auto"
+
 }
