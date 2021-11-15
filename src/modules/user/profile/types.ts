@@ -21,25 +21,13 @@ export interface Phone {
   validated_at: string | null;
 }
 
-export interface User {
+export interface ProxyAccount {
   username: string;
   password: string;
   address: string;
-  keyringPair: any;
-  email?: string;
-  level?: number;
-  otp?: boolean;
-  role?: string;
-  state?: string;
-  uid?: string;
-  profiles?: UserProfile[];
-  csrf_token?: string;
-  data?: string;
-  referal_uid?: string | null;
-  labels?: Label[];
-  phone?: Phone[];
+  keyringPair?: any;
   created_at?: string;
-  updated_at?: string;
+  state?: string;
 }
 export interface UserSkeleton {
   username: string;

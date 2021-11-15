@@ -68,7 +68,7 @@ export const polkadotWalletFetch = (): PolkadotWalletFetch => ({
   type: GET_POLKADOT_WALLET_FETCH,
 });
 
-export const polkadotWalletSetAcccount = (
+export const setMainAccount = (
   payload: PolkadotWalletSetAccount["payload"]
 ): PolkadotWalletSetAccount => ({
   type: SET_POLKADOT_WALLET_ACCOUNT,

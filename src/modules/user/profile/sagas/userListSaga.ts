@@ -6,7 +6,6 @@ import { userError, UserListFetch } from "../actions";
 
 export function* userListSaga(action: UserListFetch) {
   try {
-    console.log("in side user saga");
     const userList: Array<UserSkeleton> = yield call(() => getKeyringAllAccounts());
     yield put(userListData({ userList }));
   } catch (error) {

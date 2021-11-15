@@ -1,32 +1,25 @@
-import { call, put } from "redux-saga/effects";
-
-import { API, RequestOptions } from "../../../../api";
-import { sendError } from "../../../";
-import { userData } from "../../profile";
-import {
-  signUpData,
-  signUpError,
-  SignUpFetch,
-  signUpRequireVerification,
-} from "../actions";
+import { call, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 
-const signUpConfig: RequestOptions = {
-  apiVersion: "barong",
-};
+import { sendError } from "../../../";
+import { ProxyAccount, userData } from "../../profile";
+import { signUpData, signUpError, SignUpFetch } from "../actions";
+import { InjectedAccount } from "../../polkadotWallet";
 
-const configUpdateOptions = (csrfToken?: string): RequestOptions => {
-  return {
-    apiVersion: "sonic",
-    headers: { "X-CSRF-Token": csrfToken },
-  };
-};
+import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
 
 export function* signUpSaga(action: SignUpFetch) {
   try {
-    const { mnemonic, password, username } = action.payload
-    const { pair, json } = keyring.addUri(mnemonic, password, { name: username });
-    const data = { username, password, address: pair.address, keyringPair: pair }
+    const { mnemonic, password, username, mainAccount } = action.payload;
+    const { pair } = keyring.addUri(mnemonic, password, { name: username });
+    const proxyAddress = pair.address;
+    registerAccount(mainAccount, proxyAddress);
+    const data: ProxyAccount = {
+      username,
+      password,
+      address: pair.address,
+      keyringPair: pair,
+    };
     yield put(userData({ user: data }));
     yield put(signUpData());
   } catch (error) {
@@ -41,3 +34,9 @@ export function* signUpSaga(action: SignUpFetch) {
     );
   }
 }
+const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: string) => {
+  const payload = { main_address: mainAccount.address, proxy_address: proxyAddress };
+  const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
+  const data = { signature, ...payload };
+  console.log(data);
+};

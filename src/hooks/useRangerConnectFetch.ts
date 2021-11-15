@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { selectUserLoggedIn } from "src/modules";
 import { rangerConnectFetch } from "src/modules/public/ranger";
-import {
-  selectRanger,
-  selectShouldRangerConnect,
-} from "src/modules/public/ranger/selectors";
+import { selectRanger, selectShouldRangerConnect } from "src/modules/public/ranger/selectors";
 
 export const useRangerConnectFetch = () => {
   const dispatch = useDispatch();

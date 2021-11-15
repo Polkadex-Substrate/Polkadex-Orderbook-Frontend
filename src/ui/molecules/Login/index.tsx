@@ -20,11 +20,6 @@ export const Login = () => {
     account: "",
   };
   const [selectedAccount, setSelectedAccount] = useState<UserSkeleton>(userList[0]);
-  console.log(userList);
-
-  useEffect(() => {
-    dispatch(polkadotWalletFetch());
-  }, []);
 
   useEffect(() => {
     if (!selectedAccount) setSelectedAccount(userList[0]);
@@ -32,14 +27,12 @@ export const Login = () => {
 
   return (
     <S.Wrapper>
-      <h4>Unlock trading account</h4>
+      <h4>Unlock Proxy account</h4>
       {userList.length > 0 && !loading ? (
         <Formik
           initialValues={defaultValues}
           onSubmit={async (values) => {
             dispatch(signIn(values.account, values.password));
-            //! Verify Why fetch polkadoWalletAgain?
-            // dispatch(polkadotWalletFetch());
           }}>
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
@@ -75,7 +68,7 @@ export const Login = () => {
 
               <Input
                 label="Password"
-                placeholder="Enter a new password fot this account"
+                placeholder="Enter password for this account"
                 type="password"
                 name="password"
                 // error={errors.password && touched.password && errors.password}

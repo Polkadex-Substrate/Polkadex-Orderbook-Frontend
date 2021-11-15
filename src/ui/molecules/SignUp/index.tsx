@@ -7,9 +7,8 @@ import * as S from "./styles";
 import { Button, Input, MnemonicImport, MnemonicExport, MnemonicSelect } from "src/ui";
 import { useMnemonic } from "src/hooks/useMnemonic";
 import { signUp } from "src/modules";
-import { selectPolkadotWalletCurrentAccount } from "src/modules/user/polkadotWallet";
+import { selectMainAccount } from "src/modules/user/polkadotWallet";
 import { useReduxSelector } from "src/hooks";
-import { useExtrinsics } from "src/hooks/useExtrinsics";
 
 const defaultValues = {
   password: "",
@@ -21,10 +20,8 @@ const defaultValues = {
 export const SignUp = () => {
   const [state, setState] = useState({ isReady: false, isExport: false });
   const { mnemonic, mnemoicString } = useMnemonic({ isExport: state.isExport });
+  const mainAccount = useReduxSelector(selectMainAccount);
   const dispatch = useDispatch();
-  const selectedAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
-  console.log("selectedAccount from makeproxycomponent", selectedAccount);
-  const extrinsics = useExtrinsics(selectedAccount);
   return (
     <S.Wrapper>
       <h4>Import/export trading account</h4>
@@ -33,12 +30,12 @@ export const SignUp = () => {
         onSubmit={async (values) => {
           dispatch(
             signUp({
+              mainAccount,
               username: values.accountName,
               password: values.password,
               mnemonic: mnemoicString,
             })
           );
-          extrinsics.sendOcexRegisterExtrinsic();
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>

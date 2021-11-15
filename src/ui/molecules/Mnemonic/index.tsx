@@ -101,7 +101,7 @@ export const MnemonicSelect = ({ handleImport, handleExport }: MnemonicSelectPro
         </button>
         <span>or</span>
         <button type="button" onClick={handleExport}>
-          Generate Wallet
+          Generate a Proxy Account
         </button>
       </S.MnemonicSelect>
     </S.Wrapper>
