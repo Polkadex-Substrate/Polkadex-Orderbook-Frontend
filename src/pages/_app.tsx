@@ -8,8 +8,11 @@ import { wrapper } from "../store";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { selectCurrentColorTheme } from "src/modules";
 import { useRangerConnectFetch } from "src/hooks";
+import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 
 function App({ Component, pageProps }: AppProps) {
+  const { loading } = useKeyringInitalize();
+
   return (
     <ThemeWrapper>
       <GlobalStyles />
@@ -26,7 +29,7 @@ const ThemeWrapper = ({ children }) => {
     setState(true);
   }, []);
 
-  // const { connected } = useRangerConnectFetch();
+  const { connected } = useRangerConnectFetch();
   if (!state) return <div />;
   return (
     <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>

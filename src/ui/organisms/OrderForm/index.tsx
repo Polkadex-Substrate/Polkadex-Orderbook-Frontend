@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -11,10 +12,9 @@ import {
   precisionRegExp,
   toCapitalize,
 } from "src/helpers";
-import { useDispatch } from "react-redux";
 import { placeOrdersExecute } from "src/modules/user/OrdersTransactions";
-import { selectUserInfo } from 'src/modules/user/profile/selectors';
-import { selectPolkadotWalletCurrentAccount } from "src/modules/user/polkadotWallet";
+import { selectUserInfo } from "src/modules/user/profile/selectors";
+import { selectMainAccount } from "src/modules/user/polkadotWallet";
 
 export const OrderForm = ({
   side,
@@ -42,7 +42,7 @@ export const OrderForm = ({
   const asks = useReduxSelector(selectDepthAsks);
   const bids = useReduxSelector(selectDepthBids);
   const usersInfo = useReduxSelector(selectUserInfo);
-  const mainAccount = useReduxSelector(selectPolkadotWalletCurrentAccount);
+  const mainAccount = useReduxSelector(selectMainAccount);
   const isSellSide = side === "sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
   const safePrice = totalPrice / Number(amount) || state.priceMarket;
@@ -51,7 +51,7 @@ export const OrderForm = ({
   const total =
     state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
 
-  const handlePriceChange = (value: string) => {    
+  const handlePriceChange = (value: string) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
 
     if (convertedValue.match(precisionRegExp(currentMarketBidPrecision))) {
@@ -92,19 +92,20 @@ export const OrderForm = ({
   const handleOrders = (e) => {
     e.preventDefault();
     dispatch(
-    placeOrdersExecute({
-      proxyKeyring: usersInfo.keyringPair,
-      mainAddress: mainAccount.address, 
-      nonce: 0,
-      baseAsset: "BTC",
-      quoteAsset: "USD",
-      ordertype: "LIMIT",
-      orderSide: isSellSide ? "ASK": "BID",
-      price: 100,
-      quantity: 1,
-      isSell: isSellSide
-    }))
-  }
+      placeOrdersExecute({
+        proxyKeyring: usersInfo.keyringPair,
+        mainAddress: mainAccount.address,
+        nonce: 0,
+        baseAsset: "BTC",
+        quoteAsset: "USD",
+        ordertype: "LIMIT",
+        orderSide: isSellSide ? "ASK" : "BID",
+        price: 100,
+        quantity: 1,
+        isSell: isSellSide,
+      })
+    );
+  };
   return (
     <S.Wrapper>
       <Tabs>

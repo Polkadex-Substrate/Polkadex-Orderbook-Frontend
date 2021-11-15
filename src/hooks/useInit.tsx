@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { minutesUntilAutoLogout, sessionCheckInterval } from "src/api";
 import {
   logoutFetch,
@@ -37,10 +38,7 @@ export const useInit = () => {
 
   const getLastAction = () => {
     if (process.browser && localStorage.getItem(STORE_KEY) !== null) {
-      return parseInt(
-        (process.browser && localStorage.getItem(STORE_KEY)) || "0",
-        10
-      );
+      return parseInt((process.browser && localStorage.getItem(STORE_KEY)) || "0", 10);
     }
     return 0;
   };
@@ -53,8 +51,7 @@ export const useInit = () => {
 
   const checkLastActivity = () => {
     const now = Date.now();
-    const timeLeft =
-      getLastAction() + parseFloat(minutesUntilAutoLogout()) * 60 * 1000;
+    const timeLeft = getLastAction() + parseFloat(minutesUntilAutoLogout()) * 60 * 1000;
     const diff = timeLeft - now;
     const isTimeout = diff < 0;
 

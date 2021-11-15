@@ -1,10 +1,11 @@
 import { call, put } from "redux-saga/effects";
 import { ApiPromise, WsProvider } from "@polkadot/api";
-import { polkadexUrl } from "src/api";
 
 import { sendError } from "../../..";
 import { PolkadotWalletFetch, polkadotWalletData, InjectedAccount } from "../actions";
 import { types } from "../types";
+
+import { polkadexUrl } from "src/api";
 
 export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
   try {

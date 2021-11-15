@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
+import * as S from "./styles";
+
 import {
   Tabs,
   TabContent,
@@ -20,23 +23,13 @@ import {
   defaultAccount,
 } from "src/modules/user/polkadotWallet";
 import { useReduxSelector } from "src/hooks";
-import { useExtrinsics } from "src/hooks/useExtrinsics";
-
-import * as S from "./styles";
 
 export const SignContent = () => {
   const dispatch = useDispatch();
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount); // main addreess.
-
-  const [selectedDropDownAccount, setSelectedDropDown] =
-    useState<InjectedAccount>(defaultAccount);
   const [isActive, setIsActive] = useState(true);
-  useEffect(() => {
-    dispatch(polkadotWalletFetch());
-  }, []);
 
-  const extrinsics = useExtrinsics(selectedDropDownAccount);
   return (
     <S.Wrapper>
       <S.Title>

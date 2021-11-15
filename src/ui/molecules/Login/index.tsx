@@ -5,16 +5,15 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 
 import { Input, Dropdown, MyCurrentAccountHeader, Button } from "src/ui";
-import { selectAllUserList, signIn, UserSkeleton } from "src/modules";
+import { selectAllProxyAccounts, signIn, userListFetch, UserSkeleton } from "src/modules";
 import { useReduxSelector } from "src/hooks";
-import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
-import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
 
 export const Login = () => {
   const dispatch = useDispatch();
-  const { loading } = useKeyringInitalize();
-
-  const userList: UserSkeleton[] = useReduxSelector(selectAllUserList);
+  useEffect(() => {
+    dispatch(userListFetch());
+  }, []);
+  const userList: UserSkeleton[] = useReduxSelector(selectAllProxyAccounts);
   const defaultValues = {
     password: "",
     account: "",
@@ -23,12 +22,11 @@ export const Login = () => {
 
   useEffect(() => {
     if (!selectedAccount) setSelectedAccount(userList[0]);
-  }, [userList]);
-
+  }, [selectedAccount, userList]);
   return (
     <S.Wrapper>
       <h4>Unlock Proxy account</h4>
-      {userList.length > 0 && !loading ? (
+      {userList.length > 0 ? (
         <Formik
           initialValues={defaultValues}
           onSubmit={async (values) => {

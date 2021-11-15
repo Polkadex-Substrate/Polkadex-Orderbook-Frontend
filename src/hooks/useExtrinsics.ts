@@ -1,13 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { signAndSendExtrinsic } from "src/helpers/signAndSendExtrinsic";
-import {
-  InjectedAccount,
-  polkadotWalletFetch,
-  selectPolkadotWalletApi,
-} from "src/modules/user/polkadotWallet";
-
 import { useReduxSelector } from ".";
+
+import { signAndSendExtrinsic } from "src/helpers/signAndSendExtrinsic";
+import { InjectedAccount, selectPolkadotWalletApi } from "src/modules/user/polkadotWallet";
 
 export interface ExtrinsicResponse {
   success: boolean;

@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 import { Props } from "./types";
+
+import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
 
 export const Dropdown = ({
   title,
@@ -12,6 +15,7 @@ export const Dropdown = ({
   ...props
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
   return (
     <S.Wrapper isOpen={isOpen} variant={variant}>
       <S.Header onClick={() => setIsOpen(!isOpen)}> {title} </S.Header>

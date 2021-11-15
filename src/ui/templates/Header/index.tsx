@@ -15,7 +15,6 @@ import { selectUserInfo } from "src/modules";
 
 export const Header = () => {
   const user = useReduxSelector(selectUserInfo);
-
   const { width } = useWindowSize();
   return (
     <S.Wrapper>

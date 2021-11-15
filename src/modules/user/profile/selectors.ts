@@ -19,7 +19,7 @@ export const selectUserFetching = (state: RootState): boolean =>
 export const selectUserDataChange = (state: RootState): boolean | undefined =>
   state.user.profile.userData.success;
 
-export const selectAllUserList = (state: RootState): UserSkeleton[] =>
+export const selectAllProxyAccounts = (state: RootState): UserSkeleton[] =>
   state.user.profile.allUsers;
 
 export const selectProxyAddress = (state: RootState): string =>
