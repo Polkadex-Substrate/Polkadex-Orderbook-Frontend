@@ -5,16 +5,16 @@ import { JsonBody, makeRequest } from "./requestBuilder";
 export * from "./config";
 
 export interface RequestOptions {
-  apiVersion: "applogic" | "peatio" | "barong" | "finex" | "sonic" | "p2p";
+  apiVersion: "polkadex"|  "applogic" | "peatio" | "barong" | "finex" | "sonic" | "p2p";
   withHeaders?: boolean;
-  headers?: any;
+  headers?: object;
 }
 
 export type RequestBody = JsonBody | FormData;
 
 export type RequestMethod = (
 config: RequestOptions
-) => (url: string, body?: RequestBody) => Promise<AxiosResponse["data"]>;
+) => (url: string, body?: RequestBody) => Promise<AxiosResponse["data"] | unknown >;
 
 export interface ApiWrapper {
   get: RequestMethod;

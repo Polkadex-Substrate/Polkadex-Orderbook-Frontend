@@ -8,6 +8,7 @@ declare global {
       finexUrl: string;
       p2pUrl: string;
       polkadex:string;
+      polkadexHostUrl: string
     };
     proxy: {
       restUrl: string;

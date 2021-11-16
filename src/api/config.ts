@@ -6,7 +6,8 @@ export const defaultConfig: Config = {
     rangerUrl: `${process.env.RANGER_HOST_URL}/api/v2/ranger`,
     finexUrl: `${process.env.HOST_URL}/api/v2/finex`,
     p2pUrl: `${process.env.HOST_URL}/api/v2/p2p`,
-    polkadex: `${process.env.POLKADEX_WS}`
+    polkadex: `${process.env.POLKADEX_WS}`,
+    polkadexHostUrl: `${process.env.HOST_URL}`
   },
   proxy: {
     restUrl: `${process.env.PROXY_URL}`,
@@ -54,6 +55,8 @@ const convertToBoolean = (value: any): boolean => {
 };
 
 export const polkadexUrl= ()=> Cryptobase.config.api.polkadex;
+export const polkadexHostUrl= ()=> Cryptobase.config.api.polkadexHostUrl;
+
 export const proxyRestUrl = () => Cryptobase.config.proxy.restUrl;
 export const proxyWsUrl = () => Cryptobase.config.proxy.wsUrl;
 export const tradeUrl = () => Cryptobase.config.api.tradeUrl;

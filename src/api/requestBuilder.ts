@@ -6,6 +6,7 @@ import axios, {
 } from "axios";
 
 import {
+  polkadexHostUrl,   
   applogicUrl,
   authUrl,
   finexUrl,
@@ -22,7 +23,7 @@ export interface JsonBody {
 }
 
 export interface RequestOptions {
-  apiVersion: "applogic" | "peatio" | "barong" | "finex" | "sonic" | "p2p";
+  apiVersion: "polkadex"|  "applogic" | "peatio" | "barong" | "finex" | "sonic" | "p2p";
   withHeaders?: boolean;
   headers?: object;
 }
@@ -34,10 +35,12 @@ export interface Request {
 }
 
 const getAPI = () => {
+  // leaving this for now
   const hostUrl =
     window.location.hostname === "localhost" ? "http://localhost:9002" : "";
 
   return {
+    polkadex: polkadexHostUrl(),
     barong: authUrl(),
     applogic: applogicUrl(),
     peatio: tradeUrl(),
@@ -73,7 +76,7 @@ const buildRequest = (request: Request, configData: RequestOptions) => {
   return requestConfig;
 };
 
-export const defaultResponse: Partial<AxiosError["response"]> = {
+export const defaultResponse = {
   status: 500,
   data: {
     error: "Server error",
@@ -83,7 +86,7 @@ export const defaultResponse: Partial<AxiosError["response"]> = {
 export const formatError = (responseError: AxiosError) => {
   const response = responseError.response || defaultResponse;
   const errors =
-    (response.data && (response.data.errors || [response.data.error])) || [];
+    (response.data && (response.data['errors'] || [response.data['error']])) || [];
 
   return {
     code: response.status,
@@ -100,7 +103,7 @@ export const makeRequest = async (
   return new Promise((resolve, reject) => {
     const axiosRequest: AxiosPromise = axios(requestConfig);
     axiosRequest
-      .then((response: AxiosResponse) => {
+      .then((response: AxiosResponse) => {        
         if (configData.withHeaders) {
           resolve(response);
         } else {

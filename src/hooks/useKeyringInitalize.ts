@@ -13,7 +13,7 @@ export const useKeyringInitalize = () => {
       dispatch(polkadotWalletFetch());
       await cryptoWaitReady();
       try {
-        keyring.loadAll({ type: "ed25519" });
+        keyring.loadAll({ type: "sr25519" });
       } catch (e) {
         throw new Error("could not load Keyring");
       }

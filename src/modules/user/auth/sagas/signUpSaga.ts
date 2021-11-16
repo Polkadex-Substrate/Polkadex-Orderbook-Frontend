@@ -7,8 +7,14 @@ import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { InjectedAccount } from "../../polkadotWallet";
 
 import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
+import { RequestOptions } from "src/api/requestBuilder";
+import { API } from "src/api";
 
-export function* signUpSaga(action: SignUpFetch) {
+const registerUserOption: RequestOptions = {
+  apiVersion: 'polkadex',
+};
+
+export  function* signUpSaga(action: SignUpFetch) {
   try {
     const { mnemonic, password, username, mainAccount } = action.payload;
     const { pair } = keyring.addUri(mnemonic, password, { name: username });
@@ -35,8 +41,12 @@ export function* signUpSaga(action: SignUpFetch) {
   }
 }
 const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: string) => {
-  const payload = { main_address: mainAccount.address, proxy_address: proxyAddress };
+  const payload = { main_account: mainAccount.address, proxy_account: proxyAddress };
   const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
-  const data = { signature, ...payload };
-  console.log(data);
+  const data = { signature: {
+    Sr25519: signature
+  }, payload };
+
+ const res = await API.post(registerUserOption)('/register', data)
+  
 };
