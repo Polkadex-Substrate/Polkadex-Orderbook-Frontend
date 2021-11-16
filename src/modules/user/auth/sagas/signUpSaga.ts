@@ -44,9 +44,9 @@ const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: strin
   const payload = { main_account: mainAccount.address, proxy_account: proxyAddress };
   const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
   const data = { signature: {
-    Sr25519: signature
+    Sr25519: signature.trim().slice(2)
   }, payload };
 
  const res = await API.post(registerUserOption)('/register', data)
-  
+ console.log(res);
 };

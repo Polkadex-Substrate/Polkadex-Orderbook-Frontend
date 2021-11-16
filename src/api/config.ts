@@ -7,7 +7,7 @@ export const defaultConfig: Config = {
     finexUrl: `${process.env.HOST_URL}/api/v2/finex`,
     p2pUrl: `${process.env.HOST_URL}/api/v2/p2p`,
     polkadex: `${process.env.POLKADEX_WS}`,
-    polkadexHostUrl: `${process.env.HOST_URL}`
+    polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`
   },
   proxy: {
     restUrl: `${process.env.PROXY_URL}`,
