@@ -1,3 +1,4 @@
+// TODO : Fix saga
 import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
@@ -11,7 +12,6 @@ export function* userSaga(action: UserFetch) {
       address: userAccount.address,
       state: "active",
     };
-    //! Verify user data ->
     yield put(userData({ user }));
   } catch (error) {
     yield put(
@@ -30,6 +30,7 @@ const getKeyringAllAccounts = async () => {
   try {
     const { keyring } = await import("@polkadot/ui-keyring");
     const userPair = keyring.getAccounts()[0];
+    console.log(userPair);
     return userPair;
   } catch (e) {
     throw new Error(e);

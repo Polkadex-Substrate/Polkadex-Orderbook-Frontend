@@ -8,13 +8,14 @@ import {
   orderExecuteData,
   orderExecuteError,
   OrderExecuteFetch,
-} from "src/modules";
-import { API, isFinexEnabled, RequestOptions } from "src/api";
-import { getCsrfToken, getOrderAPI } from "src/helpers";
+} from "../../../";
+
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { getCsrfToken } from "@polkadex/web-helpers";
 
 const executeOptions = (csrfToken?: string): RequestOptions => {
   return {
-    apiVersion: getOrderAPI(),
+    apiVersion: "engine",
     headers: { "X-CSRF-Token": csrfToken },
   };
 };
@@ -41,33 +42,30 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       )
     );
     if (_placeOrder.success) {
-      const params = isFinexEnabled()
-        ? {
-            market: market,
-            side: side,
-            amount: volume,
-            price: price,
-            type: ord_type,
-          }
-        : action.payload;
+      const params = {
+        market: market,
+        side: side,
+        amount: volume,
+        price: price,
+        type: ord_type,
+      };
+
       const order = yield call(
         API.post(executeOptions(getCsrfToken())),
         "/market/orders",
         params
       );
       yield put(orderExecuteData());
-
-      if (getOrderAPI() === "finex") {
-        if (order.type !== "market") {
-          yield put(userOpenOrdersAppend(order));
-        }
-      } else {
-        if (order.ord_type !== "market") {
-          yield put(userOpenOrdersAppend(order));
-        }
-      }
-
-      yield put(alertPush({ message: ["success.order.created"], type: "success" }));
+      yield put(userOpenOrdersAppend(order));
+      yield put(
+        alertPush({
+          type: "Successful",
+          message: {
+            title: "Order Created",
+            description: "Congrats your order has been created",
+          },
+        })
+      );
     }
   } catch (error) {
     yield put(

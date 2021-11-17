@@ -2,23 +2,20 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 
-import { useReduxSelector } from "src/hooks";
 import {
   currenciesFetch,
   marketsFetch,
   marketsTickersFetch,
-  recentTradesFetch,
   selectCurrencies,
   selectCurrenciesLoading,
   selectCurrentMarket,
   selectMarkets,
   selectMarketsLoading,
   selectMarketTickers,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector, useBarong } from "@polkadex/orderbook-hooks";
 import * as S from "src/styles/status";
 import { Button, Icon, Logo, ThemeSwitch } from "src/ui";
-import { recentTradesFetchSaga } from "src/modules/public/recentTrades/sagas/recentTradesFetchSaga";
-import { useBarong } from "src/hooks/useBarong";
 
 function Home() {
   const dispatch = useDispatch();

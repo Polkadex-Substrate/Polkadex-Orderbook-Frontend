@@ -8,8 +8,7 @@ function SvgPolkadotJs(props: React.SVGProps<SVGSVGElement>) {
       viewBox="15 15 140 140"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <g>
         <circle fill="#FF8C00" cx="85" cy="85" r="70"></circle>
         <g>

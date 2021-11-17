@@ -1,11 +1,12 @@
 import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
-import { API, RequestOptions } from "../../../../api";
 import { userOpenOrdersData, userOpenOrdersError, UserOpenOrdersFetch } from "../actions";
 
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+
 const ordersOptions: RequestOptions = {
-  apiVersion: "peatio",
+  apiVersion: "engine",
 };
 
 export function* userOpenOrdersFetchSaga(action: UserOpenOrdersFetch) {

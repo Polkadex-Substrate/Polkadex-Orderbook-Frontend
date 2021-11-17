@@ -7,8 +7,7 @@ function SvgTransactions(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 22 22"
-      {...props}
-    >
+      {...props}>
       <g>
         <path
           data-name="c2/calendar"

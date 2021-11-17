@@ -7,8 +7,7 @@ function SvgSearch(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 20.095 19"
-      {...props}
-    >
+      {...props}>
       <g data-name="Group 3563">
         <path
           data-name="c2/search"

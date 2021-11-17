@@ -1,5 +1,7 @@
 import * as S from "./styles";
 
+import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
+import { selectUserInfo } from "@polkadex/orderbook-modules";
 import {
   Logo,
   ThemeSwitch,
@@ -10,8 +12,6 @@ import {
   MyAccountHeader,
   SignContent,
 } from "src/ui";
-import { useReduxSelector, useWindowSize } from "src/hooks";
-import { selectUserInfo } from "src/modules";
 
 export const Header = () => {
   const user = useReduxSelector(selectUserInfo);

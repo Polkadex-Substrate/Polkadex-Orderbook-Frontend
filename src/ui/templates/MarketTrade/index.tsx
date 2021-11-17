@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { selectCurrentMarket } from "src/modules";
-import { useReduxSelector } from "src/hooks";
 import {
+  selectCurrentMarket,
   recentTradesFetch,
   selectRecentTradesOfCurrentMarket,
-} from "src/modules/public/recentTrades";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { localeDate } from "src/helpers";
 import { Decimal, Skeleton } from "src/ui";
 

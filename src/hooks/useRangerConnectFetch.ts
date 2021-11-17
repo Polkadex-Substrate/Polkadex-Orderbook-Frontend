@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { selectUserLoggedIn } from "src/modules";
-import { rangerConnectFetch } from "src/modules/public/ranger";
-import { selectRanger, selectShouldRangerConnect } from "src/modules/public/ranger/selectors";
+import {
+  selectUserLoggedIn,
+  selectRanger,
+  rangerConnectFetch,
+  selectShouldRangerConnect,
+} from "@polkadex/orderbook-modules";
 
 export const useRangerConnectFetch = () => {
   const dispatch = useDispatch();

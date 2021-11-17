@@ -7,8 +7,7 @@ function SvgOrderDesc(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 15.465 13.5"
-      {...props}
-    >
+      {...props}>
       <g data-name="Group 3462" fill="none" strokeWidth={1.5}>
         <path data-name="Path 8113" d="M.195 12.75h15" stroke="#e6007a" />
         <path data-name="Line 18" stroke="#8BA1BE" d="M.195 4.75h15" />

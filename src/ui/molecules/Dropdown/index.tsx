@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { polkadotWalletFetch } from "src/modules/user/polkadotWallet";
+import { polkadotWalletFetch } from "@polkadex/orderbook-modules";
 
 export const Dropdown = ({
   title,

@@ -8,8 +8,7 @@ function SvgEmail(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <rect x="10" y="20" width="4" height="2" rx="0.6" fillOpacity="0.5" />
       <path
         fillRule="evenodd"

@@ -8,8 +8,7 @@ function SvgUsdt(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <g clipPath="url(#USDT_svg__clip0)" fillRule="evenodd" clipRule="evenodd">
         <path
           d="M7.93 7.064l-2.917 5.723a.105.105 0 00.026.13l7.879 7.052c.022.02.052.031.083.031.03 0 .06-.011.083-.031l7.88-7.052a.105.105 0 00.025-.13L18.07 7.065a.113.113 0 00-.043-.047.124.124 0 00-.064-.017H8.039a.124.124 0 00-.064.017.113.113 0 00-.045.047z"

@@ -7,8 +7,7 @@ function SvgChart(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 20 20"
-      {...props}
-    >
+      {...props}>
       <path
         opacity="0.5"
         d="M13.87 9.00001L16.908 5.96301C17.2746 6.58867 17.5539 7.26158 17.738 7.96301L16.7 9.00001H13.87ZM11 3.38501L12.105 2.28001C12.8019 2.46958 13.4697 2.75318 14.09 3.12301L11 6.21301V3.38501Z"

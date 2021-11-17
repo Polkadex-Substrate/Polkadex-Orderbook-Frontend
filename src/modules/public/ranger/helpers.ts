@@ -1,8 +1,8 @@
-import { isFinexEnabled } from "../../../api";
-import { DEFAULT_TRADING_VIEW_INTERVAL } from "../../../constants";
 import { Market, Ticker, TickerEvent } from "../markets";
 
 import { marketStreams } from "./actions";
+
+import { DEFAULT_TRADING_VIEW_INTERVAL } from "@polkadex/web-constants";
 
 export const generateSocketURI = (baseUrl: string, s: string[]) =>
   `${baseUrl}/?stream=${s.sort().join("&stream=")}`;
@@ -14,16 +14,7 @@ export const formatTicker = (events: {
   for (const market in events) {
     if (events.hasOwnProperty(market)) {
       const event: TickerEvent = events[market];
-      const {
-        amount,
-        avg_price,
-        high,
-        last,
-        low,
-        open,
-        price_change_percent,
-        volume,
-      } = event;
+      const { amount, avg_price, high, last, low, open, price_change_percent, volume } = event;
       tickers[market] = {
         amount,
         avg_price,
@@ -54,10 +45,6 @@ export const streamsBuilder = (
 
   if (withAuth) {
     streams = [...streams, "order", "trade", "deposit_address"];
-
-    if (isFinexEnabled()) {
-      streams = [...streams, "balances"];
-    }
 
     if (withP2P) {
       streams = [...streams, "p2p"];

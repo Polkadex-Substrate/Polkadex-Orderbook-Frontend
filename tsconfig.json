@@ -16,10 +16,6 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "paths": {
-      "lib/*": ["./src/lib/*"],
-      "src/*": ["./src/*"],
-  },
     "forceConsistentCasingInFileNames": false,
     "noEmit": true,
     "experimentalDecorators": true,
@@ -32,13 +28,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "paths": {
+      "@polkadex/orderbook-modules": ["src/modules"],
+      "@polkadex/orderbook-hooks": ["src/hooks"],
+      "@polkadex/web-helpers": ["src/helpers"],
+      "@polkadex/web-constants": ["src/constants"],
+      "@polkadex/orderbook-config": ["src/config"],
+      "lib/*": ["./src/lib/*"],
+      "src/*": ["./src/*"],
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "next.config.ss"  ],
+    "**/*.tsx" ],
   "exclude": [
     "node_modules",
     "public",

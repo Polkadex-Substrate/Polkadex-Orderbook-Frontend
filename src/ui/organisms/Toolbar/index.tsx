@@ -3,14 +3,14 @@ import React from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Markets, Information, SelectPairHeader, Dropdown, Decimal } from "src/ui";
-import { useReduxSelector } from "src/hooks";
 import {
   selectCurrentMarket,
   selectMarkets,
   selectMarketTickers,
   selectUserInfo,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Markets, Information, SelectPairHeader, Dropdown, Decimal } from "src/ui";
 
 const defaultTicker = {
   amount: 0,

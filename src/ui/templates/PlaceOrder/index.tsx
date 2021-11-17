@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 import { OrderProps } from "./types";
 
-import { Accounts, OrderForm, Tabs, TabContent, TabHeader } from "src/ui";
 import {
   selectCurrentMarket,
   selectCurrentMarketFilters,
@@ -19,8 +18,9 @@ import {
   walletsFetch,
   setCurrentPrice,
   orderExecuteFetch,
-} from "src/modules";
-import { useReduxSelector } from "src/hooks";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Accounts, OrderForm, Tabs, TabContent, TabHeader } from "src/ui";
 import { getTotalPrice } from "src/helpers";
 
 export const PlaceOrder = () => {

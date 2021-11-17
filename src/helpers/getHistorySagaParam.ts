@@ -1,5 +1,12 @@
-import { HistoryFetchPayload } from "../modules/user/history";
-
+export interface HistoryFetchPayload {
+  currency?: string;
+  page: number;
+  type: string;
+  limit?: number;
+  market?: string;
+  time_from?: string;
+  time_to?: string;
+}
 export const getHistorySagaParam = (action: HistoryFetchPayload) =>
   Object.entries(action)
     .filter((w) => w[1] !== undefined && w[0] !== "type")

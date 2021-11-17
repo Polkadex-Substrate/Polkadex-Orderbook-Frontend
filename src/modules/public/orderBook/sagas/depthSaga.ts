@@ -1,20 +1,18 @@
 import { call, put } from "redux-saga/effects";
 
-import { API, RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
 import { depthData, depthError, DepthFetch } from "../actions";
 
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+
 const depthOptions: RequestOptions = {
-  apiVersion: "peatio",
+  apiVersion: "engine",
 };
 
 export function* depthSaga(action: DepthFetch) {
   try {
     const market = action.payload;
-    const depth = yield call(
-      API.get(depthOptions),
-      `/public/markets/${market.id}/depth`
-    );
+    const depth = yield call(API.get(depthOptions), `/public/markets/${market.id}/depth`);
     yield put(depthData(depth));
   } catch (error) {
     yield put(

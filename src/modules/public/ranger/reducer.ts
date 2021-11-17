@@ -1,6 +1,3 @@
-import { defaultStorageLimit } from "../../../api";
-import { sliceArray } from "../../../helpers";
-
 import { RangerAction } from "./actions";
 import {
   RANGER_CONNECT_DATA,
@@ -9,6 +6,11 @@ import {
   RANGER_DISCONNECT_DATA,
   RANGER_SUBSCRIPTIONS_DATA,
 } from "./constants";
+
+import { defaultConfig } from "@polkadex/orderbook-config";
+import { sliceArray } from "@polkadex/web-helpers";
+
+const { defaultStorageLimit } = defaultConfig;
 
 export interface RangerState {
   withAuth: boolean;
@@ -43,10 +45,7 @@ export const rangerReducer = (
     case RANGER_SUBSCRIPTIONS_DATA:
       return {
         ...state,
-        subscriptions: sliceArray(
-          [...action.payload.subscriptions],
-          defaultStorageLimit()
-        ),
+        subscriptions: sliceArray([...action.payload.subscriptions], defaultStorageLimit),
       };
     case RANGER_CONNECT_DATA:
       return {

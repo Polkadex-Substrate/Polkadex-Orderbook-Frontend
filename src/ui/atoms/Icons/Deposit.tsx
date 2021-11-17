@@ -7,8 +7,7 @@ function SvgDeposit(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 13.847 20.868"
-      {...props}
-    >
+      {...props}>
       <path
         data-name="c2/wallet"
         d="M9.025 14.688h1.4a.7.7 0 110 1.4h-1.4a.7.7 0 010-1.4z"

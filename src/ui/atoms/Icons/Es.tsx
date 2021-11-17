@@ -7,8 +7,7 @@ function SvgEs(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 512 512"
       width="1em"
       height="1em"
-      {...props}
-    >
+      {...props}>
       <path
         d="M0 256c0 31.314 5.633 61.31 15.923 89.043L256 367.304l240.077-22.261C506.367 317.31 512 287.314 512 256s-5.633-61.31-15.923-89.043L256 144.696 15.923 166.957C5.633 194.69 0 224.686 0 256z"
         fill="#ffda44"

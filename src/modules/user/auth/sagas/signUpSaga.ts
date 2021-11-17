@@ -1,12 +1,17 @@
-import { call, put, select } from "redux-saga/effects";
+import { put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 
-import { sendError } from "../../../";
-import { ProxyAccount, userData } from "../../profile";
-import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { InjectedAccount } from "../../polkadotWallet";
+import { sendError } from "../../../";
+import { userData, ProxyAccount } from "../../profile";
+import { signUpData, signUpError, SignUpFetch } from "../actions";
 
-import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessageUsingMainAccount } from "@polkadex/web-helpers";
+
+const registerUserOption: RequestOptions = {
+  apiVersion: "engine",
+};
 
 export function* signUpSaga(action: SignUpFetch) {
   try {
@@ -35,8 +40,15 @@ export function* signUpSaga(action: SignUpFetch) {
   }
 }
 const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: string) => {
-  const payload = { main_address: mainAccount.address, proxy_address: proxyAddress };
+  const payload = { main_account: mainAccount.address, proxy_account: proxyAddress };
   const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
-  const data = { signature, ...payload };
-  console.log(data);
+  const data = {
+    signature: {
+      Sr25519: signature.trim().slice(2),
+    },
+    payload,
+  };
+
+  const res = await API.post(registerUserOption)("/register", data);
+  console.log(res);
 };

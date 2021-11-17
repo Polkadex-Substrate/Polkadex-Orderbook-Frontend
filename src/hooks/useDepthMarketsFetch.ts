@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { selectCurrentMarket, depthFetch } from "src/modules";
+import { selectCurrentMarket, depthFetch } from "@polkadex/orderbook-modules";
 
 export const useDepthMarketsFetch = () => {
   const dispatch = useDispatch();

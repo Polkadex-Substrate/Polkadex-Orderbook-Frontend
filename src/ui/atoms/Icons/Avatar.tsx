@@ -8,8 +8,7 @@ function SvgAvatar(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 31 34"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <path
         opacity="0.4"
         d="M15.1151 5.86207C16.7339 5.86207 18.0462 4.5498 18.0462 2.93103C18.0462 1.31227 16.7339 0 15.1151 0C13.4964 0 12.1841 1.31227 12.1841 2.93103C12.1841 4.5498 13.4964 5.86207 15.1151 5.86207Z"

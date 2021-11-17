@@ -1,41 +1,14 @@
-import * as Sentry from "@sentry/browser";
 import { call, put } from "redux-saga/effects";
 
-import { alertPush } from "../../alert";
+import { alertPush } from "../../alertHandler";
 import { ErrorHandlerFetch, getErrorData } from "../actions";
-import { getMetaMaskErrorMessage } from "../helpers/getMetaMaskErrorMessage";
 
 export function* handleErrorSaga(action: ErrorHandlerFetch) {
-  const { processingType, extraOptions, error } = action.payload;
+  const { processingType, error, extraOptions } = action.payload;
 
-  if (extraOptions) {
-    const { params, type, actionError } = extraOptions;
-
-    if (type) {
-      switch (type) {
-        case "METAMASK_HANDLE_ERROR":
-          error.message = [getMetaMaskErrorMessage(error)];
-
-          if (error.message[0] === "metamask.error.unknown") {
-            yield call(handleConsoleError, error);
-          }
-
-          break;
-        default:
-          process.browser && window.console.log(`Unexpected action with type: ${type}`);
-          break;
-      }
-    }
-
-    if (actionError) {
-      params ? yield put(actionError(params)) : yield put(actionError(error));
-    }
-  }
+  if (extraOptions?.params) yield put(extraOptions.actionError(extraOptions.params));
 
   switch (processingType) {
-    case "sentry":
-      yield call(handleSentryError, error);
-      break;
     case "alert":
       yield call(handleAlertError, error);
       break;
@@ -48,23 +21,18 @@ export function* handleErrorSaga(action: ErrorHandlerFetch) {
 
   yield put(getErrorData());
 }
-
-function* handleSentryError(error) {
-  for (const item of error.message) {
-    yield call(Sentry.captureException, item);
-  }
-}
-
 function* handleAlertError(error) {
   yield put(
     alertPush({
-      message: error.message,
-      code: error.code,
-      type: "error",
+      message: {
+        title: "Error",
+        description: error.message,
+      },
+      type: "Alert",
     })
   );
 }
 
 function* handleConsoleError(error) {
-  yield call(process.browser && window.console.error, error.message[0]);
+  yield call(() => process.browser && window.console.log(error.message));
 }

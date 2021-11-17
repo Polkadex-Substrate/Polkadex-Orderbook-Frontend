@@ -4,11 +4,9 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
+import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { signUp, selectMainAccount } from "@polkadex/orderbook-modules";
 import { Button, Input, MnemonicImport, MnemonicExport, MnemonicSelect } from "src/ui";
-import { useMnemonic } from "src/hooks/useMnemonic";
-import { signUp } from "src/modules";
-import { selectMainAccount } from "src/modules/user/polkadotWallet";
-import { useReduxSelector } from "src/hooks";
 
 const defaultValues = {
   password: "",

@@ -5,10 +5,9 @@ import { ThemeProvider } from "styled-components";
 
 import { wrapper } from "../store";
 
+import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
+import { useRangerConnectFetch, useKeyringInitalize } from "@polkadex/orderbook-hooks";
 import { defaultThemes, GlobalStyles } from "src/styles";
-import { selectCurrentColorTheme } from "src/modules";
-import { useRangerConnectFetch } from "src/hooks";
-import { useKeyringInitalize } from "src/hooks/useKeyringInitalize";
 
 function App({ Component, pageProps }: AppProps) {
   const { loading } = useKeyringInitalize();
@@ -29,7 +28,6 @@ const ThemeWrapper = ({ children }) => {
     setState(true);
   }, []);
 
-  const { connected } = useRangerConnectFetch();
   if (!state) return <div />;
   return (
     <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>

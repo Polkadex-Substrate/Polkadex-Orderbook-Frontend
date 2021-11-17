@@ -1,8 +1,5 @@
 import { useDispatch } from "react-redux";
 
-import { Decimal } from "src/ui";
-import { accumulateVolume, calcMaxVolume, sortAsks, sortBids } from "src/helpers";
-import { useReduxSelector } from "src/hooks";
 import {
   Market,
   selectCurrentMarket,
@@ -14,7 +11,10 @@ import {
   selectOpenOrdersList,
   setCurrentPrice,
   Ticker,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Decimal } from "src/ui";
+import { accumulateVolume, calcMaxVolume, sortAsks, sortBids } from "src/helpers";
 
 const defaultTicker = {
   amount: "0",

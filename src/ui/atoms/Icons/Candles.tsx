@@ -7,8 +7,7 @@ function SvgCandles(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 13.046 23.189"
-      {...props}
-    >
+      {...props}>
       <g data-name="Group 3485" transform="translate(0 1)">
         <path
           d="M10.346 0v21.189"

@@ -1,12 +1,8 @@
+import { signAndSendExtrinsic, ExtrinsicResponse } from "@polkadex/web-helpers";
+import { InjectedAccount, selectPolkadotWalletApi } from "@polkadex/orderbook-modules";
+
 import { useReduxSelector } from ".";
 
-import { signAndSendExtrinsic } from "src/helpers/signAndSendExtrinsic";
-import { InjectedAccount, selectPolkadotWalletApi } from "src/modules/user/polkadotWallet";
-
-export interface ExtrinsicResponse {
-  success: boolean;
-  error?: any;
-}
 export const useExtrinsics = (mainAccount: InjectedAccount) => {
   const api = useReduxSelector(selectPolkadotWalletApi);
 

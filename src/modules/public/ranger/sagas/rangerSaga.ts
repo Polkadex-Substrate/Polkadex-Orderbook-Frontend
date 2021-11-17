@@ -1,54 +1,15 @@
 import { Channel, EventChannel, eventChannel } from "redux-saga";
-import {
-  all,
-  call,
-  cancel,
-  delay,
-  fork,
-  put,
-  race,
-  select,
-  take,
-  takeEvery,
-} from "redux-saga/effects";
+import { all, call, cancel, delay, fork, put, race, select, take } from "redux-saga/effects";
 
-import { isFinexEnabled, rangerUrl } from "../../../../api";
-// import { store } from "../../../../store";
-import { pushHistoryEmit } from "../../../user/history";
-import { selectOpenOrdersList, userOpenOrdersUpdate } from "../../../user/openOrders";
+import { userOpenOrdersUpdate } from "../../../user/openOrders";
 import { userOrdersHistoryRangerData } from "../../../user/ordersHistory";
-import {
-  updateP2PWalletsDataByRanger,
-  updateWalletsDataByRanger,
-  walletsAddressDataWS,
-} from "../../../user/wallets";
-import { alertPush } from "../../alert";
-import { klinePush } from "../../kline";
-import {
-  Market,
-  marketsTickersData,
-  selectCurrentMarket,
-  SetCurrentMarket,
-} from "../../markets";
-import {
-  MARKETS_SET_CURRENT_MARKET,
-  MARKETS_SET_CURRENT_MARKET_IFUNSET,
-} from "../../markets/constants";
-import {
-  depthData,
-  depthDataIncrement,
-  depthDataSnapshot,
-  selectOrderBookSequence,
-} from "../../orderBook";
-import { recentTradesPush } from "../../recentTrades";
+import { Market, selectCurrentMarket, SetCurrentMarket } from "../../markets";
 import {
   RangerConnectFetch,
   rangerDisconnectData,
   rangerDisconnectFetch,
   rangerSubscribeMarket,
   rangerUnsubscribeMarket,
-  rangerUserOrderUpdate,
-  subscriptionsUpdate,
   UserOrderUpdate,
 } from "../actions";
 import {
@@ -57,15 +18,14 @@ import {
   RANGER_DIRECT_WRITE,
   RANGER_DISCONNECT_DATA,
   RANGER_DISCONNECT_FETCH,
-  RANGER_USER_ORDER_UPDATE,
 } from "../constants";
-import { formatTicker, generateSocketURI, streamsBuilder } from "../helpers";
+import { generateSocketURI, streamsBuilder } from "../helpers";
 import { selectSubscriptions } from "../selectors";
 
-import { p2pOffersUpdate } from "src/modules";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 interface RangerBuffer {
-  messages: object[];
+  messages: Record<string, unknown>[];
 }
 
 const initRanger = (
@@ -75,7 +35,7 @@ const initRanger = (
   buffer: RangerBuffer
 ): [EventChannel<any>, WebSocket] => {
   console.log("Ranger..");
-  const baseUrl = `${rangerUrl()}/${withAuth ? "private" : "public"}`;
+  const baseUrl = `${defaultConfig.auth}/${withAuth ? "private" : "public"}`;
   const streams = streamsBuilder(withAuth, withP2P, prevSubs, market);
   const ws = new WebSocket(generateSocketURI(baseUrl, streams));
   const channel = eventChannel((emitter) => {
@@ -96,7 +56,7 @@ const initRanger = (
       channel.close();
     };
     ws.onmessage = ({ data }) => {
-      const payload: { [pair: string]: any } = {};
+      // const payload: { [pair: string]: any } = {}
       console.log("Messaging..");
 
       // try {
@@ -324,7 +284,7 @@ const initRanger = (
   return [channel, ws];
 };
 
-function* writter(socket: WebSocket, buffer: { messages: object[] }) {
+function* writter(socket: WebSocket, buffer: { messages: Record<string, unknown>[] }) {
   while (true) {
     const data = yield take(RANGER_DIRECT_WRITE);
     if (socket.readyState === socket.OPEN) {
@@ -398,7 +358,7 @@ function* getSubscriptions() {
   }
 }
 
-export function* rangerSagas() {
+export function* rootRangerSaga() {
   let initialized = false;
   let connectFetchPayload: RangerConnectFetch["payload"] | undefined;
   const buffer: RangerBuffer = { messages: [] };

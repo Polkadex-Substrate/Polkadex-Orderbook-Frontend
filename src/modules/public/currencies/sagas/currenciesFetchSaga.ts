@@ -1,28 +1,27 @@
-import { call, put, takeLeading } from 'redux-saga/effects';
-import { sendError } from '../../../';
-import { API, RequestOptions } from '../../../../api';
-import { currenciesData, currenciesError } from '../actions';
-import { CURRENCIES_FETCH } from '../constants';
+import { call, put } from "redux-saga/effects";
+
+import { sendError } from "../../../";
+import { currenciesData, currenciesError } from "../actions";
+
+import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const currenciesOptions: RequestOptions = {
-    apiVersion: 'peatio',
+  apiVersion: "engine",
 };
 
-export function* rootCurrenciesSaga() {
-    yield takeLeading(CURRENCIES_FETCH, currenciesFetchSaga);
-}
-
 export function* currenciesFetchSaga() {
-    try {
-        const currencies = yield call(API.get(currenciesOptions), '/public/currencies');
-        yield put(currenciesData(currencies));
-    } catch (error) {
-        yield put(sendError({
-            error,
-            processingType: 'alert',
-            extraOptions: {
-                actionError: currenciesError,
-            },
-        }));
-    }
+  try {
+    const currencies = yield call(API.get(currenciesOptions), "/public/currencies");
+    yield put(currenciesData(currencies));
+  } catch (error) {
+    yield put(
+      sendError({
+        error,
+        processingType: "alert",
+        extraOptions: {
+          actionError: currenciesError,
+        },
+      })
+    );
+  }
 }

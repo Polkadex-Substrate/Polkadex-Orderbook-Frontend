@@ -4,19 +4,19 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 
 import {
-  Decimal,
-  LoadingTransactions,
-  OrderHistoryCard,
-  OrderHistoryCardReponsive,
-} from "src/ui";
-import {
   selectCurrentMarket,
   selectUserLoggedIn,
   selectHistory,
   selectHistoryLoading,
   fetchHistory,
-} from "src/modules";
-import { useReduxSelector, useWindowSize } from "src/hooks";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
+import {
+  Decimal,
+  LoadingTransactions,
+  OrderHistoryCard,
+  OrderHistoryCardReponsive,
+} from "src/ui";
 import { localeDate } from "src/helpers";
 import { DEFAULT_MARKET } from "src/constants";
 
