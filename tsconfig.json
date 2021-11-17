@@ -28,21 +28,39 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "paths": {
-      "@polkadex/orderbook-modules": ["src/modules"],
-      "@polkadex/orderbook-hooks": ["src/hooks"],
-      "@polkadex/web-helpers": ["src/helpers"],
-      "@polkadex/web-constants": ["src/constants"],
-      "@polkadex/orderbook-config": ["src/config"],
-      "lib/*": ["./src/lib/*"],
-      "src/*": ["./src/*"],
-    }
+      "@polkadex/orderbook-modules": [
+        "src/modules"
+      ],
+      "@polkadex/orderbook-hooks": [
+        "src/hooks"
+      ],
+      "@polkadex/web-helpers": [
+        "src/helpers"
+      ],
+      "@polkadex/web-constants": [
+        "src/constants"
+      ],
+      "@polkadex/orderbook-config": [
+        "src/config"
+      ],
+      "lib/*": [
+        "./src/lib/*"
+      ],
+      "src/*": [
+        "./src/*"
+      ]
+    },
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx" ],
+    "**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
     "public",
@@ -55,5 +73,7 @@
     "./src/*.test.*",
     "./src/charting_library"
   ],
-  "files": ["src/styles/styled.d.ts"]
+  "files": [
+    "src/styles/styled.d.ts"
+  ]
 }
