@@ -1,25 +1,25 @@
 import { call, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { sendError } from "../../../";
 import { ProxyAccount, userData } from "../../profile";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
-import { InjectedAccount } from "../../polkadotWallet";
 
 import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
 import { RequestOptions } from "src/api/requestBuilder";
 import { API } from "src/api";
 
 const registerUserOption: RequestOptions = {
-  apiVersion: 'polkadex',
+  apiVersion: "polkadex",
 };
 
-export  function* signUpSaga(action: SignUpFetch) {
+export function* signUpSaga(action: SignUpFetch) {
   try {
     const { mnemonic, password, username, mainAccount } = action.payload;
     const { pair } = keyring.addUri(mnemonic, password, { name: username });
     const proxyAddress = pair.address;
-    registerAccount(mainAccount, proxyAddress);
+    registerAccount(pair, proxyAddress);
     const data: ProxyAccount = {
       username,
       password,
@@ -40,13 +40,16 @@ export  function* signUpSaga(action: SignUpFetch) {
     );
   }
 }
-const registerAccount = async (mainAccount: InjectedAccount, proxyAddress: string) => {
-  const payload = { main_account: mainAccount.address, proxy_account: proxyAddress };
-  const signature = await signMessageUsingMainAccount(mainAccount, JSON.stringify(payload));
-  const data = { signature: {
-    Sr25519: signature.trim().slice(2)
-  }, payload };
-
- const res = await API.post(registerUserOption)('/register', data)
- console.log(res);
+const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) => {
+  const payload = { main_account: proxyAddress, proxy_account: proxyAddress };
+  const signature = await signMessageUsingMainAccount(userKeyring, JSON.stringify(payload));
+  const data = {
+    signature: {
+      Sr25519: signature.trim().slice(2),
+    },
+    payload,
+  };
+  console.log(data);
+  const res = await API.post(registerUserOption)("/register", data);
+  console.log(res);
 };
