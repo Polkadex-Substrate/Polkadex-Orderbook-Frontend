@@ -1,5 +1,5 @@
-import { RootState } from '../../';
-import { KlineState } from './reducer';
+import { RootState } from "../../";
 
-export const selectKline = (state: RootState): KlineState =>
-    state.public.kline;
+import { KlineState } from "./reducer";
+
+export const selectKline = (state: RootState): KlineState => state.public.kline;

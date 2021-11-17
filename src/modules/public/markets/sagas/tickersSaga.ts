@@ -1,11 +1,12 @@
 import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
-import { API, RequestOptions } from "../../../../api";
 import { marketsTickersData, marketsTickersError } from "../actions";
 
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+
 const tickersOptions: RequestOptions = {
-  apiVersion: "peatio",
+  apiVersion: "engine",
 };
 
 export function* tickersSaga() {

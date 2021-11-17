@@ -1,5 +1,3 @@
-import { defaultStorageLimit } from "../../../api";
-import { sliceArray } from "../../../helpers";
 import { OrderCommon } from "../../types";
 
 import { OpenOrdersAction } from "./actions";
@@ -16,6 +14,10 @@ import {
 } from "./constants";
 import { convertOrderEvent, insertIfNotExisted, insertOrUpdate } from "./helpers";
 
+import { sliceArray } from "@polkadex/web-helpers";
+import { defaultConfig } from "@polkadex/orderbook-config";
+
+const { defaultStorageLimit } = defaultConfig;
 export interface OpenOrdersState {
   fetching: boolean;
   list: OrderCommon[];
@@ -41,14 +43,14 @@ export const openOrdersReducer = (
       return {
         ...state,
         fetching: false,
-        list: sliceArray(action.payload, defaultStorageLimit()),
+        list: sliceArray(action.payload, defaultStorageLimit),
       };
     case OPEN_ORDERS_UPDATE:
       return {
         ...state,
         list: sliceArray(
           insertOrUpdate(state.list, convertOrderEvent(action.payload)),
-          defaultStorageLimit()
+          defaultStorageLimit
         ),
       };
     case OPEN_ORDERS_ERROR:
@@ -56,10 +58,7 @@ export const openOrdersReducer = (
     case OPEN_ORDERS_APPEND:
       return {
         ...state,
-        list: sliceArray(
-          insertIfNotExisted(state.list, action.payload),
-          defaultStorageLimit()
-        ),
+        list: sliceArray(insertIfNotExisted(state.list, action.payload), defaultStorageLimit),
       };
     case OPEN_ORDERS_RESET:
       return initialOpenOrdersState;
@@ -69,7 +68,7 @@ export const openOrdersReducer = (
       return {
         ...state,
         cancelFetching: false,
-        list: sliceArray(action.payload, defaultStorageLimit()),
+        list: sliceArray(action.payload, defaultStorageLimit),
       };
     case OPEN_ORDERS_CANCEL_ERROR:
       return { ...state, cancelFetching: false, cancelError: true };

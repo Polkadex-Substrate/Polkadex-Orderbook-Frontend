@@ -7,8 +7,7 @@ function SvgSell(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 20 20"
-      {...props}
-    >
+      {...props}>
       <g data-name="Group 3508" transform="translate(-.498)">
         <rect
           data-name="Rectangle 440"

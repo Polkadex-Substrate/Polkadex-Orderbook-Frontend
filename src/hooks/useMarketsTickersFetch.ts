@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
 import {
   marketsTickersFetch,
   selectShouldFetchMarketsTickers,
-} from "../modules/public/markets";
+} from "@polkadex/orderbook-modules";
 
 import { useReduxSelector } from ".";
 

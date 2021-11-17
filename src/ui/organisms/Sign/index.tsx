@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Tabs,
   TabContent,
@@ -21,8 +22,7 @@ import {
   selectPolkadotWalletAccounts,
   selectMainAccount,
   defaultAccount,
-} from "src/modules/user/polkadotWallet";
-import { useReduxSelector } from "src/hooks";
+} from "@polkadex/orderbook-modules";
 
 export const SignContent = () => {
   const dispatch = useDispatch();

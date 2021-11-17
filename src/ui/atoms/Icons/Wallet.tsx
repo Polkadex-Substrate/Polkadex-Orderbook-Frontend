@@ -7,8 +7,7 @@ function SvgWallet(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 23 21"
-      {...props}
-    >
+      {...props}>
       <g>
         <path
           data-name="c2/wallet"

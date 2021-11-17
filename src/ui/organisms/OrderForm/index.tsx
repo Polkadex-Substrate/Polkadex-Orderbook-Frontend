@@ -3,18 +3,22 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  selectCurrentMarket,
+  selectDepthAsks,
+  selectDepthBids,
+  placeOrdersExecute,
+  selectUserInfo,
+  selectMainAccount,
+} from "@polkadex/orderbook-modules";
 import { Button, Tabs, TabContent, TabHeader, Skeleton, OrderInput, Decimal } from "src/ui";
-import { useReduxSelector } from "src/hooks";
-import { selectCurrentMarket, selectDepthAsks, selectDepthBids } from "src/modules";
 import {
   cleanPositiveFloatInput,
   getAmount,
   precisionRegExp,
   toCapitalize,
 } from "src/helpers";
-import { placeOrdersExecute } from "src/modules/user/OrdersTransactions";
-import { selectUserInfo } from "src/modules/user/profile/selectors";
-import { selectMainAccount } from "src/modules/user/polkadotWallet";
 
 export const OrderForm = ({
   side,

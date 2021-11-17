@@ -1,12 +1,13 @@
 import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
-import { API, RequestOptions } from "../../../../api";
-import { buildQueryString } from "../../../../helpers";
 import { marketPriceData, marketPriceError, MarketPriceFetch } from "../actions";
 
+import { buildQueryString } from "@polkadex/web-helpers";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+
 const marketPriceRequestOptions: RequestOptions = {
-  apiVersion: "finex",
+  apiVersion: "engine",
 };
 
 export function* marketPriceSaga(action: MarketPriceFetch) {

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, MarketDepths } from "src/ui";
 import {
   selectChartRebuildState,
   selectCurrentColorTheme,
@@ -11,7 +10,8 @@ import {
   selectDepthAsks,
   selectDepthBids,
   selectOrderBookLoading,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+import { Decimal, MarketDepths } from "src/ui";
 
 export const MarketDepth = () => {
   const asksItems = useSelector(selectDepthAsks);

@@ -5,7 +5,9 @@ import { sendError } from "../../..";
 import { PolkadotWalletFetch, polkadotWalletData, InjectedAccount } from "../actions";
 import { types } from "../types";
 
-import { polkadexUrl } from "src/api";
+import { defaultConfig } from "@polkadex/orderbook-config";
+
+const { polkadotJsWs } = defaultConfig;
 
 export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
   try {
@@ -23,8 +25,7 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
 }
 async function createPolkadotWalletApi() {
   // const { ApiPromise, WsProvider } =await import('@polkadot/api');
-  const wsUrl = polkadexUrl();
-  const wsProvider = new WsProvider(wsUrl);
+  const wsProvider = new WsProvider(polkadotJsWs);
   const api = await ApiPromise.create({ provider: wsProvider, types });
   return api;
 }

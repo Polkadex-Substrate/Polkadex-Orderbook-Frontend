@@ -2,7 +2,7 @@ import { applyMiddleware, createStore, Store } from "redux";
 import createSagaMiddleware, { Task } from "redux-saga";
 import { Context, createWrapper } from "next-redux-wrapper";
 
-import { rootReducer, rootSaga, RootState } from "src/modules";
+import { rootReducer, rootSaga, RootState } from "@polkadex/orderbook-modules";
 
 const sagaMiddleware = createSagaMiddleware();
 

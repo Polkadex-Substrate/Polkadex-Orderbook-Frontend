@@ -7,8 +7,7 @@ function SvgArrowLeft(props: React.SVGProps<SVGSVGElement>) {
       width="1.2em"
       height="1.2em"
       viewBox="0 0 24 23"
-      {...props}
-    >
+      {...props}>
       <g transform="rotate(90 12.011 11.989)">
         <path
           data-name="Path 6"

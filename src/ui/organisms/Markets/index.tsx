@@ -5,9 +5,14 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 import { Props } from "./types";
 
+import {
+  Market,
+  selectMarkets,
+  selectMarketTickers,
+  setCurrentMarket,
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Icon, IconToken, Skeleton, Tabs, TabContent, TabHeader, Tag, Decimal } from "src/ui";
-import { Market, selectMarkets, selectMarketTickers, setCurrentMarket } from "src/modules";
-import { useReduxSelector } from "src/hooks";
 
 const defaultTickers = {
   last: 0,

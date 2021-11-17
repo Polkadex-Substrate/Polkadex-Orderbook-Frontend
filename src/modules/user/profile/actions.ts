@@ -1,13 +1,17 @@
 import { CommonError } from "../../types";
 
 import {
+  PROFILE_RESET_USER,
   PROFILE_USER_DATA,
   PROFILE_USER_ERROR,
   PROFILE_USER_FETCH,
   PROFILE_USER_LIST_DATA,
   PROFILE_USER_LIST_FETCH,
 } from "./constants";
-import { ProxyAccount, UserSkeleton } from "./types";
+
+import { UserSkeleton } from "./";
+
+import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
@@ -19,6 +23,7 @@ export interface UserInfo {
     user: Partial<ProxyAccount>;
   };
 }
+
 export interface UserListData {
   type: typeof PROFILE_USER_LIST_DATA;
   payload: {
@@ -34,7 +39,17 @@ export interface UserError {
   error: CommonError;
 }
 
-export type ProfileAction = UserFetch | UserInfo | UserError | UserListFetch | UserListData;
+export interface UserReset {
+  type: typeof PROFILE_RESET_USER;
+}
+
+export type ProfileAction =
+  | UserFetch
+  | UserInfo
+  | UserError
+  | UserReset
+  | UserListFetch
+  | UserListData;
 
 export const userFetch = (): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -48,6 +63,7 @@ export const userData = (payload: UserInfo["payload"]): UserInfo => ({
 export const userListFetch = (): UserListFetch => ({
   type: PROFILE_USER_LIST_FETCH,
 });
+
 export const userListData = (payload: UserListData["payload"]): UserListData => ({
   type: PROFILE_USER_LIST_DATA,
   payload,
@@ -56,4 +72,8 @@ export const userListData = (payload: UserListData["payload"]): UserListData => 
 export const userError = (error: CommonError): UserError => ({
   type: PROFILE_USER_ERROR,
   error,
+});
+
+export const userReset = (): UserReset => ({
+  type: PROFILE_RESET_USER,
 });

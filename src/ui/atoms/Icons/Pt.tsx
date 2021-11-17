@@ -7,8 +7,7 @@ function SvgPt(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 512 512"
       width="1em"
       height="1em"
-      {...props}
-    >
+      {...props}>
       <path
         d="M0 256c0 110.07 69.472 203.905 166.955 240.076l22.262-240.077-22.262-240.076C69.472 52.095 0 145.929 0 256z"
         fill="#6da544"

@@ -3,25 +3,10 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Decimal, LoadingTransactions, FundCard } from "src/ui";
-import {
-  selectCurrentMarket,
-  selectUserLoggedIn,
-  selectHistory,
-  selectHistoryLoading,
-  fetchHistory,
-} from "src/modules";
-import { useReduxSelector, useWindowSize } from "src/hooks";
-import { localeDate } from "src/helpers";
-import { DEFAULT_MARKET } from "src/constants";
+import { useWindowSize } from "@polkadex/orderbook-hooks";
+import { FundCard } from "src/ui";
 
 export const Funds = () => {
-  const dispatch = useDispatch();
-
-  const list = useReduxSelector(selectHistory);
-  const fetching = useReduxSelector(selectHistoryLoading);
-  const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
   return (

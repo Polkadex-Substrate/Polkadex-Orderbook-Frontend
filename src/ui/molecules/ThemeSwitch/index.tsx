@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as S from "./styles";
 
+import { changeColorTheme, selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { Icon } from "src/ui";
-import { changeColorTheme, selectCurrentColorTheme } from "src/modules";
 
 export const ThemeSwitch = () => {
   const dispatch = useDispatch();

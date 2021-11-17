@@ -1,11 +1,7 @@
-import dynamic from "next/dynamic";
-
 import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader, MarketDepth } from "src/ui";
-const TradingChart = dynamic(() => import("../TradingChart"), {
-  ssr: false,
-});
+
 export const MarketChart = () => {
   return (
     <S.Wrapper>
@@ -28,9 +24,7 @@ export const MarketChart = () => {
           </S.Actions>
         </S.Header>
         <S.Content>
-          <TabContent>
-            <TradingChart />
-          </TabContent>
+          <TabContent></TabContent>
           <TabContent>
             <MarketDepth />
           </TabContent>

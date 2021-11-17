@@ -1,6 +1,12 @@
 import { useRouter } from "next/router";
 
 import {
+  useMarketsFetch,
+  useDepthMarketsFetch,
+  useMarketsTickersFetch,
+  useWindowSize,
+} from "@polkadex/orderbook-hooks";
+import {
   Header,
   MarketChart,
   Orderbook,
@@ -12,13 +18,6 @@ import {
   Toolbar,
 } from "src/ui";
 import * as S from "src/styles/home/trading";
-import {
-  useMarketsFetch,
-  useDepthMarketsFetch,
-  useMarketsTickersFetch,
-  useWalletsFetch,
-  useWindowSize,
-} from "src/hooks";
 
 const Trading = () => {
   const router = useRouter();
@@ -26,7 +25,6 @@ const Trading = () => {
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
   useDepthMarketsFetch();
-  useWalletsFetch(); // Testing..
   const { width } = useWindowSize();
 
   if (!id) return <div />;
@@ -37,7 +35,7 @@ const Trading = () => {
 
       <S.Wrapper>
         {/* {width < 990 && <Toolbar />} */}
-        <MarketChart />
+        {/* <MarketChart /> */}
         <Orderbook />
         <MarketTrade />
         <Transactions />

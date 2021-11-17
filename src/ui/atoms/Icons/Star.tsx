@@ -7,8 +7,7 @@ function SvgStar(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 21.725 20.128"
-      {...props}
-    >
+      {...props}>
       <g stroke="rgba(0,0,0,0)">
         <path
           data-name="c2/star-filled"

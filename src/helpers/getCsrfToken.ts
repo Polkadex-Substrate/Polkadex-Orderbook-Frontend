@@ -1,2 +1,1 @@
-export const getCsrfToken = () =>
-  (process.browser && localStorage.getItem("csrfToken")) || undefined;
+export const getCsrfToken = () => localStorage.getItem("csrfToken") || undefined;

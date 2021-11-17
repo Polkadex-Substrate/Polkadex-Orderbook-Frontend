@@ -7,8 +7,7 @@ function SvgOrderAsc(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 15.414 13.5"
-      {...props}
-    >
+      {...props}>
       <g data-name="Group 3462" fill="none" strokeWidth={1.5}>
         <path data-name="Path 8113" d="M15.301.75h-15" stroke="#0ca564" />
         <path

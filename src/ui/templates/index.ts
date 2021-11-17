@@ -1,4 +1,3 @@
-export * from "./Chart";
 export * from "./MarketChart";
 export * from "./Header";
 export * from "./Navigation";

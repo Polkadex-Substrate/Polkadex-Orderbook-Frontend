@@ -1,5 +1,6 @@
 import { CommonError } from "../../types";
 import { Market, MarketId } from "../markets/types";
+
 import {
   DEPTH_DATA,
   DEPTH_DATA_INCREMENT,
@@ -91,23 +92,17 @@ export type DepthActions =
   | DepthIncrementEmptySnap
   | DepthIncrementSubscribeResetLoading;
 
-export const orderBookFetch = (
-  payload: OrderBookFetch["payload"]
-): OrderBookFetch => ({
+export const orderBookFetch = (payload: OrderBookFetch["payload"]): OrderBookFetch => ({
   type: ORDER_BOOK_FETCH,
   payload,
 });
 
-export const orderBookData = (
-  payload: OrderBookData["payload"]
-): OrderBookData => ({
+export const orderBookData = (payload: OrderBookData["payload"]): OrderBookData => ({
   type: ORDER_BOOK_DATA,
   payload,
 });
 
-export const orderBookError = (
-  error: OrderBookError["error"]
-): OrderBookError => ({
+export const orderBookError = (error: OrderBookError["error"]): OrderBookError => ({
   type: ORDER_BOOK_ERROR,
   error,
 });

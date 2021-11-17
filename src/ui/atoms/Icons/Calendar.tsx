@@ -8,8 +8,7 @@ function SvgCalendar(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <path
         opacity={0.5}
         d="M12.401 3a.4.4 0 01-.4-.4V1a1 1 0 112 0v1.6a.4.4 0 01-.4.4h-1.2zm-8 0a.4.4 0 01-.4-.4V1a1 1 0 112 0v1.6a.4.4 0 01-.4.4h-1.2z"

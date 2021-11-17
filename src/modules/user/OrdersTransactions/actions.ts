@@ -48,7 +48,7 @@ export interface CancelOrdersExecutionAction {
   payload: CancelOrdersExecutionPayload;
 }
 
-export interface placeSingleOrder {
+export interface PlaceSingleOrder {
   type: string;
   payload: { order: orderTxn };
 }
@@ -58,7 +58,7 @@ export interface cancelSingleOrder {
   payload: { uuid: string };
 }
 
-export type ordersTransactionAction = cancelSingleOrder | placeSingleOrder;
+export type ordersTransactionAction = cancelSingleOrder | PlaceSingleOrder;
 
 export const placeOrdersExecute = (
   payload: PlaceOrdersExecutionPayload
