@@ -1,24 +1,11 @@
-import { stringToHex } from "@polkadot/util";
-
-import { InjectedAccount } from "@polkadex/orderbook-modules";
+import { stringToU8a, u8aToHex } from "@polkadot/util";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 export const signMessageUsingMainAccount = async (
-  account: InjectedAccount,
+  userKeyring: KeyringPair,
   payload: string
 ): Promise<string> => {
-  const { web3FromSource } = await import("@polkadot/extension-dapp");
-  const injector = await web3FromSource(account.meta.source);
-  const signRaw = injector?.signer?.signRaw;
-  if (signRaw) {
-    // after making sure that signRaw is defined
-    // we can use it to sign our message
-    const { signature } = await signRaw({
-      address: account.address,
-      data: stringToHex(payload),
-      type: "bytes",
-    });
-    return signature;
-  } else {
-    throw new Error("signRaw is not defined");
-  }
+  const message = stringToU8a(payload);
+  const signature = userKeyring.sign(message);
+  return u8aToHex(signature);
 };
