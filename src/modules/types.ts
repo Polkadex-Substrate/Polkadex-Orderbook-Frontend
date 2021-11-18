@@ -1,17 +1,14 @@
-import { MarketsState, TickerEvent } from "./public/markets";
-import { OrderBookState } from "./public/orderBook";
-import { OrdersState } from "./user/orders";
+import { MarketsState, TickerEvent, OrderBookState, OrdersState } from "./";
 
-export interface CommonError {
+export type CommonError = {
   code: number;
   message: string[];
-}
+};
 
-export interface CommonState {
+export type CommonState = {
   error?: CommonError;
   loading?: boolean;
-}
-
+};
 export type OrderStatus = "wait" | "done" | "cancel" | "pending" | "reject";
 export type OrderSide = "sell" | "buy";
 export type OrderType = "limit" | "market";

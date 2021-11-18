@@ -2,6 +2,8 @@ import * as React from "react";
 
 import * as S from "./styles";
 
+import { selectUserLoggedIn } from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Button,
   Checkbox,
@@ -13,8 +15,6 @@ import {
   OrderHistory,
   AvailableMessage,
 } from "src/ui";
-import { selectUserLoggedIn } from "src/modules";
-import { useReduxSelector } from "src/hooks";
 
 export const Transactions = () => {
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);

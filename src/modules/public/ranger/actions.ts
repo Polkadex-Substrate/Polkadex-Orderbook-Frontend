@@ -1,8 +1,8 @@
-import { incrementalOrderBook } from "../../../api";
+// TODO: Refactor or remove this saga
+
 // import { store } from "../../../store";
 import { CommonError, OrderEvent } from "../../types";
 import { Market } from "../markets";
-import { depthIncrementSubscribe } from "../orderBook";
 
 import {
   RANGER_CONNECT_DATA,

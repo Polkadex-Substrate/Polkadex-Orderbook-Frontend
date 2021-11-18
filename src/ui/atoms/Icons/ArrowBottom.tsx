@@ -7,8 +7,7 @@ function SvgArrowBottom(props: React.SVGProps<SVGSVGElement>) {
       width="0.6em"
       height="0.6em"
       viewBox="0 0 8.525 5.677"
-      {...props}
-    >
+      {...props}>
       <path
         data-name="Path 6"
         d="M7.81811 0.706963L4.26312 4.26196L0.707115 0.706963"

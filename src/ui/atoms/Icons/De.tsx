@@ -7,8 +7,7 @@ function SvgDe(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 512 512"
       width="1em"
       height="1em"
-      {...props}
-    >
+      {...props}>
       <path
         d="M15.923 345.043C52.094 442.527 145.929 512 256 512s203.906-69.473 240.077-166.957L256 322.783l-240.077 22.26z"
         fill="#ffda44"

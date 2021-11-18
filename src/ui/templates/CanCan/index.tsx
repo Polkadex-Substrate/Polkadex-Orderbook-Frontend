@@ -6,7 +6,7 @@ import {
   RootState,
   selectAbilities,
   selectLoadingAbilities,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
 
 interface ReduxProps {
   abilities: AbilitiesInterface;

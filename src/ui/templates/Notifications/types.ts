@@ -1,4 +1,5 @@
 import { LinkHTMLAttributes } from "react";
+
 import { IIcons } from "src/utils/types";
 
 export type NotificationCardProps = {

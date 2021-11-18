@@ -7,8 +7,7 @@ function SvgIDO(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 8.525 5.677"
-      {...props}
-    >
+      {...props}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

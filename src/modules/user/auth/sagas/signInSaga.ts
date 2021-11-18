@@ -1,8 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { keyring } from "@polkadot/ui-keyring";
-import axios from "axios";
 
-import { RequestOptions } from "../../../../api";
 import { sendError } from "../../../";
 import { ProxyAccount, userData } from "../../profile";
 import { signInData, signInError, SignInFetch } from "../actions";
@@ -29,7 +27,9 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
   try {
     const userPair = keyring.getPair(address);
     const account = keyring.getAccount(address);
-    userPair.unlock(password);
+    const result = userPair.unlock(password);
+    console.log("resultado:", result);
+
     return {
       username: account.meta.name,
       address: userPair.address,

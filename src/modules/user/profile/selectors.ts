@@ -1,6 +1,8 @@
-import { RootState } from "../..";
+import { RootState } from "../../";
 
-import { ProxyAccount, UserSkeleton } from "./types";
+import { ProxyAccount } from "./types";
+
+import { UserSkeleton } from ".";
 
 export const selectUserLoggedIn = (state: RootState): boolean => {
   const {
@@ -9,6 +11,8 @@ export const selectUserLoggedIn = (state: RootState): boolean => {
 
   return !profile.userData.isFetching && profile.userData.user.state === "active";
 };
+export const selectHasUser = (state: RootState): boolean =>
+  !!state.user.profile.userData.user.address;
 
 export const selectUserInfo = (state: RootState): ProxyAccount =>
   state.user.profile.userData.user;

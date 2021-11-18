@@ -1,5 +1,3 @@
-import { isFinexEnabled } from "../../../api";
-import { buildFilterPrice, FilterPrice } from "../../../filters";
 import { CommonState } from "../../types";
 
 import { MarketsAction } from "./actions";
@@ -17,6 +15,8 @@ import {
   MARKET_PRICE_ERROR,
 } from "./constants";
 import { Market, Ticker } from "./types";
+
+import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
 
 export interface MarketsState extends CommonState {
   list: Market[];
@@ -64,10 +64,10 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
         loading: true,
         timestamp: Math.floor(Date.now() / 1000),
       };
-    case MARKETS_DATA:
+    case MARKETS_DATA: {
       let filters = {};
 
-      if (isFinexEnabled() && action.payload) {
+      if (action.payload) {
         filters = action.payload.reduce((result, market: Market) => {
           result[market.id] = result[market.id] || [];
 
@@ -85,6 +85,7 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
         list: action.payload,
         filters: filters,
       };
+    }
     case MARKETS_ERROR:
       return {
         ...state,

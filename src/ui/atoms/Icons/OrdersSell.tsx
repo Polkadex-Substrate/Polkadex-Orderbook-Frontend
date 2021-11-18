@@ -8,8 +8,7 @@ function SvgOrdersSell(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 16 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <path d="M.73 13h15" stroke="#E6007A" strokeWidth={1.5} />
       <path d="M.73 5h15M.73 1h15" stroke="#fff" strokeWidth={1.5} />
       <path

@@ -8,10 +8,10 @@ export type Props = {
   isActive?: boolean;
   background?: IColors | string;
   hoverable?: boolean;
-} & Pick<HTMLAttributes<HTMLElement>, "style">;
+} & HTMLAttributes<HTMLDivElement>;
 
 export type ITokenProps = {
   icon: ITokens;
   size?: ISizes;
   background?: IColors;
-} & Pick<HTMLAttributes<HTMLElement>, "style">;
+} & HTMLAttributes<HTMLDivElement>;

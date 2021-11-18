@@ -1,3 +1,5 @@
+// TODO: Replace Moment - deprecated lib
+
 import moment from "moment";
 
 import { localeDate } from "./localeDate";

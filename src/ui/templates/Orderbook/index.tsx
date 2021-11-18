@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Icon, Skeleton, Dropdown, Decimal } from "src/ui";
-import { useReduxSelector } from "src/hooks";
 import {
   Market,
   selectCurrentMarket,
@@ -16,7 +14,9 @@ import {
   selectMarketTickers,
   setCurrentPrice,
   Ticker,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Icon, Skeleton, Dropdown, Decimal } from "src/ui";
 import { accumulateVolume, calcMaxVolume } from "src/helpers";
 export const Orderbook = () => {
   const dispatch = useDispatch();

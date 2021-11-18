@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 import { Props, MyCurrentAccountProps } from "./types";
 
+import { logoutFetch } from "@polkadex/orderbook-modules";
+import { useWindowSize } from "@polkadex/orderbook-hooks";
 import { WalletInput, Skeleton, Button, Icon } from "src/ui";
-import { logoutFetch } from "src/modules";
-import { useWindowSize } from "src/hooks";
 
 const MyAccount = ({
   children,

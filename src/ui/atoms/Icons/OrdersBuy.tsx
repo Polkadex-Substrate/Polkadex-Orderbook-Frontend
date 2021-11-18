@@ -8,8 +8,7 @@ function SvgOrdersBuy(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 16 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+      {...props}>
       <path
         d="M15.73 1h-15M15.73 5l-3.973.606-3.3-1.719-3.332 1.719L.73 5"
         stroke="#0CA564"

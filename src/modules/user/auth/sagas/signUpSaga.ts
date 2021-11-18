@@ -1,17 +1,17 @@
-import { call, put, select } from "redux-saga/effects";
+import { put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
+import { InjectedAccount } from "../../polkadotWallet";
 import { sendError } from "../../../";
-import { ProxyAccount, userData } from "../../profile";
+import { userData, ProxyAccount } from "../../profile";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 
-import { signMessageUsingMainAccount } from "src/helpers/polkadex/signMessage";
-import { RequestOptions } from "src/api/requestBuilder";
-import { API } from "src/api";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessageUsingMainAccount } from "@polkadex/web-helpers";
 
 const registerUserOption: RequestOptions = {
-  apiVersion: "polkadex",
+  apiVersion: "engine",
 };
 
 export function* signUpSaga(action: SignUpFetch) {

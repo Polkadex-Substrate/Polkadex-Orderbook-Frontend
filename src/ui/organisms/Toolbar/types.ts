@@ -1,4 +1,4 @@
-import { Market } from "src/modules";
+import { Market } from "@polkadex/orderbook-modules";
 
 export type Props = {
   lastPrice: string;

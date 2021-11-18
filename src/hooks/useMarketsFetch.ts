@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
-import { useReduxSelector } from ".";
-
 import {
   marketsFetch,
   selectShouldFetchMarkets,
   selectMarkets,
   setCurrentMarket,
-} from "src/modules";
+} from "@polkadex/orderbook-modules";
+
+import { useReduxSelector } from ".";
 
 export const useMarketsFetch = (id: string) => {
   const dispatch = useDispatch();
