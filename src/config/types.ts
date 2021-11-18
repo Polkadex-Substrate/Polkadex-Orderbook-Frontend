@@ -8,7 +8,7 @@ export type JsonBody = {
 };
 
 export type RequestOptions = {
-  apiVersion: "auth" | "engine";
+  apiVersion: "auth" | "engine" | "polkadexHostUrl";
   withHeaders?: boolean;
   headers?: Record<string, unknown>;
 };

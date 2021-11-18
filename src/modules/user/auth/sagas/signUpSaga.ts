@@ -11,7 +11,7 @@ import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessageUsingMainAccount } from "@polkadex/web-helpers";
 
 const registerUserOption: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* signUpSaga(action: SignUpFetch) {
