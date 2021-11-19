@@ -26,6 +26,6 @@ module.exports = {
     PROXY_WS_URL:
       process.env.NEXT_PUBLIC_PROXY_WS_URL || "http://openfinex.polkadex.trade:7070",
     POLKADEX_WS: process.env.NEXT_PUBLIC_POLKADEX_WS || "wss://openfinex.polkadex.trade",
-    POLKADEX_HOST_URL:process.env.NEXT_PUBLIC_POLKADEX_HOST_URL || "http://65.21.224.93:5555"
+    POLKADEX_HOST_URL: process.env.NEXT_PUBLIC_POLKADEX_HOST_URL || "http://65.21.224.93:5555",
   },
 };

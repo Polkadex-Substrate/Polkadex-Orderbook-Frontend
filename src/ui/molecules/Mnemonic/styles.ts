@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
     width: 100%;
     input,
     label {
-      color: ${theme.colors.inverse};
+      color: ${theme.colors.black};
     }
     label,
     input {
