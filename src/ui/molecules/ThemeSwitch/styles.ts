@@ -1,16 +1,18 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as IconWrapper } from "src/ui/atoms/Icon/styles";
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    transition: 0.3s ease-in;
-    cursor: pointer;
-    & span {
-      font-size: ${theme.font.sizes.xsmall};
-    }
-    ${IconWrapper}:active {
-      background: ${theme.colors.primary};
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.8rem;
+    padding: 0.4rem;
+    ${Icon} {
+      cursor: pointer;
+      hover: {
+        background: ${theme.colors.secondaryBackground};
+      }
     }
   `}
 `;

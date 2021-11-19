@@ -54,14 +54,9 @@ export interface SignInData {
 export interface SignUpFetch {
   type: typeof AUTH_SIGN_UP_FETCH;
   payload: {
-    mainAccount: InjectedAccount;
-    username: string;
+    accountName: string;
     mnemonic: string;
     password: string;
-    email?: string;
-    data?: string;
-    captcha_response?: string | GeetestCaptchaResponse;
-    refid?: string;
   };
   callbackAction?: {
     scope: string;

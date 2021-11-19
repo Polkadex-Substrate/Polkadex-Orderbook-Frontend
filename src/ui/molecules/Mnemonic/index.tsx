@@ -1,8 +1,7 @@
-import { FormEvent, useRef, useState } from "react";
-import { Field } from "formik";
+import { useRef, useState } from "react";
 
 import * as S from "./styles";
-import { MnemonicExportProps, MnemonicProps, MnemonicSelectProps } from "./types";
+import { MnemonicExportProps, MnemonicProps } from "./types";
 
 // Transform component to tags
 export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps) => {
@@ -36,11 +35,8 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
     <S.Wrapper>
       <S.MnemonicContainer>
         <label htmlFor={props.name}>{label}</label>
-        <button type="button" onClick={handleChange}>
-          Generate new seed
-        </button>
       </S.MnemonicContainer>
-      <S.MnemonicImport>
+      <S.MnemonicImport hasTag={!!state.tags.length}>
         <ul>
           {state.tags &&
             state.tags.map((item, index) => (
@@ -50,11 +46,18 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
                 </button>
               </S.MnemonicListItem>
             ))}
-
-          <li className="input-tag__tags__input">
-            <input ref={inputRef} type="text" placeholder="tag" onKeyDown={onInputKeyDown} />
+          <li>
+            <input
+              ref={inputRef}
+              placeholder="Type your secret phrase to restore your wallet"
+              onKeyDown={onInputKeyDown}
+            />
           </li>
         </ul>
+
+        <S.MnemonicAction type="button">
+          <span>Click to paste</span>
+        </S.MnemonicAction>
       </S.MnemonicImport>
 
       {/* <Field {...props} /> */}
@@ -62,7 +65,7 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
   );
 };
 
-export const MnemonicExport = ({ label, phrases, handleChange }: MnemonicExportProps) => {
+export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy from clipboard");
 
@@ -74,9 +77,6 @@ export const MnemonicExport = ({ label, phrases, handleChange }: MnemonicExportP
     <S.Wrapper>
       <S.MnemonicContainer>
         <label htmlFor={label}>{label}</label>
-        <button type="button" onClick={handleChange}>
-          Import wallet
-        </button>
       </S.MnemonicContainer>
       <S.TagsContainer>
         {phrases && phrases.map((item, index) => <S.Tag key={index}>{item}</S.Tag>)}
@@ -88,22 +88,6 @@ export const MnemonicExport = ({ label, phrases, handleChange }: MnemonicExportP
         onClick={handleCopy}>
         <span>Copy to clipboard</span>
       </S.MnemonicAction>
-    </S.Wrapper>
-  );
-};
-
-export const MnemonicSelect = ({ handleImport, handleExport }: MnemonicSelectProps) => {
-  return (
-    <S.Wrapper>
-      <S.MnemonicSelect>
-        <button type="button" onClick={handleImport}>
-          Import Wallet
-        </button>
-        <span>or</span>
-        <button type="button" onClick={handleExport}>
-          Generate a Proxy Account
-        </button>
-      </S.MnemonicSelect>
     </S.Wrapper>
   );
 };

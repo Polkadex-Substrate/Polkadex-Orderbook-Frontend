@@ -59,3 +59,5 @@ export { default as Wallet } from "./Wallet";
 export { default as Withdraw } from "./Withdraw";
 export { default as Empty } from "./Empty";
 export { default as Verified } from "./Verified";
+export { default as Mnemonic } from "./Mnemonic";
+export { default as Print } from "./Print";

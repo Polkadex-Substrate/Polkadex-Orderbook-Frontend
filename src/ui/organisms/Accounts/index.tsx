@@ -2,7 +2,8 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { Icon, TransferInteraction } from "src/ui";
+import { TransferInteraction } from "src/ui";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Accounts = () => {
   const [state, setState] = useState(false);
@@ -49,7 +50,7 @@ const AccountCard = ({
         <button type="button" {...props}>
           Transfer
           <Icon
-            icon="ArrowRight"
+            name="ArrowRight"
             background="none"
             style={{ display: "inline-block", verticalAlign: "middle", padding: 0, margin: 0 }}
           />

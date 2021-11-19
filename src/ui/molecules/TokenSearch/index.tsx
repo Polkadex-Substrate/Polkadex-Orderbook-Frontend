@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { SearchProps, TokenSearchItemProps } from "./types";
 
-import { Icon, IconToken } from "src/ui";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 export const TokenSearch = ({
   label = "Label",
   tokens = [
@@ -43,7 +43,7 @@ export const TokenSearch = ({
 const Search = ({ fullWidth = false, ...props }: SearchProps) => {
   return (
     <S.SearchWrapper fullWidth={fullWidth}>
-      <Icon icon="Search" background="transparent" />
+      <Icon name="Search" background="transparent" />
       <input {...props} />
     </S.SearchWrapper>
   );
@@ -52,7 +52,7 @@ const Search = ({ fullWidth = false, ...props }: SearchProps) => {
 const TokenItem = ({ tokenName = "Polkadex", ticket = "Pdex" }: TokenSearchItemProps) => {
   return (
     <S.TokenItemWrapper>
-      <IconToken icon={ticket} />
+      <Icon isToken name={ticket} />
       <div>
         <span> {ticket}</span>
         <span>{tokenName}</span>

@@ -1,7 +1,8 @@
 import * as S from "./styles";
 import { LanguageCurrencyProps, LanguageNameProps, NavProps, Props } from "./types";
 
-import { Icon, Logo, Dropdown, ThemeSwitch } from "src/ui";
+import { Logo, ThemeSwitch } from "src/ui";
+import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 export const Navigation = ({ activateNotification }: Props) => (
   <S.Wrapper>
@@ -44,11 +45,11 @@ export const Navigation = ({ activateNotification }: Props) => (
     <S.Footer>
       <S.FooterNotifications>
         <button type="button" onClick={activateNotification}>
-          <Icon icon="Notifications" background="transparent" />
+          <Icon name="Notifications" background="transparent" />
         </button>
       </S.FooterNotifications>
       <S.FooterLanguage>
-        <Dropdown direction="right" isOpacity title={<Icon icon="Language" />}>
+        <Dropdown direction="right" isOpacity header={<Icon name="Language" />}>
           <LanguageContent />
         </Dropdown>
       </S.FooterLanguage>
@@ -60,7 +61,7 @@ const NavItem = ({ active = false, soon = false, icon, text, ...props }: NavProp
   <S.NavWrapper active={active} icon={icon} soon={soon} {...props}>
     <S.NavContainer>
       {soon && <span>Soon</span>}
-      <Icon icon={icon} isActive={active} />
+      <Icon name={icon} isActive={active} />
     </S.NavContainer>
     <p>{text}</p>
   </S.NavWrapper>
@@ -96,7 +97,7 @@ const LanguageCurrency = ({ title = "USD" }: LanguageCurrencyProps) => (
 
 const LanguageName = ({ title = "English", flag = "En" }: LanguageNameProps) => (
   <S.LanguageNameWrapper onClick={() => console.log("Change Language to", flag)}>
-    <Icon icon={flag} background="none" />
+    <Icon name={flag} background="none" />
     <span> {title} </span>
   </S.LanguageNameWrapper>
 );

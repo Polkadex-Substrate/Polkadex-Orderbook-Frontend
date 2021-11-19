@@ -1,58 +1,62 @@
-import styled, { css, DefaultTheme } from "styled-components";
+import styled, { css } from "styled-components";
 
-import IButton from "./types";
+import { Wrapper as IconWrapper } from "../Icon/styles";
 
-import { WrapperIcon, WrapperToken } from "src/ui/atoms/Icon/styles";
-
-const wrapperModifier = {
-  xSmall: () => css`
-    font-size: 1.1rem;
-    border-radius: 0.2rem;
-    padding: 0.3rem;
-  `,
+const sizeModifier = {
   small: () => css`
     font-size: 1.2rem;
-    border-radius: 0.5rem;
-    padding: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.4rem;
   `,
-  medium: (theme: DefaultTheme) => css`
-    font-size: ${theme.font.sizes.xsmall};
-    border-radius: ${theme.border.radius.small};
-    padding: 1.4rem 1rem;
+  medium: () => css`
+    padding: 0.8rem;
+    border-radius: 0.8rem;
   `,
-  large: (theme: DefaultTheme) => css`
-    height: 5rem;
-    font-size: ${theme.font.sizes.medium};
-    padding: ${theme.spacings.xxsmall} ${theme.spacings.xlarge};
-    border-radius: ${theme.border.radius.large};
-    padding: ${theme.spacings.xxsmall};
+  extraLarge: () => css`
+    padding: 1.5rem 2rem;
+    border-radius: 0.8rem;
   `,
 };
 
-export const Wrapper = styled.button<Partial<IButton>>`
-  ${({ theme, size, isActive, background, isFull }) => css`
-    display: flex;
-    align-items: center;
-    border: 0;
-    background-color: ${isActive ? theme.colors.primary : theme.colors[background]};
-    cursor: pointer;
-    ${isFull &&
+export const Wrapper = styled.button<{
+  background?: string;
+  hasIcon: boolean;
+  isFull?: boolean;
+  color?: string;
+  size?: string;
+}>`
+  ${({ theme, size = "medium", isFull = true, background, color, hasIcon = false }) => css`
+    border-style: "none";
+    font-weight: 500;
+    transition: background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color ${theme.transition.default}, opacity ${theme.transition.default};
+    width: ${isFull ? "100%" : "fit-content"};
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: ${theme.colors[color]};
+    background: ${theme.colors[background]};
+    white-space: nowrap;
+    ${sizeModifier[size]()};
+    ${hasIcon &&
     css`
-      width: 100%;
-      justify-content: center;
+      padding-right: 1rem;
     `}
-    ${wrapperModifier[size](theme)}
-
-    & :active {
-      background-color: ${theme.colors.primary};
-      transform: translateY(0.2rem);
+    ${IconWrapper} {
+      margin-right: 0.6rem;
+      vertical-align: middle;
     }
-    & ${WrapperIcon}, ${WrapperToken} {
-      margin-right: 0.5rem;
+    :hover {
+      ${background === "transparent"
+        ? css`
+            opacity: 0.6;
+          `
+        : css`
+            background: ${theme.colors.primary};
+            color: ${theme.colors.white};
+          `}
     }
-
-    & :disabled {
-      opacity: 0.5;
-    }
-  `}
+  `};
 `;

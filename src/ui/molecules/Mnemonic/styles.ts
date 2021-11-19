@@ -4,46 +4,44 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     padding: 1rem;
     border-radius: 1rem;
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.white};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    width: 100%;
+    input,
     label {
-      font-size: ${theme.font.sizes.xsmall};
+      color: ${theme.colors.inverse};
+    }
+    label,
+    input {
+      font-size: 1.3rem;
+    }
+    label {
       font-weight: 600;
       width: 100%;
     }
     input {
       margin-top: 1rem;
       display: block;
-      font-size: ${theme.font.sizes.small};
-      color: ${theme.colors.text};
       width: 100%;
     }
   `}
 `;
 
-export const MnemonicContainer = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    button {
-      display: block;
-      font-size: ${theme.font.sizes.xxsmall};
-      white-space: nowrap;
-      transition: all 0.5s;
-      opacity: 0.7;
-      :hover {
-        opacity: 1;
-      }
-    }
-  `}
-`;
+export const MnemonicContainer = styled.div``;
 
 export const MnemonicAction = styled.button`
-  text-align: center;
-  width: 100%;
-  margin-top: 2rem;
-  position: relative;
+  ${({ theme }) => css`
+    text-align: center;
+    width: 100%;
+    margin-top: 2rem;
+    position: relative;
+    color: ${theme.colors.black};
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    :hover {
+      opacity: 0.7;
+    }
+  `}
 `;
 
 export const TagsContainer = styled.div`
@@ -56,7 +54,8 @@ export const Tag = styled.span`
   ${({ theme }) => css`
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background: ${theme.colors.secondaryBackground};
+    background: ${theme.colors.black};
+    color: ${theme.colors.white};
     width: fit-content;
     margin-bottom: 0.5rem;
     :not(:last-child) {
@@ -65,33 +64,43 @@ export const Tag = styled.span`
   `}
 `;
 export const MnemonicSelect = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 0;
-  span {
-    margin: 0 0.5rem;
-  }
-  button :first-child {
-    opacity: 0.6;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    color: ${theme.colors.black};
+    span {
+      margin: 0 0.5rem;
+    }
+    button :first-child {
+      opacity: 0.6;
+    }
+  `}
 `;
 
-export const MnemonicImport = styled.div`
-  margin-top: 1rem;
-  ul {
-    list-style: none;
-    li {
-      display: inline-block;
+export const MnemonicImport = styled.div<{ hasTag?: boolean }>`
+  ${({ hasTag }) => css`
+    margin-top: 1rem;
+    ul {
+      list-style: none;
+      li {
+        display: inline-block;
+        width: ${hasTag ? "initial" : "100%"};
+      }
+      input {
+        width: 100%;
+      }
     }
-  }
+  `}
 `;
 
 export const MnemonicListItem = styled.li`
   ${({ theme }) => css`
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background: ${theme.colors.secondaryBackground};
+    background: ${theme.colors.black};
+    color: ${theme.colors.white};
     width: fit-content;
     margin-bottom: 0.5rem;
     :not(:last-child) {

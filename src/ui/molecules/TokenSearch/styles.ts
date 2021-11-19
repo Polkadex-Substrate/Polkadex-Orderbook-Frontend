@@ -5,7 +5,7 @@ import { SearchProps } from "./types";
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
-    box-shadow: ${theme.shadow.primary};
+    box-shadow: ${theme.shadows.primary};
     padding: 1rem;
     border-radius: 1.5rem;
     max-width: 40rem;

@@ -1,17 +1,11 @@
 import React from "react";
 
 import * as S from "./styles";
-import { Props } from "./types";
 
-import {
-  selectCurrentMarket,
-  selectMarkets,
-  selectMarketTickers,
-  selectUserInfo,
-} from "@polkadex/orderbook-modules";
+import { Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { selectCurrentMarket, selectMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Markets, Information, SelectPairHeader, Dropdown, Decimal } from "src/ui";
-
+import { Markets, Information, SelectPairHeader, Decimal } from "src/ui";
 const defaultTicker = {
   amount: 0,
   low: 0,
@@ -24,8 +18,6 @@ const defaultTicker = {
 export const Toolbar = () => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
-  const markets = useReduxSelector(selectMarkets);
-  const user = useReduxSelector(selectUserInfo);
 
   const getTickerValue = (value: string) =>
     (marketTickers[currentMarket?.id] || defaultTicker)[value];
@@ -36,13 +28,13 @@ export const Toolbar = () => {
       <S.Container>
         <Dropdown
           isOpacity
-          title={
+          direction="bottom"
+          header={
             <SelectPairHeader
               title={currentMarket?.name}
               icon={currentMarket?.base_unit || ""}
             />
-          }
-          direction="bottomRight">
+          }>
           <Markets />
         </Dropdown>
       </S.Container>

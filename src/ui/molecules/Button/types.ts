@@ -1,17 +1,13 @@
-import { ButtonHTMLAttributes } from "react";
+import { ReactNode, ButtonHTMLAttributes } from "react";
 
-import * as Icon from "src/ui/atoms/Icon/types";
-import { IColors } from "src/utils/types";
+import { Colors, Sizes } from "../../../helpers";
+import * as IconProps from "../Icon/types";
 
-type Props = {
-  title: string;
-  size?: "xSmall" | "small" | "medium" | "large";
-  icon?: Icon.Props;
-  token?: Icon.ITokenProps;
-  isActive?: boolean;
-  background?: IColors;
-  as?: "button" | "div" | "a";
+export type Props = {
+  children?: ReactNode;
+  background?: Colors;
+  color?: Colors;
+  icon?: IconProps.Props;
   isFull?: boolean;
+  size?: Sizes;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
-
-export default Props;

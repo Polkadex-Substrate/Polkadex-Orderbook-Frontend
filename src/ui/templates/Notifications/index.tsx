@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { NotificationCardProps } from "./types";
 
-import { Icon } from "src/ui";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Notifications = ({ notificationsActive = false }) => (
   <S.Wrapper notificationsActive={notificationsActive}>
@@ -9,7 +9,7 @@ export const Notifications = ({ notificationsActive = false }) => (
     <S.TitleWrapper>
       <h3>Recent</h3>
       <button type="button" onClick={() => console.log("Clean Notifications")}>
-        <Icon icon="Clean" />
+        <Icon name="Clean" />
       </button>
     </S.TitleWrapper>
     <S.ContentWrapper>
@@ -41,7 +41,7 @@ export const NotificationCard = ({
   return (
     <S.NotificationCard active={active} {...props}>
       <S.Container>
-        <Icon icon={icon} />
+        <Icon name={icon} />
       </S.Container>
       <S.Container>
         <span>{title}</span>

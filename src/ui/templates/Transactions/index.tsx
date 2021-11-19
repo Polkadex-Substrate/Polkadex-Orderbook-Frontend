@@ -5,7 +5,6 @@ import * as S from "./styles";
 import { selectUserLoggedIn } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  Button,
   Checkbox,
   Tabs,
   TabContent,
@@ -15,6 +14,7 @@ import {
   OrderHistory,
   AvailableMessage,
 } from "src/ui";
+import { Button } from "@polkadex/orderbook-ui/molecules";
 
 export const Transactions = () => {
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
@@ -41,7 +41,7 @@ export const Transactions = () => {
             <AvailableMessage>
               <S.Filters>
                 <Checkbox label="Hide Other Pairs" />
-                <Button title="Cancel All" size="small" style={{ width: "fit-content" }} />
+                <Button size="small">Cancel All</Button>
               </S.Filters>
             </AvailableMessage>
           </S.Header>

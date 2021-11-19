@@ -4,7 +4,7 @@ export * from "./config";
 
 export const defaultConfig: DefaultConfig = {
   polkadotJsWs: process.env.POLKADEX_WS,
-  auth: `${process.env.HOST_URL}/api/v2/barong`,
+  auth: process.env.POLKADEX_HOST_URL,
   engine: `${process.env.HOST_URL}/api/v2/peatio`,
   polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,

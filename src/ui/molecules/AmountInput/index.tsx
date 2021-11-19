@@ -2,7 +2,7 @@ import { Field } from "formik";
 
 import * as S from "./styles";
 
-import { Dropdown, Icon, IconToken, Skeleton } from "src/ui";
+import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 export const AmountInput = ({ data = [], error = "", ...props }) => (
   <S.Wrapper>
@@ -10,7 +10,7 @@ export const AmountInput = ({ data = [], error = "", ...props }) => (
       <Dropdown
         direction="bottom"
         style={{ width: "100%" }}
-        title={<TokenCard tokenName="Polkadex" ticket="PDEX" amount="0" />}>
+        header={<TokenCard tokenName="Polkadex" ticket="PDEX" amount="0" />}>
         <S.TokensWrapper>
           {data.length ? (
             data.map((item, index) => (
@@ -48,7 +48,7 @@ export const AmountInput = ({ data = [], error = "", ...props }) => (
 const TokenCard = ({ tokenName = "", ticket = "", amount = "", ...props }) => (
   <S.Card {...props}>
     {ticket ? (
-      <IconToken size="medium" icon={ticket} />
+      <Icon isToken size="medium" name={ticket} />
     ) : (
       <Skeleton width="3rem" height="3rem" />
     )}
@@ -57,7 +57,7 @@ const TokenCard = ({ tokenName = "", ticket = "", amount = "", ...props }) => (
       {tokenName ? (
         <S.CardFlex>
           <span>{tokenName}</span>
-          <Icon icon="ArrowBottom" size="xxsmall" />
+          <Icon name="ArrowBottom" size="small" />
         </S.CardFlex>
       ) : (
         <Skeleton width="4rem" />

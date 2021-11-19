@@ -1,5 +1,4 @@
 export * from "./MarketChart";
-export * from "./Header";
 export * from "./Navigation";
 export * from "./Notifications";
 export * from "./Orderbook";
@@ -10,3 +9,7 @@ export * from "./MarketTrade";
 export * from "./TransferInteraction";
 export * from "./CanCan";
 export * from "./MarketDepth";
+export * from "./Trading";
+export * from "./Recovery";
+export * from "./Login";
+export * from "./SignUp";

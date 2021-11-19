@@ -1,5 +1,5 @@
 export interface ProxyAccount {
-  username: string;
+  accountName: string;
   password: string;
   address: string;
   keyringPair?: any;

@@ -6,16 +6,11 @@ import { OrderProps } from "./types";
 
 import {
   selectCurrentMarket,
-  selectCurrentMarketFilters,
   selectCurrentPrice,
   selectDepthAsks,
-  selectDepthBids,
   selectMarketTickers,
-  selectOrderExecuteLoading,
-  selectUserLoggedIn,
   selectWallets,
   Wallet,
-  walletsFetch,
   setCurrentPrice,
   orderExecuteFetch,
 } from "@polkadex/orderbook-modules";
@@ -26,13 +21,9 @@ import { getTotalPrice } from "src/helpers";
 export const PlaceOrder = () => {
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentMarketFilters = useReduxSelector(selectCurrentMarketFilters);
   const asks = useReduxSelector(selectDepthAsks);
-  const bids = useReduxSelector(selectDepthBids);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const executeLoading = useReduxSelector(selectOrderExecuteLoading);
   const wallets = useReduxSelector(selectWallets);
   const [state, setState] = useState({
     orderSide: "buy",

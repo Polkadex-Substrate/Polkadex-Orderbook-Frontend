@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 
+import { Icon, Button } from "@polkadex/orderbook-ui/molecules";
 import {
   currenciesFetch,
   marketsFetch,
@@ -15,7 +16,8 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useBarong } from "@polkadex/orderbook-hooks";
 import * as S from "src/styles/status";
-import { Button, Icon, Logo, ThemeSwitch } from "src/ui";
+import { Logo, ThemeSwitch } from "src/ui";
+import { Colors } from "@polkadex/web-helpers";
 
 function Home() {
   const dispatch = useDispatch();
@@ -38,7 +40,7 @@ function Home() {
       <S.Header>
         <Link href="/">
           <a>
-            <Icon icon="Return" background="none" size="xlarge" />
+            <Icon name="Return" background="none" size="extraLarge" />
           </a>
         </Link>
         <S.Logo>
@@ -50,7 +52,7 @@ function Home() {
       <S.Content>
         <S.Status>
           <Icon
-            icon="Verified"
+            name="Verified"
             background="green"
             style={{
               margin: "0 auto",
@@ -65,11 +67,9 @@ function Home() {
             Having trouble? Troubleshoot connection issues or email us at
             issues@polkadex.trade.com.
           </p>
-          <Button
-            title="Verify Again"
-            background="primary"
-            style={{ color: "white", margin: "0 auto" }}
-          />
+          <Button background="primary" color="white">
+            Verify Again
+          </Button>
         </S.Status>
         <S.Information>
           <S.Nav>
@@ -237,8 +237,8 @@ const Card = ({
         </p>
       </S.CardContainer>
       <Icon
-        icon={icon.iconName}
-        background={icon.color}
+        name={icon.iconName}
+        background={icon.color as Colors}
         style={{ width: "2rem", height: "2rem", padding: 5, borderRadius: "30%" }}
       />
     </S.Card>
@@ -255,8 +255,8 @@ const StatusType = ({ type = "Verified", title = "No issues" }: Props) => {
   return (
     <S.AsideContainer>
       <Icon
-        icon={icon.iconName}
-        background={icon.color}
+        name={icon.iconName}
+        background={icon.color as Colors}
         style={{ width: "2rem", height: "2rem", padding: 5, borderRadius: "30%" }}
       />
       <span>{title}</span>

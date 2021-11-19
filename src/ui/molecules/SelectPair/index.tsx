@@ -2,19 +2,22 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Icon, IconToken, Skeleton } from "src/ui";
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const SelectPairHeader = ({ title = "", icon = "Default" }) => {
   return (
     <S.Wrapper>
-      <IconToken icon={icon} size="small" />
       {title ? (
         <>
+          <Icon isToken name={icon} size="small" />
           <span>{title}</span>
-          <Icon icon="ArrowBottom" size="xsmall" />
+          <Icon name="ArrowBottom" size="small" />
         </>
       ) : (
-        <Skeleton width="6rem" style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }} />
+        <>
+          <Skeleton width="3rem" height="3rem" />
+          <Skeleton width="6rem" style={{ marginLeft: "0.5rem" }} />
+        </>
       )}
     </S.Wrapper>
   );

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { WrapperToken } from "src/ui/atoms/Icon/styles";
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Token = styled.div`
   display: flex;
@@ -8,7 +8,7 @@ export const Token = styled.div`
   span {
     opacity: 0.7;
   }
-  & ${WrapperToken} {
+  & ${Icon} {
     margin-right: 0.5rem;
   }
 `;

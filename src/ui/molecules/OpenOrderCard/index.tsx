@@ -3,7 +3,8 @@ import { ReactNode } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Icon, Skeleton } from "src/ui";
+import { Bar } from "src/ui";
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const OpenOrderCard = ({
   date,
@@ -49,8 +50,8 @@ export const OpenOrderCard = ({
       <S.Container>
         {filled <= 100 && (
           <Icon
-            icon="Close"
-            size="xxxsmall"
+            name="Close"
+            size="small"
             background="none"
             onClick={onCancel}
             style={{ cursor: "pointer" }}

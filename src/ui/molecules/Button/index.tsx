@@ -1,27 +1,25 @@
-import * as S from "./styles";
-import Props from "./types";
+import { Icon } from "../";
 
-import { Icon, IconToken } from "src/ui";
+import * as S from "./styles";
+import * as T from "./types";
 
 export const Button = ({
-  title = "Button",
-  size = "medium",
-  icon,
-  token,
-  isActive = false,
-  background = "secondaryBackground",
-  as = "button",
   isFull = false,
+  icon,
+  background = "text",
+  color = "inverse",
+  children,
+  size = "medium",
   ...props
-}: Props) => (
+}: T.Props) => (
   <S.Wrapper
-    as={as}
     size={size}
-    isFull={isFull}
-    isActive={isActive}
     background={background}
+    color={color}
+    isFull={isFull}
+    hasIcon={!!icon}
     {...props}>
-    {icon || (token && icon) ? <Icon {...icon} /> : token && <IconToken {...token} />}
-    {title}
+    {!!icon && <Icon {...icon} />}
+    {children}
   </S.Wrapper>
 );

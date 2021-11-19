@@ -6,7 +6,7 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Graph;
     background: ${theme.colors.gradientBackground};
-    box-shadow: ${theme.shadow.tertiary};
+    box-shadow: ${theme.shadows.tertiary};
   `}
 `;
 

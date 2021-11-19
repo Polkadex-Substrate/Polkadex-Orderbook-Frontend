@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperCheckbox } from "src/ui/atoms/Checkbox/styles";
+import { Wrapper as WrapperCheckbox } from "@polkadex/orderbook-ui/molecules/Checkbox/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`

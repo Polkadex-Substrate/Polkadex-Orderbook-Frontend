@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     background: ${theme.colors.gradientBackground};
     border-radius: 1rem;
     padding: 1rem;
-    border: 1px solid ${theme.colors.borderLight};
+    border: 1px solid ${theme.colors.secondaryBackground};
   `}
 `;
 
@@ -62,7 +62,7 @@ export const TokensWrapper = styled.div`
     background: ${theme.colors.primaryBackground};
     padding: 1rem;
     border-radius: 1rem;
-    box-shadow: ${theme.shadow.tertiary};
+    box-shadow: ${theme.shadows.tertiary};
     max-height: 15rem;
     overflow-y: scroll;
     scrollbar-width: none;

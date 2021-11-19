@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { WrapperToken } from "src/ui/atoms/Icon/styles";
-import { Wrapper as WrapperTag } from "src/ui/atoms/Tag/styles";
+import { Wrapper as WrapperTag } from "@polkadex/orderbook-ui/molecules/Tag/styles";
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Section = styled.section<{ marketActive?: boolean }>`
   ${({ theme, marketActive }) => css`
@@ -12,7 +12,7 @@ export const Section = styled.section<{ marketActive?: boolean }>`
     border-radius: 1rem;
     min-width: 30rem;
     width: 100%;
-    box-shadow: ${theme.shadow.tertiary};
+    box-shadow: ${theme.shadows.tertiary};
     background: ${theme.colors.primaryBackground};
     & ${WrapperTag} {
       justify-self: flex-end;
@@ -92,7 +92,7 @@ export const ContentItemToken = styled.div`
   display: flex;
   align-items: center;
 
-  & ${WrapperToken} {
+  & ${Icon} {
     margin-right: 0.5rem;
   }
 `;
