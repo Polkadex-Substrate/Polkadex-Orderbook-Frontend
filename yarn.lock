@@ -3133,6 +3133,11 @@ dynamic-dedupe@^0.3.0:
   dependencies:
     xtend "^4.0.0"
 
+easyqrcodejs@^4.4.6:
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/easyqrcodejs/-/easyqrcodejs-4.4.6.tgz#3f6c6b4b97e5b9a2a20620fd1c03be96e941761c"
+  integrity sha512-LP24ScT1io86Sv6Cp1rKLCDBmSRBbnqWsF32qfykWV3ojW6iVUN2paaiaUy5tjJ/dAw+YCJ/qkrfy7MrAihY/A==
+
 ed2curve@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/ed2curve/-/ed2curve-0.3.0.tgz#322b575152a45305429d546b071823a93129a05d"
@@ -6202,6 +6207,13 @@ react-stockcharts@^0.7.8:
     lodash.flattendeep "^4.4.0"
     prop-types "^15.6.0"
     save-svg-as-png "^1.4.5"
+
+react-to-print@^2.14.1:
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.1.tgz#b6c74e9ed37520092a0863386ceb9b5525065941"
+  integrity sha512-2PWKhONAYHpWELAiclcGbyN3xG0Li37hnMVdNtSwGyOT3O6BpB+GiqaT4pqnvuDTPFTZdfjL4fmvY6HxcdQ6sw==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-transition-group@2.9.0:
   version "2.9.0"

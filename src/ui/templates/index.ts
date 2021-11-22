@@ -13,3 +13,4 @@ export * from "./Trading";
 export * from "./Recovery";
 export * from "./Login";
 export * from "./SignUp";
+export * from "./PaperWallet";

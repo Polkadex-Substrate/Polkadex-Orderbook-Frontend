@@ -1,3 +1,5 @@
+// TODO: Verify empty Icon props -> Now Only working with Mocks yarn start-mock
+
 import { useRouter } from "next/router";
 
 import * as S from "./styles";

@@ -14,7 +14,7 @@ export const Icon = ({
   ...props
 }: T.Props) => {
   const IconSvg = name && !isToken ? Icons[name] : Icons.Wallet;
-  const TokenSvg = isToken && name ? Tokens[name?.toUpperCase()] : Icons.Wallet;
+  const TokenSvg = isToken && name ? Tokens[name?.toUpperCase()] : Tokens.PDEX;
   const IconComponent = (isToken && TokenSvg) || IconSvg;
 
   return (

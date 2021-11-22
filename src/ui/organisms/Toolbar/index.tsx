@@ -34,7 +34,7 @@ export const Toolbar = () => {
           header={
             <SelectPairHeader
               title={currentMarket?.name}
-              icon={currentMarket?.base_unit || ""}
+              icon={currentMarket?.base_unit || "PDEX"}
             />
           }>
           <Markets />
