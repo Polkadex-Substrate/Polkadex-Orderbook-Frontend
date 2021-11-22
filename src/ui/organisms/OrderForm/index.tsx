@@ -3,15 +3,21 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Button, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import {
+  Button,
+  Skeleton,
+  Tabs,
+  TabHeader,
+  OrderInput,
+} from "@polkadex/orderbook-ui/molecules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   placeOrdersExecute,
   selectUserInfo,
   selectMainAccount,
 } from "@polkadex/orderbook-modules";
-import { Tabs, TabHeader, OrderInput, Decimal } from "src/ui";
-import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "src/helpers";
+import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 
 export const OrderForm = ({
   side,

@@ -13,8 +13,8 @@ import {
   Ticker,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Decimal } from "src/ui";
-import { accumulateVolume, calcMaxVolume, sortAsks, sortBids } from "src/helpers";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { accumulateVolume, calcMaxVolume, sortAsks, sortBids } from "@polkadex/web-helpers";
 
 const defaultTicker = {
   amount: "0",

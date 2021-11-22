@@ -1,10 +1,10 @@
 import { Props } from "./types";
 import * as S from "./styles";
 
-import * as I from "src/ui/atoms/Icons";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const Empty = ({ description, image = "Empty", centered = false }: Props) => {
-  const IconComponent = I[image];
+  const IconComponent = Icons[image];
   return (
     <S.Wrapper centered={centered}>
       <S.Container>

@@ -12,8 +12,6 @@ import {
   AUTH_SIGN_UP_FETCH,
 } from "./constants";
 
-import { InjectedAccount } from "@polkadex/orderbook-modules";
-
 export interface SignUpKeyRingData {
   type: string;
   payload: {
@@ -57,12 +55,6 @@ export interface SignUpFetch {
     accountName: string;
     mnemonic: string;
     password: string;
-  };
-  callbackAction?: {
-    scope: string;
-    component: string;
-    key: string;
-    value: any;
   };
 }
 
@@ -115,13 +107,9 @@ export const signInError = (error: CommonError): SignInError => ({
   error,
 });
 
-export const signUp = (
-  payload: SignUpFetch["payload"],
-  callbackAction?: SignUpFetch["callbackAction"]
-): SignUpFetch => ({
+export const signUp = (payload: SignUpFetch["payload"]): SignUpFetch => ({
   type: AUTH_SIGN_UP_FETCH,
   payload,
-  callbackAction,
 });
 
 export const signUpData = (): SignUpData => ({

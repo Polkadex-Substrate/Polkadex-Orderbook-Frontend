@@ -2,10 +2,12 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown, Information, SelectPairHeader } from "@polkadex/orderbook-ui/molecules";
 import { selectCurrentMarket, selectMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Markets, Information, SelectPairHeader, Decimal } from "src/ui";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { Markets } from "@polkadex/orderbook-ui/organisms";
+
 const defaultTicker = {
   amount: 0,
   low: 0,

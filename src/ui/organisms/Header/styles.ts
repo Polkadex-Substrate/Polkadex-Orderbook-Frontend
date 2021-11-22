@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Logo } from "@polkadex/orderbook-ui/molecules/Logo/styles";
-import { Wrapper as SwitchWrapper } from "src/ui/molecules/ThemeSwitch/styles";
+import { Wrapper as SwitchWrapper } from "@polkadex/orderbook-ui/molecules/ThemeSwitch/styles";
 
 export const Wrapper = styled.header`
   ${({ theme }) => css`

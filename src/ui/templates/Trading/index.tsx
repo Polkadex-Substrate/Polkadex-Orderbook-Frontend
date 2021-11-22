@@ -2,13 +2,19 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
+import { Header } from "@polkadex/orderbook-ui/organisms";
 import {
   useMarketsFetch,
   useDepthMarketsFetch,
   useMarketsTickersFetch,
-  // useWindowSize,
+  useWindowSize,
 } from "@polkadex/orderbook-hooks";
-import { Header, Orderbook, MarketTrade, Transactions, PlaceOrder } from "src/ui";
+import {
+  Orderbook,
+  MarketTrade,
+  Transactions,
+  PlaceOrder,
+} from "@polkadex/orderbook-ui/templates";
 
 export const Trading = () => {
   const router = useRouter();

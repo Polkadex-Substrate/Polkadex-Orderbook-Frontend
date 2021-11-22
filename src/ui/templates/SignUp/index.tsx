@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -8,8 +10,8 @@ import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { useMnemonic } from "@polkadex/orderbook-hooks";
-import { signUp } from "@polkadex/orderbook-modules";
+import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectSignUpLoading, selectSignUpSuccess, signUp } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
@@ -17,7 +19,16 @@ const defaultValues = {
 };
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { mnemonic, mnemoicString } = useMnemonic();
+  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const signUpLoading = useReduxSelector(selectSignUpLoading);
+
+  useEffect(() => {
+    if (signUpSuccess) router.push("/login");
+  }, [signUpSuccess, router]);
+
+  if (signUpSuccess) return <div />;
 
   return (
     <S.Main>
@@ -63,8 +74,8 @@ export const SignUpTemplate = () => {
                         error={errors.password && touched.password && errors.password}
                       />
                       <FlexSpaceBetween style={{ marginTop: 20 }}>
-                        <Button size="extraLarge" type="submit">
-                          Verify Account
+                        <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                          {signUpLoading ? "Loading.." : "Verify Account"}
                         </Button>
                         <Button
                           background="transparent"

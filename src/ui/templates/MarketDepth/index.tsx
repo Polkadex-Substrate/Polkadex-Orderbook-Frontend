@@ -4,19 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import * as S from "./styles";
 
 import {
-  selectChartRebuildState,
+  // selectChartRebuildState,
   selectCurrentColorTheme,
   selectCurrentMarket,
   selectDepthAsks,
   selectDepthBids,
   selectOrderBookLoading,
 } from "@polkadex/orderbook-modules";
-import { Decimal, MarketDepths } from "src/ui";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { MarketDepths } from "@polkadex/orderbook-ui/molecules";
 
 export const MarketDepth = () => {
   const asksItems = useSelector(selectDepthAsks);
   const bidsItems = useSelector(selectDepthBids);
-  const chartRebuild = useSelector(selectChartRebuildState);
+  // const chartRebuild = useSelector(selectChartRebuildState);
   const colorTheme = useSelector(selectCurrentColorTheme);
   const currentMarket = useSelector(selectCurrentMarket);
   const loading = useSelector(selectOrderBookLoading);

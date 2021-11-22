@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { TransferInteraction } from "src/ui";
+import { TransferInteraction } from "@polkadex/orderbook-ui/templates";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Accounts = () => {

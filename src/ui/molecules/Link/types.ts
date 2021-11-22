@@ -1,10 +1,10 @@
 import { LinkHTMLAttributes } from "react";
 
-import { IIcons } from "src/utils/types";
+import { Icons } from "@polkadex/web-helpers";
 
 type Props = {
   text: string;
-  icon?: IIcons;
+  icon?: Icons;
   active?: boolean;
 } & Pick<LinkHTMLAttributes<HTMLLinkElement>, "href" | "style" | "role" | "onClick">;
 

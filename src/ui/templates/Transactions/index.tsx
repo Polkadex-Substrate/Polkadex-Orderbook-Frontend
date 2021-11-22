@@ -6,16 +6,14 @@ import { selectUserLoggedIn } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Checkbox,
+  AvailableMessage,
+  Button,
   Tabs,
   TabContent,
   TabHeader,
-  OpenOrders,
   Empty,
-  OrderHistory,
-  AvailableMessage,
-} from "src/ui";
-import { Button } from "@polkadex/orderbook-ui/molecules";
-
+} from "@polkadex/orderbook-ui/molecules";
+import { OpenOrders, OrderHistory } from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
 
@@ -24,7 +22,7 @@ export const Transactions = () => {
       {userLoggedIn ? (
         <Tabs>
           <S.Header>
-            <ul>
+            {/* <ul>
               <TabHeader>
                 <S.Tab>Open Orders</S.Tab>
               </TabHeader>
@@ -37,21 +35,21 @@ export const Transactions = () => {
               <TabHeader>
                 <S.Tab>Funds</S.Tab>
               </TabHeader>
-            </ul>
-            <AvailableMessage>
+            </ul> */}
+            {/* <AvailableMessage>
               <S.Filters>
                 <Checkbox label="Hide Other Pairs" />
                 <Button size="small">Cancel All</Button>
               </S.Filters>
-            </AvailableMessage>
+            </AvailableMessage> */}
           </S.Header>
           <S.Content>
-            <TabContent>
+            {/* <TabContent>
               <OpenOrders />
             </TabContent>
             <TabContent>
               <OrderHistory />
-            </TabContent>
+            </TabContent> */}
           </S.Content>
         </Tabs>
       ) : (

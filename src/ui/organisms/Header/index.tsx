@@ -3,8 +3,16 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import { Icon, Button, Dropdown, Polkadex } from "@polkadex/orderbook-ui/molecules";
-import { ThemeSwitch, Toolbar, MyAccountContent, MyAccountHeader } from "src/ui";
+import {
+  Icon,
+  Button,
+  Dropdown,
+  Polkadex,
+  ThemeSwitch,
+  MyAccountHeader,
+  MyAccountContent,
+} from "@polkadex/orderbook-ui/molecules";
+import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import { selectUserInfo } from "@polkadex/orderbook-modules";
 

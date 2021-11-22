@@ -1,15 +1,14 @@
 import * as S from "./styles";
 import { LanguageCurrencyProps, LanguageNameProps, NavProps, Props } from "./types";
 
-import { Logo, ThemeSwitch } from "src/ui";
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Polkadex, ThemeSwitch, Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 export const Navigation = ({ activateNotification }: Props) => (
   <S.Wrapper>
     <S.Header>
       <S.Container>
         <li>
-          <Logo size="Medium" />
+          <Polkadex size="medium" />
         </li>
       </S.Container>
       <S.Container>

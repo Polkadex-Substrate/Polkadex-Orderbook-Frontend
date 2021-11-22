@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div<{ centered?: boolean }>`
-  ${({ theme, centered }) => css`
+  ${({ centered }) => css`
     text-align: center;
     padding: 2rem 0;
     display: flex;

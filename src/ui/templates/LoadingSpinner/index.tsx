@@ -2,7 +2,7 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Spinner } from "src/ui";
+import { Spinner } from "@polkadex/orderbook-ui/molecules";
 
 export const LoadingSpinner = () => {
   return (

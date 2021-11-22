@@ -29,3 +29,4 @@ export * from "./Checkbox";
 export * from "./Input";
 export * from "./Tag";
 export * from "./Link";
+export * from "./MessageCard";

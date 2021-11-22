@@ -13,7 +13,13 @@ import {
   userOpenOrdersFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { Decimal, LoadingTransactions, OpenOrderCard, OpenOrderCardReponsive } from "src/ui";
+import {
+  LoadingTransactions,
+  OpenOrderCard,
+  OpenOrderCardReponsive,
+} from "@polkadex/orderbook-ui/molecules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { localeDate } from "@polkadex/web-helpers";
 
 export const OpenOrders = () => {
   const dispatch = useDispatch();

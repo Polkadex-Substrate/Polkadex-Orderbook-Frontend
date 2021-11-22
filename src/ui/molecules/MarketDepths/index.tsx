@@ -14,8 +14,6 @@ import { PureComponent } from "react";
 
 import * as S from "./styles";
 
-import { colors } from "src/constants";
-import { convertRgbToHex, getStylesValueByKey } from "src/helpers";
 import { defaultThemes } from "src/styles";
 export interface KeyValuePairMarketDepths {
   x: string | number;

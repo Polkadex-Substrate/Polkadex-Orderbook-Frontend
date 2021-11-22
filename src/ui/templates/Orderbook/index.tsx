@@ -15,9 +15,9 @@ import {
   Ticker,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Decimal } from "src/ui";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import { accumulateVolume, calcMaxVolume } from "src/helpers";
+import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 
 export const Orderbook = () => {
   const dispatch = useDispatch();

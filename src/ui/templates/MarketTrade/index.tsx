@@ -9,8 +9,8 @@ import {
   selectRecentTradesOfCurrentMarket,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { localeDate } from "src/helpers";
-import { Decimal } from "src/ui";
+import { localeDate } from "@polkadex/web-helpers";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 const getHighLightValue = (prevValue: string, curValue: string) => {

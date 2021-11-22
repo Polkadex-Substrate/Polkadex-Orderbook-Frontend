@@ -3,8 +3,13 @@ import { Formik, Form } from "formik";
 
 import * as S from "./styles";
 
-import { AmountInput, Popup, Portal } from "src/ui";
-import { Button, SelectAccount } from "@polkadex/orderbook-ui/molecules";
+import {
+  Button,
+  SelectAccount,
+  AmountInput,
+  Popup,
+  Portal,
+} from "@polkadex/orderbook-ui/molecules";
 
 export const TransferInteraction = ({ isActive = false, onClose }) => {
   const tokens = [];
@@ -15,7 +20,7 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
 
   return (
     <Portal>
-      <Popup isVisible={isActive} size="xxSmall" onClose={onClose}>
+      <Popup isVisible={isActive} size="small" onClose={onClose}>
         <S.Wrapper>
           <S.Header>
             <h2>Transfer</h2>
