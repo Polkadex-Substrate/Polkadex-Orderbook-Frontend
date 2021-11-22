@@ -219,7 +219,6 @@ export const tokensTicker = [
   "LINK",
   "BAT",
   "BAL",
-  "POLKADEX",
   "ETH",
   "USDT",
   "INCH",
@@ -233,7 +232,6 @@ export type TokensTicker =
   | "LINK"
   | "BAT"
   | "BAL"
-  | "POLKADEX"
   | "ETH"
   | "USDT"
   | "INCH"
