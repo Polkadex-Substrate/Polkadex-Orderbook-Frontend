@@ -9,21 +9,21 @@ import {
   selectCurrentPrice,
   selectDepthAsks,
   selectDepthBids,
-  selectDepthLoading,
   selectLastRecentTrade,
   selectMarketTickers,
   setCurrentPrice,
   Ticker,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Icon, Skeleton, Dropdown, Decimal } from "src/ui";
+import { Decimal } from "src/ui";
+import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "src/helpers";
+
 export const Orderbook = () => {
   const dispatch = useDispatch();
 
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
-  const orderBookLoading = useReduxSelector(selectDepthLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
   const marketTickers = useReduxSelector(selectMarketTickers);
@@ -58,16 +58,16 @@ export const Orderbook = () => {
         <S.Options>
           <ul>
             <li>
-              <Icon icon="OrdersBuy" size="xsmall" />
+              <Icon name="OrdersBuy" size="extraSmall" />
             </li>
             <li>
-              <Icon icon="OrdersAll" size="xsmall" />
+              <Icon name="OrdersAll" size="extraSmall" />
             </li>
             <li>
-              <Icon icon="OrdersSell" size="xsmall" />
+              <Icon name="OrdersSell" size="extraSmall" />
             </li>
           </ul>
-          <Dropdown title="001" direction="bottom">
+          <Dropdown header="001" direction="bottom">
             <p>testing</p>
           </Dropdown>
         </S.Options>

@@ -3,22 +3,15 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
+import { Button, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectCurrentMarket,
-  selectDepthAsks,
-  selectDepthBids,
   placeOrdersExecute,
   selectUserInfo,
   selectMainAccount,
 } from "@polkadex/orderbook-modules";
-import { Button, Tabs, TabContent, TabHeader, Skeleton, OrderInput, Decimal } from "src/ui";
-import {
-  cleanPositiveFloatInput,
-  getAmount,
-  precisionRegExp,
-  toCapitalize,
-} from "src/helpers";
+import { Tabs, TabHeader, OrderInput, Decimal } from "src/ui";
+import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "src/helpers";
 
 export const OrderForm = ({
   side,
@@ -32,7 +25,6 @@ export const OrderForm = ({
   currentMarketBidPrecision,
   listenInputPrice,
   priceLimit,
-  ...props
 }) => {
   const [state, setState] = useState({
     orderType: "Limit",
@@ -42,15 +34,11 @@ export const OrderForm = ({
     amountBuy: "0.000000000",
   });
   const dispatch = useDispatch();
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const asks = useReduxSelector(selectDepthAsks);
-  const bids = useReduxSelector(selectDepthBids);
+
   const usersInfo = useReduxSelector(selectUserInfo);
   const mainAccount = useReduxSelector(selectMainAccount);
   const isSellSide = side === "sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
-  const safePrice = totalPrice / Number(amount) || state.priceMarket;
-  const safeAmount = Number(amount) || 0;
 
   const total =
     state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
@@ -158,11 +146,13 @@ export const OrderForm = ({
             />
             <Button
               type="submit"
-              title={toCapitalize(side)}
+              color="text"
+              size="extraLarge"
+              isFull
               onClick={handleOrders}
-              style={{ width: "100%", justifyContent: "center" }}
-              background="secondaryBackground"
-            />
+              background="secondaryBackground">
+              {toCapitalize(side)}
+            </Button>
           </form>
         </div>
       </Tabs>

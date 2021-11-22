@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 import { Props } from "./types";
 
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import {
   Market,
   selectMarkets,
@@ -12,7 +13,7 @@ import {
   setCurrentMarket,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Icon, IconToken, Skeleton, Tabs, TabContent, TabHeader, Tag, Decimal } from "src/ui";
+import { Tabs, TabContent, TabHeader, Tag, Decimal } from "src/ui";
 
 const defaultTickers = {
   last: 0,
@@ -132,7 +133,7 @@ export const Markets = ({ marketActive = false }) => {
               )}
             </ul>
             <button type="button">
-              <Icon icon="Star" background="none" />
+              <Icon size="medium" name="Star" background="none" />
             </button>
           </S.Pairs>
         </S.Header>
@@ -179,7 +180,7 @@ const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }
   <S.ContentItemWrapper onClick={onClick}>
     <S.ContentItemToken>
       {tokenIcon ? (
-        <IconToken size="xlarge" icon={tokenIcon} />
+        <Icon isToken size="extraLarge" name={tokenIcon} />
       ) : (
         <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
       )}

@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Skeleton } from "src/ui";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const OrderInput = ({ token = "", label = "", ...props }: Props) => {
   return (

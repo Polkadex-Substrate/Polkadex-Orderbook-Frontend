@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     background: ${theme.colors.primaryBackground};
     border-radius: 1.5rem;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    box-shadow: ${theme.shadow.tertiary};
+    box-shadow: ${theme.shadows.tertiary};
   `}
 `;
 

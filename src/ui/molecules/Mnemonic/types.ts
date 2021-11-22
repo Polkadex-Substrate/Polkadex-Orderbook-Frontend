@@ -7,7 +7,6 @@ export type MnemonicProps = {
 
 export type MnemonicExportProps = {
   label: string;
-  handleChange: () => void;
   phrases?: string[];
 };
 

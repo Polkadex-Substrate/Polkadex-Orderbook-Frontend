@@ -1,32 +1,28 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 import * as S from "./styles";
-import { Props } from "./types";
-
-import { polkadotWalletFetch } from "@polkadex/orderbook-modules";
+import * as T from "./types";
 
 export const Dropdown = ({
-  title,
-  children,
-  direction = "left",
+  header = "Header",
+  children = "Content",
+  direction = "centerRight",
   isOpacity = false,
-  variant = 1,
+  priority = "low",
+  isFull = true,
   ...props
-}: Props) => {
+}: T.Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch();
+
+  const toogleDropdown = () => setIsOpen(!isOpen);
+
   return (
-    <S.Wrapper isOpen={isOpen} variant={variant}>
-      <S.Header onClick={() => setIsOpen(!isOpen)}> {title} </S.Header>
-      <S.Content aria-hidden={!isOpen} direction={direction} {...props}>
+    <S.Wrapper isOpen={isOpen} priority={priority}>
+      <S.Header onClick={toogleDropdown}> {header} </S.Header>
+      <S.Content aria-hidden={!isOpen} direction={direction} isFull={isFull} {...props}>
         {children}
       </S.Content>
-      <S.Overlay
-        isOpacity={isOpacity}
-        aria-hidden={!isOpen}
-        onClick={() => setIsOpen(!isOpen)}
-      />
+      <S.Overlay isOpacity={isOpacity} aria-hidden={!isOpen} onClick={toogleDropdown} />
     </S.Wrapper>
   );
 };

@@ -1,8 +1,8 @@
+// TODO: Register call not working
 import { put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { InjectedAccount } from "../../polkadotWallet";
 import { sendError } from "../../../";
 import { userData, ProxyAccount } from "../../profile";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
@@ -16,12 +16,13 @@ const registerUserOption: RequestOptions = {
 
 export function* signUpSaga(action: SignUpFetch) {
   try {
-    const { mnemonic, password, username, mainAccount } = action.payload;
-    const { pair } = keyring.addUri(mnemonic, password, { name: username });
+    const { mnemonic, password, accountName } = action.payload;
+    const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
+    console.log("Pair", pair);
     const proxyAddress = pair.address;
     registerAccount(pair, proxyAddress);
     const data: ProxyAccount = {
-      username,
+      accountName,
       password,
       address: pair.address,
       keyringPair: pair,

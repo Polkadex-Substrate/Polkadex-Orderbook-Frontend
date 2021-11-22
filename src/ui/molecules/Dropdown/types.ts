@@ -1,9 +1,18 @@
-import { ReactNode, StyleHTMLAttributes } from "react";
+import { ReactNode, HTMLAttributes } from "react";
 
 export type Props = {
-  title: ReactNode | string;
-  children: ReactNode;
-  direction?: "left" | "right" | "bottom" | "top" | "bottomRight" | "bottomLeft";
+  header?: ReactNode | string;
+  children?: ReactNode | string;
   isOpacity?: boolean;
-  variant?: 1 | 2 | 3;
-} & Pick<StyleHTMLAttributes<HTMLStyleElement>, "style">;
+  isFull?: boolean;
+  direction?:
+    | "left"
+    | "right"
+    | "bottom"
+    | "bottomRight"
+    | "top"
+    | "topRight"
+    | "centerLeft"
+    | "centerRight";
+  priority?: "low" | "medium" | "high";
+} & HTMLAttributes<HTMLDivElement>;

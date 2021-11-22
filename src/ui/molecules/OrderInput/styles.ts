@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.2rem;
-    border: 1px solid ${theme.colors.borderLight};
+    border: 1px solid ${theme.colors.secondaryBackground};
 
     span,
     label {

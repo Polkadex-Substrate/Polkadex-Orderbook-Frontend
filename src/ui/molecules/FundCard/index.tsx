@@ -1,10 +1,7 @@
-import { ReactNode } from "react";
-import { BiFemaleSign } from "react-icons/bi";
-
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Icon, IconToken, Skeleton, Tag } from "src/ui";
+import { Skeleton, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const FundCard = ({
   tokenTicker,
@@ -21,9 +18,10 @@ export const FundCard = ({
   <S.Wrapper>
     <S.Token>
       {tokenTicker ? (
-        <IconToken
+        <Icon
+          isToken
           size="large"
-          icon={tokenTicker}
+          name={tokenTicker}
           style={{ width: "3.5rem", height: "3.5rem", borderRadius: "25%", padding: 2 }}
         />
       ) : (

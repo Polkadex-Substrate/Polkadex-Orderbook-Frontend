@@ -56,7 +56,7 @@ export const FlexJustify = styled.div`
 export const Box = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackgroundOpacity};
-    box-shadow: ${theme.shadow.tertiary};
+    box-shadow: ${theme.shadows.tertiary};
     border-radius: 0.5rem;
     margin: 0 0.5rem;
     :not(:last-child) {

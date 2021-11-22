@@ -17,7 +17,7 @@ export const Card = styled.div`
     background: ${theme.colors.primaryBackground};
     border-radius: 0.8rem;
     padding: 1.2rem;
-    border: 1px solid ${theme.colors.borderLight};
+    border: 1px solid ${theme.colors.secondaryBackground};
     :not(:last-child) {
       margin-bottom: 1rem;
     }

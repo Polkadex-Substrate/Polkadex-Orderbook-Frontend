@@ -1,6 +1,6 @@
 import * as S from "./styles";
 
-import { Skeleton } from "src/ui";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const AssetInfo = ({ name = "", available = "", reserved = "" }) => (
   <S.Wrapper>

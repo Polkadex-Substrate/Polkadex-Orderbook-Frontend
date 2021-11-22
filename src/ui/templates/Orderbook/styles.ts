@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { WrapperIcon } from "src/ui/atoms/Icon/styles";
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -85,7 +85,7 @@ export const OrderbookCardContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  ${WrapperIcon} {
+  ${Icon} {
     margin: 0 0.5rem;
   }
 `;
@@ -184,7 +184,7 @@ export const VolumeSpan = styled.span<{ isSell?: boolean }>`
 export const OrderbookDropdown = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
-    box-shadow: : ${theme.shadow.primary};
+    box-shadow: : ${theme.shadows.primary};
     padding: 1rem;
     border-radius: 1rem;
     text-align: left;

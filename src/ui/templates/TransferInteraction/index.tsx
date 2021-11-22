@@ -3,7 +3,8 @@ import { Formik, Form } from "formik";
 
 import * as S from "./styles";
 
-import { AmountInput, Button, MyCurrentAccountHeader, Popup, Portal } from "src/ui";
+import { AmountInput, Popup, Portal } from "src/ui";
+import { Button, SelectAccount } from "@polkadex/orderbook-ui/molecules";
 
 export const TransferInteraction = ({ isActive = false, onClose }) => {
   const tokens = [];
@@ -19,11 +20,11 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
           <S.Header>
             <h2>Transfer</h2>
             <Button
-              title="Cancel"
               size="small"
-              icon={{ icon: "Close", size: "xxsmall", background: "none" }}
-              onClick={onClose}
-            />
+              icon={{ name: "Close", size: "small", background: "none" }}
+              onClick={onClose}>
+              Cancel
+            </Button>
           </S.Header>
           <S.Content>
             <Formik
@@ -36,19 +37,19 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
                 <Form>
                   <S.Card>
                     <S.CardTitle>From</S.CardTitle>
-                    <MyCurrentAccountHeader
+                    <SelectAccount
                       isHeader
                       withButton={false}
-                      name="Main Account"
+                      accountName="Main Account"
                       address="Balance: 0"
                     />
                   </S.Card>
                   <S.Card>
                     <S.CardTitle>To</S.CardTitle>
-                    <MyCurrentAccountHeader
+                    <SelectAccount
                       isHeader
                       withButton={false}
-                      name="Trading Account"
+                      accountName="Trading Account"
                       address="Balance: 0"
                     />
                   </S.Card>
@@ -62,7 +63,9 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
                       error={errors.amount && touched.amount && errors.amount}
                     />
                   </S.Card>
-                  <Button type="submit" title="Confirm" isFull />
+                  <Button type="submit" isFull>
+                    Confirm
+                  </Button>
                 </Form>
               )}
             </Formik>

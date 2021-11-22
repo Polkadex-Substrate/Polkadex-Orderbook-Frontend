@@ -13,7 +13,7 @@ export const Wrapper = styled.section<Props>`
     margin-left: 1.5rem;
     height: fit-content;
     background: ${theme.colors.gradientBackground};
-    box-shadow: ${theme.shadow.primary};
+    box-shadow: ${theme.shadows.primary};
     border-radius: ${theme.border.radius.primary.medium};
     display: ${notificationsActive ? "block" : "none"};
   `}

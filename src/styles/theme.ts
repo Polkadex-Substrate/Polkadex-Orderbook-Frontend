@@ -17,7 +17,7 @@ const defaultTheme = {
   },
   font: {
     family:
-      "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+      "Work Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
     light: 300,
     normal: 400,
     bold: 600,
@@ -60,7 +60,7 @@ const defaultTheme = {
     orange: "#F2994A",
     purple: "#6745D2",
     blue: "#0090E1",
-    overlay: "#00000030",
+    overlayOpacity: "#00000030",
     light: "rgba(0, 0, 0, 0.08)",
   },
   spacings: {
@@ -83,7 +83,7 @@ const defaultTheme = {
     xxlarge: "0.7rem",
   },
   layers: {
-    base: 10,
+    base: 5,
     menu: 20,
     overlay: 30,
     modal: 40,
@@ -101,13 +101,13 @@ const light = {
     primaryBackground: "#F9FBFC",
     primaryBackgroundOpacity: "#F9FBFC99",
     gradientBackground: "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
-    tertiaryBackground: "#F9FBFC99",
+    tertiaryBackground: "#EEF0F6",
     secondaryBackgroundSolid: "#E8ECF2",
+    quaternaryBackground: "#272934",
     text: "#000000",
-    borderLight: "rgba(0, 0, 0, 0.08)",
     inverse: "#ffffff",
   },
-  shadow: {
+  shadows: {
     primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     secondary:
       "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
@@ -124,6 +124,14 @@ const light = {
       rgba(0, 0, 0, 0.14) 75%,
       rgba(0, 0, 0, 0.1) 100%
     )`,
+    inverse: `linear-gradient(
+      -90deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.12) 25%,
+      rgba(255, 255, 255, 0.20) 50%,
+      rgba(255, 255, 255, 0.14) 75%,
+      rgba(255, 255, 255, 0.1) 100%
+    )`,
   },
 };
 
@@ -135,11 +143,12 @@ const dark = {
     gradientBackground: "#1F2029",
     tertiaryBackground: "#2E303C",
     secondaryBackgroundSolid: "#2F3340",
-    text: "#f5f5f5",
-    borderLight: "rgba(0, 0, 0, 0.08)",
+    quaternaryBackground: "#272934",
+    gradient: "linear-gradient(47.94deg, #e6007a 0%, #6745d2 98.88%)",
+    text: "#ffffff",
     inverse: "#000000",
   },
-  shadow: {
+  shadows: {
     primary: "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     secondary: "rgba(0, 0, 0, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
@@ -154,6 +163,14 @@ const dark = {
       rgba(255, 255, 255, 0.20) 50%,
       rgba(255, 255, 255, 0.14) 75%,
       rgba(255, 255, 255, 0.1) 100%
+    )`,
+    inverse: `linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.12) 25%,
+      rgba(0, 0, 0, 0.20) 50%,
+      rgba(0, 0, 0, 0.14) 75%,
+      rgba(0, 0, 0, 0.1) 100%
     )`,
   },
 };

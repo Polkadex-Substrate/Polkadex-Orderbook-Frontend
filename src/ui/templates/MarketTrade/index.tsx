@@ -10,7 +10,8 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { localeDate } from "src/helpers";
-import { Decimal, Skeleton } from "src/ui";
+import { Decimal } from "src/ui";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 const getHighLightValue = (prevValue: string, curValue: string) => {
   let highlighted = "";

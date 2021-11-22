@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { WrapperIcon } from "src/ui/atoms/Icon/styles";
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -57,7 +57,7 @@ export const FooterTitle = styled.div`
       font-size: ${theme.font.sizes.xsmall};
       font-weight: 500;
       opacity: 0.6;
-      ${WrapperIcon} {
+      ${Icon} {
         display: inline-block;
         margin-left: 0.3rem;
         vertical-align: middle;

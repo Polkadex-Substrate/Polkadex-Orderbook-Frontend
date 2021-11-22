@@ -15,7 +15,7 @@ export const Header = styled.div`
     display: flex;
     justify-content: space-between;
     background: ${theme.colors.gradientBackground};
-    box-shadow: ${theme.shadow.primary};
+    box-shadow: ${theme.shadows.primary};
     border-radius: ${theme.border.radius.primary.small};
     overflow: hidden;
     transition: 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -73,7 +73,7 @@ export const NavContainer = styled.div`
       padding: 0.2rem;
       font-size: 1rem;
       background: ${theme.colors.secondaryBackgroundSolid};
-      box-shadow: ${theme.shadow.top};
+      box-shadow: ${theme.shadows.top};
     }
   `}
 `;

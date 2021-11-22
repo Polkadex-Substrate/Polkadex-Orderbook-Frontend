@@ -44,6 +44,30 @@
       "@polkadex/web-constants": [
         "src/constants"
       ],
+      "@polkadex/orderbook-ui/templates": [
+        "src/ui/templates"
+      ],
+      "@polkadex/orderbook-ui/templates/*": [
+        "src/ui/templates/*"
+      ],
+      "@polkadex/orderbook-ui/organisms": [
+        "src/ui/organisms"
+      ],
+      "@polkadex/orderbook-ui/organisms/*": [
+        "src/ui/organisms/*"
+      ],
+      "@polkadex/orderbook-ui/atoms": [
+        "src/ui/atoms"
+      ],
+      "@polkadex/orderbook-ui/atoms/*": [
+        "src/ui/atoms/*"
+      ],
+      "@polkadex/orderbook-ui/molecules": [
+        "src/ui/molecules"
+      ],
+      "@polkadex/orderbook-ui/molecules/*": [
+        "src/ui/molecules/*"
+      ],
       "@polkadex/orderbook-config": [
         "src/config"
       ],
