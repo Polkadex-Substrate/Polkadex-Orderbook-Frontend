@@ -12,13 +12,13 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
-  Decimal,
   LoadingTransactions,
   OrderHistoryCard,
   OrderHistoryCardReponsive,
-} from "src/ui";
-import { localeDate } from "src/helpers";
-import { DEFAULT_MARKET } from "src/constants";
+} from "@polkadex/orderbook-ui/molecules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { localeDate } from "@polkadex/web-helpers";
+import { DEFAULT_MARKET } from "@polkadex/web-constants";
 
 const timeFrom = String(Math.floor((Date.now() - 1000 * 60 * 60 * 24) / 1000));
 const handleHighlightValue = (prevValue: string, curValue: string) => {

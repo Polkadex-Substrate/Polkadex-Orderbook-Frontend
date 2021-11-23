@@ -1,6 +1,7 @@
 import * as S from "./styles";
 
-import { Tabs, TabContent, TabHeader, MarketDepth } from "src/ui";
+import { Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
+import { MarketDepth } from "@polkadex/orderbook-ui/templates";
 
 export const MarketChart = () => {
   return (

@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
+  selectHasUser,
   selectMainAccount,
   selectPolkadotWalletAccounts,
   setMainAccount,
@@ -26,9 +29,17 @@ const defaultValues = {
 
 export const LoginTemplate = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount);
+  const hasUser = useReduxSelector(selectHasUser);
 
+  // useEffect(() => {
+  //   if (hasUser) router.push("/");
+  // }, [hasUser, router]);
+
+  // if (hasUser) return <div />;
   return (
     <S.Main>
       <S.Wrapper>
@@ -47,7 +58,7 @@ export const LoginTemplate = () => {
                 onSubmit={async (values) => {
                   dispatch(signIn(values.account, values.password));
                 }}>
-                {({ values, errors, touched, setFieldValue }) => (
+                {({ errors, touched }) => (
                   <Form>
                     <Dropdown
                       direction="bottom"

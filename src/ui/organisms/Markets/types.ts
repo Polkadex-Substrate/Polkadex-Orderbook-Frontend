@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 
-import { ITokens } from "src/utils/types";
+import { TokensTicker } from "@polkadex/web-helpers";
 
 export type Props = {
   pair?: string;
@@ -8,5 +8,5 @@ export type Props = {
   priceFiat?: string | number;
   price?: string | number;
   change?: string | number;
-  tokenIcon?: ITokens | undefined;
+  tokenIcon?: TokensTicker | undefined;
 } & Pick<HTMLAttributes<HTMLDivElement>, "onClick">;

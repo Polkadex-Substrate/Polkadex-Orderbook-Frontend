@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 
-import { Icon, Button } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Button, Polkadex, ThemeSwitch } from "@polkadex/orderbook-ui/molecules";
 import {
   currenciesFetch,
   marketsFetch,
@@ -16,7 +16,6 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useBarong } from "@polkadex/orderbook-hooks";
 import * as S from "src/styles/status";
-import { Logo, ThemeSwitch } from "src/ui";
 import { Colors } from "@polkadex/web-helpers";
 
 function Home() {
@@ -44,7 +43,7 @@ function Home() {
           </a>
         </Link>
         <S.Logo>
-          <Logo href="/" />
+          <Polkadex />
           <span>Status</span>
         </S.Logo>
         <ThemeSwitch />

@@ -1,6 +1,6 @@
 import { ALERT_DATA, ALERT_DELETE, ALERT_PUSH } from "./constants";
 
-export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert" | "";
+export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert";
 
 export interface AlertState {
   type?: AlertTypes;

@@ -1,6 +1,4 @@
-import { AnchorHTMLAttributes, ReactNode } from "react";
-
-import { IIcons } from "src/utils/types";
+import { ReactNode } from "react";
 
 export type Props = {
   time?: string | ReactNode;

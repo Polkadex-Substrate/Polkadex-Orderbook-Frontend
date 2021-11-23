@@ -15,8 +15,9 @@ import {
   orderExecuteFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Accounts, OrderForm, Tabs, TabContent, TabHeader } from "src/ui";
-import { getTotalPrice } from "src/helpers";
+import { Accounts, OrderForm } from "@polkadex/orderbook-ui/organisms";
+import { Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
+import { getTotalPrice } from "@polkadex/web-helpers";
 
 export const PlaceOrder = () => {
   const dispatch = useDispatch();

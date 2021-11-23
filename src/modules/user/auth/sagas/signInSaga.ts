@@ -31,7 +31,7 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
     console.log("resultado:", result);
 
     return {
-      username: account.meta.name,
+      accountName: account.meta.name,
       address: userPair.address,
       password,
       keyringPair: userPair,

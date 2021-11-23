@@ -1,7 +1,7 @@
-import { ITokens } from "src/utils/types";
+import { TokensTicker } from "@polkadex/web-helpers";
 
 export type Props = {
-  tokenTicker: ITokens;
+  tokenTicker: TokensTicker;
   tokenName: string;
   totalAmount?: string;
   totalAmountFiat?: string;

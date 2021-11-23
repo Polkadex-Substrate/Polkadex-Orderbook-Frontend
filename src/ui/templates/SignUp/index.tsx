@@ -1,27 +1,55 @@
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import { useReactToPrint } from "react-to-print";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
+import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { useMnemonic } from "@polkadex/orderbook-hooks";
-import { signUp } from "@polkadex/orderbook-modules";
-
+import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectSignUpLoading, selectSignUpSuccess, signUp } from "@polkadex/orderbook-modules";
 const defaultValues = {
   password: "",
   accountName: "Main Account",
 };
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const { mnemonic, mnemoicString } = useMnemonic();
+  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const signUpLoading = useReduxSelector(selectSignUpLoading);
+
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  useEffect(() => {
+    if (signUpSuccess) router.push("/login");
+  }, [signUpSuccess, router]);
+
+  if (signUpSuccess) return <div />;
 
   return (
     <S.Main>
-      <S.Wrapper>
+      {!!mnemonic?.length && (
+        <div style={{ display: "none" }}>
+          <PaperWallet
+            mnemonic={mnemonic}
+            mnemoicString={mnemoicString}
+            forwardedRef={componentRef}
+          />
+        </div>
+      )}
+      <S.Wrapper id="test">
         <S.Content>
           <HeaderBack />
           <S.Container>
@@ -63,10 +91,12 @@ export const SignUpTemplate = () => {
                         error={errors.password && touched.password && errors.password}
                       />
                       <FlexSpaceBetween style={{ marginTop: 20 }}>
-                        <Button size="extraLarge" type="submit">
-                          Verify Account
+                        <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                          {signUpLoading ? "Loading.." : "Verify Account"}
                         </Button>
                         <Button
+                          onClick={handlePrint}
+                          type="button"
                           background="transparent"
                           color="text"
                           icon={{
@@ -84,7 +114,7 @@ export const SignUpTemplate = () => {
               </S.Form>
               <S.Footer>
                 <p>
-                  Do you want to import an account?{" "}
+                  Do you want to import an account?
                   <Link href="/recovery"> Import Account </Link>
                 </p>
               </S.Footer>

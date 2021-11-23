@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from "react";
 
-import { ITokens } from "src/utils/types";
+import { TokensTicker } from "@polkadex/web-helpers";
 
 export type InformationItemProps = {
   label?: string;
@@ -19,7 +19,7 @@ export type SearchProps = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export type PairProps = {
-  token?: ITokens | undefined;
+  token?: TokensTicker | undefined;
   pair?: boolean;
 };
 

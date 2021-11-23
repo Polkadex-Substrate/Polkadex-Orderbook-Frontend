@@ -82,6 +82,7 @@ export type Sizes =
 export const icons = [
   "ArrowTop",
   "Verified",
+  "Alert",
   "Avatar",
   "Attention",
   "ArrowBottom",
@@ -137,6 +138,9 @@ export const icons = [
   "Settings",
   "Star",
   "Sun",
+  "Successful",
+  "Error",
+  "Loading",
   "Transactions",
   "Wallet",
   "En",
@@ -149,7 +153,11 @@ export type Icons =
   | "ArrowTop"
   | "Verified"
   | "Avatar"
+  | "Alert"
   | "Attention"
+  | "Successful"
+  | "Error"
+  | "Loading"
   | "ArrowBottom"
   | "ArrowVerticalBottom"
   | "Language"
@@ -212,55 +220,66 @@ export type Icons =
   | "De";
 
 export const tokensTicker = [
-  "PDEX",
-  "DOT",
-  "AAVE",
-  "COMP",
-  "LINK",
-  "BAT",
-  "BAL",
-  "ETH",
-  "USDT",
   "INCH",
+  "AAVE",
+  "BAL",
+  "COMP",
+  "DOT",
+  "ETH",
+  "LINK",
+  "PDEX",
+  "UNI",
+  "USDT",
+  "BTC",
+  "USD",
+  "EUR",
+  "ZAR",
+  "DASH",
 ];
 
 export type TokensTicker =
-  | "PDEX"
-  | "DOT"
-  | "AAVE"
-  | "COMP"
-  | "LINK"
-  | "BAT"
-  | "BAL"
-  | "ETH"
-  | "USDT"
   | "INCH"
+  | "AAVE"
+  | "BAL"
+  | "COMP"
+  | "DOT"
+  | "ETH"
+  | "LINK"
+  | "PDEX"
+  | "UNI"
+  | "USDT"
+  | "BTC"
+  | "USD"
+  | "EUR"
+  | "ZAR"
+  | "DASH"
   | string;
 
 export const tokensName = [
   "Polkadex",
   "Polkadot",
-  "AAVE",
-  "Compound",
-  "Chainlink",
-  "Basic Attention Token",
-  "Balancer",
   "Ethereum",
+  "Aave",
+  "Compound",
   "Tether",
-  "INCH",
   "Uniswap",
+  "Link",
+  "Basic Token Atention",
+  "1Inch",
+  "Bitcoin",
+  "Dash",
 ];
 
 export type TokensName =
   | "Polkadex"
   | "Polkadot"
-  | "AAVE"
-  | "Compound"
-  | "Chainlink"
-  | "Basic Attention Token"
-  | "Balancer"
   | "Ethereum"
+  | "Aave"
+  | "Compound"
   | "Tether"
-  | "INCH"
   | "Uniswap"
-  | string;
+  | "Link"
+  | "Basic Token Atention"
+  | "1Inch"
+  | "Bitcoin"
+  | "Dash";

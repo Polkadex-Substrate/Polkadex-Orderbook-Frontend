@@ -1,10 +1,12 @@
 import { ReactNode } from "react";
 
+import { Sizes } from "../../../helpers";
+
 export type Props = {
   isVisible: boolean;
   onClose: () => void;
   children: ReactNode;
-  BottomPosition?: boolean;
+  isBottomPosition?: boolean;
   isMessage?: boolean;
-  size?: "xxSmall" | "xSmall" | "small" | "medium" | "large" | "full";
+  size?: Sizes;
 };

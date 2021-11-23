@@ -6,3 +6,4 @@ export * from "./OpenOrders";
 export * from "./OrderHistory";
 export * from "./Funds";
 export * from "./Header";
+export * from "./Message";

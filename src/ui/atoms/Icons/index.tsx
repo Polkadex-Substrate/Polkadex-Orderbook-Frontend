@@ -61,3 +61,7 @@ export { default as Empty } from "./Empty";
 export { default as Verified } from "./Verified";
 export { default as Mnemonic } from "./Mnemonic";
 export { default as Print } from "./Print";
+export { default as Successful } from "./Successful";
+export { default as Error } from "./Error";
+export { default as Loading } from "./Loading";
+export { default as Alert } from "./Alert";

@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperButton } from "src/ui/molecules/Button/styles";
-
 export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Graph;

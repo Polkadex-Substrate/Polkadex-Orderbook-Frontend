@@ -1,10 +1,8 @@
-// TODO: Register call not working
 import { put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { sendError } from "../../../";
-import { userData, ProxyAccount } from "../../profile";
+import { sendError, alertPush, userData, ProxyAccount } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
@@ -18,7 +16,6 @@ export function* signUpSaga(action: SignUpFetch) {
   try {
     const { mnemonic, password, accountName } = action.payload;
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
-    console.log("Pair", pair);
     const proxyAddress = pair.address;
     registerAccount(pair, proxyAddress);
     const data: ProxyAccount = {
@@ -29,6 +26,17 @@ export function* signUpSaga(action: SignUpFetch) {
     };
     yield put(userData({ user: data }));
     yield put(signUpData());
+
+    yield put(
+      alertPush({
+        type: "Successful",
+        message: {
+          title: "Your Account has been created",
+          description:
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+        },
+      })
+    );
   } catch (error) {
     yield put(
       sendError({

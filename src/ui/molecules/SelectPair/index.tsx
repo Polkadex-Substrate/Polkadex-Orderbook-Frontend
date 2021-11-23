@@ -9,7 +9,7 @@ export const SelectPairHeader = ({ title = "", icon = "Default" }) => {
     <S.Wrapper>
       {title ? (
         <>
-          <Icon isToken name={icon} size="small" />
+          <Icon isToken name={icon} size="large" background="secondaryBackground" />
           <span>{title}</span>
           <Icon name="ArrowBottom" size="small" />
         </>

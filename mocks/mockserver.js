@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+
 const colors = require("colors");
 const join = path.join;
 const Combinatorics = require("js-combinatorics");
@@ -41,8 +42,7 @@ const parseValue = function (value) {
  * Priority exports over ENV definition.
  */
 const prepareWatchedHeaders = function () {
-  const exportHeaders =
-    module.exports.headers && module.exports.headers.toString();
+  const exportHeaders = module.exports.headers && module.exports.headers.toString();
   const headers = (exportHeaders || process.env.MOCK_HEADERS || "").split(",");
 
   return headers.filter(function (item, pos, self) {
@@ -176,8 +176,7 @@ function matchWildcardPath(steps, dirSteps) {
 
 function flattenDeep(directories) {
   return directories.reduce(
-    (acc, val) =>
-      Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val),
+    (acc, val) => (Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val)),
     []
   );
 }
@@ -190,9 +189,7 @@ function getDirectories(srcpath) {
 }
 
 function getDirectoriesRecursive(srcpath) {
-  const nestedDirectories = getDirectories(srcpath).map(
-    getDirectoriesRecursive
-  );
+  const nestedDirectories = getDirectories(srcpath).map(getDirectoriesRecursive);
   const directories = flattenDeep(nestedDirectories);
   directories.push(srcpath);
   return directories;
@@ -281,15 +278,11 @@ function getMockedContent(path, prefix, body, query) {
   try {
     content = fs.readFileSync(mockFile, { encoding: "utf8" });
     if (mockserver.verbose) {
-      console.log(
-        "Reading from " + mockFile.yellow + " file: " + "Matched".green
-      );
+      console.log("Reading from " + mockFile.yellow + " file: " + "Matched".green);
     }
   } catch (err) {
     if (mockserver.verbose) {
-      console.log(
-        "Reading from " + mockFile.yellow + " file: " + "Not matched".red
-      );
+      console.log("Reading from " + mockFile.yellow + " file: " + "Not matched".red);
     }
     content = (body || query) && getMockedContent(path, prefix);
   }
@@ -324,8 +317,7 @@ const mockserver = {
       let path = url;
 
       const queryIndex = url.indexOf("?");
-      const query =
-        queryIndex >= 0 ? url.substring(queryIndex).replace(/\?/g, "") : "";
+      const query = queryIndex >= 0 ? url.substring(queryIndex).replace(/\?/g, "") : "";
       const method = req.method.toUpperCase();
       const headers = [];
 
@@ -337,9 +329,7 @@ const mockserver = {
         mockserver.headers.forEach(function (header) {
           header = header.toLowerCase();
           if (req.headers[header]) {
-            headers.push(
-              "_" + normalizeHeader(header) + "=" + req.headers[header]
-            );
+            headers.push("_" + normalizeHeader(header) + "=" + req.headers[header]);
           }
         });
       }
@@ -358,22 +348,10 @@ const mockserver = {
         permutations.push([]);
       }
 
-      matched = getContentFromPermutations(
-        path,
-        method,
-        body,
-        query,
-        permutations.slice(0)
-      );
+      matched = getContentFromPermutations(path, method, body, query, permutations.slice(0));
 
       if (!matched.content && (path = getWildcardPath(path))) {
-        matched = getContentFromPermutations(
-          path,
-          method,
-          body,
-          query,
-          permutations.slice(0)
-        );
+        matched = getContentFromPermutations(path, method, body, query, permutations.slice(0));
       }
 
       if (matched.content) {

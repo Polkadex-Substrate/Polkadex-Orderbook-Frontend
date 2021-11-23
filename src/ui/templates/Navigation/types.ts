@@ -1,6 +1,6 @@
 import { AnchorHTMLAttributes } from "react";
 
-import { IIcons } from "src/utils/types";
+import { Icons } from "@polkadex/web-helpers";
 
 export type Props = {
   activateNotification: () => void;
@@ -8,7 +8,7 @@ export type Props = {
 
 export type NavProps = {
   text: string;
-  icon: IIcons;
+  icon: Icons;
   active?: boolean;
   soon?: boolean;
 } & AnchorHTMLAttributes<HTMLAnchorElement>;

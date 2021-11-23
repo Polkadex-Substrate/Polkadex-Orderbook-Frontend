@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import * as S from "./styles";
 
 import { useWindowSize } from "@polkadex/orderbook-hooks";
-import { FundCard } from "src/ui";
+import { FundCard } from "@polkadex/orderbook-ui/molecules";
 
 export const Funds = () => {
   const { width } = useWindowSize();

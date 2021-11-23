@@ -1,6 +1,6 @@
-import { IColors } from "src/utils/types";
+import { Colors } from "@polkadex/web-helpers";
 
 export type Props = {
   size?: string;
-  color?: IColors;
+  color?: Colors;
 };

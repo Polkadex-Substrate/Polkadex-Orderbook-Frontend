@@ -16,7 +16,7 @@ const MyAccount = ({
 }: T.Props) => {
   return (
     <S.Wrapper isHeader={isHeader} isFull={isFull} {...props}>
-      <Icon name="Avatar" background="primaryBackground" size="extraGiant" />
+      <Icon name="Avatar" background="primaryBackground" size="giant" />
       <S.AccountInfo>
         <S.AccountInfoHeader>
           <p>
