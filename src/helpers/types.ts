@@ -82,6 +82,7 @@ export type Sizes =
 export const icons = [
   "ArrowTop",
   "Verified",
+  "Alert",
   "Avatar",
   "Attention",
   "ArrowBottom",
@@ -152,6 +153,7 @@ export type Icons =
   | "ArrowTop"
   | "Verified"
   | "Avatar"
+  | "Alert"
   | "Attention"
   | "Successful"
   | "Error"

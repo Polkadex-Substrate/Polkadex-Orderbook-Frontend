@@ -33,7 +33,7 @@ export function* signUpSaga(action: SignUpFetch) {
         message: {
           title: "Your Account has been created",
           description:
-            "Congrats your order has been created, you will be redirect in 10 seconds",
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
         },
       })
     );

@@ -1,5 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { ApiPromise, WsProvider } from "@polkadot/api";
+import keyring from "@polkadot/ui-keyring";
 
 import { sendError } from "../../..";
 import { PolkadotWalletFetch, polkadotWalletData, InjectedAccount } from "../actions";
@@ -30,17 +31,12 @@ async function createPolkadotWalletApi() {
   return api;
 }
 async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
-  const { web3Accounts, web3Enable } = await import("@polkadot/extension-dapp");
-  const extensions = await web3Enable("polkadot");
-  if (extensions.length === 0) {
-    throw new Error("no extensions installed");
-  }
-  const allAccounts = await web3Accounts();
+  const allAccounts = keyring.getAccounts() || [];
   return allAccounts.map((account) => {
     return {
       address: account.address,
       meta: account.meta,
-      type: account.type,
+      type: account.publicKey,
     };
   });
 }

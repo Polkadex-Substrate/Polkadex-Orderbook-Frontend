@@ -12,7 +12,6 @@ export const PaperWallet = ({ forwardedRef, mnemonic, mnemoicString }) => {
       drawer: "svg",
       width: 150,
       height: 150,
-      correctLevel: QRCode.CorrectLevel.L,
       text: mnemoicString,
       logo: "/img/PolkadexIcon.svg",
     };
