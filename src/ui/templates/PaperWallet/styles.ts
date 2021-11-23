@@ -19,6 +19,6 @@ export const Container = styled.div`
 `;
 
 export const Text = styled.text`
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 550;
 `;
