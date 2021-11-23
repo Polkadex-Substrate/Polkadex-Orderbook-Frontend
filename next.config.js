@@ -17,7 +17,6 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  swcMinify: true,
   env: {
     HOST_URL: process.env.NEXT_PUBLIC_HOST_URL || "http://openfinex.polkadex.trade:8000",
     RANGER_HOST_URL:
