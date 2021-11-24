@@ -55,8 +55,6 @@ export const ordersHistoryReducer = (
         ...state,
         list: sliceArray(action.payload.list, defaultStorageLimit),
         fetching: false,
-        pageIndex: action.payload.pageIndex,
-        nextPageExists: action.payload.nextPageExists,
       };
     case ORDERS_HISTORY_RANGER_DATA:
       return {

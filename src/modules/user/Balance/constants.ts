@@ -1,0 +1,9 @@
+export const USER_BALANCE_FETCH = "fetchBalance/FETCH";
+export const USER_BALANCE_DATA = "fetchBalance/DATA";
+export const USER_BALANCE_ERROR = "fetchBalance/ERROR";
+export const USER_BALANCE_APPEND = "fetchBalance/APPEND";
+export const USER_BALANCE_UPDATE = "fetchBalance/UPDATE";
+export const USER_BALANCE_RESET = "fetchBalance/RESET";
+export const USER_BALANCE_CANCEL_FETCH = "fetchBalance/CANCEL_FETCH";
+export const USER_BALANCE_CANCEL_DATA = "fetchBalance/CANCEL_DATA";
+export const USER_BALANCE_CANCEL_ERROR = "fetchBalance/CANCEL_ERUSER_BALANCE";

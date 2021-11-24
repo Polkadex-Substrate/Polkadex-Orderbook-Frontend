@@ -24,7 +24,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const defaultValues = {
   password: "",
-  account: "",
+  address: "",
 };
 
 export const LoginTemplate = () => {
@@ -35,11 +35,11 @@ export const LoginTemplate = () => {
   const selectedAccount = useReduxSelector(selectMainAccount);
   const hasUser = useReduxSelector(selectHasUser);
 
-  // useEffect(() => {
-  //   if (hasUser) router.push("/");
-  // }, [hasUser, router]);
+  useEffect(() => {
+    if (hasUser) router.push("/");
+  }, [hasUser, router]);
 
-  // if (hasUser) return <div />;
+  if (hasUser) return <div />;
   return (
     <S.Main>
       <S.Wrapper>
@@ -56,7 +56,7 @@ export const LoginTemplate = () => {
               <Formik
                 initialValues={defaultValues}
                 onSubmit={async (values) => {
-                  dispatch(signIn(values.account, values.password));
+                  dispatch(signIn(selectedAccount.address, values.password));
                 }}>
                 {({ errors, touched }) => (
                   <Form>

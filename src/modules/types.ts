@@ -15,28 +15,28 @@ export type OrderType = "limit" | "market";
 export type OrderKind = "bid" | "ask";
 
 export interface OrderCommon {
-  price: string;
-  state: OrderStatus;
-  remaining_volume: string;
-  origin_volume: string;
-  executed_volume?: string;
-  side: OrderSide;
-  market: string;
-  ord_type?: OrderType;
-  avg_price?: string;
-  volume?: number;
-  created_at?: string;
-  updated_at?: string;
-  confirmed?: boolean;
-  uuid?: string | number;
-  id?: number;
-  kind?: OrderKind;
-  trades_count?: number;
+  id: string;
+  timestamp: number;
+  last_trade_timestamp?: null;
+  status: string;
+  symbol?: string[] | null;
+  order_type: string;
+  order_side: string;
+  price: number;
+  average: number;
+  amount: number;
+  filled: number;
+  trades?: null[] | null;
+  fee: Fee;
+}
+export interface Fee {
+  currency: string;
+  cost: number;
 }
 
 export interface OrderEvent extends OrderCommon {
   at: number;
-  order_type?: OrderType;
+  order_type: OrderType;
 }
 
 export interface MarketUpdateEvent {

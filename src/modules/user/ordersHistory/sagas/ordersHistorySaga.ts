@@ -8,33 +8,28 @@ import {
 } from "../actions";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+import { OrderCommon } from "src/modules/types";
+import { formatPayload } from "src/helpers/formatPayload";
 
 const ordersOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
-    const { pageIndex, limit, type } = action.payload;
-    const params = `${type === "all" ? "" : "&state=wait"}`;
-    const data = yield call(
-      API.get(ordersOptions),
-      `/market/orders?page=${pageIndex + 1}&limit=${limit}${params}`
-    );
-    let nextPageExists = false;
-
-    if (data.length === limit) {
-      const checkData = yield call(
-        API.get(ordersOptions),
-        `/market/orders?page=${(pageIndex + 1) * limit + 1}&limit=${1}${params}`
+    const { userAccount } = action.payload;
+    const payload = { account: userAccount.address };
+    if (userAccount.address) {
+      const signature = yield call(() =>
+        signMessage(userAccount.keyringPair, JSON.stringify(payload))
       );
-
-      if (checkData.length === 1) {
-        nextPageExists = true;
-      }
+      const data = formatPayload(signature, payload);
+      const res: OrderCommon[] = yield call(() =>
+        API.post(ordersOptions)("/fetch_orders", data)
+      );
+      yield put(userOrdersHistoryData({ list: res }));
     }
-
-    yield put(userOrdersHistoryData({ list: data, nextPageExists, pageIndex }));
   } catch (error) {
     yield put(
       sendError({

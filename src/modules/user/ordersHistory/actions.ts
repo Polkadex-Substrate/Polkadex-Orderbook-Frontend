@@ -1,4 +1,5 @@
 import { CommonError, OrderCommon, OrderEvent } from "../../types";
+import { ProxyAccount } from "../profile";
 
 import {
   ORDERS_CANCEL_ALL_DATA,
@@ -16,15 +17,11 @@ import {
 } from "./constants";
 
 interface UserOrdersHistoryFetchPayload {
-  pageIndex: number;
-  limit: number;
-  type: string;
+  userAccount: ProxyAccount;
 }
 
 export interface UserOrdersHistoryDataPayload {
   list: OrderCommon[];
-  pageIndex: number;
-  nextPageExists: boolean;
 }
 
 export interface UserOrdersHistoryFetch {
