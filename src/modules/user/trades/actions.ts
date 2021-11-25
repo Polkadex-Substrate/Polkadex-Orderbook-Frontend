@@ -1,26 +1,38 @@
-import { USER_TRADES_DATA, USER_TRADES_FETCH } from "./constants";
+import { TRADES_DATA, TRADES_FETCH, TRADES_ERROR } from "./constants";
 
 import { ProxyAccount } from "@polkadex/orderbook-modules";
 
-export interface UserTradesDataPayload {
+export interface Trades {
   // we don't know the types yet
-  trades: any;
+  trade: any;
 }
-export interface UserTradesFetch {
-  type: typeof USER_TRADES_FETCH;
+export interface TradesFetch {
+  type: typeof TRADES_FETCH;
   payload: { account: ProxyAccount };
 }
-export interface UserTradesData {
-  type: typeof USER_TRADES_DATA;
-  payload: UserTradesDataPayload;
+export interface TradesData {
+  type: typeof TRADES_DATA;
+  payload: Trades;
 }
-export type DepositAction = UserTradesFetch | UserTradesData;
 
-export const userTradesFetch = (payload: UserTradesFetch["payload"]): UserTradesFetch => ({
-  type: USER_TRADES_FETCH,
+export interface TradesError {
+  type: typeof TRADES_ERROR;
+  error: string;
+}
+
+export type TradesAction = TradesFetch | TradesData | TradesError;
+
+export const tradesFetch = (payload: TradesFetch["payload"]): TradesFetch => ({
+  type: TRADES_FETCH,
   payload,
 });
-export const userTradesData = (payload: UserTradesDataPayload): UserTradesData => ({
-  type: USER_TRADES_DATA,
+
+export const tradesData = (payload: Trades): TradesData => ({
+  type: TRADES_DATA,
   payload,
+});
+
+export const tradesError = (error): TradesError => ({
+  type: TRADES_ERROR,
+  error,
 });

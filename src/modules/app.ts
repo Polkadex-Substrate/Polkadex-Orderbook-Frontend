@@ -19,6 +19,7 @@ import { polkadotWalletReducer } from "./user/polkadotWallet";
 import { orderTransactionReducer } from "./user/OrdersTransactions";
 import { walletsReducer } from "./user/wallets";
 import { depositsReducer } from "./user/deposits";
+import { tradesReducer } from "./user/trades";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -45,4 +46,5 @@ export const userReducer = combineReducers({
   profile: profileReducer,
   wallets: walletsReducer,
   deposits: depositsReducer,
+  trades: tradesReducer,
 });

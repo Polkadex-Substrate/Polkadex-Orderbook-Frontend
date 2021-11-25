@@ -1,2 +1,3 @@
-export const USER_TRADES_FETCH = "fetchTrades/FETCH";
-export const USER_TRADES_DATA = "fetchTrades/DATA";
+export const TRADES_FETCH = "trades/FETCH";
+export const TRADES_DATA = "trades/DATA";
+export const TRADES_ERROR = "trades/ERROR";

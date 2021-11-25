@@ -1,9 +1,9 @@
 import { takeLatest } from "redux-saga/effects";
 
-import { USER_TRADES_FETCH } from "../constants";
+import { TRADES_FETCH } from "../constants";
 
-import { fetchTradesSaga } from "./fetchDepositSaga";
+import { fetchTradesSaga } from "./fetchTradesSaga";
 
-export function* rootUserBalancesSaga() {
-  yield takeLatest(USER_TRADES_FETCH, fetchTradesSaga);
+export function* rootTradesSaga() {
+  yield takeLatest(TRADES_FETCH, fetchTradesSaga);
 }
