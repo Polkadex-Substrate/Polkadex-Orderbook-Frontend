@@ -53,6 +53,7 @@ const GlobalStyles = createGlobalStyle`
   .pg-trading-chart {
     height: 100%;
   }
+
  /* work-sans-100 - latin */
 @font-face {
   font-family: 'Work Sans';

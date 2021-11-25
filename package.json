@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint src",
     "test": "jest",
+    "generate": "yarn plop --plopfile generators/plopfile.js",
     "test:watch": "yarn test --watch",
     "mockAPI": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockAPI.js",
     "mockWS": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockWS.js",
@@ -29,8 +30,10 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
+    "react-router-dom": "^6.0.2",
     "react-stockcharts": "^0.7.8",
     "react-to-print": "^2.14.1",
+    "react-use-websocket": "^2.9.1",
     "recharts": "^2.1.4",
     "redux": "^4.1.1",
     "redux-saga": "^1.1.3",
@@ -71,9 +74,13 @@
     "header-case-normalizer": "^1.0.3",
     "jest": "^27.2.5",
     "js-combinatorics": "0.5.0",
+    "plop": "^2.7.6",
     "prettier": "^2.4.1",
     "redux-devtools-extension": "^2.13.9",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
+  },
+  "resolutions": {
+    "ansi-regex": "^5.0.1 "
   }
 }

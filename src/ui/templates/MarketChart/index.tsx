@@ -1,9 +1,21 @@
+import dynamic from "next/dynamic";
+
 import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { MarketDepth } from "@polkadex/orderbook-ui/templates";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 
+const TradingChart = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/molecules/TradingChart").then((mod) => mod.TradingChart),
+  {
+    ssr: false,
+  }
+);
 export const MarketChart = () => {
+  const currentMarket = useReduxSelector(selectCurrentMarket);
   return (
     <S.Wrapper>
       <Tabs>
@@ -25,7 +37,7 @@ export const MarketChart = () => {
           </S.Actions>
         </S.Header>
         <S.Content>
-          <TabContent></TabContent>
+          <TabContent>{currentMarket && <TradingChart />}</TabContent>
           <TabContent>
             <MarketDepth />
           </TabContent>

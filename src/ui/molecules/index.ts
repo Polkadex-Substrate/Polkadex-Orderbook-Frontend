@@ -30,3 +30,4 @@ export * from "./Input";
 export * from "./Tag";
 export * from "./Link";
 export * from "./MessageCard";
+export * from "./TradingChart";

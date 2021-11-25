@@ -1,9 +1,23 @@
-import { ColorThemeState } from "@polkadex/web-modules";
-
 import { RootState } from "../..";
 
-export const selectCurrentColorTheme = (state: RootState): ColorThemeState["color"] =>
-  state.public.colorTheme.color;
+import { GlobalSettingsState } from "./reducer";
+
+export const selectCurrentColorTheme = (state: RootState): GlobalSettingsState["color"] =>
+  state.public.globalSettings.color;
 
 export const selectCurrentDarkTheme = (state: RootState): boolean =>
-  state.public.colorTheme.color === "dark";
+  state.public.globalSettings.color === "dark";
+
+export const selectChartRebuildState = (
+  state: RootState
+): GlobalSettingsState["chartRebuild"] => state.public.globalSettings.chartRebuild;
+
+export const selectOrdersHideOtherPairsState = (
+  state: RootState
+): GlobalSettingsState["ordersHideOtherPairs"] =>
+  state.public.globalSettings.ordersHideOtherPairs;
+
+export const selectMarketSelectorState = (
+  state: RootState
+): GlobalSettingsState["marketSelectorActive"] =>
+  state.public.globalSettings.marketSelectorActive;

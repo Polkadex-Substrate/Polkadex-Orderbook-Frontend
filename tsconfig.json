@@ -72,10 +72,10 @@
         "src/config"
       ],
       "lib/*": [
-        "./src/lib/*"
+        "src/lib/*"
       ],
-      "src/*": [
-        "./src/*"
+      "@polkadex/orderbook/*": [
+        "src/*"
       ]
     },
     "incremental": true
@@ -95,7 +95,6 @@
     "jest.config.js",
     "webpack",
     "./src/*.test.*",
-    "./src/charting_library"
   ],
   "files": [
     "src/styles/styled.d.ts"
