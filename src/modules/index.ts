@@ -29,7 +29,8 @@ import {
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
 import { publicReducer, userReducer } from "./app";
 import { WalletsState, rootWalletsSaga } from "./user/wallets";
-import { rootUserOrdersSaga } from "./user/fetchOrders";
+import { DepositsState } from "./user/deposits/reducer";
+import { rootDepositsSaga } from "./user/deposits";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -73,6 +74,7 @@ export interface RootState {
     orderTransactions: OrderTransactionState;
     profile: ProfileState;
     wallets: WalletsState;
+    deposits: DepositsState;
   };
 }
 
@@ -84,6 +86,7 @@ export const rootReducer = combineReducers({
 export function* rootSaga() {
   yield all([
     call(rootAuthSaga),
+    call(rootDepositsSaga),
     call(rootCurrenciesSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),

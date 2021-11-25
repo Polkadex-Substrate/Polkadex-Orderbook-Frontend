@@ -18,6 +18,7 @@ import { profileReducer } from "./user/profile";
 import { polkadotWalletReducer } from "./user/polkadotWallet";
 import { orderTransactionReducer } from "./user/OrdersTransactions";
 import { walletsReducer } from "./user/wallets";
+import { depositsReducer } from "./user/deposits";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -43,4 +44,5 @@ export const userReducer = combineReducers({
   orderTransactions: orderTransactionReducer,
   profile: profileReducer,
   wallets: walletsReducer,
+  deposits: depositsReducer,
 });
