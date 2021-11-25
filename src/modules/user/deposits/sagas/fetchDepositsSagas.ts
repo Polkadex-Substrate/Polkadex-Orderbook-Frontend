@@ -1,7 +1,7 @@
 import { call, put } from "redux-saga/effects";
 
-import { DepositFetch } from "../actions";
-import { depositError } from "..";
+import { DepositsFetch } from "../actions";
+import { depositsError } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -12,7 +12,7 @@ const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* fetchDepositSaga(action: DepositsFetch) {
+export function* fetchDepositsSaga(action: DepositsFetch) {
   try {
     const { address, keyringPair } = action.payload.account;
     if (address !== "" && keyringPair) {
