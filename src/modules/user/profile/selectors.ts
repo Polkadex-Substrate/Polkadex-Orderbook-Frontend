@@ -26,5 +26,5 @@ export const selectUserDataChange = (state: RootState): boolean | undefined =>
 export const selectAllProxyAccounts = (state: RootState): UserSkeleton[] =>
   state.user.profile.allUsers;
 
-export const p = (state: RootState): string =>
+export const selectProxyAddress = (state: RootState): string =>
   state.user.profile.userData.user.address;
