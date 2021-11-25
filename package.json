@@ -77,5 +77,8 @@
     "redux-devtools-extension": "^2.13.9",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
+  },
+  "resolutions": {
+    "ansi-regex": "^5.0.1 "
   }
 }
