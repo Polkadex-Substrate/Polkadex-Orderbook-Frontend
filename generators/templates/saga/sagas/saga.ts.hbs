@@ -1,0 +1,28 @@
+import { call, put, select } from "redux-saga/effects";
+
+import { sendError } from "../../..";
+
+import { {{camelCase name}}Fetch, {{camelCase name}}Data, {{camelCase name}}Error } from "../actions";
+
+import { alertPush } from "../../../public/alertHandler";
+
+
+export function* {{camelCase name}}Saga() {
+  try {
+    yield call(() => fetch{{camelCase name}}Async());
+  } catch (error) {
+    yield put(
+      alertPush({
+        message: {
+          title: 'Something has gone wrong..',
+          description: error.message
+        },
+        type: 'Error'
+      })
+    )
+  }
+}
+
+function* fetch{{camelCase name}}Async() {
+    //..
+}

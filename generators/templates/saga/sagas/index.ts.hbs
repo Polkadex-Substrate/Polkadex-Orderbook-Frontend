@@ -1,0 +1,9 @@
+import { takeLeading } from "redux-saga/effects";
+
+import { {{constantCase name}}_FETCH } from "../constants";
+
+import { {{camelCase name}}Saga } from "./{{camelCase name}}Saga";
+
+export function* root{{properCase name}}Saga() {
+  yield takeLeading({{constantCase name}}_FETCH, {{camelCase name}}Saga);
+}
