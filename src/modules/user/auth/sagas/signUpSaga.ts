@@ -6,7 +6,7 @@ import { sendError, alertPush, userData, ProxyAccount } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessageUsingMainAccount } from "@polkadex/web-helpers";
+import { signMessage } from "@polkadex/web-helpers";
 
 const registerUserOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
@@ -51,7 +51,7 @@ export function* signUpSaga(action: SignUpFetch) {
 }
 const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) => {
   const payload = { main_account: proxyAddress, proxy_account: proxyAddress };
-  const signature = await signMessageUsingMainAccount(userKeyring, JSON.stringify(payload));
+  const signature = await signMessage(userKeyring, JSON.stringify(payload));
   const data = {
     signature: {
       Sr25519: signature.trim().slice(2),

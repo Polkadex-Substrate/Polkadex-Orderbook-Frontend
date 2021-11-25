@@ -29,6 +29,7 @@ import {
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
 import { publicReducer, userReducer } from "./app";
 import { WalletsState, rootWalletsSaga } from "./user/wallets";
+import { rootUserOrdersSaga } from "./user/fetchOrders";
 
 export * from "./user/auth";
 export * from "./user/history";

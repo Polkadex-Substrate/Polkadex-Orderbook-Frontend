@@ -1,8 +1,10 @@
+import { KeyringPair } from "@polkadot/keyring/types";
+
 export interface ProxyAccount {
   accountName: string;
   password: string;
   address: string;
-  keyringPair?: any;
+  keyringPair?: KeyringPair;
   created_at?: string;
   state?: string;
 }

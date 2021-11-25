@@ -1,8 +1,13 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { selectUserLoggedIn } from "@polkadex/orderbook-modules";
+import {
+  selectOrdersHistory,
+  selectUserInfo,
+  userOrdersHistoryFetch,
+} from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Checkbox,
@@ -13,10 +18,17 @@ import {
   TabHeader,
   Empty,
 } from "@polkadex/orderbook-ui/molecules";
-import { OpenOrders, OrderHistory } from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-
+  const userAccount = useReduxSelector(selectUserInfo);
+  const orders = useReduxSelector(selectOrdersHistory);
+  const dispatch = useDispatch();
+  const userLoggedIn = userAccount.address !== "";
+  React.useEffect(() => {
+    if (userLoggedIn) {
+      dispatch(userOrdersHistoryFetch({ userAccount }));
+    }
+  }, [dispatch, userAccount, userLoggedIn]);
+  console.log({ orders });
   return (
     <S.Wrapper>
       {userLoggedIn ? (
