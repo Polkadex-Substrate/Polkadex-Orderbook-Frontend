@@ -1,3 +1,5 @@
+import { CommonError } from "../../types";
+
 import { {{constantCase name}}_DATA, {{constantCase name}}_ERROR, {{constantCase name}}_FETCH } from "./constants";
 
 
@@ -7,7 +9,7 @@ export interface {{properCase name}}Fetch {
 
 export interface {{properCase name}}Error {
   type: typeof {{constantCase name}}_ERROR;
-  error: string;
+  error: CommonError;
 }
 
 export interface {{properCase name}}Data {
@@ -24,7 +26,7 @@ export const {{camelCase name}}Data = (): {{properCase name}}Data => ({
   type: {{constantCase name}}_DATA,
 });
 
-export const {{camelCase name}}Error = (error: string): {{properCase name}}Error => ({
+export const {{camelCase name}}Error = (error: CommonError): {{properCase name}}Error => ({
   type: {{constantCase name}}_ERROR,
   error,
 });
