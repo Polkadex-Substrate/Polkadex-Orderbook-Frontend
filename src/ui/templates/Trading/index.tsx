@@ -16,6 +16,7 @@ import {
   MarketTrade,
   Transactions,
   PlaceOrder,
+  MarketChart,
 } from "@polkadex/orderbook-ui/templates";
 
 export const Trading = () => {
@@ -30,9 +31,9 @@ export const Trading = () => {
   return (
     <S.Main>
       <Header />
-
       <S.Wrapper>
         {/* {width < 990 && <Toolbar />} */}
+        <MarketChart />
         <Orderbook />
         <MarketTrade />
         <Transactions />

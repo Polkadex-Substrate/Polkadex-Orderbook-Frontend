@@ -1,7 +1,7 @@
 import { all, call } from "redux-saga/effects";
 import { combineReducers } from "redux";
 
-import { ColorThemeState } from "./public/globalSettings";
+import { GlobalSettingsState } from "./public/globalSettings";
 import { rootHandleAlertSaga, AlertState } from "./public/alertHandler";
 import { ErrorHandlerState, rootErrorHandlerSaga } from "./public/errorHandler";
 import { CurrenciesState, rootCurrenciesSaga } from "./public/currencies";
@@ -55,7 +55,7 @@ export * from "./public/ranger";
 export interface RootState {
   public: {
     alerts: AlertState;
-    colorTheme: ColorThemeState;
+    globalSettings: GlobalSettingsState;
     currencies: CurrenciesState;
     depth: DepthState;
     errorHandler: ErrorHandlerState;

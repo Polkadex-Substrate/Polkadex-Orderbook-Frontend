@@ -21,4 +21,6 @@ export * from "./accumulateVolume";
 export * from "./calcMaxVolume";
 export * from "./getTotalPrice";
 export * from "./signMessage";
+export * from "./periodMinutesToString";
+export * from "./periodStringToMinutes";
 export * from "./types";

@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import { alertReducer } from "./public/alertHandler";
-import { changeColorThemeReducer } from "./public/globalSettings";
+import { changeGlobalSettingsReducer } from "./public/globalSettings";
 import { errorHandlerReducer } from "./public/errorHandler";
 import { currenciesReducer } from "./public/currencies";
 import { klineReducer } from "./public/kline";
@@ -24,7 +24,7 @@ import { withdrawsReducer } from "./user/withdraws";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
-  colorTheme: changeColorThemeReducer,
+  globalSettings: changeGlobalSettingsReducer,
   currencies: currenciesReducer,
   errorHandler: errorHandlerReducer,
   kline: klineReducer,
