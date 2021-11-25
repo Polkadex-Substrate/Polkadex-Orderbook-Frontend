@@ -1,11 +1,13 @@
 import { USER_BALANCE_DATA, USER_BALANCE_FETCH } from "./constants";
 
+import { ProxyAccount } from "@polkadex/orderbook-modules";
+
 export interface UserBalanceDataPayload {
   balance: any;
 }
 export interface UserBalanceFetch {
   type: typeof USER_BALANCE_FETCH;
-  payload: { proxyAddress: string };
+  payload: { account: ProxyAccount };
 }
 export interface UserBalanceData {
   type: typeof USER_BALANCE_DATA;
