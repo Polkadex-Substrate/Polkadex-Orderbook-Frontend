@@ -13,11 +13,13 @@ const ordersOption: RequestOptions = {
 export function* fetchBalanceSaga(action: UserBalanceFetch) {
   try {
     const { address, keyringPair } = action.payload.account;
-    const payload = { account: address };
-    const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
-    const data = formatPayload(signature, payload);
-    const res = yield call(() => API.post(ordersOption)("/fetch_balance", data));
-    console.log(res);
+    if (address !== "" && keyringPair) {
+      const payload = { account: address };
+      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
+      const data = formatPayload(signature, payload);
+      const res = yield call(() => API.post(ordersOption)("/fetch_balance", data));
+      console.log(res);
+    }
   } catch (error) {
     console.log(error);
   }
