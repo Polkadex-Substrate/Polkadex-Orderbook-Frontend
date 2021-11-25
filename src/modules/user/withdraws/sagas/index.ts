@@ -1,9 +1,9 @@
 import { takeLatest } from "redux-saga/effects";
 
-import { USER_WITHDRAWS_FETCH } from "../constants";
+import { WITHDRAWS_FETCH } from "../constants";
 
-import { fetchWithdrawsSaga } from "./fetchWithdrawSaga";
+import { fetchWithdrawsSaga } from "./fetchWithdrawsSaga";
 
-export function* rootUserBalancesSaga() {
-  yield takeLatest(USER_WITHDRAWS_FETCH, fetchWithdrawsSaga);
+export function* rootWithdrawsSaga() {
+  yield takeLatest(WITHDRAWS_FETCH, fetchWithdrawsSaga);
 }

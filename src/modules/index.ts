@@ -32,6 +32,7 @@ import { WalletsState, rootWalletsSaga } from "./user/wallets";
 import { DepositsState } from "./user/deposits/reducer";
 import { rootDepositsSaga } from "./user/deposits";
 import { rootTradesSaga, TradesState } from "./user/trades";
+import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -77,6 +78,7 @@ export interface RootState {
     wallets: WalletsState;
     deposits: DepositsState;
     trades: TradesState;
+    withdraws: WithdrawsState;
   };
 }
 
@@ -107,5 +109,6 @@ export function* rootSaga() {
     call(rootCancelOrdersSaga),
     call(rootPolkadotWalletSaga),
     call(rootTradesSaga),
+    call(rootWithdrawsSaga),
   ]);
 }

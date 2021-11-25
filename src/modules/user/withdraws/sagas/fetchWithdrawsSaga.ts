@@ -1,16 +1,18 @@
-import { call } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 
-import { UserWithdrawsFetch } from "../actions";
+import { WithdrawsFetch } from "../actions";
+import { tradesError } from "../../trades";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
+import { sendError } from "@polkadex/orderbook-modules";
 
 const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* fetchWithdrawsSaga(action: UserWithdrawsFetch) {
+export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { address, keyringPair } = action.payload.account;
     if (address !== "" && keyringPair) {
@@ -22,5 +24,14 @@ export function* fetchWithdrawsSaga(action: UserWithdrawsFetch) {
     }
   } catch (error) {
     console.log(error);
+    yield put(
+      sendError({
+        error,
+        processingType: "alert",
+        extraOptions: {
+          actionError: tradesError,
+        },
+      })
+    );
   }
 }

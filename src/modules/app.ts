@@ -20,6 +20,7 @@ import { orderTransactionReducer } from "./user/OrdersTransactions";
 import { walletsReducer } from "./user/wallets";
 import { depositsReducer } from "./user/deposits";
 import { tradesReducer } from "./user/trades";
+import { withdrawsReducer } from "./user/withdraws";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -47,4 +48,5 @@ export const userReducer = combineReducers({
   wallets: walletsReducer,
   deposits: depositsReducer,
   trades: tradesReducer,
+  withdraws: withdrawsReducer,
 });

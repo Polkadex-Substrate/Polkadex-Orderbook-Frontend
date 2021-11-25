@@ -1,26 +1,38 @@
-import { USER_WITHDRAWS_DATA, USER_WITHDRAWS_FETCH } from "./constants";
+import { CommonError } from "../../types";
+
+import { WITHDRAWS_DATA, WITHDRAWS_FETCH, WITHDRAWS_ERROR } from "./constants";
 
 import { ProxyAccount } from "@polkadex/orderbook-modules";
-
-export interface UserWithdrawsDataPayload {
+export interface Withdraws {
   // we don't know the types yet
   widthdraws: any;
 }
-export interface UserWithdrawsFetch {
-  type: typeof USER_WITHDRAWS_FETCH;
+export interface WithdrawsFetch {
+  type: typeof WITHDRAWS_FETCH;
   payload: { account: ProxyAccount };
 }
-export interface UserWithdrawsData {
-  type: typeof USER_WITHDRAWS_DATA;
-  payload: UserWithdrawsDataPayload;
+export interface WithdrawsData {
+  type: typeof WITHDRAWS_DATA;
+  payload: Withdraws;
 }
-export type DepositAction = UserWithdrawsFetch | UserWithdrawsData;
+export interface WithdrawsError {
+  type: typeof WITHDRAWS_ERROR;
+  error: CommonError;
+}
 
-export const userWithdrawsFetch = (payload: UserWithdrawsFetch["payload"]): UserWithdrawsFetch => ({
-  type: USER_WITHDRAWS_FETCH,
+export type WithdrawsAction = WithdrawsFetch | WithdrawsData | WithdrawsError;
+
+export const withdrawsFetch = (payload: WithdrawsFetch["payload"]): WithdrawsFetch => ({
+  type: WITHDRAWS_FETCH,
   payload,
 });
-export const userWithdrawsData = (payload: UserWithdrawsDataPayload): UserWithdrawsData => ({
-  type: USER_WITHDRAWS_DATA,
+
+export const withdrawsData = (payload: Withdraws): WithdrawsData => ({
+  type: WITHDRAWS_DATA,
   payload,
+});
+
+export const withdrawsError = (error: CommonError): WithdrawsError => ({
+  type: WITHDRAWS_ERROR,
+  error,
 });

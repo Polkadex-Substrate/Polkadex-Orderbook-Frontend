@@ -1,3 +1,5 @@
+import { CommonError } from "../../types";
+
 import { TRADES_DATA, TRADES_FETCH, TRADES_ERROR } from "./constants";
 
 import { ProxyAccount } from "@polkadex/orderbook-modules";
@@ -17,7 +19,7 @@ export interface TradesData {
 
 export interface TradesError {
   type: typeof TRADES_ERROR;
-  error: string;
+  error: CommonError;
 }
 
 export type TradesAction = TradesFetch | TradesData | TradesError;
@@ -32,7 +34,7 @@ export const tradesData = (payload: Trades): TradesData => ({
   payload,
 });
 
-export const tradesError = (error): TradesError => ({
+export const tradesError = (error: CommonError): TradesError => ({
   type: TRADES_ERROR,
   error,
 });

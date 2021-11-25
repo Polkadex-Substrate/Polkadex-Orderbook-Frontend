@@ -1,3 +1,5 @@
+import { CommonError } from "../../types";
+
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR } from "./constants";
 
 import { ProxyAccount } from "@polkadex/orderbook-modules";
@@ -17,7 +19,7 @@ export interface DepositsData {
 
 export interface DepositsError {
   type: typeof DEPOSITS_ERROR;
-  error: string;
+  error: CommonError;
 }
 
 export type DepositsAction = DepositsFetch | DepositsData | DepositsError;
@@ -32,7 +34,7 @@ export const depositsData = (payload: Deposits): DepositsData => ({
   payload,
 });
 
-export const depositsError = (error): DepositsError => ({
+export const depositsError = (error: CommonError): DepositsError => ({
   type: DEPOSITS_ERROR,
   error,
 });
