@@ -10,6 +10,7 @@ import {
   KLINE_UPDATE_PERIOD,
   KLINE_UPDATE_TIME_RANGE,
 } from "./constants";
+import { KlineEvent } from "./types";
 
 export type KlineRawElement = string | number;
 
@@ -34,7 +35,7 @@ export interface KlineFetch {
 
 export interface KlineData {
   type: typeof KLINE_DATA;
-  payload: any;
+  payload: KlineEvent;
 }
 
 export interface KlineUpdateTimeRange {

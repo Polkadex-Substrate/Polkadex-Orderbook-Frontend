@@ -25,10 +25,10 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
         signMessage(userAccount.keyringPair, JSON.stringify(payload))
       );
       const data = formatPayload(signature, payload);
-      const res: OrderCommon[] = yield call(() =>
-        API.post(ordersOptions)("/fetch_orders", data)
-      );
-      yield put(userOrdersHistoryData({ list: res }));
+      const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
+      console.log("orderhistorySaga", res);
+      const ordersArray: OrderCommon[] = res.Fine;
+      yield put(userOrdersHistoryData({ list: ordersArray }));
     }
   } catch (error) {
     yield put(
