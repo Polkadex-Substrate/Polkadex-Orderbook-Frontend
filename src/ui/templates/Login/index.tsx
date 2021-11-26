@@ -36,7 +36,7 @@ export const LoginTemplate = () => {
   const hasUser = useReduxSelector(selectHasUser);
 
   useEffect(() => {
-    if (hasUser) router.push("/");
+    if (hasUser) router.push("/trading");
   }, [hasUser, router]);
 
   if (hasUser) return <div />;
@@ -66,10 +66,8 @@ export const LoginTemplate = () => {
                         <SelectAccount
                           accountName={selectedAccount?.meta.name || "Select your account"}
                           address={
-                            selectedAccount?.address ||
-                            "Please install Polkadot {.js} extension"
+                            selectedAccount?.address || "Lorem Ipsum is simply dummy text"
                           }
-                          isHeader
                         />
                       }>
                       <S.SelectContent>

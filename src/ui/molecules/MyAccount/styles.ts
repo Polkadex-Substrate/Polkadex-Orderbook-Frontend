@@ -2,14 +2,14 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as IconWrapper } from "../Icon/styles";
 
-export const Wrapper = styled.div<{ isHeader: boolean; isFull: boolean }>`
-  ${({ theme, isHeader = false, isFull = false }) => css`
+export const Wrapper = styled.div<{ isFull: boolean }>`
+  ${({ theme, isFull = false }) => css`
     display: flex;
     align-items: center;
-    background: ${isHeader ? theme.colors.text : "transparent"};
+    background: ${theme.colors.white};
     color: ${theme.colors.inverse};
-    border-radius: 1rem;
-    padding: 0.5rem;
+    border-radius: 0.8rem;
+    padding: 0.4rem;
     ${isFull &&
     css`
       flex: 1;
@@ -29,16 +29,22 @@ export const AccountInfo = styled.div`
 `;
 
 export const AccountInfoHeader = styled.div`
-  margin-right: 1rem;
-  p {
-    font-weight: 600;
-    display: inline-block;
-    line-height: 1;
-  }
-  span {
-    display: block;
-    font-size: 1.3rem;
-  }
+  ${({ theme }) => css`
+    margin-right: 1rem;
+    p,
+    span {
+      color: ${theme.colors.black};
+    }
+    p {
+      font-weight: 600;
+      display: inline-block;
+      line-height: 1;
+    }
+    span {
+      display: block;
+      font-size: 1.3rem;
+    }
+  `}
 `;
 export const SelectAccountHeader = styled(AccountInfoHeader)`
   display: flex;
@@ -53,8 +59,8 @@ export const SelectAccountHeader = styled(AccountInfoHeader)`
 
 export const AccountContent = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull = false }) => css`
-    background: ${theme.colors.text};
-    color: ${theme.colors.inverse};
+    background: ${theme.colors.white};
+    color: ${theme.colors.black};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.primary};
     ${isFull &&
@@ -164,10 +170,9 @@ export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
 `;
 
 export const SelectAccount = styled.div<{
-  isHeader?: boolean;
   isActive?: boolean;
 }>`
-  ${({ theme, isHeader, isActive }) => css`
+  ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
     padding: 0.8rem;
@@ -177,14 +182,14 @@ export const SelectAccount = styled.div<{
     border-radius: 1rem;
 
     :hover {
-      background: ${theme.colors.secondaryBackground};
+      background: ${theme.colors.secondaryBackgroundOpacity};
     }
     :not(:last-child) {
       margin-bottom: 1rem;
     }
     ${isActive &&
     css`
-      background: ${theme.colors.primaryBackgroundOpacity};
+      background: ${theme.colors.secondaryBackground};
     `}
   `}
 `;

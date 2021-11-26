@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -14,13 +15,13 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { selectUserInfo } from "@polkadex/orderbook-modules";
+import { logoutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
 
 export const Header = () => {
   const user = useReduxSelector(selectUserInfo);
   const { width } = useWindowSize();
   const router = useRouter();
-
+  const dispatch = useDispatch();
   return (
     <S.Wrapper>
       <S.Container>
@@ -41,7 +42,11 @@ export const Header = () => {
               header={
                 <MyAccountHeader accountName={user.accountName} address={user.address} />
               }>
-              <MyAccountContent accountName={user.accountName} address={user.address} />
+              <MyAccountContent
+                accountName={user.accountName}
+                address={user.address}
+                onClick={() => dispatch(logoutFetch())}
+              />
             </Dropdown>
           ) : (
             <Button

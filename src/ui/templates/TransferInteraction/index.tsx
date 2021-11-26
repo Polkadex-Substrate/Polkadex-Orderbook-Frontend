@@ -43,7 +43,6 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
                   <S.Card>
                     <S.CardTitle>From</S.CardTitle>
                     <SelectAccount
-                      isHeader
                       withButton={false}
                       accountName="Main Account"
                       address="Balance: 0"
@@ -52,7 +51,6 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
                   <S.Card>
                     <S.CardTitle>To</S.CardTitle>
                     <SelectAccount
-                      isHeader
                       withButton={false}
                       accountName="Trading Account"
                       address="Balance: 0"

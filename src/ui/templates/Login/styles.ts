@@ -90,7 +90,7 @@ export const SelectContent = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.white};
     padding: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;

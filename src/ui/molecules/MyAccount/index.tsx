@@ -7,7 +7,6 @@ import * as T from "./types";
 
 const MyAccount = ({
   children,
-  isHeader = false,
   balance = "0.0000000",
   address = "Empty",
   accountName = "Account",
@@ -15,8 +14,8 @@ const MyAccount = ({
   ...props
 }: T.Props) => {
   return (
-    <S.Wrapper isHeader={isHeader} isFull={isFull} {...props}>
-      <Icon name="Avatar" background="primaryBackground" size="giant" />
+    <S.Wrapper isFull={isFull} {...props}>
+      <Icon name="Avatar" background="black" color="white" size="extraLarge" />
       <S.AccountInfo>
         <S.AccountInfoHeader>
           <p>
@@ -42,7 +41,6 @@ export const MyAccountHeader = ({
     : "";
   return (
     <MyAccount
-      isHeader
       balance={balance}
       address={shortAddress}
       accountName={accountName}
@@ -78,6 +76,7 @@ export const MyAccountContent = ({
           <Button
             isFull={false}
             background="secondaryBackground"
+            color="black"
             size="small"
             onClick={props?.onClick}>
             Disconnect
@@ -97,11 +96,11 @@ export const MyAccountContent = ({
       <S.AccountContentSection>
         <a href="/support">
           <p>Support</p>
-          <Icon name="ArrowRight" size="small" color="inverse" />
+          <Icon name="ArrowRight" size="small" color="black" />
         </a>
         <a href="/terms">
           <p>Terms and Conditions</p>
-          <Icon name="ArrowRight" size="small" color="inverse" />
+          <Icon name="ArrowRight" size="small" color="black" />
         </a>
       </S.AccountContentSection>
     </S.AccountContent>
@@ -109,10 +108,8 @@ export const MyAccountContent = ({
 };
 
 export const SelectAccount = ({
-  balance,
   address,
   isActive,
-  isHeader,
   accountName,
   withButton,
   isFull = true,
@@ -125,25 +122,25 @@ export const SelectAccount = ({
 
   return (
     <S.SelectAccountWrapper isFull={isFull}>
-      <S.SelectAccount isActive={isActive} isHeader={isHeader} {...props}>
+      <S.SelectAccount isActive={isActive} {...props}>
         {accountName ? (
           <Icon size="extraGiant" name="Avatar" color="white" background="black" />
         ) : (
-          <Skeleton height="4rem" width="4rem" />
+          <Skeleton isLight height="4rem" width="4rem" />
         )}
         <S.AccountInfo>
           <S.SelectAccountHeader>
             <div>
-              {address ? <p>{accountName}</p> : <Skeleton width="4rem" />}
+              {address ? <p>{accountName}</p> : <Skeleton isLight width="4rem" />}
 
               {address ? (
                 <span>{shortAddress}</span>
               ) : (
-                <Skeleton width="12rem" style={{ marginTop: "1rem" }} />
+                <Skeleton isLight width="12rem" style={{ marginTop: "1rem" }} />
               )}
             </div>
 
-            {isHeader && withButton && (
+            {withButton && (
               <Icon name="ArrowBottom" size="small" style={{ marginLeft: "1rem" }} />
             )}
           </S.SelectAccountHeader>
