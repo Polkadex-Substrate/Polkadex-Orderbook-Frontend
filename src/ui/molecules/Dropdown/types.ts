@@ -5,6 +5,7 @@ export type Props = {
   children?: ReactNode | string;
   isOpacity?: boolean;
   isFull?: boolean;
+  isClickable?: boolean;
   direction?:
     | "left"
     | "right"

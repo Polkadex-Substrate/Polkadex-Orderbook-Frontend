@@ -123,23 +123,13 @@ export const SelectAccount = ({
   return (
     <S.SelectAccountWrapper isFull={isFull}>
       <S.SelectAccount isActive={isActive} {...props}>
-        {accountName ? (
-          <Icon size="extraGiant" name="Avatar" color="white" background="black" />
-        ) : (
-          <Skeleton isLight height="4rem" width="4rem" />
-        )}
+        <Icon size="extraGiant" name="Avatar" color="white" background="black" />
         <S.AccountInfo>
           <S.SelectAccountHeader>
             <div>
-              {address ? <p>{accountName}</p> : <Skeleton isLight width="4rem" />}
-
-              {address ? (
-                <span>{shortAddress}</span>
-              ) : (
-                <Skeleton isLight width="12rem" style={{ marginTop: "1rem" }} />
-              )}
+              <p>{accountName}</p>
+              <span>{shortAddress}</span>
             </div>
-
             {withButton && (
               <Icon name="ArrowBottom" size="small" style={{ marginLeft: "1rem" }} />
             )}
@@ -149,3 +139,21 @@ export const SelectAccount = ({
     </S.SelectAccountWrapper>
   );
 };
+export const MyAccountLoading = () => (
+  <div>
+    <MyAccountLoadingContent />
+    <MyAccountLoadingContent />
+  </div>
+);
+
+const MyAccountLoadingContent = () => (
+  <S.SelectAccountWrapper>
+    <S.SelectAccount>
+      <Skeleton isLight height="4rem" width="4rem" style={{ marginRight: 10 }} />
+      <div>
+        <Skeleton isLight width="12rem" />
+        <Skeleton isLight width="12rem" style={{ marginTop: "1rem" }} />
+      </div>
+    </S.SelectAccount>
+  </S.SelectAccountWrapper>
+);
