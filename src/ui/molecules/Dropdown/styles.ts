@@ -11,6 +11,7 @@ const directionModifier = {
   `,
   bottom: () => css`
     top: calc(100%);
+    margin-top: 1rem;
     left: 0;
   `,
   bottomRight: () => css`

@@ -19,6 +19,8 @@ import {
   Dropdown,
   SelectAccount,
   InputPrimary,
+  useDropdown,
+  MyAccountLoading,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -36,7 +38,7 @@ export const LoginTemplate = () => {
   const hasUser = useReduxSelector(selectHasUser);
 
   useEffect(() => {
-    if (hasUser) router.push("/");
+    if (hasUser) router.push("/trading");
   }, [hasUser, router]);
 
   if (hasUser) return <div />;
@@ -62,17 +64,14 @@ export const LoginTemplate = () => {
                   <Form>
                     <Dropdown
                       direction="bottom"
+                      isClickable
                       header={
                         <SelectAccount
                           accountName={selectedAccount?.meta.name || "Select your account"}
-                          address={
-                            selectedAccount?.address ||
-                            "Please install Polkadot {.js} extension"
-                          }
-                          isHeader
+                          address={selectedAccount?.address || "Polkadex is completely free"}
                         />
                       }>
-                      <S.SelectContent>
+                      <S.SelectContent overflow={accounts.length > 2}>
                         {accounts.length ? (
                           accounts.map((item, index) => (
                             <SelectAccount
@@ -86,7 +85,7 @@ export const LoginTemplate = () => {
                             />
                           ))
                         ) : (
-                          <Loading />
+                          <MyAccountLoading />
                         )}
                       </S.SelectContent>
                     </Dropdown>
@@ -126,11 +125,3 @@ export const LoginTemplate = () => {
     </S.Main>
   );
 };
-
-const Loading = () => (
-  <>
-    <SelectAccount />
-    <SelectAccount />
-    <SelectAccount />
-  </>
-);

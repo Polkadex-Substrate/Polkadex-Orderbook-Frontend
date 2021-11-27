@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 
 type SharedProps = {
-  isHeader?: boolean;
   balance?: string;
   address?: string;
   accountName?: string;
