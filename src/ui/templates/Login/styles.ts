@@ -86,15 +86,15 @@ export const Form = styled.div`
   }
 `;
 
-export const SelectContent = styled.div`
-  ${({ theme }) => css`
+export const SelectContent = styled.div<{ overflow?: boolean }>`
+  ${({ theme, overflow }) => css`
     background-color: ${theme.colors.white};
     padding: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: scroll;
+    overflow-y: ${overflow ? "scroll" : "hidden"};
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;

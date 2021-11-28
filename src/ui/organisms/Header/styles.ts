@@ -11,6 +11,7 @@ export const Wrapper = styled.header`
     box-shadow: ${theme.shadows.primary};
     padding: 0.5rem 1rem;
     z-index: ${theme.layers.alwaysOnTop};
+    max-height: 4.9rem;
   `}
 `;
 

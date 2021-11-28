@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 function Home() {
   const router = useRouter();
 
-  router.push("login");
+  router.push("/trading/dashbtc");
 
   return <div />;
 }
