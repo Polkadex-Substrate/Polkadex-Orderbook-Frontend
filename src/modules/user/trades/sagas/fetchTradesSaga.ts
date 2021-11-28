@@ -1,7 +1,7 @@
 import { call, put } from "redux-saga/effects";
 
 import { TradesFetch } from "../actions";
-import { tradesError } from "..";
+import { tradesData, tradesError } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -20,7 +20,11 @@ export function* fetchTradesSaga(action: TradesFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_user_trades", data));
-      console.log(res);
+      if (res.status === 200 && res.Fine) {
+        yield put(tradesData(res.File));
+      } else {
+        throw new Error("user trade fetch failed");
+      }
     }
   } catch (error) {
     console.log(error);
