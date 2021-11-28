@@ -5,7 +5,7 @@ export interface DepositsState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: Deposits;
+  data?: Deposits[];
 }
 
 export const initialState: DepositsState = {
