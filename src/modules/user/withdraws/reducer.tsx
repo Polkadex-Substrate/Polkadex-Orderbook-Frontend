@@ -1,11 +1,11 @@
-import { WithdrawsAction, Withdraws } from "./actions";
+import { WithdrawsAction, UserWithdraws } from "./actions";
 import { WITHDRAWS_DATA, WITHDRAWS_ERROR, WITHDRAWS_FETCH } from "./constants";
 
 export interface WithdrawsState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: Withdraws;
+  data?: UserWithdraws[];
 }
 
 export const initialState: WithdrawsState = {

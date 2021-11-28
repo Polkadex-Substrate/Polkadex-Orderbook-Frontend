@@ -2,6 +2,7 @@ import { call, put } from "redux-saga/effects";
 
 import { WithdrawsFetch } from "../actions";
 import { tradesError } from "../../trades";
+import { withdrawsData } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -20,7 +21,11 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_withdraws", data));
-      console.log(res);
+      if (res.statusCode === 200 && res.Fine) {
+        yield put(withdrawsData(res.Fine));
+      } else {
+        throw new Error("withdraw fetch failed");
+      }
     }
   } catch (error) {
     console.log(error);

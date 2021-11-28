@@ -114,6 +114,5 @@ export function* rootSaga() {
     call(rootWithdrawsSaga),
     call(rootBalancesSaga),
     call(rootDepositsSaga),
-    call(rootTradesSaga),
   ]);
 }
