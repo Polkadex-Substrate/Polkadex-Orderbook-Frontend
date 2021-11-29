@@ -147,20 +147,36 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onErrorCallback,
       firstDataRequest
     ) => {
-      const url = makeHistoryUrl(
+      let url = makeHistoryUrl(
         symbolInfo.ticker || symbolInfo.name.toLowerCase(),
         resolutionToSeconds(resolution),
         from,
         to
       );
-
+      url = "http://ec2-3-101-117-26.us-west-1.polkadex.trade/fetchohlcv";
+      const payload = {
+        symbol: "BTCPDEX",
+        timeframe: "5m",
+        timestamp_start: -1296000,
+      };
       return axios
-        .get(url)
-        .then(({ data = [] }) => {
-          if (data.length < 1) {
+        .post(url, payload)
+        .then(({ data }) => {
+          if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
-          const bars = data.map(klineArrayToObject);
+          const bars = data.Fine.map((el) => {
+            return {
+              time: new Date(el._time).getTime(),
+              open: Number(el.open),
+              close: Number(el.close),
+              high: Number(el.high),
+              low: Number(el.low),
+              volume: Number(el.volume),
+            };
+          });
+          console.log("raw data", data);
+          console.log("bars", bars);
 
           return onHistoryCallback(bars, { noData: false });
         })
