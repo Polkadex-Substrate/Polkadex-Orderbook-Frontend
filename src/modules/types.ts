@@ -15,6 +15,9 @@ export type OrderType = "limit" | "market";
 export type OrderKind = "bid" | "ask";
 
 export interface OrderCommon {
+  Fine: Order[];
+}
+export interface Order {
   id: string;
   timestamp: number;
   last_trade_timestamp?: null;

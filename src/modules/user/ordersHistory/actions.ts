@@ -1,4 +1,4 @@
-import { CommonError, OrderCommon, OrderEvent } from "../../types";
+import { CommonError, Order, OrderCommon, OrderEvent } from "../../types";
 import { ProxyAccount } from "../profile";
 
 import {
@@ -21,7 +21,7 @@ interface UserOrdersHistoryFetchPayload {
 }
 
 export interface UserOrdersHistoryDataPayload {
-  list: OrderCommon[];
+  list: Order[];
 }
 
 export interface UserOrdersHistoryFetch {

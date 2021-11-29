@@ -1,9 +1,10 @@
-import { put } from "redux-saga/effects";
+import { put, call } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 import { sendError, alertPush, userData, ProxyAccount } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
+import { polkadotWalletFetch } from "../../polkadotWallet";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -18,15 +19,10 @@ export function* signUpSaga(action: SignUpFetch) {
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
     const proxyAddress = pair.address;
     registerAccount(pair, proxyAddress);
-    const data: ProxyAccount = {
-      accountName,
-      password,
-      address: pair.address,
-      keyringPair: pair,
-    };
-    yield put(userData({ user: data }));
-    yield put(signUpData());
+    // TODO: Check if registerAccount has been successful
 
+    yield put(signUpData());
+    yield put(polkadotWalletFetch());
     yield put(
       alertPush({
         type: "Successful",

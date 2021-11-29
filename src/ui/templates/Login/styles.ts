@@ -86,8 +86,8 @@ export const Form = styled.div`
   }
 `;
 
-export const SelectContent = styled.div<{ overflow?: boolean }>`
-  ${({ theme, overflow }) => css`
+export const SelectContent = styled.div<{ overflow: boolean }>`
+  ${({ theme, overflow = false }) => css`
     background-color: ${theme.colors.white};
     padding: 1rem;
     border-radius: 1rem;
