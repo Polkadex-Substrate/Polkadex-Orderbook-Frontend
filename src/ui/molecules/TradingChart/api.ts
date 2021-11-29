@@ -39,7 +39,13 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
 
   return `${defaultConfig.engine}${endPoint}`;
 };
-
+const makeOHLCVPayload = (market: string, resolution: string, from: number) => {
+  return {
+    symbol: market,
+    timeframe: resolution,
+    timestamp_start: from,
+  };
+};
 const resolutionToSeconds = (r: string): number => {
   const minutes = parseInt(r, 10);
   if (r === "1D") {
@@ -153,12 +159,10 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      url = "http://ec2-3-101-117-26.us-west-1.polkadex.trade/fetchohlcv";
-      const payload = {
-        symbol: "BTCPDEX",
-        timeframe: "5m",
-        timestamp_start: -1296000,
-      };
+      console.log({ symbolInfo, resolution, from });
+      url = defaultConfig.influxDBUrl + "/fetchohlcv";
+      // TODO: Make paylaod dynamic with symbolInfo
+      const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
       return axios
         .post(url, payload)
         .then(({ data }) => {
@@ -175,8 +179,6 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
               volume: Number(el.volume),
             };
           });
-          console.log("raw data", data);
-          console.log("bars", bars);
 
           return onHistoryCallback(bars, { noData: false });
         })
