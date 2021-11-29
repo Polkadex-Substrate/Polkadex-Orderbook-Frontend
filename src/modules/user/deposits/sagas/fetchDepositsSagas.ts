@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 
-import { DepositsFetch } from "../actions";
+import { depositsData, DepositsFetch } from "../actions";
 import { depositsError } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
@@ -20,7 +20,11 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_deposits", data));
-      console.log(res);
+      if (res.status === 200 && res.Fine) {
+        yield put(depositsData(res.Fine));
+      } else {
+        throw new Error("Depost fetch failed");
+      }
     }
   } catch (error) {
     console.log(error);

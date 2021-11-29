@@ -21,7 +21,7 @@ interface UserOrdersHistoryFetchPayload {
 }
 
 export interface UserOrdersHistoryDataPayload {
-  list: Order[];
+  list: OrderCommon[];
 }
 
 export interface UserOrdersHistoryFetch {

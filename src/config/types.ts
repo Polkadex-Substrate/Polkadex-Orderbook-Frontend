@@ -8,7 +8,7 @@ export type JsonBody = {
 };
 
 export type RequestOptions = {
-  apiVersion: "auth" | "engine" | "polkadexHostUrl";
+  apiVersion: "auth" | "engine" | "polkadexHostUrl" | "influxDB";
   withHeaders?: boolean;
   headers?: Record<string, unknown>;
 };
@@ -34,6 +34,7 @@ export type ApiWrapper = {
 };
 
 export type DefaultConfig = {
+  influxDBUrl: string;
   polkadotJsWs: string;
   auth: string;
   engine: string;

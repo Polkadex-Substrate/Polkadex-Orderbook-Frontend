@@ -10,9 +10,17 @@ import {
   KLINE_UPDATE_PERIOD,
   KLINE_UPDATE_TIME_RANGE,
 } from "./constants";
+import { KlineEvent } from "./types";
 
 export type KlineRawElement = string | number;
-
+/* example KlineRawElement: [
+7.3571210693865545
+7.565695243097394
+7.2737877360532215
+7.482361909764061
+33.92802673466386
+]
+*/
 export interface KlinePush {
   type: typeof KLINE_PUSH;
   payload: {
@@ -34,7 +42,7 @@ export interface KlineFetch {
 
 export interface KlineData {
   type: typeof KLINE_DATA;
-  payload: any;
+  payload: KlineEvent;
 }
 
 export interface KlineUpdateTimeRange {
