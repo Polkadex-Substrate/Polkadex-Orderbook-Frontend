@@ -1,16 +1,15 @@
 import { call, put } from "redux-saga/effects";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+import { OrderCommon } from "src/modules/types";
+import { formatPayload } from "src/helpers/formatPayload";
 
-import { sendError } from "../../../";
 import {
   userOrdersHistoryData,
   userOrdersHistoryError,
   UserOrdersHistoryFetch,
 } from "../actions";
-
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
-import { OrderCommon } from "src/modules/types";
-import { formatPayload } from "src/helpers/formatPayload";
+import { sendError } from "../../../";
 
 const ordersOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
@@ -26,7 +25,6 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
       );
       const data = formatPayload(signature, payload);
       const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
-      console.log("orderhistorySaga", res);
       const ordersArray: OrderCommon[] = res.Fine;
       yield put(userOrdersHistoryData({ list: ordersArray }));
     }

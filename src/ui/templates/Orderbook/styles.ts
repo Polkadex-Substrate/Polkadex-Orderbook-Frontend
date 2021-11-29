@@ -6,7 +6,6 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Orderbook;
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 0.5rem 0;
   `}
 `;
 
