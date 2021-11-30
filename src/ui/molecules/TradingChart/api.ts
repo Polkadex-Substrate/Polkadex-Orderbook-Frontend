@@ -39,7 +39,13 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
 
   return `${defaultConfig.engine}${endPoint}`;
 };
-
+const makeOHLCVPayload = (market: string, resolution: string, from: number) => {
+  return {
+    symbol: market,
+    timeframe: resolution,
+    timestamp_start: from,
+  };
+};
 const resolutionToSeconds = (r: string): number => {
   const minutes = parseInt(r, 10);
   if (r === "1D") {
@@ -147,20 +153,32 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onErrorCallback,
       firstDataRequest
     ) => {
-      const url = makeHistoryUrl(
+      let url = makeHistoryUrl(
         symbolInfo.ticker || symbolInfo.name.toLowerCase(),
         resolutionToSeconds(resolution),
         from,
         to
       );
-
+      console.log({ symbolInfo, resolution, from });
+      url = defaultConfig.influxDBUrl + "/fetchohlcv";
+      // TODO: Make paylaod dynamic with symbolInfo
+      const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
       return axios
-        .get(url)
-        .then(({ data = [] }) => {
-          if (data.length < 1) {
+        .post(url, payload)
+        .then(({ data }) => {
+          if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
-          const bars = data.map(klineArrayToObject);
+          const bars = data.Fine.map((el) => {
+            return {
+              time: new Date(el._time).getTime(),
+              open: Number(el.open),
+              close: Number(el.close),
+              high: Number(el.high),
+              low: Number(el.low),
+              volume: Number(el.volume),
+            };
+          });
 
           return onHistoryCallback(bars, { noData: false });
         })

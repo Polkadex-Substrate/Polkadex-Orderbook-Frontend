@@ -4,17 +4,30 @@ import { TRADES_DATA, TRADES_FETCH, TRADES_ERROR } from "./constants";
 
 import { ProxyAccount } from "@polkadex/orderbook-modules";
 
-export interface Trades {
-  // we don't know the types yet
-  trade: any;
+export interface UserTrade {
+  id: string;
+  timestamp: number;
+  symbol?: string[] | null;
+  order_id: string;
+  order_type: string;
+  order_side: string;
+  price: number;
+  amount: number;
+  fee: Fee;
 }
+
+export interface Fee {
+  currency: string;
+  cost: number;
+}
+
 export interface TradesFetch {
   type: typeof TRADES_FETCH;
   payload: { account: ProxyAccount };
 }
 export interface TradesData {
   type: typeof TRADES_DATA;
-  payload: Trades;
+  payload: UserTrade[];
 }
 
 export interface TradesError {
@@ -29,7 +42,7 @@ export const tradesFetch = (payload: TradesFetch["payload"]): TradesFetch => ({
   payload,
 });
 
-export const tradesData = (payload: Trades): TradesData => ({
+export const tradesData = (payload: UserTrade[]): TradesData => ({
   type: TRADES_DATA,
   payload,
 });

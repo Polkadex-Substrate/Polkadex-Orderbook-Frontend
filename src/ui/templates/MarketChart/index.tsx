@@ -26,7 +26,7 @@ export const MarketChart = () => {
                 <S.Li>Market Chart</S.Li>
               </TabHeader>
               <TabHeader>
-                <S.Li>Deepth Chart</S.Li>
+                <S.Li>Depth Chart</S.Li>
               </TabHeader>
             </ul>
           </S.Nav>

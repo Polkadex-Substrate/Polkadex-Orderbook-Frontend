@@ -5,6 +5,9 @@ export const Wrapper = styled.section`
     grid-area: Graph;
     background: ${theme.colors.gradientBackground};
     box-shadow: ${theme.shadows.tertiary};
+    @media screen and (min-width: 701px) {
+      max-height: 26rem;
+    }
   `}
 `;
 
@@ -13,7 +16,6 @@ export const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid;
     border-bottom-color: ${theme.colors.secondaryBackground};

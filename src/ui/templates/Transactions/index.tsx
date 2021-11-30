@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 
 import {
+  selectHasUser,
   selectOrdersHistory,
   selectUserInfo,
   userOrdersHistoryFetch,
@@ -22,7 +23,7 @@ export const Transactions = () => {
   const userAccount = useReduxSelector(selectUserInfo);
   const orders = useReduxSelector(selectOrdersHistory);
   const dispatch = useDispatch();
-  const userLoggedIn = userAccount.address !== "";
+  const userLoggedIn = useReduxSelector(selectHasUser);
   React.useEffect(() => {
     if (userLoggedIn) {
       dispatch(userOrdersHistoryFetch({ userAccount }));

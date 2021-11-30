@@ -1,11 +1,11 @@
-import { TradesAction, Trades } from "./actions";
+import { TradesAction, UserTrade } from "./actions";
 import { TRADES_DATA, TRADES_ERROR, TRADES_FETCH } from "./constants";
 
 export interface TradesState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: Trades;
+  data?: UserTrade[];
 }
 
 export const initialState: TradesState = {
