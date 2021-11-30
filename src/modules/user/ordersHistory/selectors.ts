@@ -18,15 +18,3 @@ export const selectOrdersNextPageExists = (state: RootState): boolean =>
 
 export const selectOrdersHistoryLoading = (state: RootState): boolean =>
   state.user.ordersHistory.fetching;
-
-export const selectCancelAllFetching = (state: RootState): boolean =>
-  state.user.ordersHistory.cancelAllFetching;
-
-export const selectCancelFetching = (state: RootState): boolean =>
-  state.user.ordersHistory.cancelFetching;
-
-export const selectShouldFetchCancelAll = (state: RootState): boolean =>
-  !selectCancelAllFetching(state) && !!selectOrdersHistory(state).length;
-
-export const selectShouldFetchCancelSingle = (state: RootState): boolean =>
-  !selectCancelFetching(state) && !!selectOrdersHistory(state).length;

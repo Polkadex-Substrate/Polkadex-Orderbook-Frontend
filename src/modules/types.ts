@@ -38,6 +38,7 @@ export interface OrderCommon {
   filled: string;
   type: string;
   uuid: string;
+  state?: "wait" | "filled" | "cancel" | "pending" | "reject"; // TODO: Verify states & filled
 }
 
 export interface Fee {

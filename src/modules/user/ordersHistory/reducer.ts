@@ -1,21 +1,7 @@
 import { OrderCommon } from "../../types";
-import { convertOrderEvent } from "../openOrders/helpers";
 
 import { OrdersHistoryAction } from "./actions";
-import {
-  ORDERS_CANCEL_ALL_DATA,
-  ORDERS_CANCEL_ALL_ERROR,
-  ORDERS_CANCEL_ALL_FETCH,
-  ORDERS_HISTORY_CANCEL_DATA,
-  ORDERS_HISTORY_CANCEL_ERROR,
-  ORDERS_HISTORY_CANCEL_FETCH,
-  ORDERS_HISTORY_DATA,
-  ORDERS_HISTORY_ERROR,
-  ORDERS_HISTORY_FETCH,
-  ORDERS_HISTORY_RANGER_DATA,
-  ORDERS_HISTORY_RESET,
-} from "./constants";
-import { insertOrUpdate } from "./helpers";
+import { ORDERS_HISTORY_DATA, ORDERS_HISTORY_ERROR, ORDERS_HISTORY_FETCH } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";
@@ -56,36 +42,8 @@ export const ordersHistoryReducer = (
         list: sliceArray(action.payload.list, defaultStorageLimit),
         fetching: false,
       };
-    case ORDERS_HISTORY_RANGER_DATA:
-      return {
-        ...state,
-        cancelFetching: false,
-        list: sliceArray(
-          insertOrUpdate(state.list, convertOrderEvent(action.payload)),
-          defaultStorageLimit
-        ),
-      };
     case ORDERS_HISTORY_ERROR:
       return { ...state, list: [], pageIndex: 0, fetching: false };
-    case ORDERS_CANCEL_ALL_FETCH:
-      return { ...state, cancelAllFetching: true, cancelAllError: false };
-    case ORDERS_CANCEL_ALL_DATA:
-      return { ...state, cancelAllFetching: false };
-    case ORDERS_CANCEL_ALL_ERROR:
-      return { ...state, cancelAllFetching: false, cancelAllError: true };
-    case ORDERS_HISTORY_CANCEL_FETCH:
-      return { ...state, cancelFetching: true, cancelError: false };
-    case ORDERS_HISTORY_CANCEL_DATA:
-      return {
-        ...state,
-        cancelFetching: false,
-        list: sliceArray(action.payload, defaultStorageLimit),
-      };
-    case ORDERS_HISTORY_CANCEL_ERROR:
-      return { ...state, cancelFetching: false, cancelError: true };
-    case ORDERS_HISTORY_RESET: {
-      return { ...state, list: [], pageIndex: 0, fetching: false };
-    }
     default:
       return state;
   }

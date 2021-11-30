@@ -1,8 +1,4 @@
 import { call, put } from "redux-saga/effects";
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
-import { OrderCommon } from "src/modules/types";
-import { formatPayload } from "src/helpers/formatPayload";
 
 import {
   userOrdersHistoryData,
@@ -10,6 +6,11 @@ import {
   UserOrdersHistoryFetch,
 } from "../actions";
 import { sendError } from "../../../";
+
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+import { OrderCommon } from "src/modules/types";
+import { formatPayload } from "src/helpers/formatPayload";
 
 const ordersOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
