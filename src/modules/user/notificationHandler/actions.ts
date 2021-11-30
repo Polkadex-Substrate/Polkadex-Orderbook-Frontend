@@ -5,7 +5,15 @@ import {
   NOTIFICATION_DELETE_BY_INDEX,
 } from "./constants";
 
-export type NotificationTypes = "Deposit" | "Withdraw" | "Error" | "Loading" | "Buy" | "Sell";
+export type NotificationTypes =
+  | "CancelOrder"
+  | "OrderSuccessfull"
+  | "Deposit"
+  | "Withdraw"
+  | "Error"
+  | "Loading"
+  | "Buy"
+  | "Sell";
 
 export interface Notification {
   type?: NotificationTypes;
