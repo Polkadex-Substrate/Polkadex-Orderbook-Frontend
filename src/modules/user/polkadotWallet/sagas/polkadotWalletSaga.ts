@@ -1,20 +1,14 @@
 import { call, put } from "redux-saga/effects";
-import { ApiPromise, WsProvider } from "@polkadot/api";
 import keyring from "@polkadot/ui-keyring";
 
 import { sendError } from "../../..";
-import { PolkadotWalletFetch, polkadotWalletData, InjectedAccount } from "../actions";
-import { types } from "../types";
+import { polkadotWalletData, InjectedAccount } from "../actions";
 
-import { defaultConfig } from "@polkadex/orderbook-config";
-
-const { polkadotJsWs } = defaultConfig;
-
-export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
+export function* polkadotWalletSaga() {
   try {
-    const api = yield call(() => createPolkadotWalletApi());
     const allAccounts: InjectedAccount[] = yield call(getAllPoladotWalletAccounts);
-    yield put(polkadotWalletData({ api, allAccounts }));
+    yield put(polkadotWalletData({ allAccounts }));
+    yield call(initKeyring);
   } catch (error) {
     yield put(
       sendError({
@@ -24,12 +18,13 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
     );
   }
 }
-async function createPolkadotWalletApi() {
-  // const { ApiPromise, WsProvider } =await import('@polkadot/api');
-  const wsProvider = new WsProvider(polkadotJsWs);
-  const api = await ApiPromise.create({ provider: wsProvider, types });
-  return api;
+async function initKeyring() {
+  const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+  await cryptoWaitReady();
+  keyring.loadAll({ type: "sr25519" });
+  throw new Error("Init Keyring Error");
 }
+
 async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
   const allAccounts = keyring.getAccounts() || [];
   return allAccounts.map((account) => {

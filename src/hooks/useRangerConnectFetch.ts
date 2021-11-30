@@ -1,20 +1,20 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import keyring from "@polkadot/ui-keyring";
+
 import {
-  selectUserLoggedIn,
   selectRanger,
-  rangerConnectFetch,
   selectShouldRangerConnect,
+  rangerConnectFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useRangerConnectFetch = () => {
   const dispatch = useDispatch();
-  const userLoggedIn = useSelector(selectUserLoggedIn);
   const shouldFetch = useSelector(selectShouldRangerConnect);
   const { connected } = useSelector(selectRanger);
 
   useEffect(() => {
-    dispatch(rangerConnectFetch({ withAuth: userLoggedIn, withP2P: true }));
-  }, [dispatch, shouldFetch, connected]);
+    if (!connected && shouldFetch) dispatch(rangerConnectFetch());
+  }, [shouldFetch, connected, dispatch]);
   return { connected };
 };

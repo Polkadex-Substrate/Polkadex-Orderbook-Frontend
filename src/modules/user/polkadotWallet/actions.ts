@@ -1,5 +1,3 @@
-import { ApiPromise } from "@polkadot/api";
-
 import { CommonError } from "../../types";
 
 import {
@@ -19,7 +17,6 @@ export interface InjectedAccount {
   type: any;
 }
 export interface PolkadotWalletFetchPayload {
-  api: ApiPromise;
   allAccounts: InjectedAccount[];
 }
 

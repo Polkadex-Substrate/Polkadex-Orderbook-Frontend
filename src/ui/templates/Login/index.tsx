@@ -8,9 +8,12 @@ import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
+  polkadotWalletFetch,
   selectHasUser,
   selectMainAccount,
   selectPolkadotWalletAccounts,
+  selectPolkadotWalletLoading,
+  selectRanger,
   setMainAccount,
   signIn,
 } from "@polkadex/orderbook-modules";
@@ -19,7 +22,6 @@ import {
   Dropdown,
   SelectAccount,
   InputPrimary,
-  useDropdown,
   MyAccountLoading,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -34,11 +36,15 @@ export const LoginTemplate = () => {
   const router = useRouter();
 
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
+  const isLoading = useReduxSelector(selectPolkadotWalletLoading);
+
   const selectedAccount = useReduxSelector(selectMainAccount);
   const hasUser = useReduxSelector(selectHasUser);
+  const { connected } = useReduxSelector(selectRanger);
 
   useEffect(() => {
     if (hasUser) router.push("/trading");
+    else if (connected) dispatch(polkadotWalletFetch());
   }, [hasUser, router]);
 
   if (hasUser) return <div />;
@@ -71,8 +77,10 @@ export const LoginTemplate = () => {
                           address={selectedAccount?.address || "Polkadex is completely free"}
                         />
                       }>
-                      <S.SelectContent overflow={accounts.length > 2}>
-                        {accounts.length ? (
+                      <S.SelectContent isOverflow={accounts.length > 2}>
+                        {isLoading ? (
+                          <MyAccountLoading />
+                        ) : accounts.length ? (
                           accounts.map((item, index) => (
                             <SelectAccount
                               isActive={item.address === selectedAccount?.address}
@@ -85,7 +93,7 @@ export const LoginTemplate = () => {
                             />
                           ))
                         ) : (
-                          <MyAccountLoading />
+                          <S.SelectMessage>No data</S.SelectMessage>
                         )}
                       </S.SelectContent>
                     </Dropdown>

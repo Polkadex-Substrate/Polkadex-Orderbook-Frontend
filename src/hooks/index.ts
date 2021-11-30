@@ -2,7 +2,6 @@ export * from "./useInit";
 export * from "./useMarketsFetch";
 export * from "./useBarong";
 export * from "./useExtrinsics";
-export * from "./useKeyringInitalize";
 export * from "./useMnemonic";
 export * from "./useRangerConnectFetch";
 export * from "./useReduxSelector";

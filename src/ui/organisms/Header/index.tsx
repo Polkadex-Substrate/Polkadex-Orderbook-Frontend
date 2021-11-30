@@ -12,10 +12,15 @@ import {
   ThemeSwitch,
   MyAccountHeader,
   MyAccountContent,
+  Status,
 } from "@polkadex/orderbook-ui/molecules";
 import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { logoutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
+import {
+  logoutFetch,
+  selectPolkadotWalletLoading,
+  selectUserInfo,
+} from "@polkadex/orderbook-modules";
 
 export const Header = () => {
   const user = useReduxSelector(selectUserInfo);
@@ -66,11 +71,17 @@ export const Header = () => {
 };
 
 export const HeaderBack = () => {
+  const rangerIsConnected = useReduxSelector(selectPolkadotWalletLoading);
+  const rangerIsConnecting = useReduxSelector(selectPolkadotWalletLoading);
+
   const router = useRouter();
   return (
-    <S.HeaderBack onClick={() => router.push("/")}>
-      <Icon size="large" name="Return" background="none" />
-      <Polkadex />
+    <S.HeaderBack>
+      <S.HeaderBackContainer onClick={() => router.push("/")}>
+        <Icon size="large" name="Return" background="none" />
+        <Polkadex />
+      </S.HeaderBackContainer>
+      <Status isActive={rangerIsConnected} isLoading={rangerIsConnecting} />
     </S.HeaderBack>
   );
 };
