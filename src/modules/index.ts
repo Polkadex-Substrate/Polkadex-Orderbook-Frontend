@@ -34,6 +34,7 @@ import { rootDepositsSaga } from "./user/deposits";
 import { rootTradesSaga, TradesState } from "./user/trades";
 import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
+import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -41,6 +42,7 @@ export * from "./user/openOrders";
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/profile";
+export * from "./user/notificationHandler";
 export * from "./user/polkadotWallet";
 export * from "./user/wallets";
 export * from "./user/OrdersTransactions";
@@ -53,6 +55,7 @@ export * from "./public/markets";
 export * from "./public/orderBook";
 export * from "./public/recentTrades";
 export * from "./public/ranger";
+
 export interface RootState {
   public: {
     alerts: AlertState;
@@ -81,6 +84,7 @@ export interface RootState {
     deposits: DepositsState;
     trades: TradesState;
     withdraws: WithdrawsState;
+    notifications: NotificationState;
   };
 }
 
@@ -94,6 +98,7 @@ export function* rootSaga() {
     call(rootAuthSaga),
     call(rootDepositsSaga),
     call(rootCurrenciesSaga),
+    call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
     call(rootHistorySaga),

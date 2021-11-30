@@ -16,7 +16,7 @@ export const defaultConfig: DefaultConfig = {
   sessionCheckInterval: 15000,
   balancesFetchInterval: 3000,
   minutesUntilAutoLogout: 5,
-  msAlertDisplayTime: 5000,
+  alertDisplayTime: 8000,
   msPricesUpdates: 1000,
   maintenanceMode: false,
 };

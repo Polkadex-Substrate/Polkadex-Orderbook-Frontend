@@ -47,7 +47,7 @@ export type DefaultConfig = {
   sessionCheckInterval: number;
   balancesFetchInterval: number;
   minutesUntilAutoLogout: number;
-  msAlertDisplayTime: number;
+  alertDisplayTime: number;
   msPricesUpdates: number;
   maintenanceMode: boolean;
 };

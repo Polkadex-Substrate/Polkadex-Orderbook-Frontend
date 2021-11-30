@@ -31,3 +31,4 @@ export * from "./Tag";
 export * from "./Link";
 export * from "./MessageCard";
 export * from "./TradingChart";
+export * from "./NotificationCard";
