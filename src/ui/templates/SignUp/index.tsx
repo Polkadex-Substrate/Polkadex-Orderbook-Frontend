@@ -8,7 +8,7 @@ import { useReactToPrint } from "react-to-print";
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
+import { Button, Icon, InputPrimary, Loading } from "@polkadex/orderbook-ui/molecules";
 import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
@@ -60,58 +60,63 @@ export const SignUpTemplate = () => {
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <S.Form>
-                <Formik
-                  initialValues={defaultValues}
-                  onSubmit={async (values) => {
-                    const { password, accountName } = values;
-                    dispatch(
-                      signUp({
-                        accountName,
-                        mnemonic: mnemoicString,
-                        password,
-                      })
-                    );
-                  }}>
-                  {({ errors, touched }) => (
-                    <Form>
-                      <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
-                      <InputPrimary
-                        label="Account Name"
-                        placeholder="Enter name for this account"
-                        type="accountName"
-                        name="accountName"
-                        error={errors.accountName && touched.accountName && errors.accountName}
-                      />
-                      <InputPrimary
-                        label="Password"
-                        placeholder="Enter your password for this account"
-                        type="password"
-                        name="password"
-                        error={errors.password && touched.password && errors.password}
-                      />
-                      <FlexSpaceBetween style={{ marginTop: 20 }}>
-                        <Button size="extraLarge" type="submit" disabled={signUpLoading}>
-                          {signUpLoading ? "Loading.." : "Verify Account"}
-                        </Button>
-                        <Button
-                          onClick={handlePrint}
-                          type="button"
-                          background="transparent"
-                          color="text"
-                          icon={{
-                            size: "large",
-                            name: "Print",
-                            background: "inverse",
-                            color: "text",
-                          }}>
-                          Print mnemonic
-                        </Button>
-                      </FlexSpaceBetween>
-                    </Form>
-                  )}
-                </Formik>
-              </S.Form>
+              <Loading isActive={true} color="primaryBackgroundOpacity">
+                <S.Form>
+                  <Formik
+                    initialValues={defaultValues}
+                    onSubmit={async (values) => {
+                      const { password, accountName } = values;
+                      dispatch(
+                        signUp({
+                          accountName,
+                          mnemonic: mnemoicString,
+                          password,
+                        })
+                      );
+                    }}>
+                    {({ errors, touched }) => (
+                      <Form>
+                        <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
+                        <InputPrimary
+                          label="Account Name"
+                          placeholder="Enter name for this account"
+                          type="accountName"
+                          name="accountName"
+                          error={
+                            errors.accountName && touched.accountName && errors.accountName
+                          }
+                        />
+                        <InputPrimary
+                          label="Password"
+                          placeholder="Enter your password for this account"
+                          type="password"
+                          name="password"
+                          error={errors.password && touched.password && errors.password}
+                        />
+                        <FlexSpaceBetween style={{ marginTop: 20 }}>
+                          <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                            {signUpLoading ? "Loading.." : "Verify Account"}
+                          </Button>
+                          <Button
+                            onClick={handlePrint}
+                            type="button"
+                            background="transparent"
+                            color="text"
+                            icon={{
+                              size: "large",
+                              name: "Print",
+                              background: "inverse",
+                              color: "text",
+                            }}>
+                            Print mnemonic
+                          </Button>
+                        </FlexSpaceBetween>
+                      </Form>
+                    )}
+                  </Formik>
+                </S.Form>
+              </Loading>
+
               <S.Footer>
                 <p>
                   Do you want to import an account?
