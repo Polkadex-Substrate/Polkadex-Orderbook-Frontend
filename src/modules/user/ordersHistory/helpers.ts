@@ -1,7 +1,8 @@
 import { OrderCommon } from "../../types";
+
 const ListReduceHelper = (list, order) => {
   const listReduce = list.reduce((memo: OrderCommon[], item: OrderCommon): OrderCommon[] => {
-    if (order.id !== item.id) {
+    if (order.id !== item.uuid) {
       memo.push(item);
     }
 
@@ -12,7 +13,7 @@ const ListReduceHelper = (list, order) => {
 };
 
 export const insertOrUpdate = (list: OrderCommon[], order: OrderCommon): OrderCommon[] => {
-  const index = list.findIndex((value: OrderCommon) => value.id === order.id);
+  const index = list.findIndex((value: OrderCommon) => value.uuid === order.uuid);
   switch (order.state) {
     case "wait":
       if (index === -1) {
@@ -23,13 +24,13 @@ export const insertOrUpdate = (list: OrderCommon[], order: OrderCommon): OrderCo
       }
 
       return list;
-    case "done":
+    case "filled":
       if (index === -1) {
         return [{ ...order }].concat(list);
       }
 
       return list.map((item) => {
-        if (order.id === item.id) {
+        if (order.uuid === item.uuid) {
           return { ...order };
         }
 
@@ -39,7 +40,7 @@ export const insertOrUpdate = (list: OrderCommon[], order: OrderCommon): OrderCo
       return ListReduceHelper(list, order);
     default:
       return list.reduce((memo: OrderCommon[], item: OrderCommon): OrderCommon[] => {
-        if (order.id !== item.id) {
+        if (order.uuid !== item.uuid) {
           memo.push(item);
         }
 

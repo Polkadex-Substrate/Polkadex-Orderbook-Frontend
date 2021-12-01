@@ -1,7 +1,0 @@
-{
-  "name": "@polkadex/orderbook-hooks",
-  "version": "1.0.0",
-  "license": "MIT",
-  "type": "module",
-  "private": true
-}

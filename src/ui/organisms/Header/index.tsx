@@ -68,9 +68,11 @@ export const Header = () => {
 export const HeaderBack = () => {
   const router = useRouter();
   return (
-    <S.HeaderBack onClick={() => router.push("/")}>
-      <Icon size="large" name="Return" background="none" />
-      <Polkadex />
+    <S.HeaderBack>
+      <S.HeaderBackContainer onClick={() => router.push("/")}>
+        <Icon size="large" name="Return" background="none" />
+        <Polkadex />
+      </S.HeaderBackContainer>
     </S.HeaderBack>
   );
 };

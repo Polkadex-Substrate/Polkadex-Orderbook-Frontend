@@ -1,6 +1,7 @@
 export * from "./buildQueryString";
 export * from "./getTimestampPeriod";
 export * from "./filterPrice";
+export * from "./getCurrentDate";
 export * from "./filterPriceCustomStep";
 export * from "./filterPriceSignificantDigit";
 export * from "./handleIncrementalUpdate";

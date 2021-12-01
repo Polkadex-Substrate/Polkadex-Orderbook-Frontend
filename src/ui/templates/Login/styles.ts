@@ -86,15 +86,15 @@ export const Form = styled.div`
   }
 `;
 
-export const SelectContent = styled.div<{ overflow: boolean }>`
-  ${({ theme, overflow = false }) => css`
+export const SelectContent = styled.div<{ isOverflow: boolean }>`
+  ${({ theme, isOverflow = false }) => css`
     background-color: ${theme.colors.white};
     padding: 1rem;
     border-radius: 1rem;
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: ${overflow ? "scroll" : "hidden"};
+    overflow-y: ${isOverflow ? "scroll" : "hidden"};
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;
@@ -102,6 +102,13 @@ export const SelectContent = styled.div<{ overflow: boolean }>`
         margin-bottom: 1rem;
       }
     }
+  `}
+`;
+export const SelectMessage = styled.p`
+  ${({ theme }) => css`
+    text-align: center;
+    color: ${theme.colors.black};
+    padding: 1rem 0;
   `}
 `;
 

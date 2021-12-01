@@ -43,6 +43,12 @@ export const Column = styled.div`
 export const HeaderBack = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+`;
+
+export const HeaderBackContainer = styled.div`
+  display: flex;
+  align-items: center;
   padding: 2rem 0;
   cursor: pointer;
   transition: opacity 0.5s ease-in-out;

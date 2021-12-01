@@ -1,6 +1,6 @@
-import keyring from "@polkadot/ui-keyring";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
 import { polkadotWalletFetch } from "@polkadex/orderbook-modules";
 
 export const useKeyringInitalize = () => {
@@ -9,24 +9,8 @@ export const useKeyringInitalize = () => {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [error, setError] = useState("");
 
-  const init = async () => {
-    try {
-      const { cryptoWaitReady } = await import("@polkadot/util-crypto");
-      dispatch(polkadotWalletFetch());
-      await cryptoWaitReady();
-      keyring.loadAll({ type: "sr25519" });
-      console.log("Keyring initalized");
-      setShouldFetch(false);
-    } catch (e) {
-      setError(e.message);
-      console.log("Could not load Keyring:", e.message);
-      // throw new Error()
-    }
-    setLoading(false);
-  };
   useEffect(() => {
-    if (shouldFetch && !error) init();
-  }, [shouldFetch, error]);
-
-  return { loading };
+    if (shouldFetch && !error) dispatch(polkadotWalletFetch());
+  }, [dispatch, shouldFetch, error]);
+  return { loading, error, shouldFetch };
 };

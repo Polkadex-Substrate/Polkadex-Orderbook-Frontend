@@ -1,0 +1,4 @@
+export const NOTIFICATION_DELETE = "notification/NOTIFICATION_DELETE";
+export const NOTIFICATION_DATA = "notification/NOTIFICATION_DATA";
+export const NOTIFICATION_PUSH = "notification/NOTIFICATION_PUSH";
+export const NOTIFICATION_DELETE_BY_INDEX = "notification/NOTIFICATION_DELETE_BY_INDEX";

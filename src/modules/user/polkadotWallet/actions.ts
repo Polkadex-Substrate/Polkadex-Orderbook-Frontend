@@ -1,13 +1,11 @@
-import { ApiPromise } from "@polkadot/api";
-
 import { CommonError } from "../../types";
 
 import {
-  GET_POLKADOT_WALLET_FETCH,
-  GET_POLKADOT_WALLET_FETCH_ERROR,
-  GET_POLKADOT_WALLET_DATA,
-  SET_POLKADOT_WALLET_ACCOUNT,
-  RESET_WALLET_ACCOUNT,
+  POLKADOT_WALLET_FETCH,
+  POLKADOT_WALLET_ERROR,
+  POLKADOT_WALLET_DATA,
+  POLKADOT_WALLET_SET,
+  POLKADOT_WALLET_RESET,
 } from "./constants";
 
 export interface InjectedAccount {
@@ -19,30 +17,29 @@ export interface InjectedAccount {
   type: any;
 }
 export interface PolkadotWalletFetchPayload {
-  api: ApiPromise;
   allAccounts: InjectedAccount[];
 }
 
 export interface PolkadotWalletFetch {
-  type: typeof GET_POLKADOT_WALLET_FETCH;
+  type: typeof POLKADOT_WALLET_FETCH;
 }
 
 export interface PolkadotWalletError {
-  type: typeof GET_POLKADOT_WALLET_FETCH_ERROR;
+  type: typeof POLKADOT_WALLET_ERROR;
   error: CommonError;
 }
 
 export interface PolkadotWalletData {
-  type: typeof GET_POLKADOT_WALLET_DATA;
+  type: typeof POLKADOT_WALLET_DATA;
   payload: PolkadotWalletFetchPayload;
 }
 export interface PolkadotWalletSetAccount {
-  type: typeof SET_POLKADOT_WALLET_ACCOUNT;
+  type: typeof POLKADOT_WALLET_SET;
   payload: InjectedAccount;
 }
 
 export interface ResetPolkadotWallet {
-  type: typeof RESET_WALLET_ACCOUNT;
+  type: typeof POLKADOT_WALLET_RESET;
 }
 
 export type GetPolkadotWalletAction =
@@ -55,26 +52,26 @@ export type GetPolkadotWalletAction =
 export const polkadotWalletData = (
   payload: PolkadotWalletFetchPayload
 ): PolkadotWalletData => ({
-  type: GET_POLKADOT_WALLET_DATA,
+  type: POLKADOT_WALLET_DATA,
   payload,
 });
 
 export const polkadotWalletError = (error: CommonError): PolkadotWalletError => ({
-  type: GET_POLKADOT_WALLET_FETCH_ERROR,
+  type: POLKADOT_WALLET_ERROR,
   error,
 });
 
 export const polkadotWalletFetch = (): PolkadotWalletFetch => ({
-  type: GET_POLKADOT_WALLET_FETCH,
+  type: POLKADOT_WALLET_FETCH,
 });
 
 export const setMainAccount = (
   payload: PolkadotWalletSetAccount["payload"]
 ): PolkadotWalletSetAccount => ({
-  type: SET_POLKADOT_WALLET_ACCOUNT,
+  type: POLKADOT_WALLET_SET,
   payload,
 });
 
 export const resetPolkadotWallet = () => ({
-  type: RESET_WALLET_ACCOUNT,
+  type: POLKADOT_WALLET_RESET,
 });

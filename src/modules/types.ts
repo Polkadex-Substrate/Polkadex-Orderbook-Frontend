@@ -15,23 +15,32 @@ export type OrderType = "limit" | "market";
 export type OrderKind = "bid" | "ask";
 
 export interface OrderCommon {
-  Fine: Order[];
+  // TODO: Check order types
+  // date: string;
+  // baseUnit: string;
+  // quoteUnit: string;
+  // side: string;
+  // isSell: boolean;
+  // price: string;
+  // amount: string;
+  // total: string;
+  // filled: string;
+  // type: string;
+  // uuid: string;
+  date: string;
+  baseUnit: string;
+  quoteUnit: string;
+  side: string;
+  isSell: boolean;
+  price: string;
+  amount: string;
+  total: string;
+  filled: string;
+  type: string;
+  uuid: string;
+  state?: "wait" | "filled" | "cancel" | "pending" | "reject"; // TODO: Verify states & filled
 }
-export interface Order {
-  id: string;
-  timestamp: number;
-  last_trade_timestamp?: null;
-  status: string;
-  symbol?: string[] | null;
-  order_type: string;
-  order_side: string;
-  price: number;
-  average: number;
-  amount: number;
-  filled: number;
-  trades?: null[] | null;
-  fee: Fee;
-}
+
 export interface Fee {
   currency: string;
   cost: number;
