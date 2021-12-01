@@ -12,7 +12,6 @@ import {
 export interface PolkadotWalletState {
   loading: boolean;
   getApiSuccess: boolean;
-  api?: ApiPromise;
   allAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
 }
@@ -36,7 +35,6 @@ export const polkadotWalletReducer = (
     case GET_POLKADOT_WALLET_DATA:
       return {
         ...state,
-        api: action.payload.api,
         loading: false,
         allAccounts: action.payload.allAccounts,
       };

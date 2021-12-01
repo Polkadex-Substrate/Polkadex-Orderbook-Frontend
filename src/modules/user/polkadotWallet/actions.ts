@@ -19,7 +19,6 @@ export interface InjectedAccount {
   type: any;
 }
 export interface PolkadotWalletFetchPayload {
-  api: ApiPromise;
   allAccounts: InjectedAccount[];
 }
 

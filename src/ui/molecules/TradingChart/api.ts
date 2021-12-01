@@ -162,7 +162,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       console.log({ symbolInfo, resolution, from });
       url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
+    const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
       return axios
         .post(url, payload)
         .then(({ data }) => {
