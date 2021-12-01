@@ -14,6 +14,7 @@ import {
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
   selectPolkadotWalletSuccess,
+  selectSignUpSuccess,
   setMainAccount,
   signIn,
 } from "@polkadex/orderbook-modules";
@@ -42,10 +43,15 @@ export const LoginTemplate = () => {
   const selectedAccount = useReduxSelector(selectMainAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
+  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+
   useEffect(() => {
     if (hasUser) router.push("/trading");
   }, [hasUser, router]);
 
+  useEffect(() => {
+    if (signUpSuccess) window.location.reload();
+  }, [signUpSuccess]);
   if (hasUser) return <div />;
   return (
     <S.Main>

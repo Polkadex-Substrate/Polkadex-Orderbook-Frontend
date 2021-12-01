@@ -1,10 +1,10 @@
-import { put, call } from "redux-saga/effects";
+import { put, delay } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 import { sendError, alertPush } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
-import { polkadotWalletFetch } from "../../polkadotWallet";
+import { notificationPush } from "../../notificationHandler";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -20,10 +20,9 @@ export function* signUpSaga(action: SignUpFetch) {
     const proxyAddress = pair.address;
     registerAccount(pair, proxyAddress);
     // TODO: Check if registerAccount has been successful
-    yield put(signUpData());
     yield put(
-      alertPush({
-        type: "Successful",
+      notificationPush({
+        type: "Loading",
         message: {
           title: "Your Account has been created",
           description:
@@ -31,6 +30,8 @@ export function* signUpSaga(action: SignUpFetch) {
         },
       })
     );
+    yield delay(2000);
+    yield put(signUpData());
   } catch (error) {
     yield put(
       sendError({

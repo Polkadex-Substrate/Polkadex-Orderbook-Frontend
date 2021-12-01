@@ -38,7 +38,7 @@ export const SignUpTemplate = () => {
   });
 
   useEffect(() => {
-    if (signUpSuccess) router.push("/login", undefined, { shallow: false });
+    if (signUpSuccess) router.push("/login");
   }, [signUpSuccess, router]);
 
   if (signUpSuccess) return <div />;
