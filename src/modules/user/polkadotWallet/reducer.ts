@@ -14,6 +14,7 @@ export interface PolkadotWalletState {
   getApiSuccess: boolean;
   allAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
+  isKeyringLoaded: boolean;
 }
 export const defaultAccount: InjectedAccount = {
   address: "",
@@ -23,6 +24,7 @@ export const defaultAccount: InjectedAccount = {
 const initialState: PolkadotWalletState = {
   loading: false,
   getApiSuccess: false,
+  isKeyringLoaded: false,
   allAccounts: [],
   selectedAccount: defaultAccount,
 };
@@ -36,6 +38,7 @@ export const polkadotWalletReducer = (
       return {
         ...state,
         loading: false,
+        isKeyringLoaded: true,
         allAccounts: action.payload.allAccounts,
       };
     case GET_POLKADOT_WALLET_FETCH_ERROR:

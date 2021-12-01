@@ -4,8 +4,8 @@ import { RootState } from "../..";
 
 import { InjectedAccount } from ".";
 
-export const selectPolkadotWalletApi = (state: RootState): ApiPromise | undefined =>
-  state.user.polkadotWallet.api;
+export const selectIsKeyringLoaded = (state: RootState): ApiPromise | boolean =>
+  state.user.polkadotWallet.isKeyringLoaded;
 
 export const selectPolkadotWalletLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.loading;
