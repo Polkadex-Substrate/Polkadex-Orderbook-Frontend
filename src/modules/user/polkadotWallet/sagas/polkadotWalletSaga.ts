@@ -8,7 +8,6 @@ export function* polkadotWalletSaga() {
   try {
     const allAccounts: InjectedAccount[] = yield call(getAllPoladotWalletAccounts);
     yield put(polkadotWalletData({ allAccounts }));
-    yield call(initKeyring);
   } catch (error) {
     yield put(
       sendError({
@@ -18,20 +17,21 @@ export function* polkadotWalletSaga() {
     );
   }
 }
-async function initKeyring() {
-  const { cryptoWaitReady } = await import("@polkadot/util-crypto");
-  await cryptoWaitReady();
-  keyring.loadAll({ type: "sr25519" });
-  throw new Error("Init Keyring Error");
-}
 
 async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
-  const allAccounts = keyring.getAccounts() || [];
-  return allAccounts.map((account) => {
-    return {
-      address: account.address,
-      meta: account.meta,
-      type: account.publicKey,
-    };
-  });
+  try {
+    const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+    await cryptoWaitReady();
+    keyring.loadAll({ type: "sr25519" });
+    const allAccounts = keyring.getAccounts();
+    return allAccounts.map((account) => {
+      return {
+        address: account.address,
+        meta: account.meta,
+        type: account.publicKey,
+      };
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 }

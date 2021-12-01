@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 import * as T from "./types";
 
-export const Wrapper = styled.footer<T.Props>`
+export const Wrapper = styled.div<T.Props>`
   ${({ theme, isActive, isLoading }) => css`
     display: flex;
     align-items: center;
@@ -21,4 +21,8 @@ export const Wrapper = styled.footer<T.Props>`
       font-weight: 500;
     }
   `}
+`;
+
+export const Message = styled.p`
+  text-align: center;
 `;

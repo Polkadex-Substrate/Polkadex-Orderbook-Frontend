@@ -13,7 +13,13 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectSignUpLoading, selectSignUpSuccess, signUp } from "@polkadex/orderbook-modules";
+import {
+  selectPolkadotWalletSuccess,
+  selectRangerIsConnected,
+  selectSignUpLoading,
+  selectSignUpSuccess,
+  signUp,
+} from "@polkadex/orderbook-modules";
 const defaultValues = {
   password: "",
   accountName: "Main Account",
@@ -25,7 +31,7 @@ export const SignUpTemplate = () => {
   const { mnemonic, mnemoicString } = useMnemonic();
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const signUpLoading = useReduxSelector(selectSignUpLoading);
-
+  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -60,7 +66,7 @@ export const SignUpTemplate = () => {
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <Loading isActive={true} color="primaryBackgroundOpacity">
+              <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}

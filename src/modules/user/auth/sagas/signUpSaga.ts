@@ -2,7 +2,7 @@ import { put, call } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { sendError, alertPush, userData, ProxyAccount } from "../../../";
+import { sendError, alertPush } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { polkadotWalletFetch } from "../../polkadotWallet";
 
@@ -22,7 +22,7 @@ export function* signUpSaga(action: SignUpFetch) {
     // TODO: Check if registerAccount has been successful
 
     yield put(signUpData());
-    yield put(polkadotWalletFetch());
+    yield call(polkadotWalletFetch);
     yield put(
       alertPush({
         type: "Successful",

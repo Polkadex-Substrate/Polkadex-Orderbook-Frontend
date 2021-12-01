@@ -17,7 +17,7 @@ export const Container = styled.div<{ color: string; isActive: boolean }>`
     opacity: ${isActive ? 1 : 0};
     cursor: pointer;
     transition: opacity 0.6s;
-    display: flex;
+    display: ${isActive ? "flex" : "none"};
     align-items: center;
     justify-content: center;
   `}

@@ -19,6 +19,7 @@ import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
   logoutFetch,
   selectPolkadotWalletLoading,
+  selectPolkadotWalletSuccess,
   selectUserInfo,
 } from "@polkadex/orderbook-modules";
 
@@ -71,7 +72,7 @@ export const Header = () => {
 };
 
 export const HeaderBack = () => {
-  const rangerIsConnected = useReduxSelector(selectPolkadotWalletLoading);
+  const rangerIsConnected = useReduxSelector(selectPolkadotWalletSuccess);
   const rangerIsConnecting = useReduxSelector(selectPolkadotWalletLoading);
 
   const router = useRouter();

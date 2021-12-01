@@ -1,3 +1,4 @@
+// TODO: Reset Selected account and Fetch PolkadotWallet -> useRanger
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
@@ -8,12 +9,11 @@ import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
-  polkadotWalletFetch,
   selectHasUser,
   selectMainAccount,
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
-  selectRanger,
+  selectPolkadotWalletSuccess,
   setMainAccount,
   signIn,
 } from "@polkadex/orderbook-modules";
@@ -41,11 +41,10 @@ export const LoginTemplate = () => {
 
   const selectedAccount = useReduxSelector(selectMainAccount);
   const hasUser = useReduxSelector(selectHasUser);
-  const { connected } = useReduxSelector(selectRanger);
+  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
 
   useEffect(() => {
     if (hasUser) router.push("/trading");
-    else if (connected) dispatch(polkadotWalletFetch());
   }, [hasUser, router]);
 
   if (hasUser) return <div />;
@@ -61,7 +60,7 @@ export const LoginTemplate = () => {
                 Dont you have an account yet? <Link href="/signUp"> Sign up </Link>
               </p>
             </S.Title>
-            <Loading isActive={true} color="primaryBackgroundOpacity">
+            <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
               <S.Form>
                 <Formik
                   initialValues={defaultValues}
@@ -79,10 +78,10 @@ export const LoginTemplate = () => {
                             address={selectedAccount?.address || "Polkadex is completely free"}
                           />
                         }>
-                        <S.SelectContent isOverflow={accounts.length > 2}>
+                        <S.SelectContent isOverflow={accounts?.length > 2}>
                           {isLoading ? (
                             <MyAccountLoading />
-                          ) : accounts.length ? (
+                          ) : accounts?.length ? (
                             accounts.map((item, index) => (
                               <SelectAccount
                                 isActive={item.address === selectedAccount?.address}
@@ -95,7 +94,9 @@ export const LoginTemplate = () => {
                               />
                             ))
                           ) : (
-                            <S.SelectMessage>No data</S.SelectMessage>
+                            <S.SelectMessage>
+                              You dont have account, please create one
+                            </S.SelectMessage>
                           )}
                         </S.SelectContent>
                       </Dropdown>

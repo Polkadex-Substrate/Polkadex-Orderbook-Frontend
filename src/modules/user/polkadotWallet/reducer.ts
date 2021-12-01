@@ -1,14 +1,15 @@
 import { GetPolkadotWalletAction, InjectedAccount } from "./actions";
 import {
-  GET_POLKADOT_WALLET_FETCH,
-  GET_POLKADOT_WALLET_FETCH_ERROR,
-  GET_POLKADOT_WALLET_DATA,
-  SET_POLKADOT_WALLET_ACCOUNT,
-  RESET_WALLET_ACCOUNT,
+  POLKADOT_WALLET_FETCH,
+  POLKADOT_WALLET_ERROR,
+  POLKADOT_WALLET_DATA,
+  POLKADOT_WALLET_SET,
+  POLKADOT_WALLET_RESET,
 } from "./constants";
 
 export interface PolkadotWalletState {
-  loading: boolean;
+  success?: boolean;
+  isFetching: boolean;
   getApiSuccess: boolean;
   allAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
@@ -19,7 +20,7 @@ export const defaultAccount: InjectedAccount = {
   type: "",
 };
 const initialState: PolkadotWalletState = {
-  loading: false,
+  isFetching: false,
   getApiSuccess: false,
   allAccounts: [],
   selectedAccount: defaultAccount,
@@ -30,29 +31,31 @@ export const polkadotWalletReducer = (
   action: GetPolkadotWalletAction
 ): PolkadotWalletState => {
   switch (action.type) {
-    case GET_POLKADOT_WALLET_DATA:
+    case POLKADOT_WALLET_DATA:
       return {
         ...state,
-        loading: false,
+        isFetching: false,
+        success: true,
         allAccounts: action.payload.allAccounts,
       };
-    case GET_POLKADOT_WALLET_FETCH_ERROR:
+    case POLKADOT_WALLET_ERROR:
       return {
         ...state,
-        loading: false,
+        isFetching: false,
         getApiSuccess: false,
       };
-    case GET_POLKADOT_WALLET_FETCH:
+    case POLKADOT_WALLET_FETCH:
       return {
         ...state,
-        loading: true,
+        success: false,
+        isFetching: true,
       };
-    case SET_POLKADOT_WALLET_ACCOUNT:
+    case POLKADOT_WALLET_SET:
       return {
         ...state,
         selectedAccount: action.payload,
       };
-    case RESET_WALLET_ACCOUNT:
+    case POLKADOT_WALLET_RESET:
       return {
         ...initialState,
       };

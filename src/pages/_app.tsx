@@ -13,12 +13,12 @@ import {
   selectCurrentColorTheme,
   selectNotificationState,
 } from "@polkadex/orderbook-modules";
-import { useRangerConnectFetch } from "@polkadex/orderbook-hooks";
+import { useKeyringInitalize } from "@polkadex/orderbook-hooks";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { NotificationCard } from "@polkadex/orderbook-ui/molecules";
 
 function App({ Component, pageProps }: AppProps) {
-  useRangerConnectFetch();
+  useKeyringInitalize();
   return (
     <ThemeWrapper>
       <GlobalStyles />
