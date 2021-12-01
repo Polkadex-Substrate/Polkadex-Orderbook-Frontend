@@ -15,7 +15,6 @@ import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectPolkadotWalletSuccess,
-  selectRangerIsConnected,
   selectSignUpLoading,
   selectSignUpSuccess,
   signUp,
@@ -39,7 +38,7 @@ export const SignUpTemplate = () => {
   });
 
   useEffect(() => {
-    if (signUpSuccess) router.push("/login");
+    if (signUpSuccess) router.push("/login", undefined, { shallow: false });
   }, [signUpSuccess, router]);
 
   if (signUpSuccess) return <div />;

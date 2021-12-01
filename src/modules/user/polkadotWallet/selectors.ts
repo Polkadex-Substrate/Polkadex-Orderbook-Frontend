@@ -1,5 +1,3 @@
-import { ApiPromise } from "@polkadot/api";
-
 import { RootState } from "../..";
 
 import { InjectedAccount } from ".";

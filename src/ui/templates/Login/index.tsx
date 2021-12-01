@@ -42,7 +42,6 @@ export const LoginTemplate = () => {
   const selectedAccount = useReduxSelector(selectMainAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
-
   useEffect(() => {
     if (hasUser) router.push("/trading");
   }, [hasUser, router]);

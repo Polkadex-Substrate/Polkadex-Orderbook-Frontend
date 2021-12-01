@@ -20,9 +20,7 @@ export function* signUpSaga(action: SignUpFetch) {
     const proxyAddress = pair.address;
     registerAccount(pair, proxyAddress);
     // TODO: Check if registerAccount has been successful
-
     yield put(signUpData());
-    yield call(polkadotWalletFetch);
     yield put(
       alertPush({
         type: "Successful",

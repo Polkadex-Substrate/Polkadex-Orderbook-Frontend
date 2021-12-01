@@ -10,7 +10,6 @@ import {
 export interface PolkadotWalletState {
   success?: boolean;
   isFetching: boolean;
-  getApiSuccess: boolean;
   allAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
 }
@@ -21,7 +20,7 @@ export const defaultAccount: InjectedAccount = {
 };
 const initialState: PolkadotWalletState = {
   isFetching: false,
-  getApiSuccess: false,
+  success: false,
   allAccounts: [],
   selectedAccount: defaultAccount,
 };
@@ -42,7 +41,7 @@ export const polkadotWalletReducer = (
       return {
         ...state,
         isFetching: false,
-        getApiSuccess: false,
+        success: false,
       };
     case POLKADOT_WALLET_FETCH:
       return {

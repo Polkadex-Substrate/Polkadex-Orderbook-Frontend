@@ -24,6 +24,7 @@ async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
     await cryptoWaitReady();
     keyring.loadAll({ type: "sr25519" });
     const allAccounts = keyring.getAccounts();
+    console.log(allAccounts);
     return allAccounts.map((account) => {
       return {
         address: account.address,
