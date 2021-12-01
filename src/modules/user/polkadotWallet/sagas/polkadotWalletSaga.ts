@@ -25,6 +25,9 @@ export function* polkadotWalletSaga(action: PolkadotWalletFetch) {
 }
 
 async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
+  const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+  await cryptoWaitReady();
+  keyring.loadAll({ type: "sr25519" });
   const allAccounts = keyring.getAccounts();
   return allAccounts.map((account) => {
     return {

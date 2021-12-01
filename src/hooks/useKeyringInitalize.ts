@@ -11,11 +11,7 @@ export const useKeyringInitalize = () => {
 
   const init = async () => {
     try {
-      const { cryptoWaitReady } = await import("@polkadot/util-crypto");
       dispatch(polkadotWalletFetch());
-      await cryptoWaitReady();
-      keyring.loadAll({ type: "sr25519" });
-      console.log("Keyring initalized");
       setShouldFetch(false);
     } catch (e) {
       setError(e.message);
