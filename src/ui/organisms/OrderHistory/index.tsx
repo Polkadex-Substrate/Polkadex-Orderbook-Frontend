@@ -6,9 +6,10 @@ import * as S from "./styles";
 import {
   selectCurrentMarket,
   selectUserLoggedIn,
-  selectHistory,
-  selectHistoryLoading,
-  fetchHistory,
+  selectOrdersHistory,
+  selectUserInfo,
+  selectOrdersHistoryLoading,
+  userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
@@ -43,23 +44,19 @@ const handleHighlightValue = (prevValue: string, curValue: string) => {
 export const OrderHistory = () => {
   const dispatch = useDispatch();
 
-  const list = useReduxSelector(selectHistory);
-  const fetching = useReduxSelector(selectHistoryLoading);
+  const list = useReduxSelector(selectOrdersHistory);
+  const userAccount = useReduxSelector(selectUserInfo);
+
+  const fetching = useReduxSelector(selectOrdersHistoryLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket)
-      dispatch(
-        fetchHistory({
-          type: "trades",
-          page: 0,
-          time_from: timeFrom,
-          market: currentMarket.id,
-        })
-      );
-  }, [userLoggedIn, currentMarket]);
+    if (userLoggedIn && currentMarket) {
+      dispatch(userOrdersHistoryFetch({ userAccount }));
+    }
+  }, [userLoggedIn, currentMarket, dispatch, userAccount]);
 
   return (
     <S.Wrapper>
@@ -79,31 +76,26 @@ export const OrderHistory = () => {
       {!fetching ? (
         <S.Content>
           {list?.map((item, i) => {
-            const { id, created_at, price, amount, taker_type } = item;
+            const { id, timestamp, price, amount, order_side, symbol, order_type } = item;
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
-            const orderSide = taker_type === "sell";
+            const orderSide = order_side === "Sell";
 
-            const higlightedDate = handleHighlightValue(
-              String(localeDate([...list][i - 1] ? [...list][i - 1].created_at : "", "time")),
-              String(localeDate(created_at, "time"))
-            );
-
-            const date = localeDate(created_at, "fullDate");
+            const date = localeDate(new Date(timestamp), "fullDate");
             const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
             return (
               <CardComponent
                 key={id}
                 date={date}
-                baseUnit={"TEST"}
-                quoteUnit={"NOTEST"}
-                side={taker_type.toUpperCase()}
+                baseUnit={symbol[0]}
+                quoteUnit={symbol[1]}
+                side={order_side.toUpperCase()}
                 isSell={orderSide}
                 price={Decimal.format(price, priceFixed, ",")}
                 amount={Decimal.format(amount, amountFixed, ",")}
                 total={"100"}
                 executed={"0.3"}
-                type={"Limit"}
+                type={order_type}
                 transactionType={"filled"}
               />
             );

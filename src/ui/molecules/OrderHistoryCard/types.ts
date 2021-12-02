@@ -10,7 +10,7 @@ export type Props = {
   amount?: string | ReactNode;
   total?: string | ReactNode;
   filled?: string;
-  type?: "Limit" | "Margin";
+  type?: "Limit" | "Market";
   executed?: string | ReactNode;
   transactionType?: "filled" | "partial filled" | "canceled" | "expired";
 };

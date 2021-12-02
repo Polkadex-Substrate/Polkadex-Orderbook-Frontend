@@ -22,10 +22,8 @@ import {
 import { Funds, OpenOrders, OrderHistory } from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
   const dispatch = useDispatch();
-  const orders = useReduxSelector(selectOrdersHistory);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
-  console.log("Orders", { orders });
   return (
     <S.Wrapper>
       {userLoggedIn ? (
