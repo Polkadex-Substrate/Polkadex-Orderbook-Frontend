@@ -31,7 +31,7 @@ export const Header = () => {
               <Polkadex />
             </a>
           </Link>
-          {width >= 920 && <Toolbar />}
+          {width >= 1050 && <Toolbar />}
         </S.Column>
         <S.Column>
           <ThemeSwitch />

@@ -17,8 +17,8 @@ const TradingChart = dynamic(
 export const MarketChart = () => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   return (
-    <S.Wrapper>
-      <Tabs>
+    <Tabs>
+      <S.Wrapper>
         <S.Header>
           <S.Nav>
             <ul>
@@ -42,7 +42,7 @@ export const MarketChart = () => {
             <MarketDepth />
           </TabContent>
         </S.Content>
-      </Tabs>
-    </S.Wrapper>
+      </S.Wrapper>
+    </Tabs>
   );
 };
