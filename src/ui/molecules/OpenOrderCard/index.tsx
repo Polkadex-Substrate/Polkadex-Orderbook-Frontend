@@ -4,59 +4,43 @@ import * as S from "./styles";
 import { Props } from "./types";
 
 import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { localeDate } from "@polkadex/web-helpers";
 
 export const OpenOrderCard = ({
   date,
   baseUnit,
   quoteUnit,
   side,
-  isSell,
   price,
   amount,
   total,
   filled,
-  type = "Limit",
+  type,
   onCancel,
 }: Props) => {
   return (
     <S.Wrapper>
-      <S.Container>
-        <span>{date}</span>
-      </S.Container>
-      <S.Container>
-        <span>
-          {baseUnit}/{quoteUnit}
-        </span>
-      </S.Container>
-      <S.Container>
-        <span>{type}</span>
-      </S.Container>
-      <S.Container>
-        <S.Side isSell={isSell}>{side}</S.Side>
-      </S.Container>
-      <S.Container>
-        <span>{price}</span>
-      </S.Container>
-      <S.Container>
-        <span>{amount}</span>
-      </S.Container>
-      <S.Container>
-        <span>{filled}</span>
-      </S.Container>
-      <S.Container>
-        <span>{total}</span>
-      </S.Container>
-      <S.Container>
-        {filled <= 100 && (
-          <Icon
-            name="Close"
-            size="small"
-            background="none"
-            onClick={onCancel}
-            style={{ cursor: "pointer" }}
-          />
-        )}
-      </S.Container>
+      <span>{localeDate(date, "fullDate")}</span>
+      <span>
+        {baseUnit}/{quoteUnit}
+      </span>
+      <span>{type}</span>
+      <S.Side isSell={side === "sell"}>{side}</S.Side>
+      <span>{price}</span>
+      <span>{amount}</span>
+      <span>{filled}</span>
+      <span>{total}</span>
+      {filled <= 100 ? (
+        <Icon
+          name="Close"
+          size="small"
+          background="none"
+          onClick={onCancel}
+          style={{ cursor: "pointer" }}
+        />
+      ) : (
+        <div />
+      )}
     </S.Wrapper>
   );
 };
@@ -66,17 +50,15 @@ export const OpenOrderCardReponsive = ({
   baseUnit,
   quoteUnit,
   side,
-  isSell,
   price,
   amount,
   total,
-  filled,
   type = "Limit",
   onCancel,
 }: Props) => {
   return (
     <S.Box>
-      <S.Header isSell={isSell}>
+      <S.Header isSell={side === "sell"}>
         <div>
           <p>
             {baseUnit}/{quoteUnit}
@@ -88,7 +70,7 @@ export const OpenOrderCardReponsive = ({
         </button>
       </S.Header>
       <S.Content>
-        <OpenOrderInfo label="Date" value={date} />
+        <OpenOrderInfo label="Date" value={localeDate(date, "fullDate")} />
         <OpenOrderInfo label="Type" value={type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />

@@ -27,17 +27,16 @@ export interface OrderCommon {
   // filled: string;
   // type: string;
   // uuid: string;
-  date: string;
+  uuid: string;
+  date: Date;
   baseUnit: string;
   quoteUnit: string;
   side: string;
-  isSell: boolean;
-  price: string;
-  amount: string;
-  total: string;
-  filled: string;
+  price: number;
+  amount: number;
+  total: number;
+  filled: number | string;
   type: string;
-  uuid: string;
   state?: "wait" | "filled" | "cancel" | "pending" | "reject"; // TODO: Verify states & filled
 }
 

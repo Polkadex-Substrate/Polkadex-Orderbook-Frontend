@@ -48,7 +48,6 @@ export interface OpenOrdersCancelFetch {
   type: typeof OPEN_ORDERS_CANCEL_FETCH;
   payload: {
     order: OrderCommon;
-    list: OrderCommon[];
   };
 }
 

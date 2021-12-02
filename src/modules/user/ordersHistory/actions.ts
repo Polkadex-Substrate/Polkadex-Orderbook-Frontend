@@ -3,17 +3,12 @@ import { ProxyAccount } from "../profile";
 
 import { ORDERS_HISTORY_DATA, ORDERS_HISTORY_ERROR, ORDERS_HISTORY_FETCH } from "./constants";
 
-interface UserOrdersHistoryFetchPayload {
-  userAccount: ProxyAccount;
-}
-
 export interface UserOrdersHistoryDataPayload {
   list: OrderCommon[];
 }
 
 export interface UserOrdersHistoryFetch {
   type: typeof ORDERS_HISTORY_FETCH;
-  payload: UserOrdersHistoryFetchPayload;
 }
 
 export interface UserOrdersHistoryData {
@@ -31,11 +26,8 @@ export type OrdersHistoryAction =
   | UserOrdersHistoryData
   | UserOrdersHistoryError;
 
-export const userOrdersHistoryFetch = (
-  payload: UserOrdersHistoryFetchPayload
-): UserOrdersHistoryFetch => ({
+export const userOrdersHistoryFetch = (): UserOrdersHistoryFetch => ({
   type: ORDERS_HISTORY_FETCH,
-  payload,
 });
 
 export const userOrdersHistoryData = (
