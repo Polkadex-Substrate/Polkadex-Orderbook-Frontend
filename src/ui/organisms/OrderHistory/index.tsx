@@ -70,7 +70,7 @@ export const OrderHistory = () => {
           <span>Executed</span>
           <span>Amount</span>
           <span>Total</span>
-          <span>All</span>
+          <span>Status</span>
         </S.Header>
       )}
       {!fetching ? (

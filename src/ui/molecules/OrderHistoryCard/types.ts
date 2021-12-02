@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { OrderStatus, OrderType } from "public/charting_library/charting_library.min";
+import { OrderStatus, OrderType } from "@polkadex/orderbook/modules/types";
 
 export type Props = {
   date?: string;
