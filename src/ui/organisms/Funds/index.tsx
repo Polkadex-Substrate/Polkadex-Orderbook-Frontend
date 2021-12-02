@@ -1,10 +1,27 @@
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+
 import * as S from "./styles";
 
-import { useWindowSize } from "@polkadex/orderbook-hooks";
-import { FundCard } from "@polkadex/orderbook-ui/molecules";
+import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
+import { FundCard, LoadingTransactions } from "@polkadex/orderbook-ui/molecules";
+import {
+  selectUserBalance,
+  balancesFetch,
+  selectHasUser,
+  selectBalancesLoading,
+} from "@polkadex/orderbook-modules";
 
 export const Funds = () => {
+  const dispatch = useDispatch();
   const { width } = useWindowSize();
+  const balances = useReduxSelector(selectUserBalance);
+  const hasUser = useReduxSelector(selectHasUser);
+  const isLoading = useReduxSelector(selectBalancesLoading);
+
+  useEffect(() => {
+    if (hasUser) dispatch(balancesFetch());
+  }, [hasUser, dispatch]);
 
   return (
     <S.Wrapper>
@@ -17,44 +34,31 @@ export const Funds = () => {
           <span>Actions</span>
         </S.Header>
       )}
-      <S.Content>
-        <FundCard
-          key={1}
-          tokenTicker="ETH"
-          tokenName="Ethereum"
-          handleTransfer={() => console.log("Transfer")}
-          handleTrade={() => console.log("Transfer")}
-        />
-        <FundCard
-          key={1}
-          tokenTicker="DASH"
-          tokenName="DASH"
-          handleTransfer={() => console.log("Transfer")}
-          handleTrade={() => console.log("Transfer")}
-        />
-      </S.Content>
-
-      {/* {!fetching ? (
+      {!isLoading ? (
         <S.Content>
-          {list?.map((item, i) => {
-            const CardComponent = width > 1130 ? FundCard : null;
-            return (
-              <FundCard
-                key={i}
-                tokenIcon="Polkadex"
-                pair="Polkadex"
-                vol={0}
-                priceFiat={0}
-                price={0}
-                change={0}
-                onClick={console.log("...")}
-              />
-            );
-          })}
+          {balances?.length &&
+            balances?.map((token, i) => {
+              const CardComponent = width > 1130 ? FundCard : null;
+              return (
+                <FundCard
+                  key={i}
+                  tokenTicker={token.ticker}
+                  tokenName={token.ticker}
+                  totalAmount={token.total.toString()}
+                  totalAmountFiat="0.0000000"
+                  availableAmount={token.free.toString()}
+                  availableAmountFiat="0.0000000"
+                  reservedAmount={token.used.toString()}
+                  reservedAmountFiat="0.0000000"
+                  handleTransfer={() => console.log("Transfer")}
+                  handleTrade={() => console.log("Trade")}
+                />
+              );
+            })}
         </S.Content>
       ) : (
         <LoadingTransactions />
-      )} */}
+      )}
     </S.Wrapper>
   );
 };

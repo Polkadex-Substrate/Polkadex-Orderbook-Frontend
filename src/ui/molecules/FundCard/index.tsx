@@ -18,12 +18,7 @@ export const FundCard = ({
   <S.Wrapper>
     <S.Token>
       {tokenTicker ? (
-        <Icon
-          isToken
-          size="large"
-          name={tokenTicker}
-          style={{ width: "3.5rem", height: "3.5rem", borderRadius: "25%", padding: 2 }}
-        />
+        <Icon isToken size="large" name={tokenTicker} background="secondaryBackground" />
       ) : (
         <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
       )}
@@ -46,7 +41,7 @@ export const FundCard = ({
     </S.Container>
     <S.Container>
       {availableAmount ? (
-        <p>$ {availableAmount}</p>
+        <p>{availableAmount}</p>
       ) : (
         <Skeleton width="6rem" style={{ marginBottom: 10 }} />
       )}
