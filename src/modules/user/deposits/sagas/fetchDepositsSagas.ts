@@ -20,7 +20,7 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_deposits", data));
-      if (res.status === 200 && res.Fine) {
+      if (res.Fine) {
         yield put(depositsData(res.Fine));
       } else {
         throw new Error("Depost fetch failed");

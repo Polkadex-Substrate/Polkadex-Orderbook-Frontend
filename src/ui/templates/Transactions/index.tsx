@@ -1,14 +1,7 @@
-import * as React from "react";
-import { useDispatch } from "react-redux";
-
+/// TODO: Check side Effets
 import * as S from "./styles";
 
-import {
-  selectHasUser,
-  selectOrdersHistory,
-  selectUserInfo,
-  userOrdersHistoryFetch,
-} from "@polkadex/orderbook-modules";
+import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Checkbox,
@@ -19,23 +12,21 @@ import {
   TabHeader,
   Empty,
 } from "@polkadex/orderbook-ui/molecules";
+import {
+  Funds,
+  OpenOrders,
+  OrderHistory,
+  TradeHistory,
+} from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
-  const userAccount = useReduxSelector(selectUserInfo);
-  const orders = useReduxSelector(selectOrdersHistory);
-  const dispatch = useDispatch();
   const userLoggedIn = useReduxSelector(selectHasUser);
-  React.useEffect(() => {
-    if (userLoggedIn) {
-      dispatch(userOrdersHistoryFetch({ userAccount }));
-    }
-  }, [dispatch, userAccount, userLoggedIn]);
-  console.log({ orders });
+
   return (
     <S.Wrapper>
       {userLoggedIn ? (
         <Tabs>
           <S.Header>
-            {/* <ul>
+            <ul>
               <TabHeader>
                 <S.Tab>Open Orders</S.Tab>
               </TabHeader>
@@ -48,21 +39,27 @@ export const Transactions = () => {
               <TabHeader>
                 <S.Tab>Funds</S.Tab>
               </TabHeader>
-            </ul> */}
-            {/* <AvailableMessage>
+            </ul>
+            <AvailableMessage>
               <S.Filters>
                 <Checkbox label="Hide Other Pairs" />
                 <Button size="small">Cancel All</Button>
               </S.Filters>
-            </AvailableMessage> */}
+            </AvailableMessage>
           </S.Header>
           <S.Content>
-            {/* <TabContent>
+            <TabContent>
               <OpenOrders />
             </TabContent>
             <TabContent>
               <OrderHistory />
-            </TabContent> */}
+            </TabContent>
+            <TabContent>
+              <TradeHistory />
+            </TabContent>
+            <TabContent>
+              <Funds />
+            </TabContent>
           </S.Content>
         </Tabs>
       ) : (

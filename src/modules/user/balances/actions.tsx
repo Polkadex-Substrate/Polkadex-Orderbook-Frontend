@@ -1,19 +1,21 @@
 import { CommonError } from "../../types";
-import { ProxyAccount } from "../profile";
 
 import { BALANCES_DATA, BALANCES_ERROR, BALANCES_FETCH } from "./constants";
 
+export type Balance = {
+  ticker: string;
+  free: string | number;
+  used: string | number;
+  total: string | number;
+};
 export interface UserBalance {
   timestamp: number;
-  free: FreeOrUsedOrTotal;
-  used: FreeOrUsedOrTotal;
-  total: FreeOrUsedOrTotal;
+  userBalance: Balance[];
 }
 export type FreeOrUsedOrTotal = Record<string, number>;
 
 export interface BalancesFetch {
   type: typeof BALANCES_FETCH;
-  payload: { account: ProxyAccount };
 }
 
 export interface BalancesError {
@@ -28,9 +30,8 @@ export interface BalancesData {
 
 export type BalancesAction = BalancesFetch | BalancesData | BalancesError;
 
-export const balancesFetch = (payload: BalancesFetch["payload"]): BalancesFetch => ({
+export const balancesFetch = (): BalancesFetch => ({
   type: BALANCES_FETCH,
-  payload,
 });
 
 export const balancesData = (payload: BalancesData["payload"]): BalancesData => ({

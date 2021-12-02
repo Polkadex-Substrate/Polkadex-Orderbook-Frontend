@@ -1,21 +1,19 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div`
+export const Template = styled.div`
   display: grid;
-  grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
+  grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1.5fr;
   grid-gap: 0.5rem;
   text-align: left;
   overflow-y: scroll;
   scrollbar-width: none;
+`;
+
+export const Wrapper = styled(Template)`
   font-size: 1.3rem;
   padding: 0 1rem;
   :not(:last-child) {
     margin-bottom: 1rem;
-  }
-  span {
-    display: block;
-    font-weight: 500;
-    font-size: 1.1rem;
   }
 `;
 

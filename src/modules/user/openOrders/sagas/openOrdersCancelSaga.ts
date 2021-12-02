@@ -5,11 +5,7 @@ import { openOrdersCancelError, OpenOrdersCancelFetch } from "../actions";
 
 export function* openOrdersCancelSaga(action: OpenOrdersCancelFetch) {
   try {
-    const {
-      order: {
-        Fine: { id },
-      },
-    } = action.payload;
+    const { id } = action.payload;
 
     const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset } = yield select(
       selectUserInfo

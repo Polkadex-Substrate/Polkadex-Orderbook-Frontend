@@ -2,17 +2,14 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.section``;
 
-export const Template = styled.div`
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.5fr 0.5fr 0.8fr 0.6fr 0.4fr 0.6fr 0.1fr;
-  grid-gap: 0.5rem;
-  text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
-`;
-
-export const Header = styled(Template)`
+export const Header = styled.div`
   ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
+    grid-gap: 0.5rem;
+    text-align: left;
+    overflow-y: scroll;
+    scrollbar-width: none;
     margin-bottom: 1rem;
     padding: 0 1rem;
     span {

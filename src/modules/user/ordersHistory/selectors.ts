@@ -4,6 +4,9 @@ import { OrderCommon } from "../../types";
 export const selectOrdersHistory = (state: RootState): OrderCommon[] =>
   state.user.ordersHistory.list;
 
+export const selectOpenOrdersHistory = (state: RootState): OrderCommon[] =>
+  state.user.ordersHistory.list.filter((order) => order.status === "Open");
+
 export const selectCurrentPageIndex = (state: RootState): number =>
   state.user.ordersHistory.pageIndex;
 

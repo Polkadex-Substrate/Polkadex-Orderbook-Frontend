@@ -1,11 +1,9 @@
-import { call, put } from "redux-saga/effects";
+// TODO: Create User middleware
+import { call, put, select } from "redux-saga/effects";
 
-import {
-  userOrdersHistoryData,
-  userOrdersHistoryError,
-  UserOrdersHistoryFetch,
-} from "../actions";
+import { userOrdersHistoryData, userOrdersHistoryError } from "../actions";
 import { sendError } from "../../../";
+import { selectUserInfo } from "../../profile";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -16,11 +14,11 @@ const ordersOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
+export function* ordersHistorySaga() {
   try {
-    const { userAccount } = action.payload;
-    const payload = { account: userAccount.address };
-    if (userAccount.address) {
+    const userAccount = yield select(selectUserInfo);
+    if (userAccount.address !== "") {
+      const payload = { account: userAccount.address };
       const signature = yield call(() =>
         signMessage(userAccount.keyringPair, JSON.stringify(payload))
       );

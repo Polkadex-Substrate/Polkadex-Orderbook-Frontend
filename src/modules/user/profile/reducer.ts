@@ -36,22 +36,10 @@ const ifUserIsLoggedIn = () => {
 const initialUserList = [];
 
 export const defaultUser = {
-  username: "",
+  accountName: "",
   address: "",
   password: "",
   keyringPair: {},
-  email: "",
-  level: 0,
-  otp: false,
-  role: "",
-  state: "",
-  uid: "",
-  profiles: [],
-  referal_uid: "",
-  labels: [],
-  phone: [],
-  created_at: "",
-  updated_at: "",
 };
 
 export const initialStateProfile: ProfileState = {

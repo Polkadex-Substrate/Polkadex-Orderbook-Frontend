@@ -5,11 +5,7 @@ import { ProxyAccount } from "./types";
 import { UserSkeleton } from ".";
 
 export const selectUserLoggedIn = (state: RootState): boolean => {
-  const {
-    user: { profile },
-  } = state;
-
-  return !profile.userData.isFetching && profile.userData.user.state === "active";
+  return state.user.profile.userData.user.address !== "";
 };
 export const selectHasUser = (state: RootState): boolean =>
   !!state.user.profile.userData.user.address;

@@ -3,88 +3,71 @@ import { ReactNode } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Bar, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 
-export const OpenOrderCard = ({
-  id,
-  timestamp,
+export const TradeHistoryCard = ({
+  date,
   symbol,
-  order_side,
+  fee,
+  profit,
+  side,
   price,
-  amount,
-  average,
-  filled,
-  order_type,
-  onCancel,
+  quantity,
 }: Props) => {
-  const baseUnit = symbol[0];
-  const quoteUnit = symbol[1];
   return (
     <S.Wrapper>
-      <span>{localeDate(new Date(timestamp), "fullDate")}</span>
-      <span>
-        {baseUnit}/{quoteUnit}
-      </span>
-      <span>{order_type}</span>
-      <S.Side isSell={order_side === "Sell"}>{order_side}</S.Side>
-      <span>{price}</span>
-      <span>{amount}</span>
-      <span>{filled}</span>
-      <span>{average}</span>
-      {filled <= 100 ? (
-        <Icon
-          name="Close"
-          size="small"
-          background="none"
-          onClick={onCancel}
-          style={{ cursor: "pointer" }}
-        />
-      ) : (
-        <div />
-      )}
+      <S.Container>
+        <span>{localeDate(new Date(date), "fullDate")}</span>
+      </S.Container>
+      <S.Container>
+        <span>{symbol}</span>
+      </S.Container>
+      <S.Container>
+        <S.Side isSell={side === "Sell"}>{side}</S.Side>
+      </S.Container>
+      <S.Container>
+        <span>{price}</span>
+      </S.Container>
+      <S.Container>
+        <span>{quantity}</span>
+      </S.Container>
+      <S.Container>
+        <span>{fee}</span>
+      </S.Container>
+      <S.Container>
+        <span>{profit}</span>
+      </S.Container>
     </S.Wrapper>
   );
 };
 
-export const OpenOrderCardReponsive = ({
-  id,
-  timestamp,
+export const TradeHistoryCardReponsive = ({
+  date,
   symbol,
-  order_side,
+  fee,
+  profit,
+  side,
   price,
-  amount,
-  average,
-  filled,
-  order_type = "Limit",
-  onCancel,
+  quantity,
 }: Props) => {
-  const baseUnit = symbol[0];
-  const quoteUnit = symbol[1];
   return (
     <S.Box>
-      <S.Header isSell={order_side === "Sell"}>
+      <S.Header isSell={side === "sell"}>
         <div>
-          <p>
-            {baseUnit}/{quoteUnit}
-          </p>
-          <span>{order_side}</span>
+          <p>{symbol}</p>
+          <span>{side}</span>
         </div>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
       </S.Header>
       <S.Content>
-        <OpenOrderInfo label="Date" value={localeDate(new Date(timestamp), "fullDate")} />
-        <OpenOrderInfo label="Type" value={order_type} />
-        <OpenOrderInfo label="Price" value={price} />
-        <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Total" value={average} />
+        <TradeHistoryInfo label="Date" value={localeDate(new Date(date), "fullDate")} />
+        <TradeHistoryInfo label="Price" value={price} />
+        <TradeHistoryInfo label="Quantity" value={quantity} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
-          <span>Filled</span>
-          <p>{filled}</p>
+          <span>{fee}</span>
+          <p>{profit}</p>
         </S.FlexJustify>
         <Bar percent={0} />
       </S.Footer>
@@ -96,14 +79,14 @@ type InfoProps = {
   label?: string;
   value?: string | number | ReactNode;
 };
-const OpenOrderInfo = ({ label = "", value = "" }: InfoProps) => (
+const TradeHistoryInfo = ({ label = "", value = "" }: InfoProps) => (
   <S.Info>
     <span>{label}</span>
     <p>{value}</p>
   </S.Info>
 );
 
-export const LoadingTransactions = () => {
+export const TradeHistoryLoading = () => {
   return (
     <div style={{ paddingRight: "1rem", paddingLeft: "1rem" }}>
       <LoadingTransactionItem />

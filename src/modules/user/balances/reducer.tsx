@@ -1,21 +1,16 @@
 import { BalancesAction, UserBalance } from "./actions";
 import { BALANCES_DATA, BALANCES_ERROR, BALANCES_FETCH } from "./constants";
 
-export interface Balances {
-  Balances: string;
-}
-
 export interface BalancesState {
   error?: string;
   loading: boolean;
   success: boolean;
-  balances: UserBalance;
+  balances?: UserBalance;
 }
 
-export const initialState: BalancesState = {
+const initialState: BalancesState = {
   loading: false,
   success: false,
-  balances: { timestamp: 0, free: {}, used: {}, total: {} },
 };
 
 export const balancesReducer = (state = initialState, action: BalancesAction) => {

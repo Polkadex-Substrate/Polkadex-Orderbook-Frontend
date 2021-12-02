@@ -5,12 +5,11 @@ import * as S from "./styles";
 
 import {
   openOrdersCancelFetch,
-  selectCancelOpenOrdersFetching,
   selectCurrentMarket,
-  selectOpenOrdersFetching,
-  selectOpenOrdersList,
+  selectOpenOrdersHistory,
+  selectOrdersHistoryLoading,
   selectUserLoggedIn,
-  userOpenOrdersFetch,
+  userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
@@ -18,40 +17,24 @@ import {
   OpenOrderCard,
   OpenOrderCardReponsive,
 } from "@polkadex/orderbook-ui/molecules";
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { localeDate } from "@polkadex/web-helpers";
 
 export const OpenOrders = () => {
   const dispatch = useDispatch();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const list = useReduxSelector(selectOpenOrdersList);
-  const fetching = useReduxSelector(selectOpenOrdersFetching);
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const cancelFetching = useReduxSelector(selectCancelOpenOrdersFetching);
+  const openOrders = useReduxSelector(selectOpenOrdersHistory);
+  const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
+  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
-  const handleCancel = (index: number) =>
-    list && dispatch(openOrdersCancelFetch({ order: list[index], list }));
-
-  // const handleCancelAll = () =>
-  // currentMarket && dispatch(ordersCancelAllFetch({ market: currentMarket.id }));
-
-  const currentMarketData = () => {
-    const currentAskUnit = currentMarket?.base_unit?.toUpperCase() || "";
-    const currentBidUnit = currentMarket?.quote_unit?.toUpperCase() || "";
-    return {
-      currentAskUnit,
-      currentBidUnit,
-    };
-  };
+  const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket)
-      dispatch(userOpenOrdersFetch({ market: currentMarket }));
-  }, [userLoggedIn, currentMarket]);
+    if (userLoggedIn && currentMarket) dispatch(userOrdersHistoryFetch());
+  }, [userLoggedIn, currentMarket, dispatch]);
 
+  console.log({ openOrders });
   return (
     <S.Wrapper>
       {width > 1110 && (
@@ -62,36 +45,40 @@ export const OpenOrders = () => {
           <span>Side</span>
           <span>Price</span>
           <span>Amount</span>
-          <span>Status</span>
+          <span>Filled</span>
           <span>Total</span>
           <span></span>
         </S.Header>
       )}
       {!fetching ? (
         <S.Content>
-          {list?.map((item, index) => {
-            const { id, price, created_at, remaining_volume, origin_volume, side } = item;
-            const executedVolume = Number(origin_volume) - Number(remaining_volume);
-            const remainingAmount = Number(remaining_volume);
-            const total = Number(origin_volume) * Number(price);
-            const filled = ((executedVolume / Number(origin_volume)) * 100).toFixed(2);
-            const priceFixed = currentMarket ? currentMarket.price_precision : 0;
-            const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
-            const orderSide = side === "buy";
+          {openOrders?.map((item) => {
+            const {
+              id,
+              timestamp,
+              symbol,
+              order_side,
+              price,
+              amount,
+              average,
+              filled,
+              order_type,
+            } = item;
+
             const CardComponent = width > 1110 ? OpenOrderCard : OpenOrderCardReponsive;
             return (
               <CardComponent
                 key={id}
-                date={localeDate(created_at, "fullDate")}
-                baseUnit={currentMarketData().currentAskUnit}
-                quoteUnit={currentMarketData().currentBidUnit}
-                side={side}
-                isSell={orderSide}
-                price={Decimal.format(price, priceFixed, ",")}
-                amount={Decimal.format(total, amountFixed, ",")}
-                total={Decimal.format(remainingAmount, amountFixed, ",")}
+                id={id}
+                timestamp={timestamp}
+                symbol={symbol}
+                order_side={order_side}
+                price={price}
                 filled={filled}
-                onCancel={() => handleCancel(index)}
+                amount={amount}
+                average={average}
+                order_type={order_type}
+                onCancel={() => handleCancel(id)}
               />
             );
           })}

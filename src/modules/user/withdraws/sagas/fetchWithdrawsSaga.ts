@@ -21,7 +21,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_withdraws", data));
-      if (res.statusCode === 200 && res.Fine) {
+      if (res.Fine) {
         yield put(withdrawsData(res.Fine));
       } else {
         throw new Error("withdraw fetch failed");

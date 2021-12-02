@@ -165,7 +165,20 @@ export class TradingChartComponent extends React.PureComponent<Props> {
   }
 
   public render() {
-    return <div id={widgetParams.containerId} className="pg-trading-chart" />;
+    return (
+      <div
+        id={widgetParams.containerId}
+        style={{
+          background: "transparent",
+          height: "100%",
+          left: "0",
+          position: "relative",
+          top: "0",
+          width: "100%",
+        }}
+        className="pg-trading-chart"
+      />
+    );
   }
 
   private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {

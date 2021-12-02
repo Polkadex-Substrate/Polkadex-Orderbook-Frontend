@@ -35,3 +35,4 @@ export * from "./NotificationCard";
 export * from "./Tooltip";
 export * from "./Status";
 export * from "./Loading";
+export * from "./TradeHistoryCard";
