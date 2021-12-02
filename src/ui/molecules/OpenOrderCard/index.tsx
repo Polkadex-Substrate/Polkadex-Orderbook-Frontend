@@ -7,29 +7,31 @@ import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 
 export const OpenOrderCard = ({
-  date,
-  baseUnit,
-  quoteUnit,
-  side,
+  id,
+  timestamp,
+  symbol,
+  order_side,
   price,
   amount,
-  total,
+  average,
   filled,
-  type,
+  order_type,
   onCancel,
 }: Props) => {
+  const baseUnit = symbol[0];
+  const quoteUnit = symbol[1];
   return (
     <S.Wrapper>
-      <span>{localeDate(date, "fullDate")}</span>
+      <span>{localeDate(new Date(timestamp), "fullDate")}</span>
       <span>
         {baseUnit}/{quoteUnit}
       </span>
-      <span>{type}</span>
-      <S.Side isSell={side === "sell"}>{side}</S.Side>
+      <span>{order_type}</span>
+      <S.Side isSell={order_side === "Sell"}>{order_side}</S.Side>
       <span>{price}</span>
       <span>{amount}</span>
       <span>{filled}</span>
-      <span>{total}</span>
+      <span>{average}</span>
       {filled <= 100 ? (
         <Icon
           name="Close"
@@ -46,40 +48,44 @@ export const OpenOrderCard = ({
 };
 
 export const OpenOrderCardReponsive = ({
-  date,
-  baseUnit,
-  quoteUnit,
-  side,
+  id,
+  timestamp,
+  symbol,
+  order_side,
   price,
   amount,
-  total,
-  type = "Limit",
+  average,
+  filled,
+  order_type = "Limit",
+
   onCancel,
 }: Props) => {
+  const baseUnit = symbol[0];
+  const quoteUnit = symbol[1];
   return (
     <S.Box>
-      <S.Header isSell={side === "sell"}>
+      <S.Header isSell={order_side === "Sell"}>
         <div>
           <p>
             {baseUnit}/{quoteUnit}
           </p>
-          <span>{side}</span>
+          <span>{order_side}</span>
         </div>
         <button type="button" onClick={onCancel}>
           Cancel
         </button>
       </S.Header>
       <S.Content>
-        <OpenOrderInfo label="Date" value={localeDate(date, "fullDate")} />
-        <OpenOrderInfo label="Type" value={type} />
+        <OpenOrderInfo label="Date" value={localeDate(new Date(timestamp), "fullDate")} />
+        <OpenOrderInfo label="Type" value={order_type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Total" value={total} />
+        <OpenOrderInfo label="Total" value={average} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
           <span>Filled</span>
-          <p>100%</p>
+          <p>{filled}</p>
         </S.FlexJustify>
         <Bar percent={0} />
       </S.Footer>

@@ -8,8 +8,11 @@ import {
   selectCurrentMarket,
   selectOpenOrdersFetching,
   selectOpenOrdersHistory,
+  selectOrdersHistoryLoading,
+  selectUserInfo,
   selectUserLoggedIn,
   userOpenOrdersFetch,
+  userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
@@ -23,20 +26,22 @@ export const OpenOrders = () => {
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const openOrders = useReduxSelector(selectOpenOrdersHistory);
-  const fetching = useReduxSelector(selectOpenOrdersFetching);
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
+  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userAccount = useReduxSelector(selectUserInfo);
   const { width } = useWindowSize();
 
   const handleCancel = (index: number) =>
     dispatch(openOrdersCancelFetch({ order: openOrders[index] }));
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket)
-      dispatch(userOpenOrdersFetch({ market: currentMarket }));
-  }, [userLoggedIn, currentMarket]);
+    if (userLoggedIn && currentMarket) {
+      dispatch(userOrdersHistoryFetch({ userAccount }));
+    }
+  }, [userLoggedIn, currentMarket, dispatch, userAccount]);
 
-  console.log();
+  console.log({ openOrders });
   return (
     <S.Wrapper>
       {width > 1110 && (
@@ -56,32 +61,30 @@ export const OpenOrders = () => {
         <S.Content>
           {openOrders?.map((item, index) => {
             const {
-              uuid,
-              date,
-              baseUnit,
-              quoteUnit,
-              side,
+              id,
+              timestamp,
+              symbol,
+              order_side,
               price,
               amount,
-              total,
+              average,
               filled,
-              type,
+              order_type,
             } = item;
 
             const CardComponent = width > 1110 ? OpenOrderCard : OpenOrderCardReponsive;
             return (
               <CardComponent
-                key={uuid}
-                uuid={uuid}
-                date={date}
-                baseUnit={baseUnit}
-                quoteUnit={quoteUnit}
-                side={side}
+                key={id}
+                id={id}
+                timestamp={timestamp}
+                symbol={symbol}
+                order_side={order_side}
                 price={price}
                 filled={filled}
                 amount={amount}
-                total={total}
-                type={type}
+                average={average}
+                order_type={order_type}
                 onCancel={() => handleCancel(index)}
               />
             );
