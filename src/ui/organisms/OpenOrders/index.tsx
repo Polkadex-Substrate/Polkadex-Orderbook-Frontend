@@ -6,12 +6,9 @@ import * as S from "./styles";
 import {
   openOrdersCancelFetch,
   selectCurrentMarket,
-  selectOpenOrdersFetching,
   selectOpenOrdersHistory,
   selectOrdersHistoryLoading,
-  selectUserInfo,
   selectUserLoggedIn,
-  userOpenOrdersFetch,
   userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
@@ -29,17 +26,13 @@ export const OpenOrders = () => {
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const userAccount = useReduxSelector(selectUserInfo);
   const { width } = useWindowSize();
 
-  const handleCancel = (index: number) =>
-    dispatch(openOrdersCancelFetch({ order: openOrders[index] }));
+  const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) {
-      dispatch(userOrdersHistoryFetch({ userAccount }));
-    }
-  }, [userLoggedIn, currentMarket, dispatch, userAccount]);
+    if (userLoggedIn && currentMarket) dispatch(userOrdersHistoryFetch());
+  }, [userLoggedIn, currentMarket, dispatch]);
 
   console.log({ openOrders });
   return (
@@ -59,7 +52,7 @@ export const OpenOrders = () => {
       )}
       {!fetching ? (
         <S.Content>
-          {openOrders?.map((item, index) => {
+          {openOrders?.map((item) => {
             const {
               id,
               timestamp,
@@ -85,7 +78,7 @@ export const OpenOrders = () => {
                 amount={amount}
                 average={average}
                 order_type={order_type}
-                onCancel={() => handleCancel(index)}
+                onCancel={() => handleCancel(id)}
               />
             );
           })}

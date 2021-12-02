@@ -5,7 +5,7 @@ import { openOrdersCancelError, OpenOrdersCancelFetch } from "../actions";
 
 export function* openOrdersCancelSaga(action: OpenOrdersCancelFetch) {
   try {
-    const { order: uuid } = action.payload;
+    const { id } = action.payload;
 
     const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset } = yield select(
       selectUserInfo
@@ -18,7 +18,7 @@ export function* openOrdersCancelSaga(action: OpenOrdersCancelFetch) {
         nonce,
         baseAsset,
         quoteAsset,
-        uuid,
+        uuid: id,
       })
     );
     // TODO: Add order  status alerts

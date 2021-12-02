@@ -11,7 +11,7 @@ export const selectBalancesLoading = (state: RootState): boolean =>
   state.user.balances.loading;
 
 export const selectUserBalanceTimestamp = (state: RootState): number =>
-  state.user.balances.balances.timestamp;
+  state.user.balances.balances?.timestamp;
 
 export const selectUserBalance = (state: RootState): Balance[] =>
-  state.user.balances.balances.userBalance;
+  state.user.balances.balances?.userBalance;

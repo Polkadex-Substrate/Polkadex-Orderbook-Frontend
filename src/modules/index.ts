@@ -37,6 +37,7 @@ export * from "./user/openOrders";
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
+export * from "./user/trades";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/polkadotWallet";

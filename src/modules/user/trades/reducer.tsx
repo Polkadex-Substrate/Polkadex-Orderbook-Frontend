@@ -8,7 +8,7 @@ export interface TradesState {
   data?: UserTrade[];
 }
 
-export const initialState: TradesState = {
+const initialState: TradesState = {
   loading: false,
   success: false,
 };

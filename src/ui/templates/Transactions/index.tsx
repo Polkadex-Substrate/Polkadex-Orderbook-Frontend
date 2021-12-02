@@ -1,14 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
+/// TODO: Check side Effets
 import * as S from "./styles";
 
-import {
-  selectHasUser,
-  selectOrdersHistory,
-  selectUserInfo,
-  userOrdersHistoryFetch,
-} from "@polkadex/orderbook-modules";
+import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   Checkbox,
@@ -19,9 +12,13 @@ import {
   TabHeader,
   Empty,
 } from "@polkadex/orderbook-ui/molecules";
-import { Funds, OpenOrders, OrderHistory } from "@polkadex/orderbook-ui/organisms";
+import {
+  Funds,
+  OpenOrders,
+  OrderHistory,
+  TradeHistory,
+} from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
-  const dispatch = useDispatch();
   const userLoggedIn = useReduxSelector(selectHasUser);
 
   return (
@@ -58,7 +55,7 @@ export const Transactions = () => {
               <OrderHistory />
             </TabContent>
             <TabContent>
-              <div />
+              <TradeHistory />
             </TabContent>
             <TabContent>
               <Funds />
