@@ -1,6 +1,6 @@
 export type Props = {
   date?: string;
-  symbol?: string;
+  symbol: string[];
   fee?: string | number;
   profit?: string | number;
   side?: string | number;

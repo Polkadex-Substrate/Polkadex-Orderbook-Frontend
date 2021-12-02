@@ -24,7 +24,7 @@ export const TradeHistoryCard = ({
         <span>{symbol}</span>
       </S.Container>
       <S.Container>
-        <S.Side isSell={side === "sell"}>{side}</S.Side>
+        <S.Side isSell={side === "Sell"}>{side}</S.Side>
       </S.Container>
       <S.Container>
         <span>{price}</span>

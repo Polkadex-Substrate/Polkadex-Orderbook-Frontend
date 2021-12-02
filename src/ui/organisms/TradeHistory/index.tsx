@@ -58,7 +58,7 @@ export const TradeHistory = () => {
                 <CardComponent
                   key={id}
                   date={date}
-                  symbol={symbol[0]}
+                  symbol={symbol}
                   fee={fee.cost}
                   profit="0.00000"
                   side={order_side}

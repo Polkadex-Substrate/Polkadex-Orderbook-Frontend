@@ -17,27 +17,7 @@ export function* fetchTradesSaga() {
     const payload = { account: address };
     const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
     const data = formatPayload(signature, payload);
-    // const res = yield call(() => API.post(ordersOption)("/fetch_user_trades", data));
-    // TODO: Check res error
-
-    const res = {
-      Fine: [
-        {
-          id: "0x0a0sas0a0sas",
-          timestamp: new Date().getTime(),
-          symbol: ["BTC"],
-          order_id: "0x020d00fdfd",
-          order_type: "limit",
-          order_side: "sell",
-          price: 2.12001,
-          amount: 1.868,
-          fee: {
-            currency: "BTC",
-            cost: 0.0,
-          },
-        },
-      ],
-    };
+    const res = yield call(() => API.post(ordersOption)("/fetch_user_trades", data));
     if (res.Fine) {
       yield put(tradesData(res.Fine));
     } else {
