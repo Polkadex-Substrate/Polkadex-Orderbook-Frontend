@@ -2,15 +2,6 @@
   background-color: red !important;
 }
 
-.pg-trading-chart {
-  background: transparent;
-  height: 100%;
-  left: 0;
-  position: relative;
-  top: 0;
-  width: 100%;
-}
-
 #cryptobase_chart {
   background: transparent;
   height: calc(100% - 39px);

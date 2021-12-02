@@ -6,7 +6,7 @@ export const Wrapper = styled.section`
     background: ${theme.colors.gradientBackground};
     box-shadow: ${theme.shadows.tertiary};
     @media screen and (min-width: 701px) {
-      max-height: 26rem;
+      max-height: 38.5rem;
     }
   `}
 `;
@@ -72,6 +72,6 @@ export const Actions = styled.div`
 `;
 
 export const Content = styled.div`
-  height: 90%;
-  min-height: 40rem;
+  height: 100%;
+  min-height: 30rem;
 `;
