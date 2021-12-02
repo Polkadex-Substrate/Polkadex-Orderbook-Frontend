@@ -62,7 +62,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
 
 const fetchKlineAsync = async (data: any, endPoint: string) => {
   const res: any = await axios.post(endPoint, data);
-  if (res.status === 200 && res.Fine) {
+  if (res.Fine) {
     return res.Fine;
   } else throw new Error(`${res.status} ${res.statusText}`);
 };

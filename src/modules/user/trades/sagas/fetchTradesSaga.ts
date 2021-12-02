@@ -13,6 +13,8 @@ const ordersOption: RequestOptions = {
 };
 
 export function* fetchTradesSaga(action: TradesFetch) {
+  console.log("fetchTradesSaga", action.payload.account);
+
   try {
     const { address, keyringPair } = action.payload.account;
     if (address !== "" && keyringPair) {
@@ -20,7 +22,7 @@ export function* fetchTradesSaga(action: TradesFetch) {
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/fetch_user_trades", data));
-      if (res.status === 200 && res.Fine) {
+      if (res.Fine) {
         yield put(tradesData(res.File));
       } else {
         throw new Error("user trade fetch failed");

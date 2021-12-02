@@ -37,7 +37,7 @@ async function fetchbalancesAsync(account: ProxyAccount): Promise<UserBalance> {
   const signature = await signMessage(account.keyringPair, JSON.stringify(payload));
   const data = formatPayload(signature, payload);
   const res: any = await API.post(balancesOption)("/fetch_balance", data);
-  if (res.status === 200 && res.Fine) {
+  if (res.Fine) {
     const userBlance: UserBalance = res.Fine;
     return userBlance;
   } else throw new Error("failed to fetch user balance");
