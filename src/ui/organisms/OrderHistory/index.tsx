@@ -76,8 +76,17 @@ export const OrderHistory = () => {
       {!fetching ? (
         <S.Content>
           {list?.map((item, i) => {
-            const { id, timestamp, price, amount, average, order_side, symbol, order_type } =
-              item;
+            const {
+              id,
+              timestamp,
+              price,
+              amount,
+              average,
+              order_side,
+              status,
+              symbol,
+              order_type,
+            } = item;
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
             const orderSide = order_side === "Sell";
@@ -97,7 +106,7 @@ export const OrderHistory = () => {
                 total={"100"}
                 executed={"0.3"}
                 type={order_type}
-                transactionType={"filled"}
+                transactionType={status}
               />
             );
           })}

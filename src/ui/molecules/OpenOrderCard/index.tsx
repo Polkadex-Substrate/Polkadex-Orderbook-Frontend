@@ -57,7 +57,6 @@ export const OpenOrderCardReponsive = ({
   average,
   filled,
   order_type = "Limit",
-
   onCancel,
 }: Props) => {
   const baseUnit = symbol[0];

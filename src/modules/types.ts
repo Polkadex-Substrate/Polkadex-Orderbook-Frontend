@@ -9,9 +9,9 @@ export type CommonState = {
   error?: CommonError;
   loading?: boolean;
 };
-export type OrderStatus = "wait" | "done" | "cancel" | "pending" | "reject";
+export type OrderStatus = "Open" | "Closed" | "Expired" | "Canceled" | "Failed";
 export type OrderSide = "Sell" | "Buy";
-export type OrderType = "limit" | "Market";
+export type OrderType = "Limit" | "Market";
 export type OrderKind = "bid" | "ask";
 
 // TODO: Integrate new Types.
@@ -19,10 +19,10 @@ export interface OrderCommon {
   id: string;
   timestamp: number;
   last_trade_timestamp?: null;
-  status: "Open" | "Closed";
+  status: OrderStatus;
   symbol?: string[];
-  order_type: "Limit" | "Market";
-  order_side: "Buy" | "Sell";
+  order_type: OrderType;
+  order_side: OrderSide;
   price?: number | null;
   average: number;
   amount: number;

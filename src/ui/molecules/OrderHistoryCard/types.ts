@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { OrderStatus, OrderType } from "public/charting_library/charting_library.min";
+
 export type Props = {
   date?: string;
   baseUnit?: string;
@@ -10,7 +12,7 @@ export type Props = {
   amount?: string | ReactNode;
   total?: string | ReactNode;
   filled?: string;
-  type?: "Limit" | "Market";
+  type?: OrderType;
   executed?: string | ReactNode;
-  transactionType?: "filled" | "partial filled" | "canceled" | "expired";
+  transactionType?: OrderStatus;
 };
