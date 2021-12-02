@@ -14,6 +14,40 @@ export type OrderSide = "sell" | "buy";
 export type OrderType = "limit" | "market";
 export type OrderKind = "bid" | "ask";
 
+/*
+//TODO: Integrate new Types.
+export interface OrderCommon {
+  id: string;
+  timestamp: number;
+  last_trade_timestamp?: null;
+  status: string;
+  symbol?: (string)[] | null;
+  order_type: string;
+  order_side: string;
+  price?: number | null;
+  average: number;
+  amount: number;
+  filled: number;
+  trades?: (TradesEntity | null)[] | null;
+  fee: Fee;
+}
+export interface TradesEntity {
+  id: string;
+  timestamp: number;
+  symbol?: (string)[] | null;
+  order_id: string;
+  order_type: string;
+  order_side: string;
+  price: number;
+  amount: number;
+  fee: Fee;
+}
+export interface Fee {
+  currency: string;
+  cost: number;
+}
+
+*/
 export interface OrderCommon {
   // TODO: Check order types
   // date: string;
