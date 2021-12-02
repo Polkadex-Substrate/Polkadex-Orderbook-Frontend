@@ -23,7 +23,8 @@ export function* ordersHistorySaga() {
     );
     const data = formatPayload(signature, payload);
     const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
-    // const ordersArray: OrderCommon[] = res.Fine;
+    const ordersArray1: OrderCommon[] = res.Fine;
+    console.log({ ordersArray1 });
     const ordersArray: OrderCommon[] = [
       {
         uuid: "0xfd9d8vjdfdjf9djf9dfjd323ojre9fd9f",
