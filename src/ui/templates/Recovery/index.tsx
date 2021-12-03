@@ -1,12 +1,21 @@
 import Link from "next/link";
+import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
 
+const defaultValues = {
+  password: "",
+  accountName: "Main Account",
+};
+
 export const RecoveryTemplate = () => {
+  const dispatch = useDispatch();
+
   return (
     <S.Main>
       <S.Wrapper>
@@ -21,13 +30,40 @@ export const RecoveryTemplate = () => {
                 </p>
               </S.Title>
               <S.Form>
-                <MnemonicImport
-                  label="12-word mnemonic seed"
-                  handleChange={() => console.log("...")}
-                />
-                <Button size="extraLarge" type="submit" style={{ marginTop: 20 }}>
-                  Import Account
-                </Button>
+                <Formik
+                  initialValues={defaultValues}
+                  onSubmit={async (values) => {
+                    const { password, accountName } = values;
+                    // dispatch(
+
+                    // );
+                  }}>
+                  {({ errors, touched }) => (
+                    <Form>
+                      <MnemonicImport
+                        label="12-word mnemonic seed"
+                        handleChange={() => console.log("...")}
+                      />
+                      <InputPrimary
+                        label="Account Name"
+                        placeholder="Enter name for this account"
+                        type="accountName"
+                        name="accountName"
+                        error={errors.accountName && touched.accountName && errors.accountName}
+                      />
+                      <InputPrimary
+                        label="Password"
+                        placeholder="Enter your password for this account"
+                        type="password"
+                        name="password"
+                        error={errors.password && touched.password && errors.password}
+                      />
+                      <Button size="extraLarge" type="submit" style={{ marginTop: 20 }}>
+                        Import Account
+                      </Button>
+                    </Form>
+                  )}
+                </Formik>
               </S.Form>
             </S.AsideLeft>
             <S.AsideRight></S.AsideRight>

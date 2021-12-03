@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
+import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
 export const Main = styled.div`
   ${({ theme }) => css`
@@ -62,8 +63,8 @@ export const Title = styled.div`
 
 export const Form = styled.div`
   padding: 5rem 0;
-  ${Dropdown} {
-    margin-bottom: 1rem;
+  ${Input} {
+    margin-top: 1rem;
   }
 `;
 
