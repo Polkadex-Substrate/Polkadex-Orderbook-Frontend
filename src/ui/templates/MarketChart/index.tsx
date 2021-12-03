@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
+import { Tabs, TabContent, TabHeader, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { MarketDepth } from "@polkadex/orderbook-ui/templates";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentMarket } from "@polkadex/orderbook-modules";
@@ -37,9 +37,19 @@ export const MarketChart = () => {
           </S.Actions>
         </S.Header>
         <S.Content>
-          <TabContent>{currentMarket && <TradingChart />}</TabContent>
           <TabContent>
-            <MarketDepth />
+            {currentMarket ? (
+              <TradingChart />
+            ) : (
+              <Skeleton height="100%" style={{ borderRadius: 0 }} />
+            )}
+          </TabContent>
+          <TabContent>
+            {currentMarket ? (
+              <MarketDepth />
+            ) : (
+              <Skeleton height="100%" style={{ borderRadius: 0 }} />
+            )}
           </TabContent>
         </S.Content>
       </S.Wrapper>

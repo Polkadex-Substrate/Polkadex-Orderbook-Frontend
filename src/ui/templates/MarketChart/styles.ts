@@ -5,9 +5,8 @@ export const Wrapper = styled.section`
     grid-area: Graph;
     background: ${theme.colors.gradientBackground};
     box-shadow: ${theme.shadows.tertiary};
-    @media screen and (min-width: 701px) {
-      max-height: 38.5rem;
-    }
+    display: flex;
+    flex-direction: column;
   `}
 `;
 
@@ -73,5 +72,7 @@ export const Actions = styled.div`
 
 export const Content = styled.div`
   height: 100%;
-  min-height: 30rem;
+  @media screen and (max-width: 701px) {
+    min-height: 30rem;
+  }
 `;

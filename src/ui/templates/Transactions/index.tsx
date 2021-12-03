@@ -11,12 +11,15 @@ import {
   TabContent,
   TabHeader,
   Empty,
+  Dropdown,
+  Icon,
 } from "@polkadex/orderbook-ui/molecules";
 import {
   Funds,
   OpenOrders,
   OrderHistory,
   TradeHistory,
+  TransactionHistory,
 } from "@polkadex/orderbook-ui/organisms";
 export const Transactions = () => {
   const userLoggedIn = useReduxSelector(selectHasUser);
@@ -37,15 +40,23 @@ export const Transactions = () => {
                 <S.Tab>Trade History</S.Tab>
               </TabHeader>
               <TabHeader>
+                <S.Tab>Transactions</S.Tab>
+              </TabHeader>
+              <TabHeader>
                 <S.Tab>Funds</S.Tab>
               </TabHeader>
             </ul>
-            <AvailableMessage>
+            {/* <AvailableMessage>
               <S.Filters>
-                <Checkbox label="Hide Other Pairs" />
+                <Dropdown
+                  header={
+                    <Icon name="Settings" size="medium" background="secondaryBackground" />
+                  }>
+                  Soon
+                </Dropdown>
                 <Button size="small">Cancel All</Button>
               </S.Filters>
-            </AvailableMessage>
+            </AvailableMessage> */}
           </S.Header>
           <S.Content>
             <TabContent>
@@ -56,6 +67,9 @@ export const Transactions = () => {
             </TabContent>
             <TabContent>
               <TradeHistory />
+            </TabContent>
+            <TabContent>
+              <TransactionHistory />
             </TabContent>
             <TabContent>
               <Funds />

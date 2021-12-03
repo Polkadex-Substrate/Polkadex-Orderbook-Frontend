@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperCheckbox } from "@polkadex/orderbook-ui/molecules/Checkbox/styles";
+import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -40,6 +40,7 @@ export const Tab = styled.li<{ isActive?: boolean }>`
     cursor: pointer;
     opacity: ${isActive ? 1 : 0.6};
     font-weight: 550;
+    font-size: 1.2rem;
     :not(:last-child) {
       margin-right: 1.5rem;
     }
@@ -61,8 +62,8 @@ export const Filters = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  ${WrapperCheckbox} {
-    margin-right: 1rem;
+  ${Button} {
+    margin-left: 0.5rem;
   }
   @media screen and (max-width: 590px) {
     margin-top: 2.5rem;

@@ -58,21 +58,28 @@ export const PairListItem = styled.div<{ isActive?: boolean }>`
     border-radius: 0.4rem;
     cursor: pointer;
     font-weight: 500;
-    &:not(:last-child) {
+    transition: background 0.2s ease-in-out;
+    ${!isActive &&
+    css`
+      :hover {
+        background: ${theme.colors.secondaryBackground};
+      }
+    `}
+
+    :not(:last-child) {
       margin-right: 0.5rem;
     }
   `}
 `;
 
-export const Content = styled.div`
-  padding: 1.5rem;
-`;
+export const Content = styled.div``;
 
 export const TableHeader = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: 2fr 1fr minmax(4rem, 6rem);
-    margin-bottom: 1rem;
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+
     & span {
       font-size: ${theme.font.sizes.xsmall};
       font-weight: 500;
@@ -102,17 +109,19 @@ export const ContentItemWrapper = styled.div`
     display: grid;
     grid-template-columns: 2fr 1fr minmax(4rem, 6rem);
     align-items: center;
-    border-radius: 1rem;
     cursor: pointer;
-
-    &:not(:last-child) {
-      margin-bottom: 1.5rem;
+    padding: 1rem;
+    transition: background 0.2s ease-in-out;
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
     }
-    & p {
+
+    p {
       font-size: ${theme.font.sizes.xxsmall};
       font-weight: 600;
     }
-    & ${ContentItemToken} span,
+
+    ${ContentItemToken} span,
     ${ContentItemPrice} span {
       display: block;
       font-size: 1.1rem;
