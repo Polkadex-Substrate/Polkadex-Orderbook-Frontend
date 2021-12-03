@@ -13,7 +13,7 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  placeOrdersExecute,
+  orderExecuteFetch,
   selectUserInfo,
   selectMainAccount,
 } from "@polkadex/orderbook-modules";
@@ -90,7 +90,7 @@ export const OrderForm = ({
   const handleOrders = (e) => {
     e.preventDefault();
     dispatch(
-      placeOrdersExecute({
+      orderExecuteFetch({
         proxyKeyring: usersInfo.keyringPair,
         mainAddress: mainAccount.address,
         nonce: 0,

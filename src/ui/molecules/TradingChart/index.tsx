@@ -171,9 +171,6 @@ export class TradingChartComponent extends React.PureComponent<Props> {
         style={{
           background: "transparent",
           height: "100%",
-          left: "0",
-          position: "relative",
-          top: "0",
           width: "100%",
         }}
         className="pg-trading-chart"

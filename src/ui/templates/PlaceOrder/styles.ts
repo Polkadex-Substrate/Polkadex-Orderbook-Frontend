@@ -6,7 +6,7 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: PlaceOrder;
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1rem;
+    padding: 0.8rem;
     h2 {
       font-size: ${theme.font.sizes.small};
       font-weight: 600;

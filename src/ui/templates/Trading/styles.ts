@@ -23,7 +23,7 @@ export const Wrapper = styled.div`
     grid-template-areas:
       "Graph Orderbook PlaceOrder"
       "Transactions Market PlaceOrder";
-    grid-template-columns: auto minmax(26rem, max-content) minmax(26rem, max-content);
+    grid-template-columns: auto minmax(26rem, max-content) minmax(27rem, max-content);
   }
 
   @media screen and (max-width: 1050px) {
