@@ -8,3 +8,4 @@ export * from "./Funds";
 export * from "./Header";
 export * from "./Message";
 export * from "./TradeHistory";
+export * from "./TransactionHistory";

@@ -30,6 +30,7 @@ import { rootTradesSaga, TradesState } from "./user/trades";
 import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
+import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -38,6 +39,7 @@ export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
 export * from "./user/trades";
+export * from "./user/transactions";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/polkadotWallet";
@@ -78,6 +80,7 @@ export interface RootState {
     wallets: WalletsState;
     deposits: DepositsState;
     trades: TradesState;
+    transactions: TransactionsState;
     withdraws: WithdrawsState;
     notifications: NotificationState;
   };
@@ -93,6 +96,7 @@ export function* rootSaga() {
     call(rootAuthSaga),
     call(rootDepositsSaga),
     call(rootCurrenciesSaga),
+    call(rootTransactionsSaga),
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
