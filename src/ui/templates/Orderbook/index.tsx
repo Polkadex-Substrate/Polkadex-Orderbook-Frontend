@@ -67,7 +67,7 @@ export const Orderbook = () => {
               <Icon name="OrdersSell" size="extraSmall" />
             </li>
           </ul>
-          <Dropdown header="001" direction="bottom">
+          <Dropdown header="001" direction="bottomRight">
             <p>testing</p>
           </Dropdown>
         </S.Options>

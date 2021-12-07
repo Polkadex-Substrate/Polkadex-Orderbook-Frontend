@@ -61,9 +61,7 @@ export const Box = styled.div`
     box-shadow: ${theme.shadows.tertiary};
     border-radius: 0.5rem;
     margin: 0 0.5rem;
-    :not(:last-child) {
-      margin-bottom: 1.5rem;
-    }
+    margin: 0 0.5rem 1.5rem 0.5rem;
   `}
 `;
 
