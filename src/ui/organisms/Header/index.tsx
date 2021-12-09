@@ -17,11 +17,12 @@ import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import { logoutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
 
-export const Header = () => {
+export const Header = ({ withInfo = true }) => {
   const user = useReduxSelector(selectUserInfo);
   const { width } = useWindowSize();
   const router = useRouter();
   const dispatch = useDispatch();
+
   return (
     <S.Wrapper>
       <S.Container>
@@ -31,7 +32,7 @@ export const Header = () => {
               <Polkadex />
             </a>
           </Link>
-          {width >= 1050 && <Toolbar />}
+          {withInfo && width >= 1050 && <Toolbar />}
         </S.Column>
         <S.Column>
           <ThemeSwitch />

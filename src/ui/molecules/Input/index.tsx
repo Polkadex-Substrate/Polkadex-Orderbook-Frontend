@@ -1,9 +1,11 @@
 import { Field } from "formik";
 
 import * as S from "./styles";
-import { Props } from "./types";
+import * as T from "./types";
 
-export const Input = ({ label, error, ...props }: Props) => (
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
+
+export const Input = ({ label, error, ...props }: T.Props) => (
   <S.Wrapper>
     <label htmlFor={props.name}>
       {label || ""}
@@ -13,7 +15,7 @@ export const Input = ({ label, error, ...props }: Props) => (
   </S.Wrapper>
 );
 
-export const InputPrimary = ({ label, error, ...props }: Props) => (
+export const InputPrimary = ({ label, error, ...props }: T.Props) => (
   <S.Primary>
     <label htmlFor={props.name}>
       {label || ""}
@@ -22,3 +24,23 @@ export const InputPrimary = ({ label, error, ...props }: Props) => (
     {error && <span>{error}</span>}
   </S.Primary>
 );
+
+export const SecondaryInput = ({
+  token = "",
+  label = "",
+  ...props
+}: T.SecondaryInputProps) => {
+  return (
+    <S.SecondaryWrapper>
+      <label htmlFor={props.name}>{label}</label>
+      <div>
+        <input type="text" {...props} />
+        {token ? (
+          <span>{token}</span>
+        ) : (
+          <Skeleton height="10px" style={{ display: "inline-block", width: "2rem" }} />
+        )}
+      </div>
+    </S.SecondaryWrapper>
+  );
+};

@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, HTMLAttributes } from "react";
+import Link from "next/link";
 
 import { Button, Icon, WalletInput, Skeleton } from "../";
 
@@ -102,6 +103,7 @@ export const MyAccountContent = ({
           <p>Terms and Conditions</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
+        <Link href="/wallet">Deposit/Withdraw</Link>
       </S.AccountContentSection>
     </S.AccountContent>
   );
