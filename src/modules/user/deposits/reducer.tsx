@@ -8,7 +8,7 @@ export interface DepositsState {
   data?: Deposits[];
 }
 
-export const initialState: DepositsState = {
+const initialState: DepositsState = {
   loading: false,
   success: false,
 };

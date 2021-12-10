@@ -1,7 +1,6 @@
 export * from "./SelectPair";
 export * from "./Information";
 export * from "./AssetInfo";
-export * from "./OrderInput";
 export * from "./WalletInput";
 export * from "./ThemeSwitch";
 export * from "./Dropdown";

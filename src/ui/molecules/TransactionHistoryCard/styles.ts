@@ -66,10 +66,7 @@ export const Box = styled.div`
     background: ${theme.colors.primaryBackgroundOpacity};
     box-shadow: ${theme.shadows.tertiary};
     border-radius: 0.5rem;
-    margin: 0 0.5rem;
-    :not(:last-child) {
-      margin-bottom: 1.5rem;
-    }
+    margin: 0 0.5rem 1.5rem 0.5rem;
   `}
 `;
 
@@ -132,6 +129,9 @@ export const Info = styled.div`
     }
     p {
       font-weight: 500;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 15rem;
     }
   `}
 `;

@@ -90,6 +90,7 @@ export const icons = [
   "Language",
   "Print",
   "ArrowVerticalTop",
+  "Locked",
   "Calendar",
   "Buy",
   "Candles",
@@ -158,6 +159,7 @@ export type Icons =
   | "Successful"
   | "Error"
   | "Loading"
+  | "Locked"
   | "ArrowBottom"
   | "ArrowVerticalBottom"
   | "Language"

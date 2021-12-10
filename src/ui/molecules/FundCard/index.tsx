@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Skeleton, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Skeleton, Icon, Bar } from "@polkadex/orderbook-ui/molecules";
 
 export const FundCard = ({
   tokenTicker,
@@ -64,4 +66,46 @@ export const FundCard = ({
       </button>
     </S.Actions>
   </S.Wrapper>
+);
+
+export const FundCardReponsive = ({
+  tokenTicker,
+  tokenName,
+  totalAmount = "0.0000000",
+  totalAmountFiat = "0.0000000",
+  availableAmount = "0.0000000",
+  availableAmountFiat = "0.0000000",
+  reservedAmount = "0.0000000",
+  reservedAmountFiat = "0.0000000",
+  handleTransfer,
+  handleTrade,
+}: Props) => {
+  return (
+    <S.Box>
+      <S.Header>
+        <div>
+          <p>{tokenName}</p>
+          <span>{tokenTicker}</span>
+        </div>
+      </S.Header>
+      <S.Content>
+        <FundCardInfo label="Total Amount" value={totalAmount} />
+        <FundCardInfo label="Total Amount Fiat" value={totalAmountFiat} />
+        <FundCardInfo label="Available Amount" value={availableAmount} />
+        <FundCardInfo label="Available Amount Fiat" value={availableAmountFiat} />
+        <FundCardInfo label="Reserved Amount" value={reservedAmount} />
+        <FundCardInfo label="Reserved Amount Fiat" value={reservedAmountFiat} />
+      </S.Content>
+    </S.Box>
+  );
+};
+type InfoProps = {
+  label?: string;
+  value?: string | number | ReactNode;
+};
+const FundCardInfo = ({ label = "", value = "" }: InfoProps) => (
+  <S.Info>
+    <span>{label}</span>
+    <p>{value}</p>
+  </S.Info>
 );

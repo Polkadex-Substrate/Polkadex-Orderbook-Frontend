@@ -2,7 +2,6 @@ import { CommonError } from "../../types";
 
 import { WITHDRAWS_DATA, WITHDRAWS_FETCH, WITHDRAWS_ERROR } from "./constants";
 
-import { ProxyAccount } from "@polkadex/orderbook-modules";
 export interface UserWithdraws {
   id: string;
   timestamp: number;
@@ -12,14 +11,13 @@ export interface UserWithdraws {
   to: string;
   fee: Fee;
 }
-export interface Fee {
+interface Fee {
   currency: string;
   cost: number;
 }
 
 export interface WithdrawsFetch {
   type: typeof WITHDRAWS_FETCH;
-  payload: { account: ProxyAccount };
 }
 export interface WithdrawsData {
   type: typeof WITHDRAWS_DATA;
@@ -32,9 +30,8 @@ export interface WithdrawsError {
 
 export type WithdrawsAction = WithdrawsFetch | WithdrawsData | WithdrawsError;
 
-export const withdrawsFetch = (payload: WithdrawsFetch["payload"]): WithdrawsFetch => ({
+export const withdrawsFetch = (): WithdrawsFetch => ({
   type: WITHDRAWS_FETCH,
-  payload,
 });
 
 export const withdrawsData = (payload: UserWithdraws[]): WithdrawsData => ({
