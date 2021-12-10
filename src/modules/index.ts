@@ -44,6 +44,8 @@ export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/polkadotWallet";
 export * from "./user/wallets";
+export * from "./user/deposits";
+export * from "./user/withdraws";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
 export * from "./public/alertHandler";

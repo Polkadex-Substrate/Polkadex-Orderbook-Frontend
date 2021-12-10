@@ -6,10 +6,18 @@ import * as S from "./styles";
 import { Header, Tokens, History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 
 export const WalletTemplate = () => {
   const router = useRouter();
+  const user = useReduxSelector(selectHasUser);
+  const isLoading = useReduxSelector(selectUserFetching);
+
   const { id } = router.query;
+  useEffect(() => {
+    if (!isLoading && !user) router.push("/login");
+  }, []);
 
   if (!id) return <div />;
   return (

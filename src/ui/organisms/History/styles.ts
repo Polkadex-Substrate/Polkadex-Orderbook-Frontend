@@ -35,6 +35,9 @@ export const Card = styled.div<{ isActive?: boolean }>`
   }
   p {
     opacity: 0.7;
+    max-width: 24rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   :not(:last-child) {
@@ -44,4 +47,32 @@ export const Card = styled.div<{ isActive?: boolean }>`
 
 export const Aside = styled.div`
   text-align: right;
+`;
+export const HeaderFiltersContent = styled.div`
+  ${({ theme }) => css`
+    padding: 1rem;
+    background: ${theme.colors.white};
+    border-radius: 0.5rem;
+  `}
+`;
+
+export const HeaderFilters = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    color: ${theme.colors.black};
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.5s;
+    span {
+      margin-right: 0.5rem;
+    }
+
+    :hover {
+      opacity: 0.5;
+    }
+    :not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  `}
 `;

@@ -25,10 +25,12 @@ export const Deposit = () => {
   }, []);
   return (
     <S.Wrapper>
-      <S.QrCode>
-        <div ref={ref} />
+      <S.QrCodeContainer>
+        <S.QrCode>
+          <div ref={ref} />
+        </S.QrCode>
         <p>Scan QR Code</p>
-      </S.QrCode>
+      </S.QrCodeContainer>
       <div>
         <S.Input>
           <span>Wallet Address</span>

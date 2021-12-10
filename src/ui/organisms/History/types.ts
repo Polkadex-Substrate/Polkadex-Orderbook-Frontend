@@ -2,6 +2,6 @@ export type HistoryProps = {
   date?: string;
   address: string;
   txid: string;
-  amount: number;
+  amount: string;
   amountInFiat?: number;
 };

@@ -5,23 +5,31 @@ export const Wrapper = styled.div`
   padding: 2.5rem;
 `;
 
+export const QrCodeContainer = styled.div`
+  text-align: center;
+  margin-right: 1.5rem;
+  width: fit-content;
+
+  p {
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+`;
+
 export const QrCode = styled.div`
   ${({ theme }) => css`
-    text-align: center;
-    margin-right: 1.5rem;
-    p {
-      margin-top: 1rem;
-      font-weight: 500;
-    }
+    background: ${theme.colors.white};
+    padding: 1rem;
+    border-radius: 0.5rem;
     div {
-      background: ${theme.colors.white};
-      padding: 1rem;
-      border-radius: 0.5rem;
-      width: max-content;
+      width: 140px;
+      height: 140px;
+      svg {
+        width: 100%;
+      }
     }
   `}
 `;
-
 export const Container = styled.div`
   padding-left: 1.6rem;
 
