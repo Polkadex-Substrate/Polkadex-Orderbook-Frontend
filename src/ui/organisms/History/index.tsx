@@ -41,7 +41,10 @@ export const History = () => {
       case "Withdrawals":
         return getValue(withdrawHistory);
       default:
-        return [...getValue(depositHistory, true), ...getValue(withdrawHistory)];
+        return [
+          ...(getValue(depositHistory, true) || []),
+          ...(getValue(withdrawHistory) || []),
+        ];
     }
   }, [depositHistory, withdrawHistory, selected]);
 
