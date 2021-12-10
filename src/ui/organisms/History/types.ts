@@ -4,4 +4,5 @@ export type HistoryProps = {
   txid: string;
   amount: string;
   amountInFiat?: number;
+  isDeposit?: boolean;
 };

@@ -8,10 +8,12 @@ import * as T from "./types";
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  Deposits,
   depositsFetch,
   selectDepositsData,
   selectHasUser,
   selectWithdrawsData,
+  UserWithdraws,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
 
@@ -24,18 +26,24 @@ export const History = () => {
   const depositHistory = useReduxSelector(selectDepositsData);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
+  const getValue = (values: Deposits[] | UserWithdraws[], isDeposit = false) => {
+    return values?.map((item) => {
+      return {
+        ...item,
+        isDeposit: isDeposit,
+      };
+    });
+  };
   const selectedValue = useMemo(() => {
     switch (selected) {
       case "Deposits":
-        return depositHistory;
-      case "Withdraws":
-        return withdrawHistory;
+        return getValue(depositHistory, true);
+      case "Withdrawals":
+        return getValue(withdrawHistory);
       default:
-        return [...(depositHistory || []), ...(withdrawHistory || [])];
+        return [...getValue(depositHistory, true), ...getValue(withdrawHistory)];
     }
   }, [depositHistory, withdrawHistory, selected]);
-  console.log("DEPOSITS:", depositHistory);
-  console.log("WITHDRAWS:", withdrawHistory);
 
   useEffect(() => {
     if (userLoggedIn) {
@@ -48,7 +56,10 @@ export const History = () => {
     <S.Wrapper>
       <S.Title>
         <h2>History</h2>
-        <Dropdown direction="bottomRight" header={<FiltersHeader selected={selected} />}>
+        <Dropdown
+          direction="bottomRight"
+          isClickable
+          header={<FiltersHeader selected={selected} />}>
           <Filters handleChange={setSelected} />
         </Dropdown>
       </S.Title>
@@ -64,6 +75,7 @@ export const History = () => {
                 txid={value.to}
                 amount={`${value.amount} ${value.currency}`}
                 amountInFiat={0.0}
+                isDeposit={value.isDeposit}
               />
             ))}
       </S.Content>
@@ -71,7 +83,14 @@ export const History = () => {
   );
 };
 
-export const Card = ({ date, address, txid, amount, amountInFiat = 0.0 }: T.HistoryProps) => (
+export const Card = ({
+  date,
+  address,
+  txid,
+  amount,
+  amountInFiat = 0.0,
+  isDeposit,
+}: T.HistoryProps) => (
   <a href={`/transaction/${txid}`}>
     <S.Card>
       <div>
@@ -81,8 +100,8 @@ export const Card = ({ date, address, txid, amount, amountInFiat = 0.0 }: T.Hist
       <S.Aside>
         <span>
           <Icon
-            name="ArrowRight"
-            background="green"
+            name={isDeposit ? "ArrowTop" : "ArrowBottom"}
+            background={isDeposit ? "green" : "primary"}
             size="extraSmall"
             style={{ marginRight: 5 }}
           />
