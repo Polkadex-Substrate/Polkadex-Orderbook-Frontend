@@ -25,19 +25,13 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
   </S.Primary>
 );
 
-export const SecondaryInput = ({
-  token = "",
-  label = "",
-  ...props
-}: T.SecondaryInputProps) => {
+export const SecondaryInput = ({ label = "", children, ...props }: T.SecondaryInputProps) => {
   return (
     <S.SecondaryWrapper>
       <label htmlFor={props.name}>{label}</label>
       <div>
         <input type="text" {...props} />
-        {token ? (
-          <span>{token}</span>
-        ) : (
+        {children || (
           <Skeleton height="10px" style={{ display: "inline-block", width: "2rem" }} />
         )}
       </div>

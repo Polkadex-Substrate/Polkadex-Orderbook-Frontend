@@ -53,7 +53,7 @@ export const Tokens = () => {
       <S.Content>
         {!isLoading ? (
           <div>
-            {allTokens?.length &&
+            {allTokens?.length ? (
               allTokens.map((token, index) => (
                 <Card
                   key={index}
@@ -61,7 +61,10 @@ export const Tokens = () => {
                   tokenTicker={token.ticker}
                   amount={token.free as number}
                 />
-              ))}
+              ))
+            ) : (
+              <p>No results</p>
+            )}
           </div>
         ) : (
           <p>Loading</p>

@@ -25,71 +25,73 @@ export const WalletTemplate = () => {
       <Header withInfo={false} />
       <S.Wrapper>
         <Tokens />
-        <S.Container>
-          <S.EstimateBalance>
-            <h2>Estimated Balance</h2>
-            <p>0.93871332 BTC</p>
-            <span>~4243.00 USD</span>
-          </S.EstimateBalance>
-          <S.TokenInfo>
-            <FlexCenter>
-              <Icon
-                isToken
-                name="BTC"
-                size="giant"
-                background="secondaryBackground"
-                style={{ marginRight: "0.8rem" }}
-              />
-              <div>
-                <span>Bitcoin</span>
-                <p>BTC</p>
-              </div>
-            </FlexCenter>
-            <FlexCenter>
-              <Icon
-                name="Wallet"
-                size="extraLarge"
-                background="primaryBackground"
-                style={{ marginRight: "0.8rem" }}
-              />
-              <div>
-                <p>Available</p>
-                <span>0.9387332 BTC</span>
-              </div>
-            </FlexCenter>
-            <FlexCenter>
-              <Icon
-                name="Locked"
-                size="extraLarge"
-                background="primaryBackground"
-                style={{ marginRight: "0.8rem" }}
-              />
-              <div>
-                <p>Locked</p>
-                <span>0.00000 BTC</span>
-              </div>
-            </FlexCenter>
-          </S.TokenInfo>
-          <Tabs>
-            <S.HeaderContainer>
-              <S.Header>
-                <TabHeader>
-                  <S.Tab color="green">Deposit</S.Tab>
-                </TabHeader>
-                <TabHeader>
-                  <S.Tab color="primary">Withdraw</S.Tab>
-                </TabHeader>
-              </S.Header>
-            </S.HeaderContainer>
-            <TabContent>
-              <Deposit />
-            </TabContent>
-            <TabContent>
-              <Withdraw />
-            </TabContent>
-          </Tabs>
-        </S.Container>
-        <History />
+        <S.Grid>
+          <S.Container>
+            <S.EstimateBalance>
+              <h2>Estimated Balance</h2>
+              <p>0.93871332 BTC</p>
+              <span>~4243.00 USD</span>
+            </S.EstimateBalance>
+            <S.TokenInfo>
+              <FlexCenter>
+                <Icon
+                  isToken
+                  name="BTC"
+                  size="giant"
+                  background="secondaryBackground"
+                  style={{ marginRight: "0.8rem" }}
+                />
+                <div>
+                  <span>Bitcoin</span>
+                  <p>BTC</p>
+                </div>
+              </FlexCenter>
+              <FlexCenter>
+                <Icon
+                  name="Wallet"
+                  size="extraLarge"
+                  background="primaryBackground"
+                  style={{ marginRight: "0.8rem" }}
+                />
+                <div>
+                  <p>Available</p>
+                  <span>0.9387332 BTC</span>
+                </div>
+              </FlexCenter>
+              <FlexCenter>
+                <Icon
+                  name="Locked"
+                  size="extraLarge"
+                  background="primaryBackground"
+                  style={{ marginRight: "0.8rem" }}
+                />
+                <div>
+                  <p>Locked</p>
+                  <span>0.00000 BTC</span>
+                </div>
+              </FlexCenter>
+            </S.TokenInfo>
+            <Tabs>
+              <S.HeaderContainer>
+                <S.Header>
+                  <TabHeader>
+                    <S.Tab color="green">Deposit</S.Tab>
+                  </TabHeader>
+                  <TabHeader>
+                    <S.Tab color="primary">Withdraw</S.Tab>
+                  </TabHeader>
+                </S.Header>
+              </S.HeaderContainer>
+              <TabContent>
+                <Deposit />
+              </TabContent>
+              <TabContent>
+                <Withdraw />
+              </TabContent>
+            </Tabs>
+          </S.Container>
+          <History />
+        </S.Grid>
       </S.Wrapper>
     </S.Main>
   );

@@ -51,18 +51,13 @@ export const SecondaryWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-
-    span,
     label {
       opacity: 0.6;
       font-weight: 500;
       white-space: nowrap;
     }
-    span {
-      font-size: ${theme.font.sizes.xxsmall};
-    }
+
     div {
       flex: 1;
       text-align: end;
@@ -73,6 +68,7 @@ export const SecondaryWrapper = styled.div`
       margin-right: 0.5rem;
       font-size: ${theme.font.sizes.small};
       line-height: 0;
+      width: 50%;
     }
   `}
 `;

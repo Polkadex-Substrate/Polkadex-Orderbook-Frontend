@@ -1,8 +1,14 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { SecondaryWrapper as FormInput } from "@polkadex/orderbook-ui/molecules/Input/styles";
+
 export const Wrapper = styled.div`
   display: flex;
-  padding: 2.5rem;
+  padding: 1.5rem;
+  @media screen and (min-width: 460px) {
+    padding: 2.5rem;
+  }
   form {
     width: 100%;
   }
@@ -24,12 +30,33 @@ export const QrCode = styled.div`
     }
   `}
 `;
+export const Form = styled.div``;
 
-export const Form = styled.div`
+export const FormAddress = styled.div`
+  ${FormInput} {
+    margin-bottom: 1.2rem;
+  }
+`;
+
+export const FormAmount = styled.div`
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
   grid-gap: 1rem;
   align-items: center;
+  span {
+    opacity: 0.6;
+    font-weight: 500;
+    white-space: nowrap;
+    font-size: 1.2rem;
+  }
+  @media screen and (min-width: 630px) {
+    grid-template-columns: 1fr auto 1fr;
+  }
+  @media screen and (max-width: 630px) {
+    ${Icon} {
+      margin: 0 auto;
+      transform: rotateX(180deg);
+    }
+  }
 `;
 
 export const Info = styled.div`
@@ -37,6 +64,9 @@ export const Info = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 1.5rem;
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
 
 export const Container = styled.div`

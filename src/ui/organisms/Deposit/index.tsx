@@ -31,7 +31,7 @@ export const Deposit = () => {
         </S.QrCode>
         <p>Scan QR Code</p>
       </S.QrCodeContainer>
-      <div>
+      <S.Container>
         <S.Input>
           <span>Wallet Address</span>
           <FlexSpaceBetween>
@@ -44,14 +44,14 @@ export const Deposit = () => {
             </Button>
           </FlexSpaceBetween>
         </S.Input>
-        <S.Container>
+        <S.Content>
           <span>Send only BTC to this deposit address</span>
           <p>
             Sending coin or token other than BTC to this address may result in the loss of your
             deposit.
           </p>
-        </S.Container>
-      </div>
+        </S.Content>
+      </S.Container>
     </S.Wrapper>
   );
 };

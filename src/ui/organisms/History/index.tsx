@@ -48,7 +48,7 @@ export const History = () => {
     <S.Wrapper>
       <S.Title>
         <h2>History</h2>
-        <Dropdown direction="bottomRight" header={selected}>
+        <Dropdown direction="bottomRight" header={<FiltersHeader selected={selected} />}>
           <Filters handleChange={setSelected} />
         </Dropdown>
       </S.Title>
@@ -102,4 +102,11 @@ const Filters = ({ handleChange }) => (
       </S.HeaderFilters>
     ))}
   </S.HeaderFiltersContent>
+);
+
+const FiltersHeader = ({ selected = "All" }) => (
+  <S.HeaderFilters isHeader>
+    <span>{selected}</span>
+    <Icon background="secondaryBackground" name="ArrowBottom" />
+  </S.HeaderFilters>
 );

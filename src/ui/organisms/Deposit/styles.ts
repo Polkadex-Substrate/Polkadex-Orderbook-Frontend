@@ -2,7 +2,10 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   display: flex;
-  padding: 2.5rem;
+  padding: 1.5rem;
+  @media screen and (min-width: 460px) {
+    padding: 2.5rem;
+  }
 `;
 
 export const QrCodeContainer = styled.div`
@@ -31,8 +34,13 @@ export const QrCode = styled.div`
   `}
 `;
 export const Container = styled.div`
-  padding-left: 1.6rem;
+  flex: 1;
+`;
 
+export const Content = styled.div`
+  @media screen and (min-width: 460px) {
+    padding-left: 1.6rem;
+  }
   span {
     display: block;
     font-size: 1.5rem;

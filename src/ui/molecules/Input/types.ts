@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from "react";
+import { ReactNode, InputHTMLAttributes } from "react";
 
 export type Props = {
   label?: string;
@@ -7,5 +7,5 @@ export type Props = {
 
 export type SecondaryInputProps = {
   label?: string;
-  token?: string;
+  children?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;

@@ -130,16 +130,16 @@ export const OrderForm = ({
             </S.AvailableAmount>
             <SecondaryInput
               label="Price"
-              token={isSellSide ? quoteUnit : baseUnit}
               value={state.price || "0.000000000"}
-              onChange={(e) => handlePriceChange(e.currentTarget.value)}
-            />
+              onChange={(e) => handlePriceChange(e.currentTarget.value)}>
+              <span>{isSellSide ? quoteUnit : baseUnit}</span>
+            </SecondaryInput>
             <SecondaryInput
               label="Amount"
-              token={isSellSide ? baseUnit : quoteUnit}
               value={amount || "0.000000000"}
-              onChange={(e) => handleAmountChange(e.currentTarget.value)}
-            />
+              onChange={(e) => handleAmountChange(e.currentTarget.value)}>
+              <span>{isSellSide ? baseUnit : quoteUnit}</span>
+            </SecondaryInput>
             <SecondaryInput
               value={Decimal.format(
                 total,
@@ -147,9 +147,9 @@ export const OrderForm = ({
                 ","
               )}
               onChange={() => console.log("Updating..")}
-              label="Total"
-              token={isSellSide ? quoteUnit : baseUnit}
-            />
+              label="Total">
+              <span>{isSellSide ? quoteUnit : baseUnit}</span>
+            </SecondaryInput>
             <Button
               type="submit"
               color="text"

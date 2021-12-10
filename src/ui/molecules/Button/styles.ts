@@ -8,6 +8,11 @@ const sizeModifier = {
     padding: 0.2rem 0.4rem;
     border-radius: 0.4rem;
   `,
+  extraSmall: () => css`
+    font-size: 1.2rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.6rem;
+  `,
   medium: () => css`
     padding: 0.8rem;
     border-radius: 0.8rem;

@@ -56,23 +56,25 @@ export const HeaderFiltersContent = styled.div`
   `}
 `;
 
-export const HeaderFilters = styled.div`
-  ${({ theme }) => css`
+export const HeaderFilters = styled.div<{ isHeader?: boolean }>`
+  ${({ theme, isHeader }) => css`
     display: flex;
     align-items: center;
-    color: ${theme.colors.black};
+    color: ${isHeader ? theme.colors.white : theme.colors.black};
     cursor: pointer;
     opacity: 1;
     transition: opacity 0.5s;
     span {
       margin-right: 0.5rem;
     }
-
-    :hover {
-      opacity: 0.5;
-    }
-    :not(:last-child) {
-      margin-bottom: 1rem;
-    }
+    ${!isHeader &&
+    css`
+      :hover {
+        opacity: 0.5;
+      }
+      :not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    `}
   `}
 `;

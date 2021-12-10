@@ -20,10 +20,18 @@ export const Wrapper = styled.div`
   flex: 1;
 
   @media screen and (min-width: 760px) {
-    grid-template-columns: 1fr 2fr 1.3fr;
+    grid-template-columns: 0.5fr 2fr;
   }
 `;
-
+export const Grid = styled.div`
+  ${({ theme }) => css`
+    display: grid;
+    grid-gap: 1rem;
+    @media screen and (min-width: 1170px) {
+      grid-template-columns: 2fr 1.3fr;
+    }
+  `}
+`;
 export const Container = styled.section`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
@@ -32,9 +40,11 @@ export const Container = styled.section`
 
 export const EstimateBalance = styled.div`
   ${({ theme }) => css`
-    padding: 2.5rem;
     background: ${theme.colors.secondaryBackgroundOpacity};
-
+    padding: 1.5rem;
+    @media screen and (min-width: 460px) {
+      padding: 2.5rem;
+    }
     h2 {
       font-size: 1.6rem;
       font-weight: 550;
@@ -50,19 +60,33 @@ export const EstimateBalance = styled.div`
 `;
 
 export const TokenInfo = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: space-between;
-  padding: 2.5rem;
+  padding: 1.5rem;
+  grid-gap: 1rem;
+  @media screen and (min-width: 460px) {
+    padding: 2.5rem;
+  }
   span {
     font-weight: 550;
   }
   p {
     opacity: 0.7;
   }
+  @media screen and (min-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (min-width: 460px) and (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 1fr;
+  }
 `;
 export const HeaderContainer = styled.div`
-  padding: 0 2.5rem;
+  padding: 0 1.5rem;
+  @media screen and (min-width: 460px) {
+    padding: 0 2.5rem;
+  }
 `;
 
 export const Header = styled.div`
