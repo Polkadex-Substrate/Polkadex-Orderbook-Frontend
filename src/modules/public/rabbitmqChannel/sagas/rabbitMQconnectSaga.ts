@@ -15,9 +15,8 @@ export function* rabbitmqConnectionSaga() {
       "uwkbvyaj",
       "ZkWyU-ZFryl7QFz3WAZR6PWMMhhx43Rk"
     );
-    const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));    
+    const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
-   
   } catch (error) {
     console.log("error in rabbitmq", error);
     yield put(
@@ -34,6 +33,5 @@ export function* rabbitmqConnectionSaga() {
 async function fetchrabbitmqChannelAsync(amqp) {
   const connection = await amqp.connect();
   const channel = await connection.channel();
-  return channel
-  
+  return channel;
 }

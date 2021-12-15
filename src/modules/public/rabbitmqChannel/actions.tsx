@@ -19,7 +19,7 @@ export type RabbitmqChannelType = unknown | null;
 
 export interface RabbitmqChannelData {
   type: typeof RABBITMQ_CHANNEL_DATA;
-  payload: RabbitmqChannelType
+  payload: RabbitmqChannelType;
 }
 
 export type RabbitmqChannelAction =
@@ -33,7 +33,7 @@ export const rabbitmqChannelFetch = (): RabbitmqChannelFetch => ({
 
 export const rabbitmqChannelData = (channel: RabbitmqChannelType): RabbitmqChannelData => ({
   type: RABBITMQ_CHANNEL_DATA,
-  payload: channel
+  payload: channel,
 });
 
 export const rabbitmqChannelError = (error: CommonError): RabbitmqChannelError => ({

@@ -13,13 +13,13 @@ export interface RabbitmqChannelState {
   error?: string;
   loading: boolean;
   success: boolean;
-  channel: RabbitmqChannelType
+  channel: RabbitmqChannelType;
 }
 
 export const initialState: RabbitmqChannelState = {
   loading: false,
   success: false,
-  channel: null
+  channel: null,
 };
 
 export const rabbitmqChannelReducer = (
@@ -38,7 +38,7 @@ export const rabbitmqChannelReducer = (
         ...state,
         loading: false,
         success: true,
-        channel: state.channel
+        channel: state.channel,
       };
     case RABBITMQ_CHANNEL_ERROR:
       return {
