@@ -1,4 +1,4 @@
-import { RabbitmqChannelAction } from "./actions";
+import { RabbitmqChannelAction, RabbitmqChannelType } from "./actions";
 import {
   RABBITMQ_CHANNEL_DATA,
   RABBITMQ_CHANNEL_ERROR,
@@ -13,12 +13,13 @@ export interface RabbitmqChannelState {
   error?: string;
   loading: boolean;
   success: boolean;
-  // RabbitmqChannel: RabbitmqChannel
+  channel: RabbitmqChannelType
 }
 
 export const initialState: RabbitmqChannelState = {
   loading: false,
   success: false,
+  channel: null
 };
 
 export const rabbitmqChannelReducer = (
@@ -35,13 +36,14 @@ export const rabbitmqChannelReducer = (
     case RABBITMQ_CHANNEL_DATA:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: true,
+        channel: state.channel
       };
     case RABBITMQ_CHANNEL_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };

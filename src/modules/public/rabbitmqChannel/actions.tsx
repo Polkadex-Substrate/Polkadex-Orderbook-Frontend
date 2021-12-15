@@ -15,8 +15,11 @@ export interface RabbitmqChannelError {
   error: CommonError;
 }
 
+export type RabbitmqChannelType = unknown | null;
+
 export interface RabbitmqChannelData {
   type: typeof RABBITMQ_CHANNEL_DATA;
+  payload: RabbitmqChannelType
 }
 
 export type RabbitmqChannelAction =
@@ -28,8 +31,9 @@ export const rabbitmqChannelFetch = (): RabbitmqChannelFetch => ({
   type: RABBITMQ_CHANNEL_FETCH,
 });
 
-export const rabbitmqChannelData = (): RabbitmqChannelData => ({
+export const rabbitmqChannelData = (channel: RabbitmqChannelType): RabbitmqChannelData => ({
   type: RABBITMQ_CHANNEL_DATA,
+  payload: channel
 });
 
 export const rabbitmqChannelError = (error: CommonError): RabbitmqChannelError => ({
