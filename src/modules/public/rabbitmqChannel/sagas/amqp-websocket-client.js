@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-empty */
+/* eslint-disable no-throw-literal */
 class AMQPError extends Error {
   constructor(message, connection) {
     super(message);
