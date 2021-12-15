@@ -30,7 +30,7 @@ export const rabbitmqChannelReducer = (
     case RABBITMQ_CHANNEL_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case RABBITMQ_CHANNEL_DATA:
@@ -38,7 +38,7 @@ export const rabbitmqChannelReducer = (
         ...state,
         loading: false,
         success: true,
-        channel: state.channel,
+        channel: action.payload,
       };
     case RABBITMQ_CHANNEL_ERROR:
       return {

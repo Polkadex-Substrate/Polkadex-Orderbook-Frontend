@@ -2,7 +2,7 @@ import { RootState } from "../..";
 
 import { RabbitmqChannelType } from "./actions";
 
-export const selectRabbitmqChannelSuccess = (state: RootState): boolean =>
+export const selectRabbitmqChannelConnected = (state: RootState): boolean =>
   state.public.rabbitmqChannel.success;
 export const selectRabbitmqChannelError = (state: RootState): string =>
   state.public.rabbitmqChannel.error;

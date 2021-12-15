@@ -11,6 +11,7 @@ export interface BalancesState {
 const initialState: BalancesState = {
   loading: false,
   success: false,
+  balances: { timestamp: 0, userBalance: [] },
 };
 
 export const balancesReducer = (state = initialState, action: BalancesAction) => {

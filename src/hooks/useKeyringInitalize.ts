@@ -3,7 +3,11 @@ import { useDispatch } from "react-redux";
 
 import { rabbitmqChannelFetch } from "../modules/public/rabbitmqChannel";
 
-import { polkadotWalletFetch, rangerConnectFetch } from "@polkadex/orderbook-modules";
+import {
+  balanceChannelFetch,
+  polkadotWalletFetch,
+  rangerConnectFetch,
+} from "@polkadex/orderbook-modules";
 
 export const useKeyringInitalize = () => {
   const dispatch = useDispatch();
@@ -12,7 +16,7 @@ export const useKeyringInitalize = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    //dispatch(rangerConnectFetch());
+    // dispatch(rangerConnectFetch());
     dispatch(rabbitmqChannelFetch());
     if (shouldFetch && !error) dispatch(polkadotWalletFetch());
   }, [dispatch, shouldFetch, error]);
