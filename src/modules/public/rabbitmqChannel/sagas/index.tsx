@@ -2,8 +2,9 @@ import { takeLeading } from "redux-saga/effects";
 
 import { RABBITMQ_CHANNEL_FETCH } from "../constants";
 
-import { rabbitmqChannelSaga } from "./rabbitmqChannelSaga";
+import { rabbitmqConnectionSaga } from "./rabbitMQconnectSaga";
+
 
 export function* rootRabbitmqChannelSaga() {
-  yield takeLeading(RABBITMQ_CHANNEL_FETCH, rabbitmqChannelSaga);
+  yield takeLeading(RABBITMQ_CHANNEL_FETCH, rabbitmqConnectionSaga);
 }
