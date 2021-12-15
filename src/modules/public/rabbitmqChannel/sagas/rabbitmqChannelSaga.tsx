@@ -1,25 +1,12 @@
-import { call, put, select, take } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
-
-import { sendError } from "../../..";
-import { rabbitmqChannelFetch, rabbitmqChannelData, rabbitmqChannelError } from "../actions";
+import { put, select, take } from "redux-saga/effects";
+import {selectRabbitmqChannel} from '../selectors';
 import { alertPush } from "../../alertHandler";
 
-import AMQPWebSocketClient from "./amqp-websocket-client";
-
-const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
 export function* rabbitmqChannelSaga() {
   try {
-    const amqp = new AMQPWebSocketClient(
-      url,
-      "uwkbvyaj",
-      "uwkbvyaj",
-      "ZkWyU-ZFryl7QFz3WAZR6PWMMhhx43Rk"
-    );
-    const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
-    while (true) {
+    const channel = yield select(selectRabbitmqChannel);
+    while (true && channel) {
       const msg = yield take(channel);
       console.log("inside while true", msg);
     }
@@ -36,21 +23,4 @@ export function* rabbitmqChannelSaga() {
       })
     );
   }
-}
-async function fetchrabbitmqChannelAsync(amqp) {
-  const conn = await amqp.connect();
-  const chann = await conn.channel();
-  const queue = await chann.queue("345563xbh-balance-update-events", { durable: false });
-  await queue.bind("amq.direct");
-  return eventChannel((emitter) => {
-    queue.subscribe({ noAck: false }, (res) => {
-      console.log({ res });
-      const msg = u8aToString(res.body);
-      emitter(msg);
-      res.ack();
-    });
-    return () => {
-      conn.close();
-    };
-  });
 }
