@@ -1,20 +1,20 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
-import { depositsData, DepositsFetch } from "../actions";
+import { depositsData } from "../actions";
 import { depositsError } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
-import { sendError } from "@polkadex/orderbook-modules";
+import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 
 const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* fetchDepositsSaga(action: DepositsFetch) {
+export function* fetchDepositsSaga() {
   try {
-    const { address, keyringPair } = action.payload.account;
+    const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
       const payload = { account: address };
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));

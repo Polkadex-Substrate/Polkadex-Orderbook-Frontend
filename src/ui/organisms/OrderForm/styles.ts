@@ -1,6 +1,19 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div``;
+import { SecondaryWrapper as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
+export const Wrapper = styled.div`
+  form {
+    ${Input} {
+      margin-bottom: 1.2rem;
+      span {
+        opacity: 0.6;
+        font-weight: 500;
+        white-space: nowrap;
+        font-size: 1.2rem;
+      }
+    }
+  }
+`;
 export const Header = styled.div`
   display: flex;
   align-items: center;

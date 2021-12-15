@@ -14,3 +14,4 @@ export * from "./Recovery";
 export * from "./Login";
 export * from "./SignUp";
 export * from "./PaperWallet";
+export * from "./Wallet";

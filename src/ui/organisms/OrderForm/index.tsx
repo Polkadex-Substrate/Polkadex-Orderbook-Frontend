@@ -8,7 +8,7 @@ import {
   Skeleton,
   Tabs,
   TabHeader,
-  OrderInput,
+  SecondaryInput,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -128,28 +128,28 @@ export const OrderForm = ({
                 <Skeleton width="4rem" />
               )}
             </S.AvailableAmount>
-            <OrderInput
+            <SecondaryInput
               label="Price"
-              token={isSellSide ? quoteUnit : baseUnit}
               value={state.price || "0.000000000"}
-              onChange={(e) => handlePriceChange(e.currentTarget.value)}
-            />
-            <OrderInput
+              onChange={(e) => handlePriceChange(e.currentTarget.value)}>
+              <span>{isSellSide ? quoteUnit : baseUnit}</span>
+            </SecondaryInput>
+            <SecondaryInput
               label="Amount"
-              token={isSellSide ? baseUnit : quoteUnit}
               value={amount || "0.000000000"}
-              onChange={(e) => handleAmountChange(e.currentTarget.value)}
-            />
-            <OrderInput
+              onChange={(e) => handleAmountChange(e.currentTarget.value)}>
+              <span>{isSellSide ? baseUnit : quoteUnit}</span>
+            </SecondaryInput>
+            <SecondaryInput
               value={Decimal.format(
                 total,
                 currentMarketAskPrecision + currentMarketBidPrecision,
                 ","
               )}
               onChange={() => console.log("Updating..")}
-              label="Total"
-              token={isSellSide ? quoteUnit : baseUnit}
-            />
+              label="Total">
+              <span>{isSellSide ? quoteUnit : baseUnit}</span>
+            </SecondaryInput>
             <Button
               type="submit"
               color="text"

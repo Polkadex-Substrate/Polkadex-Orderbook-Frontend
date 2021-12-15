@@ -4,7 +4,11 @@ import { useEffect } from "react";
 import * as S from "./styles";
 
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { FundCard, LoadingTransactions } from "@polkadex/orderbook-ui/molecules";
+import {
+  FundCard,
+  FundCardReponsive,
+  LoadingTransactions,
+} from "@polkadex/orderbook-ui/molecules";
 import {
   selectUserBalance,
   balancesFetch,
@@ -38,9 +42,9 @@ export const Funds = () => {
         <S.Content>
           {balances?.length &&
             balances?.map((token, i) => {
-              const CardComponent = width > 1130 ? FundCard : null;
+              const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               return (
-                <FundCard
+                <CardComponent
                   key={i}
                   tokenTicker={token.ticker}
                   tokenName={token.ticker}

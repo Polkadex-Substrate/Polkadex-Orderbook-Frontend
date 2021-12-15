@@ -8,7 +8,7 @@ export interface WithdrawsState {
   data?: UserWithdraws[];
 }
 
-export const initialState: WithdrawsState = {
+const initialState: WithdrawsState = {
   loading: false,
   success: false,
 };
