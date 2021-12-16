@@ -19,7 +19,7 @@ export function* balanceChannelSaga() {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
     if (rabbitmqConn) {
       if (rabbitmqConn) {
-        const channel = yield call(() => fetchrabbitmqChannelAsync(rabbitmqConn));
+        const channel = yield call(() => fetchBalanceUpdatesChannel(rabbitmqConn));
         while (true) {
           let balanceMsg = yield take(channel);
           balanceMsg = JSON.parse(balanceMsg);
@@ -76,8 +76,7 @@ const updateBalanceFromMsg = (oldBalance: Balance[], balanceMsg: BalanceMessage)
   return [...oldBalance];
 };
 
-async function fetchrabbitmqChannelAsync(chann) {
-  console.log(chann);
+async function fetchBalanceUpdatesChannel(chann) {
   const queue = await chann.queue("345563xbh-balance-update-events", { durable: false });
   await queue.bind("amq.direct");
   return eventChannel((emitter) => {
