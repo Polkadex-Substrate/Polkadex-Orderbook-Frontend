@@ -31,8 +31,8 @@ export const OpenOrders = () => {
   const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userOrdersHistoryFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+    if (userLoggedIn) dispatch(userOrdersHistoryFetch());
+  }, [userLoggedIn, dispatch]);
 
   console.log({ openOrders });
   return (
