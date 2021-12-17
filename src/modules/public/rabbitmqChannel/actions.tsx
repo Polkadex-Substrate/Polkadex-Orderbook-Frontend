@@ -15,7 +15,7 @@ export interface RabbitmqChannelError {
   error: CommonError;
 }
 
-export type RabbitmqChannelType = unknown | null;
+export type RabbitmqChannelType = { queue: any } | null;
 
 export interface RabbitmqChannelData {
   type: typeof RABBITMQ_CHANNEL_DATA;

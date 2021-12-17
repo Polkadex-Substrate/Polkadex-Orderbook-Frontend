@@ -8,27 +8,23 @@ import {
   BalanceMessage,
   balancesData,
   selectUserBalance,
-  sendError,
 } from "../../..";
-import { convertOrderEvent } from "../../openOrders/helpers";
 
-import { selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { RabbitmqChannelType, selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 
 export function* balanceChannelSaga() {
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
     if (rabbitmqConn) {
-      if (rabbitmqConn) {
-        const channel = yield call(() => fetchBalanceUpdatesChannel(rabbitmqConn));
+        const channel = yield call(() => fetchBalanceUpdatesChannel(rabbitmqConn, "345563xbh-balance-update-events"));
         while (true) {
           let balanceMsg = yield take(channel);
           balanceMsg = JSON.parse(balanceMsg);
           const oldBalance = yield select(selectUserBalance);
-          const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);
+          const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);          
           yield put(
             balancesData({ timestamp: new Date().getTime(), userBalance: newBalance })
           );
-        }
       }
     }
   } catch (error) {
@@ -76,8 +72,8 @@ const updateBalanceFromMsg = (oldBalance: Balance[], balanceMsg: BalanceMessage)
   return [...oldBalance];
 };
 
-async function fetchBalanceUpdatesChannel(chann) {
-  const queue = await chann.queue("345563xbh-balance-update-events", { durable: false });
+async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, queueName: string) {
+  const queue = await chann.queue(queueName, { durable: false });
   await queue.bind("amq.direct");
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
