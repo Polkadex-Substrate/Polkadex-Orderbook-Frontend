@@ -16,7 +16,7 @@ export function* fetchTradeChannelSaga() {
           const tradesMsg = yield take(channel);
           const trades = yield select(selectRecentTrades);
           const data = JSON.parse(tradesMsg);
-          yield put(recentTradesData([...trades, data]));
+          yield put(recentTradesData([data, ...trades]));
         }
     }
   } catch (error) {
