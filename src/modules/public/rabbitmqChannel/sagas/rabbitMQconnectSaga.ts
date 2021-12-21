@@ -1,11 +1,12 @@
 import { call, put } from "redux-saga/effects";
-import { balanceChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 
-import { rabbitmqChannelData } from "../actions";
 import { alertPush } from "../../alertHandler";
 import { orderBookChannelFetch } from "../../orderBook";
+import { rabbitmqChannelData } from "../actions";
 
 import AMQPWebSocketClient from "./amqp-websocket-client";
+
+import { balanceChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 

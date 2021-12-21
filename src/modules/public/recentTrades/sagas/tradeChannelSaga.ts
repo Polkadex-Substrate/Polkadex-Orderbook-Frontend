@@ -1,12 +1,13 @@
 import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
+
+import { alertPush, recentTradesData, selectRecentTrades } from "../../..";
+
 import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
-
-import { alertPush, recentTradesData, selectRecentTrades } from "../../..";
 
 export function* fetchTradeChannelSaga() {
   try {
