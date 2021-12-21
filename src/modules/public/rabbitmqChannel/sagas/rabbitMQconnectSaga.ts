@@ -1,11 +1,11 @@
 import { call, put } from "redux-saga/effects";
+import { balanceChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 
 import { rabbitmqChannelData } from "../actions";
 import { alertPush } from "../../alertHandler";
+import { orderBookChannelFetch } from "../../orderBook";
 
 import AMQPWebSocketClient from "./amqp-websocket-client";
-
-import { balanceChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
@@ -20,7 +20,8 @@ export function* rabbitmqConnectionSaga() {
     const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
     yield put(balanceChannelFetch());
-    yield put(recentTradesChannelFetch())
+    yield put(recentTradesChannelFetch());
+    yield put(orderBookChannelFetch());
   } catch (error) {
     yield put(
       alertPush({

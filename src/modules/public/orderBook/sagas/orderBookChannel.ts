@@ -1,25 +1,27 @@
-import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
+import { call, put, select, take } from "redux-saga/effects";
 import { u8aToString } from "@polkadot/util";
-import {
-  RabbitmqChannelType,
-  selectRabbitmqChannel,
-} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 
-import { alertPush, recentTradesData, selectRecentTrades } from "../../..";
+import { orderBookData } from "..";
+import { alertPush } from "../../alertHandler";
+import { RabbitmqChannelType, selectRabbitmqChannel } from "../../rabbitmqChannel";
 
-export function* fetchTradeChannelSaga() {
+export function* orderBookChannelSaga() {
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
+
     if (rabbitmqConn) {
       const channel = yield call(() =>
-        fetchTradesChannel(rabbitmqConn, "one.trade-events", "BTC.USD.trade-events")
+        fetchOrderBookChannel(
+          rabbitmqConn,
+          "one.orderbook-snapshot",
+          "BTC.USD.orderbook-snapshot"
+        )
       );
       while (true) {
         const tradesMsg = yield take(channel);
-        const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
-        yield put(recentTradesData([data, ...trades]));
+        yield put(orderBookData(data));
       }
     }
   } catch (error) {
@@ -34,8 +36,7 @@ export function* fetchTradeChannelSaga() {
     );
   }
 }
-
-async function fetchTradesChannel(
+async function fetchOrderBookChannel(
   chann: RabbitmqChannelType,
   queueName: string,
   routingKey: string
