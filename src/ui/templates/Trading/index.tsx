@@ -7,7 +7,7 @@ import * as S from "./styles";
 import { Header } from "@polkadex/orderbook-ui/organisms";
 import {
   useMarketsFetch,
-  useDepthMarketsFetch,
+  useOrderBookMarketsFetch,
   useMarketsTickersFetch,
   useWindowSize,
 } from "@polkadex/orderbook-hooks";
@@ -24,7 +24,7 @@ export const Trading = () => {
   const { id } = router.query;
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
-  useDepthMarketsFetch();
+  useOrderBookMarketsFetch();
 
   if (!id) return <div />;
 

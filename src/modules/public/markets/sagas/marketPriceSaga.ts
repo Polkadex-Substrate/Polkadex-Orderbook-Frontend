@@ -9,14 +9,11 @@ import { API, RequestOptions } from "@polkadex/orderbook-config";
 const marketPriceRequestOptions: RequestOptions = {
   apiVersion: "engine",
 };
-
+// TODO: remove mockData and update endpoint when we have a marketPrice endpoint available
 export function* marketPriceSaga(action: MarketPriceFetch) {
   try {
     const payload = action.payload ? `?${buildQueryString(action.payload)}` : "";
-    const price = yield call(
-      API.get(marketPriceRequestOptions),
-      `/public/qe/prices${payload}`
-    );
+    const price = mockData();
     yield put(marketPriceData(price));
   } catch (error) {
     yield put(
@@ -30,3 +27,9 @@ export function* marketPriceSaga(action: MarketPriceFetch) {
     );
   }
 }
+
+const mockData = () => ({
+  price: "31.4132905",
+  created_at: "",
+  updated_at: "",
+});
