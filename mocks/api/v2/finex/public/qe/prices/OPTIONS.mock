@@ -3,8 +3,3 @@ access-control-allow-origin: *
 access-control-allow-methods: GET, POST, PUT, PATCH, DELETE
 access-control-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization
 
-
-//markets 
-//tickers
-//fetchOrderbook    -- orderbooksnapshot
-//fetchMarketTrades -- market trades rabbit
