@@ -2,14 +2,13 @@ import { eventChannel } from "redux-saga";
 import { call, put, select, take } from "redux-saga/effects";
 import { u8aToString } from "@polkadot/util";
 
-import { orderBookData } from "..";
+import { depthData, DepthState, orderBookData, OrderBookState } from "..";
 import { alertPush } from "../../alertHandler";
 import { RabbitmqChannelType, selectRabbitmqChannel } from "../../rabbitmqChannel";
 
 export function* orderBookChannelSaga() {
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
-
     if (rabbitmqConn) {
       const channel = yield call(() =>
         fetchOrderBookChannel(
@@ -20,8 +19,10 @@ export function* orderBookChannelSaga() {
       );
       while (true) {
         const tradesMsg = yield take(channel);
-        const data = JSON.parse(tradesMsg);
+        const data: OrderBookState = JSON.parse(tradesMsg);
+        const { asks, bids } = getDepthFromOrderbook(data);
         yield put(orderBookData(data));
+        yield put(depthData({ asks, bids }));
       }
     }
   } catch (error) {
@@ -53,4 +54,14 @@ async function fetchOrderBookChannel(
       amqpConsumer.then((consumer) => consumer.cancel());
     };
   });
+}
+
+function getDepthFromOrderbook(data: OrderBookState): DepthState {
+  const bids = data.bids.map((bid) => {
+    return [bid.price, bid.volume];
+  });
+  const asks = data.asks.map((ask) => {
+    return [ask.price, ask.volume];
+  });
+  return { bids, asks };
 }
