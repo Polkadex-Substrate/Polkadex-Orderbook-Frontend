@@ -6,7 +6,7 @@ import { rabbitmqChannelData } from "../actions";
 
 import AMQPWebSocketClient from "./amqp-websocket-client";
 
-import { balanceChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
+import { balanceChannelFetch, klineFetchChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
@@ -22,6 +22,7 @@ export function* rabbitmqConnectionSaga() {
     yield put(rabbitmqChannelData(channel));
     yield put(balanceChannelFetch());
     yield put(recentTradesChannelFetch());
+    yield put(klineFetchChannelFetch());
     yield put(orderBookChannelFetch());
   } catch (error) {
     yield put(
