@@ -23,12 +23,11 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     const endPoint = `http://ec2-3-101-117-26.us-west-1.polkadex.trade/fetchohlcv`;
 
     const data = yield call(() => fetchKlineAsync(payload, endPoint));
-    console.log("kline data", data);
     const convertedData = data.map((elem) => {
-      const {_time: date, open, high, low, close, volume} = elem;
+      const {_time: time, open, high, low, close, volume} = elem;
 
       return {
-        date,
+        time,
         open,
         high,
         low,
