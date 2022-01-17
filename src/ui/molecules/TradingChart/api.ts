@@ -59,10 +59,23 @@ const resolutionToSeconds = (r: string): number => {
   }
 };
 
+const resolutionForPayload = (resolution: string): string => {
+  let isNum = /^[0-9]+$/.test(resolution);
+  if(isNum){
+    const resNum = parseInt(resolution);
+    if(resNum < 60) {
+      return `${resNum}m`;
+    }
+      return `${resNum/60}h`
+    }
+
+  return resolution;
+}
+
 const config = {
   supports_timescale_marks: true,
   supports_time: false,
-  supported_resolutions: ["1", "5", "15", "30", "60", "120", "240", "360", "720", "d", "3d"],
+  supported_resolutions: ["1", "5", "30", "60", "240", "720", "1d", "1w", "1M"],
 };
 
 export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Market[]) => {
@@ -83,7 +96,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       setTimeout(() => onResultReadyCallback(symbols), 0);
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);      
+      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);    
+        
       if (!symbol) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
@@ -99,32 +113,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         minmov: 1,
         pricescale: Math.pow(10, symbol.price_precision),
         has_intraday: true,
-        intraday_multipliers: [
-          "1",
-          "5",
-          "15",
-          "30",
-          "60",
-          "120",
-          "240",
-          "360",
-          "720",
-          "d",
-          "3d",
-        ],
-        supported_resolutions: [
-          "1",
-          "5",
-          "15",
-          "30",
-          "60",
-          "120",
-          "240",
-          "360",
-          "720",
-          "d",
-          "3d",
-        ],
+        intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
+        supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
         volume_precision: 8,
         data_status: "streaming",
       };
@@ -141,7 +131,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const range = tradingChart.tvWidget!.activeChart().getVisibleRange();
       const period = tradingChart.tvWidget!.activeChart().resolution();
       // store.dispatch(klineUpdateTimeRange(range));
-      // store.dispatch(klineUpdatePeriod(period));
+      // store.dispatch(klineUpdatePeriod(period));      
     },
     getBars: async (
       symbolInfo: LibrarySymbolInfo,
@@ -158,9 +148,9 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      url = defaultConfig.influxDBUrl + "/fetchohlcv";
+      url = defaultConfig.influxDBUrl + "/fetchohlcv";      
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("BTCPDEX", "5m", -31484909);
+      const payload = makeOHLCVPayload("BTCPDEX", resolutionForPayload(resolution), -31484909);
       return axios
         .post(url, payload)
         .then(({ data }) => {          
@@ -169,7 +159,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
           }
           const bars = data.Fine.map((el) => {
             return {
-              time: new Date(el._time).getTime(),
+              time: new Date(el._time).getTime() * 1e3,
               open: Number(el.open),
               close: Number(el.close),
               high: Number(el.high),
@@ -190,8 +180,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onRealtimeCallback,
       subscribeUID: string,
       onResetCacheNeededCallback
-    ) => {
-      dataFeed.onRealtimeCallback = (kline: KlineState) => {        
+    ) => {            
+      dataFeed.onRealtimeCallback = (kline: KlineState) => {     
         if (
           kline.last &&
           kline.marketId === tradingChart.currentKlineSubscription.marketId &&
@@ -216,7 +206,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       }
       tradingChart.currentKlineSubscription = {};
     },
-    onRealtimeCallback: (kline: KlineState) => {            
+    onRealtimeCallback: (kline: KlineState) => {   
+      console.log('onRealtimeCallback => ', kline);
       // window.console.log(`default onRealtimeCallback called with ${JSON.stringify(bar)}`);
     },
   };
