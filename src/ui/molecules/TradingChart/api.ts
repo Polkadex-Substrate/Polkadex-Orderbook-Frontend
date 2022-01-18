@@ -83,7 +83,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       setTimeout(() => onResultReadyCallback(symbols), 0);
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);      
+      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);
       if (!symbol) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
@@ -163,7 +163,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const payload = makeOHLCVPayload("BTCPDEX", "5m", -31484909);
       return axios
         .post(url, payload)
-        .then(({ data }) => {          
+        .then(({ data }) => {
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
@@ -191,7 +191,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       subscribeUID: string,
       onResetCacheNeededCallback
     ) => {
-      dataFeed.onRealtimeCallback = (kline: KlineState) => {        
+      dataFeed.onRealtimeCallback = (kline: KlineState) => {
         if (
           kline.last &&
           kline.marketId === tradingChart.currentKlineSubscription.marketId &&
@@ -216,7 +216,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       }
       tradingChart.currentKlineSubscription = {};
     },
-    onRealtimeCallback: (kline: KlineState) => {            
+    onRealtimeCallback: (kline: KlineState) => {
       // window.console.log(`default onRealtimeCallback called with ${JSON.stringify(bar)}`);
     },
   };
