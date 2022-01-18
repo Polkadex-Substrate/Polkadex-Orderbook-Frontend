@@ -9,72 +9,41 @@ import {
   OrderExecuteFetch,
 } from "../../..";
 import { notificationPush } from "../../notificationHandler";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+import { formatPayload } from "src/helpers/formatPayload";
 
-import { getCurrentDate } from "@polkadex/web-helpers";
+const ordersOption: RequestOptions = {
+  apiVersion: "polkadexHostUrl",
+};
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
-  try {
-    const { side, volume, price, ord_type } = action.payload;
-    const { proxyKeyring, mainAddress, nonce, baseAsset, quoteAsset } = yield select(
-      selectUserInfo
-    );
-    const polkadexWorker = (window as any).polkadexWorker;
-
-    const _placeOrder = yield call(() =>
-      polkadexWorker.placeOrder({
-        proxyKeyring,
-        mainAddress,
-        nonce,
-        baseAsset,
-        quoteAsset,
-        ordertype: ord_type,
-        orderSide: side,
-        price,
-        quantity: volume,
-      })
-    );
-    // TODO: Add order status alerts
-    if (_placeOrder.success) {
-      yield put(orderExecuteData());
-      yield put(
-        userOpenOrdersAppend({
-          // TODO: Check order types
-          // id: _placeOrder.message,
-          // timestamp: getCurrentDate(),
-          // status: string,
-          // symbol?: string[] | null;
-          // order_type: ord_type,
-          // order_side: side,
-          // price: price,
-          // average: number;
-          // amount: volume;
-          // filled: number;
-          // trades?: null[] | null;
-          // fee: 0
-          date: getCurrentDate(),
-          baseUnit: baseAsset,
-          quoteUnit: quoteAsset,
-          type: ord_type,
-          side: side,
-          price: price,
-          amount: volume,
-          uuid: _placeOrder.message,
-          total: `${volume}`,
-          isSell: side === "sell",
-          filled: "filled",
-        })
-      );
-      yield put(
-        notificationPush({
-          type: "Loading",
-          message: {
-            title: "Order Created",
-            description: "Congrats your order has been created",
-          },
-        })
-      );
+  try {    
+    const { side, price, order_type, amount } = action.payload;
+    const { address, keyringPair } = yield select(selectUserInfo);
+    if (address !== "" && keyringPair) {
+      const payload = { symbol: [{"Asset": 0},{"Asset": 1}], order_side: side, order_type, price, amount, account: address   };
+      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
+      const data = formatPayload(signature, payload);
+      const res = yield call(() => API.post(ordersOption)("/place_order", data));
+      if (res.Fine) {
+        yield put(orderExecuteData());
+        console.log(res.Fine);
+        yield put(
+          notificationPush({
+            type: "Loading",
+            message: {
+              title: "Order Created",
+              description: "Congrats your order has been created",
+            },
+          })
+        );
+      } else {
+        throw new Error("Place order failed");
+      }
     }
   } catch (error) {
+    console.log({error});
     yield put(
       sendError({
         error,
