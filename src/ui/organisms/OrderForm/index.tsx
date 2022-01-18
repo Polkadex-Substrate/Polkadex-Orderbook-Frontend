@@ -11,11 +11,8 @@ import {
   SecondaryInput,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  orderExecuteFetch,
-  selectUserInfo,
-  selectMainAccount,
+  orderExecuteFetch
 } from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 
@@ -36,23 +33,20 @@ export const OrderForm = ({
     orderType: "Limit",
     price: "",
     priceMarket: priceMarket,
-    amountSell: "0.000000000",
-    amountBuy: "0.000000000",
+    amountSell: '0.00',
+    amountBuy: '0.00',
   });
   const dispatch = useDispatch();
 
-  const usersInfo = useReduxSelector(selectUserInfo);
-  const mainAccount = useReduxSelector(selectMainAccount);
   const isSellSide = side === "sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
 
   const total =
     state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
 
-  const handlePriceChange = (value: string) => {
+  const handlePriceChange = (value: string) => {    
     const convertedValue = cleanPositiveFloatInput(String(value));
-
-    if (convertedValue.match(precisionRegExp(currentMarketBidPrecision))) {
+    if (convertedValue.match(precisionRegExp(currentMarketBidPrecision))) {      
       setState({
         ...state,
         price: convertedValue,
@@ -64,7 +58,6 @@ export const OrderForm = ({
 
   const handleAmountChange = (value: string) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
-
     if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
       if (isSellSide) {
         setState({
@@ -82,25 +75,19 @@ export const OrderForm = ({
   useEffect(() => {
     const nextPriceLimitTruncated = Decimal.format(priceLimit, currentMarketBidPrecision);
     if (state.orderType === "Limit" && priceLimit && nextPriceLimitTruncated !== state.price) {
-      console.log("Updating..");
       handlePriceChange(nextPriceLimitTruncated);
     }
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
-  const handleOrders = (e) => {
-    e.preventDefault();
+  const handleOrders = (e) => {    
+    e.preventDefault();    
     dispatch(
       orderExecuteFetch({
-        proxyKeyring: usersInfo.keyringPair,
-        mainAddress: mainAccount.address,
-        nonce: 0,
-        baseAsset: "BTC",
-        quoteAsset: "USD",
-        ordertype: "LIMIT",
-        orderSide: isSellSide ? "ASK" : "BID",
-        price: 100,
-        quantity: 1,
-        isSell: isSellSide,
+        order_type: state.orderType,
+        side,
+        price: state.price,
+        market: `${baseUnit}${quoteUnit}`.toLowerCase(),
+        amount: isSellSide? state.amountSell : state.amountBuy
       })
     );
   };
@@ -130,13 +117,13 @@ export const OrderForm = ({
             </S.AvailableAmount>
             <SecondaryInput
               label="Price"
-              value={state.price || "0.000000000"}
+              value={state.price || "0.00"}
               onChange={(e) => handlePriceChange(e.currentTarget.value)}>
               <span>{isSellSide ? quoteUnit : baseUnit}</span>
             </SecondaryInput>
             <SecondaryInput
               label="Amount"
-              value={amount || "0.000000000"}
+              value={isSellSide? state.amountSell : state.amountBuy || "0.00"}
               onChange={(e) => handleAmountChange(e.currentTarget.value)}>
               <span>{isSellSide ? baseUnit : quoteUnit}</span>
             </SecondaryInput>
