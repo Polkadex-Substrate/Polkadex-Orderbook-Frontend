@@ -77,18 +77,18 @@
       "@polkadex/orderbook/*": [
         "src/*"
       ],
+      "@orderbook-ui/v2/atoms": [
+        "src/v2/ui/atoms"
+      ],
       "@orderbook-ui/v2/templates": [
         "src/v2/ui/templates"
       ],
-
       "@orderbook-ui/v2/organisms": [
         "src/v2/ui/organisms"
       ],
-
       "@orderbook-ui/v2/molecules": [
         "src/v2/ui/molecules"
       ],
-
     },
     "incremental": true
   },

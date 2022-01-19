@@ -28,8 +28,8 @@ const sizeModifier = {
     padding: ${isToken ? "0.3em" : "0.5rem"};
   `,
   extraLarge: (isToken: boolean) => css`
-    width: 3.3rem;
-    height: 3.3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     padding: ${isToken ? "0.4rem" : "0.6rem"};
   `,
   giant: (isToken: boolean) => css`

@@ -4,8 +4,7 @@ import { tradesError } from "../../trades";
 import { withdrawsData } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
-import { formatPayload } from "src/helpers/formatPayload";
+import { signMessage, formatPayload } from "@polkadex/web-helpers";
 import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 
 const ordersOption: RequestOptions = {

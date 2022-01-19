@@ -66,3 +66,4 @@ export { default as Error } from "./Error";
 export { default as Loading } from "./Loading";
 export { default as Alert } from "./Alert";
 export { default as Locked } from "./Locked";
+export { default as Menu } from "./Menu";
