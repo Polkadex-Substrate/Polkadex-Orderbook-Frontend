@@ -14,10 +14,7 @@ export const Wrapper = styled.div`
   max-width: 140rem;
   width: 100%;
   margin: 0 auto;
-  /* grid-template-rows: minmax(40rem, 60rem) max-content; */
   grid-gap: 0.8rem;
-  padding-top: 5.8rem;
-  grid-template-rows: max-content;
   grid-template-columns: auto minmax(26rem, fit-content) minmax(26rem, fit-content);
   @media screen and (min-width: 1050px) {
     grid-template-areas:
@@ -33,7 +30,12 @@ export const Wrapper = styled.div`
       "Transactions Transactions";
   }
 
+  @media screen and (min-width: 705px) {
+    padding-top: 5.5rem;
+    grid-template-rows: minmax(40rem, 43rem) 1fr;
+  }
   @media screen and (max-width: 700px) {
+    padding-top: 4.5rem;
     grid-template-areas:
       "Toolbar"
       "Graph"

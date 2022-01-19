@@ -151,9 +151,6 @@ export const PlaceOrder = () => {
             />
           </TabContent>
         </S.Content>
-        <S.Footer>
-          <Accounts />
-        </S.Footer>
       </Tabs>
     </S.Wrapper>
   );
