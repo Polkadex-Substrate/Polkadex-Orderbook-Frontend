@@ -159,7 +159,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
           }
           const bars = data.Fine.map((el) => {
             return {
-              time: new Date(el._time).getTime() * 1e3,
+              time: new Date(el._time).getTime(),
               open: Number(el.open),
               close: Number(el.close),
               high: Number(el.high),
@@ -181,7 +181,10 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       subscribeUID: string,
       onResetCacheNeededCallback
     ) => {            
-      dataFeed.onRealtimeCallback = (kline: KlineState) => {     
+          
+      dataFeed.onRealtimeCallback = (kline: KlineState) => {    
+        console.log("inside subscribe bars ==> ", kline);
+         
         if (
           kline.last &&
           kline.marketId === tradingChart.currentKlineSubscription.marketId &&
