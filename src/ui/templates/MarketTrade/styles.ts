@@ -6,6 +6,8 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     grid-area: Market;
     background: ${theme.colors.secondaryBackgroundOpacity};
+    display: flex;
+    flex-direction: column;
   `}
 `;
 export const Header = styled.div`
@@ -18,7 +20,9 @@ export const Header = styled.div`
   }
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  flex: 1;
+`;
 
 const Template = styled.div`
   display: grid;
@@ -45,7 +49,13 @@ export const HeaderBox = styled(Template)`
 export const Box = styled.div`
   overflow-y: scroll;
   scrollbar-width: none;
-  max-height: 33rem;
+  max-height: 40vh;
+  @media screen and (min-width: 1055px) {
+    max-height: 40vh;
+  }
+  @media screen and (max-width: 1055px) {
+    max-height: 33rem;
+  }
 `;
 
 export const CardWrapper = styled(Template)<Partial<Props>>`
