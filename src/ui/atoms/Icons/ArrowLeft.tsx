@@ -13,7 +13,6 @@ function SvgArrowLeft(props: React.SVGProps<SVGSVGElement>) {
           data-name="Path 6"
           d="M14.747 10.403l-3.325 3.325-3.325-3.325"
           fill="none"
-          stroke="#fff"
           strokeWidth={2}
         />
       </g>

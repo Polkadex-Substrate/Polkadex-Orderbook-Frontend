@@ -80,3 +80,4 @@ export { default as Loan } from "./Loan";
 export { default as Marketplace } from "./Marketplace";
 export { default as Lock } from "./Lock";
 export { default as Play } from "./Play";
+export { default as SingleArrowLeft } from "./SingleArrowLeft";

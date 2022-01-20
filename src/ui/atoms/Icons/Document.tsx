@@ -14,12 +14,14 @@ function SvgDocument(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
       <path
         d="M12.7162 10.0369H5.49622"
         stroke="#130F26"
         strokeWidth="1.5"
         strokeLinecap="round"
+        fill="none"
         strokeLinejoin="round"
       />
       <path
@@ -28,6 +30,7 @@ function SvgDocument(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
       <path
         fillRule="evenodd"
@@ -37,6 +40,7 @@ function SvgDocument(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
     </svg>
   );

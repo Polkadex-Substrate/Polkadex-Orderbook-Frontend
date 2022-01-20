@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
 import { SpaceBetweenCenter } from "@orderbook-ui/v2/atoms";
-import { MyAccount, Notifications, Menu } from "@orderbook-ui/v2/molecules";
+import { MyAccount, Notifications, Menu, Search } from "@orderbook-ui/v2/molecules";
 import { Polkadex } from "@polkadex/orderbook-ui/molecules";
 
 export const Header = () => {
@@ -10,7 +10,7 @@ export const Header = () => {
       <SpaceBetweenCenter>
         <S.AsideLeft>
           <Polkadex />
-          <div>Search</div>
+          <Search />
         </S.AsideLeft>
         <S.AsideRight>
           <Menu />

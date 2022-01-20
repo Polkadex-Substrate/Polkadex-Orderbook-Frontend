@@ -13,6 +13,7 @@ function SvgLock(props: React.SVGProps<SVGSVGElement>) {
         stroke="#130F26"
         strokeWidth="1.5"
         strokeLinecap="round"
+        fill="none"
         strokeLinejoin="round"
       />
       <path
@@ -21,6 +22,7 @@ function SvgLock(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
       <path
         fillRule="evenodd"
@@ -28,6 +30,7 @@ function SvgLock(props: React.SVGProps<SVGSVGElement>) {
         d="M8.91024 6.82422C3.16524 6.82422 1.25024 8.39222 1.25024 13.0952C1.25024 17.7992 3.16524 19.3672 8.91024 19.3672C14.6552 19.3672 16.5712 17.7992 16.5712 13.0952C16.5712 8.39222 14.6552 6.82422 8.91024 6.82422Z"
         stroke="#130F26"
         strokeWidth="1.5"
+        fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

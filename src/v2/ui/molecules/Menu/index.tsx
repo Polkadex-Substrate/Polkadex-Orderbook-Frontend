@@ -6,7 +6,7 @@ import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 export const Menu = () => {
   return (
     <S.Main>
-      <Dropdown direction="bottomRight" header={<Header />}>
+      <Dropdown header={<Header />} direction="bottomRight" isOpacity>
         <Content />
       </Dropdown>
     </S.Main>

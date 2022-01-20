@@ -16,6 +16,7 @@ function SvgLoan(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="2.26666"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
       <path
         fillRule="evenodd"
@@ -25,6 +26,7 @@ function SvgLoan(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="2.26666"
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
       />
     </svg>
   );

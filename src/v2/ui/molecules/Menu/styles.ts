@@ -48,7 +48,7 @@ export const Title = styled.div`
     align-items: center;
     background: ${theme.colors.inverse};
     padding: 1rem 1rem 1rem 2rem;
-    border-radius: 1.5rem;
+    border-radius: 1rem;
     color: ${theme.colors.text};
     h3 {
       font-size: 1.5rem;

@@ -1,26 +1,36 @@
 import * as S from "./styles";
-import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const Search = ({
-  balance = "0.000000",
-  address = "0x000000000",
-  accountName = "Account",
-  isFull = false,
-  ...props
-}: T.Props) => {
+export const Search = () => {
   return (
-    <S.Wrapper isFull={isFull} {...props}>
-      <Icon name="Avatar" background="secondaryBackground" size="giant" />
-      <S.AccountInfo>
-        <S.AccountInfoHeader>
-          <p>
-            {accountName} ({address})
-          </p>
-          <span>Estimated: {balance}</span>
-        </S.AccountInfoHeader>
-      </S.AccountInfo>
-    </S.Wrapper>
+    <S.Main>
+      <S.Header>
+        <S.Actions onClick={() => console.log("Clicked")}>
+          <Icon name="SingleArrowLeft" size="extraSmall" color="inverse" />
+        </S.Actions>
+        <S.Search>
+          <Icon name="Search" size="extraSmall" />
+          <input type="text" placeholder="Search Menu.." />
+        </S.Search>
+      </S.Header>
+      <S.Content>
+        <S.Title>
+          <h4>Recent Searches</h4>
+          <button>Clear</button>
+        </S.Title>
+        <S.Container>
+          <S.Card>
+            <span>
+              <Icon name="Clock" size="extraSmall" />
+              Polkadex
+            </span>
+            <S.CardActions>
+              <Icon name="Close" color="inverse" />
+            </S.CardActions>
+          </S.Card>
+        </S.Container>
+      </S.Content>
+    </S.Main>
   );
 };
