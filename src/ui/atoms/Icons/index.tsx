@@ -6,6 +6,7 @@ export { default as ArrowVerticalBottom } from "./ArrowVerticalBottom";
 export { default as ArrowVerticalTop } from "./ArrowVerticalTop";
 export { default as Buy } from "./Buy";
 export { default as Calendar } from "./Calendar";
+export { default as SingleArrowRight } from "./SingleArrowRight";
 export { default as Candles } from "./Candles";
 export { default as Chart } from "./Chart";
 export { default as Clean } from "./Clean";
