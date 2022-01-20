@@ -28,7 +28,6 @@ export const Orderbook = () => {
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-
   const getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) =>
     tickers[currentMarket?.id];
 

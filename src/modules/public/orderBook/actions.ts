@@ -11,6 +11,7 @@ import {
   DEPTH_INCREMENT_EMPTY_SNAP,
   DEPTH_INCREMENT_SUBSCRIBE,
   DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING,
+  ORDER_BOOK_CHANNEL_FETCH,
   ORDER_BOOK_DATA,
   ORDER_BOOK_ERROR,
   ORDER_BOOK_FETCH,
@@ -81,6 +82,9 @@ export interface DepthIncrementSubscribeResetLoading {
   type: typeof DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING;
 }
 
+export interface OrderBookChannelFetch {
+  type: typeof ORDER_BOOK_CHANNEL_FETCH;
+}
 export type DepthActions =
   | DepthFetch
   | DepthData
@@ -96,7 +100,9 @@ export const orderBookFetch = (payload: OrderBookFetch["payload"]): OrderBookFet
   type: ORDER_BOOK_FETCH,
   payload,
 });
-
+export const orderBookChannelFetch = (): OrderBookChannelFetch => ({
+  type: ORDER_BOOK_CHANNEL_FETCH,
+});
 export const orderBookData = (payload: OrderBookData["payload"]): OrderBookData => ({
   type: ORDER_BOOK_DATA,
   payload,

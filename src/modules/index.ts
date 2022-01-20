@@ -31,6 +31,7 @@ import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
+import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -69,6 +70,7 @@ export interface RootState {
     orderBook: OrderBookState;
     recentTrades: RecentTradesState;
     ranger: RangerState;
+    rabbitmqChannel: RabbitmqChannelState;
   };
   user: {
     polkadotWallet: PolkadotWalletState;
@@ -118,5 +120,6 @@ export function* rootSaga() {
     call(rootWithdrawsSaga),
     call(rootBalancesSaga),
     call(rootDepositsSaga),
+    call(rootRabbitmqChannelSaga),
   ]);
 }

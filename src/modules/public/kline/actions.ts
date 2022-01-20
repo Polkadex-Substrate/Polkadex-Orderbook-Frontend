@@ -4,6 +4,7 @@ import {
   KLINE_DATA,
   KLINE_ERROR,
   KLINE_FETCH,
+  KLINE_FETCH_CHANNEL,
   KLINE_PUSH,
   KLINE_SUBSCRIBE,
   KLINE_UNSUBSCRIBE,
@@ -97,6 +98,10 @@ export const klinePush = (payload: KlinePush["payload"]): KlinePush => ({
 export const klineFetch = (payload: KlineFetch["payload"]): KlineFetch => ({
   type: KLINE_FETCH,
   payload,
+});
+
+export const klineFetchChannelFetch = () => ({
+  type: KLINE_FETCH_CHANNEL,
 });
 
 export const klineData = (payload: KlineData["payload"]): KlineData => ({

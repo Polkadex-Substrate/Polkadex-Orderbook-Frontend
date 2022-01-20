@@ -1,5 +1,4 @@
 // TODO: Fix eslint and typescript build errors
-
 module.exports = {
   experimental: {
     // Enables the styled-components SWC transform

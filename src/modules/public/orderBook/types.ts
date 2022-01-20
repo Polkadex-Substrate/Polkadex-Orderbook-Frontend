@@ -30,7 +30,7 @@ export interface OrderBookEntry extends CommonState {
 export interface DepthState extends CommonState {
   asks: string[][];
   bids: string[][];
-  loading: boolean;
+  loading?: boolean;
 }
 
 export interface DepthIncrementState {

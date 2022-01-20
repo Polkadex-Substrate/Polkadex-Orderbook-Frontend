@@ -84,7 +84,6 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
       const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);
-
       if (!symbol) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
@@ -159,10 +158,9 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      console.log({ symbolInfo, resolution, from });
       url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
+      const payload = makeOHLCVPayload("BTCPDEX", "5m", -31484909);
       return axios
         .post(url, payload)
         .then(({ data }) => {
