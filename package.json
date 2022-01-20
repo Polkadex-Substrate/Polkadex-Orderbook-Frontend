@@ -14,7 +14,7 @@
     "mockWS": "tsnd --transpile-only --inspect --respawn --ignore-watch node_modules mocks/mockWS.js",
     "start-mock": "npm-run-all -p dev mockAPI",
     "checkTypes": "tsc --noEmit",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
