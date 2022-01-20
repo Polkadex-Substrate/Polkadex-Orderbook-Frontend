@@ -2,27 +2,33 @@ import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
 
-import { alertPush } from "../../..";
+import { alertPush, klineEventToObject, klinePush } from "../../..";
 
 import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 
-export function* fetchKlineChannelSaga() {
+export function* fetchKlineChannelSaga() {  
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
-    if (rabbitmqConn) {
+    if (rabbitmqConn) {      
       const channel = yield call(() =>
       fetchKlineChannel(rabbitmqConn, "one.kline-events", "BTC.USD.kline-events")
       );
       while (true) {
         const data = yield take(channel);
-        console.log('kline channel saga data ===> ', data);
+        const klineEventToJson = JSON.parse(data);        
+        const klineEvent = klineEventToObject(klineEventToJson);   
+        // TODO: marketId and period will be dynamic
+        yield put(klinePush({
+          marketId: "ethbtc",
+          kline: klineEvent,
+          period: "5m"
+        }));
       }
     }
   } catch (error) {
-    console.log('kline channel saga error =====> ', error)
     yield put(
       alertPush({
         message: {

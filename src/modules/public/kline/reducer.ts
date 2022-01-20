@@ -26,7 +26,9 @@ export interface KlineState extends CommonState {
   };
 }
 
+// needs to be update to suite new data structure 
 export const klineArrayToObject = (el: KlineRawElement[]): KlineEvent => {
+  
   const [time, open, high, low, close, volume] = el.map((e: KlineRawElement) => {
     switch (typeof e) {
       case "number":
@@ -47,6 +49,20 @@ export const klineArrayToObject = (el: KlineRawElement[]): KlineEvent => {
     volume,
   };
 };
+
+export const klineEventToObject = (data) => {
+  const {o: open, c: close, h: high, l: low, v: volume } = data.k;
+  const time = data.E
+
+  return {
+    time: parseInt(time),
+    open: parseFloat(open),
+    high: parseFloat(high),
+    low: parseFloat(low),
+    close: parseFloat(close),
+    volume: parseFloat(volume),
+  };
+}
 
 export const initialKlineState: KlineState = {
   last: undefined,
@@ -84,7 +100,7 @@ export const klineReducer = (state = initialKlineState, action: KlineActions): K
         ...state,
         marketId,
         period,
-        last: klineArrayToObject(kline),
+        last: kline,
       };
     }
     case KLINE_FETCH:

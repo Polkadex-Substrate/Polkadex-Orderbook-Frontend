@@ -26,7 +26,7 @@ export interface KlinePush {
   type: typeof KLINE_PUSH;
   payload: {
     marketId: string;
-    kline: KlineRawElement[];
+    kline: KlineEvent;
     period: string;
   };
 }

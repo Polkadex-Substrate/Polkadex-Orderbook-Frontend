@@ -12,9 +12,9 @@ import {
 export interface OrderExecution {
   market: string;
   side: OrderSide;
-  volume: string;
   price?: string;
-  ord_type?: string;
+  order_type?: string;
+  amount?: string
 }
 
 export interface OrderExecuteFetch {
