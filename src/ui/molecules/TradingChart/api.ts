@@ -78,6 +78,7 @@ const config = {
   supported_resolutions: ["1", "5", "30", "60", "240", "720", "1d", "1w", "1M"],
 };
 
+let updateCb = null;
 export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Market[]) => {
   const dataFeed = {
     onReady: (cb) => {
@@ -180,19 +181,13 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onRealtimeCallback,
       subscribeUID: string,
       onResetCacheNeededCallback
-    ) => {            
-          
-      dataFeed.onRealtimeCallback = (kline: KlineState) => {    
-        console.log("inside subscribe bars ==> ", kline);
-         
-        if (
-          kline.last &&
-          kline.marketId === tradingChart.currentKlineSubscription.marketId &&
-          kline.period === tradingChart.currentKlineSubscription.periodString
-        ) {
-          onRealtimeCallback(kline.last);
-        }
-      };
+    ) => {
+      
+      updateCb = {
+        symbolInfo,
+        resolution,
+        onRealtimeCallback
+      }
       const marketId: string = symbolInfo.ticker!;
       const periodString = periodMinutesToString(resolutionToSeconds(resolution));
 
@@ -211,7 +206,13 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
     },
     onRealtimeCallback: (kline: KlineState) => {   
       console.log('onRealtimeCallback => ', kline);
-      // window.console.log(`default onRealtimeCallback called with ${JSON.stringify(bar)}`);
+      if (
+        kline.last &&
+        kline.marketId === tradingChart.currentKlineSubscription.marketId &&
+        kline.period === tradingChart.currentKlineSubscription.periodString
+      ) {
+        updateCb.onRealtimeCallback(kline.last);
+      }
     },
   };
 

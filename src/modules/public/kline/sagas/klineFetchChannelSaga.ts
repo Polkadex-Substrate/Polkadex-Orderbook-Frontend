@@ -24,7 +24,7 @@ export function* fetchKlineChannelSaga() {
         yield put(klinePush({
           marketId: "ethbtc",
           kline: klineEvent,
-          period: "1m"
+          period: "5m"
         }));
       }
     }
