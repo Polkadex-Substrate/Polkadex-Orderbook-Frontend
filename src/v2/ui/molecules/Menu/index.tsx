@@ -25,7 +25,10 @@ const Content = () => {
     <S.Content>
       <S.Title>
         <h3>Menu</h3>
-        <p>Search...</p>
+        <S.Search>
+          <Icon name="Search" color="inverse" size="extraSmall" />
+          <input type="text" placeholder="Search Menu.." />
+        </S.Search>
       </S.Title>
       <S.Container>
         <CardGroup title="Buy Crypto">

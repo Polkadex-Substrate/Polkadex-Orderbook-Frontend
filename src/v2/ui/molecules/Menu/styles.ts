@@ -35,7 +35,7 @@ export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    min-width: 65rem;
+    min-width: 60rem;
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
   `}
@@ -47,12 +47,23 @@ export const Title = styled.div`
     justify-content: space-between;
     align-items: center;
     background: ${theme.colors.inverse};
-    padding: 2rem;
+    padding: 1rem 1rem 1rem 2rem;
     border-radius: 1.5rem;
     color: ${theme.colors.text};
     h3 {
       font-size: 1.5rem;
       font-weight: bold;
+    }
+  `}
+`;
+
+export const Search = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.text};
+    padding: 1rem;
+    border-radius: 3rem;
+    input {
+      margin-left: 0.5rem;
     }
   `}
 `;

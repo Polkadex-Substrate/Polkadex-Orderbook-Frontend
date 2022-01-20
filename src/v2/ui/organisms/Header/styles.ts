@@ -24,7 +24,7 @@ export const AsideLeft = styled(Grid)`
 export const AsideRight = styled(Grid)`
   grid-template-columns: auto auto 1fr;
   align-items: center;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
 `;
 
 export const Notifications = styled.div``;
