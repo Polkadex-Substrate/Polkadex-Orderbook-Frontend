@@ -1,12 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  cloneElement,
-  isValidElement,
-  Children,
-  ReactNode,
-} from "react";
+import { useState, useEffect, useRef, cloneElement, isValidElement, ReactNode } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";

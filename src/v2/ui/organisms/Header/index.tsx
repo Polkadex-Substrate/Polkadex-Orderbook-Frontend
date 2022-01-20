@@ -1,8 +1,8 @@
 import * as S from "./styles";
 
 import { SpaceBetweenCenter } from "@orderbook-ui/v2/atoms";
-import { MyAccount, Notifications } from "@orderbook-ui/v2/molecules";
-import { Polkadex, Icon } from "@polkadex/orderbook-ui/molecules";
+import { MyAccount, Notifications, Menu } from "@orderbook-ui/v2/molecules";
+import { Polkadex } from "@polkadex/orderbook-ui/molecules";
 
 export const Header = () => {
   return (
@@ -13,10 +13,7 @@ export const Header = () => {
           <div>Search</div>
         </S.AsideLeft>
         <S.AsideRight>
-          <S.Menu>
-            <Icon name="Menu" color="inverse" size="extraSmall" />
-            Menu
-          </S.Menu>
+          <Menu />
           <Notifications />
           <MyAccount />
         </S.AsideRight>

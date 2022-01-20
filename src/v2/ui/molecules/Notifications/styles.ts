@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { FlexCenter } from "@orderbook-ui/v2/atoms";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Main = styled.div``;
@@ -10,7 +9,6 @@ export const Header = styled.div<{ isActive?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.colors.text};
     transition: background 0.3s ease-in-out;
     border-radius: 50%;
     width: 4rem;

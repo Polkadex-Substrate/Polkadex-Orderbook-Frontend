@@ -1,5 +1,3 @@
-import { useMemo, useState } from "react";
-
 import * as S from "./styles";
 import * as F from "./fakeData";
 
@@ -16,13 +14,13 @@ export const Notifications = () => {
   );
 };
 
-export const Header = ({ isActive = false }) => (
+const Header = ({ isActive = false }) => (
   <S.Header isActive={isActive}>
     <Icon name="Notifications" color="inverse" size="extraSmall" />
   </S.Header>
 );
 
-export const Content = () => {
+const Content = () => {
   return (
     <S.Content>
       <S.Title>
@@ -57,7 +55,7 @@ export const Content = () => {
   );
 };
 
-export const Card = ({ description, time, isRead = false }) => (
+const Card = ({ description, time, isRead = false }) => (
   <S.Card isRead={isRead}>
     <S.CardIcon>
       <Icon name="Clock" size="extraSmall" />

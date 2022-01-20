@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 import { FlexCenter, Grid } from "@orderbook-ui/v2/atoms";
 import { Wrapper as Logo } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
@@ -30,14 +29,6 @@ export const AsideRight = styled(Grid)`
 
 export const Notifications = styled.div``;
 
-export const Menu = styled(FlexCenter)`
-  ${({ theme }) => css`
-    color: ${theme.colors.inverse};
-    ${Icon} {
-      margin-right: 0.5rem;
-    }
-  `}
-`;
 export const Account = styled(FlexCenter)`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
