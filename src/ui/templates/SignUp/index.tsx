@@ -100,7 +100,7 @@ export const SignUpTemplate = () => {
                         />
                         <FlexSpaceBetween style={{ marginTop: 20 }}>
                           <Button size="extraLarge" type="submit" disabled={signUpLoading}>
-                            {signUpLoading ? "Loading.." : "Verify Account"}
+                            {signUpLoading ? "Loading.." : "Create Account"}
                           </Button>
                           <Button
                             onClick={handlePrint}

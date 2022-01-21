@@ -67,7 +67,7 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
 
 export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
   const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy from clipboard");
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(phrases.join(" "));
