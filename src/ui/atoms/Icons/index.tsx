@@ -86,3 +86,4 @@ export { default as Appearance } from "./Appearance";
 export { default as Logout } from "./Logout";
 export { default as Support } from "./Support";
 export { default as SupportCenter } from "./SupportCenter";
+export { default as Computer } from "./Computer";
