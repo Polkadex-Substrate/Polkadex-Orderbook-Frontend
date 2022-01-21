@@ -50,7 +50,15 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div<Partial<Props>>`
-  ${({ theme, background, color, size = "small", isActive = false, isToken = false }) => css`
+  ${({
+    theme,
+    background,
+    color,
+    stroke = "none",
+    size = "small",
+    isActive = false,
+    isToken = false,
+  }) => css`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,6 +66,7 @@ export const Container = styled.div<Partial<Props>>`
     border-radius: 20%;
     svg {
       fill: ${isActive ? theme.colors.white : theme.colors[color]};
+      stroke: ${theme.colors[stroke]};
     }
     ${sizeModifier[size](isToken)};
     ${!background &&

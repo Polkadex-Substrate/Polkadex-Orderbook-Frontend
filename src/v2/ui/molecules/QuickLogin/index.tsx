@@ -2,10 +2,10 @@ import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
-export const QrLogin = ({ isFull = false }) => {
+export const QuickLogin = ({ isFull = false }) => {
   return (
     <S.Main>
-      <Dropdown header={<Header />} direction="bottomRight" isOpacity>
+      <Dropdown isFull={isFull} header={<Header />} direction="bottom" isOpacity>
         <Content isFull={isFull} />
       </Dropdown>
     </S.Main>

@@ -17,6 +17,10 @@ export type IColors =
 
 export type IIcons =
   | "ArrowTop"
+  | "Appearance"
+  | "SupportCenter"
+  | "Logout"
+  | "Support"
   | "Verified"
   | "Avatar"
   | "Attention"

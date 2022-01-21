@@ -82,3 +82,7 @@ export { default as Lock } from "./Lock";
 export { default as Play } from "./Play";
 export { default as SingleArrowLeft } from "./SingleArrowLeft";
 export { default as Mobile } from "./Mobile";
+export { default as Appearance } from "./Appearance";
+export { default as Logout } from "./Logout";
+export { default as Support } from "./Support";
+export { default as SupportCenter } from "./SupportCenter";

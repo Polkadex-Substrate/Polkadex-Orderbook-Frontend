@@ -2,11 +2,12 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Main = styled.div`
-  ${({ theme }) => css`
+export const Main = styled.div<{ isActive?: boolean }>`
+  ${({ isActive }) => css`
     position: relative;
     cursor: pointer;
-    :hover {
+    ${isActive &&
+    css`
       ${Content} {
         height: auto;
         opacity: 1;
@@ -23,7 +24,7 @@ export const Main = styled.div`
         opacity: 1;
         display: block;
       }
-    }
+    `}
   `}
 `;
 
@@ -58,10 +59,12 @@ export const Search = styled.div`
       margin-left: 1.5rem;
     }
     ${Icon} {
+      margin-left: 0.2rem;
       stroke: ${theme.colors.inverse};
     }
   `}
 `;
+
 export const Container = styled.div``;
 
 export const Content = styled.div`
@@ -107,8 +110,18 @@ export const Card = styled.div`
     margin-right: 0.5rem;
   }
 `;
+
 export const CardActions = styled.div`
   ${Icon} {
     cursor: pointer;
   }
+`;
+
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.5s ease-in-out;
 `;

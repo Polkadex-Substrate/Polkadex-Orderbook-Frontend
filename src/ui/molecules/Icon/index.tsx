@@ -10,6 +10,7 @@ export const Icon = ({
   isActive = false,
   isToken = false,
   background,
+  stroke,
   color = "text",
   ...props
 }: T.Props) => {
@@ -25,6 +26,7 @@ export const Icon = ({
         isActive={isActive}
         background={background}
         color={color}
+        stroke={stroke}
         {...props}>
         <IconComponent />
       </S.Container>
