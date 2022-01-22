@@ -7,3 +7,4 @@ export * from "./RecentTrades";
 export * from "./MyOrders";
 export * from "./Orderbook";
 export * from "./PlaceOrder";
+export * from "./Markets";

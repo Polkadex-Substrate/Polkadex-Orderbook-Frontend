@@ -11,7 +11,6 @@ function SvgArrowBottom(props: React.SVGProps<SVGSVGElement>) {
       <path
         data-name="Path 6"
         d="M7.81811 0.706963L4.26312 4.26196L0.707115 0.706963"
-        stroke="#fff"
         fill="none"
         strokeWidth={1.7}
       />
