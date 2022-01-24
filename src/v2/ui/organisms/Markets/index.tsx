@@ -4,6 +4,9 @@ import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 export const Markets = () => {
   return (
     <S.Main>
+      <S.HeaderWrapper>
+        <Header />
+      </S.HeaderWrapper>
       <Header />
       <Content />
       <Footer />
@@ -153,15 +156,20 @@ const Card = ({
 }) => (
   <S.Card>
     <S.CardInfo>
-      <S.CardToken>
-        <Icon isToken name={tokenTicker} size="large" color="inverse" />
-      </S.CardToken>
-      <S.CardInfoWrapper>
-        <span>
-          {tokenTicker}/<small>{pair}</small>
-        </span>
-        <p>Vol:{vol}</p>
-      </S.CardInfoWrapper>
+      <S.CardInfoActions>
+        <Icon name="Star" size="extraSmall" stroke="inverse" />
+      </S.CardInfoActions>
+      <S.CardInfoContainer>
+        <S.CardToken>
+          <Icon isToken name={tokenTicker} size="large" color="inverse" />
+        </S.CardToken>
+        <S.CardInfoWrapper>
+          <span>
+            {tokenTicker}/<small>{pair}</small>
+          </span>
+          <p>Vol:{vol}</p>
+        </S.CardInfoWrapper>
+      </S.CardInfoContainer>
     </S.CardInfo>
     <S.CardPricing>
       <span>{price}</span>
@@ -178,6 +186,7 @@ export const Footer = () => (
     <S.FooterCard isActive>Pdex</S.FooterCard>
     <S.FooterCard>Btc</S.FooterCard>
     <S.FooterCard>Usdt</S.FooterCard>
+    <S.FooterCard>Dot</S.FooterCard>
     <S.FooterCard>
       <Dropdown header="ALTS">
         <p>ETH</p>

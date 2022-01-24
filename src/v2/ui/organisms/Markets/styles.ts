@@ -10,12 +10,15 @@ export const Main = styled.section`
   `}
 `;
 // Header
+export const HeaderWrapper = styled.div`
+  padding: 1.5rem 1.5rem 0 1.5rem;
+`;
+
 export const Header = styled.div`
   display: grid;
   grid-template-columns: max-content fit-content(100%) fit-content(100%);
   grid-gap: 2rem;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
 `;
 
 export const HeaderAsideLeft = styled.div`
@@ -115,7 +118,8 @@ export const Card = styled.div`
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: 0 1.5rem;
-
+    cursor: pointer;
+    transition: background 0.4s ease-in-out;
     span {
       font-weight: 550;
     }
@@ -125,12 +129,38 @@ export const Card = styled.div`
     :not(:last-child) {
       margin-bottom: 1rem;
     }
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      box-shadow: ${theme.shadows.quaternary};
+    }
   `}
 `;
+export const CardInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const CardInfoActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 0.8rem 0.8rem 0.5rem;
+
+  :hover {
+    svg {
+      transition: all 0.4s ease-in-out;
+
+      fill: orange;
+      stroke: orange;
+    }
+  }
+`;
+
 export const CardInfo = styled.div`
   display: flex;
   align-items: center;
 `;
+
 export const CardToken = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -142,6 +172,7 @@ export const CardToken = styled.div`
     height: 4rem;
   `}
 `;
+
 export const CardInfoWrapper = styled.div`
   margin-left: 0.5rem;
   span small {
@@ -152,11 +183,13 @@ export const CardInfoWrapper = styled.div`
     opacity: 0.6;
   }
 `;
+
 export const CardPricing = styled.div``;
 export const CardChange = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
     color: ${isNegative ? theme.colors.primary : theme.colors.green};
     padding-right: 0.3rem;
+    justify-self: flex-end;
     span {
       position: relative;
       ::before {
@@ -181,6 +214,7 @@ export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background: ${theme.colors.black};
     color: ${theme.colors.white};
     padding: 1rem;
@@ -193,5 +227,14 @@ export const FooterCard = styled.div<{ isActive?: boolean }>`
     padding: 1rem;
     background: ${isActive ? theme.colors.primary : "none"};
     border-radius: 1rem;
+    text-transform: uppercase;
+    font-weight: 550;
+    font-size: 1.2rem;
+    transition: background 0.4s ease-in-out;
+    cursor: pointer;
+    :hover {
+      background: ${theme.colors.text};
+      color: ${theme.colors.inverse};
+    }
   `}
 `;
