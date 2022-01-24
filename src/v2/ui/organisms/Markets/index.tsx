@@ -7,7 +7,6 @@ export const Markets = () => {
       <S.HeaderWrapper>
         <Header />
       </S.HeaderWrapper>
-      <Header />
       <Content />
       <Footer />
     </S.Main>
@@ -186,7 +185,6 @@ export const Footer = () => (
     <S.FooterCard isActive>Pdex</S.FooterCard>
     <S.FooterCard>Btc</S.FooterCard>
     <S.FooterCard>Usdt</S.FooterCard>
-    <S.FooterCard>Dot</S.FooterCard>
     <S.FooterCard>
       <Dropdown header="ALTS">
         <p>ETH</p>

@@ -87,3 +87,6 @@ export { default as Logout } from "./Logout";
 export { default as Support } from "./Support";
 export { default as SupportCenter } from "./SupportCenter";
 export { default as Computer } from "./Computer";
+export { default as Time } from "./Time";
+export { default as OrderSell } from "./OrderSell";
+export { default as OrderBuy } from "./OrderBuy";

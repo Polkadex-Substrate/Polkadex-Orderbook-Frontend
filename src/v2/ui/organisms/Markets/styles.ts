@@ -16,8 +16,8 @@ export const HeaderWrapper = styled.div`
 
 export const Header = styled.div`
   display: grid;
-  grid-template-columns: max-content fit-content(100%) fit-content(100%);
-  grid-gap: 2rem;
+  grid-template-columns: auto auto fit-content(100%);
+  grid-gap: 1rem;
   align-items: center;
 `;
 
@@ -103,6 +103,7 @@ export const Container = styled.div`
 export const ContainerWrapper = styled.div`
   max-height: 75vh;
   overflow-y: scroll;
+  max-width: 38rem;
 `;
 
 export const ContainerTitle = styled.div``;
