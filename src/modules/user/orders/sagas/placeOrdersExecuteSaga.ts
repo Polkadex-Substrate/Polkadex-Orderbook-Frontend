@@ -1,4 +1,5 @@
 import { call, put, select } from "redux-saga/effects";
+import { Keyring } from "@polkadot/api";
 
 import {
   sendError,
@@ -9,6 +10,7 @@ import {
   OrderExecuteFetch,
 } from "../../..";
 import { notificationPush } from "../../notificationHandler";
+
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
@@ -16,24 +18,34 @@ import { formatPayload } from "src/helpers/formatPayload";
 const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
-
+// TODO change keyring to alice/bob
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
-  try {    
+  try {
     const { side, price, order_type, amount } = action.payload;
     const { address, keyringPair } = yield select(selectUserInfo);
+    const keyring = new Keyring({ type: "sr25519" });
+
+    const alice = keyring.addFromUri("//Alice");
     if (address !== "" && keyringPair) {
-      const payload = { symbol: [{"Asset": 0},{"Asset": 1}], order_side: side, order_type, price, amount, account: address   };
-      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
+      const payload = {
+        symbol: [0, 1],
+        order_side: side,
+        order_type,
+        price,
+        amount,
+        account: alice.address,
+      };
+      const signature = yield call(() => signMessage(alice, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/place_order", data));
-      if (res.Fine) {
+      if (res.FineWithMessage) {
         yield put(orderExecuteData());
         console.log(res.Fine);
         yield put(
           notificationPush({
             type: "Loading",
             message: {
-              title: "Order Created",
+              title: res.FineWithMessage.message,
               description: "Congrats your order has been created",
             },
           })
@@ -43,7 +55,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       }
     }
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     yield put(
       sendError({
         error,
