@@ -113,7 +113,7 @@ export const PlaceOrder = () => {
         <h2>Place Order</h2>
         <S.Header>
           <TabHeader>
-            <S.TabHeader> Buy</S.TabHeader>
+            <S.TabHeader>Buy</S.TabHeader>
           </TabHeader>
           <TabHeader>
             <S.TabHeader isSell={true}> Sell </S.TabHeader>
@@ -122,7 +122,7 @@ export const PlaceOrder = () => {
         <S.Content>
           <TabContent>
             <OrderForm
-              side="buy"
+              side="Buy"
               quoteUnit={currentMarket?.quote_unit.toUpperCase()}
               baseUnit={currentMarket?.base_unit.toUpperCase()}
               availableQuoteAmount={getAvailableValue(walletQuote)}
@@ -137,7 +137,7 @@ export const PlaceOrder = () => {
           </TabContent>
           <TabContent>
             <OrderForm
-              side="sell"
+              side="Sell"
               quoteUnit={currentMarket?.quote_unit.toUpperCase()}
               baseUnit={currentMarket?.base_unit.toUpperCase()}
               availableQuoteAmount={getAvailableValue(walletQuote)}
