@@ -6,6 +6,11 @@ import { Button, Icon, WalletInput, Skeleton } from "../";
 import * as S from "./styles";
 import * as T from "./types";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectUserInfo } from "@polkadex/orderbook-modules";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+
 const MyAccount = ({
   children,
   balance = "0.0000000",
@@ -62,6 +67,42 @@ export const MyAccountContent = ({
   const shortAddress = address
     ? address.slice(0, 7) + "..." + address.slice(address.length - 7)
     : "";
+
+  // add test funds
+  // TODO: should be removed at relesse
+  const user = useReduxSelector(selectUserInfo);
+  const userKeyring = user.keyringPair;
+  const option: RequestOptions = {
+    apiVersion: "polkadexHostUrl",
+  };
+  const handleFundsRequest = async () => {
+    console.log("handleFundsRequest");
+    if (user.address) {
+      try {
+        const payloads = [
+          { account: user.address, asset: 1, amount: "100000.0" },
+          { account: user.address, asset: 0, amount: "100000.0" },
+        ];
+        const reqs = payloads.map(async (payload) => {
+          const signature = await signMessage(userKeyring, JSON.stringify(payload));
+          const data = {
+            signature: {
+              Sr25519: signature.trim().slice(2),
+            },
+            payload,
+          };
+          const res = await API.post(option)("/test_deposit", data);
+          return res;
+        });
+        const res = await Promise.all(reqs);
+        console.log(res);
+      } catch (error) {
+        alert("Error: could not add funds");
+      }
+    } else {
+      alert("You should be logged in to add funds");
+    }
+  };
   return (
     <S.AccountContent isFull={isFull}>
       <MyAccount balance={balance} address={shortAddress} accountName={accountName} />
@@ -101,6 +142,10 @@ export const MyAccountContent = ({
         </a>
         <a href="/terms">
           <p>Terms and Conditions</p>
+          <Icon name="ArrowRight" size="small" color="black" />
+        </a>
+        <a href="#" onClick={handleFundsRequest}>
+          <p>Get me money!</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
         <Link href="/wallet">Deposit/Withdraw</Link>
