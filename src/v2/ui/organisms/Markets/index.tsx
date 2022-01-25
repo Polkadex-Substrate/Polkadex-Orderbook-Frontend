@@ -5,7 +5,7 @@ export const Markets = () => {
   return (
     <S.Main>
       <S.HeaderWrapper>
-        <Header />
+        <HeaderMarket />
       </S.HeaderWrapper>
       <Content />
       <Footer />
@@ -13,7 +13,7 @@ export const Markets = () => {
   );
 };
 
-export const Header = () => (
+export const HeaderMarket = () => (
   <S.Header>
     <S.HeaderAsideLeft>
       <S.HeaderToken>

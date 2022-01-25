@@ -1,13 +1,13 @@
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Header as MarketsHeader } from "@orderbook-ui/v2/organisms/Markets";
+import { HeaderMarket } from "@orderbook-ui/v2/organisms/Markets";
 
 export const Information = () => {
   return (
     <S.Main>
       <S.AsideLeft>
-        <MarketsHeader />
+        <HeaderMarket />
       </S.AsideLeft>
       <S.AsideRight>
         <Card title="Market Price" description="0.03209666">

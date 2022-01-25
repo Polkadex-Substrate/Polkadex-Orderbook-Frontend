@@ -90,3 +90,4 @@ export { default as Computer } from "./Computer";
 export { default as Time } from "./Time";
 export { default as OrderSell } from "./OrderSell";
 export { default as OrderBuy } from "./OrderBuy";
+export { default as SingleArrowBottom } from "./SingleArrowBottom";
