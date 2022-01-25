@@ -6,3 +6,4 @@ export * from "./QuickLogin";
 export * from "./Navigation";
 export * from "./AlertCard";
 export * from "./Switcher";
+export * from "./Range";

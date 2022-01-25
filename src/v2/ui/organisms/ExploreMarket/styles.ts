@@ -59,14 +59,11 @@ export const Card = styled.div<{ isActive?: boolean }>`
         ? theme.colors.gradientPrimary
         : theme.colors.secondaryBackgroundOpacity};
     }
-    :not(:last-child) {
-      margin-right: 0.5rem;
-    }
   `}
 `;
 
 export const CardTitle = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 550;
 `;
 

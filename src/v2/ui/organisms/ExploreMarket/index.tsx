@@ -6,8 +6,8 @@ export const ExploreMarket = () => {
     <S.Main>
       <S.Container>
         <Card pair="DOT" token="PDEX" price="0.03209666" change="19.08" isActive />
-        <Card pair="DOT" token="PDEX" price="0.03209666" change="19.08" />
-        <Card pair="DOT" token="PDEX" price="0.03209666" change="19.08" />
+        <Card pair="DOT" token="ETH" price="0.03417652" change="18.71" />
+        <Card pair="DOT" token="DOT" price="0.03507542" change="19.21" />
       </S.Container>
       <S.Actions>
         <Icon name="SingleArrowRight" color="inverse" size="extraSmall" />

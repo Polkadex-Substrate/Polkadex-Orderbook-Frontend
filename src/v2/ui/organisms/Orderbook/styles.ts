@@ -43,6 +43,7 @@ export const Head = styled.div`
   align-items: center;
   opacity: 0.5;
   padding: 0 2rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const CellHead = styled.span`
