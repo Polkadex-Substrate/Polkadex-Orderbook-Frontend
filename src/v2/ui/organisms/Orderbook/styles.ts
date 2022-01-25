@@ -30,7 +30,7 @@ export const Content = styled.div`
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     ${CardCell} {
-      :nth-child(2) {
+      :first-child {
         color: ${isSell ? theme.colors.primary : theme.colors.green};
       }
     }
@@ -90,13 +90,13 @@ export const Pricing = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 `;
 
 export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: 0 1.2rem 1.2rem 0;
     flex: 1;
     span {
@@ -124,13 +124,18 @@ export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
 
 export const PricingAsideRight = styled.div`
   ${({ theme }) => css`
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 20rem;
     margin: 0 2rem;
+    cursor: pointer;
+    transition: border 0.5s ease-in-out;
+    :hover {
+      border: 1px solid ${theme.colors.black};
+    }
   `}
 `;
