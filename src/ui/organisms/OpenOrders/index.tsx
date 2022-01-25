@@ -54,31 +54,31 @@ export const OpenOrders = () => {
         <S.Content>
           {openOrders?.map((item) => {
             const {
-              id,
+              order_id,
               timestamp,
-              symbol,
+              base_asset,
+              quote_asset,
               order_side,
               price,
               amount,
-              average,
-              filled,
+              filled_qty,
               order_type,
             } = item;
 
             const CardComponent = width > 1110 ? OpenOrderCard : OpenOrderCardReponsive;
             return (
               <CardComponent
-                key={id}
-                id={id}
+                key={order_id}
+                order_id={order_id}
                 timestamp={timestamp}
-                symbol={symbol}
+                base_asset={base_asset}
+                quote_asset={quote_asset}
                 order_side={order_side}
                 price={price}
-                filled={filled}
+                filled_qty={filled_qty}
                 amount={amount}
-                average={average}
                 order_type={order_type}
-                onCancel={() => handleCancel(id)}
+                onCancel={() => handleCancel(order_id)}
               />
             );
           })}

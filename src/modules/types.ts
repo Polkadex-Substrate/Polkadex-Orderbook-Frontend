@@ -16,19 +16,19 @@ export type OrderKind = "bid" | "ask";
 
 // TODO: Integrate new Types.
 export interface OrderCommon {
-  id: string;
-  timestamp?: number;
-  last_trade_timestamp?: null;
-  status?: OrderStatus;
-  symbol?: string[];
-  order_type?: OrderType;
-  order_side?: OrderSide;
-  price?: number | null;
-  average?: number;
-  amount?: number;
-  filled?: number;
-  trades?: (TradesEntity | null)[] | null;
-  fee?: Fee;
+  amount: string;
+  base_asset: number;
+  quote_asset: number;
+  fee: Fee;
+  filled_qty: string;
+  main_acc: string;
+  order_id: string;
+  order_side: OrderSide;
+  order_type: OrderType;
+  price: string;
+  status: OrderStatus;
+  timestamp: string;
+  trades: TradesEntity[];
 }
 export interface TradesEntity {
   id: string;
@@ -42,7 +42,7 @@ export interface TradesEntity {
   fee: Fee;
 }
 export interface Fee {
-  currency: string;
+  currency: { Asset: number };
   cost: number;
 }
 

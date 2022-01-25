@@ -7,22 +7,22 @@ import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 
 export const OpenOrderCard = ({
-  id,
+  order_id,
   timestamp,
-  symbol,
+  base_asset,
+  quote_asset,
   order_side,
   price,
   amount,
-  average,
-  filled,
+  filled_qty,
   order_type,
   onCancel,
 }: Props) => {
-  const baseUnit = symbol[0];
-  const quoteUnit = symbol[1];
+  const baseUnit = base_asset;
+  const quoteUnit = quote_asset;
   return (
     <S.Wrapper>
-      <span>{localeDate(new Date(timestamp), "fullDate")}</span>
+      <span>{localeDate(new Date(Number(timestamp)), "fullDate")}</span>
       <span>
         {baseUnit}/{quoteUnit}
       </span>
@@ -30,9 +30,9 @@ export const OpenOrderCard = ({
       <S.Side isSell={order_side === "Sell"}>{order_side}</S.Side>
       <span>{price}</span>
       <span>{amount}</span>
-      <span>{filled}</span>
-      <span>{average}</span>
-      {filled <= 100 ? (
+      <span>{filled_qty}</span>
+      <span>{price}</span>
+      {Number(filled_qty) <= 100 ? (
         <Icon
           name="Close"
           size="small"
@@ -48,19 +48,19 @@ export const OpenOrderCard = ({
 };
 
 export const OpenOrderCardReponsive = ({
-  id,
+  order_id,
   timestamp,
-  symbol,
+  base_asset,
+  quote_asset,
   order_side,
   price,
   amount,
-  average,
-  filled,
+  filled_qty,
   order_type = "Limit",
   onCancel,
 }: Props) => {
-  const baseUnit = symbol[0];
-  const quoteUnit = symbol[1];
+  const baseUnit = base_asset;
+  const quoteUnit = quote_asset;
   return (
     <S.Box>
       <S.Header isSell={order_side === "Sell"}>
@@ -75,16 +75,19 @@ export const OpenOrderCardReponsive = ({
         </button>
       </S.Header>
       <S.Content>
-        <OpenOrderInfo label="Date" value={localeDate(new Date(timestamp), "fullDate")} />
+        <OpenOrderInfo
+          label="Date"
+          value={localeDate(new Date(Number(timestamp)), "fullDate")}
+        />
         <OpenOrderInfo label="Type" value={order_type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Total" value={average} />
+        <OpenOrderInfo label="Price" value={price} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
           <span>Filled</span>
-          <p>{filled}</p>
+          <p>{filled_qty}</p>
         </S.FlexJustify>
         <Bar percent={0} />
       </S.Footer>
