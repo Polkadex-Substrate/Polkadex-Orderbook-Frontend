@@ -25,6 +25,16 @@ async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
     keyring.loadAll({ type: "sr25519" });
     const allAccounts = keyring.getAccounts();
     console.log(allAccounts);
+
+    // Check if Alice account already exists other wise add it to the keyring
+    // Just for testing purpose
+    const isAlice = allAccounts.find(
+      (account) => account.address === "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+    );
+    if (!isAlice) {
+      keyring.addUri("//Alice", "0000", { name: "Alice default" });
+    }
+
     return allAccounts.map((account) => {
       return {
         address: account.address,
