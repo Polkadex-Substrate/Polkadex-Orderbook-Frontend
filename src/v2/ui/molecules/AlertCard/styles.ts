@@ -21,8 +21,14 @@ export const Container = styled.div`
 
 export const Action = styled.div`
   position: absolute;
-  top: 0.5rem;
+  top: 0;
   right: 1rem;
+  padding: 1rem;
+  transition: opacity 0.3s ease-in-out;
+  cursor: pointer;
+  :hover {
+    opacity: 0.4;
+  }
 `;
 
 export const Aside = styled.div`

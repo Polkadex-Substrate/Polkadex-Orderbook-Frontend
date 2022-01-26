@@ -143,6 +143,10 @@ export const Title = styled.div`
       background: ${theme.colors.secondaryBackground};
       border-radius: 0.8rem;
       padding: 0.5rem 0.8rem;
+      transition: background 0.3s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
     }
   `}
 `;
@@ -159,8 +163,11 @@ export const Card = styled.div`
 `;
 
 export const CardActions = styled.div`
-  ${Icon} {
-    cursor: pointer;
+  padding: 1rem;
+  cursor: pointer;
+  transition: opacity 0.5s ease-in-out;
+  :hover {
+    opacity: 0.5;
   }
 `;
 

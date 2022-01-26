@@ -3,9 +3,9 @@ import * as F from "./fakeData";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const Orderbook = () => {
+export const Orderbook = ({ isFull = false }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <S.Header>
         <h2>Orderbook</h2>
         <Dropdown header="0.1000000">Testing</Dropdown>

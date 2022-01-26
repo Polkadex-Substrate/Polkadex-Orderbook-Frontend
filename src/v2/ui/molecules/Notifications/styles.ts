@@ -71,27 +71,25 @@ export const Recent = styled.div`
     }
     ul {
       list-style: none;
-      li {
-        display: inline-block;
-        padding: 0.5rem 0.6rem;
-        border-radius: 1rem;
-        cursor: pointer;
-        background: ${theme.colors.secondaryBackground};
-        transition: background 0.3s ease-in-out;
-        font-weight: 500;
-        font-size: 1.2rem;
-        :first-child {
-          background: ${theme.colors.primary};
-          color: ${theme.colors.white};
-        }
-        :not(:last-child) {
-          margin-right: 0.5rem;
-        }
-        :hover {
-          background: ${theme.colors.primary};
-          color: ${theme.colors.white};
-        }
-      }
+    }
+  `}
+`;
+export const RecentLi = styled.li<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    display: inline-block;
+    padding: 0.5rem 0.6rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
+    color: ${isActive ? theme.colors.white : theme.colors.black};
+    transition: background 0.3s ease-in-out;
+    font-weight: 500;
+    font-size: 1.2rem;
+    :hover {
+      background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
+    }
+    :not(:last-child) {
+      margin-right: 0.5rem;
     }
   `}
 `;

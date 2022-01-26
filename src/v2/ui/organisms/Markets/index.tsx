@@ -1,12 +1,14 @@
 import * as S from "./styles";
+import * as F from "./fakeData";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-export const Markets = () => {
+export const Markets = ({ isFull = false }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <S.HeaderWrapper>
         <HeaderMarket />
       </S.HeaderWrapper>
+      <Filters />
       <Content />
       <Footer />
     </S.Main>
@@ -37,112 +39,40 @@ export const HeaderMarket = () => (
     </S.HeaderAsideRight>
   </S.Header>
 );
+export const Filters = () => (
+  <S.Title>
+    <h2>Markets</h2>
+    <S.TitleActions>
+      <S.TitleActionCard>
+        <Icon name="Search" size="extraSmall" stroke="inverse" />
+      </S.TitleActionCard>
+      <S.TitleActionCard>
+        <Icon name="Star" size="extraSmall" stroke="inverse" />
+      </S.TitleActionCard>
+    </S.TitleActions>
+  </S.Title>
+);
 
-export const Content = () => (
-  <S.Content>
-    <S.Title>
-      <h2>Markets</h2>
-      <S.TitleActions>
-        <S.TitleActionCard>
-          <Icon name="Search" size="extraSmall" stroke="inverse" />
-        </S.TitleActionCard>
-        <S.TitleActionCard>
-          <Icon name="Star" size="extraSmall" stroke="inverse" />
-        </S.TitleActionCard>
-      </S.TitleActions>
-    </S.Title>
-    <S.Container>
+export const Content = () => {
+  return (
+    <S.Content>
       <S.ContainerTitle></S.ContainerTitle>
       <S.ContainerWrapper>
-        <Card
-          pair="DOT"
-          tokenTicker="PDEX"
-          vol="32,875.081"
-          price="2.180000"
-          fiat="32.28"
-          change="21.00"
-        />
-        <Card
-          pair="UNI"
-          tokenTicker="UNI"
-          vol="32,875.081"
-          price="2.180000"
-          fiat="39.21"
-          change="10.99"
-          isNegative
-        />
-        <Card
-          pair="ETH"
-          tokenTicker="ETH"
-          vol="32,875.081"
-          price="2.180000"
-          fiat="2,022.28"
-          change="1.09"
-          isNegative
-        />
-        <Card
-          pair="PDEX"
-          tokenTicker="PDEX"
-          vol="32,875.081"
-          price="8.5890"
-          fiat="32.28"
-          change="3.98"
-        />
-        <Card
-          pair="USDT"
-          tokenTicker="USDT"
-          vol="32,875.081"
-          price="1.00000"
-          fiat="1.00000"
-          change="1.09"
-          isNegative
-        />
-        <Card
-          pair="Link"
-          tokenTicker="LINK"
-          vol="32,875.081"
-          price="8.5890"
-          fiat="18.01"
-          change="2.03"
-        />
-        <Card
-          pair="ETH"
-          tokenTicker="ETH"
-          vol="32,875.081"
-          price="2.180000"
-          fiat="2,022.28"
-          change="1.09"
-          isNegative
-        />
-        <Card
-          pair="PDEX"
-          tokenTicker="PDEX"
-          vol="32,875.081"
-          price="8.5890"
-          fiat="32.28"
-          change="3.98"
-        />
-        <Card
-          pair="USDT"
-          tokenTicker="USDT"
-          vol="32,875.081"
-          price="1.00000"
-          fiat="1.00000"
-          change="1.09"
-          isNegative
-        />
-        <Card
-          pair="Link"
-          tokenTicker="LINK"
-          vol="32,875.081"
-          price="8.5890"
-          fiat="18.01"
-          change="2.03"
-        />
+        {F.tokens.map((token) => (
+          <Card
+            key={token.id}
+            pair={token.pair}
+            tokenTicker={token.tokenTicker}
+            vol={token.vol}
+            price={token.price}
+            fiat={token.fiat}
+            change={token.change}
+          />
+        ))}
       </S.ContainerWrapper>
-    </S.Container>
-  </S.Content>
-);
+    </S.Content>
+  );
+};
 
 const Card = ({
   pair = "DOT",

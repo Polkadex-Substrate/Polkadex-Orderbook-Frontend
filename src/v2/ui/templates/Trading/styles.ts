@@ -1,5 +1,13 @@
 import styled, { css } from "styled-components";
 
 export const Main = styled.main`
-  ${({ theme }) => css``}
+  ${({ theme }) => css`
+    position: relative;
+    height: 100vh;
+    /* background: #ff99008d; */
+    overflow-y: hidden;
+  `}
+`;
+export const Container = styled.div`
+  /* padding-top: 7rem; */
 `;

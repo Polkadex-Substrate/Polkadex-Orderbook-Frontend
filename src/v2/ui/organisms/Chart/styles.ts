@@ -2,14 +2,14 @@ import styled, { css } from "styled-components";
 
 import { Colors } from "@polkadex/web-helpers";
 
-export const Main = styled.section`
-  ${({ theme }) => css`
+export const Main = styled.section<{ isFull?: boolean }>`
+  ${({ theme, isFull }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     padding: 1.5rem;
-    max-width: 70rem;
+    max-width: ${isFull ? "auto" : "70rem"};
   `}
 `;
 export const Content = styled.div``;
@@ -73,7 +73,14 @@ export const HeaderActions = styled.div`
 export const OriginalChart = styled.div``;
 export const DepthChart = styled.div``;
 export const TradingViewChart = styled.div`
+  position: relative;
   img {
     width: 100%;
+  }
+  span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #00000033;
   }
 `;

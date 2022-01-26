@@ -20,7 +20,7 @@ export const AlertCard = ({
         </S.Aside>
       </S.Container>
       <S.Action>
-        <Icon name="Close" color="inverse" />
+        <Icon name="Close" color="inverse" onClick={() => console.log("Remove card")} />
       </S.Action>
     </S.Main>
   );

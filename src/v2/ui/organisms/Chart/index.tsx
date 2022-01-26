@@ -2,9 +2,9 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const Chart = () => {
+export const Chart = ({ isFull = false }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <Header />
       <S.Content>
         <OriginalChart />
@@ -51,6 +51,7 @@ const OriginalChart = () => <S.OriginalChart></S.OriginalChart>;
 const DepthChart = () => <S.DepthChart></S.DepthChart>;
 const TradingViewChart = () => (
   <S.TradingViewChart>
+    <span>Test image</span>
     <img src="/img/tradingChartExample.svg" alt="" />
   </S.TradingViewChart>
 );

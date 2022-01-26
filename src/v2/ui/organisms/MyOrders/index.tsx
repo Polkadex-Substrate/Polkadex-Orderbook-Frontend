@@ -3,9 +3,9 @@ import * as T from "./types";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const MyOrders = () => {
+export const MyOrders = ({ isFull = true }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <Header />
       <Content />
     </S.Main>

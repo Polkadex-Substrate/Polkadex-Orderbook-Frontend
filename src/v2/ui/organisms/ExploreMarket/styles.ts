@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section`
-  ${({ theme }) => css`
+export const Main = styled.section<{ isFull?: boolean }>`
+  ${({ theme, isFull }) => css`
     display: grid;
     grid-template-columns: auto fit-content(100%);
     grid-gap: 1rem;
@@ -9,6 +9,7 @@ export const Main = styled.section`
     color: ${theme.colors.black};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
+    max-width: ${isFull ? "auto" : "80rem"};
   `}
 `;
 

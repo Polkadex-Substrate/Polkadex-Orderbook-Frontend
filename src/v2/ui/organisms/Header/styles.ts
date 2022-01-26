@@ -5,6 +5,9 @@ import { Wrapper as Logo } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
 export const Main = styled.header`
   ${({ theme }) => css`
+    position: absolute;
+    top: 0;
+    width: 100%;
     background: ${theme.colors.text};
     border-radius: 1.5rem 0 0 1.5rem;
     padding-left: 1.5rem;

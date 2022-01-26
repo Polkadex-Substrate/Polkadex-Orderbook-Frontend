@@ -11,6 +11,12 @@ export const Footer = () => {
           Stable Connection
         </span>
       </S.Connection>
+      <S.Developer>
+        <span>
+          <Icon name="Settings" size="extraSmall" />
+          Developer Options
+        </span>
+      </S.Developer>
     </S.Main>
   );
 };

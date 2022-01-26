@@ -1,12 +1,12 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-export const Main = styled.section`
-  ${({ theme }) => css`
+export const Main = styled.section<{ isFull?: boolean }>`
+  ${({ theme, isFull }) => css`
     position: relative;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    max-width: 35rem;
+    max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     padding: 2rem;

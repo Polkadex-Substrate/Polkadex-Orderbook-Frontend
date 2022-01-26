@@ -1,14 +1,19 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section`
-  ${({ theme }) => css`
+export const Main = styled.section<{ isFull?: boolean }>`
+  ${({ theme, isFull }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    max-width: fit-content;
+    max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1.5rem;
     box-shadow: ${theme.shadows.secondary};
+    max-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
   `}
 `;
+
 // Header
 export const HeaderWrapper = styled.div`
   padding: 1.5rem 1.5rem 0 1.5rem;
@@ -53,6 +58,7 @@ export const HeaderInfoContainer = styled.div`
     font-weight: 550;
   }
 `;
+
 export const HeaderInfoActions = styled.div`
   ${({ theme }) => css`
     border: 1px solid ${theme.colors.secondaryBackground};
@@ -65,17 +71,23 @@ export const HeaderInfoActions = styled.div`
   `}
 `;
 // Content
-export const Content = styled.div``;
+export const Content = styled.div`
+  overflow-x: hidden;
+  flex: 1;
+`;
 
 export const Title = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1.5rem 1.5rem 1rem 1.5rem;
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 550;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: ${theme.colors.white};
+    padding: 2rem 2rem 2rem 2rem;
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 550;
+    }
+  `}
 `;
 
 export const TitleActions = styled.div`
@@ -93,17 +105,16 @@ export const TitleActionCard = styled.div`
     height: 3rem;
     border-radius: 20rem;
     border: 1px solid ${theme.colors.secondaryBackground};
+    transition: border 0.2s ease-in-out;
+    cursor: pointer;
+    :hover {
+      border-color: ${theme.colors.black};
+    }
   `}
 `;
 
-export const Container = styled.div`
-  margin-bottom: 1rem;
-`;
-
 export const ContainerWrapper = styled.div`
-  max-height: 75vh;
-  overflow-y: scroll;
-  max-width: 38rem;
+  margin-bottom: 1rem;
 `;
 
 export const ContainerTitle = styled.div``;
@@ -113,14 +124,19 @@ export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: 1fr 0.5fr auto;
-    grid-gap: 2rem;
+    grid-gap: 1rem;
     align-items: center;
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: 1rem 0.9rem;
+    border-radius: 1.2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: 0 1.5rem;
     cursor: pointer;
-    transition: background 0.4s ease-in-out;
+    transition: border 0.4s ease-in-out;
+    span,
+    small,
+    p {
+      font-size: 1.2rem;
+    }
     span {
       font-weight: 550;
     }
@@ -131,11 +147,12 @@ export const Card = styled.div`
       margin-bottom: 1rem;
     }
     :hover {
-      background: ${theme.colors.secondaryBackgroundOpacity};
+      border-color: ${theme.colors.black};
       box-shadow: ${theme.shadows.quaternary};
     }
   `}
 `;
+
 export const CardInfoContainer = styled.div`
   display: flex;
   align-items: center;
@@ -145,8 +162,7 @@ export const CardInfoActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 0.8rem 0.8rem 0.5rem;
-
+  padding: 0.8rem 0.4rem;
   :hover {
     svg {
       transition: all 0.4s ease-in-out;
@@ -177,7 +193,6 @@ export const CardToken = styled.div`
 export const CardInfoWrapper = styled.div`
   margin-left: 0.5rem;
   span small {
-    font-size: 1.2rem;
     opacity: 0.6;
   }
   p {
@@ -210,6 +225,7 @@ export const CardChange = styled.div<{ isNegative?: boolean }>`
     }
   `}
 `;
+
 // Footer
 export const Footer = styled.div`
   ${({ theme }) => css`
@@ -229,8 +245,8 @@ export const FooterCard = styled.div<{ isActive?: boolean }>`
     background: ${isActive ? theme.colors.primary : "none"};
     border-radius: 1rem;
     text-transform: uppercase;
-    font-weight: 550;
-    font-size: 1.2rem;
+    font-weight: 500;
+    font-size: 1.1rem;
     transition: background 0.4s ease-in-out;
     cursor: pointer;
     :hover {

@@ -25,3 +25,9 @@ export const SpaceBetweenCenter = styled(Flex)`
 export const Grid = styled.div`
   display: flex;
 `;
+
+export const Template = styled.div`
+  width: 100%;
+  height: 100vh;
+  /* background: #ff99008d; */
+`;

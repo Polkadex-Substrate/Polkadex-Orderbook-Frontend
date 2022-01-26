@@ -1,7 +1,6 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 import * as S from "./styles";
-import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { selectMarkets } from "@polkadex/orderbook-modules";
@@ -22,10 +21,10 @@ export const Search = () => {
 
   const handleOpen = () => setActive(true);
 
-  const searchResults = useMemo(
-    () => markets.filter((market) => market.base_unit.toLowerCase().includes(searchField)),
-    [searchField, markets]
-  );
+  const searchResults = useMemo(() => {
+    console.log("Searching by name...", searchField);
+    return markets.filter((market) => market.base_unit.toLowerCase().includes(searchField));
+  }, [searchField, markets]);
 
   return (
     <S.Main isActive={active}>
@@ -33,7 +32,7 @@ export const Search = () => {
         <S.Actions onClick={handleClose}>
           <Icon name="SingleArrowLeft" size="extraSmall" color="inverse" />
         </S.Actions>
-        <S.Search onClick={!active && handleOpen}>
+        <S.Search onClick={active ? undefined : handleOpen}>
           <Icon name="Search" size="extraSmall" stroke="inverse" />
           <input
             type="text"
@@ -63,7 +62,9 @@ export const Search = () => {
           <S.RecentSearch>
             <S.Title>
               <h4>Recent Searches</h4>
-              <button>Clear</button>
+              <button type="button" onClick={() => console.log("Delete All")}>
+                Clear
+              </button>
             </S.Title>
             <S.Container>
               <S.Card>
@@ -71,7 +72,7 @@ export const Search = () => {
                   <Icon name="Clock" size="extraSmall" />
                   Polkadex
                 </span>
-                <S.CardActions>
+                <S.CardActions onClick={() => console.log("Delete Action")}>
                   <Icon name="Close" color="inverse" />
                 </S.CardActions>
               </S.Card>

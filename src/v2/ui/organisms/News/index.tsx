@@ -2,9 +2,9 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const News = () => {
+export const News = ({ isFull = false }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <S.Container>
         <Card
           tag="Listings"

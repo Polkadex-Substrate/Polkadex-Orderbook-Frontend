@@ -1,9 +1,9 @@
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-export const ExploreMarket = () => {
+export const ExploreMarket = ({ isFull = false }) => {
   return (
-    <S.Main>
+    <S.Main isFull={isFull}>
       <S.Container>
         <Card pair="DOT" token="PDEX" price="0.03209666" change="19.08" isActive />
         <Card pair="DOT" token="ETH" price="0.03417652" change="18.71" />

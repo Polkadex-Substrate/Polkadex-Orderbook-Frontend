@@ -36,8 +36,8 @@ const Content = () => {
         <S.RecentTitle>
           <h5>Recent</h5>
           <ul>
-            <li>All</li>
-            <li>Unread</li>
+            <S.RecentLi isActive>All</S.RecentLi>
+            <S.RecentLi>Unread</S.RecentLi>
           </ul>
         </S.RecentTitle>
         <S.RecentContent isScrollable={F.cards.length > 3}>
