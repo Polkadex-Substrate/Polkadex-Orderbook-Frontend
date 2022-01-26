@@ -3,6 +3,7 @@ import GlobalStyles from "../src/styles/global"
 import { darkTheme } from "../src/styles/theme"
 import { ThemeProvider } from "styled-components"
 import { Provider } from 'react-redux'
+import {store} from "../src/store"
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -19,9 +20,12 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
+    <Provider store={store}>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Story />
       </ThemeProvider>
+    </Provider>
+
 )
 ]

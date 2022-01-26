@@ -86,6 +86,53 @@ export const Content = styled.div`
   `}
 `;
 
+export const Results = styled.div``;
+export const NoResults = styled.p`
+  text-align: center;
+  opacity: 0.6;
+`;
+
+export const ResultCard = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    transition: background 0.3s ease-in-out;
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  `}
+`;
+
+export const ResultCardToken = styled.div`
+  ${({ theme }) => css`
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+  `}
+`;
+
+export const ResultCardContainer = styled.div`
+  margin-left: 0.5rem;
+  span {
+    font-size: 1.3rem;
+  }
+  p {
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+`;
+
+export const RecentSearch = styled.div``;
+
 export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;

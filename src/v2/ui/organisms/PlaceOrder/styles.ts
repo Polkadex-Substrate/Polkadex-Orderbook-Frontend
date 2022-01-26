@@ -16,7 +16,7 @@ export const Header = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1rem 0 1rem;
+    padding: 1.5rem 1.5rem 0 1.5rem;
     h2 {
       font-size: 1.7rem;
       font-weight: 550;
@@ -43,6 +43,7 @@ export const ListItem = styled.div<{ isActive?: boolean }>`
     text-align: center;
     cursor: pointer;
     transition: background 0.4s ease-in-out;
+    font-weight: 500;
     :hover {
       background: ${isActive ? theme.colors.black : theme.colors.secondaryBackground};
     }
@@ -51,7 +52,7 @@ export const ListItem = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div`
   ${({ theme }) => css`
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1.5rem;
     ${List} {
       margin-bottom: 1rem;
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -69,6 +70,7 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
     text-align: center;
     cursor: pointer;
     transition: background 0.4s ease-in-out;
+    font-weight: 500;
     ${Icon} {
       display: inline-block;
       margin-right: 0.2rem;
@@ -148,19 +150,13 @@ export const Available = styled.div`
 
 export const Box = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 1.5rem;
   `}
 `;
 
-export const BoxInput = styled(Input)`
-  ${({ theme }) => css`
-    input,
-    span {
-      color: ${theme.colors.white};
-    }
-  `}
-`;
+export const BoxInput = styled(Input)``;
 
 export const Button = styled.div`
   ${({ theme }) => css`
