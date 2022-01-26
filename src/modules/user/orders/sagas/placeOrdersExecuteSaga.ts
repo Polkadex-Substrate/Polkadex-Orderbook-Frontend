@@ -23,9 +23,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const { side, price, order_type, amount } = action.payload;
     const { address, keyringPair } = yield select(selectUserInfo);
-    const keyring = new Keyring({ type: "sr25519" });
-
-    const alice = keyring.addFromUri("//Alice");
     if (address !== "" && keyringPair) {
       const payload = {
         symbol: [0, 1],
@@ -33,9 +30,9 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         order_type,
         price,
         amount,
-        account: alice.address,
+        account: address,
       };
-      const signature = yield call(() => signMessage(alice, JSON.stringify(payload)));
+      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/place_order", data));
       if (res.FineWithMessage) {
