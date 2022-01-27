@@ -6,7 +6,7 @@ import { recentTradesData, recentTradesError, RecentTradesFetch } from "../actio
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tradesOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* recentTradesFetchSaga(action: RecentTradesFetch) {
@@ -15,9 +15,8 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
     if (!market.id) {
       throw new Error(`ERROR: Empty market provided to recentTradesFetchSaga`);
     }
-
-    const trades = yield call(API.get(tradesOptions), `/public/markets/${market.id}/trades`);
-    yield put(recentTradesData(trades));
+    // TODO: Replace with polkadex endpoint when available
+    // yield put(recentTradesData(trades));
   } catch (error) {
     yield put(
       sendError({
