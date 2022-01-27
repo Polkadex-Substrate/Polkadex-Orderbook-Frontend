@@ -1,5 +1,6 @@
 import * as S from "./styles";
 import * as T from "./types";
+import * as F from "./fakeData";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 
@@ -11,6 +12,7 @@ export const MyOrders = ({ isFull = true }) => {
     </S.Main>
   );
 };
+
 const Header = () => (
   <S.Header>
     <S.HeaderAsideLeft>
@@ -49,37 +51,20 @@ const Header = () => (
 );
 const Content = () => (
   <S.Content>
-    <Card
-      pair="DOT"
-      token="PDEX"
-      date="Dec 12, 2021 12:50:05"
-      type="Limit"
-      price="30.00000"
-      amount="2.00000"
-      filled="0.00"
-      total="60.00000"
-    />
-    <Card
-      pair="DOT"
-      token="PDEX"
-      date="Dec 12, 2021 12:50:05"
-      type="Limit"
-      price="30.00000"
-      amount="2.00000"
-      filled="0.00"
-      total="60.00000"
-      isSell
-    />
-    <Card
-      pair="DOT"
-      token="PDEX"
-      date="Dec 12, 2021 12:50:05"
-      type="Limit"
-      price="30.00000"
-      amount="2.00000"
-      filled="0.00"
-      total="60.00000"
-    />
+    {F.orders.map((order) => (
+      <Card
+        key={order.id}
+        pair={order.pair}
+        token={order.token}
+        date={order.date}
+        type={order.type}
+        price={order.price}
+        amount={order.amount}
+        filled={order.filled}
+        total={order.total}
+        isSell={order.isSell}
+      />
+    ))}
   </S.Content>
 );
 
@@ -88,6 +73,7 @@ const Card = ({ pair, token, type, price, amount, date, filled, total, isSell }:
     <S.CardBox>
       <S.CardInfoToken>
         <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" />
+        <S.Tag isSell={isSell}>{isSell ? "Sell" : "Buy"} </S.Tag>
       </S.CardInfoToken>
       <div>
         <span>
@@ -119,9 +105,14 @@ const Card = ({ pair, token, type, price, amount, date, filled, total, isSell }:
     <S.CardActions>
       <div>
         <ul>
-          <li>Trade</li>
-          <li>Deposit</li>
-          <li>Withdraw</li>
+          {Number(filled) < 100 ? (
+            <S.Cancel>Cancel</S.Cancel>
+          ) : (
+            <>
+              <S.Deposit>Deposit</S.Deposit>
+              <li>Withdraw</li>
+            </>
+          )}
         </ul>
       </div>
     </S.CardActions>

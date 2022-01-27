@@ -5,7 +5,7 @@ export const Main = styled.main`
     position: relative;
     height: 100vh;
     /* background: #ff99008d; */
-    overflow-y: hidden;
+    overflow-y: auto;
   `}
 `;
 export const Container = styled.div`

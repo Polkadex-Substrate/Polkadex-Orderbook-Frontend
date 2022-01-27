@@ -19,6 +19,8 @@ ${({ theme }) => css`
     font-size: ${theme.font.sizes.xsmall};
     background-color: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
+    width: 100vw;
+    min-height: 100vh;
   }
   svg {
     fill: ${theme.colors.text};
