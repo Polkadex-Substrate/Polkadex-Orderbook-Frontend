@@ -10,27 +10,23 @@ export const RecentTrades = ({ isFull = false }) => {
         <h2>Recent Trades</h2>
         <Dropdown header="0.1000000">Testing</Dropdown>
       </S.Header>
+      <S.Head>
+        <S.CellHead>Price(DOT)</S.CellHead>
+        <S.CellHead>Amount(PDEX)</S.CellHead>
+        <S.CellHead>Date</S.CellHead>
+      </S.Head>
       <S.Content>
-        <S.Table>
-          <S.Head>
-            <S.CellHead>Price(DOT)</S.CellHead>
-            <S.CellHead>Amount(PDEX)</S.CellHead>
-            <S.CellHead>Date</S.CellHead>
-          </S.Head>
-          <S.Body>
-            {F.orders.map((order) => {
-              return (
-                <Card
-                  key={order.id}
-                  price={order.price}
-                  amount={order.amount}
-                  date={order.date}
-                  isSell={order.isSell}
-                />
-              );
-            })}
-          </S.Body>
-        </S.Table>
+        {F.orders.map((order) => {
+          return (
+            <Card
+              key={order.id}
+              price={order.price}
+              amount={order.amount}
+              date={order.date}
+              isSell={order.isSell}
+            />
+          );
+        })}
       </S.Content>
     </S.Main>
   );

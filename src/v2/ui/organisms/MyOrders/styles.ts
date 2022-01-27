@@ -80,6 +80,9 @@ export const HeaderAsideRight = styled.div`
         padding: 0.8rem;
       }
     }
+    @media screen and (max-width: 520px) {
+      display: none;
+    }
   `}
 `;
 
@@ -117,10 +120,9 @@ export const Card = styled.div`
     border: 1px solid ${theme.colors.secondaryBackground};
     color: ${theme.colors.black};
     margin: 0 1.5rem;
-    transition: background 0.4s ease-in-out;
+    transition: border 0.4s ease-in-out;
     user-select: none;
     cursor: pointer;
-
     span {
       font-weight: 550;
     }
@@ -131,7 +133,7 @@ export const Card = styled.div`
       margin-bottom: 1rem;
     }
     :hover {
-      background: ${theme.colors.secondaryBackgroundOpacity};
+      border-color: ${theme.colors.black};
       box-shadow: ${theme.shadows.quaternary};
     }
     @media screen and (max-width: 990px) {

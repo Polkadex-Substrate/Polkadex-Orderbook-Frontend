@@ -2,14 +2,16 @@ import * as S from "./styles";
 import * as T from "./types";
 import * as F from "./fakeData";
 
-import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown, Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 
 export const MyOrders = ({ isFull = true }) => {
   return (
-    <S.Main isFull={isFull}>
-      <Header />
-      <Content />
-    </S.Main>
+    <Tabs>
+      <S.Main isFull={isFull}>
+        <Header />
+        <Content />
+      </S.Main>
+    </Tabs>
   );
 };
 
@@ -17,14 +19,18 @@ const Header = () => (
   <S.Header>
     <S.HeaderAsideLeft>
       <ul>
-        <S.HeaderLeftLi isActive>
-          <Icon name="Document" stroke="inverse" size="extraSmall" />
-          Order History
-        </S.HeaderLeftLi>
-        <S.HeaderLeftLi>
-          <Icon name="Time" color="inverse" size="extraSmall" />
-          Trade History
-        </S.HeaderLeftLi>
+        <TabHeader>
+          <S.HeaderLeftLi isActive>
+            <Icon name="Document" stroke="inverse" size="extraSmall" />
+            Order History
+          </S.HeaderLeftLi>
+        </TabHeader>
+        <TabHeader>
+          <S.HeaderLeftLi>
+            <Icon name="Time" color="inverse" size="extraSmall" />
+            Trade History
+          </S.HeaderLeftLi>
+        </TabHeader>
       </ul>
     </S.HeaderAsideLeft>
     <S.HeaderAsideRight>
@@ -49,26 +55,55 @@ const Header = () => (
     </S.HeaderAsideRight>
   </S.Header>
 );
+
 const Content = () => (
   <S.Content>
-    {F.orders.map((order) => (
-      <Card
-        key={order.id}
-        pair={order.pair}
-        token={order.token}
-        date={order.date}
-        type={order.type}
-        price={order.price}
-        amount={order.amount}
-        filled={order.filled}
-        total={order.total}
-        isSell={order.isSell}
-      />
-    ))}
+    <TabContent>
+      {F.orders.map((order) => (
+        <CardHistory
+          key={order.id}
+          pair={order.pair}
+          token={order.token}
+          date={order.date}
+          type={order.type}
+          price={order.price}
+          amount={order.amount}
+          filled={order.filled}
+          total={order.total}
+          isSell={order.isSell}
+        />
+      ))}
+    </TabContent>
+    <TabContent>
+      {F.orders.map((order) => (
+        <CardHistory
+          key={order.id}
+          pair={order.pair}
+          token={order.token}
+          date={order.date}
+          type={order.type}
+          price={order.price}
+          amount={order.amount}
+          filled={order.filled}
+          total={order.total}
+          isSell={order.isSell}
+        />
+      ))}
+    </TabContent>
   </S.Content>
 );
 
-const Card = ({ pair, token, type, price, amount, date, filled, total, isSell }: T.Props) => (
+const CardHistory = ({
+  pair,
+  token,
+  type,
+  price,
+  amount,
+  date,
+  filled,
+  total,
+  isSell,
+}: T.Props) => (
   <S.Card>
     <S.CardBox>
       <S.CardInfoToken>

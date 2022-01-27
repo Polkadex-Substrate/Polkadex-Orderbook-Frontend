@@ -7,6 +7,10 @@ export const Main = styled.section<{ isFull?: boolean }>`
     max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
+    max-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
   `}
 `;
 
@@ -24,9 +28,9 @@ export const Header = styled.div`
 
 export const Content = styled.div`
   padding-bottom: 2rem;
+  flex: 1;
+  overflow: overlay;
 `;
-
-export const Table = styled.div``;
 
 export const Head = styled.div`
   display: grid;
@@ -42,8 +46,6 @@ export const CellHead = styled.span`
     justify-self: flex-end;
   }
 `;
-
-export const Body = styled.div``;
 
 // Card
 export const Card = styled.div<{ isSell?: boolean }>`
