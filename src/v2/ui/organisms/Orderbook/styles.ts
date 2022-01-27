@@ -8,6 +8,10 @@ export const Main = styled.section<{ isFull?: boolean }>`
     max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
+    max-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
   `}
 `;
 
@@ -24,11 +28,16 @@ export const Header = styled.div`
 `;
 
 export const Content = styled.div`
-  padding-bottom: 2rem;
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  overflow: overlay;
 `;
 
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
+    overflow: overlay;
     ${CardCell} {
       :first-child {
         color: ${isSell ? theme.colors.primary : theme.colors.green};
@@ -53,9 +62,9 @@ export const CellHead = styled.span`
 `;
 
 export const Body = styled.div`
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   scrollbar-width: none;
-  max-height: 14.5rem;
+  /* max-height: 14.5rem; */
 `;
 
 // Card
@@ -65,6 +74,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   padding: 0 1.6rem 0 2rem;
+  cursor: pointer;
   :not(:last-child) {
     margin-bottom: 0.1rem;
   }

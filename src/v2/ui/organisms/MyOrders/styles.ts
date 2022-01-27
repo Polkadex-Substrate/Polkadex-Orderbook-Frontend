@@ -6,7 +6,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
     background: ${theme.colors.white};
     border-radius: 1.5rem;
-    max-width: ${isFull ? "auto" : "70rem"};
+    max-width: ${isFull ? "auto" : "80rem"};
     display: flex;
     flex-flow: column nowrap;
     height: 100%;

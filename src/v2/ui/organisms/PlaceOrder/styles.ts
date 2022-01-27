@@ -8,6 +8,8 @@ export const Main = styled.section<{ isFull?: boolean }>`
     max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
+    max-height: 100vh;
+    height: 100%;
   `}
 `;
 
