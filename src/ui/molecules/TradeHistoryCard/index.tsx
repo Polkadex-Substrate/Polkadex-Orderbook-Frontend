@@ -18,7 +18,7 @@ export const TradeHistoryCard = ({
   return (
     <S.Wrapper>
       <S.Container>
-        <span>{localeDate(new Date(date), "fullDate")}</span>
+        <span>{date}</span>
       </S.Container>
       <S.Container>
         <span>{symbol}</span>
@@ -53,14 +53,14 @@ export const TradeHistoryCardReponsive = ({
 }: Props) => {
   return (
     <S.Box>
-      <S.Header isSell={side === "sell"}>
+      <S.Header isSell={side === "Sell"}>
         <div>
           <p>{symbol}</p>
           <span>{side}</span>
         </div>
       </S.Header>
       <S.Content>
-        <TradeHistoryInfo label="Date" value={localeDate(new Date(date), "fullDate")} />
+        <TradeHistoryInfo label="Date" value={date} />
         <TradeHistoryInfo label="Price" value={price} />
         <TradeHistoryInfo label="Quantity" value={quantity} />
       </S.Content>
