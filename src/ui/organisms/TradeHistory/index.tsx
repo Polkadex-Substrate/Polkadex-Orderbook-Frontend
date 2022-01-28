@@ -17,7 +17,7 @@ import {
   TradeHistoryCardReponsive,
 } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
+import { DEFAULT_MARKET, marketIdMap } from "@polkadex/web-constants";
 
 export const TradeHistory = () => {
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ export const TradeHistory = () => {
                 quote_asset,
               } = trade;
               const date = localeDate(new Date(Number(timestamp)), "fullDate");
-              const symbol = `${base_asset}/${quote_asset}`;
+              const symbol = `${marketIdMap[base_asset].symbol} / ${marketIdMap[quote_asset].symbol}`;
               const CardComponent =
                 width > 1130 ? TradeHistoryCard : TradeHistoryCardReponsive;
               return (

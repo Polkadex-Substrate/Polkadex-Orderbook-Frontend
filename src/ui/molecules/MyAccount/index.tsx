@@ -97,6 +97,7 @@ export const MyAccountContent = ({
         });
         const res = await Promise.all(reqs);
         console.log(res);
+        // @ts-ignore
         if (res[0].Fine && res[1].Fine) {
           alert("Funds added, You are rich now!");
         } else {
