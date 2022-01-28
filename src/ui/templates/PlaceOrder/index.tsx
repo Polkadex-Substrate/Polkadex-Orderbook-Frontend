@@ -83,7 +83,7 @@ export const PlaceOrder = () => {
   };
 
   // Change order type
-  const handleChangeOrderType = (label: "buy" | "sell") =>
+  const handleChangeOrderType = (label: "Buy" | "Sell") =>
     setState({ ...state, orderSide: label });
 
   // Clean Input..
