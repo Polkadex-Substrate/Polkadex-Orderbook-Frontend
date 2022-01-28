@@ -31,7 +31,7 @@ export const OpenOrderCard = ({
       <span>{price}</span>
       <span>{amount}</span>
       <span>{filled_qty}</span>
-      <span>{price}</span>
+      <span>{Number(price) * Number(amount)}</span>
       {Number(filled_qty) <= 100 ? (
         <Icon
           name="Close"
@@ -82,7 +82,7 @@ export const OpenOrderCardReponsive = ({
         <OpenOrderInfo label="Type" value={order_type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Price" value={price} />
+        <OpenOrderInfo label="Total" value={Number(price) * Number(amount)} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
