@@ -14,6 +14,7 @@ import {
   Wallet,
   setCurrentPrice,
   orderExecuteFetch,
+  OrderExecution,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Accounts, OrderForm } from "@polkadex/orderbook-ui/organisms";
@@ -28,7 +29,7 @@ export const PlaceOrder = () => {
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const wallets = useReduxSelector(selectWallets);
   const [state, setState] = useState({
-    orderSide: "buy",
+    orderSide: "Buy",
     priceLimit: undefined,
     amount: "",
   });
@@ -37,6 +38,7 @@ export const PlaceOrder = () => {
     wallets.find((w) => w.currency === currency.toLowerCase()) as Wallet;
 
   // Create Order
+  // TODO: Remove if unneeded.
   const handleSubmit = (value: OrderProps) => {
     if (!currentMarket) return;
     const { amount, available, orderType, price, type } = value;
