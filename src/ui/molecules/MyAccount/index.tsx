@@ -80,8 +80,8 @@ export const MyAccountContent = ({
     if (user.address) {
       try {
         const payloads = [
-          { account: user.address, asset: 1, amount: "100000.0" },
-          { account: user.address, asset: 0, amount: "100000.0" },
+          { account: user.address, asset: 1, amount: "1000000.0" },
+          { account: user.address, asset: 0, amount: "1000000.0" },
         ];
         const reqs = payloads.map(async (payload) => {
           const signature = await signMessage(userKeyring, JSON.stringify(payload));
@@ -96,6 +96,11 @@ export const MyAccountContent = ({
         });
         const res = await Promise.all(reqs);
         console.log(res);
+        if (res[0].Fine && res[1].Fine) {
+          alert("Funds added, You are rich now!");
+        } else {
+          throw Error("Error adding funds");
+        }
       } catch (error) {
         alert("Error: could not add funds");
       }
