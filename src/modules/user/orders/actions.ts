@@ -1,4 +1,4 @@
-import { CommonError, OrderSide } from "../../types";
+import { CommonError, OrderSide, OrderType } from "../../types";
 
 import {
   ORDER_EXECUTE_DATA,
@@ -13,8 +13,8 @@ export interface OrderExecution {
   market: string;
   side: OrderSide;
   price?: string;
-  order_type?: string;
-  amount?: string
+  order_type?: OrderType;
+  amount?: string;
 }
 
 export interface OrderExecuteFetch {

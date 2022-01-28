@@ -4,18 +4,20 @@ import { TRADES_DATA, TRADES_FETCH, TRADES_ERROR } from "./constants";
 
 export interface UserTrade {
   id: string;
+  main_acc: string;
   timestamp: number;
-  symbol?: string[] | null;
   order_id: string;
   order_type: string;
   order_side: string;
   price: number;
+  base_asset: number;
+  quote_asset: number;
   amount: number;
   fee: Fee;
 }
 
 export interface Fee {
-  currency: string;
+  currency: { Asset: number };
   cost: number;
 }
 
