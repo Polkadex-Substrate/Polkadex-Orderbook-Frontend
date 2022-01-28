@@ -48,11 +48,11 @@ export const Funds = () => {
                   key={i}
                   tokenTicker={token.ticker}
                   tokenName={token.ticker}
-                  totalAmount={token.total.toString()}
+                  totalAmount={parseFloat(token.total).toFixed(3)}
                   totalAmountFiat="0.0000000"
-                  availableAmount={token.free.toString()}
+                  availableAmount={parseFloat(token.free).toFixed(3)}
                   availableAmountFiat="0.0000000"
-                  reservedAmount={token.used.toString()}
+                  reservedAmount={parseFloat(token.used).toFixed(3)}
                   reservedAmountFiat="0.0000000"
                   handleTransfer={() => console.log("Transfer")}
                   handleTrade={() => console.log("Trade")}

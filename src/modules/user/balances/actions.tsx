@@ -9,9 +9,9 @@ import {
 
 export type Balance = {
   ticker: string;
-  free: string | number;
-  used: string | number;
-  total: string | number;
+  free: string;
+  used: string;
+  total: string;
 };
 export interface UserBalance {
   timestamp: number;
