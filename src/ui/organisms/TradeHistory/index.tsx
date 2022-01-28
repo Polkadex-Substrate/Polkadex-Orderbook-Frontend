@@ -49,9 +49,9 @@ export const TradeHistory = () => {
       {!fetching ? (
         <S.Content>
           {list?.length &&
-            list.map((trade) => {
+            list.map((trade, idx) => {
               const {
-                id,
+                order_id,
                 timestamp,
                 price,
                 amount,
@@ -66,7 +66,7 @@ export const TradeHistory = () => {
                 width > 1130 ? TradeHistoryCard : TradeHistoryCardReponsive;
               return (
                 <CardComponent
-                  key={id}
+                  key={idx}
                   date={date}
                   symbol={symbol}
                   fee={fee.cost}
