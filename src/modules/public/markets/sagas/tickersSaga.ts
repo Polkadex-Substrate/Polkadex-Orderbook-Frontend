@@ -6,7 +6,7 @@ import { marketsTickersData, marketsTickersError } from "../actions";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tickersOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 const ts = Date.now() / 1000;
 // TODO: remove mockDate and add tickers when we have endpoint available

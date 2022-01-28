@@ -5,6 +5,7 @@ import { Props } from "./types";
 
 import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
+import { marketIdMap } from "@polkadex/web-constants";
 
 export const OpenOrderCard = ({
   order_id,
@@ -18,8 +19,8 @@ export const OpenOrderCard = ({
   order_type,
   onCancel,
 }: Props) => {
-  const baseUnit = base_asset;
-  const quoteUnit = quote_asset;
+  const baseUnit = marketIdMap[base_asset].symbol;
+  const quoteUnit = marketIdMap[quote_asset].symbol;
   return (
     <S.Wrapper>
       <span>{localeDate(new Date(Number(timestamp)), "fullDate")}</span>
@@ -31,7 +32,7 @@ export const OpenOrderCard = ({
       <span>{price}</span>
       <span>{amount}</span>
       <span>{filled_qty}</span>
-      <span>{price}</span>
+      <span>{Number(price) * Number(amount)}</span>
       {Number(filled_qty) <= 100 ? (
         <Icon
           name="Close"
@@ -59,8 +60,8 @@ export const OpenOrderCardReponsive = ({
   order_type = "Limit",
   onCancel,
 }: Props) => {
-  const baseUnit = base_asset;
-  const quoteUnit = quote_asset;
+  const baseUnit = marketIdMap[base_asset].symbol;
+  const quoteUnit = marketIdMap[quote_asset].symbol;
   return (
     <S.Box>
       <S.Header isSell={order_side === "Sell"}>
@@ -82,7 +83,7 @@ export const OpenOrderCardReponsive = ({
         <OpenOrderInfo label="Type" value={order_type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Price" value={price} />
+        <OpenOrderInfo label="Total" value={Number(price) * Number(amount)} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>

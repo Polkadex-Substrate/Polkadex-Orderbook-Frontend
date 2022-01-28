@@ -6,7 +6,7 @@ import { walletsAddressData, walletsAddressError, WalletsAddressFetch } from "..
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const walletsAddressOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* walletsAddressSaga(action: WalletsAddressFetch) {

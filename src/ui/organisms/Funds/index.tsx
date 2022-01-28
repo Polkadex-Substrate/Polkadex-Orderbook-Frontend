@@ -15,6 +15,7 @@ import {
   selectHasUser,
   selectBalancesLoading,
 } from "@polkadex/orderbook-modules";
+import { marketIdMap } from "@polkadex/web-constants";
 
 export const Funds = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,6 @@ export const Funds = () => {
   useEffect(() => {
     if (hasUser) dispatch(balancesFetch());
   }, [hasUser, dispatch]);
-
   return (
     <S.Wrapper>
       {width > 1110 && (
@@ -43,16 +43,17 @@ export const Funds = () => {
           {balances?.length &&
             balances?.map((token, i) => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
+              const assetid = Number(token.ticker);
               return (
                 <CardComponent
                   key={i}
                   tokenTicker={token.ticker}
-                  tokenName={token.ticker}
-                  totalAmount={token.total.toString()}
+                  tokenName={marketIdMap[assetid].symbol}
+                  totalAmount={parseFloat(token.total).toFixed(3)}
                   totalAmountFiat="0.0000000"
-                  availableAmount={token.free.toString()}
+                  availableAmount={parseFloat(token.free).toFixed(3)}
                   availableAmountFiat="0.0000000"
-                  reservedAmount={token.used.toString()}
+                  reservedAmount={parseFloat(token.used).toFixed(3)}
                   reservedAmountFiat="0.0000000"
                   handleTransfer={() => console.log("Transfer")}
                   handleTrade={() => console.log("Trade")}

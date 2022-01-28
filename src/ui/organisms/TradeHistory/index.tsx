@@ -17,7 +17,7 @@ import {
   TradeHistoryCardReponsive,
 } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
+import { DEFAULT_MARKET, marketIdMap } from "@polkadex/web-constants";
 
 export const TradeHistory = () => {
   const dispatch = useDispatch();
@@ -49,14 +49,24 @@ export const TradeHistory = () => {
       {!fetching ? (
         <S.Content>
           {list?.length &&
-            list.map((trade) => {
-              const { id, timestamp, price, amount, order_side, fee, symbol } = trade;
-              const date = localeDate(new Date(timestamp), "fullDate");
+            list.map((trade, idx) => {
+              const {
+                order_id,
+                timestamp,
+                price,
+                amount,
+                order_side,
+                fee,
+                base_asset,
+                quote_asset,
+              } = trade;
+              const date = localeDate(new Date(Number(timestamp)), "fullDate");
+              const symbol = `${marketIdMap[base_asset].symbol} / ${marketIdMap[quote_asset].symbol}`;
               const CardComponent =
                 width > 1130 ? TradeHistoryCard : TradeHistoryCardReponsive;
               return (
                 <CardComponent
-                  key={id}
+                  key={idx}
                   date={date}
                   symbol={symbol}
                   fee={fee.cost}

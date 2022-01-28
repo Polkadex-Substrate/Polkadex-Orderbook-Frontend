@@ -2,11 +2,12 @@ import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
 import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from "../actions";
+import { Market } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tickersOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 // TODO: remove mockData and update endpoint when we have a markets endpoint available
 export function* marketsFetchSaga(action: MarketsFetch) {
@@ -30,12 +31,13 @@ export function* marketsFetchSaga(action: MarketsFetch) {
     );
   }
 }
-const mockData = () => [
+const mockData = (): Market[] => [
   {
-    id: "ethbtc",
-    name: "ETH/BTC",
-    base_unit: "eth",
-    quote_unit: "btc",
+    id: "pdgsdx",
+    name: "PDG/SDX",
+    symbolArray: [0, 1],
+    base_unit: "PolkaDoge",
+    quote_unit: "ShibaDex",
     state: "hidden",
     amount_precision: 5,
     price_precision: 7,

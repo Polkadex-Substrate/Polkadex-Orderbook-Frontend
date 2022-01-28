@@ -8,6 +8,7 @@ import {
   orderExecuteData,
   orderExecuteError,
   OrderExecuteFetch,
+  userOrdersHistoryFetch,
 } from "../../..";
 import { notificationPush } from "../../notificationHandler";
 
@@ -21,11 +22,14 @@ const ordersOption: RequestOptions = {
 // TODO change keyring to alice/bob
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
-    const { side, price, order_type, amount } = action.payload;
+    const { side, price, order_type, amount, symbol } = action.payload;
+    if (Number(price) * Number(amount) <= 0) {
+      throw new Error("Invalid price or amount");
+    }
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
       const payload = {
-        symbol: [0, 1],
+        symbol: symbol,
         order_side: side,
         order_type,
         price,
@@ -47,8 +51,9 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
             },
           })
         );
+        yield put(userOrdersHistoryFetch());
       } else {
-        throw new Error("Place order failed");
+        throw new Error(res.Bad);
       }
     }
   } catch (error) {

@@ -6,7 +6,7 @@ import { currenciesData, currenciesError } from "../actions";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const currenciesOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* currenciesFetchSaga() {

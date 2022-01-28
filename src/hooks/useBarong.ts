@@ -14,36 +14,6 @@ export function useBarong() {
     isLoading: false,
   });
 
-  // const [wsConnection, setWsConnection] = useState({
-  //   data: null,
-  //   isLoading: false
-  // })
-
-  const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_HOST_URL,
-  });
-
-  const handleWsConnection = () => {
-    // const wss = new WebSocket(process.env.NEXT_PUBLIC_PROXY_WS_URL, {
-    //   headers: {
-    //     Cookie: "123456",
-    //     "User-Agent": "custom",
-    //   },
-    // });
-    // try {
-    //   wss.on("open", () => {
-    //     console.log("Open...");
-    //   });
-    //   wss.on("message", (msg) => {
-    //     console.log("Message:...", msg);
-    //   });
-    //   wss.on("error", (e) => {
-    //     console.log("Error:...", e);
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
 
   const getExtensionAddress = () => {
     const keyring = new Keyring({ type: "ed25519", ss58Format: 2 });

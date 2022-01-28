@@ -13,9 +13,11 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { orderExecuteFetch } from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
+import { OrderType } from "@polkadex/orderbook/modules/types";
 
 export const OrderForm = ({
   side,
+  symbolArray,
   quoteUnit,
   baseUnit,
   availableQuoteAmount,
@@ -81,7 +83,8 @@ export const OrderForm = ({
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: state.orderType,
+        order_type: state.orderType as OrderType,
+        symbol: symbolArray,
         side,
         price: state.price,
         market: `${baseUnit}${quoteUnit}`.toLowerCase(),

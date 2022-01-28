@@ -37,7 +37,7 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
     endPoint = `${endPoint}?${buildQueryString(payload)}`;
   }
 
-  return `${defaultConfig.engine}${endPoint}`;
+  return `${defaultConfig.polkadexHostUrl}${endPoint}`;
 };
 const makeOHLCVPayload = (market: string, resolution: string, from: number) => {
   return {
@@ -60,17 +60,17 @@ const resolutionToSeconds = (r: string): number => {
 };
 
 const resolutionForPayload = (resolution: string): string => {
-  let isNum = /^[0-9]+$/.test(resolution);
-  if(isNum){
+  const isNum = /^[0-9]+$/.test(resolution);
+  if (isNum) {
     const resNum = parseInt(resolution);
-    if(resNum < 60) {
+    if (resNum < 60) {
       return `${resNum}m`;
     }
-      return `${resNum/60}h`
-    }
+    return `${resNum / 60}h`;
+  }
 
   return resolution;
-}
+};
 
 const config = {
   supports_timescale_marks: true,
@@ -97,8 +97,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       setTimeout(() => onResultReadyCallback(symbols), 0);
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);    
-        
+      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);
+
       if (!symbol) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
@@ -132,7 +132,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const range = tradingChart.tvWidget!.activeChart().getVisibleRange();
       const period = tradingChart.tvWidget!.activeChart().resolution();
       // store.dispatch(klineUpdateTimeRange(range));
-      // store.dispatch(klineUpdatePeriod(period));      
+      // store.dispatch(klineUpdatePeriod(period));
     },
     getBars: async (
       symbolInfo: LibrarySymbolInfo,
@@ -149,7 +149,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      url = defaultConfig.influxDBUrl + "/fetchohlcv";      
+      url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
       const payload = makeOHLCVPayload("BTCPDEX", resolutionForPayload(resolution), -31484909);
       return axios
@@ -182,12 +182,11 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       subscribeUID: string,
       onResetCacheNeededCallback
     ) => {
-      
       updateCb = {
         symbolInfo,
         resolution,
-        onRealtimeCallback
-      }
+        onRealtimeCallback,
+      };
       const marketId: string = symbolInfo.ticker!;
       const periodString = periodMinutesToString(resolutionToSeconds(resolution));
 
@@ -204,8 +203,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       }
       tradingChart.currentKlineSubscription = {};
     },
-    onRealtimeCallback: (kline: KlineState) => {   
-      console.log('onRealtimeCallback => ', kline);
+    onRealtimeCallback: (kline: KlineState) => {
+      console.log("onRealtimeCallback => ", kline);
       if (
         kline.last &&
         kline.marketId === tradingChart.currentKlineSubscription.marketId &&

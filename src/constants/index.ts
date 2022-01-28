@@ -11,3 +11,7 @@ export const DEFAULT_MARKET = {
   amount_precision: 0,
   price_precision: 0,
 };
+export const marketIdMap = {
+  0: { name: "POLKADOGE", symbol: "PDG" },
+  1: { name: "SHIBADEX", symbol: "SDX" },
+};

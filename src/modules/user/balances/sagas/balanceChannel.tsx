@@ -2,29 +2,26 @@ import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
 
-import {
-  alertPush,
-  Balance,
-  BalanceMessage,
-  balancesData,
-  selectUserBalance,
-} from "../../..";
+import { alertPush, Balance, BalanceMessage, balancesData, selectUserBalance } from "../../..";
 
-import { RabbitmqChannelType, selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import {
+  RabbitmqChannelType,
+  selectRabbitmqChannel,
+} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 
 export function* balanceChannelSaga() {
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
     if (rabbitmqConn) {
-        const channel = yield call(() => fetchBalanceUpdatesChannel(rabbitmqConn, "345563xbh-balance-update-events"));
-        while (true) {
-          let balanceMsg = yield take(channel);
-          balanceMsg = JSON.parse(balanceMsg);
-          const oldBalance = yield select(selectUserBalance);
-          const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);          
-          yield put(
-            balancesData({ timestamp: new Date().getTime(), userBalance: newBalance })
-          );
+      const channel = yield call(() =>
+        fetchBalanceUpdatesChannel(rabbitmqConn, "345563xbh-balance-update-events")
+      );
+      while (true) {
+        let balanceMsg = yield take(channel);
+        balanceMsg = JSON.parse(balanceMsg);
+        const oldBalance = yield select(selectUserBalance);
+        const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);
+        yield put(balancesData({ timestamp: new Date().getTime(), userBalance: newBalance }));
       }
     }
   } catch (error) {

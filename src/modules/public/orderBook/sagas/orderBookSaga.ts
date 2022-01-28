@@ -6,7 +6,7 @@ import { orderBookData, orderBookError, OrderBookFetch } from "../actions";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const orderBookOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* orderBookSaga(action: OrderBookFetch) {
