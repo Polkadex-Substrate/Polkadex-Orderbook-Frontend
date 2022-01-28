@@ -2,6 +2,7 @@ import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
 import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from "../actions";
+import { Market } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
@@ -30,10 +31,11 @@ export function* marketsFetchSaga(action: MarketsFetch) {
     );
   }
 }
-const mockData = () => [
+const mockData = (): Market[] => [
   {
     id: "pdgsdx",
     name: "PDG/SDX",
+    symbolArray: [0, 1],
     base_unit: "PolkaDoge",
     quote_unit: "ShibaDex",
     state: "hidden",

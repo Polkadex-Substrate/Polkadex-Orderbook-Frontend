@@ -11,6 +11,7 @@ import {
 
 export interface OrderExecution {
   market: string;
+  symbol: number[];
   side: OrderSide;
   price?: string;
   order_type?: OrderType;

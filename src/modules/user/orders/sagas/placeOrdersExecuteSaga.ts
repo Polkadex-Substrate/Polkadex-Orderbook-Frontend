@@ -21,11 +21,11 @@ const ordersOption: RequestOptions = {
 // TODO change keyring to alice/bob
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
-    const { side, price, order_type, amount } = action.payload;
+    const { side, price, order_type, amount, symbol } = action.payload;
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
       const payload = {
-        symbol: [0, 1],
+        symbol: symbol,
         order_side: side,
         order_type,
         price,

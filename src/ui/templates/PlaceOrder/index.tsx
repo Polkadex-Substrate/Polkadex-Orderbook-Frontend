@@ -125,6 +125,7 @@ export const PlaceOrder = () => {
           <TabContent>
             <OrderForm
               side="Buy"
+              symbolArray={currentMarket.symbolArray}
               quoteUnit={currentMarket?.quote_unit.toUpperCase()}
               baseUnit={currentMarket?.base_unit.toUpperCase()}
               availableQuoteAmount={getAvailableValue(walletQuote)}
@@ -140,6 +141,7 @@ export const PlaceOrder = () => {
           <TabContent>
             <OrderForm
               side="Sell"
+              symbolArray={currentMarket.symbolArray}
               quoteUnit={currentMarket?.quote_unit.toUpperCase()}
               baseUnit={currentMarket?.base_unit.toUpperCase()}
               availableQuoteAmount={getAvailableValue(walletQuote)}
