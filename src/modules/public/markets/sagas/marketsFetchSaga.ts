@@ -6,7 +6,7 @@ import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tickersOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 // TODO: remove mockData and update endpoint when we have a markets endpoint available
 export function* marketsFetchSaga(action: MarketsFetch) {

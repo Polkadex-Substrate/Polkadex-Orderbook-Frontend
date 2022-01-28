@@ -7,11 +7,11 @@ import { Wallet } from "../types";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const walletsOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 const currenciesOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* walletsSaga(action: WalletsFetch) {

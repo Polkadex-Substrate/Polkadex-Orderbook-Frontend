@@ -10,7 +10,6 @@ const buildRequest = (request: Request, configData: RequestOptions) => {
 
   const api = {
     auth: defaultConfig.auth,
-    engine: defaultConfig.engine,
     polkadexHostUrl: defaultConfig.polkadexHostUrl,
     influxDB: defaultConfig.influxDBUrl,
   };

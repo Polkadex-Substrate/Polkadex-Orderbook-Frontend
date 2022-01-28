@@ -6,7 +6,6 @@ export const defaultConfig: DefaultConfig = {
   influxDBUrl: process.env.INFLUX_DB_URL,
   polkadotJsWs: process.env.POLKADEX_WS,
   auth: process.env.POLKADEX_HOST_URL,
-  engine: `${process.env.HOST_URL}/api/v2/peatio`,
   polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
   withCredentials: false,
