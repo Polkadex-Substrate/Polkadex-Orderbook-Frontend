@@ -53,7 +53,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         );
         yield put(userOrdersHistoryFetch());
       } else {
-        throw new Error("Place order failed");
+        throw new Error(res.Bad);
       }
     }
   } catch (error) {
