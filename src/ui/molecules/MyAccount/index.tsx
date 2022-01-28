@@ -27,7 +27,8 @@ const MyAccount = ({
           <p>
             {accountName} ({address})
           </p>
-          <span>Balance: {balance}</span>
+          {/* TODO: add balance when total portfolio balance available to call
+          <span>Balance: {balance}</span> */}
         </S.AccountInfoHeader>
         {children}
       </S.AccountInfo>
