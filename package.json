@@ -81,6 +81,7 @@
     "typescript": "^4.4.3"
   },
   "resolutions": {
-    "ansi-regex": "^5.0.1 "
+    "ansi-regex": "^5.0.1 ",
+    "node-fetch": "^2.6.7 "
   }
 }
