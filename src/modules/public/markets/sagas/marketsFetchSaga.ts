@@ -32,10 +32,10 @@ export function* marketsFetchSaga(action: MarketsFetch) {
 }
 const mockData = () => [
   {
-    id: "ethbtc",
-    name: "ETH/BTC",
-    base_unit: "eth",
-    quote_unit: "btc",
+    id: "pdgsdx",
+    name: "PDG/SDX",
+    base_unit: "PolkaDoge",
+    quote_unit: "ShibaDex",
     state: "hidden",
     amount_precision: 5,
     price_precision: 7,

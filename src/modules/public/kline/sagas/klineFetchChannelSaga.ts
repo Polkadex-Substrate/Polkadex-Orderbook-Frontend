@@ -9,23 +9,25 @@ import {
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 
-export function* fetchKlineChannelSaga() {  
+export function* fetchKlineChannelSaga() {
   try {
     const rabbitmqConn = yield select(selectRabbitmqChannel);
-    if (rabbitmqConn) {      
+    if (rabbitmqConn) {
       const channel = yield call(() =>
-      fetchKlineChannel(rabbitmqConn, "one.kline-events", "BTC.USD.kline-events")
+        fetchKlineChannel(rabbitmqConn, "one.kline-events", "BTC.USD.kline-events")
       );
       while (true) {
         const data = yield take(channel);
-        const klineEventToJson = JSON.parse(data);        
-        const klineEvent = klineEventToObject(klineEventToJson);   
+        const klineEventToJson = JSON.parse(data);
+        const klineEvent = klineEventToObject(klineEventToJson);
         // TODO: marketId and period will be dynamic
-        yield put(klinePush({
-          marketId: "ethbtc",
-          kline: klineEvent,
-          period: "5m"
-        }));
+        yield put(
+          klinePush({
+            marketId: "pdgsdx",
+            kline: klineEvent,
+            period: "5m",
+          })
+        );
       }
     }
   } catch (error) {
