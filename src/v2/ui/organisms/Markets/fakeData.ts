@@ -1,3 +1,6 @@
+export const fakeChartData = [
+  5, 8, 10, 7, 12, 6, 15, 17, 20, 22, 16, 10, 9, 8, 7, 10, 12, 18, 22, 30, 50,
+];
 export const tokens = [
   {
     id: 1,

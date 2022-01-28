@@ -1,3 +1,5 @@
+import { Sparklines, SparklinesLine } from "react-sparklines";
+
 import * as S from "./styles";
 import * as F from "./fakeData";
 
@@ -32,7 +34,9 @@ export const HeaderMarket = () => (
       </S.HeaderInfo>
     </S.HeaderAsideLeft>
     <S.HeaderAsideCenter>
-      <img src="/img/graphTest.svg" alt="" />
+      <Sparklines data={F.fakeChartData}>
+        <SparklinesLine color="#E6007A" />
+      </Sparklines>
     </S.HeaderAsideCenter>
     <S.HeaderAsideRight>
       <Icon name="ArrowBottom" stroke="inverse" />

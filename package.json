@@ -34,6 +34,7 @@
     "react-range": "^1.8.12",
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.0.2",
+    "react-sparklines": "^1.7.0",
     "react-stockcharts": "^0.7.8",
     "react-to-print": "^2.14.1",
     "react-use-websocket": "^2.9.1",

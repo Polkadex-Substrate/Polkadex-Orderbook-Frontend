@@ -17,6 +17,11 @@ export const Container = styled.div`
   display: flex;
   overflow: hidden;
 `;
+export const ActionsContainer = styled.div`
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 0.5rem;
+`;
 
 export const Actions = styled.div`
   ${({ theme }) => css`
@@ -30,19 +35,29 @@ export const Actions = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+    transition: border 0.5s ease-in-out;
     cursor: pointer;
+    :hover {
+      border: 1px solid ${theme.colors.secondaryBackground};
+    }
+    :active {
+      transform: translateY(2px);
+    }
   `}
 `;
 // Card
 export const Card = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     position: relative;
-    padding: 3rem;
+    padding: 3rem 2rem;
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-gap: 2rem;
+    grid-gap: 0.5rem;
     background: ${isActive ? theme.colors.gradientPrimary : theme.colors.white};
     transition: background 0.3s ease-in-out;
+    min-width: 23rem;
+    user-select: none;
     cursor: pointer;
     ::before {
       content: "";
@@ -99,6 +114,7 @@ export const CardAsideLeft = styled.div<{ isNegative?: boolean }>`
     }
   `}
 `;
+
 export const CardAsideRight = styled.div`
   width: 100%;
 `;
