@@ -54,7 +54,7 @@ export const OrderHistory = () => {
 
   useEffect(() => {
     if (userLoggedIn && currentMarket) {
-      dispatch(userOrdersHistoryFetch({ userAccount }));
+      dispatch(userOrdersHistoryFetch());
     }
   }, [userLoggedIn, currentMarket, dispatch, userAccount]);
 
@@ -77,34 +77,35 @@ export const OrderHistory = () => {
         <S.Content>
           {list?.map((item, i) => {
             const {
-              id,
+              order_id,
               timestamp,
+              base_asset,
+              quote_asset,
+              order_side,
               price,
               amount,
-              average,
-              order_side,
+              filled_qty,
               status,
-              symbol,
               order_type,
             } = item;
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
             const orderSide = order_side === "Sell";
             const orderPrice = order_type === "Limit" ? price : average;
-            const date = localeDate(new Date(timestamp), "fullDate");
+            const date = localeDate(new Date(Number(timestamp)), "fullDate");
             const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
             return (
               <CardComponent
-                key={id}
+                key={order_id}
                 date={date}
-                baseUnit={symbol[0]}
-                quoteUnit={symbol[1]}
+                baseUnit={base_asset}
+                quoteUnit={quote_asset}
                 side={order_side.toUpperCase()}
                 isSell={orderSide}
                 price={Decimal.format(orderPrice, priceFixed, ",")}
                 amount={Decimal.format(amount, amountFixed, ",")}
-                total={"100"}
-                executed={"0.3"}
+                total={Number(price) * Number(amount)}
+                executed={filled_qty}
                 type={order_type}
                 transactionType={status}
               />
