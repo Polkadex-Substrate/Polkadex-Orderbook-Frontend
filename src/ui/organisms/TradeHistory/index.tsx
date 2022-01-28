@@ -50,8 +50,18 @@ export const TradeHistory = () => {
         <S.Content>
           {list?.length &&
             list.map((trade) => {
-              const { id, timestamp, price, amount, order_side, fee, symbol } = trade;
-              const date = localeDate(new Date(timestamp), "fullDate");
+              const {
+                id,
+                timestamp,
+                price,
+                amount,
+                order_side,
+                fee,
+                base_asset,
+                quote_asset,
+              } = trade;
+              const date = localeDate(new Date(Number(timestamp)), "fullDate");
+              const symbol = `${base_asset}/${quote_asset}`;
               const CardComponent =
                 width > 1130 ? TradeHistoryCard : TradeHistoryCardReponsive;
               return (

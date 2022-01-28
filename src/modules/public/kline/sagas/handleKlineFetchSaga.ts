@@ -11,7 +11,7 @@ const klineRequestOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* handleKlineFetchSaga(action: KlineFetch) {  
+export function* handleKlineFetchSaga(action: KlineFetch) {
   try {
     // const { market, resolution, from, to } = action.payload;
     // TODO make the payload dynamic w.r.t the market
@@ -24,7 +24,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
 
     const data = yield call(() => fetchKlineAsync(payload, endPoint));
     const convertedData = data.map((elem) => {
-      const {_time: time, open, high, low, close, volume} = elem;
+      const { _time: time, open, high, low, close, volume } = elem;
 
       return {
         time,
@@ -50,7 +50,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
 }
 
 const fetchKlineAsync = async (data: any, endPoint: string) => {
-  const res: any = await axios.post(endPoint, data);  
+  const res: any = await axios.post(endPoint, data);
   if (res.data.Fine) {
     return res.data.Fine;
   } else throw new Error(`${res.status} ${res.statusText}`);
