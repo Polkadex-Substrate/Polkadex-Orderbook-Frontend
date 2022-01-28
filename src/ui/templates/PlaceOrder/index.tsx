@@ -38,7 +38,7 @@ export const PlaceOrder = () => {
     wallets.find((w) => w.currency === currency.toLowerCase()) as Wallet;
 
   // Create Order
-  // TODO: Remove if unneeded.
+  // TODO: Remove if unneeded
   const handleSubmit = (value: OrderProps) => {
     if (!currentMarket) return;
     const { amount, available, orderType, price, type } = value;
@@ -121,40 +121,43 @@ export const PlaceOrder = () => {
             <S.TabHeader isSell={true}> Sell </S.TabHeader>
           </TabHeader>
         </S.Header>
-        <S.Content>
-          <TabContent>
-            <OrderForm
-              side="Buy"
-              symbolArray={currentMarket.symbolArray}
-              quoteUnit={currentMarket?.quote_unit.toUpperCase()}
-              baseUnit={currentMarket?.base_unit.toUpperCase()}
-              availableQuoteAmount={getAvailableValue(walletQuote)}
-              availableBaseAmount={getAvailableValue(walletBase)}
-              priceMarket={currentTicker?.last}
-              currentMarketAskPrecision={currentMarket?.amount_precision}
-              currentMarketBidPrecision={currentMarket?.price_precision}
-              totalPrice={getTotalPrice(state.amount, currentTicker?.last, asks)}
-              listenInputPrice={listenInputPrice}
-              priceLimit={state.priceLimit}
-            />
-          </TabContent>
-          <TabContent>
-            <OrderForm
-              side="Sell"
-              symbolArray={currentMarket.symbolArray}
-              quoteUnit={currentMarket?.quote_unit.toUpperCase()}
-              baseUnit={currentMarket?.base_unit.toUpperCase()}
-              availableQuoteAmount={getAvailableValue(walletQuote)}
-              availableBaseAmount={getAvailableValue(walletBase)}
-              priceMarket={currentTicker?.last}
-              currentMarketAskPrecision={currentMarket?.amount_precision}
-              currentMarketBidPrecision={currentMarket?.price_precision}
-              totalPrice={getTotalPrice(state.amount, currentTicker?.last, asks)}
-              listenInputPrice={listenInputPrice}
-              priceLimit={state.priceLimit}
-            />
-          </TabContent>
-        </S.Content>
+        {/* TOOD: Place order should only be available if user has signed in */}
+        {currentMarket && (
+          <S.Content>
+            <TabContent>
+              <OrderForm
+                side="Buy"
+                symbolArray={currentMarket.symbolArray}
+                quoteUnit={currentMarket?.quote_unit.toUpperCase()}
+                baseUnit={currentMarket?.base_unit.toUpperCase()}
+                availableQuoteAmount={getAvailableValue(walletQuote)}
+                availableBaseAmount={getAvailableValue(walletBase)}
+                priceMarket={currentTicker?.last}
+                currentMarketAskPrecision={currentMarket?.amount_precision}
+                currentMarketBidPrecision={currentMarket?.price_precision}
+                totalPrice={getTotalPrice(state.amount, currentTicker?.last, asks)}
+                listenInputPrice={listenInputPrice}
+                priceLimit={state.priceLimit}
+              />
+            </TabContent>
+            <TabContent>
+              <OrderForm
+                side="Sell"
+                symbolArray={currentMarket.symbolArray}
+                quoteUnit={currentMarket?.quote_unit.toUpperCase()}
+                baseUnit={currentMarket?.base_unit.toUpperCase()}
+                availableQuoteAmount={getAvailableValue(walletQuote)}
+                availableBaseAmount={getAvailableValue(walletBase)}
+                priceMarket={currentTicker?.last}
+                currentMarketAskPrecision={currentMarket?.amount_precision}
+                currentMarketBidPrecision={currentMarket?.price_precision}
+                totalPrice={getTotalPrice(state.amount, currentTicker?.last, asks)}
+                listenInputPrice={listenInputPrice}
+                priceLimit={state.priceLimit}
+              />
+            </TabContent>
+          </S.Content>
+        )}
       </Tabs>
     </S.Wrapper>
   );
