@@ -15,6 +15,8 @@ import {
   setCurrentPrice,
   orderExecuteFetch,
   OrderExecution,
+  selectUserBalance,
+  Balance,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Accounts, OrderForm } from "@polkadex/orderbook-ui/organisms";
@@ -27,15 +29,13 @@ export const PlaceOrder = () => {
   const asks = useReduxSelector(selectDepthAsks);
   const marketTickers = useReduxSelector(selectMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-  const wallets = useReduxSelector(selectWallets);
+  const balances = useReduxSelector(selectUserBalance);
+
   const [state, setState] = useState({
     orderSide: "Buy",
     priceLimit: undefined,
     amount: "",
   });
-
-  const getWallet = (currency: string, wallets: Wallet[]) =>
-    wallets.find((w) => w.currency === currency.toLowerCase()) as Wallet;
 
   // Create Order
   // TODO: Remove if unneeded
@@ -98,10 +98,15 @@ export const PlaceOrder = () => {
   };
 
   // Get available amount
-  const getAvailableValue = (wallet: Wallet | undefined) => wallet?.balance || 0;
-
-  const walletBase = getWallet(currentMarket?.base_unit, wallets);
-  const walletQuote = getWallet(currentMarket?.quote_unit, wallets);
+  const getBalance = (assetid: string, balances: Balance[]) => {
+    if (balances.length > 0) {
+      const idx = balances.findIndex((balance) => balance.ticker === assetid);
+      return idx >= 0 ? balances[idx].free : "0";
+    } else return "0";
+  };
+  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket.symbolArray : [-1, -1];
+  const availabeBaseAmount = getBalance(baseAssetId.toString(), balances);
+  const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);
 
   const currentTicker = marketTickers[currentMarket?.id];
 
@@ -130,8 +135,8 @@ export const PlaceOrder = () => {
                 symbolArray={currentMarket.symbolArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
-                availableQuoteAmount={getAvailableValue(walletQuote)}
-                availableBaseAmount={getAvailableValue(walletBase)}
+                availableQuoteAmount={availabeBaseAmount}
+                availableBaseAmount={availabelQuoteAmount}
                 priceMarket={currentTicker?.last}
                 currentMarketAskPrecision={currentMarket?.amount_precision}
                 currentMarketBidPrecision={currentMarket?.price_precision}
@@ -146,8 +151,8 @@ export const PlaceOrder = () => {
                 symbolArray={currentMarket.symbolArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
-                availableQuoteAmount={getAvailableValue(walletQuote)}
-                availableBaseAmount={getAvailableValue(walletBase)}
+                availableQuoteAmount={availabeBaseAmount}
+                availableBaseAmount={availabelQuoteAmount}
                 priceMarket={currentTicker?.last}
                 currentMarketAskPrecision={currentMarket?.amount_precision}
                 currentMarketBidPrecision={currentMarket?.price_precision}
