@@ -2,9 +2,9 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.section`
   ${({ theme }) => css`
-    background: ${theme.colors.text};
-    color: ${theme.colors.inverse};
-    padding: 2rem;
+    grid-area: Information;
+    color: ${theme.colors.black};
+    padding: 1rem 1rem 0 1rem;
     border-radius: 1.5rem;
     display: grid;
     grid-template-columns: fit-content(100%) auto;
@@ -63,7 +63,7 @@ export const Tag = styled.span<{ isNegative?: boolean }>`
 export const Group = styled.div``;
 // Card
 export const Card = styled.div<{ isHorizontal?: boolean; textColor?: string }>`
-  ${({ theme, isHorizontal, textColor }) => css`
+  ${({ theme, isHorizontal, textColor = "black" }) => css`
     display: flex;
     flex-direction: ${isHorizontal ? "row" : "column"};
     align-items: ${isHorizontal ? "center" : "flex-start"};

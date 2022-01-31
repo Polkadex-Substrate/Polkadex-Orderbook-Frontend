@@ -4,22 +4,22 @@ import { Colors } from "@polkadex/web-helpers";
 
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    background: ${theme.colors.white};
+    grid-area: Graph;
     color: ${theme.colors.black};
-    border-radius: 1rem;
-    box-shadow: ${theme.shadows.secondary};
-    padding: 1.5rem;
-    max-width: ${isFull ? "auto" : "70rem"};
+    max-width: ${isFull ? "initial" : "70rem"};
   `}
 `;
-export const Content = styled.div``;
+export const Content = styled.div`
+  height: 100%;
+`;
 
 // Header
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  padding: 1rem;
+
   ul {
     list-style: none;
   }
@@ -41,13 +41,13 @@ export const HeaderLi = styled.li<{ isActive?: boolean; color?: Colors }>`
   ${({ theme, isActive, color = "none" }) => css`
     background: ${isActive ? theme.colors.primary : theme.colors[color]};
     color: ${isActive ? theme.colors.white : theme.colors.black};
-    font-weight: 500;
     display: inline-block;
-    padding: 1rem;
-    border-radius: 1rem;
-    cursor: pointer;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
     vertical-align: middle;
-    font-size: 1.2rem;
+    cursor: pointer;
     :not(:last-child) {
       margin-right: 0.5rem;
     }
@@ -60,10 +60,10 @@ export const HeaderLi = styled.li<{ isActive?: boolean; color?: Colors }>`
 
 export const HeaderActions = styled.div`
   ${({ theme }) => css`
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 2.8rem;
+    height: 2.8rem;
     background: ${theme.colors.secondaryBackground};
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,14 +73,9 @@ export const HeaderActions = styled.div`
 export const OriginalChart = styled.div``;
 export const DepthChart = styled.div``;
 export const TradingViewChart = styled.div`
-  position: relative;
-  img {
-    width: 100%;
-  }
-  span {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #00000033;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #c1c1c133;
 `;

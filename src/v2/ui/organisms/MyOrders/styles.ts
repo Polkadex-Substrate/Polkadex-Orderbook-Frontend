@@ -4,20 +4,24 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
+    grid-area: MyOrders;
     background: ${theme.colors.white};
     border-radius: 1.5rem;
-    max-width: ${isFull ? "auto" : "80rem"};
+    padding: 0.5rem;
+    /* max-width: ${isFull ? "auto" : "80rem"}; */
     display: flex;
     flex-flow: column nowrap;
-    height: 100%;
+    /* height: 100%; */
+    /* width: max-content; */
+    width: 100%;
   `}
 `;
 
 export const Header = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.black};
-    padding: 1rem;
-    border-radius: 1.5rem;
+    padding: 0.8rem;
+    border-radius: 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -51,13 +55,17 @@ export const HeaderLeftLi = styled(HeaderLi)<{ isActive?: boolean }>`
   `}
 `;
 
-export const HeaderRightLi = styled(HeaderLi)``;
+export const HeaderRightLi = styled(HeaderLi)`
+  ${({ theme }) => css`
+    color: ${theme.colors.white};
+  `}
+`;
 
 export const HeaderAsideLeft = styled.div`
   ${() => css`
     ${HeaderLi} {
-      padding: 1.5rem;
-      border-radius: 1.2rem;
+      padding: 1rem;
+      border-radius: 0.8rem;
       ${Icon} {
         margin-right: 0.5rem;
       }
@@ -102,7 +110,7 @@ export const Search = styled.div`
 export const Content = styled.div`
   position: relative;
   flex: 1;
-  padding: 2rem 0;
+  padding: 0.7rem 0;
   overflow-x: scroll;
   scrollbar-width: none;
   ::-webkit-scrollbar {
@@ -114,12 +122,11 @@ export const Content = styled.div`
 export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: repeat(7, auto);
-    grid-gap: 2rem;
+    grid-template-columns: 3fr fit-content(100%);
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     color: ${theme.colors.black};
-    margin: 0 1.5rem;
+    margin: 0 0.5rem;
     transition: border 0.4s ease-in-out;
     user-select: none;
     cursor: pointer;
@@ -130,27 +137,38 @@ export const Card = styled.div`
       opacity: 0.6;
     }
     :not(:last-child) {
-      margin-bottom: 1rem;
+      margin-bottom: 0.7rem;
     }
     :hover {
       border-color: ${theme.colors.black};
       box-shadow: ${theme.shadows.quaternary};
     }
-    @media screen and (max-width: 990px) {
+
+    /* @media screen and (max-width: 990px) {
       width: max-content;
-    }
+    } */
     :hover ${Tag} {
       visibility: visible;
       opacity: 1;
     }
   `}
 `;
+export const CardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  grid-gap: 2rem;
+
+  overflow: overlay;
+  ::-webkit-scrollbar {
+    height: 0;
+  }
+`;
 
 export const CardBox = styled.div`
   display: flex;
   align-items: center;
   align-self: center;
-  padding: 1rem;
+  padding: 0.5rem;
   min-width: 21rem;
 `;
 

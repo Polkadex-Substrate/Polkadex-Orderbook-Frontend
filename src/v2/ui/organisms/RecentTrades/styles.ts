@@ -1,14 +1,11 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+export const Main = styled.section`
+  ${({ theme }) => css`
+    grid-area: RecentTrades;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
-    box-shadow: ${theme.shadows.secondary};
-    max-height: 100vh;
-    height: 100%;
     display: flex;
     flex-flow: column nowrap;
   `}
@@ -21,15 +18,32 @@ export const Header = styled.div`
   padding: 2rem 2rem 0 2rem;
   margin-bottom: 1rem;
   h2 {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 550;
   }
 `;
 
 export const Content = styled.div`
-  padding-bottom: 2rem;
-  flex: 1;
-  overflow: overlay;
+  ${({ theme }) => css`
+    padding-bottom: 2rem;
+    flex: 1;
+    overflow: overlay;
+    ::-webkit-scrollbar-thumb {
+      background: none;
+    }
+    ::-webkit-scrollbar-track {
+      background: none;
+    }
+    :hover {
+      ::-webkit-scrollbar-thumb {
+        background: ${theme.colors.secondaryBackground};
+      }
+
+      ::-webkit-scrollbar-track {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 
 export const Head = styled.div`

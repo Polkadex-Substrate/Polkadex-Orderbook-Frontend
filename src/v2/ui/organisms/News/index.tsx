@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const News = ({ isFull = false }) => {
+export const News = ({ isFull = true }) => {
   return (
     <S.Main isFull={isFull}>
       <S.Container>
@@ -15,7 +15,7 @@ export const News = ({ isFull = false }) => {
         />
       </S.Container>
       <S.Actions>
-        <Icon name="SingleArrowRight" size="extraSmall" color="inverse" />
+        <Icon name="SingleArrowRight" size="extraSmall" color="black" />
       </S.Actions>
     </S.Main>
   );

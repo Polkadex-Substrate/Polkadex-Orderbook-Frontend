@@ -11,6 +11,7 @@ export const Main = styled.header`
     background: ${theme.colors.text};
     border-radius: 1.5rem 0 0 1.5rem;
     padding-left: 1.5rem;
+    margin-left: 1rem;
     ${Logo} {
       svg {
         fill: ${theme.colors.inverse};
@@ -35,7 +36,6 @@ export const Notifications = styled.div``;
 export const Account = styled(FlexCenter)`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
-    padding: 0.9rem;
     border-radius: 1.5rem 0 0 1.5rem;
   `}
 `;

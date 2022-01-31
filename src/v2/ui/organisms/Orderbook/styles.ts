@@ -3,12 +3,13 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
+    grid-area: Orderbook;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
-    max-height: 100vh;
+    max-height: -webkit-fill-available;
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
@@ -22,7 +23,7 @@ export const Header = styled.div`
   padding: 2rem 2rem 0 2rem;
   margin-bottom: 1rem;
   h2 {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 550;
   }
 `;
@@ -38,6 +39,21 @@ export const Content = styled.div`
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     overflow: overlay;
+    ::-webkit-scrollbar-thumb {
+      background: none;
+    }
+    ::-webkit-scrollbar-track {
+      background: none;
+    }
+    :hover {
+      ::-webkit-scrollbar-thumb {
+        background: ${theme.colors.secondaryBackground};
+      }
+
+      ::-webkit-scrollbar-track {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
     ${CardCell} {
       :first-child {
         color: ${isSell ? theme.colors.primary : theme.colors.green};
@@ -61,11 +77,7 @@ export const CellHead = styled.span`
   }
 `;
 
-export const Body = styled.div`
-  /* overflow-y: scroll; */
-  scrollbar-width: none;
-  /* max-height: 14.5rem; */
-`;
+export const Body = styled.div``;
 
 // Card
 export const Card = styled.div<{ isSell?: boolean }>`

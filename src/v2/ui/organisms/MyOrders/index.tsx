@@ -6,12 +6,12 @@ import { Dropdown, Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook
 
 export const MyOrders = ({ isFull = true }) => {
   return (
-    <Tabs>
-      <S.Main isFull={isFull}>
+    <S.Main isFull={isFull}>
+      <Tabs>
         <Header />
         <Content />
-      </S.Main>
-    </Tabs>
+      </Tabs>
+    </S.Main>
   );
 };
 
@@ -44,12 +44,12 @@ const Header = () => (
           <Dropdown header="All">Test</Dropdown>
         </S.HeaderRightLi>
         <S.HeaderRightLi>
-          <Icon name="Calendar" />
+          <Icon name="Calendar" color="white" />
         </S.HeaderRightLi>
         <S.HeaderRightLi>Reset</S.HeaderRightLi>
         <S.HeaderRightLi>
           Less
-          <Icon name="Expand" />
+          <Icon name="Expand" color="white" />
         </S.HeaderRightLi>
       </ul>
     </S.HeaderAsideRight>
@@ -105,38 +105,41 @@ const CardHistory = ({
   isSell,
 }: T.Props) => (
   <S.Card>
-    <S.CardBox>
-      <S.CardInfoToken>
-        <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" />
-        <S.Tag isSell={isSell}>{isSell ? "Sell" : "Buy"} </S.Tag>
-      </S.CardInfoToken>
-      <div>
-        <span>
-          {pair}/{token}
-        </span>
-        <p>{date}</p>
-      </div>
-    </S.CardBox>
-    <S.CardInfo>
-      <span>{type}</span>
-      <p>Type</p>
-    </S.CardInfo>
-    <S.CardInfo>
-      <span>{price}</span>
-      <p>Price</p>
-    </S.CardInfo>
-    <S.CardInfo>
-      <span>{amount}</span>
-      <p>Amount</p>
-    </S.CardInfo>
-    <S.CardInfo>
-      <span>{filled}%</span>
-      <p>Filled</p>
-    </S.CardInfo>
-    <S.CardInfo>
-      <span>{total}</span>
-      <p>Total</p>
-    </S.CardInfo>
+    <S.CardWrapper>
+      <S.CardBox>
+        <S.CardInfoToken>
+          <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" />
+          <S.Tag isSell={isSell}>{isSell ? "Sell" : "Buy"} </S.Tag>
+        </S.CardInfoToken>
+        <div>
+          <span>
+            {pair}/{token}
+          </span>
+          <p>{date}</p>
+        </div>
+      </S.CardBox>
+      <S.CardInfo>
+        <span>{type}</span>
+        <p>Type</p>
+      </S.CardInfo>
+      <S.CardInfo>
+        <span>{price}</span>
+        <p>Price</p>
+      </S.CardInfo>
+      <S.CardInfo>
+        <span>{amount}</span>
+        <p>Amount</p>
+      </S.CardInfo>
+      <S.CardInfo>
+        <span>{filled}%</span>
+        <p>Filled</p>
+      </S.CardInfo>
+      <S.CardInfo>
+        <span>{total}</span>
+        <p>Total</p>
+      </S.CardInfo>
+    </S.CardWrapper>
+
     <S.CardActions>
       <div>
         <ul>

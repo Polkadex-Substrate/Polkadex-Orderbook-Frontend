@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const Chart = ({ isFull = false }) => {
+export const Chart = ({ isFull = true }) => {
   return (
     <S.Main isFull={isFull}>
       <Header />
@@ -19,7 +19,7 @@ const Header = () => (
   <S.Header>
     <S.HeaderLeft>
       <S.HeaderActions>
-        <Icon name="Settings" color="inverse" size="extraSmall" />
+        <Icon name="Settings" color="black" size="extraSmall" />
       </S.HeaderActions>
       <ul>
         <S.HeaderLi>1h</S.HeaderLi>
@@ -30,7 +30,7 @@ const Header = () => (
         <S.HeaderLi>All</S.HeaderLi>
       </ul>
       <S.HeaderActions>
-        <Icon name="Calendar" color="inverse" size="extraSmall" />
+        <Icon name="Calendar" color="black" size="extraSmall" />
       </S.HeaderActions>
     </S.HeaderLeft>
     <S.HeaderRight>
@@ -42,16 +42,11 @@ const Header = () => (
         <S.HeaderLi color="secondaryBackground">Depth</S.HeaderLi>
       </ul>
       <S.HeaderActions>
-        <Icon name="Expand" color="inverse" size="extraSmall" />
+        <Icon name="Expand" color="black" size="extraSmall" />
       </S.HeaderActions>
     </S.HeaderRight>
   </S.Header>
 );
 const OriginalChart = () => <S.OriginalChart></S.OriginalChart>;
 const DepthChart = () => <S.DepthChart></S.DepthChart>;
-const TradingViewChart = () => (
-  <S.TradingViewChart>
-    <span>Test image</span>
-    <img src="/img/tradingChartExample.svg" alt="" />
-  </S.TradingViewChart>
-);
+const TradingViewChart = () => <S.TradingViewChart>TradingView</S.TradingViewChart>;

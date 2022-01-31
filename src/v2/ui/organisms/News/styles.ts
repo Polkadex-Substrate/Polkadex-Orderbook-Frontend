@@ -3,12 +3,12 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
+    grid-area: News;
     position: relative;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
-    box-shadow: ${theme.shadows.secondary};
     padding: 2rem;
   `}
 `;
@@ -50,13 +50,13 @@ export const Card = styled.div`
     }
     h3 {
       font-weight: 550;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 0.8rem;
     }
     p {
       opacity: 0.5;
       line-height: 1.5;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
     a {
       background: ${theme.colors.primary};

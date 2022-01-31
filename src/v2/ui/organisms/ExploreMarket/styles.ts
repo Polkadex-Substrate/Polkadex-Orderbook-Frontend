@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
+    grid-area: ExploreMarket;
     display: grid;
     grid-template-columns: auto fit-content(100%);
     grid-gap: 1rem;
@@ -10,6 +11,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     max-width: ${isFull ? "auto" : "80rem"};
+    height: fit-content;
   `}
 `;
 
@@ -50,7 +52,7 @@ export const Actions = styled.div`
 export const Card = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     position: relative;
-    padding: 3rem 2rem;
+    padding: 2rem;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-gap: 0.5rem;
@@ -79,7 +81,7 @@ export const Card = styled.div<{ isActive?: boolean }>`
 `;
 
 export const CardTitle = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 550;
 `;
 

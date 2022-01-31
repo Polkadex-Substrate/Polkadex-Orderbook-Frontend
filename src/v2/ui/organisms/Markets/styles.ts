@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
+    grid-area: Markets;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     max-width: ${isFull ? "auto" : "35rem"};
@@ -43,7 +44,12 @@ export const HeaderToken = styled.div`
   `}
 `;
 
-export const HeaderAsideCenter = styled.div``;
+export const HeaderAsideCenter = styled.div`
+  max-height: 5rem;
+  max-width: 10rem;
+  height: 100%;
+  width: 100%;
+`;
 export const HeaderAsideRight = styled.div``;
 export const HeaderInfo = styled.div`
   margin-left: 0.5rem;

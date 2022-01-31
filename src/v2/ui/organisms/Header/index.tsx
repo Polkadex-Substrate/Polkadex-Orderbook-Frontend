@@ -10,7 +10,7 @@ export const Header = () => {
       <SpaceBetweenCenter>
         <S.AsideLeft>
           <Polkadex />
-          <Search />
+          {/* <Search /> */}
         </S.AsideLeft>
         <S.AsideRight>
           <Menu />

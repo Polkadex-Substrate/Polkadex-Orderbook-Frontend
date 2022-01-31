@@ -3,9 +3,9 @@ import * as F from "./fakeData";
 
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 
-export const RecentTrades = ({ isFull = false }) => {
+export const RecentTrades = () => {
   return (
-    <S.Main isFull={isFull}>
+    <S.Main>
       <S.Header>
         <h2>Recent Trades</h2>
         <Dropdown header="0.1000000">Testing</Dropdown>

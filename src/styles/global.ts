@@ -19,8 +19,11 @@ ${({ theme }) => css`
     font-size: ${theme.font.sizes.xsmall};
     background-color: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
-    width: 100vw;
-    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    @media screen and (max-width: 1180px) {
+      overflow-y: scroll;
+    }
   }
   svg {
     fill: ${theme.colors.text};

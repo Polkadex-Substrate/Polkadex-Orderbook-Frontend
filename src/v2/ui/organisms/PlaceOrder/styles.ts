@@ -1,15 +1,12 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+export const Main = styled.section`
+  ${({ theme }) => css`
+    grid-area: PlaceOrder;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
-    box-shadow: ${theme.shadows.secondary};
-    max-height: 100vh;
-    height: 100%;
   `}
 `;
 
@@ -20,7 +17,7 @@ export const Header = styled.div`
     justify-content: space-between;
     padding: 1.5rem 1.5rem 0 1.5rem;
     h2 {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 550;
     }
     ${List} {
@@ -54,7 +51,7 @@ export const ListItem = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div`
   ${({ theme }) => css`
-    padding: 1.5rem;
+    padding: 1rem;
     ${List} {
       margin-bottom: 1rem;
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -91,8 +88,8 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
 
 export const Form = styled.div``;
 export const Input = styled.div`
-  padding: 1.5rem;
-  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.8rem;
   display: flex;
   justify-content: space-between;
   :not(:last-child) {
@@ -165,7 +162,7 @@ export const Button = styled.div`
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
     padding: 1.5rem;
-    border-radius: 1.5rem;
+    border-radius: 1rem;
     text-align: center;
     font-weight: 500;
   `}

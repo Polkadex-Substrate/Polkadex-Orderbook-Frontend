@@ -21,7 +21,7 @@ export const HeaderMarket = () => (
   <S.Header>
     <S.HeaderAsideLeft>
       <S.HeaderToken>
-        <Icon isToken name="DOT" size="large" color="inverse" />
+        <Icon isToken name="DOT" size="large" color="black" />
       </S.HeaderToken>
       <S.HeaderInfo>
         <S.HeaderInfoContainer>
@@ -43,7 +43,8 @@ export const HeaderMarket = () => (
     </S.HeaderAsideRight>
   </S.Header>
 );
-export const Filters = () => (
+
+const Filters = () => (
   <S.Title>
     <h2>Markets</h2>
     <S.TitleActions>
@@ -57,7 +58,7 @@ export const Filters = () => (
   </S.Title>
 );
 
-export const Content = () => {
+const Content = () => {
   return (
     <S.Content>
       <S.ContainerTitle></S.ContainerTitle>
@@ -114,7 +115,7 @@ const Card = ({
   </S.Card>
 );
 
-export const Footer = () => (
+const Footer = () => (
   <S.Footer>
     <S.FooterCard isActive>Pdex</S.FooterCard>
     <S.FooterCard>Btc</S.FooterCard>

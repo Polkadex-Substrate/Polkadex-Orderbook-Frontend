@@ -5,7 +5,7 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-export const ExploreMarket = ({ isFull = false }) => {
+export const ExploreMarket = ({ isFull = true }) => {
   const carouselRef = useRef(null);
 
   const handleNext = () => {
@@ -39,7 +39,7 @@ export const ExploreMarket = ({ isFull = false }) => {
       </S.Container>
       {F.fakeData.length > 3 && (
         <S.Actions onClick={handleNext}>
-          <Icon name="SingleArrowRight" color="inverse" size="extraSmall" />
+          <Icon name="SingleArrowRight" color="black" size="extraSmall" />
         </S.Actions>
       )}
     </S.Main>

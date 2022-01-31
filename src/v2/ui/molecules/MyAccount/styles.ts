@@ -9,7 +9,7 @@ export const Header = styled.div<{ isFull: boolean }>`
     display: flex;
     align-items: center;
     background: ${theme.colors.primaryBackground};
-    padding: 0.9rem;
+    padding: 0.8rem;
     border-radius: 1.5rem 0 0 1.5rem;
     cursor: pointer;
     ${isFull &&
@@ -76,7 +76,7 @@ export const Input = styled.div`
     align-items: center;
     justify-content: space-between;
     background: ${theme.colors.text};
-    color: ${theme.colors.inverse};
+    color: ${theme.colors.white};
     padding: 1.2rem;
     margin-top: 0.5rem;
     border-radius: 0.8rem;
@@ -126,7 +126,7 @@ export const CardTitle = styled.div`
     margin-left: 1rem;
     span,
     p {
-      color: ${theme.colors.inverse};
+      color: ${theme.colors.black};
     }
     span {
       font-size: 1.3rem;
@@ -148,7 +148,7 @@ export const ContentFooter = styled.div`
     align-items: center;
     p,
     a {
-      color: ${theme.colors.inverse};
+      color: ${theme.colors.black};
     }
     a {
       position: relative;

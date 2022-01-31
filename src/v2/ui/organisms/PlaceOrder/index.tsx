@@ -5,11 +5,11 @@ import * as S from "./styles";
 import { Range } from "@orderbook-ui/v2/molecules";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const PlaceOrder = ({ isFull = false }) => {
+export const PlaceOrder = () => {
   const [state, setState] = useState<number[]>([50]);
 
   return (
-    <S.Main isFull={isFull}>
+    <S.Main>
       <S.Header>
         <h2>Place Order</h2>
         <S.List>

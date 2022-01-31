@@ -3,7 +3,7 @@ import * as F from "./fakeData";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const Orderbook = ({ isFull = false }) => {
+export const Orderbook = ({ isFull = true }) => {
   return (
     <S.Main isFull={isFull}>
       <S.Header>
