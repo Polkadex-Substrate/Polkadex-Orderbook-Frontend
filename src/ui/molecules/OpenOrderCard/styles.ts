@@ -37,7 +37,7 @@ export const Container = styled.div`
 
 export const Side = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    color: ${isSell ? theme.colors.green : theme.colors.primary};
+    color: ${isSell ? theme.colors.primary : theme.colors.green};
     text-transform: capitalize;
     font-size: ${theme.font.sizes.xxxsmall};
   `}
