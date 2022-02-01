@@ -19,7 +19,7 @@ export const useKeyringInitalize = () => {
   const [error, setError] = useState("");
   const hasUser = useReduxSelector(selectHasUser);
 
-  // basic initialize
+  // basic initialization
   useEffect(() => {
     // dispatch(rangerConnectFetch());
     dispatch(rabbitmqChannelFetch());
@@ -35,6 +35,6 @@ export const useKeyringInitalize = () => {
       }
     }
   }, [dispatch, hasUser]);
-
+  
   return { loading, error, shouldFetch };
 };
