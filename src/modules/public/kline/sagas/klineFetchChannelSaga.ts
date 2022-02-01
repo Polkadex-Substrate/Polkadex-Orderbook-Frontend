@@ -8,6 +8,7 @@ import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
 
 export function* fetchKlineChannelSaga() {
   try {
