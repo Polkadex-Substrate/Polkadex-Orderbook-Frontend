@@ -80,7 +80,16 @@ export const Orderbook = () => {
         />
         <S.Select>
           {currentMarket ? (
-            <S.LastPriceWrapper>
+            <S.LastPriceWrapper
+              onClick={() =>
+                dispatch(
+                  setCurrentPrice(
+                    parseFloat(
+                      Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")
+                    )
+                  )
+                )
+              }>
               Latest Price
               <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;

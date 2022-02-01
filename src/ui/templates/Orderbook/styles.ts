@@ -148,6 +148,7 @@ export const Select = styled.div`
 
 export const LastPriceWrapper = styled.p`
   margin: 0;
+  cursor: pointer;
 `;
 
 export const LastPrice = styled.strong<{ isPositive?: boolean }>`
