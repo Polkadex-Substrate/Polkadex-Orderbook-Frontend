@@ -1,5 +1,4 @@
 import { CommonError } from "../../types";
-import { PublicTrade } from "../../user/history";
 import { Market } from "../markets";
 
 import {
@@ -7,9 +6,9 @@ import {
   RECENT_TRADES_ERROR,
   RECENT_TRADES_FETCH,
   RECENT_TRADES_PUSH,
-  RECENT_TRADES_FETCH_CHANNEL
+  RECENT_TRADES_FETCH_CHANNEL,
 } from "./constants";
-import { PublicTradeEvent } from "./types";
+import { PublicTrade, PublicTradeEvent } from "./types";
 
 export interface RecentTradesFetch {
   type: typeof RECENT_TRADES_FETCH;
@@ -43,7 +42,7 @@ export type RecentTradesActions =
   | RecentTradesError
   | RecentTradesData
   | RecentTradesPush
-  | RecentTradesChannelFetch
+  | RecentTradesChannelFetch;
 
 export const recentTradesFetch = (
   payload: RecentTradesFetch["payload"]

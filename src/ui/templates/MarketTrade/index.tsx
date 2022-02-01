@@ -7,6 +7,8 @@ import {
   selectCurrentMarket,
   recentTradesFetch,
   selectRecentTradesOfCurrentMarket,
+  PublicTrade,
+  selectRecentTrades,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { localeDate } from "@polkadex/web-helpers";
@@ -30,8 +32,7 @@ const getHighLightValue = (prevValue: string, curValue: string) => {
 export const MarketTrade = () => {
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
-
+  const recentTrades: PublicTrade[] = useReduxSelector(selectRecentTradesOfCurrentMarket);
   useEffect(() => {
     if (currentMarket) dispatch(recentTradesFetch(currentMarket));
   }, [dispatch, currentMarket]);
@@ -52,17 +53,17 @@ export const MarketTrade = () => {
             recentTrades.map((item, index) => {
               const higlightedDate = getHighLightValue(
                 localeDate(
-                  recentTrades[index - 1] ? recentTrades[index - 1].created_at : "",
+                  recentTrades[index - 1] ? recentTrades[index - 1].timestamp.toString() : "",
                   "time"
                 ),
-                localeDate(item.created_at, "time")
+                localeDate(item.timestamp.toString(), "time")
               );
 
               return (
                 <Card
                   key={index}
-                  isSell={item.taker_type === "sell"}
-                  time={higlightedDate}
+                  isSell={item.order_side === "Sell"}
+                  time={item.timestamp}
                   price={Decimal.format(item.price, currentMarket.price_precision, ",")}
                   amount={Decimal.format(item.amount, currentMarket.amount_precision, ",")}
                 />
