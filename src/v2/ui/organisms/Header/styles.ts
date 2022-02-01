@@ -8,15 +8,15 @@ export const Main = styled.header`
     position: absolute;
     top: 0;
     width: 100%;
-    background: ${theme.colors.text};
+    background: ${theme.colors.black};
     border-radius: 1.5rem 0 0 1.5rem;
     padding-left: 1.5rem;
     margin-left: 1rem;
-    ${Logo} {
+    /* ${Logo} {
       svg {
         fill: ${theme.colors.inverse};
       }
-    }
+    } */
   `}
 `;
 

@@ -8,24 +8,23 @@ export const Header = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
-    color: ${theme.colors.inverse};
-    background: ${isActive ? theme.colors.inverse : theme.colors.text};
+    background: ${isActive ? theme.colors.white : theme.colors.black};
     border-radius: 2rem;
     padding: 1rem;
     transition: background 0.3s ease-in-out;
-    color: ${isActive ? theme.colors.text : theme.colors.inverse};
+    color: ${isActive ? theme.colors.black : theme.colors.white};
     user-select: none;
     ${Icon} {
       margin-right: 0.5rem;
       svg {
-        fill: ${isActive ? theme.colors.text : theme.colors.inverse};
+        fill: ${isActive ? theme.colors.black : theme.colors.white};
       }
     }
     :hover {
-      color: ${theme.colors.text};
-      background: ${theme.colors.inverse};
+      color: ${theme.colors.black};
+      background: ${theme.colors.white};
       ${Icon} svg {
-        fill: ${theme.colors.text};
+        fill: ${theme.colors.black};
       }
     }
   `}

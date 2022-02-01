@@ -13,14 +13,14 @@ export const Header = styled.div<{ isActive?: boolean }>`
     border-radius: 50%;
     width: 4rem;
     height: 4rem;
-    background: ${isActive ? theme.colors.inverse : theme.colors.text};
+    background: ${isActive ? theme.colors.white : theme.colors.black};
     ${Icon} svg {
-      fill: ${isActive ? theme.colors.text : theme.colors.inverse};
+      fill: ${isActive ? theme.colors.black : theme.colors.white};
     }
     :hover {
-      background: ${theme.colors.inverse};
+      background: ${theme.colors.white};
       ${Icon} svg {
-        fill: ${theme.colors.text};
+        fill: ${theme.colors.black};
       }
     }
   `}
@@ -110,7 +110,7 @@ export const CardAction = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.colors.text};
+    background: ${theme.colors.white};
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 5rem;
     width: 3rem;

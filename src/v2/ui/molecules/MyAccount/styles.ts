@@ -8,7 +8,7 @@ export const Header = styled.div<{ isFull: boolean }>`
   ${({ theme, isFull = false }) => css`
     display: flex;
     align-items: center;
-    background: ${theme.colors.primaryBackground};
+    background: ${theme.colors.white};
     padding: 0.8rem;
     border-radius: 1.5rem 0 0 1.5rem;
     cursor: pointer;

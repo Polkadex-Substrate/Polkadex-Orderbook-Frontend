@@ -73,7 +73,7 @@ const Content = () => (
 export const Card = ({ title, description, icon, ...props }: T.Card) => (
   <S.Card>
     <S.CardContent>
-      <Icon name={icon} color="black" size="medium" />
+      <Icon name={icon} stroke="black" size="medium" />
       <S.CardTitle>
         <span>{title}</span>
         {description && <p>{description}</p>}

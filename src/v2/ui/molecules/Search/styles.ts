@@ -12,6 +12,7 @@ const wrapperModifiers = {
     pointer-events: none;
   `,
 };
+
 export const Main = styled.div<{ isActive?: boolean }>`
   ${({ isActive }) => css`
     position: relative;
@@ -61,7 +62,7 @@ export const Header = styled.div`
 
 export const Search = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.inverse};
+    background: ${theme.colors.white};
     padding: 1rem;
     border-radius: 3rem;
     border: 1px solid ${theme.colors.secondaryBackground};

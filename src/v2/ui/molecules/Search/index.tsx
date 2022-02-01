@@ -33,7 +33,7 @@ export const Search = () => {
           <Icon name="SingleArrowLeft" size="extraSmall" stroke="inverse" />
         </S.Actions>
         <S.Search onClick={active ? undefined : handleOpen}>
-          <Icon name="Search" size="extraSmall" stroke="text" />
+          <Icon name="Search" size="extraSmall" stroke="black" />
           <input
             type="text"
             placeholder="Search Menu.."

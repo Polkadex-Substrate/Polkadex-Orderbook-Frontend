@@ -26,7 +26,7 @@ const Content = () => {
       <S.Title>
         <h3>Menu</h3>
         <S.Search>
-          <Icon name="Search" color="inverse" size="extraSmall" />
+          <Icon name="Search" stroke="black" size="extraSmall" />
           <input type="text" placeholder="Search Menu.." />
         </S.Search>
       </S.Title>
@@ -142,7 +142,7 @@ const CardGroup = ({ title, children }) => (
 
 const Card = ({ title, description, icon, isBeta = false, ...props }: T.Props) => (
   <S.Card {...props}>
-    <Icon size="medium" name={icon} color="inverse" />
+    <Icon size="medium" name={icon} color="black" />
     <S.CardContainer>
       <div>
         <small>{title} </small>
