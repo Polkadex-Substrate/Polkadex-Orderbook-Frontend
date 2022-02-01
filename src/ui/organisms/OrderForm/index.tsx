@@ -117,15 +117,13 @@ export const OrderForm = ({
               )}
             </S.AvailableAmount>
             <SecondaryInput
-              label="Price"
               value={state.price}
-              placeholder="0.00"
+              placeholder="Price"
               onChange={(e) => handlePriceChange(e.currentTarget.value)}>
               <span>{quoteUnit}</span>
             </SecondaryInput>
             <SecondaryInput
-              label="Amount"
-              placeholder="0.00"
+              placeholder="Amount"
               value={isSellSide ? state.amountSell : state.amountBuy}
               onChange={(e) => handleAmountChange(e.currentTarget.value)}>
               <span>{baseUnit}</span>
