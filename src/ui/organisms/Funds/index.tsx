@@ -44,11 +44,12 @@ export const Funds = () => {
             balances?.map((token, i) => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               const assetid = Number(token.ticker);
+              const tokenName = assetid ? marketIdMap[assetid].symbol : "";
               return (
                 <CardComponent
                   key={i}
                   tokenTicker={token.ticker}
-                  tokenName={marketIdMap[assetid].symbol}
+                  tokenName={tokenName}
                   totalAmount={parseFloat(token.total).toFixed(3)}
                   totalAmountFiat="0.0000000"
                   availableAmount={parseFloat(token.free).toFixed(3)}

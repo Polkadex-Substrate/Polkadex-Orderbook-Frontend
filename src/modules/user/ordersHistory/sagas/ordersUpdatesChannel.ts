@@ -6,6 +6,7 @@ import { FetchOrderUpdatesChannel, OrderUpdateEvent } from "../actions";
 import { selectOrdersHistory } from "..";
 
 import { selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
 
 export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
   const AmqpChannel = yield select(selectRabbitmqChannel);
@@ -20,7 +21,11 @@ export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
 }
 
 async function fetchOrderUpdatesChannel(chann) {
-  const queue = await chann.queue("345563xbh-order-update-events", { durable: false });
+  const queue = await chann.queue(
+    "345563xbh-order-update-events",
+    { durable: false },
+    { "x-expires": QUEUE_EXPIRY_TIME }
+  );
   await queue.bind("amq.direct");
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {

@@ -58,12 +58,11 @@ export const MarketTrade = () => {
                 ),
                 localeDate(item.timestamp.toString(), "time")
               );
-
               return (
                 <Card
                   key={index}
                   isSell={item.order_side === "Sell"}
-                  time={item.timestamp}
+                  time={localeDate(item.timestamp, "time")}
                   price={Decimal.format(item.price, currentMarket.price_precision, ",")}
                   amount={Decimal.format(item.amount, currentMarket.amount_precision, ",")}
                 />
