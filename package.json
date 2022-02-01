@@ -21,6 +21,7 @@
     "@polkadot/ui-keyring": "^0.85.4",
     "@polkadot/util-crypto": "^7.4.1",
     "axios": "^0.22.0",
+    "crypto-random-string": "^4.0.0",
     "easyqrcodejs": "^4.4.6",
     "formik": "^2.2.9",
     "moment": "^2.29.1",
