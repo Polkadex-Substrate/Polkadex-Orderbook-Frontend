@@ -35,6 +35,6 @@ export const useKeyringInitalize = () => {
       }
     }
   }, [dispatch, hasUser]);
-  
+
   return { loading, error, shouldFetch };
 };
