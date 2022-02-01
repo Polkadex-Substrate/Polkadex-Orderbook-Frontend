@@ -6,7 +6,11 @@ import { rabbitmqChannelData } from "../actions";
 
 import AMQPWebSocketClient from "./amqp-websocket-client";
 
-import { balanceChannelFetch, klineFetchChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
+import {
+  balanceChannelFetch,
+  klineFetchChannelFetch,
+  recentTradesChannelFetch,
+} from "@polkadex/orderbook-modules";
 
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
