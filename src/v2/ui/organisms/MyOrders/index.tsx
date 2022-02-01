@@ -2,7 +2,14 @@ import * as S from "./styles";
 import * as T from "./types";
 import * as F from "./fakeData";
 
-import { Dropdown, Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
+import {
+  Dropdown,
+  Icon,
+  Tabs,
+  TabContent,
+  TabHeader,
+  AvailableMessage,
+} from "@polkadex/orderbook-ui/molecules";
 
 export const MyOrders = ({ isFull = true }) => {
   return (
@@ -33,26 +40,28 @@ const Header = () => (
         </TabHeader>
       </ul>
     </S.HeaderAsideLeft>
-    <S.HeaderAsideRight>
-      <ul>
-        <S.HeaderRightLi>
-          <S.Search>
-            <Icon name="Search" stroke="black" size="extraSmall" />
-          </S.Search>
-        </S.HeaderRightLi>
-        <S.HeaderRightLi>
-          <Dropdown header="All">Test</Dropdown>
-        </S.HeaderRightLi>
-        <S.HeaderRightLi>
-          <Icon name="Calendar" color="white" />
-        </S.HeaderRightLi>
-        <S.HeaderRightLi>Reset</S.HeaderRightLi>
-        <S.HeaderRightLi>
-          Less
-          <Icon name="Expand" color="white" />
-        </S.HeaderRightLi>
-      </ul>
-    </S.HeaderAsideRight>
+    <AvailableMessage message="Soon">
+      <S.HeaderAsideRight>
+        <ul>
+          <S.HeaderRightLi>
+            <S.Search>
+              <Icon name="Search" stroke="black" size="extraSmall" />
+            </S.Search>
+          </S.HeaderRightLi>
+          <S.HeaderRightLi>
+            <Dropdown header="All">Test</Dropdown>
+          </S.HeaderRightLi>
+          <S.HeaderRightLi>
+            <Icon name="Calendar" color="white" />
+          </S.HeaderRightLi>
+          <S.HeaderRightLi>Reset</S.HeaderRightLi>
+          <S.HeaderRightLi>
+            Less
+            <Icon name="Expand" color="white" />
+          </S.HeaderRightLi>
+        </ul>
+      </S.HeaderAsideRight>
+    </AvailableMessage>
   </S.Header>
 );
 

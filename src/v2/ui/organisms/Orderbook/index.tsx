@@ -1,18 +1,22 @@
 import * as S from "./styles";
 import * as F from "./fakeData";
 
-import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Orderbook = ({ isFull = true }) => {
   return (
     <S.Main isFull={isFull}>
-      <S.Header>
-        <h2>Orderbook</h2>
-        <Dropdown header="0.1000000">Testing</Dropdown>
-      </S.Header>
+      <AvailableMessage message="Soon">
+        <S.Header>
+          <h2>Orderbook</h2>
+          <Dropdown header="0.1000000">Testing</Dropdown>
+        </S.Header>
+      </AvailableMessage>
       <S.Content>
         <Table pair="DOT" token="PDEX" orders={F.orders} isSell />
-        <Pricing price="0.21858000" priceInFiat="24.00" />
+        <AvailableMessage message="Soon">
+          <Pricing price="0.21858000" priceInFiat="24.00" />
+        </AvailableMessage>
         <Table pair="DOT" token="PDEX" orders={F.orders} />
       </S.Content>
     </S.Main>

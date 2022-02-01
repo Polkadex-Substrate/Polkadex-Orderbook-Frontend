@@ -13,6 +13,9 @@ const sizeModifier = {
   full: () => css`
     max-width: auto;
   `,
+  fitContent: () => css`
+    max-width: fit-content;
+  `,
 };
 
 const wrapperModifiers = {
@@ -25,11 +28,11 @@ const wrapperModifiers = {
     transform: translateY(2rem);
   `,
 };
-export const Container = styled.div<{ isBottomPosition: boolean }>`
-  ${({ isBottomPosition }) => css`
+export const Container = styled.div<{ isBottomPosition: boolean; isRightPosition?: boolean }>`
+  ${({ isBottomPosition, isRightPosition }) => css`
     display: flex;
     align-items: ${isBottomPosition ? "flex-end" : "center"};
-    justify-content: center;
+    justify-content: ${isRightPosition ? "flex-start" : "center"};
     width: 100%;
     height: 100%;
   `}

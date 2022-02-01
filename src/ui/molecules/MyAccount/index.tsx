@@ -112,6 +112,7 @@ export const MyAccountContent = ({
 export const SelectAccount = ({
   address,
   isActive,
+  isHeader,
   accountName,
   withButton,
   isFull = true,
@@ -124,8 +125,13 @@ export const SelectAccount = ({
 
   return (
     <S.SelectAccountWrapper isFull={isFull}>
-      <S.SelectAccount isActive={isActive} {...props}>
-        <Icon size="extraGiant" name="Avatar" color="white" background="black" />
+      <S.SelectAccount isActive={isActive} isHeader={isHeader} {...props}>
+        <Icon
+          size={isHeader ? "extraGiant" : "giant"}
+          name="Avatar"
+          color="white"
+          background="black"
+        />
         <S.AccountInfo>
           <S.SelectAccountHeader>
             <div>

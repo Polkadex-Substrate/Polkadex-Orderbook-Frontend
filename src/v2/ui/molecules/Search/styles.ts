@@ -1,11 +1,27 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
+const wrapperModifiers = {
+  open: () => css`
+    opacity: 1;
+    pointer-events: auto;
+  `,
+  close: () => css`
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  `,
+};
 export const Main = styled.div<{ isActive?: boolean }>`
   ${({ isActive }) => css`
     position: relative;
     cursor: pointer;
+    ${Content},
+    ${Overlay} {
+      transition: opacity 0.2s ease-in;
+      ${isActive && wrapperModifiers.open()}
+      ${!isActive && wrapperModifiers.close()}
+    }
     ${isActive &&
     css`
       ${Content} {
@@ -45,7 +61,7 @@ export const Header = styled.div`
 
 export const Search = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.text};
+    background: ${theme.colors.inverse};
     padding: 1rem;
     border-radius: 3rem;
     border: 1px solid ${theme.colors.secondaryBackground};

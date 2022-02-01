@@ -13,6 +13,7 @@ function SvgLink(props: React.SVGProps<SVGSVGElement>) {
         clipRule="evenodd"
         d="M13 6l6.062 3.5v7L13 20l-6.062-3.5v-7L13 6z"
         stroke="#224DDA"
+        fill="none"
         strokeWidth={3}
       />
     </svg>

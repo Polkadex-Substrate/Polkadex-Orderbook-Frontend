@@ -3,22 +3,26 @@ import { Sparklines, SparklinesLine } from "react-sparklines";
 import * as S from "./styles";
 import * as F from "./fakeData";
 
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 export const Markets = ({ isFull = false }) => {
   return (
     <S.Main isFull={isFull}>
       <S.HeaderWrapper>
         <HeaderMarket />
       </S.HeaderWrapper>
-      <Filters />
+      <AvailableMessage message="Soon">
+        <Filters />
+      </AvailableMessage>
       <Content />
-      <Footer />
+      <AvailableMessage message="Soon">
+        <Footer />
+      </AvailableMessage>
     </S.Main>
   );
 };
 
-export const HeaderMarket = () => (
-  <S.Header>
+export const HeaderMarket = ({ onOpenMarkets = undefined }) => (
+  <S.Header onClick={onOpenMarkets}>
     <S.HeaderAsideLeft>
       <S.HeaderToken>
         <Icon isToken name="DOT" size="large" color="black" />
@@ -39,7 +43,7 @@ export const HeaderMarket = () => (
       </Sparklines>
     </S.HeaderAsideCenter>
     <S.HeaderAsideRight>
-      <Icon name="ArrowBottom" stroke="inverse" />
+      <Icon name="ArrowBottom" stroke="text" />
     </S.HeaderAsideRight>
   </S.Header>
 );
@@ -49,10 +53,10 @@ const Filters = () => (
     <h2>Markets</h2>
     <S.TitleActions>
       <S.TitleActionCard>
-        <Icon name="Search" size="extraSmall" stroke="inverse" />
+        <Icon name="Search" size="extraSmall" stroke="black" />
       </S.TitleActionCard>
       <S.TitleActionCard>
-        <Icon name="Star" size="extraSmall" stroke="inverse" />
+        <Icon name="Star" size="extraSmall" stroke="black" color="white" />
       </S.TitleActionCard>
     </S.TitleActions>
   </S.Title>
@@ -91,11 +95,11 @@ const Card = ({
   <S.Card>
     <S.CardInfo>
       <S.CardInfoActions>
-        <Icon name="Star" size="extraSmall" stroke="inverse" />
+        <Icon name="Star" size="extraSmall" stroke="black" color="white" />
       </S.CardInfoActions>
       <S.CardInfoContainer>
         <S.CardToken>
-          <Icon isToken name={tokenTicker} size="large" color="inverse" />
+          <Icon isToken name={tokenTicker} size="large" color="black" />
         </S.CardToken>
         <S.CardInfoWrapper>
           <span>

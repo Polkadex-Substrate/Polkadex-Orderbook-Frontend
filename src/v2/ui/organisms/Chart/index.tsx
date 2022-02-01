@@ -1,6 +1,6 @@
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Chart = ({ isFull = true }) => {
   return (
@@ -17,34 +17,38 @@ export const Chart = ({ isFull = true }) => {
 
 const Header = () => (
   <S.Header>
-    <S.HeaderLeft>
-      <S.HeaderActions>
-        <Icon name="Settings" color="black" size="extraSmall" />
-      </S.HeaderActions>
-      <ul>
-        <S.HeaderLi>1h</S.HeaderLi>
-        <S.HeaderLi isActive>24h</S.HeaderLi>
-        <S.HeaderLi>7d</S.HeaderLi>
-        <S.HeaderLi>1m</S.HeaderLi>
-        <S.HeaderLi>1y</S.HeaderLi>
-        <S.HeaderLi>All</S.HeaderLi>
-      </ul>
-      <S.HeaderActions>
-        <Icon name="Calendar" color="black" size="extraSmall" />
-      </S.HeaderActions>
-    </S.HeaderLeft>
-    <S.HeaderRight>
-      <ul>
-        <S.HeaderLi color="secondaryBackground">Original</S.HeaderLi>
-        <S.HeaderLi isActive color="secondaryBackground">
-          TradingView
-        </S.HeaderLi>
-        <S.HeaderLi color="secondaryBackground">Depth</S.HeaderLi>
-      </ul>
-      <S.HeaderActions>
-        <Icon name="Expand" color="black" size="extraSmall" />
-      </S.HeaderActions>
-    </S.HeaderRight>
+    <AvailableMessage message="Soon">
+      <S.HeaderLeft>
+        <S.HeaderActions>
+          <Icon name="Settings" color="black" size="extraSmall" />
+        </S.HeaderActions>
+        <ul>
+          <S.HeaderLi>1h</S.HeaderLi>
+          <S.HeaderLi isActive>24h</S.HeaderLi>
+          <S.HeaderLi>7d</S.HeaderLi>
+          <S.HeaderLi>1m</S.HeaderLi>
+          <S.HeaderLi>1y</S.HeaderLi>
+          <S.HeaderLi>All</S.HeaderLi>
+        </ul>
+        <S.HeaderActions>
+          <Icon name="Calendar" color="black" size="extraSmall" />
+        </S.HeaderActions>
+      </S.HeaderLeft>
+    </AvailableMessage>
+    <AvailableMessage message="Soon">
+      <S.HeaderRight>
+        <ul>
+          <S.HeaderLi color="secondaryBackground">Original</S.HeaderLi>
+          <S.HeaderLi isActive color="secondaryBackground">
+            TradingView
+          </S.HeaderLi>
+          <S.HeaderLi color="secondaryBackground">Depth</S.HeaderLi>
+        </ul>
+        <S.HeaderActions>
+          <Icon name="Expand" color="black" size="extraSmall" />
+        </S.HeaderActions>
+      </S.HeaderRight>
+    </AvailableMessage>
   </S.Header>
 );
 const OriginalChart = () => <S.OriginalChart></S.OriginalChart>;

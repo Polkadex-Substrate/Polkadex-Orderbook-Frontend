@@ -6,7 +6,7 @@ import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 export const MyAccount = () => {
   return (
     <S.Main>
-      <Dropdown header={<Header />} direction="bottomRight" isOpacity>
+      <Dropdown header={<Header />} direction="bottomRight" priority="medium" isOpacity>
         <Content />
       </Dropdown>
     </S.Main>
@@ -39,7 +39,7 @@ const Content = () => (
       <small>Connected with Polkadot.js</small>
       <S.Input>
         <input type="text" value="9e0816415vogTpNm6ajK4N9SDRRE5sjq08" />
-        <Icon name="Copy" background="secondaryBackground" color="inverse" size="large" />
+        <Icon name="Copy" background="secondaryBackground" stroke="black" size="large" />
       </S.Input>
     </S.ContentHeader>
     <S.ContentContainer>
@@ -73,7 +73,7 @@ const Content = () => (
 export const Card = ({ title, description, icon, ...props }: T.Card) => (
   <S.Card>
     <S.CardContent>
-      <Icon name={icon} color="inverse" size="medium" />
+      <Icon name={icon} color="black" size="medium" />
       <S.CardTitle>
         <span>{title}</span>
         {description && <p>{description}</p>}

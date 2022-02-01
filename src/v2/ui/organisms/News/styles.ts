@@ -60,7 +60,7 @@ export const Card = styled.div`
     }
     a {
       background: ${theme.colors.primary};
-      color: ${theme.colors.white};
+      color: ${theme.colors.white} !important;
       padding: 1rem;
       border-radius: 0.8rem;
       font-weight: 500;
@@ -69,6 +69,7 @@ export const Card = styled.div`
       transition: background 0.3s ease-in-out;
       border-width: 1px;
       border-style: solid;
+      border-color: transparent;
       :hover {
         background: transparent;
         color: ${theme.colors.primary};

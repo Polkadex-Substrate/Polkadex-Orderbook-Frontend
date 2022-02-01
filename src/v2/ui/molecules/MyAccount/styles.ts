@@ -35,7 +35,7 @@ export const HeaderInfo = styled.div`
     margin-right: 1rem;
     p,
     span {
-      color: ${theme.colors.text};
+      color: ${theme.colors.black};
     }
     p {
       font-weight: 600;
@@ -60,12 +60,13 @@ export const Content = styled.div`
 
 export const ContentHeader = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.inverse};
+    background: ${theme.colors.black};
     padding: 2rem;
     border-radius: 1.5rem;
     small {
       font-size: 1.2rem;
       font-weight: 500;
+      color: ${theme.colors.white};
     }
   `}
 `;
@@ -75,8 +76,8 @@ export const Input = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: ${theme.colors.text};
-    color: ${theme.colors.white};
+    background: ${theme.colors.white};
+    color: ${theme.colors.black};
     padding: 1.2rem;
     margin-top: 0.5rem;
     border-radius: 0.8rem;

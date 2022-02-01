@@ -30,10 +30,10 @@ export const Search = () => {
     <S.Main isActive={active}>
       <S.Header>
         <S.Actions onClick={handleClose}>
-          <Icon name="SingleArrowLeft" size="extraSmall" color="inverse" />
+          <Icon name="SingleArrowLeft" size="extraSmall" stroke="inverse" />
         </S.Actions>
         <S.Search onClick={active ? undefined : handleOpen}>
-          <Icon name="Search" size="extraSmall" stroke="inverse" />
+          <Icon name="Search" size="extraSmall" stroke="text" />
           <input
             type="text"
             placeholder="Search Menu.."
@@ -69,11 +69,11 @@ export const Search = () => {
             <S.Container>
               <S.Card>
                 <span>
-                  <Icon name="Clock" size="extraSmall" />
+                  <Icon name="Clock" size="extraSmall" stroke="text" />
                   Polkadex
                 </span>
                 <S.CardActions onClick={() => console.log("Delete Action")}>
-                  <Icon name="Close" color="inverse" />
+                  <Icon name="Close" color="text" />
                 </S.CardActions>
               </S.Card>
             </S.Container>

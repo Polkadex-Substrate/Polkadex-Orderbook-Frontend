@@ -6,6 +6,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     max-width: ${isFull ? "auto" : "35rem"};
+    width: 100%;
     border-radius: 1.5rem;
     box-shadow: ${theme.shadows.secondary};
     max-height: 100vh;
@@ -25,6 +26,7 @@ export const Header = styled.div`
   grid-template-columns: auto auto fit-content(100%);
   grid-gap: 1rem;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const HeaderAsideLeft = styled.div`
@@ -79,6 +81,8 @@ export const HeaderInfoActions = styled.div`
 // Content
 export const Content = styled.div`
   overflow-x: hidden;
+  overflow-y: auto;
+
   flex: 1;
 `;
 
@@ -88,7 +92,7 @@ export const Title = styled.div`
     align-items: center;
     justify-content: space-between;
     background: ${theme.colors.white};
-    padding: 2rem 2rem 2rem 2rem;
+    padding: 1rem 2rem;
     h2 {
       font-size: 1.5rem;
       font-weight: 550;
@@ -172,7 +176,6 @@ export const CardInfoActions = styled.div`
   :hover {
     svg {
       transition: all 0.4s ease-in-out;
-
       fill: orange;
       stroke: orange;
     }

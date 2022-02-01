@@ -79,6 +79,7 @@ export const LoginTemplate = () => {
                         isClickable
                         header={
                           <SelectAccount
+                            isHeader
                             accountName={selectedAccount?.meta.name || "Select your account"}
                             address={selectedAccount?.address || "Polkadex is completely free"}
                           />

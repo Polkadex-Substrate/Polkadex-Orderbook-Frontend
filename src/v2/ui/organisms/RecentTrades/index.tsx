@@ -1,15 +1,18 @@
 import * as S from "./styles";
 import * as F from "./fakeData";
 
-import { Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 export const RecentTrades = () => {
   return (
     <S.Main>
-      <S.Header>
-        <h2>Recent Trades</h2>
-        <Dropdown header="0.1000000">Testing</Dropdown>
-      </S.Header>
+      <AvailableMessage message="Soon">
+        <S.Header>
+          <h2>Recent Trades</h2>
+          <Dropdown header="0.1000000">Testing</Dropdown>
+        </S.Header>
+      </AvailableMessage>
+
       <S.Head>
         <S.CellHead>Price(DOT)</S.CellHead>
         <S.CellHead>Amount(PDEX)</S.CellHead>

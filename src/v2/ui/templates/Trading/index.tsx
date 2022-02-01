@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import * as S from "./styles";
 
 import {
@@ -13,13 +15,19 @@ import {
   Information,
   Footer,
 } from "@orderbook-ui/v2/organisms";
+import { Popup } from "@polkadex/orderbook-ui/molecules";
 export const Trading = () => {
+  const [isActive, setIsActive] = useState(false);
+  const handleClose = () => setIsActive(!isActive);
   return (
     <S.Main>
+      <Popup isVisible={isActive} onClose={handleClose} size="fitContent" isRightPosition>
+        <Markets />
+      </Popup>
       <Header />
       <S.Wrapper>
-        <S.Container className="test">
-          <Information />
+        <S.Container>
+          <Information onOpenMarkets={handleClose} />
           <Chart />
           <Orderbook />
           <ExploreMarket />

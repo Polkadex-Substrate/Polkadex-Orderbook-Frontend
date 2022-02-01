@@ -77,7 +77,8 @@ export type Sizes =
   | "extraLarge"
   | "giant"
   | "extraGiant"
-  | "full";
+  | "full"
+  | "fitContent";
 
 export const icons = [
   "ArrowTop",

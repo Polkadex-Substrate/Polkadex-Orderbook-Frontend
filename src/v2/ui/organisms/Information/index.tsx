@@ -3,11 +3,11 @@ import * as T from "./types";
 
 import { HeaderMarket } from "@orderbook-ui/v2/organisms/Markets";
 
-export const Information = () => {
+export const Information = ({ onOpenMarkets }) => {
   return (
     <S.Main>
       <S.AsideLeft>
-        <HeaderMarket />
+        <HeaderMarket onOpenMarkets={onOpenMarkets} />
       </S.AsideLeft>
       <S.AsideRight>
         <Card title="Market Price" description="0.03209666">

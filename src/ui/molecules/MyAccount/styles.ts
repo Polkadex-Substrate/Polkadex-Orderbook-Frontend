@@ -171,21 +171,21 @@ export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
 
 export const SelectAccount = styled.div<{
   isActive?: boolean;
+  isHeader?: boolean;
 }>`
-  ${({ theme, isActive }) => css`
+  ${({ theme, isActive, isHeader }) => css`
     display: flex;
     align-items: center;
-    padding: 0.8rem;
+    padding: ${isHeader ? "0.8rem" : "0.4rem"};
     cursor: pointer;
     transition: background 0.5s;
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 1rem;
-
     :hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
     }
     :not(:last-child) {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
     ${isActive &&
     css`
