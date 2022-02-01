@@ -6,6 +6,7 @@ import { rabbitmqChannelFetch } from "../modules/public/rabbitmqChannel";
 import { useReduxSelector } from ".";
 
 import {
+  balanceChannelFetch,
   balancesFetch,
   polkadotWalletFetch,
   selectHasUser,
@@ -28,7 +29,10 @@ export const useKeyringInitalize = () => {
   // initialize user specific sagas
   useEffect(() => {
     if (hasUser) {
-      if (hasUser) dispatch(balancesFetch());
+      if (hasUser) {
+        dispatch(balancesFetch());
+        dispatch(balanceChannelFetch());
+      }
     }
   }, [dispatch, hasUser]);
 

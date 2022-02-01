@@ -155,7 +155,8 @@ export const MyAccountContent = ({
           <p>Get me money!</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
-        <Link href="/wallet">Deposit/Withdraw</Link>
+        {/* TODO: Add when the endpoint is available
+         <Link href="/wallet">Deposit/Withdraw</Link> */}
       </S.AccountContentSection>
     </S.AccountContent>
   );

@@ -1,5 +1,4 @@
-import { RootState } from "../..";
-import { PublicTrade } from "../../user/history";
+import { PublicTrade, RootState } from "../..";
 import { selectCurrentMarket } from "../markets";
 
 export const selectRecentTrades = (state: RootState): PublicTrade[] =>
@@ -13,7 +12,9 @@ export const selectRecentTradesOfCurrentMarket = (state: RootState): PublicTrade
 
   return currentMarket
     ? state.public.recentTrades.list.filter(
-        (trade: PublicTrade) => trade.market === currentMarket.id
+        (trade: PublicTrade) =>
+          trade.market_id[0].Asset === currentMarket.symbolArray[0] &&
+          trade.market_id[1].Asset === currentMarket.symbolArray[1]
       )
     : [];
 };

@@ -1,4 +1,4 @@
-import { put, delay } from "redux-saga/effects";
+import { put, delay, call } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { KeyringPair } from "@polkadot/keyring/types";
 
@@ -18,7 +18,7 @@ export function* signUpSaga(action: SignUpFetch) {
     const { mnemonic, password, accountName } = action.payload;
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
     const proxyAddress = pair.address;
-    registerAccount(pair, proxyAddress);
+    yield call(() => registerAccount(pair, proxyAddress));
     // TODO: Check if registerAccount has been successful
     yield put(
       notificationPush({
@@ -44,7 +44,8 @@ export function* signUpSaga(action: SignUpFetch) {
     );
   }
 }
-const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) => {
+// TODO: Check if registerAccount has been successful
+export const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) => {
   const payload = { main_account: proxyAddress, proxy_account: proxyAddress };
   const signature = await signMessage(userKeyring, JSON.stringify(payload));
   const data = {
@@ -54,6 +55,9 @@ const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) =
     payload,
   };
   console.log(data);
-  const res = await API.post(registerUserOption)("/register", data);
+  const res: any = await API.post(registerUserOption)("/register", data);
   console.log(res);
+  if (res.Bad && !res.Bad.includes("AccountAlreadyRegistered")) {
+    throw new Error(res.Bad);
+  }
 };

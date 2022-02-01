@@ -1,5 +1,6 @@
 export const UNIT = BigInt(1000_000_000_000);
 export const DEFAULT_TRADING_VIEW_INTERVAL = "5";
+export const DEFAULT_RANDOM_STRING_LENGTH = 20;
 export const DEFAULT_MARKET = {
   id: "",
   name: "",
