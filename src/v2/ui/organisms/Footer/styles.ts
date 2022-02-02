@@ -10,7 +10,7 @@ export const Main = styled.footer`
     width: 100%;
     background: ${theme.colors.white};
     border-top: 1px solid ${theme.colors.secondaryBackground};
-    padding: 0.4rem 1rem;
+    padding: 0 1rem 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

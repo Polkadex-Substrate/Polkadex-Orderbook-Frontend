@@ -54,8 +54,47 @@ export const Content = styled.div`
     background: ${theme.colors.white};
     min-width: 35rem;
     border-radius: 1.5rem;
-    box-shadow: ${theme.shadows.secondary};
+    transition: height 400ms ease;
+
+    .menu-secondary-enter {
+      transform: translateX(110%);
+    }
+    //Primary
+
+    .menu-primary-enter {
+      position: absolute;
+      transform: translateX(-110%);
+    }
+
+    .menu-primary-enter-active {
+      transform: translateX(0);
+      transition: transform 400ms ease;
+    }
+
+    .menu-primary-exit {
+      position: absolute;
+    }
+
+    .menu-primary-exit-active {
+      transform: translateX(-110%);
+      transition: all 400ms ease;
+    }
+
+    //Secondary
+    .menu-secondary-enter-active {
+      transform: translateX(0);
+      transition: all 400ms ease;
+    }
+
+    .menu-secondary-exit-active {
+      transform: translateX(110%);
+      transition: all 400ms ease;
+    }
   `}
+`;
+
+export const ContentWrapper = styled.div`
+  width: 100%;
 `;
 
 export const ContentHeader = styled.div`

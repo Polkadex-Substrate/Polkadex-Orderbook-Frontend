@@ -2,7 +2,7 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { SpaceBetweenCenter } from "@orderbook-ui/v2/atoms";
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 
 export const Notifications = () => {
   return (
@@ -35,10 +35,12 @@ const Content = () => {
       <S.Recent>
         <S.RecentTitle>
           <h5>Recent</h5>
-          <ul>
-            <S.RecentLi isActive>All</S.RecentLi>
-            <S.RecentLi>Unread</S.RecentLi>
-          </ul>
+          <AvailableMessage message="Soon">
+            <ul>
+              <S.RecentLi isActive>All</S.RecentLi>
+              <S.RecentLi>Unread</S.RecentLi>
+            </ul>
+          </AvailableMessage>
         </S.RecentTitle>
         <S.RecentContent isScrollable={F.cards.length > 3}>
           {F.cards?.map((notification) => (
@@ -58,7 +60,7 @@ const Content = () => {
 const Card = ({ description, time, isRead = false }) => (
   <S.Card isRead={isRead}>
     <S.CardIcon>
-      <Icon name="Clock" size="extraSmall" />
+      <Icon name="Clock" size="extraSmall" stroke="black" />
       {isRead && <S.Read />}
     </S.CardIcon>
     <S.CardContent>

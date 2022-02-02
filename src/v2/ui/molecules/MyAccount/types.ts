@@ -13,4 +13,4 @@ export type Card = {
   title: string;
   description?: string;
   icon: IIcons;
-} & AllHTMLAttributes<HTMLDivElement>;
+} & Pick<AllHTMLAttributes<HTMLDivElement>, "onClick">;

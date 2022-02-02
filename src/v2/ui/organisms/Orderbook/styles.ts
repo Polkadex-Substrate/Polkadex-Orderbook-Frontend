@@ -6,7 +6,6 @@ export const Main = styled.section<{ isFull?: boolean }>`
     grid-area: Orderbook;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    max-width: ${isFull ? "auto" : "35rem"};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     max-height: -webkit-fill-available;
@@ -113,22 +112,21 @@ export const Pricing = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
 `;
 
 export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 0 1.2rem 1.2rem 0;
     flex: 1;
     span {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 550;
       color: ${isSell ? theme.colors.primary : theme.colors.green};
       ${Icon} {
         transition: transform 0.2s ease-in-out;
-
         margin-right: 0.5rem;
         svg {
           fill: ${isSell ? theme.colors.primary : theme.colors.green};
@@ -138,7 +136,7 @@ export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
     p {
       display: inline-block;
       opacity: 0.4;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 500;
       margin-left: 0.5rem;
     }
@@ -147,8 +145,8 @@ export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
 
 export const PricingAsideRight = styled.div`
   ${({ theme }) => css`
-    width: 5rem;
-    height: 5rem;
+    width: 4.2rem;
+    height: 4.2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     display: flex;
     align-items: center;

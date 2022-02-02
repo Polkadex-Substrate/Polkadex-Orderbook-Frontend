@@ -29,12 +29,12 @@ export const Wrapper = styled.div`
 
     @media screen and (min-width: 1180px) {
       grid-template-areas:
-        "GridContainer GridContainer  PlaceOrder"
-        "GridContainer GridContainer  PlaceOrder"
-        "GridContainer GridContainer  RecentTrades"
-        "MyOrders News  RecentTrades";
-      grid-template-rows: 1fr minmax(25rem, 25rem) 1fr minmax(22rem, 22rem);
-      grid-template-columns: 4fr minmax(32rem, 32rem) minmax(31rem, auto);
+        "GridContainer GridContainer PlaceOrder"
+        "GridContainer GridContainer PlaceOrder"
+        "GridContainer GridContainer RecentTrades"
+        "MyOrders News RecentTrades";
+      grid-template-rows: 1fr minmax(28rem, 28rem) 1fr minmax(22rem, 22rem);
+      grid-template-columns: 4fr minmax(32rem, 32rem) fit-content(100%);
     }
 
     @media screen and (min-width: 700px) and (max-width: 1180px) {

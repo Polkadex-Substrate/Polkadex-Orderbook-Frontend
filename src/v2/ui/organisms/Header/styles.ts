@@ -12,11 +12,11 @@ export const Main = styled.header`
     border-radius: 1.5rem 0 0 1.5rem;
     padding-left: 1.5rem;
     margin-left: 1rem;
-    /* ${Logo} {
+    ${Logo} {
       svg {
-        fill: ${theme.colors.inverse};
+        fill: ${theme.colors.white};
       }
-    } */
+    }
   `}
 `;
 

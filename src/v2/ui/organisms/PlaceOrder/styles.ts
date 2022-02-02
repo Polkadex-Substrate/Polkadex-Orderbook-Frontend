@@ -68,7 +68,7 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
     width: 100%;
     text-align: center;
     cursor: pointer;
-    transition: background 0.4s ease-in-out;
+    transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
     font-weight: 500;
     ${Icon} {
       display: inline-block;
@@ -83,12 +83,14 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
     :last-child {
       background: ${isActive ? theme.colors.primary : "initial"};
     }
+    :hover {
+      opacity: ${isActive ? 1 : 0.6};
+    }
   `}
 `;
 
 export const Form = styled.div``;
 export const Input = styled.div`
-  padding: 1rem 1.5rem;
   border-radius: 0.8rem;
   display: flex;
   justify-content: space-between;
@@ -117,18 +119,29 @@ export const InputLabel = styled.div`
 
 export const InputWrapper = styled.div`
   ${({ theme }) => css`
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
     input {
       font-size: 1.4rem;
-      font-weight: 550;
       width: 100%;
       color: ${theme.colors.black};
-      text-align: right;
-      margin-right: 0.5rem;
+      padding: 1.5rem 0 1.5rem 1.5rem;
     }
-    span {
-      opacity: 0.5;
+    div {
+      background: ${theme.colors.secondaryBackground};
+      border-radius: 0.8rem;
+      margin: 0 1rem 0 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        padding: 0.5rem;
+        font-weight: 500;
+        opacity: 0.6;
+      }
     }
   `}
 `;

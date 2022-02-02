@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 
 export const Menu = () => {
   return (
@@ -25,10 +25,12 @@ const Content = () => {
     <S.Content>
       <S.Title>
         <h3>Menu</h3>
-        <S.Search>
-          <Icon name="Search" stroke="black" size="extraSmall" />
-          <input type="text" placeholder="Search Menu.." />
-        </S.Search>
+        <AvailableMessage message="Soon">
+          <S.Search>
+            <Icon name="Search" stroke="black" size="extraSmall" />
+            <input type="text" placeholder="Search Menu.." />
+          </S.Search>
+        </AvailableMessage>
       </S.Title>
       <S.Container>
         <CardGroup title="Buy Crypto">
@@ -142,7 +144,7 @@ const CardGroup = ({ title, children }) => (
 
 const Card = ({ title, description, icon, isBeta = false, ...props }: T.Props) => (
   <S.Card {...props}>
-    <Icon size="medium" name={icon} color="black" />
+    <Icon size="medium" name={icon} color="black" stroke="black" />
     <S.CardContainer>
       <div>
         <small>{title} </small>
