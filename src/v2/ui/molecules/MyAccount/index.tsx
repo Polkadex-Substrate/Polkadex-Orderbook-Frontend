@@ -57,7 +57,7 @@ const Content = () => {
     <S.Content style={{ height: menuHeight }}>
       <CSSTransition
         in={activeMenu === "Main"}
-        unmountOnExit
+        unmountOnExit={true}
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
@@ -65,7 +65,7 @@ const Content = () => {
           <S.ContentHeader>
             <small>Connected with Polkadot.js</small>
             <S.Input>
-              <input type="text" value="9e0816415vogTpNm6ajK4N9SDRRE5sjq08" />
+              <input type="text" defaultValue="9e0816415vogTpNm6ajK4N9SDRRE5sjq08" />
               <Icon name="Copy" background="secondaryBackground" stroke="black" size="large" />
             </S.Input>
           </S.ContentHeader>
@@ -120,7 +120,7 @@ const Content = () => {
       </CSSTransition>
       <CSSTransition
         in={activeMenu === "Appearance"}
-        unmountOnExit
+        unmountOnExit={true}
         timeout={400}
         classNames="menu-secondary"
         onEnter={calculateHeight}>

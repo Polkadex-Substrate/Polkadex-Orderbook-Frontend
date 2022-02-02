@@ -93,7 +93,7 @@ export const tokens = [
     isNegative: false,
   },
   {
-    id: 7,
+    id: 20,
     pair: "Link",
     tokenTicker: "LINK",
     vol: "32,875.081",

@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.div<{ isFull?: boolean }>`
-  ${({ isFull }) => css`
-    position: relative;
-    max-width: ${isFull ? "auto" : "34rem"};
-  `}
+export const Main = styled.div`
+  position: relative;
+  :not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 export const Container = styled.div`
@@ -22,7 +22,7 @@ export const Container = styled.div`
 export const Action = styled.div`
   position: absolute;
   top: 0;
-  right: 1rem;
+  right: 0;
   padding: 1rem;
   transition: opacity 0.3s ease-in-out;
   cursor: pointer;

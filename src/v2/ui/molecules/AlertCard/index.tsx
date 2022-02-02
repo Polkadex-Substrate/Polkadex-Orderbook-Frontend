@@ -6,21 +6,21 @@ export const AlertCard = ({
   title = "Title",
   description = "Description",
   icon = "Clock",
-  isFull = false,
+  ...props
 }) => {
   return (
-    <S.Main isFull={isFull}>
+    <S.Main>
       <S.Container>
         <S.Aside>
-          <Icon name={icon} size="medium" />
+          <Icon name={icon} size="medium" color="white" stroke="white" />
         </S.Aside>
         <S.Aside>
           <span>{title}</span>
           <p>{description}</p>
         </S.Aside>
       </S.Container>
-      <S.Action>
-        <Icon name="Close" color="inverse" onClick={() => console.log("Remove card")} />
+      <S.Action {...props}>
+        <Icon name="Close" color="inverse" />
       </S.Action>
     </S.Main>
   );
