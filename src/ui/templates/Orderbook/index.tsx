@@ -18,6 +18,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
+import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const Orderbook = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,10 @@ export const Orderbook = () => {
 
   const getLastPrice = () => {
     let lastPrice = "";
-    if (lastRecentTrade?.market === currentMarket?.id) {
+    if (
+      lastRecentTrade?.market_id[0].Asset === currentMarket.symbolArray[0] &&
+      lastRecentTrade?.market_id[1].Asset === currentMarket.symbolArray[1]
+    ) {
       lastPrice = lastRecentTrade?.price;
     } else {
       lastPrice = currentTicker?.last;
@@ -121,8 +125,8 @@ const OrderbookColumn = ({
 }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
-  const formattedBaseUnit = currentMarket?.base_unit.toUpperCase();
-  const formattedQuoteUnit = currentMarket?.quote_unit.toUpperCase();
+  const formattedBaseUnit = getSymbolFromAssetId(currentMarket?.symbolArray[0]).toUpperCase();
+  const formattedQuoteUnit = getSymbolFromAssetId(currentMarket?.symbolArray[1]).toUpperCase();
   const priceFixed = currentMarket?.price_precision || 0;
   const amountFixed = currentMarket?.amount_precision || 0;
   const isSell = side === "asks";
