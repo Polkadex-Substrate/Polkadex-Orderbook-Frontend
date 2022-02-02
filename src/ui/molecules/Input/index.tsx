@@ -25,10 +25,10 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
   </S.Primary>
 );
 
-export const SecondaryInput = ({ label = "", children, ...props }: T.SecondaryInputProps) => {
+export const SecondaryInput = ({ label, children, ...props }: T.SecondaryInputProps) => {
   return (
-    <S.SecondaryWrapper>
-      <label htmlFor={props.name}>{label}</label>
+    <S.SecondaryWrapper hasLabel={!!label}>
+      {label && <label htmlFor={props.name}>{label}</label>}
       <div>
         <input type="text" {...props} />
         {children || (
