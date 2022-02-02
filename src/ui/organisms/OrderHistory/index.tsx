@@ -91,15 +91,17 @@ export const OrderHistory = () => {
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
             const orderSide = order_side === "Sell";
-            const orderPrice = order_type === "Limit" ? price : average;
+            // TUDO: Check object old:
+            // const orderPrice = order_type === "Limit" ? price : average;
+            const orderPrice = price;
             const date = localeDate(new Date(Number(timestamp)), "fullDate");
             const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
             return (
               <CardComponent
                 key={order_id}
                 date={date}
-                baseUnit={base_asset}
-                quoteUnit={quote_asset}
+                baseUnit={base_asset.toString()}
+                quoteUnit={quote_asset.toString()}
                 side={order_side.toUpperCase()}
                 isSell={orderSide}
                 price={Decimal.format(orderPrice, priceFixed, ",")}
