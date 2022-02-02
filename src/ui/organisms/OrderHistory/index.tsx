@@ -19,7 +19,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { localeDate } from "@polkadex/web-helpers";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
+import { DEFAULT_MARKET, marketIdMap } from "@polkadex/web-constants";
 
 const timeFrom = String(Math.floor((Date.now() - 1000 * 60 * 60 * 24) / 1000));
 const handleHighlightValue = (prevValue: string, curValue: string) => {
@@ -98,8 +98,8 @@ export const OrderHistory = () => {
               <CardComponent
                 key={order_id}
                 date={date}
-                baseUnit={base_asset}
-                quoteUnit={quote_asset}
+                baseUnit={marketIdMap[base_asset].symbol}
+                quoteUnit={marketIdMap[quote_asset].symbol}
                 side={order_side.toUpperCase()}
                 isSell={isSell}
                 price={Decimal.format(orderPrice, priceFixed, ",")}
