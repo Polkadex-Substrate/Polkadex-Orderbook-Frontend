@@ -90,7 +90,7 @@ export const OrderHistory = () => {
             } = item;
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
-            const orderSide = order_side === "Sell";
+            const isSell = order_side === "Sell";
             const orderPrice = order_type === "Limit" ? price : average;
             const date = localeDate(new Date(Number(timestamp)), "fullDate");
             const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
@@ -101,7 +101,7 @@ export const OrderHistory = () => {
                 baseUnit={base_asset}
                 quoteUnit={quote_asset}
                 side={order_side.toUpperCase()}
-                isSell={orderSide}
+                isSell={isSell}
                 price={Decimal.format(orderPrice, priceFixed, ",")}
                 amount={Decimal.format(amount, amountFixed, ",")}
                 total={Number(price) * Number(amount)}

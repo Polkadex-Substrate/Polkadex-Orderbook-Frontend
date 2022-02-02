@@ -4,7 +4,7 @@ export const DEFAULT_RANDOM_STRING_LENGTH = 20;
 export const QUEUE_EXPIRY_TIME = 3000000;
 export const DEFAULT_MARKET = {
   id: "",
-  name: "", 
+  name: "",
   base_unit: "",
   quote_unit: "",
   min_price: "",
