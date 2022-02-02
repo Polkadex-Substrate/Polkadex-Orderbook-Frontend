@@ -43,8 +43,8 @@ export const Primary = styled.div`
 
 // Secondary Input
 
-export const SecondaryWrapper = styled.div`
-  ${({ theme }) => css`
+export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
+  ${({ theme, hasLabel }) => css`
     background: ${theme.colors.primaryBackground};
     padding: 1.2rem 0.8rem;
     border-radius: 0.5rem;
@@ -59,16 +59,18 @@ export const SecondaryWrapper = styled.div`
     }
 
     div {
+      display: flex;
+      justify-content: ${hasLabel ? "flex-end" : "space-between"};
       flex: 1;
-      text-align: end;
+      text-align: ${hasLabel ? "end" : "start"};
     }
     input {
       color: ${theme.colors.text};
-      text-align: end;
+      text-align: ${hasLabel ? "end" : "start"};
       margin-right: 0.5rem;
       font-size: ${theme.font.sizes.small};
       line-height: 0;
-      width: 50%;
+      width: 100%;
     }
   `}
 `;

@@ -33,8 +33,8 @@ export const OrderForm = ({
     orderType: "Limit",
     price: "",
     priceMarket: priceMarket,
-    amountSell: "0.00",
-    amountBuy: "0.00",
+    amountSell: "",
+    amountBuy: "",
   });
   const dispatch = useDispatch();
 
@@ -117,14 +117,14 @@ export const OrderForm = ({
               )}
             </S.AvailableAmount>
             <SecondaryInput
-              label="Price"
-              value={state.price || "0.00"}
+              value={state.price}
+              placeholder="Price"
               onChange={(e) => handlePriceChange(e.currentTarget.value)}>
               <span>{quoteUnit}</span>
             </SecondaryInput>
             <SecondaryInput
-              label="Amount"
-              value={isSellSide ? state.amountSell : state.amountBuy || "0.00"}
+              placeholder="Amount"
+              value={isSellSide ? state.amountSell : state.amountBuy}
               onChange={(e) => handleAmountChange(e.currentTarget.value)}>
               <span>{baseUnit}</span>
             </SecondaryInput>
