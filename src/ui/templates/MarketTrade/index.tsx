@@ -11,7 +11,6 @@ import {
   selectRecentTrades,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
@@ -36,7 +35,7 @@ export const MarketTrade = () => {
   useEffect(() => {
     if (currentMarket) dispatch(recentTradesFetch(currentMarket));
   }, [dispatch, currentMarket]);
-
+  const isDecreasing = getIsDecreasingArray(recentTrades);
   return (
     <S.Wrapper>
       <S.Header>
@@ -51,14 +50,12 @@ export const MarketTrade = () => {
         <S.Box>
           {recentTrades.length ? (
             recentTrades.map((item, index) => {
-              const isDecreasing = recentTrades[index + 1]
-                ? recentTrades[index].price < recentTrades[index + 1].price
-                : false;
+              const time = new Date(item.timestamp).toLocaleTimeString();
               return (
                 <Card
                   key={index}
-                  isSell={isDecreasing}
-                  time={localeDate(item.timestamp, "time")}
+                  isSell={isDecreasing[index]}
+                  time={time}
                   price={Decimal.format(item.price, currentMarket.price_precision, ",")}
                   amount={Decimal.format(item.amount, currentMarket.amount_precision, ",")}
                 />
@@ -110,4 +107,18 @@ const LoadingCard = () => {
       <Skeleton height="1rem" />
     </S.CardWrapper>
   );
+};
+
+const getIsDecreasingArray = (recentTrades: PublicTrade[]): [boolean] => {
+  const res: any = new Array(recentTrades.length);
+  for (let i = recentTrades.length - 1; i >= 0; i--) {
+    if (i === recentTrades.length - 1) {
+      res[i] = false;
+    } else if (recentTrades[i].price < recentTrades[i + 1].price) {
+      res[i] = true;
+    } else if (recentTrades[i].price === recentTrades[i + 1].price) {
+      res[i] = res[i + 1];
+    } else res[i] = false;
+  }
+  return res;
 };
