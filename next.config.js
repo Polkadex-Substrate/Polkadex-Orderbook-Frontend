@@ -1,14 +1,5 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
-  async redirects() {
-    return [
-      {
-        source: '/signUp',
-        destination: '/login',
-        permanent: true,
-      },
-    ]
-  },
   experimental: {
     // Enables the styled-components SWC transform
     styledComponents: true,
