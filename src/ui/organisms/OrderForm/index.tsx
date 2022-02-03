@@ -11,9 +11,10 @@ import {
   SecondaryInput,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { orderExecuteFetch } from "@polkadex/orderbook-modules";
+import { orderExecuteFetch, selectOrderExecuteSucess } from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 import { OrderType } from "@polkadex/orderbook/modules/types";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const OrderForm = ({
   side,
@@ -92,6 +93,8 @@ export const OrderForm = ({
       })
     );
   };
+  const orderCreated = useReduxSelector(selectOrderExecuteSucess);
+
   return (
     <S.Wrapper>
       <Tabs>
@@ -147,6 +150,7 @@ export const OrderForm = ({
               background="secondaryBackground">
               {toCapitalize(side)}
             </Button>
+            {orderCreated && <S.Message>Order created successfully</S.Message>}
           </form>
         </div>
       </Tabs>

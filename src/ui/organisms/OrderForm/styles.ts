@@ -20,6 +20,33 @@ export const Header = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 1.5rem;
 `;
+export const Message = styled.div`
+  ${({ theme }) => css`
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid ${theme.colors.green};
+    background: ${theme.colors.green}33;
+    margin-top: 1.5rem;
+  `}
+`;
+
+export const AvailableAmount = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+    span {
+      display: block;
+      font-weight: 500;
+      font-size: ${theme.font.sizes.xxsmall};
+      :first-child {
+        opacity: 0.7;
+      }
+    }
+  `}
+`;
 
 export const TabHeader = styled.div<{
   isActive?: boolean;
@@ -37,21 +64,5 @@ export const TabHeader = styled.div<{
     font-weight: 600;
     cursor: pointer;
     font-size: ${theme.font.sizes.xsmall};
-  `}
-`;
-export const AvailableAmount = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.7rem;
-    span {
-      display: block;
-      font-weight: 500;
-      font-size: ${theme.font.sizes.xxsmall};
-      :first-child {
-        opacity: 0.7;
-      }
-    }
   `}
 `;

@@ -42,15 +42,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       if (res.FineWithMessage) {
         yield put(orderExecuteData());
         console.log(res.Fine);
-        yield put(
-          notificationPush({
-            type: "Loading",
-            message: {
-              title: res.FineWithMessage.message,
-              description: "Congrats your order has been created",
-            },
-          })
-        );
         yield put(userOrdersHistoryFetch());
       } else {
         throw new Error(res.Bad);

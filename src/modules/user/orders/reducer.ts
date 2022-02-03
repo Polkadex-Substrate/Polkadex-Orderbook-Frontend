@@ -12,6 +12,7 @@ import {
 
 export interface OrdersState extends CommonState {
   executeLoading: boolean;
+  executeSuccess?: boolean;
   executeError?: CommonError;
   currentPrice: number | undefined;
   amount: string;
@@ -20,6 +21,7 @@ export interface OrdersState extends CommonState {
 
 const initialState: OrdersState = {
   executeLoading: false,
+  executeSuccess: false,
   currentPrice: undefined,
   amount: "",
   orderType: "",
@@ -38,6 +40,7 @@ export const ordersReducer = (state = initialState, action: OrdersAction) => {
         ...state,
         executeLoading: false,
         executeError: undefined,
+        executeSuccess: true,
       };
     case ORDER_EXECUTE_ERROR:
       return {

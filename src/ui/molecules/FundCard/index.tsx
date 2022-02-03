@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { AvailableMessage } from "../AvailableMessage";
+
 import * as S from "./styles";
 import { Props } from "./types";
 
@@ -58,9 +60,11 @@ export const FundCard = ({
       {reservedAmountFiat ? <span>~${reservedAmountFiat}</span> : <Skeleton width="4rem" />}
     </S.Container>
     <S.Actions>
-      <button type="button" onClick={handleTransfer}>
-        Transfer
-      </button>
+      <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
+        <button type="button" onClick={handleTransfer}>
+          Transfer
+        </button>
+      </AvailableMessage>
       <button type="button" onClick={handleTrade}>
         Trade
       </button>
