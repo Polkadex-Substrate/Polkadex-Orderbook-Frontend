@@ -40,7 +40,9 @@ export const Transactions = () => {
                 <S.Tab>Trade History</S.Tab>
               </TabHeader>
               <TabHeader>
-                <S.Tab>Transactions</S.Tab>
+                <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
+                  <S.Tab>Transactions</S.Tab>
+                </AvailableMessage>
               </TabHeader>
               <TabHeader>
                 <S.Tab>Funds</S.Tab>
@@ -68,7 +70,7 @@ export const Transactions = () => {
             <TabContent>
               <TradeHistory />
             </TabContent>
-            <TabContent>
+            <TabContent isDisabled>
               <TransactionHistory />
             </TabContent>
             <TabContent>

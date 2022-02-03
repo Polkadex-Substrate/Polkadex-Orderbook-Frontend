@@ -4,8 +4,9 @@ export const AvailableMessage = ({
   message = "Not available in Beta",
   color = "tertiaryBackground",
   children,
+  ...props
 }) => (
-  <S.Wrapper>
+  <S.Wrapper {...props}>
     {children}
     <S.Container color={color}>
       <p>{message}</p>
