@@ -22,5 +22,6 @@ module.exports = {
     INFLUX_DB_URL:
       process.env.NEXT_PUBLIC_INFLUX_DB_URL ||
       "https://ec2-3-101-117-26.us-west-1.polkadex.trade",
+    POLKADEX_FEATURE: process.env.POLKADEX_FEATURE || "signUp",
   },
 };
