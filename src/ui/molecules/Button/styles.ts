@@ -29,8 +29,17 @@ export const Wrapper = styled.button<{
   isFull?: boolean;
   color?: string;
   size?: string;
+  isDisabled?: boolean;
 }>`
-  ${({ theme, size = "medium", isFull = true, background, color, hasIcon = false }) => css`
+  ${({
+    theme,
+    size = "medium",
+    isFull = true,
+    background,
+    color,
+    hasIcon = false,
+    isDisabled,
+  }) => css`
     border-style: "none";
     font-weight: 500;
     transition: background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -42,7 +51,7 @@ export const Wrapper = styled.button<{
     -ms-user-select: none;
     user-select: none;
     color: ${theme.colors[color]};
-    background: ${theme.colors[background]};
+    background: ${isDisabled ? "gray" : theme.colors[background]};
     white-space: nowrap;
     ${sizeModifier[size]()};
     ${hasIcon &&
@@ -59,7 +68,7 @@ export const Wrapper = styled.button<{
             opacity: 0.6;
           `
         : css`
-            background: ${theme.colors.primary};
+            background: ${isDisabled ? "gray" : theme.colors.primary};
             color: ${theme.colors.white};
           `}
     }
