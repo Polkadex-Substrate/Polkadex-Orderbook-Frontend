@@ -9,7 +9,7 @@ import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
-import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
+import { DEFAULT_RANDOM_STRING_LENGTH, QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
 
 export function* fetchTradeChannelSaga() {
   try {
@@ -22,7 +22,9 @@ export function* fetchTradeChannelSaga() {
         fetchTradesChannel(rabbitmqConn, queueName, "*.*.trade-events")
       );
       while (true) {
+        console.log("waiting on recent trades");
         const tradesMsg = yield take(channel);
+        console.log("tradesMsg", tradesMsg);
         const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
         yield put(recentTradesData([data, ...trades]));
@@ -46,10 +48,10 @@ async function fetchTradesChannel(
   queueName: string,
   routingKey: string
 ) {
-  const queue = await chann.queue(queueName, { durable: false });
+  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
+    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);
       emitter(msg);
       res.ack();

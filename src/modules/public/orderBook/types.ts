@@ -1,25 +1,20 @@
-import { CommonState, OrderSide, OrderStatus, OrderType } from "../../types";
+import { CommonState, Fee, OrderSide, OrderStatus, OrderType } from "../../types";
 import { MarketId } from "../markets";
 
 export interface OrderBookOrder {
-  id: number;
-  side: OrderSide;
-  ord_type: OrderType;
+  id: string;
+  base_asset: number;
+  order_side: OrderSide;
+  amount: string;
   price: string;
-  avg_price: string;
-  state: OrderStatus;
-  market: string;
-  created_at: string;
-  volume: string;
-  remaining_volume: string;
-  executed_volume: string;
-  trades_count: number;
+  quote_asset: 1;
 }
-
 export interface OrderBookState extends CommonState {
-  asks: OrderBookOrder[];
-  bids: OrderBookOrder[];
-  loading: boolean;
+  base_asset: number;
+  quote_asset: number;
+  timestamp: string;
+  ask: OrderBookOrder[];
+  bid: OrderBookOrder[];
 }
 
 export interface OrderBookEntry extends CommonState {

@@ -24,6 +24,7 @@ export function* ordersHistorySaga() {
       );
       const data = formatPayload(signature, payload);
       const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
+      console.log("OrdersFetch", res);
       const ordersArray: OrderCommon[] = res.Fine;
       yield put(userOrdersHistoryData({ list: ordersArray }));
     }

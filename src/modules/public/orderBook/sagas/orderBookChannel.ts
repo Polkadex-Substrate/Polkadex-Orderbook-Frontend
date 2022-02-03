@@ -7,7 +7,7 @@ import { depthData, DepthState, orderBookData, OrderBookState } from "..";
 import { alertPush } from "../../alertHandler";
 import { RabbitmqChannelType, selectRabbitmqChannel } from "../../rabbitmqChannel";
 
-import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
+import { DEFAULT_RANDOM_STRING_LENGTH, QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
 
 export function* orderBookChannelSaga() {
   try {
@@ -19,8 +19,9 @@ export function* orderBookChannelSaga() {
         fetchOrderBookChannel(rabbitmqConn, queueName, "*.*.orderbook-snapshot")
       );
       while (true) {
+        console.log("waiting on orderbook snapshot");
         const tradesMsg = yield take(channel);
-        console.log("orderbook channel", tradesMsg);
+        console.log("orderbook ", tradesMsg);
         const data: OrderBookState = JSON.parse(tradesMsg);
         const { asks, bids } = getDepthFromOrderbook(data);
         yield put(orderBookData(data));
@@ -31,7 +32,7 @@ export function* orderBookChannelSaga() {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong..",
+          title: "Something has gone wrong (orderbook channel)..",
           description: error.message,
         },
         type: "Error",
@@ -44,10 +45,10 @@ async function fetchOrderBookChannel(
   queueName: string,
   routingKey: string
 ) {
-  const queue = await chann.queue(queueName, { durable: false });
+  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
+    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);
       emitter(msg);
       res.ack();
@@ -59,11 +60,11 @@ async function fetchOrderBookChannel(
 }
 
 function getDepthFromOrderbook(data: OrderBookState): DepthState {
-  const bids = data.bids.map((bid) => {
-    return [bid.price, bid.volume];
+  const bids = data.bid.map((bid) => {
+    return [bid.price, bid.amount];
   });
-  const asks = data.asks.map((ask) => {
-    return [ask.price, ask.volume];
+  const asks = data.ask.map((ask) => {
+    return [ask.price, ask.amount];
   });
   return { bids, asks };
 }

@@ -9,6 +9,7 @@ import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
 
 export function* balanceChannelSaga() {
   try {
@@ -77,7 +78,7 @@ const updateBalanceFromMsg = (oldBalance: Balance[], balanceMsg: BalanceMessage)
 };
 
 async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, queueName: string) {
-  const queue = await chann.queue(queueName, { durable: false }, { "x-expires": 3000000 });
+  const queue = await chann.queue(queueName, { durable: false });
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
       const msg = u8aToString(res.body);
