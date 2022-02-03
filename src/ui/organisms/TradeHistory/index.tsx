@@ -43,7 +43,6 @@ export const TradeHistory = () => {
           <span>Side</span>
           <span>Price</span>
           <span>Quantity</span>
-          <span>Fee</span>
         </S.Header>
       )}
       {!fetching ? (
