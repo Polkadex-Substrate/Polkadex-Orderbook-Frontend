@@ -73,8 +73,8 @@ export const Orderbook = () => {
       </S.Header>
       <S.Content>
         <OrderbookColumn
-          data={asks}
-          side="asks"
+          data={bids}
+          side="bids"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
         />
@@ -92,8 +92,8 @@ export const Orderbook = () => {
           )}
         </S.Select>
         <OrderbookColumn
-          data={bids}
-          side="bids"
+          data={asks}
+          side="asks"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
         />
