@@ -22,7 +22,6 @@ export function* fetchTradeChannelSaga() {
         fetchTradesChannel(rabbitmqConn, queueName, "*.*.trade-events")
       );
       while (true) {
-        console.log("waiting on recent trades");
         const tradesMsg = yield take(channel);
         console.log("tradesMsg", tradesMsg);
         const trades = yield select(selectRecentTrades);
