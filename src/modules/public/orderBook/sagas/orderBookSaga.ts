@@ -15,7 +15,11 @@ export function* orderBookSaga(action: OrderBookFetch) {
   try {
     // TODO: make dynamic with market
     const market = action.payload;
-    const data = yield call(API.get(orderBookOptions), `/fetch_orderbook`);
+    const res = yield call(API.get(orderBookOptions), `/fetch_orderbook`);
+    if (!res.Fine) {
+      throw new Error(res.Bad);
+    }
+    const data = res.Fine;
     const { asks, bids } = getDepthFromOrderbook(data);
     yield put(orderBookData(data));
     yield put(depthData({ asks, bids }));
