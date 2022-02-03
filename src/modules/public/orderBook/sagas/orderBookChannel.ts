@@ -3,11 +3,13 @@ import { call, put, select, take } from "redux-saga/effects";
 import { u8aToString } from "@polkadot/util";
 import cryptoRandomString from "crypto-random-string";
 
-import { depthData, DepthState, orderBookData, OrderBookState } from "..";
+import { depthData, orderBookData, OrderBookState } from "..";
 import { alertPush } from "../../alertHandler";
 import { RabbitmqChannelType, selectRabbitmqChannel } from "../../rabbitmqChannel";
 
-import { DEFAULT_RANDOM_STRING_LENGTH, QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
+import { getDepthFromOrderbook } from "./helper";
+
+import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
 
 export function* orderBookChannelSaga() {
   try {
@@ -57,20 +59,4 @@ async function fetchOrderBookChannel(
       amqpConsumer.then((consumer) => consumer.cancel());
     };
   });
-}
-
-function getDepthFromOrderbook(data: OrderBookState): DepthState {
-  let bids = data.bid.map((bid) => {
-    return [bid.price, bid.amount];
-  });
-  bids = sortArrayDescending(bids);
-  let asks = data.ask.map((ask) => {
-    return [ask.price, ask.amount];
-  });
-  asks = sortArrayDescending(asks);
-  return { bids, asks };
-}
-
-function sortArrayDescending(arr: string[][]) {
-  return arr.sort((a, b) => Number(b[0]) - Number(a[0]));
 }
