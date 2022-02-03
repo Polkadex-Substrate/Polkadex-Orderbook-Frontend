@@ -1,10 +1,13 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import * as cryptoIcons from "@styled-icons/crypto";
 
 import * as S from "./styles";
 import { Props } from "./types";
 
+import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
+import { toCapitalize } from "@polkadex/web-helpers";
 import {
   Icon,
   Skeleton,
@@ -183,34 +186,40 @@ export const Markets = ({ marketActive = false }) => {
   );
 };
 
-const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => (
-  <S.ContentItemWrapper onClick={onClick}>
-    <S.ContentItemToken>
-      {tokenIcon ? (
-        <Icon isToken size="large" background="secondaryBackground" name={tokenIcon} />
+const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => {
+  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+  const IconComponent = cryptoIcons[toCapitalize(symbol)];
+  return (
+    <S.ContentItemWrapper onClick={onClick}>
+      <S.ContentItemToken>
+        {tokenIcon ? (
+          <S.TokenWrapper>
+            <IconComponent />
+          </S.TokenWrapper>
+        ) : (
+          <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
+        )}
+        <div>
+          {pair ? <p>{pair}</p> : <Skeleton width="10rem" style={{ marginBottom: 10 }} />}
+          {vol ? <span>VOL $ {vol}</span> : <Skeleton width="6rem" />}
+        </div>
+      </S.ContentItemToken>
+      <S.ContentItemPrice>
+        {priceFiat ? (
+          <p>$ {priceFiat}</p>
+        ) : (
+          <Skeleton width="6rem" style={{ marginBottom: 10 }} />
+        )}
+        {price ? <span>{price} BTC</span> : <Skeleton width="4rem" />}
+      </S.ContentItemPrice>
+      {change ? (
+        <Tag title={change} isPositive={isNegative(change.toString())} />
       ) : (
-        <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
+        <Skeleton width="4rem" />
       )}
-      <div>
-        {pair ? <p>{pair}</p> : <Skeleton width="10rem" style={{ marginBottom: 10 }} />}
-        {vol ? <span>VOL $ {vol}</span> : <Skeleton width="6rem" />}
-      </div>
-    </S.ContentItemToken>
-    <S.ContentItemPrice>
-      {priceFiat ? (
-        <p>$ {priceFiat}</p>
-      ) : (
-        <Skeleton width="6rem" style={{ marginBottom: 10 }} />
-      )}
-      {price ? <span>{price} BTC</span> : <Skeleton width="4rem" />}
-    </S.ContentItemPrice>
-    {change ? (
-      <Tag title={change} isPositive={isNegative(change.toString())} />
-    ) : (
-      <Skeleton width="4rem" />
-    )}
-  </S.ContentItemWrapper>
-);
+    </S.ContentItemWrapper>
+  );
+};
 
 const ContentLoading = () => (
   <>

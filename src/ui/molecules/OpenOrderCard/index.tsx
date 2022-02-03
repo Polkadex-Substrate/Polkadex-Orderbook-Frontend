@@ -33,17 +33,17 @@ export const OpenOrderCard = ({
       <span>{amount}</span>
       <span>{filled_qty}</span>
       <span>{Number(price) * Number(amount)}</span>
-      {Number(filled_qty) <= 100 ? (
-        <Icon
-          name="Close"
-          size="small"
-          background="none"
-          onClick={onCancel}
-          style={{ cursor: "pointer" }}
-        />
-      ) : (
-        <div />
-      )}
+      <span>
+        {Number(filled_qty) <= 100 && (
+          <Icon
+            name="Close"
+            size="small"
+            background="none"
+            onClick={onCancel}
+            style={{ cursor: "pointer" }}
+          />
+        )}
+      </span>
     </S.Wrapper>
   );
 };
@@ -110,7 +110,6 @@ const OpenOrderInfo = ({ label = "", value = "" }: InfoProps) => (
 export const LoadingTransactions = () => {
   return (
     <div style={{ paddingRight: "1rem", paddingLeft: "1rem" }}>
-      <LoadingTransactionItem />
       <LoadingTransactionItem />
       <LoadingTransactionItem />
       <LoadingTransactionItem />

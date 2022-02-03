@@ -70,7 +70,6 @@ export const OrderHistory = () => {
           <span>Price</span>
           <span>Executed</span>
           <span>Amount</span>
-          <span>Total</span>
           <span>Status</span>
         </S.Header>
       )}

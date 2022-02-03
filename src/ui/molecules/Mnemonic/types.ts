@@ -2,7 +2,8 @@ import { InputHTMLAttributes } from "react";
 
 export type MnemonicProps = {
   label: string;
-  handleChange: () => void;
+  state: State;
+  handleChange: (values: State) => void;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export type MnemonicExportProps = {
@@ -10,6 +11,9 @@ export type MnemonicExportProps = {
   phrases?: string[];
 };
 
+type State = {
+  tags: string[];
+};
 export type MnemonicSelectProps = {
   handleExport: () => void;
   handleImport: () => void;

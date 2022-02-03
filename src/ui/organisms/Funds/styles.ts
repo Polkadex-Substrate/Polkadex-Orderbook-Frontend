@@ -7,8 +7,6 @@ export const Template = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 0.5rem;
   text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
 `;
 
 export const Header = styled(Template)`
@@ -26,7 +24,7 @@ export const Header = styled(Template)`
 export const Content = styled.div`
   display: grid;
   padding: 0 1rem;
-
+  overflow-x: hidden;
   @media screen and (min-width: 500px) and (max-width: 1110px) {
     grid-template-columns: 1fr 1fr;
   }

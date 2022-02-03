@@ -34,7 +34,7 @@ export function* signUpSaga(action: SignUpFetch) {
         },
       })
     );
-    yield delay(2000);
+    yield delay(3000);
     yield put(signUpData());
   } catch (error) {
     yield put(

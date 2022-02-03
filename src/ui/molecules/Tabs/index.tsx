@@ -65,7 +65,6 @@ export const usePanelState = () => {
 
 export const TabHeader: React.FC = ({ children }) => {
   const state = useTabState();
-
   if (typeof children === "function") {
     return children(state);
   }
@@ -78,8 +77,12 @@ export const TabHeader: React.FC = ({ children }) => {
     : children;
 };
 
-export const TabContent: React.FC<{ active?: boolean }> = ({ active, children }) => {
+export const TabContent: React.FC<{ active?: boolean; isDisabled?: boolean }> = ({
+  active,
+  isDisabled = false,
+  children,
+}) => {
   const isActive = usePanelState();
 
-  return <>{isActive || active ? children : null}</>;
+  return <>{(isActive && !isDisabled) || active ? children : null}</>;
 };

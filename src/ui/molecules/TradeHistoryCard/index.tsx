@@ -32,12 +32,6 @@ export const TradeHistoryCard = ({
       <S.Container>
         <span>{quantity}</span>
       </S.Container>
-      <S.Container>
-        <span>{fee}</span>
-      </S.Container>
-      <S.Container>
-        <span>{profit}</span>
-      </S.Container>
     </S.Wrapper>
   );
 };
@@ -64,13 +58,6 @@ export const TradeHistoryCardReponsive = ({
         <TradeHistoryInfo label="Price" value={price} />
         <TradeHistoryInfo label="Quantity" value={quantity} />
       </S.Content>
-      <S.Footer>
-        <S.FlexJustify>
-          <span>{fee}</span>
-          <p>{profit}</p>
-        </S.FlexJustify>
-        <Bar percent={0} />
-      </S.Footer>
     </S.Box>
   );
 };

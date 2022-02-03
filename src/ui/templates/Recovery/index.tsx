@@ -1,6 +1,8 @@
+// TODO: Move mnemonic state to Formik
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 import * as S from "./styles";
 
@@ -15,7 +17,7 @@ const defaultValues = {
 
 export const RecoveryTemplate = () => {
   const dispatch = useDispatch();
-
+  const [state, setState] = useState({ tags: [] });
   return (
     <S.Main>
       <S.Wrapper>
@@ -33,16 +35,20 @@ export const RecoveryTemplate = () => {
                 <Formik
                   initialValues={defaultValues}
                   onSubmit={async (values) => {
-                    const { password, accountName } = values;
-                    // dispatch(
+                    if (state.tags.length === 12) {
+                      const { password, accountName } = values;
+                      console.log(state.tags, password, accountName);
+                      // dispatch(
 
-                    // );
+                      // );
+                    }
                   }}>
                   {({ errors, touched }) => (
                     <Form>
                       <MnemonicImport
                         label="12-word mnemonic seed"
-                        handleChange={() => console.log("...")}
+                        state={state}
+                        handleChange={setState}
                       />
                       <InputPrimary
                         label="Account Name"

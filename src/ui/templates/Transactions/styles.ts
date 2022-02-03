@@ -29,9 +29,22 @@ export const Header = styled.div`
     }
   `}
 `;
+export const HeaderTabWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+`;
 
 export const Content = styled.div`
   margin-top: 1rem;
+  overflow: overlay;
+  @media screen and (min-width: 1055px) {
+    max-height: 36vh;
+  }
+  @media screen and (max-width: 1055px) {
+    max-height: 36rem;
+  }
 `;
 
 export const Tab = styled.li<{ isActive?: boolean }>`
