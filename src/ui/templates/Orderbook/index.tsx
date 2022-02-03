@@ -16,7 +16,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
@@ -58,22 +58,25 @@ export const Orderbook = () => {
     <S.Wrapper>
       <S.Header>
         <h2>Orderbook</h2>
-        <S.Options>
-          <ul>
-            <li>
-              <Icon name="OrdersBuy" size="extraSmall" />
-            </li>
-            <li>
-              <Icon name="OrdersAll" size="extraSmall" />
-            </li>
-            <li>
-              <Icon name="OrdersSell" size="extraSmall" />
-            </li>
-          </ul>
-          <Dropdown header="001" direction="bottomRight">
-            <p>testing</p>
-          </Dropdown>
-        </S.Options>
+        <AvailableMessage message="Soon">
+          <S.Options>
+            <ul>
+              <li>
+                <Icon name="OrdersBuy" size="extraSmall" />
+              </li>
+              <li>
+                <Icon name="OrdersAll" size="extraSmall" />
+              </li>
+              <li>
+                <Icon name="OrdersSell" size="extraSmall" />
+              </li>
+            </ul>
+
+            <Dropdown header="001" direction="bottomRight">
+              <p>testing</p>
+            </Dropdown>
+          </S.Options>
+        </AvailableMessage>
       </S.Header>
       <S.Content>
         <OrderbookColumn

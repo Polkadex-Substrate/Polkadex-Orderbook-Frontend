@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { Container as Message } from "@polkadex/orderbook-ui/molecules/AvailableMessage/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -14,6 +15,9 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  ${Message} {
+    z-index: 33;
+  }
   h2 {
     ${({ theme }) => css`
       font-size: ${theme.font.sizes.small};
