@@ -4,7 +4,6 @@ import * as S from "./styles";
 import { Props } from "./types";
 
 import { Bar, Skeleton } from "@polkadex/orderbook-ui/molecules";
-import { marketIdMap } from "@polkadex/web-constants";
 
 export const OrderHistoryCard = ({
   date,
@@ -26,7 +25,7 @@ export const OrderHistoryCard = ({
       </S.Container>
       <S.Container>
         <span>
-          {marketIdMap[baseUnit].symbol}/{marketIdMap[quoteUnit].symbol}
+          {baseUnit}/{quoteUnit}
         </span>
       </S.Container>
       <S.Container>
@@ -72,7 +71,7 @@ export const OrderHistoryCardReponsive = ({
       <S.Header isSell={isSell}>
         <div>
           <p>
-            {marketIdMap[baseUnit].symbol}/{marketIdMap[quoteUnit].symbol}
+            {baseUnit}/{quoteUnit}
           </p>
           <span>{side}</span>
         </div>

@@ -32,7 +32,7 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
       return {
         list: sliceArray(action.payload, defaultStorageLimit),
         loading: false,
-        lastTrade: undefined,
+        lastTrade: action.payload[0],
       };
     }
     case RECENT_TRADES_ERROR: {

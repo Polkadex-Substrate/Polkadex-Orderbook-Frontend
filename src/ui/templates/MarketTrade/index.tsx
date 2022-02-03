@@ -51,19 +51,14 @@ export const MarketTrade = () => {
         <S.Box>
           {recentTrades.length ? (
             recentTrades.map((item, index) => {
-              const higlightedDate = getHighLightValue(
-                localeDate(
-                  recentTrades[index - 1] ? recentTrades[index - 1].timestamp.toString() : "",
-                  "time"
-                ),
-                localeDate(item.timestamp.toString(), "time")
-              );
-
+              const isDecreasing = recentTrades[index + 1]
+                ? recentTrades[index].price < recentTrades[index + 1].price
+                : false;
               return (
                 <Card
                   key={index}
-                  isSell={item.order_side === "Sell"}
-                  time={item.timestamp}
+                  isSell={isDecreasing}
+                  time={localeDate(item.timestamp, "time")}
                   price={Decimal.format(item.price, currentMarket.price_precision, ",")}
                   amount={Decimal.format(item.amount, currentMarket.amount_precision, ",")}
                 />

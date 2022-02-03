@@ -39,11 +39,17 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
 
   return `${defaultConfig.polkadexHostUrl}${endPoint}`;
 };
-const makeOHLCVPayload = (market: string, resolution: string, from: number) => {
+const makeOHLCVPayload = (
+  market: string,
+  resolution: string,
+  start?: number,
+  stop?: number
+) => {
   return {
     symbol: market,
     timeframe: resolution,
-    timestamp_start: from,
+    timestamp_start: start,
+    timestamp_stop: stop,
   };
 };
 const resolutionToSeconds = (r: string): number => {
@@ -106,7 +112,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const symbolStub = {
         name: symbol.name,
         currency_code: symbol.quote_unit.toUpperCase(),
-        description: "",
+        description: "Polkadex test tokens",
         type: "bitcoin",
         session: "24x7",
         timezone: "Etc/UTC",
@@ -116,7 +122,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         has_intraday: true,
         intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
         supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
-        volume_precision: 8,
+        volume_precision: 4,
         data_status: "streaming",
       };
 
@@ -151,10 +157,12 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       );
       url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("BTCPDEX", resolutionForPayload(resolution), -31484909);
+      console.log("graph time ", from, to);
+      const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios
         .post(url, payload)
         .then(({ data }) => {
+          console.log("olhcv data", data);
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }

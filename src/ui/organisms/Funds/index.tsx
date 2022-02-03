@@ -15,7 +15,7 @@ import {
   selectHasUser,
   selectBalancesLoading,
 } from "@polkadex/orderbook-modules";
-import { marketIdMap } from "@polkadex/web-constants";
+import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const Funds = () => {
   const dispatch = useDispatch();
@@ -44,11 +44,12 @@ export const Funds = () => {
             balances?.map((token, i) => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               const assetid = Number(token.ticker);
+              const tokenName = assetid ? getSymbolFromAssetId(assetid) : "";
               return (
                 <CardComponent
                   key={i}
                   tokenTicker={token.ticker}
-                  tokenName={marketIdMap[assetid].symbol}
+                  tokenName={tokenName}
                   totalAmount={parseFloat(token.total).toFixed(3)}
                   totalAmountFiat="0.0000000"
                   availableAmount={parseFloat(token.free).toFixed(3)}
