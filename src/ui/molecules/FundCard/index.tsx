@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import * as cryptoIcons from "@styled-icons/crypto";
 
 import { AvailableMessage } from "../AvailableMessage";
 
@@ -6,6 +7,8 @@ import * as S from "./styles";
 import { Props } from "./types";
 
 import { Skeleton, Icon, Bar } from "@polkadex/orderbook-ui/molecules";
+import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
+import { toCapitalize } from "@polkadex/web-helpers";
 
 export const FundCard = ({
   tokenTicker,
@@ -18,59 +21,69 @@ export const FundCard = ({
   reservedAmountFiat = "0.0000000",
   handleTransfer,
   handleTrade,
-}: Props) => (
-  <S.Wrapper>
-    <S.Token>
-      {tokenTicker ? (
-        <Icon isToken size="large" name={tokenTicker} background="secondaryBackground" />
-      ) : (
-        <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
-      )}
-      <div>
-        {tokenName ? (
-          <p>{tokenName}</p>
+}: Props) => {
+  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+  const IconComponent = cryptoIcons[toCapitalize(symbol)];
+  return (
+    <S.Wrapper>
+      <S.Token>
+        {tokenTicker ? (
+          <S.TokenWrapper>
+            <IconComponent />
+          </S.TokenWrapper>
         ) : (
-          <Skeleton width="10rem" style={{ marginBottom: 10 }} />
+          <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
         )}
-        {tokenTicker ? <span> {tokenTicker}</span> : <Skeleton width="6rem" />}
-      </div>
-    </S.Token>
-    <S.Container>
-      {totalAmount ? (
-        <p>{totalAmount}</p>
-      ) : (
-        <Skeleton width="6rem" style={{ marginBottom: 10 }} />
-      )}
-      {totalAmountFiat ? <span>~${totalAmountFiat}</span> : <Skeleton width="4rem" />}
-    </S.Container>
-    <S.Container>
-      {availableAmount ? (
-        <p>{availableAmount}</p>
-      ) : (
-        <Skeleton width="6rem" style={{ marginBottom: 10 }} />
-      )}
-      {availableAmountFiat ? <span>~${availableAmountFiat}</span> : <Skeleton width="4rem" />}
-    </S.Container>
-    <S.Container>
-      {reservedAmount ? (
-        <p>{reservedAmount}</p>
-      ) : (
-        <Skeleton width="6rem" style={{ marginBottom: 10 }} />
-      )}
-      {reservedAmountFiat ? <span>~${reservedAmountFiat}</span> : <Skeleton width="4rem" />}
-    </S.Container>
-    <S.Actions>
-      <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
-        <button type="button" onClick={handleTransfer}>
-          Transfer
+        <div>
+          {tokenName ? (
+            <p>{tokenName}</p>
+          ) : (
+            <Skeleton width="10rem" style={{ marginBottom: 10 }} />
+          )}
+          {tokenTicker ? <span> {tokenTicker}</span> : <Skeleton width="6rem" />}
+        </div>
+      </S.Token>
+      <S.Container>
+        {totalAmount ? (
+          <p>{totalAmount}</p>
+        ) : (
+          <Skeleton width="6rem" style={{ marginBottom: 10 }} />
+        )}
+        {totalAmountFiat ? <span>~${totalAmountFiat}</span> : <Skeleton width="4rem" />}
+      </S.Container>
+      <S.Container>
+        {availableAmount ? (
+          <p>{availableAmount}</p>
+        ) : (
+          <Skeleton width="6rem" style={{ marginBottom: 10 }} />
+        )}
+        {availableAmountFiat ? (
+          <span>~${availableAmountFiat}</span>
+        ) : (
+          <Skeleton width="4rem" />
+        )}
+      </S.Container>
+      <S.Container>
+        {reservedAmount ? (
+          <p>{reservedAmount}</p>
+        ) : (
+          <Skeleton width="6rem" style={{ marginBottom: 10 }} />
+        )}
+        {reservedAmountFiat ? <span>~${reservedAmountFiat}</span> : <Skeleton width="4rem" />}
+      </S.Container>
+      <S.Actions>
+        <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
+          <button type="button" onClick={handleTransfer}>
+            Transfer
+          </button>
+        </AvailableMessage>
+        <button type="button" onClick={handleTrade}>
+          Trade
         </button>
-      </AvailableMessage>
-      <button type="button" onClick={handleTrade}>
-        Trade
-      </button>
-    </S.Actions>
-  </S.Wrapper>
-);
+      </S.Actions>
+    </S.Wrapper>
+  );
+};
 
 export const FundCardReponsive = ({
   tokenTicker,

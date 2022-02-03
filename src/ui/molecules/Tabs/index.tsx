@@ -65,7 +65,6 @@ export const usePanelState = () => {
 
 export const TabHeader: React.FC = ({ children }) => {
   const state = useTabState();
-
   if (typeof children === "function") {
     return children(state);
   }

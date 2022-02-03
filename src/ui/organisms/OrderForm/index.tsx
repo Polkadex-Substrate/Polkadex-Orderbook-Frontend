@@ -57,6 +57,14 @@ export const OrderForm = ({
     listenInputPrice && listenInputPrice();
   };
 
+  const handleTypeChange = (value: "Market" | "Limit") => {
+    console.log("Clicked");
+    setState({
+      ...state,
+      orderType: value,
+    });
+  };
+
   const handleAmountChange = (value: string) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
     if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
@@ -103,7 +111,7 @@ export const OrderForm = ({
             <S.TabHeader>Limit</S.TabHeader>
           </TabHeader>
           <TabHeader>
-            <S.TabHeader isMarket>Market</S.TabHeader>
+            <S.TabHeader>Market</S.TabHeader>
           </TabHeader>
         </S.Header>
         <div>
@@ -119,12 +127,15 @@ export const OrderForm = ({
                 <Skeleton width="4rem" />
               )}
             </S.AvailableAmount>
-            <SecondaryInput
-              value={state.price}
-              placeholder="Price"
-              onChange={(e) => handlePriceChange(e.currentTarget.value)}>
-              <span>{quoteUnit}</span>
-            </SecondaryInput>
+            {state.orderType !== "Market" && (
+              <SecondaryInput
+                value={state.price}
+                placeholder="Price"
+                onChange={(e) => handlePriceChange(e.currentTarget.value)}>
+                <span>{quoteUnit}</span>
+              </SecondaryInput>
+            )}
+
             <SecondaryInput
               placeholder="Amount"
               value={isSellSide ? state.amountSell : state.amountBuy}

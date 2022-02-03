@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 
 import {
+  notificationPush,
   openOrdersCancelFetch,
   selectCurrentMarket,
   selectOpenOrdersHistory,
@@ -28,7 +29,18 @@ export const OpenOrders = () => {
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
-  const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
+  const handleCancel = (id: string) =>
+    dispatch(
+      notificationPush({
+        type: "Error",
+        message: {
+          title: "Not Available in Beta",
+          description: "Polkadex team is currently working on this functionality.",
+        },
+      })
+    );
+
+  // const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
     if (userLoggedIn) dispatch(userOrdersHistoryFetch());

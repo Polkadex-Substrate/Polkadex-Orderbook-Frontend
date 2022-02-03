@@ -1,10 +1,11 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, delay, put, select } from "redux-saga/effects";
 import { Keyring } from "@polkadot/api";
 
 import {
   sendError,
   selectUserInfo,
   userOpenOrdersAppend,
+  orderExecuteDataDelete,
   orderExecuteData,
   orderExecuteError,
   OrderExecuteFetch,
@@ -12,9 +13,11 @@ import {
 } from "../../..";
 import { notificationPush } from "../../notificationHandler";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { defaultConfig, API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
+
+const { alertDisplayTime } = defaultConfig;
 
 const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
@@ -42,6 +45,8 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       if (res.FineWithMessage) {
         yield put(orderExecuteData());
         console.log(res.Fine);
+        yield delay(5000);
+        yield put(orderExecuteDataDelete());
         yield put(userOrdersHistoryFetch());
       } else {
         throw new Error(res.Bad);

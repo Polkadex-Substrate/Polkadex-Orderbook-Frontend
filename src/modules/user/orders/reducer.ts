@@ -8,6 +8,7 @@ import {
   ORDERS_SET_AMOUNT,
   ORDERS_SET_CURRENT_PRICE,
   ORDERS_SET_ORDER_TYPE,
+  ORDER_EXECUTE_DATA_DELETE,
 } from "./constants";
 
 export interface OrdersState extends CommonState {
@@ -42,6 +43,13 @@ export const ordersReducer = (state = initialState, action: OrdersAction) => {
         executeError: undefined,
         executeSuccess: true,
       };
+
+    case ORDER_EXECUTE_DATA_DELETE:
+      return {
+        ...state,
+        executeSuccess: false,
+      };
+
     case ORDER_EXECUTE_ERROR:
       return {
         ...state,

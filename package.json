@@ -20,6 +20,7 @@
     "@polkadot/extension-dapp": "^0.40.3",
     "@polkadot/ui-keyring": "^0.85.4",
     "@polkadot/util-crypto": "^7.4.1",
+    "@styled-icons/crypto": "^10.38.0",
     "axios": "^0.22.0",
     "crypto-random-string": "^4.0.0",
     "easyqrcodejs": "^4.4.6",

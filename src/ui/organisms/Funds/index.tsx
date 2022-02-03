@@ -16,6 +16,7 @@ import {
   selectBalancesLoading,
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { tokensTicker } from "@polkadex/web-helpers";
 
 export const Funds = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ export const Funds = () => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               const assetid = Number(token.ticker);
               const tokenName = assetid ? getSymbolFromAssetId(assetid) : "";
+              console.log("Token info:", token);
               return (
                 <CardComponent
                   key={i}
