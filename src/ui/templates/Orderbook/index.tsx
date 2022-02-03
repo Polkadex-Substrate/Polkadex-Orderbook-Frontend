@@ -142,7 +142,7 @@ const OrderbookColumn = ({
   React.useEffect(() => {
     if (isBottomPosition && !!contentRef?.current)
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  }, [isBottomPosition]);
+  }, [isBottomPosition, contentRef, data]);
 
   return (
     <S.Box>
