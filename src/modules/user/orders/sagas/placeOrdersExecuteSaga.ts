@@ -35,7 +35,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         symbol: symbol,
         order_side: side,
         order_type,
-        price,
+        price: order_type === "Limit" ? price : "null",
         amount,
         account: address,
       };
