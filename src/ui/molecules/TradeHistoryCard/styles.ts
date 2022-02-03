@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Template = styled.div`
   display: grid;
-  grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1.5fr;
+  grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr;
   grid-gap: 0.5rem;
   text-align: left;
 `;

@@ -35,9 +35,6 @@ export const TradeHistoryCard = ({
       <S.Container>
         <span>{fee}</span>
       </S.Container>
-      <S.Container>
-        <span>{profit}</span>
-      </S.Container>
     </S.Wrapper>
   );
 };
@@ -67,7 +64,6 @@ export const TradeHistoryCardReponsive = ({
       <S.Footer>
         <S.FlexJustify>
           <span>{fee}</span>
-          <p>{profit}</p>
         </S.FlexJustify>
         <Bar percent={0} />
       </S.Footer>
