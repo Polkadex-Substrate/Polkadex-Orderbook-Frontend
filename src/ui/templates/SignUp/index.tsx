@@ -37,7 +37,7 @@ export const SignUpTemplate = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  const isPublicBranch = defaultConfig.polkadexFeature === "signup";
+  const isPublicBranch = defaultConfig.polkadexFeature === "none";
   useEffect(() => {
     if (signUpSuccess) router.push("/login");
   }, [signUpSuccess, router]);
