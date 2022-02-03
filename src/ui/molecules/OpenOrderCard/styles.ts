@@ -5,8 +5,6 @@ export const Wrapper = styled.div`
   grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
   grid-gap: 0.5rem;
   text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
   font-size: 1.3rem;
   padding: 0 1rem;
   :not(:last-child) {

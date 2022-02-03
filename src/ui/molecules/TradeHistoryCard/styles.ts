@@ -5,8 +5,6 @@ export const Template = styled.div`
   grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1.5fr;
   grid-gap: 0.5rem;
   text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
 `;
 
 export const Wrapper = styled(Template)`

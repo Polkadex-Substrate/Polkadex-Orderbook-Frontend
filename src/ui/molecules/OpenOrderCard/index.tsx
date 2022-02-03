@@ -125,7 +125,6 @@ export const LoadingTransactions = () => {
       <LoadingTransactionItem />
       <LoadingTransactionItem />
       <LoadingTransactionItem />
-      <LoadingTransactionItem />
     </div>
   );
 };
