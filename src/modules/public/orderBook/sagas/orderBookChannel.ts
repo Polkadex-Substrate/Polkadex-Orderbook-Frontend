@@ -19,6 +19,7 @@ export function* orderBookChannelSaga() {
         fetchOrderBookChannel(rabbitmqConn, queueName, "*.*.orderbook-snapshot")
       );
       while (true) {
+        console.log("waiting on orderbook snapshot");
         const tradesMsg = yield take(channel);
         console.log("orderbook ", tradesMsg);
         const data: OrderBookState = JSON.parse(tradesMsg);
@@ -44,14 +45,10 @@ async function fetchOrderBookChannel(
   queueName: string,
   routingKey: string
 ) {
-  const queue = await chann.queue(
-    queueName,
-    { durable: false },
-    { "x-expires": QUEUE_EXPIRY_TIME }
-  );
+  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
+    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);
       emitter(msg);
       res.ack();

@@ -21,11 +21,7 @@ export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
 }
 
 async function fetchOrderUpdatesChannel(chann) {
-  const queue = await chann.queue(
-    "345563xbh-order-update-events",
-    { durable: false },
-    { "x-expires": QUEUE_EXPIRY_TIME }
-  );
+  const queue = await chann.queue("345563xbh-order-update-events", { durable: false });
   await queue.bind("amq.direct");
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {

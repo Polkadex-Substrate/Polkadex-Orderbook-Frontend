@@ -22,6 +22,7 @@ export function* fetchTradeChannelSaga() {
         fetchTradesChannel(rabbitmqConn, queueName, "*.*.trade-events")
       );
       while (true) {
+        console.log("waiting on recent trades");
         const tradesMsg = yield take(channel);
         console.log("tradesMsg", tradesMsg);
         const trades = yield select(selectRecentTrades);
@@ -47,14 +48,10 @@ async function fetchTradesChannel(
   queueName: string,
   routingKey: string
 ) {
-  const queue = await chann.queue(
-    queueName,
-    { durable: false },
-    { "x-expires": QUEUE_EXPIRY_TIME }
-  );
+  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
+    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);
       emitter(msg);
       res.ack();

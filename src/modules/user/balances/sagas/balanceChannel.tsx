@@ -78,11 +78,7 @@ const updateBalanceFromMsg = (oldBalance: Balance[], balanceMsg: BalanceMessage)
 };
 
 async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, queueName: string) {
-  const queue = await chann.queue(
-    queueName,
-    { durable: false },
-    { "x-expires": QUEUE_EXPIRY_TIME }
-  );
+  const queue = await chann.queue(queueName, { durable: false });
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
       const msg = u8aToString(res.body);
