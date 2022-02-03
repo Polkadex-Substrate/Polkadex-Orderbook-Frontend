@@ -44,6 +44,7 @@ export const SignUpTemplate = () => {
 
   if (signUpSuccess) return <div />;
   console.log("POLKADEX_FEATURE", defaultConfig.polkadexFeature);
+
   return (
     <S.Main>
       {!!mnemonic?.length && (

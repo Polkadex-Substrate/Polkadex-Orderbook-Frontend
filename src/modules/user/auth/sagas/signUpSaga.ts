@@ -6,16 +6,20 @@ import { sendError, alertPush } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { API, defaultConfig, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
+import { checkIfWhitelisted } from "@polkadex/orderbook/helpers/checkWhitelistAccouts";
 
 const registerUserOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
-
+const isPublicBranch = defaultConfig.polkadexFeature === "none";
 export function* signUpSaga(action: SignUpFetch) {
   try {
     const { mnemonic, password, accountName } = action.payload;
+    if (isPublicBranch && !checkIfWhitelisted(mnemonic)) {
+      throw new Error("This mnemonic is not whitelisted");
+    }
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
     const proxyAddress = pair.address;
     yield call(() => registerAccount(pair, proxyAddress));
