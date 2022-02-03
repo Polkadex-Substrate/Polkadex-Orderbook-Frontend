@@ -81,6 +81,7 @@ export const Orderbook = () => {
           side="bids"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
+          isBottomPosition
         />
         <S.Select>
           {currentMarket ? (
@@ -122,6 +123,7 @@ const OrderbookColumn = ({
   side = "asks",
   isLarge = true,
   handleSelectPrice,
+  isBottomPosition = false,
 }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
@@ -135,16 +137,23 @@ const OrderbookColumn = ({
   const getRowWidth = (index: number) =>
     valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
 
+  const contentRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (isBottomPosition && !!contentRef?.current)
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+  }, [isBottomPosition]);
+
   return (
     <S.Box>
       {data.length ? (
         <>
-          <S.BoxHeader>
+          <S.BoxHeader onClick={() => console.log(contentRef?.current?.scrollIntoView())}>
             <span>Price({formattedBaseUnit})</span>
             <span>Amount({formattedQuoteUnit})</span>
             <span>Total({formattedBaseUnit})</span>
           </S.BoxHeader>
-          <S.BoxContent>
+          <S.BoxContent ref={contentRef}>
             {data.map((item, index) => {
               const total = isLarge
                 ? accumulateVolume(data)

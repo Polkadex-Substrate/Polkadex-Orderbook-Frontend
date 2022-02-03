@@ -66,7 +66,6 @@ export const BoxHeader = styled.div`
 
 export const BoxContent = styled.div`
   ${({ theme }) => css`
-    max-height: 22.2rem;
     overflow-x: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
