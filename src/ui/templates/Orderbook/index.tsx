@@ -19,12 +19,11 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Icon, Skeleton, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
-let prevTradePrice = 0;
-const prevIsPriceUp = false;
 
 export const Orderbook = () => {
   const dispatch = useDispatch();
-
+  const [isPriceUp, setIsPriceUp] = React.useState(true);
+  const [prevTradePrice, setPrevTradePrice] = React.useState(0);
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const currentMarket = useReduxSelector(selectCurrentMarket);
@@ -36,16 +35,21 @@ export const Orderbook = () => {
 
   const currentTicker = getTickerValue(currentMarket, marketTickers);
 
-  const checkIsPriceChanegePositve = () => {
-    let result = false;
-    if (currentPrice > prevTradePrice) {
-      result = true;
-    } else if (currentPrice === prevTradePrice) {
-      result = prevIsPriceUp;
-    }
-    prevTradePrice = currentPrice;
-    return result;
-  };
+  React.useEffect(() => {
+    const price = Number(lastRecentTrade?.price);
+    const checkIsPriceChanegePositve = () => {
+      if (price > prevTradePrice) {
+        return true;
+      } else if (price === prevTradePrice) {
+        return isPriceUp;
+      }
+      return false;
+    };
+    const _isPriceUp = checkIsPriceChanegePositve();
+    setIsPriceUp(_isPriceUp);
+    setPrevTradePrice(price);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastRecentTrade]);
 
   const getLastPrice = () => {
     let lastPrice = "";
@@ -59,7 +63,7 @@ export const Orderbook = () => {
     }
     return lastPrice;
   };
-  const isPriceUp = checkIsPriceChanegePositve();
+
   const maxVolume = calcMaxVolume(bids, asks);
   const handleSelectPrice = (index: string, side: "asks" | "bids") => {
     const arr = side === "asks" ? asks : bids;
