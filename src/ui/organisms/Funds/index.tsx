@@ -45,7 +45,7 @@ export const Funds = () => {
             balances?.map((token, i) => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               const assetid = Number(token.ticker);
-              const tokenName = assetid ? getSymbolFromAssetId(assetid) : "";
+              const tokenName = getSymbolFromAssetId(assetid);
               console.log("Token info:", token);
               return (
                 <CardComponent
