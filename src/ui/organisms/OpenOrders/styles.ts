@@ -5,7 +5,7 @@ export const Wrapper = styled.section``;
 export const Header = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
+    grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 1fr 1rem;
     grid-gap: 0.5rem;
     text-align: left;
     margin-bottom: 1rem;

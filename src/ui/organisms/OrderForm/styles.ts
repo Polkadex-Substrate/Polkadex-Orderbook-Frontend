@@ -20,6 +20,9 @@ export const Header = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 1.5rem;
 `;
+
+export const Content = styled.div``;
+
 export const Message = styled.div`
   ${({ theme }) => css`
     text-align: center;

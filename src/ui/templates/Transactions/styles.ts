@@ -29,6 +29,12 @@ export const Header = styled.div`
     }
   `}
 `;
+export const HeaderTabWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+`;
 
 export const Content = styled.div`
   margin-top: 1rem;
