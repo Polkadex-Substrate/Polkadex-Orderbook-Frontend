@@ -19,4 +19,5 @@ export const defaultConfig: DefaultConfig = {
   alertDisplayTime: 8000,
   msPricesUpdates: 1000,
   maintenanceMode: false,
+  polkadexFeature: process.env.POLKADEX_FEATURE,
 };

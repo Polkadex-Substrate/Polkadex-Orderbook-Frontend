@@ -60,11 +60,17 @@ async function fetchOrderBookChannel(
 }
 
 function getDepthFromOrderbook(data: OrderBookState): DepthState {
-  const bids = data.bid.map((bid) => {
+  let bids = data.bid.map((bid) => {
     return [bid.price, bid.amount];
   });
-  const asks = data.ask.map((ask) => {
+  bids = sortArrayDescending(bids);
+  let asks = data.ask.map((ask) => {
     return [ask.price, ask.amount];
   });
+  asks = sortArrayDescending(asks);
   return { bids, asks };
+}
+
+function sortArrayDescending(arr: string[][]) {
+  return arr.sort((a, b) => Number(b[0]) - Number(a[0]));
 }
