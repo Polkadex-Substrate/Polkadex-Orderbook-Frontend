@@ -12,7 +12,11 @@ import {
   TabContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { orderExecuteFetch, selectOrderExecuteSucess } from "@polkadex/orderbook-modules";
+import {
+  orderExecuteFetch,
+  selectOrderExecuteLoading,
+  selectOrderExecuteSucess,
+} from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 import { OrderType } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -96,6 +100,7 @@ export const OrderForm = ({
     );
   };
   const orderCreated = useReduxSelector(selectOrderExecuteSucess);
+  const isLoading = useReduxSelector(selectOrderExecuteLoading);
 
   return (
     <S.Wrapper>
@@ -125,6 +130,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
           <TabContent>
@@ -144,6 +150,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
         </S.Content>
@@ -167,6 +174,7 @@ export const MarketType = ({
   total,
   orderCreated,
   side,
+  isLoading,
 }) => {
   return (
     <form>
@@ -212,6 +220,9 @@ export const MarketType = ({
         size="extraLarge"
         isFull
         onClick={handleOrders}
+        disabled={
+          isLoading || !state.price || (isSellSide ? !state.amountSell : !state.amountBuy)
+        }
         background="secondaryBackground">
         {toCapitalize(side)}
       </Button>

@@ -180,19 +180,14 @@ const OrderbookColumn = ({
                       {total[index]}
                     </Decimal>
                   </S.OrderbookCardWrapper>
-                </S.OrderbookCard>
-              );
-            })}
-            <S.OrderbookVolume>
-              {data &&
-                data.map((item, index) => (
                   <S.VolumeSpan
                     key={index}
                     isSell={isSell}
                     style={{ width: getRowWidth(index) }}
                   />
-                ))}
-            </S.OrderbookVolume>
+                </S.OrderbookCard>
+              );
+            })}
           </S.BoxContent>
         </>
       ) : (
