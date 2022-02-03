@@ -19,6 +19,8 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+let prevTradePrice = 0;
+const prevIsPriceUp = false;
 
 export const Orderbook = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,17 @@ export const Orderbook = () => {
 
   const currentTicker = getTickerValue(currentMarket, marketTickers);
 
+  const checkIsPriceChanegePositve = () => {
+    let result = false;
+    if (currentPrice > prevTradePrice) {
+      result = true;
+    } else if (currentPrice === prevTradePrice) {
+      result = prevIsPriceUp;
+    }
+    prevTradePrice = currentPrice;
+    return result;
+  };
+
   const getLastPrice = () => {
     let lastPrice = "";
     if (
@@ -46,8 +59,8 @@ export const Orderbook = () => {
     }
     return lastPrice;
   };
+  const isPriceUp = checkIsPriceChanegePositve();
   const maxVolume = calcMaxVolume(bids, asks);
-
   const handleSelectPrice = (index: string, side: "asks" | "bids") => {
     const arr = side === "asks" ? asks : bids;
     const priceToSet = arr[Number(index)] && Number(arr[Number(index)][0]);
@@ -87,7 +100,7 @@ export const Orderbook = () => {
           {currentMarket ? (
             <S.LastPriceWrapper>
               Latest Price
-              <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
+              <S.LastPrice isPositive={isPriceUp}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
               </S.LastPrice>
