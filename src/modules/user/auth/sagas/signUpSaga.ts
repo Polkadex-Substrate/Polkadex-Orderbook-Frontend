@@ -16,7 +16,6 @@ const registerUserOption: RequestOptions = {
 const isPublicBranch = defaultConfig.polkadexFeature === "none";
 export function* signUpSaga(action: SignUpFetch) {
   try {
-    console.log("in signup saga");
     const { mnemonic, password, accountName } = action.payload;
     if (isPublicBranch && !checkIfWhitelisted(mnemonic)) {
       throw new Error("This mnemonic is not whitelisted");
@@ -57,9 +56,7 @@ export const registerAccount = async (userKeyring: KeyringPair, proxyAddress: st
     },
     payload,
   };
-  console.log(data);
   const res: any = await API.post(registerUserOption)("/register", data);
-  console.log(res);
   if (res.Bad && !res.Bad.includes("AccountAlreadyRegistered")) {
     throw new Error(res.Bad);
   }

@@ -11,7 +11,6 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
   // const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Paste from clipboard");
   const onInputKeyDown = (e) => {
     const val = e.target.value;
-    console.log("onkeyDown", val);
     const sameValue = state.tags.find((tag) => tag.toLowerCase() === val.toLowerCase());
     const hasSpace = /\s/.test(val);
     if (val && e.key === "Enter") {

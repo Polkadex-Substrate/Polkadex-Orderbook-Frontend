@@ -22,7 +22,6 @@ export function* orderBookChannelSaga() {
       );
       while (true) {
         const tradesMsg = yield take(channel);
-        console.log("orderbook ", tradesMsg);
         const data: OrderBookState = JSON.parse(tradesMsg);
         const { asks, bids } = getDepthFromOrderbook(data);
         yield put(orderBookData(data));

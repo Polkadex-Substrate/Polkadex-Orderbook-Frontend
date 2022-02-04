@@ -45,7 +45,6 @@ export const RecoveryTemplate = () => {
                 <Formik
                   initialValues={defaultValues}
                   onSubmit={async (values) => {
-                    console.log("mnemonic array", state.tags);
                     if (state.tags.length === 12) {
                       const { password, accountName } = values;
                       console.log(state.tags, password, accountName);
