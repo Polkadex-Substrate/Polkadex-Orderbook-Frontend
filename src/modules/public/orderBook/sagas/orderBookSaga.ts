@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 
-import { sendError } from "../../../";
+import { alertPush } from "../../../";
 import { depthData, orderBookData, orderBookError, OrderBookFetch } from "../actions";
 
 import { getDepthFromOrderbook } from "./helper";
@@ -13,7 +13,7 @@ const orderBookOptions: RequestOptions = {
 
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
-    // TODO: make dynamic with market
+    // TODO: make dynamic with market.
     const market = action.payload;
     const res = yield call(API.get(orderBookOptions), `/fetch_orderbook`);
     if (!res.Fine) {
@@ -25,12 +25,12 @@ export function* orderBookSaga(action: OrderBookFetch) {
     yield put(depthData({ asks, bids }));
   } catch (error) {
     yield put(
-      sendError({
-        error,
-        processingType: "console",
-        extraOptions: {
-          actionError: orderBookError,
+      alertPush({
+        message: {
+          title: "Something has gone wrong (orderbook fetch)..",
+          description: error.message,
         },
+        type: "Error",
       })
     );
   }

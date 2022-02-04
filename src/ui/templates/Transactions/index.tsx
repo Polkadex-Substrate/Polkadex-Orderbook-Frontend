@@ -29,28 +29,25 @@ export const Transactions = () => {
       {userLoggedIn ? (
         <Tabs>
           <S.Header>
-            <S.HeaderTabWrapper>
-              <ul>
-                <TabHeader>
-                  <S.Tab>Open Orders</S.Tab>
-                </TabHeader>
-                <TabHeader>
-                  <S.Tab>Orders History</S.Tab>
-                </TabHeader>
-                <TabHeader>
-                  <S.Tab>Trade History</S.Tab>
-                </TabHeader>
-                <TabHeader>
-                  <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
-                    <S.Tab>Transactions</S.Tab>
-                  </AvailableMessage>
-                </TabHeader>
-              </ul>
+            <ul>
+              <TabHeader>
+                <S.Tab>Open Orders</S.Tab>
+              </TabHeader>
+              <TabHeader>
+                <S.Tab>Orders History</S.Tab>
+              </TabHeader>
+              <TabHeader>
+                <S.Tab>Trade History</S.Tab>
+              </TabHeader>
+              <TabHeader>
+                <AvailableMessage message="Soon" style={{ display: "inline-block" }}>
+                  <S.Tab>Transactions</S.Tab>
+                </AvailableMessage>
+              </TabHeader>
               <TabHeader>
                 <S.Tab as="div">Funds</S.Tab>
               </TabHeader>
-            </S.HeaderTabWrapper>
-
+            </ul>
             {/* <AvailableMessage>
               <S.Filters>
                 <Dropdown

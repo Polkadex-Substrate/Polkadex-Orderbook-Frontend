@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { Container as Message } from "@polkadex/orderbook-ui/molecules/AvailableMessage/styles";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -14,6 +15,9 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  ${Message} {
+    z-index: 33;
+  }
   h2 {
     ${({ theme }) => css`
       font-size: ${theme.font.sizes.small};
@@ -42,6 +46,7 @@ export const Options = styled.div`
 export const Content = styled.div`
   display: grid;
   grid-template-rows: 1fr min-content 1fr;
+  height: auto;
 `;
 export const Box = styled.div``;
 
@@ -64,13 +69,13 @@ export const BoxHeader = styled.div`
   `}
 `;
 
-export const BoxContent = styled.div`
-  ${({ theme }) => css`
-    max-height: 22.2rem;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    scrollbar-width: none;
+export const BoxContent = styled.div<{ hasScroll?: boolean }>`
+  ${({ theme, hasScroll }) => css`
     max-height: 15rem;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: ${hasScroll ? "scroll" : "hidden"};
+    scrollbar-width: none;
     position: relative;
     font-weight: 500;
 
@@ -125,9 +130,8 @@ export const OrderbookCard = styled.div`
     padding: 0.1rem 1rem;
     transition: ${theme.transition.default};
 
-    :hover {
+    :hover ${VolumeSpan} {
       opacity: 0.5;
-      background: ${theme.colors.primaryBackground};
     }
 
     :not(:last-child) {
@@ -157,25 +161,11 @@ export const LastPrice = styled.strong<{ isPositive?: boolean }>`
   `}
 `;
 
-export const OrderbookVolume = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  left: 0;
-  overflow: hidden;
-  width: 100%;
-  top: 0;
-  z-index: 0;
-`;
-
 export const VolumeSpan = styled.span<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    box-sizing: border-box;
-    display: block;
-    height: 1.95rem;
+    position: absolute;
+    height: 100%;
     opacity: 0.2;
-    margin-bottom: 1px;
-    padding-bottom: calc(0.5em * 2.5);
     background: ${isSell ? theme.colors.gradientGreen : theme.colors.gradientRed};
   `}
 `;

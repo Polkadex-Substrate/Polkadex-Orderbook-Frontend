@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
@@ -12,7 +12,11 @@ import {
   TabContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { orderExecuteFetch, selectOrderExecuteSucess } from "@polkadex/orderbook-modules";
+import {
+  orderExecuteFetch,
+  selectOrderExecuteLoading,
+  selectOrderExecuteSucess,
+} from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 import { OrderType } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -82,11 +86,11 @@ export const OrderForm = ({
     }
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
-  const handleOrders = (e) => {
+  const handleOrders = (e, isMarket) => {
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: state.orderType as OrderType,
+        order_type: isMarket ? "Market" : "Limit",
         symbol: symbolArray,
         side,
         price: state.price,
@@ -96,6 +100,7 @@ export const OrderForm = ({
     );
   };
   const orderCreated = useReduxSelector(selectOrderExecuteSucess);
+  const isLoading = useReduxSelector(selectOrderExecuteLoading);
 
   return (
     <S.Wrapper>
@@ -114,7 +119,7 @@ export const OrderForm = ({
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
-              quoteUnit={baseUnit}
+              quoteUnit={quoteUnit}
               isSellSide={isSellSide}
               state={state}
               handlePriceChange={handlePriceChange}
@@ -125,6 +130,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
           <TabContent>
@@ -133,7 +139,7 @@ export const OrderForm = ({
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
-              quoteUnit={baseUnit}
+              quoteUnit={quoteUnit}
               isSellSide={isSellSide}
               state={state}
               handlePriceChange={handlePriceChange}
@@ -144,6 +150,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
         </S.Content>
@@ -167,7 +174,21 @@ export const MarketType = ({
   total,
   orderCreated,
   side,
+  isLoading,
 }) => {
+  const amountInput = isSellSide ? Number(state.amountSell) : Number(state.amountBuy);
+  const amountAvailable = isSellSide
+    ? Number(availableBaseAmount) <= 0
+    : Number(availableQuoteAmount) <= 0;
+
+  const isDisabled = useMemo(() => {
+    if (isMarket) {
+      return isLoading || !amountInput || amountAvailable;
+    } else {
+      return isLoading || !amountInput || !Number(state.price) || amountAvailable;
+    }
+  }, [isLoading, amountInput, amountAvailable, isMarket, state]);
+
   return (
     <form>
       <S.AvailableAmount>
@@ -209,10 +230,18 @@ export const MarketType = ({
       <Button
         type="submit"
         color="text"
+        hoverColor={isSellSide ? "primary" : "green"}
         size="extraLarge"
         isFull
-        onClick={handleOrders}
-        background="secondaryBackground">
+        onClick={(e) => handleOrders(e, isMarket)}
+        disabled={isDisabled}
+        background={
+          amountInput && state.price
+            ? isSellSide
+              ? "primary"
+              : "green"
+            : "secondaryBackground"
+        }>
         {toCapitalize(side)}
       </Button>
       {orderCreated && <S.Message>Order created successfully</S.Message>}

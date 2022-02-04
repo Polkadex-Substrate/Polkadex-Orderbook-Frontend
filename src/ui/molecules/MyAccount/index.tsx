@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import { Button, Icon, WalletInput, Skeleton } from "../";
 
@@ -7,7 +8,7 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectUserInfo } from "@polkadex/orderbook-modules";
+import { balancesFetch, selectUserInfo } from "@polkadex/orderbook-modules";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 
@@ -72,6 +73,7 @@ export const MyAccountContent = ({
   // add test funds
   // TODO: should be removed at relesse
   const user = useReduxSelector(selectUserInfo);
+  const dispatch = useDispatch();
   const userKeyring = user.keyringPair;
   const option: RequestOptions = {
     apiVersion: "polkadexHostUrl",
@@ -81,8 +83,8 @@ export const MyAccountContent = ({
     if (user.address) {
       try {
         const payloads = [
-          { account: user.address, asset: 1, amount: "1000000.0" },
-          { account: user.address, asset: 0, amount: "1000000.0" },
+          { account: user.address, asset: 1, amount: "100.0" },
+          { account: user.address, asset: 0, amount: "100.0" },
         ];
         const reqs = payloads.map(async (payload) => {
           const signature = await signMessage(userKeyring, JSON.stringify(payload));
@@ -99,6 +101,7 @@ export const MyAccountContent = ({
         console.log(res);
         // @ts-ignore
         if (res[0].Fine && res[1].Fine) {
+          dispatch(balancesFetch());
           alert("Funds added, You are rich now!");
         } else {
           throw Error("Error adding funds");

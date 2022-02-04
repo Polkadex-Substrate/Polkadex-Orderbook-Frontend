@@ -23,7 +23,7 @@ export const FundCard = ({
   handleTrade,
 }: Props) => {
   const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  const IconComponent = cryptoIcons[toCapitalize(symbol)];
+  const IconComponent = cryptoIcons[toCapitalize(symbol) || "Dot"];
   return (
     <S.Wrapper>
       <S.Token>
