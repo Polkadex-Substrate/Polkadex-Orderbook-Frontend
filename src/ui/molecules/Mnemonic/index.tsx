@@ -57,7 +57,10 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
         </ul>
 
         <S.MnemonicAction type="button">
-          <span>Please Type the words and press Enter (do not paste)</span>
+          <span>
+            Please type each word from the seed phrase and press enter after each word. (do not
+            copy and paste)
+          </span>
         </S.MnemonicAction>
       </S.MnemonicImport>
 

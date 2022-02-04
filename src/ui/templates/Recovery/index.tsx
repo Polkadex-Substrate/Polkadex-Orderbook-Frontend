@@ -48,7 +48,7 @@ export const RecoveryTemplate = () => {
                           password,
                         })
                       );
-                    } else alert("mnemonic not correct");
+                    }
                   }}>
                   {({ errors, touched }) => (
                     <Form>
