@@ -16,6 +16,7 @@ import { notificationPush } from "../../notificationHandler";
 import { defaultConfig, API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
+import { OrderSide, OrderType } from "@polkadex/orderbook/modules/types";
 
 const { alertDisplayTime } = defaultConfig;
 
@@ -34,14 +35,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     }
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
-      const payload = {
-        symbol: symbol,
-        order_side: side,
-        order_type,
-        price: order_type === "Limit" ? price : "1",
-        amount,
-        account: address,
-      };
+      const payload = createOrderPayload(side, price, order_type, amount, symbol, address);
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/place_order", data));
@@ -68,3 +62,30 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     );
   }
 }
+const createOrderPayload = (
+  side: OrderSide,
+  price: string,
+  order_type: OrderType,
+  amount: string,
+  symbol: number[],
+  address: string
+) => {
+  if (order_type === "Limit") {
+    return {
+      symbol: symbol,
+      order_side: side,
+      order_type,
+      price,
+      amount,
+      account: address,
+    };
+  } else {
+    return {
+      symbol: symbol,
+      order_side: side,
+      order_type,
+      amount,
+      account: address,
+    };
+  }
+};
