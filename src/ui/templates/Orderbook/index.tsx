@@ -173,7 +173,7 @@ const OrderbookColumn = ({
             <span>Amount({formattedQuoteUnit})</span>
             <span>Total({formattedBaseUnit})</span>
           </S.BoxHeader>
-          <S.BoxContent ref={contentRef}>
+          <S.BoxContent hasScroll={data.length >= 8}>
             {data.map((item, index) => {
               const total = isLarge
                 ? accumulateVolume(data)

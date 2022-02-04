@@ -188,7 +188,7 @@ export const Markets = ({ marketActive = false }) => {
 
 const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => {
   const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  const IconComponent = cryptoIcons[toCapitalize(symbol)];
+  const IconComponent = cryptoIcons[toCapitalize(symbol) || "Dot"];
   return (
     <S.ContentItemWrapper onClick={onClick}>
       <S.ContentItemToken>

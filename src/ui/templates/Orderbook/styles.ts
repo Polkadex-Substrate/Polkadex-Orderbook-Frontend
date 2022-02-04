@@ -46,6 +46,7 @@ export const Options = styled.div`
 export const Content = styled.div`
   display: grid;
   grid-template-rows: 1fr min-content 1fr;
+  height: auto;
 `;
 export const Box = styled.div``;
 
@@ -68,12 +69,13 @@ export const BoxHeader = styled.div`
   `}
 `;
 
-export const BoxContent = styled.div`
-  ${({ theme }) => css`
-    overflow-x: hidden;
-    overflow-y: scroll;
-    scrollbar-width: none;
+export const BoxContent = styled.div<{ hasScroll?: boolean }>`
+  ${({ theme, hasScroll }) => css`
     max-height: 15rem;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: ${hasScroll ? "scroll" : "hidden"};
+    scrollbar-width: none;
     position: relative;
     font-weight: 500;
 
