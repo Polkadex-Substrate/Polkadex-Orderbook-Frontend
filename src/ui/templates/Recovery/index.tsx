@@ -2,13 +2,16 @@
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
+import { selectSignUpSuccess, signUp } from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const defaultValues = {
   password: "",
@@ -17,7 +20,14 @@ const defaultValues = {
 
 export const RecoveryTemplate = () => {
   const dispatch = useDispatch();
+  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const router = useRouter();
+
   const [state, setState] = useState({ tags: [] });
+  useEffect(() => {
+    if (signUpSuccess) router.push("/login");
+  }, [signUpSuccess, router]);
+
   return (
     <S.Main>
       <S.Wrapper>
@@ -35,12 +45,18 @@ export const RecoveryTemplate = () => {
                 <Formik
                   initialValues={defaultValues}
                   onSubmit={async (values) => {
+                    console.log("mnemonic array", state.tags);
                     if (state.tags.length === 12) {
                       const { password, accountName } = values;
                       console.log(state.tags, password, accountName);
-                      // dispatch(
-
-                      // );
+                      const mnemoicString = state.tags.join(" ");
+                      dispatch(
+                        signUp({
+                          accountName,
+                          mnemonic: mnemoicString,
+                          password,
+                        })
+                      );
                     }
                   }}>
                   {({ errors, touched }) => (
