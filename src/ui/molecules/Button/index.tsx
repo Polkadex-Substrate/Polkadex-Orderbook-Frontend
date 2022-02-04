@@ -18,6 +18,7 @@ export const Button = ({
     color={color}
     isFull={isFull}
     hasIcon={!!icon}
+    isDisabled={props.disabled}
     {...props}>
     {!!icon && <Icon {...icon} />}
     {children}

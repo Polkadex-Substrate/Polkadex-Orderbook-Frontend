@@ -19,11 +19,16 @@ export const useKeyringInitalize = () => {
   const dispatch = useDispatch();
   const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
+
   // basic initialization
   useEffect(() => {
-    // dispatch(rangerConnectFetch());
     dispatch(rabbitmqChannelFetch());
     dispatch(polkadotWalletFetch());
+  }, [dispatch]);
+
+  // intitialize market dependent events
+  useEffect(() => {
+    // dispatch(rangerConnectFetch());
     dispatch(orderBookFetch(market));
   }, [dispatch, market]);
 

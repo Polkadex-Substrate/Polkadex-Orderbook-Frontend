@@ -21,7 +21,6 @@ export function* orderBookChannelSaga() {
         fetchOrderBookChannel(rabbitmqConn, queueName, "*.*.orderbook-snapshot")
       );
       while (true) {
-        console.log("waiting on orderbook snapshot");
         const tradesMsg = yield take(channel);
         console.log("orderbook ", tradesMsg);
         const data: OrderBookState = JSON.parse(tradesMsg);

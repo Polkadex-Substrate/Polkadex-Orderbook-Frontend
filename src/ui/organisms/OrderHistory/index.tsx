@@ -91,7 +91,9 @@ export const OrderHistory = () => {
             const priceFixed = currentMarket ? currentMarket.price_precision : 0;
             const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
             const isSell = order_side === "Sell";
-            const orderPrice = order_type === "Limit" ? price : average;
+            const orderPrice = price;
+            // TODO: Check  average object
+            // const orderPrice = order_type === "Limit" ? price : average;
             const date = localeDate(new Date(Number(timestamp)), "fullDate");
             const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
             return (

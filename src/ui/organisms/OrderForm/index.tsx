@@ -12,7 +12,11 @@ import {
   TabContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { orderExecuteFetch, selectOrderExecuteSucess } from "@polkadex/orderbook-modules";
+import {
+  orderExecuteFetch,
+  selectOrderExecuteLoading,
+  selectOrderExecuteSucess,
+} from "@polkadex/orderbook-modules";
 import { cleanPositiveFloatInput, precisionRegExp, toCapitalize } from "@polkadex/web-helpers";
 import { OrderType } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -82,11 +86,11 @@ export const OrderForm = ({
     }
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
-  const handleOrders = (e) => {
+  const handleOrders = (e, isMarket) => {
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: state.orderType as OrderType,
+        order_type: isMarket ? "Market" : "Limit",
         symbol: symbolArray,
         side,
         price: state.price,
@@ -96,6 +100,7 @@ export const OrderForm = ({
     );
   };
   const orderCreated = useReduxSelector(selectOrderExecuteSucess);
+  const isLoading = useReduxSelector(selectOrderExecuteLoading);
 
   return (
     <S.Wrapper>
@@ -114,7 +119,7 @@ export const OrderForm = ({
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
-              quoteUnit={baseUnit}
+              quoteUnit={quoteUnit}
               isSellSide={isSellSide}
               state={state}
               handlePriceChange={handlePriceChange}
@@ -125,6 +130,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
           <TabContent>
@@ -133,7 +139,7 @@ export const OrderForm = ({
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
-              quoteUnit={baseUnit}
+              quoteUnit={quoteUnit}
               isSellSide={isSellSide}
               state={state}
               handlePriceChange={handlePriceChange}
@@ -144,6 +150,7 @@ export const OrderForm = ({
               total={total}
               orderCreated={orderCreated}
               side={side}
+              isLoading={isLoading}
             />
           </TabContent>
         </S.Content>
@@ -167,6 +174,7 @@ export const MarketType = ({
   total,
   orderCreated,
   side,
+  isLoading,
 }) => {
   return (
     <form>
@@ -211,11 +219,23 @@ export const MarketType = ({
         color="text"
         size="extraLarge"
         isFull
-        onClick={handleOrders}
+        onClick={(e) => handleOrders(e, isMarket)}
+        disabled={checkIfDisabled(isLoading, state, isSellSide, isMarket)}
         background="secondaryBackground">
         {toCapitalize(side)}
       </Button>
       {orderCreated && <S.Message>Order created successfully</S.Message>}
     </form>
   );
+};
+const checkIfDisabled = (isLoading, state, isSellSide, isMarket): boolean => {
+  if (isMarket) {
+    return isLoading || (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy));
+  } else {
+    return (
+      isLoading ||
+      (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy)) ||
+      !Number(state.price)
+    );
+  }
 };

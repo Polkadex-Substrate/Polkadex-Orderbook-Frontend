@@ -26,8 +26,11 @@ const ordersOption: RequestOptions = {
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const { side, price, order_type, amount, symbol } = action.payload;
-    if (Number(price) * Number(amount) <= 0) {
+    if (order_type === "Limit" && Number(price) * Number(amount) <= 0) {
       throw new Error("Invalid price or amount");
+    }
+    if (order_type === "Market" && Number(amount) <= 0) {
+      throw new Error("Invalid amount");
     }
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
@@ -35,7 +38,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         symbol: symbol,
         order_side: side,
         order_type,
-        price,
+        price: order_type === "Limit" ? price : "1",
         amount,
         account: address,
       };

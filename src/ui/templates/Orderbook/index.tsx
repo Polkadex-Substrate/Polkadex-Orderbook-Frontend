@@ -16,13 +16,14 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { Icon, Skeleton, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const Orderbook = () => {
   const dispatch = useDispatch();
-
+  const [isPriceUp, setIsPriceUp] = React.useState(true);
+  const [prevTradePrice, setPrevTradePrice] = React.useState(0);
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const currentMarket = useReduxSelector(selectCurrentMarket);
@@ -33,6 +34,22 @@ export const Orderbook = () => {
     tickers[currentMarket?.id];
 
   const currentTicker = getTickerValue(currentMarket, marketTickers);
+
+  React.useEffect(() => {
+    const price = Number(lastRecentTrade?.price);
+    const checkIsPriceChanegePositve = () => {
+      if (price > prevTradePrice) {
+        return true;
+      } else if (price === prevTradePrice) {
+        return isPriceUp;
+      }
+      return false;
+    };
+    const _isPriceUp = checkIsPriceChanegePositve();
+    setIsPriceUp(_isPriceUp);
+    setPrevTradePrice(price);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastRecentTrade]);
 
   const getLastPrice = () => {
     let lastPrice = "";
@@ -46,8 +63,8 @@ export const Orderbook = () => {
     }
     return lastPrice;
   };
-  const maxVolume = calcMaxVolume(bids, asks);
 
+  const maxVolume = calcMaxVolume(bids, asks);
   const handleSelectPrice = (index: string, side: "asks" | "bids") => {
     const arr = side === "asks" ? asks : bids;
     const priceToSet = arr[Number(index)] && Number(arr[Number(index)][0]);
@@ -58,22 +75,25 @@ export const Orderbook = () => {
     <S.Wrapper>
       <S.Header>
         <h2>Orderbook</h2>
-        <S.Options>
-          <ul>
-            <li>
-              <Icon name="OrdersBuy" size="extraSmall" />
-            </li>
-            <li>
-              <Icon name="OrdersAll" size="extraSmall" />
-            </li>
-            <li>
-              <Icon name="OrdersSell" size="extraSmall" />
-            </li>
-          </ul>
-          <Dropdown header="001" direction="bottomRight">
-            <p>testing</p>
-          </Dropdown>
-        </S.Options>
+        <AvailableMessage message="Soon">
+          <S.Options>
+            <ul>
+              <li>
+                <Icon name="OrdersBuy" size="extraSmall" />
+              </li>
+              <li>
+                <Icon name="OrdersAll" size="extraSmall" />
+              </li>
+              <li>
+                <Icon name="OrdersSell" size="extraSmall" />
+              </li>
+            </ul>
+
+            <Dropdown header="001" direction="bottomRight">
+              <p>testing</p>
+            </Dropdown>
+          </S.Options>
+        </AvailableMessage>
       </S.Header>
       <S.Content>
         <OrderbookColumn
@@ -81,12 +101,13 @@ export const Orderbook = () => {
           side="bids"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
+          isBottomPosition
         />
         <S.Select>
           {currentMarket ? (
             <S.LastPriceWrapper>
               Latest Price
-              <S.LastPrice isPositive={currentTicker?.price_change_percent.includes("+")}>
+              <S.LastPrice isPositive={isPriceUp}>
                 {Decimal.format(getLastPrice(), currentMarket?.price_precision, ",")}&nbsp;
                 {currentMarket?.quote_unit.toUpperCase()}
               </S.LastPrice>
@@ -122,6 +143,7 @@ const OrderbookColumn = ({
   side = "asks",
   isLarge = true,
   handleSelectPrice,
+  isBottomPosition = false,
 }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
@@ -135,16 +157,23 @@ const OrderbookColumn = ({
   const getRowWidth = (index: number) =>
     valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
 
+  const contentRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (isBottomPosition && !!contentRef?.current)
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+  }, [isBottomPosition, contentRef, data]);
+
   return (
     <S.Box>
       {data.length ? (
         <>
-          <S.BoxHeader>
+          <S.BoxHeader onClick={() => console.log(contentRef?.current?.scrollIntoView())}>
             <span>Price({formattedBaseUnit})</span>
             <span>Amount({formattedQuoteUnit})</span>
             <span>Total({formattedBaseUnit})</span>
           </S.BoxHeader>
-          <S.BoxContent>
+          <S.BoxContent hasScroll={data.length >= 8}>
             {data.map((item, index) => {
               const total = isLarge
                 ? accumulateVolume(data)
@@ -171,19 +200,14 @@ const OrderbookColumn = ({
                       {total[index]}
                     </Decimal>
                   </S.OrderbookCardWrapper>
-                </S.OrderbookCard>
-              );
-            })}
-            <S.OrderbookVolume>
-              {data &&
-                data.map((item, index) => (
                   <S.VolumeSpan
                     key={index}
                     isSell={isSell}
                     style={{ width: getRowWidth(index) }}
                   />
-                ))}
-            </S.OrderbookVolume>
+                </S.OrderbookCard>
+              );
+            })}
           </S.BoxContent>
         </>
       ) : (
