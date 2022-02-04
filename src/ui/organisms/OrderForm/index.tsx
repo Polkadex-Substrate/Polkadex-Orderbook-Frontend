@@ -86,11 +86,11 @@ export const OrderForm = ({
     }
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
-  const handleOrders = (e) => {
+  const handleOrders = (e, isMarket) => {
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: state.orderType as OrderType,
+        order_type: isMarket ? "Market" : "Limit",
         symbol: symbolArray,
         side,
         price: state.price,
@@ -219,14 +219,23 @@ export const MarketType = ({
         color="text"
         size="extraLarge"
         isFull
-        onClick={handleOrders}
-        disabled={
-          isLoading || !state.price || (isSellSide ? !state.amountSell : !state.amountBuy)
-        }
+        onClick={(e) => handleOrders(e, isMarket)}
+        disabled={checkIfDisabled(isLoading, state, isSellSide, isMarket)}
         background="secondaryBackground">
         {toCapitalize(side)}
       </Button>
       {orderCreated && <S.Message>Order created successfully</S.Message>}
     </form>
   );
+};
+const checkIfDisabled = (isLoading, state, isSellSide, isMarket): boolean => {
+  if (isMarket) {
+    return isLoading || (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy));
+  } else {
+    return (
+      isLoading ||
+      (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy)) ||
+      !Number(state.price)
+    );
+  }
 };
