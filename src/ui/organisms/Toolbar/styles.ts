@@ -7,11 +7,10 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  :not(:last-child) {
-    margin-right: 3rem;
-  }
-  :last-child {
-    display: flex;
-    align-items: center;
-  }
+  margin-right: 3rem;
+`;
+
+export const InformationWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
