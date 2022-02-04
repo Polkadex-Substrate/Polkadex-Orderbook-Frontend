@@ -97,11 +97,10 @@ export const Orderbook = () => {
       </S.Header>
       <S.Content>
         <OrderbookColumn
-          data={bids}
-          side="bids"
+          data={asks}
+          side="asks"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
-          isBottomPosition
         />
         <S.Select>
           {currentMarket ? (
@@ -117,10 +116,11 @@ export const Orderbook = () => {
           )}
         </S.Select>
         <OrderbookColumn
-          data={asks}
-          side="asks"
+          data={bids}
+          side="bids"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
+          isBottomPosition
         />
       </S.Content>
     </S.Wrapper>
@@ -151,7 +151,7 @@ const OrderbookColumn = ({
   const formattedQuoteUnit = getSymbolFromAssetId(currentMarket?.symbolArray[1]).toUpperCase();
   const priceFixed = currentMarket?.price_precision || 0;
   const amountFixed = currentMarket?.amount_precision || 0;
-  const isSell = side === "asks";
+  const isSell = side === "bids";
 
   const valumeData = mapValues(maxVolume, accumulateVolume(data));
   const getRowWidth = (index: number) =>
