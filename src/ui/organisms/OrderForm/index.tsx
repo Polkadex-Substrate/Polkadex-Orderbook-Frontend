@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
@@ -176,6 +176,19 @@ export const MarketType = ({
   side,
   isLoading,
 }) => {
+  const amountInput = isSellSide ? Number(state.amountSell) : Number(state.amountBuy);
+  const amountAvailable = isSellSide
+    ? Number(availableBaseAmount) <= 0
+    : Number(availableQuoteAmount) <= 0;
+
+  const isDisabled = useMemo(() => {
+    if (isMarket) {
+      return isLoading || !amountInput || amountAvailable;
+    } else {
+      return isLoading || !amountInput || !Number(state.price) || amountAvailable;
+    }
+  }, [isLoading, amountInput, amountAvailable, isMarket, state]);
+
   return (
     <form>
       <S.AvailableAmount>
@@ -221,36 +234,17 @@ export const MarketType = ({
         size="extraLarge"
         isFull
         onClick={(e) => handleOrders(e, isMarket)}
-        disabled={checkIfDisabled(
-          isLoading,
-          state,
-          isSellSide,
-          isMarket,
-          availableBaseAmount <= 0,
-          availableQuoteAmount <= 0
-        )}
-        background="secondaryBackground">
+        disabled={isDisabled}
+        background={
+          amountInput && state.price
+            ? isSellSide
+              ? "primary"
+              : "green"
+            : "secondaryBackground"
+        }>
         {toCapitalize(side)}
       </Button>
       {orderCreated && <S.Message>Order created successfully</S.Message>}
     </form>
   );
-};
-const checkIfDisabled = (
-  isLoading,
-  state,
-  isSellSide,
-  isMarket,
-  availableBaseAmount,
-  availableQuoteAmount
-): boolean => {
-  if (isMarket) {
-    return isLoading || (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy));
-  } else {
-    return (
-      isLoading ||
-      (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy)) ||
-      !Number(state.price)
-    );
-  }
 };
