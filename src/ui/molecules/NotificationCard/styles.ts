@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   position: absolute;
   top: 2%;
   right: 1%;
-  z-index: 1;
+  z-index: 100;
   animation: fadeIn 0.5s ease-in-out;
 `;
 
@@ -13,7 +13,9 @@ export const Container = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    background: ${theme.colors.secondaryBackgroundSolid};
+    background: ${theme.colors.white};
+    color: ${theme.colors.black};
+
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 0.5rem;
     padding: 1.5rem;
