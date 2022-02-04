@@ -29,8 +29,6 @@ export function* signUpSaga(action: SignUpFetch) {
         type: "Loading",
         message: {
           title: "Your Account has been created",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
         },
       })
     );

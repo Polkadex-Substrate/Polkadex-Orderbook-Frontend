@@ -29,6 +29,7 @@ export const Wrapper = styled.button<{
   isFull?: boolean;
   color?: string;
   size?: string;
+  hoverColor?: string;
   isDisabled?: boolean;
 }>`
   ${({
@@ -39,6 +40,7 @@ export const Wrapper = styled.button<{
     color,
     hasIcon = false,
     isDisabled,
+    hoverColor = "primary",
   }) => css`
     border-style: "none";
     font-weight: 500;
@@ -68,7 +70,7 @@ export const Wrapper = styled.button<{
             opacity: 0.6;
           `
         : css`
-            background: ${isDisabled ? "gray" : theme.colors.primary};
+            background: ${isDisabled ? "gray" : theme.colors[hoverColor]};
             color: ${theme.colors.white};
           `}
     }

@@ -10,4 +10,5 @@ export type Props = {
   icon?: IconProps.Props;
   isFull?: boolean;
   size?: Sizes;
+  hoverColor?: Colors;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
