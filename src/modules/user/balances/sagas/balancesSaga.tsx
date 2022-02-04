@@ -51,7 +51,6 @@ async function fetchbalancesAsync(account: ProxyAccount): Promise<UserBalance> {
   const signature = await signMessage(account.keyringPair, JSON.stringify(payload));
   const data = formatPayload(signature, payload);
   const res: any = await API.post(balancesOption)("/fetch_balance", data);
-  console.log("balances", res);
   if (res.Fine) {
     const userBlance: UserBalance = res.Fine;
     return userBlance;
