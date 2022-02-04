@@ -46,7 +46,6 @@ export const OpenOrders = () => {
     if (userLoggedIn) dispatch(userOrdersHistoryFetch());
   }, [userLoggedIn, dispatch]);
 
-  console.log({ openOrders });
   return (
     <S.Wrapper>
       {width > 1110 && (
