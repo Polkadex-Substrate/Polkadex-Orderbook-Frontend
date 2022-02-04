@@ -1,19 +1,4 @@
-import { CommonState } from "../../types";
-export interface PublicTrade {
-  id: number;
-  price: string;
-  total?: string;
-  amount: string;
-  market: string;
-  created_at: string;
-  taker_type: string;
-  price_change?: string;
-}
-
-export interface PrivateTrade extends PublicTrade {
-  side?: string;
-  order_id?: number;
-}
+import { CommonState, OrderSide } from "../../types";
 
 export interface PrivateTradeEvent {
   id: number;
@@ -26,12 +11,6 @@ export interface PrivateTradeEvent {
   side?: string;
   order_id?: number;
 }
-
-export interface PrivateTradesState extends CommonState {
-  list: PrivateTrade[];
-}
-
-export type MakerType = "buy" | "sell";
 
 export interface Withdraw {
   currency: string;
@@ -62,5 +41,5 @@ export interface Deposit {
   price?: number;
 }
 
-export type WalletHistoryElement = Withdraw | Deposit | PrivateTrade;
+export type WalletHistoryElement = Withdraw | Deposit;
 export type WalletHistoryList = WalletHistoryElement[];

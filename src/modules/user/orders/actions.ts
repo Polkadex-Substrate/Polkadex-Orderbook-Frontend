@@ -1,4 +1,4 @@
-import { CommonError, OrderSide } from "../../types";
+import { CommonError, OrderSide, OrderType } from "../../types";
 
 import {
   ORDER_EXECUTE_DATA,
@@ -7,14 +7,16 @@ import {
   ORDERS_SET_AMOUNT,
   ORDERS_SET_CURRENT_PRICE,
   ORDERS_SET_ORDER_TYPE,
+  ORDER_EXECUTE_DATA_DELETE,
 } from "./constants";
 
 export interface OrderExecution {
   market: string;
+  symbol: number[];
   side: OrderSide;
-  volume: string;
   price?: string;
-  ord_type?: string;
+  order_type?: OrderType;
+  amount?: string;
 }
 
 export interface OrderExecuteFetch {
@@ -24,6 +26,10 @@ export interface OrderExecuteFetch {
 
 export interface OrderExecuteData {
   type: typeof ORDER_EXECUTE_DATA;
+}
+
+export interface OrderExecuteDataDelete {
+  type: typeof ORDER_EXECUTE_DATA_DELETE;
 }
 
 export interface OrderExecuteError {
@@ -49,6 +55,7 @@ export interface SetOrderType {
 export type OrdersAction =
   | OrderExecuteFetch
   | OrderExecuteData
+  | OrderExecuteDataDelete
   | OrderExecuteError
   | SetCurrentPrice
   | SetAmount
@@ -63,6 +70,10 @@ export const orderExecuteFetch = (
 
 export const orderExecuteData = (): OrderExecuteData => ({
   type: ORDER_EXECUTE_DATA,
+});
+
+export const orderExecuteDataDelete = (): OrderExecuteDataDelete => ({
+  type: ORDER_EXECUTE_DATA_DELETE,
 });
 
 export const orderExecuteError = (error: CommonError): OrderExecuteError => ({

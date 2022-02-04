@@ -23,6 +23,7 @@ import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
+import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -36,6 +37,7 @@ export const publicReducer = combineReducers({
   incrementDepth: incrementDepthReducer,
   recentTrades: recentTradesReducer,
   ranger: rangerReducer,
+  rabbitmqChannel: rabbitmqChannelReducer,
 });
 
 export const userReducer = combineReducers({

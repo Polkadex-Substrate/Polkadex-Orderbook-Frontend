@@ -19,6 +19,7 @@ import {
   selectSignUpSuccess,
   signUp,
 } from "@polkadex/orderbook-modules";
+import { defaultConfig } from "@polkadex/orderbook-config";
 const defaultValues = {
   password: "",
   accountName: "Main Account",
@@ -36,12 +37,13 @@ export const SignUpTemplate = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
+  const isPublicBranch = defaultConfig.polkadexFeature === "none";
   useEffect(() => {
     if (signUpSuccess) router.push("/login");
   }, [signUpSuccess, router]);
 
   if (signUpSuccess) return <div />;
+  console.log("POLKADEX_FEATURE", defaultConfig.polkadexFeature);
 
   return (
     <S.Main>
@@ -71,13 +73,15 @@ export const SignUpTemplate = () => {
                     initialValues={defaultValues}
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
-                      dispatch(
-                        signUp({
-                          accountName,
-                          mnemonic: mnemoicString,
-                          password,
-                        })
-                      );
+                      if (!isPublicBranch) {
+                        dispatch(
+                          signUp({
+                            accountName,
+                            mnemonic: mnemoicString,
+                            password,
+                          })
+                        );
+                      } else alert("signup is not available for beta");
                     }}>
                     {({ errors, touched }) => (
                       <Form>
@@ -100,7 +104,7 @@ export const SignUpTemplate = () => {
                         />
                         <FlexSpaceBetween style={{ marginTop: 20 }}>
                           <Button size="extraLarge" type="submit" disabled={signUpLoading}>
-                            {signUpLoading ? "Loading.." : "Verify Account"}
+                            {signUpLoading ? "Loading.." : "Create Account"}
                           </Button>
                           <Button
                             onClick={handlePrint}

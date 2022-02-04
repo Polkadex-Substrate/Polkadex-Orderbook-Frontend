@@ -13,21 +13,25 @@ const balancesOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
-export function* balancesSaga() {
+export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
     const account = yield select(selectUserInfo);
-    const userBalance = yield call(() => fetchbalancesAsync(account));
-    const tickers = Object.keys(userBalance.free).map((key) => [key]);
-    if (tickers.length) {
-      const result = tickers.map(([ticker]) => {
-        return {
-          ticker: ticker,
-          free: userBalance.free[ticker],
-          used: userBalance.used[ticker],
-          total: userBalance.total[ticker],
-        };
-      });
-      yield put(balancesData({ timestamp: userBalance.timestamp, userBalance: result }));
+    if (account.address) {
+      const userBalance = yield call(() => fetchbalancesAsync(account));
+      const tickers = Object.keys(userBalance.free).map((key) => [key]);
+      if (tickers.length) {
+        const result = tickers.map(([ticker]) => {
+          return {
+            ticker: ticker,
+            free: userBalance.free[ticker],
+            used: userBalance.used[ticker],
+            total: userBalance.total[ticker],
+          };
+        });
+        yield put(balancesData({ timestamp: userBalance.timestamp, userBalance: result }));
+      }
+    } else {
+      throw new Error("User not logged in");
     }
   } catch (error) {
     yield put(
@@ -47,6 +51,7 @@ async function fetchbalancesAsync(account: ProxyAccount): Promise<UserBalance> {
   const signature = await signMessage(account.keyringPair, JSON.stringify(payload));
   const data = formatPayload(signature, payload);
   const res: any = await API.post(balancesOption)("/fetch_balance", data);
+  console.log("balances", res);
   if (res.Fine) {
     const userBlance: UserBalance = res.Fine;
     return userBlance;

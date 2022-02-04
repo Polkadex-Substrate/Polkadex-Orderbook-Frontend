@@ -73,9 +73,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
         this.setChart(next.markets, next.currentMarket, next.colorTheme);
       }
     }
-    console.log("global props", this.props);
-    if (next.kline && next.kline !== this.props.kline) {
-      console.log("before onrealtimeCallback", next.kline);
+    if (next.kline && next.kline !== this.props.kline) {      
       this.datafeed.onRealtimeCallback(next.kline);
     }
 
@@ -178,9 +176,9 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     );
   }
 
-  private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {
+  private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {    
+
     const { kline } = this.props;
-    console.log("in setChart", kline);
     const isMobileDevice = false;
     this.datafeed = dataFeedObject(this, markets);
 
@@ -218,7 +216,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     });
   };
 
-  private updateChart = (currentMarket: Market) => {
+  private updateChart = (currentMarket: Market) => {    
     if (this.tvWidget) {
       let symbolSet = false;
       const UPDATE_TIMEOUT = 3000;

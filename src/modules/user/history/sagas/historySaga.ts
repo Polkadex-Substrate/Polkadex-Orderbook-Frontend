@@ -9,7 +9,7 @@ import { getHistorySagaParam, sliceArray } from "@polkadex/web-helpers";
 const { defaultStorageLimit } = defaultConfig;
 
 const config: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
 
 export function* historySaga(action: HistoryFetch) {

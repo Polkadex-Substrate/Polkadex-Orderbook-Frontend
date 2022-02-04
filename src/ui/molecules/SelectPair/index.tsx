@@ -1,15 +1,22 @@
 import React from "react";
+import * as cryptoIcons from "@styled-icons/crypto";
 
 import * as S from "./styles";
 
+import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
+import { toCapitalize } from "@polkadex/web-helpers";
 import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const SelectPairHeader = ({ title = "", icon = "Default" }) => {
+  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+  const IconComponent = cryptoIcons[toCapitalize(symbol)];
   return (
     <S.Wrapper>
       {title ? (
         <>
-          <Icon isToken name={icon} size="large" background="secondaryBackground" />
+          <S.TokenWrapper>
+            <IconComponent />
+          </S.TokenWrapper>
           <span>{title}</span>
           <Icon name="ArrowBottom" size="small" />
         </>

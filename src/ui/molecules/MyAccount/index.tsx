@@ -6,6 +6,11 @@ import { Button, Icon, WalletInput, Skeleton } from "../";
 import * as S from "./styles";
 import * as T from "./types";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectUserInfo } from "@polkadex/orderbook-modules";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { signMessage } from "@polkadex/web-helpers";
+
 const MyAccount = ({
   children,
   balance = "0.0000000",
@@ -22,7 +27,8 @@ const MyAccount = ({
           <p>
             {accountName} ({address})
           </p>
-          <span>Balance: {balance}</span>
+          {/* TODO: add balance when total portfolio balance available to call
+          <span>Balance: {balance}</span> */}
         </S.AccountInfoHeader>
         {children}
       </S.AccountInfo>
@@ -62,6 +68,48 @@ export const MyAccountContent = ({
   const shortAddress = address
     ? address.slice(0, 7) + "..." + address.slice(address.length - 7)
     : "";
+
+  // add test funds
+  // TODO: should be removed at relesse
+  const user = useReduxSelector(selectUserInfo);
+  const userKeyring = user.keyringPair;
+  const option: RequestOptions = {
+    apiVersion: "polkadexHostUrl",
+  };
+  const handleFundsRequest = async () => {
+    console.log("handleFundsRequest");
+    if (user.address) {
+      try {
+        const payloads = [
+          { account: user.address, asset: 1, amount: "1000000.0" },
+          { account: user.address, asset: 0, amount: "1000000.0" },
+        ];
+        const reqs = payloads.map(async (payload) => {
+          const signature = await signMessage(userKeyring, JSON.stringify(payload));
+          const data = {
+            signature: {
+              Sr25519: signature.trim().slice(2),
+            },
+            payload,
+          };
+          const res = await API.post(option)("/test_deposit", data);
+          return res;
+        });
+        const res = await Promise.all(reqs);
+        console.log(res);
+        // @ts-ignore
+        if (res[0].Fine && res[1].Fine) {
+          alert("Funds added, You are rich now!");
+        } else {
+          throw Error("Error adding funds");
+        }
+      } catch (error) {
+        alert("Error: could not add funds");
+      }
+    } else {
+      alert("You should be logged in to add funds");
+    }
+  };
   return (
     <S.AccountContent isFull={isFull}>
       <MyAccount balance={balance} address={shortAddress} accountName={accountName} />
@@ -103,7 +151,12 @@ export const MyAccountContent = ({
           <p>Terms and Conditions</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
-        <Link href="/wallet">Deposit/Withdraw</Link>
+        <a href="#" onClick={handleFundsRequest}>
+          <p>Get me money!</p>
+          <Icon name="ArrowRight" size="small" color="black" />
+        </a>
+        {/* TODO: Add when the endpoint is available
+         <Link href="/wallet">Deposit/Withdraw</Link> */}
       </S.AccountContentSection>
     </S.AccountContent>
   );

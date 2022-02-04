@@ -5,11 +5,9 @@ export const Wrapper = styled.section``;
 export const Header = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
+    grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 1fr 1rem;
     grid-gap: 0.5rem;
     text-align: left;
-    overflow-y: scroll;
-    scrollbar-width: none;
     margin-bottom: 1rem;
     padding: 0 1rem;
     span {
@@ -22,6 +20,8 @@ export const Header = styled.div`
 
 export const Content = styled.div`
   display: grid;
+  overflow-x: hidden;
+
   @media screen and (min-width: 500px) and (max-width: 1110px) {
     grid-template-columns: 1fr 1fr;
   }

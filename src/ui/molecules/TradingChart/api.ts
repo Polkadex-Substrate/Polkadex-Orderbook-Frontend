@@ -37,13 +37,19 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
     endPoint = `${endPoint}?${buildQueryString(payload)}`;
   }
 
-  return `${defaultConfig.engine}${endPoint}`;
+  return `${defaultConfig.polkadexHostUrl}${endPoint}`;
 };
-const makeOHLCVPayload = (market: string, resolution: string, from: number) => {
+const makeOHLCVPayload = (
+  market: string,
+  resolution: string,
+  start?: number,
+  stop?: number
+) => {
   return {
     symbol: market,
     timeframe: resolution,
-    timestamp_start: from,
+    timestamp_start: start,
+    timestamp_stop: stop,
   };
 };
 const resolutionToSeconds = (r: string): number => {
@@ -59,12 +65,26 @@ const resolutionToSeconds = (r: string): number => {
   }
 };
 
+const resolutionForPayload = (resolution: string): string => {
+  const isNum = /^[0-9]+$/.test(resolution);
+  if (isNum) {
+    const resNum = parseInt(resolution);
+    if (resNum < 60) {
+      return `${resNum}m`;
+    }
+    return `${resNum / 60}h`;
+  }
+
+  return resolution;
+};
+
 const config = {
   supports_timescale_marks: true,
   supports_time: false,
-  supported_resolutions: ["1", "5", "15", "30", "60", "120", "240", "360", "720", "d", "3d"],
+  supported_resolutions: ["1", "5", "30", "60", "240", "720", "1d", "1w", "1M"],
 };
 
+let updateCb = null;
 export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Market[]) => {
   const dataFeed = {
     onReady: (cb) => {
@@ -92,7 +112,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const symbolStub = {
         name: symbol.name,
         currency_code: symbol.quote_unit.toUpperCase(),
-        description: "",
+        description: "Polkadex test tokens",
         type: "bitcoin",
         session: "24x7",
         timezone: "Etc/UTC",
@@ -100,33 +120,9 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         minmov: 1,
         pricescale: Math.pow(10, symbol.price_precision),
         has_intraday: true,
-        intraday_multipliers: [
-          "1",
-          "5",
-          "15",
-          "30",
-          "60",
-          "120",
-          "240",
-          "360",
-          "720",
-          "d",
-          "3d",
-        ],
-        supported_resolutions: [
-          "1",
-          "5",
-          "15",
-          "30",
-          "60",
-          "120",
-          "240",
-          "360",
-          "720",
-          "d",
-          "3d",
-        ],
-        volume_precision: 8,
+        intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
+        supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
+        volume_precision: 4,
         data_status: "streaming",
       };
 
@@ -159,13 +155,14 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      console.log({ symbolInfo, resolution, from });
       url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("BTCPDEX", "5m", -1296000);
+      console.log("graph time ", from, to);
+      const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios
         .post(url, payload)
         .then(({ data }) => {
+          console.log("olhcv data", data);
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
@@ -193,14 +190,10 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       subscribeUID: string,
       onResetCacheNeededCallback
     ) => {
-      dataFeed.onRealtimeCallback = (kline: KlineState) => {
-        if (
-          kline.last &&
-          kline.marketId === tradingChart.currentKlineSubscription.marketId &&
-          kline.period === tradingChart.currentKlineSubscription.periodString
-        ) {
-          onRealtimeCallback(kline.last);
-        }
+      updateCb = {
+        symbolInfo,
+        resolution,
+        onRealtimeCallback,
       };
       const marketId: string = symbolInfo.ticker!;
       const periodString = periodMinutesToString(resolutionToSeconds(resolution));
@@ -219,7 +212,14 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       tradingChart.currentKlineSubscription = {};
     },
     onRealtimeCallback: (kline: KlineState) => {
-      // window.console.log(`default onRealtimeCallback called with ${JSON.stringify(bar)}`);
+      console.log("onRealtimeCallback => ", kline);
+      if (
+        kline.last &&
+        kline.marketId === tradingChart.currentKlineSubscription.marketId &&
+        kline.period === tradingChart.currentKlineSubscription.periodString
+      ) {
+        updateCb.onRealtimeCallback(kline.last);
+      }
     },
   };
 

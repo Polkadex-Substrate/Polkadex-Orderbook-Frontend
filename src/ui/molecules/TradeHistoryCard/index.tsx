@@ -18,7 +18,7 @@ export const TradeHistoryCard = ({
   return (
     <S.Wrapper>
       <S.Container>
-        <span>{localeDate(new Date(date), "fullDate")}</span>
+        <span>{date}</span>
       </S.Container>
       <S.Container>
         <span>{symbol}</span>
@@ -31,12 +31,6 @@ export const TradeHistoryCard = ({
       </S.Container>
       <S.Container>
         <span>{quantity}</span>
-      </S.Container>
-      <S.Container>
-        <span>{fee}</span>
-      </S.Container>
-      <S.Container>
-        <span>{profit}</span>
       </S.Container>
     </S.Wrapper>
   );
@@ -53,24 +47,17 @@ export const TradeHistoryCardReponsive = ({
 }: Props) => {
   return (
     <S.Box>
-      <S.Header isSell={side === "sell"}>
+      <S.Header isSell={side === "Sell"}>
         <div>
           <p>{symbol}</p>
           <span>{side}</span>
         </div>
       </S.Header>
       <S.Content>
-        <TradeHistoryInfo label="Date" value={localeDate(new Date(date), "fullDate")} />
+        <TradeHistoryInfo label="Date" value={date} />
         <TradeHistoryInfo label="Price" value={price} />
         <TradeHistoryInfo label="Quantity" value={quantity} />
       </S.Content>
-      <S.Footer>
-        <S.FlexJustify>
-          <span>{fee}</span>
-          <p>{profit}</p>
-        </S.FlexJustify>
-        <Bar percent={0} />
-      </S.Footer>
     </S.Box>
   );
 };

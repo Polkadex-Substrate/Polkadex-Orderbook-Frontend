@@ -2,11 +2,9 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 12rem 8rem 1fr 1fr 1fr 1fr 1fr 6rem 1rem;
+  grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 1fr 1rem;
   grid-gap: 0.5rem;
   text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
   font-size: 1.3rem;
   padding: 0 1rem;
   :not(:last-child) {
@@ -16,6 +14,10 @@ export const Wrapper = styled.div`
     display: block;
     font-weight: 500;
     font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
   }
 `;
 
@@ -35,9 +37,9 @@ export const Container = styled.div`
   `}
 `;
 
-export const Side = styled.div<{ isSell?: boolean }>`
+export const Side = styled.span<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    color: ${isSell ? theme.colors.green : theme.colors.primary};
+    color: ${isSell ? theme.colors.primary : theme.colors.green};
     text-transform: capitalize;
     font-size: ${theme.font.sizes.xxxsmall};
   `}

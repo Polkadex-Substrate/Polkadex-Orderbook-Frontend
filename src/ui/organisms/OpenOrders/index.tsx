@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 
 import {
+  notificationPush,
   openOrdersCancelFetch,
   selectCurrentMarket,
   selectOpenOrdersHistory,
@@ -28,11 +29,22 @@ export const OpenOrders = () => {
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
-  const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
+  const handleCancel = (id: string) =>
+    dispatch(
+      notificationPush({
+        type: "Error",
+        message: {
+          title: "Not Available in Beta",
+          description: "Polkadex team is currently working on this functionality.",
+        },
+      })
+    );
+
+  // const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userOrdersHistoryFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+    if (userLoggedIn) dispatch(userOrdersHistoryFetch());
+  }, [userLoggedIn, dispatch]);
 
   console.log({ openOrders });
   return (
@@ -54,31 +66,31 @@ export const OpenOrders = () => {
         <S.Content>
           {openOrders?.map((item) => {
             const {
-              id,
+              order_id,
               timestamp,
-              symbol,
+              base_asset,
+              quote_asset,
               order_side,
               price,
               amount,
-              average,
-              filled,
+              filled_qty,
               order_type,
             } = item;
 
             const CardComponent = width > 1110 ? OpenOrderCard : OpenOrderCardReponsive;
             return (
               <CardComponent
-                key={id}
-                id={id}
+                key={order_id}
+                order_id={order_id}
                 timestamp={timestamp}
-                symbol={symbol}
+                base_asset={base_asset}
+                quote_asset={quote_asset}
                 order_side={order_side}
                 price={price}
-                filled={filled}
+                filled_qty={filled_qty}
                 amount={amount}
-                average={average}
                 order_type={order_type}
-                onCancel={() => handleCancel(id)}
+                onCancel={() => handleCancel(order_id)}
               />
             );
           })}

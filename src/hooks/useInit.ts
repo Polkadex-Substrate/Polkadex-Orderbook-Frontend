@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { defaultConfig } from "@polkadex/orderbook-config";
 import {
   logoutFetch,
@@ -14,6 +15,7 @@ export const useInit = () => {
   const { minutesUntilAutoLogout, sessionCheckInterval } = defaultConfig;
   const user = useSelector(selectUserInfo);
   const isLoggedIn = useSelector(selectUserLoggedIn);
+
   const userLoading = useSelector(selectUserFetching);
 
   const dispatch = useDispatch();

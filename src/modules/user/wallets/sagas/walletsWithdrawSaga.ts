@@ -12,7 +12,7 @@ import { getCsrfToken } from "@polkadex/web-helpers";
 
 const walletsWithdrawCcyOptions = (csrfToken?: string): RequestOptions => {
   return {
-    apiVersion: "engine",
+    apiVersion: "polkadexHostUrl",
     headers: { "X-CSRF-Token": csrfToken },
   };
 };

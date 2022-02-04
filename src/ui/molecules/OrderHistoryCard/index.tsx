@@ -44,9 +44,6 @@ export const OrderHistoryCard = ({
         <span>{amount}</span>
       </S.Container>
       <S.Container>
-        <span>{total}</span>
-      </S.Container>
-      <S.Container>
         <span>{transactionType}</span>
       </S.Container>
     </S.Wrapper>
@@ -81,7 +78,6 @@ export const OrderHistoryCardReponsive = ({
         <OrderHistoryInfo label="Type" value={type} />
         <OrderHistoryInfo label="Price" value={price} />
         <OrderHistoryInfo label="Amount" value={amount} />
-        <OrderHistoryInfo label="Total" value={total} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>

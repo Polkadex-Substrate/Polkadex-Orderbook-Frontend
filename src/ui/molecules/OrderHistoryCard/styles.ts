@@ -2,11 +2,9 @@ import styled, { css } from "styled-components";
 
 export const Template = styled.div`
   display: grid;
-  grid-template-columns: 12rem 8rem 0.4fr 0.4fr 0.8fr 0.6fr 0.4fr 6rem 3rem;
+  grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 4rem;
   grid-gap: 0.5rem;
   text-align: left;
-  overflow-y: scroll;
-  scrollbar-width: none;
 `;
 
 export const Wrapper = styled(Template)`
@@ -33,9 +31,9 @@ export const Container = styled.div`
   `}
 `;
 
-export const Side = styled.div<{ isSell?: boolean }>`
+export const Side = styled.span<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    color: ${isSell ? theme.colors.green : theme.colors.primary};
+    color: ${isSell ? theme.colors.primary : theme.colors.green};
     text-transform: capitalize;
     font-size: ${theme.font.sizes.xxxsmall};
   `}

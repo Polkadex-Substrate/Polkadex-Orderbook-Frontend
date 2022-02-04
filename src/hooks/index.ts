@@ -5,6 +5,6 @@ export * from "./useExtrinsics";
 export * from "./useMnemonic";
 export * from "./useKeyringInitalize";
 export * from "./useReduxSelector";
-export * from "./useDepthMarketsFetch";
+export * from "./useOrderBookMarketsFetch";
 export * from "./useMarketsTickersFetch";
 export * from "./useWindowSize";

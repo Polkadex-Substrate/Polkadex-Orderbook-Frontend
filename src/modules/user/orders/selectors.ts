@@ -5,6 +5,9 @@ const selectOrdersState = (state: RootState): RootState["user"]["orders"] => sta
 export const selectOrderExecuteLoading = (state: RootState): boolean =>
   selectOrdersState(state).executeLoading;
 
+export const selectOrderExecuteSucess = (state: RootState): boolean =>
+  selectOrdersState(state).executeSuccess;
+
 export const selectCurrentPrice = (state: RootState): number | undefined =>
   selectOrdersState(state).currentPrice;
 

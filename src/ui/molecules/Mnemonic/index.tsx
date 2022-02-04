@@ -1,12 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import * as S from "./styles";
 import { MnemonicExportProps, MnemonicProps } from "./types";
 
 // Transform component to tags
-export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps) => {
-  const [state, setState] = useState({ tags: [] });
-
+export const MnemonicImport = ({ label, state, handleChange, ...props }: MnemonicProps) => {
   const inputRef = useRef(null);
   // const buttonRef = useRef(null);
 
@@ -19,16 +17,17 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
       if (sameValue || hasSpace) {
         return;
       }
-      setState({ tags: [...state.tags, val] });
+      handleChange({ tags: [...state.tags, val] });
       inputRef.current.value = null;
     } else if (e.key === "Backspace" && !val) {
       handleRemove(state.tags.length - 1);
     }
   };
+
   const handleRemove = (i: number) => {
     const newTags = [...state.tags];
     newTags.splice(i, 1);
-    setState({ tags: newTags });
+    handleChange({ tags: newTags });
   };
 
   return (
@@ -50,6 +49,7 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
             <input
               ref={inputRef}
               placeholder="Type your secret phrase to restore your wallet"
+              disabled={state.tags.length >= 12}
               onKeyDown={onInputKeyDown}
             />
           </li>
@@ -67,7 +67,7 @@ export const MnemonicImport = ({ label, handleChange, ...props }: MnemonicProps)
 
 export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
   const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy from clipboard");
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(phrases.join(" "));

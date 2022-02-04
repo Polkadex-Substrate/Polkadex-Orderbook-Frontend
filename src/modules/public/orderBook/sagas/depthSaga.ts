@@ -6,9 +6,13 @@ import { depthData, depthError, DepthFetch } from "../actions";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const depthOptions: RequestOptions = {
-  apiVersion: "engine",
+  apiVersion: "polkadexHostUrl",
 };
+/*
+TODO: convert saga from openware endpoint when we have a dept endpoint available
+*/
 
+/*
 export function* depthSaga(action: DepthFetch) {
   try {
     const market = action.payload;
@@ -26,3 +30,4 @@ export function* depthSaga(action: DepthFetch) {
     );
   }
 }
+*/
