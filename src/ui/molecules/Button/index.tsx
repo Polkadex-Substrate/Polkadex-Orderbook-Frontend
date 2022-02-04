@@ -10,6 +10,7 @@ export const Button = ({
   color = "inverse",
   children,
   size = "medium",
+  hoverColor = "primary",
   ...props
 }: T.Props) => (
   <S.Wrapper
@@ -19,6 +20,7 @@ export const Button = ({
     isFull={isFull}
     hasIcon={!!icon}
     isDisabled={props.disabled}
+    hoverColor={hoverColor}
     {...props}>
     {!!icon && <Icon {...icon} />}
     {children}

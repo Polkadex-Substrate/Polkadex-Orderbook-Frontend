@@ -217,10 +217,18 @@ export const MarketType = ({
       <Button
         type="submit"
         color="text"
+        hoverColor={isSellSide ? "primary" : "green"}
         size="extraLarge"
         isFull
         onClick={(e) => handleOrders(e, isMarket)}
-        disabled={checkIfDisabled(isLoading, state, isSellSide, isMarket)}
+        disabled={checkIfDisabled(
+          isLoading,
+          state,
+          isSellSide,
+          isMarket,
+          availableBaseAmount <= 0,
+          availableQuoteAmount <= 0
+        )}
         background="secondaryBackground">
         {toCapitalize(side)}
       </Button>
@@ -228,7 +236,14 @@ export const MarketType = ({
     </form>
   );
 };
-const checkIfDisabled = (isLoading, state, isSellSide, isMarket): boolean => {
+const checkIfDisabled = (
+  isLoading,
+  state,
+  isSellSide,
+  isMarket,
+  availableBaseAmount,
+  availableQuoteAmount
+): boolean => {
   if (isMarket) {
     return isLoading || (isSellSide ? !Number(state.amountSell) : !Number(state.amountBuy));
   } else {
