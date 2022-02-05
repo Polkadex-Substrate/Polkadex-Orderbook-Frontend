@@ -203,8 +203,8 @@ export const MarketType = ({
     : Number(availableQuoteAmount) <= 0;
 
   const amountUnavailable = isSellSide
-    ? Number(availableBaseAmount) >= Number(state.amountSell)
-    : Number(availableQuoteAmount) >= Number(state.amountBuy);
+    ? Number(availableBaseAmount) >= Number(state.amountSell) * Number(state.price)
+    : Number(availableQuoteAmount) >= Number(state.amountBuy) * Number(state.price);
 
   const isDisabled = useMemo(() => {
     if (isMarket) {
