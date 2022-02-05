@@ -17,6 +17,8 @@ import {
   OrderExecution,
   selectUserBalance,
   Balance,
+  selectBestAskPrice,
+  selectBestBidPrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Accounts, OrderForm } from "@polkadex/orderbook-ui/organisms";
@@ -30,6 +32,7 @@ export const PlaceOrder = () => {
   const marketTickers = useReduxSelector(selectMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const balances = useReduxSelector(selectUserBalance);
+
 
   const [state, setState] = useState({
     orderSide: "Buy",

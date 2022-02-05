@@ -14,6 +14,8 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import {
   orderExecuteFetch,
+  selectBestAskPrice,
+  selectBestBidPrice,
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
 } from "@polkadex/orderbook-modules";
@@ -42,13 +44,14 @@ export const OrderForm = ({
     amountSell: "",
     amountBuy: "",
   });
+  const [estimatedTotal, setEstimatedTotal] = useState(0);
   const dispatch = useDispatch();
-
+  const bestAskPrice = useReduxSelector(selectBestAskPrice);
+  const bestBidPrice = useReduxSelector(selectBestBidPrice);
   const isSellSide = side === "Sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
 
-  const total =
-    state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
+  const total = Number(amount) * Number(state.price) || 0;
 
   const handlePriceChange = (value: string) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
@@ -58,11 +61,10 @@ export const OrderForm = ({
         price: convertedValue,
       });
     }
-
     listenInputPrice && listenInputPrice();
   };
 
-  const handleAmountChange = (value: string) => {
+  const handleAmountChange = (value: string, isMarket: boolean, isSell: boolean) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
     if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
       if (isSellSide) {
@@ -76,6 +78,10 @@ export const OrderForm = ({
           amountBuy: convertedValue,
         });
       }
+    }
+    const estPrice = isSell ? bestBidPrice : bestAskPrice;
+    if (isMarket) {
+      setEstimatedTotal(Number(value) * estPrice);
     }
   };
 
@@ -136,6 +142,7 @@ export const OrderForm = ({
           <TabContent>
             <MarketType
               isMarket
+              estimatedTotal={estimatedTotal}
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
@@ -160,6 +167,7 @@ export const OrderForm = ({
 };
 export const MarketType = ({
   isMarket = false,
+  estimatedTotal = 0,
   availableBaseAmount,
   availableQuoteAmount,
   baseUnit,
@@ -224,17 +232,17 @@ export const MarketType = ({
       <SecondaryInput
         placeholder="Amount"
         value={isSellSide ? state.amountSell : state.amountBuy}
-        onChange={(e) => handleAmountChange(e.currentTarget.value)}>
+        onChange={(e) => handleAmountChange(e.currentTarget.value, isMarket, isSellSide)}>
         <span>{baseUnit}</span>
       </SecondaryInput>
       <SecondaryInput
         value={Decimal.format(
-          total,
+          isMarket ? estimatedTotal : total,
           currentMarketAskPrecision + currentMarketBidPrecision,
           ","
         )}
         onChange={() => console.log("Updating..")}
-        label="Total">
+        label={isMarket ? "Est Total" : "Total"}>
         <span>{quoteUnit}</span>
       </SecondaryInput>
       <Button
