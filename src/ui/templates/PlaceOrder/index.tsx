@@ -33,7 +33,6 @@ export const PlaceOrder = () => {
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const balances = useReduxSelector(selectUserBalance);
 
-
   const [state, setState] = useState({
     orderSide: "Buy",
     priceLimit: undefined,

@@ -44,7 +44,7 @@ export const OrderForm = ({
     amountSell: "",
     amountBuy: "",
   });
-  const [estimatedTotal, setEstimatedTotal] = useState(0);
+  const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const dispatch = useDispatch();
   const bestAskPrice = useReduxSelector(selectBestAskPrice);
   const bestBidPrice = useReduxSelector(selectBestBidPrice);
@@ -64,7 +64,7 @@ export const OrderForm = ({
     listenInputPrice && listenInputPrice();
   };
 
-  const handleAmountChange = (value: string, isMarket: boolean, isSell: boolean) => {
+  const handleAmountChange = (value: string, isSell: boolean) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
     if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
       if (isSellSide) {
@@ -80,16 +80,28 @@ export const OrderForm = ({
       }
     }
     const estPrice = isSell ? bestBidPrice : bestAskPrice;
-    if (isMarket) {
-      setEstimatedTotal(Number(value) * estPrice);
-    }
+    setEstimatedTotal((prevState) => {
+      return {
+        ...prevState,
+        [isSell ? "sell" : "buy"]: Number(convertedValue) * Number(estPrice),
+      };
+    });
   };
+
+  useEffect(() => {
+    setEstimatedTotal({
+      sell: Number(state.amountSell) * Number(bestBidPrice),
+      buy: Number(state.amountBuy) * Number(bestAskPrice),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bestAskPrice, bestBidPrice]);
 
   useEffect(() => {
     const nextPriceLimitTruncated = Decimal.format(priceLimit, currentMarketBidPrecision);
     if (state.orderType === "Limit" && priceLimit && nextPriceLimitTruncated !== state.price) {
       handlePriceChange(nextPriceLimitTruncated);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
   const handleOrders = (e, isMarket) => {
@@ -167,7 +179,7 @@ export const OrderForm = ({
 };
 export const MarketType = ({
   isMarket = false,
-  estimatedTotal = 0,
+  estimatedTotal = { buy: 0, sell: 0 },
   availableBaseAmount,
   availableQuoteAmount,
   baseUnit,
@@ -184,6 +196,7 @@ export const MarketType = ({
   side,
   isLoading,
 }) => {
+  const estimatedTotalVal = isSellSide ? estimatedTotal.sell : estimatedTotal.buy;
   const amountInput = isSellSide ? Number(state.amountSell) : Number(state.amountBuy);
   const amountAvailable = isSellSide
     ? Number(availableBaseAmount) <= 0
@@ -232,12 +245,12 @@ export const MarketType = ({
       <SecondaryInput
         placeholder="Amount"
         value={isSellSide ? state.amountSell : state.amountBuy}
-        onChange={(e) => handleAmountChange(e.currentTarget.value, isMarket, isSellSide)}>
+        onChange={(e) => handleAmountChange(e.currentTarget.value, isSellSide)}>
         <span>{baseUnit}</span>
       </SecondaryInput>
       <SecondaryInput
         value={Decimal.format(
-          isMarket ? estimatedTotal : total,
+          isMarket ? estimatedTotalVal : total,
           currentMarketAskPrecision + currentMarketBidPrecision,
           ","
         )}
