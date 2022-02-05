@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
-export const Wrapper = styled.section`
+export const Wrapper = styled.div`
   ${({ theme }) => css`
     grid-area: Transactions;
     background: ${theme.colors.secondaryBackgroundOpacity};
@@ -38,7 +38,8 @@ export const HeaderTabWrapper = styled.div`
 
 export const Content = styled.div`
   margin-top: 1rem;
-  overflow: overlay;
+  overflow: auto;
+  scrollbar-width: none;
   @media screen and (min-width: 1055px) {
     max-height: 36vh;
   }
