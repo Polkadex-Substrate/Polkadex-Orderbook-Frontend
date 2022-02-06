@@ -6,8 +6,6 @@ import * as cryptoIcons from "@styled-icons/crypto";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
-import { toCapitalize } from "@polkadex/web-helpers";
 import {
   Icon,
   Skeleton,
@@ -161,7 +159,7 @@ export const Markets = ({ marketActive = false }) => {
                     getTickers().map((item, index) => (
                       <ContentItem
                         key={item.id}
-                        tokenIcon={item.base_unit}
+                        tokenIcon={item.tokenTickerName}
                         pair={item.name}
                         vol={Decimal.format(Number(item.volume), item.price_precision, ",")}
                         priceFiat={Decimal.format(
@@ -187,8 +185,7 @@ export const Markets = ({ marketActive = false }) => {
 };
 
 const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => {
-  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  const IconComponent = cryptoIcons[toCapitalize(symbol) || "Dot"];
+  const IconComponent = cryptoIcons[tokenIcon];
   return (
     <S.ContentItemWrapper onClick={onClick}>
       <S.ContentItemToken>
