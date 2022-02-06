@@ -7,7 +7,8 @@ export function* handleErrorSaga(action: ErrorHandlerFetch) {
   const { processingType, error, extraOptions } = action.payload;
 
   if (extraOptions?.params) yield put(extraOptions.actionError(extraOptions.params));
-  if (extraOptions?.actionError) yield put(extraOptions.actionError());
+  if (extraOptions?.actionError && !extraOptions?.params)
+    yield put(extraOptions.actionError());
 
   switch (processingType) {
     case "alert":
