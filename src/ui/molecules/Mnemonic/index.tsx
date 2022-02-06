@@ -10,16 +10,15 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
 
   // const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Paste from clipboard");
   const onInputKeyDown = (e) => {
-    const val = e.target.value;
-    const sameValue = state.tags.find((tag) => tag.toLowerCase() === val.toLowerCase());
-    const hasSpace = /\s/.test(val);
-    if (val && e.key === "Enter") {
-      if (sameValue || hasSpace) {
-        return;
-      }
-      handleChange({ tags: [...state.tags, val] });
+    const val: string[] = e.target.value
+      .split(",")
+      .map((value) => value.trim())
+      .filter((e) => e);
+
+    if (!!val.length && e.key === "Enter") {
+      handleChange({ tags: [...state.tags, ...val] });
       inputRef.current.value = null;
-    } else if (e.key === "Backspace" && !val) {
+    } else if (e.key === "Backspace" && !!val.length) {
       handleRemove(state.tags.length - 1);
     }
   };
@@ -56,10 +55,7 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
         </ul>
 
         <S.MnemonicAction type="button">
-          <span>
-            Please type each word from the seed phrase and press enter after each word. (do not
-            copy and paste)
-          </span>
+          <span>Please type each word from the seed phrase and press enter.</span>
         </S.MnemonicAction>
       </S.MnemonicImport>
 
