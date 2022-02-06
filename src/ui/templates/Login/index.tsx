@@ -62,7 +62,7 @@ export const LoginTemplate = () => {
             <S.Title>
               <h1>Welcome Back!</h1>
               <p>
-                Dont you have an account yet?
+                Don't you have an account yet?
                 <Link href="/signUp"> Sign up </Link>
               </p>
             </S.Title>

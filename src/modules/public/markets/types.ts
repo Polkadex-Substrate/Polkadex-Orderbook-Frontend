@@ -30,6 +30,7 @@ export interface Market {
   price_precision: number;
   state?: string;
   filters?: MarketFilter[];
+  tokenTickerName?: string;
 }
 
 export interface Ticker {
