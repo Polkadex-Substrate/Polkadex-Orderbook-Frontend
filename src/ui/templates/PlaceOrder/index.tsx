@@ -17,6 +17,8 @@ import {
   OrderExecution,
   selectUserBalance,
   Balance,
+  selectBestAskPrice,
+  selectBestBidPrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Accounts, OrderForm } from "@polkadex/orderbook-ui/organisms";

@@ -38,6 +38,9 @@ export const Primary = styled.div`
       color: ${theme.colors.black};
       width: 100%;
     }
+    span {
+      color: ${theme.colors.primary};
+    }
   `}
 `;
 

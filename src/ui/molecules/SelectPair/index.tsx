@@ -3,16 +3,13 @@ import * as cryptoIcons from "@styled-icons/crypto";
 
 import * as S from "./styles";
 
-import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
-import { toCapitalize } from "@polkadex/web-helpers";
 import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 
-export const SelectPairHeader = ({ title = "", icon = "Default" }) => {
-  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  const IconComponent = cryptoIcons[toCapitalize(symbol)];
+export const SelectPairHeader = ({ title = "", icon }) => {
+  const IconComponent = cryptoIcons[icon];
   return (
     <S.Wrapper>
-      {title ? (
+      {title && icon ? (
         <>
           <S.TokenWrapper>
             <IconComponent />

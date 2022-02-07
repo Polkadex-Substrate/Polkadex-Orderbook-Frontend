@@ -2,6 +2,7 @@ import { TokensTicker } from "@polkadex/web-helpers";
 
 export type Props = {
   tokenTicker: TokensTicker;
+  tokenTickerName: string;
   tokenName: string;
   totalAmount?: string;
   totalAmountFiat?: string;

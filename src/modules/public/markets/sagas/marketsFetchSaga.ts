@@ -44,5 +44,6 @@ const mockData = (): Market[] => [
     min_price: "0.0000001",
     max_price: "0",
     min_amount: "0.00001",
+    tokenTickerName: "Agi",
   },
 ];
