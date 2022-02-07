@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
+import { useReduxSelector } from ".";
+
 import {
   marketsTickersFetch,
   selectShouldFetchMarketsTickers,
 } from "@polkadex/orderbook-modules";
-
-import { useReduxSelector } from ".";
 
 export const useMarketsTickersFetch = () => {
   const shouldDispatch = useReduxSelector(selectShouldFetchMarketsTickers);

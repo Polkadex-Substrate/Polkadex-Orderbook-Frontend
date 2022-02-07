@@ -181,11 +181,21 @@ export const MarketType = ({
     ? Number(availableBaseAmount) <= 0
     : Number(availableQuoteAmount) <= 0;
 
+  const amountAmountUnavariable = isSellSide
+    ? Number(availableBaseAmount) >= Number(state.amountSell)
+    : Number(availableQuoteAmount) >= Number(state.amountBuy);
+
   const isDisabled = useMemo(() => {
     if (isMarket) {
-      return isLoading || !amountInput || amountAvailable;
+      return isLoading || !amountInput || amountAvailable || amountAmountUnavariable;
     } else {
-      return isLoading || !amountInput || !Number(state.price) || amountAvailable;
+      return (
+        isLoading ||
+        !amountInput ||
+        !Number(state.price) ||
+        amountAvailable ||
+        amountAmountUnavariable
+      );
     }
   }, [isLoading, amountInput, amountAvailable, isMarket, state]);
 

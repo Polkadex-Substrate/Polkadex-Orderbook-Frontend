@@ -17,6 +17,7 @@ export const useMarketsFetch = (id: string) => {
   const markets = useReduxSelector(selectMarkets);
   const selectMarket = markets.find((item) => item.id === id);
   const user = useReduxSelector(selectUserInfo);
+
   useEffect(() => {
     if (shouldDispatch) dispatch(marketsFetch());
     else if (!shouldDispatch && markets) dispatch(setCurrentMarket(selectMarket));

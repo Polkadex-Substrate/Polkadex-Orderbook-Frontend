@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { Range } from "@orderbook-ui/v2/molecules";
+// import { Range } from "@orderbook/v2/ui/molecules";
 import {
   AvailableMessage,
   Icon,
@@ -58,7 +58,7 @@ export const PlaceOrder = () => {
                 </div>
               </S.InputWrapper>
               <AvailableMessage message="Soon">
-                <Range values={state} />
+                {/* <Range values={state} /> */}
               </AvailableMessage>
             </S.FormInput>
             <S.Available>

@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import * as F from "./fakeData";
 
-import { SpaceBetweenCenter } from "@orderbook-ui/v2/atoms";
+import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
 import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 
 export const Notifications = () => {

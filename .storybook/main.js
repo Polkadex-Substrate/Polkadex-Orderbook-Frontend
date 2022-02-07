@@ -14,10 +14,10 @@ module.exports = {
     config.resolve.modules = [path.resolve(__dirname, "..", "src"), "node_modules"];
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@orderbook-ui/v2/atoms": path.resolve(__dirname, "../src/v2/ui/atoms"),
-      "@orderbook-ui/v2/molecules": path.resolve(__dirname, "../src/v2/ui/molecules"),
-      "@orderbook-ui/v2/organisms": path.resolve(__dirname, "../src/v2/ui/organisms"),
-      "@orderbook-ui/v2/templates": path.resolve(__dirname, "../src/v2/ui/templates"),
+      "@orderbook/v2/ui/atoms": path.resolve(__dirname, "../src/v2/ui/atoms"),
+      "@orderbook/v2/ui/molecules": path.resolve(__dirname, "../src/v2/ui/molecules"),
+      "@orderbook/v2/ui/organisms": path.resolve(__dirname, "../src/v2/ui/organisms"),
+      "@orderbook/v2/ui/templates": path.resolve(__dirname, "../src/v2/ui/templates"),
       "@polkadex/orderbook-ui/atoms": path.resolve(__dirname, "../src/ui/atoms"),
       "@polkadex/orderbook-ui/molecules": path.resolve(__dirname, "../src/ui/molecules"),
       "@polkadex/orderbook-ui/organisms": path.resolve(__dirname, "../src/ui/organisms"),

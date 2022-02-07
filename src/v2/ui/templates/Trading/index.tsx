@@ -2,6 +2,7 @@ import { setTimeout } from "timers/promises";
 
 import { useEffect, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useRouter } from "next/router";
 
 import { AlertCard } from "../../molecules";
 
@@ -19,31 +20,22 @@ import {
   RecentTrades,
   Information,
   Footer,
-} from "@orderbook-ui/v2/organisms";
+} from "@orderbook/v2/ui/organisms";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
+import { useMarketsFetch, useMarketsTickersFetch } from "@polkadex/orderbook-hooks";
 export const Trading = () => {
   const [isActive, setIsActive] = useState(false);
 
   // Test data
   const [alerts, setAlerts] = useState([]);
+  const { id } = useRouter().query;
+  useMarketsFetch(id as string);
+  useMarketsTickersFetch();
+
+  if (!id) return <div />;
   const handleClose = () => setIsActive(!isActive);
   const handleRemoveAlert = (id: number) =>
     setAlerts((alert) => alert.filter((item) => id !== item.id));
-
-  // useEffect(() => {
-  //   window.setTimeout(() => {
-  //     const number = Math.random();
-  //     setAlerts((alerts) => [
-  //       ...alerts,
-  //       {
-  //         id: number,
-  //         title: `Order Created: ${number}`,
-  //         description: "Cool Man",
-  //         icon: "Clock",
-  //       },
-  //     ]);
-  //   }, 8000);
-  // }, [alerts]);
 
   return (
     <S.Main>

@@ -9,8 +9,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     width: 100%;
     border-radius: 1.5rem;
     box-shadow: ${theme.shadows.secondary};
-    max-height: 100vh;
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-flow: column nowrap;
   `}

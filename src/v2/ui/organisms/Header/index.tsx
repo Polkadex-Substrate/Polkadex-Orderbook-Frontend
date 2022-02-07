@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
-import { SpaceBetweenCenter } from "@orderbook-ui/v2/atoms";
-import { MyAccount, Notifications, Menu, Search } from "@orderbook-ui/v2/molecules";
+import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
+import { MyAccount, Notifications, Menu, Search } from "@orderbook/v2/ui/molecules";
 import { Polkadex } from "@polkadex/orderbook-ui/molecules";
 
 export const Header = () => {

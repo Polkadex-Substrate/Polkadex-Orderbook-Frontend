@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { FlexCenter, Grid } from "@orderbook-ui/v2/atoms";
+import { FlexCenter, Grid } from "@orderbook/v2/ui/atoms";
 import { Wrapper as Logo } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
 export const Main = styled.header`

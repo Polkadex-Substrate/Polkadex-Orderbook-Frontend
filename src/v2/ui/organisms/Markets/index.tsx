@@ -1,10 +1,24 @@
 import { Sparklines, SparklinesLine } from "react-sparklines";
+import { FC } from "react";
 
 import * as S from "./styles";
 import * as F from "./fakeData";
 
+import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
 import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { Market } from "@polkadex/orderbook-modules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { isNegative } from "@polkadex/orderbook/v2/helpers";
+
 export const Markets = ({ isFull = false }) => {
+  const {
+    marketTokens,
+    marketTickers,
+    handleChangeMarket,
+    handleFieldChange,
+    handleMarketsTabsSelected,
+  } = useMarkets();
+
   return (
     <S.Main isFull={isFull}>
       <S.HeaderWrapper>
@@ -13,9 +27,9 @@ export const Markets = ({ isFull = false }) => {
       <AvailableMessage message="Soon">
         <Filters />
       </AvailableMessage>
-      <Content />
+      <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
       <AvailableMessage message="Soon">
-        <Footer />
+        <Footer tickers={marketTickers} />
       </AvailableMessage>
     </S.Main>
   );
@@ -62,37 +76,34 @@ const Filters = () => (
   </S.Title>
 );
 
-const Content = () => {
+const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
+  tokens = [],
+  changeMarket,
+}) => {
   return (
     <S.Content>
       <S.ContainerTitle></S.ContainerTitle>
       <S.ContainerWrapper>
-        {F.tokens.map((token) => (
-          <Card
-            key={token.id}
-            pair={token.pair}
-            tokenTicker={token.tokenTicker}
-            vol={token.vol}
-            price={token.price}
-            fiat={token.fiat}
-            change={token.change}
-          />
-        ))}
+        {!!tokens.length &&
+          tokens.map((token) => (
+            <Card
+              key={token.id}
+              pair={token.name}
+              tokenTicker={token.name}
+              vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
+              price="0"
+              fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
+              change={token.price_change_percent}
+              changeMarket={() => changeMarket(token.name)}
+            />
+          ))}
       </S.ContainerWrapper>
     </S.Content>
   );
 };
 
-const Card = ({
-  pair = "DOT",
-  tokenTicker = "PDEX",
-  vol = "32,875.081",
-  price = "2.180000",
-  fiat = "32.28",
-  change = "81.10",
-  isNegative = false,
-}) => (
-  <S.Card>
+const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => (
+  <S.Card onClick={changeMarket}>
     <S.CardInfo>
       <S.CardInfoActions>
         <Icon name="Star" size="extraSmall" stroke="black" color="white" />
@@ -113,17 +124,20 @@ const Card = ({
       <span>{price}</span>
       <p>{fiat}</p>
     </S.CardPricing>
-    <S.CardChange isNegative={isNegative}>
+    <S.CardChange isNegative={isNegative(change.toString())}>
       <span>{change}</span>
     </S.CardChange>
   </S.Card>
 );
 
-const Footer = () => (
+const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
   <S.Footer>
-    <S.FooterCard isActive>Pdex</S.FooterCard>
-    <S.FooterCard>Btc</S.FooterCard>
-    <S.FooterCard>Usdt</S.FooterCard>
+    {!!tickers.length &&
+      tickers.map((ticker) => (
+        <S.FooterCard key={ticker} isActive>
+          {ticker}
+        </S.FooterCard>
+      ))}
     <S.FooterCard>
       <Dropdown header="ALTS">
         <p>ETH</p>

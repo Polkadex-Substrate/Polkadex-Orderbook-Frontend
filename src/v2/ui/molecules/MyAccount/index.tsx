@@ -4,7 +4,7 @@ import { useState } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Navigation, Switcher } from "@orderbook-ui/v2/molecules";
+import { Navigation, Switcher } from "@orderbook/v2/ui/molecules";
 import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 
 export const MyAccount = () => {

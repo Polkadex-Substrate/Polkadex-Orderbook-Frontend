@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, cloneElement, isValidElement, ReactNode } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -45,24 +45,16 @@ export const Dropdown = ({
 
   const toogleDropdown = () => setIsOpen(!isOpen);
 
-  const childComponent = (component: ReactNode) => {
-    if (isValidElement(component)) {
-      return cloneElement<{
-        isActive: boolean;
-      }>(component, { isActive: isOpen });
-    } else return component;
-  };
-
   return (
     <S.Wrapper isOpen={isOpen} priority={priority}>
-      <S.Header onClick={toogleDropdown}> {childComponent(header)} </S.Header>
+      <S.Header onClick={toogleDropdown}> {header} </S.Header>
       <S.Content
         ref={dropdownRef}
         aria-hidden={!isOpen}
         direction={direction}
         isFull={isFull}
         {...props}>
-        {childComponent(children)}
+        {children}
       </S.Content>
       <S.Overlay isOpacity={isOpacity} aria-hidden={!isOpen} onClick={toogleDropdown} />
     </S.Wrapper>

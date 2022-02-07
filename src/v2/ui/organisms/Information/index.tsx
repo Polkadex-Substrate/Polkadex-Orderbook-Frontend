@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import * as T from "./types";
 
-import { HeaderMarket } from "@orderbook-ui/v2/organisms/Markets";
+import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
 
 export const Information = ({ onOpenMarkets }) => {
   return (
