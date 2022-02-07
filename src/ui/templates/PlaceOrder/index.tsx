@@ -100,15 +100,16 @@ export const PlaceOrder = () => {
   };
 
   // Get available amount
-  const getBalance = (assetid: string, balances: Balance[]) => {
+  const getBalance = (assetid: string, balances: Balance[]) => {    
     if (balances.length > 0) {
-      const idx = balances.findIndex((balance) => balance.ticker === assetid);
-      return idx >= 0 ? balances[idx].free : "0";
-    } else return "0";
+      const data = balances.find(value => value.ticker === assetid);
+      return data ? data.free : "0"
+    }  
+    return "0";
   };
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket.symbolArray : [-1, -1];
   const availabeBaseAmount = getBalance(baseAssetId.toString(), balances);
-  const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);
+  const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);  
 
   const currentTicker = marketTickers[currentMarket?.id];
 
@@ -137,8 +138,8 @@ export const PlaceOrder = () => {
                 symbolArray={currentMarket.symbolArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
-                availableQuoteAmount={availabeBaseAmount}
-                availableBaseAmount={availabelQuoteAmount}
+                availableQuoteAmount={availabelQuoteAmount}
+                availableBaseAmount={availabeBaseAmount}
                 priceMarket={currentTicker?.last}
                 currentMarketAskPrecision={currentMarket?.amount_precision}
                 currentMarketBidPrecision={currentMarket?.price_precision}
@@ -153,8 +154,8 @@ export const PlaceOrder = () => {
                 symbolArray={currentMarket.symbolArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
-                availableQuoteAmount={availabeBaseAmount}
-                availableBaseAmount={availabelQuoteAmount}
+                availableQuoteAmount={availabelQuoteAmount}
+                availableBaseAmount={availabeBaseAmount}
                 priceMarket={currentTicker?.last}
                 currentMarketAskPrecision={currentMarket?.amount_precision}
                 currentMarketBidPrecision={currentMarket?.price_precision}
