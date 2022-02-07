@@ -1,3 +1,5 @@
+import * as cryptoIcons from "@styled-icons/crypto";
+
 import * as Tokens from "../../atoms/Tokens";
 import * as Icons from "../../atoms/Icons";
 
@@ -15,7 +17,7 @@ export const Icon = ({
   ...props
 }: T.Props) => {
   const IconSvg = name && !isToken ? Icons[name] : Icons.Wallet;
-  const TokenSvg = isToken && name ? Tokens[name?.toUpperCase()] : Tokens.PDEX;
+  const TokenSvg = isToken && name ? cryptoIcons[name] : cryptoIcons.Dot;
   const IconComponent = (isToken && TokenSvg) || IconSvg;
 
   return (

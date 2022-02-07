@@ -6,7 +6,6 @@ import * as F from "./fakeData";
 
 import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
 import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
-import { Market } from "@polkadex/orderbook-modules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
@@ -17,12 +16,15 @@ export const Markets = ({ isFull = false }) => {
     handleChangeMarket,
     handleFieldChange,
     handleMarketsTabsSelected,
+    currentTickerImg,
+    currentTickerName,
   } = useMarkets();
 
+  console.log(">>>>>>>>", currentTickerImg);
   return (
     <S.Main isFull={isFull}>
       <S.HeaderWrapper>
-        <HeaderMarket />
+        <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
       <AvailableMessage message="Soon">
         <Filters />
@@ -35,32 +37,34 @@ export const Markets = ({ isFull = false }) => {
   );
 };
 
-export const HeaderMarket = ({ onOpenMarkets = undefined }) => (
-  <S.Header onClick={onOpenMarkets}>
-    <S.HeaderAsideLeft>
-      <S.HeaderToken>
-        <Icon isToken name="DOT" size="large" color="black" />
-      </S.HeaderToken>
-      <S.HeaderInfo>
-        <S.HeaderInfoContainer>
-          <span>DOT/PDEX</span>
-          <S.HeaderInfoActions>
-            <Icon name="Exchange" />
-          </S.HeaderInfoActions>
-        </S.HeaderInfoContainer>
-        <p>Polkadot</p>
-      </S.HeaderInfo>
-    </S.HeaderAsideLeft>
-    <S.HeaderAsideCenter>
-      <Sparklines data={F.fakeChartData}>
-        <SparklinesLine color="#E6007A" />
-      </Sparklines>
-    </S.HeaderAsideCenter>
-    <S.HeaderAsideRight>
-      <Icon name="ArrowBottom" stroke="text" />
-    </S.HeaderAsideRight>
-  </S.Header>
-);
+export const HeaderMarket = ({ pair, pairTicker, onOpenMarkets = undefined }) => {
+  return (
+    <S.Header onClick={onOpenMarkets}>
+      <S.HeaderAsideLeft>
+        <S.HeaderToken>
+          <Icon isToken name={pairTicker} size="large" color="black" />
+        </S.HeaderToken>
+        <S.HeaderInfo>
+          <S.HeaderInfoContainer>
+            <span>{pair}</span>
+            <S.HeaderInfoActions>
+              <Icon name="Exchange" />
+            </S.HeaderInfoActions>
+          </S.HeaderInfoContainer>
+          <p>Polkadot</p>
+        </S.HeaderInfo>
+      </S.HeaderAsideLeft>
+      <S.HeaderAsideCenter>
+        <Sparklines data={F.fakeChartData}>
+          <SparklinesLine color="#E6007A" />
+        </Sparklines>
+      </S.HeaderAsideCenter>
+      <S.HeaderAsideRight>
+        <Icon name="ArrowBottom" stroke="text" />
+      </S.HeaderAsideRight>
+    </S.Header>
+  );
+};
 
 const Filters = () => (
   <S.Title>
@@ -89,7 +93,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
             <Card
               key={token.id}
               pair={token.name}
-              tokenTicker={token.name}
+              tokenTicker={token.tokenTickerName}
               vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
               price="0"
               fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
@@ -113,9 +117,7 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
           <Icon isToken name={tokenTicker} size="large" color="black" />
         </S.CardToken>
         <S.CardInfoWrapper>
-          <span>
-            {tokenTicker}/<small>{pair}</small>
-          </span>
+          <span>{pair}</span>
           <p>Vol:{vol}</p>
         </S.CardInfoWrapper>
       </S.CardInfoContainer>
