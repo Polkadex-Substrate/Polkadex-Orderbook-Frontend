@@ -14,6 +14,8 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import {
   orderExecuteFetch,
+  selectBestAskPrice,
+  selectBestBidPrice,
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
 } from "@polkadex/orderbook-modules";
@@ -42,13 +44,14 @@ export const OrderForm = ({
     amountSell: "",
     amountBuy: "",
   });
+  const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const dispatch = useDispatch();
-
+  const bestAskPrice = useReduxSelector(selectBestAskPrice);
+  const bestBidPrice = useReduxSelector(selectBestBidPrice);
   const isSellSide = side === "Sell";
   const amount = isSellSide ? state.amountSell : state.amountBuy;
 
-  const total =
-    state.orderType === "Market" ? totalPrice : Number(amount) * Number(state.price) || 0;
+  const total = Number(amount) * Number(state.price) || 0;
 
   const handlePriceChange = (value: string) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
@@ -58,11 +61,10 @@ export const OrderForm = ({
         price: convertedValue,
       });
     }
-
     listenInputPrice && listenInputPrice();
   };
 
-  const handleAmountChange = (value: string) => {
+  const handleAmountChange = (value: string, isSell: boolean) => {
     const convertedValue = cleanPositiveFloatInput(String(value));
     if (convertedValue.match(precisionRegExp(currentMarketAskPrecision))) {
       if (isSellSide) {
@@ -77,13 +79,29 @@ export const OrderForm = ({
         });
       }
     }
+    const estPrice = isSell ? bestBidPrice : bestAskPrice;
+    setEstimatedTotal((prevState) => {
+      return {
+        ...prevState,
+        [isSell ? "sell" : "buy"]: Number(convertedValue) * Number(estPrice),
+      };
+    });
   };
+
+  useEffect(() => {
+    setEstimatedTotal({
+      sell: Number(state.amountSell) * Number(bestBidPrice),
+      buy: Number(state.amountBuy) * Number(bestAskPrice),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bestAskPrice, bestBidPrice]);
 
   useEffect(() => {
     const nextPriceLimitTruncated = Decimal.format(priceLimit, currentMarketBidPrecision);
     if (state.orderType === "Limit" && priceLimit && nextPriceLimitTruncated !== state.price) {
       handlePriceChange(nextPriceLimitTruncated);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceLimit, state.orderType, state.price, currentMarketBidPrecision]);
 
   const handleOrders = (e, isMarket) => {
@@ -136,6 +154,7 @@ export const OrderForm = ({
           <TabContent>
             <MarketType
               isMarket
+              estimatedTotal={estimatedTotal}
               availableBaseAmount={availableBaseAmount}
               availableQuoteAmount={availableQuoteAmount}
               baseUnit={baseUnit}
@@ -160,6 +179,7 @@ export const OrderForm = ({
 };
 export const MarketType = ({
   isMarket = false,
+  estimatedTotal = { buy: 0, sell: 0 },
   availableBaseAmount,
   availableQuoteAmount,
   baseUnit,
@@ -176,28 +196,29 @@ export const MarketType = ({
   side,
   isLoading,
 }) => {
+  const estimatedTotalVal = isSellSide ? estimatedTotal.sell : estimatedTotal.buy;
   const amountInput = isSellSide ? Number(state.amountSell) : Number(state.amountBuy);
   const amountAvailable = isSellSide
     ? Number(availableBaseAmount) <= 0
     : Number(availableQuoteAmount) <= 0;
 
-  const amountAmountUnavariable = isSellSide
-    ? Number(availableBaseAmount) >= Number(state.amountSell)
-    : Number(availableQuoteAmount) >= Number(state.amountBuy);
+  const amountUnavailable = isSellSide
+    ? Number(availableBaseAmount) >= Number(state.amountSell) * Number(state.price)
+    : Number(availableQuoteAmount) >= Number(state.amountBuy) * Number(state.price);
 
   const isDisabled = useMemo(() => {
     if (isMarket) {
-      return isLoading || !amountInput || amountAvailable || amountAmountUnavariable;
+      return isLoading || !amountInput || amountAvailable || !amountUnavailable;
     } else {
       return (
         isLoading ||
         !amountInput ||
         !Number(state.price) ||
         amountAvailable ||
-        amountAmountUnavariable
+        !amountUnavailable
       );
     }
-  }, [isLoading, amountInput, amountAvailable, isMarket, state]);
+  }, [isLoading, amountInput, amountAvailable, isMarket, state, amountUnavailable]);
 
   return (
     <form>
@@ -224,17 +245,17 @@ export const MarketType = ({
       <SecondaryInput
         placeholder="Amount"
         value={isSellSide ? state.amountSell : state.amountBuy}
-        onChange={(e) => handleAmountChange(e.currentTarget.value)}>
+        onChange={(e) => handleAmountChange(e.currentTarget.value, isSellSide)}>
         <span>{baseUnit}</span>
       </SecondaryInput>
       <SecondaryInput
         value={Decimal.format(
-          total,
+          isMarket ? estimatedTotalVal : total,
           currentMarketAskPrecision + currentMarketBidPrecision,
           ","
         )}
         onChange={() => console.log("Updating..")}
-        label="Total">
+        label={isMarket ? "Est Total" : "Total"}>
         <span>{quoteUnit}</span>
       </SecondaryInput>
       <Button

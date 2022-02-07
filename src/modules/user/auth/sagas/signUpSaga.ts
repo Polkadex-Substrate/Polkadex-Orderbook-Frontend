@@ -56,9 +56,7 @@ export const registerAccount = async (userKeyring: KeyringPair, proxyAddress: st
     },
     payload,
   };
-  console.log(data);
   const res: any = await API.post(registerUserOption)("/register", data);
-  console.log(res);
   if (res.Bad && !res.Bad.includes("AccountAlreadyRegistered")) {
     throw new Error(res.Bad);
   }

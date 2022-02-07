@@ -16,7 +16,6 @@ import {
   selectBalancesLoading,
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
-import { tokensTicker } from "@polkadex/web-helpers";
 
 export const Funds = () => {
   const dispatch = useDispatch();
@@ -51,6 +50,7 @@ export const Funds = () => {
                 <CardComponent
                   key={i}
                   tokenTicker={token.ticker}
+                  tokenTickerName={token.tickerName}
                   tokenName={tokenName}
                   totalAmount={parseFloat(token.total).toFixed(3)}
                   totalAmountFiat="0.0000000"

@@ -9,6 +9,7 @@ import {
 
 export type Balance = {
   ticker: string;
+  tickerName?: string;
   free: string;
   used: string;
   total: string;

@@ -23,7 +23,6 @@ export function* fetchTradeChannelSaga() {
       );
       while (true) {
         const tradesMsg = yield take(channel);
-        console.log("tradesMsg", tradesMsg);
         const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
         yield put(recentTradesData([data, ...trades]));

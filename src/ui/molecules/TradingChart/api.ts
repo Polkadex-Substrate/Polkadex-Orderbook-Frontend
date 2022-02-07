@@ -157,12 +157,10 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       );
       url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
-      console.log("graph time ", from, to);
       const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios
         .post(url, payload)
         .then(({ data }) => {
-          console.log("olhcv data", data);
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }

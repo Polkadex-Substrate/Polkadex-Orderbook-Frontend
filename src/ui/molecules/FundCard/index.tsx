@@ -6,12 +6,11 @@ import { AvailableMessage } from "../AvailableMessage";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Skeleton, Icon, Bar } from "@polkadex/orderbook-ui/molecules";
-import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
-import { toCapitalize } from "@polkadex/web-helpers";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 export const FundCard = ({
   tokenTicker,
+  tokenTickerName,
   tokenName,
   totalAmount = "0.0000000",
   totalAmountFiat = "0.0000000",
@@ -22,12 +21,11 @@ export const FundCard = ({
   handleTransfer,
   handleTrade,
 }: Props) => {
-  const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-  const IconComponent = cryptoIcons[toCapitalize(symbol) || "Dot"];
+  const IconComponent = cryptoIcons[tokenTickerName];
   return (
     <S.Wrapper>
       <S.Token>
-        {tokenTicker ? (
+        {tokenTickerName && IconComponent ? (
           <S.TokenWrapper>
             <IconComponent />
           </S.TokenWrapper>

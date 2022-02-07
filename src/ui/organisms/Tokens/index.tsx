@@ -76,7 +76,6 @@ export const Tokens = () => {
 
 const Card = ({ tokenName, tokenTicker, amount, amountInFiat = 0.0 }: T.TokenProps) => {
   const router = useRouter();
-  console.log(router);
   return (
     <Link href={tokenTicker}>
       <a>

@@ -164,20 +164,20 @@ const OrderbookColumn = ({
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
   }, [isBottomPosition, contentRef, data]);
 
+  const total = isSell
+    ? accumulateVolume(data)
+    : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
   return (
     <S.Box>
       {data.length ? (
         <>
           <S.BoxHeader onClick={() => console.log(contentRef?.current?.scrollIntoView())}>
-            <span>Price({formattedBaseUnit})</span>
-            <span>Amount({formattedQuoteUnit})</span>
+            <span>Price({formattedQuoteUnit})</span>
+            <span>Amount({formattedBaseUnit})</span>
             <span>Total({formattedBaseUnit})</span>
           </S.BoxHeader>
           <S.BoxContent hasScroll={data.length >= 8}>
             {data.map((item, index) => {
-              const total = isLarge
-                ? accumulateVolume(data)
-                : accumulateVolume(data.slice(0).reverse()).slice(0).reverse();
               const [price, volume] = item;
               return (
                 <S.OrderbookCard key={index} onClick={() => handleSelectPrice(index, side)}>

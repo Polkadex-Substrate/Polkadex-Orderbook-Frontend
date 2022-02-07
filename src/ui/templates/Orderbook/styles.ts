@@ -71,8 +71,7 @@ export const BoxHeader = styled.div`
 
 export const BoxContent = styled.div<{ hasScroll?: boolean }>`
   ${({ theme, hasScroll }) => css`
-    max-height: 15rem;
-    height: 100%;
+    height: 15rem;
     overflow-x: hidden;
     overflow-y: ${hasScroll ? "scroll" : "hidden"};
     scrollbar-width: none;
