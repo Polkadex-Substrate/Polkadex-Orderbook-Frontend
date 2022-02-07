@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { detect } from "detect-browser";
 
 import * as S from "./styles";
 import { MnemonicExportProps, MnemonicProps } from "./types";
@@ -6,19 +7,38 @@ import { MnemonicExportProps, MnemonicProps } from "./types";
 // Transform component to tags
 export const MnemonicImport = ({ label, state, handleChange, ...props }: MnemonicProps) => {
   const inputRef = useRef(null);
-  // const buttonRef = useRef(null);
+  const buttonRef = useRef(null);
+  const { name } = detect();
+  const isBrowserSupported = ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
 
-  // const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Paste from clipboard");
-  const onInputKeyDown = (e) => {
-    const val: string[] = e.target.value
-      .split(",")
+  const handleOnMouseOut = async () => {
+    const phrase = await navigator.clipboard.readText();
+    const val: string[] = phrase
+      .split(" ")
       .map((value) => value.trim())
       .filter((e) => e);
 
-    if (!!val.length && e.key === "Enter") {
+    if (val.length && val.length <= 12 && val.length + state.tags.length <= 12) {
       handleChange({ tags: [...state.tags, ...val] });
       inputRef.current.value = null;
-    } else if (e.key === "Backspace" && !!val.length) {
+    }
+  };
+
+  const onInputKeyDown = (e) => {
+    const val: string[] = e.target.value
+      .split(" ")
+      .map((value) => value.trim())
+      .filter((e) => e);
+
+    if (
+      !!val.length &&
+      val.length <= 12 &&
+      val.length + state.tags.length <= 12 &&
+      e.key === "Enter"
+    ) {
+      handleChange({ tags: [...state.tags, ...val] });
+      inputRef.current.value = null;
+    } else if (e.key === "Backspace" && e.target.value.length === 0) {
       handleRemove(state.tags.length - 1);
     }
   };
@@ -54,12 +74,16 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
           </li>
         </ul>
 
-        <S.MnemonicAction type="button">
-          <span>Please type each word from the seed phrase and press enter.</span>
+        <S.MnemonicAction
+          type="button"
+          ref={buttonRef}
+          onClick={isBrowserSupported ? handleOnMouseOut : undefined}>
+          <span>
+            {isBrowserSupported && "Click to paste from the clipboard or"} type each word from
+            the seed phrase and press enter.
+          </span>
         </S.MnemonicAction>
       </S.MnemonicImport>
-
-      {/* <Field {...props} /> */}
     </S.Wrapper>
   );
 };
