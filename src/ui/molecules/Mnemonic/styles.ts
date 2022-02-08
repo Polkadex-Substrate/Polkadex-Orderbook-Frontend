@@ -41,6 +41,14 @@ export const MnemonicAction = styled.button`
     :hover {
       opacity: 0.7;
     }
+    span {
+      display: block;
+      line-height: 1.3;
+      text-transform: lowercase;
+      :first-letter {
+        text-transform: uppercase;
+      }
+    }
   `}
 `;
 

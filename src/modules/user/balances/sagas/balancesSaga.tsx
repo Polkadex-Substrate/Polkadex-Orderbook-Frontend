@@ -5,7 +5,8 @@ import { balancesData, balancesError, UserBalance, BalancesFetch } from "../acti
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 
-import { signMessage } from "@polkadex/web-helpers";
+import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
+import { signMessage, toCapitalize } from "@polkadex/web-helpers";
 import { formatPayload } from "@polkadex/orderbook/helpers/formatPayload";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
@@ -19,10 +20,14 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
     if (account.address) {
       const userBalance = yield call(() => fetchbalancesAsync(account));
       const tickers = Object.keys(userBalance.free).map((key) => [key]);
+
       if (tickers.length) {
-        const result = tickers.map(([ticker]) => {
+        const result = tickers.map(([ticker], i) => {
+          const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+
           return {
             ticker: ticker,
+            tickerName: toCapitalize(symbol),
             free: userBalance.free[ticker],
             used: userBalance.used[ticker],
             total: userBalance.total[ticker],

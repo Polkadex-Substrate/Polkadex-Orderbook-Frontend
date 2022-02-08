@@ -7,7 +7,6 @@ export const Template = styled.div`
   grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 4rem;
   grid-gap: 0.5rem;
   text-align: left;
-  scrollbar-width: none;
 `;
 
 export const Header = styled(Template)`
