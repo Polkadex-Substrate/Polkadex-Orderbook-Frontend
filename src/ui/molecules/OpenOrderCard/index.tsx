@@ -6,6 +6,7 @@ import { Props } from "./types";
 import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { convertExponentialToString } from "@polkadex/orderbook/helpers/convertExponential";
 
 export const OpenOrderCard = ({
   order_id,
@@ -32,7 +33,7 @@ export const OpenOrderCard = ({
       <span>{price}</span>
       <span>{amount}</span>
       <span>{filled_qty}</span>
-      <span>{Number(price) * Number(amount)}</span>
+      <span>{convertExponentialToString((Number(price) * Number(amount)))}</span>
       <span>
         {Number(filled_qty) <= 100 && (
           <Icon
@@ -83,7 +84,7 @@ export const OpenOrderCardReponsive = ({
         <OpenOrderInfo label="Type" value={order_type} />
         <OpenOrderInfo label="Price" value={price} />
         <OpenOrderInfo label="Amount" value={amount} />
-        <OpenOrderInfo label="Total" value={Number(price) * Number(amount)} />
+        <OpenOrderInfo label="Total" value={convertExponentialToString((Number(price) * Number(amount)))} />
       </S.Content>
       <S.Footer>
         <S.FlexJustify>
