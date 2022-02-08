@@ -6,14 +6,15 @@ import { marketsTickersData, marketsTickersError } from "../actions";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tickersOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
+  apiVersion: "influxDB",
 };
 const ts = Date.now() / 1000;
 // TODO: remove mockDate and add tickers when we have endpoint available
 export function* tickersSaga() {
   try {
-    const tickers = mockData();
-
+    const payload = { symbol: "0-1" };
+    const tickers = yield call(API.post(tickersOptions), "/fetch_ticker", payload);
+    console.log("tickersSaga", tickers);
     if (tickers) {
       const pairs = Object.keys(tickers);
 
