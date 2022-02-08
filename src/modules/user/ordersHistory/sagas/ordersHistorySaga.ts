@@ -26,7 +26,8 @@ export function* ordersHistorySaga() {
       const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
       console.log("OrdersFetch", res);
       const ordersArray: OrderCommon[] = res.Fine;
-      yield put(userOrdersHistoryData({ list: ordersArray }));
+      const orders = sortDescendingTime(ordersArray);
+      yield put(userOrdersHistoryData({ list: orders }));
     }
   } catch (error) {
     yield put(
@@ -40,3 +41,10 @@ export function* ordersHistorySaga() {
     );
   }
 }
+
+const sortDescendingTime = (orders: OrderCommon[]) =>
+  orders.sort((a, b) => {
+    const timestampA = new Date(a.timestamp).getTime();
+    const timestampB = new Date(b.timestamp).getTime();
+    return timestampB - timestampA;
+  });
