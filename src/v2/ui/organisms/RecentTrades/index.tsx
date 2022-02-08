@@ -1,9 +1,12 @@
 import * as S from "./styles";
-import * as F from "./fakeData";
 
 import { AvailableMessage, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { useRecentTrades } from "@polkadex/orderbook/v2/hooks";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 export const RecentTrades = () => {
+  const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+    useRecentTrades();
   return (
     <S.Main>
       <AvailableMessage message="Soon">
@@ -14,22 +17,24 @@ export const RecentTrades = () => {
       </AvailableMessage>
 
       <S.Head>
-        <S.CellHead>Price(DOT)</S.CellHead>
-        <S.CellHead>Amount(PDEX)</S.CellHead>
+        <S.CellHead>Price({baseUnit})</S.CellHead>
+        <S.CellHead>Amount({quoteUnit})</S.CellHead>
         <S.CellHead>Date</S.CellHead>
       </S.Head>
       <S.Content>
-        {F.orders.map((order) => {
-          return (
-            <Card
-              key={order.id}
-              price={order.price}
-              amount={order.amount}
-              date={order.date}
-              isSell={order.isSell}
-            />
-          );
-        })}
+        {!!recentTrades.length &&
+          recentTrades.map((order, i) => {
+            const date = new Date(order.timestamp).toLocaleTimeString();
+            return (
+              <Card
+                key={i}
+                price={Decimal.format(order.price, pricePrecision, ",")}
+                amount={Decimal.format(order.amount, amountPrecision, ",")}
+                date={date}
+                isSell={isDecreasing[i]}
+              />
+            );
+          })}
       </S.Content>
     </S.Main>
   );

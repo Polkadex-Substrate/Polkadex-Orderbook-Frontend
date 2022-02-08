@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 
+import { getSymbolFromId } from "../helpers";
+
 import {
   DepthState,
   selectCurrentMarket,
@@ -10,7 +12,6 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export type Props = {
   isSell?: boolean;
@@ -32,18 +33,12 @@ export function useOrderbookTable({ orders, isSell }: Props) {
    * @param {string} side - Market side (asks/bids)
    * @returns {void} Dispatch setCurrentPrice action
    */
-  // TODO: Create unbounding function
+  // TODO: Create unbounding
   const changeMarketPrice = (index: number, side: "asks" | "bids"): void => {
     const arr = side === "asks" ? asks : bids;
     const priceToSet = arr[index] && Number(arr[index][0]);
     if (currentPrice !== priceToSet) dispatch(setCurrentPrice(priceToSet));
   };
-
-  /**
-   * @description Get last price change
-   */
-  const getSymbol = (value: "base" | "quote"): string =>
-    getSymbolFromAssetId(currentMarket?.symbolArray[value === "base" ? 0 : 1]).toUpperCase();
 
   /**
    * @description Get max volume based on bids and asks
@@ -52,8 +47,8 @@ export function useOrderbookTable({ orders, isSell }: Props) {
    */
   const maxVolume = calcMaxVolume(bids, asks);
   return {
-    quoteUnit: getSymbol("quote"),
-    baseUnit: getSymbol("base"),
+    quoteUnit: getSymbolFromId("quote", currentMarket?.symbolArray),
+    baseUnit: getSymbolFromId("base", currentMarket?.symbolArray),
     maxVolume,
     changeMarketPrice,
     priceFixed: currentMarket?.price_precision || 0,

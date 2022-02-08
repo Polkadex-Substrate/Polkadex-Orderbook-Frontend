@@ -56,6 +56,7 @@ export const Head = styled.div`
 `;
 
 export const CellHead = styled.span`
+  font-size: 1.2rem;
   :not(:first-child) {
     justify-self: flex-end;
   }
@@ -69,6 +70,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
     padding: 0 1.6rem 0 2rem;
+    font-weight: 500;
     :not(:last-child) {
       margin-bottom: 0.1rem;
     }
@@ -82,6 +84,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
 
 export const CardCell = styled.span`
   padding: 0.4rem 0;
+  font-size: 1.2rem;
   :not(:first-child) {
     justify-self: flex-end;
   }
