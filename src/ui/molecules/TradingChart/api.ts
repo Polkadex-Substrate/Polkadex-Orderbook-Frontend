@@ -166,7 +166,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
           }
           const bars = data.Fine.map((el) => {
             return {
-              time: new Date(el._time).getTime(),
+              time: new Date(el.time).getTime(),
               open: Number(el.open),
               close: Number(el.close),
               high: Number(el.high),
@@ -174,7 +174,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
               volume: Number(el.volume),
             };
           });
-
+                    
           return onHistoryCallback(bars, { noData: false });
         })
         .catch((e) => {
