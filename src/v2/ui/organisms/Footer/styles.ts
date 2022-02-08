@@ -37,14 +37,3 @@ export const Connection = styled.div<{ isActive?: boolean }>`
     }
   `}
 `;
-export const Developer = styled.div<{ isActive?: boolean }>`
-  ${({ theme }) => css`
-    cursor: pointer;
-    span {
-      color: ${theme.colors.black};
-      vertical-align: middle;
-      font-size: 1.2rem;
-      font-weight: 500;
-    }
-  `}
-`;

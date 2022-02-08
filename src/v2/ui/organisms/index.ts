@@ -9,3 +9,4 @@ export * from "./Orderbook";
 export * from "./PlaceOrder";
 export * from "./Markets";
 export * from "./Footer";
+export * from "./Developer";

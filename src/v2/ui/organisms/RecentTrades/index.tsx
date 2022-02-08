@@ -12,7 +12,7 @@ export const RecentTrades = () => {
       <AvailableMessage message="Soon">
         <S.Header>
           <h2>Recent Trades</h2>
-          <Dropdown header="0.1000000">Testing</Dropdown>
+          {/* <Dropdown header="0.1000000">Testing</Dropdown> */}
         </S.Header>
       </AvailableMessage>
 

@@ -20,7 +20,6 @@ export const Markets = ({ isFull = false }) => {
     currentTickerName,
   } = useMarkets();
 
-  console.log(">>>>>>>>", currentTickerImg);
   return (
     <S.Main isFull={isFull}>
       <S.HeaderWrapper>
@@ -133,33 +132,31 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
 );
 
 const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
-  <S.Footer>
-    {!!tickers.length &&
-      tickers.map((ticker) => (
-        <S.FooterCard key={ticker} isActive>
-          {ticker}
-        </S.FooterCard>
-      ))}
-    <S.FooterCard>
-      <Dropdown header="ALTS">
-        <p>ETH</p>
-        <p>SOL</p>
-        <p>DOGE</p>
-      </Dropdown>
-    </S.FooterCard>
-    <S.FooterCard>
-      <Dropdown header="FIAT">
-        <p>USDC</p>
-        <p>CUSD</p>
-        <p>EURT</p>
-      </Dropdown>
-    </S.FooterCard>
-    <S.FooterCard>
-      <Dropdown header="ZONES">
-        <p>DEFI</p>
-        <p>FINANCE</p>
-        <p>NFT</p>
-      </Dropdown>
-    </S.FooterCard>
-  </S.Footer>
+  <AvailableMessage message="Soon">
+    <S.Footer>
+      {!!tickers.length &&
+        tickers.map((ticker) => <S.FooterCard key={ticker}>{ticker}</S.FooterCard>)}
+      <S.FooterCard>
+        <Dropdown header="ALTS">
+          <p>ETH</p>
+          <p>SOL</p>
+          <p>DOGE</p>
+        </Dropdown>
+      </S.FooterCard>
+      <S.FooterCard>
+        <Dropdown header="FIAT">
+          <p>USDC</p>
+          <p>CUSD</p>
+          <p>EURT</p>
+        </Dropdown>
+      </S.FooterCard>
+      <S.FooterCard>
+        <Dropdown header="ZONES">
+          <p>DEFI</p>
+          <p>FINANCE</p>
+          <p>NFT</p>
+        </Dropdown>
+      </S.FooterCard>
+    </S.Footer>
+  </AvailableMessage>
 );
