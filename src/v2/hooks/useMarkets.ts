@@ -43,7 +43,7 @@ export function useMarkets() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
   /**
-   * Get the single market information for the current market
+   * @description Get the single market information for the current market
    *
    * @param {string} e - Get default value for the market
    * @returns - The single market information
@@ -72,7 +72,7 @@ export function useMarkets() {
     setFieldValue({ ...fieldValue, marketsTabsSelected: value });
 
   /**
-   * Change to selected market
+   * @description Change to selected market
    *
    * @param {string} e -  Search field value
    * @returns {void} dispatch setCurrentMarket action
@@ -86,7 +86,7 @@ export function useMarkets() {
   };
 
   /**
-   * Return the tickers based on the current market id
+   * @description Return the tickers based on the current market id
    *
    * @returns {InitialMarkets[]} dispatch setCurrentMarket action
    */
@@ -119,7 +119,8 @@ export function useMarkets() {
   };
 
   /**
-   * Return the market tickers
+   * @description Return the market tickers
+   *
    * @returns {string[]} Tickers name
    */
   // TODO: Add ticker types, ex. Fiat, Zones, Alts

@@ -96,7 +96,7 @@ export const Container = styled.div`
         "Graph Graph Orderbook"
         "ExploreMarket ExploreMarket Orderbook";
       grid-template-rows: fit-content(100%) 1fr fit-content(100%);
-      grid-template-columns: 4fr 1fr max-content;
+      grid-template-columns: 4fr 1fr minmax(30rem, 30rem);
     }
 
     grid-gap: 0.5rem;

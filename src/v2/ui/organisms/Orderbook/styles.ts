@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+export const Main = styled.section`
+  ${({ theme }) => css`
     grid-area: Orderbook;
     background: ${theme.colors.white};
     color: ${theme.colors.black};
@@ -19,7 +19,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem 2rem 0 2rem;
+  padding: 1rem 2rem 0 2rem;
   margin-bottom: 1rem;
   h2 {
     font-size: 1.5rem;
@@ -38,6 +38,7 @@ export const Content = styled.div`
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     overflow: overlay;
+    flex: 1;
     ::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -71,6 +72,8 @@ export const Head = styled.div`
 `;
 
 export const CellHead = styled.span`
+  font-size: 1.2rem;
+
   :not(:first-child) {
     justify-self: flex-end;
   }
@@ -80,21 +83,26 @@ export const Body = styled.div``;
 
 // Card
 export const Card = styled.div<{ isSell?: boolean }>`
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: center;
-  padding: 0 1.6rem 0 2rem;
-  cursor: pointer;
-  :not(:last-child) {
-    margin-bottom: 0.1rem;
-  }
+  ${({ theme, isSell }) => css`
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    padding: 0 1.6rem 0 2rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    :not(:last-child) {
+      margin-bottom: 0.1rem;
+    }
+    :hover {
+      background: ${isSell ? theme.colors.green : theme.colors.primary}19;
+    }
+  `}
 `;
 
-export const CardVolume = styled.div<{ isSell?: boolean; volume: number }>`
-  ${({ theme, isSell, volume }) => css`
+export const CardVolume = styled.div<{ isSell?: boolean }>`
+  ${({ theme, isSell }) => css`
     position: absolute;
-    width: ${volume}%;
     height: 100%;
     background: ${isSell ? theme.colors.primary : theme.colors.green}13;
   `}
@@ -102,6 +110,8 @@ export const CardVolume = styled.div<{ isSell?: boolean; volume: number }>`
 
 export const CardCell = styled.span`
   padding: 0.4rem 0;
+  font-size: 1.2rem;
+  font-weight: 500;
   :not(:first-child) {
     justify-self: flex-end;
   }

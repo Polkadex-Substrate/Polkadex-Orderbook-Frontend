@@ -22,7 +22,11 @@ import {
   Footer,
 } from "@orderbook/v2/ui/organisms";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
-import { useMarketsFetch, useMarketsTickersFetch } from "@polkadex/orderbook-hooks";
+import {
+  useMarketsFetch,
+  useMarketsTickersFetch,
+  useOrderBookMarketsFetch,
+} from "@polkadex/orderbook-hooks";
 export const Trading = () => {
   const [isActive, setIsActive] = useState(false);
 
@@ -31,6 +35,7 @@ export const Trading = () => {
   const { id } = useRouter().query;
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
+  useOrderBookMarketsFetch();
 
   if (!id) return <div />;
   const handleClose = () => setIsActive(!isActive);
