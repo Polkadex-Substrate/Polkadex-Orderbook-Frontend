@@ -67,7 +67,10 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
             valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
 
           return (
-            <S.Card key={i} onClick={() => changeMarketPrice(i, isSell ? "asks" : "bids")}>
+            <S.Card
+              key={i}
+              onClick={() => changeMarketPrice(i, isSell ? "asks" : "bids")}
+              isSell={isSell}>
               <S.CardCell>
                 <Decimal
                   key={i}

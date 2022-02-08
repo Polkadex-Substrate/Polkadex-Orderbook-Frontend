@@ -1,6 +1,4 @@
-import { setTimeout } from "timers/promises";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useRouter } from "next/router";
 

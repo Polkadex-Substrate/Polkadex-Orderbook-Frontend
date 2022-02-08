@@ -2,26 +2,18 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
-import { selectCurrentMarket, selectMarketTickers } from "@polkadex/orderbook-modules";
+import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
 export const Information = ({ onOpenMarkets }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const marketTickers = useReduxSelector(selectMarketTickers);
-
-  // const getTickerValue = (value: string) => marketTickers[currentMarket?.id][value] || 0;
-
-  const bidUnit = currentMarket?.quote_unit?.toUpperCase();
-  // const isPositive = isNegative(getTickerValue("price_change_percent"));
 
   return (
     <S.Main>
       <S.AsideLeft>
         <HeaderMarket
           pair={currentMarket?.name}
-          pairIcon={"DOT"}
+          pairTicker={currentMarket?.tokenTickerName}
           onOpenMarkets={onOpenMarkets}
         />
       </S.AsideLeft>

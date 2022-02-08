@@ -63,6 +63,7 @@ export const Wrapper = styled.div`
       "MyOrders News RecentTrades";
     grid-template-rows: 1fr minmax(28rem, 28rem) 1fr minmax(22rem, 22rem);
     grid-template-columns: 4fr minmax(32rem, 32rem) fit-content(100%);
+    max-height: 100vh;
   }
 
   @media screen and (min-width: 700px) and (max-width: 1180px) {

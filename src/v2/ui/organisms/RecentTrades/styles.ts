@@ -27,7 +27,7 @@ export const Content = styled.div`
   ${({ theme }) => css`
     padding-bottom: 2rem;
     flex: 1;
-    overflow: overlay;
+    overflow: auto;
     ::-webkit-scrollbar-thumb {
       background: none;
     }

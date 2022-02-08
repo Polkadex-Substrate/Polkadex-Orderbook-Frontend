@@ -32,12 +32,13 @@ export const Content = styled.div`
   display: flex;
   flex-flow: column nowrap;
   height: 100%;
-  overflow: overlay;
+  overflow: hidden;
 `;
 
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    overflow: overlay;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex: 1;
     ::-webkit-scrollbar-thumb {
       background: none;
@@ -95,7 +96,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
       margin-bottom: 0.1rem;
     }
     :hover {
-      background: ${isSell ? theme.colors.green : theme.colors.primary}19;
+      background: ${isSell ? theme.colors.primary : theme.colors.green}19;
     }
   `}
 `;
@@ -104,7 +105,7 @@ export const CardVolume = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     position: absolute;
     height: 100%;
-    background: ${isSell ? theme.colors.primary : theme.colors.green}13;
+    background: ${isSell ? theme.colors.primary : theme.colors.green}10;
   `}
 `;
 
