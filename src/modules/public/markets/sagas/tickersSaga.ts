@@ -1,28 +1,28 @@
 import { call, put } from "redux-saga/effects";
+import axios from "axios";
 
 import { sendError } from "../../../";
 import { marketsTickersData, marketsTickersError } from "../actions";
+import { Ticker } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const tickersOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
+  apiVersion: "influxDB",
 };
 const ts = Date.now() / 1000;
 // TODO: remove mockDate and add tickers when we have endpoint available
 export function* tickersSaga() {
   try {
-    const tickers = mockData();
-
-    if (tickers) {
-      const pairs = Object.keys(tickers);
-
-      const convertedTickers = pairs.reduce((result, pair) => {
-        result[pair] = tickers[pair].ticker;
-
-        return result;
-      }, {});
+    const payload = { symbol: "0-1" };
+    const res = yield call(() => API.post(tickersOptions)("/fetch_ticker", payload));
+    if (res.Fine) {
+      const _ticker: Partial<Ticker> = JSON.parse(res.Fine);
+      const ticker: Ticker = getConvertedTickers(_ticker);
+      const convertedTickers = { "0-1": ticker };
       yield put(marketsTickersData(convertedTickers));
+    } else {
+      throw new Error(res.Bad);
     }
   } catch (error) {
     yield put(
@@ -36,33 +36,11 @@ export function* tickersSaga() {
     );
   }
 }
-const mockData = () => ({
-  btczar: {
-    at: ts,
-    ticker: {
-      amount: "60.0",
-      buy: "1200.0",
-      sell: "1300.0",
-      low: "1150.0",
-      high: "1350.0",
-      last: "1250.0",
-      volume: "120.0",
-      open: 1251.0,
-      price_change_percent: "+0.08%",
-    },
-  },
-  ethbtc: {
-    at: ts,
-    ticker: {
-      amount: "124.021",
-      buy: "0.240",
-      sell: "0.250",
-      low: "0.238",
-      high: "0.253",
-      last: "0.245",
-      volume: "200.0",
-      open: 0.247,
-      price_change_percent: "+0.81%",
-    },
-  },
-});
+const getConvertedTickers = (ticker: any): Ticker => {
+  const price_change_percent =
+    ((Number(ticker.high) - Number(ticker.last)) / Number(ticker.last)) * 100;
+  return {
+    ...ticker,
+    price_change_percent: `${price_change_percent.toFixed(2)}%`,
+  };
+};

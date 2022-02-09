@@ -19,7 +19,8 @@ export function* fetchTradesSaga() {
     const data = formatPayload(signature, payload);
     const res = yield call(() => API.post(ordersOption)("/fetch_user_trades", data));
     if (res.Fine) {
-      yield put(tradesData(res.Fine));
+      const trades = res.Fine.sort((a, b) => b.timestamp - a.timestamp);
+      yield put(tradesData(trades));
     } else {
       throw new Error("user trade fetch failed");
     }
