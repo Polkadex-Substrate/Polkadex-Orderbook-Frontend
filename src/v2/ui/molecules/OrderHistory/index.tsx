@@ -1,17 +1,20 @@
+import { Logged } from "..";
+
 import * as T from "./types";
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const OrderHistory = () => {
-  const { priceFixed, amountFixed, orders } = useOrderHistory();
+  const { priceFixed, amountFixed, orders, userLoggedIn } = useOrderHistory();
   return (
     <>
-      {!!orders.length &&
+      {userLoggedIn ? (
+        orders.length &&
         orders.map((order, i) => {
           const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
           const isSell = order.order_side === "Sell";
@@ -24,7 +27,7 @@ export const OrderHistory = () => {
                 <S.CardBox>
                   <S.CardInfoToken>
                     <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" />
-                    <S.Tag isSell={isSell}>{isSell} </S.Tag>
+                    <S.Tag isSell={isSell}>{order.order_side} </S.Tag>
                   </S.CardInfoToken>
                   <div>
                     <span>
@@ -57,21 +60,26 @@ export const OrderHistory = () => {
 
               <S.CardActions>
                 <div>
-                  <ul>
-                    {Number(order.filled_qty) < 100 ? (
-                      <S.Cancel>Cancel</S.Cancel>
-                    ) : (
-                      <>
-                        <S.Deposit>Deposit</S.Deposit>
-                        <li>Withdraw</li>
-                      </>
-                    )}
-                  </ul>
+                  <AvailableMessage message="Soon">
+                    <ul>
+                      {Number(order.filled_qty) < 100 ? (
+                        <S.Cancel>Cancel</S.Cancel>
+                      ) : (
+                        <>
+                          <S.Deposit>Deposit</S.Deposit>
+                          <li>Withdraw</li>
+                        </>
+                      )}
+                    </ul>
+                  </AvailableMessage>
                 </div>
               </S.CardActions>
             </S.Card>
           );
-        })}
+        })
+      ) : (
+        <Logged />
+      )}
     </>
   );
 };

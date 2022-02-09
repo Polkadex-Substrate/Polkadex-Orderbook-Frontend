@@ -8,3 +8,4 @@ export * from "./AlertCard";
 export * from "./Switcher";
 export * from "./Range";
 export * from "./OrderHistory";
+export * from "./Logged";

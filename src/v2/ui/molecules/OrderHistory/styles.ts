@@ -51,7 +51,7 @@ export const CardBox = styled.div`
   align-items: center;
   align-self: center;
   padding: 0.5rem;
-  min-width: 21rem;
+  min-width: 18rem;
 `;
 
 export const CardInfoToken = styled.div`
@@ -101,6 +101,8 @@ export const CardActions = styled.div`
     height: 100%;
     padding: 1rem;
     border-left: 1px solid ${theme.colors.secondaryBackground};
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     display: flex;
     flex-direction: column;
     align-items: left;
