@@ -41,6 +41,6 @@ const getConvertedTickers = (ticker: any): Ticker => {
     ((Number(ticker.high) - Number(ticker.last)) / Number(ticker.last)) * 100;
   return {
     ...ticker,
-    price_change_percent: price_change_percent.toFixed(2),
+    price_change_percent: `${price_change_percent.toFixed(2)}%`,
   };
 };
