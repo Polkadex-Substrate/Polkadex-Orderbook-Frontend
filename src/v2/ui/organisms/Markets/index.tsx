@@ -36,7 +36,11 @@ export const Markets = ({ isFull = false }) => {
   );
 };
 
-export const HeaderMarket = ({ pair, pairTicker, onOpenMarkets = undefined }) => {
+export const HeaderMarket = ({
+  pair = "Empty  Token",
+  pairTicker,
+  onOpenMarkets = undefined,
+}) => {
   return (
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>
@@ -136,6 +140,7 @@ const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
     <S.Footer>
       {!!tickers.length &&
         tickers.map((ticker) => <S.FooterCard key={ticker}>{ticker}</S.FooterCard>)}
+      <S.FooterCard>DOT</S.FooterCard>
       <S.FooterCard>
         <Dropdown header="ALTS">
           <p>ETH</p>

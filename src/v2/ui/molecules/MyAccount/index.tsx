@@ -30,7 +30,7 @@ const Header = ({
   ...props
 }: T.Props) => (
   <S.Header isFull={isFull} {...props}>
-    <Icon name="Avatar" background="secondaryBackground" color="black" size="giant" />
+    <Icon name="Avatar" background="secondaryBackground" color="black" size="extraLarge" />
     <S.HeaderContainer>
       <S.HeaderInfo>
         <p>

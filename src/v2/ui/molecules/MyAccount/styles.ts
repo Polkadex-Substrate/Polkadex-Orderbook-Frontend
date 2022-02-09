@@ -10,7 +10,7 @@ export const Header = styled.div<{ isFull: boolean }>`
     align-items: center;
     background: ${theme.colors.white};
     padding: 0.8rem;
-    border-radius: 1.5rem 0 0 1.5rem;
+    border-radius: 1.2rem 0 0 1.2rem;
     cursor: pointer;
     ${isFull &&
     css`
@@ -44,7 +44,7 @@ export const HeaderInfo = styled.div`
     }
     span {
       display: block;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
   `}
 `;

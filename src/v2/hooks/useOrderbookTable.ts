@@ -1,7 +1,9 @@
 import { useDispatch } from "react-redux";
+import { MutableRefObject, useEffect } from "react";
 
-import { getSymbolFromId } from "../helpers";
+import { getSymbolFromId, mapValues } from "../helpers";
 
+import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import {
   DepthState,
   selectCurrentMarket,
@@ -11,14 +13,14 @@ import {
   setCurrentPrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 
 export type Props = {
   isSell?: boolean;
   orders: DepthState["bids"];
+  contentRef?: MutableRefObject<HTMLDivElement>;
 };
 
-export function useOrderbookTable({ orders, isSell }: Props) {
+export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const dispatch = useDispatch();
 
   const bids = useReduxSelector(selectDepthBids);
@@ -46,10 +48,22 @@ export function useOrderbookTable({ orders, isSell }: Props) {
    * @returns {number} max volume value
    */
   const maxVolume = calcMaxVolume(bids, asks);
+
+  /**
+   * @description -Get Volume of ther orders
+   */
+  const valumeData = mapValues(maxVolume, accumulateVolume(orders));
+
+  useEffect(() => {
+    // Make sure the scroll is always down
+    if (isSell && !!contentRef?.current)
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+  }, [isSell, contentRef, orders]);
+
   return {
     quoteUnit: getSymbolFromId("quote", currentMarket?.symbolArray),
     baseUnit: getSymbolFromId("base", currentMarket?.symbolArray),
-    maxVolume,
+    valumeData,
     changeMarketPrice,
     priceFixed: currentMarket?.price_precision || 0,
     amountFixed: currentMarket?.amount_precision || 0,

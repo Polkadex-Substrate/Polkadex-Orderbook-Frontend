@@ -11,7 +11,7 @@ export const Main = styled.section`
 `;
 
 export const Header = styled.div`
-  ${({ theme }) => css`
+  ${() => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -170,13 +170,18 @@ export const Box = styled.div`
 
 export const BoxInput = styled(Input)``;
 
-export const Button = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.primary};
+export const Button = styled.button<{ isSell?: boolean }>`
+  ${({ theme, isSell }) => css`
+    background: ${isSell ? theme.colors.primary : theme.colors.green};
     color: ${theme.colors.white};
     padding: 1.5rem;
     border-radius: 1rem;
     text-align: center;
     font-weight: 500;
+    width: 100%;
+    :disabled {
+      background: ${theme.colors.secondaryBackground};
+      color: ${theme.colors.black};
+    }
   `}
 `;

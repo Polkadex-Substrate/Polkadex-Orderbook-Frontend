@@ -1,6 +1,5 @@
 import { Logged } from "..";
 
-import * as T from "./types";
 import * as S from "./styles";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";

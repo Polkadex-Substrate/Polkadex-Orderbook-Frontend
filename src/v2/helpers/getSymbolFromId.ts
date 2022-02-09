@@ -8,4 +8,6 @@ export const getSymbolFromId = (
   value: "base" | "quote",
   marketArray: Market["symbolArray"]
 ): string =>
-  marketArray && getSymbolFromAssetId(marketArray[value === "base" ? 0 : 1]).toUpperCase();
+  marketArray
+    ? getSymbolFromAssetId(marketArray[value === "base" ? 0 : 1]).toUpperCase()
+    : "Empty";

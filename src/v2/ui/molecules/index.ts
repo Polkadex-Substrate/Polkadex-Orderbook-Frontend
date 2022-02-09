@@ -9,3 +9,5 @@ export * from "./Switcher";
 export * from "./Range";
 export * from "./OrderHistory";
 export * from "./Logged";
+export * from "./Loading";
+export * from "./ButtonStatus";

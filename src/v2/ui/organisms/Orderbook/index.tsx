@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -7,8 +7,6 @@ import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecul
 import { useOrderbook } from "@polkadex/orderbook/v2/hooks/useOrderbook";
 import { useOrderbookTable } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { mapValues } from "@polkadex/orderbook/v2/helpers";
-import { accumulateVolume } from "@polkadex/web-helpers";
 
 export const Orderbook = () => {
   const { hasMarket, asks, bids, lastPriceValue } = useOrderbook();
@@ -33,38 +31,33 @@ export const Orderbook = () => {
 };
 
 const Table = ({ isSell = false, orders = [] }: T.Props) => {
-  const { quoteUnit, baseUnit, maxVolume, changeMarketPrice, priceFixed, amountFixed, total } =
-    useOrderbookTable({ isSell, orders });
-
   const contentRef = useRef(null);
 
-  /**
-   * @description -Get Volume of ther orders
-   */
-  const valumeData = mapValues(maxVolume, accumulateVolume(orders));
-
-  useEffect(() => {
-    // Make sure the scroll is always down
-    if (isSell && !!contentRef?.current)
-      contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  }, [isSell, contentRef, orders]);
+  const {
+    quoteUnit,
+    baseUnit,
+    valumeData,
+    changeMarketPrice,
+    priceFixed,
+    amountFixed,
+    total,
+  } = useOrderbookTable({ isSell, orders, contentRef });
 
   return (
-    <S.Table isSell={isSell}>
+    <S.Table isSell={isSell} ref={contentRef}>
       <S.Head>
         <S.CellHead>Price({baseUnit})</S.CellHead>
         <S.CellHead>Amount({quoteUnit})</S.CellHead>
         <S.CellHead>Total({quoteUnit})</S.CellHead>
       </S.Head>
-      <S.Body ref={contentRef}>
+      <S.Body>
         {orders.map((order, i) => {
           const [price, volume] = order;
 
           /**
            * @description -Get Row width based on the volume
            */
-          const getRowWidth = (index: number) =>
-            valumeData && valumeData.length ? `${valumeData[index].value}%` : "1%";
+          const getRowWidth = (index: number) => `${valumeData[index]?.value || 1}%`;
 
           return (
             <S.Card
