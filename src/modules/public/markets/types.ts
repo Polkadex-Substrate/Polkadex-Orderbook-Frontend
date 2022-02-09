@@ -34,14 +34,13 @@ export interface Market {
 }
 
 export interface Ticker {
-  amount: string;
-  avg_price: string;
+  timestamp: number;
   high: string;
-  last: string;
   low: string;
-  open: number | string;
+  last: string;
+  previous_close: string;
   price_change_percent: string;
-  volume: string;
+  average: string;
 }
 
 export interface TickerEvent {

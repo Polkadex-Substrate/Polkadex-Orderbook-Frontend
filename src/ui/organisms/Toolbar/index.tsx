@@ -25,11 +25,17 @@ const defaultTicker = {
 export const Toolbar = () => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
+  const currTicker = marketTickers["0-1"];
 
-  const getTickerValue = (value: string) =>
-    (marketTickers[currentMarket?.id] || defaultTicker)[value];
+  const getTickerValue = (value: string) => {
+    if (currTicker && Object.keys(currTicker).includes(value)) {
+      return currTicker[value];
+    }
+    return "0";
+  };
+
   const bidUnit = currentMarket?.quote_unit?.toUpperCase();
-  const isPositive = /\+/.test(getTickerValue("price_change_percent"));
+  const isPositive = true;
   return (
     <S.Wrapper>
       <S.Container>
@@ -61,10 +67,7 @@ export const Toolbar = () => {
           <Information
             label="Price 24h"
             color={isPositive ? "green" : "red"}
-            text={
-              currentMarket &&
-              (marketTickers[currentMarket?.id] || defaultTicker).price_change_percent
-            }
+            text={currentMarket && `${Number(getTickerValue("price_change_percent"))}`}
           />
           <Information
             label="Volume 24h"
