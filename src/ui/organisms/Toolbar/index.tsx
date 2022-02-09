@@ -66,7 +66,7 @@ export const Toolbar = () => {
         <Information
           label="Price 24h"
           color={isPositive ? "green" : "red"}
-          text={currentMarket && `${Number(getTickerValue("price_change_percent"))}`}
+          text={currentMarket && `${getTickerValue("price_change_percent")}`}
         />
         <Information
           label="Volume 24h"
