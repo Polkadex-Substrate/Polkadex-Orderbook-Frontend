@@ -4,7 +4,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
     grid-area: Markets;
     background: ${theme.colors.secondaryBackgroundSolid};
-    max-width: ${isFull ? "auto" : "35rem"};
+    max-width: ${isFull ? "inherit" : "35rem"};
     width: 100%;
     border-radius: 1.5rem;
     box-shadow: ${theme.shadows.secondary};

@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    max-width: ${isFull ? "auto" : "35rem"};
+    max-width: ${isFull ? "inherit" : "35rem"};
     background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
     border-radius: 1rem;

@@ -1,6 +1,3 @@
-import { clearTimeout, setTimeout } from "timers";
-import { clear } from "console";
-
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
@@ -11,6 +8,7 @@ import {
   notificationPush,
   selectHasUser,
   selectNotifications,
+  selectPolkadotWalletAccounts,
   selectSignInError,
   selectSignInLoading,
   selectUserInfo,
@@ -25,7 +23,7 @@ type CommomState = {
   error?: string;
 };
 
-type Funds = { value?: string } & CommomState;
+type Funds = { amount?: string } & CommomState;
 type ConnectWallet = { address: string; password: string };
 type Notifications = { repeatNumber: number; repeatTime: number };
 
@@ -37,6 +35,7 @@ export function useDeveloper() {
   const user = useReduxSelector(selectUserInfo);
   const hasUser = useReduxSelector(selectHasUser);
   const notifications = useReduxSelector(selectNotifications);
+  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
 
   const walletLoading = useReduxSelector(selectSignInLoading);
   const walletError = useReduxSelector(selectSignInError);
@@ -45,17 +44,17 @@ export function useDeveloper() {
     success: false,
     loading: false,
     error: "",
-    value: "100.0",
+    amount: "100.0",
   });
 
   const [connectWallet, setConnectWallet] = useState<ConnectWallet>({
-    address: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    password: "0000",
+    address: "Choose an option",
+    password: "",
   });
 
-  const [notification, setNotification] = useState<Notifications>({
-    repeatNumber: 4,
-    repeatTime: 2000,
+  const [notification, selectNotification] = useState<Notifications>({
+    repeatNumber: 2,
+    repeatTime: 2,
   });
   /**
    * @description Request funds
@@ -64,8 +63,8 @@ export function useDeveloper() {
     setFunds((funds) => ({ ...funds, loading: true }));
     try {
       const payloads = [
-        { account: user.address, asset: 1, amount: funds.value },
-        { account: user.address, asset: 0, amount: funds.value },
+        { account: user.address, asset: 1, amount: funds.amount },
+        { account: user.address, asset: 0, amount: funds.amount },
       ];
 
       const response: any = await Promise.all(
@@ -95,8 +94,10 @@ export function useDeveloper() {
    *
    * @returns {void} Dispatch Sign In action
    */
-  const connectTestWallet = () =>
+  const connectTestWallet = () => {
+    console.log(connectWallet.address, connectWallet.password);
     dispatch(signIn(connectWallet.address, connectWallet.password));
+  };
 
   /**
    * @description Disconnect Wallet
@@ -111,7 +112,7 @@ export function useDeveloper() {
    * @returns {void} Dispatch notification Push  action
    */
   const sendNotification = (): void => {
-    let num = 1;
+    let num = 0;
     const interval = setInterval(() => {
       dispatch(
         notificationPush({
@@ -123,14 +124,15 @@ export function useDeveloper() {
         })
       );
       num++;
-      if (num >= notification.repeatNumber) clearInterval(interval);
-    }, notification.repeatTime);
+      if (num === notification.repeatNumber) clearInterval(interval);
+    }, notification.repeatTime * 1000);
   };
 
   return {
     hasUser,
     funds: {
       requestFunds: user ? requestFunds : undefined,
+      onChange: (e) => setFunds({ ...funds, [e.target.name]: e.target.value }),
       ...funds,
     },
     wallet: {
@@ -138,12 +140,16 @@ export function useDeveloper() {
       loading: walletLoading,
       error: walletError?.message[0],
       success: hasUser,
+      options: accounts,
+      onChange: (e) => setConnectWallet({ ...connectWallet, [e.target.name]: e.target.value }),
       ...connectWallet,
     },
     notifications: {
       sendNotification,
       loading: false,
       success: !!notifications.length,
+      onChange: (e) =>
+        selectNotification({ ...notification, [e.target.name]: e.target.value }),
       ...notification,
     },
   };

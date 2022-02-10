@@ -9,7 +9,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     background: ${theme.colors.inverse};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
-    max-width: ${isFull ? "auto" : "80rem"};
+    max-width: ${isFull ? "inherit" : "80rem"};
     height: fit-content;
   `}
 `;

@@ -11,7 +11,7 @@ const sizeModifier = {
     max-width: 80rem;
   `,
   full: () => css`
-    max-width: auto;
+    max-width: inherit;
   `,
   fitContent: () => css`
     max-width: fit-content;

@@ -28,7 +28,7 @@ export const Content = styled.div<{ isFull?: boolean }>`
     box-shadow: ${theme.shadows.secondary};
     padding: 2.5rem 2rem;
     text-align: center;
-    max-width: ${isFull ? "auto" : "26rem"};
+    max-width: ${isFull ? "inherit" : "26rem"};
     h4 {
       font-size: 1.4rem;
       font-weight: 550;

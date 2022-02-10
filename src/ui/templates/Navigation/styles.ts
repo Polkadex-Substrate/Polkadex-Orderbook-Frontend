@@ -7,7 +7,7 @@ export const Wrapper = styled.nav`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: -webkit-fill-available;
+  height: max-content;
 `;
 
 export const Header = styled.div`

@@ -1,4 +1,6 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, SelectHTMLAttributes } from "react";
+
+import { InjectedAccount } from "@polkadex/orderbook-modules";
 export type Props = {
   title: string;
   buttonTitle?: string;
@@ -14,5 +16,8 @@ export type Props = {
 
 type TextField = {
   label: string;
-  props?: InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+  selectProps?: Partial<SelectHTMLAttributes<HTMLSelectElement>>;
+  isSelect?: boolean;
+  options?: InjectedAccount[];
 };

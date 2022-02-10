@@ -28,8 +28,25 @@ export const DeveloperContent = () => {
             isLoading={wallet.loading}
             error={wallet.error}
             textFiled={[
-              { label: "Address", props: { value: wallet.address, disabled: true } },
-              { label: "Password", props: { value: wallet.password, disabled: true } },
+              {
+                label: "Address",
+                isSelect: true,
+                options: wallet.options,
+                selectProps: {
+                  name: "address",
+                  value: wallet.address,
+                  onChange: wallet.onChange,
+                },
+              },
+              {
+                label: "Password",
+                inputProps: {
+                  name: "password",
+                  value: wallet.password,
+                  placeholder: "Enter your password",
+                  onChange: wallet.onChange,
+                },
+              },
             ]}
             url=""
           />
@@ -49,7 +66,14 @@ export const DeveloperContent = () => {
             isLoading={funds.loading}
             error={funds.error}
             textFiled={[
-              { label: "Request Amount", props: { value: funds.value, disabled: true } },
+              {
+                label: "Request Amount",
+                inputProps: {
+                  name: "amount",
+                  value: funds.amount,
+                  onChange: funds.onChange,
+                },
+              },
             ]}
           />
           <Card
@@ -60,14 +84,28 @@ export const DeveloperContent = () => {
             textFiled={[
               {
                 label: "Nº Notifications",
-                props: { value: notifications.repeatNumber, disabled: true },
+                inputProps: {
+                  name: "repeatNumber",
+                  value: notifications.repeatNumber,
+                  onChange: notifications.onChange,
+                },
               },
               {
-                label: "Notifications Time",
-                props: { value: notifications.repeatTime, disabled: true },
+                label: "Notifications Time(seconds)",
+                inputProps: {
+                  name: "repeatTime",
+                  value: notifications.repeatTime,
+                  onChange: notifications.onChange,
+                },
               },
             ]}
             url=""
+          />
+          <Card
+            title="Test Error"
+            status={notifications.success ? "success" : "error"}
+            buttonOnClick={notifications.sendNotification}
+            buttonTitle={"Send Error"}
           />
         </S.Content>
       </S.Wrapper>
@@ -108,17 +146,32 @@ const Card = ({
           {endpoint}
         </p>
       </S.CardHeader>
-      {!!textFiled.length &&
-        textFiled.map((field, i) => (
-          <S.CardContent key={i}>
-            <label htmlFor={i.toString()}>{field.label}</label>
-            <input id={i.toString()} type="text" {...field.props} />
-          </S.CardContent>
-        ))}
+      {textFiled.length &&
+        textFiled.map(({ isSelect = false, label, options, selectProps, inputProps }, i) => {
+          return (
+            <S.CardContent key={i}>
+              <label htmlFor={i.toString()}>{label}</label>
+              {isSelect ? (
+                <select id={i.toString()} {...selectProps}>
+                  <option value="Choose an option">Choose an option</option>
+                  {!!options.length &&
+                    options.map((val, index) => (
+                      <option key={index} value={val.address}>
+                        {val.address}
+                      </option>
+                    ))}
+                </select>
+              ) : (
+                <input id={i.toString()} type="text" {...inputProps} />
+              )}
+            </S.CardContent>
+          );
+        })}
       {error && <p>{error}</p>}
     </S.Card>
   );
 };
+
 export const DeveloperHeader = () => (
   <S.DeveloperHeader>
     <span>

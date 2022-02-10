@@ -119,14 +119,26 @@ export const CardContent = styled.div`
     align-items: center;
     border-bottom: 1px dashed ${theme.colors.secondaryBackground};
     margin-top: 0.8rem;
+    select {
+      max-width: 20rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     label,
     input {
       font-weight: 500;
       font-size: 1.2rem;
     }
+    option {
+      color: ${theme.colors.black};
+    }
+    input,
+    select {
+      color: ${theme.colors.text};
+    }
     input {
       text-align: end;
-      color: ${theme.colors.text};
       font-weight: 500;
       :disabled {
         cursor: not-allowed;

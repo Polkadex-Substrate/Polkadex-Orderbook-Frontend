@@ -2,7 +2,7 @@ import * as S from "./styles";
 import { Props } from "./types";
 
 export const Skeleton = ({
-  width = "-webkit-fill-available",
+  width = "max-content",
   height = "1rem",
   isLight = false,
   ...props

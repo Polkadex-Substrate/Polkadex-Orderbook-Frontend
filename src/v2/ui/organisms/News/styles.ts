@@ -5,7 +5,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     grid-area: News;
     position: relative;
     background: ${theme.colors.inverse};
-    max-width: ${isFull ? "auto" : "35rem"};
+    max-width: ${isFull ? "inherit" : "35rem"};
     height: 100%;
     border-radius: 1rem;
     padding: 2rem;

@@ -42,7 +42,7 @@ export const Wrapper = styled.button<{
     isDisabled,
     hoverColor = "primary",
   }) => css`
-    border-style: "none";
+    border-style: none;
     font-weight: 500;
     transition: background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
       color ${theme.transition.default}, opacity ${theme.transition.default};
