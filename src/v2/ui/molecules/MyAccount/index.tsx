@@ -6,17 +6,20 @@ import * as T from "./types";
 
 import { Navigation, Switcher } from "@orderbook/v2/ui/molecules";
 import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { useAccount } from "@polkadex/orderbook-hooks";
 
 export const MyAccount = () => {
+  const { userAddress, userName, logout } = useAccount();
+
   return (
     <S.Main>
       <Dropdown
-        header={<Header />}
+        header={<Header address={userAddress} accountName={userName} />}
         direction="bottomRight"
         priority="medium"
         isOpacity
         style={{ overflow: "hidden" }}>
-        <Content />
+        <Content address={userAddress} logout={logout} />
       </Dropdown>
     </S.Main>
   );
@@ -24,28 +27,33 @@ export const MyAccount = () => {
 
 const Header = ({
   balance = "0.000000",
-  address = "0x000000000",
-  accountName = "Account",
+  address,
+  accountName,
   isFull = false,
   ...props
-}: T.Props) => (
-  <S.Header isFull={isFull} {...props}>
-    <Icon name="Avatar" background="secondaryBackground" color="black" size="extraLarge" />
-    <S.HeaderContainer>
-      <S.HeaderInfo>
-        <p>
-          {accountName} ({address})
-        </p>
-        <span>Estimated: {balance}</span>
-      </S.HeaderInfo>
-    </S.HeaderContainer>
-  </S.Header>
-);
+}: T.Props) => {
+  const shortAddress = address
+    ? address.slice(0, 3) + ".." + address.slice(address.length - 3)
+    : "";
 
-const Content = () => {
+  return (
+    <S.Header isFull={isFull} {...props}>
+      <Icon name="Avatar" background="secondaryBackground" color="black" size="extraLarge" />
+      <S.HeaderContainer>
+        <S.HeaderInfo>
+          <p>{`${accountName} (${shortAddress})`}</p>
+          <span>Estimated: {balance}</span>
+        </S.HeaderInfo>
+      </S.HeaderContainer>
+    </S.Header>
+  );
+};
+
+const Content = ({ address = "0x00000000000", logout = undefined }) => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
 
+  // TODO: Add types
   const calculateHeight = (el) => {
     const height = el.offsetHeight;
     setMenuHeight(height);
@@ -65,7 +73,7 @@ const Content = () => {
           <S.ContentHeader>
             <small>Connected with Polkadot.js</small>
             <S.Input>
-              <input type="text" defaultValue="9e0816415vogTpNm6ajK4N9SDRRE5sjq08" />
+              <input type="text" disabled value={address} />
               <Icon name="Copy" background="secondaryBackground" stroke="black" size="large" />
             </S.Input>
           </S.ContentHeader>
@@ -102,9 +110,7 @@ const Content = () => {
                 icon="Appearance"
                 onClick={() => onNavigate("Appearance")}
               />
-              <AvailableMessage message="Soon">
-                <Card title="Log Out" icon="Logout" />
-              </AvailableMessage>
+              <Card title="Log Out" icon="Logout" onClick={logout} />
             </S.ContentBox>
           </S.ContentContainer>
           <S.ContentFooter>

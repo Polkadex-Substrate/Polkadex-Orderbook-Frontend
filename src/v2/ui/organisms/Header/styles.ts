@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 import { FlexCenter, Grid } from "@orderbook/v2/ui/atoms";
 import { Wrapper as Logo } from "@polkadex/orderbook-ui/molecules/Logo/styles";
+import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Main = styled.header`
   ${({ theme }) => css`
@@ -37,5 +38,20 @@ export const Account = styled(FlexCenter)`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
     border-radius: 1.5rem 0 0 1.5rem;
+  `}
+`;
+
+export const Box = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    ${Button} {
+      transition: background 0.5s ease-in-out;
+      background: ${theme.colors.primary};
+      :hover {
+        background: ${theme.colors.primary}D8;
+      }
+    }
   `}
 `;

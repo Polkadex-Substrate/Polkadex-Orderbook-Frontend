@@ -12,6 +12,7 @@ export const Main = styled.section`
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
+    overflow-y: auto;
   `}
 `;
 

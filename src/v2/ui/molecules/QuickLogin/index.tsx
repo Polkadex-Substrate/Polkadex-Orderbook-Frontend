@@ -5,7 +5,7 @@ import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 export const QuickLogin = ({ isFull = false }) => {
   return (
     <S.Main>
-      <Dropdown isFull={isFull} header={<Header />} direction="bottom" isOpacity>
+      <Dropdown isFull={isFull} header={<Header />} direction="bottomRight" isOpacity>
         <Content isFull={isFull} />
       </Dropdown>
     </S.Main>

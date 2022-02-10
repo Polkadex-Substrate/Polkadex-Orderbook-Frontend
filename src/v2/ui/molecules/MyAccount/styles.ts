@@ -11,6 +11,7 @@ export const Header = styled.div<{ isFull: boolean }>`
     background: ${theme.colors.white};
     padding: 0.8rem;
     border-radius: 1.2rem 0 0 1.2rem;
+    max-width: 23rem;
     cursor: pointer;
     ${isFull &&
     css`
