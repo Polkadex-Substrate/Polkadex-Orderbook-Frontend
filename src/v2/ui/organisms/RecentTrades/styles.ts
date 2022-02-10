@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section`
-  ${({ theme }) => css`
+export const Main = styled.section<{ hasData?: boolean }>`
+  ${({ theme, hasData }) => css`
     grid-area: RecentTrades;
-    background: ${theme.colors.inverse};
+    background: ${hasData ? theme.colors.inverse : theme.colors.white};
     border-radius: 1rem;
     display: flex;
     flex-flow: column nowrap;
@@ -87,4 +87,28 @@ export const CardCell = styled.span`
   :not(:first-child) {
     justify-self: flex-end;
   }
+`;
+
+export const Container = styled.div`
+  background: conic-gradient(
+    from 0.94deg at 49.18% 49.53%,
+    rgba(230, 0, 122, 0.17) 0deg,
+    rgba(230, 0, 122, 0) 360deg
+  );
+  border-radius: 1rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Empty = styled.div`
+  ${({ theme }) => css`
+    text-align: center;
+    color: ${theme.colors.inverse};
+    img {
+      margin-bottom: 1rem;
+      max-width: 22rem;
+    }
+  `}
 `;
