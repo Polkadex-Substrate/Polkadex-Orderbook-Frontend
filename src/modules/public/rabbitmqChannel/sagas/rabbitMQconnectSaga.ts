@@ -16,7 +16,7 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
 export function* rabbitmqConnectionSaga() {
-  console.log({ defaultConfig });
+
   try {
     const amqp = new AMQPWebSocketClient(
       url,
