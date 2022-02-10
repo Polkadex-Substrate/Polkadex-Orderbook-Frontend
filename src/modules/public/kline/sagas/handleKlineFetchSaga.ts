@@ -20,7 +20,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
       timeframe: "5m",
       timestamp_start: -3888000,
     };
-    const endPoint = `http://ec2-3-101-117-26.us-west-1.polkadex.trade/fetchohlcv`;
+    const endPoint = `http://ec2-3-101-117-26.us-west-1.polkadex.trade/api/fetchohlcv`;
 
     const data = yield call(() => fetchKlineAsync(payload, endPoint));
     const convertedData = data.map((elem) => {

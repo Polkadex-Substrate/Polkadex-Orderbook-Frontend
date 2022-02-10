@@ -155,7 +155,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      url = defaultConfig.influxDBUrl + "/fetchohlcv";
+      url = defaultConfig.influxDBUrl + "/api/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
       const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios
