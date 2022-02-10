@@ -1,14 +1,11 @@
 import styled, { css } from "styled-components";
 
 export const Main = styled.main`
-  ${({ theme }) => css`
-    position: relative;
-    min-height: 100vh;
-    height: 100%;
-    background: ${theme.colors.white};
-    display: flex;
-    flex-direction: column;
-  `}
+  position: relative;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Wrapper = styled.div`
@@ -49,7 +46,7 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   ${({ theme }) => css`
     grid-area: GridContainer;
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     display: grid;
     width: 100%;
     @media screen and (max-width: 700px) {
