@@ -140,7 +140,7 @@ export function useDeveloper() {
       loading: walletLoading,
       error: walletError?.message[0],
       success: hasUser,
-      options: accounts,
+      options: accounts.length ? accounts : [],
       onChange: (e) => setConnectWallet({ ...connectWallet, [e.target.name]: e.target.value }),
       ...connectWallet,
     },

@@ -147,26 +147,28 @@ const Card = ({
         </p>
       </S.CardHeader>
       {textFiled.length &&
-        textFiled.map(({ isSelect = false, label, options, selectProps, inputProps }, i) => {
-          return (
-            <S.CardContent key={i}>
-              <label htmlFor={i.toString()}>{label}</label>
-              {isSelect ? (
-                <select id={i.toString()} {...selectProps}>
-                  <option value="Choose an option">Choose an option</option>
-                  {!!options.length &&
-                    options.map((val, index) => (
-                      <option key={index} value={val.address}>
-                        {val.address}
-                      </option>
-                    ))}
-                </select>
-              ) : (
-                <input id={i.toString()} type="text" {...inputProps} />
-              )}
-            </S.CardContent>
-          );
-        })}
+        textFiled.map(
+          ({ isSelect = false, label, options = [], selectProps, inputProps }, i) => {
+            return (
+              <S.CardContent key={i}>
+                <label htmlFor={i.toString()}>{label}</label>
+                {isSelect ? (
+                  <select id={i.toString()} {...selectProps}>
+                    <option value="Choose an option">Choose an option</option>
+                    {!!options.length &&
+                      options.map((val, index) => (
+                        <option key={index} value={val.address}>
+                          {val.address}
+                        </option>
+                      ))}
+                  </select>
+                ) : (
+                  <input id={i.toString()} type="text" {...inputProps} />
+                )}
+              </S.CardContent>
+            );
+          }
+        )}
       {error && <p>{error}</p>}
     </S.Card>
   );

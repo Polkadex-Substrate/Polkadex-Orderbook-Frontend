@@ -29,6 +29,7 @@ export const Container = styled.div`
         transition: background 0.2s ease-in-out;
         :first-child {
           background: ${theme.colors.primary}E5;
+          color: ${theme.colors.white};
           :hover {
             background: ${theme.colors.primary};
           }

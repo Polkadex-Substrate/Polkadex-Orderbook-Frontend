@@ -78,7 +78,7 @@ export const RecentLi = styled.li<{ isActive?: boolean }>`
     border-radius: 1rem;
     cursor: pointer;
     background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
-    color: ${theme.colors.text};
+    color: ${isActive ? theme.colors.white : theme.colors.text};
     transition: background 0.3s ease-in-out;
     font-weight: 500;
     font-size: 1.2rem;

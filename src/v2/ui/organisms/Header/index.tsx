@@ -40,9 +40,8 @@ export const Header = () => {
                 icon={{
                   name: "Wallet",
                   background: "black",
-                  color: "white",
                   size: "extraMedium",
-                  stroke: "text",
+                  stroke: "white",
                 }}>
                 Login/Sign Up
               </Button>

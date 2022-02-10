@@ -172,7 +172,7 @@ export const BoxInput = styled(Input)``;
 export const Button = styled.button<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     background: ${isSell ? theme.colors.primary : theme.colors.green};
-    color: ${theme.colors.text};
+    color: ${theme.colors.white};
     padding: 1.5rem;
     border-radius: 1rem;
     text-align: center;
