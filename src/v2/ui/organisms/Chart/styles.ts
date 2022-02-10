@@ -3,9 +3,8 @@ import styled, { css } from "styled-components";
 import { Colors } from "@polkadex/web-helpers";
 
 export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+  ${({ isFull }) => css`
     grid-area: Graph;
-    color: ${theme.colors.black};
     max-width: ${isFull ? "initial" : "70rem"};
   `}
 `;
@@ -40,7 +39,7 @@ export const HeaderRight = styled(HeaderGrid)`
 export const HeaderLi = styled.li<{ isActive?: boolean; color?: Colors }>`
   ${({ theme, isActive, color = "none" }) => css`
     background: ${isActive ? theme.colors.primary : theme.colors[color]};
-    color: ${isActive ? theme.colors.white : theme.colors.black};
+    color: ${isActive ? theme.colors.white : theme.colors.text};
     display: inline-block;
     padding: 0.8rem;
     border-radius: 0.5rem;

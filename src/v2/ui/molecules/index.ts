@@ -12,3 +12,5 @@ export * from "./Logged";
 export * from "./Loading";
 export * from "./ButtonStatus";
 export * from "./TradeHistory";
+export * from "./Appearance";
+export * from "./AccountOverview";

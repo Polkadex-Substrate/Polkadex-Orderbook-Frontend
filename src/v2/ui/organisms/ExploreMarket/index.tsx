@@ -1,5 +1,5 @@
 import { Sparklines, SparklinesLine } from "react-sparklines";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as F from "./fakeData";
@@ -39,7 +39,7 @@ export const ExploreMarket = ({ isFull = true }) => {
       </S.Container>
       {F.fakeData.length > 3 && (
         <S.Actions onClick={handleNext}>
-          <Icon name="SingleArrowRight" color="black" size="extraSmall" />
+          <Icon name="SingleArrowRight" color="text" size="extraSmall" />
         </S.Actions>
       )}
     </S.Main>

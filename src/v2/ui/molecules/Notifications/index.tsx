@@ -28,7 +28,7 @@ const Content = () => {
           <h3>Notifications Center</h3>
           <a href="#">
             See all
-            <Icon color="inverse" name="SingleArrowRight" />
+            <Icon color="text" name="SingleArrowRight" />
           </a>
         </SpaceBetweenCenter>
       </S.Title>
@@ -60,7 +60,7 @@ const Content = () => {
 const Card = ({ description, time, isRead = false }) => (
   <S.Card isRead={isRead}>
     <S.CardIcon>
-      <Icon name="Clock" size="extraSmall" stroke="black" />
+      <Icon name="Clock" size="extraSmall" stroke="text" />
       {isRead && <S.Read />}
     </S.CardIcon>
     <S.CardContent>

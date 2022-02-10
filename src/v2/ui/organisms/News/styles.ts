@@ -1,13 +1,12 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
     grid-area: News;
     position: relative;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.inverse};
     max-width: ${isFull ? "auto" : "35rem"};
+    height: 100%;
     border-radius: 1rem;
     padding: 2rem;
   `}

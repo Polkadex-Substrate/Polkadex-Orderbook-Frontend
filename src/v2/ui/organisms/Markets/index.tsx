@@ -46,7 +46,7 @@ export const HeaderMarket = ({
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>
         <S.HeaderToken>
-          <Icon isToken name={pairTicker} size="large" color="black" />
+          <Icon isToken name={pairTicker} size="large" color="text" />
         </S.HeaderToken>
         <S.HeaderInfo>
           <S.HeaderInfoContainer>
@@ -75,10 +75,10 @@ const Filters = () => (
     <h2>Markets</h2>
     <S.TitleActions>
       <S.TitleActionCard>
-        <Icon name="Search" size="extraSmall" stroke="black" />
+        <Icon name="Search" size="extraSmall" stroke="text" />
       </S.TitleActionCard>
       <S.TitleActionCard>
-        <Icon name="Star" size="extraSmall" stroke="black" color="white" />
+        <Icon name="Star" size="extraSmall" stroke="text" color="text" />
       </S.TitleActionCard>
     </S.TitleActions>
   </S.Title>
@@ -114,11 +114,11 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
   <S.Card onClick={changeMarket}>
     <S.CardInfo>
       <S.CardInfoActions>
-        <Icon name="Star" size="extraSmall" stroke="black" color="white" />
+        <Icon name="Star" size="extraSmall" stroke="text" color="text" />
       </S.CardInfoActions>
       <S.CardInfoContainer>
         <S.CardToken>
-          <Icon isToken name={tokenTicker} size="large" color="black" />
+          <Icon isToken name={tokenTicker} size="large" color="text" />
         </S.CardToken>
         <S.CardInfoWrapper>
           <span>{pair}</span>

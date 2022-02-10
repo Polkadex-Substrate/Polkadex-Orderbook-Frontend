@@ -14,7 +14,7 @@ export const QuickLogin = ({ isFull = false }) => {
 
 const Header = ({ isActive = false }) => (
   <S.Header isActive={isActive}>
-    <Icon name="Mobile" color="inverse" size="extraSmall" />
+    <Icon name="Mobile" color="text" size="extraSmall" />
     Quick Access
   </S.Header>
 );

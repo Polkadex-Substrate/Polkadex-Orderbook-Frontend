@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: Markets;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
     width: 100%;
     border-radius: 1.5rem;
@@ -16,17 +15,14 @@ export const Main = styled.section`
 `;
 
 export const Header = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: ${theme.colors.white};
-    padding: 1.5rem 2rem 1rem 2rem;
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 550;
-    }
-  `}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem 2rem;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 550;
+  }
 `;
 export const Wrapper = styled.div``;
 
@@ -79,7 +75,7 @@ export const Card = styled.div<{ statusColor?: string }>`
   ${({ theme, statusColor }) => css`
     padding: 2rem;
     border-left: 0.5rem solid ${theme.colors[statusColor]};
-    background: ${theme.colors.white};
+    background: ${theme.colors.secondaryBackgroundOpacity};
     box-shadow: ${theme.shadows.quaternary};
 
     :not(:last-child) {
@@ -130,6 +126,8 @@ export const CardContent = styled.div`
     }
     input {
       text-align: end;
+      color: ${theme.colors.text};
+      font-weight: 500;
       :disabled {
         cursor: not-allowed;
       }
@@ -141,13 +139,10 @@ export const CardContent = styled.div`
 `;
 
 export const DeveloperHeader = styled.div`
-  ${({ theme }) => css`
-    cursor: pointer;
-    span {
-      color: ${theme.colors.black};
-      vertical-align: middle;
-      font-size: 1.2rem;
-      font-weight: 500;
-    }
-  `}
+  cursor: pointer;
+  span {
+    vertical-align: middle;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
 `;

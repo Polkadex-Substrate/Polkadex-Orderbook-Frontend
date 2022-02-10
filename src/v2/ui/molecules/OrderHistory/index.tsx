@@ -25,7 +25,7 @@ export const OrderHistory = () => {
               <S.CardWrapper>
                 <S.CardBox>
                   <S.CardInfoToken>
-                    <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" />
+                    <Icon name={isSell ? "OrderSell" : "OrderBuy"} size="large" color="text" />
                     <S.Tag isSell={isSell}>{order.order_side} </S.Tag>
                   </S.CardInfoToken>
                   <div>

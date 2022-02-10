@@ -9,25 +9,21 @@ export const Header = styled.div<{ isActive?: boolean }>`
     display: flex;
     align-items: center;
     color: ${theme.colors.inverse};
-    background: ${isActive ? theme.colors.primary : theme.colors.text};
+    background: ${isActive ? theme.colors.primary : theme.colors.inverse};
     padding: 1.8rem;
     border-radius: 1.5rem 0 0 1.5rem;
     transition: background 0.3s ease-in-out;
-    color: ${isActive ? theme.colors.text : theme.colors.inverse};
+    color: ${theme.colors.text};
     user-select: none;
     ${Icon} {
       margin-right: 0.5rem;
-      svg {
-        fill: ${isActive ? theme.colors.text : theme.colors.inverse};
-      }
     }
   `}
 `;
 
 export const Content = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull = false }) => css`
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     padding: 2.5rem 2rem;

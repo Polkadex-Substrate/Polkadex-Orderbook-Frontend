@@ -4,8 +4,7 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: PlaceOrder;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.inverse};
     border-radius: 1rem;
   `}
 `;
@@ -34,8 +33,8 @@ export const List = styled.div<{ isActive?: boolean }>`
 
 export const ListItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    background: ${isActive ? theme.colors.black : "inherit"};
-    color: ${isActive ? theme.colors.white : "inherit"};
+    background: ${isActive ? theme.colors.text : "inherit"};
+    color: ${isActive ? theme.colors.inverse : "inherit"};
     padding: 0.5rem;
     border-radius: 0.7rem;
     font-size: 1.2rem;
@@ -74,7 +73,7 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
       display: inline-block;
       margin-right: 0.2rem;
       svg {
-        fill: ${isActive ? theme.colors.white : theme.colors.black};
+        fill: ${isActive ? theme.colors.white : theme.colors.text};
       }
     }
     :first-child {
@@ -127,7 +126,7 @@ export const InputWrapper = styled.div`
     input {
       font-size: 1.4rem;
       width: 100%;
-      color: ${theme.colors.black};
+      color: ${theme.colors.text};
       padding: 1.5rem 0 1.5rem 1.5rem;
     }
     div {
@@ -173,7 +172,7 @@ export const BoxInput = styled(Input)``;
 export const Button = styled.button<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     background: ${isSell ? theme.colors.primary : theme.colors.green};
-    color: ${theme.colors.white};
+    color: ${theme.colors.text};
     padding: 1.5rem;
     border-radius: 1rem;
     text-align: center;
@@ -181,7 +180,6 @@ export const Button = styled.button<{ isSell?: boolean }>`
     width: 100%;
     :disabled {
       background: ${theme.colors.secondaryBackground};
-      color: ${theme.colors.black};
     }
   `}
 `;

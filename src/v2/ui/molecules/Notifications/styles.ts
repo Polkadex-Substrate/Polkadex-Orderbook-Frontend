@@ -13,14 +13,14 @@ export const Header = styled.div<{ isActive?: boolean }>`
     border-radius: 50%;
     width: 4rem;
     height: 4rem;
-    background: ${isActive ? theme.colors.white : theme.colors.black};
+    background: ${isActive ? theme.colors.inverse : theme.colors.text};
     ${Icon} svg {
-      fill: ${isActive ? theme.colors.black : theme.colors.white};
+      fill: ${isActive ? theme.colors.text : theme.colors.inverse};
     }
     :hover {
-      background: ${theme.colors.white};
+      background: ${theme.colors.inverse};
       ${Icon} svg {
-        fill: ${theme.colors.black};
+        fill: ${theme.colors.text};
       }
     }
   `}
@@ -28,8 +28,7 @@ export const Header = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
@@ -64,15 +63,13 @@ export const RecentTitle = styled.div`
 `;
 
 export const Recent = styled.div`
-  ${({ theme }) => css`
-    h5 {
-      font-size: 1.4rem;
-      font-weight: 500;
-    }
-    ul {
-      list-style: none;
-    }
-  `}
+  h5 {
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  ul {
+    list-style: none;
+  }
 `;
 export const RecentLi = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
@@ -81,7 +78,7 @@ export const RecentLi = styled.li<{ isActive?: boolean }>`
     border-radius: 1rem;
     cursor: pointer;
     background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
-    color: ${isActive ? theme.colors.white : theme.colors.black};
+    color: ${theme.colors.text};
     transition: background 0.3s ease-in-out;
     font-weight: 500;
     font-size: 1.2rem;

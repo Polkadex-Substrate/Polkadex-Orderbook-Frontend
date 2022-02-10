@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: RecentTrades;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.inverse};
     border-radius: 1rem;
     display: flex;
     flex-flow: column nowrap;

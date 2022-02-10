@@ -6,8 +6,7 @@ export const Main = styled.section<{ isFull?: boolean }>`
     display: grid;
     grid-template-columns: auto fit-content(100%);
     grid-gap: 1rem;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.inverse};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     max-width: ${isFull ? "auto" : "80rem"};
@@ -56,7 +55,7 @@ export const Card = styled.div<{ isActive?: boolean }>`
     display: grid;
     grid-template-columns: 1fr auto;
     grid-gap: 0.5rem;
-    background: ${isActive ? theme.colors.gradientPrimary : theme.colors.white};
+    background: ${isActive ? theme.colors.gradientPrimary : theme.colors.inverse};
     transition: background 0.3s ease-in-out;
     min-width: 23rem;
     user-select: none;

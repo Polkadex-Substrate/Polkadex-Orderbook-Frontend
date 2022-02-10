@@ -20,7 +20,7 @@ const Header = () => (
     <AvailableMessage message="Soon">
       <S.HeaderLeft>
         <S.HeaderActions>
-          <Icon name="Settings" color="black" size="extraSmall" />
+          <Icon name="Settings" stroke="text" size="extraSmall" />
         </S.HeaderActions>
         <ul>
           <S.HeaderLi>1h</S.HeaderLi>
@@ -31,7 +31,7 @@ const Header = () => (
           <S.HeaderLi>All</S.HeaderLi>
         </ul>
         <S.HeaderActions>
-          <Icon name="Calendar" color="black" size="extraSmall" />
+          <Icon name="Calendar" color="text" size="extraSmall" />
         </S.HeaderActions>
       </S.HeaderLeft>
     </AvailableMessage>
@@ -45,7 +45,7 @@ const Header = () => (
           <S.HeaderLi color="secondaryBackground">Depth</S.HeaderLi>
         </ul>
         <S.HeaderActions>
-          <Icon name="Expand" color="black" size="extraSmall" />
+          <Icon name="Expand" color="text" size="extraSmall" />
         </S.HeaderActions>
       </S.HeaderRight>
     </AvailableMessage>

@@ -16,7 +16,7 @@ export const News = ({ isFull = true }) => {
           />
         </S.Container>
         <S.Actions>
-          <Icon name="SingleArrowRight" size="extraSmall" color="black" />
+          <Icon name="SingleArrowRight" size="extraSmall" color="text" />
         </S.Actions>
       </S.Main>
     </AvailableMessage>

@@ -2,24 +2,21 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+export const Main = styled.section`
+  ${({ theme }) => css`
     grid-area: MyOrders;
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     border-radius: 1.5rem;
     padding: 0.5rem;
-    /* max-width: ${isFull ? "auto" : "80rem"}; */
     display: flex;
     flex-flow: column nowrap;
-    /* height: 100%; */
-    /* width: max-content; */
     width: 100%;
   `}
 `;
 
 export const Header = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.black};
+    background: ${theme.colors.text};
     padding: 0.8rem;
     border-radius: 1.2rem;
     display: flex;
@@ -42,14 +39,14 @@ export const HeaderLi = styled.div`
 
 export const HeaderLeftLi = styled(HeaderLi)<{ isActive?: boolean }>`
   ${({ theme, isActive = false }) => css`
-    color: ${isActive ? theme.colors.black : theme.colors.white};
-    background: ${isActive ? theme.colors.white : "none"};
+    color: ${isActive ? theme.colors.text : theme.colors.inverse};
+    background: ${isActive ? theme.colors.inverse : "none"};
     ${Icon} {
       display: inline-block;
       vertical-align: middle;
       svg {
-        fill: ${isActive ? theme.colors.black : theme.colors.white};
-        stroke: ${isActive ? theme.colors.black : theme.colors.white};
+        fill: ${isActive ? theme.colors.text : theme.colors.inverse};
+        stroke: ${isActive ? theme.colors.text : theme.colors.inverse};
       }
     }
   `}
@@ -57,7 +54,7 @@ export const HeaderLeftLi = styled(HeaderLi)<{ isActive?: boolean }>`
 
 export const HeaderRightLi = styled(HeaderLi)`
   ${({ theme }) => css`
-    color: ${theme.colors.white};
+    color: ${theme.colors.inverse};
   `}
 `;
 
@@ -99,11 +96,12 @@ export const Search = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 10rem;
-    width: 2.9rem;
-    height: 2.9rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    vertical-align: middle;
   `}
 `;
 

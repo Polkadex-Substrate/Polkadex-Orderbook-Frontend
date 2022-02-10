@@ -8,23 +8,23 @@ export const Header = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
-    background: ${isActive ? theme.colors.white : theme.colors.black};
+    background: ${isActive ? theme.colors.inverse : theme.colors.text};
     border-radius: 2rem;
     padding: 1rem;
     transition: background 0.3s ease-in-out;
-    color: ${isActive ? theme.colors.black : theme.colors.white};
+    color: ${isActive ? theme.colors.text : theme.colors.inverse};
     user-select: none;
     ${Icon} {
       margin-right: 0.5rem;
       svg {
-        fill: ${isActive ? theme.colors.black : theme.colors.white};
+        fill: ${isActive ? theme.colors.text : theme.colors.inverse};
       }
     }
     :hover {
-      color: ${theme.colors.black};
-      background: ${theme.colors.white};
+      color: ${theme.colors.text};
+      background: ${theme.colors.inverse};
       ${Icon} svg {
-        fill: ${theme.colors.black};
+        fill: ${theme.colors.text};
       }
     }
   `}
@@ -32,8 +32,7 @@ export const Header = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 60rem;
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
@@ -48,7 +47,6 @@ export const Title = styled.div`
     background: ${theme.colors.inverse};
     padding: 1rem 1rem 1rem 2rem;
     border-radius: 1rem;
-    color: ${theme.colors.text};
     h3 {
       font-size: 1.5rem;
       font-weight: bold;
@@ -111,7 +109,6 @@ export const CardContainer = styled.div`
       }
       span {
         background: ${theme.colors.primary};
-        color: ${theme.colors.white};
         padding: 0.2rem 0.4rem;
         border-radius: 0.4rem;
         font-size: 1rem;

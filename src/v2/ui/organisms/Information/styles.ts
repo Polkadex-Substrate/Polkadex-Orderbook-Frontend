@@ -1,16 +1,13 @@
 import styled, { css } from "styled-components";
 
 export const Main = styled.section`
-  ${({ theme }) => css`
-    grid-area: Information;
-    color: ${theme.colors.black};
-    padding: 1rem 1rem 0 1rem;
-    border-radius: 1.5rem;
-    display: grid;
-    grid-template-columns: fit-content(100%) auto;
-    grid-gap: 2rem;
-    align-items: center;
-  `}
+  grid-area: Information;
+  padding: 1rem 1rem 0 1rem;
+  border-radius: 1.5rem;
+  display: grid;
+  grid-template-columns: fit-content(100%) auto;
+  grid-gap: 2rem;
+  align-items: center;
 `;
 
 export const AsideLeft = styled.div`
@@ -63,7 +60,7 @@ export const Tag = styled.span<{ isNegative?: boolean }>`
 export const Group = styled.div``;
 // Card
 export const Card = styled.div<{ isHorizontal?: boolean; textColor?: string }>`
-  ${({ theme, isHorizontal, textColor = "black" }) => css`
+  ${({ theme, isHorizontal, textColor = "text" }) => css`
     display: flex;
     flex-direction: ${isHorizontal ? "row" : "column"};
     align-items: ${isHorizontal ? "center" : "flex-start"};

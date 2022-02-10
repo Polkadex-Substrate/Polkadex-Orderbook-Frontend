@@ -11,9 +11,9 @@ import { OrderHistory, TradeHistory } from "@orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 
-export const MyOrders = ({ isFull = true }) => {
+export const MyOrders = () => {
   return (
-    <S.Main isFull={isFull}>
+    <S.Main>
       <Tabs>
         <Header />
         <Content />
@@ -48,16 +48,16 @@ const Header = () => {
             <ul>
               <S.HeaderRightLi>
                 <S.Search>
-                  <Icon name="Search" stroke="black" size="extraSmall" />
+                  <Icon name="Search" stroke="text" size="extraSmall" />
                 </S.Search>
               </S.HeaderRightLi>
-              <S.HeaderRightLi>
-                <Icon name="Calendar" color="white" />
-              </S.HeaderRightLi>
+              {/* <S.HeaderRightLi>
+                <Icon name="Calendar" color="inverse" />
+              </S.HeaderRightLi> */}
               <S.HeaderRightLi>Reset</S.HeaderRightLi>
               <S.HeaderRightLi>
                 Less
-                <Icon name="Expand" color="white" style={{ marginLeft: 5 }} />
+                <Icon name="Expand" color="inverse" style={{ marginLeft: 5 }} />
               </S.HeaderRightLi>
             </ul>
           </S.HeaderAsideRight>

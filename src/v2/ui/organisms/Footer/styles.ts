@@ -8,7 +8,7 @@ export const Main = styled.footer`
     bottom: 0;
     left: 0;
     width: 100%;
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     border-top: 1px solid ${theme.colors.secondaryBackground};
     padding: 0 1rem 0.5rem 1rem;
     display: flex;

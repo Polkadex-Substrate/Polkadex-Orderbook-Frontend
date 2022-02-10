@@ -10,10 +10,6 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   text-align: center;
   ${({ theme }) => css`
-    h2,
-    p {
-      color: ${theme.colors.inverse};
-    }
     h2 {
       font-size: 1.8rem;
       margin-bottom: 0.4rem;
@@ -38,7 +34,7 @@ export const Container = styled.div`
           }
         }
         :last-child {
-          color: ${theme.colors.inverse};
+          color: ${theme.colors.text};
           background: ${theme.colors.secondaryBackgroundOpacity};
           :hover {
             background: ${theme.colors.secondaryBackground};

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
@@ -8,26 +6,26 @@ export const Switcher = ({
   title = "Title",
   description = "Description",
   icon = "Appearance",
+  isActive = false,
+  onChange = undefined,
 }) => {
   return (
     <S.Main>
       <S.Header>
-        <Icon name={icon} size="medium" color="inverse" />
+        <Icon name={icon} size="medium" color="text" stroke="text" />
         <div>
           <span>{title}</span>
           <p>{description}</p>
         </div>
       </S.Header>
-      <Switch />
+      <Switch isActive={isActive} onChange={onChange} />
     </S.Main>
   );
 };
 
-const Switch = () => {
-  const [active, setActive] = useState(false);
-
+const Switch = ({ isActive = false, onChange = undefined }) => {
   return (
-    <S.Switch isActive={active} onClick={() => setActive(!active)}>
+    <S.Switch isActive={isActive} onClick={onChange}>
       <div />
     </S.Switch>
   );

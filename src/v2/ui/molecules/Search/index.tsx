@@ -22,7 +22,6 @@ export const Search = () => {
   const handleOpen = () => setActive(true);
 
   const searchResults = useMemo(() => {
-    console.log("Searching by name...", searchField);
     return markets.filter((market) => market.base_unit.toLowerCase().includes(searchField));
   }, [searchField, markets]);
 
@@ -30,10 +29,10 @@ export const Search = () => {
     <S.Main isActive={active}>
       <S.Header>
         <S.Actions onClick={handleClose}>
-          <Icon name="SingleArrowLeft" size="extraSmall" stroke="inverse" />
+          <Icon name="SingleArrowLeft" size="extraSmall" color="inverse" />
         </S.Actions>
         <S.Search onClick={active ? undefined : handleOpen}>
-          <Icon name="Search" size="extraSmall" stroke="black" />
+          <Icon name="Search" size="extraSmall" stroke="text" />
           <input
             type="text"
             placeholder="Search Menu.."

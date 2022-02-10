@@ -4,8 +4,8 @@ import { useState } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Navigation, Switcher } from "@orderbook/v2/ui/molecules";
-import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
 import { useAccount } from "@polkadex/orderbook-hooks";
 
 export const MyAccount = () => {
@@ -38,7 +38,7 @@ const Header = ({
 
   return (
     <S.Header isFull={isFull} {...props}>
-      <Icon name="Avatar" background="secondaryBackground" color="black" size="extraLarge" />
+      <Icon name="Avatar" background="secondaryBackground" color="text" size="extraLarge" />
       <S.HeaderContainer>
         <S.HeaderInfo>
           <p>{`${accountName} (${shortAddress})`}</p>
@@ -69,60 +69,7 @@ const Content = ({ address = "0x00000000000", logout = undefined }) => {
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
-        <S.ContentWrapper>
-          <S.ContentHeader>
-            <small>Connected with Polkadot.js</small>
-            <S.Input>
-              <input type="text" disabled value={address} />
-              <Icon name="Copy" background="secondaryBackground" stroke="black" size="large" />
-            </S.Input>
-          </S.ContentHeader>
-          <S.ContentContainer>
-            <S.ContentFeedback>
-              <AvailableMessage message="Soon">
-                <Card
-                  title="Give Feedback"
-                  description="Help us improve Polkadex"
-                  icon="SupportCenter"
-                />
-              </AvailableMessage>
-            </S.ContentFeedback>
-            <S.ContentBox>
-              <AvailableMessage message="Soon">
-                <Card title="My Wallet" icon="Wallet" onClick={() => onNavigate("MyWallet")} />
-              </AvailableMessage>
-              <AvailableMessage message="Soon">
-                <Card
-                  title="Settings"
-                  icon="Settings"
-                  onClick={() => onNavigate("Settings")}
-                />
-              </AvailableMessage>
-              <AvailableMessage message="Soon">
-                <Card
-                  title="Help and Support"
-                  icon="Support"
-                  onClick={() => onNavigate("Support")}
-                />
-              </AvailableMessage>
-              <Card
-                title="Apperance"
-                icon="Appearance"
-                onClick={() => onNavigate("Appearance")}
-              />
-              <Card title="Log Out" icon="Logout" onClick={logout} />
-            </S.ContentBox>
-          </S.ContentContainer>
-          <S.ContentFooter>
-            <a href="#" target="_blank">
-              Privacy
-            </a>
-            <a href="#" target="_blank">
-              Termas and Conditions
-            </a>
-            <p>Polkadex© 2021</p>
-          </S.ContentFooter>
-        </S.ContentWrapper>
+        <AccountOverview address={address} logout={logout} onNavigate={onNavigate} />
       </CSSTransition>
       <CSSTransition
         in={activeMenu === "Appearance"}
@@ -130,33 +77,8 @@ const Content = ({ address = "0x00000000000", logout = undefined }) => {
         timeout={400}
         classNames="menu-secondary"
         onEnter={calculateHeight}>
-        <Navigation title="Appearance" onBack={() => onNavigate("Main")}>
-          <Switcher
-            title="Dark Mode"
-            description="Adjust the appearance of Polkadex to reduce  glare and give you eyes a break."
-          />
-          <AvailableMessage message="Soon">
-            <Switcher
-              title="Classic Mode"
-              icon="Computer"
-              description="The layout of the classic version is quite similar to other exchanges."
-            />
-          </AvailableMessage>
-        </Navigation>
+        <Appearance navigateBack={() => onNavigate("Main")} />
       </CSSTransition>
     </S.Content>
   );
 };
-
-export const Card = ({ title, description, icon, ...props }: T.Card) => (
-  <S.Card {...props}>
-    <S.CardContent>
-      <Icon name={icon} stroke="black" color="black" size="medium" />
-      <S.CardTitle>
-        <span>{title}</span>
-        {description && <p>{description}</p>}
-      </S.CardTitle>
-    </S.CardContent>
-    <Icon name="ArrowRight" stroke="black" />
-  </S.Card>
-);

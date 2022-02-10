@@ -62,7 +62,7 @@ export const Header = styled.div`
 
 export const Search = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     padding: 1rem;
     border-radius: 3rem;
     border: 1px solid ${theme.colors.secondaryBackground};

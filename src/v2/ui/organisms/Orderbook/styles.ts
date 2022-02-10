@@ -4,8 +4,7 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: Orderbook;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.inverse};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.secondary};
     max-height: -webkit-fill-available;

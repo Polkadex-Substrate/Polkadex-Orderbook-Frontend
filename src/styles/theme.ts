@@ -103,7 +103,7 @@ const light = {
     primaryBackgroundOpacity: "#F9FBFC99",
     gradientBackground: "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
     tertiaryBackground: "#EEF0F6",
-    secondaryBackgroundSolid: "#E8ECF2",
+    secondaryBackgroundSolid: "#FBFBFB",
     quaternaryBackground: "#272934",
     text: "#000000",
     inverse: "#ffffff",
@@ -147,7 +147,7 @@ const dark = {
     quaternaryBackground: "#272934",
     gradient: "linear-gradient(47.94deg, #e6007a 0%, #6745d2 98.88%)",
     text: "#ffffff",
-    inverse: "#000000",
+    inverse: "#1F2029",
   },
   shadows: {
     primary: "rgba(0, 0, 0, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",

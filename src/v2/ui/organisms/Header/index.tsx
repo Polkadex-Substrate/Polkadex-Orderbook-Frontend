@@ -27,7 +27,6 @@ export const Header = () => {
         </S.AsideLeft>
         <S.AsideRight>
           <Menu />
-
           {hasUser ? (
             <>
               <Notifications />
@@ -37,7 +36,6 @@ export const Header = () => {
             <S.Box>
               <Button
                 onClick={() => router.push("/login")}
-                background="primary"
                 color="white"
                 icon={{
                   name: "Wallet",

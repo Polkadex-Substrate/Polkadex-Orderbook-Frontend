@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 export const Main = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
     max-width: ${isFull ? "auto" : "35rem"};
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
@@ -18,7 +17,6 @@ export const Header = styled.div`
     align-items: center;
     margin-bottom: 2rem;
     span {
-      color: ${theme.colors.inverse};
       display: block;
       font-size: 1.6rem;
       font-weight: 550;

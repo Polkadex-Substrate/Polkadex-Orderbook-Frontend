@@ -7,7 +7,6 @@ export const Card = styled.div`
     grid-template-columns: 3fr fit-content(100%);
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    color: ${theme.colors.black};
     margin: 0 0.5rem;
     transition: border 0.4s ease-in-out;
     user-select: none;
@@ -103,7 +102,7 @@ export const CardActions = styled.div`
     position: sticky;
     right: 0;
     min-width: 15.3rem;
-    background: ${theme.colors.white};
+    background: ${theme.colors.inverse};
     height: 100%;
     padding: 1rem;
     border-left: 1px solid ${theme.colors.secondaryBackground};

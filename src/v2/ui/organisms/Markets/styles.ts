@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 export const Main = styled.section<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
     grid-area: Markets;
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.secondaryBackgroundSolid};
     max-width: ${isFull ? "auto" : "35rem"};
     width: 100%;
     border-radius: 1.5rem;
@@ -90,7 +89,7 @@ export const Title = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: ${theme.colors.white};
+    background: ${theme.colors.secondaryBackgroundSolid};
     padding: 1rem 2rem;
     h2 {
       font-size: 1.5rem;
@@ -117,7 +116,7 @@ export const TitleActionCard = styled.div`
     transition: border 0.2s ease-in-out;
     cursor: pointer;
     :hover {
-      border-color: ${theme.colors.black};
+      border-color: ${theme.colors.text};
     }
   `}
 `;
@@ -156,7 +155,7 @@ export const Card = styled.div`
       margin-bottom: 1rem;
     }
     :hover {
-      border-color: ${theme.colors.black};
+      border-color: ${theme.colors.text};
       box-shadow: ${theme.shadows.quaternary};
     }
   `}
@@ -240,8 +239,8 @@ export const Footer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: ${theme.colors.black};
-    color: ${theme.colors.white};
+    background: ${theme.colors.text};
+    color: ${theme.colors.inverse};
     padding: 1rem;
     border-radius: 1.5rem;
   `}

@@ -144,7 +144,7 @@ const CardGroup = ({ title, children }) => (
 
 const Card = ({ title, description, icon, isBeta = false, ...props }: T.Props) => (
   <S.Card {...props}>
-    <Icon size="medium" name={icon} color="black" stroke="black" />
+    <Icon size="medium" name={icon} color="text" stroke="text" />
     <S.CardContainer>
       <div>
         <small>{title} </small>
