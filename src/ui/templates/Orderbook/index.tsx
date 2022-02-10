@@ -101,6 +101,7 @@ export const Orderbook = () => {
           side="asks"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
+          isBottomPosition
         />
         <S.Select>
           {currentMarket ? (
@@ -120,7 +121,6 @@ export const Orderbook = () => {
           side="bids"
           maxVolume={maxVolume}
           handleSelectPrice={handleSelectPrice}
-          isBottomPosition
         />
       </S.Content>
     </S.Wrapper>
@@ -171,12 +171,12 @@ const OrderbookColumn = ({
     <S.Box>
       {data.length ? (
         <>
-          <S.BoxHeader onClick={() => console.log(contentRef?.current?.scrollIntoView())}>
+          <S.BoxHeader>
             <span>Price({formattedQuoteUnit})</span>
             <span>Amount({formattedBaseUnit})</span>
             <span>Total({formattedBaseUnit})</span>
           </S.BoxHeader>
-          <S.BoxContent hasScroll={data.length >= 8}>
+          <S.BoxContent hasScroll={data.length >= 8} ref={contentRef}>
             {data.map((item, index) => {
               const [price, volume] = item;
               return (

@@ -24,7 +24,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
 
     const data = yield call(() => fetchKlineAsync(payload, endPoint));
     const convertedData = data.map((elem) => {
-      const { _time: time, open, high, low, close, volume } = elem;
+      const { time, open, high, low, close, volume } = elem;
 
       return {
         time,
