@@ -6,6 +6,7 @@ import {
   selectOrdersHistory,
   userOrdersHistoryFetch,
   selectHasUser,
+  selectOpenOrdersHistory,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -13,6 +14,7 @@ export function useOrderHistory() {
   const dispatch = useDispatch();
 
   const list = useReduxSelector(selectOrdersHistory);
+  const openOrders = useReduxSelector(selectOpenOrdersHistory);
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasUser);
@@ -26,5 +28,6 @@ export function useOrderHistory() {
     priceFixed: currentMarket?.price_precision,
     amountFixed: currentMarket?.amount_precision,
     userLoggedIn,
+    openOrders: openOrders,
   };
 }

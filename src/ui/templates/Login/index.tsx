@@ -46,7 +46,7 @@ export const LoginTemplate = () => {
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
 
   useEffect(() => {
-    if (hasUser) router.push("/trading");
+    if (hasUser) router.push("/v2/trading");
   }, [hasUser, router]);
 
   useEffect(() => {
