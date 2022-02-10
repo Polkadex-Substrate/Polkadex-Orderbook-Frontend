@@ -1,14 +1,13 @@
 import * as S from "./styles";
 
 import {
-  Dropdown,
   Icon,
   Tabs,
   TabContent,
   TabHeader,
   AvailableMessage,
 } from "@polkadex/orderbook-ui/molecules";
-import { OrderHistory } from "@orderbook/v2/ui/molecules";
+import { OrderHistory, TradeHistory } from "@orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 
@@ -74,7 +73,7 @@ const Content = () => (
       <OrderHistory />
     </TabContent>
     <TabContent>
-      <OrderHistory />
+      <TradeHistory />
     </TabContent>
   </S.Content>
 );

@@ -11,3 +11,4 @@ export * from "./OrderHistory";
 export * from "./Logged";
 export * from "./Loading";
 export * from "./ButtonStatus";
+export * from "./TradeHistory";
