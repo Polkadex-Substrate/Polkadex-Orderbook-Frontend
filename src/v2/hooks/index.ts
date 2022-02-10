@@ -5,3 +5,4 @@ export * from "./useRecentTrades";
 export * from "./useOrderHistory";
 export * from "./useDeveloper";
 export * from "./usePlaceOrder";
+export * from "./useInformation";

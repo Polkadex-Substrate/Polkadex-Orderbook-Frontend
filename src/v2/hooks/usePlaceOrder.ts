@@ -206,6 +206,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     availableBaseAmount,
     availableQuoteAmount,
     isLimit,
+    hasUser,
   ]);
 
   /**

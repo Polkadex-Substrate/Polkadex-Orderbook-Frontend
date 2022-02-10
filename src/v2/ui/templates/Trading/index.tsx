@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useRouter } from "next/router";
-
-import { AlertCard } from "../../molecules";
 
 import * as S from "./styles";
 
@@ -29,7 +26,6 @@ export const Trading = () => {
   const [isActive, setIsActive] = useState(false);
 
   // Test data
-  const [alerts, setAlerts] = useState([]);
   const { id } = useRouter().query;
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
@@ -37,30 +33,12 @@ export const Trading = () => {
 
   if (!id) return <div />;
   const handleClose = () => setIsActive(!isActive);
-  const handleRemoveAlert = (id: number) =>
-    setAlerts((alert) => alert.filter((item) => id !== item.id));
 
   return (
     <S.Main>
       <Popup isVisible={isActive} onClose={handleClose} size="fitContent" isRightPosition>
         <Markets />
       </Popup>
-      {!!alerts.length && (
-        <S.AlertsWrapper>
-          <TransitionGroup>
-            {alerts.map((alert) => (
-              <CSSTransition key={alert.id} timeout={500} classNames="animate-alert">
-                <AlertCard
-                  title={alert.title}
-                  description={alert.description}
-                  icon={alert.icon}
-                  onClick={() => handleRemoveAlert(alert.id)}
-                />
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        </S.AlertsWrapper>
-      )}
       <Header />
       <S.Wrapper>
         <S.Container>

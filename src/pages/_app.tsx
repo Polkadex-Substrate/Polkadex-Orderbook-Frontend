@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components";
 import { wrapper } from "../store";
 
 import { Message } from "@polkadex/orderbook-ui/organisms";
+import { Notifications } from "@orderbook/v2/ui/organisms";
 import {
   alertDelete,
   notificationDeleteByIndex,
@@ -43,16 +44,7 @@ const ThemeWrapper = ({ children }) => {
 
   return (
     <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      {!!notifications.length &&
-        notifications.map((notification, index) => (
-          <NotificationCard
-            key={index}
-            title={notification.message.title}
-            description={notification.message.description}
-            onClose={() => dispatch(notificationDeleteByIndex(index))}
-          />
-        ))}
-
+      {!!notifications.length && <Notifications />}
       {alert.status && (
         <Message
           isVisible={alert.status}

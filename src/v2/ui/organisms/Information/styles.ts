@@ -94,7 +94,7 @@ export const CardContainer = styled.div`
 `;
 
 export const CardChildren = styled.div<{ hasMargin?: boolean }>`
-  ${({ theme, hasMargin }) => css`
+  ${({ hasMargin }) => css`
     margin-left: ${hasMargin ? "0.5rem" : 0};
   `}
 `;

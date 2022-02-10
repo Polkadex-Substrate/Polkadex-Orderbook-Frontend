@@ -6,7 +6,7 @@ import { useDeveloper } from "@polkadex/orderbook/v2/hooks";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const DeveloperContent = () => {
-  const { funds, hasUser, wallet } = useDeveloper();
+  const { funds, hasUser, wallet, notifications } = useDeveloper();
 
   return (
     <S.Main>
@@ -51,6 +51,23 @@ export const DeveloperContent = () => {
             textFiled={[
               { label: "Request Amount", props: { value: funds.value, disabled: true } },
             ]}
+          />
+          <Card
+            title="Test Notifications"
+            status={notifications.success ? "success" : "error"}
+            buttonOnClick={notifications.sendNotification}
+            buttonTitle={"Send Notification"}
+            textFiled={[
+              {
+                label: "Nº Notifications",
+                props: { value: notifications.repeatNumber, disabled: true },
+              },
+              {
+                label: "Notifications Time",
+                props: { value: notifications.repeatTime, disabled: true },
+              },
+            ]}
+            url=""
           />
         </S.Content>
       </S.Wrapper>

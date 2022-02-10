@@ -38,6 +38,7 @@ export const Markets = ({ isFull = false }) => {
 
 export const HeaderMarket = ({
   pair = "Empty  Token",
+  pairSymbol = "Polkadot",
   pairTicker,
   onOpenMarkets = undefined,
 }) => {
@@ -54,7 +55,7 @@ export const HeaderMarket = ({
               <Icon name="Exchange" />
             </S.HeaderInfoActions>
           </S.HeaderInfoContainer>
-          <p>Polkadot</p>
+          <p>{pairSymbol}</p>
         </S.HeaderInfo>
       </S.HeaderAsideLeft>
       <S.HeaderAsideCenter>

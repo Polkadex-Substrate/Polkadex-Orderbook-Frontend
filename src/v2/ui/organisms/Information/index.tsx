@@ -2,34 +2,48 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
-import { selectCurrentMarket } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useInformation } from "@polkadex/orderbook/v2/hooks";
 
 export const Information = ({ onOpenMarkets }) => {
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-
+  const {
+    pairName,
+    pairTicker,
+    quoteUnit,
+    lastPrice,
+    volume24h,
+    priceHigh,
+    price24h,
+    priceLow,
+    isNegative,
+  } = useInformation();
   return (
     <S.Main>
       <S.AsideLeft>
-        <HeaderMarket
-          pair={currentMarket?.name}
-          pairTicker={currentMarket?.tokenTickerName}
-          onOpenMarkets={onOpenMarkets}
-        />
+        <HeaderMarket pair={pairName} pairTicker={pairTicker} onOpenMarkets={onOpenMarkets} />
       </S.AsideLeft>
       <S.AsideRight>
-        <Card title="Market Price" description="0.03209666">
-          <S.Ticker>PDEX</S.Ticker>
+        <Card title="Market Price" description={lastPrice}>
+          <S.Ticker>{quoteUnit}</S.Ticker>
         </Card>
-        <Card title="Price 24h">
-          <S.Tag>36.94%</S.Tag>
+        <Card title="Price 24h" description={price24h}>
+          <S.Tag isNegative={isNegative}>0.00%</S.Tag>
         </Card>
-        <Card title="Volume 24h (DOT)" description="71,459.80">
-          <S.Tag>12.02%</S.Tag>
+        <Card title="Volume 24h (DOT)" description={volume24h}>
+          <S.Tag>0.00%</S.Tag>
         </Card>
         <S.Group>
-          <Card title="24h High" description="0.05446660" isHorizontal textColor="primary" />
-          <Card title="24h Low" description="0.02900341" isHorizontal textColor="green" />
+          <Card
+            title={`24h High(${quoteUnit})`}
+            description={priceHigh}
+            isHorizontal
+            textColor="primary"
+          />
+          <Card
+            title={`24h Low(${quoteUnit})`}
+            description={priceLow}
+            isHorizontal
+            textColor="green"
+          />
         </S.Group>
       </S.AsideRight>
     </S.Main>

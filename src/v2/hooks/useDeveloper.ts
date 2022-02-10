@@ -1,3 +1,6 @@
+import { clearTimeout, setTimeout } from "timers";
+import { clear } from "console";
+
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
@@ -5,7 +8,9 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
   logoutFetch,
+  notificationPush,
   selectHasUser,
+  selectNotifications,
   selectSignInError,
   selectSignInLoading,
   selectUserInfo,
@@ -22,6 +27,8 @@ type CommomState = {
 
 type Funds = { value?: string } & CommomState;
 type ConnectWallet = { address: string; password: string };
+type Notifications = { repeatNumber: number; repeatTime: number };
+
 const option: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
@@ -29,6 +36,7 @@ export function useDeveloper() {
   const dispatch = useDispatch();
   const user = useReduxSelector(selectUserInfo);
   const hasUser = useReduxSelector(selectHasUser);
+  const notifications = useReduxSelector(selectNotifications);
 
   const walletLoading = useReduxSelector(selectSignInLoading);
   const walletError = useReduxSelector(selectSignInError);
@@ -43,6 +51,11 @@ export function useDeveloper() {
   const [connectWallet, setConnectWallet] = useState<ConnectWallet>({
     address: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     password: "0000",
+  });
+
+  const [notification, setNotification] = useState<Notifications>({
+    repeatNumber: 4,
+    repeatTime: 2000,
   });
   /**
    * @description Request funds
@@ -79,11 +92,41 @@ export function useDeveloper() {
 
   /**
    * @description Connect test wallet
+   *
+   * @returns {void} Dispatch Sign In action
    */
   const connectTestWallet = () =>
     dispatch(signIn(connectWallet.address, connectWallet.password));
 
+  /**
+   * @description Disconnect Wallet
+   *
+   * @returns {void} Dispatch Logout action
+   */
   const disconnectTestWallet = () => dispatch(logoutFetch());
+
+  /**
+   * @description Create a new notification
+   *
+   * @returns {void} Dispatch notification Push  action
+   */
+  const sendNotification = (): void => {
+    let num = 1;
+    const interval = setInterval(() => {
+      dispatch(
+        notificationPush({
+          type: "Loading",
+          message: {
+            title: `Notification Title ${num}`,
+            description: `Notification Description ${num}`,
+          },
+        })
+      );
+      num++;
+      if (num >= notification.repeatNumber) clearInterval(interval);
+    }, notification.repeatTime);
+  };
+
   return {
     hasUser,
     funds: {
@@ -96,6 +139,12 @@ export function useDeveloper() {
       error: walletError?.message[0],
       success: hasUser,
       ...connectWallet,
+    },
+    notifications: {
+      sendNotification,
+      loading: false,
+      success: !!notifications.length,
+      ...notification,
     },
   };
 }
