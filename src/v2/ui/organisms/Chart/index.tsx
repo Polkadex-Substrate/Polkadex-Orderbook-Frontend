@@ -1,6 +1,14 @@
 import * as S from "./styles";
-
+import dynamic from "next/dynamic";
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
+
+const TradingChart = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/molecules/TradingChart").then((mod) => mod.TradingChart),
+  {
+    ssr: false,
+  }
+);
 
 export const Chart = ({ isFull = true }) => {
   return (
@@ -53,4 +61,4 @@ const Header = () => (
 );
 const OriginalChart = () => <S.OriginalChart></S.OriginalChart>;
 const DepthChart = () => <S.DepthChart></S.DepthChart>;
-const TradingViewChart = () => <S.TradingViewChart>TradingView</S.TradingViewChart>;
+const TradingViewChart = () => <S.TradingViewChart><TradingChart /></S.TradingViewChart>;
