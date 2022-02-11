@@ -40,7 +40,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   });
 
   const [form, setForm] = useState({
-    orderType: "Limit",
+    orderType: isLimit ? "Limit" : "Market",
     price: "",
     priceMarket: currentTicker?.last || 0,
     amountSell: "",
@@ -81,11 +81,11 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const getEstimatedTotal = useCallback(
     (total: number): string =>
       Decimal.format(
-        isLimit ? Number(estimatedTotal) : total,
+        total,
         currentMarket?.amount_precision || 0 + currentMarket?.price_precision || 0,
         ","
       ),
-    [isLimit, estimatedTotal, currentMarket?.amount_precision, currentMarket?.price_precision]
+    [currentMarket?.amount_precision, currentMarket?.price_precision]
   );
 
   /**
@@ -143,8 +143,15 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
           });
         }
       }
+      setEstimatedTotal((estimatedTotal) => {
+        return {
+          ...estimatedTotal,
+          [isSell ? "sell" : "buy"]:
+            Number(convertedValue) * Number(isSell ? bestBidPrice : bestAskPrice),
+        };
+      });
     },
-    [currentMarket?.price_precision, form, isSell]
+    [currentMarket?.price_precision, form, isSell, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -158,10 +165,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: isLimit ? "Market" : "Limit",
+        order_type: isLimit ? "Limit" : "Market",
         symbol: currentMarket?.symbolArray,
         side: isSell ? "Sell" : "Buy",
-        price: form.price,
+        price: isLimit ? form.price : "",
         market: `${currentMarket?.base_unit}${currentMarket?.quote_unit}`.toLowerCase(),
         amount: isSell ? form.amountSell : form.amountBuy,
       })
@@ -183,11 +190,11 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
     const amountUnavailable = isSell
       ? Number(availableBaseAmount) >=
-        Number(form.amountSell) * Number(isLimit ? 1 : form.price)
+        Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
       : Number(availableQuoteAmount) >=
-        Number(form.amountBuy) * Number(isLimit ? 1 : form.price);
+        Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
 
-    if (isLimit) {
+    if (!isLimit) {
       return (
         isOrderLoading || !amountInput || amountAvailable || !amountUnavailable || !hasUser
       );
@@ -218,15 +225,22 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    *
    * @returns {string} total amount result
    */
-  const total = useMemo(
-    () =>
-      (form.amountSell || form.amountBuy) && form.price
-        ? getEstimatedTotal(
-            Number(isSell ? form.amountSell : form.amountBuy) * Number(form.price) || 0
-          )
-        : "",
-    [isSell, form.amountBuy, form.amountSell, form.price, getEstimatedTotal]
-  );
+  const total = useMemo(() => {
+    return form.amountSell || form.amountBuy
+      ? getEstimatedTotal(
+          Number(isSell ? form.amountSell : form.amountBuy) *
+            Number(isLimit ? form.price : Number(estimatedTotal[isSell ? "sell" : "buy"])) || 0
+        )
+      : "";
+  }, [
+    isSell,
+    isLimit,
+    estimatedTotal,
+    form.amountBuy,
+    form.amountSell,
+    form.price,
+    getEstimatedTotal,
+  ]);
 
   useEffect(() => {
     // Check if the currentPrice is different from the price in the form

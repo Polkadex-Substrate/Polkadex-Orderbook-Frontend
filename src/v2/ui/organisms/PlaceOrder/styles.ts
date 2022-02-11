@@ -43,7 +43,7 @@ export const ListItem = styled.div<{ isActive?: boolean }>`
     transition: background 0.4s ease-in-out;
     font-weight: 500;
     :hover {
-      background: ${isActive ? theme.colors.black : theme.colors.secondaryBackground};
+      background: ${isActive ? theme.colors.text : theme.colors.secondaryBackground};
     }
   `}
 `;

@@ -15,7 +15,7 @@ import {
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
 export const PlaceOrder = () => {
-  const [isLimit, setIsLimit] = useState(false);
+  const [isLimit, setIsLimit] = useState(true);
   const handleChangeType = (value: boolean) => setIsLimit(value);
   return (
     <S.Main>
@@ -23,11 +23,11 @@ export const PlaceOrder = () => {
         <S.Header>
           <h2>Place Order</h2>
           <S.List>
-            <S.ListItem isActive={!isLimit} onClick={() => handleChangeType(false)}>
-              Market
-            </S.ListItem>
             <S.ListItem isActive={isLimit} onClick={() => handleChangeType(true)}>
               Limit
+            </S.ListItem>
+            <S.ListItem isActive={!isLimit} onClick={() => handleChangeType(false)}>
+              Market
             </S.ListItem>
           </S.List>
         </S.Header>
@@ -80,7 +80,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
 
   return (
     <form onSubmit={executeOrder}>
-      {!isLimit && (
+      {isLimit && (
         <S.FormInput>
           <S.InputWrapper>
             <input
@@ -124,7 +124,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
           <input
             type="text"
             defaultValue={total}
-            placeholder={isLimit ? "Estimated Total" : "Total"}
+            placeholder={isLimit ? "Total" : "Estimated Total"}
             disabled={isOrderLoading}
           />
           <div>
