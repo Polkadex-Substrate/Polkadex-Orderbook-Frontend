@@ -38,6 +38,8 @@ export type DefaultConfig = {
   polkadotJsWs: string;
   auth: string;
   polkadexHostUrl: string;
+  amqpWsPassword: string;
+  amqpWsUsername: string;
   gaTrackerKey: string;
   withCredentials: boolean;
   incrementalOrderBook: boolean;

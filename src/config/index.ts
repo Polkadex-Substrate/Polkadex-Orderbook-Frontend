@@ -7,6 +7,8 @@ export const defaultConfig: DefaultConfig = {
   polkadotJsWs: process.env.POLKADEX_WS,
   auth: process.env.POLKADEX_HOST_URL,
   polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`,
+  amqpWsPassword: process.env.RMQ_KEY,
+  amqpWsUsername: process.env.RMQ_USERNAME,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
   withCredentials: false,
   incrementalOrderBook: false,
