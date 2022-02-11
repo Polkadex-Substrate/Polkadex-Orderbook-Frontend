@@ -78,7 +78,7 @@ const Filters = () => (
         <Icon name="Search" size="extraSmall" stroke="text" />
       </S.TitleActionCard>
       <S.TitleActionCard>
-        <Icon name="Star" size="extraSmall" stroke="text" color="text" />
+        <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
       </S.TitleActionCard>
     </S.TitleActions>
   </S.Title>
@@ -114,7 +114,7 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
   <S.Card onClick={changeMarket}>
     <S.CardInfo>
       <S.CardInfoActions>
-        <Icon name="Star" size="extraSmall" stroke="text" color="text" />
+        <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
       </S.CardInfoActions>
       <S.CardInfoContainer>
         <S.CardToken>

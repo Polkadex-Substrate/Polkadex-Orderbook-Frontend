@@ -8,7 +8,7 @@ export const RecentTrades = () => {
   const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTrades();
   return (
-    <S.Main hasData={!!recentTrades.length}>
+    <S.Main>
       {recentTrades.length ? (
         <>
           <AvailableMessage message="Soon">
@@ -39,9 +39,7 @@ export const RecentTrades = () => {
           </>
         </>
       ) : (
-        <S.Container>
-          <EmptyTrades />
-        </S.Container>
+        <EmptyTrades />
       )}
     </S.Main>
   );
@@ -55,8 +53,10 @@ const Card = ({ price, amount, date, isSell = false }) => (
   </S.Card>
 );
 const EmptyTrades = () => (
-  <S.Empty>
-    <img src="/img/emptyTrade.svg" alt="Empty Trades" />
-    <p>No Transactions</p>
-  </S.Empty>
+  <S.Container>
+    <S.Empty>
+      <img src="/img/emptyTrade.svg" alt="Empty Trades" />
+      <p>No Transactions</p>
+    </S.Empty>
+  </S.Container>
 );

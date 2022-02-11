@@ -242,7 +242,7 @@ export const Footer = styled.div`
     background: ${theme.colors.text};
     color: ${theme.colors.inverse};
     padding: 1rem;
-    border-radius: 1.5rem;
+    border-radius: 1rem;
   `}
 `;
 
