@@ -151,16 +151,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios
         .post<TradingApiResponse>(url, payload as any)
-        .then(({ data }): {data: {
-          Fine: Array<{
-              time: number;
-              open: string;
-              close: string;
-              high: string;
-              low: string;
-              volume: string;
-          }>
-        }} => {
+        .then(({ data }) => {
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
