@@ -24,7 +24,7 @@ export const OrderHistory = () => {
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
                   return (
-                    <S.Card key={i}>
+                    <S.Card key={i} isOpenOrder={true}>
                       <S.CardWrapper>
                         <S.CardBox>
                           <S.CardInfoToken>

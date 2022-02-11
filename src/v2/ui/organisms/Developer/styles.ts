@@ -2,7 +2,6 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.section`
   ${({ theme }) => css`
-    grid-area: Markets;
     background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
     width: 100%;
@@ -11,6 +10,8 @@ export const Main = styled.section`
     height: 60vh;
     display: flex;
     flex-flow: column nowrap;
+    position: relative;
+    z-index: 2;
   `}
 `;
 

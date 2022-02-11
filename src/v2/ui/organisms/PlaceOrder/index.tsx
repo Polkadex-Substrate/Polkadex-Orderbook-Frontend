@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { Range, Loading } from "@orderbook/v2/ui/molecules";
+import { Range, ButtonStatus } from "@orderbook/v2/ui/molecules";
 import {
   AvailableMessage,
   Icon,
@@ -69,7 +69,8 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     amount,
     executeOrder,
     buttonDisabled,
-    inputDisabled,
+    isOrderLoading,
+    isOrderExecuted,
     availableAmount,
     quoteTicker,
     baseTicker,
@@ -87,7 +88,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
               placeholder="Price"
               value={price}
               onChange={(e) => changePrice(e.currentTarget.value)}
-              disabled={inputDisabled}
+              disabled={isOrderLoading}
             />
             <div>
               <span>{quoteTicker}</span>
@@ -102,7 +103,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             placeholder="Amount"
             value={amount}
             onChange={(e) => changeAmount(e.currentTarget.value)}
-            disabled={inputDisabled}
+            disabled={isOrderLoading}
           />
           <div>
             <span>{baseTicker}</span>
@@ -124,20 +125,24 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             type="text"
             defaultValue={total}
             placeholder={isLimit ? "Estimated Total" : "Total"}
-            disabled={inputDisabled}
+            disabled={isOrderLoading}
           />
           <div>
             <span>{quoteTicker}</span>
           </div>
         </S.InputWrapper>
-
-        <S.Button type="submit" isSell={isSell} disabled={buttonDisabled}>
-          {inputDisabled ? (
-            <Loading />
-          ) : (
-            <>{!hasUser ? "Connect your account" : `${orderSide} ${baseTicker}`}</>
-          )}
-        </S.Button>
+        <ButtonStatus
+          isSell={isSell}
+          heading={{
+            text: !hasUser ? "Connect your account" : `${orderSide} ${baseTicker}`,
+            loading: "Waiting",
+            success: "Order Created",
+          }}
+          isLoading={isOrderLoading}
+          isSuccess={isOrderExecuted}
+          type="submit"
+          disabled={buttonDisabled}
+        />
       </S.Box>
     </form>
   );

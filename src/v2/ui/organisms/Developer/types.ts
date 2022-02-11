@@ -4,7 +4,7 @@ import { InjectedAccount } from "@polkadex/orderbook-modules";
 export type Props = {
   title: string;
   buttonTitle?: string;
-  buttonOnClick: () => void;
+  buttonOnClick?: () => void;
   buttonDisabled?: boolean;
   endpoint?: string;
   status?: "noStatus" | "loading" | "success" | "error";

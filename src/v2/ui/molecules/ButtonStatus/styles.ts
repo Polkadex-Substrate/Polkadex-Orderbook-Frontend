@@ -6,29 +6,26 @@ export const Wrapper = styled.button<{
   isLoading?: boolean;
 }>`
   ${({ theme, isSell, isSuccess, isLoading }) => css`
+    position: relative;
+    z-index: 0;
+    display: flex;
+    align-items: center;
     background: ${isSell ? theme.colors.primary : theme.colors.green};
     color: ${theme.colors.white};
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 1rem;
-    text-align: center;
     font-weight: 500;
     width: 100%;
-
+    transition: transform 0.2s ease, background 0.3s ease;
     :disabled {
       background: ${theme.colors.secondaryBackground};
-      color: ${theme.colors.black};
-    }
-    :hover {
-      span {
-        svg {
-          :nth-child(2) {
-            transform: translateY(-20px);
-          }
-          :nth-child(3) {
-            transform: translateY(0);
-          }
-        }
+      color: ${theme.colors.text};
+      span svg:nth-child(1) {
+        stroke: transparent;
       }
+    }
+    :active {
+      transform: translateY(0.2rem);
     }
 
     span {
@@ -38,7 +35,18 @@ export const Wrapper = styled.button<{
       border-radius: 1rem;
       position: relative;
       overflow: hidden;
-      background: white;
+      background: ${isLoading ? "white" : "transaparent"};
+      :before {
+        content: "";
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: transform 0.3s ease, background 0.3s ease;
+      }
       svg {
         position: absolute;
         width: 1.2rem;
@@ -46,14 +54,15 @@ export const Wrapper = styled.button<{
         left: 50%;
         top: 50%;
         margin: -0.6rem 0 0 -0.6rem;
+        z-index: 1;
         :nth-child(1) {
-          width: 20px;
-          height: 20px;
+          width: 2rem;
+          height: 2rem;
           top: 0;
           left: 0;
           fill: none;
           margin: 0;
-          stroke: ${theme.colors.primary};
+          stroke: ${isLoading ? "white" : isSell ? theme.colors.primary : theme.colors.green};
           stroke-width: 1px;
           stroke-dashoffset: 47.124 * 2;
           stroke-dasharray: 47.124;
@@ -61,50 +70,41 @@ export const Wrapper = styled.button<{
         :nth-child(2) {
           fill: ${theme.colors.primary};
           transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        :nth-child(3) {
-          fill: ${theme.colors.primary};
-          transform: translateY(20px);
-          transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+          transform: translateY(2rem);
         }
       }
     }
 
     ul {
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      height: 20px;
-      width: 70px;
-      display: inline-block;
-      vertical-align: top;
-      text-align: center;
       position: relative;
-      perspective: 80rem;
-      perspective-origin: 50% 50% 0;
+      z-index: -1;
+      list-style: none;
+      height: 1.4rem;
+      width: 10rem;
+      display: inline-block;
+      transform-style: preserve-3d;
       transition: transform 0.3s ease;
+      flex: 1;
+      margin-right: 2rem;
       li {
-        background: red;
-        margin-bottom: 1rem;
         position: absolute;
         top: 0;
         bottom: 0;
         width: 100%;
-        transform-style: preserve-3d;
-        transform-origin: 50% 50% 0;
-        transform: rotateX(0deg);
+        white-space: nowrap;
+        backface-visibility: hidden;
+        transform-origin: 50% 50%;
+        :nth-child(1) {
+          transform: rotateX(0deg) translateZ(1rem);
+        }
         :nth-child(2) {
-          transform-style: preserve-3d;
-          transform-origin: 50% 50% 0;
-          transform: rotateX(0deg);
+          transform: rotateX(-90deg) translateZ(1rem);
+        }
+        :nth-child(3) {
+          transform: rotateX(-180deg) translateZ(1rem);
         }
       }
     }
-
-    ${isSuccess &&
-    css`
-      transform: scale(0.94);
-    `}
 
     ${isLoading &&
     css`
@@ -116,38 +116,32 @@ export const Wrapper = styled.button<{
         }
         svg {
           :nth-child(1) {
-            animation: turn 1.6s linear infinite forwards, path 1.6s linear infinite forwards;
-          }
-          :nth-child(2) {
-            transform: translateY(-20px);
-          }
-          :nth-child(3) {
-            opacity: 0;
-            transform: translateY(0) scale(0.6);
+            animation: turn 1s linear infinite forwards, path 1.6s linear infinite forwards;
           }
         }
       }
       ul {
-        transform: rotateX(50deg);
+        transform: rotateX(90deg);
       }
-      /* ${isSuccess &&
+      ${isSuccess &&
       css`
-        background: green;
-        box-shadow: 0 4px 20px rgba($success, 0.15);
+        background: ${isSell ? theme.colors.primary : theme.colors.green};
         span {
+          background: white;
           transition: background 0.1s ease 0s;
           :before {
-            background: $success;
+            background: ${isSell ? theme.colors.primary : theme.colors.green};
             transform: scale(0);
           }
           svg {
             :nth-child(1) {
               animation: none;
             }
-            :nth-child(3) {
-              fill: $success;
+
+            :nth-child(2) {
+              fill: ${isSell ? theme.colors.primary : theme.colors.green};
               opacity: 1;
-              transform: scale(1);
+              transform: translateY(0);
               transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s,
                 opacity 0.4s ease 0.25s;
             }
@@ -156,7 +150,7 @@ export const Wrapper = styled.button<{
         ul {
           transform: rotateX(180deg);
         }
-      `} */
+      `}
     `}
     @keyframes turn {
       100% {

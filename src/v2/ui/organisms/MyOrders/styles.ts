@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { Card as OrderHistoryCard } from "@orderbook/v2/ui/molecules/OrderHistory/styles";
 
 export const Main = styled.section`
   ${({ theme }) => css`
@@ -113,5 +114,8 @@ export const Content = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
+  }
+  :hover ${OrderHistoryCard} {
+    opacity: 1;
   }
 `;

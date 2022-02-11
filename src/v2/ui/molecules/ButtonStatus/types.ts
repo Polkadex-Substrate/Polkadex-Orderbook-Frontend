@@ -1,12 +1,12 @@
 import { ButtonHTMLAttributes } from "react";
 
 export type Props = {
-  heading: {
-    text: string;
+  heading?: {
+    text?: string;
     loading?: string;
     success?: string;
   };
-  loading?: boolean;
-  success?: boolean;
-  error?: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isSell?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;

@@ -15,6 +15,7 @@ import {
   orderExecuteFetch,
   selectOrderExecuteLoading,
   selectHasUser,
+  selectOrderExecuteSucess,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -28,7 +29,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const balances = useReduxSelector(selectUserBalance);
   const bestAskPrice = useReduxSelector(selectBestAskPrice);
   const bestBidPrice = useReduxSelector(selectBestBidPrice);
-  const isLoading = useReduxSelector(selectOrderExecuteLoading);
+  const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
+  const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasUser = useReduxSelector(selectHasUser);
 
   const currentTicker = marketTickers[currentMarket?.id];
@@ -186,10 +188,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         Number(form.amountBuy) * Number(isLimit ? 1 : form.price);
 
     if (isLimit) {
-      return isLoading || !amountInput || amountAvailable || !amountUnavailable || !hasUser;
+      return (
+        isOrderLoading || !amountInput || amountAvailable || !amountUnavailable || !hasUser
+      );
     } else {
       return (
-        isLoading ||
+        isOrderLoading ||
         !amountInput ||
         !Number(form.price) ||
         amountAvailable ||
@@ -198,7 +202,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       );
     }
   }, [
-    isLoading,
+    isOrderLoading,
     form.amountBuy,
     form.amountSell,
     form.price,
@@ -264,7 +268,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     total,
     executeOrder: handleExecuteOrders,
     buttonDisabled: isDisabled,
-    inputDisabled: isLoading,
+    isOrderLoading,
+    isOrderExecuted,
     quoteTicker: isSell ? quoteTicker : baseTicker,
     baseTicker: isSell ? baseTicker : quoteTicker,
     orderSide: isSell ? "Sell" : "Buy",
