@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 // Card
-export const Card = styled.div`
-  ${({ theme }) => css`
+export const Card = styled.div<{ isOpenOrder?: boolean }>`
+  ${({ theme, isOpenOrder }) => css`
     display: grid;
     grid-template-columns: 3fr fit-content(100%);
     border-radius: 1rem;
@@ -10,6 +10,8 @@ export const Card = styled.div`
     margin: 0 0.5rem;
     transition: border 0.4s ease-in-out;
     user-select: none;
+    opacity: ${isOpenOrder ? 1 : 0.7};
+    transition: opacity 0.4s ease-in-out, border-color 0.4s ease-in-out;
     cursor: pointer;
     span {
       font-weight: 550;
@@ -21,16 +23,12 @@ export const Card = styled.div`
       margin-bottom: 0.7rem;
     }
     :hover {
-      border-color: ${theme.colors.black};
+      border-color: ${theme.colors.text}99;
       box-shadow: ${theme.shadows.quaternary};
-    }
-
-    /* @media screen and (max-width: 990px) {
-      width: max-content;
-    } */
-    :hover ${Tag} {
-      visibility: visible;
-      opacity: 1;
+      ${Tag} {
+        visibility: visible;
+        opacity: 1;
+      }
     }
   `}
 `;

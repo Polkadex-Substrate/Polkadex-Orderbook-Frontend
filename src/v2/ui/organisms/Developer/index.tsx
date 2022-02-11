@@ -79,13 +79,15 @@ export const DeveloperContent = () => {
           <Card
             title="Test Notifications"
             status={notifications.success ? "success" : "error"}
-            buttonOnClick={notifications.sendNotification}
+            // buttonOnClick={notifications.sendNotification}
             buttonTitle={"Send Notification"}
+            buttonDisabled
             textFiled={[
               {
                 label: "Nº Notifications",
                 inputProps: {
                   name: "repeatNumber",
+                  disabled: true,
                   value: notifications.repeatNumber,
                   onChange: notifications.onChange,
                 },
@@ -94,6 +96,7 @@ export const DeveloperContent = () => {
                 label: "Notifications Time(seconds)",
                 inputProps: {
                   name: "repeatTime",
+                  disabled: true,
                   value: notifications.repeatTime,
                   onChange: notifications.onChange,
                 },
@@ -105,6 +108,7 @@ export const DeveloperContent = () => {
             title="Test Error"
             status={notifications.success ? "success" : "error"}
             buttonOnClick={notifications.sendNotification}
+            buttonDisabled
             buttonTitle={"Send Error"}
           />
         </S.Content>
@@ -116,7 +120,7 @@ export const DeveloperContent = () => {
 const Card = ({
   title,
   buttonTitle = "Try Again",
-  buttonOnClick,
+  buttonOnClick = undefined,
   buttonDisabled = false,
   endpoint = "",
   status = "noStatus",
@@ -146,7 +150,7 @@ const Card = ({
           {endpoint}
         </p>
       </S.CardHeader>
-      {textFiled.length &&
+      {!!textFiled.length &&
         textFiled.map(
           ({ isSelect = false, label, options = [], selectProps, inputProps }, i) => {
             return (
@@ -158,7 +162,7 @@ const Card = ({
                     {!!options.length &&
                       options.map((val, index) => (
                         <option key={index} value={val.address}>
-                          {val.address}
+                          {`${val?.meta?.name} (${val.address})`}
                         </option>
                       ))}
                   </select>

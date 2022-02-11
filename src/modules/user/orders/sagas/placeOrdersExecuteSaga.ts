@@ -42,7 +42,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       if (res.FineWithMessage) {
         yield put(orderExecuteData());
         console.log(res.Fine);
-        yield delay(5000);
+        yield delay(1000);
         yield put(orderExecuteDataDelete());
         yield put(userOrdersHistoryFetch());
       } else {
