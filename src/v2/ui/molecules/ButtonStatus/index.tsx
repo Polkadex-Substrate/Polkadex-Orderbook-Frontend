@@ -31,13 +31,13 @@ export const ButtonStatus = ({
   const handleChange = () => {
     if (!loading) {
       setLoading(true);
-      setTimeout(() => {
+      if (isSuccess) {
         setSuccess(true);
         setTimeout(() => {
           setLoading(false);
           setSuccess(false);
         }, 1600);
-      }, 3200);
+      }
     }
   };
   return (
