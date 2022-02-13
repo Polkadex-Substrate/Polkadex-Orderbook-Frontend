@@ -18,10 +18,13 @@ module.exports = {
   },
   env: {
     POLKADEX_HOST_URL:
-      process.env.NEXT_PUBLIC_POLKADEX_HOST_URL || "https://ramen-1.polkadex.trade:443/api",
+      process.env.POLKADEX_HOST_URL || "https://ramen-1.polkadex.trade:443/api",
     INFLUX_DB_URL:
-      process.env.NEXT_PUBLIC_INFLUX_DB_URL ||
+      process.env.INFLUX_DB_URL ||
       "https://ec2-3-101-117-26.us-west-1.polkadex.trade/api",
     POLKADEX_FEATURE: process.env.POLKADEX_FEATURE || "signUp",
+    INFLUX_DB_TOKEN: process.env.INFLUX_DB_TOKEN,
+    RMQ_KEY: process.env.RMQ_KEY,
+    RMQ_USERNAME: process.env.RMQ_USERNAME,
   },
 };
