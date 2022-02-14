@@ -77,18 +77,30 @@
       "@polkadex/orderbook/*": [
         "src/*"
       ],
-      "@orderbook-ui/v2/templates": [
+      "@orderbook/v2/ui/atoms": [
+        "src/v2/ui/atoms"
+      ],
+      "@orderbook/v2/ui/templates": [
         "src/v2/ui/templates"
       ],
-
-      "@orderbook-ui/v2/organisms": [
+      "@orderbook/v2/uitemplates/*": [
+        "src/v2/ui/templates/*"
+      ],
+      "@orderbook/v2/ui/organisms": [
         "src/v2/ui/organisms"
       ],
-
-      "@orderbook-ui/v2/molecules": [
+      "@orderbook/v2/ui/organisms/*": [
+        "src/v2/ui/organisms/*"
+      ],
+      "@orderbook/v2/ui/molecules": [
         "src/v2/ui/molecules"
       ],
-
+      "@orderbook/v2/ui/molecules/*": [
+        "src/v2/ui/molecules/*"
+      ],
+      "@orderbook/v2/hooks": [
+        "src/v2/hooks"
+      ],
     },
     "incremental": true
   },

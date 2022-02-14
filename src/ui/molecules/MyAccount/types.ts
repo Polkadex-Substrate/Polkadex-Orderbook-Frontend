@@ -10,6 +10,7 @@ type SharedProps = {
 export type SelectAccountProps = {
   isActive?: boolean;
   withButton?: boolean;
+  isHeader?: boolean;
 } & SharedProps;
 
 export type Props = {

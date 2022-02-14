@@ -56,6 +56,7 @@ export const Header = ({ withInfo = true }) => {
                 name: "Wallet",
                 background: "primaryBackground",
                 size: "extraMedium",
+                stroke: "text",
               }}>
               Login/Sign Up
             </Button>

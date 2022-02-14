@@ -8,7 +8,7 @@ function SvgArrowRight(props: React.SVGProps<SVGSVGElement>) {
       height="1.2em"
       viewBox="0 0 14 14"
       {...props}>
-      <path d="M5 3L9 7L5 11" fill="none" stroke="white" strokeWidth="2" />
+      <path d="M5 3L9 7L5 11" fill="none" strokeWidth="2" />
     </svg>
   );
 }

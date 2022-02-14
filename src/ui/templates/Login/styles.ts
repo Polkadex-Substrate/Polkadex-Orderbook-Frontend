@@ -94,7 +94,7 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: ${isOverflow ? "scroll" : "hidden"};
+    overflow-y: ${isOverflow ? "overlay" : "hidden"};
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;

@@ -18,7 +18,7 @@ const bindMiddleware = (middleware) => {
 export interface SagaStore extends Store<RootState> {
   sagaRootTask: Task;
 }
-// export const store = createStore(rootReducer);
+export const store = createStore(rootReducer);
 
 const makeStore = (context: Context) => {
   const initialStore = createStore(rootReducer, bindMiddleware([sagaMiddleware]));

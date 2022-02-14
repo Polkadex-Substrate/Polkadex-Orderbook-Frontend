@@ -6,9 +6,7 @@ export const customWidgetParams = {};
 
 export const customWidgetOptions = (colorTheme?: string) => {
   const background =
-    colorTheme === "light"
-      ? lightTheme.colors.gradientBackground
-      : darkTheme.colors.gradientBackground;
+    colorTheme === "light" ? lightTheme.colors.inverse : darkTheme.colors.inverse;
   const red = darkTheme.colors.primary;
   const green = darkTheme.colors.green;
 

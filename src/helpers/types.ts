@@ -77,7 +77,8 @@ export type Sizes =
   | "extraLarge"
   | "giant"
   | "extraGiant"
-  | "full";
+  | "full"
+  | "fitContent";
 
 export const icons = [
   "ArrowTop",
@@ -152,6 +153,7 @@ export const icons = [
 ];
 export type Icons =
   | "ArrowTop"
+  | "Menu"
   | "Verified"
   | "Avatar"
   | "Alert"

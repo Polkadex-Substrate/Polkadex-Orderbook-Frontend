@@ -8,3 +8,4 @@ export * from "./useReduxSelector";
 export * from "./useOrderBookMarketsFetch";
 export * from "./useMarketsTickersFetch";
 export * from "./useWindowSize";
+export * from "./useAccount";

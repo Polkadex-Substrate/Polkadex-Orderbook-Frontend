@@ -157,10 +157,10 @@ class Decimal extends React.Component<DecimalProps> {
     } else {
       return (
         <React.Fragment>
-          <span>{Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)}</span>
-          <span className="cr-decimal__opacity">
-            {Decimal.getNumberAfterDot(children, fixed)}
+          <span style={{ opacity: 0.6 }}>
+            {Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)}
           </span>
+          <span>{Decimal.getNumberAfterDot(children, fixed)}</span>
         </React.Fragment>
       );
     }

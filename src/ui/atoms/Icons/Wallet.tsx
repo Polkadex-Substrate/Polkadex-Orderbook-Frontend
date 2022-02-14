@@ -6,19 +6,38 @@ function SvgWallet(props: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
-      viewBox="0 0 23 21"
+      viewBox="0 0 22 20"
       {...props}>
-      <g>
-        <path
-          data-name="c2/wallet"
-          d="M15.578 11.254h2.428a1.214 1.214 0 010 2.428h-2.428a1.214 1.214 0 010-2.428z"
-          opacity={0.5}
-        />
-        <path
-          data-name="c1/wallet"
-          d="M19.55 21H3.45A3.479 3.479 0 010 17.5v-14A3.479 3.479 0 013.45 0h13.8a3.479 3.479 0 013.45 3.5v1.366a3.5 3.5 0 012.3 3.3V17.5a3.479 3.479 0 01-3.45 3.5zM3.45 7A1.16 1.16 0 002.3 8.167V17.5a1.16 1.16 0 001.15 1.167h16.1A1.16 1.16 0 0020.7 17.5V8.167A1.16 1.16 0 0019.55 7zm0-4.667a1.167 1.167 0 000 2.333H18.4V3.5a1.16 1.16 0 00-1.15-1.167z"
-        />
-      </g>
+      <path
+        d="M20.6389 12.3957H16.5906C15.1042 12.3948 13.8993 11.1909 13.8984 9.70446C13.8984 8.21801 15.1042 7.01409 16.5906 7.01318H20.6389"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.0485 9.6427H16.7369"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6.74766 1H15.3911C18.2892 1 20.6388 3.34951 20.6388 6.24766V13.4247C20.6388 16.3229 18.2892 18.6724 15.3911 18.6724H6.74766C3.84951 18.6724 1.5 16.3229 1.5 13.4247V6.24766C1.5 3.34951 3.84951 1 6.74766 1Z"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6.03564 5.5382H11.4346"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

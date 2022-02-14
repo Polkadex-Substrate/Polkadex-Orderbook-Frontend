@@ -9,4 +9,5 @@ export type Props = {
   isToken?: boolean;
   background?: Colors;
   color?: Colors;
+  stroke?: Colors;
 } & HTMLAttributes<HTMLDivElement>;
