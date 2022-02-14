@@ -1,5 +1,6 @@
 // TODO: Fix change colorTheme & Mobile version
 
+
 import * as React from "react";
 import { connect, MapDispatchToPropsFunction, MapStateToProps } from "react-redux";
 
@@ -258,38 +259,6 @@ export class TradingChartComponent extends React.PureComponent<Props> {
 
       this.setChart(markets, nextMarket || currentMarket, colorTheme);
     }
-  };
-
-  private languageIncluded = (lang: string) => {
-    return [
-      "ar",
-      "zh",
-      "cs",
-      "da_DK",
-      "nl_NL",
-      "en",
-      "et_EE",
-      "fr",
-      "de",
-      "el",
-      "he_IL",
-      "hu_HU",
-      "id_ID",
-      "it",
-      "ja",
-      "ko",
-      "fa",
-      "pl",
-      "pt",
-      "ro",
-      "ru",
-      "sk_SK",
-      "es",
-      "sv",
-      "th",
-      "tr",
-      "vi",
-    ].includes(lang);
   };
 }
 

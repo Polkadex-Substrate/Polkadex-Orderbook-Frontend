@@ -11,16 +11,18 @@ import {
   klineFetchChannelFetch,
   recentTradesChannelFetch,
 } from "@polkadex/orderbook-modules";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
 
 export function* rabbitmqConnectionSaga() {
+
   try {
     const amqp = new AMQPWebSocketClient(
       url,
-      "uwkbvyaj",
-      "uwkbvyaj",
-      "ZkWyU-ZFryl7QFz3WAZR6PWMMhhx43Rk"
+      defaultConfig.amqpWsUsername,
+      defaultConfig.amqpWsUsername,
+      defaultConfig.amqpWsPassword
     );
     const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
