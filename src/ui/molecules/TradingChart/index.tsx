@@ -260,38 +260,6 @@ export class TradingChartComponent extends React.PureComponent<Props> {
       this.setChart(markets, nextMarket || currentMarket, colorTheme);
     }
   };
-
-  private languageIncluded = (lang: string) => {
-    return [
-      "ar",
-      "zh",
-      "cs",
-      "da_DK",
-      "nl_NL",
-      "en",
-      "et_EE",
-      "fr",
-      "de",
-      "el",
-      "he_IL",
-      "hu_HU",
-      "id_ID",
-      "it",
-      "ja",
-      "ko",
-      "fa",
-      "pl",
-      "pt",
-      "ro",
-      "ru",
-      "sk_SK",
-      "es",
-      "sv",
-      "th",
-      "tr",
-      "vi",
-    ].includes(lang);
-  };
 }
 
 const reduxProps: MapStateToProps<ReduxProps, Record<string, unknown>, RootState> = (
