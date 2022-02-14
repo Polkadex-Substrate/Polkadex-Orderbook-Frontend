@@ -6,10 +6,16 @@ export const Main = styled.section<{ isFull?: boolean }>`
   ${({ isFull }) => css`
     grid-area: Graph;
     max-width: ${isFull ? "initial" : "70rem"};
+    display: flex;
+    flex-direction: column;
   `}
 `;
 export const Content = styled.div`
   height: 100%;
+
+  @media screen and (max-width: 700px) {
+    min-height: 35rem;
+  }
 `;
 
 // Header
@@ -76,5 +82,4 @@ export const TradingViewChart = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: #c1c1c133;
 `;

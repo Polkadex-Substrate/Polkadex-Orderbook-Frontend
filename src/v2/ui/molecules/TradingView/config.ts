@@ -1,4 +1,6 @@
-import { ThemeName } from "../../../../public/charting_library/charting_library.min";
+// TODO!: Verify and Clean code
+
+import { ThemeName } from "../../../../../public/charting_library/charting_library.min";
 
 import { DEFAULT_TRADING_VIEW_INTERVAL } from "@polkadex/web-constants";
 import { darkTheme, lightTheme } from "@polkadex/orderbook/styles/theme";
@@ -6,7 +8,9 @@ export const customWidgetParams = {};
 
 export const customWidgetOptions = (colorTheme?: string) => {
   const background =
-    colorTheme === "light" ? lightTheme.colors.inverse : darkTheme.colors.inverse;
+    colorTheme === "light"
+      ? lightTheme.colors.gradientBackground
+      : darkTheme.colors.gradientBackground;
   const red = darkTheme.colors.primary;
   const green = darkTheme.colors.green;
 
@@ -57,12 +61,11 @@ export const widgetOptions = (colorTheme?: string) => {
   return {
     allow_symbol_change: false,
     autosize: true,
-    calendar: true,
     client_id: "tradingview.com",
     custom_css_url: "/css/tradingview.css",
     debug: false,
     details: true,
-    disabled_features: ["use_localstorage_for_settings", "header_symbol_search"],
+    // disabled_features: ["use_localstorage_for_settings", "header_symbol_search"],
     enable_publishing: false,
     enabled_features: ["show_animated_logo"],
     fullscreen: false,
@@ -77,6 +80,7 @@ export const widgetOptions = (colorTheme?: string) => {
     timeframe: "1D",
     user_id: "public_user_id",
     withdateranges: false,
+    style: "2",
     ...customWidgetOptions(colorTheme),
   };
 };

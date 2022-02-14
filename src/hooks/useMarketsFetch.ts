@@ -1,3 +1,4 @@
+// TODO: check marketsFetch repeated useEffect
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 

@@ -7,3 +7,4 @@ export * from "./useDeveloper";
 export * from "./usePlaceOrder";
 export * from "./useInformation";
 export * from "./useAppearance";
+export * from "./useTradingView";

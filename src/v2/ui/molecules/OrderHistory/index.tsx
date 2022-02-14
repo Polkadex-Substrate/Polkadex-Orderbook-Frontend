@@ -1,7 +1,6 @@
-import { EmptyData, Logged } from "..";
-
 import * as S from "./styles";
 
+import { EmptyData, Logged } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { localeDate } from "@polkadex/web-helpers";
@@ -17,7 +16,7 @@ export const OrderHistory = () => {
         <>
           {!!openOrders.length || !!orders.length ? (
             <>
-              {openOrders.length &&
+              {!!openOrders.length &&
                 openOrders.map((order, i) => {
                   const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
                   const isSell = order.order_side === "Sell";
@@ -89,7 +88,7 @@ export const OrderHistory = () => {
                     </S.Card>
                   );
                 })}
-              {orders.length &&
+              {!!orders.length &&
                 orders.map((order, i) => {
                   const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
                   const isSell = order.order_side === "Sell";

@@ -45,7 +45,7 @@ export const Trading = () => {
           <Information onOpenMarkets={handleClose} />
           <Chart />
           <Orderbook />
-          <ExploreMarket />
+          {/* <ExploreMarket /> */}
         </S.Container>
         <PlaceOrder />
         <MyOrders />

@@ -98,6 +98,7 @@ export const Container = styled.div`
 
 export const Empty = styled.div`
   text-align: center;
+  padding: 5rem 1rem;
   img {
     margin-bottom: 1rem;
     max-width: 22rem;

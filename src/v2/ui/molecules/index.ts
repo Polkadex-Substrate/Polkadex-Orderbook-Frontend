@@ -15,3 +15,4 @@ export * from "./TradeHistory";
 export * from "./Appearance";
 export * from "./AccountOverview";
 export * from "./EmptyData";
+export * from "./TradingView";

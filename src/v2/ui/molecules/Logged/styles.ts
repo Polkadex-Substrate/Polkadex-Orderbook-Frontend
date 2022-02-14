@@ -9,6 +9,8 @@ export const Wrapper = styled.div`
 `;
 export const Container = styled.div`
   text-align: center;
+  padding: 3rem 1rem;
+
   ${({ theme }) => css`
     h2 {
       font-size: 1.8rem;

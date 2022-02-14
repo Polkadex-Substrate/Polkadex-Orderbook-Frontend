@@ -1,7 +1,6 @@
-import { EmptyData, Logged } from "..";
-
 import * as S from "./styles";
 
+import { EmptyData, Logged } from "@orderbook/v2/ui/molecules";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { localeDate } from "@polkadex/web-helpers";

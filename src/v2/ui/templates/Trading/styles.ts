@@ -39,7 +39,7 @@ export const Wrapper = styled.div`
       "GridContainer GridContainer"
       "MyOrders PlaceOrder"
       "News RecentTrades";
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: minmax(45rem, max-content) 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
 `;

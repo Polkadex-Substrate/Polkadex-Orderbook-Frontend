@@ -18,7 +18,7 @@ export const Main = styled.section`
 export const Header = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.text};
-    padding: 0.8rem;
+    padding: 0.5rem;
     border-radius: 1.2rem;
     display: flex;
     justify-content: space-between;

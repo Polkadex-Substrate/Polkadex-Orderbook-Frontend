@@ -11,6 +11,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  /* padding: 3rem 1rem; */
 `;
 
 export const Box = styled.div`

@@ -1,13 +1,18 @@
 import styled, { css } from "styled-components";
 
 export const Main = styled.section`
-  grid-area: Information;
-  padding: 1rem 1rem 0 1rem;
-  border-radius: 1.5rem;
-  display: grid;
-  grid-template-columns: fit-content(100%) auto;
-  grid-gap: 2rem;
-  align-items: center;
+  ${({ theme }) => css`
+    grid-area: Information;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: fit-content(100%) auto;
+    grid-gap: 2rem;
+    align-items: center;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (max-width: 830px) {
+      display: none;
+    }
+  `}
 `;
 
 export const AsideLeft = styled.div`

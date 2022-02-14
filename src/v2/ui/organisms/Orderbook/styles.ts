@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { Wrapper as EmptyData } from "@orderbook/v2/ui/molecules/EmptyData/styles";
+
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: Orderbook;
@@ -33,6 +35,12 @@ export const Content = styled.div`
   flex-flow: column nowrap;
   height: 100%;
   overflow: hidden;
+
+  @media screen and (max-width: 700px) {
+    ${EmptyData} {
+      padding: 3rem 1rem;
+    }
+  }
 `;
 
 export const Table = styled.div<{ isSell?: boolean }>`

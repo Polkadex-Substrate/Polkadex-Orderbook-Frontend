@@ -73,7 +73,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
         this.setChart(next.markets, next.currentMarket, next.colorTheme);
       }
     }
-    if (next.kline && next.kline !== this.props.kline) {      
+    if (next.kline && next.kline !== this.props.kline) {
       this.datafeed.onRealtimeCallback(next.kline);
     }
 
@@ -83,11 +83,47 @@ export class TradingChartComponent extends React.PureComponent<Props> {
   }
 
   public async componentDidMount() {
+    const { colorTheme, currentMarket, markets } = this.props;
+
+    if (currentMarket) {
+      this.setChart(markets, currentMarket, colorTheme);
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.tvWidget) {
+      try {
+        this.tvWidget.remove();
+      } catch (error) {
+        window.console.log(`TradingChart unmount failed: ${error}`);
+      }
+    }
+  }
+
+  public render() {
+    return (
+      <div
+        id={widgetParams.containerId}
+        style={{
+          background: "transparent",
+          height: "100%",
+          width: "100%",
+        }}
+        className="pg-trading-chart"
+      />
+    );
+  }
+
+  private setChart = async (markets: Market[], currentMarket: Market, colorTheme: string) => {
+    const { kline } = this.props;
+
+    const isMobileDevice = false;
+    this.datafeed = dataFeedObject(this, markets);
+
     const { widget } = await import(
       "../../../../public/charting_library/charting_library.min"
     );
 
-    const isMobileDevice = false;
     const disabledFeatures = {
       disabled_features: isMobileDevice
         ? [
@@ -141,46 +177,9 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     // eslint-disable-next-line new-cap
     this.tvWidget = new widget({
       ...defaultWidgetOptions,
-      ...widgetOptions(this.props.colorTheme),
+      ...widgetOptions(colorTheme),
       ...disabledFeatures,
     });
-
-    const { colorTheme, currentMarket, markets } = this.props;
-
-    if (currentMarket) {
-      this.setChart(markets, currentMarket, colorTheme);
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.tvWidget) {
-      try {
-        this.tvWidget.remove();
-      } catch (error) {
-        window.console.log(`TradingChart unmount failed: ${error}`);
-      }
-    }
-  }
-
-  public render() {
-    return (
-      <div
-        id={widgetParams.containerId}
-        style={{
-          background: "transparent",
-          height: "100%",
-          width: "100%",
-        }}
-        className="pg-trading-chart"
-      />
-    );
-  }
-
-  private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {    
-
-    const { kline } = this.props;
-    const isMobileDevice = false;
-    this.datafeed = dataFeedObject(this, markets);
 
     if (this.props.kline.period) {
       widgetParams.interval = String(periodStringToMinutes(this.props.kline.period));
@@ -216,7 +215,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     });
   };
 
-  private updateChart = (currentMarket: Market) => {    
+  private updateChart = (currentMarket: Market) => {
     if (this.tvWidget) {
       let symbolSet = false;
       const UPDATE_TIMEOUT = 3000;
