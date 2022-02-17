@@ -16,10 +16,14 @@ const defaultTicker = {
 export function useInformation() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const marketTickers = useReduxSelector(selectMarketTickers);
+  const currTicker = marketTickers["0-1"];
 
-  const getTickerValue = (value: string) =>
-    (marketTickers[currentMarket?.id] || defaultTicker)[value];
-
+  const getTickerValue = (value: string) => {
+    if (currTicker && Object.keys(currTicker).includes(value)) {
+      return currTicker[value];
+    }
+    return "0";
+  };
   return {
     pairName: currentMarket?.name,
     pairTicker: currentMarket?.tokenTickerName,

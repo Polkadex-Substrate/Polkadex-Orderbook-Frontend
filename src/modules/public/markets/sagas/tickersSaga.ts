@@ -37,8 +37,11 @@ export function* tickersSaga() {
   }
 }
 const getConvertedTickers = (ticker: any): Ticker => {
-  const price_change_percent =
+  let price_change_percent =
     ((Number(ticker.high) - Number(ticker.last)) / Number(ticker.last)) * 100;
+  if (isNaN(price_change_percent)) {
+    price_change_percent=0;
+  }
   return {
     ...ticker,
     price_change_percent: `${price_change_percent.toFixed(2)}%`,
