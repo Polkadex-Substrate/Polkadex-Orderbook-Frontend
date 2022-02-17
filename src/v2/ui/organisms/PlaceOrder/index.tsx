@@ -116,7 +116,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       <S.Available>
         <p>Available:</p>
         <span>
-          {availableAmount} {quoteTicker}
+          {availableAmount} {isSell ? baseTicker : quoteTicker}
         </span>
       </S.Available>
       <S.Box>

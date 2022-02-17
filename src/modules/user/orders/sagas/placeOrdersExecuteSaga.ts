@@ -12,6 +12,7 @@ import {
   userOrdersHistoryFetch,
 } from "../../..";
 import { notificationPush } from "../../notificationHandler";
+import { balancesFetch } from "../../balances";
 
 import { defaultConfig, API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -45,6 +46,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         yield delay(1000);
         yield put(orderExecuteDataDelete());
         yield put(userOrdersHistoryFetch());
+        yield put(balancesFetch());
       } else {
         throw new Error(res.Bad);
       }
