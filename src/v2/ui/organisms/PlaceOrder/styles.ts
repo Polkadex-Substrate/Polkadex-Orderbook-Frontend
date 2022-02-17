@@ -122,13 +122,20 @@ export const InputWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+
+    label {
+      padding-left: 1rem;
+      opacity: 0.6;
+    }
 
     input {
       font-size: 1.4rem;
-      width: 100%;
+      width: 50%;
       color: ${theme.colors.text};
       padding: 1.5rem 0 1.5rem 1.5rem;
     }
+  
     div {
       background: ${theme.colors.secondaryBackground};
       border-radius: 0.8rem;

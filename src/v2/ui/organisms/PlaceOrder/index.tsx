@@ -83,13 +83,15 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       {isLimit && (
         <S.FormInput>
           <S.InputWrapper>
+            <label htmlFor="order-price">Price</label>
             <input
-              type="text"
-              placeholder="Price"
-              value={price}
-              onChange={(e) => changePrice(e.currentTarget.value)}
-              disabled={isOrderLoading}
-            />
+                type="text"
+                placeholder=""
+                id="order-price"
+                value={price}
+                onChange={(e) => changePrice(e.currentTarget.value)}
+                disabled={isOrderLoading}
+              />
             <div>
               <span>{quoteTicker}</span>
             </div>
@@ -98,9 +100,11 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       )}
       <S.FormInput isVertical>
         <S.InputWrapper>
+        <label htmlFor="order-amount">Amount</label>
           <input
             type="text"
-            placeholder="Amount"
+            placeholder=""
+            id="order-amount"
             value={amount}
             onChange={(e) => changeAmount(e.currentTarget.value)}
             disabled={isOrderLoading}
