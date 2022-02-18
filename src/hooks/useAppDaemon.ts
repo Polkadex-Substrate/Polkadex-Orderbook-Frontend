@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { rabbitmqChannelFetch } from "../modules/public/rabbitmqChannel";
 import { marketsFetchSaga } from "../modules/public/markets/sagas/marketsFetchSaga";
+import { updateTickerWithTrade } from "../helpers/updateTickerWithTrade";
 
 import { useReduxSelector } from ".";
 
@@ -14,6 +15,7 @@ import {
   orderBookFetch,
   polkadotWalletFetch,
   selectCurrentMarket,
+  selectCurrentMarketTickers,
   selectCurrentTrade,
   selectHasUser,
   selectLastRecentTrade,
@@ -25,7 +27,7 @@ export const useAppDaemon = () => {
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTrade);
   const lastTrade = useReduxSelector(selectLastRecentTrade);
-
+  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   // basic initialization
   useEffect(() => {
     dispatch(rabbitmqChannelFetch());
@@ -55,7 +57,9 @@ export const useAppDaemon = () => {
   // intiatilize trade specific events
   useEffect(() => {
     if (currentTrade && lastTrade) {
-      dispatch(currentTickersUpdate({ last: currentTrade.price }));
+      const updatedTicker = updateTickerWithTrade(currentTrade, currentTicker);
+      dispatch(currentTickersUpdate(updatedTicker));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTrade, dispatch, lastTrade]);
 };
