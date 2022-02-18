@@ -17,7 +17,7 @@ import {
 import {
   Market,
   selectMarkets,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   setCurrentMarket,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -47,7 +47,7 @@ export const Markets = ({ marketActive = false }) => {
     marketsTabsSelected: "",
   });
 
-  const marketTickets = useReduxSelector(selectMarketTickers);
+  const marketTickets = useReduxSelector(selectCurrentMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const dispatch = useDispatch();
   const router = useRouter();

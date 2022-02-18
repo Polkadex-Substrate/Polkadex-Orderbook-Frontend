@@ -1,6 +1,6 @@
 import { getSymbolFromId, isNegative } from "../helpers";
 
-import { selectCurrentMarket, selectMarketTickers } from "@polkadex/orderbook-modules";
+import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
@@ -15,11 +15,14 @@ const defaultTicker = {
 
 export function useInformation() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const currTicker = useReduxSelector(selectCurrentMarketTickers);
 
-  const getTickerValue = (value: string) =>
-    (marketTickers[currentMarket?.id] || defaultTicker)[value];
-
+  const getTickerValue = (value: string) => {
+    if (currTicker && Object.keys(currTicker).includes(value)) {
+      return currTicker[value];
+    }
+    return "0";
+  };
   return {
     pairName: currentMarket?.name,
     pairTicker: currentMarket?.tokenTickerName,

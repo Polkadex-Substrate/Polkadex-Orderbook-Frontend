@@ -40,6 +40,7 @@ export interface Ticker {
   last: string;
   previous_close: string;
   price_change_percent: string;
+  volume?: string;
   average: string;
 }
 

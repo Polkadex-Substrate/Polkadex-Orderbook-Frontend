@@ -9,7 +9,6 @@ import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers
 
 export const OrderHistory = () => {
   const { priceFixed, amountFixed, orders, userLoggedIn, openOrders } = useOrderHistory();
-
   return (
     <>
       {userLoggedIn ? (
@@ -20,8 +19,11 @@ export const OrderHistory = () => {
                 openOrders.map((order, i) => {
                   const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
                   const isSell = order.order_side === "Sell";
+                  const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
+                  const filledPercent = (Number(order.filled_qty) * 100).toFixed(2);
+
                   return (
                     <S.Card key={i} isOpenOrder={true}>
                       <S.CardWrapper>
@@ -45,16 +47,18 @@ export const OrderHistory = () => {
                           <span>{order.order_type}</span>
                           <p>Type</p>
                         </S.CardInfo>
-                        <S.CardInfo>
-                          <span>{Decimal.format(order.price, priceFixed, ",")}</span>
-                          <p>Price</p>
-                        </S.CardInfo>
+                        {isLimit && (
+                          <S.CardInfo>
+                            <span>{Decimal.format(order.price, priceFixed, ",")}</span>
+                            <p>Limit</p>
+                          </S.CardInfo>
+                        )}
                         <S.CardInfo>
                           <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{order.filled_qty}%</span>
+                          <span>{filledPercent}%</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>
@@ -92,9 +96,10 @@ export const OrderHistory = () => {
                 orders.map((order, i) => {
                   const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
                   const isSell = order.order_side === "Sell";
+                  const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
-
+                  const filledPercent = (Number(order.filled_qty) * 100).toFixed(2);
                   return (
                     <S.Card key={i}>
                       <S.CardWrapper>
@@ -118,16 +123,18 @@ export const OrderHistory = () => {
                           <span>{order.order_type}</span>
                           <p>Type</p>
                         </S.CardInfo>
-                        <S.CardInfo>
-                          <span>{Decimal.format(order.price, priceFixed, ",")}</span>
-                          <p>Price</p>
-                        </S.CardInfo>
+                        {isLimit && (
+                          <S.CardInfo>
+                            <span>{Decimal.format(order.price, priceFixed, ",")}</span>
+                            <p>Limit</p>
+                          </S.CardInfo>
+                        )}
                         <S.CardInfo>
                           <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{order.filled_qty}%</span>
+                          <span>{filledPercent}%</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>

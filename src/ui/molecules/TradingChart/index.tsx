@@ -28,7 +28,7 @@ import {
   selectCurrentMarket,
   selectKline,
   selectMarkets,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
 } from "@polkadex/orderbook-modules";
 
 interface ReduxProps {
@@ -269,7 +269,7 @@ const reduxProps: MapStateToProps<ReduxProps, Record<string, unknown>, RootState
   colorTheme: selectCurrentColorTheme(state),
   chartRebuild: selectChartRebuildState(state),
   currentMarket: selectCurrentMarket(state),
-  tickers: selectMarketTickers(state),
+  tickers: selectCurrentMarketTickers(state),
   kline: selectKline(state),
 });
 

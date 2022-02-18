@@ -52,8 +52,10 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   /**
    * @description -Get Volume of ther orders
    */
-  const valumeData = mapValues(maxVolume, accumulateVolume(orders));
-
+  const cumulativeVolume = isSell
+    ? accumulateVolume(orders.slice(0).reverse()).slice(0).reverse()
+    : accumulateVolume(orders);
+  const valumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
     // Make sure the scroll is always down
     if (isSell && !!contentRef?.current)
@@ -67,8 +69,6 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     changeMarketPrice,
     priceFixed: currentMarket?.price_precision || 0,
     amountFixed: currentMarket?.amount_precision || 0,
-    total: isSell
-      ? accumulateVolume(orders)
-      : accumulateVolume(orders.slice(0).reverse()).slice(0).reverse(),
+    total: cumulativeVolume,
   };
 }

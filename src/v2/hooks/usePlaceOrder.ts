@@ -7,7 +7,7 @@ import { cleanPositiveFloatInput, precisionRegExp } from "@polkadex/web-helpers"
 import {
   selectCurrentMarket,
   selectCurrentPrice,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   setCurrentPrice,
   selectUserBalance,
   selectBestAskPrice,
@@ -24,7 +24,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const balances = useReduxSelector(selectUserBalance);
   const bestAskPrice = useReduxSelector(selectBestAskPrice);
@@ -32,8 +32,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasUser = useReduxSelector(selectHasUser);
-
-  const currentTicker = marketTickers[currentMarket?.id];
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
@@ -60,14 +58,15 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    * @param {string} assetId - The token id
    * @returns {string} balance amount
    */
-  const getBalance = (assetId: string): string => {
-    if (balances?.length) {
-      const asset = balances.findIndex((asset) => asset.ticker === assetId);
-      return asset >= 0 ? balances[asset].free : "0";
-    } else return "0";
+  const getBalance = (assetid: string) => {
+    if (balances.length > 0) {
+      const data = balances.find((value) => value.ticker === assetid);
+      return data ? data.free : "0";
+    }
+    return "0";
   };
 
-  const availableBaseAmount = getBalance(baseAssetId.toString());
+  const availableBaseAmount = getBalance(baseAssetId?.toString());
   const availableQuoteAmount = getBalance(quoteAssetId?.toString());
   const quoteTicker = getSymbolFromId("quote", currentMarket?.symbolArray);
   const baseTicker = getSymbolFromId("base", currentMarket?.symbolArray);
@@ -284,8 +283,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     buttonDisabled: isDisabled,
     isOrderLoading,
     isOrderExecuted,
-    quoteTicker: isSell ? quoteTicker : baseTicker,
-    baseTicker: isSell ? baseTicker : quoteTicker,
+    quoteTicker,
+    baseTicker,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser,
   };

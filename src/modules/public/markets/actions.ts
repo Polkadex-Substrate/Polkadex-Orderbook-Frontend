@@ -1,3 +1,5 @@
+import { TypeOf } from "yup";
+
 import { CommonError } from "../../types";
 
 import {
@@ -13,6 +15,9 @@ import {
   MARKET_PRICE_FETCH,
   MARKET_PRICE_DATA,
   MARKET_PRICE_ERROR,
+  MARKET_CURRENT_TICKERS_DATA,
+  MARKET_CURRENT_TICKERS_FETCH,
+  MARKET_CURRENT_TICKERS_UPDATE,
 } from "./constants";
 import { Market, Ticker, TickerEvent, MarketPriceInterface } from "./types";
 
@@ -60,7 +65,23 @@ export interface MarketsTickersData {
     [pair: string]: Ticker;
   };
 }
+export interface CurrentTickersFetch {
+  type: typeof MARKET_CURRENT_TICKERS_FETCH;
+  payload: {
+    marketId: string;
+  };
+}
+export interface CurrentTickersData {
+  type: typeof MARKET_CURRENT_TICKERS_DATA;
+  payload: {
+    ticker: Ticker;
+  };
+}
 
+export interface CurrentTickersUpdate {
+  type: typeof MARKET_CURRENT_TICKERS_UPDATE;
+  payload: Partial<Ticker>;
+}
 export interface MarketsTickersError {
   type: typeof MARKETS_TICKERS_ERROR;
   error: CommonError;
@@ -95,7 +116,10 @@ export type MarketsAction =
   | SetCurrentMarketIfUnset
   | MarketPriceFetch
   | MarketPriceData
-  | MarketPriceError;
+  | MarketPriceError
+  | CurrentTickersFetch
+  | CurrentTickersData
+  | CurrentTickersUpdate;
 
 export const marketsFetch = (payload?: MarketsFetch["payload"]): MarketsFetch => ({
   type: MARKETS_FETCH,
@@ -144,6 +168,27 @@ export const marketsTickersPush = (
   payload: MarketsTickersPush["payload"]
 ): MarketsTickersPush => ({
   type: MARKETS_TICKERS_PUSH,
+  payload,
+});
+
+export const currentTickersData = (
+  payload: CurrentTickersData["payload"]
+): CurrentTickersData => ({
+  type: MARKET_CURRENT_TICKERS_DATA,
+  payload,
+});
+
+export const currentTickerFetch = (
+  payload: CurrentTickersFetch["payload"]
+): CurrentTickersFetch => ({
+  type: MARKET_CURRENT_TICKERS_FETCH,
+  payload,
+});
+
+export const currentTickersUpdate = (
+  payload: CurrentTickersUpdate["payload"]
+): CurrentTickersUpdate => ({
+  type: MARKET_CURRENT_TICKERS_UPDATE,
   payload,
 });
 

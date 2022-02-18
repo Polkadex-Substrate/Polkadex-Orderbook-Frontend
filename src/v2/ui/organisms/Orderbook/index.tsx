@@ -49,8 +49,8 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
       {orders.length ? (
         <S.Table isSell={isSell} ref={contentRef}>
           <S.Head>
-            <S.CellHead>Price({baseUnit})</S.CellHead>
-            <S.CellHead>Amount({quoteUnit})</S.CellHead>
+            <S.CellHead>Price({quoteUnit})</S.CellHead>
+            <S.CellHead>Amount({baseUnit})</S.CellHead>
             <S.CellHead>Total({quoteUnit})</S.CellHead>
           </S.Head>
           <S.Body>

@@ -10,7 +10,7 @@ import {
   selectDepthAsks,
   selectDepthBids,
   selectLastRecentTrade,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   setCurrentPrice,
   Ticker,
 } from "@polkadex/orderbook-modules";
@@ -28,7 +28,7 @@ export const Orderbook = () => {
   const asks = useReduxSelector(selectDepthAsks);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const marketTickers = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) =>
     tickers[currentMarket?.id];

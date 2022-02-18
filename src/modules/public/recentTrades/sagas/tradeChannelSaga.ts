@@ -9,7 +9,7 @@ import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
-import { DEFAULT_RANDOM_STRING_LENGTH, QUEUE_EXPIRY_TIME } from "@polkadex/web-constants";
+import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
 
 export function* fetchTradeChannelSaga() {
   try {
@@ -25,7 +25,8 @@ export function* fetchTradeChannelSaga() {
         const tradesMsg = yield take(channel);
         const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
-        yield put(recentTradesData([data, ...trades]));
+        const tradesArray = [data, ...trades];
+        yield put(recentTradesData(tradesArray));
       }
     }
   } catch (error) {

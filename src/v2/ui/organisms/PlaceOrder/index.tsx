@@ -110,7 +110,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             disabled={isOrderLoading}
           />
           <div>
-            <span>{baseTicker}</span>
+            <span>{isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}</span>
           </div>
         </S.InputWrapper>
         <AvailableMessage message="Soon">
@@ -120,7 +120,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       <S.Available>
         <p>Available:</p>
         <span>
-          {availableAmount} {quoteTicker}
+          {availableAmount} {isSell ? baseTicker : quoteTicker}
         </span>
       </S.Available>
       <S.Box>

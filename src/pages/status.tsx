@@ -12,7 +12,7 @@ import {
   selectCurrentMarket,
   selectMarkets,
   selectMarketsLoading,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useBarong } from "@polkadex/orderbook-hooks";
 import * as S from "src/styles/status";
@@ -27,7 +27,7 @@ function Home() {
   const marketsIsLoading = useReduxSelector(selectMarketsLoading);
 
   // Tickers
-  const tickers = useReduxSelector(selectMarketTickers);
+  const tickers = useReduxSelector(selectCurrentMarketTickers);
 
   // Tickers
   const currencies = useReduxSelector(selectCurrencies);

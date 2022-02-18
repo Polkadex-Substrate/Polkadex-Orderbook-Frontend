@@ -1,13 +1,8 @@
 import { CommonError } from "../../types";
 
 import { RecentTradesActions } from "./actions";
-import {
-  RECENT_TRADES_DATA,
-  RECENT_TRADES_ERROR,
-  RECENT_TRADES_FETCH,
-  RECENT_TRADES_PUSH,
-} from "./constants";
-import { PublicTrade, PublicTradeEvent } from "./types";
+import { RECENT_TRADES_DATA, RECENT_TRADES_ERROR, RECENT_TRADES_FETCH } from "./constants";
+import { PublicTrade } from "./types";
 
 import { sliceArray } from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";
@@ -17,6 +12,7 @@ const { defaultStorageLimit } = defaultConfig;
 export interface RecentTradesState {
   list: PublicTrade[];
   loading: boolean;
+  currentTrade?: PublicTrade;
   lastTrade?: PublicTrade;
   error?: CommonError;
 }
@@ -32,7 +28,8 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
       return {
         list: sliceArray(action.payload, defaultStorageLimit),
         loading: false,
-        lastTrade: action.payload[0],
+        currentTrade: action.payload[0],
+        lastTrade: action.payload[1],
       };
     }
     case RECENT_TRADES_ERROR: {
