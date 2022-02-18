@@ -22,7 +22,7 @@ export const OrderHistory = () => {
                   const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
-                  const filledPercent = (Number(order.filled_qty) * 100).toFixed(2);
+                  const filled = Number(order.filled_qty).toFixed(2);
 
                   return (
                     <S.Card key={i} isOpenOrder={true}>
@@ -58,7 +58,7 @@ export const OrderHistory = () => {
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{filledPercent}%</span>
+                          <span>{filled}%</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>
@@ -99,7 +99,7 @@ export const OrderHistory = () => {
                   const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
-                  const filledPercent = (Number(order.filled_qty) * 100).toFixed(2);
+                  const filled = Number(order.filled_qty).toFixed(2);
                   return (
                     <S.Card key={i}>
                       <S.CardWrapper>
@@ -134,7 +134,7 @@ export const OrderHistory = () => {
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{filledPercent}%</span>
+                          <span>{filled}%</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>
