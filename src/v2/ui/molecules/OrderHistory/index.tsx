@@ -17,7 +17,7 @@ export const OrderHistory = () => {
             <>
               {!!openOrders.length &&
                 openOrders.map((order, i) => {
-                  const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
+                  const date = new Date(Number(order.timestamp)).toLocaleTimeString();
                   const isSell = order.order_side === "Sell";
                   const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
@@ -94,7 +94,7 @@ export const OrderHistory = () => {
                 })}
               {!!orders.length &&
                 orders.map((order, i) => {
-                  const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
+                  const date = new Date(Number(order.timestamp)).toLocaleTimeString();
                   const isSell = order.order_side === "Sell";
                   const isLimit = order.order_type === "Limit";
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
