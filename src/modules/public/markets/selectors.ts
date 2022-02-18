@@ -1,7 +1,7 @@
 import { RootState } from "../../";
 
 import { MarketsState } from "./reducer";
-import { Market } from "./types";
+import { Market, Ticker } from "./types";
 
 import { FilterPrice } from "@polkadex/web-helpers";
 
@@ -24,8 +24,8 @@ export const selectCurrentMarket = (state: RootState): Market | undefined =>
 export const selectCurrentMarketFilters = (state: RootState): FilterPrice =>
   selectMarketFilters(state)[(selectCurrentMarket(state) || { id: "" }).id];
 
-export const selectMarketTickers = (state: RootState): MarketsState["tickers"] =>
-  selectMarketsState(state).tickers;
+export const selectCurrentMarketTickers = (state: RootState): Ticker =>
+  selectMarketsState(state).currentTicker;
 
 export const selectShouldFetchMarkets = (state: RootState): boolean =>
   !selectMarketsTimestamp(state) && !selectMarketsLoading(state);

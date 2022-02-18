@@ -13,20 +13,29 @@ import {
   MARKET_PRICE_FETCH,
   MARKET_PRICE_DATA,
   MARKET_PRICE_ERROR,
+  MARKET_CURRENT_TICKERS_DATA,
 } from "./constants";
 import { Market, Ticker } from "./types";
 
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
-
+export const defaultTickers = {
+  amount: "0",
+  low: "0",
+  last: "0",
+  high: "0",
+  volume: "0",
+  price_change_percent: "0.00%",
+  previous_close: "0",
+  average: "0",
+  timestamp: 0,
+};
 export interface MarketsState extends CommonState {
   list: Market[];
   filters: {
     [marketId: string]: FilterPrice;
   };
   currentMarket: Market | undefined;
-  tickers: {
-    [pair: string]: Ticker;
-  };
+  currentTicker: Ticker;
   tickerLoading: boolean;
   loading: boolean;
   timestamp?: number;
@@ -45,7 +54,7 @@ export const initialMarketsState: MarketsState = {
   list: [],
   filters: {},
   currentMarket: undefined,
-  tickers: {},
+  currentTicker: defaultTickers,
   tickerLoading: false,
   loading: false,
   successMarketPriceFetch: false,
@@ -118,7 +127,13 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
       return {
         ...state,
         tickerLoading: false,
-        tickers: action.payload,
+        tickers: action.payload.ticker,
+      };
+    case MARKET_CURRENT_TICKERS_DATA:
+      return {
+        ...state,
+        tickerLoading: false,
+        currentTicker: action.payload.ticker,
       };
     case MARKETS_TICKERS_ERROR:
       return {

@@ -7,7 +7,7 @@ import {
   selectDepthAsks,
   selectDepthBids,
   selectLastRecentTrade,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   selectOpenOrdersList,
   setCurrentPrice,
   Ticker,
@@ -32,7 +32,7 @@ export const useOrderbook = () => {
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const marketTickers = useReduxSelector(selectCurrentMarketTickers);
   const openOrdersList = useReduxSelector(selectOpenOrdersList);
 
   const dispatch = useDispatch();

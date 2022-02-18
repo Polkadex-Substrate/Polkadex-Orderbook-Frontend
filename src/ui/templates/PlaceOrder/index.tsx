@@ -9,7 +9,7 @@ import {
   selectCurrentMarket,
   selectCurrentPrice,
   selectDepthAsks,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   selectWallets,
   Wallet,
   setCurrentPrice,
@@ -29,7 +29,7 @@ export const PlaceOrder = () => {
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const asks = useReduxSelector(selectDepthAsks);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const marketTickers = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const balances = useReduxSelector(selectUserBalance);
 

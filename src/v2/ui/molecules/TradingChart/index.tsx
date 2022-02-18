@@ -27,7 +27,7 @@ import {
   selectCurrentMarket,
   selectKline,
   selectMarkets,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
 } from "@polkadex/orderbook-modules";
 
 interface ReduxProps {
@@ -73,7 +73,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
         this.setChart(next.markets, next.currentMarket, next.colorTheme);
       }
     }
-    if (next.kline && next.kline !== this.props.kline) {      
+    if (next.kline && next.kline !== this.props.kline) {
       this.datafeed.onRealtimeCallback(next.kline);
     }
 
@@ -176,8 +176,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     );
   }
 
-  private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {    
-
+  private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {
     const { kline } = this.props;
     const isMobileDevice = false;
     this.datafeed = dataFeedObject(this, markets);
@@ -216,7 +215,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     });
   };
 
-  private updateChart = (currentMarket: Market) => {    
+  private updateChart = (currentMarket: Market) => {
     if (this.tvWidget) {
       let symbolSet = false;
       const UPDATE_TIMEOUT = 3000;
@@ -301,7 +300,7 @@ const reduxProps: MapStateToProps<ReduxProps, Record<string, unknown>, RootState
   colorTheme: selectCurrentColorTheme(state),
   chartRebuild: selectChartRebuildState(state),
   currentMarket: selectCurrentMarket(state),
-  tickers: selectMarketTickers(state),
+  tickers: selectCurrentMarketTickers(state),
   kline: selectKline(state),
 });
 

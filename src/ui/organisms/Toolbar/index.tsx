@@ -8,7 +8,7 @@ import {
   Information,
   SelectPairHeader,
 } from "@polkadex/orderbook-ui/molecules";
-import { selectCurrentMarket, selectMarketTickers } from "@polkadex/orderbook-modules";
+import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Markets } from "@polkadex/orderbook-ui/organisms";
@@ -24,7 +24,7 @@ const defaultTicker = {
 
 export const Toolbar = () => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const marketTickers = useReduxSelector(selectCurrentMarketTickers);
   const currTicker = marketTickers["0-1"];
 
   const getTickerValue = (value: string) => {

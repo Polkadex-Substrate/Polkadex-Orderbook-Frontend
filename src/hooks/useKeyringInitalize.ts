@@ -9,6 +9,7 @@ import { useReduxSelector } from ".";
 import {
   balanceChannelFetch,
   balancesFetch,
+  currentTickerFetch,
   orderBookFetch,
   polkadotWalletFetch,
   selectCurrentMarket,
@@ -19,7 +20,6 @@ export const useKeyringInitalize = () => {
   const dispatch = useDispatch();
   const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
-
   // basic initialization
   useEffect(() => {
     dispatch(rabbitmqChannelFetch());
@@ -28,8 +28,12 @@ export const useKeyringInitalize = () => {
 
   // intitialize market dependent events
   useEffect(() => {
-    // dispatch(rangerConnectFetch());
-    dispatch(orderBookFetch(market));
+    if (market) {
+      const tickerMarketId = `${market.symbolArray[0]}-${market.symbolArray[1]}`;
+      // dispatch(rangerConnectFetch());
+      dispatch(orderBookFetch(market));
+      dispatch(currentTickerFetch({ marketId: tickerMarketId }));
+    }
   }, [dispatch, market]);
 
   // initialize user specific sagas

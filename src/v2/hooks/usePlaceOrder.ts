@@ -7,7 +7,7 @@ import { cleanPositiveFloatInput, precisionRegExp } from "@polkadex/web-helpers"
 import {
   selectCurrentMarket,
   selectCurrentPrice,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   setCurrentPrice,
   selectUserBalance,
   selectBestAskPrice,
@@ -24,7 +24,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const marketTickers = useReduxSelector(selectMarketTickers);
+  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
   const balances = useReduxSelector(selectUserBalance);
   const bestAskPrice = useReduxSelector(selectBestAskPrice);
@@ -32,8 +32,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasUser = useReduxSelector(selectHasUser);
-
-  const currentTicker = marketTickers[currentMarket?.id];
 
   const [tab, setTab] = useState({
     priceLimit: undefined,

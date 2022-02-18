@@ -6,22 +6,11 @@ import {
   Market,
   selectCurrentMarket,
   selectMarkets,
-  selectMarketTickers,
+  selectCurrentMarketTickers,
   setCurrentMarket,
+  defaultTickers,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-
-const defaultTickers = {
-  amount: 0,
-  low: 0,
-  last: 0,
-  high: 0,
-  volume: 0,
-  price_change_percent: "+0.00%",
-};
-
-type DefaultTickers = "amount" | "low" | "high" | "last" | "volume" | "price_change_percent";
-
 export type InitialMarkets = {
   last: string | number;
   volume: string | number;
@@ -38,7 +27,7 @@ export function useMarkets() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const marketTickets = useReduxSelector(selectMarketTickers);
+  const marketTickets = useReduxSelector(selectCurrentMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
@@ -95,11 +84,11 @@ export function useMarkets() {
     const allTickets = markets.map((item) => {
       return {
         ...item,
-        last: (marketTickets[item.id] || defaultTickers).last,
-        volume: (marketTickets[item.id] || defaultTickers).volume,
-        price_change_percent: (marketTickets[item.id] || defaultTickers).price_change_percent,
+        last: (marketTickets || defaultTickers).last,
+        volume: (marketTickets || defaultTickers).volume,
+        price_change_percent: (marketTickets || defaultTickers).price_change_percent,
         price_change_percent_num: Number.parseFloat(
-          (marketTickets[item.id] || defaultTickers).price_change_percent
+          (marketTickets || defaultTickers).price_change_percent
         ),
       };
     });
