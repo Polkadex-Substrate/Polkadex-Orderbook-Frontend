@@ -58,7 +58,7 @@ export const OrderHistory = () => {
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{filled}%</span>
+                          <span>{filled}</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>
@@ -134,7 +134,7 @@ export const OrderHistory = () => {
                           <p>Amount</p>
                         </S.CardInfo>
                         <S.CardInfo>
-                          <span>{filled}%</span>
+                          <span>{filled}</span>
                           <p>Filled</p>
                         </S.CardInfo>
                         <S.CardInfo>
