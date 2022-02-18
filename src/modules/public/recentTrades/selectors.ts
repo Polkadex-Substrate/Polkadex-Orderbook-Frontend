@@ -4,6 +4,9 @@ import { selectCurrentMarket } from "../markets";
 export const selectRecentTrades = (state: RootState): PublicTrade[] =>
   state.public.recentTrades.list;
 
+export const selectCurrentTrade = (state: RootState): PublicTrade | undefined =>
+  state.public.recentTrades.currentTrade;
+
 export const selectLastRecentTrade = (state: RootState): PublicTrade | undefined =>
   state.public.recentTrades.lastTrade;
 

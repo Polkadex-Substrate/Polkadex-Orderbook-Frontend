@@ -3,7 +3,7 @@ export * from "./useMarketsFetch";
 export * from "./useBarong";
 export * from "./useExtrinsics";
 export * from "./useMnemonic";
-export * from "./useKeyringInitalize";
+export * from "./useAppDaemon";
 export * from "./useReduxSelector";
 export * from "./useOrderBookMarketsFetch";
 export * from "./useMarketsTickersFetch";

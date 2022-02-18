@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
 import { wrapper } from "../store";
+import { useAppDaemon } from "../hooks/useAppDaemon";
 
 import { Message } from "@polkadex/orderbook-ui/organisms";
 import { Notifications } from "@orderbook/v2/ui/organisms";
@@ -14,12 +15,11 @@ import {
   selectCurrentColorTheme,
   selectNotificationState,
 } from "@polkadex/orderbook-modules";
-import { useKeyringInitalize } from "@polkadex/orderbook-hooks";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { NotificationCard } from "@polkadex/orderbook-ui/molecules";
 
 function App({ Component, pageProps }: AppProps) {
-  useKeyringInitalize();
+  useAppDaemon();
   return (
     <ThemeWrapper>
       <GlobalStyles />

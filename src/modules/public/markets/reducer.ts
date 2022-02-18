@@ -14,6 +14,7 @@ import {
   MARKET_PRICE_DATA,
   MARKET_PRICE_ERROR,
   MARKET_CURRENT_TICKERS_DATA,
+  MARKET_CURRENT_TICKERS_UPDATE,
 } from "./constants";
 import { Market, Ticker } from "./types";
 
@@ -135,6 +136,13 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
         tickerLoading: false,
         currentTicker: action.payload.ticker,
       };
+    case MARKET_CURRENT_TICKERS_UPDATE: {
+      const updatedTicker = { ...state.currentTicker, ...action.payload };
+      return {
+        ...state,
+        currentTicker: updatedTicker,
+      };
+    }
     case MARKETS_TICKERS_ERROR:
       return {
         ...state,

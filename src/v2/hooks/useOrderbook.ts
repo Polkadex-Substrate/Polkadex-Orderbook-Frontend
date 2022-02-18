@@ -4,8 +4,8 @@ import {
   selectCurrentMarket,
   selectDepthAsks,
   selectDepthBids,
-  selectLastRecentTrade,
   selectCurrentMarketTickers,
+  selectCurrentTrade,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -17,7 +17,7 @@ export function useOrderbook() {
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const lastRecentTrade = useReduxSelector(selectLastRecentTrade);
+  const lastRecentTrade = useReduxSelector(selectCurrentTrade);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
 
   const lastPrice = Number(lastRecentTrade?.price);

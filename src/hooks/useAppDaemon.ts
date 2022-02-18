@@ -10,16 +10,22 @@ import {
   balanceChannelFetch,
   balancesFetch,
   currentTickerFetch,
+  currentTickersUpdate,
   orderBookFetch,
   polkadotWalletFetch,
   selectCurrentMarket,
+  selectCurrentTrade,
   selectHasUser,
+  selectLastRecentTrade,
 } from "@polkadex/orderbook-modules";
 
-export const useKeyringInitalize = () => {
+export const useAppDaemon = () => {
   const dispatch = useDispatch();
   const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
+  const currentTrade = useReduxSelector(selectCurrentTrade);
+  const lastTrade = useReduxSelector(selectLastRecentTrade);
+
   // basic initialization
   useEffect(() => {
     dispatch(rabbitmqChannelFetch());
@@ -45,4 +51,11 @@ export const useKeyringInitalize = () => {
       }
     }
   }, [dispatch, hasUser]);
+
+  // intiatilize trade specific events
+  useEffect(() => {
+    if (currentTrade && lastTrade) {
+      dispatch(currentTickersUpdate({ last: currentTrade.price }));
+    }
+  }, [currentTrade, dispatch, lastTrade]);
 };

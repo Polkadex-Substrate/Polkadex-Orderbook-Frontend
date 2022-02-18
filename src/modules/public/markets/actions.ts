@@ -17,6 +17,7 @@ import {
   MARKET_PRICE_ERROR,
   MARKET_CURRENT_TICKERS_DATA,
   MARKET_CURRENT_TICKERS_FETCH,
+  MARKET_CURRENT_TICKERS_UPDATE,
 } from "./constants";
 import { Market, Ticker, TickerEvent, MarketPriceInterface } from "./types";
 
@@ -77,6 +78,10 @@ export interface CurrentTickersData {
   };
 }
 
+export interface CurrentTickersUpdate {
+  type: typeof MARKET_CURRENT_TICKERS_UPDATE;
+  payload: Partial<Ticker>;
+}
 export interface MarketsTickersError {
   type: typeof MARKETS_TICKERS_ERROR;
   error: CommonError;
@@ -112,7 +117,9 @@ export type MarketsAction =
   | MarketPriceFetch
   | MarketPriceData
   | MarketPriceError
-  | CurrentTickersData;
+  | CurrentTickersFetch
+  | CurrentTickersData
+  | CurrentTickersUpdate;
 
 export const marketsFetch = (payload?: MarketsFetch["payload"]): MarketsFetch => ({
   type: MARKETS_FETCH,
@@ -175,6 +182,13 @@ export const currentTickerFetch = (
   payload: CurrentTickersFetch["payload"]
 ): CurrentTickersFetch => ({
   type: MARKET_CURRENT_TICKERS_FETCH,
+  payload,
+});
+
+export const currentTickersUpdate = (
+  payload: CurrentTickersUpdate["payload"]
+): CurrentTickersUpdate => ({
+  type: MARKET_CURRENT_TICKERS_UPDATE,
   payload,
 });
 
