@@ -1,6 +1,5 @@
 // TODO: Fix change colorTheme & Mobile version
 
-
 import * as React from "react";
 import { connect, MapDispatchToPropsFunction, MapStateToProps } from "react-redux";
 
