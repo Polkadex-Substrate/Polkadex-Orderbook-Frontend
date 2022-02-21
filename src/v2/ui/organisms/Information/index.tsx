@@ -36,13 +36,13 @@ export const Information = ({ onOpenMarkets }) => {
             title={`24h High(${quoteUnit})`}
             description={priceHigh}
             isHorizontal
-            textColor="primary"
+            textColor="green"
           />
           <Card
             title={`24h Low(${quoteUnit})`}
             description={priceLow}
             isHorizontal
-            textColor="green"
+            textColor="primary"
           />
         </S.Group>
       </S.AsideRight>
