@@ -227,7 +227,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const total = useMemo(() => {
     return form.amountSell || form.amountBuy
       ? getEstimatedTotal(
-          Number(isSell ? form.amountSell : form.amountBuy) *
+          Number(isLimit ? (isSell ? form.amountSell : form.amountBuy) : 1) *
             Number(isLimit ? form.price : Number(estimatedTotal[isSell ? "sell" : "buy"])) || 0
         )
       : "";
@@ -250,8 +250,9 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     // Set estimated total price for the current market
     setEstimatedTotal({
       sell: Number(form.amountSell) * Number(bestBidPrice),
-      buy: Number(form.amountBuy) * Number(bestAskPrice),
+      buy: Number(form.amountBuy) / Number(bestAskPrice),
     });
+    debugger;
   }, [bestAskPrice, bestBidPrice, form]);
 
   useEffect(() => {
