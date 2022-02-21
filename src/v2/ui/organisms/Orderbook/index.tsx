@@ -53,7 +53,7 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
           <S.Head>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>
-            <S.CellHead>Total({quoteUnit})</S.CellHead>
+            <S.CellHead>Cum({quoteUnit})</S.CellHead>
           </S.Head>
           <S.Body>
             {orders.map((order, i) => {
