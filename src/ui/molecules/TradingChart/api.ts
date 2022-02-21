@@ -137,8 +137,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
     ) => {
       const range = tradingChart.tvWidget!.activeChart().getVisibleRange();
       const period = tradingChart.tvWidget!.activeChart().resolution();
-      // store.dispatch(klineUpdateTimeRange(range));
-      // store.dispatch(klineUpdatePeriod(period));
+      tradingChart.props.klineUpdateTimeRange(range);
+      tradingChart.props.klineUpdatePeriod(period);
     },
     getBars: async (
       symbolInfo: LibrarySymbolInfo,
@@ -161,9 +161,13 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       return axios
         .post(url, payload)
         .then(({ data }) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           const bars = data.Fine.map((el) => {
             return {
               time: new Date(el.time).getTime(),
@@ -174,7 +178,8 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
               volume: Number(el.volume),
             };
           });
-                    
+          const lastBar = bars[bars.length - 1];
+          tradingChart.props.klineSetLastBar({ kline: lastBar });
           return onHistoryCallback(bars, { noData: false });
         })
         .catch((e) => {
@@ -210,12 +215,15 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       tradingChart.currentKlineSubscription = {};
     },
     onRealtimeCallback: (kline: KlineState) => {
-      console.log("onRealtimeCallback => ", kline);
       if (
-        kline.last &&
+        updateCb &&
+        kline.last
+        /* TODO: 
         kline.marketId === tradingChart.currentKlineSubscription.marketId &&
         kline.period === tradingChart.currentKlineSubscription.periodString
+        */
       ) {
+        console.log("onRealtimeCallback => ", kline.last);
         updateCb.onRealtimeCallback(kline.last);
       }
     },

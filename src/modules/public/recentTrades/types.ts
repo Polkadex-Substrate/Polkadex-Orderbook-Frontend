@@ -1,7 +1,7 @@
 import { OrderSide } from "../../types";
 
 export interface PublicTradeEvent {
-  tid: number;
+  timestamp: number;
   taker_type: "buy" | "sell";
   date: number;
   price: string;
