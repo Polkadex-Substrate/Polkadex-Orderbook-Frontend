@@ -6,6 +6,7 @@ import {
   selectDepthBids,
   selectCurrentMarketTickers,
   selectCurrentTrade,
+  selectLastRecentTrade,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -17,27 +18,28 @@ export function useOrderbook() {
   const bids = useReduxSelector(selectDepthBids);
   const asks = useReduxSelector(selectDepthAsks);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const lastRecentTrade = useReduxSelector(selectCurrentTrade);
+  const currentTrade = useReduxSelector(selectCurrentTrade);
+  const lastTrade = useReduxSelector(selectLastRecentTrade);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
 
-  const lastPrice = Number(lastRecentTrade?.price);
-
+  const currentPrice = Number(currentTrade?.price);
+  const lastPrice = Number(lastTrade?.price);
   /**
    * @description Get last market price
    *
    * @returns {string}
    */
   const lastMarketPrice =
-    lastRecentTrade?.market_id[0].Asset === currentMarket?.symbolArray[0] &&
-    lastRecentTrade?.market_id[1].Asset === currentMarket?.symbolArray[1]
-      ? lastRecentTrade?.price
+    currentTrade?.market_id[0].Asset === currentMarket?.symbolArray[0] &&
+    currentTrade?.market_id[1].Asset === currentMarket?.symbolArray[1]
+      ? currentTrade?.price
       : currentTicker?.last;
 
   /**
    * @description Check if price is up or down
    */
   const isPriceUpValue =
-    lastPrice > prevTradePrice ? true : lastPrice === prevTradePrice && isPriceUp;
+    currentPrice > lastPrice ? true : lastPrice === prevTradePrice && isPriceUp;
 
   /**
    * @description Get last price change
@@ -47,9 +49,10 @@ export function useOrderbook() {
   useEffect(() => {
     setIsPriceUp(isPriceUpValue);
     setPrevTradePrice(lastPrice);
-  }, [lastRecentTrade, isPriceUpValue, lastPrice]);
+  }, [currentPrice, isPriceUpValue, lastPrice]);
 
   return {
+    isPriceUp,
     lastPriceValue,
     hasMarket: !!currentMarket,
     asks,

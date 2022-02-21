@@ -134,8 +134,8 @@ export const Pricing = styled.div`
   margin: 0.8rem 0;
 `;
 
-export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
-  ${({ theme, isSell }) => css`
+export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
+  ${({ theme, isPriceUp }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1.5rem;
     border-radius: 0 1.2rem 1.2rem 0;
@@ -143,12 +143,12 @@ export const PricingAsideLeft = styled.div<{ isSell?: boolean }>`
     span {
       font-size: 1.5rem;
       font-weight: 550;
-      color: ${isSell ? theme.colors.primary : theme.colors.green};
+      color: ${isPriceUp ? theme.colors.green : theme.colors.primary};
       ${Icon} {
         transition: transform 0.2s ease-in-out;
         margin-right: 0.5rem;
         svg {
-          fill: ${isSell ? theme.colors.primary : theme.colors.green};
+          fill: ${isPriceUp ? theme.colors.green : theme.colors.primary};
         }
       }
     }

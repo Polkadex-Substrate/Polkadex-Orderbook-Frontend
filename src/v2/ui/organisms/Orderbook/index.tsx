@@ -10,8 +10,8 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@orderbook/v2/ui/molecules";
 
 export const Orderbook = () => {
-  const { hasMarket, asks, bids, lastPriceValue } = useOrderbook();
-
+  const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
+  console.log({ isPriceUp });
   return (
     <S.Main>
       <AvailableMessage message="Soon">
@@ -23,7 +23,9 @@ export const Orderbook = () => {
       <S.Content>
         <Table orders={asks} isSell />
         <AvailableMessage message="Soon">
-          {hasMarket && <Pricing price={lastPriceValue} priceInFiat="0.00" />}
+          {hasMarket && (
+            <Pricing price={lastPriceValue} isPriceUp={isPriceUp} priceInFiat="0.00" />
+          )}
         </AvailableMessage>
         <Table orders={bids} />
       </S.Content>
@@ -101,11 +103,11 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
   );
 };
 
-const Pricing = ({ price, priceInFiat, isSell = false }) => (
+const Pricing = ({ price, priceInFiat, isPriceUp = false }) => (
   <S.Pricing>
-    <S.PricingAsideLeft isSell={isSell}>
+    <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
-        <Icon name={"SingleArrowBottom"} size="extraSmall" />
+        {/* <Icon name={isPriceUp ? "SingleArrowTop" : "SingleArrowBottom"} size="extraSmall" /> */}
         {price}
       </span>
       <p>${priceInFiat}</p>

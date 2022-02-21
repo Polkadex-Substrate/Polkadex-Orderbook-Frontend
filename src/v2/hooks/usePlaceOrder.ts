@@ -252,7 +252,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       sell: Number(form.amountSell) * Number(bestBidPrice),
       buy: Number(form.amountBuy) / Number(bestAskPrice),
     });
-    debugger;
   }, [bestAskPrice, bestBidPrice, form]);
 
   useEffect(() => {
