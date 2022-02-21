@@ -1,6 +1,11 @@
 import axios from "axios";
+
 import { LibrarySymbolInfo } from "../../../../../public/charting_library/datafeed-api";
+
+import { TradingApiResponse } from "./types";
+
 import { TradingChartComponent } from ".";
+
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { KlineState, Market } from "@polkadex/orderbook-modules";
 import {
@@ -8,7 +13,6 @@ import {
   getTimestampPeriod,
   periodMinutesToString,
 } from "@polkadex/web-helpers";
-import { TradingApiResponse } from "./types";
 
 export interface CurrentKlineSubscription {
   marketId?: string;
@@ -155,7 +159,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
           if (data.Fine.length < 1) {
             return onHistoryCallback([], { noData: true });
           }
-          const bars = data.Fine.map(({open, close, high, low, volume, time}) => {
+          const bars = data.Fine.map(({ open, close, high, low, volume, time }) => {
             return {
               time: new Date(time).getTime(),
               open,
@@ -165,7 +169,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
               volume,
             };
           });
-                    
+
           return onHistoryCallback(bars, { noData: false });
         })
         .catch((e) => {
@@ -201,7 +205,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       tradingChart.currentKlineSubscription = {};
     },
     onRealtimeCallback: (kline: KlineState) => {
-      console.log("onRealtimeCallback => ", kline);
+      // console.log("onRealtimeCallback => ", kline);
       if (
         kline.last &&
         kline.marketId === tradingChart.currentKlineSubscription.marketId &&
