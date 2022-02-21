@@ -1,4 +1,5 @@
 import { CommonError } from "../../types";
+import { PublicTradeEvent } from "../recentTrades";
 
 import {
   KLINE_DATA,
@@ -8,6 +9,7 @@ import {
   KLINE_PUSH,
   KLINE_SUBSCRIBE,
   KLINE_UNSUBSCRIBE,
+  KLINE_UPDATE_FETCH,
   KLINE_UPDATE_PERIOD,
   KLINE_UPDATE_TIME_RANGE,
 } from "./constants";
@@ -25,9 +27,7 @@ export type KlineRawElement = string | number;
 export interface KlinePush {
   type: typeof KLINE_PUSH;
   payload: {
-    marketId: string;
     kline: KlineEvent;
-    period: string;
   };
 }
 
@@ -45,7 +45,10 @@ export interface KlineData {
   type: typeof KLINE_DATA;
   payload: KlineEvent;
 }
-
+export interface KlineUpdateFetch {
+  type: typeof KLINE_UPDATE_FETCH;
+  payload: PublicTradeEvent;
+}
 export interface KlineUpdateTimeRange {
   type: typeof KLINE_UPDATE_TIME_RANGE;
   payload: {
@@ -135,5 +138,10 @@ export const klineSubscribe = (payload: KlineSubscribe["payload"]): KlineSubscri
 
 export const klineUnsubscribe = (payload: KlineUnsubscribe["payload"]): KlineUnsubscribe => ({
   type: KLINE_UNSUBSCRIBE,
+  payload,
+});
+
+export const klineUpdateFetch = (payload: KlineUpdateFetch["payload"]): KlineUpdateFetch => ({
+  type: KLINE_UPDATE_FETCH,
   payload,
 });
