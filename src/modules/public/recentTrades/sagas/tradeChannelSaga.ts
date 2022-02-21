@@ -3,7 +3,7 @@ import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
 import cryptoRandomString from "crypto-random-string";
 
-import { alertPush, recentTradesData, selectRecentTrades } from "../../..";
+import { alertPush, klineUpdateFetch, recentTradesData, selectRecentTrades } from "../../..";
 
 import {
   RabbitmqChannelType,
@@ -27,6 +27,7 @@ export function* fetchTradeChannelSaga() {
         const data = JSON.parse(tradesMsg);
         const tradesArray = [data, ...trades];
         yield put(recentTradesData(tradesArray));
+        yield put(klineUpdateFetch(data));
       }
     }
   } catch (error) {
@@ -49,6 +50,7 @@ async function fetchTradesChannel(
 ) {
   const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
+  queue.purge();
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);

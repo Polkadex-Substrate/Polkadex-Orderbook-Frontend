@@ -28,6 +28,7 @@ import {
   selectKline,
   selectMarkets,
   selectCurrentMarketTickers,
+  klinePush,
 } from "@polkadex/orderbook-modules";
 
 interface ReduxProps {
@@ -35,7 +36,7 @@ interface ReduxProps {
   colorTheme: string;
   chartRebuild: boolean;
   currentMarket?: Market;
-  tickers: MarketsState["tickers"];
+  tickers: MarketsState["currentTicker"];
   kline: KlineState;
 }
 
@@ -44,6 +45,7 @@ interface DispatchProps {
   unSubscribeKline: typeof klineUnsubscribe;
   klineUpdateTimeRange: typeof klineUpdateTimeRange;
   klineUpdatePeriod: typeof klineUpdatePeriod;
+  klineSetLastBar: typeof klinePush;
 }
 
 type Props = ReduxProps & DispatchProps;
@@ -279,6 +281,14 @@ const mapDispatchProps: MapDispatchToPropsFunction<DispatchProps, Record<string,
   subscribeKline: (payload) => dispatch(klineSubscribe(payload)),
   unSubscribeKline: (payload) => dispatch(klineUnsubscribe(payload)),
   klineUpdatePeriod: (payload) => dispatch(klineUpdatePeriod(payload)),
+  klineSetLastBar: (payload) => {
+    console.log(
+      "graph called update last bar",
+      payload.kline.time,
+      new Date(payload.kline.time).toLocaleTimeString()
+    );
+    return dispatch(klinePush(payload));
+  },
 });
 
 export const TradingChart = connect<
