@@ -132,7 +132,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             disabled={isOrderLoading}
           />
           <div>
-            <span>{quoteTicker}</span>
+            <span>{isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}</span>
           </div>
         </S.InputWrapper>
         <ButtonStatus
