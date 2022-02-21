@@ -40,8 +40,8 @@ export const customWidgetOptions = (colorTheme?: string) => {
       "mainSeriesProperties.hiloStyle.fontSize": 22,
     },
     studies_overrides: {
-      "volume.volume.color.0": green,
-      "volume.volume.color.1": red,
+      "volume.volume.color.0": red,
+      "volume.volume.color.1": green,
     },
     theme: "Dark" as ThemeName,
   };
