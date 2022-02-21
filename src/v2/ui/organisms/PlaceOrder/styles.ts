@@ -134,6 +134,7 @@ export const InputWrapper = styled.div`
       width: 50%;
       color: ${theme.colors.text};
       padding: 1.5rem 0 1.5rem 1.5rem;
+      background: inherit
     }
   
     div {
