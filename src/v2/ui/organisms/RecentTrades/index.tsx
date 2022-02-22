@@ -21,7 +21,7 @@ export const RecentTrades = () => {
           <S.Head>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>
-            <S.CellHead>Date</S.CellHead>
+            <S.CellHead>Time</S.CellHead>
           </S.Head>
           <>
             {recentTrades.map((order, i) => {
