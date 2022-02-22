@@ -46,12 +46,20 @@ export const Content = styled.div`
 `;
 
 export const Head = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: center;
-  opacity: 0.5;
-  padding: 0 2rem;
-  margin-bottom: 0.5rem;
+  ${({ theme }) => css`
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: ${theme.colors.inverse};
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    padding: 0 2rem;
+    margin-bottom: 0.5rem;
+    span {
+      opacity: 0.5;
+    }
+  `}
 `;
 
 export const CellHead = styled.span`
