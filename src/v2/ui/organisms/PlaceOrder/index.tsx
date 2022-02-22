@@ -128,7 +128,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
           <input
             type="text"
             defaultValue={total}
-            placeholder={isLimit ? "Total" : "Estimated Total"}
+            placeholder={isLimit ? "Total" : "Estimated Amount"}
             disabled={isOrderLoading}
           />
           <div>
