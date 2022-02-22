@@ -45,6 +45,8 @@ export const Content = styled.div`
 
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
+    position: relative;
+    z-index: 0;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
@@ -74,7 +76,7 @@ export const Table = styled.div<{ isSell?: boolean }>`
 export const Head = styled.div`
   ${({ theme }) => css`
     position: sticky;
-    top: 0;
+    top: -0.1px;
     z-index: 2;
     background: ${theme.colors.inverse};
     display: grid;
