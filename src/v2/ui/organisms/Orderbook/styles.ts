@@ -45,6 +45,8 @@ export const Content = styled.div`
 
 export const Table = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
+    position: relative;
+    z-index: 0;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
@@ -72,12 +74,20 @@ export const Table = styled.div<{ isSell?: boolean }>`
 `;
 
 export const Head = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: center;
-  opacity: 0.5;
-  padding: 0 2rem;
-  margin-bottom: 0.5rem;
+  ${({ theme }) => css`
+    position: sticky;
+    top: -0.1px;
+    z-index: 2;
+    background: ${theme.colors.inverse};
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    padding: 0 2rem;
+    margin-bottom: 0.5rem;
+    span {
+      opacity: 0.5;
+    }
+  `}
 `;
 
 export const CellHead = styled.span`
