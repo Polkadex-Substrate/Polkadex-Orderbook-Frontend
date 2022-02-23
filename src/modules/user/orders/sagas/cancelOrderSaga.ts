@@ -22,7 +22,7 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const { order_id } = action.payload;
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
-      const payload = { order_id: Number(order_id) };
+      const payload = createCancelOrderPayload(order_id, address);
       const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
       const data = formatPayload(signature, payload);
       const res = yield call(() => API.post(ordersOption)("/cancel_order", data));
@@ -50,3 +50,7 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     );
   }
 }
+const createCancelOrderPayload = (order_id: string, account: string) => ({
+  order_id: Number(order_id),
+  account,
+});
