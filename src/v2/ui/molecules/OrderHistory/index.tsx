@@ -1,14 +1,17 @@
+import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
 
 import { EmptyData, Logged } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
-import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { orderCancelFetch } from "@polkadex/orderbook-modules";
 
 export const OrderHistory = () => {
   const { priceFixed, amountFixed, orders, userLoggedIn, openOrders } = useOrderHistory();
+  const dispatch = useDispatch();
   return (
     <>
       {userLoggedIn ? (
@@ -23,7 +26,7 @@ export const OrderHistory = () => {
                   const baseUnit = getSymbolFromAssetId(order.base_asset);
                   const quoteUnit = getSymbolFromAssetId(order.quote_asset);
                   const filled = Number(order.filled_qty).toFixed(2);
-
+                  console.log(order.order_id);
                   return (
                     <S.Card key={i} isOpenOrder={true}>
                       <S.CardWrapper>
@@ -50,12 +53,12 @@ export const OrderHistory = () => {
                         {isLimit && (
                           <S.CardInfo>
                             <span>{Decimal.format(order.price, priceFixed, ",")}</span>
-                            <p>Limit</p>
+                            <p>Limit({quoteUnit})</p>
                           </S.CardInfo>
                         )}
                         <S.CardInfo>
                           <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
-                          <p>Amount</p>
+                          <p>Amount({isLimit ? baseUnit : quoteUnit})</p>
                         </S.CardInfo>
                         <S.CardInfo>
                           <span>{filled}</span>
@@ -75,18 +78,23 @@ export const OrderHistory = () => {
 
                       <S.CardActions>
                         <div>
-                          <AvailableMessage message="Soon">
-                            <ul>
-                              {Number(order.filled_qty) < 100 ? (
-                                <S.Cancel>Cancel</S.Cancel>
-                              ) : (
-                                <>
-                                  <S.Deposit>Deposit</S.Deposit>
-                                  <li>Withdraw</li>
-                                </>
-                              )}
-                            </ul>
-                          </AvailableMessage>
+                          <ul>
+                            {order.status === "Open" ? (
+                              <S.Cancel>
+                                <button
+                                  onClick={() => {
+                                    dispatch(orderCancelFetch({ order_id: order.order_id }));
+                                  }}>
+                                  Cancel
+                                </button>
+                              </S.Cancel>
+                            ) : (
+                              <>
+                                <S.Deposit>Deposit</S.Deposit>
+                                <li>Withdraw</li>
+                              </>
+                            )}
+                          </ul>
                         </div>
                       </S.CardActions>
                     </S.Card>
@@ -131,7 +139,7 @@ export const OrderHistory = () => {
                         )}
                         <S.CardInfo>
                           <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
-                          <p>Amount</p>
+                          <p>Amount({isLimit ? baseUnit : quoteUnit})</p>
                         </S.CardInfo>
                         <S.CardInfo>
                           <span>{filled}</span>
