@@ -12,9 +12,6 @@ import { orderCancelFetch } from "@polkadex/orderbook-modules";
 export const OrderHistory = () => {
   const { priceFixed, amountFixed, orders, userLoggedIn, openOrders } = useOrderHistory();
   const dispatch = useDispatch();
-  const placeCancelOrder = (order_id: string) => {
-    dispatch(orderCancelFetch({ order_id }));
-  };
   return (
     <>
       {userLoggedIn ? (
@@ -84,7 +81,12 @@ export const OrderHistory = () => {
                           <ul>
                             {order.status === "Open" ? (
                               <S.Cancel>
-                                <p onClick={() => placeCancelOrder(order.order_id)}>Cancel</p>
+                                <button
+                                  onClick={() => {
+                                    dispatch(orderCancelFetch({ order_id: order.order_id }));
+                                  }}>
+                                  Cancel
+                                </button>
                               </S.Cancel>
                             ) : (
                               <>
