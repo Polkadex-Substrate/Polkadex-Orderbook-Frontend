@@ -5,6 +5,7 @@ export const signMessage = async (
   userKeyring: KeyringPair,
   payload: string
 ): Promise<string> => {
+  alert(`sigining ${payload}`);
   const message = stringToU8a(payload);
   const signature = userKeyring.sign(message);
   return u8aToHex(signature);
