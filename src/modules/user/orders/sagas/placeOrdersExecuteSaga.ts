@@ -4,22 +4,18 @@ import { Keyring } from "@polkadot/api";
 import {
   sendError,
   selectUserInfo,
-  userOpenOrdersAppend,
   orderExecuteDataDelete,
   orderExecuteData,
   orderExecuteError,
   OrderExecuteFetch,
   userOrdersHistoryFetch,
 } from "../../..";
-import { notificationPush } from "../../notificationHandler";
 import { balancesFetch } from "../../balances";
 
-import { defaultConfig, API, RequestOptions } from "@polkadex/orderbook-config";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "src/helpers/formatPayload";
 import { OrderSide, OrderType } from "@polkadex/orderbook/modules/types";
-
-const { alertDisplayTime } = defaultConfig;
 
 const ordersOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
