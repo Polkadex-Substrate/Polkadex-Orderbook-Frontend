@@ -129,6 +129,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             type="text"
             defaultValue={total}
             placeholder={isLimit ? "Total" : "Estimated Amount"}
+            autoComplete="off"
             disabled={isOrderLoading}
           />
           <div>

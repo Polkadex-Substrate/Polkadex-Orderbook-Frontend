@@ -1,29 +1,28 @@
 import styled, { css } from "styled-components";
+export const Wrapper = styled.div`
+  overflow-x: auto;
+  ::-webkit-scrollbar {
+    height: 0;
+  }
+`;
 
-// Card
-export const Card = styled.div<{ isOpenOrder?: boolean }>`
+export const Container = styled.div<{ isOpenOrder?: boolean }>`
   ${({ theme, isOpenOrder }) => css`
-    display: flex;
-    border-radius: 1rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 0 0.5rem;
     transition: border 0.4s ease-in-out;
     user-select: none;
     opacity: ${isOpenOrder ? 1 : 0.7};
     transition: opacity 0.4s ease-in-out, border-color 0.4s ease-in-out;
     cursor: pointer;
+    border-top: 1px solid ${theme.colors.secondaryBackground};
     span {
       font-weight: 550;
     }
     p {
       opacity: 0.6;
     }
-    :not(:last-child) {
-      margin-bottom: 0.7rem;
-    }
     :hover {
-      border-color: ${theme.colors.text}99;
       box-shadow: ${theme.shadows.quaternary};
+      opacity: 1;
       ${Tag} {
         visibility: visible;
         opacity: 1;
@@ -31,37 +30,62 @@ export const Card = styled.div<{ isOpenOrder?: boolean }>`
     }
   `}
 `;
-export const CardWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, auto);
-  grid-gap: 2rem;
-  overflow: auto;
-  ::-webkit-scrollbar {
-    height: 0;
+
+export const Flex = styled.div`
+  display: flex;
+  grid-gap: 0.5rem;
+  width: max-content;
+  padding: 0 1rem;
+`;
+
+export const CardFlex = styled(Flex)`
+  width: max-content;
+`;
+
+export const HeaderItem = styled.div`
+  padding: 0.5rem;
+  span {
+    opacity: 0.6;
+    font-size: 1.2;
+  }
+  :not(:nth-child(2)) {
+    min-width: 10rem;
+  }
+  :nth-child(2) {
+    min-width: 15rem;
   }
 `;
 
-export const CardBox = styled.div`
+export const HeaderActions = styled.div`
+  ${({ theme }) => css`
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    position: sticky;
+    right: 0;
+    background: ${theme.colors.inverse};
+  `}
+`;
+
+export const Box = styled.div`
   display: flex;
   align-items: center;
   align-self: center;
   padding: 0.5rem;
-  min-width: 20rem;
-  div p {
+  min-width: 10rem;
+  div span {
     font-size: 1.2rem;
   }
 `;
 
-export const CardInfoToken = styled.div`
+export const InfoToken = styled.div`
   ${({ theme }) => css`
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 10rem;
+    border-radius: 8rem;
     margin-right: 0.5rem;
   `}
 `;
@@ -76,7 +100,7 @@ export const Tag = styled.span<{ isSell?: boolean }>`
     background: ${isSell ? theme.colors.primary : theme.colors.green};
     padding: 0.2rem;
     border-radius: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     width: fit-content;
     opacity: 0;
     visibility: hidden;
@@ -84,26 +108,31 @@ export const Tag = styled.span<{ isSell?: boolean }>`
   `}
 `;
 
-export const CardInfo = styled.div`
+export const Info = styled.div`
   padding: 0.5rem;
   align-self: center;
-  min-width: 10rem;
-  p {
+  :not(:nth-child(2)) {
+    min-width: 10rem;
+  }
+  :nth-child(2) {
+    min-width: 15rem;
+  }
+  span {
     font-size: 1.2rem;
   }
 `;
 
-export const CardActions = styled.div`
-  ${({ theme }) => css`
+export const Actions = styled.div<{ hasOrder?: boolean }>`
+  ${({ theme, hasOrder }) => css`
     position: sticky;
     right: 0;
-    min-width: 15.3rem;
+    min-width: ${hasOrder ? "8rem" : "15.3rem"};
     background: ${theme.colors.inverse};
-    height: 100%;
-    padding: 1rem;
     border-left: 1px solid ${theme.colors.secondaryBackground};
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    height: 100%;
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -126,12 +155,6 @@ export const CardActions = styled.div`
         }
       }
     }
-  `}
-`;
-
-export const Deposit = styled.li`
-  ${({ theme }) => css`
-    color: ${theme.colors.green};
   `}
 `;
 
