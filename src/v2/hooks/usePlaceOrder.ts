@@ -44,6 +44,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     amountSell: "",
     amountBuy: "",
   });
+  const [rangeValue, setRangeValue] = useState([1]);
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.symbolArray : [-1, -1];
@@ -117,6 +118,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       }
       handleCleanPrice && handleCleanPrice();
     },
+
     [currentMarket?.amount_precision, form, handleCleanPrice]
   );
 
@@ -241,6 +243,20 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     getEstimatedTotal,
   ]);
 
+  const updateRange = useCallback((data: {values: Array<number>}) => {
+    if(isSell){
+      form.amountSell = `${Number(availableBaseAmount) * data.values[0] * 0.01}`;
+    }else {
+      if(!isLimit){
+        form.amountBuy = `${Number(availableQuoteAmount) * data.values[0] * 0.01}`;
+      }else{
+        form.amountBuy = `${Number(availableBaseAmount) * data.values[0] * 0.01}`;
+      }
+    }
+    setRangeValue(data.values)
+
+  }, [rangeValue, total, isSell, isLimit, form, form.amountBuy, form.amountSell] )
+
   useEffect(() => {
     // Check if the currentPrice is different from the price in the form
     if (currentPrice !== tab.priceLimit) setTab({ ...tab, priceLimit: currentPrice });
@@ -276,6 +292,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     availableAmount: isSell ? availableBaseAmount : availableQuoteAmount,
     changeAmount: handleAmountChange,
     changePrice: handlePriceChange,
+    updateRange,
+    rangeValue,
     price: form.price,
     amount: isSell ? form.amountSell : form.amountBuy,
     total,
