@@ -101,6 +101,7 @@
     "simple-get": "^4.0.1",
     "glob-parent": "^5.1.2",
     "trim": "^0.0.3",
-    "postcss": "^8.2.13"
+    "postcss": "^8.2.13",
+    "prismjs": "^1.27.0"
   }
 }
