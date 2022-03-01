@@ -1,9 +1,15 @@
+// TODO: Change wallet link to default token
+
+import { useRouter } from "next/router";
+
 import * as S from "./styles";
 import * as T from "./types";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
+  const router = useRouter();
+
   return (
     <S.ContentWrapper>
       <S.ContentHeader>
@@ -24,9 +30,7 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
           </AvailableMessage>
         </S.ContentFeedback>
         <S.ContentBox>
-          <AvailableMessage message="Soon">
-            <Card title="My Wallet" icon="Wallet" onClick={() => onNavigate("MyWallet")} />
-          </AvailableMessage>
+          <Card title="My Wallet" icon="Wallet" onClick={() => router.push("/wallet/pdg")} />
           <AvailableMessage message="Soon">
             <Card title="Settings" icon="Settings" onClick={() => onNavigate("Settings")} />
           </AvailableMessage>

@@ -3,7 +3,8 @@ import { useEffect } from "react";
 
 import * as S from "./styles";
 
-import { Header, Tokens, History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
+import { Header } from "@orderbook/v2/ui/organisms";
+import { Tokens, History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -17,12 +18,12 @@ export const WalletTemplate = () => {
   const { id } = router.query;
   useEffect(() => {
     if (!isLoading && !user) router.push("/login");
-  }, []);
+  }, [isLoading, user, router]);
 
   if (!id) return <div />;
   return (
     <S.Main>
-      <Header withInfo={false} />
+      <Header />
       <S.Wrapper>
         <Tokens />
         <S.Grid>
@@ -50,8 +51,8 @@ export const WalletTemplate = () => {
                 <Icon
                   name="Wallet"
                   size="extraLarge"
-                  background="primaryBackground"
-                  style={{ marginRight: "0.8rem" }}
+                  stroke="text"
+                  style={{ marginRight: "0.8rem", padding: "0.5rem" }}
                 />
                 <div>
                   <p>Available</p>
