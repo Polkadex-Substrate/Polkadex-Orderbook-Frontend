@@ -1,6 +1,5 @@
 import * as cryptoIcons from "@styled-icons/crypto";
 
-import * as Tokens from "../../atoms/Tokens";
 import * as Icons from "../../atoms/Icons";
 
 import * as S from "./styles";

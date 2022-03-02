@@ -28,7 +28,7 @@ export const Withdraw = () => {
                 <SecondaryInput
                   label="Wallet Address"
                   name="walletAddress"
-                  value="0x1q2w3e4r5t6y7ui89o0pa1s2s3d4f5g6h7j7k8l9l0">
+                  defaultValue="0x1q2w3e4r5t6y7ui89o0pa1s2s3d4f5g6h7j7k8l9l0">
                   <Button size="extraSmall" color="white" background="secondaryBackground">
                     PASTE
                   </Button>

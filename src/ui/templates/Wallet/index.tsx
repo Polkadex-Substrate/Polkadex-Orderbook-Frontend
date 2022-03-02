@@ -36,11 +36,11 @@ export const WalletTemplate = () => {
             <S.TokenInfo>
               <FlexCenter>
                 <Icon
-                  isToken
-                  name="BTC"
+                  name="Btc"
                   size="giant"
                   background="secondaryBackground"
                   style={{ marginRight: "0.8rem" }}
+                  isToken
                 />
                 <div>
                   <span>Bitcoin</span>

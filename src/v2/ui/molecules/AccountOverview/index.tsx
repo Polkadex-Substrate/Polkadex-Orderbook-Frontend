@@ -30,7 +30,7 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
           </AvailableMessage>
         </S.ContentFeedback>
         <S.ContentBox>
-          <Card title="My Wallet" icon="Wallet" onClick={() => router.push("/wallet/pdg")} />
+          <Card title="My Wallet" icon="Wallet" onClick={() => router.push("/wallet/PDG")} />
           <AvailableMessage message="Soon">
             <Card title="Settings" icon="Settings" onClick={() => onNavigate("Settings")} />
           </AvailableMessage>

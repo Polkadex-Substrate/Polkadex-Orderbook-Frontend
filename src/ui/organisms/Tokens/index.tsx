@@ -15,6 +15,8 @@ import {
   selectHasUser,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
+import { toCapitalize } from "@polkadex/web-helpers";
+import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const Tokens = () => {
   const dispatch = useDispatch();
@@ -57,9 +59,9 @@ export const Tokens = () => {
               allTokens.map((token, index) => (
                 <Card
                   key={index}
-                  tokenName={token.ticker}
-                  tokenTicker={token.ticker}
-                  amount={token.free as number}
+                  tokenName={getSymbolFromAssetId(Number(token.ticker))}
+                  tokenTicker={getSymbolFromAssetId(Number(token.ticker))}
+                  amount={token.free}
                 />
               ))
             ) : (
@@ -74,7 +76,12 @@ export const Tokens = () => {
   );
 };
 
-const Card = ({ tokenName, tokenTicker, amount, amountInFiat = 0.0 }: T.TokenProps) => {
+const Card = ({
+  tokenName,
+  tokenTicker = "Btc",
+  amount,
+  amountInFiat = "0.0",
+}: T.TokenProps) => {
   const router = useRouter();
   return (
     <Link href={tokenTicker}>
@@ -83,7 +90,7 @@ const Card = ({ tokenName, tokenTicker, amount, amountInFiat = 0.0 }: T.TokenPro
           <FlexCenter>
             <Icon
               isToken
-              name={tokenTicker}
+              name="Btc"
               size="giant"
               background="secondaryBackground"
               style={{ marginRight: "0.8rem" }}

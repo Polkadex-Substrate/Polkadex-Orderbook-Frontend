@@ -129,6 +129,5 @@ const Filters = ({ handleChange }) => (
 const FiltersHeader = ({ selected = "All" }) => (
   <S.HeaderFilters isHeader>
     <span>{selected}</span>
-    <Icon background="secondaryBackground" name="ArrowBottom" />
   </S.HeaderFilters>
 );
