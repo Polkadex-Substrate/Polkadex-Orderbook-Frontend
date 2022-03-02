@@ -39,11 +39,7 @@ export const Withdraw = () => {
                 <SecondaryInput label="Amount" name="amount">
                   <span>PDEX</span>
                 </SecondaryInput>
-                <Icon
-                  name="Swap"
-                  size="medium"
-                  style={{ marginBottom: "0.5rem", transform: "rotate(90deg)" }}
-                />
+                <Icon name="Exchange" size="medium" style={{ marginBottom: "0.5rem" }} />
                 <SecondaryInput label="In Fiat" name="amountInFiat">
                   <span>USD</span>
                 </SecondaryInput>
