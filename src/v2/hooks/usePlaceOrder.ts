@@ -225,35 +225,33 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   ]);
 
   const calculateTotal = () => {
-    if(isLimit){
-      if(isSell){
-        return Number(form.amountSell) * Number(form.price);
-      }
-      else {
-        if(changeTypeIsRange){
-          return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
-        }
-        return Number(form.amountBuy) * Number(form.price);
+    // limit and sell
+    if(isLimit && isSell){
+      return Number(form.amountSell) * Number(form.price);
+    }
 
+    // limit and buy
+    else if(isLimit && !isSell) {
+      if(changeTypeIsRange){
+        return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
       }
-    } else {
-      if(isSell) {
-        if(changeTypeIsRange) {
-          if(Number(availableBaseAmount) && Number(bestBidPrice) ){
-            return (Number(availableBaseAmount) * Number(rangeValue[0]) * 0.01) * Number(bestBidPrice);
-          }
-        }
-        return Number(estimatedTotal["sell"]) || 0
+      return Number(form.amountBuy) * Number(form.price);
+    }
+
+    // market and sell
+    else if(!isLimit && isSell) {
+      if(changeTypeIsRange && Number(availableBaseAmount) && Number(bestBidPrice)){
+          return (Number(availableBaseAmount) * Number(rangeValue[0]) * 0.01) * Number(bestBidPrice);
       }
-      else {
-       if(changeTypeIsRange){
-        if(Number(availableQuoteAmount) && Number(bestAskPrice) ){
+      return Number(estimatedTotal["sell"]) || 0;
+    }
+
+    // market and buy
+    else {
+      if(changeTypeIsRange && Number(availableQuoteAmount) && Number(bestAskPrice) ){
           return (Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01) / Number(bestAskPrice);
-        }
-       }
-       return Number(estimatedTotal["buy"]) || 0
       }
-
+      return Number(estimatedTotal["buy"]) || 0;
     }
   }
 
@@ -280,28 +278,28 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const updateRange = useCallback((data: {values: Array<number>}) => {
     setRangeValue(data.values);
     setChangeType(true);
-    if(isLimit) {
-      if(isSell){
-        if(Number(availableBaseAmount) && Number(form.price)){
-          form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
-        }
-      }
-      else {
-        if(Number(availableQuoteAmount) && Number(form.price)){
-          form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01) / Number(form.price)}`
-        }
+    // limit and sell
+    if(isLimit && isSell){
+      if(Number(availableBaseAmount) && Number(form.price)){
+        form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
       }
     }
-    else {
-      if(isSell){
-        if(Number(availableBaseAmount) && Number(bestBidPrice)){
-          form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
-        }
+    // limit and buy
+    else if(isLimit && !isSell) {
+      if(Number(availableQuoteAmount) && Number(form.price)){
+        form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01) / Number(form.price)}`
       }
-      else {
-        if(Number(availableQuoteAmount) && Number(bestAskPrice) ){
-          form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01)}`
-        }
+    }
+    // market and sell
+    else if(!isLimit && isSell){
+      if(Number(availableBaseAmount) && Number(bestBidPrice)){
+        form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
+      }
+    }
+    // market and buy
+    else {
+      if(Number(availableQuoteAmount) && Number(bestAskPrice) ){
+        form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01)}`
       }
     }
   }, [rangeValue, total, isSell, isLimit, form.price, form.amountBuy, form.amountSell] )
