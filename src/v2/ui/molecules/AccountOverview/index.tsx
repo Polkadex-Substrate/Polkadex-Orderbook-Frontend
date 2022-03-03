@@ -9,7 +9,6 @@ import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
   const router = useRouter();
-
   return (
     <S.ContentWrapper>
       <S.ContentHeader>
