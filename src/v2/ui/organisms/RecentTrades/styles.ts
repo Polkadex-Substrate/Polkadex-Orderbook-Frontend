@@ -50,7 +50,7 @@ export const Head = styled.div`
     position: sticky;
     top: 0;
     z-index: 2;
-    background: ${theme.colors.inverse};
+    background: ${theme.colors.secondaryBackgroundSolid};
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
