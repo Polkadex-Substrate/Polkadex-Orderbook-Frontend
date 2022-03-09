@@ -8,14 +8,17 @@ export const Main = styled.section`
     grid-area: MyOrders;
     background: ${theme.colors.inverse};
     border-radius: 1.5rem;
-    padding: 0.5rem;
     display: flex;
     flex-flow: column nowrap;
     width: 100%;
+    overflow: auto;
   `}
 `;
-
 export const Header = styled.div`
+  padding: 0.5rem;
+`;
+
+export const HeaderWrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.text};
     padding: 0.5rem;
@@ -53,16 +56,10 @@ export const HeaderLeftLi = styled(HeaderLi)<{ isActive?: boolean }>`
   `}
 `;
 
-export const HeaderRightLi = styled(HeaderLi)`
-  ${({ theme }) => css`
-    color: ${theme.colors.inverse};
-  `}
-`;
-
 export const HeaderAsideLeft = styled.div`
   ${() => css`
     ${HeaderLi} {
-      padding: 1rem;
+      padding: 0.7rem;
       border-radius: 0.8rem;
       ${Icon} {
         margin-right: 0.5rem;
@@ -72,23 +69,38 @@ export const HeaderAsideLeft = styled.div`
 `;
 
 export const HeaderAsideRight = styled.div`
+  ul {
+    display: flex;
+  }
+  @media screen and (max-width: 520px) {
+    display: none;
+  }
+`;
+
+export const HeaderRightLi = styled(HeaderLi)<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: ${isActive ? theme.colors.inverse : theme.colors.secondaryBackground};
+    transition: background 0.4s ease-in-out;
+    :hover {
+      background: ${isActive ? theme.colors.inverse : theme.colors.secondaryBackgroundOpacity};
+    }
+  `}
+`;
+export const HeaderRightExpand = styled(HeaderLi)`
   ${({ theme }) => css`
-    ${HeaderLi} {
-      border-radius: 0.8rem;
-      font-size: 1.2rem;
-      :nth-child(5) {
-        ${Icon} {
-          margin-left: 0.5rem;
-        }
-      }
-      :not(:nth-child(1)) {
-        background: ${theme.colors.secondaryBackground};
-        padding: 0.8rem;
-      }
-    }
-    @media screen and (max-width: 520px) {
-      display: none;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    border-radius: 0.8rem;
+    color: ${theme.colors.inverse};
+    background: ${theme.colors.secondaryBackground};
   `}
 `;
 
@@ -109,7 +121,7 @@ export const Search = styled.div`
 export const Content = styled.div`
   position: relative;
   flex: 1;
-  padding: 0.7rem 0;
+  padding: 0;
   overflow-x: scroll;
   scrollbar-width: none;
   ::-webkit-scrollbar {

@@ -21,7 +21,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem 0 2rem;
+  padding: 1rem 1rem 0 1rem;
   margin-bottom: 1rem;
   h2 {
     font-size: 1.5rem;
@@ -82,7 +82,7 @@ export const Head = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 1rem;
     margin-bottom: 0.5rem;
     span {
       opacity: 0.5;
@@ -107,7 +107,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 1.6rem 0 2rem;
+    padding: 0 1rem;
     cursor: pointer;
     transition: background 0.3s ease-in-out;
     :not(:last-child) {
@@ -147,7 +147,7 @@ export const Pricing = styled.div`
 export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
   ${({ theme, isPriceUp }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 0 1.2rem 1.2rem 0;
     flex: 1;
     span {
@@ -174,8 +174,8 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
 
 export const PricingAsideRight = styled.div`
   ${({ theme }) => css`
-    width: 4.2rem;
-    height: 4.2rem;
+    width: 3rem;
+    height: 3rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     display: flex;
     align-items: center;

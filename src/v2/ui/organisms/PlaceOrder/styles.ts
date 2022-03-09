@@ -14,7 +14,7 @@ export const Header = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 1rem 1.5rem;
     h2 {
       font-size: 1.5rem;
       font-weight: 550;
@@ -29,6 +29,7 @@ export const List = styled.div<{ isActive?: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  margin: 0 1rem;
 `;
 
 export const ListItem = styled.div<{ isActive?: boolean }>`
@@ -50,7 +51,6 @@ export const ListItem = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div`
   ${({ theme }) => css`
-    padding: 1rem;
     ${List} {
       margin-bottom: 1rem;
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -90,7 +90,6 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
 
 export const Form = styled.div``;
 export const Input = styled.div`
-  border-radius: 0.8rem;
   display: flex;
   justify-content: space-between;
   :not(:last-child) {
@@ -102,8 +101,6 @@ export const FormInput = styled(Input)<{ isVertical?: boolean }>`
   ${({ theme, isVertical = false }) => css`
     flex-direction: ${isVertical ? "column" : "row"};
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 1rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
   `}
 `;
 
@@ -123,7 +120,6 @@ export const InputWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     position: relative;
-
     label {
       padding-left: 1rem;
       opacity: 0.6;
@@ -134,9 +130,9 @@ export const InputWrapper = styled.div`
       width: 50%;
       color: ${theme.colors.text};
       padding: 1.5rem 0 1.5rem 1.5rem;
-      background: inherit
+      background: inherit;
     }
-  
+
     div {
       background: ${theme.colors.secondaryBackground};
       border-radius: 0.8rem;
@@ -155,7 +151,7 @@ export const InputWrapper = styled.div`
 export const InputContainer = styled.div``;
 export const Available = styled.div`
   text-align: right;
-  margin: 1.5rem 0;
+  margin: 1.5rem 1rem;
   p {
     display: inline-block;
     opacity: 0.5;
@@ -170,8 +166,6 @@ export const Available = styled.div`
 export const Box = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 1.5rem;
   `}
 `;
 
