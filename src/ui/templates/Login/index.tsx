@@ -124,7 +124,8 @@ export const LoginTemplate = () => {
                           hasBorder
                           label="Quick Access"
                           title="Scan in Polkadex App"
-                          description="Access quickly "
+                          description="Access quickly"
+                          qrCodeValue={"test1, test2, test3"}
                         />
                       </S.Flex>
                     </Form>

@@ -1,6 +1,7 @@
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { QrCode } from "@polkadex/orderbook-ui/organisms";
 
 export const QuickLogin = ({
   isFull = false,
@@ -9,6 +10,7 @@ export const QuickLogin = ({
   label,
   title,
   description,
+  qrCodeValue,
 }) => {
   return (
     <S.Main>
@@ -18,7 +20,12 @@ export const QuickLogin = ({
         header={<Header background={background} hasBorder={hasBorder} label={label} />}
         direction="bottomRight"
         isOpacity>
-        <Content isFull={isFull} title={title} description={description} />
+        <Content
+          isFull={isFull}
+          title={title}
+          description={description}
+          qrCodeValue={qrCodeValue}
+        />
       </Dropdown>
     </S.Main>
   );
@@ -31,13 +38,11 @@ const Header = ({ isActive = false, background = "white", hasBorder = false, lab
   </S.Header>
 );
 
-const Content = ({ isFull, title = "", description = "" }) => {
+const Content = ({ isFull, title = "", description = "", qrCodeValue }) => {
   return (
     <S.Content isFull={isFull}>
       <h4>{title}</h4>
-      <figure>
-        <img src="/img/qrCodeExample.svg" />
-      </figure>
+      <QrCode mnemoicString={qrCodeValue} />
       <p>{description}</p>
     </S.Content>
   );

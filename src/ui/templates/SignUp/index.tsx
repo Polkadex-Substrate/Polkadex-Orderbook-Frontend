@@ -44,7 +44,6 @@ export const SignUpTemplate = () => {
     accounts,
     handlePrint,
     isPublicBranch,
-    selectedAccount,
     signUpSuccess,
     componentRef,
   } = useSignUp();
