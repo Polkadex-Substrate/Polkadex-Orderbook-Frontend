@@ -85,6 +85,11 @@ export const Form = styled.div`
     margin: 1rem 0;
   }
 `;
+export const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
 
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
   ${({ theme, isOverflow = false }) => css`

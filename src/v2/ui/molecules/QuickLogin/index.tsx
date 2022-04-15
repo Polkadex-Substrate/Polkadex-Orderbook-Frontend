@@ -2,31 +2,43 @@ import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 
-export const QuickLogin = ({ isFull = false }) => {
+export const QuickLogin = ({
+  isFull = false,
+  background = "white",
+  hasBorder = false,
+  label,
+  title,
+  description,
+}) => {
   return (
     <S.Main>
-      <Dropdown isFull={isFull} header={<Header />} direction="bottomRight" isOpacity>
-        <Content isFull={isFull} />
+      <Dropdown
+        priority="medium"
+        isFull={isFull}
+        header={<Header background={background} hasBorder={hasBorder} label={label} />}
+        direction="bottomRight"
+        isOpacity>
+        <Content isFull={isFull} title={title} description={description} />
       </Dropdown>
     </S.Main>
   );
 };
 
-const Header = ({ isActive = false }) => (
-  <S.Header isActive={isActive}>
+const Header = ({ isActive = false, background = "white", hasBorder = false, label = "" }) => (
+  <S.Header isActive={isActive} background={background} hasBorder={hasBorder}>
     <Icon name="Mobile" color="text" size="extraSmall" />
-    Quick Access
+    {label}
   </S.Header>
 );
 
-const Content = ({ isFull }) => {
+const Content = ({ isFull, title = "", description = "" }) => {
   return (
     <S.Content isFull={isFull}>
-      <h4>Log in with QR Code</h4>
+      <h4>{title}</h4>
       <figure>
         <img src="/img/qrCodeExample.svg" />
       </figure>
-      <p>Scan this QR Code with the Polkadex mobile app to log in instantly.</p>
+      <p>{description}</p>
     </S.Content>
   );
 };

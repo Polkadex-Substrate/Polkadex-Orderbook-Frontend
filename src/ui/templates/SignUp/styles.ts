@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
+import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
 
 export const Main = styled.div`
   ${({ theme }) => css`
@@ -27,7 +28,9 @@ export const Wrapper = styled.section`
   }
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  max-width: 42.5rem;
+`;
 
 export const Container = styled.div`
   padding-top: 8rem;
@@ -62,6 +65,36 @@ export const Form = styled.div`
   ${Input} {
     margin-top: 1rem;
   }
+  ${Dropdown} {
+    margin-bottom: 1rem;
+  }
+`;
+
+export const SelectContent = styled.div<{ isOverflow: boolean }>`
+  ${({ theme, isOverflow = false }) => css`
+    background-color: ${theme.colors.white};
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: ${theme.shadows.tertiary};
+    max-height: 20rem;
+    overflow-y: ${isOverflow ? "overlay" : "hidden"};
+    scrollbar-width: none;
+    ${Dropdown} {
+      cursor: pointer;
+      :not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+  `}
+`;
+
+export const SelectMessage = styled.p`
+  ${({ theme }) => css`
+    text-align: center;
+    color: ${theme.colors.black};
+    padding: 1rem 0;
+  `}
 `;
 
 export const Footer = styled.div`

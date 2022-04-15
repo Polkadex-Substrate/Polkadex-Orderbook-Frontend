@@ -27,6 +27,7 @@ import {
   Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
 
 const defaultValues = {
   password: "",
@@ -62,7 +63,7 @@ export const LoginTemplate = () => {
             <S.Title>
               <h1>Welcome Back!</h1>
               <p>
-                Don't you have an account yet?
+                Don&apos;t you have an account yet?
                 <Link href="/signUp"> Sign up </Link>
               </p>
             </S.Title>
@@ -114,9 +115,18 @@ export const LoginTemplate = () => {
                         name="password"
                         error={errors.password && touched.password && errors.password}
                       />
-                      <Button size="extraLarge" type="submit">
-                        Login
-                      </Button>
+                      <S.Flex>
+                        <Button size="extraLarge" type="submit">
+                          Login
+                        </Button>
+                        <QuickLogin
+                          background="secondaryBackground"
+                          hasBorder
+                          label="Quick Access"
+                          title="Scan in Polkadex App"
+                          description="Access quickly "
+                        />
+                      </S.Flex>
                     </Form>
                   )}
                 </Formik>

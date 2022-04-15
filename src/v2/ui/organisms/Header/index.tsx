@@ -45,7 +45,11 @@ export const Header = () => {
                 }}>
                 Login/Sign Up
               </Button>
-              <QuickLogin />
+              <QuickLogin
+                label="Quick Access"
+                title="Log in with QR Code"
+                description="Scan this QR Code with the Polkadex mobile app to log in instantly."
+              />
             </S.Box>
           )}
         </S.AsideRight>

@@ -1,46 +1,53 @@
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/router";
-import { useReactToPrint } from "react-to-print";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon, InputPrimary, Loading } from "@polkadex/orderbook-ui/molecules";
+import {
+  Button,
+  Dropdown,
+  Icon,
+  InputPrimary,
+  Loading,
+  MnemonicExport,
+  MyAccountLoading,
+  SelectAccount,
+} from "@polkadex/orderbook-ui/molecules";
 import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
-import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectPolkadotWalletSuccess,
-  selectSignUpLoading,
-  selectSignUpSuccess,
-  signUp,
-} from "@polkadex/orderbook-modules";
-import { defaultConfig } from "@polkadex/orderbook-config";
+import { useMnemonic } from "@polkadex/orderbook-hooks";
+import { useSignUp } from "@polkadex/orderbook/v2/hooks";
+import { signUp } from "@polkadex/orderbook-modules";
+
 const defaultValues = {
   password: "",
   accountName: "Main Account",
+  selectedAccount: {
+    address: "",
+    meta: {
+      name: "",
+      source: "",
+    },
+    type: [],
+  },
 };
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const { mnemonic, mnemoicString } = useMnemonic();
-  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
-  const signUpLoading = useReduxSelector(selectSignUpLoading);
-  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
-  const componentRef = useRef();
-
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
-  const isPublicBranch = defaultConfig.polkadexFeature === "none";
-  useEffect(() => {
-    if (signUpSuccess) router.push("/login");
-  }, [signUpSuccess, router]);
+  const {
+    isSuccess,
+    signUpLoading,
+    isLoading,
+    accounts,
+    handlePrint,
+    isPublicBranch,
+    selectedAccount,
+    signUpSuccess,
+    componentRef,
+  } = useSignUp();
 
   if (signUpSuccess) return <div />;
 
@@ -82,8 +89,47 @@ export const SignUpTemplate = () => {
                         );
                       } else alert("signup is not available for beta");
                     }}>
-                    {({ errors, touched }) => (
+                    {({ values, errors, touched, setFieldValue }) => (
                       <Form>
+                        <Dropdown
+                          direction="bottom"
+                          isClickable
+                          header={
+                            <SelectAccount
+                              isHeader
+                              accountName={
+                                values?.selectedAccount?.meta?.name ||
+                                "Select your stash account"
+                              }
+                              fullDescription
+                              address={
+                                values?.selectedAccount?.address ||
+                                "This wallet will be linked to your Polkadex account."
+                              }
+                            />
+                          }>
+                          <S.SelectContent isOverflow={accounts?.length > 2}>
+                            {isLoading ? (
+                              <MyAccountLoading />
+                            ) : accounts?.length ? (
+                              accounts.map((item, index) => (
+                                <SelectAccount
+                                  isActive={item.address === values?.selectedAccount?.address}
+                                  key={index}
+                                  accountName={item.meta.name || `Account ${index}`}
+                                  address={item.address}
+                                  onClick={() =>
+                                    setFieldValue("selectedAccount", accounts[index])
+                                  }
+                                />
+                              ))
+                            ) : (
+                              <S.SelectMessage>
+                                You dont have account, please create one
+                              </S.SelectMessage>
+                            )}
+                          </S.SelectContent>
+                        </Dropdown>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
                           label="Account Name"
