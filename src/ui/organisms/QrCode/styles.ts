@@ -2,9 +2,14 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    margin: 1rem 0;
+    background: white;
     padding: 1rem;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
+    width: fit-content;
+    margin: 1rem auto;
+    svg {
+      width: inherit;
+    }
   `}
 `;
