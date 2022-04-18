@@ -122,9 +122,9 @@ export const LoginTemplate = () => {
                         <QuickLogin
                           background="secondaryBackground"
                           hasBorder
-                          label="Quick Access"
-                          title="Scan in Polkadex App"
-                          description="Access quickly"
+                          label="Connect Phone"
+                          title="Log in with QR code"
+                          description="Scan this code with the Polkadex mobile app to log in instantly."
                           qrCodeValue={"test1, test2, test3"}
                         />
                       </S.Flex>
