@@ -98,7 +98,7 @@ export const SignUpTemplate = () => {
                               isHeader
                               accountName={
                                 values?.selectedAccount?.meta?.name ||
-                                "Select your stash account"
+                                "Select your main account"
                               }
                               fullDescription
                               address={
@@ -131,7 +131,7 @@ export const SignUpTemplate = () => {
                         </Dropdown>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
-                          label="Account Name"
+                          label="Proxy Account"
                           placeholder="Enter name for this account"
                           type="accountName"
                           name="accountName"
