@@ -2,10 +2,8 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    padding: 1rem;
-    border-radius: 1rem;
-    background: ${theme.colors.white};
-    border: 1px solid ${theme.colors.secondaryBackground};
+    padding: 1rem 0;
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
     width: 100%;
     input,
     label {

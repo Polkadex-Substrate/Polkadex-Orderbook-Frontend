@@ -20,6 +20,7 @@ export const Wrapper = styled.section`
   margin: 0 auto;
   width: 100%;
   flex: 1;
+  margin-bottom: 3rem;
   @media screen and (max-width: 920px) {
     padding: 0 2rem;
   }
@@ -43,8 +44,21 @@ export const Container = styled.div`
 export const AsideRight = styled.div``;
 
 export const AsideLeft = styled.div`
-  width: 100%;
+  ${({ theme }) => css`
+    width: 100%;
+    ${Form}, ${Connect}, ${Login} {
+      background: ${theme.colors.white};
+      padding: 1.5rem;
+      border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      border-radius: 1rem;
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 550;
+      }
+    }
+  `}
 `;
+
 export const Title = styled.div`
   ${({ theme }) => css`
     h1 {
@@ -59,15 +73,74 @@ export const Title = styled.div`
     }
   `}
 `;
+export const SuccessWrapper = styled.div`
+  ${({ theme }) => css`
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.colors.green};
+    svg {
+      max-width: 1rem;
+    }
+  `}
+`;
 
 export const Form = styled.div`
-  padding: 5rem 0;
-  ${Input} {
-    margin-top: 1rem;
+  ${({ theme }) => css`
+    margin: 2rem 0 1rem 0;
+
+    ${Input} {
+      margin-top: 1rem;
+    }
+    ${Dropdown} {
+      margin-bottom: 1rem;
+    }
+  `}
+`;
+
+export const FormTitle = styled.div`
+  margin-bottom: 1.2rem;
+  p {
+    margin-top: 0.5rem;
   }
-  ${Dropdown} {
-    margin-bottom: 1rem;
+`;
+
+export const FormTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const Phrases = styled.div`
+  margin-top: 2.5rem;
+`;
+export const PhrasesTitle = styled.div`
+  h5 {
+    font-size: 1.4rem;
+    font-weight: 550;
   }
+  margin-bottom: 1.5rem;
+`;
+export const PhrasesContent = styled.div`
+  ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    div {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      padding-bottom: 0.8rem;
+      p {
+        font-weight: 550;
+      }
+    }
+  `}
 `;
 
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
@@ -94,15 +167,6 @@ export const SelectMessage = styled.p`
     text-align: center;
     color: ${theme.colors.black};
     padding: 1rem 0;
-  `}
-`;
-
-export const Footer = styled.div`
-  ${({ theme }) => css`
-    a {
-      color: ${theme.colors.primary};
-      font-weight: bold;
-    }
   `}
 `;
 
@@ -148,6 +212,74 @@ export const CardContent = styled.div`
     }
     @media screen and (min-width: 920px) {
       padding: 4rem;
+    }
+  `}
+`;
+export const Connect = styled.div`
+  margin-bottom: 1rem;
+`;
+
+export const ConnectTitle = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    h3 {
+      margin-bottom: 0.5rem;
+    }
+  `}
+`;
+
+export const ConnectTitleWrapper = styled.div`
+  div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+`;
+
+export const ConnetTitleIcon = styled.a`
+  width: 2rem;
+`;
+
+export const ConnectContent = styled.div`
+  ${({ theme }) => css`
+    margin-top: 1.5rem;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+export const ConnectEmpty = styled.div`
+  p {
+    margin-bottom: 1rem;
+  }
+`;
+export const ConnectBox = styled.div`
+  h4 {
+    font-size: 1.5rem;
+  }
+  p {
+    margin: 0.5rem 0 1rem 0;
+  }
+`;
+
+export const Login = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+export const LoginWrapper = styled.div``;
+
+export const Footer = styled.div`
+  ${({ theme }) => css`
+    padding-left: 1.5rem;
+    a {
+      color: ${theme.colors.primary};
+      font-weight: bold;
     }
   `}
 `;
