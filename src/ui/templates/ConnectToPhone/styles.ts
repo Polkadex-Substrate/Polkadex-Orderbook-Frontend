@@ -46,17 +46,27 @@ export const AsideRight = styled.div``;
 export const AsideLeft = styled.div`
   ${({ theme }) => css`
     width: 100%;
-    ${Form} {
-      h3 {
-        font-size: 1.5rem;
-        font-weight: 550;
-      }
+  `}
+`;
+export const Step = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.white};
+    padding: 1.5rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 1rem;
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 550;
+    }
+    :not(:last-child) {
+      margin-bottom: 1.5rem;
     }
   `}
 `;
 
 export const Title = styled.div`
   ${({ theme }) => css`
+    margin-bottom: 2rem;
     h1 {
       font-size: 3.5rem;
     }
@@ -69,115 +79,6 @@ export const Title = styled.div`
     }
   `}
 `;
-
-export const Form = styled.div`
-  margin: 2rem 0;
-
-  ${Input} {
-    margin-top: 1rem;
-  }
-  ${Dropdown} {
-    margin-bottom: 1rem;
-  }
-`;
-export const Connect = styled.div`
-  margin-bottom: 1rem;
-`;
-
-export const ConnectTitle = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    h3 {
-      margin-bottom: 0.5rem;
-    }
-  `}
-`;
-
-export const ConnectTitleWrapper = styled.div`
-  div {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-`;
-
-export const ConnetTitleIcon = styled.a`
-  width: 2rem;
-`;
-
-export const ConnectContent = styled.div`
-  ${({ theme }) => css`
-    margin-top: 1.5rem;
-    text-align: center;
-    padding: 3rem 2rem;
-    border-radius: 1rem;
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-  `}
-`;
-export const ConnectEmpty = styled.div`
-  p {
-    margin-bottom: 1rem;
-  }
-`;
-export const ConnectBox = styled.div`
-  h4 {
-    font-size: 1.5rem;
-  }
-  p {
-    margin: 0.5rem 0 1rem 0;
-  }
-`;
-
-export const Login = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    background: ${theme.colors.white};
-    padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    a {
-      color: ${theme.colors.black} !important;
-      background: ${theme.colors.secondaryBackground};
-      transition: background 0.2s ease-in-out;
-      border-radius: 1rem;
-      padding: 1rem;
-      :hover {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
-    }
-  `}
-`;
-export const LoginWrapper = styled.div`
-  ${({ theme }) => css`
-    p,
-    h3 {
-      color: ${theme.colors.black};
-    }
-    p {
-      margin-top: 0.5rem;
-    }
-  `}
-`;
-
-export const FormTitle = styled.div`
-  margin-bottom: 1.2rem;
-  p {
-    margin-top: 0.5rem;
-  }
-`;
-
-export const FormTitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
 export const SuccessWrapper = styled.div`
   ${({ theme }) => css`
     width: 1.5rem;
@@ -193,6 +94,73 @@ export const SuccessWrapper = styled.div`
   `}
 `;
 
+export const StepTitle = styled.div`
+  ${({ theme }) => css`
+    margin-bottom: 1.2rem;
+    p,
+    h3 {
+      color: ${theme.colors.black};
+    }
+    p {
+      margin-top: 0.5rem;
+    }
+  `}
+`;
+export const StepContent = styled.div``;
+export const Download = styled.div`
+  display: flex;
+  align-items: center;
+  grid-gap: 1rem;
+`;
+
+export const SelectAccount = styled.div`
+  ${({ theme }) => css`
+    margin-top: 1.5rem;
+    p {
+      margin-bottom: 1rem;
+      color: ${theme.colors.black};
+    }
+  `}
+`;
+
+export const Phrases = styled.div`
+  ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    div {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      padding-bottom: 0.8rem;
+      p {
+        font-weight: 550;
+      }
+    }
+  `}
+`;
+export const DownloadButton = styled.a`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackground};
+    padding: 1rem;
+    border-radius: 1rem;
+    max-width: 15rem;
+    width: 100%;
+    height: 6rem;
+    padding: 1rem 2rem;
+    transition: background 0.3s ease-in-out;
+    cursor: pointer;
+    svg {
+      width: 100%;
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+  `}
+`;
+
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
   ${({ theme, isOverflow = false }) => css`
     background-color: ${theme.colors.white};
@@ -201,7 +169,7 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: ${isOverflow ? "overlay" : "hidden"};
+    overflow-y: auto;
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;
@@ -265,9 +233,68 @@ export const CardContent = styled.div`
     }
   `}
 `;
+export const Connect = styled.div`
+  margin-bottom: 1rem;
+`;
+
+export const ConnectTitle = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    h3 {
+      margin-bottom: 0.5rem;
+    }
+  `}
+`;
+
+export const ConnectTitleWrapper = styled.div`
+  div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+`;
+
+export const ConnetTitleIcon = styled.a`
+  width: 2rem;
+`;
+
+export const ConnectContent = styled.div`
+  ${({ theme }) => css`
+    margin-top: 1.5rem;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+export const ConnectEmpty = styled.div`
+  p {
+    margin-bottom: 1rem;
+  }
+`;
+export const ConnectBox = styled.div`
+  h4 {
+    font-size: 1.5rem;
+  }
+  p {
+    margin: 0.5rem 0 1rem 0;
+  }
+`;
+
+export const Login = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+export const LoginWrapper = styled.div``;
 
 export const Footer = styled.div`
   ${({ theme }) => css`
+    padding-left: 1.5rem;
     a {
       color: ${theme.colors.primary};
       font-weight: bold;

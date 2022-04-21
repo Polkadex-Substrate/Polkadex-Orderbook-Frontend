@@ -99,3 +99,5 @@ export { default as Grid } from "./Grid";
 export * from "./Android";
 export * from "./Apple";
 export * from "./Checked";
+export * from "./DownloadApple";
+export * from "./DownloadAndroid";

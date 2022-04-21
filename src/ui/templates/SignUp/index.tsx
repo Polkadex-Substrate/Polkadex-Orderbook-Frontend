@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
 
 import * as S from "./styles";
 
@@ -34,9 +33,9 @@ const defaultValues = {
     type: [],
   },
 };
+
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
-  const [isVisible, setIsVisible] = useState(false);
   const { mnemonic, mnemoicString } = useMnemonic();
   const {
     isSuccess,
@@ -48,22 +47,8 @@ export const SignUpTemplate = () => {
     signUpSuccess,
     componentRef,
   } = useSignUp();
-  const success = true;
   if (signUpSuccess) return <div />;
-  const mnemonicTest = [
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-    "test6",
-    "test7",
-    "test8",
-    "test9",
-    "test10",
-    "test11",
-    "test12",
-  ];
+  const success = false;
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -81,57 +66,18 @@ export const SignUpTemplate = () => {
           <S.Container>
             <S.AsideLeft>
               <S.Title>
-                <h1>Create an account</h1>
-                <p>
-                  Do you have an account? <Link href="/login"> Sign in </Link>
-                </p>
+                <h1>{success ? "Account Created" : "Create an account"}</h1>
+                {success ? (
+                  <p>Access to Polkadex via Web or via App</p>
+                ) : (
+                  <p>
+                    Do you have an account? <Link href="/login"> Sign in </Link>
+                  </p>
+                )}
               </S.Title>
               <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
                 <S.Form>
-                  <S.FormTitle>
-                    <S.FormTitleWrapper>
-                      {success && (
-                        <S.SuccessWrapper>
-                          <Icons.Checked />
-                        </S.SuccessWrapper>
-                      )}
-
-                      <h3>Create your Polkadex Account</h3>
-                    </S.FormTitleWrapper>
-                    {success && <p>Congrats your account has been created !</p>}
-                  </S.FormTitle>
-                  {success ? (
-                    <S.Phrases>
-                      <S.PhrasesTitle>
-                        <h5>My Mnemonic Phrases</h5>
-                        <p>Never share your mnemonic seed with anyone. </p>
-                      </S.PhrasesTitle>
-                      <div>
-                        <S.PhrasesContent>
-                          {mnemonicTest.map((phrase, i) => (
-                            <div key={i}>
-                              <span>{i + 1}.</span>
-                              <p>{phrase}</p>
-                            </div>
-                          ))}
-                        </S.PhrasesContent>
-                      </div>
-                      <Button
-                        onClick={handlePrint}
-                        type="button"
-                        background="transparent"
-                        color="text"
-                        style={{ padding: 0, marginTop: "2rem" }}
-                        icon={{
-                          size: "large",
-                          name: "Print",
-                          background: "inverse",
-                          color: "text",
-                        }}>
-                        Print mnemonic
-                      </Button>
-                    </S.Phrases>
-                  ) : (
+                  {!success && (
                     <Formik
                       initialValues={defaultValues}
                       onSubmit={async (values) => {
@@ -210,66 +156,44 @@ export const SignUpTemplate = () => {
                             <Button size="extraLarge" type="submit" disabled={signUpLoading}>
                               {signUpLoading ? "Loading.." : "Create Account"}
                             </Button>
+                            <Button
+                              onClick={handlePrint}
+                              type="button"
+                              background="transparent"
+                              color="text"
+                              style={{ padding: 0 }}
+                              icon={{
+                                size: "large",
+                                name: "Print",
+                                background: "inverse",
+                                color: "text",
+                              }}>
+                              Print mnemonic
+                            </Button>
                           </FlexSpaceBetween>
                         </Form>
                       )}
                     </Formik>
                   )}
+                  {success && (
+                    <>
+                      <S.Login>
+                        <S.LoginWrapper>
+                          <h3>Login</h3>
+                          <p>Simply dummy text of the printing</p>
+                        </S.LoginWrapper>
+                        <Link href="/login">Login</Link>
+                      </S.Login>
+                      <S.Login>
+                        <S.LoginWrapper>
+                          <h3>Connect to Phone</h3>
+                          <p>Simply dummy text of the printing</p>
+                        </S.LoginWrapper>
+                        <Link href="/connectToPhone">Connect to Phone</Link>
+                      </S.Login>
+                    </>
+                  )}
                 </S.Form>
-                {success && (
-                  <>
-                    <S.Login>
-                      <S.LoginWrapper>
-                        <h3>Login</h3>
-                        <p>Simply dummy text of the printing</p>
-                      </S.LoginWrapper>
-                      <Button background="secondaryBackground" color="black">
-                        Login
-                      </Button>
-                    </S.Login>
-                    <S.Connect>
-                      <S.ConnectTitle>
-                        <S.ConnectTitleWrapper>
-                          <h3>Connect to Phone(Optional)</h3>
-                          <div>
-                            <p>Polkadex App is avaible in</p>
-                            <S.ConnetTitleIcon href="#">
-                              <Icons.Apple />
-                            </S.ConnetTitleIcon>
-                            <S.ConnetTitleIcon href="#">
-                              <Icons.Android />
-                            </S.ConnetTitleIcon>
-                          </div>
-                        </S.ConnectTitleWrapper>
-                        <Button background="secondaryBackground" color="black">
-                          View QR Code
-                        </Button>
-                      </S.ConnectTitle>
-                      <S.ConnectContent>
-                        {isVisible ? (
-                          <S.ConnectBox>
-                            <h4>Mnemonic Phrases QR Code</h4>
-                            <p>
-                              Open Polkadex Exchange App and import your wallet via QR code.
-                            </p>
-                            <QrCode mnemoicString={"['test1','test2','test3' ]"} />
-                          </S.ConnectBox>
-                        ) : (
-                          <S.ConnectEmpty>
-                            <p>I saved my mnemonic seed</p>
-                            <Button
-                              type="button"
-                              onClick={() => setIsVisible(true)}
-                              background="secondaryBackground"
-                              color="black">
-                              View QR Code
-                            </Button>
-                          </S.ConnectEmpty>
-                        )}
-                      </S.ConnectContent>
-                    </S.Connect>
-                  </>
-                )}
               </Loading>
               {!success && (
                 <S.Footer>

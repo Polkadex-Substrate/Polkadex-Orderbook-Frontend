@@ -86,9 +86,20 @@ export const Form = styled.div`
   }
 `;
 export const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    a {
+      background: ${theme.colors.secondaryBackground};
+      padding: 1.4rem;
+      border-radius: 1rem;
+      transition: background 0.2s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
