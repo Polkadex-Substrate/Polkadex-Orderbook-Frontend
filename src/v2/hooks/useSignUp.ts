@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import { useRouter } from "next/router";
 
 import {
   selectMainAccount,
@@ -13,6 +14,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 export function useSignUp() {
+  const router = useRouter();
   const componentRef = useRef();
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const signUpLoading = useReduxSelector(selectSignUpLoading);
@@ -26,6 +28,10 @@ export function useSignUp() {
   });
 
   const isPublicBranch = defaultConfig.polkadexFeature === "none";
+
+  useEffect(() => {
+    if (signUpSuccess) router.push("/connectToPhone");
+  }, [signUpSuccess, router]);
 
   return {
     isSuccess,

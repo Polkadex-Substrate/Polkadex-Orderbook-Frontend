@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
 import * as S from "./styles";
 
@@ -14,24 +15,20 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useMnemonic } from "@polkadex/orderbook-hooks";
-import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainAccount } from "@polkadex/orderbook-modules";
+import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  selectMainAccount,
+  selectPolkadotWalletAccounts,
+  setMainAccount,
+} from "@polkadex/orderbook-modules";
 
 export const ConnectToPhone = () => {
   const dispatch = useDispatch();
+  const componentRef = useRef();
+  // Change to Saga
   const [isVisible, setIsVisible] = useState(false);
-  const { mnemonic, mnemoicString } = useMnemonic();
-  const {
-    isSuccess,
-    isLoading,
-    accounts,
-    selectedAccount,
-    signUpSuccess,
-    componentRef,
-    handlePrint,
-  } = useSignUp();
-  if (signUpSuccess) return <div />;
+  const isLoading = false;
+  const isSuccess = true;
   const mnemonicTest = [
     "test1",
     "test2",
@@ -46,6 +43,17 @@ export const ConnectToPhone = () => {
     "test11",
     "test12",
   ];
+  // Change to Saga
+  const { mnemonic, mnemoicString } = useMnemonic();
+
+  const selectedAccount = useReduxSelector(selectMainAccount);
+
+  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   return (
     <S.Main>
       {!!mnemonic?.length && (

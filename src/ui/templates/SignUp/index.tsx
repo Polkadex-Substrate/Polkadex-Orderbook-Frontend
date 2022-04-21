@@ -47,6 +47,9 @@ export const SignUpTemplate = () => {
     signUpSuccess,
     componentRef,
   } = useSignUp();
+
+  if (signUpSuccess) return <div />;
+
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -64,143 +67,116 @@ export const SignUpTemplate = () => {
           <S.Container>
             <S.AsideLeft>
               <S.Title>
-                <h1>{signUpSuccess ? "Account Created" : "Create an account"}</h1>
-                {signUpSuccess ? (
-                  <p>Access to Polkadex via Web or via App</p>
-                ) : (
-                  <p>
-                    Do you have an account? <Link href="/login"> Sign in </Link>
-                  </p>
-                )}
+                <h1>Create an account</h1>
+
+                <p>
+                  Do you have an account? <Link href="/login"> Sign in </Link>
+                </p>
               </S.Title>
               <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
                 <S.Form>
-                  {!signUpSuccess && (
-                    <Formik
-                      initialValues={defaultValues}
-                      onSubmit={async (values) => {
-                        const { password, accountName } = values;
-                        if (!isPublicBranch) {
-                          dispatch(
-                            signUp({
-                              accountName,
-                              mnemonic: mnemoicString,
-                              password,
-                            })
-                          );
-                        } else alert("signup is not available for beta");
-                      }}>
-                      {({ values, errors, touched, setFieldValue }) => (
-                        <Form>
-                          <Dropdown
-                            direction="bottom"
-                            isClickable
-                            header={
-                              <SelectAccount
-                                isHeader
-                                accountName={
-                                  values?.selectedAccount?.meta?.name ||
-                                  "Select your main account"
-                                }
-                                fullDescription
-                                address={
-                                  values?.selectedAccount?.address ||
-                                  "This wallet will be linked to your Polkadex account"
-                                }
-                              />
-                            }>
-                            <S.SelectContent isOverflow={accounts?.length > 2}>
-                              {isLoading ? (
-                                <MyAccountLoading />
-                              ) : accounts?.length ? (
-                                accounts.map((item, index) => (
-                                  <SelectAccount
-                                    isActive={
-                                      item.address === values?.selectedAccount?.address
-                                    }
-                                    key={index}
-                                    accountName={item.meta.name || `Account ${index}`}
-                                    address={item.address}
-                                    onClick={() =>
-                                      setFieldValue("selectedAccount", accounts[index])
-                                    }
-                                  />
-                                ))
-                              ) : (
-                                <S.SelectMessage>
-                                  You dont have account, please create one
-                                </S.SelectMessage>
-                              )}
-                            </S.SelectContent>
-                          </Dropdown>
-                          <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
-                          <InputPrimary
-                            label="Account Name"
-                            placeholder="Enter a name for this account"
-                            type="accountName"
-                            name="accountName"
-                            error={
-                              errors.accountName && touched.accountName && errors.accountName
-                            }
-                          />
-                          <InputPrimary
-                            label="Password"
-                            placeholder="Enter your password for this account"
-                            type="password"
-                            name="password"
-                            error={errors.password && touched.password && errors.password}
-                          />
-                          <FlexSpaceBetween style={{ marginTop: 20 }}>
-                            <Button size="extraLarge" type="submit" disabled={signUpLoading}>
-                              {signUpLoading ? "Loading.." : "Create Account"}
-                            </Button>
-                            <Button
-                              onClick={handlePrint}
-                              type="button"
-                              background="transparent"
-                              color="text"
-                              style={{ padding: 0 }}
-                              icon={{
-                                size: "large",
-                                name: "Print",
-                                background: "inverse",
-                                color: "text",
-                              }}>
-                              Print mnemonic
-                            </Button>
-                          </FlexSpaceBetween>
-                        </Form>
-                      )}
-                    </Formik>
-                  )}
-                  {signUpSuccess && (
-                    <>
-                      <S.Login>
-                        <S.LoginWrapper>
-                          <h3>Login</h3>
-                          <p>Simply dummy text of the printing</p>
-                        </S.LoginWrapper>
-                        <Link href="/login">Login</Link>
-                      </S.Login>
-                      <S.Login>
-                        <S.LoginWrapper>
-                          <h3>Connect to Phone</h3>
-                          <p>Simply dummy text of the printing</p>
-                        </S.LoginWrapper>
-                        <Link href="/connectToPhone">Connect to Phone</Link>
-                      </S.Login>
-                    </>
-                  )}
+                  <Formik
+                    initialValues={defaultValues}
+                    onSubmit={async (values) => {
+                      const { password, accountName } = values;
+                      if (!isPublicBranch) {
+                        dispatch(
+                          signUp({
+                            accountName,
+                            mnemonic: mnemoicString,
+                            password,
+                          })
+                        );
+                      } else alert("signup is not available for beta");
+                    }}>
+                    {({ values, errors, touched, setFieldValue }) => (
+                      <Form>
+                        <Dropdown
+                          direction="bottom"
+                          isClickable
+                          header={
+                            <SelectAccount
+                              isHeader
+                              accountName={
+                                values?.selectedAccount?.meta?.name ||
+                                "Select your main account"
+                              }
+                              fullDescription
+                              address={
+                                values?.selectedAccount?.address ||
+                                "This wallet will be linked to your Polkadex account"
+                              }
+                            />
+                          }>
+                          <S.SelectContent isOverflow={accounts?.length > 2}>
+                            {isLoading ? (
+                              <MyAccountLoading />
+                            ) : accounts?.length ? (
+                              accounts.map((item, index) => (
+                                <SelectAccount
+                                  isActive={item.address === values?.selectedAccount?.address}
+                                  key={index}
+                                  accountName={item.meta.name || `Account ${index}`}
+                                  address={item.address}
+                                  onClick={() =>
+                                    setFieldValue("selectedAccount", accounts[index])
+                                  }
+                                />
+                              ))
+                            ) : (
+                              <S.SelectMessage>
+                                You dont have account, please create one
+                              </S.SelectMessage>
+                            )}
+                          </S.SelectContent>
+                        </Dropdown>
+                        <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
+                        <InputPrimary
+                          label="Account Name"
+                          placeholder="Enter a name for this account"
+                          type="accountName"
+                          name="accountName"
+                          error={
+                            errors.accountName && touched.accountName && errors.accountName
+                          }
+                        />
+                        <InputPrimary
+                          label="Password"
+                          placeholder="Enter your password for this account"
+                          type="password"
+                          name="password"
+                          error={errors.password && touched.password && errors.password}
+                        />
+                        <FlexSpaceBetween style={{ marginTop: 20 }}>
+                          <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                            {signUpLoading ? "Loading.." : "Create Account"}
+                          </Button>
+                          <Button
+                            onClick={handlePrint}
+                            type="button"
+                            background="transparent"
+                            color="text"
+                            style={{ padding: 0 }}
+                            icon={{
+                              size: "large",
+                              name: "Print",
+                              background: "inverse",
+                              color: "text",
+                            }}>
+                            Print mnemonic
+                          </Button>
+                        </FlexSpaceBetween>
+                      </Form>
+                    )}
+                  </Formik>
                 </S.Form>
               </Loading>
-              {!signUpSuccess && (
-                <S.Footer>
-                  <p>
-                    Do you want to import an account?
-                    <Link href="/recovery"> Import Account </Link>
-                  </p>
-                </S.Footer>
-              )}
+              <S.Footer>
+                <p>
+                  Do you want to import an account?
+                  <Link href="/recovery"> Import Account </Link>
+                </p>
+              </S.Footer>
             </S.AsideLeft>
             <S.AsideRight></S.AsideRight>
           </S.Container>

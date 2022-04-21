@@ -201,7 +201,7 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: hidden;
+    overflow-y: scroll;
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;
