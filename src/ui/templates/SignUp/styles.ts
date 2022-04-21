@@ -44,7 +44,7 @@ export const Container = styled.div`
 export const AsideRight = styled.div``;
 
 export const AsideLeft = styled.div`
-  ${({ theme }) => css`
+  ${() => css`
     width: 100%;
     ${Form} {
       h3 {
@@ -201,7 +201,7 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: ${isOverflow ? "overlay" : "hidden"};
+    overflow-y: hidden;
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;

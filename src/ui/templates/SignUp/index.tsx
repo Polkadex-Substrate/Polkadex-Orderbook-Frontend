@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { HeaderBack, QrCode } from "@polkadex/orderbook-ui/organisms";
+import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
   Button,
   Dropdown,
@@ -16,7 +16,7 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { PaperWallet } from "@polkadex/orderbook-ui/templates";
-import { FlexSpaceBetween, Icons } from "@polkadex/orderbook-ui/atoms";
+import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
 import { signUp } from "@polkadex/orderbook-modules";
@@ -47,8 +47,6 @@ export const SignUpTemplate = () => {
     signUpSuccess,
     componentRef,
   } = useSignUp();
-  if (signUpSuccess) return <div />;
-  const success = false;
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -66,8 +64,8 @@ export const SignUpTemplate = () => {
           <S.Container>
             <S.AsideLeft>
               <S.Title>
-                <h1>{success ? "Account Created" : "Create an account"}</h1>
-                {success ? (
+                <h1>{signUpSuccess ? "Account Created" : "Create an account"}</h1>
+                {signUpSuccess ? (
                   <p>Access to Polkadex via Web or via App</p>
                 ) : (
                   <p>
@@ -77,7 +75,7 @@ export const SignUpTemplate = () => {
               </S.Title>
               <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
                 <S.Form>
-                  {!success && (
+                  {!signUpSuccess && (
                     <Formik
                       initialValues={defaultValues}
                       onSubmit={async (values) => {
@@ -175,7 +173,7 @@ export const SignUpTemplate = () => {
                       )}
                     </Formik>
                   )}
-                  {success && (
+                  {signUpSuccess && (
                     <>
                       <S.Login>
                         <S.LoginWrapper>
@@ -195,7 +193,7 @@ export const SignUpTemplate = () => {
                   )}
                 </S.Form>
               </Loading>
-              {!success && (
+              {!signUpSuccess && (
                 <S.Footer>
                   <p>
                     Do you want to import an account?

@@ -129,6 +129,10 @@ export const Phrases = styled.div`
     grid-template-columns: repeat(4, 1fr);
     column-gap: 1rem;
     row-gap: 0.5rem;
+    span,
+    p {
+      color: ${theme.colors.black};
+    }
     div {
       display: flex;
       align-items: center;

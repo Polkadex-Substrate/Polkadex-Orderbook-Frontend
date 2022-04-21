@@ -160,7 +160,7 @@ export const ConnectToPhone = () => {
                           onClick={handlePrint}
                           type="button"
                           background="transparent"
-                          color="text"
+                          color="black"
                           style={{ padding: 0, marginTop: "2rem" }}
                           icon={{
                             size: "large",
