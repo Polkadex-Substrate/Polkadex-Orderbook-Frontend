@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
@@ -96,5 +98,19 @@ const Card = ({
       <p>{amount.toFixed(7)}</p>
       <span>{amountFiat.toFixed(7)}</span>
     </S.CardWrapper>
+    <S.CardActions>
+      <Link href={`/wallet/${name}`}>
+        <a>
+          <Icon name="OrderBuy" color="black" size="medium" />
+          <span>Deposit</span>
+        </a>
+      </Link>
+      <Link href={`/wallet/${name}`}>
+        <a>
+          <Icon name="OrderSell" color="black" size="medium" />
+          <span>Withdraw</span>
+        </a>
+      </Link>
+    </S.CardActions>
   </S.Card>
 );
