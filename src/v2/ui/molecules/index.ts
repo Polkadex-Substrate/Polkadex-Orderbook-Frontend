@@ -19,3 +19,4 @@ export * from "./TradingView";
 export * from "./OrderHistoryTable";
 export * from "./TableRow";
 export * from "./TradeHistoryTable";
+export * from "./MyWallet";

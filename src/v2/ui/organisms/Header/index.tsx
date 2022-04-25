@@ -6,6 +6,7 @@ import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
 import {
   MyAccount,
   Notifications,
+  MyWallet,
   Menu,
   Search,
   QuickLogin,
@@ -30,6 +31,7 @@ export const Header = () => {
           {hasUser ? (
             <>
               <Notifications />
+              <MyWallet />
               <MyAccount />
             </>
           ) : (
@@ -50,6 +52,7 @@ export const Header = () => {
                 title="Log in with QR Code"
                 description="Scan this QR Code with the Polkadex mobile app to log in instantly."
                 qrCodeValue={"test1, test2, test3"}
+                background="black"
               />
             </S.Box>
           )}

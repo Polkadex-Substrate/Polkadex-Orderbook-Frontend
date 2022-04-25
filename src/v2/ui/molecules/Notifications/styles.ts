@@ -39,7 +39,6 @@ export const Content = styled.div`
 export const Title = styled.div`
   ${({ theme }) => css`
     padding: 2rem;
-    transition: all 0.3s ease-in-out;
     a {
       padding: 0.5rem 1rem;
       border-radius: 1rem;

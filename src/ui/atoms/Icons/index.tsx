@@ -101,3 +101,4 @@ export * from "./Apple";
 export * from "./Checked";
 export * from "./DownloadApple";
 export * from "./DownloadAndroid";
+export * from "./IncreaseFilter";
