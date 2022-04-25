@@ -3,10 +3,10 @@ import { useReactToPrint } from "react-to-print";
 import { useRouter } from "next/router";
 
 import {
-  selectMainAccount,
-  selectPolkadotWalletAccounts,
-  selectPolkadotWalletLoading,
-  selectPolkadotWalletSuccess,
+  selectExtensionWalletAccounts,
+  selectExtensionWalletLoading,
+  selectExtensionWalletSuccess,
+  selectMainExtensionAccount,
   selectSignUpLoading,
   selectSignUpSuccess,
 } from "@polkadex/orderbook-modules";
@@ -18,10 +18,10 @@ export function useSignUp() {
   const componentRef = useRef();
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const signUpLoading = useReduxSelector(selectSignUpLoading);
-  const selectedAccount = useReduxSelector(selectMainAccount);
-  const isLoading = useReduxSelector(selectPolkadotWalletLoading);
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
+  const isLoading = useReduxSelector(selectExtensionWalletLoading);
+  const isSuccess = useReduxSelector(selectExtensionWalletSuccess);
+  const selectedExtensionAccount = useReduxSelector(selectMainExtensionAccount);
+  const extensionAccounts = useReduxSelector(selectExtensionWalletAccounts);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -37,11 +37,11 @@ export function useSignUp() {
     isSuccess,
     signUpLoading,
     isLoading,
-    accounts,
     handlePrint,
     isPublicBranch,
-    selectedAccount,
     signUpSuccess,
     componentRef,
+    selectedExtensionAccount,
+    extensionAccounts,
   };
 }

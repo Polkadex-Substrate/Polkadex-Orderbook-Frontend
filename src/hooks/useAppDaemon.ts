@@ -19,6 +19,7 @@ import {
   selectCurrentTrade,
   selectHasUser,
   selectLastRecentTrade,
+  extensionWalletFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useAppDaemon = () => {
@@ -32,6 +33,7 @@ export const useAppDaemon = () => {
   useEffect(() => {
     dispatch(rabbitmqChannelFetch());
     dispatch(polkadotWalletFetch());
+    dispatch(extensionWalletFetch());
   }, [dispatch]);
 
   // intitialize market dependent events

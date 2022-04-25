@@ -17,9 +17,9 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectMainAccount,
-  selectPolkadotWalletAccounts,
-  setMainAccount,
+  selectExtensionWalletAccounts,
+  selectMainExtensionAccount,
+  setMainExtensionAccount,
 } from "@polkadex/orderbook-modules";
 
 export const ConnectToPhone = () => {
@@ -46,9 +46,8 @@ export const ConnectToPhone = () => {
   // Change to Saga
   const { mnemonic, mnemoicString } = useMnemonic();
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
-
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
+  const selectedAccount = useReduxSelector(selectMainExtensionAccount);
+  const accounts = useReduxSelector(selectExtensionWalletAccounts);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -103,7 +102,9 @@ export const ConnectToPhone = () => {
                       header={
                         <SelectAccount
                           isHeader
-                          accountName={selectedAccount?.meta.name || "Select your account"}
+                          accountName={
+                            selectedAccount?.meta.name || "Select your main account"
+                          }
                           address={selectedAccount?.address || "Polkadex is completely free"}
                         />
                       }>
@@ -120,7 +121,7 @@ export const ConnectToPhone = () => {
                               onClick={() =>
                                 isVisible
                                   ? undefined
-                                  : dispatch(setMainAccount(accounts[index]))
+                                  : dispatch(setMainExtensionAccount(accounts[index]))
                               }
                             />
                           ))

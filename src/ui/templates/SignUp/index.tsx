@@ -41,11 +41,11 @@ export const SignUpTemplate = () => {
     isSuccess,
     signUpLoading,
     isLoading,
-    accounts,
     handlePrint,
     isPublicBranch,
     signUpSuccess,
     componentRef,
+    extensionAccounts,
   } = useSignUp();
 
   if (signUpSuccess) return <div />;
@@ -73,7 +73,7 @@ export const SignUpTemplate = () => {
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
+              <Loading isActive={false} color="primaryBackgroundOpacity">
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}
@@ -108,18 +108,18 @@ export const SignUpTemplate = () => {
                               }
                             />
                           }>
-                          <S.SelectContent isOverflow={accounts?.length > 2}>
+                          <S.SelectContent isOverflow={extensionAccounts?.length > 2}>
                             {isLoading ? (
                               <MyAccountLoading />
-                            ) : accounts?.length ? (
-                              accounts.map((item, index) => (
+                            ) : extensionAccounts?.length ? (
+                              extensionAccounts.map((item, index) => (
                                 <SelectAccount
                                   isActive={item.address === values?.selectedAccount?.address}
                                   key={index}
                                   accountName={item.meta.name || `Account ${index}`}
                                   address={item.address}
                                   onClick={() =>
-                                    setFieldValue("selectedAccount", accounts[index])
+                                    setFieldValue("selectedAccount", extensionAccounts[index])
                                   }
                                 />
                               ))

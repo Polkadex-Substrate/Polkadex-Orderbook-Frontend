@@ -32,6 +32,7 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
+import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/extensionWallet";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -44,6 +45,7 @@ export * from "./user/transactions";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/polkadotWallet";
+export * from "./user/extensionWallet";
 export * from "./user/wallets";
 export * from "./user/deposits";
 export * from "./user/withdraws";
@@ -74,6 +76,7 @@ export interface RootState {
   };
   user: {
     polkadotWallet: PolkadotWalletState;
+    extensionWallet: ExtensionWalletState;
     auth: AuthState;
     balances: BalancesState;
     history: HistoryState;
@@ -97,6 +100,7 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield all([
+    call(rootExtensionWalletSaga),
     call(rootAuthSaga),
     call(rootDepositsSaga),
     call(rootCurrenciesSaga),
