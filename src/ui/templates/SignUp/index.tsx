@@ -19,11 +19,11 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { signUp } from "@polkadex/orderbook-modules";
+import { setMainExtensionAccount, signUp } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
-  accountName: "Main Account",
+  accountName: "Proxy Account",
   selectedAccount: {
     address: "",
     meta: {
@@ -38,7 +38,6 @@ export const SignUpTemplate = () => {
   const dispatch = useDispatch();
   const { mnemonic, mnemoicString } = useMnemonic();
   const {
-    isSuccess,
     signUpLoading,
     isLoading,
     handlePrint,
@@ -118,9 +117,12 @@ export const SignUpTemplate = () => {
                                   key={index}
                                   accountName={item.meta.name || `Account ${index}`}
                                   address={item.address}
-                                  onClick={() =>
-                                    setFieldValue("selectedAccount", extensionAccounts[index])
-                                  }
+                                  onClick={() => {
+                                    setFieldValue("selectedAccount", extensionAccounts[index]);
+                                    dispatch(
+                                      setMainExtensionAccount(extensionAccounts[index])
+                                    );
+                                  }}
                                 />
                               ))
                             ) : (
