@@ -6,7 +6,7 @@ import { ApiPromise } from "@polkadot/api";
 import { sendError, selectMainAccount, selectRangerApi } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { notificationPush } from "../../notificationHandler";
-import { MainAccount } from "../../mainAccounts";
+import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 

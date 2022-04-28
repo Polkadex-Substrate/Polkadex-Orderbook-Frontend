@@ -32,7 +32,7 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
-import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccounts";
+import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -45,7 +45,7 @@ export * from "./user/transactions";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/proxyAccount";
-export * from "./user/mainAccounts";
+export * from "./user/mainAccount";
 export * from "./user/wallets";
 export * from "./user/deposits";
 export * from "./user/withdraws";

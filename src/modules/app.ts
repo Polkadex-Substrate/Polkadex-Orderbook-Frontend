@@ -24,7 +24,7 @@ import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
 import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
-import { extensionWalletReducer } from "./user/mainAccounts";
+import { extensionWalletReducer } from "./user/mainAccount";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
