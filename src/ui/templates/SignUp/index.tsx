@@ -19,7 +19,7 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainExtensionAccount, signUp } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
@@ -119,9 +119,7 @@ export const SignUpTemplate = () => {
                                   address={item.address}
                                   onClick={() => {
                                     setFieldValue("selectedAccount", extensionAccounts[index]);
-                                    dispatch(
-                                      setMainExtensionAccount(extensionAccounts[index])
-                                    );
+                                    dispatch(setMainAccountFetch(extensionAccounts[index]));
                                   }}
                                 />
                               ))
