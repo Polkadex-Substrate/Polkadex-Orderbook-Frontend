@@ -85,6 +85,22 @@ export const Form = styled.div`
     margin: 1rem 0;
   }
 `;
+export const Flex = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    a {
+      background: ${theme.colors.secondaryBackground};
+      padding: 1.4rem;
+      border-radius: 1rem;
+      transition: background 0.2s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
+`;
 
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
   ${({ theme, isOverflow = false }) => css`
@@ -94,7 +110,7 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
     width: 100%;
     box-shadow: ${theme.shadows.tertiary};
     max-height: 20rem;
-    overflow-y: ${isOverflow ? "overlay" : "hidden"};
+    overflow-y: scroll;
     scrollbar-width: none;
     ${Dropdown} {
       cursor: pointer;

@@ -19,6 +19,8 @@ import {
   selectCurrentTrade,
   selectHasUser,
   selectLastRecentTrade,
+  extensionWalletFetch,
+  rangerConnectFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useAppDaemon = () => {
@@ -30,8 +32,10 @@ export const useAppDaemon = () => {
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   // basic initialization
   useEffect(() => {
+    dispatch(rangerConnectFetch());
     dispatch(rabbitmqChannelFetch());
     dispatch(polkadotWalletFetch());
+    dispatch(extensionWalletFetch());
   }, [dispatch]);
 
   // intitialize market dependent events

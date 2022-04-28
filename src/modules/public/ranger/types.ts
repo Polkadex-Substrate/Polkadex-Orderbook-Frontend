@@ -18,22 +18,15 @@ export const orderbookTypes = {
   AssetId: {
     _enum: {
       POLKADEX: null,
-      BTC: null,
-      DOT: null,
-      CHAINSAFE: "H160",
-      USD: null,
+      ASSET: "u128",
     },
   },
   CHAINSAFE: "H160",
   CurrencyIdOf: "AssetId",
   CurrencyId: "AssetId",
   ShardIdentifier: "H256",
+  Balance: "u128",
   BalanceOf: "Balance",
-  AccountData: {
-    free: "u128",
-    reserved: "u128",
-    frozen: "u128",
-  },
   Message: {
     data: "Vec<u8>",
     proof: "Proof",

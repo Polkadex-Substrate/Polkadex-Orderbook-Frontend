@@ -4,19 +4,29 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Main = styled.div``;
 
-export const Header = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+export const Header = styled.div<{
+  isActive?: boolean;
+  background?: string;
+  hasBorder?: boolean;
+}>`
+  ${({ theme, isActive, background, hasBorder }) => css`
     display: flex;
     align-items: center;
     color: ${theme.colors.inverse};
-    background: ${isActive ? theme.colors.primary : theme.colors.inverse};
-    padding: 1.8rem;
-    border-radius: 1.5rem 0 0 1.5rem;
-    transition: background 0.3s ease-in-out;
+    background: ${isActive ? theme.colors.primary : theme.colors[background]};
+    padding: 1.4rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: ${hasBorder ? "1rem" : "0"};
+    border-bottom-right-radius: ${hasBorder ? "1rem" : "0"};
+    border-bottom-left-radius: 1rem;
+    transition: background 0.3s ease-in-out, opacity 0.3s ease-in-out;
     color: ${theme.colors.text};
     user-select: none;
     ${Icon} {
       margin-right: 0.5rem;
+    }
+    :hover {
+      opacity: 0.7;
     }
   `}
 `;

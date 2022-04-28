@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, HTMLAttributes } from "react";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 
 import { Button, Icon, WalletInput, Skeleton } from "../";
@@ -168,6 +167,7 @@ export const MyAccountContent = ({
 export const SelectAccount = ({
   address,
   isActive,
+  fullDescription,
   isHeader,
   accountName,
   withButton,
@@ -192,7 +192,7 @@ export const SelectAccount = ({
           <S.SelectAccountHeader>
             <div>
               <p>{accountName}</p>
-              <span>{shortAddress}</span>
+              <span>{fullDescription ? address : shortAddress}</span>
             </div>
             {withButton && (
               <Icon name="ArrowBottom" size="small" style={{ marginLeft: "1rem" }} />

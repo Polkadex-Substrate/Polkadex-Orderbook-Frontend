@@ -23,6 +23,7 @@ export const AccountInfo = styled.div`
   justify-content: space-between;
   margin-left: 0.5rem;
   flex: 1;
+
   span {
     line-height: 1.1;
   }
@@ -51,6 +52,13 @@ export const SelectAccountHeader = styled(AccountInfoHeader)`
   justify-content: space-between;
   align-items: center;
   flex: 1;
+  span {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 35rem;
+  }
   span,
   p {
     color: black;
@@ -60,7 +68,7 @@ export const SelectAccountHeader = styled(AccountInfoHeader)`
 export const AccountContent = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull = false }) => css`
     background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    clor: ${theme.colors.black};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.primary};
     ${isFull &&
