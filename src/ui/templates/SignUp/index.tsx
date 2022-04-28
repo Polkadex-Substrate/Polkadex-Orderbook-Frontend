@@ -41,6 +41,7 @@ export const SignUpTemplate = () => {
     signUpLoading,
     isLoading,
     handlePrint,
+    isSuccess,
     isPublicBranch,
     signUpSuccess,
     componentRef,
@@ -72,7 +73,7 @@ export const SignUpTemplate = () => {
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <Loading isActive={false} color="primaryBackgroundOpacity">
+              <Loading isActive={isSuccess} color="primaryBackgroundOpacity">
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}
