@@ -1,11 +1,8 @@
 import { put, delay, call, select } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { ApiPromise, Keyring } from "@polkadot/api";
-import { mnemonicToMiniSecret, naclKeypairFromSeed } from "@polkadot/util-crypto";
 
 import { sendError, selectMainAccount, selectRangerApi } from "../../../";
-import { ConnectPhoneFetch, signUpData, signUpError, SignUpFetch } from "../actions";
+import { ConnectPhoneFetch, signUpData, signUpError } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 import { MainAccount } from "../../mainAccount";
 
