@@ -17,6 +17,7 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  connectPhoneFetch,
   selectExtensionWalletAccounts,
   selectMainAccount,
   setMainAccountFetch,
@@ -29,20 +30,7 @@ export const ConnectToPhone = () => {
   const [isVisible, setIsVisible] = useState(false);
   const isLoading = false;
   const isSuccess = true;
-  const mnemonicTest = [
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-    "test6",
-    "test7",
-    "test8",
-    "test9",
-    "test10",
-    "test11",
-    "test12",
-  ];
+
   // Change to Saga
   const { mnemonic, mnemoicString } = useMnemonic();
 
@@ -140,7 +128,9 @@ export const ConnectToPhone = () => {
                           background="secondaryBackground"
                           color="black"
                           type="button"
-                          onClick={() => setIsVisible(true)}>
+                          onClick={() =>
+                            dispatch(connectPhoneFetch({ mnemonic: mnemoicString }))
+                          }>
                           Unlock QR Code
                         </Button>
                       </S.SelectAccount>
@@ -156,7 +146,7 @@ export const ConnectToPhone = () => {
                       </S.StepTitle>
                       <S.StepContent>
                         <S.Phrases>
-                          {mnemonicTest.map((phrase, i) => (
+                          {mnemonic.map((phrase, i) => (
                             <div key={i}>
                               <span>{i + 1}.</span>
                               <p>{phrase}</p>

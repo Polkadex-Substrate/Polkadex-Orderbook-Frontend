@@ -1,21 +1,24 @@
 import { put, delay, call, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
-import { ApiPromise } from "@polkadot/api";
+import { KeyringPair } from "@polkadot/keyring/types";
+import { ApiPromise, Keyring } from "@polkadot/api";
+import { mnemonicToMiniSecret, naclKeypairFromSeed } from "@polkadot/util-crypto";
 
-import { sendError, selectMainAccount, selectRangerApi, alertPush } from "../../../";
-import { signUpData, signUpError, SignUpFetch } from "../actions";
+import { sendError, selectMainAccount, selectRangerApi } from "../../../";
+import { ConnectPhoneFetch, signUpData, signUpError, SignUpFetch } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
-export function* signUpSaga(action: SignUpFetch) {
+export function* connectPhoneSaga(action: ConnectPhoneFetch) {
   try {
     const api = yield select(selectRangerApi);
     const mainAccount: MainAccount = yield select(selectMainAccount);
-    const { mnemonic, password, accountName } = action.payload;
+    const { mnemonic } = action.payload;
+    const keyring = new Keyring();
     keyring.setSS58Format(88);
-    const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
+    const pair = keyring.createFromUri(mnemonic);
     const proxyAddress = pair.address;
     if (api && mainAccount.address) {
       const res = yield call(() =>
@@ -23,10 +26,10 @@ export function* signUpSaga(action: SignUpFetch) {
       );
       if (res.isSuccess) {
         yield put(
-          alertPush({
-            type: "Successful",
+          notificationPush({
+            type: "Loading",
             message: {
-              title: "New proxy account Registered",
+              title: "Your Account has been created",
             },
           })
         );

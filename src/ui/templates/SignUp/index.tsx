@@ -23,7 +23,7 @@ import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
-  accountName: "Proxy Account",
+  accountName: "",
   selectedAccount: {
     address: "",
     meta: {
@@ -132,8 +132,8 @@ export const SignUpTemplate = () => {
                         </Dropdown>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
-                          label="Account Name"
-                          placeholder="Enter a name for this account"
+                          label="Proxy account name"
+                          placeholder="Proxy account act as a controller for you main account"
                           type="accountName"
                           name="accountName"
                           error={
