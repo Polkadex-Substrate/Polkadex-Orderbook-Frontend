@@ -18,7 +18,7 @@ export const orderbookTypes = {
   AssetId: {
     _enum: {
       POLKADEX: null,
-      ASSET: "u128",
+      Asset: "u128",
     },
   },
   CHAINSAFE: "H160",
@@ -77,6 +77,31 @@ export const orderbookTypes = {
   PruningRange: {
     oldestUnprunedBlock: "u64",
     oldestBlockToKeep: "u64",
+  },
+  OrderPayload: {
+    user: "AccountId",
+    pair: "TradingPair",
+    side: "OrderSide",
+    order_type: "OrderType",
+    qty: "u128",
+    price: "u128",
+    nonce: "u32",
+  },
+  TradingPair: {
+    base_asset: "AssetId",
+    quote_asset: "AssetId",
+  },
+  OrderSide: {
+    _enum: {
+      Ask: null,
+      Bid: null,
+    },
+  },
+  OrderType: {
+    _enum: {
+      LIMIT: null,
+      MARKET: null,
+    },
   },
 };
 
