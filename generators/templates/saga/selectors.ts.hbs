@@ -1,8 +1,8 @@
 import { RootState } from "../../";
 
 export const select{{properCase name}}Success = (state: RootState): boolean =>
-  state.{{dotCase name}}.success;
+  state.public.{{properCase name}}.success;
 export const select{{properCase name}}Error = (state: RootState): string =>
-  state.{{dotCase name}}.error;
+  state.public{{properCase name}}.error;
 export const select{{properCase name}}Loading = (state: RootState): boolean =>
-  state.{{dotCase name}}.loading;
+  state.public.{{properCase name}}.loading;
