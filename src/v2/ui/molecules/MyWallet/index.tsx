@@ -111,7 +111,7 @@ const Card = ({
       </S.CardIconWrapper>
       <S.CardInfo>
         <p>{toCapitalize(name)}</p>
-        <span>{ticker}</span>
+        <span>PDE</span>
       </S.CardInfo>
     </S.CardWrapper>
     {locked && (

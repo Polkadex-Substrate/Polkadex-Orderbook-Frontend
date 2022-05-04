@@ -54,7 +54,7 @@ export const WalletTemplate = () => {
                     <Icon
                       name="Btc"
                       size="giant"
-                      color="black"
+                      color="text"
                       style={{ marginRight: "0.8rem" }}
                       isToken
                     />

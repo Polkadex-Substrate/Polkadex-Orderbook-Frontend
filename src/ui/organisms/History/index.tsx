@@ -35,42 +35,20 @@ export const History = () => {
       };
     });
   };
-  const selectedValue = [
-    {
-      isDeposit: false,
-      id: "1",
-      timestamp: new Date(Date.now()),
-      currency: "0",
-      amount: 0,
-      from: "0x000000000000000000",
-      to: "0x00000000000000000000",
-      fee: 0.01,
-    },
-    {
-      isDeposit: true,
-      id: "2",
-      timestamp: Date.now(),
-      currency: "0",
-      amount: 0.0,
-      from: "0x000000000000000000",
-      to: "0x000000000000000000",
-      fee: 0.01,
-    },
-  ];
 
-  // const selectedValue = useMemo(() => {
-  //   switch (selected) {
-  //     case "Deposits":
-  //       return getValue(depositHistory, true);
-  //     case "Withdrawals":
-  //       return getValue(withdrawHistory);
-  //     default:
-  //       return [
-  //         ...(getValue(depositHistory, true) || []),
-  //         ...(getValue(withdrawHistory) || []),
-  //       ];
-  //   }
-  // }, [depositHistory, withdrawHistory, selected]);
+  const selectedValue = useMemo(() => {
+    switch (selected) {
+      case "Deposits":
+        return getValue(depositHistory, true);
+      case "Withdrawals":
+        return getValue(withdrawHistory);
+      default:
+        return [
+          ...(getValue(depositHistory, true) || []),
+          ...(getValue(withdrawHistory) || []),
+        ];
+    }
+  }, [depositHistory, withdrawHistory, selected]);
 
   console.log(selectedValue);
   useEffect(() => {
@@ -100,7 +78,7 @@ export const History = () => {
         </S.TitleWrapper>
       </S.Title>
       <S.Content>
-        {!!selectedValue?.length &&
+        {selectedValue?.length ? (
           selectedValue
             .filter((value) => value.currency === route.query.id)
             .map((value) => (
@@ -115,7 +93,10 @@ export const History = () => {
                 amountInFiat={(0.0).toFixed(2)}
                 isDeposit={value.isDeposit}
               />
-            ))}
+            ))
+        ) : (
+          <EmptyData />
+        )}
       </S.Content>
     </S.Wrapper>
   );
@@ -164,4 +145,13 @@ const FiltersHeader = ({ selected = "All" }) => (
     <span>{selected}</span>
     <Icon stroke="text" name="ArrowBottom" />
   </S.HeaderFilters>
+);
+
+const EmptyData = ({ message = "No Transactions" }) => (
+  <S.Empty>
+    <S.EmptyContainer>
+      <img src="/img/emptyOrderbookSell.png" alt="Empty Trades" />
+      <p>{message}</p>
+    </S.EmptyContainer>
+  </S.Empty>
 );

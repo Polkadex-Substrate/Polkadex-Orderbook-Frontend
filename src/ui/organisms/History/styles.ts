@@ -145,3 +145,19 @@ export const HeaderFilters = styled.div<{ isHeader?: boolean }>`
     `}
   `}
 `;
+
+export const Empty = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const EmptyContainer = styled.div`
+  text-align: center;
+  padding: 5rem 1rem;
+  img {
+    margin-bottom: 1rem;
+    max-width: 10rem;
+  }
+`;

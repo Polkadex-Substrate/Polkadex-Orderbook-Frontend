@@ -199,7 +199,7 @@ export const SelectAccount = ({
           <S.SelectAccountHeader>
             <S.SelectAccountHeaderWrapper>
               <S.SelectAccountTitle>
-                {locked && <Icon name="Lock" stroke="text" />}
+                {locked && <Icon name="Lock" stroke="secondaryBackgroundDark" />}
                 <p>{accountName}</p>
               </S.SelectAccountTitle>
               <S.SelectAccountFlex>

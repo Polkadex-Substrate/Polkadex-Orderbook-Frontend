@@ -52,7 +52,7 @@ export const Header = () => {
                 title="Log in with QR Code"
                 description="Scan this QR Code with the Polkadex mobile app to log in instantly."
                 qrCodeValue={"test1, test2, test3"}
-                background="white"
+                background="inverse"
               />
             </S.Box>
           )}
