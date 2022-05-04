@@ -30,13 +30,14 @@ export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    min-width: 35rem;
+    min-width: 30rem;
+    height: max-content;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
     display: flex;
     flex-direction: column;
-    max-height: 80vh;
+    /* max-height: 80vh; */
     height: 100%;
   `}
 `;
@@ -83,33 +84,35 @@ export const FundsWrapper = styled.div<{ hasScroll?: boolean }>`
   `}
 `;
 
-export const FundsHeader = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 1rem;
-  padding: 0.5rem 1rem;
-  position: sticky;
-  top: 0;
-  background: white;
-  span {
-    opacity: 0.4;
-    :not(:first-child) {
-      text-align: right;
+export const FundsHeader = styled.div<{ hasLocked?: boolean }>`
+  ${({ hasLocked }) => css`
+    display: grid;
+    grid-template-columns: ${hasLocked ? "1fr 1fr 1fr" : "1fr 1fr"};
+    grid-gap: 1rem;
+    padding: 0.5rem 1rem;
+    position: sticky;
+    top: 0;
+    background: white;
+    span {
+      opacity: 0.4;
+      :not(:first-child) {
+        text-align: right;
+      }
     }
-  }
+  `}
 `;
 
 export const FundsContent = styled.div``;
 
-export const Card = styled.div`
-  ${({ theme }) => css`
+export const Card = styled.div<{ hasLocked?: boolean }>`
+  ${({ theme, hasLocked }) => css`
     position: relative;
     user-select: none;
     border-radius: 1rem;
     padding: 1rem;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: ${hasLocked ? "1fr 1fr 1fr" : "1fr 1fr"};
     grid-gap: 1rem;
     align-items: center;
     cursor: pointer;
@@ -131,16 +134,21 @@ export const Card = styled.div`
 `;
 
 export const CardWrapper = styled.div`
-  p {
-    font-weight: 500;
-  }
-  :not(:first-child) {
-    text-align: right;
-  }
-  :first-child {
-    display: flex;
-    align-items: center;
-  }
+  ${({ theme }) => css`
+    p {
+      font-weight: 500;
+    }
+    :not(:first-child) {
+      text-align: right;
+    }
+    :first-child {
+      display: flex;
+      align-items: center;
+    }
+    span {
+      color: ${theme.colors.secondaryBackgroundDark};
+    }
+  `}
 `;
 export const CardInfo = styled.div``;
 

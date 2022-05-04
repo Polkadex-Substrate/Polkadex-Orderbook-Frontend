@@ -48,9 +48,9 @@ export const Primary = styled.div`
 
 export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
   ${({ theme, hasLabel }) => css`
-    background: ${theme.colors.primaryBackground};
+    background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1.2rem 0.8rem;
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

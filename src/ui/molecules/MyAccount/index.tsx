@@ -96,9 +96,8 @@ export const MyAccountContent = ({
           const res = await API.post(option)("/test_deposit", data);
           return res;
         });
-        const res = await Promise.all(reqs);
+        const res: any = await Promise.all(reqs);
         console.log(res);
-        // @ts-ignore
         if (res[0].Fine && res[1].Fine) {
           dispatch(balancesFetch());
           alert("Funds added, You are rich now!");
@@ -171,7 +170,11 @@ export const SelectAccount = ({
   isHeader,
   accountName,
   withButton,
+  locked = false,
   isFull = true,
+  iconColor = "white",
+  iconBackground = "black",
+  isHoverable = true,
   ...props
 }: T.SelectAccountProps & HTMLAttributes<HTMLDivElement>) => {
   const shortAddress =
@@ -181,19 +184,29 @@ export const SelectAccount = ({
 
   return (
     <S.SelectAccountWrapper isFull={isFull}>
-      <S.SelectAccount isActive={isActive} isHeader={isHeader} {...props}>
+      <S.SelectAccount
+        isActive={isActive}
+        isHeader={isHeader}
+        isHoverable={isHoverable}
+        {...props}>
         <Icon
           size={isHeader ? "extraGiant" : "giant"}
           name="Avatar"
-          color="white"
-          background="black"
+          color={iconColor}
+          background={iconBackground}
         />
         <S.AccountInfo>
           <S.SelectAccountHeader>
-            <div>
-              <p>{accountName}</p>
-              <span>{fullDescription ? address : shortAddress}</span>
-            </div>
+            <S.SelectAccountHeaderWrapper>
+              <S.SelectAccountTitle>
+                {locked && <Icon name="Lock" stroke="text" />}
+                <p>{accountName}</p>
+              </S.SelectAccountTitle>
+              <S.SelectAccountFlex>
+                <span>{fullDescription ? address : shortAddress}</span>
+                {isHeader && <Icon name="ArrowBottom" stroke="black" />}
+              </S.SelectAccountFlex>
+            </S.SelectAccountHeaderWrapper>
             {withButton && (
               <Icon name="ArrowBottom" size="small" style={{ marginLeft: "1rem" }} />
             )}

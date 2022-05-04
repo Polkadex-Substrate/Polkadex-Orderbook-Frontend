@@ -13,7 +13,9 @@ export type IColors =
   | "green"
   | "orange"
   | "transparent"
-  | "none";
+  | "none"
+  | "black"
+  | "white";
 
 export type IIcons =
   | "ArrowTop"

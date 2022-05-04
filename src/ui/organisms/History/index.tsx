@@ -16,6 +16,7 @@ import {
   UserWithdraws,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
+import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
 export const History = () => {
   const dispatch = useDispatch();
@@ -34,20 +35,44 @@ export const History = () => {
       };
     });
   };
-  const selectedValue = useMemo(() => {
-    switch (selected) {
-      case "Deposits":
-        return getValue(depositHistory, true);
-      case "Withdrawals":
-        return getValue(withdrawHistory);
-      default:
-        return [
-          ...(getValue(depositHistory, true) || []),
-          ...(getValue(withdrawHistory) || []),
-        ];
-    }
-  }, [depositHistory, withdrawHistory, selected]);
+  const selectedValue = [
+    {
+      isDeposit: false,
+      id: "1",
+      timestamp: new Date(Date.now()),
+      currency: "0",
+      amount: 0,
+      from: "0x000000000000000000",
+      to: "0x00000000000000000000",
+      fee: 0.01,
+    },
+    {
+      isDeposit: true,
+      id: "2",
+      timestamp: Date.now(),
+      currency: "0",
+      amount: 0.0,
+      from: "0x000000000000000000",
+      to: "0x000000000000000000",
+      fee: 0.01,
+    },
+  ];
 
+  // const selectedValue = useMemo(() => {
+  //   switch (selected) {
+  //     case "Deposits":
+  //       return getValue(depositHistory, true);
+  //     case "Withdrawals":
+  //       return getValue(withdrawHistory);
+  //     default:
+  //       return [
+  //         ...(getValue(depositHistory, true) || []),
+  //         ...(getValue(withdrawHistory) || []),
+  //       ];
+  //   }
+  // }, [depositHistory, withdrawHistory, selected]);
+
+  console.log(selectedValue);
   useEffect(() => {
     if (userLoggedIn) {
       dispatch(depositsFetch());
@@ -59,12 +84,20 @@ export const History = () => {
     <S.Wrapper>
       <S.Title>
         <h2>History</h2>
-        <Dropdown
-          direction="bottomRight"
-          isClickable
-          header={<FiltersHeader selected={selected} />}>
-          <Filters handleChange={setSelected} />
-        </Dropdown>
+        <S.TitleWrapper>
+          <Dropdown
+            direction="bottomRight"
+            isClickable
+            header={<FiltersHeader selected={selected} />}>
+            <Filters handleChange={setSelected} />
+          </Dropdown>
+          <S.TitleIconWrapper>
+            <Icon name="Calendar" size="extraSmall" />
+          </S.TitleIconWrapper>
+          <S.TitleIconWrapper>
+            <Icon name="Search" stroke="text" size="extraSmall" />
+          </S.TitleIconWrapper>
+        </S.TitleWrapper>
       </S.Title>
       <S.Content>
         {!!selectedValue?.length &&
@@ -76,8 +109,10 @@ export const History = () => {
                 date={value.timestamp.toLocaleString()}
                 address={value.from}
                 txid={value.to}
-                amount={`${value.amount} ${value.currency}`}
-                amountInFiat={0.0}
+                amount={`${value.amount.toFixed(6)} ${getSymbolFromAssetId(
+                  Number(value.currency)
+                )}`}
+                amountInFiat={(0.0).toFixed(2)}
                 isDeposit={value.isDeposit}
               />
             ))}
@@ -91,29 +126,27 @@ export const Card = ({
   address,
   txid,
   amount,
-  amountInFiat = 0.0,
+  amountInFiat = "0.0",
   isDeposit,
 }: T.HistoryProps) => (
-  <a href={`/transaction/${txid}`}>
-    <S.Card>
+  <S.Card>
+    <S.CardLeft>
+      <S.CardIconWrapper>
+        <Icon name={isDeposit ? "WalletDeposit" : "WalletWithdraw"} size="extraMedium" />
+      </S.CardIconWrapper>
       <div>
-        <span>{date}</span>
-        <p>{address}</p>
-      </div>
-      <S.Aside>
-        <span>
-          <Icon
-            name={isDeposit ? "ArrowTop" : "ArrowBottom"}
-            background={isDeposit ? "green" : "primary"}
-            size="extraSmall"
-            style={{ marginRight: 5 }}
-          />
-          {amount}
-        </span>
+        <span>{amount}</span>
         <p>~{amountInFiat} USD</p>
-      </S.Aside>
-    </S.Card>
-  </a>
+      </div>
+    </S.CardLeft>
+    <S.CardRight>
+      <p>{date}</p>
+      <a href="#txidHere" target="_blank">
+        <Icon name="Link" size="extraSmall" />
+        <span>{address}</span>
+      </a>
+    </S.CardRight>
+  </S.Card>
 );
 
 const Filters = ({ handleChange }) => (
@@ -129,6 +162,6 @@ const Filters = ({ handleChange }) => (
 const FiltersHeader = ({ selected = "All" }) => (
   <S.HeaderFilters isHeader>
     <span>{selected}</span>
-    <Icon background="secondaryBackground" name="ArrowBottom" />
+    <Icon stroke="text" name="ArrowBottom" />
   </S.HeaderFilters>
 );

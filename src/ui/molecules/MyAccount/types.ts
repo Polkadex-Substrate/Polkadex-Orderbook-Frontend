@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { IColors } from "@polkadex/orderbook/utils/types";
+
 type SharedProps = {
   balance?: string;
   address?: string;
@@ -12,6 +14,10 @@ export type SelectAccountProps = {
   withButton?: boolean;
   isHeader?: boolean;
   fullDescription?: boolean;
+  locked?: boolean;
+  iconColor?: IColors;
+  iconBackground?: IColors;
+  isHoverable?: boolean;
 } & SharedProps;
 
 export type Props = {

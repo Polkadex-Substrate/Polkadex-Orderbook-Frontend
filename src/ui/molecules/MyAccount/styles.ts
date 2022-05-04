@@ -47,6 +47,24 @@ export const AccountInfoHeader = styled.div`
     }
   `}
 `;
+
+export const SelectAccountFlex = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const SelectAccountTitle = styled.div`
+  display: flex;
+  align-items: center;
+  ${IconWrapper} {
+    margin-right: 0.2rem;
+  }
+`;
+export const SelectAccountHeaderWrapper = styled.div`
+  flex: 1;
+`;
+
 export const SelectAccountHeader = styled(AccountInfoHeader)`
   display: flex;
   justify-content: space-between;
@@ -180,17 +198,18 @@ export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
 export const SelectAccount = styled.div<{
   isActive?: boolean;
   isHeader?: boolean;
+  isHoverable?: boolean;
 }>`
-  ${({ theme, isActive, isHeader }) => css`
+  ${({ theme, isActive, isHeader, isHoverable }) => css`
     display: flex;
     align-items: center;
-    padding: ${isHeader ? "0.8rem" : "0.4rem"};
+    padding: ${isHeader ? "0.8rem" : "0.6rem"};
     cursor: pointer;
     transition: background 0.5s;
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 1rem;
     :hover {
-      background: ${theme.colors.secondaryBackgroundOpacity};
+      background: ${isHoverable ? theme.colors.secondaryBackgroundOpacity : "inherit"};
     }
     :not(:last-child) {
       margin-bottom: 0.5rem;
