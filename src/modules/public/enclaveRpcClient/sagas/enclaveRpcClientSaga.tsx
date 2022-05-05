@@ -5,9 +5,12 @@ import { eventChannel } from "redux-saga";
 import { enclaveRpcConnectionOpen, EnclaveRpcClientFetch } from "../actions";
 import { alertPush } from "../../alertHandler";
 
+import { defaultConfig } from "@polkadex/orderbook-config";
+
+const { enclaveUrl } = defaultConfig;
 export function* enclaveRpcClientSaga(action: EnclaveRpcClientFetch) {
   try {
-    const enclaveWsClient = new Client("ws://localhost:9945"); // Connect to enclave
+    const enclaveWsClient = new Client(enclaveUrl); // Connect to enclave
     const channel = yield call(() => fetchEnclaveRpcClientChannel(enclaveWsClient));
     while (true) {
       const action = yield take(channel);
