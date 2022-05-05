@@ -14,8 +14,10 @@ const ordersOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
+// TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
 export function* ordersHistorySaga() {
   try {
+    return;
     const userAccount = yield select(selectUserInfo);
     if (userAccount.address !== "") {
       const payload = { account: userAccount.address };
