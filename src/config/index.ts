@@ -4,11 +4,13 @@ export * from "./config";
 
 export const defaultConfig: DefaultConfig = {
   influxDBUrl: process.env.INFLUX_DB_URL,
-  polkadotJsWs: process.env.POLKADEX_WS,
   auth: process.env.POLKADEX_HOST_URL,
   polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`,
   amqpWsPassword: process.env.RMQ_KEY,
   amqpWsUsername: process.env.RMQ_USERNAME,
+  polkadexFeature: process.env.POLKADEX_FEATURE,
+  polkadexChain: process.env.POLKADEX_CHAIN,
+  enclaveUrl: process.env.ENCLAVE_URL,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
   withCredentials: false,
   incrementalOrderBook: false,
@@ -21,5 +23,4 @@ export const defaultConfig: DefaultConfig = {
   alertDisplayTime: 8000,
   msPricesUpdates: 1000,
   maintenanceMode: false,
-  polkadexFeature: process.env.POLKADEX_FEATURE,
 };
