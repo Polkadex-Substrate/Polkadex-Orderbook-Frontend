@@ -34,7 +34,7 @@ function* fetchRanger() {
   yield call(() => web3Enable("PolkadexIdo"));
 
   return eventChannel((emitter) => {
-    const provider = new WsProvider(defaultConfig.polkadotJsWs);
+    const provider = new WsProvider(defaultConfig.polkadexChain);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

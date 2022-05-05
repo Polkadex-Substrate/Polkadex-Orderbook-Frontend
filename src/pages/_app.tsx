@@ -44,7 +44,7 @@ const ThemeWrapper = ({ children }) => {
 
   return (
     <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      {/* {!!notifications.length && <Notifications />}
+      {/* {!!notifications.length && <Notifications />} */}
       {alert.status && (
         <Message
           isVisible={alert.status}
@@ -53,7 +53,7 @@ const ThemeWrapper = ({ children }) => {
           title={alert.message.title}
           description={alert.message.description}
         />
-      )} */}
+      )}
       {children}
     </ThemeProvider>
   );

@@ -146,7 +146,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
           isLoading={isOrderLoading}
           isSuccess={isOrderExecuted}
           type="submit"
-          disabled={buttonDisabled}
+          disabled={false} // TODO: THIS HARCODED FOR TESTING PURPOSES ONLY
         />
       </S.Box>
     </form>
