@@ -14,8 +14,10 @@ const balancesOption: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
+// TODO: MUST BE CHANGED DURING SQL_INTEGRATION
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
+    return;
     const account = yield select(selectUserInfo);
     if (account.address) {
       const userBalance = yield call(() => fetchbalancesAsync(account));

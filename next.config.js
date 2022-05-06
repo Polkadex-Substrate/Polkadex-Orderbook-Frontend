@@ -25,5 +25,7 @@ module.exports = {
     INFLUX_DB_TOKEN: process.env.INFLUX_DB_TOKEN,
     RMQ_KEY: process.env.RMQ_KEY,
     RMQ_USERNAME: process.env.RMQ_USERNAME,
+    ENCLAVE_URL: process.env.ENCLAVE_URL || "wss://sgx.polkadex.trade:443",
+    POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "ws://127.0.0.1:9944",
   },
 };

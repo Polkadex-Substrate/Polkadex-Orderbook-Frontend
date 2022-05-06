@@ -27,7 +27,6 @@ export function useSignUp() {
     content: () => componentRef.current,
   });
 
-  const isPublicBranch = defaultConfig.polkadexFeature === "none";
 
   useEffect(() => {
     if (signUpSuccess) router.push("/connectToPhone");
@@ -38,7 +37,6 @@ export function useSignUp() {
     signUpLoading,
     isLoading,
     handlePrint,
-    isPublicBranch,
     signUpSuccess,
     componentRef,
     selectedExtensionAccount,

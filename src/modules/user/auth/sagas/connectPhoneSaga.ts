@@ -48,7 +48,6 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
     );
   }
 }
-// TODO: Check if registerAccount has been successful
 export const registerAccount = async (
   api: ApiPromise,
   proxyAddress: string,

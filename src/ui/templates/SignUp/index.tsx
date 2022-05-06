@@ -42,14 +42,12 @@ export const SignUpTemplate = () => {
     isLoading,
     handlePrint,
     isSuccess,
-    isPublicBranch,
     signUpSuccess,
     componentRef,
     extensionAccounts,
   } = useSignUp();
 
   if (signUpSuccess) return <div />;
-
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -73,21 +71,19 @@ export const SignUpTemplate = () => {
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <Loading isActive={isSuccess} color="primaryBackgroundOpacity">
+              <Loading isActive={false} color="primaryBackgroundOpacity">
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
-                      if (!isPublicBranch) {
-                        dispatch(
-                          signUp({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
-                      } else alert("signup is not available for beta");
+                      dispatch(
+                        signUp({
+                          accountName,
+                          mnemonic: mnemoicString,
+                          password,
+                        })
+                      );
                     }}>
                     {({ values, errors, touched, setFieldValue }) => (
                       <Form>

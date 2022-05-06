@@ -9,17 +9,17 @@ import {
   orderExecuteError,
   OrderExecuteFetch,
   userOrdersHistoryFetch,
+  selectRangerApi,
 } from "../../..";
 import { balancesFetch } from "../../balances";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
-import { formatPayload } from "src/helpers/formatPayload";
-import { OrderSide, OrderType } from "@polkadex/orderbook/modules/types";
+import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
+import {
+  createOrderPayload,
+  placeOrderToEnclave,
+  signOrderPayload,
+} from "@polkadex/orderbook/helpers/createOrdersHelpers";
 
-const ordersOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
 // TODO change keyring to alice/bob
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
@@ -31,21 +31,26 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       throw new Error("Invalid amount");
     }
     const { address, keyringPair } = yield select(selectUserInfo);
-    if (address !== "" && keyringPair) {
-      const payload = createOrderPayload(side, price, order_type, amount, symbol, address);
-      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
-      const data = formatPayload(signature, payload);
-      const res = yield call(() => API.post(ordersOption)("/place_order", data));
-      if (res.FineWithMessage) {
-        yield put(orderExecuteData());
-        console.log(res.Fine);
-        yield delay(1000);
-        yield put(orderExecuteDataDelete());
-        yield put(userOrdersHistoryFetch());
-        yield put(balancesFetch());
-      } else {
-        throw new Error(res.Bad);
-      }
+    const enclaveRpcClient = yield select(selectEnclaveRpcClient);
+    const api = yield select(selectRangerApi);
+    if (address !== "" && keyringPair && enclaveRpcClient && api) {
+      const payload = createOrderPayload(
+        api,
+        address,
+        order_type,
+        side,
+        "1",
+        null,
+        amount,
+        price
+      );
+      const signature = signOrderPayload(api, keyringPair, payload);
+      const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
+      console.log("placeOrderResult =>", res);
+      yield put(orderExecuteData());
+      yield put(orderExecuteDataDelete());
+      yield put(userOrdersHistoryFetch());
+      yield put(balancesFetch());
     }
   } catch (error) {
     console.log({ error });
@@ -60,30 +65,3 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     );
   }
 }
-const createOrderPayload = (
-  side: OrderSide,
-  price: string,
-  order_type: OrderType,
-  amount: string,
-  symbol: number[],
-  address: string
-) => {
-  if (order_type === "Limit") {
-    return {
-      symbol: symbol,
-      order_side: side,
-      order_type,
-      price,
-      amount,
-      account: address,
-    };
-  } else {
-    return {
-      symbol: symbol,
-      order_side: side,
-      order_type,
-      amount,
-      account: address,
-    };
-  }
-};

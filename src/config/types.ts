@@ -35,11 +35,13 @@ export type ApiWrapper = {
 
 export type DefaultConfig = {
   influxDBUrl: string;
-  polkadotJsWs: string;
   auth: string;
   polkadexHostUrl: string;
   amqpWsPassword: string;
   amqpWsUsername: string;
+  polkadexFeature: string;
+  enclaveUrl: string;
+  polkadexChain: string;
   gaTrackerKey: string;
   withCredentials: boolean;
   incrementalOrderBook: boolean;
@@ -52,5 +54,4 @@ export type DefaultConfig = {
   alertDisplayTime: number;
   msPricesUpdates: number;
   maintenanceMode: boolean;
-  polkadexFeature: string;
 };
