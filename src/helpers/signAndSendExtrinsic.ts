@@ -13,7 +13,8 @@ export const signAndSendExtrinsic = async (
   api: ApiPromise,
   extrinsic: SubmittableExtrinsic<"promise", any>,
   injector: any,
-  address: string
+  address: string,
+  waitForFinalization = false
 ) => {
   return new Promise<ExtrinsicResult>((resolve, reject) => {
     extrinsic
@@ -36,7 +37,13 @@ export const signAndSendExtrinsic = async (
               const errMsg = dispatchError.toString();
               reject(new Error(errMsg));
             }
-          } else if (status.isInBlock) {
+          } else if (status.isInBlock && !waitForFinalization) {
+            handleExtrinsicErrors(events, api);
+            const eventMessages = events.map(({ phase, event: { data, method, section } }) => {
+              return `event:${phase} ${section} ${method}:: ${data}`;
+            });
+            resolve({ isSuccess: true, eventMessages, hash: extrinsic.hash.toHex() });
+          } else if (status.isFinalized && waitForFinalization) {
             handleExtrinsicErrors(events, api);
             const eventMessages = events.map(({ phase, event: { data, method, section } }) => {
               return `event:${phase} ${section} ${method}:: ${data}`;

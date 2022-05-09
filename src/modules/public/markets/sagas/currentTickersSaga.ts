@@ -11,8 +11,9 @@ const tickersOptions: RequestOptions = {
   apiVersion: "influxDB",
 };
 const ts = Date.now() / 1000;
-// TODO: remove mockDate and add tickers when we have endpoint available
+// TODO: NEED INFLUXDB ENDPOINT FOR TICKERS
 export function* currentTickersSaga(action: CurrentTickersFetch) {
+  return;
   try {
     const payload = { symbol: action.payload.marketId };
     const res = yield call(() => API.post(tickersOptions)("/fetch_ticker", payload));
