@@ -8,6 +8,10 @@ import {
   ORDERS_SET_CURRENT_PRICE,
   ORDERS_SET_ORDER_TYPE,
   ORDER_EXECUTE_DATA_DELETE,
+  ORDER_CANCEL_DATA,
+  ORDER_CANCEL_FETCH,
+  ORDER_CANCEL_DATA_DELETE,
+  ORDER_CANCEL_ERROR,
 } from "./constants";
 
 export interface OrderExecution {
@@ -18,7 +22,9 @@ export interface OrderExecution {
   order_type?: OrderType;
   amount?: string;
 }
-
+export interface OrderCancellation {
+  order_id: string;
+}
 export interface OrderExecuteFetch {
   type: typeof ORDER_EXECUTE_FETCH;
   payload: OrderExecution;
@@ -34,6 +40,23 @@ export interface OrderExecuteDataDelete {
 
 export interface OrderExecuteError {
   type: typeof ORDER_EXECUTE_ERROR;
+  error: CommonError;
+}
+export interface OrderCancelFetch {
+  type: typeof ORDER_CANCEL_FETCH;
+  payload: OrderCancellation;
+}
+
+export interface OrderCancelData {
+  type: typeof ORDER_CANCEL_DATA;
+}
+
+export interface OrderCancelDataDelete {
+  type: typeof ORDER_CANCEL_DATA_DELETE;
+}
+
+export interface OrderCancelError {
+  type: typeof ORDER_CANCEL_ERROR;
   error: CommonError;
 }
 
@@ -59,7 +82,11 @@ export type OrdersAction =
   | OrderExecuteError
   | SetCurrentPrice
   | SetAmount
-  | SetOrderType;
+  | SetOrderType
+  | OrderCancelFetch
+  | OrderCancelData
+  | OrderCancelDataDelete
+  | OrderCancelError;
 
 export const orderExecuteFetch = (
   payload: OrderExecuteFetch["payload"]
@@ -78,6 +105,24 @@ export const orderExecuteDataDelete = (): OrderExecuteDataDelete => ({
 
 export const orderExecuteError = (error: CommonError): OrderExecuteError => ({
   type: ORDER_EXECUTE_ERROR,
+  error,
+});
+
+export const orderCancelFetch = (payload: OrderCancelFetch["payload"]): OrderCancelFetch => ({
+  type: ORDER_CANCEL_FETCH,
+  payload,
+});
+
+export const orderCancelData = (): OrderCancelData => ({
+  type: ORDER_CANCEL_DATA,
+});
+
+export const orderCancelDataDelete = (): OrderCancelDataDelete => ({
+  type: ORDER_CANCEL_DATA_DELETE,
+});
+
+export const orderCancelError = (error: CommonError): OrderCancelError => ({
+  type: ORDER_CANCEL_ERROR,
   error,
 });
 

@@ -13,10 +13,8 @@ import {
 } from "@polkadex/orderbook-modules";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
-const url = `wss://roedeer.rmq.cloudamqp.com/ws/amqp`;
-
+const url = `wss://rabbitmq-ws.polkadex.trade/ws/amqp`;
 export function* rabbitmqConnectionSaga() {
-
   try {
     const amqp = new AMQPWebSocketClient(
       url,

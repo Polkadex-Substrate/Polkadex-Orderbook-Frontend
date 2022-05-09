@@ -17,24 +17,24 @@ export const initialState:  {{properCase name}}State = {
   success: false,
 };
 
-export const {{camelCase name}}Reducer = (state = initialState, action:  {{properCase name}}Action) => {
+export const {{camelCase name}}Reducer = (state = initialState, action:  {{properCase name}}Action):{{properCase name}}State => {
   switch (action.type) {
     case {{constantCase name}}_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case {{constantCase name}}_DATA:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: true,
       };
     case {{constantCase name}}_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };

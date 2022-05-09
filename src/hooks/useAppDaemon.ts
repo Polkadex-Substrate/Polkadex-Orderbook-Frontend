@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { rabbitmqChannelFetch } from "../modules/public/rabbitmqChannel";
 import { marketsFetchSaga } from "../modules/public/markets/sagas/marketsFetchSaga";
 import { updateTickerWithTrade } from "../helpers/updateTickerWithTrade";
+import { enclaveRpcClientFetch } from "../modules/public/enclaveRpcClient";
 
 import { useReduxSelector } from ".";
 
@@ -19,6 +20,8 @@ import {
   selectCurrentTrade,
   selectHasUser,
   selectLastRecentTrade,
+  extensionWalletFetch,
+  rangerConnectFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useAppDaemon = () => {
@@ -30,8 +33,11 @@ export const useAppDaemon = () => {
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   // basic initialization
   useEffect(() => {
+    dispatch(enclaveRpcClientFetch());
+    dispatch(rangerConnectFetch());
     dispatch(rabbitmqChannelFetch());
     dispatch(polkadotWalletFetch());
+    dispatch(extensionWalletFetch());
   }, [dispatch]);
 
   // intitialize market dependent events

@@ -1,49 +1,53 @@
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/router";
-import { useReactToPrint } from "react-to-print";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon, InputPrimary, Loading } from "@polkadex/orderbook-ui/molecules";
+import {
+  Button,
+  Dropdown,
+  Icon,
+  InputPrimary,
+  Loading,
+  MnemonicExport,
+  MyAccountLoading,
+  SelectAccount,
+} from "@polkadex/orderbook-ui/molecules";
 import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
-import { MnemonicExport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectPolkadotWalletSuccess,
-  selectSignUpLoading,
-  selectSignUpSuccess,
-  signUp,
-} from "@polkadex/orderbook-modules";
-import { defaultConfig } from "@polkadex/orderbook-config";
+import { useMnemonic } from "@polkadex/orderbook-hooks";
+import { useSignUp } from "@polkadex/orderbook/v2/hooks";
+import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
+
 const defaultValues = {
   password: "",
-  accountName: "Main Account",
+  accountName: "",
+  selectedAccount: {
+    address: "",
+    meta: {
+      name: "",
+      source: "",
+    },
+    type: [],
+  },
 };
+
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-
   const { mnemonic, mnemoicString } = useMnemonic();
-  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
-  const signUpLoading = useReduxSelector(selectSignUpLoading);
-  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
-  const componentRef = useRef();
-
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
-  const isPublicBranch = defaultConfig.polkadexFeature === "none";
-  useEffect(() => {
-    if (signUpSuccess) router.push("/login");
-  }, [signUpSuccess, router]);
+  const {
+    signUpLoading,
+    isLoading,
+    handlePrint,
+    isSuccess,
+    signUpSuccess,
+    componentRef,
+    extensionAccounts,
+  } = useSignUp();
 
   if (signUpSuccess) return <div />;
-
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -55,39 +59,78 @@ export const SignUpTemplate = () => {
           />
         </div>
       )}
-      <S.Wrapper id="test">
+      <S.Wrapper>
         <S.Content>
           <HeaderBack />
           <S.Container>
             <S.AsideLeft>
               <S.Title>
                 <h1>Create an account</h1>
+
                 <p>
                   Do you have an account? <Link href="/login"> Sign in </Link>
                 </p>
               </S.Title>
-              <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
+              <Loading isActive={false} color="primaryBackgroundOpacity">
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
-                      if (!isPublicBranch) {
-                        dispatch(
-                          signUp({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
-                      } else alert("signup is not available for beta");
+                      dispatch(
+                        signUp({
+                          accountName,
+                          mnemonic: mnemoicString,
+                          password,
+                        })
+                      );
                     }}>
-                    {({ errors, touched }) => (
+                    {({ values, errors, touched, setFieldValue }) => (
                       <Form>
+                        <Dropdown
+                          direction="bottom"
+                          isClickable
+                          header={
+                            <SelectAccount
+                              isHeader
+                              accountName={
+                                values?.selectedAccount?.meta?.name ||
+                                "Select your main account"
+                              }
+                              fullDescription
+                              address={
+                                values?.selectedAccount?.address ||
+                                "This wallet will be linked to your Polkadex account"
+                              }
+                            />
+                          }>
+                          <S.SelectContent isOverflow={extensionAccounts?.length > 2}>
+                            {isLoading ? (
+                              <MyAccountLoading />
+                            ) : extensionAccounts?.length ? (
+                              extensionAccounts.map((item, index) => (
+                                <SelectAccount
+                                  isActive={item.address === values?.selectedAccount?.address}
+                                  key={index}
+                                  accountName={item.meta.name || `Account ${index}`}
+                                  address={item.address}
+                                  onClick={() => {
+                                    setFieldValue("selectedAccount", extensionAccounts[index]);
+                                    dispatch(setMainAccountFetch(extensionAccounts[index]));
+                                  }}
+                                />
+                              ))
+                            ) : (
+                              <S.SelectMessage>
+                                You dont have account, please create one
+                              </S.SelectMessage>
+                            )}
+                          </S.SelectContent>
+                        </Dropdown>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
-                          label="Account Name"
-                          placeholder="Enter name for this account"
+                          label="Proxy account name"
+                          placeholder="Proxy account act as a controller for you main account"
                           type="accountName"
                           name="accountName"
                           error={
@@ -110,6 +153,7 @@ export const SignUpTemplate = () => {
                             type="button"
                             background="transparent"
                             color="text"
+                            style={{ padding: 0 }}
                             icon={{
                               size: "large",
                               name: "Print",
@@ -124,7 +168,6 @@ export const SignUpTemplate = () => {
                   </Formik>
                 </S.Form>
               </Loading>
-
               <S.Footer>
                 <p>
                   Do you want to import an account?

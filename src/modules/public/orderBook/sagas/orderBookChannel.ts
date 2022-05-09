@@ -1,5 +1,5 @@
 import { eventChannel } from "redux-saga";
-import { call, put, select, take } from "redux-saga/effects";
+import { call, delay, put, select, take } from "redux-saga/effects";
 import { u8aToString } from "@polkadot/util";
 import cryptoRandomString from "crypto-random-string";
 
@@ -22,13 +22,16 @@ export function* orderBookChannelSaga() {
       );
       while (true) {
         const tradesMsg = yield take(channel);
+        console.log("orderbook channel", tradesMsg);
         const data: OrderBookState = JSON.parse(tradesMsg);
-        const { asks, bids } = getDepthFromOrderbook(data);
+        const { asks, bids } = data;
         yield put(orderBookData(data));
         yield put(depthData({ asks, bids }));
+        yield delay(5000); // delay 5000 just for testing (performance)
       }
     }
   } catch (error) {
+    console.log({ error });
     yield put(
       alertPush({
         message: {
@@ -50,8 +53,8 @@ async function fetchOrderBookChannel(
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
       const msg = u8aToString(res.body);
-      emitter(msg);
       res.ack();
+      emitter(msg);
     });
     return () => {
       amqpConsumer.then((consumer) => consumer.cancel());

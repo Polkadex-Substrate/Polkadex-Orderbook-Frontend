@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 // Card
 export const Card = styled.div<{ isOpenOrder?: boolean }>`
   ${({ theme, isOpenOrder }) => css`
-    display: grid;
-    grid-template-columns: 3fr fit-content(100%);
+    display: flex;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: 0 0.5rem;
@@ -36,8 +35,7 @@ export const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(6, auto);
   grid-gap: 2rem;
-
-  overflow: overlay;
+  overflow: auto;
   ::-webkit-scrollbar {
     height: 0;
   }
@@ -87,7 +85,7 @@ export const Tag = styled.span<{ isSell?: boolean }>`
 `;
 
 export const CardInfo = styled.div`
-  padding: 1rem;
+  padding: 0.5rem;
   align-self: center;
   min-width: 10rem;
   p {

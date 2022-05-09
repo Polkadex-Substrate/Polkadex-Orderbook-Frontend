@@ -10,12 +10,12 @@ import * as S from "./styles";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
-  selectMainAccount,
+  selectProxyAccount,
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
   selectPolkadotWalletSuccess,
   selectSignUpSuccess,
-  setMainAccount,
+  setProxyAccount,
   signIn,
 } from "@polkadex/orderbook-modules";
 import {
@@ -27,6 +27,7 @@ import {
   Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
 
 const defaultValues = {
   password: "",
@@ -40,7 +41,7 @@ export const LoginTemplate = () => {
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
   const isLoading = useReduxSelector(selectPolkadotWalletLoading);
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectProxyAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
@@ -62,7 +63,7 @@ export const LoginTemplate = () => {
             <S.Title>
               <h1>Welcome Back!</h1>
               <p>
-                Don't you have an account yet?
+                Don&apos;t you have an account yet?
                 <Link href="/signUp"> Sign up </Link>
               </p>
             </S.Title>
@@ -96,7 +97,7 @@ export const LoginTemplate = () => {
                                 accountName={item.meta.name || `Account ${index}`}
                                 address={item.address}
                                 onClick={() => {
-                                  dispatch(setMainAccount(accounts[index]));
+                                  dispatch(setProxyAccount(accounts[index]));
                                 }}
                               />
                             ))
@@ -114,9 +115,12 @@ export const LoginTemplate = () => {
                         name="password"
                         error={errors.password && touched.password && errors.password}
                       />
-                      <Button size="extraLarge" type="submit">
-                        Login
-                      </Button>
+                      <S.Flex>
+                        <Button size="extraLarge" type="submit">
+                          Login
+                        </Button>
+                        <Link href="connectToPhone">Connect to Phone</Link>
+                      </S.Flex>
                     </Form>
                   )}
                 </Formik>

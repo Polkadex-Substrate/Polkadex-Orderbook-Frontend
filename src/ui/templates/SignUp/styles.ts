@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
+import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
 
 export const Main = styled.div`
   ${({ theme }) => css`
@@ -19,6 +20,7 @@ export const Wrapper = styled.section`
   margin: 0 auto;
   width: 100%;
   flex: 1;
+  margin-bottom: 3rem;
   @media screen and (max-width: 920px) {
     padding: 0 2rem;
   }
@@ -27,7 +29,9 @@ export const Wrapper = styled.section`
   }
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  max-width: 42.5rem;
+`;
 
 export const Container = styled.div`
   padding-top: 8rem;
@@ -40,8 +44,17 @@ export const Container = styled.div`
 export const AsideRight = styled.div``;
 
 export const AsideLeft = styled.div`
-  width: 100%;
+  ${() => css`
+    width: 100%;
+    ${Form} {
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 550;
+      }
+    }
+  `}
 `;
+
 export const Title = styled.div`
   ${({ theme }) => css`
     h1 {
@@ -58,18 +71,152 @@ export const Title = styled.div`
 `;
 
 export const Form = styled.div`
-  padding: 5rem 0;
+  margin: 2rem 0;
+
   ${Input} {
     margin-top: 1rem;
   }
+  ${Dropdown} {
+    margin-bottom: 1rem;
+  }
+`;
+export const Connect = styled.div`
+  margin-bottom: 1rem;
 `;
 
-export const Footer = styled.div`
+export const ConnectTitle = styled.div`
   ${({ theme }) => css`
-    a {
-      color: ${theme.colors.primary};
-      font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    h3 {
+      margin-bottom: 0.5rem;
     }
+  `}
+`;
+
+export const ConnectTitleWrapper = styled.div`
+  div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+`;
+
+export const ConnetTitleIcon = styled.a`
+  width: 2rem;
+`;
+
+export const ConnectContent = styled.div`
+  ${({ theme }) => css`
+    margin-top: 1.5rem;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+export const ConnectEmpty = styled.div`
+  p {
+    margin-bottom: 1rem;
+  }
+`;
+export const ConnectBox = styled.div`
+  h4 {
+    font-size: 1.5rem;
+  }
+  p {
+    margin: 0.5rem 0 1rem 0;
+  }
+`;
+
+export const Login = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    background: ${theme.colors.white};
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    a {
+      color: ${theme.colors.black} !important;
+      background: ${theme.colors.secondaryBackground};
+      transition: background 0.2s ease-in-out;
+      border-radius: 1rem;
+      padding: 1rem;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
+`;
+export const LoginWrapper = styled.div`
+  ${({ theme }) => css`
+    p,
+    h3 {
+      color: ${theme.colors.black};
+    }
+    p {
+      margin-top: 0.5rem;
+    }
+  `}
+`;
+
+export const FormTitle = styled.div`
+  margin-bottom: 1.2rem;
+  p {
+    margin-top: 0.5rem;
+  }
+`;
+
+export const FormTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const SuccessWrapper = styled.div`
+  ${({ theme }) => css`
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.colors.green};
+    svg {
+      max-width: 1rem;
+    }
+  `}
+`;
+
+export const SelectContent = styled.div<{ isOverflow: boolean }>`
+  ${({ theme, isOverflow = false }) => css`
+    background-color: ${theme.colors.white};
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: ${theme.shadows.tertiary};
+    max-height: 20rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    ${Dropdown} {
+      cursor: pointer;
+      :not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+  `}
+`;
+
+export const SelectMessage = styled.p`
+  ${({ theme }) => css`
+    text-align: center;
+    color: ${theme.colors.black};
+    padding: 1rem 0;
   `}
 `;
 
@@ -115,6 +262,15 @@ export const CardContent = styled.div`
     }
     @media screen and (min-width: 920px) {
       padding: 4rem;
+    }
+  `}
+`;
+
+export const Footer = styled.div`
+  ${({ theme }) => css`
+    a {
+      color: ${theme.colors.primary};
+      font-weight: bold;
     }
   `}
 `;

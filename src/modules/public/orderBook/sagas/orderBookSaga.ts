@@ -11,9 +11,10 @@ const orderBookOptions: RequestOptions = {
   apiVersion: "polkadexHostUrl",
 };
 
+// TODO: MUST BE CHANGED DURING SQL_INTEGRATION
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
-    // TODO: make dynamic with market.
+    return;
     const market = action.payload;
     const res = yield call(API.get(orderBookOptions), `/fetch_orderbook`);
     if (!res.Fine) {

@@ -38,8 +38,7 @@ export const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, fit-content(100%));
   grid-gap: 2rem;
-
-  overflow: overlay;
+  overflow: auto;
   ::-webkit-scrollbar {
     height: 0;
   }
@@ -89,7 +88,7 @@ export const Tag = styled.span<{ isSell?: boolean }>`
 `;
 
 export const CardInfo = styled.div`
-  padding: 1rem;
+  padding: 0.5rem;
   align-self: center;
   min-width: 10rem;
   p {

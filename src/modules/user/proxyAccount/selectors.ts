@@ -11,5 +11,5 @@ export const selectPolkadotWalletSuccess = (state: RootState): boolean =>
 export const selectPolkadotWalletAccounts = (state: RootState): InjectedAccount[] =>
   state.user.polkadotWallet.allAccounts;
 
-export const selectMainAccount = (state: RootState): InjectedAccount =>
+export const selectProxyAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;

@@ -13,3 +13,4 @@ export * from "./Tokens";
 export * from "./History";
 export * from "./Deposit";
 export * from "./Withdraw";
+export * from "./QrCode";

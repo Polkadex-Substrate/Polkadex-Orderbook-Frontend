@@ -4,7 +4,7 @@ import keyring from "@polkadot/ui-keyring";
 import { sendError } from "../../..";
 import { polkadotWalletData, InjectedAccount } from "../actions";
 
-export function* polkadotWalletSaga() {
+export function* loadProxyAccountsSaga() {
   try {
     const allAccounts: InjectedAccount[] = yield call(getAllPoladotWalletAccounts);
     yield put(polkadotWalletData({ allAccounts }));
@@ -22,7 +22,7 @@ async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
   try {
     const { cryptoWaitReady } = await import("@polkadot/util-crypto");
     await cryptoWaitReady();
-    keyring.loadAll({ type: "sr25519" });
+    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
     const allAccounts = keyring.getAccounts();
     console.log(allAccounts);
     return allAccounts.map((account) => {

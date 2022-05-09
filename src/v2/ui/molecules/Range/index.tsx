@@ -4,7 +4,7 @@ import { getTrackBackground, Range as CustomRange } from "react-range";
 import * as S from "./styles";
 
 const STEP = 0.1;
-const MIN = 0;
+const MIN = 1;
 const MAX = 100;
 
 type Props = {
