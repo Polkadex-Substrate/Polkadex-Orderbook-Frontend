@@ -8,7 +8,7 @@ export type JsonBody = {
 };
 
 export type RequestOptions = {
-  apiVersion: "auth" | "polkadexHostUrl" | "influxDB";
+  apiVersion: "auth" | "polkadexHostUrl" | "influxDB" | "apiPath";
   withHeaders?: boolean;
   headers?: Record<string, unknown>;
 };
@@ -41,6 +41,7 @@ export type DefaultConfig = {
   amqpWsUsername: string;
   polkadexFeature: string;
   enclaveUrl: string;
+  apiPath: string;
   polkadexChain: string;
   gaTrackerKey: string;
   withCredentials: boolean;
