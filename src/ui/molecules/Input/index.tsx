@@ -17,11 +17,13 @@ export const Input = ({ label, error, ...props }: T.Props) => (
 
 export const InputPrimary = ({ label, error, ...props }: T.Props) => (
   <S.Primary>
-    <label htmlFor={props.name}>
-      {label || ""}
-      <Field {...props} />
-    </label>
-    {error && <span>{error}</span>}
+    <S.Box>
+      <label htmlFor={props.name}>
+        {label || ""}
+        <Field {...props} />
+      </label>
+    </S.Box>
+    {error && <S.Error>{error}</S.Error>}
   </S.Primary>
 );
 

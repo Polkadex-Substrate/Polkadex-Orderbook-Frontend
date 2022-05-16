@@ -85,6 +85,16 @@ export const Form = styled.div`
     margin: 1rem 0;
   }
 `;
+export const SelectAccount = styled.div``;
+
+export const Error = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-size: 1.2rem;
+    margin-left: 1.3rem;
+  `}
+`;
+
 export const Flex = styled.div`
   ${({ theme }) => css`
     display: flex;
