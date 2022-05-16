@@ -44,6 +44,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     amountSell: "",
     amountBuy: "",
   });
+  const [rangeValue, setRangeValue] = useState([1]);
+  const [changeTypeIsRange, setChangeType] = useState(false);
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.symbolArray : [-1, -1];
@@ -115,8 +117,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
           price: convertedValue,
         });
       }
+      setChangeType(false);
       handleCleanPrice && handleCleanPrice();
     },
+
     [currentMarket?.amount_precision, form, handleCleanPrice]
   );
 
@@ -142,6 +146,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
           });
         }
       }
+      setChangeType(false);
       setEstimatedTotal((estimatedTotal) => {
         return {
           ...estimatedTotal,
@@ -219,6 +224,37 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     hasUser,
   ]);
 
+  const calculateTotal = () => {
+    // limit and sell
+    if(isLimit && isSell){
+      return Number(form.amountSell) * Number(form.price);
+    }
+
+    // limit and buy
+    else if(isLimit && !isSell) {
+      if(changeTypeIsRange){
+        return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
+      }
+      return Number(form.amountBuy) * Number(form.price);
+    }
+
+    // market and sell
+    else if(!isLimit && isSell) {
+      if(changeTypeIsRange && Number(availableBaseAmount) && Number(bestBidPrice)){
+          return (Number(availableBaseAmount) * Number(rangeValue[0]) * 0.01) * Number(bestBidPrice);
+      }
+      return Number(estimatedTotal["sell"]) || 0;
+    }
+
+    // market and buy
+    else {
+      if(changeTypeIsRange && Number(availableQuoteAmount) && Number(bestAskPrice) ){
+          return (Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01) / Number(bestAskPrice);
+      }
+      return Number(estimatedTotal["buy"]) || 0;
+    }
+  }
+
   /**
    * @description Memorize the total amount to buy/sell based on the amount and price
    *
@@ -226,10 +262,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    */
   const total = useMemo(() => {
     return form.amountSell || form.amountBuy
-      ? getEstimatedTotal(
-          Number(isLimit ? (isSell ? form.amountSell : form.amountBuy) : 1) *
-            Number(isLimit ? form.price : Number(estimatedTotal[isSell ? "sell" : "buy"])) || 0
-        )
+      ? getEstimatedTotal(calculateTotal())
       : "";
   }, [
     isSell,
@@ -239,7 +272,37 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     form.amountSell,
     form.price,
     getEstimatedTotal,
+    rangeValue
   ]);
+
+  const updateRange = useCallback((data: {values: Array<number>}) => {
+    setRangeValue(data.values);
+    setChangeType(true);
+    // limit and sell
+    if(isLimit && isSell){
+      if(Number(availableBaseAmount) && Number(form.price)){
+        form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
+      }
+    }
+    // limit and buy
+    else if(isLimit && !isSell) {
+      if(Number(availableQuoteAmount) && Number(form.price)){
+        form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01) / Number(form.price)}`
+      }
+    }
+    // market and sell
+    else if(!isLimit && isSell){
+      if(Number(availableBaseAmount) && Number(bestBidPrice)){
+        form.amountSell = `${(Number(availableBaseAmount) * Number(data.values[0]) * 0.01)}`
+      }
+    }
+    // market and buy
+    else {
+      if(Number(availableQuoteAmount) && Number(bestAskPrice) ){
+        form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * 0.01)}`
+      }
+    }
+  }, [rangeValue, total, isSell, isLimit, form.price, form.amountBuy, form.amountSell] )
 
   useEffect(() => {
     // Check if the currentPrice is different from the price in the form
@@ -276,6 +339,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     availableAmount: isSell ? availableBaseAmount : availableQuoteAmount,
     changeAmount: handleAmountChange,
     changePrice: handlePriceChange,
+    updateRange,
+    rangeValue,
     price: form.price,
     amount: isSell ? form.amountSell : form.amountBuy,
     total,

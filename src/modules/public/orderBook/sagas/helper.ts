@@ -1,11 +1,12 @@
 import { DepthState, OrderBookState } from "..";
 
+// TODO: UNUSED_DELETE
 export function getDepthFromOrderbook(data: OrderBookState): DepthState {
-  let bids = data.bid.map((bid) => {
-    return [bid.price, bid.amount];
+  let bids = data.bids?.map((bid) => {
+    return [bid[0], bid.amount];
   });
   bids = sortArrayDescending(bids);
-  let asks = data.ask.map((ask) => {
+  let asks = data.asks?.map((ask) => {
     return [ask.price, ask.amount];
   });
   asks = sortArrayDescending(asks);
@@ -13,5 +14,5 @@ export function getDepthFromOrderbook(data: OrderBookState): DepthState {
 }
 
 function sortArrayDescending(arr: string[][]) {
-  return arr.sort((a, b) => Number(b[0]) - Number(a[0]));
+  return arr?.sort((a, b) => Number(b[0]) - Number(a[0]));
 }

@@ -1,63 +1,75 @@
-import { put, delay, call } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
-import { KeyringPair } from "@polkadot/keyring/types";
+import { debug } from "console";
 
-import { sendError, alertPush } from "../../../";
+import { put, delay, call, select } from "redux-saga/effects";
+import keyring from "@polkadot/ui-keyring";
+import { ApiPromise } from "@polkadot/api";
+
+import { sendError, selectMainAccount, selectRangerApi, alertPush } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
 import { notificationPush } from "../../notificationHandler";
+import { MainAccount } from "../../mainAccount";
 
-import { API, defaultConfig, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
-import { checkIfWhitelisted } from "@polkadex/orderbook/helpers/checkWhitelistAccouts";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+keyring.setSS58Format(88);
 
-const registerUserOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-const isPublicBranch = defaultConfig.polkadexFeature === "none";
+let proxyAddress: string;
 export function* signUpSaga(action: SignUpFetch) {
   try {
-    const { mnemonic, password, accountName } = action.payload;
-    if (isPublicBranch && !checkIfWhitelisted(mnemonic)) {
-      throw new Error("This mnemonic is not whitelisted");
+    const api = yield select(selectRangerApi);
+    const mainAccount: MainAccount = yield select(selectMainAccount);
+    if (!mainAccount.address) {
+      throw new Error("Pleaes select a main account!");
     }
+    const { mnemonic, password, accountName } = action.payload;
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
-    const proxyAddress = pair.address;
-    yield call(() => registerAccount(pair, proxyAddress));
-    // TODO: Check if registerAccount has been successful
-    yield put(
-      notificationPush({
-        type: "Loading",
-        message: {
-          title: "Your Account has been created",
-        },
-      })
-    );
-    yield delay(3000);
-    yield put(signUpData());
+    proxyAddress = pair.address;
+    if (api && mainAccount.address) {
+      yield put(
+        alertPush({
+          type: "Loading",
+          message: {
+            title: "Please wait...",
+          },
+        })
+      );
+      const res = yield call(() =>
+        registerAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
+      );
+
+      if (res.isSuccess) {
+        alert("succesffully registerd");
+        yield put(
+          alertPush({
+            type: "Successful",
+            message: {
+              title: "New proxy account Registered",
+            },
+          })
+        );
+        yield put(signUpData());
+      } else {
+        throw new Error(res.message);
+      }
+    }
   } catch (error) {
+    proxyAddress && keyring.forgetAddress(proxyAddress);
     yield put(
-      sendError({
-        error,
-        processingType: "alert",
-        extraOptions: {
-          actionError: signUpError,
+      alertPush({
+        type: "Error",
+        message: {
+          title: error.message,
         },
       })
     );
   }
 }
-// TODO: Check if registerAccount has been successful
-export const registerAccount = async (userKeyring: KeyringPair, proxyAddress: string) => {
-  const payload = { main_account: proxyAddress, proxy_account: proxyAddress };
-  const signature = await signMessage(userKeyring, JSON.stringify(payload));
-  const data = {
-    signature: {
-      Sr25519: signature.trim().slice(2),
-    },
-    payload,
-  };
-  const res: any = await API.post(registerUserOption)("/register", data);
-  if (res.Bad && !res.Bad.includes("AccountAlreadyRegistered")) {
-    throw new Error(res.Bad);
-  }
+export const registerAccount = async (
+  api: ApiPromise,
+  proxyAddress: string,
+  injector: any,
+  mainAddress: string
+): Promise<ExtrinsicResult> => {
+  const ext = api.tx.ocex.registerMainAccount(proxyAddress);
+  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
+  return res;
 };

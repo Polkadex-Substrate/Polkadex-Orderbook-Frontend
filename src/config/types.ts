@@ -8,7 +8,7 @@ export type JsonBody = {
 };
 
 export type RequestOptions = {
-  apiVersion: "auth" | "polkadexHostUrl" | "influxDB";
+  apiVersion: "auth" | "polkadexHostUrl" | "influxDB" | "apiPath";
   withHeaders?: boolean;
   headers?: Record<string, unknown>;
 };
@@ -35,11 +35,14 @@ export type ApiWrapper = {
 
 export type DefaultConfig = {
   influxDBUrl: string;
-  polkadotJsWs: string;
   auth: string;
   polkadexHostUrl: string;
   amqpWsPassword: string;
   amqpWsUsername: string;
+  polkadexFeature: string;
+  enclaveUrl: string;
+  apiPath: string;
+  polkadexChain: string;
   gaTrackerKey: string;
   withCredentials: boolean;
   incrementalOrderBook: boolean;
@@ -52,5 +55,4 @@ export type DefaultConfig = {
   alertDisplayTime: number;
   msPricesUpdates: number;
   maintenanceMode: boolean;
-  polkadexFeature: string;
 };

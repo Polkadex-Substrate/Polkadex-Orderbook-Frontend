@@ -64,6 +64,8 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
   const {
     changeAmount,
     changePrice,
+    updateRange,
+    rangeValue,
     price,
     total,
     amount,
@@ -78,6 +80,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     hasUser,
   } = usePlaceOrder(isSell, isLimit);
 
+
   return (
     <form onSubmit={executeOrder}>
       {isLimit && (
@@ -89,6 +92,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
               placeholder=""
               id="order-price"
               value={price}
+              autoComplete="off"
               onChange={(e) => changePrice(e.currentTarget.value)}
               disabled={isOrderLoading}
             />
@@ -106,6 +110,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             placeholder=""
             id="order-amount"
             value={amount}
+            autoComplete="off"
             onChange={(e) => changeAmount(e.currentTarget.value)}
             disabled={isOrderLoading}
           />
@@ -113,9 +118,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             <span>{isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}</span>
           </div>
         </S.InputWrapper>
-        <AvailableMessage message="Soon">
-          <Range values={[50]} />
-        </AvailableMessage>
+          <Range values={rangeValue} setValues={updateRange} />
       </S.FormInput>
       <S.Available>
         <p>Available:</p>
@@ -146,7 +149,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
           isLoading={isOrderLoading}
           isSuccess={isOrderExecuted}
           type="submit"
-          disabled={buttonDisabled}
+          disabled={false} // TODO: THIS HARCODED FOR TESTING PURPOSES ONLY
         />
       </S.Box>
     </form>

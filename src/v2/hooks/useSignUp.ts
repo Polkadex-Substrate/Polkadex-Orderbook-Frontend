@@ -6,7 +6,7 @@ import {
   selectExtensionWalletAccounts,
   selectExtensionWalletLoading,
   selectExtensionWalletSuccess,
-  selectMainExtensionAccount,
+  selectMainAccount,
   selectSignUpLoading,
   selectSignUpSuccess,
 } from "@polkadex/orderbook-modules";
@@ -20,14 +20,13 @@ export function useSignUp() {
   const signUpLoading = useReduxSelector(selectSignUpLoading);
   const isLoading = useReduxSelector(selectExtensionWalletLoading);
   const isSuccess = useReduxSelector(selectExtensionWalletSuccess);
-  const selectedExtensionAccount = useReduxSelector(selectMainExtensionAccount);
+  const selectedExtensionAccount = useReduxSelector(selectMainAccount);
   const extensionAccounts = useReduxSelector(selectExtensionWalletAccounts);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  const isPublicBranch = defaultConfig.polkadexFeature === "none";
 
   useEffect(() => {
     if (signUpSuccess) router.push("/connectToPhone");
@@ -38,7 +37,6 @@ export function useSignUp() {
     signUpLoading,
     isLoading,
     handlePrint,
-    isPublicBranch,
     signUpSuccess,
     componentRef,
     selectedExtensionAccount,

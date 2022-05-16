@@ -10,11 +10,8 @@ export interface OrderBookOrder {
   quote_asset: 1;
 }
 export interface OrderBookState extends CommonState {
-  base_asset: number;
-  quote_asset: number;
-  timestamp: string;
-  ask: OrderBookOrder[];
-  bid: OrderBookOrder[];
+  asks: string[][];
+  bids: string[][];
 }
 
 export interface OrderBookEntry extends CommonState {

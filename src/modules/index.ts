@@ -21,7 +21,7 @@ import { OpenOrdersState, rootOpenOrdersSaga } from "./user/openOrders";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
 import { ProfileState, rootProfileSaga } from "./user/profile";
-import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/polkadotWallet";
+import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/proxyAccount";
 import { publicReducer, userReducer } from "./app";
 import { WalletsState, rootWalletsSaga } from "./user/wallets";
 import { DepositsState } from "./user/deposits/reducer";
@@ -32,7 +32,8 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
-import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/extensionWallet";
+import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
+import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -44,8 +45,8 @@ export * from "./user/trades";
 export * from "./user/transactions";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
-export * from "./user/polkadotWallet";
-export * from "./user/extensionWallet";
+export * from "./user/proxyAccount";
+export * from "./user/mainAccount";
 export * from "./user/wallets";
 export * from "./user/deposits";
 export * from "./user/withdraws";
@@ -73,6 +74,7 @@ export interface RootState {
     recentTrades: RecentTradesState;
     ranger: RangerState;
     rabbitmqChannel: RabbitmqChannelState;
+    enclaveRpcClient: EnclaveRpcClientState;
   };
   user: {
     polkadotWallet: PolkadotWalletState;
@@ -125,5 +127,6 @@ export function* rootSaga() {
     call(rootBalancesSaga),
     call(rootDepositsSaga),
     call(rootRabbitmqChannelSaga),
+    call(rootEnclaveRpcClientSaga),
   ]);
 }

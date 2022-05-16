@@ -1,14 +1,22 @@
 import { CommonError } from "../../types";
-import { InjectedAccount } from "../polkadotWallet";
+import { InjectedAccount } from "../proxyAccount";
 
 import {
   EXTENSION_WALLET_FETCH,
   EXTENSION_WALLET_ERROR,
   EXTENSION_WALLET_DATA,
-  EXTENSION_WALLET_SET,
+  MAIN_ACCOUNT_SET_FETCH,
   EXTENSION_WALLET_RESET,
+  MAIN_ACCOUNT_SET_DATA,
+  MAIN_ACCOUNT_SET_ERROR,
 } from "./constants";
 
+export interface MainAccount {
+  account: any;
+  address: string;
+  injector: any;
+  name: string;
+}
 export interface ExtensionWalletFetchPayload {
   allAccounts: InjectedAccount[];
 }
@@ -26,11 +34,19 @@ export interface ExtensionWalletData {
   type: typeof EXTENSION_WALLET_DATA;
   payload: ExtensionWalletFetchPayload;
 }
-export interface ExtensionWalletSetAccount {
-  type: typeof EXTENSION_WALLET_SET;
+export interface SetMainAccountFetch {
+  type: typeof MAIN_ACCOUNT_SET_FETCH;
   payload: InjectedAccount;
 }
 
+export interface SetMainAccountData {
+  type: typeof MAIN_ACCOUNT_SET_DATA;
+  payload: MainAccount;
+}
+export interface SetMainAccountError {
+  type: typeof MAIN_ACCOUNT_SET_ERROR;
+  error: CommonError;
+}
 export interface ResetExtensionWallet {
   type: typeof EXTENSION_WALLET_RESET;
 }
@@ -39,7 +55,8 @@ export type GetExtensionWalletAction =
   | ExtensionWalletFetch
   | ExtensionWalletError
   | ExtensionWalletData
-  | ExtensionWalletSetAccount
+  | SetMainAccountFetch
+  | SetMainAccountData
   | ResetExtensionWallet;
 
 export const extensionWalletData = (
@@ -58,11 +75,21 @@ export const extensionWalletFetch = (): ExtensionWalletFetch => ({
   type: EXTENSION_WALLET_FETCH,
 });
 
-export const setMainExtensionAccount = (
-  payload: ExtensionWalletSetAccount["payload"]
-): ExtensionWalletSetAccount => ({
-  type: EXTENSION_WALLET_SET,
+export const setMainAccountFetch = (
+  payload: SetMainAccountFetch["payload"]
+): SetMainAccountFetch => ({
+  type: MAIN_ACCOUNT_SET_FETCH,
   payload,
+});
+
+export const setMainAccountData = (payload: SetMainAccountData["payload"]) => ({
+  type: MAIN_ACCOUNT_SET_DATA,
+  payload,
+});
+
+export const setMainAccountError = (error: CommonError): SetMainAccountError => ({
+  type: MAIN_ACCOUNT_SET_ERROR,
+  error,
 });
 
 export const resetExtensionWallet = () => ({

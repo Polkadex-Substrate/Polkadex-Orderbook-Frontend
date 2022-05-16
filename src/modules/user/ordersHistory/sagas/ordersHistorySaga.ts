@@ -11,9 +11,10 @@ import { OrderCommon } from "src/modules/types";
 import { formatPayload } from "src/helpers/formatPayload";
 
 const ordersOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
+  apiVersion: "apiPath",
 };
 
+// TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
 export function* ordersHistorySaga() {
   try {
     const userAccount = yield select(selectUserInfo);
@@ -23,9 +24,9 @@ export function* ordersHistorySaga() {
         signMessage(userAccount.keyringPair, JSON.stringify(payload))
       );
       const data = formatPayload(signature, payload);
-      const res: any = yield call(() => API.post(ordersOptions)("/fetch_orders", data));
+      const res: any = yield call(() => API.get(ordersOptions)("/transactions"));
       console.log("OrdersFetch", res);
-      const ordersArray: OrderCommon[] = res.Fine;
+      const ordersArray: OrderCommon[] = res?.data;
       const orders = sortDescendingTime(ordersArray);
       yield put(userOrdersHistoryData({ list: orders }));
     }

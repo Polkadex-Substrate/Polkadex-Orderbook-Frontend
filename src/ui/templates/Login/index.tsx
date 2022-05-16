@@ -10,13 +10,13 @@ import * as S from "./styles";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
-  selectMainAccount,
+  selectProxyAccount,
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
   selectPolkadotWalletSuccess,
   selectSignInLoading,
   selectSignUpSuccess,
-  setMainAccount,
+  setProxyAccount,
   signIn,
 } from "@polkadex/orderbook-modules";
 import {
@@ -42,7 +42,7 @@ export const LoginTemplate = () => {
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
   const isLoading = useReduxSelector(selectPolkadotWalletLoading);
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectProxyAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
@@ -104,7 +104,7 @@ export const LoginTemplate = () => {
                                   address={item.address}
                                   onClick={() => {
                                     setFieldValue("address", item.address);
-                                    dispatch(setMainAccount(accounts[index]));
+                                    dispatch(setProxyAccount(accounts[index]));
                                   }}
                                 />
                               ))

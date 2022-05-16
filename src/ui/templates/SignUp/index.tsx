@@ -19,11 +19,11 @@ import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainExtensionAccount, signUp } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
-  accountName: "Proxy Account",
+  accountName: "",
   selectedAccount: {
     address: "",
     meta: {
@@ -41,14 +41,13 @@ export const SignUpTemplate = () => {
     signUpLoading,
     isLoading,
     handlePrint,
-    isPublicBranch,
+    isSuccess,
     signUpSuccess,
     componentRef,
     extensionAccounts,
   } = useSignUp();
 
   if (signUpSuccess) return <div />;
-
   return (
     <S.Main>
       {!!mnemonic?.length && (
@@ -78,15 +77,13 @@ export const SignUpTemplate = () => {
                     initialValues={defaultValues}
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
-                      if (!isPublicBranch) {
-                        dispatch(
-                          signUp({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
-                      } else alert("signup is not available for beta");
+                      dispatch(
+                        signUp({
+                          accountName,
+                          mnemonic: mnemoicString,
+                          password,
+                        })
+                      );
                     }}>
                     {({ values, errors, touched, setFieldValue }) => (
                       <Form>
@@ -119,9 +116,7 @@ export const SignUpTemplate = () => {
                                   address={item.address}
                                   onClick={() => {
                                     setFieldValue("selectedAccount", extensionAccounts[index]);
-                                    dispatch(
-                                      setMainExtensionAccount(extensionAccounts[index])
-                                    );
+                                    dispatch(setMainAccountFetch(extensionAccounts[index]));
                                   }}
                                 />
                               ))
@@ -134,8 +129,8 @@ export const SignUpTemplate = () => {
                         </Dropdown>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
-                          label="Account Name"
-                          placeholder="Enter a name for this account"
+                          label="Proxy account name"
+                          placeholder="Proxy account act as a controller for you main account"
                           type="accountName"
                           name="accountName"
                           error={

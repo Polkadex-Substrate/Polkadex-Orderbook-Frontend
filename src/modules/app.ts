@@ -16,7 +16,7 @@ import { ordersReducer } from "./user/orders";
 import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
 import { profileReducer } from "./user/profile";
-import { polkadotWalletReducer } from "./user/polkadotWallet";
+import { polkadotWalletReducer } from "./user/proxyAccount";
 import { walletsReducer } from "./user/wallets";
 import { depositsReducer } from "./user/deposits";
 import { tradesReducer } from "./user/trades";
@@ -24,7 +24,8 @@ import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
 import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
-import { extensionWalletReducer } from "./user/extensionWallet";
+import { extensionWalletReducer } from "./user/mainAccount";
+import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -39,6 +40,7 @@ export const publicReducer = combineReducers({
   recentTrades: recentTradesReducer,
   ranger: rangerReducer,
   rabbitmqChannel: rabbitmqChannelReducer,
+  enclaveRpcClient: enclaveRpcClientReducer,
 });
 
 export const userReducer = combineReducers({

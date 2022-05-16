@@ -1,25 +1,27 @@
-import { InjectedAccount } from "../polkadotWallet";
+import { InjectedAccount } from "../proxyAccount";
 
-import { GetExtensionWalletAction } from "./actions";
+import { GetExtensionWalletAction, MainAccount } from "./actions";
 import {
   EXTENSION_WALLET_FETCH,
   EXTENSION_WALLET_ERROR,
   EXTENSION_WALLET_DATA,
-  EXTENSION_WALLET_SET,
+  MAIN_ACCOUNT_SET_FETCH,
   EXTENSION_WALLET_RESET,
+  MAIN_ACCOUNT_SET_DATA,
 } from "./constants";
 
 export interface ExtensionWalletState {
   success?: boolean;
   isFetching: boolean;
   allAccounts: InjectedAccount[];
-  selectedAccount: InjectedAccount;
+  selectedAccount: MainAccount;
 }
 
-const defaultAccount: InjectedAccount = {
+const defaultAccount: MainAccount = {
   address: "",
-  meta: {},
-  type: "",
+  account: null,
+  injector: null,
+  name: "",
 };
 
 const initialState: ExtensionWalletState = {
@@ -53,7 +55,7 @@ export const extensionWalletReducer = (
         success: false,
         isFetching: true,
       };
-    case EXTENSION_WALLET_SET:
+    case MAIN_ACCOUNT_SET_DATA:
       return {
         ...state,
         selectedAccount: action.payload,

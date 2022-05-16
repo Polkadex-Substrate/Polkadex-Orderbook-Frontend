@@ -5,13 +5,10 @@ import { sendError } from "../../../";
 import { ProxyAccount, userData } from "../../profile";
 import { signInData, signInError, SignInFetch } from "../actions";
 
-import { registerAccount } from "./signUpSaga";
-
 export function* signInSaga(action: SignInFetch) {
   try {
     const { address, password } = action.payload;
     const user: ProxyAccount = yield call(() => getProxyKeyring(address, password));
-    yield call(() => registerAccount(user.keyringPair, user.address));
     yield put(userData({ user }));
     yield put(signInData());
   } catch (error) {

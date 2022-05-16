@@ -18,22 +18,15 @@ export const orderbookTypes = {
   AssetId: {
     _enum: {
       POLKADEX: null,
-      BTC: null,
-      DOT: null,
-      CHAINSAFE: "H160",
-      USD: null,
+      Asset: "u128",
     },
   },
   CHAINSAFE: "H160",
   CurrencyIdOf: "AssetId",
   CurrencyId: "AssetId",
   ShardIdentifier: "H256",
+  Balance: "u128",
   BalanceOf: "Balance",
-  AccountData: {
-    free: "u128",
-    reserved: "u128",
-    frozen: "u128",
-  },
   Message: {
     data: "Vec<u8>",
     proof: "Proof",
@@ -84,6 +77,31 @@ export const orderbookTypes = {
   PruningRange: {
     oldestUnprunedBlock: "u64",
     oldestBlockToKeep: "u64",
+  },
+  OrderPayload: {
+    user: "AccountId",
+    pair: "TradingPair",
+    side: "OrderSide",
+    order_type: "OrderType",
+    qty: "u128",
+    price: "u128",
+    nonce: "u32",
+  },
+  TradingPair: {
+    base_asset: "AssetId",
+    quote_asset: "AssetId",
+  },
+  OrderSide: {
+    _enum: {
+      Ask: null,
+      Bid: null,
+    },
+  },
+  OrderType: {
+    _enum: {
+      LIMIT: null,
+      MARKET: null,
+    },
   },
 };
 
