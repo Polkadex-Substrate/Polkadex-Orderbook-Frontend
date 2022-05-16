@@ -6,6 +6,18 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+export const SecondaryWrapper = styled.div<{ color?: string; size?: string }>`
+  ${({ theme, color, size }) => css`
+    width: ${size};
+    height: ${size};
+    display: inline-block;
+    vertical-align: middle;
+    svg path,
+    svg rect {
+      fill: ${theme.colors[color]};
+    }
+  `}
+`;
 
 export const Container = styled.div<Props>`
   ${({ theme, size, color }) => css`

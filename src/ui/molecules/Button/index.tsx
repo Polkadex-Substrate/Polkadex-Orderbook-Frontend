@@ -1,4 +1,4 @@
-import { Icon } from "../";
+import { Icon, LoadingSpinner } from "../";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -11,6 +11,7 @@ export const Button = ({
   children,
   size = "medium",
   hoverColor = "primary",
+  isLoading = false,
   ...props
 }: T.Props) => (
   <S.Wrapper
@@ -21,8 +22,13 @@ export const Button = ({
     hasIcon={!!icon}
     isDisabled={props.disabled}
     hoverColor={hoverColor}
+    isLoading={isLoading}
     {...props}>
-    {!!icon && <Icon {...icon} />}
-    {children}
+    {isLoading ? (
+      <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />
+    ) : (
+      !!icon && <Icon {...icon} />
+    )}
+    {isLoading ? <p>Loading</p> : children}
   </S.Wrapper>
 );

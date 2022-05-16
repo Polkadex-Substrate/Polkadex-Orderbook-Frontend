@@ -14,6 +14,7 @@ import {
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
   selectPolkadotWalletSuccess,
+  selectSignInLoading,
   selectSignUpSuccess,
   setMainAccount,
   signIn,
@@ -45,6 +46,7 @@ export const LoginTemplate = () => {
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const isSignInLoading = useReduxSelector(selectSignInLoading);
 
   useEffect(() => {
     if (hasUser) router.push("/v2/trading");
@@ -124,14 +126,12 @@ export const LoginTemplate = () => {
                         error={errors.password && touched.password && errors.password}
                       />
                       <S.Flex>
-                        <Button size="extraLarge" type="submit">
-                          Login
-                        </Button>
                         <Button
                           size="extraLarge"
-                          type="button"
-                          onClick={() => console.log("Errors:", errors, "Value", values)}>
-                          Check
+                          type="submit"
+                          disabled={!errors.password && !errors.address && isSignInLoading}
+                          isLoading={isSignInLoading}>
+                          Login
                         </Button>
                         <Link href="connectToPhone">Connect to Phone</Link>
                       </S.Flex>
