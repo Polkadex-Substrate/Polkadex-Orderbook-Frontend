@@ -8,19 +8,15 @@ import { getDepthFromOrderbook } from "./helper";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
 const orderBookOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
+  apiVersion: "apiPath",
 };
 
-// TODO: MUST BE CHANGED DURING SQL_INTEGRATION
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
-    return;
+    return
     const market = action.payload;
-    const res = yield call(API.get(orderBookOptions), `/fetch_orderbook`);
-    if (!res.Fine) {
-      throw new Error(res.Bad);
-    }
-    const data = res.Fine;
+    const res = yield call(API.get(orderBookOptions), `/transactions`);
+    const data = res.data;
     const { asks, bids } = getDepthFromOrderbook(data);
     yield put(orderBookData(data));
     yield put(depthData({ asks, bids }));
