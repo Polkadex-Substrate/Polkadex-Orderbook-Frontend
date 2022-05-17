@@ -8,7 +8,7 @@ export interface PublicTradeEvent {
   amount: string;
 }
 export interface PublicTrade {
-  market_id: [{ Asset: number }, { Asset: number }];
+  market_id: string;
   price: string;
   order_side: OrderSide;
   amount: string;
