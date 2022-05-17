@@ -11,7 +11,7 @@ import {
   setCurrentMarket,
   selectUserInfo,
   selectRangerApi,
-  selectRangerIsConnected,
+  selectRangerIsReady,
 } from "@polkadex/orderbook-modules";
 
 export const useMarketsFetch = (id: string) => {
@@ -22,7 +22,7 @@ export const useMarketsFetch = (id: string) => {
   debugger;
   const user = useReduxSelector(selectUserInfo);
   const api = useReduxSelector(selectRangerApi);
-  const isApiConnectd = useReduxSelector(selectRangerIsConnected);
+  const isApiConnectd = useReduxSelector(selectRangerIsReady);
 
   useEffect(() => {
     if (shouldDispatch) dispatch(marketsFetch());

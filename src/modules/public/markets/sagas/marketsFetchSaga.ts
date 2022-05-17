@@ -5,7 +5,7 @@ import BigNumber from "bignumber.js";
 import { sendError } from "../../../";
 import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from "../actions";
 import { Market } from "..";
-import { selectRangerApi, selectRangerIsConnected } from "../../ranger";
+import { selectRangerApi, selectRangerIsReady } from "../../ranger";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { UNIT_BN } from "@polkadex/web-constants";
@@ -18,7 +18,7 @@ export function* marketsFetchSaga(action: MarketsFetch) {
   try {
     const payload = action.payload;
     const api = yield select(selectRangerApi);
-    const isApi = yield select(selectRangerIsConnected);
+    const isApi = yield select(selectRangerIsReady);
     if (isApi) {
       const markets = yield call(fetchMarkets, api);
       yield put(marketsData(markets));
