@@ -2,27 +2,17 @@ import { CommonError } from "../../types";
 
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR } from "./constants";
 
-export interface Deposits {
-  id: string;
-  timestamp: number;
-  currency: string;
-  amount: number;
-  from: string;
-  to: string;
-  fee: Fee;
-}
-interface Fee {
-  currency: string;
-  cost: number;
-}
-
-export interface DepositsFetch {
-  type: typeof DEPOSITS_FETCH;
-}
-
 export interface DepositsData {
   type: typeof DEPOSITS_DATA;
-  payload: Deposits[];
+}
+export interface DepositsFetch {
+  type: typeof DEPOSITS_FETCH;
+  payload: {
+    baseAsset: Record<string, string | null>;
+    quoteAsset: Record<string, string | null>;
+    amount: string | number;
+    isBase: boolean;
+  };
 }
 
 export interface DepositsError {
@@ -32,13 +22,13 @@ export interface DepositsError {
 
 export type DepositsAction = DepositsFetch | DepositsData | DepositsError;
 
-export const depositsFetch = (): DepositsFetch => ({
+export const depositsFetch = (payload: DepositsFetch["payload"]): DepositsFetch => ({
   type: DEPOSITS_FETCH,
+  payload,
 });
 
-export const depositsData = (payload: Deposits[]): DepositsData => ({
+export const depositsData = (): DepositsData => ({
   type: DEPOSITS_DATA,
-  payload,
 });
 
 export const depositsError = (error: CommonError): DepositsError => ({

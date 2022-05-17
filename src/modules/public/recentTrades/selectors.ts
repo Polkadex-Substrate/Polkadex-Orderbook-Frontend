@@ -12,14 +12,15 @@ export const selectLastRecentTrade = (state: RootState): PublicTrade | undefined
 
 export const selectRecentTradesOfCurrentMarket = (state: RootState): PublicTrade[] => {
   const currentMarket = selectCurrentMarket(state);
-
-  return currentMarket
-    ? state.public.recentTrades.list.filter(
-        (trade: PublicTrade) =>
-          trade.market_id[0].Asset === currentMarket.symbolArray[0] &&
-          trade.market_id[1].Asset === currentMarket.symbolArray[1]
-      )
-    : [];
+  return state.public.recentTrades.list;
+  // TODO: filter based on market
+  // return currentMarket
+  //   ? state.public.recentTrades.list.filter(
+  //       (trade: PublicTrade) =>
+  //         trade.market_id[0].Asset === currentMarket.symbolArray[0] &&
+  //         trade.market_id[1].Asset === currentMarket.symbolArray[1]
+  //     )
+  //   : [];
 };
 
 export const selectRecentTradesLoading = (state: RootState): boolean | undefined =>

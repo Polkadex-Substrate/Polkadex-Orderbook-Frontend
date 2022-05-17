@@ -1,11 +1,10 @@
-import { DepositsAction, Deposits } from "./actions";
+import { DepositsAction } from "./actions";
 import { DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_FETCH } from "./constants";
 
 export interface DepositsState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: Deposits[];
 }
 
 const initialState: DepositsState = {
@@ -18,20 +17,19 @@ export const depositsReducer = (state = initialState, action: DepositsAction) =>
     case DEPOSITS_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case DEPOSITS_DATA:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: true,
-        data: action.payload,
       };
     case DEPOSITS_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };
