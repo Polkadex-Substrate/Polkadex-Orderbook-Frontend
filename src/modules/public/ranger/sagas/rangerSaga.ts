@@ -40,7 +40,7 @@ function* fetchRanger() {
     // @ts-ignore
     const api = new ApiPromise({ provider, types });
 
-    api.on("connected", () => {
+    api.on("ready", () => {
       return emitter(rangerConnectData(api));
     });
 
