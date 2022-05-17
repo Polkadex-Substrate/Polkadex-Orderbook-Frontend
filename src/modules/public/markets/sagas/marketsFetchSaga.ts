@@ -38,9 +38,8 @@ export function* marketsFetchSaga(action: MarketsFetch) {
   }
 }
 const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
-  debugger;
   const tradingPairEntries = await api.query.ocex.tradingPairs.entries();
-  debugger;
+
   const tradingPairs = tradingPairEntries.map(
     ([
       {
@@ -55,7 +54,7 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       };
     }
   );
-  debugger;
+
   /* example of tradingPairs
   [
   {
@@ -105,11 +104,9 @@ const fetchAssetData = async (
   api: ApiPromise,
   asset: Record<string, number | null>
 ): Promise<string[]> => {
-  debugger;
   if (Object.hasOwnProperty.call(asset, "polkadex")) {
     return ["POLKADEX", "PDEX", "-1"];
   }
   const assetMetadata = await (await api.query.assets.metadata(asset.asset)).toHuman();
-  debugger;
   return [assetMetadata.name, assetMetadata.symbol, asset.asset];
 };
