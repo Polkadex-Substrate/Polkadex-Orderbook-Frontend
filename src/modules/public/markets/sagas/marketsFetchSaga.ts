@@ -7,16 +7,10 @@ import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from
 import { Market } from "..";
 import { selectRangerApi, selectRangerIsReady } from "../../ranger";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { UNIT_BN } from "@polkadex/web-constants";
 
-const tickersOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-// TODO: remove mockData and update endpoint when we have a markets endpoint available
 export function* marketsFetchSaga(action: MarketsFetch) {
   try {
-    const payload = action.payload;
     const api = yield select(selectRangerApi);
     const isApi = yield select(selectRangerIsReady);
     if (isApi) {
@@ -107,6 +101,6 @@ const fetchAssetData = async (
   if (Object.hasOwnProperty.call(asset, "polkadex")) {
     return ["POLKADEX", "PDEX", "-1"];
   }
-  const assetMetadata = await (await api.query.assets.metadata(asset.asset)).toHuman();
+  const assetMetadata: any = await (await api.query.assets.metadata(asset.asset)).toHuman();
   return [assetMetadata.name, assetMetadata.symbol, asset.asset];
 };
