@@ -7,7 +7,7 @@ import { depositsError } from "..";
 import { selectMainAccount } from "../../mainAccount";
 
 import { signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { sendError } from "@polkadex/orderbook-modules";
+import { alertPush, sendError } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
   selectRangerIsReady,
@@ -32,12 +32,20 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
       );
       if (res.isSuccess) {
         yield put(depositsData());
+        yield put(
+          alertPush({
+            type: "Successful",
+            message: {
+              title: "Congrats! You have successfully deposited to the enclave.",
+            },
+          })
+        );
       } else {
         throw new Error("Depost fetch failed");
       }
     }
   } catch (error) {
-    console.log(error);
+    console.log("err in depoit =>", error);
     yield put(
       sendError({
         error,
