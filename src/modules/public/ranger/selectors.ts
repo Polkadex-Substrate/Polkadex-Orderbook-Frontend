@@ -8,7 +8,7 @@ export const selectRanger = (state: RootState): RangerState => state.public.rang
 
 export const selectRangerApi = (state: RootState): ApiPromise => state.public.ranger.api;
 
-export const selectRangerIsConnected = (state: RootState): boolean =>
+export const selectRangerIsReady = (state: RootState): boolean =>
   state.public.ranger.connected;
 
 export const selectRangerIsConnecting = (state: RootState): boolean =>

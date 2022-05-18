@@ -23,6 +23,8 @@ export function* fetchTradeChannelSaga() {
       );
       while (true) {
         const tradesMsg = yield take(channel);
+        console.log("tradesMsg =>", tradesMsg);
+        // eg:  {"market_id":"PDEX/1","price":"3","amount":"5","order_side":"Bid"}
         const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
         const tradesArray = [data, ...trades];
@@ -48,6 +50,7 @@ async function fetchTradesChannel(
   queueName: string,
   routingKey: string
 ) {
+  console.log("creating trade queue", queueName, routingKey);
   const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   queue.purge();

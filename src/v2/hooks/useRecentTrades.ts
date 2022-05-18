@@ -14,7 +14,6 @@ export function useRecentTrades() {
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
-
   useEffect(() => {
     if (currentMarket) dispatch(recentTradesFetch(currentMarket));
   }, [dispatch, currentMarket]);

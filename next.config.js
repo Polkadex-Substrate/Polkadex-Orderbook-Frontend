@@ -1,5 +1,6 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
+  experimental: { granularChunks: true },
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,
@@ -19,7 +20,7 @@ module.exports = {
   env: {
     POLKADEX_HOST_URL:
       process.env.POLKADEX_HOST_URL || "https://ramen-1.polkadex.trade:443/api",
-      API_PATH: process.env.API_PATH || "http://localhost:3000/api",
+    API_PATH: process.env.API_PATH || "http://localhost:3000/api",
     INFLUX_DB_URL:
       process.env.INFLUX_DB_URL || "https://ec2-3-101-117-26.us-west-1.polkadex.trade/api",
     POLKADEX_FEATURE: process.env.POLKADEX_FEATURE || "signUp",
