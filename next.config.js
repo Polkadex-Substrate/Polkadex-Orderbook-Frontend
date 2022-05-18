@@ -5,7 +5,6 @@ module.exports = {
     // Enables the styled-components SWC transform
     styledComponents: true,
   },
-  staticPageGenerationTimeout: 2000,
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
