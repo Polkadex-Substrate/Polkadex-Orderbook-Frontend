@@ -11,7 +11,7 @@ export const MyWallet = () => {
   return (
     <S.Main>
       <Dropdown header={<Header />} direction="bottomRight" priority="medium" isOpacity>
-        <Content />
+        <WalletContent title="My Funds" />
       </Dropdown>
     </S.Main>
   );
@@ -23,13 +23,32 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-const Content = () => {
-  const { searchState, handleChange, balances } = useFunds();
-
+export const WalletContent = ({ title, locked = true }) => {
+  const {
+    searchState,
+    handleChange,
+    // balances
+  } = useFunds();
+  const balances = [
+    {
+      ticker: 0,
+      tickerName: 0,
+      free: "0.00",
+      used: "0.00",
+      total: "0.00",
+    },
+    {
+      ticker: 1,
+      tickerName: 0,
+      free: "0.00",
+      used: "0.00",
+      total: "0.00",
+    },
+  ];
   return (
     <S.Content>
       <S.Title>
-        <h3>My Funds</h3>
+        <h3>{title}</h3>
       </S.Title>
       <S.Box>
         <S.Search>
@@ -43,13 +62,16 @@ const Content = () => {
         </S.Search>
         {!!balances.length && (
           <S.FundsWrapper hasScroll={balances.length > 5}>
-            <S.FundsHeader>
+            <S.FundsHeader hasLocked={locked}>
               <span>
                 Name <Icon name="IncreaseFilter" size="small" />
               </span>
-              <span>
-                Locked <Icon name="IncreaseFilter" size="small" />
-              </span>
+              {locked && (
+                <span>
+                  Locked <Icon name="IncreaseFilter" size="small" />
+                </span>
+              )}
+
               <span>
                 Available <Icon name="IncreaseFilter" size="small" />
               </span>
@@ -62,6 +84,8 @@ const Content = () => {
                   ticker={balance.tickerName}
                   amount={Number(balance.free)}
                   lockedAmount={Number(balance.used)}
+                  locked={locked}
+                  id={balance.ticker}
                 />
               ))}
             </S.FundsContent>
@@ -73,39 +97,44 @@ const Content = () => {
 };
 
 const Card = ({
+  id,
   name,
   ticker,
   lockedAmount = 0.0,
   lockedAmountFiat = 0.0,
   amount = 0.0,
   amountFiat = 0.0,
+  locked = true,
 }) => (
-  <S.Card>
+  <S.Card hasLocked={locked}>
     <S.CardWrapper>
       <S.CardIconWrapper>
         <Icon name={ticker} color="black" isToken size="large" />
       </S.CardIconWrapper>
       <S.CardInfo>
         <p>{toCapitalize(name)}</p>
-        <span>{ticker}</span>
+        <span>PDE</span>
       </S.CardInfo>
     </S.CardWrapper>
-    <S.CardWrapper>
-      <p>{lockedAmount.toFixed(7)}</p>
-      <span>{lockedAmountFiat.toFixed(7)}</span>
-    </S.CardWrapper>
+    {locked && (
+      <S.CardWrapper>
+        <p>{lockedAmount.toFixed(7)}</p>
+        <span>{lockedAmountFiat.toFixed(7)}</span>
+      </S.CardWrapper>
+    )}
+
     <S.CardWrapper>
       <p>{amount.toFixed(7)}</p>
       <span>{amountFiat.toFixed(7)}</span>
     </S.CardWrapper>
     <S.CardActions>
-      <Link href={`/wallet/${name}`}>
+      <Link href={`/wallet/${id}`}>
         <a>
           <Icon name="OrderBuy" color="black" size="medium" />
           <span>Deposit</span>
         </a>
       </Link>
-      <Link href={`/wallet/${name}`}>
+      <Link href={`/wallet/${id}`}>
         <a>
           <Icon name="OrderSell" color="black" size="medium" />
           <span>Withdraw</span>

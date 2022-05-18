@@ -7,11 +7,5 @@ export const signInValidations = Yup.object().shape({
 
 export const loginValidations = Yup.object().shape({
   password: Yup.string().required("Required"),
-  // account: Yup.array().of(
-  //   Yup.object().shape({
-  //     name: Yup.string(),
-  //   })
-  // ),
-  accountName: Yup.string().required("Required"),
-  terms: Yup.bool().oneOf([true], "Accept Terms & Conditions is required"),
+  address: Yup.string().required("Required"),
 });

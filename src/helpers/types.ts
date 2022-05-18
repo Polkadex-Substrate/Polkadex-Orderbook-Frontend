@@ -38,6 +38,7 @@ export type Colors =
   | "secondaryBackgroundOpacity"
   | "secondaryBackgroundSolid"
   | "teriaryBackgroundOpacity"
+  | "secondaryBackgroundDark"
   | "quaternaryBackground"
   | "popupBackground"
   | "gradientBackground"

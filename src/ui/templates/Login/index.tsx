@@ -14,6 +14,7 @@ import {
   selectPolkadotWalletAccounts,
   selectPolkadotWalletLoading,
   selectPolkadotWalletSuccess,
+  selectSignInLoading,
   selectSignUpSuccess,
   setProxyAccount,
   signIn,
@@ -27,7 +28,7 @@ import {
   Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
+import { loginValidations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
   password: "",
@@ -45,6 +46,7 @@ export const LoginTemplate = () => {
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const isSignInLoading = useReduxSelector(selectSignInLoading);
 
   useEffect(() => {
     if (hasUser) router.push("/v2/trading");
@@ -71,43 +73,51 @@ export const LoginTemplate = () => {
               <S.Form>
                 <Formik
                   initialValues={defaultValues}
+                  validationSchema={loginValidations}
                   onSubmit={async (values) => {
                     dispatch(signIn(selectedAccount.address, values.password));
                   }}>
-                  {({ errors, touched }) => (
+                  {({ errors, touched, values, setFieldValue }) => (
                     <Form>
-                      <Dropdown
-                        direction="bottom"
-                        isClickable
-                        header={
-                          <SelectAccount
-                            isHeader
-                            accountName={selectedAccount?.meta.name || "Select your account"}
-                            address={selectedAccount?.address || "Polkadex is completely free"}
-                          />
-                        }>
-                        <S.SelectContent isOverflow={accounts?.length > 2}>
-                          {isLoading ? (
-                            <MyAccountLoading />
-                          ) : accounts?.length ? (
-                            accounts.map((item, index) => (
-                              <SelectAccount
-                                isActive={item.address === selectedAccount?.address}
-                                key={index}
-                                accountName={item.meta.name || `Account ${index}`}
-                                address={item.address}
-                                onClick={() => {
-                                  dispatch(setProxyAccount(accounts[index]));
-                                }}
-                              />
-                            ))
-                          ) : (
-                            <S.SelectMessage>
-                              You dont have account, please create one
-                            </S.SelectMessage>
-                          )}
-                        </S.SelectContent>
-                      </Dropdown>
+                      <S.SelectAccount>
+                        <Dropdown
+                          direction="bottom"
+                          isClickable
+                          header={
+                            <SelectAccount
+                              isHeader
+                              accountName={selectedAccount?.meta.name || "Select your account"}
+                              address={
+                                selectedAccount?.address || "Polkadex is completely free"
+                              }
+                            />
+                          }>
+                          <S.SelectContent isOverflow={accounts?.length > 2}>
+                            {isLoading ? (
+                              <MyAccountLoading />
+                            ) : accounts?.length ? (
+                              accounts.map((item, index) => (
+                                <SelectAccount
+                                  isActive={item.address === selectedAccount?.address}
+                                  key={index}
+                                  accountName={item.meta.name || `Account ${index}`}
+                                  address={item.address}
+                                  onClick={() => {
+                                    setFieldValue("address", item.address);
+                                    dispatch(setProxyAccount(accounts[index]));
+                                  }}
+                                />
+                              ))
+                            ) : (
+                              <S.SelectMessage>
+                                You dont have account, please create one
+                              </S.SelectMessage>
+                            )}
+                          </S.SelectContent>
+                        </Dropdown>
+                        {errors.address && <S.Error>{errors.address}</S.Error>}
+                      </S.SelectAccount>
+
                       <InputPrimary
                         label="Password"
                         placeholder="Enter your password for this account"
@@ -116,7 +126,11 @@ export const LoginTemplate = () => {
                         error={errors.password && touched.password && errors.password}
                       />
                       <S.Flex>
-                        <Button size="extraLarge" type="submit">
+                        <Button
+                          size="extraLarge"
+                          type="submit"
+                          disabled={!errors.password && !errors.address && isSignInLoading}
+                          isLoading={isSignInLoading}>
                           Login
                         </Button>
                         <Link href="connectToPhone">Connect to Phone</Link>

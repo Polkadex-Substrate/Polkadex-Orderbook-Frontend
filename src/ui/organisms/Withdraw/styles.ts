@@ -5,10 +5,8 @@ import { SecondaryWrapper as FormInput } from "@polkadex/orderbook-ui/molecules/
 
 export const Wrapper = styled.div`
   display: flex;
-  padding: 1.5rem;
-  @media screen and (min-width: 460px) {
-    padding: 2.5rem;
-  }
+  padding: 2rem;
+
   form {
     width: 100%;
   }
@@ -31,11 +29,39 @@ export const QrCode = styled.div`
   `}
 `;
 export const Form = styled.div``;
+export const IconWrapper = styled.div`
+  @media screen and (max-width: 582px) {
+    display: none;
+  }
+`;
+
+export const FormWallet = styled.div`
+  display: grid;
+  grid-gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  @media screen and (min-width: 582px) {
+    grid-template-columns: 1fr auto 1fr;
+  }
+`;
 
 export const FormAddress = styled.div`
-  ${FormInput} {
-    margin-bottom: 1.2rem;
-  }
+  ${({ theme }) => css`
+    ${FormInput} {
+      margin-bottom: 1.2rem;
+    }
+    button {
+      background: ${theme.colors.secondaryBackground};
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      padding: 0.6rem;
+      margin-left: 0.5rem;
+      transition: background 0.2s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 
 export const FormAmount = styled.div`
@@ -63,7 +89,7 @@ export const Info = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1.5rem;
+  margin: 1.5rem 0;
   @media screen and (max-width: 400px) {
     flex-direction: column;
   }

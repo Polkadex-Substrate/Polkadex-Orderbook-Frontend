@@ -3,11 +3,13 @@ import { useEffect } from "react";
 
 import * as S from "./styles";
 
-import { Header, Tokens, History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
+import { Header } from "@orderbook/v2/ui/organisms";
+import { History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
+import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -17,61 +19,23 @@ export const WalletTemplate = () => {
   const { id } = router.query;
   useEffect(() => {
     if (!isLoading && !user) router.push("/login");
-  }, []);
+  }, [isLoading, user, router]);
 
   if (!id) return <div />;
   return (
     <S.Main>
-      <Header withInfo={false} />
-      <S.Wrapper>
-        <Tokens />
-        <S.Grid>
-          <S.Container>
+      <Header />
+      <Tabs>
+        <S.Wrapper>
+          <WalletContent title="Tokens" locked={false} />
+          <S.ContainerWrapper>
             <S.EstimateBalance>
-              <h2>Estimated Balance</h2>
-              <p>0.93871332 BTC</p>
-              <span>~4243.00 USD</span>
-            </S.EstimateBalance>
-            <S.TokenInfo>
-              <FlexCenter>
-                <Icon
-                  isToken
-                  name="BTC"
-                  size="giant"
-                  background="secondaryBackground"
-                  style={{ marginRight: "0.8rem" }}
-                />
-                <div>
-                  <span>Bitcoin</span>
-                  <p>BTC</p>
-                </div>
-              </FlexCenter>
-              <FlexCenter>
-                <Icon
-                  name="Wallet"
-                  size="extraLarge"
-                  background="primaryBackground"
-                  style={{ marginRight: "0.8rem" }}
-                />
-                <div>
-                  <p>Available</p>
-                  <span>0.9387332 BTC</span>
-                </div>
-              </FlexCenter>
-              <FlexCenter>
-                <Icon
-                  name="Locked"
-                  size="extraLarge"
-                  background="primaryBackground"
-                  style={{ marginRight: "0.8rem" }}
-                />
-                <div>
-                  <p>Locked</p>
-                  <span>0.00000 BTC</span>
-                </div>
-              </FlexCenter>
-            </S.TokenInfo>
-            <Tabs>
+              <S.EstimatedBalanceWrapper>
+                <h2>Estimated Balance</h2>
+                <p>0.93871332 BTC</p>
+                <span>~4243.00 USD</span>
+              </S.EstimatedBalanceWrapper>
+
               <S.HeaderContainer>
                 <S.Header>
                   <TabHeader>
@@ -82,17 +46,56 @@ export const WalletTemplate = () => {
                   </TabHeader>
                 </S.Header>
               </S.HeaderContainer>
-              <TabContent>
-                <Deposit />
-              </TabContent>
-              <TabContent>
-                <Withdraw />
-              </TabContent>
-            </Tabs>
-          </S.Container>
-          <History />
-        </S.Grid>
-      </S.Wrapper>
+            </S.EstimateBalance>
+            <S.Grid>
+              <S.Container>
+                <S.TokenInfo>
+                  <FlexCenter>
+                    <Icon
+                      name="Btc"
+                      size="giant"
+                      color="text"
+                      style={{ marginRight: "0.8rem" }}
+                      isToken
+                    />
+                    <div>
+                      <span>Bitcoin</span>
+                      <p>BTC</p>
+                    </div>
+                  </FlexCenter>
+                  <FlexCenter>
+                    <S.TokenInfoWrapper>
+                      <Icon name="Wallet" size="medium" stroke="text" />
+                    </S.TokenInfoWrapper>
+
+                    <div>
+                      <p>Available</p>
+                      <span>0.9387332 BTC</span>
+                    </div>
+                  </FlexCenter>
+                  <FlexCenter>
+                    <S.TokenInfoWrapper>
+                      <Icon name="Lock" size="medium" stroke="text" />
+                    </S.TokenInfoWrapper>
+
+                    <div>
+                      <p>Locked</p>
+                      <span>0.00000 BTC</span>
+                    </div>
+                  </FlexCenter>
+                </S.TokenInfo>
+                <TabContent>
+                  <Deposit />
+                </TabContent>
+                <TabContent>
+                  <Withdraw />
+                </TabContent>
+              </S.Container>
+              <History />
+            </S.Grid>
+          </S.ContainerWrapper>
+        </S.Wrapper>
+      </Tabs>
     </S.Main>
   );
 };

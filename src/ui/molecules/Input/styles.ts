@@ -20,7 +20,9 @@ export const Wrapper = styled.div`
   `}
 `;
 
-export const Primary = styled.div`
+export const Primary = styled.div``;
+
+export const Box = styled.div`
   ${({ theme }) => css`
     padding: 1.2rem;
     border-radius: 1rem;
@@ -44,13 +46,21 @@ export const Primary = styled.div`
   `}
 `;
 
+export const Error = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-size: 1.2rem;
+    margin-left: 1.3rem;
+  `}
+`;
+
 // Secondary Input
 
 export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
   ${({ theme, hasLabel }) => css`
-    background: ${theme.colors.primaryBackground};
+    background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1.2rem 0.8rem;
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

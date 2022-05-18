@@ -3,6 +3,6 @@ export type HistoryProps = {
   address: string;
   txid: string;
   amount: string;
-  amountInFiat?: number;
+  amountInFiat?: string;
   isDeposit?: boolean;
 };

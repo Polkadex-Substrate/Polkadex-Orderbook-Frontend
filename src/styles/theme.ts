@@ -48,6 +48,7 @@ const defaultTheme = {
     primary: "#E6007A",
     secondary: "#6745D2",
     secondaryBackground: "rgba(139,161,190,0.2)",
+    secondaryBackgroundDark: "#ABB2BC",
     secondaryBackgroundOpacity: "rgba(139,161,190,0.1)",
     gradient: "linear-gradient(47.94deg, #e6007a 0%, #6745d2 98.88%)",
     gradientGreen: "linear-gradient(90deg, #0CA564 0.04%, rgba(2, 192, 118, 0.3) 99.92%)",
@@ -114,6 +115,7 @@ const light = {
       "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.02) 0px 0px 0px 1px",
     quaternary: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
+    smooth: "0px -20px 99px rgba(171, 192, 227, 0.17)",
     top: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;",
   },
   skeleton: {
@@ -154,6 +156,7 @@ const dark = {
     secondary: "rgba(0, 0, 0, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
     quaternary: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
+    smooth: "0px -20px 99px rgba(171, 192, 227, 0.17)",
     top: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;",
   },
   skeleton: {

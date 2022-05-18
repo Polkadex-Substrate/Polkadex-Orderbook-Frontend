@@ -11,4 +11,5 @@ export type Props = {
   isFull?: boolean;
   size?: Sizes;
   hoverColor?: Colors;
+  isLoading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;

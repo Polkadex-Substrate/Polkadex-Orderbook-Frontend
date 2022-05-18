@@ -31,6 +31,7 @@ export const Wrapper = styled.button<{
   size?: string;
   hoverColor?: string;
   isDisabled?: boolean;
+  isLoading?: boolean;
 }>`
   ${({
     theme,
@@ -41,6 +42,7 @@ export const Wrapper = styled.button<{
     hasIcon = false,
     isDisabled,
     hoverColor = "primary",
+    isLoading,
   }) => css`
     border-style: none;
     font-weight: 500;
@@ -56,23 +58,59 @@ export const Wrapper = styled.button<{
     background: ${isDisabled ? "gray" : theme.colors[background]};
     white-space: nowrap;
     ${sizeModifier[size]()};
-    ${hasIcon &&
-    css`
-      padding-right: 1rem;
-    `}
+    ${
+      hasIcon &&
+      css`
+        padding-right: 1rem;
+      `
+    }
     ${IconWrapper} {
       margin-right: 0.6rem;
       vertical-align: middle;
     }
     :hover {
-      ${background === "transparent"
-        ? css`
-            opacity: 0.6;
-          `
-        : css`
-            background: ${isDisabled ? "gray" : theme.colors[hoverColor]};
-            color: ${theme.colors.white};
-          `}
+      ${
+        background === "transparent"
+          ? css`
+              opacity: 0.6;
+            `
+          : css`
+              background: ${isDisabled ? "gray" : theme.colors[hoverColor]};
+              color: ${theme.colors.white};
+            `
+      }
     }
+    ${
+      isLoading &&
+      css`
+    p {
+      display: inline-block;
+      :after {
+        content: ".";
+        animation: dots 1.5s steps(5, end) infinite;
+      }
+      @keyframes dots {
+        0%,
+        20% {
+          color: rgba(0, 0, 0, 0);
+          text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+        }
+        40% {
+          color: white;
+          text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+        }
+        60% {
+          text-shadow: 0.25em 0 0 white, 0.5em 0 0 rgba(0, 0, 0, 0);
+        }
+        80%,
+        100% {
+          text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+        }
+      }
+    `
+    }
+
+    }
+
   `};
 `;
