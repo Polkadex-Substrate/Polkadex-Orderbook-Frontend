@@ -1,17 +1,22 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
   experimental: { granularChunks: true },
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.optimization.splitChunks.cacheGroups = {};
+    config.optimization.minimize = true;
+    return config;
+  },
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,
   },
   eslint: {
+    // !! WARN !!
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
     // !! WARN !!
