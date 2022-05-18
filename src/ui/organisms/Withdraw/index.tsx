@@ -10,11 +10,7 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectMainAccount,
-  selectMainExtensionAccount,
-  selectProxyAddress,
-} from "@polkadex/orderbook-modules";
+import { selectMainAccount, selectProxyAddress } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   walletAddress: "",
@@ -23,7 +19,7 @@ const defaultValues = {
 };
 
 export const Withdraw = () => {
-  const mainAccount = useReduxSelector(selectMainExtensionAccount);
+  const mainAccount = useReduxSelector(selectMainAccount);
   const proxyAccount = useReduxSelector(selectMainAccount);
 
   return (
@@ -41,7 +37,7 @@ export const Withdraw = () => {
             <S.Form>
               <S.FormWallet>
                 <SelectAccount
-                  accountName={mainAccount?.meta.name || "My Main account"}
+                  accountName={mainAccount?.name || "My Main account"}
                   address={mainAccount?.address || "Polkadex is completely free"}
                   locked
                   isHoverable={false}
@@ -51,7 +47,7 @@ export const Withdraw = () => {
                 </S.IconWrapper>
 
                 <SelectAccount
-                  accountName={proxyAccount?.meta.name || "My Proxy account"}
+                  accountName={proxyAccount?.name || "My Proxy account"}
                   address={proxyAccount?.address || "Polkadex is completely free"}
                   locked
                   iconBackground="secondaryBackground"

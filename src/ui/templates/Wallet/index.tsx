@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import * as S from "./styles";
 
 import { Header } from "@orderbook/v2/ui/organisms";
-import { Tokens, History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
+import { History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
-import { MyWallet, WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
+import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -17,9 +17,9 @@ export const WalletTemplate = () => {
   const isLoading = useReduxSelector(selectUserFetching);
 
   const { id } = router.query;
-  // useEffect(() => {
-  //   if (!isLoading && !user) router.push("/login");
-  // }, []);
+  useEffect(() => {
+    if (!isLoading && !user) router.push("/login");
+  }, [isLoading, user, router]);
 
   if (!id) return <div />;
   return (

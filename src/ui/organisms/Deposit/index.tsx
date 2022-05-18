@@ -8,14 +8,14 @@ import { Button, Dropdown, SelectAccount } from "@polkadex/orderbook-ui/molecule
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import {
   selectExtensionWalletAccounts,
-  selectMainExtensionAccount,
-  setMainExtensionAccount,
+  selectMainAccount,
+  setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const selectedAccount = useReduxSelector(selectMainExtensionAccount);
+  const selectedAccount = useReduxSelector(selectMainAccount);
 
   const dispatch = useDispatch();
   const ref = useRef(null);
@@ -43,7 +43,7 @@ export const Deposit = () => {
           header={
             <SelectAccount
               isHeader
-              accountName={selectedAccount?.meta.name || "Select your main account"}
+              accountName={selectedAccount?.name || "Select your main account"}
               address={selectedAccount?.address || "Polkadex is completely free"}
             />
           }>
@@ -56,7 +56,7 @@ export const Deposit = () => {
                   accountName={item.meta.name || `Account ${index}`}
                   address={item.address}
                   onClick={() => {
-                    dispatch(setMainExtensionAccount(accounts[index]));
+                    dispatch(setMainAccountFetch(accounts[index]));
                   }}
                 />
               ))
