@@ -8,9 +8,9 @@ import * as T from "./types";
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  Deposits,
+  // Deposits,
   depositsFetch,
-  selectDepositsData,
+  // selectDepositsData,
   selectHasUser,
   selectWithdrawsData,
   UserWithdraws,
@@ -24,36 +24,36 @@ export const History = () => {
 
   const [selected, setSelected] = useState("All");
   const withdrawHistory = useReduxSelector(selectWithdrawsData);
-  const depositHistory = useReduxSelector(selectDepositsData);
+  // const depositHistory = useReduxSelector(selectDepositsData);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
-  const getValue = (values: Deposits[] | UserWithdraws[], isDeposit = false) => {
-    return values?.map((item) => {
-      return {
-        ...item,
-        isDeposit: isDeposit,
-      };
-    });
-  };
+  // const getValue = (values: Deposits[] | UserWithdraws[], isDeposit = false) => {
+  //   return values?.map((item) => {
+  //     return {
+  //       ...item,
+  //       isDeposit: isDeposit,
+  //     };
+  //   });
+  // };
 
-  const selectedValue = useMemo(() => {
-    switch (selected) {
-      case "Deposits":
-        return getValue(depositHistory, true);
-      case "Withdrawals":
-        return getValue(withdrawHistory);
-      default:
-        return [
-          ...(getValue(depositHistory, true) || []),
-          ...(getValue(withdrawHistory) || []),
-        ];
-    }
-  }, [depositHistory, withdrawHistory, selected]);
+  // const selectedValue = useMemo(() => {
+  //   switch (selected) {
+  //     case "Deposits":
+  //       return getValue(depositHistory, true);
+  //     case "Withdrawals":
+  //       return getValue(withdrawHistory);
+  //     default:
+  //       return [
+  //         ...(getValue(depositHistory, true) || []),
+  //         ...(getValue(withdrawHistory) || []),
+  //       ];
+  //   }
+  // }, [depositHistory, withdrawHistory, selected]);
 
-  console.log(selectedValue);
+  // console.log(selectedValue);
   useEffect(() => {
     if (userLoggedIn) {
-      dispatch(depositsFetch());
+      // dispatch(depositsFetch());
       dispatch(withdrawsFetch());
     }
   }, [userLoggedIn, dispatch]);
@@ -78,7 +78,7 @@ export const History = () => {
         </S.TitleWrapper>
       </S.Title>
       <S.Content>
-        {selectedValue?.length ? (
+        {/* {selectedValue?.length ? (
           selectedValue
             .filter((value) => value.currency === route.query.id)
             .map((value) => (
@@ -96,7 +96,7 @@ export const History = () => {
             ))
         ) : (
           <EmptyData />
-        )}
+        )} */}
       </S.Content>
     </S.Wrapper>
   );

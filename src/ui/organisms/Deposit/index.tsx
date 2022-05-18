@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Button, Dropdown, SelectAccount } from "@polkadex/orderbook-ui/molecules";
+import { Button, Dropdown, Icon, SelectAccount } from "@polkadex/orderbook-ui/molecules";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import {
   selectExtensionWalletAccounts,
@@ -66,6 +66,38 @@ export const Deposit = () => {
           </S.SelectContent>
         </Dropdown>
       </S.SelectAccountContainer>
+      <S.SelectPairContainer>
+        <Dropdown
+          direction="bottom"
+          header={
+            <S.SelectWrapper>
+              Select Market
+              <Icon
+                name="ArrowBottom"
+                size="small"
+                style={{ marginLeft: "1rem" }}
+                stroke="black"
+              />
+            </S.SelectWrapper>
+          }>
+          <S.SelectContent isOverflow={false}>markets</S.SelectContent>
+        </Dropdown>
+        <Dropdown
+          direction="bottom"
+          header={
+            <S.SelectWrapper>
+              Select Asset
+              <Icon
+                name="ArrowBottom"
+                size="small"
+                style={{ marginLeft: "1rem" }}
+                stroke="black"
+              />
+            </S.SelectWrapper>
+          }>
+          <S.SelectContent isOverflow={false}>assets</S.SelectContent>
+        </Dropdown>
+      </S.SelectPairContainer>
       <S.WrapperContainer>
         <S.QrCodeContainer>
           <S.QrCode>

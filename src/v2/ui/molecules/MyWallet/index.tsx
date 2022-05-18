@@ -85,6 +85,7 @@ export const WalletContent = ({ title, locked = true }) => {
                   amount={Number(balance.free)}
                   lockedAmount={Number(balance.used)}
                   locked={locked}
+                  id={balance.ticker}
                 />
               ))}
             </S.FundsContent>
@@ -96,6 +97,7 @@ export const WalletContent = ({ title, locked = true }) => {
 };
 
 const Card = ({
+  id,
   name,
   ticker,
   lockedAmount = 0.0,
@@ -126,13 +128,13 @@ const Card = ({
       <span>{amountFiat.toFixed(7)}</span>
     </S.CardWrapper>
     <S.CardActions>
-      <Link href={`/wallet/${name}`}>
+      <Link href={`/wallet/${id}`}>
         <a>
           <Icon name="OrderBuy" color="black" size="medium" />
           <span>Deposit</span>
         </a>
       </Link>
-      <Link href={`/wallet/${name}`}>
+      <Link href={`/wallet/${id}`}>
         <a>
           <Icon name="OrderSell" color="black" size="medium" />
           <span>Withdraw</span>

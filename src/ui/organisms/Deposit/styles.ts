@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
+import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 
 export const Wrapper = styled.div``;
 export const WrapperContainer = styled.div`
@@ -11,8 +12,31 @@ export const WrapperContainer = styled.div`
     align-items: center;
   }
 `;
+
 export const SelectAccountContainer = styled.div`
   padding: 0 2rem;
+`;
+
+export const SelectPairContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1rem;
+    padding: 0 2rem;
+    margin-top: 1rem;
+    ${DropdownWrapper} {
+      flex: 1;
+    }
+  `}
+`;
+
+export const SelectWrapper = styled.div`
+  ${({ theme }) => css`
+    padding: 1.5rem;
+    background: ${theme.colors.white};
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    flex: 1;
+  `}
 `;
 
 export const SelectContent = styled.div<{ isOverflow: boolean }>`
