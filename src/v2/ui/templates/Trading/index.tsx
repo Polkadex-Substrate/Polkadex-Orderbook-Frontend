@@ -86,7 +86,7 @@ export const Trading = () => {
   // intitialize market dependent events
   useEffect(() => {
     if (market) {
-      const tickerMarketId = `${market.symbolArray[0]}-${market.symbolArray[1]}`;
+      const tickerMarketId = `${market.assetIdArray[0]}-${market.assetIdArray[1]}`;
       // dispatch(rangerConnectFetch());
       dispatch(orderBookFetch(market));
       dispatch(currentTickerFetch({ marketId: tickerMarketId }));
