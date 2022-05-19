@@ -30,8 +30,8 @@ export function useOrderbook() {
    * @returns {string}
    */
   const lastMarketPrice =
-    currentTrade?.market_id[0].Asset === currentMarket?.symbolArray[0] &&
-    currentTrade?.market_id[1].Asset === currentMarket?.symbolArray[1]
+    currentTrade?.market_id[0].Asset === currentMarket?.assetIdArray[0] &&
+    currentTrade?.market_id[1].Asset === currentMarket?.assetIdArray[1]
       ? currentTrade?.price
       : currentTicker?.last;
 

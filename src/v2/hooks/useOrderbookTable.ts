@@ -63,8 +63,8 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   }, [isSell, contentRef, orders]);
 
   return {
-    quoteUnit: getSymbolFromId("quote", currentMarket?.symbolArray),
-    baseUnit: getSymbolFromId("base", currentMarket?.symbolArray),
+    quoteUnit: getSymbolFromId("quote", currentMarket?.assetIdArray),
+    baseUnit: getSymbolFromId("base", currentMarket?.assetIdArray),
     valumeData,
     changeMarketPrice,
     priceFixed: currentMarket?.price_precision || 0,

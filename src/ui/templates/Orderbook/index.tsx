@@ -54,8 +54,8 @@ export const Orderbook = () => {
   const getLastPrice = () => {
     let lastPrice = "";
     if (
-      lastRecentTrade?.market_id[0].Asset === currentMarket.symbolArray[0] &&
-      lastRecentTrade?.market_id[1].Asset === currentMarket.symbolArray[1]
+      lastRecentTrade?.market_id[0].Asset === currentMarket.assetIdArray[0] &&
+      lastRecentTrade?.market_id[1].Asset === currentMarket.assetIdArray[1]
     ) {
       lastPrice = lastRecentTrade?.price;
     } else {
@@ -147,8 +147,10 @@ const OrderbookColumn = ({
 }) => {
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
-  const formattedBaseUnit = getSymbolFromAssetId(currentMarket?.symbolArray[0]).toUpperCase();
-  const formattedQuoteUnit = getSymbolFromAssetId(currentMarket?.symbolArray[1]).toUpperCase();
+  const formattedBaseUnit = getSymbolFromAssetId(currentMarket?.assetIdArray[0]).toUpperCase();
+  const formattedQuoteUnit = getSymbolFromAssetId(
+    currentMarket?.assetIdArray[1]
+  ).toUpperCase();
   const priceFixed = currentMarket?.price_precision || 0;
   const amountFixed = currentMarket?.amount_precision || 0;
   const isSell = side === "bids";

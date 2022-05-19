@@ -48,7 +48,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const [changeTypeIsRange, setChangeType] = useState(false);
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
-  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.symbolArray : [-1, -1];
+  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
     currentMarket?.price_precision || 0
@@ -170,7 +170,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     dispatch(
       orderExecuteFetch({
         order_type: isLimit ? "Limit" : "Market",
-        symbol: currentMarket?.symbolArray,
+        symbol: currentMarket?.assetIdArray,
         side: isSell ? "Sell" : "Buy",
         price: isLimit ? form.price : "",
         market: `${currentMarket?.base_unit}${currentMarket?.quote_unit}`.toLowerCase(),

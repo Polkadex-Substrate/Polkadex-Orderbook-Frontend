@@ -107,7 +107,7 @@ export const PlaceOrder = () => {
     }
     return "0";
   };
-  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket.symbolArray : [-1, -1];
+  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket.assetIdArray : [-1, -1];
   const availabeBaseAmount = getBalance(baseAssetId.toString(), balances);
   const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);
 
@@ -135,7 +135,7 @@ export const PlaceOrder = () => {
             <TabContent>
               <OrderForm
                 side="Buy"
-                symbolArray={currentMarket.symbolArray}
+                symbolArray={currentMarket.assetIdArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
                 availableQuoteAmount={availabelQuoteAmount}
@@ -151,7 +151,7 @@ export const PlaceOrder = () => {
             <TabContent>
               <OrderForm
                 side="Sell"
-                symbolArray={currentMarket.symbolArray}
+                symbolArray={currentMarket.assetIdArray}
                 quoteUnit={currentMarket?.quote_unit.toUpperCase()}
                 baseUnit={currentMarket?.base_unit.toUpperCase()}
                 availableQuoteAmount={availabelQuoteAmount}
