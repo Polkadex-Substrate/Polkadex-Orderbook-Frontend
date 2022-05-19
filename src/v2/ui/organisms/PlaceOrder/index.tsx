@@ -14,7 +14,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
-export const PlaceOrder = () => {
+const PlaceOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
   const handleChangeType = (value: boolean) => setIsLimit(value);
   return (
@@ -80,7 +80,6 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     hasUser,
   } = usePlaceOrder(isSell, isLimit);
 
-
   return (
     <form onSubmit={executeOrder}>
       {isLimit && (
@@ -118,7 +117,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             <span>{isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}</span>
           </div>
         </S.InputWrapper>
-          <Range values={rangeValue} setValues={updateRange} />
+        <Range values={rangeValue} setValues={updateRange} />
       </S.FormInput>
       <S.Available>
         <p>Available:</p>
@@ -155,3 +154,5 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     </form>
   );
 };
+
+export default PlaceOrder;

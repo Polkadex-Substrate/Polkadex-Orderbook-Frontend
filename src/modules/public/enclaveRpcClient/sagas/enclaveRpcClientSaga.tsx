@@ -2,7 +2,11 @@ import { call, put, select, take } from "redux-saga/effects";
 import { Client } from "rpc-websockets";
 import { eventChannel } from "redux-saga";
 
-import { enclaveRpcConnectionOpen, EnclaveRpcClientFetch } from "../actions";
+import {
+  enclaveRpcConnectionOpen,
+  EnclaveRpcClientFetch,
+  enclaveRpcClientError,
+} from "../actions";
 import { alertPush } from "../../alertHandler";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
@@ -34,6 +38,15 @@ async function fetchEnclaveRpcClientChannel(enclaveWsClient: Client) {
   return eventChannel((emitter) => {
     enclaveWsClient.on("open", () => {
       console.log("connected with enclave...");
+      emitter(enclaveRpcConnectionOpen(enclaveWsClient));
+    });
+
+    enclaveWsClient.on("error", (error) => {
+      console.log("Error", error);
+      return emitter(enclaveRpcClientError(error.message));
+    });
+
+    enclaveWsClient.on("closee", () => {
       emitter(enclaveRpcConnectionOpen(enclaveWsClient));
     });
     return () => {

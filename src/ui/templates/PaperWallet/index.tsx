@@ -3,7 +3,7 @@ import { useRef, useEffect } from "react";
 
 import * as S from "./styles";
 
-export const PaperWallet = ({ forwardedRef, mnemonic, mnemoicString }) => {
+const PaperWallet = ({ forwardedRef, mnemonic, mnemoicString }) => {
   const pharses = divideArray(mnemonic);
   const ref = useRef(null);
 
@@ -296,3 +296,5 @@ const divideArray = (values) => {
   }
   return result;
 };
+
+export default PaperWallet;

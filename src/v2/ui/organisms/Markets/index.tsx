@@ -9,7 +9,7 @@ import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecul
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
-export const Markets = ({ isFull = false }) => {
+const Markets = ({ isFull = false }) => {
   const {
     marketTokens,
     marketTickers,
@@ -166,3 +166,5 @@ const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
     </S.Footer>
   </AvailableMessage>
 );
+
+export default Markets;

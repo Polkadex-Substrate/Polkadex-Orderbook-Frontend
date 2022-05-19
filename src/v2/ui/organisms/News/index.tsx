@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const News = ({ isFull = true }) => {
+const News = ({ isFull = true }) => {
   return (
     <AvailableMessage message="Soon">
       <S.Main isFull={isFull}>
@@ -30,3 +30,5 @@ const Card = ({ tag, title, description, buttonText, buttonLink }) => (
     <a href={buttonLink}>{buttonText}</a>
   </S.Card>
 );
+
+export default News;

@@ -18,7 +18,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
-export const History = () => {
+const History = () => {
   const dispatch = useDispatch();
   const route = useRouter();
 
@@ -155,3 +155,5 @@ const EmptyData = ({ message = "No Transactions" }) => (
     </S.EmptyContainer>
   </S.Empty>
 );
+
+export default History;

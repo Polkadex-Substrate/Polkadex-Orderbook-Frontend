@@ -4,7 +4,7 @@ import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
-export const RecentTrades = () => {
+const RecentTrades = () => {
   const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTrades();
   return (
@@ -60,3 +60,5 @@ const EmptyTrades = ({ message = "No Transactions" }) => (
     </S.Empty>
   </S.Container>
 );
+
+export default RecentTrades;

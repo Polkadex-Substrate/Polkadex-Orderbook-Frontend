@@ -7,16 +7,12 @@ import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
 
 import { Message } from "@polkadex/orderbook-ui/organisms";
-import { Notifications } from "@orderbook/v2/ui/organisms";
 import {
   alertDelete,
-  notificationDeleteByIndex,
   selectAlertState,
   selectCurrentColorTheme,
-  selectNotificationState,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
-import { NotificationCard } from "@polkadex/orderbook-ui/molecules";
 
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
@@ -32,7 +28,6 @@ const ThemeWrapper = ({ children }) => {
   const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
   const alert = useSelector(selectAlertState);
-  const { notifications } = useSelector(selectNotificationState);
 
   const dispatch = useDispatch();
 

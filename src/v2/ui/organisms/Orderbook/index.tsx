@@ -9,7 +9,7 @@ import { useOrderbookTable } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@orderbook/v2/ui/molecules";
 
-export const Orderbook = () => {
+const Orderbook = () => {
   const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
   console.log({ isPriceUp });
   return (
@@ -117,3 +117,4 @@ const Pricing = ({ price, priceInFiat, isPriceUp = false }) => (
     </S.PricingAsideRight>
   </S.Pricing>
 );
+export default Orderbook;

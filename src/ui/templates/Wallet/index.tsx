@@ -1,15 +1,30 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Header } from "@orderbook/v2/ui/organisms";
-import { History, Deposit, Withdraw } from "@polkadex/orderbook-ui/organisms";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
+
+const History = dynamic(() => import("@polkadex/orderbook-ui/organisms/History"), {
+  ssr: false,
+});
+const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
+  ssr: false,
+});
+const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
+  ssr: false,
+});
+const Header = dynamic(
+  () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
+  {
+    ssr: false,
+  }
+);
 
 export const WalletTemplate = () => {
   const router = useRouter();
