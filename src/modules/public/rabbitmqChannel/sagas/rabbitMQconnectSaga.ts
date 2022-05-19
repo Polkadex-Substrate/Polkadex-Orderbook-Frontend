@@ -41,7 +41,11 @@ export function* rabbitmqConnectionSaga() {
   }
 }
 async function fetchrabbitmqChannelAsync(amqp) {
-  const connection = await amqp.connect();
-  const channel = await connection.channel();
-  return channel;
+  try {
+    const connection = await amqp.connect();
+    const channel = await connection.channel();
+    return channel;
+  } catch (error) {
+    console.log(error);
+  }
 }

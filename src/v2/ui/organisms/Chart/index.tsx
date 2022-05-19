@@ -12,7 +12,7 @@ const TradingChart = dynamic(
   }
 );
 
-export const Chart = ({ isFull = true }) => {
+const Chart = ({ isFull = true }) => {
   return (
     <S.Main isFull={isFull}>
       {/* <Header /> */}
@@ -68,3 +68,5 @@ const TradingViewChart = () => (
     <TradingChart />
   </S.TradingViewChart>
 );
+
+export default Chart;

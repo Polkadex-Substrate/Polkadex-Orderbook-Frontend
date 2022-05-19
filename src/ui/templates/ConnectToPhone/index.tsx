@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { HeaderBack, QrCode } from "@polkadex/orderbook-ui/organisms";
 import {
   Button,
   Dropdown,
@@ -13,7 +13,6 @@ import {
   MyAccountLoading,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { PaperWallet } from "@polkadex/orderbook-ui/templates";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
@@ -22,6 +21,20 @@ import {
   selectMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
+
+const HeaderBack = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.HeaderBack),
+  {
+    ssr: false,
+  }
+);
+
+const QrCode = dynamic(() => import("@polkadex/orderbook-ui/organisms/QrCode"), {
+  ssr: false,
+});
+const PaperWallet = dynamic(() => import("@polkadex/orderbook-ui/templates/PaperWallet"), {
+  ssr: false,
+});
 
 export const ConnectToPhone = () => {
   const dispatch = useDispatch();
