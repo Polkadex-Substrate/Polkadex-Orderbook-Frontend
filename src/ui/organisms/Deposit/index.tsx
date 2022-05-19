@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "easyqrcodejs";
 import { useDispatch } from "react-redux";
 
@@ -7,8 +7,12 @@ import * as S from "./styles";
 import { Button, Dropdown, Icon, SelectAccount } from "@polkadex/orderbook-ui/molecules";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import {
+  depositsFetch,
+  Market,
+  selectCurrentMarket,
   selectExtensionWalletAccounts,
   selectMainAccount,
+  selectMarkets,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -16,8 +20,24 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount);
+  const markets = useReduxSelector(selectMarkets);
+  const [isBase, setIsBase] = useState(true);
+  const [amount, setAmount] = useState(0);
+  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
 
   const dispatch = useDispatch();
+  const handleDeposit = () => {
+    const baseAsset =
+      selectedMarket.assetIdArray[0] === "-1"
+        ? { polkadex: null }
+        : { asset: selectedMarket.assetIdArray[0] };
+    const quoteAsset =
+      selectedMarket.assetIdArray[1] === "-1"
+        ? { polkadex: null }
+        : { asset: selectedMarket.assetIdArray[1] };
+    dispatch(depositsFetch({ baseAsset, quoteAsset, amount, isBase }));
+  };
+
   const ref = useRef(null);
   useEffect(() => {
     const opts = {
@@ -71,7 +91,7 @@ export const Deposit = () => {
           direction="bottom"
           header={
             <S.SelectWrapper>
-              Select Market
+              {"Select Market"}
               <Icon
                 name="ArrowBottom"
                 size="small"
@@ -80,7 +100,13 @@ export const Deposit = () => {
               />
             </S.SelectWrapper>
           }>
-          <S.SelectContent isOverflow={false}>markets</S.SelectContent>
+          <S.SelectContent isOverflow={false}>
+            {markets.map((market, idx) => (
+              <p key={idx} onClick={() => setSelectedMarket(market)}>
+                {market.name}
+              </p>
+            ))}
+          </S.SelectContent>
         </Dropdown>
         <Dropdown
           direction="bottom"
@@ -95,7 +121,10 @@ export const Deposit = () => {
               />
             </S.SelectWrapper>
           }>
-          <S.SelectContent isOverflow={false}>assets</S.SelectContent>
+          <S.SelectContent isOverflow={false}>
+            <p onClick={() => setIsBase(true)}>{selectedMarket?.base_unit}</p>
+            <p onClick={() => setIsBase(false)}>{selectedMarket?.quote_unit}</p>
+          </S.SelectContent>
         </Dropdown>
       </S.SelectPairContainer>
       <S.WrapperContainer>
@@ -110,7 +139,7 @@ export const Deposit = () => {
             <span>Wallet Address</span>
             <FlexSpaceBetween>
               <p>19BY2XCgbDe6WtTVbTyzM9eR3LYr6tWK</p>
-              <button type="button" onClick={() => console.log("...")}>
+              <button type="button" onClick={handleDeposit}>
                 Copy
               </button>
             </FlexSpaceBetween>
