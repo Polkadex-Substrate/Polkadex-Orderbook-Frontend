@@ -1,6 +1,7 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
   experimental: { granularChunks: true },
+  staticPageGenerationTimeout: 1500,
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,
