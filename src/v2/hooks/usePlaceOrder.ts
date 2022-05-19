@@ -70,8 +70,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   const availableBaseAmount = getBalance(baseAssetId?.toString());
   const availableQuoteAmount = getBalance(quoteAssetId?.toString());
-  const quoteTicker = currentMarket.base_unit;
-  const baseTicker = currentMarket.quote_unit;
+  const quoteTicker = currentMarket?.base_unit;
+  const baseTicker = currentMarket?.quote_unit;
 
   /**
    * @description Get estimated total amount
