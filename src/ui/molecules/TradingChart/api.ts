@@ -37,7 +37,7 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
     endPoint = `${endPoint}?${buildQueryString(payload)}`;
   }
 
-  return `${defaultConfig.polkadexHostUrl}${endPoint}`;
+  return defaultConfig.influxDBUrl + "/fetchohlcv";
 };
 const makeOHLCVPayload = (
   market: string,
@@ -155,7 +155,6 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         from,
         to
       );
-      url = defaultConfig.influxDBUrl + "/fetchohlcv";
       // TODO: Make paylaod dynamic with symbolInfo
       const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
       return axios

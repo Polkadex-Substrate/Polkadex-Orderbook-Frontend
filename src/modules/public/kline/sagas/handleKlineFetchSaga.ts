@@ -7,10 +7,6 @@ import { klineData, klineError, KlineFetch } from "../actions";
 import { API, defaultConfig, RequestOptions } from "@polkadex/orderbook-config";
 import { buildQueryString, getTimestampPeriod } from "@polkadex/web-helpers";
 
-const klineRequestOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
 export function* handleKlineFetchSaga(action: KlineFetch) {
   try {
     // const { market, resolution, from, to } = action.payload;

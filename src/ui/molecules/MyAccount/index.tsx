@@ -74,9 +74,9 @@ export const MyAccountContent = ({
   const user = useReduxSelector(selectUserInfo);
   const dispatch = useDispatch();
   const userKeyring = user.keyringPair;
-  const option: RequestOptions = {
-    apiVersion: "polkadexHostUrl",
-  };
+  // const option: RequestOptions = {
+  //   apiVersion: "polkadexHostUrl",
+  // };
   const handleFundsRequest = async () => {
     console.log("handleFundsRequest");
     if (user.address) {
@@ -93,7 +93,7 @@ export const MyAccountContent = ({
             },
             payload,
           };
-          const res = await API.post(option)("/test_deposit", data);
+          // const res = await API.post(option)("/test_deposit", data);
           return res;
         });
         const res: any = await Promise.all(reqs);

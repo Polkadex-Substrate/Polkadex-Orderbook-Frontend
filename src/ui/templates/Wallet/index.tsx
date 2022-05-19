@@ -9,6 +9,7 @@ import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
+import { useDispatch } from "react-redux";
 
 const History = dynamic(() => import("@polkadex/orderbook-ui/organisms/History"), {
   ssr: false,

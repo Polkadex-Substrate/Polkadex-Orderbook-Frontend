@@ -16,6 +16,7 @@ const ordersOptions: RequestOptions = {
 
 // TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
 export function* ordersHistorySaga() {
+  return;
   try {
     const userAccount = yield select(selectUserInfo);
     if (userAccount.address !== "") {

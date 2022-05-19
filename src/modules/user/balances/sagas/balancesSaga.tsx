@@ -10,9 +10,7 @@ import { signMessage, toCapitalize } from "@polkadex/web-helpers";
 import { formatPayload } from "@polkadex/orderbook/helpers/formatPayload";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const balancesOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
+
 
 // TODO: MUST BE CHANGED DURING SQL_INTEGRATION
 export function* balancesSaga(balancesFetch: BalancesFetch) {

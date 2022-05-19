@@ -6,15 +6,9 @@ import { Wallet } from "../types";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const walletsOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
-const currenciesOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
+// TODO: CHANGE TO USE SQL
 export function* walletsSaga(action: WalletsFetch) {
+  return;
   try {
     const accounts = yield call(API.get(walletsOptions), "/account/balances");
     const currencies = yield call(API.get(currenciesOptions), "/public/currencies");

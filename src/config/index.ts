@@ -4,8 +4,6 @@ export * from "./config";
 
 export const defaultConfig: DefaultConfig = {
   influxDBUrl: process.env.INFLUX_DB_URL,
-  auth: process.env.POLKADEX_HOST_URL,
-  polkadexHostUrl: `${process.env.POLKADEX_HOST_URL}`,
   amqpWsPassword: process.env.RMQ_KEY,
   amqpWsUsername: process.env.RMQ_USERNAME,
   polkadexFeature: process.env.POLKADEX_FEATURE,

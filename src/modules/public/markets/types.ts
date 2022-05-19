@@ -1,3 +1,5 @@
+import BigNumber from "bignumber.js";
+
 export type MarketId = string;
 
 export interface MarketFilterCustomStepRule {
@@ -19,18 +21,20 @@ export type MarketFilter = MarketFilterSignificantDigit | MarketFilterCustomStep
 
 export interface Market {
   id: MarketId;
-  symbolArray: string[];
+  assetIdArray: string[];
   name: string;
   base_unit: string;
   quote_unit: string;
-  min_price: string;
-  max_price: string;
-  min_amount: string;
+  min_price: BigNumber;
+  max_price: BigNumber;
+  min_amount: BigNumber;
   amount_precision: number;
   price_precision: number;
   state?: string;
   filters?: MarketFilter[];
   tokenTickerName?: string;
+  base_ticker: string;
+  quote_ticker: string;
 }
 
 export interface Ticker {

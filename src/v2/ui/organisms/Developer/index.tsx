@@ -124,7 +124,6 @@ const Card = ({
   buttonDisabled = false,
   endpoint = "",
   status = "noStatus",
-  url = defaultConfig.polkadexHostUrl,
   isLoading = false,
   error = "",
   textFiled = [],
@@ -145,10 +144,7 @@ const Card = ({
             {isLoading ? "Loading.." : buttonTitle}
           </button>
         </S.CardHeaderWrapper>
-        <p>
-          {url}
-          {endpoint}
-        </p>
+        <p>{endpoint}</p>
       </S.CardHeader>
       {!!textFiled.length &&
         textFiled.map(
