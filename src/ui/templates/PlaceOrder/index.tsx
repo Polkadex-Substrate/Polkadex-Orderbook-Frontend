@@ -100,16 +100,16 @@ export const PlaceOrder = () => {
   };
 
   // Get available amount
-  const getBalance = (assetid: string, balances: Balance[]) => {    
+  const getBalance = (assetid: string, balances: Balance[]) => {
     if (balances.length > 0) {
-      const data = balances.find(value => value.ticker === assetid);
-      return data ? data.free : "0"
-    }  
+      const data = balances.find((value) => value.ticker === assetid);
+      return data ? data.free : "0";
+    }
     return "0";
   };
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket.symbolArray : [-1, -1];
   const availabeBaseAmount = getBalance(baseAssetId.toString(), balances);
-  const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);  
+  const availabelQuoteAmount = getBalance(quoteAssetId.toString(), balances);
 
   const currentTicker = marketTickers[currentMarket?.id];
 
