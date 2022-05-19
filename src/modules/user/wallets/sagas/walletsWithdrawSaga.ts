@@ -10,14 +10,9 @@ import {
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { getCsrfToken } from "@polkadex/web-helpers";
 
-const walletsWithdrawCcyOptions = (csrfToken?: string): RequestOptions => {
-  return {
-    apiVersion: "polkadexHostUrl",
-    headers: { "X-CSRF-Token": csrfToken },
-  };
-};
-
+// TODO: CHANGE TO USE ENCLAVE WS
 export function* walletsWithdrawCcySaga(action: WalletsWithdrawCcyFetch) {
+  return;
   try {
     yield call(
       API.post(walletsWithdrawCcyOptions(getCsrfToken())),

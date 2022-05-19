@@ -8,11 +8,9 @@ import { getHistorySagaParam, sliceArray } from "@polkadex/web-helpers";
 
 const { defaultStorageLimit } = defaultConfig;
 
-const config: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
+// TODO: DISABLED FOR NOW UPDATE WHEN DATA IS READY
 export function* historySaga(action: HistoryFetch) {
+  return;
   try {
     const { type, limit, page } = action.payload;
     const coreEndpoint = {

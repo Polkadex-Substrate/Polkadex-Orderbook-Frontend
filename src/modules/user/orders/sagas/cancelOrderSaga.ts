@@ -13,11 +13,9 @@ import { formatPayload, signMessage } from "@polkadex/web-helpers";
 import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const ordersOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
+// TODO: CHANGE TO USE ENCLAVE WS TO CACNEL ORDER
 export function* cancelOrderSaga(action: OrderCancelFetch) {
+  return;
   try {
     const { order_id } = action.payload;
     const { address, keyringPair } = yield select(selectUserInfo);

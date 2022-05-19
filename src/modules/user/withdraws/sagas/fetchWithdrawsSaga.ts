@@ -7,11 +7,9 @@ import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage, formatPayload } from "@polkadex/web-helpers";
 import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 
-const ordersOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
+// TOOD: CHANGE TO USE ENCLAVE WS
 export function* fetchWithdrawsSaga() {
+  return;
   try {
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {

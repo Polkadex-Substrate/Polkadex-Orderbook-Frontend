@@ -9,10 +9,8 @@ const buildRequest = (request: Request, configData: RequestOptions) => {
   const { apiVersion, headers } = configData;
 
   const api = {
-    auth: defaultConfig.auth,
-    polkadexHostUrl: defaultConfig.polkadexHostUrl,
     influxDB: defaultConfig.influxDBUrl,
-    apiPath: defaultConfig.apiPath
+    apiPath: defaultConfig.apiPath,
   };
 
   const contentType = body instanceof FormData ? "multipart/form-data" : "application/json";

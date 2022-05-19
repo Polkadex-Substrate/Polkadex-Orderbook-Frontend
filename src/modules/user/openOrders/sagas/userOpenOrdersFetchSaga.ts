@@ -6,10 +6,6 @@ import { userOpenOrdersData, userOpenOrdersError, UserOpenOrdersFetch } from "..
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const ordersOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
 export function* userOpenOrdersFetchSaga(action: UserOpenOrdersFetch) {
   try {
     const { market } = action.payload;

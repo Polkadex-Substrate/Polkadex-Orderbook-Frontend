@@ -5,11 +5,9 @@ import { walletsAddressData, walletsAddressError, WalletsAddressFetch } from "..
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const walletsAddressOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
-
+// TODO: DISABLED UNITL DATA IS READY
 export function* walletsAddressSaga(action: WalletsAddressFetch) {
+  return;
   try {
     const currency = action.payload.currency.toLocaleLowerCase();
     const url = `/account/deposit_address/${currency}`;

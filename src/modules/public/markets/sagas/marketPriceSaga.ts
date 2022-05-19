@@ -6,9 +6,6 @@ import { marketPriceData, marketPriceError, MarketPriceFetch } from "../actions"
 import { buildQueryString } from "@polkadex/web-helpers";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const marketPriceRequestOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
 // TODO: remove mockData and update endpoint when we have a marketPrice endpoint available
 export function* marketPriceSaga(action: MarketPriceFetch) {
   try {

@@ -27,9 +27,7 @@ type Funds = { amount?: string } & CommomState;
 type ConnectWallet = { address: string; password: string };
 type Notifications = { repeatNumber: number; repeatTime: number };
 
-const option: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
+// TODO: REMOVED IN PRODUCTION
 export function useDeveloper() {
   const dispatch = useDispatch();
   const user = useReduxSelector(selectUserInfo);
@@ -76,7 +74,7 @@ export function useDeveloper() {
             },
             payload,
           };
-          return await API.post(option)("/test_deposit", data);
+          // return await API.post(option)("/test_deposit", data);
         })
       );
       if (response[0].Fine && response[1].Fine) {

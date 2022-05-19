@@ -5,9 +5,7 @@ import { recentTradesData, recentTradesError, RecentTradesFetch } from "../actio
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const tradesOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
+
 
 export function* recentTradesFetchSaga(action: RecentTradesFetch) {
   try {

@@ -8,10 +8,9 @@ import { signMessage } from "@polkadex/web-helpers";
 import { formatPayload } from "@polkadex/orderbook/helpers/formatPayload";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const ordersOption: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
+// TODO: CHANGE TO USE SQL
 export function* transactionsSaga() {
+  return;
   try {
     const { address, keyringPair } = yield select(selectUserInfo);
     const payload = { account: address };

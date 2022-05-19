@@ -5,9 +5,6 @@ import { depthData, depthError, DepthFetch } from "../actions";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 
-const depthOptions: RequestOptions = {
-  apiVersion: "polkadexHostUrl",
-};
 /*
 TODO: convert saga from openware endpoint when we have a dept endpoint available
 */
