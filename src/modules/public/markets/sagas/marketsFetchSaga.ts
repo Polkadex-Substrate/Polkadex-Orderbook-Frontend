@@ -80,14 +80,16 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
     return {
       id: baseSymbol + quoteSymbol,
       name: baseSymbol + "/" + quoteSymbol,
-      symbolArray: [baseAssetId, quoteAssetId],
+      assetIdArray: [baseAssetId.toString(), quoteAssetId.toString()],
+      base_ticker: baseSymbol,
+      quote_ticker: quoteSymbol,
       base_unit: baseName,
       quote_unit: quoteName,
       amount_precision: 12,
       price_precision: 12,
-      min_price: new BigNumber(tradingPair.minimumTradeAmount).div(UNIT_BN).toString(),
-      max_price: new BigNumber(tradingPair.maximumTradeAmount).div(UNIT_BN).toString(),
-      min_amount: new BigNumber(tradingPair.minimumWithdrawalAmount).div(UNIT_BN).toString(),
+      min_price: new BigNumber(tradingPair.minimumTradeAmount).div(UNIT_BN),
+      max_price: new BigNumber(tradingPair.maximumTradeAmount).div(UNIT_BN),
+      min_amount: new BigNumber(tradingPair.minimumWithdrawalAmount).div(UNIT_BN),
       tokenTickerName: baseSymbol,
     };
   });
