@@ -56,7 +56,7 @@ const Content = () => {
             href="#"
           />
           <Card
-            icon="Polkaido"
+            icon="Wallet"
             title="IDO -Initial Dex Offering"
             description="An easy way to invest or start promising projects."
             isBeta

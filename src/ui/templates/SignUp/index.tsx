@@ -15,7 +15,7 @@ import {
   MyAccountLoading,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { PaperWallet } from "@polkadex/orderbook-ui/templates";
+import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";

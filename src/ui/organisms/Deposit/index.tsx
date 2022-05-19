@@ -17,7 +17,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
-export const Deposit = () => {
+const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount);
   const markets = useReduxSelector(selectMarkets);
@@ -156,3 +156,5 @@ export const Deposit = () => {
     </S.Wrapper>
   );
 };
+
+export default Deposit;

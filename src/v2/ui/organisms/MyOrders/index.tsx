@@ -23,7 +23,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 
-export const MyOrders = () => {
+const MyOrders = () => {
   const [state, setState] = useState(true);
   return (
     <S.Main>
@@ -123,3 +123,5 @@ const Content = ({ showList }) => {
     </S.Content>
   );
 };
+
+export default MyOrders;

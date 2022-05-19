@@ -18,7 +18,7 @@ const defaultValues = {
   amountInFiat: 0.0,
 };
 
-export const Withdraw = () => {
+const Withdraw = () => {
   const mainAccount = useReduxSelector(selectMainAccount);
   const proxyAccount = useReduxSelector(selectMainAccount);
 
@@ -98,3 +98,5 @@ export const Withdraw = () => {
     </S.Wrapper>
   );
 };
+
+export default Withdraw;

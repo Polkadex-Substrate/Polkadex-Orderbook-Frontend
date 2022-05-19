@@ -4,7 +4,7 @@ import * as T from "./types";
 import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
 import { useInformation } from "@polkadex/orderbook/v2/hooks";
 
-export const Information = ({ onOpenMarkets }) => {
+const Information = ({ onOpenMarkets }) => {
   const {
     pairName,
     pairTicker,
@@ -59,3 +59,5 @@ const Card = ({ title, description, isHorizontal, textColor, children }: T.Props
     </S.CardContainer>
   </S.Card>
 );
+
+export default Information;
