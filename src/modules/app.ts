@@ -26,6 +26,7 @@ import { transactionsReducer } from "./user/transactions";
 import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
 import { extensionWalletReducer } from "./user/mainAccount";
 import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
+import { assetsReducer } from "./public/assets";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -41,6 +42,7 @@ export const publicReducer = combineReducers({
   ranger: rangerReducer,
   rabbitmqChannel: rabbitmqChannelReducer,
   enclaveRpcClient: enclaveRpcClientReducer,
+  assets: assetsReducer,
 });
 
 export const userReducer = combineReducers({

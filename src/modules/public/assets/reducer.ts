@@ -5,12 +5,14 @@ import { IPublicAsset } from "./types";
 export interface AssetsState {
   error?: string;
   list: IPublicAsset[];
+  assetIdMap: Record<string, IPublicAsset>;
   loading: boolean;
   success: boolean;
 }
 
 export const initialState: AssetsState = {
   list: [],
+  assetIdMap: {},
   loading: false,
   success: false,
 };
@@ -27,7 +29,7 @@ export const assetsReducer = (state = initialState, action: AssetsAction) => {
       return {
         ...state,
         list: action.payload.list,
-
+        assetIdMap: action.payload.assetIdMap,
         loading: false,
         success: true,
       };

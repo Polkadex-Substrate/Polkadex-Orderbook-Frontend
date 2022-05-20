@@ -4,7 +4,7 @@ import { IPublicAsset } from "./types";
 
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-export const selecAssetsFetchSuccess = (state: RootState): boolean =>
+export const selectAssetsFetchSuccess = (state: RootState): boolean =>
   state.public.assets.success;
 
 export const selectAssetFetchError = (state: RootState): string => state.public.assets.error;
@@ -16,6 +16,9 @@ export const selectAllAssets = (state: RootState): IPublicAsset[] => state.publi
 
 export const selectAllAssetIds = (state: RootState): string[] =>
   state.public.assets.list.map((asset) => asset.assetId);
+
+export const selectAssetIdMap = (state: RootState): Record<string, IPublicAsset> =>
+  state.public.assets.assetIdMap;
 
 export const selectGetAsset =
   (state: RootState) =>
