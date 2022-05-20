@@ -1,11 +1,12 @@
-import { BalancesAction, AssetBalance } from "./actions";
+import { BalancesAction, Balance } from "./actions";
 import { BALANCES_DATA, BALANCES_ERROR, BALANCES_FETCH } from "./constants";
 
 export interface BalancesState {
   error?: string;
   loading: boolean;
   success: boolean;
-  balances: AssetBalance[];
+  balances: Balance[];
+  timestamp?: number;
 }
 
 const initialState: BalancesState = {
@@ -28,7 +29,8 @@ export const balancesReducer = (
     case BALANCES_DATA:
       return {
         ...state,
-        balances: action.payload,
+        balances: action.payload.balances,
+        timestamp: action.payload.timestamp,
         loading: false,
         success: true,
       };

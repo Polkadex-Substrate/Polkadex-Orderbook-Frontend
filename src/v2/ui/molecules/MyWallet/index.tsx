@@ -3,7 +3,6 @@ import Link from "next/link";
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import { getNameFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 import { toCapitalize } from "@polkadex/web-helpers";
 import { useFunds } from "@polkadex/orderbook/v2/hooks";
 
@@ -24,27 +23,8 @@ const Header = ({ isActive = false }) => (
 );
 
 export const WalletContent = ({ title, locked = true, hasLink = true }) => {
-  const {
-    searchState,
-    handleChange,
-    // balances
-  } = useFunds();
-  const balances = [
-    {
-      ticker: 0,
-      tickerName: 0,
-      free: "0.00",
-      used: "0.00",
-      total: "0.00",
-    },
-    {
-      ticker: 1,
-      tickerName: 0,
-      free: "0.00",
-      used: "0.00",
-      total: "0.00",
-    },
-  ];
+  const { searchState, handleChange, balances } = useFunds();
+
   return (
     <S.Content>
       <S.Title>
@@ -81,12 +61,12 @@ export const WalletContent = ({ title, locked = true, hasLink = true }) => {
               {balances?.map((balance, i) => (
                 <Card
                   key={i}
-                  name={getNameFromAssetId(Number(balance.ticker))}
-                  ticker={balance.tickerName}
-                  amount={Number(balance.free)}
-                  lockedAmount={Number(balance.used)}
+                  name={balance.name}
+                  ticker={balance.symbol}
+                  amount={Number(balance.free_balance) || 0}
+                  lockedAmount={Number(balance.reserved_balance) || 0}
                   locked={locked}
-                  id={balance.ticker}
+                  id={balance.symbol}
                 />
               ))}
             </S.FundsContent>
@@ -114,7 +94,7 @@ const Card = ({
       </S.CardIconWrapper>
       <S.CardInfo>
         <p>{toCapitalize(name)}</p>
-        <span>PDE</span>
+        <span>{ticker}</span>
       </S.CardInfo>
     </S.CardWrapper>
     {locked && (

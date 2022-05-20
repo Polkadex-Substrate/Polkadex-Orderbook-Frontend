@@ -1,6 +1,6 @@
 import { RootState } from "../../";
 
-import { Balance } from ".";
+import { Balance, BalanceBase } from ".";
 
 export const selectBalancesSuccess = (state: RootState): boolean =>
   state.user.balances.success;
