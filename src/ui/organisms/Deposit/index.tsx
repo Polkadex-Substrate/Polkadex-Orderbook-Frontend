@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Formik } from "formik";
 
@@ -13,7 +12,6 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import {
   depositsFetch,
-  Market,
   selectExtensionWalletAccounts,
   selectMainAccount,
   selectMarkets,
@@ -25,7 +23,7 @@ import { depositValidations } from "@polkadex/orderbook/validations";
 const defaultValues = {
   amount: 0.0,
   asset: "",
-  market: "",
+  market: null,
   address: "",
 };
 
@@ -33,22 +31,8 @@ const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount);
   const markets = useReduxSelector(selectMarkets);
-  const [isBase, setIsBase] = useState(true);
-  const [amount, setAmount] = useState(0);
-  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
 
   const dispatch = useDispatch();
-  const handleDeposit = () => {
-    const baseAsset =
-      selectedMarket.assetIdArray[0] === "-1"
-        ? { polkadex: null }
-        : { asset: selectedMarket.assetIdArray[0] };
-    const quoteAsset =
-      selectedMarket.assetIdArray[1] === "-1"
-        ? { polkadex: null }
-        : { asset: selectedMarket.assetIdArray[1] };
-    dispatch(depositsFetch({ baseAsset, quoteAsset, amount, isBase }));
-  };
 
   return (
     <S.Wrapper>
@@ -56,10 +40,16 @@ const Deposit = () => {
         initialValues={defaultValues}
         validationSchema={depositValidations}
         onSubmit={async (values) => {
-          console.log(values);
-          // dispatch(
-
-          // );
+          const isBase = values.market?.base_unit === values.asset;
+          const baseAsset =
+            values.market.assetIdArray[0] === "-1"
+              ? { polkadex: null }
+              : { asset: values.market.assetIdArray[0] };
+          const quoteAsset =
+            values.market.assetIdArray[1] === "-1"
+              ? { polkadex: null }
+              : { asset: values.market.assetIdArray[1] };
+          dispatch(depositsFetch({ baseAsset, quoteAsset, amount: values.amount, isBase }));
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -96,14 +86,14 @@ const Deposit = () => {
               </Dropdown>
               {errors.address && <S.Error>{errors.address}</S.Error>}
             </S.SelectAccountContainer>
-            <S.SelectPairContainer>
+            <S.SelectPairContainer onClick={() => console.log(errors, values)}>
               <S.SelectPairWrapper>
                 <Dropdown
                   direction="bottom"
                   isClickable
                   header={
                     <S.SelectWrapper>
-                      <span>{values.market || "Select Market"}</span>
+                      <span>{values?.market?.name || "Select Market"}</span>
                       <Icon
                         name="ArrowBottom"
                         size="small"
@@ -117,8 +107,7 @@ const Deposit = () => {
                       <S.SelectCard
                         key={idx}
                         onClick={() => {
-                          setFieldValue("market", market.name);
-                          setSelectedMarket(market);
+                          setFieldValue("market", market);
                         }}>
                         {market.name}
                       </S.SelectCard>
@@ -127,40 +116,40 @@ const Deposit = () => {
                 </Dropdown>
                 {errors.market && <S.Error>{errors.market}</S.Error>}
               </S.SelectPairWrapper>
-              <S.SelectPairWrapper>
-                <Dropdown
-                  direction="bottom"
-                  isClickable
-                  header={
-                    <S.SelectWrapper>
-                      <span>{values.asset || "Select Asset"}</span>
-                      <Icon
-                        name="ArrowBottom"
-                        size="small"
-                        style={{ marginLeft: "1rem" }}
-                        stroke="text"
-                      />
-                    </S.SelectWrapper>
-                  }>
-                  <S.SelectContent isOverflow={false}>
-                    <S.SelectCard
-                      onClick={() => {
-                        setFieldValue("asset", selectedMarket.base_unit);
-                        setIsBase(true);
-                      }}>
-                      {selectedMarket?.base_unit}
-                    </S.SelectCard>
-                    <S.SelectCard
-                      onClick={() => {
-                        setFieldValue("asset", selectedMarket.quote_unit);
-                        setIsBase(false);
-                      }}>
-                      {selectedMarket?.quote_unit}
-                    </S.SelectCard>
-                  </S.SelectContent>
-                </Dropdown>
-                {errors.market && <S.Error>{errors.market}</S.Error>}
-              </S.SelectPairWrapper>
+              {values?.market?.id && (
+                <S.SelectPairWrapper>
+                  <Dropdown
+                    direction="bottom"
+                    isClickable
+                    header={
+                      <S.SelectWrapper>
+                        <span>{values.asset || "Select Asset"}</span>
+                        <Icon
+                          name="ArrowBottom"
+                          size="small"
+                          style={{ marginLeft: "1rem" }}
+                          stroke="text"
+                        />
+                      </S.SelectWrapper>
+                    }>
+                    <S.SelectContent isOverflow={false}>
+                      <S.SelectCard
+                        onClick={() => {
+                          setFieldValue("asset", values.market.base_unit);
+                        }}>
+                        {values.market?.base_unit}
+                      </S.SelectCard>
+                      <S.SelectCard
+                        onClick={() => {
+                          setFieldValue("asset", values.market.quote_unit);
+                        }}>
+                        {values.market?.quote_unit}
+                      </S.SelectCard>
+                    </S.SelectContent>
+                  </Dropdown>
+                  {errors.market && <S.Error>{errors.market}</S.Error>}
+                </S.SelectPairWrapper>
+              )}
             </S.SelectPairContainer>
             <S.WrapperContainer>
               <S.Container>
