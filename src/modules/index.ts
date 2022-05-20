@@ -34,6 +34,7 @@ import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
 import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
+import { AssetsState, rootAssetsSaga } from "./public/assets";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -75,6 +76,7 @@ export interface RootState {
     ranger: RangerState;
     rabbitmqChannel: RabbitmqChannelState;
     enclaveRpcClient: EnclaveRpcClientState;
+    assets: AssetsState;
   };
   user: {
     polkadotWallet: PolkadotWalletState;
@@ -128,5 +130,6 @@ export function* rootSaga() {
     call(rootDepositsSaga),
     call(rootRabbitmqChannelSaga),
     call(rootEnclaveRpcClientSaga),
+    call(rootAssetsSaga),
   ]);
 }

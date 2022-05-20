@@ -20,3 +20,11 @@ export const marketIdMap = {
   0: { name: "POLKADOGE", symbol: "PDG" },
   1: { name: "SHIBADEX", symbol: "SDX" },
 };
+
+export const POLKADEX_ASSSET_ID = "-1";
+
+export const POLKADEX_ASSET = {
+  name: "POLKADEX",
+  symbol: "PDEX",
+  assetId: POLKADEX_ASSSET_ID,
+};

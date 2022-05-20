@@ -1,38 +1,41 @@
-import { BalancesAction, UserBalance } from "./actions";
+import { BalancesAction, AssetBalance } from "./actions";
 import { BALANCES_DATA, BALANCES_ERROR, BALANCES_FETCH } from "./constants";
 
 export interface BalancesState {
   error?: string;
   loading: boolean;
   success: boolean;
-  balances?: UserBalance;
+  balances: AssetBalance[];
 }
 
 const initialState: BalancesState = {
   loading: false,
   success: false,
-  balances: { timestamp: 0, userBalance: [] },
+  balances: [],
 };
 
-export const balancesReducer = (state = initialState, action: BalancesAction) => {
+export const balancesReducer = (
+  state = initialState,
+  action: BalancesAction
+): BalancesState => {
   switch (action.type) {
     case BALANCES_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case BALANCES_DATA:
       return {
         ...state,
-        balances: { ...action.payload },
-        laoding: false,
+        balances: action.payload,
+        loading: false,
         success: true,
       };
     case BALANCES_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };

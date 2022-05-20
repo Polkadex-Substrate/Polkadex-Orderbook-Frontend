@@ -7,16 +7,14 @@ import {
   BALANCE_CHANNEL_FETCH,
 } from "./constants";
 
-export type Balance = {
+export interface Balance {
+  asset_type: string;
+  reserve_base: string;
+  free_balance: string;
+}
+export interface AssetBalance extends Balance {
+  name: string;
   ticker: string;
-  tickerName?: string;
-  free: string;
-  used: string;
-  total: string;
-};
-export interface UserBalance {
-  timestamp: number;
-  userBalance: Balance[];
 }
 export type FreeOrUsedOrTotal = Record<string, number>;
 
@@ -37,7 +35,7 @@ export interface BalancesError {
 
 export interface BalancesData {
   type: typeof BALANCES_DATA;
-  payload: UserBalance;
+  payload: AssetBalance;
 }
 export interface BalanceChannelFetch {
   type: typeof BALANCE_CHANNEL_FETCH;
