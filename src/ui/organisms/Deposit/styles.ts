@@ -2,13 +2,11 @@ import styled, { css } from "styled-components";
 
 import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
 import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
-import { Box as InputPrimary } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
 export const Wrapper = styled.div``;
 export const WrapperContainer = styled.div`
   display: flex;
-  padding: 0 2rem;
-  margin-top: 1rem;
+  padding: 2rem;
   @media screen and (max-width: 520px) {
     flex-direction: column;
     align-items: center;
@@ -30,28 +28,19 @@ export const SelectPairContainer = styled.div`
     }
   `}
 `;
-export const SelectPairWrapper = styled.div`
-  flex: 1;
-`;
 
 export const SelectWrapper = styled.div`
   ${({ theme }) => css`
     padding: 1.5rem;
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.white};
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      display: block;
-    }
   `}
 `;
 
-export const Select = styled.div`
-  ${({ theme }) => css`
+export const SelectContent = styled.div<{ isOverflow: boolean }>`
+  ${({ theme, isOverflow = false }) => css`
     background-color: ${theme.colors.white};
     padding: 1rem;
     border-radius: 1rem;
@@ -60,12 +49,6 @@ export const Select = styled.div`
     max-height: 20rem;
     overflow-y: scroll;
     scrollbar-width: none;
-  `}
-`;
-
-export const SelectContent = styled(Select)<{ isOverflow?: boolean }>`
-  ${({ theme, isOverflow = false }) => css`
-    overflow: ${isOverflow ? "visible" : "hidden"};
     ${Dropdown} {
       cursor: pointer;
       :not(:last-child) {
@@ -74,29 +57,6 @@ export const SelectContent = styled(Select)<{ isOverflow?: boolean }>`
     }
   `}
 `;
-
-export const SelectContainer = styled(Select)<{ isOverflow?: boolean }>`
-  ${({ theme, isOverflow = false }) => css`
-    overflow: ${isOverflow ? "visible" : "hidden"};
-  `}
-`;
-
-export const SelectCard = styled.div`
-  ${({ theme }) => css`
-    padding: 0.4rem;
-    cursor: pointer;
-    border-radius: 0.4rem;
-    color: black;
-    transition: background 0.5s ease-in-out;
-    :hover {
-      background: ${theme.colors.secondaryBackgroundOpacity};
-    }
-    :not(:last-child) {
-      margin-bottom: 0.2rem;
-    }
-  `}
-`;
-
 export const SelectMessage = styled.p`
   ${({ theme }) => css`
     text-align: center;
@@ -104,35 +64,74 @@ export const SelectMessage = styled.p`
     padding: 1rem 0;
   `}
 `;
+export const QrCodeContainer = styled.div`
+  text-align: center;
+  margin-right: 1.5rem;
+  width: fit-content;
 
-export const Container = styled.div`
-  flex: 1;
+  p {
+    margin-top: 1rem;
+  }
+  @media screen and (max-width: 520px) {
+    margin-bottom: 2rem;
+  }
 `;
 
-export const Input = styled.div`
+export const QrCode = styled.div`
   ${({ theme }) => css`
-    margin-bottom: 2rem;
-    ${InputPrimary} {
-      background: ${theme.colors.secondaryBackgroundOpacity};
-      label {
-        opacity: 0.7;
-      }
-      label,
-      input {
-        color: ${theme.colors.text};
+    background: ${theme.colors.white};
+    padding: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 1rem;
+    div {
+      width: 140px;
+      height: 140px;
+      svg {
+        width: 100%;
       }
     }
   `}
 `;
-export const Actions = styled.div`
-  padding: 0 2rem;
-  margin-top: 1rem;
+export const Container = styled.div`
+  flex: 1;
 `;
 
-export const Error = styled.span`
+export const Content = styled.div`
+  @media screen and (min-width: 460px) {
+    padding-left: 1.6rem;
+  }
+  span {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+`;
+
+export const Input = styled.div`
   ${({ theme }) => css`
-    color: ${theme.colors.primary};
-    font-size: 1.2rem;
-    margin-left: 1.3rem;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 1.2rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    span {
+      opacity: 0.7;
+    }
+    p {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+    button {
+      margin-left: 1rem;
+      background: ${theme.colors.secondaryBackground};
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
   `}
 `;

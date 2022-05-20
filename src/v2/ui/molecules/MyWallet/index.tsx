@@ -7,11 +7,11 @@ import { getNameFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 import { toCapitalize } from "@polkadex/web-helpers";
 import { useFunds } from "@polkadex/orderbook/v2/hooks";
 
-export const MyWallet = ({ hasLink = true }) => {
+export const MyWallet = () => {
   return (
     <S.Main>
-      <Dropdown header={<Header />} direction="bottomRight" priority="medium">
-        <WalletContent title="My Funds" hasLink={hasLink} />
+      <Dropdown header={<Header />} direction="bottomRight" priority="medium" isOpacity>
+        <WalletContent title="My Funds" />
       </Dropdown>
     </S.Main>
   );
@@ -23,7 +23,7 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-export const WalletContent = ({ title, locked = true, hasLink = true }) => {
+export const WalletContent = ({ title, locked = true }) => {
   const {
     searchState,
     handleChange,
@@ -49,7 +49,6 @@ export const WalletContent = ({ title, locked = true, hasLink = true }) => {
     <S.Content>
       <S.Title>
         <h3>{title}</h3>
-        {hasLink && <Link href="/wallet">Deposit/Withdraw</Link>}
       </S.Title>
       <S.Box>
         <S.Search>
@@ -128,5 +127,19 @@ const Card = ({
       <p>{amount.toFixed(7)}</p>
       <span>{amountFiat.toFixed(7)}</span>
     </S.CardWrapper>
+    <S.CardActions>
+      <Link href={`/wallet/${id}`}>
+        <a>
+          <Icon name="OrderBuy" color="black" size="medium" />
+          <span>Deposit</span>
+        </a>
+      </Link>
+      <Link href={`/wallet/${id}`}>
+        <a>
+          <Icon name="OrderSell" color="black" size="medium" />
+          <span>Withdraw</span>
+        </a>
+      </Link>
+    </S.CardActions>
   </S.Card>
 );

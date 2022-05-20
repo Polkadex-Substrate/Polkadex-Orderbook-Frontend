@@ -6,7 +6,7 @@ import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecul
 export const Menu = () => {
   return (
     <S.Main>
-      <Dropdown header={<Header />} direction="bottomRight" priority="medium">
+      <Dropdown header={<Header />} direction="bottomRight" priority="medium" isOpacity>
         <Content />
       </Dropdown>
     </S.Main>

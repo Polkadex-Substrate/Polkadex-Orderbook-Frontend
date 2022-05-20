@@ -65,7 +65,7 @@ export const Wrapper = styled.div<{ isMessage?: boolean; isVisible: boolean }>`
   ${({ theme, isMessage, isVisible }) => css`
     position: fixed;
     top: 0;
-    z-index: ${isMessage ? 33 : 30};
+    z-index: ${isMessage ? 31 : 30};
     width: 100vw;
     height: 100vh;
     transition: opacity ${theme.transition.default};
