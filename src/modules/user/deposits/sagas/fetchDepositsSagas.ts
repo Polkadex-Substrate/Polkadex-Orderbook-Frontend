@@ -6,7 +6,7 @@ import { depositsData, DepositsFetch } from "../actions";
 import { depositsError } from "..";
 import { selectMainAccount } from "../../mainAccount";
 
-import { signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { alertPush, sendError } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
@@ -21,6 +21,15 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
     const api = yield select(selectRangerApi);
     const isApiReady = yield select(selectRangerIsReady);
     if (isApiReady && mainUser.address !== "") {
+      yield put(
+        alertPush({
+          type: "Loading",
+          message: {
+            title: "Processing Deposit",
+            description: "Please wait while we process your deposit",
+          },
+        })
+      );
       const res = yield call(
         depositToEnclave,
         api,
@@ -36,12 +45,13 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           alertPush({
             type: "Successful",
             message: {
-              title: "Congrats! You have successfully deposited to the enclave.",
+              title: "Deposit Successful",
+              description: "Congrats! You have successfully deposited to the enclave.",
             },
           })
         );
       } else {
-        throw new Error("Depost fetch failed");
+        throw new Error("Depost failed");
       }
     }
   } catch (error) {
@@ -65,12 +75,9 @@ async function depositToEnclave(
   quoteAsset: Record<string, string | null>,
   amount: string | number,
   isBase: boolean
-) {
-  const ext = api.tx.ocex.deposit(
-    baseAsset,
-    quoteAsset,
-    new BigNumber(amount).multipliedBy(UNIT_BN),
-    isBase
-  );
-  await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
+): Promise<ExtrinsicResult> {
+  const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
+  const ext = api.tx.ocex.deposit(baseAsset, quoteAsset, amountStr, isBase);
+  const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
+  return res;
 }
