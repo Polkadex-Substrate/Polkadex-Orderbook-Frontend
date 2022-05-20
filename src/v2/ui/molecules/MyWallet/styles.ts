@@ -43,11 +43,27 @@ export const Content = styled.div`
 `;
 
 export const Title = styled.div`
-  padding: 2rem 2rem 0 2rem;
-  h3 {
-    font-size: 1.6rem;
-    font-weight: 550;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2rem 0 2rem;
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 550;
+    }
+    a {
+      font-size: 1.2rem;
+      background: ${theme.colors.primary}22;
+      color: ${theme.colors.primary} !important;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.4rem;
+      transition: background 0.3s ease-in-out;
+      :hover {
+        background: ${theme.colors.primary}33;
+      }
+    }
+  `}
 `;
 
 export const Box = styled.div`
@@ -123,13 +139,6 @@ export const Card = styled.div<{ hasLocked?: boolean }>`
     :not(:last-child) {
       margin-bottom: 1rem;
     }
-    :hover ${CardActions} {
-       {
-        visibility: visible;
-        opacity: 1;
-        transform: translateY(-50%);
-      }
-    }
   `}
 `;
 
@@ -162,39 +171,5 @@ export const CardIconWrapper = styled.div`
     margin-right: 0.4rem;
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-  `}
-`;
-
-export const CardActions = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: ${theme.colors.white};
-    box-shadow: ${theme.shadows.tertiary};
-    border-radius: 1rem;
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-20%);
-    padding: 1rem;
-    height: 80%;
-    visibility: hidden;
-    opacity: 0;
-    transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out,
-      opacity 0.3s ease-in-out;
-    ${Icon} {
-      margin-right: 0.2rem;
-    }
-    span {
-      transition: opacity 0.3s ease-in-out;
-      opacity: 0.5;
-    }
-
-    a :hover {
-      span {
-        opacity: 1;
-      }
-    }
   `}
 `;

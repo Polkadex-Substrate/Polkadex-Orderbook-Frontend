@@ -17,7 +17,6 @@ export const MyAccount = () => {
         header={<Header address={userAddress} accountName={userName} />}
         direction="bottomRight"
         priority="medium"
-        isOpacity
         style={{ overflow: "hidden" }}>
         <Content address={userAddress} logout={logout} />
       </Dropdown>
