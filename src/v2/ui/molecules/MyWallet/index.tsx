@@ -10,7 +10,7 @@ import { useFunds } from "@polkadex/orderbook/v2/hooks";
 export const MyWallet = ({ hasLink = true }) => {
   return (
     <S.Main>
-      <Dropdown header={<Header />} direction="bottomRight" priority="medium">
+      <Dropdown header={<Header />} direction="bottomRight" priority="high">
         <WalletContent title="My Funds" hasLink={hasLink} />
       </Dropdown>
     </S.Main>
