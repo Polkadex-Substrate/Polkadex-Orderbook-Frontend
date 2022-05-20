@@ -9,11 +9,7 @@ import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
-import { useDispatch } from "react-redux";
 
-const History = dynamic(() => import("@polkadex/orderbook-ui/organisms/History"), {
-  ssr: false,
-});
 const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
   ssr: false,
 });
@@ -32,18 +28,16 @@ export const WalletTemplate = () => {
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
 
-  const { id } = router.query;
   useEffect(() => {
     if (!isLoading && !user) router.push("/login");
   }, [isLoading, user, router]);
 
-  if (!id) return <div />;
   return (
     <S.Main>
       <Header />
       <Tabs>
         <S.Wrapper>
-          <WalletContent title="Tokens" locked={false} />
+          <WalletContent title="Tokens" locked={false} hasLink={false} />
           <S.ContainerWrapper>
             <S.EstimateBalance>
               <S.EstimatedBalanceWrapper>
@@ -107,7 +101,7 @@ export const WalletTemplate = () => {
                   <Withdraw />
                 </TabContent>
               </S.Container>
-              <History />
+              {/* <History /> */}
             </S.Grid>
           </S.ContainerWrapper>
         </S.Wrapper>
