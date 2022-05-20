@@ -36,7 +36,7 @@ export const Tokens = () => {
   const allTokens = useMemo(
     () =>
       balances?.filter((token) => {
-        return token.ticker.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase());
+        return token.symbol.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase());
       }),
     [fieldValue, balances]
   );
@@ -57,8 +57,8 @@ export const Tokens = () => {
               allTokens.map((token, index) => (
                 <Card
                   key={index}
-                  tokenName={token.ticker}
-                  tokenTicker={token.ticker}
+                  tokenName={token.symbol}
+                  tokenTicker={token.symbol}
                   amount={token.free as number}
                 />
               ))

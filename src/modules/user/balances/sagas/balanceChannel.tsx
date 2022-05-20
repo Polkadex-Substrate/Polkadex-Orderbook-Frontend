@@ -2,7 +2,13 @@ import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
 
-import { alertPush, Balance, BalanceMessage, balancesData, selectUserBalance } from "../../..";
+import {
+  alertPush,
+  BalanceBase,
+  BalanceMessage,
+  balancesData,
+  selectUserBalance,
+} from "../../..";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 
 import {
@@ -25,9 +31,7 @@ export function* balanceChannelSaga() {
           balanceMsg = JSON.parse(balanceMsg);
           const oldBalance = yield select(selectUserBalance);
           const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);
-          yield put(
-            balancesData({ timestamp: new Date().getTime(), userBalance: newBalance })
-          );
+          yield put(balancesData({ timestamp: new Date().getTime(), balances: newBalance }));
         }
       }
     }
@@ -44,7 +48,7 @@ export function* balanceChannelSaga() {
   }
 }
 // TODO: recheck the types for this function
-const updateBalanceFromMsg = (oldBalance: Balance[], balanceMsg: BalanceMessage) => {
+const updateBalanceFromMsg = (oldBalance: BalanceBase[], balanceMsg: BalanceMessage) => {
   const isAssetAPresent =
     oldBalance && oldBalance.find((elem) => elem.ticker === balanceMsg.asset_a);
   const isAssetBPresent =

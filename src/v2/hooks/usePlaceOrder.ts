@@ -62,8 +62,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    */
   const getBalance = (assetid: string) => {
     if (balances.length > 0) {
-      const data = balances.find((value) => value.ticker === assetid);
-      return data ? data.free : "0";
+      const data = balances.find((value) => value.symbol === assetid);
+      return data ? data.free_balance : "0";
     }
     return "0";
   };

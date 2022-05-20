@@ -10,8 +10,11 @@ export function* fetchAssetsSaga() {
     const api = yield select(selectRangerApi);
     if (api) {
       const assetsList = yield call(() => fetchAllAssetMetadata(api));
-
-      yield put(assetsData({ list: assetsList }));
+      const assetIdMap = assetsList.reduce((acc, asset) => {
+        acc[asset.assetId] = asset;
+        return acc;
+      }, {});
+      yield put(assetsData({ list: assetsList, assetIdMap }));
     }
   } catch (error) {
     yield put(

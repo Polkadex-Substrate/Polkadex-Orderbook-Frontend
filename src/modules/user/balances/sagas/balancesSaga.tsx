@@ -1,22 +1,37 @@
 import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
 
-import { ProxyAccount, sendError } from "../../..";
-import { balancesData, balancesError, AssetBalance, BalancesFetch, Balance } from "../actions";
+import { ProxyAccount } from "../../..";
+import { balancesData, BalancesFetch, BalanceBase } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 
-import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
-import { signMessage, toCapitalize } from "@polkadex/web-helpers";
+import {
+  selectAssetsFetchSuccess,
+  selectAllAssets,
+  IPublicAsset,
+  selectAssetIdMap,
+} from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
     const account = yield select(selectUserInfo);
-    if (account.address) {
+    const isAssetData = yield select(selectAssetsFetchSuccess);
+    if (account.address && isAssetData) {
+      const assetMap = yield select(selectAssetIdMap);
       const balances = yield call(() => fetchbalancesAsync(account));
-      yield put(balancesData(balances));
-    } else {
-      throw new Error("User not logged in");
+      // very unoptimized way to map the asset data
+      // TODO: improve datastructure in the future
+      const list = balances.map((balance: BalanceBase) => {
+        const asset =
+          balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
+        return {
+          ...asset,
+          ...balance,
+        };
+      });
+      yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
     yield put(
@@ -31,8 +46,10 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
   }
 }
 
-async function fetchbalancesAsync(account: ProxyAccount): Promise<Balance[]> {
+async function fetchbalancesAsync(account: ProxyAccount): Promise<BalanceBase[]> {
   const address = account.address;
-  const res = await axios.get("/api/user/assets/ " + address);
-  return res.data;
+  // const res = await axios.get("/api/user/assets/" + address);
+  const res: any = await axios.get("/api/user/assets/" + "148"); // for testing purposes
+  console.log("fetch balance =>", res);
+  return res.data.data;
 }

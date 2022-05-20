@@ -25,6 +25,7 @@ import {
   selectLastRecentTrade,
 } from "@polkadex/orderbook-modules";
 import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
+import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 
 const Header = dynamic(
   () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
@@ -77,6 +78,7 @@ export const Trading = () => {
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
+  useUserDataFetch();
 
   const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
