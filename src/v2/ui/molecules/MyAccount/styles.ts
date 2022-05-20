@@ -35,6 +35,10 @@ export const HeaderInfo = styled.div`
     font-weight: 600;
     display: inline-block;
     line-height: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 18rem;
+    white-space: nowrap;
   }
   span {
     display: block;
@@ -49,7 +53,7 @@ export const Content = styled.div`
     min-width: 35rem;
     border-radius: 1.5rem;
     transition: height 400ms ease;
-
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     .menu-secondary-enter {
       transform: translateX(110%);
     }

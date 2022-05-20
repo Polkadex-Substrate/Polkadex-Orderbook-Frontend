@@ -10,7 +10,7 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectMainAccount, selectProxyAddress } from "@polkadex/orderbook-modules";
+import { selectMainAccount } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   walletAddress: "",
