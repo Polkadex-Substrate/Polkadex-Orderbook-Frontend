@@ -11,7 +11,6 @@ import { EmptyData } from "@orderbook/v2/ui/molecules";
 
 const Orderbook = () => {
   const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
-  console.log({ isPriceUp });
   return (
     <S.Main>
       <AvailableMessage message="Soon">
