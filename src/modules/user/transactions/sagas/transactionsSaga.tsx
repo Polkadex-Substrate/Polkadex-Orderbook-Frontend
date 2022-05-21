@@ -1,28 +1,17 @@
 import { call, put, select } from "redux-saga/effects";
+import axios from "axios";
 
 import { transactionsData } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 
-import { signMessage } from "@polkadex/web-helpers";
-import { formatPayload } from "@polkadex/orderbook/helpers/formatPayload";
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-
 // TODO: CHANGE TO USE SQL
 export function* transactionsSaga() {
-  return;
+  console.log("transactions saga");
   try {
     const { address, keyringPair } = yield select(selectUserInfo);
-    const payload = { account: address };
-    const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
-    const data = formatPayload(signature, payload);
-    // TODO: Replace url
-    const res = yield call(() => API.post(ordersOption)("/fetch_transactions ", data));
-    if (res.Fine) {
-      yield put(transactionsData(res.Fine));
-    } else {
-      throw new Error("user transaction fetch failed");
-    }
+    const transactions = yield call(fetchTransactions, address);
+    yield put(transactionsData(transactions));
   } catch (error) {
     yield put(
       alertPush({
@@ -35,3 +24,8 @@ export function* transactionsSaga() {
     );
   }
 }
+const fetchTransactions = async (address: string) => {
+  const res: any = await axios.get("/api/user/transactions" + "148");
+  console.log("transaction data=>", res.data.data);
+  return res.data.data;
+};

@@ -9,24 +9,16 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 const { defaultStorageLimit } = defaultConfig;
 export interface OrdersHistoryState {
   list: OrderCommon[];
-  fetching: boolean;
+  loading: boolean;
   pageIndex: number;
-  cancelAllFetching: boolean;
-  cancelAllError: boolean;
-  cancelError: boolean;
-  cancelFetching: boolean;
-  nextPageExists: boolean;
+  success: boolean;
 }
 
 export const initialOrdersHistoryState: OrdersHistoryState = {
   list: [],
-  fetching: false,
+  loading: false,
   pageIndex: 0,
-  cancelAllFetching: false,
-  cancelAllError: false,
-  cancelError: false,
-  cancelFetching: false,
-  nextPageExists: false,
+  success: false,
 };
 
 export const ordersHistoryReducer = (
@@ -35,15 +27,16 @@ export const ordersHistoryReducer = (
 ): OrdersHistoryState => {
   switch (action.type) {
     case ORDERS_HISTORY_FETCH:
-      return { ...state, fetching: true };
+      return { ...state, loading: true };
     case ORDERS_HISTORY_DATA:
       return {
         ...state,
         list: sliceArray(action.payload.list, defaultStorageLimit),
-        fetching: false,
+        loading: false,
+        success: true,
       };
     case ORDERS_HISTORY_ERROR:
-      return { ...state, list: [], pageIndex: 0, fetching: false };
+      return { ...state, list: [], pageIndex: 0, loading: false };
     default:
       return state;
   }

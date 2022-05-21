@@ -16,8 +16,5 @@ export const selectOrdersFirstElemIndex = (state: RootState, limit: number): num
 export const selectOrdersLastElemIndex = (state: RootState, limit: number): number =>
   state.user.ordersHistory.pageIndex * limit + state.user.ordersHistory.list.length;
 
-export const selectOrdersNextPageExists = (state: RootState): boolean =>
-  state.user.ordersHistory.nextPageExists;
-
 export const selectOrdersHistoryLoading = (state: RootState): boolean =>
-  state.user.ordersHistory.fetching;
+  state.user.ordersHistory.loading;
