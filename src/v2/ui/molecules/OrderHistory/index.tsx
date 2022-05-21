@@ -8,7 +8,7 @@ import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
 
-export const OrderHistory = ({ orders, priceFixed, amountFixed }: T.Props) => {
+export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   const dispatch = useDispatch();
   return (
     <>
@@ -16,8 +16,8 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed }: T.Props) => {
         const date = new Date(Number(order.timestamp)).toLocaleTimeString();
         const isSell = order.order_side === "Sell";
         const isLimit = order.order_type === "Limit";
-        const baseUnit = getSymbolFromAssetId(order.base_asset);
-        const quoteUnit = getSymbolFromAssetId(order.quote_asset);
+        const baseUnit = getAsset(order.base_asset_type).symbol;
+        const quoteUnit = getAsset(order.quote_asset_type).symbol;
         const filled = Number(order.filled_qty).toFixed(5);
 
         return (
@@ -46,7 +46,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed }: T.Props) => {
                 </S.CardInfo>
               )}
               <S.CardInfo>
-                <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
+                <span>{Decimal.format(order.qty, amountFixed, ",")}</span>
                 <p>Amount({isLimit ? baseUnit : quoteUnit})</p>
               </S.CardInfo>
               <S.CardInfo>
@@ -55,11 +55,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed }: T.Props) => {
               </S.CardInfo>
               <S.CardInfo>
                 <span>
-                  {Decimal.format(
-                    Number(order.price) * Number(order.amount),
-                    amountFixed,
-                    ","
-                  )}
+                  {Decimal.format(Number(order.price) * Number(order.qty), amountFixed, ",")}
                 </span>
                 <p>Total</p>
               </S.CardInfo>
@@ -71,7 +67,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed }: T.Props) => {
                     <ul>
                       <S.Cancel
                         onClick={() => {
-                          dispatch(orderCancelFetch({ order_id: order.order_id }));
+                          dispatch(orderCancelFetch({ order_id: order.txid }));
                         }}>
                         Cancel
                       </S.Cancel>

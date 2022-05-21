@@ -4,15 +4,15 @@ import { TableRow, TableCard } from "@orderbook/v2/ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
-export const OrderHistoryTable = ({ orders, priceFixed, amountFixed }: T.Props) => (
+export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => (
   <TableRow
     isOpenOrder={!!orders?.find((order) => order.status === "Open")}
     header={["Pair", "Date", "Type", "Price", "Amount", "Filled", "Total"]}>
     {orders.map((order, i) => {
       const date = new Date(order.timestamp).toLocaleString();
       const isSell = order.order_side === "Ask";
-      const baseUnit = order.base_asset_type;
-      const quoteUnit = order.quote_asset_type;
+      const baseUnit = getAsset(order.base_asset_type).symbol;
+      const quoteUnit = getAsset(order.quote_asset_type).symbol;
       return (
         <TableCard
           key={i}
