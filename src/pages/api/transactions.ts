@@ -1,19 +1,21 @@
-import { serializeBigInt } from "@polkadex/orderbook/helpers/serializeBigInt";
 import { NextApiRequest, NextApiResponse } from "next";
+
 import prisma from "../../../prisma";
+
 import { getUserAcc } from "./user/accounts/[id]";
 import { userTransactions } from "./user/transactions/[id]";
+
+import { serializeBigInt } from "@polkadex/orderbook/helpers/serializeBigInt";
 
 export default async function transactions(req: NextApiRequest, res: NextApiResponse) {
   try {
     const transactions = await prisma.transactions.findMany();
-
     const updatedData = await Promise.all(
       transactions.map(async (acc) => {
         const serializedData = serializeBigInt(acc);
-        const id = +serializedData.main_account_id;
-        const userAcc = await getUserAcc(id, { main_acc: true});
-        const trades = await userTransactions(id, null);
+        const id = serializedData.main_account_id;
+        const userAcc = await getUserAcc(id, { main_acc: true });
+        const trades = await userTransactions(id as string, null);
         return createOrderCommonTypes({
           ...serializedData,
           main_account_id: userAcc.main_acc,
