@@ -126,11 +126,9 @@ export const Trading = () => {
           <Information onOpenMarkets={handleClose} />
           <Chart />
           <Orderbook />
-          {/* <ExploreMarket /> */}
         </S.Container>
         <PlaceOrder />
         <MyOrders />
-        <News />
         <RecentTrades />
       </S.Wrapper>
       <Footer />
