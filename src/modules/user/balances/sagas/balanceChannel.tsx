@@ -2,36 +2,35 @@ import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
 
-import {
-  alertPush,
-  BalanceBase,
-  BalanceMessage,
-  balancesData,
-  selectUserBalance,
-} from "../../..";
+import { alertPush, BalanceMessage, selectUserBalance } from "../../..";
 import { ProxyAccount, selectUserInfo } from "../../profile";
+import { Balance, BalanceChannelFetch, balanceChannelUpdateData } from "../actions";
 
 import {
   RabbitmqChannelType,
   selectRabbitmqChannel,
 } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
-export function* balanceChannelSaga() {
+export function* balanceChannelSaga(action: BalanceChannelFetch) {
+  console.log("balanceChannelSaga called");
   try {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.address;
     if (userAddress) {
+      const userAddress = "esozUamXY9R14rwM3G5cPaTX1haVSo47orFtKGJSn6pPrLvwD";
       const rabbitmqConn = yield select(selectRabbitmqChannel);
+      const getAsset = yield select(selectGetAsset);
       if (rabbitmqConn) {
         const channel = yield call(() =>
-          fetchBalanceUpdatesChannel(rabbitmqConn, userAddress + "-balance-update-events")
+          fetchBalanceUpdatesChannel(rabbitmqConn, userAddress)
         );
         while (true) {
-          let balanceMsg = yield take(channel);
-          balanceMsg = JSON.parse(balanceMsg);
-          const oldBalance = yield select(selectUserBalance);
-          const newBalance = updateBalanceFromMsg(oldBalance, balanceMsg);
-          yield put(balancesData({ timestamp: new Date().getTime(), balances: newBalance }));
+          const msg = yield take(channel);
+          console.log("balanceMsg =>", msg);
+          const balanceMsg: BalanceMessage = JSON.parse(msg);
+          const updateBalance = updateBalanceFromMsg(balanceMsg, getAsset);
+          yield put(balanceChannelUpdateData(updateBalance));
         }
       }
     }
@@ -47,44 +46,16 @@ export function* balanceChannelSaga() {
     );
   }
 }
-// TODO: recheck the types for this function
-const updateBalanceFromMsg = (oldBalance: BalanceBase[], balanceMsg: BalanceMessage) => {
-  const isAssetAPresent =
-    oldBalance && oldBalance.find((elem) => elem.ticker === balanceMsg.asset_a);
-  const isAssetBPresent =
-    oldBalance && oldBalance.find((elem) => elem.ticker === balanceMsg.asset_b);
-  if (isAssetAPresent) {
-    const index = oldBalance.findIndex((elem) => elem.ticker === balanceMsg.asset_a);
-    oldBalance[index].free = balanceMsg.amount_a;
-    oldBalance[index].total = Number(oldBalance[index].free) + Number(oldBalance[index].used);
-  } else {
-    oldBalance.push({
-      ticker: balanceMsg.asset_a,
-      free: balanceMsg.amount_a,
-      used: 0,
-      total: balanceMsg.amount_a,
-    });
-  }
-  if (isAssetBPresent) {
-    const index = oldBalance.findIndex((elem) => elem.ticker === balanceMsg.asset_b);
-    oldBalance[index].free = balanceMsg.amount_b;
-    oldBalance[index].total = Number(oldBalance[index].free) + Number(oldBalance[index].used);
-  } else {
-    oldBalance.push({
-      ticker: balanceMsg.asset_b,
-      free: balanceMsg.amount_b,
-      used: 0,
-      total: balanceMsg.amount_b,
-    });
-  }
-  return [...oldBalance];
-};
-
-async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, queueName: string) {
-  const queue = await chann.queue(queueName, { durable: false });
+async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, address: string) {
+  const queueName = `${address}-balance-update-events`;
+  const routingKey = `*.balance-update-events`;
+  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
+  await queue.bind("topic_exchange", routingKey);
+  console.log("created balance update queue", queueName);
   return eventChannel((emitter) => {
     const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
       const msg = u8aToString(res.body);
+      console.log("balance update msg =>", msg);
       emitter(msg);
       res.ack();
     });
@@ -93,3 +64,34 @@ async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, queueName:
     };
   });
 }
+
+const updateBalanceFromMsg = (
+  msg: BalanceMessage,
+  getAsset: (id: string) => IPublicAsset
+): Balance[] => {
+  const update: BalanceMessage["update"] = msg.update;
+  let [baseAsset, quoteAsset] = msg.trading_pair.split("/");
+  baseAsset = baseAsset === "PDEX" ? "-1" : baseAsset;
+  quoteAsset = quoteAsset === "PDEX" ? "-1" : quoteAsset;
+  const baseFree = update.base_free;
+  const baseReserved = update.base_reserved;
+  const quoteFree = update.quote_free;
+  const quoteReserved = update.quote_reserved;
+  const newBalance: Balance[] = [
+    {
+      name: getAsset(baseAsset).name,
+      symbol: getAsset(baseAsset).symbol,
+      asset_type: baseAsset,
+      free_balance: baseFree,
+      reserved_balance: baseReserved,
+    },
+    {
+      name: getAsset(quoteAsset).name,
+      symbol: getAsset(quoteAsset).symbol,
+      asset_type: quoteAsset,
+      free_balance: quoteFree,
+      reserved_balance: quoteReserved,
+    },
+  ];
+  return newBalance;
+};

@@ -1,5 +1,10 @@
 import { BalancesAction, Balance } from "./actions";
-import { BALANCES_DATA, BALANCES_ERROR, BALANCES_FETCH } from "./constants";
+import {
+  BALANCES_CHANNEL_UPDATE_DATA,
+  BALANCES_DATA,
+  BALANCES_ERROR,
+  BALANCES_FETCH,
+} from "./constants";
 
 export interface BalancesState {
   error?: string;
@@ -41,6 +46,19 @@ export const balancesReducer = (
         success: false,
         error: action.error,
       };
+    case BALANCES_CHANNEL_UPDATE_DATA: {
+      const updates = action.payload;
+      // filter out old balances from the balance state
+      const balanceFiltered = state.balances.filter((balance) =>
+        updates.some((update) => update.asset_type === balance.asset_type)
+      );
+      // apply updates to the balances in the state
+      const newBalances = [...balanceFiltered, ...updates];
+      return {
+        ...state,
+        balances: newBalances,
+      };
+    }
     default:
       return state;
   }
