@@ -19,7 +19,7 @@ import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch, signUp, signUpData } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
   password: "",
@@ -41,11 +41,10 @@ export const SignUpTemplate = () => {
     signUpLoading,
     isLoading,
     handlePrint,
-    isSuccess,
     signUpSuccess,
     componentRef,
     extensionAccounts,
-  } = useSignUp();
+  } = useSignUp({ mnemonic: mnemoicString });
 
   if (signUpSuccess) return <div />;
   return (
@@ -78,11 +77,12 @@ export const SignUpTemplate = () => {
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
                       dispatch(
-                        signUp({
-                          accountName,
-                          mnemonic: mnemoicString,
-                          password,
-                        })
+                        signUpData()
+                        // signUp({
+                        //   accountName,
+                        //   mnemonic: mnemoicString,
+                        //   password,
+                        // })
                       );
                     }}>
                     {({ values, errors, touched, setFieldValue }) => (
@@ -145,7 +145,11 @@ export const SignUpTemplate = () => {
                           error={errors.password && touched.password && errors.password}
                         />
                         <FlexSpaceBetween style={{ marginTop: 20 }}>
-                          <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                          <Button
+                            size="extraLarge"
+                            type="submit"
+                            //  disabled={signUpLoading}
+                          >
                             {signUpLoading ? "Loading.." : "Create Account"}
                           </Button>
                           <Button

@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -21,7 +22,6 @@ import {
   selectMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
-
 const HeaderBack = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.HeaderBack),
   {
@@ -37,6 +37,7 @@ const PaperWallet = dynamic(() => import("@polkadex/orderbook-ui/templates/Paper
 });
 
 export const ConnectToPhone = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const componentRef = useRef();
   // Change to Saga
@@ -45,7 +46,7 @@ export const ConnectToPhone = () => {
   const isSuccess = true;
 
   // Change to Saga
-  const { mnemonic, mnemoicString } = useMnemonic();
+  const { mnemonic, mnemoicString } = useMnemonic(router?.query?.mnemonic as string);
 
   const selectedAccount = useReduxSelector(selectMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
@@ -97,40 +98,42 @@ export const ConnectToPhone = () => {
                     <p>Read and accet our terms of use to continue</p>
                   </S.StepTitle>
                   <S.StepContent>
-                    <Dropdown
-                      direction="bottom"
-                      isClickable
-                      header={
-                        <SelectAccount
-                          isHeader
-                          accountName={selectedAccount?.name || "Select your main account"}
-                          address={selectedAccount?.address || "Polkadex is completely free"}
-                        />
-                      }>
-                      <S.SelectContent isOverflow={accounts?.length > 2}>
-                        {isLoading ? (
-                          <MyAccountLoading />
-                        ) : accounts?.length ? (
-                          accounts.map((item, index) => (
-                            <SelectAccount
-                              isActive={item.address === selectedAccount?.address}
-                              key={index}
-                              accountName={item.meta.name || `Account ${index}`}
-                              address={item.address}
-                              onClick={() =>
-                                isVisible
-                                  ? undefined
-                                  : dispatch(setMainAccountFetch(accounts[index]))
-                              }
-                            />
-                          ))
-                        ) : (
-                          <S.SelectMessage>
-                            You dont have account, please create one
-                          </S.SelectMessage>
-                        )}
-                      </S.SelectContent>
-                    </Dropdown>
+                    {!router?.query?.mnemonic?.length && (
+                      <Dropdown
+                        direction="bottom"
+                        isClickable
+                        header={
+                          <SelectAccount
+                            isHeader
+                            accountName={selectedAccount?.name || "Select your main account"}
+                            address={selectedAccount?.address || "Polkadex is completely free"}
+                          />
+                        }>
+                        <S.SelectContent isOverflow={accounts?.length > 2}>
+                          {isLoading ? (
+                            <MyAccountLoading />
+                          ) : accounts?.length ? (
+                            accounts.map((item, index) => (
+                              <SelectAccount
+                                isActive={item.address === selectedAccount?.address}
+                                key={index}
+                                accountName={item.meta.name || `Account ${index}`}
+                                address={item.address}
+                                onClick={() =>
+                                  isVisible
+                                    ? undefined
+                                    : dispatch(setMainAccountFetch(accounts[index]))
+                                }
+                              />
+                            ))
+                          ) : (
+                            <S.SelectMessage>
+                              You dont have account, please create one
+                            </S.SelectMessage>
+                          )}
+                        </S.SelectContent>
+                      </Dropdown>
+                    )}
                     {!isVisible && (
                       <S.SelectAccount>
                         <p>
@@ -141,9 +144,10 @@ export const ConnectToPhone = () => {
                           background="secondaryBackground"
                           color="black"
                           type="button"
-                          onClick={() =>
-                            dispatch(connectPhoneFetch({ mnemonic: mnemoicString }))
-                          }>
+                          onClick={() => {
+                            dispatch(connectPhoneFetch({ mnemonic: mnemoicString }));
+                            // setIsVisible(true);
+                          }}>
                           Unlock QR Code
                         </Button>
                       </S.SelectAccount>
