@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   connectPhoneFetch,
+  selectConnectPhoneSuccess,
   selectExtensionWalletAccounts,
   selectMainAccount,
   setMainAccountFetch,
@@ -41,7 +42,6 @@ export const ConnectToPhone = () => {
   const dispatch = useDispatch();
   const componentRef = useRef();
   // Change to Saga
-  const [isVisible, setIsVisible] = useState(false);
   const isLoading = false;
   const isSuccess = true;
 
@@ -50,6 +50,7 @@ export const ConnectToPhone = () => {
 
   const selectedAccount = useReduxSelector(selectMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
+  const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -78,7 +79,7 @@ export const ConnectToPhone = () => {
               <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
                 <S.Step>
                   <S.StepTitle>
-                    <h3>1. Download Polkadex App</h3>
+                    <h3>Download Polkadex App</h3>
                     <p>Any device at any time, trade on the go</p>
                   </S.StepTitle>
                   <S.StepContent>
@@ -93,10 +94,13 @@ export const ConnectToPhone = () => {
                   </S.StepContent>
                 </S.Step>
                 <S.Step>
-                  <S.StepTitle>
-                    <h3>2. Select your account</h3>
-                    <p>Read and accet our terms of use to continue</p>
-                  </S.StepTitle>
+                  {!router?.query?.mnemonic?.length && (
+                    <S.StepTitle>
+                      <h3>Select your account</h3>
+                      <p>Read and accept our terms of use to continue</p>
+                    </S.StepTitle>
+                  )}
+
                   <S.StepContent>
                     {!router?.query?.mnemonic?.length && (
                       <Dropdown
@@ -120,7 +124,7 @@ export const ConnectToPhone = () => {
                                 accountName={item.meta.name || `Account ${index}`}
                                 address={item.address}
                                 onClick={() =>
-                                  isVisible
+                                  connectPhoneSuccess
                                     ? undefined
                                     : dispatch(setMainAccountFetch(accounts[index]))
                                 }
@@ -134,36 +138,36 @@ export const ConnectToPhone = () => {
                         </S.SelectContent>
                       </Dropdown>
                     )}
-                    {!isVisible && (
-                      <S.SelectAccount>
-                        <p>
-                          I am aware that Polkadex does not store any information related to
-                          Wallet or Mnemonic.
-                        </p>
+
+                    <S.SelectAccount>
+                      <p>
+                        I am aware that Polkadex does not store any information related to
+                        Wallet or Mnemonic.
+                      </p>
+                      {!connectPhoneSuccess && (
                         <Button
                           background="secondaryBackground"
                           color="black"
                           type="button"
                           onClick={() => {
                             dispatch(connectPhoneFetch({ mnemonic: mnemoicString }));
-                            // setIsVisible(true);
                           }}>
                           Unlock QR Code
                         </Button>
-                      </S.SelectAccount>
-                    )}
+                      )}
+                    </S.SelectAccount>
                   </S.StepContent>
                 </S.Step>
-                {isVisible && (
+                {connectPhoneSuccess && (
                   <>
                     <S.Step>
                       <S.StepTitle>
-                        <h3>3. Save your Mnemonic Phrases</h3>
+                        <h3>Save your Mnemonic Phrases</h3>
                         <p>Never share your mnemonic seed with anyone. </p>
                       </S.StepTitle>
                       <S.StepContent>
                         <S.Phrases>
-                          {mnemonic.map((phrase, i) => (
+                          {mnemonic?.map((phrase, i) => (
                             <div key={i}>
                               <span>{i + 1}.</span>
                               <p>{phrase}</p>
@@ -188,7 +192,7 @@ export const ConnectToPhone = () => {
                     </S.Step>
                     <S.Step>
                       <S.StepTitle>
-                        <h3>4. Mnemonic Phrases QR Code</h3>
+                        <h3>Mnemonic Phrases QR Code</h3>
                         <p>Open Polkadex Exchange App and import your wallet via QR code. </p>
                       </S.StepTitle>
                       <S.StepContent>

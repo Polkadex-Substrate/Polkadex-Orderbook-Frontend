@@ -17,3 +17,12 @@ export const selectSignUpLoading = (state: RootState): AuthState["signUpLoading"
 
 export const selectSignUpSuccess = (state: RootState): AuthState["signUpSuccess"] =>
   state.user.auth.signUpSuccess;
+
+export const selectConnectPhoneError = (state: RootState): AuthState["authError"] =>
+  state.user.auth.connectPhoneError;
+
+export const selectConnectPhoneLoading = (state: RootState): AuthState["signUpLoading"] =>
+  state.user.auth.connectPhoneLoading;
+
+export const selectConnectPhoneSuccess = (state: RootState): AuthState["signUpSuccess"] =>
+  state.user.auth.connectPhoneSuccess;
