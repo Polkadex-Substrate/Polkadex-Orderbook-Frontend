@@ -49,7 +49,7 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
 async function fetchbalancesAsync(account: ProxyAccount): Promise<BalanceBase[]> {
   const address = account.address;
   // const res = await axios.get("/api/user/assets/" + address);
-  const res: any = await axios.get("/api/user/assets/" + "148"); // for testing purposes
+  const res: any = await axios.get("/api/user/assets/" + account.main_acc_id); // for testing purposes
   console.log("fetch balance =>", res);
   return res.data.data;
 }
