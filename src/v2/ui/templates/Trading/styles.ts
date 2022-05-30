@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
     "GridContainer"
     "PlaceOrder"
     "MyOrders"
-    "News"
+    /* "News" */
     "RecentTrades";
   grid-template-rows: 1fr;
   grid-template-columns: 1fr;
@@ -28,7 +28,7 @@ export const Wrapper = styled.div`
       "GridContainer GridContainer PlaceOrder"
       "GridContainer GridContainer PlaceOrder"
       "GridContainer GridContainer RecentTrades"
-      "MyOrders News RecentTrades";
+      "MyOrders MyOrders RecentTrades";
     grid-template-rows: minmax(24rem, 24rem) auto 1fr minmax(25rem, 24rem);
     grid-template-columns: 4fr minmax(30rem, 30rem) minmax(28rem, 28rem);
     max-height: 100vh;

@@ -3,6 +3,7 @@ import { CommonError } from "../../types";
 import { AuthAction } from "./actions";
 import {
   AUTH_CONNECT_PHONE_DATA,
+  AUTH_CONNECT_PHONE_ERROR,
   AUTH_CONNECT_PHONE_FETCH,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
@@ -25,8 +26,9 @@ export interface AuthState {
   signInLoading: boolean;
   signUpLoading: boolean;
   signUpSuccess: boolean;
+  connectPhoneSuccess?: boolean;
   connectPhoneLoading: boolean;
-  connnectPhoneSuccess: boolean;
+  connectPhoneError?: CommonError;
 }
 
 export const initialStateAuth: AuthState = {
@@ -37,8 +39,8 @@ export const initialStateAuth: AuthState = {
   signInLoading: false,
   signUpLoading: false,
   signUpSuccess: false,
+  connectPhoneSuccess: false,
   connectPhoneLoading: false,
-  connnectPhoneSuccess: false,
 };
 
 export const authReducer = (state = initialStateAuth, action: AuthAction) => {
@@ -47,6 +49,13 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state, signInLoading: true };
     case AUTH_SIGN_IN_DATA:
       return { ...state, signInLoading: false };
+
+    case AUTH_CONNECT_PHONE_FETCH:
+      return { ...state, connectPhoneLoading: true };
+    case AUTH_CONNECT_PHONE_DATA:
+      return { ...state, connectPhoneLoading: false, connectPhoneSuccess: true };
+    case AUTH_CONNECT_PHONE_ERROR:
+      return { ...state, connectPhoneLoading: false, connectPhoneError: action.error };
     case AUTH_SIGN_IN_ERROR:
       return { ...state, authError: action.error, signInLoading: false };
     case AUTH_SIGN_UP_FETCH:
@@ -59,10 +68,6 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state };
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
-    case AUTH_CONNECT_PHONE_FETCH:
-      return { ...state, connectPhoneLoading: true };
-    case AUTH_CONNECT_PHONE_DATA:
-      return { ...state, connectPhoneLoading: false, connnectPhoneSuccess: true };
     default:
       return state;
   }
