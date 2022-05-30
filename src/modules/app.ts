@@ -11,7 +11,6 @@ import { depthReducer, incrementDepthReducer, orderBookReducer } from "./public/
 import { recentTradesReducer } from "./public/recentTrades";
 import { authReducer } from "./user/auth";
 import { historyReducer } from "./user/history";
-import { openOrdersReducer } from "./user/openOrders";
 import { ordersReducer } from "./user/orders";
 import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
@@ -50,7 +49,6 @@ export const userReducer = combineReducers({
   polkadotWallet: polkadotWalletReducer,
   extensionWallet: extensionWalletReducer,
   history: historyReducer,
-  openOrders: openOrdersReducer,
   balances: balancesReducer,
   orders: ordersReducer,
   ordersHistory: ordersHistoryReducer,
