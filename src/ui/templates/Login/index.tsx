@@ -18,8 +18,6 @@ import {
   selectSignUpSuccess,
   setProxyAccount,
   signIn,
-  balancesFetch,
-  balanceChannelFetch,
 } from "@polkadex/orderbook-modules";
 import {
   Button,
@@ -49,15 +47,7 @@ export const LoginTemplate = () => {
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const isSignInLoading = useReduxSelector(selectSignInLoading);
-  // initialize user specific sagas
-  useEffect(() => {
-    if (hasUser) {
-      if (hasUser) {
-        dispatch(balancesFetch());
-        dispatch(balanceChannelFetch());
-      }
-    }
-  }, [dispatch, hasUser]);
+
   useEffect(() => {
     if (hasUser) router.push("/v2/trading");
   }, [hasUser, router]);

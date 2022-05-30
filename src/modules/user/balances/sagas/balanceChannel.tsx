@@ -18,7 +18,6 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.address;
     if (userAddress) {
-      const userAddress = "esozUamXY9R14rwM3G5cPaTX1haVSo47orFtKGJSn6pPrLvwD";
       const rabbitmqConn = yield select(selectRabbitmqChannel);
       const getAsset = yield select(selectGetAsset);
       if (rabbitmqConn) {
@@ -48,7 +47,7 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
 }
 async function fetchBalanceUpdatesChannel(chann: RabbitmqChannelType, address: string) {
   const queueName = `${address}-balance-update-events`;
-  const routingKey = `*.balance-update-events`;
+  const routingKey = `${address}-balance-update-events`;
   const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   await queue.bind("topic_exchange", routingKey);
   console.log("created balance update queue", queueName);

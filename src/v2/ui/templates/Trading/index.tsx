@@ -13,8 +13,6 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  balanceChannelFetch,
-  balancesFetch,
   currentTickerFetch,
   currentTickersUpdate,
   orderBookFetch,
@@ -78,7 +76,6 @@ export const Trading = () => {
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
-  useUserDataFetch();
 
   const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
@@ -96,14 +93,7 @@ export const Trading = () => {
   }, [dispatch, market]);
 
   // initialize user specific sagas
-  useEffect(() => {
-    if (hasUser) {
-      if (hasUser) {
-        dispatch(balancesFetch());
-        dispatch(balanceChannelFetch());
-      }
-    }
-  }, [dispatch, hasUser]);
+  useUserDataFetch();
 
   // intiatilize trade specific events
   useEffect(() => {

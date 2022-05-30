@@ -15,7 +15,7 @@ export const OrderHistoryCard = ({
   amount,
   total,
   executed,
-  type = "Limit",
+  type = "LIMIT",
   transactionType,
 }: Props) => {
   return (
@@ -60,7 +60,7 @@ export const OrderHistoryCardReponsive = ({
   amount,
   total,
   executed,
-  type = "Limit",
+  type = "LIMIT",
   transactionType,
 }: Props) => {
   return (

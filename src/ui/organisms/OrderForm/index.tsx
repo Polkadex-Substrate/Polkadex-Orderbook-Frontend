@@ -108,7 +108,7 @@ export const OrderForm = ({
     e.preventDefault();
     dispatch(
       orderExecuteFetch({
-        order_type: isMarket ? "Market" : "Limit",
+        order_type: isMarket ? "MARKET" : "LIMIT",
         symbol: symbolArray,
         side,
         price: state.price,

@@ -2,16 +2,15 @@
 import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
 
-import { userOrdersHistoryData } from "../actions";
+import { userOrdersHistoryData, UserOrdersHistoryFetch } from "../actions";
 import { alertPush } from "../../../";
 import { selectUserInfo } from "../../profile";
 
 import { OrderCommon } from "src/modules/types";
 
-// TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
-export function* ordersHistorySaga() {
+export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
-    const { address, main_acc_id } = yield select(selectUserInfo);
+    const { main_acc_id } = yield select(selectUserInfo);
     const transactions: OrderCommon[] = yield call(fetchTransactions, main_acc_id);
     console.log("transactions =>", transactions);
     yield put(userOrdersHistoryData({ list: transactions }));

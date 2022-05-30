@@ -11,7 +11,7 @@ export type CommonState = {
 };
 export type OrderStatus = "Open" | "Closed" | "Expired" | "Canceled" | "Failed";
 export type OrderSide = "Sell" | "Buy";
-export type OrderType = "Limit" | "Market";
+export type OrderType = "LIMIT" | "MARKET";
 export type OrderKind = "bid" | "ask";
 
 // TODO: Integrate new Types.

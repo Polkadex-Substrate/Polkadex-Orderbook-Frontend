@@ -24,10 +24,10 @@ import {
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const { side, price, order_type, amount, symbol } = action.payload;
-    if (order_type === "Limit" && Number(price) * Number(amount) <= 0) {
+    if (order_type === "LIMIT" && Number(price) * Number(amount) <= 0) {
       throw new Error("Invalid price or amount");
     }
-    if (order_type === "Market" && Number(amount) <= 0) {
+    if (order_type === "MARKET" && Number(amount) <= 0) {
       throw new Error("Invalid amount");
     }
     const { address, keyringPair, main_addr } = yield select(selectUserInfo);
@@ -52,7 +52,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
       yield put(userOrdersHistoryFetch());
-      yield put(balancesFetch());
     }
   } catch (error) {
     console.log({ error });
