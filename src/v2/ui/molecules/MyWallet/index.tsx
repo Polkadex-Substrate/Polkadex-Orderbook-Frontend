@@ -49,12 +49,12 @@ export const WalletContent = ({ title, locked = true, hasLink = true }) => {
               </span>
               {locked && (
                 <span>
-                  Locked <Icon name="IncreaseFilter" size="small" />
+                  Available <Icon name="IncreaseFilter" size="small" />
                 </span>
               )}
 
               <span>
-                Available <Icon name="IncreaseFilter" size="small" />
+                Locked <Icon name="IncreaseFilter" size="small" />
               </span>
             </S.FundsHeader>
             <S.FundsContent>
@@ -97,16 +97,15 @@ const Card = ({
         <span>{ticker}</span>
       </S.CardInfo>
     </S.CardWrapper>
+    <S.CardWrapper>
+      <p>{amount.toFixed(7)}</p>
+      <span>{amountFiat.toFixed(7)}</span>
+    </S.CardWrapper>
     {locked && (
       <S.CardWrapper>
         <p>{lockedAmount.toFixed(7)}</p>
         <span>{lockedAmountFiat.toFixed(7)}</span>
       </S.CardWrapper>
     )}
-
-    <S.CardWrapper>
-      <p>{amount.toFixed(7)}</p>
-      <span>{amountFiat.toFixed(7)}</span>
-    </S.CardWrapper>
   </S.Card>
 );

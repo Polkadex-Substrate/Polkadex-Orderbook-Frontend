@@ -42,8 +42,8 @@ export const WalletTemplate = () => {
             <S.EstimateBalance>
               <S.EstimatedBalanceWrapper>
                 <h2>Estimated Balance</h2>
-                <p>0.93871332 BTC</p>
-                <span>~4243.00 USD</span>
+                <p>0.0 </p>
+                <span>~0.00 USD</span>
               </S.EstimatedBalanceWrapper>
 
               <S.HeaderContainer>
@@ -59,7 +59,8 @@ export const WalletTemplate = () => {
             </S.EstimateBalance>
             <S.Grid>
               <S.Container>
-                <S.TokenInfo>
+                {/* TODO: Read this component once enclave supports multiple trading pairs */}
+                {/* <S.TokenInfo>
                   <FlexCenter>
                     <Icon
                       name="Btc"
@@ -93,7 +94,7 @@ export const WalletTemplate = () => {
                       <span>0.00000 BTC</span>
                     </div>
                   </FlexCenter>
-                </S.TokenInfo>
+                </S.TokenInfo> */}
                 <TabContent>
                   <Deposit />
                 </TabContent>
