@@ -45,12 +45,19 @@ const makeOHLCVPayload = (
   start?: number,
   stop?: number
 ) => {
-  return {
-    symbol: market,
-    timeframe: resolution,
-    timestamp_start: start,
-    timestamp_stop: stop,
-  };
+  if (stop)
+    return {
+      symbol: market,
+      timeframe: resolution,
+      timestamp_start: start,
+      timestamp_stop: stop,
+    };
+  else
+    return {
+      symbol: market,
+      timeframe: resolution,
+      timestamp_start: start,
+    };
 };
 const resolutionToSeconds = (r: string): number => {
   const minutes = parseInt(r, 10);
@@ -149,17 +156,22 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onErrorCallback,
       firstDataRequest
     ) => {
-      let url = makeHistoryUrl(
+      const url = makeHistoryUrl(
         symbolInfo.ticker || symbolInfo.name.toLowerCase(),
         resolutionToSeconds(resolution),
         from,
         to
       );
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
+      const payload = makeOHLCVPayload(
+        "PDEX/32",
+        resolutionForPayload(resolution),
+        -1296000000
+      );
       return axios
         .post(url, payload)
         .then(({ data }) => {
+          console.log("getBars => ", data);
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           if (data.Fine.length < 1) {
