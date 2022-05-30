@@ -1,18 +1,17 @@
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
 
-export const TradeHistory = ({ orders, priceFixed, amountFixed }: T.Props) => (
+export const TradeHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => (
   <>
     {orders.map((order, i) => {
-      const date = localeDate(new Date(Number(order.timestamp)), "fullDate");
+      const date = new Date(Number(order.timestamp)).toLocaleDateString();
+      console.log("tradeHistory rendered");
       const isSell = order.order_side === "Sell";
-      const baseUnit = getSymbolFromAssetId(order.base_asset);
-      const quoteUnit = getSymbolFromAssetId(order.quote_asset);
+      const baseUnit = getAsset(order.base_asset_type).symbol;
+      const quoteUnit = getAsset(order.quote_asset_type).symbol;
       return (
         <S.Card key={i}>
           <S.CardWrapper>
@@ -33,7 +32,7 @@ export const TradeHistory = ({ orders, priceFixed, amountFixed }: T.Props) => (
               <p>Price</p>
             </S.CardInfo>
             <S.CardInfo>
-              <span>{Decimal.format(order.amount, amountFixed, ",")}</span>
+              <span>{Decimal.format(order.qty, amountFixed, ",")}</span>
               <p>Quantity</p>
             </S.CardInfo>
           </S.CardWrapper>

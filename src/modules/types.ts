@@ -26,6 +26,8 @@ export interface OrderCommon {
   status: string;
   qty: string;
   price: string;
+  trade_history: string;
+  filled_price: string;
 }
 
 export interface TradesEntity {

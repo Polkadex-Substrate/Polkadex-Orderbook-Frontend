@@ -26,6 +26,9 @@ export const userTransactions = async (
     status: true,
     qty: true,
     price: true,
+    trade_history: true,
+    filled_price: true,
+    filled_qty: true,
   }
 ) => {
   const transactions = await prisma.transactions.findMany({

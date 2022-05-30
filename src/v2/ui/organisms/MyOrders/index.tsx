@@ -88,7 +88,8 @@ const Header = ({ showList, changeToList }) => {
 };
 
 const Content = ({ showList }) => {
-  const { priceFixed, amountFixed, orders, userLoggedIn } = useOrderHistory();
+  const { priceFixed, amountFixed, orders, userLoggedIn, trades } = useOrderHistory();
+  console.log("OrderHistory Content rendered");
   const getAsset = useReduxSelector(selectGetAsset);
   const OrderHistoryComponent = showList ? OrderHistoryTable : OrderHistory;
   const TradeHistoryComponent = showList ? TradeHistoryTable : TradeHistory;
@@ -109,11 +110,12 @@ const Content = ({ showList }) => {
             )}
           </TabContent>
           <TabContent>
-            {orders?.length ? (
+            {trades?.length ? (
               <TradeHistoryComponent
                 priceFixed={priceFixed}
                 amountFixed={amountFixed}
-                orders={orders}
+                getAsset={getAsset}
+                orders={trades}
               />
             ) : (
               <EmptyData />
