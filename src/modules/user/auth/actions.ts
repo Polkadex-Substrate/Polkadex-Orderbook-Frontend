@@ -151,6 +151,6 @@ export const connectPhoneFetch = (
   payload,
 });
 
-export const ConnectPhoneData = (): ConnectPhoneData => ({
+export const connectPhoneData = (): ConnectPhoneData => ({
   type: AUTH_CONNECT_PHONE_DATA,
 });

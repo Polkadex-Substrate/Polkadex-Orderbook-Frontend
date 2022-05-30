@@ -2,7 +2,7 @@ import { put, delay, call, select } from "redux-saga/effects";
 import { ApiPromise, Keyring } from "@polkadot/api";
 
 import { sendError, selectMainAccount, selectRangerApi, alertPush } from "../../../";
-import { ConnectPhoneFetch, signUpData, signUpError } from "../actions";
+import { connectPhoneData, ConnectPhoneFetch, signUpData, signUpError } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 import { MainAccount } from "../../mainAccount";
 
@@ -42,8 +42,7 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
             },
           })
         );
-        yield delay(3000);
-        yield put(signUpData());
+        yield put(connectPhoneData());
       } else {
         throw new Error(res.message);
       }

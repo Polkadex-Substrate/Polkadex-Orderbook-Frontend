@@ -2,6 +2,8 @@ import { CommonError } from "../../types";
 
 import { AuthAction } from "./actions";
 import {
+  AUTH_CONNECT_PHONE_DATA,
+  AUTH_CONNECT_PHONE_FETCH,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_SIGN_IN_DATA,
@@ -23,6 +25,8 @@ export interface AuthState {
   signInLoading: boolean;
   signUpLoading: boolean;
   signUpSuccess: boolean;
+  connectPhoneLoading: boolean;
+  connnectPhoneSuccess: boolean;
 }
 
 export const initialStateAuth: AuthState = {
@@ -33,6 +37,8 @@ export const initialStateAuth: AuthState = {
   signInLoading: false,
   signUpLoading: false,
   signUpSuccess: false,
+  connectPhoneLoading: false,
+  connnectPhoneSuccess: false,
 };
 
 export const authReducer = (state = initialStateAuth, action: AuthAction) => {
@@ -53,6 +59,10 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state };
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
+    case AUTH_CONNECT_PHONE_FETCH:
+      return { ...state, connectPhoneLoading: true };
+    case AUTH_CONNECT_PHONE_DATA:
+      return { ...state, connectPhoneLoading: false, connnectPhoneSuccess: true };
     default:
       return state;
   }
