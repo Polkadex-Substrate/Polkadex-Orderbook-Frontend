@@ -125,7 +125,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         timezone: "Etc/UTC",
         ticker: market.id,
         minmov: 1,
-        pricescale: Math.pow(10, Math.min(market.price_precision, 4)),
+        pricescale: Math.pow(10, market.price_precision),
         has_intraday: true,
         intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
         supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],

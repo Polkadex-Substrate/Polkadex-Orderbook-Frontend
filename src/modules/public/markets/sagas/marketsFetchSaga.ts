@@ -77,6 +77,7 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       api,
       tradingPair.quoteAsset
     );
+    //TODO: amount and price precision needs to be fetched from the api
     return {
       id: baseSymbol + quoteSymbol,
       name: baseSymbol + "/" + quoteSymbol,
@@ -85,8 +86,8 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       quote_ticker: quoteSymbol,
       base_unit: baseName,
       quote_unit: quoteName,
-      amount_precision: 12,
-      price_precision: 12,
+      amount_precision: 5,
+      price_precision: 5,
       min_price: new BigNumber(tradingPair.minimumTradeAmount).div(UNIT_BN),
       max_price: new BigNumber(tradingPair.maximumTradeAmount).div(UNIT_BN),
       min_amount: new BigNumber(tradingPair.minimumWithdrawalAmount).div(UNIT_BN),

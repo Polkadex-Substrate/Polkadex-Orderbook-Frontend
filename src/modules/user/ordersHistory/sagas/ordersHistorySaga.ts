@@ -11,8 +11,8 @@ import { OrderCommon } from "src/modules/types";
 // TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
 export function* ordersHistorySaga() {
   try {
-    const { address } = yield select(selectUserInfo);
-    const transactions: OrderCommon[] = yield call(fetchTransactions, address);
+    const { address, main_acc_id } = yield select(selectUserInfo);
+    const transactions: OrderCommon[] = yield call(fetchTransactions, main_acc_id);
     console.log("transactions =>", transactions);
     yield put(userOrdersHistoryData({ list: transactions }));
   } catch (error) {
@@ -27,8 +27,8 @@ export function* ordersHistorySaga() {
     );
   }
 }
-const fetchTransactions = async (address: string): Promise<OrderCommon[]> => {
-  const res: any = await axios.get("/api/user/transactions/" + "148");
+const fetchTransactions = async (main_acc_id: string): Promise<OrderCommon[]> => {
+  const res: any = await axios.get("/api/user/transactions/" + main_acc_id);
   const orders = res.data.data;
   if (orders.length > 0) {
     return sortDescendingTime(orders);
