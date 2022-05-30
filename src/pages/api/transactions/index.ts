@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "../../../prisma";
+import prisma from "../../../../prisma";
 
 import { serializeBigInt } from "@polkadex/orderbook/helpers/serializeBigInt";
 
