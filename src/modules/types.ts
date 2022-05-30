@@ -17,6 +17,7 @@ export type OrderKind = "bid" | "ask";
 // TODO: Integrate new Types.
 export interface OrderCommon {
   txid: string;
+  id: bigint;
   base_asset_type: string;
   quote_asset_type: string;
   order_side: string;
