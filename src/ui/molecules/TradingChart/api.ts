@@ -171,7 +171,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       return axios
         .post(url, payload)
         .then(({ data }) => {
-          console.log("getBars => ", data);
+          // console.log("getBars => ", data);
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           if (data.Fine.length < 1) {
@@ -234,7 +234,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         kline.period === tradingChart.currentKlineSubscription.periodString
         */
       ) {
-        console.log("onRealtimeCallback => ", kline.last);
+        // console.log("onRealtimeCallback => ", kline.last);
         updateCb.onRealtimeCallback(kline.last);
       }
     },
