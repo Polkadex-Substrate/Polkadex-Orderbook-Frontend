@@ -16,6 +16,7 @@ import {
   selectOrderExecuteLoading,
   selectHasUser,
   selectOrderExecuteSucess,
+  selectGetFreeProxyBalance,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -26,12 +27,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-  const balances = useReduxSelector(selectUserBalance);
   const bestAskPrice = useReduxSelector(selectBestAskPrice);
   const bestBidPrice = useReduxSelector(selectBestBidPrice);
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasUser = useReduxSelector(selectHasUser);
+  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
@@ -60,16 +61,9 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    * @param {string} assetId - The token id
    * @returns {string} balance amount
    */
-  const getBalance = (assetid: string) => {
-    if (balances.length > 0) {
-      const data = balances.find((value) => value.symbol === assetid);
-      return data ? data.free_balance : "0";
-    }
-    return "0";
-  };
 
-  const availableBaseAmount = getBalance(baseAssetId?.toString());
-  const availableQuoteAmount = getBalance(quoteAssetId?.toString());
+  const availableBaseAmount = getFreeProxyBalance(baseAssetId?.toString());
+  const availableQuoteAmount = getFreeProxyBalance(quoteAssetId?.toString());
   const quoteTicker = currentMarket?.quote_ticker;
   const baseTicker = currentMarket?.base_ticker;
 

@@ -11,3 +11,14 @@ export const selectBalancesLoading = (state: RootState): boolean =>
   state.user.balances.loading;
 
 export const selectUserBalance = (state: RootState): Balance[] => state.user.balances.balances;
+
+export const selectGetFreeProxyBalance =
+  (state: RootState): ((assetId: string) => string) =>
+  (assetId: string) => {
+    const balance = state.user.balances.balances.find(
+      (balance) =>
+        balance.asset_type === assetId || (balance.asset_type === "PDEX" && assetId === "-1")
+    );
+    if (!balance) return "0";
+    return balance.free_balance;
+  };
