@@ -33,8 +33,9 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
     if (!res.data.data) {
       throw new Error("This proxy account has not been registered yet!");
     }
-    const { id, main_acc_id } = res.data.data;
+    const { id, main_acc_id, main_addr } = res.data.data;
     return {
+      main_addr: main_addr,
       proxy_id: id,
       main_acc_id: main_acc_id,
       accountName: account.meta.name,

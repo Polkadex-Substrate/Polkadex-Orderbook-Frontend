@@ -18,8 +18,25 @@ export default async function proxy(req: NextApiRequest, res: NextApiResponse) {
         main_acc_id: true,
       },
     });
-    res.status(200).json({ data: serializeBigInt(proxy) });
+    if (proxy) {
+      const main_addr = await getMainAccountAddress(proxy.main_acc_id);
+      res.status(200).json({ data: serializeBigInt({ ...proxy, main_addr }) });
+    } else {
+      throw new Error("Proxy account not found");
+    }
   } catch (error) {
     res.status(500).json({ data: error.message });
   }
+}
+
+async function getMainAccountAddress(main_acc_id: bigint) {
+  const res = await prisma.accounts.findFirst({
+    where: {
+      id: main_acc_id,
+    },
+    select: {
+      main_acc: true,
+    },
+  });
+  return res.main_acc;
 }

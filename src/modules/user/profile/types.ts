@@ -1,6 +1,7 @@
 import { KeyringPair } from "@polkadot/keyring/types";
 
 export interface ProxyAccount {
+  main_addr: string;
   proxy_id: string;
   main_acc_id: string;
   accountName: string;

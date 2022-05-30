@@ -164,10 +164,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     dispatch(
       orderExecuteFetch({
         order_type: isLimit ? "Limit" : "Market",
-        symbol: currentMarket?.assetIdArray,
+        symbol: currentMarket.assetIdArray,
         side: isSell ? "Sell" : "Buy",
         price: isLimit ? form.price : "",
-        market: `${currentMarket?.base_unit}${currentMarket?.quote_unit}`.toLowerCase(),
+        market: currentMarket.id,
         amount: isSell ? form.amountSell : form.amountBuy,
       })
     );
