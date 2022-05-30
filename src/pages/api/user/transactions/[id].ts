@@ -18,6 +18,7 @@ export const userTransactions = async (
   accId: bigint,
   selector: Record<string, boolean> | null = {
     txid: true,
+    id: true,
     base_asset_type: true,
     quote_asset_type: true,
     order_side: true,
