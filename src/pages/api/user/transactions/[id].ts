@@ -34,7 +34,6 @@ export const userTransactions = async (
     },
     select: selector,
   });
-  console.log("user transactions", transactions);
   const updatedData = transactions.map((acc) => {
     return serializeBigInt(acc);
   });
