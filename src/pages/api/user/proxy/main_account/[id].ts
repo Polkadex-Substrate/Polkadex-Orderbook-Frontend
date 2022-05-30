@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+
 import prisma from "../../../../../../prisma";
 
 /** Gets the users main accounts through proxy account */
@@ -10,7 +11,7 @@ export default async function proxy(req: NextApiRequest, res: NextApiResponse) {
         proxy: id.toString(),
       },
       select: {
-        id: true
+        id: true,
       },
     });
 
