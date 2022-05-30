@@ -110,22 +110,22 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       setTimeout(() => onResultReadyCallback(symbols), 0);
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);
+      const market = markets.find((m) => m.id === symbolName || m.name === symbolName);
 
-      if (!symbol) {
+      if (!market) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
 
       const symbolStub = {
-        name: symbol.name,
-        currency_code: symbol.quote_unit.toUpperCase(),
-        description: "Polkadex test tokens",
+        name: market.name,
+        currency_code: market.quote_unit.toUpperCase(),
+        description: `${market.id}`,
         type: "bitcoin",
         session: "24x7",
         timezone: "Etc/UTC",
-        ticker: symbol.id,
+        ticker: market.id,
         minmov: 1,
-        pricescale: Math.pow(10, symbol.price_precision),
+        pricescale: Math.pow(10, Math.min(market.price_precision, 4)),
         has_intraday: true,
         intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
         supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
