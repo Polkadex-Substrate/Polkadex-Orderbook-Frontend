@@ -28,7 +28,9 @@ export function* signUpSaga(action: SignUpFetch) {
         alertPush({
           type: "Loading",
           message: {
-            title: "Please wait...",
+            title: "Processing you transaction...",
+            description:
+              "Please sign the transaction and wait for block finalization, this may take a minute",
           },
         })
       );
@@ -37,12 +39,12 @@ export function* signUpSaga(action: SignUpFetch) {
       );
 
       if (res.isSuccess) {
-        alert("succesffully registerd");
         yield put(
           alertPush({
             type: "Successful",
             message: {
-              title: "New proxy account Registered",
+              title: "Congrats!",
+              description: "New proxy account Registered",
             },
           })
         );
