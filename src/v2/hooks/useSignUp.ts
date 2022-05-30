@@ -11,9 +11,8 @@ import {
   selectSignUpSuccess,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { defaultConfig } from "@polkadex/orderbook-config";
 
-export function useSignUp() {
+export function useSignUp({ mnemonic = "" }) {
   const router = useRouter();
   const componentRef = useRef();
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
@@ -27,10 +26,10 @@ export function useSignUp() {
     content: () => componentRef.current,
   });
 
-
   useEffect(() => {
-    if (signUpSuccess) router.push("/connectToPhone");
-  }, [signUpSuccess, router]);
+    if (signUpSuccess)
+      router.push({ pathname: "/connectToPhone", query: { mnemonic } }, "connectToPhone");
+  }, [signUpSuccess, router, mnemonic]);
 
   return {
     isSuccess,

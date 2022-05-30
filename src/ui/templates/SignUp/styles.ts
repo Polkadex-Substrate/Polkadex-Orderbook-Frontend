@@ -76,9 +76,6 @@ export const Form = styled.div`
   ${Input} {
     margin-top: 1rem;
   }
-  ${Dropdown} {
-    margin-bottom: 1rem;
-  }
 `;
 export const Connect = styled.div`
   margin-bottom: 1rem;
@@ -209,6 +206,17 @@ export const SelectContent = styled.div<{ isOverflow: boolean }>`
         margin-bottom: 1rem;
       }
     }
+  `}
+`;
+
+export const SelectAccount = styled.div`
+  margin-bottom: 1rem;
+`;
+export const Error = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-size: 1.2rem;
+    margin-left: 1.3rem;
   `}
 `;
 

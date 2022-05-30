@@ -2,6 +2,7 @@ import { CommonError } from "../../types";
 
 import {
   AUTH_CONNECT_PHONE_DATA,
+  AUTH_CONNECT_PHONE_ERROR,
   AUTH_CONNECT_PHONE_FETCH,
   AUTH_KEYRING_SIGN_IN_DATA,
   AUTH_LOGOUT_FAILURE,
@@ -88,6 +89,11 @@ export interface ConnectPhoneData {
   type: typeof AUTH_CONNECT_PHONE_DATA;
 }
 
+export interface ConnectPhoneError {
+  type: typeof AUTH_CONNECT_PHONE_ERROR;
+  error: CommonError;
+}
+
 export type AuthAction =
   | SignInFetch
   | SignInData
@@ -98,7 +104,8 @@ export type AuthAction =
   | LogoutFailed
   | LogoutFetch
   | ConnectPhoneFetch
-  | ConnectPhoneData;
+  | ConnectPhoneData
+  | ConnectPhoneError;
 
 export const signInKeyRingData = (payload: SignInKeyRingData["payload"]) => ({
   type: AUTH_KEYRING_SIGN_IN_DATA,
@@ -151,6 +158,11 @@ export const connectPhoneFetch = (
   payload,
 });
 
-export const ConnectPhoneData = (): ConnectPhoneData => ({
+export const connectPhoneData = (): ConnectPhoneData => ({
   type: AUTH_CONNECT_PHONE_DATA,
+});
+
+export const connectPhoneError = (error: CommonError): ConnectPhoneError => ({
+  type: AUTH_CONNECT_PHONE_ERROR,
+  error,
 });

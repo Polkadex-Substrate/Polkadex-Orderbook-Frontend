@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
 import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
+import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Main = styled.div`
   ${({ theme }) => css`
@@ -106,7 +106,13 @@ export const StepTitle = styled.div`
     }
   `}
 `;
-export const StepContent = styled.div``;
+export const StepContent = styled.div`
+  ${({ theme }) => css`
+    ${Dropdown} {
+      margin-bottom: 1.5rem;
+    }
+  `}
+`;
 export const Download = styled.div`
   display: flex;
   align-items: center;
@@ -115,10 +121,11 @@ export const Download = styled.div`
 
 export const SelectAccount = styled.div`
   ${({ theme }) => css`
-    margin-top: 1.5rem;
     p {
-      margin-bottom: 1rem;
       color: ${theme.colors.black};
+    }
+    ${Button} {
+      margin-top: 1rem;
     }
   `}
 `;

@@ -19,7 +19,8 @@ import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch, signUp, signUpData } from "@polkadex/orderbook-modules";
+import { signInValidations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
   password: "",
@@ -41,11 +42,10 @@ export const SignUpTemplate = () => {
     signUpLoading,
     isLoading,
     handlePrint,
-    isSuccess,
     signUpSuccess,
     componentRef,
     extensionAccounts,
-  } = useSignUp();
+  } = useSignUp({ mnemonic: mnemoicString });
 
   if (signUpSuccess) return <div />;
   return (
@@ -75,6 +75,7 @@ export const SignUpTemplate = () => {
                 <S.Form>
                   <Formik
                     initialValues={defaultValues}
+                    validationSchema={signInValidations}
                     onSubmit={async (values) => {
                       const { password, accountName } = values;
                       dispatch(
@@ -87,46 +88,56 @@ export const SignUpTemplate = () => {
                     }}>
                     {({ values, errors, touched, setFieldValue }) => (
                       <Form>
-                        <Dropdown
-                          direction="bottom"
-                          isClickable
-                          header={
-                            <SelectAccount
-                              isHeader
-                              accountName={
-                                values?.selectedAccount?.meta?.name ||
-                                "Select your main account"
-                              }
-                              fullDescription
-                              address={
-                                values?.selectedAccount?.address ||
-                                "This wallet will be linked to your Polkadex account"
-                              }
-                            />
-                          }>
-                          <S.SelectContent isOverflow={extensionAccounts?.length > 2}>
-                            {isLoading ? (
-                              <MyAccountLoading />
-                            ) : extensionAccounts?.length ? (
-                              extensionAccounts.map((item, index) => (
-                                <SelectAccount
-                                  isActive={item.address === values?.selectedAccount?.address}
-                                  key={index}
-                                  accountName={item.meta.name || `Account ${index}`}
-                                  address={item.address}
-                                  onClick={() => {
-                                    setFieldValue("selectedAccount", extensionAccounts[index]);
-                                    dispatch(setMainAccountFetch(extensionAccounts[index]));
-                                  }}
-                                />
-                              ))
-                            ) : (
-                              <S.SelectMessage>
-                                You dont have account, please create one
-                              </S.SelectMessage>
-                            )}
-                          </S.SelectContent>
-                        </Dropdown>
+                        <S.SelectAccount>
+                          <Dropdown
+                            direction="bottom"
+                            isClickable
+                            header={
+                              <SelectAccount
+                                isHeader
+                                accountName={
+                                  values?.selectedAccount?.meta?.name ||
+                                  "Select your main account"
+                                }
+                                fullDescription
+                                address={
+                                  values?.selectedAccount?.address ||
+                                  "This wallet will be linked to your Polkadex account"
+                                }
+                              />
+                            }>
+                            <S.SelectContent isOverflow={extensionAccounts?.length > 2}>
+                              {isLoading ? (
+                                <MyAccountLoading />
+                              ) : extensionAccounts?.length ? (
+                                extensionAccounts.map((item, index) => (
+                                  <SelectAccount
+                                    isActive={
+                                      item.address === values?.selectedAccount?.address
+                                    }
+                                    key={index}
+                                    accountName={item.meta.name || `Account ${index}`}
+                                    address={item.address}
+                                    onClick={() => {
+                                      setFieldValue(
+                                        "selectedAccount",
+                                        extensionAccounts[index]
+                                      );
+                                      dispatch(setMainAccountFetch(extensionAccounts[index]));
+                                    }}
+                                  />
+                                ))
+                              ) : (
+                                <S.SelectMessage>
+                                  You dont have account, please create one
+                                </S.SelectMessage>
+                              )}
+                            </S.SelectContent>
+                          </Dropdown>
+                          {!!errors?.selectedAccount?.address && (
+                            <S.Error>{errors?.selectedAccount?.address}</S.Error>
+                          )}
+                        </S.SelectAccount>
                         <MnemonicExport label="12-word mnemonic seed" phrases={mnemonic} />
                         <InputPrimary
                           label="Proxy account name"
@@ -145,7 +156,11 @@ export const SignUpTemplate = () => {
                           error={errors.password && touched.password && errors.password}
                         />
                         <FlexSpaceBetween style={{ marginTop: 20 }}>
-                          <Button size="extraLarge" type="submit" disabled={signUpLoading}>
+                          <Button
+                            size="extraLarge"
+                            type="submit"
+                            //  disabled={signUpLoading}
+                          >
                             {signUpLoading ? "Loading.." : "Create Account"}
                           </Button>
                           <Button

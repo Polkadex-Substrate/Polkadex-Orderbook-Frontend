@@ -75,7 +75,7 @@ export const SelectAccountHeader = styled(AccountInfoHeader)`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 35rem;
+    max-width: 30rem;
   }
   span,
   p {
