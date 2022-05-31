@@ -9,6 +9,7 @@ import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
+import History from "@polkadex/orderbook-ui/organisms/History";
 
 const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
   ssr: false,
@@ -45,7 +46,6 @@ export const WalletTemplate = () => {
                 <p>0.0 </p>
                 <span>~0.00 USD</span>
               </S.EstimatedBalanceWrapper>
-
               <S.HeaderContainer>
                 <S.Header>
                   <TabHeader>
@@ -102,7 +102,7 @@ export const WalletTemplate = () => {
                   <Withdraw />
                 </TabContent>
               </S.Container>
-              {/* <History /> */}
+              <History />
             </S.Grid>
           </S.ContainerWrapper>
         </S.Wrapper>

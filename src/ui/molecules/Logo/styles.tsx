@@ -11,8 +11,9 @@ const sizeModifier = {
   `,
 };
 
-export const Wrapper = styled.div<{ size?: string }>`
+export const Wrapper = styled.a<{ size?: string }>`
   ${({ size }) => css`
+    cursor: pointer;
     svg {
       pointer-events: none;
     }

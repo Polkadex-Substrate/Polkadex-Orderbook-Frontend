@@ -17,9 +17,11 @@ export const Icon = ({
   ...props
 }: T.Props) => {
   const IconSvg = name && !isToken ? Icons[name] : Icons.Wallet;
-  const TokenSvg = isToken && name ? cryptoIcons[name] : cryptoIcons.Dot;
-  const IconComponent = (isToken && TokenSvg) || IconSvg;
+  // const TokenSvg = isToken && name ? cryptoIcons[name] : cryptoIcons.Dot;
+  console.log(">>>", isToken && name);
 
+  const TokenSvg = (isToken && name && Tokens[name]) ?? Tokens.DOT;
+  const IconComponent = (isToken && TokenSvg) || IconSvg;
   return (
     <S.Wrapper>
       <S.Container

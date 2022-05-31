@@ -86,26 +86,28 @@ const Card = ({
   amount = 0.0,
   amountFiat = 0.0,
   locked = true,
-}) => (
-  <S.Card hasLocked={locked}>
-    <S.CardWrapper>
-      <S.CardIconWrapper>
-        <Icon name={ticker} color="black" isToken size="large" />
-      </S.CardIconWrapper>
-      <S.CardInfo>
-        <p>{toCapitalize(name)}</p>
-        <span>{ticker}</span>
-      </S.CardInfo>
-    </S.CardWrapper>
-    <S.CardWrapper>
-      <p>{amount.toFixed(7)}</p>
-      <span>{amountFiat.toFixed(7)}</span>
-    </S.CardWrapper>
-    {locked && (
+}) => {
+  return (
+    <S.Card hasLocked={locked}>
       <S.CardWrapper>
-        <p>{lockedAmount.toFixed(7)}</p>
-        <span>{lockedAmountFiat.toFixed(7)}</span>
+        <S.CardIconWrapper>
+          <Icon isToken name={ticker} color="black" size="large" />
+        </S.CardIconWrapper>
+        <S.CardInfo>
+          <p>{toCapitalize(name)}</p>
+          <span>{ticker}</span>
+        </S.CardInfo>
       </S.CardWrapper>
-    )}
-  </S.Card>
-);
+      <S.CardWrapper>
+        <p>{amount.toFixed(7)}</p>
+        <span>{amountFiat.toFixed(7)}</span>
+      </S.CardWrapper>
+      {locked && (
+        <S.CardWrapper>
+          <p>{lockedAmount.toFixed(7)}</p>
+          <span>{lockedAmountFiat.toFixed(7)}</span>
+        </S.CardWrapper>
+      )}
+    </S.Card>
+  );
+};

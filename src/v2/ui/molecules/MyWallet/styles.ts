@@ -30,7 +30,7 @@ export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
-    min-width: 30rem;
+    min-width: 35rem;
     height: max-content;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
@@ -159,7 +159,11 @@ export const CardWrapper = styled.div`
     }
   `}
 `;
-export const CardInfo = styled.div``;
+export const CardInfo = styled.div`
+  p {
+    white-space: nowrap;
+  }
+`;
 
 export const CardIconWrapper = styled.div`
   ${({ theme }) => css`
