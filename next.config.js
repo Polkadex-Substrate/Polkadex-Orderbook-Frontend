@@ -16,6 +16,7 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  target: "experimental-serverless-trace",
   env: {
     API_PATH: process.env.API_PATH || "http://localhost:3000/api",
     DATABASE_URL: process.env.DATABASE_URL,
