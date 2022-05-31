@@ -1,9 +1,14 @@
 import { put, delay, call, select } from "redux-saga/effects";
 import { ApiPromise, Keyring } from "@polkadot/api";
 
-import { sendError, selectMainAccount, selectRangerApi, connectPhoneData } from "../../../";
-import { ConnectPhoneFetch, signUpData, signUpError } from "../actions";
-import { notificationPush } from "../../notificationHandler";
+import {
+  sendError,
+  selectMainAccount,
+  selectRangerApi,
+  connectPhoneData,
+  alertPush,
+} from "../../../";
+import { ConnectPhoneFetch, signUpError } from "../actions";
 import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
@@ -18,15 +23,27 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
     const pair = keyring.createFromUri(mnemonic);
     const proxyAddress = pair.address;
     if (api && mainAccount.address) {
+      yield put(
+        alertPush({
+          type: "Loading",
+          message: {
+            title: "Processing you transaction...",
+            description:
+              "Please sign the transaction and wait for block finalization, this may take a minute",
+          },
+        })
+      );
       const res = yield call(() =>
-        registerAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
+        addProxyToAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
       );
       if (res.isSuccess) {
         yield put(
-          notificationPush({
-            type: "Loading",
+          alertPush({
+            type: "Successful",
             message: {
-              title: "Your Account has been created",
+              title: "Congratulations!",
+              description:
+                "New proxy account Registered, Please scan the QR code using polkadex app",
             },
           })
         );
@@ -48,13 +65,13 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
     );
   }
 }
-export const registerAccount = async (
+export const addProxyToAccount = async (
   api: ApiPromise,
   proxyAddress: string,
   injector: any,
   mainAddress: string
 ): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.registerMainAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress);
+  const ext = api.tx.ocex.addProxyAccount(proxyAddress);
+  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
   return res;
 };

@@ -22,6 +22,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const MyOrders = () => {
   const [state, setState] = useState(true);
@@ -87,7 +88,9 @@ const Header = ({ showList, changeToList }) => {
 };
 
 const Content = ({ showList }) => {
-  const { priceFixed, amountFixed, orders, userLoggedIn } = useOrderHistory();
+  const { priceFixed, amountFixed, orders, userLoggedIn, trades } = useOrderHistory();
+  console.log("OrderHistory Content rendered");
+  const getAsset = useReduxSelector(selectGetAsset);
   const OrderHistoryComponent = showList ? OrderHistoryTable : OrderHistory;
   const TradeHistoryComponent = showList ? TradeHistoryTable : TradeHistory;
   return (
@@ -97,6 +100,7 @@ const Content = ({ showList }) => {
           <TabContent>
             {orders?.length ? (
               <OrderHistoryComponent
+                getAsset={getAsset}
                 priceFixed={priceFixed}
                 amountFixed={amountFixed}
                 orders={orders}
@@ -106,11 +110,12 @@ const Content = ({ showList }) => {
             )}
           </TabContent>
           <TabContent>
-            {orders?.length ? (
+            {trades?.length ? (
               <TradeHistoryComponent
                 priceFixed={priceFixed}
                 amountFixed={amountFixed}
-                orders={orders}
+                getAsset={getAsset}
+                orders={trades}
               />
             ) : (
               <EmptyData />

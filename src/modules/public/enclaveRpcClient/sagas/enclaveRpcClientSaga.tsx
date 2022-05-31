@@ -34,7 +34,6 @@ export function* enclaveRpcClientSaga(action: EnclaveRpcClientFetch) {
 }
 
 async function fetchEnclaveRpcClientChannel(enclaveWsClient: Client) {
-  // .. const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
   return eventChannel((emitter) => {
     enclaveWsClient.on("open", () => {
       console.log("connected with enclave...");

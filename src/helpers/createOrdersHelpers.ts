@@ -3,8 +3,11 @@ import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Client } from "rpc-websockets";
 import { u8aToHex } from "@polkadot/util";
+import BigNumber from "bignumber.js";
 
 import { OrderSide, OrderType } from "../modules/types";
+
+import { UNIT_BN } from "@polkadex/web-constants";
 
 export const createOrderPayload = (
   api: ApiPromise,
@@ -17,8 +20,8 @@ export const createOrderPayload = (
   price: string,
   nonce = "0"
 ): Codec => {
-  const baseAssetId = baseAsset ? { Asset: baseAsset } : { POLKADEX: null };
-  const quoteAssetId = quoteAsset ? { Asset: quoteAsset } : { POLKADEX: null };
+  const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
+  const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
   const orderType = { [type.toUpperCase()]: null };
   const orderSide = { [side === "Buy" ? "Bid" : "Ask"]: null };
   const orderPayload = api.createType("OrderPayload", {
@@ -29,8 +32,8 @@ export const createOrderPayload = (
     },
     side: orderSide,
     order_type: orderType,
-    qty: quantity,
-    price: price,
+    qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
+    price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : null,
     nonce: nonce,
   });
   return orderPayload;

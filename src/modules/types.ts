@@ -11,25 +11,26 @@ export type CommonState = {
 };
 export type OrderStatus = "Open" | "Closed" | "Expired" | "Canceled" | "Failed";
 export type OrderSide = "Sell" | "Buy";
-export type OrderType = "Limit" | "Market";
+export type OrderType = "LIMIT" | "MARKET";
 export type OrderKind = "bid" | "ask";
 
 // TODO: Integrate new Types.
 export interface OrderCommon {
-  amount: string;
-  base_asset: number;
-  quote_asset: number;
-  fee: Fee;
+  txid: string;
+  id: string;
+  base_asset_type: string;
+  quote_asset_type: string;
+  order_side: string;
   filled_qty: string;
-  main_acc: string;
-  order_id: string;
-  order_side: OrderSide;
-  order_type: OrderType;
-  price: string;
-  status: OrderStatus;
   timestamp: string;
-  trades: TradesEntity[];
+  order_type: string;
+  status: string;
+  qty: string;
+  price: string;
+  trade_history: string;
+  filled_price: string;
 }
+
 export interface TradesEntity {
   id: string;
   timestamp: number;

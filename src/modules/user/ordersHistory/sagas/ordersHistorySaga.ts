@@ -1,48 +1,39 @@
 // TODO: Create User middleware
 import { call, put, select } from "redux-saga/effects";
+import axios from "axios";
 
-import { userOrdersHistoryData, userOrdersHistoryError } from "../actions";
-import { sendError } from "../../../";
+import { userOrdersHistoryData, UserOrdersHistoryFetch } from "../actions";
+import { alertPush } from "../../../";
 import { selectUserInfo } from "../../profile";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage } from "@polkadex/web-helpers";
 import { OrderCommon } from "src/modules/types";
-import { formatPayload } from "src/helpers/formatPayload";
 
-const ordersOptions: RequestOptions = {
-  apiVersion: "apiPath",
-};
-
-// TODO: MUST BE CHANGED DURING TO SQL INTEGRATION
-export function* ordersHistorySaga() {
-  return;
+export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
-    const userAccount = yield select(selectUserInfo);
-    if (userAccount.address !== "") {
-      const payload = { account: userAccount.address };
-      const signature = yield call(() =>
-        signMessage(userAccount.keyringPair, JSON.stringify(payload))
-      );
-      const data = formatPayload(signature, payload);
-      const res: any = yield call(() => API.get(ordersOptions)("/transactions"));
-      console.log("OrdersFetch", res);
-      const ordersArray: OrderCommon[] = res?.data;
-      const orders = sortDescendingTime(ordersArray);
-      yield put(userOrdersHistoryData({ list: orders }));
-    }
+    const { main_acc_id } = yield select(selectUserInfo);
+    const transactions: OrderCommon[] = yield call(fetchTransactions, main_acc_id);
+    console.log("transactions =>", transactions);
+    yield put(userOrdersHistoryData({ list: transactions }));
   } catch (error) {
     yield put(
-      sendError({
-        error,
-        processingType: "alert",
-        extraOptions: {
-          actionError: userOrdersHistoryError,
+      alertPush({
+        message: {
+          title: "Something has gone wrong..",
+          description: error.message,
         },
+        type: "Error",
       })
     );
   }
 }
+const fetchTransactions = async (main_acc_id: string): Promise<OrderCommon[]> => {
+  const res: any = await axios.get("/api/user/transactions/" + main_acc_id);
+  const orders = res.data.data;
+  if (orders.length > 0) {
+    return sortDescendingTime(orders);
+  }
+  return orders;
+};
 
 const sortDescendingTime = (orders: OrderCommon[]) =>
   orders.sort((a, b) => {

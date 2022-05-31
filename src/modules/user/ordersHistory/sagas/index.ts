@@ -1,9 +1,11 @@
-import { takeLatest } from "redux-saga/effects";
+import { takeLatest, takeLeading } from "redux-saga/effects";
 
-import { ORDERS_HISTORY_FETCH } from "../constants";
+import { ORDERS_CHANNEL_FETCH, ORDERS_HISTORY_FETCH } from "../constants";
 
 import { ordersHistorySaga } from "./ordersHistorySaga";
+import { orderUpdatesChannelSaga } from "./ordersUpdatesChannel";
 
 export function* rootOrdersHistorySaga() {
-  yield takeLatest(ORDERS_HISTORY_FETCH, ordersHistorySaga);
+  yield takeLeading(ORDERS_HISTORY_FETCH, ordersHistorySaga);
+  yield takeLatest(ORDERS_CHANNEL_FETCH, orderUpdatesChannelSaga);
 }

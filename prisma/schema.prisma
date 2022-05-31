@@ -8,19 +8,21 @@ datasource db {
 }
 
 model accounts {
-  id           BigInt         @id @default(autoincrement())
-  main_acc     String         @db.VarChar(255)
-  nonce        BigInt?
-  assets       assets[]
-  proxies      proxies[]
-  transactions transactions[]
+  id              BigInt            @id @default(autoincrement())
+  main_acc        String            @db.VarChar(255)
+  nonce           BigInt?
+  assets          assets[]
+  balance_history balance_history[]
+  proxies         proxies[]
+  transactions    transactions[]
 }
 
 model asset_types {
-  asset_type                                              String         @id @db.Char(20)
+  asset_type                                              String            @id @db.Char(20)
   assets                                                  assets[]
-  transactions_asset_typesTotransactions_base_asset_type  transactions[] @relation("asset_typesTotransactions_base_asset_type")
-  transactions_asset_typesTotransactions_quote_asset_type transactions[] @relation("asset_typesTotransactions_quote_asset_type")
+  balance_history                                         balance_history[]
+  transactions_asset_typesTotransactions_base_asset_type  transactions[]    @relation("asset_typesTotransactions_base_asset_type")
+  transactions_asset_typesTotransactions_quote_asset_type transactions[]    @relation("asset_typesTotransactions_quote_asset_type")
 }
 
 model assets {
@@ -29,6 +31,7 @@ model assets {
   main_acc         BigInt?
   free_balance     Float?
   reserved_balance Float?
+  market           String?      @db.Char(20)
   asset_types      asset_types? @relation(fields: [asset_type], references: [asset_type], onDelete: NoAction, onUpdate: NoAction, map: "assets_ibfk_2")
   accounts         accounts?    @relation(fields: [main_acc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assets_ibfk_1")
 
@@ -53,17 +56,20 @@ model proxies {
 
 model transactions {
   id                                                     BigInt                    @id @default(autoincrement())
-  txid                                                   BigInt?
+  txid                                                   String?                   @db.Char(45)
   main_account_id                                        BigInt?
   base_asset_type                                        String?                   @db.Char(20)
   quote_asset_type                                       String?                   @db.Char(20)
   order_type                                             String                    @db.Char(20)
   trader_type                                            transactions_trader_type?
-  status                                                 transactions_status
+  status                                                 transactions_status?
   order_side                                             transactions_order_side?
   timestamp                                              DateTime?                 @default(now()) @db.DateTime(0)
   qty                                                    Float?
   price                                                  Float?
+  filled_price                                           Float?
+  filled_qty                                             Float?
+  trade_history                                          String?                   @db.VarChar(16000)
   asset_types_asset_typesTotransactions_base_asset_type  asset_types?              @relation("asset_typesTotransactions_base_asset_type", fields: [base_asset_type], references: [asset_type], onDelete: NoAction, onUpdate: NoAction, map: "transactions_ibfk_2")
   accounts                                               accounts?                 @relation(fields: [main_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_ibfk_1")
   order_types                                            order_types               @relation(fields: [order_type], references: [types], onDelete: NoAction, onUpdate: NoAction, map: "transactions_ibfk_4")
@@ -75,6 +81,22 @@ model transactions {
   @@index([quote_asset_type], map: "quote_asset_type")
 }
 
+model balance_history {
+  id          BigInt       @id @default(autoincrement())
+  asset_type  String?      @db.Char(20)
+  main_acc_id BigInt?
+  amount      Float?
+  timestamp   DateTime?    @default(now()) @db.DateTime(0)
+  status      String?      @db.Char(20)
+  event       String?      @db.Char(20)
+  market      String?      @db.Char(20)
+  asset_types asset_types? @relation(fields: [asset_type], references: [asset_type], onDelete: NoAction, onUpdate: NoAction, map: "balance_history_ibfk_2")
+  accounts    accounts?    @relation(fields: [main_acc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "balance_history_ibfk_1")
+
+  @@index([asset_type], map: "asset_type")
+  @@index([main_acc_id], map: "main_acc_id")
+}
+
 enum transactions_trader_type {
   Taker
   Maker
@@ -84,6 +106,7 @@ enum transactions_status {
   Accepted
   Filled
   PartiallyFilled
+  Cancelled
 }
 
 enum transactions_order_side {

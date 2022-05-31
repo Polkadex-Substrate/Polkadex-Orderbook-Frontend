@@ -11,7 +11,6 @@ import { depthReducer, incrementDepthReducer, orderBookReducer } from "./public/
 import { recentTradesReducer } from "./public/recentTrades";
 import { authReducer } from "./user/auth";
 import { historyReducer } from "./user/history";
-import { openOrdersReducer } from "./user/openOrders";
 import { ordersReducer } from "./user/orders";
 import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
@@ -26,6 +25,7 @@ import { transactionsReducer } from "./user/transactions";
 import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
 import { extensionWalletReducer } from "./user/mainAccount";
 import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
+import { assetsReducer } from "./public/assets";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -41,6 +41,7 @@ export const publicReducer = combineReducers({
   ranger: rangerReducer,
   rabbitmqChannel: rabbitmqChannelReducer,
   enclaveRpcClient: enclaveRpcClientReducer,
+  assets: assetsReducer,
 });
 
 export const userReducer = combineReducers({
@@ -48,7 +49,6 @@ export const userReducer = combineReducers({
   polkadotWallet: polkadotWalletReducer,
   extensionWallet: extensionWalletReducer,
   history: historyReducer,
-  openOrders: openOrdersReducer,
   balances: balancesReducer,
   orders: ordersReducer,
   ordersHistory: ordersHistoryReducer,

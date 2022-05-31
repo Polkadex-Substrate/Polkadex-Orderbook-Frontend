@@ -1,6 +1,6 @@
 import { RootState } from "../../";
 
-import { Balance } from ".";
+import { Balance, BalanceBase } from ".";
 
 export const selectBalancesSuccess = (state: RootState): boolean =>
   state.user.balances.success;
@@ -10,8 +10,15 @@ export const selectBalancesError = (state: RootState): string => state.user.bala
 export const selectBalancesLoading = (state: RootState): boolean =>
   state.user.balances.loading;
 
-export const selectUserBalanceTimestamp = (state: RootState): number =>
-  state.user.balances.balances.timestamp;
+export const selectUserBalance = (state: RootState): Balance[] => state.user.balances.balances;
 
-export const selectUserBalance = (state: RootState): Balance[] =>
-  state.user.balances.balances.userBalance;
+export const selectGetFreeProxyBalance =
+  (state: RootState): ((assetId: string) => string) =>
+  (assetId: string) => {
+    const balance = state.user.balances.balances.find(
+      (balance) =>
+        balance.asset_type === assetId || (balance.asset_type === "PDEX" && assetId === "-1")
+    );
+    if (!balance) return "0";
+    return balance.free_balance;
+  };

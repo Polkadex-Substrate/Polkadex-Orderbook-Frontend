@@ -16,7 +16,7 @@ import {
 
 export interface OrderExecution {
   market: string;
-  symbol: number[];
+  symbol: string[];
   side: OrderSide;
   price?: string;
   order_type?: OrderType;

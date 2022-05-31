@@ -13,8 +13,6 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  balanceChannelFetch,
-  balancesFetch,
   currentTickerFetch,
   currentTickersUpdate,
   orderBookFetch,
@@ -25,6 +23,7 @@ import {
   selectLastRecentTrade,
 } from "@polkadex/orderbook-modules";
 import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
+import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 
 const Header = dynamic(
   () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
@@ -94,14 +93,7 @@ export const Trading = () => {
   }, [dispatch, market]);
 
   // initialize user specific sagas
-  useEffect(() => {
-    if (hasUser) {
-      if (hasUser) {
-        dispatch(balancesFetch());
-        dispatch(balanceChannelFetch());
-      }
-    }
-  }, [dispatch, hasUser]);
+  useUserDataFetch();
 
   // intiatilize trade specific events
   useEffect(() => {

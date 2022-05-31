@@ -45,12 +45,19 @@ const makeOHLCVPayload = (
   start?: number,
   stop?: number
 ) => {
-  return {
-    symbol: market,
-    timeframe: resolution,
-    timestamp_start: start,
-    timestamp_stop: stop,
-  };
+  if (stop)
+    return {
+      symbol: market,
+      timeframe: resolution,
+      timestamp_start: start,
+      timestamp_stop: stop,
+    };
+  else
+    return {
+      symbol: market,
+      timeframe: resolution,
+      timestamp_start: start,
+    };
 };
 const resolutionToSeconds = (r: string): number => {
   const minutes = parseInt(r, 10);
@@ -103,22 +110,22 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       setTimeout(() => onResultReadyCallback(symbols), 0);
     },
     resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-      const symbol = markets.find((m) => m.id === symbolName || m.name === symbolName);
+      const market = markets.find((m) => m.id === symbolName || m.name === symbolName);
 
-      if (!symbol) {
+      if (!market) {
         return setTimeout(() => onResolveErrorCallback("Symbol not found"), 0);
       }
 
       const symbolStub = {
-        name: symbol.name,
-        currency_code: symbol.quote_unit.toUpperCase(),
-        description: "Polkadex test tokens",
+        name: market.name,
+        currency_code: market.quote_unit.toUpperCase(),
+        description: `${market.id}`,
         type: "bitcoin",
         session: "24x7",
         timezone: "Etc/UTC",
-        ticker: symbol.id,
+        ticker: market.id,
         minmov: 1,
-        pricescale: Math.pow(10, symbol.price_precision),
+        pricescale: Math.pow(10, market.price_precision),
         has_intraday: true,
         intraday_multipliers: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
         supported_resolutions: ["1", "5", "30", "60", "240", "720", "d", "1w", "1M"],
@@ -149,17 +156,22 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       onErrorCallback,
       firstDataRequest
     ) => {
-      let url = makeHistoryUrl(
+      const url = makeHistoryUrl(
         symbolInfo.ticker || symbolInfo.name.toLowerCase(),
         resolutionToSeconds(resolution),
         from,
         to
       );
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("0-1", resolutionForPayload(resolution), from, to);
+      const payload = makeOHLCVPayload(
+        "PDEX/32",
+        resolutionForPayload(resolution),
+        -1296000000
+      );
       return axios
         .post(url, payload)
         .then(({ data }) => {
+          // console.log("getBars => ", data);
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           if (data.Fine.length < 1) {
@@ -222,7 +234,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         kline.period === tradingChart.currentKlineSubscription.periodString
         */
       ) {
-        console.log("onRealtimeCallback => ", kline.last);
+        // console.log("onRealtimeCallback => ", kline.last);
         updateCb.onRealtimeCallback(kline.last);
       }
     },

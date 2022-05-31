@@ -1,6 +1,8 @@
-import { serializeBigInt } from "@polkadex/orderbook/helpers/serializeBigInt";
 import { NextApiRequest, NextApiResponse } from "next";
+
 import prisma from "../../../../../prisma";
+
+import { serializeBigInt } from "@polkadex/orderbook/helpers/serializeBigInt";
 
 export default async function assets(req: NextApiRequest, res: NextApiResponse) {
   try {

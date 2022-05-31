@@ -1,5 +1,6 @@
 import { call, delay, put, select } from "redux-saga/effects";
-import { Keyring } from "@polkadot/api";
+import axios from "axios";
+import { Client } from "rpc-websockets";
 
 import {
   sendError,
@@ -20,18 +21,18 @@ import {
   signOrderPayload,
 } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 
-// TODO change keyring to alice/bob
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const { side, price, order_type, amount, symbol } = action.payload;
-    if (order_type === "Limit" && Number(price) * Number(amount) <= 0) {
+    if (order_type === "LIMIT" && Number(price) * Number(amount) <= 0) {
       throw new Error("Invalid price or amount");
     }
-    if (order_type === "Market" && Number(amount) <= 0) {
+    if (order_type === "MARKET" && Number(amount) <= 0) {
       throw new Error("Invalid amount");
     }
-    const { address, keyringPair } = yield select(selectUserInfo);
+    const { address, keyringPair, main_addr } = yield select(selectUserInfo);
     const enclaveRpcClient = yield select(selectEnclaveRpcClient);
+    const nonce = yield call(() => getNonceForAccount(enclaveRpcClient, main_addr));
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && enclaveRpcClient && api) {
       const payload = createOrderPayload(
@@ -39,10 +40,11 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         address,
         order_type,
         side,
-        "1",
-        null,
+        symbol[0],
+        symbol[1],
         amount,
-        price
+        price,
+        nonce
       );
       const signature = signOrderPayload(api, keyringPair, payload);
       const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
@@ -50,7 +52,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
       yield put(userOrdersHistoryFetch());
-      yield put(balancesFetch());
     }
   } catch (error) {
     console.log({ error });
@@ -64,4 +65,9 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       })
     );
   }
+}
+
+async function getNonceForAccount(ws: Client, addr: string) {
+  const nonce: any = await ws.call("enclave_getNonce", [addr]);
+  return nonce + 1;
 }

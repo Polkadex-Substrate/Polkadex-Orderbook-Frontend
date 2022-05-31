@@ -1,42 +1,37 @@
 import { call, put, select } from "redux-saga/effects";
+import axios from "axios";
 
-import { ProxyAccount, sendError } from "../../..";
-import { balancesData, balancesError, UserBalance, BalancesFetch } from "../actions";
+import { ProxyAccount } from "../../..";
+import { balancesData, BalancesFetch, BalanceBase } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 
-import { randomIcons } from "@polkadex/orderbook-ui/organisms/Funds/randomIcons";
-import { signMessage, toCapitalize } from "@polkadex/web-helpers";
-import { formatPayload } from "@polkadex/orderbook/helpers/formatPayload";
-import { API, RequestOptions } from "@polkadex/orderbook-config";
+import {
+  selectAssetsFetchSuccess,
+  selectAllAssets,
+  IPublicAsset,
+  selectAssetIdMap,
+} from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-
-
-// TODO: MUST BE CHANGED DURING SQL_INTEGRATION
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
-    return;
     const account = yield select(selectUserInfo);
-    if (account.address) {
-      const userBalance = yield call(() => fetchbalancesAsync(account));
-      const tickers = Object.keys(userBalance.free).map((key) => [key]);
-
-      if (tickers.length) {
-        const result = tickers.map(([ticker], i) => {
-          const { symbol } = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-
-          return {
-            ticker: ticker,
-            tickerName: toCapitalize(symbol),
-            free: userBalance.free[ticker],
-            used: userBalance.used[ticker],
-            total: userBalance.total[ticker],
-          };
-        });
-        yield put(balancesData({ timestamp: userBalance.timestamp, userBalance: result }));
-      }
-    } else {
-      throw new Error("User not logged in");
+    const isAssetData = yield select(selectAssetsFetchSuccess);
+    if (account.address && isAssetData) {
+      const assetMap = yield select(selectAssetIdMap);
+      const balances = yield call(() => fetchbalancesAsync(account));
+      // very unoptimized way to map the asset data
+      // TODO: improve datastructure in the future
+      const list = balances.map((balance: BalanceBase) => {
+        const asset =
+          balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
+        return {
+          ...asset,
+          ...balance,
+        };
+      });
+      yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
     yield put(
@@ -51,13 +46,10 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
   }
 }
 
-async function fetchbalancesAsync(account: ProxyAccount): Promise<UserBalance> {
-  const payload = { account: account.address };
-  const signature = await signMessage(account.keyringPair, JSON.stringify(payload));
-  const data = formatPayload(signature, payload);
-  const res: any = await API.post(balancesOption)("/fetch_balance", data);
-  if (res.Fine) {
-    const userBlance: UserBalance = res.Fine;
-    return userBlance;
-  } else throw new Error("failed to fetch user balance");
+async function fetchbalancesAsync(account: ProxyAccount): Promise<BalanceBase[]> {
+  const address = account.address;
+  // const res = await axios.get("/api/user/assets/" + address);
+  const res: any = await axios.get("/api/user/assets/" + account.main_acc_id); // for testing purposes
+  console.log("fetch balance =>", res);
+  return res.data.data;
 }
