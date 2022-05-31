@@ -4,6 +4,9 @@ module.exports = {
     // Enables the styled-components SWC transform
     styledComponents: true,
   },
+  experimental: {
+    outputStandalone: true,
+  },
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
@@ -16,7 +19,6 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  target: "experimental-serverless-trace",
   env: {
     API_PATH: process.env.API_PATH || "http://localhost:3000/api",
     DATABASE_URL: process.env.DATABASE_URL,
