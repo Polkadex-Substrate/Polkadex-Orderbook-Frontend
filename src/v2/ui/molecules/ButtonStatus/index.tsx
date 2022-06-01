@@ -37,6 +37,9 @@ export const ButtonStatus = ({
           setLoading(false);
           setSuccess(false);
         }, 1600);
+      } else {
+        setLoading(false);
+        setSuccess(false);
       }
     }
   };
