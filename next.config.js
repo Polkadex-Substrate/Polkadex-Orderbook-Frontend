@@ -17,6 +17,7 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  distDir: ".next",
   env: {
     API_PATH: process.env.API_PATH || "http://localhost:3000/api",
     DATABASE_URL: process.env.DATABASE_URL,
