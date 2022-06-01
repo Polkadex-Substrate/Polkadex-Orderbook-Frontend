@@ -4,14 +4,19 @@ module.exports = {
     // Enables the styled-components SWC transform
     styledComponents: true,
   },
-  experimental: {
-    outputStandalone: true,
-  },
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  webpack: (config, { defaultLoaders, isServer }) => {
+    if (isServer) {
+      config.externals.push("_http_common");
+    }
+
+    return config;
+  },
+  target: "experimental-serverless-trace",
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
