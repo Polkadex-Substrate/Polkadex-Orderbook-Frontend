@@ -65,7 +65,7 @@ export const Select = styled.div`
 
 export const SelectContent = styled(Select)<{ isOverflow?: boolean }>`
   ${({ theme, isOverflow = false }) => css`
-    overflow: ${isOverflow ? "visible" : "hidden"};
+    overflow: scroll;
     ${Dropdown} {
       cursor: pointer;
       :not(:last-child) {

@@ -9,6 +9,14 @@ module.exports = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  webpack: (config, { defaultLoaders, isServer }) => {
+    if (isServer) {
+      config.externals.push("_http_common");
+    }
+
+    return config;
+  },
+  target: "experimental-serverless-trace",
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
