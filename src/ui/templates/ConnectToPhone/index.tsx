@@ -189,7 +189,7 @@ export const ConnectToPhone = () => {
                             background: "inverse",
                             color: "text",
                           }}>
-                          Print mnemonic
+                          Download mnemonic
                         </Button>
                       </S.StepContent>
                     </S.Step>
