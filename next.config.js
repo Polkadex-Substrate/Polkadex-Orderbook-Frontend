@@ -1,5 +1,6 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
+  target: "experimental-serverless-trace",
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,
