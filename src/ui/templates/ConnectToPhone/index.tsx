@@ -46,15 +46,15 @@ export const ConnectToPhone = () => {
   const isSuccess = true;
 
   // Change to Saga
-  const { mnemonic, mnemoicString, isMnemonic } = useMnemonic(
+  const { mnemonic, mnemoicString, isMnemonicFromSignUp } = useMnemonic(
     router?.query?.mnemonic as string
   );
 
   const selectedAccount = useReduxSelector(selectMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
-  const showQrCode = connectPhoneSuccess || isMnemonic;
-  const showUnlockQr = !connectPhoneSuccess && !isMnemonic;
+  const showQrCode = connectPhoneSuccess || isMnemonicFromSignUp;
+  const showUnlockQr = !connectPhoneSuccess && !isMnemonicFromSignUp;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
