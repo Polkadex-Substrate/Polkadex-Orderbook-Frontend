@@ -68,29 +68,31 @@ const updateBalanceFromMsg = (
   msg: BalanceMessage,
   getAsset: (id: string) => IPublicAsset
 ): Balance[] => {
-  const update: BalanceMessage["update"] = msg.update;
-  let [baseAsset, quoteAsset] = msg.trading_pair.split("/");
-  baseAsset = baseAsset === "PDEX" ? "-1" : baseAsset;
-  quoteAsset = quoteAsset === "PDEX" ? "-1" : quoteAsset;
-  const baseFree = update.base_free;
-  const baseReserved = update.base_reserved;
-  const quoteFree = update.quote_free;
-  const quoteReserved = update.quote_reserved;
-  const newBalance: Balance[] = [
-    {
-      name: getAsset(baseAsset).name,
-      symbol: getAsset(baseAsset).symbol,
-      asset_type: baseAsset,
-      free_balance: baseFree,
-      reserved_balance: baseReserved,
-    },
-    {
-      name: getAsset(quoteAsset).name,
-      symbol: getAsset(quoteAsset).symbol,
-      asset_type: quoteAsset,
-      free_balance: quoteFree,
-      reserved_balance: quoteReserved,
-    },
-  ];
-  return newBalance;
+  const update: BalanceMessage["update"]["BalanceUpdate"] = msg.update.BalanceUpdate;
+  if (update) {
+    let [baseAsset, quoteAsset] = msg.trading_pair.split("/");
+    baseAsset = baseAsset === "PDEX" ? "-1" : baseAsset;
+    quoteAsset = quoteAsset === "PDEX" ? "-1" : quoteAsset;
+    const baseFree = update.base_free;
+    const baseReserved = update.base_reserved;
+    const quoteFree = update.quote_free;
+    const quoteReserved = update.quote_reserved;
+    const newBalance: Balance[] = [
+      {
+        name: getAsset(baseAsset).name,
+        symbol: getAsset(baseAsset).symbol,
+        assetId: baseAsset,
+        free_balance: baseFree,
+        reserved_balance: baseReserved,
+      },
+      {
+        name: getAsset(quoteAsset).name,
+        symbol: getAsset(quoteAsset).symbol,
+        assetId: quoteAsset,
+        free_balance: quoteFree,
+        reserved_balance: quoteReserved,
+      },
+    ];
+    return newBalance;
+  }
 };

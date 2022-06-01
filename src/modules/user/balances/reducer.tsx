@@ -49,8 +49,8 @@ export const balancesReducer = (
     case BALANCES_CHANNEL_UPDATE_DATA: {
       const updates = action.payload;
       // filter out old balances from the balance state
-      const balanceFiltered = state.balances.filter((balance) =>
-        updates.some((update) => update.asset_type === balance.asset_type)
+      const balanceFiltered = state.balances.filter(
+        (balance) => !updates.some((update) => update.assetId === balance.assetId)
       );
       // apply updates to the balances in the state
       const newBalances = [...balanceFiltered, ...updates];

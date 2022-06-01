@@ -9,7 +9,7 @@ import {
 } from "./constants";
 
 export interface BalanceBase {
-  asset_type: string;
+  assetId: string;
   reserved_balance: string;
   free_balance: string;
 }
@@ -22,11 +22,13 @@ export type FreeOrUsedOrTotal = Record<string, number>;
 export type BalanceMessage = {
   trading_pair: string;
   update: {
-    user: string;
-    base_free: string;
-    base_reserved: string;
-    quote_free: string;
-    quote_reserved: string;
+    BalanceUpdate?: {
+      user: string;
+      base_free: string;
+      base_reserved: string;
+      quote_free: string;
+      quote_reserved: string;
+    };
   };
 };
 export interface BalancesFetch {

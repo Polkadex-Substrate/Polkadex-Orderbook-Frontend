@@ -16,6 +16,7 @@ import { UNIT_BN } from "@polkadex/web-constants";
 
 export function* fetchDepositsSaga(action: DepositsFetch) {
   try {
+    console.log("depsoit saga called");
     const { baseAsset, quoteAsset, isBase, amount } = action.payload;
     const mainUser = yield select(selectMainAccount);
     const api = yield select(selectRangerApi);
