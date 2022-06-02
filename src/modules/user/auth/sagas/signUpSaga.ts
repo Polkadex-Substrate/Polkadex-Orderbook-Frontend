@@ -56,10 +56,11 @@ export function* signUpSaga(action: SignUpFetch) {
   } catch (error) {
     proxyAddress && keyring.forgetAddress(proxyAddress);
     yield put(
-      alertPush({
-        type: "Error",
-        message: {
-          title: error.message,
+      sendError({
+        error,
+        processingType: "alert",
+        extraOptions: {
+          actionError: signUpError,
         },
       })
     );

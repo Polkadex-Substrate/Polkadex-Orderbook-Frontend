@@ -5,6 +5,7 @@ export const useMnemonic = (defaultMnemonic = "") => {
   const [mnemonic, setMnemonic] = useState<Array<string>>();
   const [mnemoicString, setMnemonicString] = useState<string>();
   const [loading, setLoading] = useState(true);
+  const isMnemonicFromSignUp = defaultMnemonic && defaultMnemonic.length > 0;
 
   const createMnemonic = async ({ defaultMnemonic = "" }) => {
     let mnemonic_string = defaultMnemonic;
@@ -22,5 +23,5 @@ export const useMnemonic = (defaultMnemonic = "") => {
     createMnemonic({ defaultMnemonic });
   }, [defaultMnemonic]);
 
-  return { mnemonic, mnemoicString, loading };
+  return { mnemonic, mnemoicString, loading, isMnemonicFromSignUp };
 };

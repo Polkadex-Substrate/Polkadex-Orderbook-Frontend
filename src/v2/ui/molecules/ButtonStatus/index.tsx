@@ -37,6 +37,12 @@ export const ButtonStatus = ({
           setLoading(false);
           setSuccess(false);
         }, 1600);
+      } else {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setSuccess(false);
+        }, 1600);
       }
     }
   };

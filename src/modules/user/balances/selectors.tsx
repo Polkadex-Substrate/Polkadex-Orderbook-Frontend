@@ -17,7 +17,7 @@ export const selectGetFreeProxyBalance =
   (assetId: string) => {
     const balance = state.user.balances.balances.find(
       (balance) =>
-        balance.asset_type === assetId || (balance.asset_type === "PDEX" && assetId === "-1")
+        balance.assetId === assetId || (balance.assetId === "PDEX" && assetId === "-1")
     );
     if (!balance) return "0";
     return balance.free_balance;

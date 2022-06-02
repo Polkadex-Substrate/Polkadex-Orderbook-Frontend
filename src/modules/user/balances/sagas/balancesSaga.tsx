@@ -23,12 +23,15 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
       const balances = yield call(() => fetchbalancesAsync(account));
       // very unoptimized way to map the asset data
       // TODO: improve datastructure in the future
-      const list = balances.map((balance: BalanceBase) => {
+      const list = balances.map((balance: IBalanceFromDb) => {
         const asset =
           balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
         return {
-          ...asset,
-          ...balance,
+          assetId: asset.assetId,
+          name: asset.name,
+          symbol: asset.symbol,
+          reserved_balance: balance.reserved_balance,
+          free_balance: balance.free_balance,
         };
       });
       yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
@@ -46,9 +49,13 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
   }
 }
 
-async function fetchbalancesAsync(account: ProxyAccount): Promise<BalanceBase[]> {
-  const address = account.address;
-  // const res = await axios.get("/api/user/assets/" + address);
+type IBalanceFromDb = {
+  asset_type: string;
+  reserved_balance: string;
+  free_balance: string;
+};
+
+async function fetchbalancesAsync(account: ProxyAccount): Promise<IBalanceFromDb[]> {
   const res: any = await axios.get("/api/user/assets/" + account.main_acc_id); // for testing purposes
   console.log("fetch balance =>", res);
   return res.data.data;

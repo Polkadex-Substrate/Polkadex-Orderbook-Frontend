@@ -55,6 +55,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     }
   } catch (error) {
     console.log({ error });
+    yield put(orderExecuteDataDelete());
     yield put(
       sendError({
         error,

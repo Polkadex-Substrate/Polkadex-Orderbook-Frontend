@@ -175,7 +175,7 @@ export const SignUpTemplate = () => {
                               background: "inverse",
                               color: "text",
                             }}>
-                            Print mnemonic
+                            Download mnemonic
                           </Button>
                         </FlexSpaceBetween>
                       </Form>

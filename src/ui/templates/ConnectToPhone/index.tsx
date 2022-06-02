@@ -46,12 +46,15 @@ export const ConnectToPhone = () => {
   const isSuccess = true;
 
   // Change to Saga
-  const { mnemonic, mnemoicString } = useMnemonic(router?.query?.mnemonic as string);
+  const { mnemonic, mnemoicString, isMnemonicFromSignUp } = useMnemonic(
+    router?.query?.mnemonic as string
+  );
 
   const selectedAccount = useReduxSelector(selectMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
-
+  const showQrCode = connectPhoneSuccess || isMnemonicFromSignUp;
+  const showUnlockQr = !connectPhoneSuccess && !isMnemonicFromSignUp;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -144,7 +147,7 @@ export const ConnectToPhone = () => {
                         I am aware that Polkadex does not store any information related to
                         Wallet or Mnemonic.
                       </p>
-                      {!connectPhoneSuccess && (
+                      {showUnlockQr && (
                         <Button
                           background="secondaryBackground"
                           color="black"
@@ -158,7 +161,7 @@ export const ConnectToPhone = () => {
                     </S.SelectAccount>
                   </S.StepContent>
                 </S.Step>
-                {connectPhoneSuccess && (
+                {showQrCode && (
                   <>
                     <S.Step>
                       <S.StepTitle>
@@ -186,7 +189,7 @@ export const ConnectToPhone = () => {
                             background: "inverse",
                             color: "text",
                           }}>
-                          Print mnemonic
+                          Download mnemonic
                         </Button>
                       </S.StepContent>
                     </S.Step>
