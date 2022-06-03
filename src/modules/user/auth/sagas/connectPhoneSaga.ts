@@ -27,7 +27,7 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
         alertPush({
           type: "Loading",
           message: {
-            title: "Processing you transaction...",
+            title: "r transaction...",
             description:
               "Please sign the transaction and wait for block finalization, this may take a minute",
           },
