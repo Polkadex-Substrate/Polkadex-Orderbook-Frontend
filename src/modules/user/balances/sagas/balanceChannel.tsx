@@ -1,22 +1,13 @@
 import { call, put, race, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
 
 import { alertPush, BalanceMessage, selectUserBalance } from "../../..";
 import { ProxyAccount, selectUserInfo } from "../../profile";
-import {
-  Balance,
-  BalanceChannelFetch,
-  balanceChannelTradeUpdateData,
-  balanceChannelTransferUpdateData,
-  BalanceChannelTransferUpdateData,
-  BalanceTransferMessage,
-} from "../actions";
+import { Balance, BalanceChannelFetch, balanceChannelTradeUpdateData } from "../actions";
 
-import {
-  RabbitmqChannelType,
-  selectRabbitmqChannel,
-} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { fetchBalanceUpdatesChannel } from "./helpers";
+
+import { selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 export function* balanceChannelSaga(action: BalanceChannelFetch) {
@@ -30,32 +21,17 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
       const proxyAddress = userAddress;
       const proxyQueueName = `${proxyAddress}-balance-update-events`;
       const proxyRoutingKey = `${proxyAddress}-balance-update-events`;
-      const mainAddress = userInfo.main_addr;
-      const mainQueueName = `${mainAddress}-balance-update-events`;
-      const mainRoutingKey = `${mainAddress}-balance-update-events`;
       if (rabbitmqConn) {
         const proxyChannel = yield call(() =>
           fetchBalanceUpdatesChannel(rabbitmqConn, proxyQueueName, proxyRoutingKey)
         );
-        const mainChannel = yield call(() =>
-          fetchBalanceUpdatesChannel(rabbitmqConn, mainQueueName, mainRoutingKey)
-        );
 
         while (true) {
-          const { tradeMsg, transferMsg } = yield race({
-            tradeMsg: take(proxyChannel),
-            transferMsg: take(mainChannel),
-          });
-          console.log("balanceMsg =>", { tradeMsg, transferMsg });
-          if (tradeMsg) {
-            const balanceMsg: BalanceMessage = JSON.parse(tradeMsg);
-            const updateBalance = updateBalanceFromTradeMsg(balanceMsg, getAsset);
-            yield put(balanceChannelTradeUpdateData(updateBalance));
-          } else if (transferMsg) {
-            const balanceMsg: BalanceTransferMessage = JSON.parse(transferMsg);
-            const updateBalance = updateBalanceFromDepositMsg(balanceMsg, getAsset);
-            yield put(balanceChannelTransferUpdateData(updateBalance));
-          }
+          const tradeMsg = yield take(proxyChannel);
+          console.log("balanceMsg =>", tradeMsg);
+          const balanceMsg: BalanceMessage = JSON.parse(tradeMsg);
+          const updateBalance = updateBalanceFromTradeMsg(balanceMsg, getAsset);
+          yield put(balanceChannelTradeUpdateData(updateBalance));
         }
       }
     }
@@ -70,26 +46,6 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
       })
     );
   }
-}
-async function fetchBalanceUpdatesChannel(
-  chann: RabbitmqChannelType,
-  queueName: string,
-  routingKey: string
-) {
-  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
-  await queue.bind("topic_exchange", routingKey);
-  console.log("created balance update queue", queueName);
-  return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
-      const msg = u8aToString(res.body);
-      console.log("balance update msg =>", msg);
-      emitter(msg);
-      res.ack();
-    });
-    return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
-    };
-  });
 }
 
 const updateBalanceFromTradeMsg = (
@@ -123,18 +79,4 @@ const updateBalanceFromTradeMsg = (
     ];
     return newBalance;
   }
-};
-
-const updateBalanceFromDepositMsg = (
-  msg: BalanceTransferMessage,
-  getAsset: (id: string) => IPublicAsset
-): BalanceChannelTransferUpdateData["payload"] => {
-  const assetId = msg.update.Deposit.asset === "PDEX" ? "-1" : msg.update.Deposit.asset;
-  const amount = msg.update.Deposit.amount;
-  return {
-    name: getAsset(assetId).name,
-    symbol: getAsset(assetId).symbol,
-    amount,
-    assetId,
-  };
 };

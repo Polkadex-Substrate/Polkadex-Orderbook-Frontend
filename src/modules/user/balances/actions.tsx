@@ -6,7 +6,7 @@ import {
   BALANCES_DATA,
   BALANCES_ERROR,
   BALANCES_FETCH,
-  BALANCE_CHANNEL_FETCH,
+  BALANCE_CHANNEL_TRADE_FETCH,
 } from "./constants";
 
 export interface BalanceBase {
@@ -56,7 +56,7 @@ export interface BalancesData {
   payload: { timestamp: number; balances: Balance[] };
 }
 export interface BalanceChannelFetch {
-  type: typeof BALANCE_CHANNEL_FETCH;
+  type: typeof BALANCE_CHANNEL_TRADE_FETCH;
 }
 
 export interface BalanceChannelUpdateData {
@@ -89,8 +89,8 @@ export const balancesError = (error: CommonError): BalancesError => ({
   error,
 });
 
-export const balanceChannelFetch = (): BalanceChannelFetch => ({
-  type: BALANCE_CHANNEL_FETCH,
+export const balanceTradeChannelFetch = (): BalanceChannelFetch => ({
+  type: BALANCE_CHANNEL_TRADE_FETCH,
 });
 
 export const balanceChannelTradeUpdateData = (
@@ -98,6 +98,10 @@ export const balanceChannelTradeUpdateData = (
 ): BalanceChannelUpdateData => ({
   type: BALANCES_CHANNEL_TRADE_UPDATE_DATA,
   payload,
+});
+
+export const balanceTransferChannelFetch = (): BalanceChannelFetch => ({
+  type: BALANCE_CHANNEL_TRADE_FETCH,
 });
 
 export const balanceChannelTransferUpdateData = (
