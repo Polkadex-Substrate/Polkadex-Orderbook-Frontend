@@ -4,7 +4,7 @@ import { alertPush } from "../../alertHandler";
 import { orderBookChannelFetch } from "../../orderBook";
 import { rabbitmqChannelData } from "../actions";
 
-import AMQPWebSocketClient from "./amqp-websocket-client";
+import { AMQPWebSocketClient } from "./amqp-websocket-client.mjs";
 
 import { klineFetchChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 import { defaultConfig } from "@polkadex/orderbook-config";
