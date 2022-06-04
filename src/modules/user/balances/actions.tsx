@@ -1,7 +1,8 @@
 import { CommonError } from "../../types";
 
 import {
-  BALANCES_CHANNEL_UPDATE_DATA,
+  BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
   BALANCES_FETCH,
@@ -22,12 +23,22 @@ export type FreeOrUsedOrTotal = Record<string, number>;
 export type BalanceMessage = {
   trading_pair: string;
   update: {
-    BalanceUpdate?: {
+    BalanceUpdate: {
       user: string;
       base_free: string;
       base_reserved: string;
       quote_free: string;
       quote_reserved: string;
+    };
+  };
+};
+export type BalanceTransferMessage = {
+  trading_pair: string;
+  update: {
+    Deposit: {
+      user: string;
+      amount: string;
+      asset: string;
     };
   };
 };
@@ -49,14 +60,20 @@ export interface BalanceChannelFetch {
 }
 
 export interface BalanceChannelUpdateData {
-  type: typeof BALANCES_CHANNEL_UPDATE_DATA;
+  type: typeof BALANCES_CHANNEL_TRADE_UPDATE_DATA;
   payload: Balance[];
+}
+
+export interface BalanceChannelTransferUpdateData {
+  type: typeof BALANCES_CHANNEL_TRANSFER_UPDATE_DATA;
+  payload: { amount: string; assetId: string; name: string; symbol: string };
 }
 export type BalancesAction =
   | BalancesFetch
   | BalancesData
   | BalancesError
-  | BalanceChannelUpdateData;
+  | BalanceChannelUpdateData
+  | BalanceChannelTransferUpdateData;
 
 export const balancesFetch = (): BalancesFetch => ({
   type: BALANCES_FETCH,
@@ -76,9 +93,16 @@ export const balanceChannelFetch = (): BalanceChannelFetch => ({
   type: BALANCE_CHANNEL_FETCH,
 });
 
-export const balanceChannelUpdateData = (
+export const balanceChannelTradeUpdateData = (
   payload: BalanceChannelUpdateData["payload"]
 ): BalanceChannelUpdateData => ({
-  type: BALANCES_CHANNEL_UPDATE_DATA,
+  type: BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  payload,
+});
+
+export const balanceChannelTransferUpdateData = (
+  payload: BalanceChannelTransferUpdateData["payload"]
+): BalanceChannelTransferUpdateData => ({
+  type: BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   payload,
 });
