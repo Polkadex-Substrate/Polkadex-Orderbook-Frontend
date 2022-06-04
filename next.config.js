@@ -35,5 +35,6 @@ module.exports = {
     RMQ_USERNAME: process.env.RMQ_USERNAME,
     ENCLAVE_URL: process.env.ENCLAVE_URL || "wss://sgx.polkadex.trade:443",
     POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "wss://ramen-1.polkadex.trade:443",
+    NODE_ENV: process.env.NODE_ENV || "development",
   },
 };
