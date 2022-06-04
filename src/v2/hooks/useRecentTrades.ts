@@ -23,8 +23,8 @@ export function useRecentTrades() {
   return {
     isDecreasing,
     recentTrades,
-    quoteUnit: getSymbolFromId("quote", currentMarket?.assetIdArray),
-    baseUnit: getSymbolFromId("base", currentMarket?.assetIdArray),
+    quoteUnit: currentMarket?.quote_unit,
+    baseUnit: currentMarket?.base_unit,
     pricePrecision: currentMarket?.price_precision,
     amountPrecision: currentMarket?.amount_precision,
   };
