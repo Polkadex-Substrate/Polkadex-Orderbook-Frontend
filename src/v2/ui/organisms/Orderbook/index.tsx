@@ -94,8 +94,8 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
         </S.Table>
       ) : (
         <EmptyData
-          image={isSell ? "emptyOrderbookSell" : "emptyOrderbook"}
-          title={`No ${isSell ? "Bids" : "Asks"}`}
+          image={isSell ? "emptyOrderbook" : "emptyOrderbookSell"}
+          title={`No ${isSell ? "Asks" : "Bids"}`}
         />
       )}
     </>
