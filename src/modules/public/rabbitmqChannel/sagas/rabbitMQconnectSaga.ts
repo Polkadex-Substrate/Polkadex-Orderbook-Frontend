@@ -21,7 +21,7 @@ export function* rabbitmqConnectionSaga() {
     const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
     yield put(recentTradesChannelFetch());
-    yield put(klineFetchChannelFetch());
+    // yield put(klineFetchChannelFetch());
     yield put(orderBookChannelFetch());
   } catch (error) {
     yield put(
