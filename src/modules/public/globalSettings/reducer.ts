@@ -11,7 +11,7 @@ export interface GlobalSettingsState {
   marketSelectorActive: boolean;
 }
 const currentGlobalSettings: string =
-  (process.browser && localStorage.getItem("colorTheme")) || "dark";
+  (process.browser && localStorage.getItem("colorTheme")) || "light";
 
 export const initialChangeGlobalSettingsState: GlobalSettingsState = {
   color: currentGlobalSettings,
