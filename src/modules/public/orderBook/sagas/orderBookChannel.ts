@@ -27,7 +27,6 @@ export function* orderBookChannelSaga() {
         const { asks, bids } = data;
         yield put(orderBookData(data));
         yield put(depthData({ asks, bids }));
-        yield delay(5000); // delay 5000 just for testing (performance)
       }
     }
   } catch (error) {
