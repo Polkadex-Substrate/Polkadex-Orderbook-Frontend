@@ -4,8 +4,8 @@ import { alertPush } from "../../..";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 import {
   BalanceChannelFetch,
-  balanceChannelTransferUpdateData,
-  BalanceChannelTransferUpdateData,
+  balanceChannelTransferData,
+  BalanceChannelTransferData,
   BalanceTransferMessage,
 } from "../actions";
 
@@ -16,6 +16,7 @@ import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public
 
 export function* transfersChannelSaga(action: BalanceChannelFetch) {
   try {
+    console.log("transfersChannelSaga called");
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.address;
     if (userAddress) {
@@ -31,9 +32,10 @@ export function* transfersChannelSaga(action: BalanceChannelFetch) {
 
         while (true) {
           const transferMsg = yield take(mainChannel);
+          console.log("transferMsg =>", transferMsg);
           const balanceMsg: BalanceTransferMessage = JSON.parse(transferMsg);
           const updateBalance = updateBalanceFromDepositMsg(balanceMsg, getAsset);
-          yield put(balanceChannelTransferUpdateData(updateBalance));
+          yield put(balanceChannelTransferData(updateBalance));
         }
       }
     }
@@ -53,7 +55,7 @@ export function* transfersChannelSaga(action: BalanceChannelFetch) {
 const updateBalanceFromDepositMsg = (
   msg: BalanceTransferMessage,
   getAsset: (id: string) => IPublicAsset
-): BalanceChannelTransferUpdateData["payload"] => {
+): BalanceChannelTransferData["payload"] => {
   const assetId = msg.update.Deposit.asset === "PDEX" ? "-1" : msg.update.Deposit.asset;
   const amount = msg.update.Deposit.amount;
   return {

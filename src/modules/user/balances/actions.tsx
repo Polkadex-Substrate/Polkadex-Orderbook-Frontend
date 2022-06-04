@@ -7,6 +7,7 @@ import {
   BALANCES_ERROR,
   BALANCES_FETCH,
   BALANCE_CHANNEL_TRADE_FETCH,
+  BALANCE_CHANNEL_TRANSFER_FETCH,
 } from "./constants";
 
 export interface BalanceBase {
@@ -63,8 +64,10 @@ export interface BalanceChannelUpdateData {
   type: typeof BALANCES_CHANNEL_TRADE_UPDATE_DATA;
   payload: Balance[];
 }
-
-export interface BalanceChannelTransferUpdateData {
+export interface BalanceChannelTransferFetch {
+  type: typeof BALANCE_CHANNEL_TRANSFER_FETCH;
+}
+export interface BalanceChannelTransferData {
   type: typeof BALANCES_CHANNEL_TRANSFER_UPDATE_DATA;
   payload: { amount: string; assetId: string; name: string; symbol: string };
 }
@@ -73,7 +76,8 @@ export type BalancesAction =
   | BalancesData
   | BalancesError
   | BalanceChannelUpdateData
-  | BalanceChannelTransferUpdateData;
+  | BalanceChannelTransferFetch
+  | BalanceChannelTransferData;
 
 export const balancesFetch = (): BalancesFetch => ({
   type: BALANCES_FETCH,
@@ -100,13 +104,13 @@ export const balanceChannelTradeUpdateData = (
   payload,
 });
 
-export const balanceTransferChannelFetch = (): BalanceChannelFetch => ({
-  type: BALANCE_CHANNEL_TRADE_FETCH,
+export const balanceTransferChannelFetch = (): BalanceChannelTransferFetch => ({
+  type: BALANCE_CHANNEL_TRANSFER_FETCH,
 });
 
-export const balanceChannelTransferUpdateData = (
-  payload: BalanceChannelTransferUpdateData["payload"]
-): BalanceChannelTransferUpdateData => ({
+export const balanceChannelTransferData = (
+  payload: BalanceChannelTransferData["payload"]
+): BalanceChannelTransferData => ({
   type: BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   payload,
 });
