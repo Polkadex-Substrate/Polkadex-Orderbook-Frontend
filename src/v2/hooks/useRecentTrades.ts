@@ -23,8 +23,8 @@ export function useRecentTrades() {
   return {
     isDecreasing,
     recentTrades,
-    quoteUnit: currentMarket?.quote_unit,
-    baseUnit: currentMarket?.base_unit,
+    quoteUnit: currentMarket?.quote_ticker,
+    baseUnit: currentMarket?.base_ticker,
     pricePrecision: currentMarket?.price_precision,
     amountPrecision: currentMarket?.amount_precision,
   };
