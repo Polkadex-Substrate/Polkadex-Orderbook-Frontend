@@ -26,3 +26,14 @@ export const selectConnectPhoneLoading = (state: RootState): AuthState["signUpLo
 
 export const selectConnectPhoneSuccess = (state: RootState): AuthState["signUpSuccess"] =>
   state.user.auth.connectPhoneSuccess;
+
+export const selectImportAccountLoading = (
+  state: RootState
+): AuthState["importAccountLoading"] => state.user.auth.importAccountLoading;
+
+export const selectImportAccountError = (state: RootState): AuthState["importAccountError"] =>
+  state.user.auth.importAccountError;
+
+export const selectImportAccountSuccess = (
+  state: RootState
+): AuthState["importAccountSuccess"] => state.user.auth.importAccountSuccess;

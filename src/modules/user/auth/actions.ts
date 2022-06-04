@@ -4,6 +4,9 @@ import {
   AUTH_CONNECT_PHONE_DATA,
   AUTH_CONNECT_PHONE_ERROR,
   AUTH_CONNECT_PHONE_FETCH,
+  AUTH_IMPORT_ACCOUNT_DATA,
+  AUTH_IMPORT_ACCOUNT_ERROR,
+  AUTH_IMPORT_ACCOUNT_FETCH,
   AUTH_KEYRING_SIGN_IN_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
@@ -94,6 +97,22 @@ export interface ConnectPhoneError {
   error: CommonError;
 }
 
+export interface ImportAccountFetch {
+  type: typeof AUTH_IMPORT_ACCOUNT_FETCH;
+  payload: {
+    accountName: string;
+    mnemonic: string;
+    password: string;
+  };
+}
+export interface ImportAccountData {
+  type: typeof AUTH_IMPORT_ACCOUNT_DATA;
+}
+
+export interface ImportAccountError {
+  type: typeof AUTH_IMPORT_ACCOUNT_ERROR;
+  error: CommonError;
+}
 export type AuthAction =
   | SignInFetch
   | SignInData
@@ -105,7 +124,10 @@ export type AuthAction =
   | LogoutFetch
   | ConnectPhoneFetch
   | ConnectPhoneData
-  | ConnectPhoneError;
+  | ConnectPhoneError
+  | ImportAccountFetch
+  | ImportAccountData
+  | ImportAccountError;
 
 export const signInKeyRingData = (payload: SignInKeyRingData["payload"]) => ({
   type: AUTH_KEYRING_SIGN_IN_DATA,
@@ -164,5 +186,21 @@ export const connectPhoneData = (): ConnectPhoneData => ({
 
 export const connectPhoneError = (error: CommonError): ConnectPhoneError => ({
   type: AUTH_CONNECT_PHONE_ERROR,
+  error,
+});
+
+export const importAccountFetch = (
+  payload: ImportAccountFetch["payload"]
+): ImportAccountFetch => ({
+  type: AUTH_IMPORT_ACCOUNT_FETCH,
+  payload,
+});
+
+export const importAccountData = (): ImportAccountData => ({
+  type: AUTH_IMPORT_ACCOUNT_DATA,
+});
+
+export const importAccountError = (error: CommonError): ImportAccountError => ({
+  type: AUTH_IMPORT_ACCOUNT_ERROR,
   error,
 });

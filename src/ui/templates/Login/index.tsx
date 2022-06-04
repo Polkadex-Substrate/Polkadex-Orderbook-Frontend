@@ -18,6 +18,7 @@ import {
   selectSignUpSuccess,
   setProxyAccount,
   signIn,
+  selectImportAccountSuccess,
 } from "@polkadex/orderbook-modules";
 import {
   Button,
@@ -41,7 +42,7 @@ export const LoginTemplate = () => {
 
   const accounts = useReduxSelector(selectPolkadotWalletAccounts);
   const isLoading = useReduxSelector(selectPolkadotWalletLoading);
-
+  const isImportAccountSuccess = useReduxSelector(selectImportAccountSuccess);
   const selectedAccount = useReduxSelector(selectProxyAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
@@ -53,8 +54,8 @@ export const LoginTemplate = () => {
   }, [hasUser, router]);
 
   useEffect(() => {
-    if (signUpSuccess) window.location.reload();
-  }, [signUpSuccess]);
+    if (signUpSuccess || isImportAccountSuccess) window.location.reload();
+  }, [signUpSuccess, isImportAccountSuccess]);
   if (hasUser) return <div />;
   return (
     <S.Main>

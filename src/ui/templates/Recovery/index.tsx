@@ -11,7 +11,7 @@ import { importValiations } from "./validations";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { selectSignUpSuccess, signUp } from "@polkadex/orderbook-modules";
+import { importAccountFetch, selectImportAccountSuccess } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const defaultValues = {
@@ -21,7 +21,7 @@ const defaultValues = {
 
 export const RecoveryTemplate = () => {
   const dispatch = useDispatch();
-  const signUpSuccess = useReduxSelector(selectSignUpSuccess);
+  const signUpSuccess = useReduxSelector(selectImportAccountSuccess);
   const router = useRouter();
 
   const [state, setState] = useState({ tags: [] });
@@ -52,7 +52,7 @@ export const RecoveryTemplate = () => {
                       console.log(state.tags, password, accountName);
                       const mnemoicString = state.tags.join(" ");
                       dispatch(
-                        signUp({
+                        importAccountFetch({
                           accountName,
                           mnemonic: mnemoicString,
                           password,
