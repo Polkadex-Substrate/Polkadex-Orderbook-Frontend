@@ -16,7 +16,7 @@ export function* importAccountSaga(action: ImportAccountFetch) {
       alertPush({
         type: "Successful",
         message: {
-          title: "Congrtulations!",
+          title: "Congratulations!",
           description: "Proxy account successfully imported!",
         },
       })
