@@ -8,7 +8,7 @@ export const TradeHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }:
     <>
       <TableRow header={["Pair", "Date", "Price", "Amount"]}>
         {orders.map((order, i) => {
-          const date = new Date(Number(order.timestamp)).toLocaleDateString();
+          const date = new Date(parseInt(order.timestamp)).toLocaleString();
           const isSell = order.order_side === "Sell";
           const baseUnit = getAsset(order.base_asset_type).symbol;
           const quoteUnit = getAsset(order.quote_asset_type).symbol;

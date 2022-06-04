@@ -24,7 +24,7 @@ export function useOrderHistory() {
         .filter((str) => str !== "")
         .forEach((trade) => {
           const [price, qty, timestamp] = trade.split("-");
-          const unixtime = new Date(timestamp).getTime();
+          const unixtime = (parseFloat(timestamp) * 1000).toString();
           acc.push({
             order_id: item.txid,
             base_asset_type: item.base_asset_type,
