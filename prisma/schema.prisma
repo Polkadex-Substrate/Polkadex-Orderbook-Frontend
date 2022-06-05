@@ -64,7 +64,7 @@ model transactions {
   trader_type                                            transactions_trader_type?
   status                                                 transactions_status?
   order_side                                             transactions_order_side?
-  timestamp                                              DateTime?                 @default(now()) @db.DateTime(0)
+  timestamp                                              String?                   @db.Char(50)
   qty                                                    Float?
   price                                                  Float?
   filled_price                                           Float?

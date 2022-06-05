@@ -9,7 +9,6 @@ import {
   orderExecuteData,
   orderExecuteError,
   OrderExecuteFetch,
-  userOrdersHistoryFetch,
   selectRangerApi,
 } from "../../..";
 import { balancesFetch } from "../../balances";
@@ -51,7 +50,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       console.log("placeOrderResult =>", res);
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
-      yield put(userOrdersHistoryFetch());
     }
   } catch (error) {
     console.log({ error });

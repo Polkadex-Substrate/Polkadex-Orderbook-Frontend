@@ -6,6 +6,9 @@ import {
   FetchOrderUpdatesChannel,
   OrderUpdateEvent,
   userOrderChannelUpdateData,
+  userOrderUpdateAccepted,
+  userOrderUpdateFilled,
+  userOrderUpdatePartiallyFilled,
 } from "../actions";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 
@@ -24,10 +27,16 @@ export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
     if (AmqpChannel && userAddress) {
       const channel = yield call(() => fetchOrderUpdatesChannel(AmqpChannel, userAddress));
       while (true) {
-        let orderMsg = yield take(channel);
-        console.log("order update=>" + orderMsg);
-        orderMsg = JSON.parse(orderMsg) as OrderUpdateEvent;
-        yield put(userOrderChannelUpdateData(orderMsg));
+        const orderMsgRaw = yield take(channel);
+        console.log("order update=>" + orderMsgRaw);
+        const orderMsg: any = JSON.parse(orderMsgRaw);
+        if (orderMsg.update.Accepted) {
+          yield put(userOrderUpdateAccepted(orderMsg));
+        } else if (orderMsg.update.PartiallyFilled) {
+          yield put(userOrderUpdatePartiallyFilled(orderMsg));
+        } else if (orderMsg.update.Filled) {
+          yield put(userOrderUpdateFilled(orderMsg));
+        }
       }
     }
   } catch (error) {

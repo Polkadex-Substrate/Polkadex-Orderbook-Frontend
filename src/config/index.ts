@@ -14,7 +14,7 @@ export const defaultConfig: DefaultConfig = {
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,
-  defaultStorageLimit: 50,
+  defaultStorageLimit: 100,
   defaultTradingViewInterval: 5,
   sessionCheckInterval: 15000,
   balancesFetchInterval: 3000,

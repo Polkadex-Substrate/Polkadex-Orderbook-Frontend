@@ -10,6 +10,7 @@ export default async function transactions(req: NextApiRequest, res: NextApiResp
     const data = await userTransactions(BigInt(id as string));
     res.status(200).json({ data });
   } catch (error) {
+    console.log("/api/user/transactions", error);
     res.status(500).json({ data: error.message });
   }
 }
