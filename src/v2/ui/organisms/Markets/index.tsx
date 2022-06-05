@@ -38,7 +38,7 @@ const Markets = ({ isFull = false }) => {
 
 export const HeaderMarket = ({
   pair = "Empty  Token",
-  pairSymbol = "Polkadot",
+  pairSymbol = "Polkadex",
   pairTicker,
   onOpenMarkets = undefined,
 }) => {
