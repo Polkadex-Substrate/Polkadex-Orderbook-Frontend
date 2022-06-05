@@ -25,6 +25,7 @@ export default async function proxy(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("Proxy account not found");
     }
   } catch (error) {
+    console.log("/api/user/proxy/main_account", error);
     res.status(500).json({ data: error.message });
   }
 }

@@ -15,6 +15,7 @@ export default async function transactions(req: NextApiRequest, res: NextApiResp
     });
     res.status(200).json({ data: serializeBigInt(transaction) });
   } catch (error) {
+    console.log("/api/tranactions", error);
     res.status(500).json({ data: error.message });
   }
 }
