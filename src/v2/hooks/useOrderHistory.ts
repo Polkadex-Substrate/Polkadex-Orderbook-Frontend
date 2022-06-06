@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
+import { sortOrdersDescendingTime } from "../helpers/sortOrderDescendingTime";
+
 import {
   selectCurrentMarket,
   selectOrdersHistory,
@@ -12,7 +14,11 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export function useOrderHistory() {
   const dispatch = useDispatch();
 
-  const list = useReduxSelector(selectOrdersHistory);
+  const orderlist = useReduxSelector(selectOrdersHistory);
+
+  const list = useMemo(() => {
+    return sortOrdersDescendingTime(orderlist);
+  }, [orderlist]);
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasUser);
@@ -24,7 +30,7 @@ export function useOrderHistory() {
         .filter((str) => str !== "")
         .forEach((trade) => {
           const [price, qty, timestamp] = trade.split("-");
-          const unixtime = new Date(timestamp).getTime();
+          const unixtime = (parseFloat(timestamp) * 1000).toString();
           acc.push({
             order_id: item.txid,
             base_asset_type: item.base_asset_type,
@@ -42,8 +48,8 @@ export function useOrderHistory() {
   }, [list]);
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userOrdersHistoryFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+    if (userLoggedIn) dispatch(userOrdersHistoryFetch());
+  }, [userLoggedIn, dispatch]);
 
   return {
     orders: list,

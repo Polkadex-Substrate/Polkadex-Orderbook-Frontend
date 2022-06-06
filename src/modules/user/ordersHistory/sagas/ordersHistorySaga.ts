@@ -10,6 +10,7 @@ import { OrderCommon } from "src/modules/types";
 
 export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
+    console.log("orderhistory saga called, fetching orderhistory from database");
     const { main_acc_id } = yield select(selectUserInfo);
     const transactions: OrderCommon[] = yield call(fetchTransactions, main_acc_id);
     console.log("transactions =>", transactions);
@@ -29,15 +30,5 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
 const fetchTransactions = async (main_acc_id: string): Promise<OrderCommon[]> => {
   const res: any = await axios.get("/api/user/transactions/" + main_acc_id);
   const orders = res.data.data;
-  if (orders.length > 0) {
-    return sortDescendingTime(orders);
-  }
   return orders;
 };
-
-const sortDescendingTime = (orders: OrderCommon[]) =>
-  orders.sort((a, b) => {
-    const timestampA = new Date(a.timestamp).getTime();
-    const timestampB = new Date(b.timestamp).getTime();
-    return timestampB - timestampA;
-  });

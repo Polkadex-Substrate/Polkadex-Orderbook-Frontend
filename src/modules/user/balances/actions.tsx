@@ -1,11 +1,13 @@
 import { CommonError } from "../../types";
 
 import {
-  BALANCES_CHANNEL_UPDATE_DATA,
+  BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
   BALANCES_FETCH,
-  BALANCE_CHANNEL_FETCH,
+  BALANCE_CHANNEL_TRADE_FETCH,
+  BALANCE_CHANNEL_TRANSFER_FETCH,
 } from "./constants";
 
 export interface BalanceBase {
@@ -22,12 +24,22 @@ export type FreeOrUsedOrTotal = Record<string, number>;
 export type BalanceMessage = {
   trading_pair: string;
   update: {
-    BalanceUpdate?: {
+    BalanceUpdate: {
       user: string;
       base_free: string;
       base_reserved: string;
       quote_free: string;
       quote_reserved: string;
+    };
+  };
+};
+export type BalanceTransferMessage = {
+  trading_pair: string;
+  update: {
+    Deposit: {
+      user: string;
+      amount: string;
+      asset: string;
     };
   };
 };
@@ -45,18 +57,27 @@ export interface BalancesData {
   payload: { timestamp: number; balances: Balance[] };
 }
 export interface BalanceChannelFetch {
-  type: typeof BALANCE_CHANNEL_FETCH;
+  type: typeof BALANCE_CHANNEL_TRADE_FETCH;
 }
 
 export interface BalanceChannelUpdateData {
-  type: typeof BALANCES_CHANNEL_UPDATE_DATA;
+  type: typeof BALANCES_CHANNEL_TRADE_UPDATE_DATA;
   payload: Balance[];
+}
+export interface BalanceChannelTransferFetch {
+  type: typeof BALANCE_CHANNEL_TRANSFER_FETCH;
+}
+export interface BalanceChannelTransferData {
+  type: typeof BALANCES_CHANNEL_TRANSFER_UPDATE_DATA;
+  payload: { amount: string; assetId: string; name: string; symbol: string };
 }
 export type BalancesAction =
   | BalancesFetch
   | BalancesData
   | BalancesError
-  | BalanceChannelUpdateData;
+  | BalanceChannelUpdateData
+  | BalanceChannelTransferFetch
+  | BalanceChannelTransferData;
 
 export const balancesFetch = (): BalancesFetch => ({
   type: BALANCES_FETCH,
@@ -72,13 +93,24 @@ export const balancesError = (error: CommonError): BalancesError => ({
   error,
 });
 
-export const balanceChannelFetch = (): BalanceChannelFetch => ({
-  type: BALANCE_CHANNEL_FETCH,
+export const balanceTradeChannelFetch = (): BalanceChannelFetch => ({
+  type: BALANCE_CHANNEL_TRADE_FETCH,
 });
 
-export const balanceChannelUpdateData = (
+export const balanceChannelTradeUpdateData = (
   payload: BalanceChannelUpdateData["payload"]
 ): BalanceChannelUpdateData => ({
-  type: BALANCES_CHANNEL_UPDATE_DATA,
+  type: BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  payload,
+});
+
+export const balanceTransferChannelFetch = (): BalanceChannelTransferFetch => ({
+  type: BALANCE_CHANNEL_TRANSFER_FETCH,
+});
+
+export const balanceChannelTransferData = (
+  payload: BalanceChannelTransferData["payload"]
+): BalanceChannelTransferData => ({
+  type: BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   payload,
 });

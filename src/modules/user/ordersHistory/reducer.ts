@@ -6,6 +6,9 @@ import {
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
   ORDER_CHANNEL_UPDATE_DATA,
+  ORDER_UPDATE_ACCEPTED,
+  ORDER_UPDATE_FILLED,
+  ORDER_UPDATE_PARTIALLYFILLED,
 } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
@@ -30,10 +33,10 @@ export const ordersHistoryReducer = (
   state = initialOrdersHistoryState,
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
+  console.log("order action =>", action.type);
   switch (action.type) {
     case ORDERS_HISTORY_FETCH:
       return { ...state, loading: true };
-
     case ORDERS_HISTORY_DATA:
       return {
         ...state,
@@ -41,24 +44,85 @@ export const ordersHistoryReducer = (
         loading: false,
         success: true,
       };
-
     case ORDERS_HISTORY_ERROR:
       return { ...state, list: [], pageIndex: 0, loading: false };
 
-    case ORDER_CHANNEL_UPDATE_DATA: {
-      const update = action.payload.update;
-      const orders = [...state.list];
-      const idx = orders.findIndex(
-        (order) =>
-          order.txid ===
-          (update?.PartiallyFilled?.order_id || order.txid === update?.Filled?.order_id)
+    case ORDER_UPDATE_ACCEPTED:
+    case ORDER_UPDATE_FILLED:
+    case ORDER_UPDATE_PARTIALLYFILLED:
+      return orderUpdateReducer(state, action);
+
+    default:
+      return state;
+  }
+};
+
+export const orderUpdateReducer = (
+  state = initialOrdersHistoryState,
+  action: OrdersHistoryAction
+): OrdersHistoryState => {
+  console.log("order update action =>", action.type);
+
+  switch (action.type) {
+    case ORDER_UPDATE_ACCEPTED: {
+      const orderUpdate = action.payload.update.Accepted;
+      const [baseAsset, quoteAsset] = action.payload.trading_pair.split("/");
+      const order: OrderCommon = {
+        txid: BigInt(orderUpdate.order_id).toString(), // TODO: change this coversion when txid is a string
+        base_asset_type: baseAsset,
+        quote_asset_type: quoteAsset,
+        order_type: orderUpdate.order_type,
+        status: "Accepted",
+        qty: orderUpdate.qty,
+        price: orderUpdate.price,
+        order_side: orderUpdate.side,
+        trade_history: "",
+        filled_price: "0",
+        filled_qty: "0",
+        timestamp: new Date().toISOString(),
+      };
+      const list = [...state.list, order];
+      return { ...state, list: sliceArray(list, defaultStorageLimit) };
+    }
+    case ORDER_UPDATE_FILLED: {
+      console.log("order filled reducer");
+      const list = [...state.list];
+      const orderUpdate = action.payload.update.Filled;
+      const curr_qty = Number(orderUpdate.qty);
+      const curr_price = Number(orderUpdate.price);
+      const order = list.find((order) => order.txid === orderUpdate.order_id.toString());
+      const orderIdx = list.findIndex(
+        (order) => order.txid === orderUpdate.order_id.toString()
       );
-      if (idx < 0) {
-        return state;
+      const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
+      if (order) {
+        order.filled_price = (curr_price + Number(order.filled_price)).toString();
+        order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
+        order.status = "Filled";
+        order.trade_history = `{${order.trade_history},${curr_trade}`;
       }
-      const order = orders[idx];
-      order.status = Object.keys(update)[0];
-      return { ...state, list: [...orders] };
+      list[orderIdx] = order;
+      return { ...state, list: sliceArray(list, defaultStorageLimit) };
+    }
+    case ORDER_UPDATE_PARTIALLYFILLED: {
+      console.log("order patiall filled reducer");
+      const list = [...state.list];
+      const orderUpdate = action.payload.update.PartiallyFilled;
+      const curr_qty = Number(orderUpdate.qty);
+      const curr_price = Number(orderUpdate.price);
+      const order = state.list.find((order) => order.txid === orderUpdate.order_id.toString());
+      const orderIdx = list.findIndex(
+        (order) => order.txid === orderUpdate.order_id.toString()
+      );
+      const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
+      if (order) {
+        order.filled_price = (curr_price + Number(order.filled_price)).toString();
+        order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
+        order.status = "PartiallyFilled";
+        order.trade_history = `{${order.trade_history},${curr_trade}`;
+      }
+      list[orderIdx] = order;
+      return { ...state, list: sliceArray(list, defaultStorageLimit) };
     }
     default:
       return state;

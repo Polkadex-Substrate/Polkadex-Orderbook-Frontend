@@ -16,7 +16,7 @@ const Orderbook = () => {
       <AvailableMessage message="Soon">
         <S.Header>
           <h2>Orderbook</h2>
-          <Dropdown header="0.1000000">Testing</Dropdown>
+          <Dropdown header="">Testing</Dropdown>
         </S.Header>
       </AvailableMessage>
       <S.Content>
@@ -44,7 +44,7 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
     amountFixed,
     total,
   } = useOrderbookTable({ isSell, orders, contentRef });
-
+  orders = isSell ? orders.reverse() : orders;
   return (
     <>
       {orders.length ? (
@@ -94,8 +94,8 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
         </S.Table>
       ) : (
         <EmptyData
-          image={isSell ? "emptyOrderbookSell" : "emptyOrderbook"}
-          title={`No ${isSell ? "Bids" : "Asks"}`}
+          image={isSell ? "emptyOrderbook" : "emptyOrderbookSell"}
+          title={`No ${isSell ? "Asks" : "Bids"}`}
         />
       )}
     </>

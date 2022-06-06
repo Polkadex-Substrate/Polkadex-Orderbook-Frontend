@@ -27,7 +27,8 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           type: "Loading",
           message: {
             title: "Processing Deposit",
-            description: "Please wait while we process your deposit",
+            description:
+              "Please wait while we process your deposit and finalize the block, This may take a few minutes",
           },
         })
       );

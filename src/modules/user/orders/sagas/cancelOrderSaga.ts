@@ -1,6 +1,5 @@
 import { call, delay, put, select } from "redux-saga/effects";
 
-import { userOrdersHistoryFetch } from "../../ordersHistory";
 import { balancesFetch } from "../../balances";
 import {
   orderCancelData,
@@ -29,8 +28,6 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
         console.log(res.Fine);
         yield delay(1000);
         yield put(orderCancelDataDelete());
-        yield put(userOrdersHistoryFetch());
-        yield put(balancesFetch());
       } else {
         throw new Error(res.Bad);
       }

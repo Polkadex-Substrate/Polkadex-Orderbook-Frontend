@@ -26,7 +26,8 @@ export function useInformation() {
   return {
     pairName: currentMarket?.name,
     pairTicker: currentMarket?.tokenTickerName,
-    quoteUnit: getSymbolFromId("quote", currentMarket?.assetIdArray),
+    quoteUnit: currentMarket?.quote_ticker,
+    baseUnit: currentMarket?.base_ticker,
     lastPrice: Decimal.format(getTickerValue("last"), currentMarket?.price_precision, ","),
     volume24h: Decimal.format(getTickerValue("volume"), currentMarket?.price_precision, ","),
     priceHigh: Decimal.format(getTickerValue("high"), currentMarket?.price_precision, ","),

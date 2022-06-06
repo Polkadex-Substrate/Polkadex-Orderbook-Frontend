@@ -8,6 +8,7 @@ const Information = ({ onOpenMarkets }) => {
   const {
     pairName,
     pairTicker,
+    baseUnit,
     quoteUnit,
     lastPrice,
     volume24h,
@@ -28,7 +29,7 @@ const Information = ({ onOpenMarkets }) => {
         <Card title="Price 24h" description={price24h}>
           <S.Tag isNegative={isNegative}>0.00%</S.Tag>
         </Card>
-        <Card title="Volume 24h (DOT)" description={volume24h}>
+        <Card title={`Volume 24h (${quoteUnit})`} description={volume24h}>
           <S.Tag>0.00%</S.Tag>
         </Card>
         <S.Group>

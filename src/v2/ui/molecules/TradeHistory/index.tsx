@@ -7,7 +7,7 @@ import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
 export const TradeHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => (
   <>
     {orders.map((order, i) => {
-      const date = new Date(Number(order.timestamp)).toLocaleDateString();
+      const date = new Date(parseInt(order.timestamp)).toLocaleString();
       console.log("tradeHistory rendered");
       const isSell = order.order_side === "Sell";
       const baseUnit = getAsset(order.base_asset_type).symbol;

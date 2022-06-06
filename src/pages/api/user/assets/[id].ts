@@ -23,6 +23,7 @@ export default async function assets(req: NextApiRequest, res: NextApiResponse) 
 
     res.status(200).json({ data: updatedData });
   } catch (error) {
+    console.log("/api/user/assets", error);
     res.status(500).json({ data: error.message });
   }
 }

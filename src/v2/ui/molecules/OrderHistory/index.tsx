@@ -4,22 +4,24 @@ import * as S from "./styles";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
+import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
+import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
 
 export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   const dispatch = useDispatch();
   return (
     <>
       {orders?.map((order, i) => {
-        const date = new Date(Number(order.timestamp)).toLocaleTimeString();
+        const date = new Date(order.timestamp).toLocaleString();
         const isSell = order.order_side === "Sell";
         const isLimit = order.order_type === "Limit";
         const baseUnit = getAsset(order.base_asset_type).symbol;
         const quoteUnit = getAsset(order.quote_asset_type).symbol;
-        const filled = Number(order.filled_qty).toFixed(5);
-
+        const filled = Number(order.filled_qty);
+        const avgPrice = calcAveragePrice(order.trade_history);
+        const status = order.status.toUpperCase();
         return (
           <S.Card key={i} isOpenOrder={order.status === "Open"}>
             <S.CardWrapper>
@@ -46,18 +48,21 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
                 </S.CardInfo>
               )}
               <S.CardInfo>
-                <span>{Decimal.format(order.qty, amountFixed, ",")}</span>
-                <p>Amount({isLimit ? baseUnit : quoteUnit})</p>
+                <span>{calcStatusOfOrder(status)}</span>
+                <p>Status</p>
               </S.CardInfo>
+              <S.CardInfo>
+                <span>{Decimal.format(order.qty, amountFixed, ",")}</span>
+                <p>Amount</p>
+              </S.CardInfo>
+
               <S.CardInfo>
                 <span>{filled}</span>
                 <p>Filled</p>
               </S.CardInfo>
               <S.CardInfo>
-                <span>
-                  {Decimal.format(Number(order.price) * Number(order.qty), amountFixed, ",")}
-                </span>
-                <p>Total</p>
+                <span>{Decimal.format(avgPrice, priceFixed, ",")}</span>
+                <p>Avg Price</p>
               </S.CardInfo>
             </S.CardWrapper>
             {order.status === "Open" && (

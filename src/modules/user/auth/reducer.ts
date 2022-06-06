@@ -5,6 +5,9 @@ import {
   AUTH_CONNECT_PHONE_DATA,
   AUTH_CONNECT_PHONE_ERROR,
   AUTH_CONNECT_PHONE_FETCH,
+  AUTH_IMPORT_ACCOUNT_DATA,
+  AUTH_IMPORT_ACCOUNT_ERROR,
+  AUTH_IMPORT_ACCOUNT_FETCH,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_SIGN_IN_DATA,
@@ -29,6 +32,9 @@ export interface AuthState {
   connectPhoneSuccess?: boolean;
   connectPhoneLoading: boolean;
   connectPhoneError?: CommonError;
+  importAccountLoading: boolean;
+  importAccountError?: CommonError;
+  importAccountSuccess: boolean;
 }
 
 export const initialStateAuth: AuthState = {
@@ -41,6 +47,10 @@ export const initialStateAuth: AuthState = {
   signUpSuccess: false,
   connectPhoneSuccess: false,
   connectPhoneLoading: false,
+  connectPhoneError: undefined,
+  importAccountLoading: false,
+  importAccountError: undefined,
+  importAccountSuccess: false,
 };
 
 export const authReducer = (state = initialStateAuth, action: AuthAction) => {
@@ -68,6 +78,12 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state };
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
+    case AUTH_IMPORT_ACCOUNT_FETCH:
+      return { ...state, importAccountLoading: true };
+    case AUTH_IMPORT_ACCOUNT_DATA:
+      return { ...state, importAccountLoading: false, importAccountSuccess: true };
+    case AUTH_IMPORT_ACCOUNT_ERROR:
+      return { ...state, importAccountLoading: false, importAccountError: action.error };
     default:
       return state;
   }

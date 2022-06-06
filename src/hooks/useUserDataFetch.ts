@@ -4,9 +4,10 @@ import { useDispatch } from "react-redux";
 import { selectAssetsFetchSuccess } from "../modules/public/assets";
 import { selectCurrentMarket } from "../modules/public/markets";
 import {
-  balanceChannelFetch,
+  balanceTradeChannelFetch,
   balancesFetch,
   selectBalancesSuccess,
+  balanceTransferChannelFetch,
 } from "../modules/user/balances";
 import { userOrderUpdatesChannelFetch } from "../modules/user/ordersHistory";
 import { selectUserInfo } from "../modules/user/profile";
@@ -26,7 +27,8 @@ export const useUserDataFetch = () => {
 
   useEffect(() => {
     if (user.address) {
-      dispatch(balanceChannelFetch());
+      dispatch(balanceTradeChannelFetch());
+      dispatch(balanceTransferChannelFetch());
       dispatch(userOrderUpdatesChannelFetch());
     }
   }, [dispatch, user]);
