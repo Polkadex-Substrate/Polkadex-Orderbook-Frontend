@@ -13,7 +13,7 @@ export const _OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }
     header={["Pair", "Date", "Type", "Status", "Price", "Amount", "Filled", "Average Price"]}>
     {orders.map((order, i) => {
       // console.log("orderhistoryTable rows rendered");
-      const date = new Date(order.timestamp).toLocaleString();
+      const date = new Date(Number(order.timestamp)).toLocaleString();
       const isSell = order.order_side === "Ask";
       const isMarket = order.order_type === "MARKET";
       const baseUnit = getAsset(order.base_asset_type).symbol;
