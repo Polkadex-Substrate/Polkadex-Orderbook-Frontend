@@ -5,7 +5,7 @@ export const selectOrdersHistory = (state: RootState): OrderCommon[] =>
   state.user.ordersHistory.list;
 
 export const selectOpenOrdersHistory = (state: RootState): OrderCommon[] =>
-  state.user.ordersHistory.list.filter((order) => order.status === "Open");
+  state.user.ordersHistory.list.filter((order) => order.status === "Accepted");
 
 export const selectCurrentPageIndex = (state: RootState): number =>
   state.user.ordersHistory.pageIndex;

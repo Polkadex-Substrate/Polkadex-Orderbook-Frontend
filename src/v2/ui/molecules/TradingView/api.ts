@@ -138,7 +138,6 @@ export const dataFeedObject = (tradeViewApi: any, markets: Market[]) => {
         });
     },
     getTimescaleMarks,
-
     subscribeBars,
     unsubscribeBars,
     onRealtimeCallback,

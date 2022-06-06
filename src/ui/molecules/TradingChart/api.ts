@@ -92,6 +92,7 @@ const config = {
 };
 
 let updateCb = null;
+const currMarket = null;
 export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Market[]) => {
   const dataFeed = {
     onReady: (cb) => {
@@ -163,11 +164,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         to
       );
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload(
-        "PDEX/32",
-        resolutionForPayload(resolution),
-        -1296000000
-      );
+      const payload = makeOHLCVPayload("PDEX/1", resolutionForPayload(resolution), from, to);
       return axios
         .post(url, payload)
         .then(({ data }) => {
