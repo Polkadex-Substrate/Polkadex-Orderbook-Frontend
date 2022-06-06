@@ -33,7 +33,6 @@ export const ordersHistoryReducer = (
   state = initialOrdersHistoryState,
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
-  console.log("order action =>", action.type);
   switch (action.type) {
     case ORDERS_HISTORY_FETCH:
       return { ...state, loading: true };
@@ -61,14 +60,12 @@ export const orderUpdateReducer = (
   state = initialOrdersHistoryState,
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
-  console.log("order update action =>", action.type);
-
   switch (action.type) {
     case ORDER_UPDATE_ACCEPTED: {
       const orderUpdate = action.payload.update.Accepted;
       const [baseAsset, quoteAsset] = action.payload.trading_pair.split("/");
       const order: OrderCommon = {
-        txid: BigInt(orderUpdate.order_id).toString(), // TODO: change this coversion when txid is a string
+        txid: orderUpdate.order_id,
         base_asset_type: baseAsset,
         quote_asset_type: quoteAsset,
         order_type: orderUpdate.order_type,
@@ -79,7 +76,7 @@ export const orderUpdateReducer = (
         trade_history: "",
         filled_price: "0",
         filled_qty: "0",
-        timestamp: new Date().toISOString(),
+        timestamp: (new Date().getTime() / 1000).toString(),
       };
       const list = [...state.list, order];
       return { ...state, list: sliceArray(list, defaultStorageLimit) };
@@ -90,10 +87,8 @@ export const orderUpdateReducer = (
       const orderUpdate = action.payload.update.Filled;
       const curr_qty = Number(orderUpdate.qty);
       const curr_price = Number(orderUpdate.price);
-      const order = list.find((order) => order.txid === orderUpdate.order_id.toString());
-      const orderIdx = list.findIndex(
-        (order) => order.txid === orderUpdate.order_id.toString()
-      );
+      const order = list.find((order) => order.txid === orderUpdate.order_id);
+      const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
       const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
       if (order) {
         order.filled_price = (curr_price + Number(order.filled_price)).toString();
@@ -110,10 +105,8 @@ export const orderUpdateReducer = (
       const orderUpdate = action.payload.update.PartiallyFilled;
       const curr_qty = Number(orderUpdate.qty);
       const curr_price = Number(orderUpdate.price);
-      const order = state.list.find((order) => order.txid === orderUpdate.order_id.toString());
-      const orderIdx = list.findIndex(
-        (order) => order.txid === orderUpdate.order_id.toString()
-      );
+      const order = state.list.find((order) => order.txid === orderUpdate.order_id);
+      const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
       const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
       if (order) {
         order.filled_price = (curr_price + Number(order.filled_price)).toString();
