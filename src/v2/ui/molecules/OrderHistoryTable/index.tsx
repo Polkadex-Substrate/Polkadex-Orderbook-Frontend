@@ -12,9 +12,10 @@ export const _OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }
     isOpenOrder={!!orders?.find((order) => order.status === "Open")}
     header={["Pair", "Date", "Type", "Status", "Price", "Amount", "Filled", "Average Price"]}>
     {orders.map((order, i) => {
-      console.log("orderhistoryTable rows rendered");
+      // console.log("orderhistoryTable rows rendered");
       const date = new Date(order.timestamp).toLocaleString();
       const isSell = order.order_side === "Ask";
+      const isMarket = order.order_type === "MARKET";
       const baseUnit = getAsset(order.base_asset_type).symbol;
       const quoteUnit = getAsset(order.quote_asset_type).symbol;
       const avgPrice = calcAveragePrice(order.trade_history);
@@ -31,8 +32,8 @@ export const _OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }
           data={[
             { value: date },
             { value: order.order_type },
-            { value: calcStatusOfOrder(status) },
-            { value: Decimal.format(order.price, priceFixed, ",") },
+            { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
+            { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
             { value: Decimal.format(order.qty, amountFixed, ",") },
             { value: Decimal.format(order.filled_qty, amountFixed, ",") },
             {
