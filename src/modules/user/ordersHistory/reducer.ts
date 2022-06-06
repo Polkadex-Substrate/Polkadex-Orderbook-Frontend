@@ -33,6 +33,7 @@ export const ordersHistoryReducer = (
   state = initialOrdersHistoryState,
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
+  console.log("order action =>", action.type);
   switch (action.type) {
     case ORDERS_HISTORY_FETCH:
       return { ...state, loading: true };
@@ -46,7 +47,9 @@ export const ordersHistoryReducer = (
     case ORDERS_HISTORY_ERROR:
       return { ...state, list: [], pageIndex: 0, loading: false };
 
-    case ORDER_UPDATE_ACCEPTED || ORDER_UPDATE_FILLED || ORDER_UPDATE_PARTIALLYFILLED:
+    case ORDER_UPDATE_ACCEPTED:
+    case ORDER_UPDATE_FILLED:
+    case ORDER_UPDATE_PARTIALLYFILLED:
       return orderUpdateReducer(state, action);
 
     default:
@@ -58,6 +61,8 @@ export const orderUpdateReducer = (
   state = initialOrdersHistoryState,
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
+  console.log("order update action =>", action.type);
+
   switch (action.type) {
     case ORDER_UPDATE_ACCEPTED: {
       const orderUpdate = action.payload.update.Accepted;
@@ -80,12 +85,15 @@ export const orderUpdateReducer = (
       return { ...state, list: sliceArray(list, defaultStorageLimit) };
     }
     case ORDER_UPDATE_FILLED: {
+      console.log("order filled reducer");
       const list = [...state.list];
       const orderUpdate = action.payload.update.Filled;
       const curr_qty = Number(orderUpdate.qty);
       const curr_price = Number(orderUpdate.price);
-      const order = list.find((order) => order.txid === orderUpdate.order_id);
-      const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
+      const order = list.find((order) => order.txid === orderUpdate.order_id.toString());
+      const orderIdx = list.findIndex(
+        (order) => order.txid === orderUpdate.order_id.toString()
+      );
       const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
       if (order) {
         order.filled_price = (curr_price + Number(order.filled_price)).toString();
@@ -97,12 +105,15 @@ export const orderUpdateReducer = (
       return { ...state, list: sliceArray(list, defaultStorageLimit) };
     }
     case ORDER_UPDATE_PARTIALLYFILLED: {
+      console.log("order patiall filled reducer");
       const list = [...state.list];
       const orderUpdate = action.payload.update.PartiallyFilled;
       const curr_qty = Number(orderUpdate.qty);
       const curr_price = Number(orderUpdate.price);
-      const order = state.list.find((order) => order.txid === orderUpdate.order_id);
-      const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
+      const order = state.list.find((order) => order.txid === orderUpdate.order_id.toString());
+      const orderIdx = list.findIndex(
+        (order) => order.txid === orderUpdate.order_id.toString()
+      );
       const curr_trade = `{${curr_qty}-${curr_price}-${new Date().getTime() / 1000}}`;
       if (order) {
         order.filled_price = (curr_price + Number(order.filled_price)).toString();
