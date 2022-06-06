@@ -14,9 +14,9 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
   return (
     <>
       {orders?.map((order, i) => {
-        const date = new Date(order.timestamp).toLocaleString();
+        const date = new Date(Number(order.timestamp)).toLocaleString();
         const isSell = order.order_side === "Sell";
-        const isLimit = order.order_type === "Limit";
+        const isLimit = order.order_type === "LIMIT";
         const baseUnit = getAsset(order.base_asset_type).symbol;
         const quoteUnit = getAsset(order.quote_asset_type).symbol;
         const filled = Number(order.filled_qty);
@@ -48,7 +48,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
                 </S.CardInfo>
               )}
               <S.CardInfo>
-                <span>{calcStatusOfOrder(status)}</span>
+                <span>{isLimit ? calcStatusOfOrder(status) : "CLOSED"}</span>
                 <p>Status</p>
               </S.CardInfo>
               <S.CardInfo>

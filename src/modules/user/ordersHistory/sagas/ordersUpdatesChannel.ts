@@ -31,10 +31,13 @@ export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
         console.log("order update=>" + orderMsgRaw);
         const orderMsg: any = JSON.parse(orderMsgRaw);
         if (orderMsg.update.Accepted) {
+          console.log("accepted");
           yield put(userOrderUpdateAccepted(orderMsg));
         } else if (orderMsg.update.PartiallyFilled) {
+          console.log("partially filled");
           yield put(userOrderUpdatePartiallyFilled(orderMsg));
         } else if (orderMsg.update.Filled) {
+          console.log("filled");
           yield put(userOrderUpdateFilled(orderMsg));
         }
       }

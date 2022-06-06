@@ -15,10 +15,10 @@ export function useOrderHistory() {
   const dispatch = useDispatch();
 
   const orderlist = useReduxSelector(selectOrdersHistory);
-
-  const list = useMemo(() => {
-    return sortOrdersDescendingTime(orderlist);
-  }, [orderlist]);
+  const list = sortOrdersDescendingTime(orderlist).map((order) => ({
+    ...order,
+    timestamp: (parseFloat(order.timestamp) * 1000).toFixed(0),
+  }));
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasUser);

@@ -20,7 +20,7 @@ import {
   EmptyData,
 } from "@orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser } from "@polkadex/orderbook-modules";
+import { selectHasUser, selectOrdersHistory } from "@polkadex/orderbook-modules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
