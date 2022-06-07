@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Main = styled.div`
   ${({ theme }) => css`
     min-width: 100vw;
@@ -13,8 +14,8 @@ export const Main = styled.div`
 
 export const Wrapper = styled.div`
   display: grid;
-  grid-gap: 1rem;
-  margin: 4.5rem auto 0 auto;
+  grid-gap: 2rem;
+  margin: 5.1rem auto 0 auto;
   width: 100%;
   flex: 1;
   padding: 1rem;
@@ -22,6 +23,21 @@ export const Wrapper = styled.div`
     grid-template-columns: minmax(30rem, 34rem) 1fr;
   }
 `;
+export const GoBack = styled.button`
+  ${({ theme }) => css`
+    padding: 1rem 0;
+    cursor: pointer;
+    transition: opacity 0.5s ease-in-out;
+    width: fit-content;
+    :hover {
+      opacity: 0.7;
+    }
+    ${Icon} {
+      margin-right: 0.5rem;
+    }
+  `}
+`;
+
 export const ContainerWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,7 +53,7 @@ export const Grid = styled.div`
     }
   `}
 `;
-export const Container = styled.section`
+export const Container = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
     box-shadow: ${theme.shadows.tertiary};

@@ -29,7 +29,7 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
           message: {
             title: "Processing your transaction...",
             description:
-              "Please sign the transaction and wait for block finalization, this may take a few minute",
+              "Please sign the transaction and wait for block finalization, this may take a few minutes",
           },
         })
       );
@@ -43,7 +43,7 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
             message: {
               title: "Congratulations!",
               description:
-                "New proxy account Registered, Please scan the QR code using polkadex app",
+                "New proxy account registered, please scan the QR code using polkadex app",
             },
           })
         );

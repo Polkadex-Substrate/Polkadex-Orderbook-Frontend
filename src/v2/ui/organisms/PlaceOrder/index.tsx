@@ -5,13 +5,7 @@ import { useState } from "react";
 import * as S from "./styles";
 
 import { Range, ButtonStatus } from "@orderbook/v2/ui/molecules";
-import {
-  AvailableMessage,
-  Icon,
-  Tabs,
-  TabContent,
-  TabHeader,
-} from "@polkadex/orderbook-ui/molecules";
+import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
 const PlaceOrder = () => {
@@ -117,7 +111,9 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             <span>{isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}</span>
           </div>
         </S.InputWrapper>
-        <Range values={rangeValue} setValues={updateRange} />
+        <S.RangeWrapper>
+          <Range values={rangeValue} setValues={updateRange} />
+        </S.RangeWrapper>
       </S.FormInput>
       <S.Available>
         <p>Available:</p>

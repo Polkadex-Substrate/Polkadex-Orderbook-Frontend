@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.white};
@@ -18,15 +17,16 @@ export const Container = styled.div`
 `;
 
 export const Action = styled.div`
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  ${Icon} {
+  ${({ theme }) => css`
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: background 0.2s ease-in-out;
     cursor: pointer;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out;
+    padding: 1.5rem;
+    border-radius: 10rem;
     :hover {
-      opacity: 0.6;
+      background: ${theme.colors.secondaryBackgroundOpacity};
     }
-  }
+  `}
 `;
