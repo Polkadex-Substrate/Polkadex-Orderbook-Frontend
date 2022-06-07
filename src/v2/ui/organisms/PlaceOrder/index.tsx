@@ -13,6 +13,8 @@ import {
   TabHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 
 const PlaceOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
@@ -79,7 +81,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     orderSide,
     hasUser,
   } = usePlaceOrder(isSell, isLimit);
-
+  const marketPrecision = useReduxSelector(selectCurrentMarket).price_precision;
   return (
     <form onSubmit={executeOrder}>
       {isLimit && (
@@ -122,7 +124,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       <S.Available>
         <p>Available:</p>
         <span>
-          {availableAmount} {isSell ? baseTicker : quoteTicker}
+          {availableAmount.toFixed(marketPrecision)} {isSell ? baseTicker : quoteTicker}
         </span>
       </S.Available>
       <S.Box>
