@@ -32,8 +32,9 @@ export const Card = styled.div<{ isOpenOrder?: boolean }>`
   `}
 `;
 export const CardWrapper = styled.div`
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(6, auto);
+  grid-template-columns: repeat(7, auto);
   grid-gap: 2rem;
   overflow: auto;
   ::-webkit-scrollbar {

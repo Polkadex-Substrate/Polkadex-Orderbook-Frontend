@@ -28,7 +28,7 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           message: {
             title: "Processing Deposit",
             description:
-              "Please wait while we process your deposit and finalize the block, This may take a few minutes",
+              "Please wait while the deposit is processed and the block is finalized. This may take a few mins.",
           },
         })
       );
@@ -48,7 +48,8 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
             type: "Successful",
             message: {
               title: "Deposit Successful",
-              description: "Congrats! You have successfully deposited to the enclave.",
+              description:
+                "Congratulations! You have successfully deposited assets to your proxy account.",
             },
           })
         );

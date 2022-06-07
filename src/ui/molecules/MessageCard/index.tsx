@@ -28,9 +28,9 @@ function getColor(messageType: AlertTypes): Colors {
       return "green";
 
     case "Loading":
-      return "secondaryBackgroundOpacity";
+      return "secondaryBackground";
 
     default:
-      return "secondaryBackgroundOpacity";
+      return "secondaryBackground";
   }
 }

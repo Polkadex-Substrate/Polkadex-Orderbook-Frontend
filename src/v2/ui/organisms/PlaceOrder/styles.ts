@@ -113,6 +113,9 @@ export const InputLabel = styled.div`
   opacity: 0.5;
 `;
 
+export const RangeWrapper = styled.div`
+  padding: 0 1rem;
+`;
 export const InputWrapper = styled.div`
   ${({ theme }) => css`
     flex: 1;

@@ -30,7 +30,7 @@ export function* signUpSaga(action: SignUpFetch) {
           message: {
             title: "Processing your transaction...",
             description:
-              "Please sign the transaction and wait for block finalization, this may take a few minute",
+              "Please sign the transaction and wait for block finalization, this may take a few minutes",
           },
         })
       );
@@ -43,8 +43,8 @@ export function* signUpSaga(action: SignUpFetch) {
           alertPush({
             type: "Successful",
             message: {
-              title: "Congrtulations!",
-              description: "New proxy account Registered",
+              title: "Congratulations!",
+              description: "New proxy account registered",
             },
           })
         );

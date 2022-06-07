@@ -55,7 +55,7 @@ export const Range = ({ values, setValues }: Props) => {
             style={{
               ...props.style,
               height: "20px",
-              width: "35px",
+              width: "30px",
               borderRadius: "4px",
               backgroundColor: "#E6007A",
               display: "flex",

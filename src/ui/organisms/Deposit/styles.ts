@@ -4,7 +4,15 @@ import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecul
 import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 import { Box as InputPrimary } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  form {
+    padding: 2rem 0;
+  }
+`;
+export const Form = styled.div`
+  padding: 0 2rem;
+  margin-top: 1rem;
+`;
 export const WrapperContainer = styled.div`
   display: flex;
   padding: 0 2rem;

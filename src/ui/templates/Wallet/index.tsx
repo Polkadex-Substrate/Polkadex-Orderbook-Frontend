@@ -4,8 +4,7 @@ import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
-import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
+import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
@@ -40,6 +39,11 @@ export const WalletTemplate = () => {
         <S.Wrapper>
           <WalletContent title="Tokens" locked={false} hasLink={false} />
           <S.ContainerWrapper>
+            <S.GoBack onClick={() => router.back()}>
+              <Icon name="SingleArrowLeft" size="extraSmall" />
+              Go back
+            </S.GoBack>
+
             <S.EstimateBalance>
               <S.EstimatedBalanceWrapper>
                 <h2>Estimated Balance</h2>
@@ -99,7 +103,8 @@ export const WalletTemplate = () => {
                   <Deposit />
                 </TabContent>
                 <TabContent>
-                  <Withdraw />
+                  <p style={{ padding: "2rem", textAlign: "center" }}>Soon</p>
+                  {/* <Withdraw /> */}
                 </TabContent>
               </S.Container>
               <History />

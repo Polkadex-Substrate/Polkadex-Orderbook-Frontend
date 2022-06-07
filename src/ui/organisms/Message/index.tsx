@@ -23,8 +23,8 @@ export const Message = ({
         <MessageCard icon={type} title={title} description={description}>
           {children}
         </MessageCard>
-        <S.Action>
-          <Icon name="Close" size="extraSmall" color="black" onClick={onClose} />
+        <S.Action onClick={onClose}>
+          <Icon name="Close" size="extraSmall" color="black" />
         </S.Action>
       </S.Container>
     </S.Wrapper>
