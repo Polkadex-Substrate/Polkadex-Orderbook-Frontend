@@ -75,7 +75,6 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
     orderSide,
     hasUser,
   } = usePlaceOrder(isSell, isLimit);
-  const marketPrecision = useReduxSelector(selectCurrentMarket).price_precision;
   return (
     <form onSubmit={executeOrder}>
       {isLimit && (
@@ -120,7 +119,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
       <S.Available>
         <p>Available:</p>
         <span>
-          {availableAmount.toFixed(marketPrecision)} {isSell ? baseTicker : quoteTicker}
+          {Number(availableAmount).toFixed(5)} {isSell ? baseTicker : quoteTicker}
         </span>
       </S.Available>
       <S.Box>
