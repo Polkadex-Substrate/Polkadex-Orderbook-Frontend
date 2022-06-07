@@ -12,7 +12,6 @@ export const TradeHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }:
           const isSell = order.order_side === "Sell";
           const baseUnit = getAsset(order.base_asset_type).symbol;
           const quoteUnit = getAsset(order.quote_asset_type).symbol;
-          console.log("TradeHistoryTable rendered");
           return (
             <TableCard
               key={i}

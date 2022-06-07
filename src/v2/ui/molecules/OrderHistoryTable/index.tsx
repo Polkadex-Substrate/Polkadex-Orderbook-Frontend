@@ -8,7 +8,6 @@ import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTrad
 import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
 
 export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
-  console.log("orders in component", orders);
   return (
     <TableRow
       isOpenOrder={
