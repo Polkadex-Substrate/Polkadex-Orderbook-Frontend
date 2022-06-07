@@ -76,8 +76,8 @@ export const ordersHistoryReducer = (
       const curr_trade = `${curr_qty}-${curr_price}-${new Date().getTime() / 1000}`;
       if (order) {
         order.filled_price = (
-          curr_price +
-          Number(order.filled_price) * Number(order.filled_qty)
+          +Number(order.filled_price) +
+          curr_price * Number(order.filled_qty)
         ).toString();
         order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
         order.status = "Filled";
@@ -97,8 +97,8 @@ export const ordersHistoryReducer = (
       const curr_trade = `${curr_qty}-${curr_price}-${new Date().getTime() / 1000}`;
       if (order) {
         order.filled_price = (
-          curr_price +
-          Number(order.filled_price) * Number(order.filled_qty)
+          +Number(order.filled_price) +
+          curr_price * Number(order.filled_qty)
         ).toString();
         order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
         order.status = "PartiallyFilled";
