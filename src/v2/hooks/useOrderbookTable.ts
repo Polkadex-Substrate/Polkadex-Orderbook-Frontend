@@ -53,7 +53,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
    * @description -Get Volume of ther orders
    */
   const cumulativeVolume = isSell
-    ? accumulateVolume(orders.slice(0).reverse()).slice(0).reverse()
+    ? accumulateVolume(orders).slice(0).reverse()
     : accumulateVolume(orders);
   const valumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
