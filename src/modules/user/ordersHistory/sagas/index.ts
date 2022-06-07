@@ -7,5 +7,5 @@ import { orderUpdatesChannelSaga } from "./ordersUpdatesChannel";
 
 export function* rootOrdersHistorySaga() {
   yield takeLeading(ORDERS_HISTORY_FETCH, ordersHistorySaga);
-  yield takeLatest(ORDERS_CHANNEL_FETCH, orderUpdatesChannelSaga);
+  yield takeLeading(ORDERS_CHANNEL_FETCH, orderUpdatesChannelSaga);
 }

@@ -8,7 +8,6 @@ import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTrad
 import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
 
 export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
-  console.log("orders in component", orders);
   return (
     <TableRow
       isOpenOrder={
@@ -31,12 +30,12 @@ export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }:
         const isMarket = order.order_type === "MARKET";
         const baseUnit = getAsset(order.base_asset_type).symbol;
         const quoteUnit = getAsset(order.quote_asset_type).symbol;
-        const avgPrice = calcAveragePrice(order.trade_history);
+        const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
         const status = order.status.toUpperCase();
         return (
           <TableCard
             key={i}
-            isOpenOrder={order.status === "Accepted"}
+            isOpenOrder={order.status === "Accepted" && !isMarket}
             isSell={isSell}
             orderSide={order.order_side}
             baseUnit={baseUnit}

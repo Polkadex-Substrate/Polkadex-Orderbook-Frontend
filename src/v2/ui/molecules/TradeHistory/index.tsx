@@ -8,7 +8,6 @@ export const TradeHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
   <>
     {orders.map((order, i) => {
       const date = new Date(parseInt(order.timestamp)).toLocaleString();
-      console.log("tradeHistory rendered");
       const isSell = order.order_side === "Sell";
       const baseUnit = getAsset(order.base_asset_type).symbol;
       const quoteUnit = getAsset(order.quote_asset_type).symbol;
