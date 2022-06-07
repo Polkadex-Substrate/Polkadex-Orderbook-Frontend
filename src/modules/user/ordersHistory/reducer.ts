@@ -75,7 +75,10 @@ export const ordersHistoryReducer = (
       const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
       const curr_trade = `${curr_qty}-${curr_price}-${new Date().getTime() / 1000}`;
       if (order) {
-        order.filled_price = (curr_price + Number(order.filled_price)).toString();
+        order.filled_price = (
+          curr_price +
+          Number(order.filled_price) * Number(order.filled_qty)
+        ).toString();
         order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
         order.status = "Filled";
         order.trade_history = `${order.trade_history},${curr_trade}`;
@@ -93,7 +96,10 @@ export const ordersHistoryReducer = (
       const orderIdx = list.findIndex((order) => order.txid === orderUpdate.order_id);
       const curr_trade = `${curr_qty}-${curr_price}-${new Date().getTime() / 1000}`;
       if (order) {
-        order.filled_price = (curr_price + Number(order.filled_price)).toString();
+        order.filled_price = (
+          curr_price +
+          Number(order.filled_price) * Number(order.filled_qty)
+        ).toString();
         order.filled_qty = (curr_qty + Number(order.filled_qty)).toString();
         order.status = "PartiallyFilled";
         order.trade_history = `${order.trade_history},${curr_trade}`;

@@ -6,8 +6,8 @@ import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
 import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
+import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
 
 export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
         const baseUnit = getAsset(order.base_asset_type).symbol;
         const quoteUnit = getAsset(order.quote_asset_type).symbol;
         const filled = Number(order.filled_qty);
-        const avgPrice = calcAveragePrice(order.trade_history);
+        const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
         const status = order.status.toUpperCase();
         return (
           <S.Card key={i} isOpenOrder={order.status === "Open"}>
@@ -65,7 +65,7 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
                 <p>Avg Price</p>
               </S.CardInfo>
             </S.CardWrapper>
-            {order.status === "Open" && (
+            {order.status === "Accepted" && isLimit && (
               <S.CardActions>
                 <div>
                   <AvailableMessage message="Soon">
