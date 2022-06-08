@@ -3,6 +3,7 @@ import * as T from "./types";
 
 import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
 import { useInformation } from "@polkadex/orderbook/v2/hooks";
+import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 
 const Information = ({ onOpenMarkets }) => {
   const {
@@ -54,10 +55,12 @@ const Information = ({ onOpenMarkets }) => {
 const Card = ({ title, description, isHorizontal, textColor, children }: T.Props) => (
   <S.Card isHorizontal={isHorizontal} textColor={textColor}>
     <S.CardTitle>{title}</S.CardTitle>
-    <S.CardContainer>
-      {description && <p>{description}</p>}
-      {children && <S.CardChildren hasMargin={!!description}>{children}</S.CardChildren>}
-    </S.CardContainer>
+    <AvailableMessage message="Soon" isVisible>
+      <S.CardContainer>
+        {description && <p>{description}</p>}
+        {children && <S.CardChildren hasMargin={!!description}>{children}</S.CardChildren>}
+      </S.CardContainer>
+    </AvailableMessage>
   </S.Card>
 );
 

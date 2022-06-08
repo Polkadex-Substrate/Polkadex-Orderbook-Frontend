@@ -46,9 +46,8 @@ export const WalletTemplate = () => {
 
             <S.EstimateBalance>
               <S.EstimatedBalanceWrapper>
-                <h2>Estimated Balance</h2>
+                <h2>My Wallet</h2>
                 <p>0.0 </p>
-                <span>~0.00 USD</span>
               </S.EstimatedBalanceWrapper>
               <S.HeaderContainer>
                 <S.Header>
@@ -103,7 +102,7 @@ export const WalletTemplate = () => {
                   <Deposit />
                 </TabContent>
                 <TabContent>
-                  <p style={{ padding: "2rem", textAlign: "center" }}>Soon</p>
+                  <p style={{ padding: "2rem", textAlign: "center" }}>Coming Soon</p>
                   {/* <Withdraw /> */}
                 </TabContent>
               </S.Container>

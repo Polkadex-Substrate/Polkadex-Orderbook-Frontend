@@ -130,6 +130,7 @@ export const OrderForm = ({ isSell = false, isLimit = false }) => {
             placeholder={isLimit ? "Total" : "Estimated Amount"}
             autoComplete="off"
             disabled={isOrderLoading}
+            readOnly
           />
           <div>
             <span>{isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}</span>

@@ -15,9 +15,6 @@ export const Footer = () => {
           </span>
         </S.Connection>
       </AvailableMessage>
-      <Dropdown header={<DeveloperHeader />} direction="topRight" priority="high">
-        <DeveloperContent />
-      </Dropdown>
     </S.Main>
   );
 };

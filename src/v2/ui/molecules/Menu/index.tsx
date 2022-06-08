@@ -7,7 +7,8 @@ export const Menu = () => {
   return (
     <S.Main>
       <Dropdown header={<Header />} direction="bottomRight" priority="high">
-        <Content />
+        <p>Soon</p>
+        {/* <Content /> */}
       </Dropdown>
     </S.Main>
   );

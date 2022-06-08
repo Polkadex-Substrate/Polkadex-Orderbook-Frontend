@@ -29,7 +29,7 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
           message: {
             title: "Processing your transaction...",
             description:
-              "Please sign the transaction and wait for block finalization, this may take a few minutes",
+              "Please sign the transaction and wait for block finalization. This may take a few minutes",
           },
         })
       );
