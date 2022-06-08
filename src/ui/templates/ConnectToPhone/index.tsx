@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 
 import {
+  AvailableMessage,
   Button,
   Dropdown,
   Icon,
@@ -86,14 +87,16 @@ export const ConnectToPhone = () => {
                     <p>Any device at any time, trade on the go</p>
                   </S.StepTitle>
                   <S.StepContent>
-                    <S.Download>
-                      <S.DownloadButton href="#">
-                        <Icons.DownloadApple />
-                      </S.DownloadButton>
-                      <S.DownloadButton href="#">
-                        <Icons.DownloadAndroid />
-                      </S.DownloadButton>
-                    </S.Download>
+                    <AvailableMessage isVisible>
+                      <S.Download>
+                        <S.DownloadButton href="#">
+                          <Icons.DownloadApple />
+                        </S.DownloadButton>
+                        <S.DownloadButton href="#">
+                          <Icons.DownloadAndroid />
+                        </S.DownloadButton>
+                      </S.Download>
+                    </AvailableMessage>
                   </S.StepContent>
                 </S.Step>
                 <S.Step>

@@ -11,7 +11,7 @@ import {
   Search,
   QuickLogin,
 } from "@orderbook/v2/ui/molecules";
-import { Button, Polkadex } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Button, Polkadex } from "@polkadex/orderbook-ui/molecules";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -27,10 +27,14 @@ export const Header = () => {
           <Search />
         </S.AsideLeft>
         <S.AsideRight>
-          <Menu />
+          <AvailableMessage message="Soon" isPriority>
+            <Menu />
+          </AvailableMessage>
           {hasUser ? (
             <>
-              <Notifications />
+              <AvailableMessage message="Soon" isPriority>
+                <Notifications />
+              </AvailableMessage>
               <MyWallet />
               <MyAccount />
             </>
