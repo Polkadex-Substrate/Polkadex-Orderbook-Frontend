@@ -3,11 +3,11 @@ import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
-import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
+import { HeaderBack, TemporaryMessage } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
   selectProxyAccount,
@@ -37,6 +37,8 @@ const defaultValues = {
 };
 
 export const LoginTemplate = () => {
+  const [state, setState] = useState(true);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -59,6 +61,11 @@ export const LoginTemplate = () => {
   if (hasUser) return <div />;
   return (
     <S.Main>
+      <TemporaryMessage
+        message="The tech team is using this testnet for development. Expect frequent restarts of the testnet and wipe offs leading to loss of your test token balances and order history. You may have to create new proxy accounts when the testnet is restarted."
+        isVisible={state}
+        onClose={() => setState(false)}
+      />
       <S.Wrapper>
         <HeaderBack />
         <S.Container>
