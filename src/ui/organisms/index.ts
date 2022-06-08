@@ -10,6 +10,4 @@ export * from "./TradeHistory";
 export * from "./TransactionHistory";
 export * from "./Tokens";
 export * from "./History";
-export * from "./Deposit";
-export * from "./Withdraw";
-export * from "./QrCode";
+export * from "./TemporaryMessage";
