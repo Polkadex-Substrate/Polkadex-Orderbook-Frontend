@@ -87,7 +87,7 @@ export const ConnectToPhone = () => {
                     <p>Any device at any time, trade on the go</p>
                   </S.StepTitle>
                   <S.StepContent>
-                    <AvailableMessage isVisible>
+                    <AvailableMessage>
                       <S.Download>
                         <S.DownloadButton href="#">
                           <Icons.DownloadApple />
