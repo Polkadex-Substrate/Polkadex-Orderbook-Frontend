@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const TableRow = ({ isOpenOrder = false, header = [], children }: T.Props) => (
   <S.Wrapper>
@@ -50,13 +50,15 @@ export const TableCard = ({
         </S.Info>
       ))}
       {isOpenOrder && (
-        <S.Actions hasOrder={filledQuantity < 100}>
-          <div>
-            <ul>
-              <S.Cancel>Cancel</S.Cancel>
-            </ul>
-          </div>
-        </S.Actions>
+        <AvailableMessage message="Soon">
+          <S.Actions hasOrder={filledQuantity < 100}>
+            <div>
+              <ul>
+                <S.Cancel>Cancel</S.Cancel>
+              </ul>
+            </div>
+          </S.Actions>
+        </AvailableMessage>
       )}
     </S.CardFlex>
   </S.Container>
