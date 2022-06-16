@@ -45,7 +45,7 @@ async function fetchEnclaveRpcClientChannel(enclaveWsClient: Client) {
       return emitter(enclaveRpcClientError(error.message));
     });
 
-    enclaveWsClient.on("closee", () => {
+    enclaveWsClient.on("close", () => {
       emitter(enclaveRpcConnectionOpen(enclaveWsClient));
     });
     return () => {

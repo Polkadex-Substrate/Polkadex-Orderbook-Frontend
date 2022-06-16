@@ -164,7 +164,7 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
         to
       );
       // TODO: Make paylaod dynamic with symbolInfo
-      const payload = makeOHLCVPayload("PDEX/1", resolutionForPayload(resolution), from, to);
+      const payload = makeOHLCVPayload("PDEX/100", resolutionForPayload(resolution), from, to);
       return axios
         .post(url, payload)
         .then(({ data }) => {
