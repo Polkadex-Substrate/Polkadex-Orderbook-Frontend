@@ -15,9 +15,16 @@ const MarketOrder = () => {
     <S.Section>
       <Tabs>
         <S.Header>
-          <TabHeader>Buy DOT</TabHeader>
-          <TabHeader>Sell DOT</TabHeader>
-          <Dropdown title={state}>
+          <S.HeaderWrapper>
+            <TabHeader>
+              <S.HeaderContent>Buy DOT </S.HeaderContent>
+            </TabHeader>
+            <TabHeader>
+              <S.HeaderContent>Sell DOT </S.HeaderContent>
+            </TabHeader>
+          </S.HeaderWrapper>
+
+          <Dropdown header={state}>
             <>
               <DropdownItem title="Market Order" handleAction={handleChange} />
               <DropdownItem title="Limit Order" handleAction={handleChange} />

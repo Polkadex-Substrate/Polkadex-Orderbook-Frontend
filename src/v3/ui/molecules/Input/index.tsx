@@ -1,5 +1,7 @@
 import * as S from "./styles";
 
+import { Icon } from "@polkadex/orderbook-ui/molecules";
+
 export type InputProps = {
   label?: string;
   icon?: "None" | "ArrowVerticalBottom" | "ArrowVerticalTop";
@@ -22,7 +24,8 @@ const Input = ({
     <S.Wrapper>
       <S.ContainerInput>
         <S.Label>
-          {icon !== "None" && <img src={`/img/icons/${icon}.svg`} />} {label}
+          <Icon name={icon} size="medium" style={{ marginRight: 5 }} />
+          {label}
         </S.Label>
         <S.Box inputInfo={inputInfo} fullWidth={fullWidth}>
           <S.Input

@@ -13,7 +13,7 @@ export type MarketOrderActionProps = {
 const MarketOrderAction = ({ type = "Buy" }: MarketOrderActionProps) => (
   <S.WrapperOrder>
     <S.ContainerWallet>
-      <Icon name="Wallet" background="secondaryBackground" />
+      <Icon name="Wallet" background="secondaryBackground" size="extraLarge" stroke="white" />
       <S.WrapperBalance>
         <span>Available</span>
         <S.Span>0.93871332 DOT</S.Span>
