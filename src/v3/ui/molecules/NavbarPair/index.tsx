@@ -24,7 +24,7 @@ const NavbarPair = ({ coin, pairs }: NavbarPairProps) => {
       <S.WrapperCoin>
         <S.Label>Coin</S.Label>
         <S.Container>
-          <S.Image src={`img/cryptocurrencies/${coin}.svg`} />
+          <Icon isToken name={coin} size="large" color="text" />
           <S.Name>{coin}</S.Name>
         </S.Container>
       </S.WrapperCoin>
@@ -33,13 +33,12 @@ const NavbarPair = ({ coin, pairs }: NavbarPairProps) => {
       </S.WrapperExchange>
       <S.WrapperCoin>
         <S.Label>Pair</S.Label>
-
-        <Dropdown title={state}>
-          <>
+        <Dropdown header={state} direction="bottom">
+          <S.Content>
             {pairs.map(({ id, name }) => (
               <DropdownItem key={id} title={name} handleAction={handleChange} />
             ))}
-          </>
+          </S.Content>
         </Dropdown>
       </S.WrapperCoin>
     </S.Wrapper>

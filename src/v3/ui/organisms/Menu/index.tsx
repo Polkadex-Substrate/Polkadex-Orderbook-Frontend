@@ -78,7 +78,7 @@ const Menu = ({ handleChange }: MenuProps) => {
         </S.WrapperIcon>
       </S.WrapperLinks>
       <S.WrapperProfile>
-        <Icon name="Notifications" background="none" />
+        <Icon name="Notifications" background="none" size="large" />
         <S.Profile src="/img/Avatar.png" />
       </S.WrapperProfile>
     </S.Wrapper>

@@ -1,5 +1,7 @@
 import * as S from "./styles";
 
+import { Icons } from "@polkadex/orderbook-ui/atoms";
+
 export type NavbarDropdownProps = {
   title: string;
   children?: JSX.Element;
@@ -12,7 +14,7 @@ const NavbarDropdown = ({ title = "NavbarDropdown", children }: NavbarDropdownPr
         <S.Wrapper></S.Wrapper>
         <S.Title>{title}</S.Title>
         <S.WrapperImage>
-          <S.Image src="/img/icons/ArrowTop.svg" />
+          <Icons.ArrowBottom stroke="white" />
         </S.WrapperImage>
       </S.Header>
       <S.WrapperContent className="animation">

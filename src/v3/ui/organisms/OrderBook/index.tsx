@@ -49,14 +49,14 @@ const OrderBook = ({ data }: Props) => {
             />
           </S.ContainerActions>
           <Dropdown header={sizeState}>
-            <>
+            <S.DropdownContent>
               <DropdownItem title={0.1} handleAction={handleAction} />
               <DropdownItem title={0.01} handleAction={handleAction} />
               <DropdownItem title={0.001} handleAction={handleAction} />
               <DropdownItem title={0.0001} handleAction={handleAction} />
               <DropdownItem title={0.00001} handleAction={handleAction} />
               <DropdownItem title={0.000001} handleAction={handleAction} />
-            </>
+            </S.DropdownContent>
           </Dropdown>
         </S.ContainerTitle>
       </S.WrapperTitle>

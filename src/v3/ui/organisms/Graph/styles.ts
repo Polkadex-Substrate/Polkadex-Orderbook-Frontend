@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div`
@@ -29,6 +29,13 @@ export const FlexWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+export const DropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.primaryBackground};
+    padding: 1rem;
+    border-radius: 0.5rem;
+  `}
 `;
 export const List = styled.div`
   display: grid;

@@ -24,7 +24,10 @@ export const WrapperImage = styled.div`
     border-radius: 0.5rem;
     width: 2rem;
     height: 2rem;
-
+    padding: 0.6rem;
+    svg {
+      width: 100%;
+    }
     :hover {
       opacity: 0.8;
     }

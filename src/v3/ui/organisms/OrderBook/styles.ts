@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div`
@@ -19,6 +19,16 @@ export const WrapperTitle = styled.div`
   align-items: center;
   margin-bottom: 1rem;
   padding-right: 2rem;
+`;
+export const DropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.primaryBackground};
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  `}
 `;
 export const ContainerActions = styled.div`
   display: grid;

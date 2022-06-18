@@ -1,5 +1,7 @@
 import * as S from "./styles";
 
+import { Icons } from "@polkadex/orderbook-ui/atoms";
+
 export type OrderBookProps = {
   icon: string;
   filterState?: string;
@@ -7,9 +9,11 @@ export type OrderBookProps = {
   active?: boolean;
 };
 const OrderBookIcon = ({ icon, filterState, handleChange }: OrderBookProps) => {
+  const IconComponent = Icons[icon];
+
   return (
     <S.Wrapper active={filterState === icon} onClick={() => handleChange(icon)}>
-      <S.Image src={`/img/icons/${icon}.svg`} />
+      <IconComponent />
     </S.Wrapper>
   );
 };

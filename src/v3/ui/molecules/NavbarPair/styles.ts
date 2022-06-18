@@ -20,6 +20,16 @@ export const Label = styled.span`
   margin-bottom: 0.3rem;
 `;
 
+export const Content = styled.div`
+  ${({ theme }) => css`
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: ${theme.colors.primaryBackground};
+  `}
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: row;

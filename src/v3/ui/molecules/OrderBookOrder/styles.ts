@@ -9,7 +9,9 @@ export const ContainerFlex = styled.div`
   display: flex;
   align-items: center;
 `;
-
+export const IconWrapper = styled.div`
+  margin: 0 1rem;
+`;
 export const Image = styled.img`
   margin: 0 1rem;
   width: 1.5rem;

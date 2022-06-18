@@ -18,7 +18,7 @@ const wrapperModifier = {
     padding: ${theme.spacings.xxsmall} ${theme.spacings.xlarge};
   `,
   Dark: (theme: DefaultTheme) => css`
-    background-color: ${theme.colors.text};
+    background-color: ${theme.colors.secondaryBackground};
     color: ${theme.colors.white};
   `,
   Light: (theme: DefaultTheme) => css`
@@ -33,7 +33,7 @@ const wrapperModifier = {
 export const Wrapper = styled.div<Partial<ListItemProps>>`
   ${({ theme, size, darkMode, fullWidth }) => css`
     border: 0;
-    border-radius: ${theme.border.radius};
+    border-radius: 0.5rem;
     padding: ${theme.spacings.xxsmall};
     color: white;
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);

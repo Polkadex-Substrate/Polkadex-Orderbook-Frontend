@@ -68,8 +68,6 @@ export function Trading() {
           <Graph orderbook={orderbook} graphData={graphData} />
           <MarketOrder />
         </S.WrapperGraph>
-        <button onClick={getCoinMarketCap}>Make Requisicion</button>
-        <button onClick={() => console.log(coin)}>Check</button>
 
         <Transactions data={transactions} remove={removeTransactionsOrder} />
       </S.WrapperMain>

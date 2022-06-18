@@ -3,16 +3,18 @@ import NavbarSingleLanguage from "../NavbarSingleLanguage";
 
 import * as S from "./styles";
 
+import { Icons } from "@polkadex/orderbook-ui/atoms";
+
 const NavbarLanguage = () => {
   return (
     <S.Wrapper>
       <S.Header>
         <S.WrapperFlag>
-          <S.Image src="/img/icons/EN.svg" />
+          <S.Image src="/img/EN.svg" />
         </S.WrapperFlag>
         <S.Title>EN/USD</S.Title>
         <S.WrapperImage>
-          <S.Image src="/img/icons/ArrowTop.svg" />
+          <Icons.ArrowBottom stroke="white" />
         </S.WrapperImage>
       </S.Header>
       <S.WrapperContent className="animation">

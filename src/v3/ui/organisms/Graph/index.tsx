@@ -20,17 +20,21 @@ const Graph = ({ orderbook, graphData }: IGraph) => {
         <S.Header>
           <S.FlexWrapper>
             <S.List>
-              <Icon name="Edit" />
-              <Icon name="History" />
+              <Icon name="Edit" size="extraSmall" />
+              <Icon name="History" size="extraSmall" />
             </S.List>
           </S.FlexWrapper>
-          <Dropdown title="Candles" />
+          <Dropdown title="Candles">
+            <S.DropdownContent>
+              <p>Testing</p>
+            </S.DropdownContent>
+          </Dropdown>
           <S.FlexWrapper>
             <S.List>
               <ListItemButton title="Original" size="Small" />
               <ListItemButton title="Trading View" size="Small" />
               <ListItemButton title="Deep Market" size="Small" />
-              <Icon name="Expand" />
+              <Icon name="Expand" size="extraSmall" />
             </S.List>
           </S.FlexWrapper>
         </S.Header>
