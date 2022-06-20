@@ -6447,6 +6447,11 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+klinecharts@^8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/klinecharts/-/klinecharts-8.5.0.tgz#48337c79c76100738e307267cd4d3c43578ce195"
+  integrity sha512-7F34LO3N1F/2qK4xlDSFQ4UXFE1Skvo754lXHfOdI4KtkV0Fo65lJzdpShTCdB6r1BzWxIfBOHufzRjTPfrLHA==
+
 lazystream@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/lazystream/-/lazystream-1.0.1.tgz#494c831062f1f9408251ec44db1cba29242a2638"

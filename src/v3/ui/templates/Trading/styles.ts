@@ -19,6 +19,8 @@ export const WrapperMain = styled.div`
 `;
 export const WrapperGraph = styled.div`
   display: grid;
+  min-height: 50vh;
+
   ${media.greaterThan("large")`
     grid-template-columns: 3fr auto;
   `}
