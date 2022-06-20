@@ -5,6 +5,7 @@ export type ListItemProps = {
   size?: "Small" | "Medium" | "Large";
   darkMode?: boolean;
   fullWidth?: boolean;
+  isActive?: boolean;
 };
 
 const ListItemButton = ({
@@ -12,8 +13,9 @@ const ListItemButton = ({
   size = "Medium",
   darkMode = true,
   fullWidth = false,
+  isActive = false,
 }: ListItemProps) => (
-  <S.Wrapper size={size} darkMode={darkMode} fullWidth={fullWidth}>
+  <S.Wrapper isActive={isActive} size={size} darkMode={darkMode} fullWidth={fullWidth}>
     {title}
   </S.Wrapper>
 );

@@ -37,12 +37,28 @@ export const DropdownContent = styled.div`
     border-radius: 0.5rem;
   `}
 `;
+
 export const List = styled.div`
   display: grid;
   grid-template-columns: repeat(4, auto);
-  grid-column-gap: 1rem;
+  grid-column-gap: 0.8rem;
   align-items: center;
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
 `;
+export const Li = styled.li<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    list-style: none;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    background: ${isActive ? theme.colors.primary : "none"};
+    cursor: pointer; ;
+  `}
+`;
+
 export const WrapperFilters = styled.div``;
 
 // Graph

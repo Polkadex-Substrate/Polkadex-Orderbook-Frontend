@@ -31,7 +31,7 @@ const wrapperModifier = {
 };
 
 export const Wrapper = styled.div<Partial<ListItemProps>>`
-  ${({ theme, size, darkMode, fullWidth }) => css`
+  ${({ theme, fullWidth, isActive }) => css`
     border: 0;
     border-radius: 0.5rem;
     padding: ${theme.spacings.xxsmall};
@@ -39,12 +39,11 @@ export const Wrapper = styled.div<Partial<ListItemProps>>`
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     display: inline-block;
     cursor: pointer;
-
-    ${wrapperModifier[size](theme)}
-    ${darkMode ? wrapperModifier.Dark(theme) : wrapperModifier.Light(theme)}
-  ${fullWidth && wrapperModifier.FullWidth()}
-
-  :hover {
+    background: ${isActive ? theme.colors.primary : theme.colors.primaryBackgroundOpacity};
+    padding: 0.4rem 0.5rem;
+    ${fullWidth && wrapperModifier.FullWidth()};
+    user-select: none;
+    :hover {
       opacity: ${theme.colors.black};
     }
     :active {
