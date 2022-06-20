@@ -38,7 +38,7 @@ const Graph = ({ orderbook, graphData }: IGraph) => {
             <S.List>
               <ListItemButton title="Original" size="Small" isActive />
               <ListItemButton title="Trading View" size="Small" />
-              <ListItemButton title="Deep Market" size="Small" />
+              {/* <ListItemButton title="Deep Market" size="Small" /> */}
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
           </S.FlexWrapper>
