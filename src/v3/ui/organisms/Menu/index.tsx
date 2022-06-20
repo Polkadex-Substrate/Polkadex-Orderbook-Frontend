@@ -2,7 +2,7 @@ import { Logo } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 
 export type MenuProps = {
@@ -66,16 +66,19 @@ const Menu = ({ handleChange }: MenuProps) => {
             <S.Span>Support</S.Span>
           </S.WrapperIcon>
         </S.Container>
-        <S.WrapperIcon onClick={changeTheme} href="#">
-          <div>
-            <Icon
-              name={isDarkTheme ? "Moon" : "Sun"}
-              background="secondaryBackground"
-              size="large"
-            />
-          </div>
-          <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-        </S.WrapperIcon>
+        <AvailableMessage message="Soon">
+          <S.WrapperIcon onClick={changeTheme} as="div">
+            <div>
+              <Icon
+                name={isDarkTheme ? "Moon" : "Sun"}
+                background="secondaryBackground"
+                size="large"
+              />
+            </div>
+
+            <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
+          </S.WrapperIcon>
+        </AvailableMessage>
       </S.WrapperLinks>
       <S.WrapperProfile>
         <Icon name="Notifications" background="none" size="large" />

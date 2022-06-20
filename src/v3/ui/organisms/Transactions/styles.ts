@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
+
 export const Section = styled.section`
-  padding: 1rem 0;
+  flex: 1;
 `;
 
 // Header

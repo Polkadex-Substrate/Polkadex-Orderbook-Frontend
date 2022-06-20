@@ -49,6 +49,11 @@ const Transactions = dynamic(
     ssr: false,
   }
 );
+
+const RecentTrades = dynamic(() => import("@orderbook/v2/ui/organisms/RecentTrades"), {
+  ssr: false,
+});
+
 export function Trading() {
   const [state, setState] = useState(false);
   const dispatch = useDispatch();
@@ -94,7 +99,10 @@ export function Trading() {
           <Graph orderbook={[]} graphData={[]} />
           <MarketOrder />
         </S.WrapperGraph>
-        <Transactions data={[]} remove={() => console.log("remove")} />
+        <S.BottomWrapper>
+          <Transactions data={[]} remove={() => console.log("remove")} />
+          <RecentTrades />
+        </S.BottomWrapper>
       </S.WrapperMain>
     </S.Wrapper>
   );
