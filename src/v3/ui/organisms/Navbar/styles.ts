@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import media, { generateMedia } from "styled-media-query";
 
+import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
+
 const customMedia = generateMedia({
   custom: "1060px",
 });
@@ -49,11 +51,20 @@ export const WrapperInfo = styled.div`
   }
 `;
 
-export const WrapperLinks = styled.div`
-  justify-self: flex-end;
-  ${customMedia.lessThan("custom")`
-      display: none;
-    `};
+export const Box = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-self: flex-end;
+    ${Button} {
+      transition: background 0.5s ease-in-out;
+      background: ${theme.colors.primary};
+      :hover {
+        background: ${theme.colors.primary}D8;
+      }
+    }
+  `}
 `;
 
 export const VolumeHigh = styled.div<{ isNegative?: boolean }>`
