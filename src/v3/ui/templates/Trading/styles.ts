@@ -20,9 +20,9 @@ export const WrapperMain = styled.div`
 export const WrapperGraph = styled.div`
   display: grid;
   ${media.greaterThan("large")`
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 3fr auto;
   `}
   ${media.greaterThan("huge")`
-    grid-template-columns: 2.9fr 0.9fr;
+    grid-template-columns: 2.9fr auto;
   `}
 `;

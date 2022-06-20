@@ -8,9 +8,9 @@ export const Wrapper = styled.div`
   border-radius: 0 3rem 3rem 3rem;
   width: 100%;
   box-shadow: 0px 0px 99px rgba(0, 0, 0, 0.65);
-  min-width: 35rem;
+  min-width: 30rem;
   ${media.greaterThan("large")`
-    max-width: 35rem;
+    max-width: 30rem;
   `}
 `;
 

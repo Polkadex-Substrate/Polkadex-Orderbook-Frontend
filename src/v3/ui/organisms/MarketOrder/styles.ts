@@ -4,8 +4,8 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Section = styled.section`
   margin-left: 1rem;
-  min-width: 28rem;
-
+  min-width: 32rem;
+  max-width: 32rem;
   & .react-tabs__tab--selected {
     color: green;
   }

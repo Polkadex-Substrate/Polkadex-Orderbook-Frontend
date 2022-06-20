@@ -9,8 +9,8 @@ export const Wrapper = styled.div<Partial<OrderBookProps>>`
     justify-content: center;
     cursor: pointer;
     background: ${active ? theme.colors.white : theme.colors.secondaryBackground};
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 2rem;
+    width: 2rem;
     padding: ${theme.spacings.xxxsmall};
     border-radius: 0.5rem;
     img {
