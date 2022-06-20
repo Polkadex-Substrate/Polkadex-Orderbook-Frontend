@@ -1,46 +1,26 @@
-import OrderBookOrder from "../OrderBookOrder";
-
 import * as S from "./styles";
 
-export type OrderBookTableProps = {
-  active?: number;
-  data: any;
-};
+import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook/v2/ui/organisms";
+import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 
-const OrderBookTable = ({ active = 0, data }: OrderBookTableProps) => {
-  const filterBy = (side) => data.filter((item) => item.side === side);
+const OrderBookTable = () => {
+  const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
 
   return (
     <S.Wrapper>
-      <S.Table>
-        <S.Thead>
-          <S.Tr>
-            <S.Th>Price</S.Th>
-            <S.Th>Amount</S.Th>
-          </S.Tr>
-        </S.Thead>
-        <S.Tbody>
-          {data && filterBy("buy").map((item) => <OrderBookOrder key={item.id} data={item} />)}
-        </S.Tbody>
-      </S.Table>
-
-      <S.LastTransaction active={active}>
-        <p>
-          Latest transaction <span>{active} </span>
-        </p>
-      </S.LastTransaction>
-      <S.Table>
-        <S.Thead>
-          <S.Tr>
-            <S.Th>Price</S.Th>
-            <S.Th>Amount</S.Th>
-          </S.Tr>
-        </S.Thead>
-        <S.Tbody>
-          {data &&
-            filterBy("sell").map((item) => <OrderBookOrder key={item.id} data={item} />)}
-        </S.Tbody>
-      </S.Table>
+      <OrderbookTable orders={asks} isSell />
+      <AvailableMessage message="Soon">
+        {hasMarket && (
+          <OrderbookPricing
+            price={lastPriceValue}
+            isPriceUp={isPriceUp}
+            priceInFiat="0.00"
+            hasFilter={false}
+          />
+        )}
+      </AvailableMessage>
+      <OrderbookTable orders={bids} />
     </S.Wrapper>
   );
 };

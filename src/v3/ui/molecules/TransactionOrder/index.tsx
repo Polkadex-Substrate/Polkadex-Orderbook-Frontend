@@ -4,68 +4,60 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-type Props = {
-  data?: any;
-  remove?: () => void;
-};
-
-const TransactionOrder = ({ data, remove }: Props) => (
+const TransactionOrder = ({
+  isSell,
+  filledQuantity = 0,
+  orderSide,
+  baseUnit,
+  quoteUnit,
+  data = [],
+  isOpenOrder = false,
+}) => (
   <S.Tr>
-    <S.Td>
-      <S.Tag>Date</S.Tag>
-      <S.ContainerFlex>
-        {data.status ? (
-          <>
-            <S.Image src="/img/icons/Clock.svg" />
-            <span>Pending</span>
-          </>
-        ) : (
-          moment(data.date).format("LLL")
-        )}
-      </S.ContainerFlex>
-    </S.Td>
-
     <S.Td>
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
-        <S.Image src={`img/cryptocurrencies/${data.coin}.svg`} />
+        <S.Image isSell={isSell}>
+          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" color="text" />
+        </S.Image>
         <span>
-          {data.coin} / {data.pair}
+          {quoteUnit} / {baseUnit}
         </span>
       </S.ContainerFlex>
     </S.Td>
+    <S.Td>
+      <S.Tag>Date</S.Tag>
+      <S.ContainerFlex>{moment(new Date()).format("LLL")}</S.ContainerFlex>
+    </S.Td>
 
     <S.Td>
-      <S.Tag>Side</S.Tag>
+      <S.Tag>Type</S.Tag>
       <S.ContainerFlex>
-        <S.Image src={`img/icons/${data.side}.svg`} />
-        <span>{data.side}</span>
+        <span>{orderSide}</span>
       </S.ContainerFlex>
     </S.Td>
 
     <S.Td>
-      <S.Tag>Side</S.Tag>
-      <span>{data.price}</span>
+      <S.Tag>Price</S.Tag>
+      <span>{data[3].value}</span>
     </S.Td>
 
     <S.Td>
-      <S.Tag>Side</S.Tag>
-      <span>
-        {data.fee} {data.coin}
-      </span>
+      <S.Tag>Total</S.Tag>
+      <span>{data[4].value}</span>
     </S.Td>
 
     <S.Td>
-      <S.Tag>Side</S.Tag>
-      <span>
-        {data.total} {data.pair}
-      </span>
+      <S.Tag>Filled</S.Tag>
+      <span>{data[5].value}</span>
     </S.Td>
 
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        {data.status && <Icon name="Close" background="primary" onClick={remove} />}
+        {isOpenOrder && (
+          <Icon name="Trash" background="primary" onClick={() => console.log("Remove")} />
+        )}
         <Icon name="Options" background="none" />
       </S.ContainerActions>
     </S.Td>

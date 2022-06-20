@@ -31,7 +31,7 @@ const wrapperModifier = {
 };
 
 export const Wrapper = styled.button<Partial<ButtonProps>>`
-  ${({ theme, size, darkMode, fullWidth }) => css`
+  ${({ theme, size, fullWidth, background }) => css`
     background-color: #1c2023;
     border: 0;
     border-radius: ${theme.border.radius};
@@ -41,10 +41,12 @@ export const Wrapper = styled.button<Partial<ButtonProps>>`
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 
     ${wrapperModifier[size](theme)}
-    ${darkMode ? wrapperModifier.Dark(theme) : wrapperModifier.Light(theme)}
-  ${fullWidth && wrapperModifier.FullWidth()}
+    background: ${theme.colors[background]};
+    color: ${theme.colors.text};
 
-  :hover {
+    ${fullWidth && wrapperModifier.FullWidth()}
+
+    :hover {
       opacity: ${theme.colors.black};
     }
     :active {

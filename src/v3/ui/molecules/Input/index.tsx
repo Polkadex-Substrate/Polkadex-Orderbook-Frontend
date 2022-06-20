@@ -1,38 +1,33 @@
+import { InputHTMLAttributes } from "react";
+
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type InputProps = {
   label?: string;
-  icon?: "None" | "ArrowVerticalBottom" | "ArrowVerticalTop";
-  placeholder?: string;
-  type?: "text" | "email" | "password" | "url" | "number";
-  value?: number;
   inputInfo?: string;
   fullWidth?: boolean;
-};
+  icon?: "Price" | "Amount";
+} & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({
   label = "Label",
-  placeholder = "Text..",
-  type = "text",
-  icon = "None",
   inputInfo,
   fullWidth = false,
+  icon,
+  ...props
 }: InputProps) => {
+  const IconComponent = Icons[icon];
   return (
     <S.Wrapper>
       <S.ContainerInput>
         <S.Label>
-          <Icon name={icon} size="medium" style={{ marginRight: 5 }} />
+          {icon?.length && <IconComponent />}
           {label}
         </S.Label>
         <S.Box inputInfo={inputInfo} fullWidth={fullWidth}>
-          <S.Input
-            placeholder={placeholder}
-            type={type}
-            onChange={(e) => console.log(e.target.value)}
-          />
+          <S.Input {...props} />
           {inputInfo && <S.Span>{inputInfo}</S.Span>}
         </S.Box>
       </S.ContainerInput>

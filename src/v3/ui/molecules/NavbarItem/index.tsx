@@ -1,5 +1,7 @@
 import * as S from "./styles";
 
+import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+
 export type NavbarItemPops = {
   label?: string;
   info?: string | number;
@@ -8,7 +10,9 @@ export type NavbarItemPops = {
 const NavbarItem = ({ label, info, color }: NavbarItemPops) => (
   <S.Wrapper>
     <S.Label>{label}</S.Label>
-    <S.Info color={color}>{info}</S.Info>
+    <AvailableMessage message="Soon" color="secondaryBackgroundSolid" isVisible>
+      <S.Info color={color}>{info}</S.Info>
+    </AvailableMessage>
   </S.Wrapper>
 );
 

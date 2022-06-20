@@ -14,6 +14,7 @@ const Graph = ({ orderbook, graphData }: IGraph) => {
   const [filters, setFilters] = useState({
     type: "CandlestickSeries",
   });
+
   return (
     <S.Wrapper>
       <S.WrapperGraph>

@@ -112,3 +112,6 @@ export * from "./Change";
 export * from "./Book";
 export * from "./Transaction";
 export * from "./Question";
+export * from "./Amount";
+export * from "./Price";
+export * from "./Trash";

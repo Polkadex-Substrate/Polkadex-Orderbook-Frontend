@@ -13,12 +13,12 @@ export const Label = styled.label`
 
   /* Style the checkmark/indicator */
   span:after {
-    margin-left: 0.7rem;
+    margin-left: 0.5rem;
     margin-top: 0.2rem;
-    width: 0.4rem;
-    height: 0.8rem;
+    width: 0.3rem;
+    height: 0.6rem;
     border: solid white;
-    border-width: 0 3px 3px 0;
+    border-width: 0 2px 2px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -41,8 +41,8 @@ export const Input = styled.input`
   }
 `;
 export const Span = styled.span`
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background-color: #434658;
   margin-right: 0.5rem;
   border-radius: 0.4rem;

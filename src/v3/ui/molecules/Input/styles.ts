@@ -17,17 +17,20 @@ export const ContainerInput = styled.div`
   flex-direction: column;
 `;
 export const Label = styled.label`
-  color: white;
-  img {
+  font-size: 1.2rem;
+  color: #8ba1be;
+  font-weight: 500;
+  svg {
+    display: inline-block;
     width: 1.1rem;
     height: 1.1rem;
-    margin-right: 0.2rem;
+    margin-right: 0.5rem;
   }
 `;
 export const Box = styled.div<Partial<InputProps>>`
   ${({ theme, inputInfo, fullWidth }) => css`
     padding: 1rem;
-    border-bottom: 0.1rem solid ${theme.colors.white};
+    border-bottom: 0.1rem solid ${theme.colors.secondaryBackground};
     width: ${fullWidth ? "100%" : "20rem"};
     ${inputInfo && inputModifier.Flex()}
     :hover {
@@ -36,8 +39,7 @@ export const Box = styled.div<Partial<InputProps>>`
   `}
 `;
 export const Span = styled.span`
-  color: white;
-  opacity: 0.8;
+  color: #8ba1be;
 `;
 
 export const Input = styled.input`

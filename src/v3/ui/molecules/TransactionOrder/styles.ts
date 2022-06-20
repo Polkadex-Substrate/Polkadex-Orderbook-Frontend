@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import media from "styled-media-query";
 export const Tr = styled.tr`
   background-color: #2e303c;
@@ -15,10 +15,21 @@ export const ContainerFlex = styled.div`
   align-items: center;
 `;
 
-export const Image = styled.img`
-  margin-right: 0.4rem;
-  height: 1.7rem;
-  width: 1.7rem;
+export const Image = styled.div<{ isSell?: boolean }>`
+  ${({ theme, isSell }) => css`
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 30rem;
+    margin-right: 0.5rem;
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  `}
 `;
 export const ContainerActions = styled.div`
   display: flex;

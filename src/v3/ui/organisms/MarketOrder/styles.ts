@@ -1,7 +1,11 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+
 export const Section = styled.section`
   margin-left: 1rem;
+  min-width: 28rem;
+
   & .react-tabs__tab--selected {
     color: green;
   }
@@ -12,17 +16,41 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 0;
+  margin: 1rem;
 `;
 export const HeaderWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 `;
 
-export const HeaderContent = styled.div<{ isActive?: boolean }>`
+export const ActionItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    background: ${isActive ? theme.colors.primary : "none"};
-    padding: 1rem;
     border-radius: 1rem;
+    width: 100%;
+    text-align: center;
     cursor: pointer;
+    transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    font-weight: 500;
+    ${Icon} {
+      display: inline-block;
+      margin-right: 0.2rem;
+    }
+    :first-child {
+      margin-right: 2rem;
+      color: ${isActive ? theme.colors.green : theme.colors.text};
+      svg {
+        fill: ${isActive ? theme.colors.green : theme.colors.text};
+      }
+    }
+    :last-child {
+      color: ${isActive ? theme.colors.primary : theme.colors.text};
+      svg {
+        fill: ${isActive ? theme.colors.primary : theme.colors.text};
+      }
+    }
+    :hover {
+      opacity: ${isActive ? 1 : 0.6};
+    }
   `}
 `;

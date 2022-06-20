@@ -2,14 +2,15 @@ import { useState } from "react";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import MarketOrderAction from "../../molecules/MarketOrderAction";
+import { DropdownContent, DropdownHeader } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Dropdown, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown, Icon, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
 
 const MarketOrder = () => {
-  const [state, setState] = useState("Market Order");
-  const handleChange = (select: string) => setState(select);
+  const [isLimit, setIsLimit] = useState(true);
+  const handleChangeType = (value: boolean) => setIsLimit(value);
 
   return (
     <S.Section>
@@ -17,26 +18,41 @@ const MarketOrder = () => {
         <S.Header>
           <S.HeaderWrapper>
             <TabHeader>
-              <S.HeaderContent>Buy DOT </S.HeaderContent>
+              <S.ActionItem isActive>
+                <Icon name="BuyOrder" size="medium" />
+                Buy
+              </S.ActionItem>
             </TabHeader>
             <TabHeader>
-              <S.HeaderContent>Sell DOT </S.HeaderContent>
+              <S.ActionItem>
+                <Icon name="SellOrder" size="medium" />
+                Sell
+              </S.ActionItem>
             </TabHeader>
           </S.HeaderWrapper>
-
-          <Dropdown header={state}>
-            <>
-              <DropdownItem title="Market Order" handleAction={handleChange} />
-              <DropdownItem title="Limit Order" handleAction={handleChange} />
-              <DropdownItem title="Stop Order" handleAction={handleChange} />
-            </>
+          <Dropdown
+            header={
+              <DropdownHeader>{isLimit ? "Limit Order" : "Market Order"}</DropdownHeader>
+            }
+            direction="bottom"
+            isClickable>
+            <DropdownContent>
+              <DropdownItem
+                title={isLimit ? "Limit Order" : "Market Order"}
+                handleAction={() => handleChangeType(true)}
+              />
+              <DropdownItem
+                title={!isLimit ? "Limit Order" : "Market Order"}
+                handleAction={() => handleChangeType(false)}
+              />
+            </DropdownContent>
           </Dropdown>
         </S.Header>
         <TabContent>
-          <MarketOrderAction type="Buy" />
+          <MarketOrderAction isLimit={isLimit} />
         </TabContent>
         <TabContent>
-          <MarketOrderAction type="Sell" />
+          <MarketOrderAction isSell isLimit={isLimit} />
         </TabContent>
       </Tabs>
     </S.Section>

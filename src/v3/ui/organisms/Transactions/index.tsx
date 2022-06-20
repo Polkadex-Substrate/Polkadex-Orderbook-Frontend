@@ -2,12 +2,17 @@ import { useState } from "react";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
-import TransactionTable from "../../molecules/TransactionTable";
+import OrderHistory from "../../molecules/OrderHistory";
+import TradeHistory from "../../molecules/TradeHistory";
+import { DropdownContent, DropdownHeader } from "../../molecules";
 
-import { ITransactions } from "./ITransactions";
 import * as S from "./styles";
 
 import { Dropdown, Icon, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import { EmptyData, Logged } from "@polkadex/orderbook/v2/ui/molecules";
+import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const initialFilters = {
   hiddenPairs: false,
@@ -16,24 +21,33 @@ const initialFilters = {
   status: "All Transactions",
 };
 
-const Transactions = ({ data, remove }: ITransactions, pair = "DOT") => {
+const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
+
+const Transactions = ({ data, remove, pair = "DOT" }) => {
   const [filters, setFilters] = useState(initialFilters);
 
   // Filters Actions
   const handleChangeHidden = () =>
     setFilters({ ...filters, hiddenPairs: !filters.hiddenPairs });
-  const handleChangeStatus = (status: string) => setFilters({ ...filters, status });
-  const handleChangeBuy = () => setFilters({ ...filters, onlyBuy: !filters.onlyBuy });
-  const handleChangeSell = () => setFilters({ ...filters, onlySell: !filters.onlySell! });
+
+  const { priceFixed, amountFixed, orders, userLoggedIn, trades } = useOrderHistory();
+  const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Section>
       <Tabs>
         <S.Header>
-          <TabHeader>Open Orders</TabHeader>
-          <TabHeader>Order History</TabHeader>
-          <TabHeader>Trade History</TabHeader>
-          <TabHeader>Funds</TabHeader>
+          <S.HeaderContent>
+            <TabHeader>
+              <S.TabHeader>Order History</S.TabHeader>
+            </TabHeader>
+            <TabHeader>
+              <S.TabHeader>Trade History</S.TabHeader>
+            </TabHeader>
+            <TabHeader>
+              <S.TabHeader>Funds</S.TabHeader>
+            </TabHeader>
+          </S.HeaderContent>
           <S.WrapperActions>
             <Checkbox
               title="Hide Other Pairs"
@@ -41,26 +55,70 @@ const Transactions = ({ data, remove }: ITransactions, pair = "DOT") => {
               action={handleChangeHidden}
             />
             <S.ContainerActions>
-              <Checkbox title="Buy" checked={filters.onlyBuy} action={handleChangeBuy} />
-              <Checkbox title="Sell" checked={filters.onlySell} action={handleChangeSell} />
+              <Checkbox
+                title="Buy"
+                checked={filters.onlyBuy}
+                action={() => console.log("...")}
+              />
+              <Checkbox
+                title="Sell"
+                checked={filters.onlySell}
+                action={() => console.log("...")}
+              />
             </S.ContainerActions>
             <S.ContainerTransactions>
-              <Dropdown title={filters.status}>
-                <>
-                  <DropdownItem title="All Transactions" handleAction={handleChangeStatus} />
-                  <DropdownItem title="Pending" handleAction={handleChangeStatus} />
-                  <DropdownItem title="Completed" handleAction={handleChangeStatus} />
-                  <DropdownItem title="Canceled" handleAction={handleChangeStatus} />
-                </>
+              <Dropdown
+                header={<DropdownHeader>{filters.status} </DropdownHeader>}
+                direction="bottom"
+                isClickable>
+                <DropdownContent>
+                  {initialState.map((status) => (
+                    <DropdownItem
+                      key={status}
+                      title={status}
+                      handleAction={() => console.log("...")}
+                    />
+                  ))}
+                </DropdownContent>
               </Dropdown>
-              <Icon name="Transactions" background="secondaryBackground" />
+              <Icon
+                name="Calendar"
+                stroke="text"
+                background="secondaryBackground"
+                color="secondaryBackground"
+                size="extraMedium"
+                style={{ marginLeft: 10 }}
+              />
             </S.ContainerTransactions>
           </S.WrapperActions>
         </S.Header>
-        <TabContent>
-          <TransactionTable data={data} remove={remove} filters={filters} />
-        </TabContent>
-        {/* <TabPanel>
+        {!userLoggedIn ? (
+          <S.Content>
+            <TabContent>
+              {orders?.length ? (
+                <OrderHistory
+                  getAsset={getAsset}
+                  priceFixed={priceFixed}
+                  amountFixed={amountFixed}
+                  orders={orders}
+                />
+              ) : (
+                <EmptyData />
+              )}
+            </TabContent>
+            <TabContent>
+              {trades?.length ? (
+                <TradeHistory
+                  getAsset={getAsset}
+                  priceFixed={priceFixed}
+                  amountFixed={amountFixed}
+                  orders={orders}
+                />
+              ) : (
+                <EmptyData />
+              )}
+            </TabContent>
+            {/* <TabPanel>
           <TransactionTable data={data} />
         </TabPanel>
         <TabPanel>
@@ -69,6 +127,10 @@ const Transactions = ({ data, remove }: ITransactions, pair = "DOT") => {
         <TabPanel>
           <TransactionTable data={data} />
         </TabPanel> */}
+          </S.Content>
+        ) : (
+          <Logged />
+        )}
       </Tabs>
     </S.Section>
   );

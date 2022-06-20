@@ -13,7 +13,7 @@ export const Thead = styled.thead`
   color: #8ba1be;
   tr {
     display: grid;
-    grid-template-columns: 2.5fr repeat(5, 1fr) 0.5fr;
+    grid-template-columns: repeat(6, 1fr) 0.5fr;
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -41,6 +41,7 @@ export const Tbody = styled.tbody`
 
 export const Tr = styled.tr``;
 export const Th = styled.th`
+  font-weight: 500;
   ${media.lessThan("large")`
     display: none;
   `}

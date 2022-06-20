@@ -8,13 +8,13 @@ export const Label = styled.span`
     font-size: 1.1rem;
     color: #8ba1be;
     opacity: 0.7;
-    font-weight: 700;
+    font-weight: 500;
   `}
 `;
 export const Info = styled.p<Partial<NavbarItemPops>>`
   ${({ theme, color }) => css`
     font-size: ${theme.font.sizes.medium};
     color: ${color ? theme.colors.primary : "inherit"};
-    font-weight: 700;
+    font-weight: 500;
   `}
 `;

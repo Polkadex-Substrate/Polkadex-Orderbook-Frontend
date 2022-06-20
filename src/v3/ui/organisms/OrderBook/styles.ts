@@ -2,11 +2,13 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: #242633;
   border-radius: 0 3rem 3rem 3rem;
   width: 100%;
-  padding: 2rem 0 2rem 2rem;
   box-shadow: 0px 0px 99px rgba(0, 0, 0, 0.65);
+  min-width: 35rem;
   ${media.greaterThan("large")`
     max-width: 35rem;
   `}
@@ -17,9 +19,9 @@ export const WrapperTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-right: 2rem;
+  padding: 2rem 2rem 1rem 2rem;
 `;
+
 export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};

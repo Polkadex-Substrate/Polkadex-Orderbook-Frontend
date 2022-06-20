@@ -1,75 +1,100 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
-// Fake Data
-import {
-  fakeGetGraphData,
-  fakeOrderBook,
-  fakeTransactionsOrders,
-  coinMarketCapInstance,
-} from "./fakeData";
 import * as S from "./styles";
 
-import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
-import Market from "@polkadex/orderbook/v3/ui/organisms/Market";
-import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
-import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
+import {
+  useMarketsFetch,
+  useMarketsTickersFetch,
+  useOrderBookMarketsFetch,
+  useReduxSelector,
+} from "@polkadex/orderbook-hooks";
+import {
+  currentTickerFetch,
+  currentTickersUpdate,
+  orderBookFetch,
+  selectCurrentMarket,
+  selectCurrentMarketTickers,
+  selectCurrentTrade,
+  selectLastRecentTrade,
+} from "@polkadex/orderbook-modules";
+import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
+import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 
+const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
+  ssr: false,
+});
+
+const Graph = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Graph"), {
+  ssr: false,
+});
+
+const MarketOrder = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/MarketOrder"), {
+  ssr: false,
+});
+
+const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
+  ssr: false,
+});
+
+const Navbar = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Navbar"), {
+  ssr: false,
+});
+
+const Transactions = dynamic(
+  () => import("@polkadex/orderbook/v3/ui/organisms/Transactions"),
+  {
+    ssr: false,
+  }
+);
 export function Trading() {
   const [state, setState] = useState(false);
-  const [transactions, setTransactions] = useState([]);
-  const [orderbook, setOrderbook] = useState([]);
-  const [graphData, setGraphData] = useState([]);
-  const [coin, setCoin] = useState<any>([]);
+  const dispatch = useDispatch();
+  const { id } = useRouter().query;
+  useMarketsFetch(id as string);
+  useMarketsTickersFetch();
+  useOrderBookMarketsFetch();
 
-  // Fake Transactions Orders Actions
-  const getTransactionsOrders = () => setTransactions(fakeTransactionsOrders);
-  const removeTransactionsOrder = (id: string) => {
-    // Cancel Action
-    const removeItem = transactions.filter((item) => item.id !== id);
-    setTransactions(removeItem);
-  };
-
-  // Fake OrderBook Actions
-  const getOrderBookOrders = () => setOrderbook(fakeOrderBook);
-
-  // Fake Graph Actions
-  const getGraphData = async () => {
-    const data = await fakeGetGraphData();
-    setGraphData(data.slice(0, 100));
-  };
-
-  // Data from CoinMarketCap
-
-  const getCoinMarketCap = async () => {
-    console.log("Starting");
-
-    const data = await coinMarketCapInstance.get("/v1/cryptocurrency/info");
-    console.log("Result", data);
-    throw new Error("Error");
-
-    setCoin(data);
-  };
+  const market = useReduxSelector(selectCurrentMarket);
+  const currentTrade = useReduxSelector(selectCurrentTrade);
+  const lastTrade = useReduxSelector(selectLastRecentTrade);
+  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
+  // intitialize market dependent events
   useEffect(() => {
-    getTransactionsOrders();
-    getOrderBookOrders();
-    getGraphData();
-  }, []);
+    if (market) {
+      const tickerMarketId = `${market.assetIdArray[0]}-${market.assetIdArray[1]}`;
+      // dispatch(rangerConnectFetch());
+      dispatch(orderBookFetch(market));
+      dispatch(currentTickerFetch({ marketId: tickerMarketId }));
+    }
+  }, [dispatch, market]);
 
+  // initialize user specific sagas
+  useUserDataFetch();
+
+  // intiatilize trade specific events
+  useEffect(() => {
+    if (currentTrade && lastTrade) {
+      const updatedTicker = updateTickerWithTrade(currentTrade, currentTicker);
+      dispatch(currentTickersUpdate(updatedTicker));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTrade, dispatch, lastTrade]);
+
+  if (!id) return <div />;
   return (
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />
-      {state && <Market />}
+      {state && <Markets />}
       <S.WrapperMain>
-        <Navbar />
+        <Navbar onOpenMarkets={() => setState(!state)} />
         <S.WrapperGraph>
-          <Graph orderbook={orderbook} graphData={graphData} />
+          <Graph orderbook={[]} graphData={[]} />
           <MarketOrder />
         </S.WrapperGraph>
-
-        <Transactions data={transactions} remove={removeTransactionsOrder} />
+        <Transactions data={[]} remove={() => console.log("remove")} />
       </S.WrapperMain>
     </S.Wrapper>
   );

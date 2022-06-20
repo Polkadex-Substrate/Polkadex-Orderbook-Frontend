@@ -1,21 +1,24 @@
+import { ButtonHTMLAttributes } from "react";
+
 import * as S from "./styles";
+
+import { Colors } from "@polkadex/web-helpers";
 
 export type ButtonProps = {
   title: string;
   size?: "Small" | "Medium" | "Large";
-  darkMode?: boolean;
   fullWidth?: boolean;
-  type?: "submit" | "button";
-};
+  background?: Colors;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({
   title = "Button",
   size = "Medium",
-  darkMode = true,
   fullWidth = false,
-  type = "button",
+  background = "secondaryBackground",
+  ...props
 }: ButtonProps) => (
-  <S.Wrapper type={type} size={size} darkMode={darkMode} fullWidth={fullWidth}>
+  <S.Wrapper size={size} fullWidth={fullWidth} background={background} {...props}>
     {title}
   </S.Wrapper>
 );

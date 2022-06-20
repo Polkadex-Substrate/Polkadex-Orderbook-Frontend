@@ -2,8 +2,9 @@ import styled, { css } from "styled-components";
 import media, { generateMedia } from "styled-media-query";
 
 const customMedia = generateMedia({
-  custom: "1245px",
+  custom: "1060px",
 });
+
 export const Wrapper = styled.section`
   display: grid;
   grid-template-columns: auto auto;
@@ -14,6 +15,7 @@ export const Wrapper = styled.section`
     padding-left: 0;
   `}
 `;
+
 export const ContainerPair = styled.div`
   display: flex;
   flex-direction: row;
@@ -24,6 +26,7 @@ export const ContainerPair = styled.div`
       margin-right:1rem;
     `}
 `;
+
 export const ContainerInfo = styled.div`
   display: grid;
   grid-template-columns: repeat(4, auto);
@@ -41,44 +44,50 @@ export const ContainerInfo = styled.div`
 `;
 export const WrapperInfo = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  @media screen and (max-width: 880px) {
+    flex-direction: column;
+  }
 `;
+
 export const WrapperLinks = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+  justify-self: flex-end;
   ${customMedia.lessThan("custom")`
       display: none;
     `};
 `;
 
-export const VolumeHigh = styled.div`
-  p {
-    color: green;
-  }
+export const VolumeHigh = styled.div<{ isNegative?: boolean }>`
+  ${({ theme, isNegative }) => css`
+    p {
+      color: ${isNegative ? theme.colors.primary : theme.colors.green};
+    }
+  `}
 `;
 
-export const VolumeLow = styled.div`
-  p {
-    color: red;
-  }
+export const VolumeLow = styled.div<{ isNegative?: boolean }>`
+  ${({ theme, isNegative }) => css`
+    p {
+      color: ${isNegative ? theme.colors.primary : theme.colors.green};
+    }
+  `}
 `;
+
 export const WrapperVolume = styled.div`
   span {
     margin-right: 1rem;
+    font-size: 1.1rem;
     color: #8ba1be;
-    font-size: 1.3rem;
-    font-weight: 700;
+    opacity: 0.7;
+    font-weight: 500;
   }
   div {
     display: flex;
     flex-direction: row;
   }
+  p {
+    font-weight: 500;
+  }
 `;
-
-export const Span = styled.span``;
 
 // Dropdown
 export const WrapperDropdownContent = styled.a`

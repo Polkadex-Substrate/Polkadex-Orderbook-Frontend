@@ -20,19 +20,23 @@ const Orderbook = () => {
         </S.Header>
       </AvailableMessage>
       <S.Content>
-        <Table orders={asks} isSell />
+        <OrderbookTable orders={asks} isSell />
         <AvailableMessage message="Soon">
           {hasMarket && (
-            <Pricing price={lastPriceValue} isPriceUp={isPriceUp} priceInFiat="0.00" />
+            <OrderbookPricing
+              price={lastPriceValue}
+              isPriceUp={isPriceUp}
+              priceInFiat="0.00"
+            />
           )}
         </AvailableMessage>
-        <Table orders={bids} />
+        <OrderbookTable orders={bids} />
       </S.Content>
     </S.Main>
   );
 };
 
-const Table = ({ isSell = false, orders = [] }: T.Props) => {
+export const OrderbookTable = ({ isSell = false, orders = [] }: T.Props) => {
   const contentRef = useRef(null);
 
   const {
@@ -102,7 +106,12 @@ const Table = ({ isSell = false, orders = [] }: T.Props) => {
   );
 };
 
-const Pricing = ({ price, priceInFiat, isPriceUp = false }) => (
+export const OrderbookPricing = ({
+  price,
+  priceInFiat,
+  isPriceUp = false,
+  hasFilter = true,
+}) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
@@ -111,9 +120,11 @@ const Pricing = ({ price, priceInFiat, isPriceUp = false }) => (
       </span>
       <p>${priceInFiat}</p>
     </S.PricingAsideLeft>
-    <S.PricingAsideRight>
-      <Icon name="OrderDesc" size="medium" />
-    </S.PricingAsideRight>
+    {hasFilter && (
+      <S.PricingAsideRight>
+        <Icon name="OrderDesc" size="medium" />
+      </S.PricingAsideRight>
+    )}
   </S.Pricing>
 );
 export default Orderbook;
