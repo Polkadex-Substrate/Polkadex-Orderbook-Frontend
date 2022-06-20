@@ -96,7 +96,7 @@ export function Trading() {
       <S.WrapperMain>
         <Navbar onOpenMarkets={() => setState(!state)} />
         <S.WrapperGraph>
-          <Graph orderbook={[]} graphData={[]} />
+          <Graph />
           <MarketOrder />
         </S.WrapperGraph>
         <S.BottomWrapper>
