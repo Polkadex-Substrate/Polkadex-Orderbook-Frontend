@@ -2,6 +2,31 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type TickerStatInput = {
+  m: string,
+  priceChange24Hr: string,
+  priceChangePercent24Hr: string,
+  open: string,
+  close: string,
+  high: string,
+  low: string,
+  volumeBase24hr: string,
+  volumeQuote24Hr: string,
+};
+
+export type TickerStats = {
+  __typename: "TickerStats",
+  m: string,
+  priceChange24Hr: string,
+  priceChangePercent24Hr: string,
+  open: string,
+  close: string,
+  high: string,
+  low: string,
+  volumeBase24hr: string,
+  volumeQuote24Hr: string,
+};
+
 export type Channel = {
   __typename: "Channel",
   name: string,
@@ -163,6 +188,12 @@ export type KlinesConnection = {
   items?:  Array<CandleStick | null > | null,
 };
 
+export type TickersConnection = {
+  __typename: "TickersConnection",
+  items?:  Array<TickerStats | null > | null,
+  nextToken?: string | null,
+};
+
 export type ProxyConnection = {
   __typename: "ProxyConnection",
   items?: Array< string | null > | null,
@@ -191,6 +222,25 @@ export type TradesConnection = {
   __typename: "TradesConnection",
   items?:  Array<Trade | null > | null,
   nextToken?: string | null,
+};
+
+export type SetTickerStatsMutationVariables = {
+  input: TickerStatInput,
+};
+
+export type SetTickerStatsMutation = {
+  setTickerStats?:  {
+    __typename: "TickerStats",
+    m: string,
+    priceChange24Hr: string,
+    priceChangePercent24Hr: string,
+    open: string,
+    close: string,
+    high: string,
+    low: string,
+    volumeBase24hr: string,
+    volumeQuote24Hr: string,
+  } | null,
 };
 
 export type PublishMutationVariables = {
@@ -352,6 +402,26 @@ export type GetKlinesbyMarketIntervalQuery = {
       v_quote: string,
       t: string,
     } | null > | null,
+  } | null,
+};
+
+export type GetAllMarketTickersQuery = {
+  // Get all market tickers
+  getAllMarketTickers?:  {
+    __typename: "TickersConnection",
+    items?:  Array< {
+      __typename: "TickerStats",
+      m: string,
+      priceChange24Hr: string,
+      priceChangePercent24Hr: string,
+      open: string,
+      close: string,
+      high: string,
+      low: string,
+      volumeBase24hr: string,
+      volumeQuote24Hr: string,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -657,5 +727,25 @@ export type Websocket_streamsSubscription = {
     __typename: "Channel",
     name: string,
     data: string,
+  } | null,
+};
+
+export type OnNewTickerSubscriptionVariables = {
+  m: string,
+};
+
+export type OnNewTickerSubscription = {
+  // Ticker Streams
+  onNewTicker?:  {
+    __typename: "TickerStats",
+    m: string,
+    priceChange24Hr: string,
+    priceChangePercent24Hr: string,
+    open: string,
+    close: string,
+    high: string,
+    low: string,
+    volumeBase24hr: string,
+    volumeQuote24Hr: string,
   } | null,
 };

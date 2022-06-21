@@ -37,6 +37,24 @@ export const getKlinesbyMarketInterval = /* GraphQL */ `
     }
   }
 `;
+export const getAllMarketTickers = /* GraphQL */ `
+  query GetAllMarketTickers {
+    getAllMarketTickers {
+      items {
+        m
+        priceChange24Hr
+        priceChangePercent24Hr
+        open
+        close
+        high
+        low
+        volumeBase24hr
+        volumeQuote24Hr
+      }
+      nextToken
+    }
+  }
+`;
 export const findUserByProxyAccount = /* GraphQL */ `
   query FindUserByProxyAccount($proxy_account: String!) {
     findUserByProxyAccount(proxy_account: $proxy_account) {

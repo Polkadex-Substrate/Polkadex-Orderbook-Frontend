@@ -1,6 +1,12 @@
+import { Amplify } from "aws-amplify";
+
+import awsconfig from "../aws-exports";
+
 import { DefaultConfig } from ".";
 export * from "./types";
 export * from "./config";
+
+Amplify.configure(awsconfig);
 
 export const defaultConfig: DefaultConfig = {
   influxDBUrl: process.env.INFLUX_DB_URL,

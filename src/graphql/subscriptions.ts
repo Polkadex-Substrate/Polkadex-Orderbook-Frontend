@@ -78,3 +78,18 @@ export const websocket_streams = /* GraphQL */ `
     }
   }
 `;
+export const onNewTicker = /* GraphQL */ `
+  subscription OnNewTicker($m: String!) {
+    onNewTicker(m: $m) {
+      m
+      priceChange24Hr
+      priceChangePercent24Hr
+      open
+      close
+      high
+      low
+      volumeBase24hr
+      volumeQuote24Hr
+    }
+  }
+`;

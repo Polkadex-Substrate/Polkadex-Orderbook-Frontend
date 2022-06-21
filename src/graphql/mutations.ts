@@ -2,6 +2,21 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const setTickerStats = /* GraphQL */ `
+  mutation SetTickerStats($input: TickerStatInput!) {
+    setTickerStats(input: $input) {
+      m
+      priceChange24Hr
+      priceChangePercent24Hr
+      open
+      close
+      high
+      low
+      volumeBase24hr
+      volumeQuote24Hr
+    }
+  }
+`;
 export const publish = /* GraphQL */ `
   mutation Publish($name: String!, $data: String!) {
     publish(name: $name, data: $data) {
