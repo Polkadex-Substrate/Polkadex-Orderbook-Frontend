@@ -63,7 +63,6 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
     query: queries.getAllBalancesByMainAccount,
     variables: { main_account: account },
   });
-  debugger;
   console.log("fetch balance =>", res);
   return res.data.data;
 }
