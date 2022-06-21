@@ -13,6 +13,8 @@ export const Wrapper = styled.div`
   `}
 `;
 export const WrapperGraph = styled.section`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 2rem;
   box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
@@ -25,6 +27,13 @@ export const Header = styled.div`
   align-items: center;
   margin-bottom: 1.5rem;
 `;
+
+export const ChartWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
 export const FlexWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -63,3 +72,20 @@ export const WrapperFilters = styled.div``;
 
 // Graph
 export const Graph = styled.div``;
+export const FilterIcon = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    cursor: pointer;
+    svg {
+      width: 1.5rem;
+      stroke: ${theme.colors.text};
+      fill: ${theme.colors.text};
+      margin: 0;
+    }
+    span {
+      white-space: nowrap;
+    }
+  `}
+`;
