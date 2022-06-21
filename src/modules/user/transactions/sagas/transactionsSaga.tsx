@@ -1,22 +1,25 @@
 import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
+import { API } from "aws-amplify";
 
 import { transactionsData } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
+import * as queries from "../../../../graphql/queries";
 
-// TODO: CHANGE TO USE SQL
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+
 export function* transactionsSaga() {
   console.log("transactions saga");
   try {
-    const { address, keyringPair } = yield select(selectUserInfo);
-    const transactions = yield call(fetchTransactions, address);
+    const { main_addr } = yield select(selectUserInfo);
+    const transactions = yield call(fetchTransactions, main_addr, 3, 10);
     yield put(transactionsData(transactions));
   } catch (error) {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong..",
+          title: "Something has gone wrong (transactions)..",
           description: error.message,
         },
         type: "Error",
@@ -24,8 +27,18 @@ export function* transactionsSaga() {
     );
   }
 }
-const fetchTransactions = async (address: string) => {
-  const res: any = await axios.get("/api/user/transactions" + "148");
-  console.log("transaction data=>", res.data.data);
-  return res.data.data;
+const fetchTransactions = async (address: string, monthsBefore: number, limit = 10) => {
+  const fromDate = subtractMonths(monthsBefore);
+  const res: any = await API.graphql({
+    query: queries.listTransactionsByMainAccount,
+    variables: {
+      main_account: address,
+      from: fromDate.toISOString(),
+      to: new Date().toISOString(),
+      limit: limit,
+    },
+  });
+  const txs = res.data.listTransactionsByMainAccount.items;
+  console.log("transaction data=>", txs);
+  return txs;
 };

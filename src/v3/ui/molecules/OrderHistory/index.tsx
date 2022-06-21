@@ -5,6 +5,7 @@ import * as S from "./styles";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
 import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }) => {
   return (
@@ -23,21 +24,22 @@ const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }) => {
         </S.Thead>
         <S.Tbody>
           {orders &&
-            orders.map((order, i) => {
+            orders.map((order: OrderCommon, i) => {
               // console.log("orderhistoryTable rows rendered");
-              const date = new Date(Number(order.timestamp)).toLocaleString();
-              const isSell = order.order_side === "Ask";
+              const date = new Date(order.time).toLocaleString();
+              const isSell = order.side === "Ask";
               const isMarket = order.order_type === "MARKET";
-              const baseUnit = getAsset(order.base_asset_type).symbol;
-              const quoteUnit = getAsset(order.quote_asset_type).symbol;
-              const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
+              const [base, quote] = order.m.split("-");
+              const baseUnit = getAsset(base).symbol;
+              const quoteUnit = getAsset(quote).symbol;
+              const avgPrice = order.avg_filled_price;
               const status = order.status.toUpperCase();
               return (
                 <TransactionOrder
                   key={i}
                   isOpenOrder={order.status === "Accepted" && !isMarket}
                   isSell={isSell}
-                  orderSide={order.order_side}
+                  orderSide={order.side}
                   baseUnit={baseUnit}
                   quoteUnit={quoteUnit}
                   filledQuantity={Number("0")}
@@ -47,7 +49,7 @@ const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }) => {
                     { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
                     { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
                     { value: Decimal.format(order.qty, amountFixed, ",") },
-                    { value: Decimal.format(order.filled_qty, amountFixed, ",") },
+                    { value: Decimal.format(order.filled_quantity, amountFixed, ",") },
                     {
                       value: Decimal.format(avgPrice, priceFixed, ","),
                     },

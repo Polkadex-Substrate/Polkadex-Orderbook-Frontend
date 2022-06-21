@@ -56,7 +56,7 @@ const getMainAddrFromUserByProxyAccountRes = (s: string) => {
   */
   const n = s.length;
   // slice "{ }" values from the ends
-  s = s.slice(2, n - 2);
+  s = s.slice(2, n - 1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_a, b] = s.split(",");
   const main_addr = b.split("=")[1];

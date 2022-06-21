@@ -1,6 +1,8 @@
 import { CommonError, OrderCommon, OrderSide, OrderType } from "../../types";
 
 import {
+  OPEN_ORDERS_HISTORY_DATA,
+  OPEN_ORDERS_HISTORY_FETCH,
   ORDERS_CHANNEL_FETCH,
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
@@ -23,22 +25,17 @@ export interface UserOrdersHistoryError {
   type: typeof ORDERS_HISTORY_ERROR;
   error: CommonError;
 }
+export interface UserOpenOrdersHistoryFetch {
+  type: typeof OPEN_ORDERS_HISTORY_FETCH;
+}
+
+export interface UserOpenOrdersHistoryData {
+  type: typeof OPEN_ORDERS_HISTORY_DATA;
+  payload: { list: OrderCommon[] };
+}
 export interface FetchOrderUpdatesChannel {
   type: typeof ORDERS_CHANNEL_FETCH;
 }
-// {
-//   trading_pair: "PDEX/1",
-//   update: {
-//     Accepted: {
-//       order_id: 335613430048268376252486492096633622314,
-//       user: "5DwPy8LFTXReZtboaDH3tFN9jqjMpqqnavLuimD2a5s7dHa5",
-//       side: "Bid",
-//       order_type: "LIMIT",
-//       price: "1",
-//       qty: "1",
-//     },
-//   },
-// };
 
 type OrderUpdatePayload = {
   order_id: string;
@@ -102,7 +99,9 @@ export type OrdersHistoryAction =
   | OrderUpdatesChannelData
   | OrderUpdateAcceptedData
   | OrderUpdatePartiallyFilledData
-  | OrderUpdateFilledData;
+  | OrderUpdateFilledData
+  | UserOpenOrdersHistoryData
+  | UserOpenOrdersHistoryData;
 
 export const userOrdersHistoryFetch = (): UserOrdersHistoryFetch => ({
   type: ORDERS_HISTORY_FETCH,
@@ -118,6 +117,17 @@ export const userOrdersHistoryData = (
 export const userOrdersHistoryError = (error: CommonError): UserOrdersHistoryError => ({
   type: ORDERS_HISTORY_ERROR,
   error,
+});
+
+export const userOpenOrdersHistoryFetch = (): UserOpenOrdersHistoryFetch => ({
+  type: OPEN_ORDERS_HISTORY_FETCH,
+});
+
+export const userOpenOrderHistoryData = (
+  payload: UserOpenOrdersHistoryData["payload"]
+): UserOpenOrdersHistoryData => ({
+  type: OPEN_ORDERS_HISTORY_DATA,
+  payload,
 });
 
 export const userOrderUpdatesChannelFetch = (): FetchOrderUpdatesChannel => ({

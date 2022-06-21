@@ -16,19 +16,18 @@ export type OrderKind = "bid" | "ask";
 
 // TODO: Integrate new Types.
 export interface OrderCommon {
-  txid: string;
-  id?: string;
-  base_asset_type: string;
-  quote_asset_type: string;
-  order_side: string;
-  filled_qty: string;
-  timestamp: string;
+  main_account: string;
+  id: string;
+  time: string;
+  m: string; // marketid
+  side: string;
   order_type: string;
   status: string;
-  qty: string;
   price: string;
-  trade_history: string;
-  filled_price: string;
+  qty: string;
+  avg_filled_price: string;
+  filled_quantity: string;
+  fee: string;
 }
 
 export interface TradesEntity {

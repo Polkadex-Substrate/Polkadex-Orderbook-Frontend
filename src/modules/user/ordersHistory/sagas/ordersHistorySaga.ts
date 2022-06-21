@@ -1,25 +1,31 @@
 // TODO: Create User middleware
 import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
+import { API } from "aws-amplify";
 
 import { userOrdersHistoryData, UserOrdersHistoryFetch } from "../actions";
 import { alertPush } from "../../../";
-import { selectUserInfo } from "../../profile";
+import { ProxyAccount, selectUserInfo } from "../../profile";
+
+import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
-    console.log("orderhistory saga called, fetching orderhistory from database");
-    const { main_acc_id } = yield select(selectUserInfo);
-    const transactions: OrderCommon[] = yield call(fetchTransactions, main_acc_id);
-    console.log("transactions =>", transactions);
-    yield put(userOrdersHistoryData({ list: transactions }));
+    console.log("orderhistory saga called");
+    const account: ProxyAccount = yield select(selectUserInfo);
+    if (account.address) {
+      const transactions: OrderCommon[] = yield call(fetchOrders, account.address, 1);
+      console.log("orders =>", transactions);
+      yield put(userOrdersHistoryData({ list: transactions }));
+    }
   } catch (error) {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong..",
+          title: "Something has gone wrong (orderHistory)..",
           description: error.message,
         },
         type: "Error",
@@ -27,8 +33,22 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
     );
   }
 }
-const fetchTransactions = async (main_acc_id: string): Promise<OrderCommon[]> => {
-  const res: any = await axios.get("/api/user/transactions/" + main_acc_id);
-  const orders = res.data.data;
+const fetchOrders = async (
+  proxy_acc: string,
+  monthsBefore: number,
+  limit = 10
+): Promise<OrderCommon[]> => {
+  const fromDate = subtractMonths(monthsBefore);
+
+  const res: any = await API.graphql({
+    query: queries.listOrderHistorybyMainAccount,
+    variables: {
+      main_account: proxy_acc,
+      from: fromDate.toISOString(),
+      to: new Date().toISOString(),
+      limit: limit,
+    },
+  });
+  const orders = res.data.listOrderHistorybyMainAccount.items;
   return orders;
 };

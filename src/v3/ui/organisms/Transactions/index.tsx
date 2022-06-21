@@ -92,7 +92,7 @@ const Transactions = ({ data, remove, pair = "DOT" }) => {
             </S.ContainerTransactions>
           </S.WrapperActions>
         </S.Header>
-        {!userLoggedIn ? (
+        {userLoggedIn ? (
           <S.Content>
             <TabContent>
               {orders?.length ? (
