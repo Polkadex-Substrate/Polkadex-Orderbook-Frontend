@@ -52,7 +52,7 @@ const Card = ({ price, amount, date, isSell = false }) => (
     <S.CardCell>{date}</S.CardCell>
   </S.Card>
 );
-const EmptyTrades = ({ message = "No Transactions" }) => (
+const EmptyTrades = ({ message = "No Recent Trades" }) => (
   <S.Container>
     <S.Empty>
       <img src="/img/emptyTrade.svg" alt="Empty Trades" />
