@@ -3,11 +3,10 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Section = styled.section`
-  margin-left: 1rem;
-  min-width: 29rem;
-  max-width: 29rem;
-  & .react-tabs__tab--selected {
-    color: green;
+  @media screen and (min-width: 970px) {
+    margin-left: 1rem;
+    min-width: 29rem;
+    max-width: 29rem;
   }
 `;
 // Header
