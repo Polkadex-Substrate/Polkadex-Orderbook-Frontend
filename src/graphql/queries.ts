@@ -10,6 +10,18 @@ export const getChannel = /* GraphQL */ `
     }
   }
 `;
+export const getOrderbook = /* GraphQL */ `
+  query GetOrderbook($market: String!, $limit: Int, $nextToken: String) {
+    getOrderbook(market: $market, limit: $limit, nextToken: $nextToken) {
+      items {
+        price
+        qty
+        side
+      }
+      nextToken
+    }
+  }
+`;
 export const getKlinesbyMarketInterval = /* GraphQL */ `
   query GetKlinesbyMarketInterval(
     $market: String!

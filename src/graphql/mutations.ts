@@ -2,6 +2,24 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const setOrderbookPuts = /* GraphQL */ `
+  mutation SetOrderbookPuts($input: SetOrderbookInput!) {
+    setOrderbookPuts(input: $input) {
+      price
+      qty
+      side
+    }
+  }
+`;
+export const setOrderbookDels = /* GraphQL */ `
+  mutation SetOrderbookDels($input: SetOrderbookInput!) {
+    setOrderbookDels(input: $input) {
+      price
+      qty
+      side
+    }
+  }
+`;
 export const setTickerStats = /* GraphQL */ `
   mutation SetTickerStats($input: TickerStatInput!) {
     setTickerStats(input: $input) {

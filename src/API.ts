@@ -2,6 +2,31 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type SetOrderbookInput = {
+  m: string,
+  seq: string,
+  levels?: Array< SetPriceLevelInput | null > | null,
+};
+
+export type SetPriceLevelInput = {
+  price: string,
+  qty: string,
+  side?: OrderSide | null,
+};
+
+export enum OrderSide {
+  Bid = "Bid",
+  Ask = "Ask",
+}
+
+
+export type SetPriceLevel = {
+  __typename: "SetPriceLevel",
+  price: string,
+  qty: string,
+  side?: OrderSide | null,
+};
+
 export type TickerStatInput = {
   m: string,
   priceChange24Hr: string,
@@ -70,12 +95,6 @@ export type OrderUpdateInput = {
   filled_quantity: string,
   fee: string,
 };
-
-export enum OrderSide {
-  Bid = "Bid",
-  Ask = "Ask",
-}
-
 
 export enum OrderType {
   LIMIT = "LIMIT",
@@ -183,6 +202,12 @@ export type CandleStick = {
   t: string,
 };
 
+export type Orderbook = {
+  __typename: "Orderbook",
+  items?:  Array<SetPriceLevel | null > | null,
+  nextToken?: string | null,
+};
+
 export type KlinesConnection = {
   __typename: "KlinesConnection",
   items?:  Array<CandleStick | null > | null,
@@ -222,6 +247,32 @@ export type TradesConnection = {
   __typename: "TradesConnection",
   items?:  Array<Trade | null > | null,
   nextToken?: string | null,
+};
+
+export type SetOrderbookPutsMutationVariables = {
+  input: SetOrderbookInput,
+};
+
+export type SetOrderbookPutsMutation = {
+  setOrderbookPuts?:  Array< {
+    __typename: "SetPriceLevel",
+    price: string,
+    qty: string,
+    side?: OrderSide | null,
+  } | null > | null,
+};
+
+export type SetOrderbookDelsMutationVariables = {
+  input: SetOrderbookInput,
+};
+
+export type SetOrderbookDelsMutation = {
+  setOrderbookDels?:  Array< {
+    __typename: "SetPriceLevel",
+    price: string,
+    qty: string,
+    side?: OrderSide | null,
+  } | null > | null,
 };
 
 export type SetTickerStatsMutationVariables = {
@@ -376,6 +427,26 @@ export type GetChannelQuery = {
     __typename: "Channel",
     name: string,
     data: string,
+  } | null,
+};
+
+export type GetOrderbookQueryVariables = {
+  market: string,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetOrderbookQuery = {
+  // Get orderbook
+  getOrderbook?:  {
+    __typename: "Orderbook",
+    items?:  Array< {
+      __typename: "SetPriceLevel",
+      price: string,
+      qty: string,
+      side?: OrderSide | null,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 

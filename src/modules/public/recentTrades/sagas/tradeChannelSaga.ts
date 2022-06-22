@@ -1,30 +1,26 @@
 import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
-import cryptoRandomString from "crypto-random-string";
-
-import { alertPush, klineUpdateFetch, recentTradesData, selectRecentTrades } from "../../..";
+import { API } from "aws-amplify";
 
 import {
-  RabbitmqChannelType,
-  selectRabbitmqChannel,
-} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
-import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
+  alertPush,
+  klineUpdateFetch,
+  recentTradesData,
+  recentTradesPush,
+  selectCurrentMarket,
+  selectRecentTrades,
+} from "../../..";
+import * as subscriptions from "../../../../graphql/subscriptions";
 
 export function* fetchTradeChannelSaga() {
   try {
-    const rabbitmqConn = yield select(selectRabbitmqChannel);
-    // random prefix to queue name to avoid collisions
-    const queueName =
-      cryptoRandomString({ length: DEFAULT_RANDOM_STRING_LENGTH }) + "-trade-events";
-    if (rabbitmqConn) {
-      const channel = yield call(() =>
-        fetchTradesChannel(rabbitmqConn, queueName, "*.*.trade-events")
-      );
+    const market = yield select(selectCurrentMarket);
+
+    if (market.id) {
+      const channel = yield call(() => fetchTradesChannel("PDEX/1"));
       while (true) {
         const tradesMsg = yield take(channel);
         console.log("tradesMsg =>", tradesMsg);
-        // eg:  {"market_id":"PDEX/1","price":"3","amount":"5","order_side":"Bid"}
         const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
         const tradesArray = [data, ...trades];
@@ -45,23 +41,18 @@ export function* fetchTradeChannelSaga() {
   }
 }
 
-async function fetchTradesChannel(
-  chann: RabbitmqChannelType,
-  queueName: string,
-  routingKey: string
-) {
-  console.log("creating trade queue", queueName, routingKey);
-  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
-  await queue.bind("topic_exchange", routingKey);
-  queue.purge();
-  return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
-      const msg = u8aToString(res.body);
-      emitter(msg);
-      res.ack();
+async function fetchTradesChannel(marketid: string) {
+  return eventChannel((emit) => {
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: `${marketid}-raw_trades` },
+    }).subscribe({
+      next: (data) => {
+        debugger;
+        emit(recentTradesPush(data.value.data.onOrderUpdate));
+      },
+      error: (err) => console.warn(err),
     });
-    return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
-    };
+    return subscription.unsubscribe;
   });
 }
