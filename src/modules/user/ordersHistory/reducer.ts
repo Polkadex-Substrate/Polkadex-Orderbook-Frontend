@@ -7,9 +7,6 @@ import {
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
   ORDER_CHANNEL_UPDATE_DATA,
-  ORDER_UPDATE_DATA,
-  ORDER_UPDATE_FILLED,
-  ORDER_UPDATE_PARTIALLYFILLED,
 } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
