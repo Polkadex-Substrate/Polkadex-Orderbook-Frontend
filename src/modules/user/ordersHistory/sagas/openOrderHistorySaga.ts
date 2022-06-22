@@ -3,12 +3,7 @@ import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
 import { API } from "aws-amplify";
 
-import {
-  userOpenOrderHistoryData,
-  UserOpenOrdersHistoryFetch,
-  userOrdersHistoryData,
-  UserOrdersHistoryFetch,
-} from "../actions";
+import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
 import { alertPush } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 
