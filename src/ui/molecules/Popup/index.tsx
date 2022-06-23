@@ -11,10 +11,14 @@ export const Popup = ({
   isBottomPosition = false,
   isRightPosition = false,
   isMessage = false,
+  ...props
 }: Props) => (
   <Portal>
     <S.Wrapper isMessage={isMessage} isVisible={isVisible}>
-      <S.Container isBottomPosition={isBottomPosition} isRightPosition={isRightPosition}>
+      <S.Container
+        isBottomPosition={isBottomPosition}
+        isRightPosition={isRightPosition}
+        {...props}>
         <S.Content isMessage={isMessage} size={size} aria-hidden={!isVisible}>
           {children}
         </S.Content>

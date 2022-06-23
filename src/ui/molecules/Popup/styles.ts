@@ -56,7 +56,7 @@ export const Overlay = styled.div<{
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: ${isMessage ? 22 : theme.layers.menu}};
+    z-index: ${isMessage ? 22 : theme.layers.menu};
     background: ${isVisible ? theme.colors.overlayOpacity : "none"};
   `}
 `;

@@ -4,6 +4,7 @@ import media from "styled-media-query";
 import { Main as RecentTrade } from "@orderbook/v2/ui/organisms/RecentTrades/styles";
 
 export const Wrapper = styled.main`
+  position: relative;
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -23,7 +24,7 @@ export const WrapperGraph = styled.div`
   display: grid;
   min-height: 50vh;
   @media screen and (min-width: 1290px) {
-    grid-template-columns: 3fr auto;
+    grid-template-columns: minmax(85rem, 1fr) auto;
   }
 `;
 

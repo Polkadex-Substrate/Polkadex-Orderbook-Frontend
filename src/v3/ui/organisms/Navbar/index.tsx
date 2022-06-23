@@ -40,7 +40,7 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {!hasUser ? (
+      {hasUser ? (
         <S.Box>
           <AvailableMessage message="Soon" isPriority>
             <Notifications />

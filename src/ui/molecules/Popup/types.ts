@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, AllHTMLAttributes } from "react";
 
 import { Sizes } from "../../../helpers";
 
@@ -10,4 +10,4 @@ export type Props = {
   isRightPosition?: boolean;
   isMessage?: boolean;
   size?: Sizes;
-};
+} & Pick<AllHTMLAttributes<HTMLDivElement>, "style">;
