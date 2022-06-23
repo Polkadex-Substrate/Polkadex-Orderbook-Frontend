@@ -6,7 +6,6 @@ import { rabbitmqChannelData } from "../actions";
 
 import { AMQPWebSocketClient } from "./amqp-websocket-client.mjs";
 
-import { klineFetchChannelFetch, recentTradesChannelFetch } from "@polkadex/orderbook-modules";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 const url = `wss://rabbitmq-ws.polkadex.trade/ws/amqp`;
@@ -20,7 +19,7 @@ export function* rabbitmqConnectionSaga() {
     );
     const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
-    yield put(recentTradesChannelFetch());
+
     // yield put(klineFetchChannelFetch());
     yield put(orderBookChannelFetch());
   } catch (error) {

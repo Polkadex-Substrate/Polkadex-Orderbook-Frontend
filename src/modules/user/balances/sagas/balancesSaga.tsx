@@ -22,7 +22,7 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (account.address && isAssetData) {
       // const assetMap = yield select(selectAssetIdMap);
-      // const balances = yield call(() => fetchbalancesAsync(account.main_addr));
+      const balances = yield call(() => fetchbalancesAsync(account.main_addr));
       // very unoptimized way to map the asset data
       // TODO: improve datastructure in the future
       // const list = balances.map((balance: IBalanceFromDb) => {
@@ -56,13 +56,38 @@ type IBalanceFromDb = {
   asset_type: string;
   reserved_balance: string;
   free_balance: string;
+  pending_withdrawal: string;
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
+  /*
+  {
+    "getAllBalancesByMainAccount": {
+        "items": [
+            {
+                "main_account": "esrPQes7pyxeWjvPjxzhqVYFeNVMCJfEJUbza4Zi1tt5d4Bgb",
+                "asset": "1",
+                "free": "7",
+                "reserved": "3",
+                "pending_withdrawal": "0.00000000"
+            },
+        ],
+        "nextToken": null
+    }
+}
+*/
   const res: any = await API.graphql({
     query: queries.getAllBalancesByMainAccount,
     variables: { main_account: account },
   });
-  console.log("fetch balance =>", res);
-  return res.data.data;
+  const balances = res.data.getAllBalancesByMainAccount.items.map((val) => {
+    return {
+      asset_type: val.asset,
+      reserved_balance: val.reserved,
+      free_balance: val.free,
+      pending_withdrawal: val.pending_withdrawal,
+    };
+  });
+  console.log("fetch balance =>", balances);
+  return balances;
 }

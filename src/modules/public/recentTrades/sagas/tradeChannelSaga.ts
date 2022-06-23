@@ -5,6 +5,7 @@ import { API } from "aws-amplify";
 import {
   alertPush,
   klineUpdateFetch,
+  Market,
   recentTradesData,
   recentTradesPush,
   selectCurrentMarket,
@@ -14,10 +15,12 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 
 export function* fetchTradeChannelSaga() {
   try {
-    const market = yield select(selectCurrentMarket);
+    const market: Market = yield select(selectCurrentMarket);
 
-    if (market.id) {
-      const channel = yield call(() => fetchTradesChannel("PDEX/1"));
+    if (market?.name) {
+      const base = market.assetIdArray[0] === "-1" ? "PDEX" : market.assetIdArray[0];
+      const quote = market.assetIdArray[1] === "-1" ? "PDEX" : market.assetIdArray[1];
+      const channel = yield call(() => fetchTradesChannel(`${base}-${quote}`));
       while (true) {
         const tradesMsg = yield take(channel);
         console.log("tradesMsg =>", tradesMsg);
@@ -43,9 +46,10 @@ export function* fetchTradeChannelSaga() {
 
 async function fetchTradesChannel(marketid: string) {
   return eventChannel((emit) => {
+    console.log("fetchTradesChannel created");
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `${marketid}-raw_trades` },
+      variables: { name: `PDEX-1-raw-trades` },
     }).subscribe({
       next: (data) => {
         debugger;

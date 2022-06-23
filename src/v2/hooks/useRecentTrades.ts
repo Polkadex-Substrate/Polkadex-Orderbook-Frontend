@@ -7,6 +7,7 @@ import {
   selectCurrentMarket,
   recentTradesFetch,
   selectRecentTradesOfCurrentMarket,
+  recentTradesChannelFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export function useRecentTrades() {
@@ -15,7 +16,7 @@ export function useRecentTrades() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
   useEffect(() => {
-    if (currentMarket) dispatch(recentTradesFetch(currentMarket));
+    if (currentMarket?.name) dispatch(recentTradesChannelFetch());
   }, [dispatch, currentMarket]);
 
   const isDecreasing = getIsDecreasingArray(recentTrades);
