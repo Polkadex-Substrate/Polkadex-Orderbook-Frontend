@@ -23,6 +23,8 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 `;
 
 export const ChartWrapper = styled.div`

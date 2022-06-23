@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 
 import NavbarItem from "../../molecules/NavbarItem";
-import NavbarLanguage from "../../molecules/NavbarLanguage";
 
 import * as S from "./styles";
 
@@ -41,14 +40,14 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {hasUser ? (
-        <>
+      {!hasUser ? (
+        <S.Box>
           <AvailableMessage message="Soon" isPriority>
             <Notifications />
           </AvailableMessage>
           <MyWallet />
           <MyAccount />
-        </>
+        </S.Box>
       ) : (
         <S.Box>
           <Button

@@ -92,7 +92,7 @@ export function Trading() {
   return (
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />
-      {state && <Markets />}
+      {state && <Markets hasMargin />}
       <S.WrapperMain>
         <Navbar onOpenMarkets={() => setState(!state)} />
         <S.WrapperGraph>

@@ -9,7 +9,7 @@ import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecul
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
-const Markets = ({ isFull = false }) => {
+const Markets = ({ isFull = false, hasMargin = false }) => {
   const {
     marketTokens,
     marketTickers,
@@ -21,7 +21,7 @@ const Markets = ({ isFull = false }) => {
   } = useMarkets();
 
   return (
-    <S.Main isFull={isFull}>
+    <S.Main isFull={isFull} hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
