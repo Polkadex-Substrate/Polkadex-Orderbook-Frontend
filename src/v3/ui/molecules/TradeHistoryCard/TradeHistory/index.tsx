@@ -26,27 +26,28 @@ const TradeHistory = () => {
             </S.Tr>
           </S.Thead>
           <S.Tbody>
-            {trades.map((order, i) => {
-              // console.log("orderhistoryTable rows rendered");
-              const date = new Date(parseInt(order.timestamp)).toLocaleString();
-              const isSell = order.order_side === "Sell";
-              const baseUnit = getAsset(order.base_asset_type).symbol;
-              const quoteUnit = getAsset(order.quote_asset_type).symbol;
-              return (
-                <TradeHistoryCard
-                  key={i}
-                  isSell={isSell}
-                  orderSide={order.order_side}
-                  baseUnit={baseUnit}
-                  quoteUnit={quoteUnit}
-                  data={[
-                    { value: date },
-                    { value: Decimal.format(order.price, priceFixed, ",") },
-                    { value: Decimal.format(order.qty, amountFixed, ",") },
-                  ]}
-                />
-              );
-            })}
+            {trades &&
+              trades.map((order, i) => {
+                // console.log("orderhistoryTable rows rendered");
+                const date = new Date(parseInt(order.timestamp)).toLocaleString();
+                const isSell = order.order_side === "Sell";
+                const baseUnit = getAsset(order.base_asset_type).symbol;
+                const quoteUnit = getAsset(order.quote_asset_type).symbol;
+                return (
+                  <TradeHistoryCard
+                    key={i}
+                    isSell={isSell}
+                    orderSide={order.order_side}
+                    baseUnit={baseUnit}
+                    quoteUnit={quoteUnit}
+                    data={[
+                      { value: date },
+                      { value: Decimal.format(order.price, priceFixed, ",") },
+                      { value: Decimal.format(order.qty, amountFixed, ",") },
+                    ]}
+                  />
+                );
+              })}
           </S.Tbody>
         </S.Table>
       ) : (
