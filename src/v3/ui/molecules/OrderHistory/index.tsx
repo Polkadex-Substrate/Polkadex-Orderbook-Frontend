@@ -35,7 +35,7 @@ const OrderHistory = () => {
               orders.map((order: OrderCommon, i) => {
                 // console.log("orderhistoryTable rows rendered");
                 const [base, quote] = order.m.split("-");
-                const date = new Date(Number(order.timestamp)).toLocaleString();
+                const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";
                 const isMarket = order.order_type === "MARKET";
                 const baseUnit = getAsset(base).symbol;
