@@ -15,18 +15,12 @@ export const loginValidations = Yup.object().shape({
 
 export const depositValidations = Yup.object().shape({
   amount: Yup.number().required("Required").typeError("Must be a number"),
-  asset: Yup.string().required("Required"),
-  market: Yup.object({
-    id: Yup.string(),
+  asset: Yup.object({
+    assetId: Yup.string(),
     name: Yup.string(),
-    base_unit: Yup.string(),
-    quote_unit: Yup.string(),
-    amount_precision: Yup.number(),
-    price_precision: Yup.number(),
-    state: Yup.string(),
-    tokenTickerName: Yup.string(),
-    base_ticker: Yup.string(),
-    quote_ticker: Yup.string(),
+    symbol: Yup.string(),
+    decimals: Yup.string(),
+    isFrozen: Yup.bool(),
   })
     .required("Required")
     .nullable(),
