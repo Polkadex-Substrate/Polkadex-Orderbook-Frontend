@@ -1,0 +1,34 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-orderbookfrontend-dev-213922-authRole",
+            "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-authRole",
+            "Region": "ap-south-1",
+            "DeploymentBucketName": "amplify-orderbookfrontend-dev-213922-deployment",
+            "UnauthRoleName": "amplify-orderbookfrontend-dev-213922-unauthRole",
+            "StackName": "amplify-orderbookfrontend-dev-213922",
+            "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-dev-213922/59f148c0-f0b3-11ec-93ea-0a1621de353a",
+            "AmplifyAppId": "djf6q4n044sil"
+        }
+    },
+    "api": {
+        "SpotOrderbookUsers": {
+            "service": "AppSync",
+            "output": {
+                "authConfig": {
+                    "defaultAuthentication": {
+                        "authenticationType": "API_KEY"
+                    },
+                    "additionalAuthenticationProviders": null
+                },
+                "GraphQLAPIIdOutput": "pz4axoaufvc5xhmeildsspx4ze",
+                "GraphQLAPIEndpointOutput": "https://x6sbwzrbzvbabpujfy2phgq6ka.appsync-api.ap-south-1.amazonaws.com/graphql",
+                "name": "SpotOrderbookUsers",
+                "region": "ap-south-1",
+                "GraphQLAPIKeyOutput": "da2-6s2cbvsgebcldiopkabxaunfey"
+            },
+            "lastPushTimeStamp": "2022-06-20T16:19:12.024Z"
+        }
+    }
+}

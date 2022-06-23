@@ -1,23 +1,22 @@
-import OrderHistoryCard from "../OrderHistoryCard";
+import OpenOrderCard from "../OpenOrderCard";
 
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
 import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
-const OrderHistory = () => {
+const OpenOrders = () => {
   const { priceFixed, amountFixed, orders, trades } = useOrderHistory();
   const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Wrapper>
-      {orders?.length ? (
+      {trades?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -32,21 +31,20 @@ const OrderHistory = () => {
           </S.Thead>
           <S.Tbody>
             {orders &&
-              orders.map((order: OrderCommon, i) => {
+              orders.map((order, i) => {
                 // console.log("orderhistoryTable rows rendered");
-                const [base, quote] = order.m.split("-");
                 const date = new Date(Number(order.timestamp)).toLocaleString();
-                const isSell = order.side === "Ask";
+                const isSell = order.order_side === "Ask";
                 const isMarket = order.order_type === "MARKET";
-                const baseUnit = getAsset(base).symbol;
-                const quoteUnit = getAsset(quote).symbol;
-                const avgPrice = order.avg_filled_price;
+                const baseUnit = getAsset(order.base_asset_type).symbol;
+                const quoteUnit = getAsset(order.quote_asset_type).symbol;
+                const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
                 const status = order.status.toUpperCase();
                 return (
-                  <OrderHistoryCard
+                  <OpenOrderCard
                     key={i}
                     isSell={isSell}
-                    orderSide={order.side}
+                    orderSide={order.order_side}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
                     data={[
@@ -55,7 +53,7 @@ const OrderHistory = () => {
                       { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
                       { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
                       { value: Decimal.format(order.qty, amountFixed, ",") },
-                      { value: Decimal.format(order.filled_quantity, amountFixed, ",") },
+                      { value: Decimal.format(order.filled_qty, amountFixed, ",") },
                       {
                         value: Decimal.format(avgPrice, priceFixed, ","),
                       },
@@ -74,4 +72,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default OpenOrders;

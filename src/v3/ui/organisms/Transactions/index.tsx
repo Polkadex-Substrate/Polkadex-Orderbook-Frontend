@@ -5,14 +5,14 @@ import Checkbox from "../../molecules/Checkbox";
 import OrderHistory from "../../molecules/OrderHistory";
 import TradeHistory from "../../molecules/TradeHistory";
 import { DropdownContent, DropdownHeader } from "../../molecules";
+import OpenOrders from "../../molecules/OpenOrders";
 
 import * as S from "./styles";
 
 import { Dropdown, Icon, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
-import { EmptyData, Logged } from "@polkadex/orderbook/v2/ui/molecules";
-import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
+import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { selectHasUser } from "@polkadex/orderbook-modules";
 
 const initialFilters = {
   hiddenPairs: false,
@@ -23,21 +23,22 @@ const initialFilters = {
 
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
-const Transactions = ({ data, remove, pair = "DOT" }) => {
+const Transactions = () => {
   const [filters, setFilters] = useState(initialFilters);
+  const userLoggedIn = useReduxSelector(selectHasUser);
 
   // Filters Actions
   const handleChangeHidden = () =>
     setFilters({ ...filters, hiddenPairs: !filters.hiddenPairs });
-
-  const { priceFixed, amountFixed, orders, userLoggedIn, trades } = useOrderHistory();
-  const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Section>
       <Tabs>
         <S.Header>
           <S.HeaderContent>
+            <TabHeader>
+              <S.TabHeader>Open Orders</S.TabHeader>
+            </TabHeader>
             <TabHeader>
               <S.TabHeader>Order History</S.TabHeader>
             </TabHeader>
@@ -95,38 +96,14 @@ const Transactions = ({ data, remove, pair = "DOT" }) => {
         {userLoggedIn ? (
           <S.Content>
             <TabContent>
-              {orders?.length ? (
-                <OrderHistory
-                  getAsset={getAsset}
-                  priceFixed={priceFixed}
-                  amountFixed={amountFixed}
-                  orders={orders}
-                />
-              ) : (
-                <EmptyData />
-              )}
+              <OpenOrders />
             </TabContent>
             <TabContent>
-              {trades?.length ? (
-                <TradeHistory
-                  getAsset={getAsset}
-                  priceFixed={priceFixed}
-                  amountFixed={amountFixed}
-                  orders={orders}
-                />
-              ) : (
-                <EmptyData />
-              )}
+              <OrderHistory />
             </TabContent>
-            {/* <TabPanel>
-          <TransactionTable data={data} />
-        </TabPanel>
-        <TabPanel>
-          <TransactionTable data={data} />
-        </TabPanel>
-        <TabPanel>
-          <TransactionTable data={data} />
-        </TabPanel> */}
+            <TabContent>
+              <TradeHistory />
+            </TabContent>
           </S.Content>
         ) : (
           <Logged />

@@ -1,57 +1,60 @@
-import TransactionOrder from "../TransactionOrder";
+import TradeHistoryCard from "../TradeHistoryCard";
 
 import * as S from "./styles";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
+import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 
-const TradeHistory = ({ orders, priceFixed, amountFixed, getAsset }) => {
+const TradeHistory = () => {
+  const { priceFixed, amountFixed, trades } = useOrderHistory();
+  const getAsset = useReduxSelector(selectGetAsset);
+
   return (
     <S.Wrapper>
-      <S.Table>
-        <S.Thead>
-          <S.Tr>
-            <S.Th>Pair</S.Th>
-            <S.Th>Date</S.Th>
-            <S.Th>Price</S.Th>
-            <S.Th>Amount</S.Th>
-          </S.Tr>
-        </S.Thead>
-        <S.Tbody>
-          {orders &&
-            orders.map((order, i) => {
-              // console.log("orderhistoryTable rows rendered");
-              const date = new Date(parseInt(order.timestamp)).toLocaleString();
-              const isSell = order.order_side === "Sell";
-              const baseUnit = getAsset(order.base_asset_type).symbol;
-              const quoteUnit = getAsset(order.quote_asset_type).symbol;
-              return (
-                <div key={i} />
-                // <TransactionOrder
-                //   key={i}
-                //   isOpenOrder={order.status === "Accepted" && !isMarket}
-                //   isSell={isSell}
-                //   orderSide={order.order_side}
-                //   baseUnit={baseUnit}
-                //   quoteUnit={quoteUnit}
-                //   filledQuantity={Number("0")}
-                //   data={[
-                //     { value: date },
-                //     { value: order.order_type },
-                //     { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
-                //     { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
-                //     { value: Decimal.format(order.qty, amountFixed, ",") },
-                //     { value: Decimal.format(order.filled_qty, amountFixed, ",") },
-                //     {
-                //       value: Decimal.format(avgPrice, priceFixed, ","),
-                //     },
-                //   ]}
-                // />
-              );
-            })}
-        </S.Tbody>
-      </S.Table>
+      {trades.length ? (
+        <S.Table>
+          <S.Thead>
+            <S.Tr>
+              <S.Th>Pair</S.Th>
+              <S.Th>Date</S.Th>
+              <S.Th>Type</S.Th>
+              <S.Th>Price</S.Th>
+              <S.Th>Quantity</S.Th>
+            </S.Tr>
+          </S.Thead>
+          <S.Tbody>
+            {trades &&
+              trades.map((order, i) => {
+                // console.log("orderhistoryTable rows rendered");
+                const date = new Date(parseInt(order.timestamp)).toLocaleString();
+                const isSell = order.order_side === "Sell";
+                const baseUnit = getAsset(order.base_asset_type).symbol;
+                const quoteUnit = getAsset(order.quote_asset_type).symbol;
+                return (
+                  <TradeHistoryCard
+                    key={i}
+                    isSell={isSell}
+                    orderSide={order.order_side}
+                    baseUnit={baseUnit}
+                    quoteUnit={quoteUnit}
+                    data={[
+                      { value: date },
+                      { value: Decimal.format(order.price, priceFixed, ",") },
+                      { value: Decimal.format(order.qty, amountFixed, ",") },
+                    ]}
+                  />
+                );
+              })}
+          </S.Tbody>
+        </S.Table>
+      ) : (
+        <S.EmptyWrapper>
+          <EmptyData />
+        </S.EmptyWrapper>
+      )}
     </S.Wrapper>
   );
 };

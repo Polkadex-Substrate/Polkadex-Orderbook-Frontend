@@ -1,16 +1,13 @@
 import styled, { css } from "styled-components";
-import media from "styled-media-query";
 
 export const Wrapper = styled.div`
   background: #2e303c;
   border-radius: 0 3rem 3rem 3rem;
   box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  ${media.lessThan("large")`
-    flex-direction: column;
-  `}
+  display: grid;
+  @media screen and (min-width: 980px) {
+    grid-template-columns: 1fr auto;
+  }
 `;
 export const WrapperGraph = styled.section`
   display: flex;

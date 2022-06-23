@@ -100,7 +100,7 @@ export function Trading() {
           <MarketOrder />
         </S.WrapperGraph>
         <S.BottomWrapper>
-          <Transactions data={[]} remove={() => console.log("remove")} />
+          <Transactions />
           <RecentTrades />
         </S.BottomWrapper>
       </S.WrapperMain>
