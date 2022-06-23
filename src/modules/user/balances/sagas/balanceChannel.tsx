@@ -1,38 +1,26 @@
-import { call, put, race, select, take } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
+import { call, put, select, take } from "redux-saga/effects";
 
-import { alertPush, BalanceMessage, selectUserBalance } from "../../..";
+import { alertPush, BalanceMessage } from "../../..";
 import { ProxyAccount, selectUserInfo } from "../../profile";
-import { Balance, BalanceChannelFetch, balanceChannelTradeUpdateData } from "../actions";
+import { Balance, BalanceChannelFetch, balanceChannelUpdateData } from "../actions";
 
 import { fetchBalanceUpdatesChannel } from "./helpers";
 
-import { selectRabbitmqChannel } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 export function* balanceChannelSaga(action: BalanceChannelFetch) {
   console.log("balanceChannelSaga called");
   try {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
-    const userAddress = userInfo.address;
+    const userAddress = userInfo.main_addr;
     if (userAddress) {
-      const rabbitmqConn = yield select(selectRabbitmqChannel);
       const getAsset = yield select(selectGetAsset);
-      const proxyAddress = userAddress;
-      const proxyQueueName = `${proxyAddress}-balance-update-events`;
-      const proxyRoutingKey = `${proxyAddress}-balance-update-events`;
-      if (rabbitmqConn) {
-        const proxyChannel = yield call(() =>
-          fetchBalanceUpdatesChannel(rabbitmqConn, proxyQueueName, proxyRoutingKey)
-        );
-
-        while (true) {
-          const tradeMsg = yield take(proxyChannel);
-          console.log("balanceMsg =>", tradeMsg);
-          const balanceMsg: BalanceMessage = JSON.parse(tradeMsg);
-          const updateBalance = updateBalanceFromTradeMsg(balanceMsg, getAsset);
-          yield put(balanceChannelTradeUpdateData(updateBalance));
-        }
+      const channel = yield call(() => fetchBalanceUpdatesChannel(userAddress));
+      while (true) {
+        const balanceMsg = yield take(channel);
+        console.log("balanceMsg =>", balanceMsg);
+        const updateBalance = updateBalanceFromTradeMsg(balanceMsg, getAsset);
+        yield put(balanceChannelUpdateData(updateBalance));
       }
     }
   } catch (error) {
@@ -51,32 +39,14 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
 const updateBalanceFromTradeMsg = (
   msg: BalanceMessage,
   getAsset: (id: string) => IPublicAsset
-): Balance[] => {
-  const update: BalanceMessage["update"]["BalanceUpdate"] = msg.update.BalanceUpdate;
-  if (update) {
-    let [baseAsset, quoteAsset] = msg.trading_pair.split("/");
-    baseAsset = baseAsset === "PDEX" ? "-1" : baseAsset;
-    quoteAsset = quoteAsset === "PDEX" ? "-1" : quoteAsset;
-    const baseFree = update.base_free;
-    const baseReserved = update.base_reserved;
-    const quoteFree = update.quote_free;
-    const quoteReserved = update.quote_reserved;
-    const newBalance: Balance[] = [
-      {
-        name: getAsset(baseAsset).name,
-        symbol: getAsset(baseAsset).symbol,
-        assetId: baseAsset,
-        free_balance: baseFree,
-        reserved_balance: baseReserved,
-      },
-      {
-        name: getAsset(quoteAsset).name,
-        symbol: getAsset(quoteAsset).symbol,
-        assetId: quoteAsset,
-        free_balance: quoteFree,
-        reserved_balance: quoteReserved,
-      },
-    ];
-    return newBalance;
-  }
+): Balance => {
+  const newBalance = {
+    name: getAsset(msg.asset).name,
+    symbol: getAsset(msg.asset).symbol,
+    assetId: msg.asset === "PDEX" ? "-1" : msg.asset,
+    free_balance: msg.free,
+    reserved_balance: msg.reserved,
+    pending_withdrawal: msg.pending_withdrawal,
+  };
+  return newBalance;
 };
