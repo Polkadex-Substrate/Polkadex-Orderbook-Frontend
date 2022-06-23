@@ -17,6 +17,9 @@ export const Header = styled.div`
     `}
 `;
 export const Content = styled.div``;
+export const ContentWrapper = styled.div`
+  padding: 10rem 0;
+`;
 
 export const HeaderContent = styled.ul`
   display: flex;

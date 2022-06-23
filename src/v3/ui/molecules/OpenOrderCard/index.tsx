@@ -4,15 +4,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-const TransactionOrder = ({
-  isSell,
-  filledQuantity = 0,
-  orderSide,
-  baseUnit,
-  quoteUnit,
-  data = [],
-  isOpenOrder = false,
-}) => (
+const OpenOrderCard = ({ isSell, orderSide, baseUnit, quoteUnit, data = [] }) => (
   <S.Tr>
     <S.Td>
       <S.Tag>Pair</S.Tag>
@@ -21,7 +13,7 @@ const TransactionOrder = ({
           <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" color="text" />
         </S.Image>
         <span>
-          {quoteUnit} / {baseUnit}
+          {quoteUnit}/{baseUnit}
         </span>
       </S.ContainerFlex>
     </S.Td>
@@ -55,13 +47,10 @@ const TransactionOrder = ({
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        {isOpenOrder && (
-          <Icon name="Trash" background="primary" onClick={() => console.log("Remove")} />
-        )}
         <Icon name="Options" background="none" />
       </S.ContainerActions>
     </S.Td>
   </S.Tr>
 );
 
-export default TransactionOrder;
+export default OpenOrderCard;

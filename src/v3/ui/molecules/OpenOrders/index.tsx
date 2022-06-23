@@ -1,4 +1,4 @@
-import OrderHistoryCard from "../OrderHistoryCard";
+import OpenOrderCard from "../OpenOrderCard";
 
 import * as S from "./styles";
 
@@ -10,7 +10,7 @@ import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
-const OrderHistory = () => {
+const OpenOrders = () => {
   const { priceFixed, amountFixed, orders, trades } = useOrderHistory();
   const getAsset = useReduxSelector(selectGetAsset);
 
@@ -41,7 +41,7 @@ const OrderHistory = () => {
                 const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
                 const status = order.status.toUpperCase();
                 return (
-                  <OrderHistoryCard
+                  <OpenOrderCard
                     key={i}
                     isSell={isSell}
                     orderSide={order.order_side}
@@ -72,4 +72,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default OpenOrders;

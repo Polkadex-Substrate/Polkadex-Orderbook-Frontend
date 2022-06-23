@@ -13,7 +13,7 @@ export const Thead = styled.thead`
   color: #8ba1be;
   tr {
     display: grid;
-    grid-template-columns: repeat(6, 1fr) 0.5fr;
+    grid-template-columns: 1fr 1.5fr repeat(3, 1fr);
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -29,7 +29,7 @@ export const Tbody = styled.tbody`
   `}
   tr {
     display: grid;
-    grid-template-columns: 2.5fr repeat(5, 1fr) 0.5fr;
+    grid-template-columns: 1fr 1.5fr repeat(3, 1fr);
     align-items: center;
     ${media.lessThan("large")`
       grid-template-columns: repeat(4,1fr);
@@ -45,4 +45,7 @@ export const Th = styled.th`
   ${media.lessThan("large")`
     display: none;
   `}
+`;
+export const EmptyWrapper = styled.div`
+  padding: 10rem 0;
 `;
