@@ -1,5 +1,8 @@
 // TODO: Check kline subscription updates
+import { rejects } from "assert";
+
 import axios from "axios";
+import { Client } from "rpc-websockets";
 
 import { LibrarySymbolInfo } from "../../../../public/charting_library/datafeed-api";
 
@@ -239,3 +242,4 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
 
   return dataFeed;
 };
+

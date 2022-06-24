@@ -21,6 +21,7 @@ export type MarketFilter = MarketFilterSignificantDigit | MarketFilterCustomStep
 
 export interface Market {
   id: MarketId;
+  m: string; // id in terms of PDEX-1
   assetIdArray: string[];
   name: string;
   base_unit: string;
@@ -38,16 +39,16 @@ export interface Market {
 }
 
 export interface Ticker {
-  timestamp: number;
+  m: string; // eg "PDEX-1"
+  priceChange24Hr: string;
+  priceChangePercent24Hr: string;
+  open: string;
+  close: string;
   high: string;
   low: string;
-  last: string;
-  previous_close: string;
-  price_change_percent: string;
-  volume?: string;
-  average: string;
+  volumeBase24hr: string;
+  volumeQuote24Hr: string;
 }
-
 export interface TickerEvent {
   amount: string;
   name: string;

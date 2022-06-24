@@ -1,6 +1,6 @@
 import { BalancesAction, Balance } from "./actions";
 import {
-  BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  BALANCES_CHANNEL_UPDATE_DATA,
   BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
@@ -47,48 +47,17 @@ export const balancesReducer = (
         success: false,
         error: action.error,
       };
-    case BALANCES_CHANNEL_TRADE_UPDATE_DATA: {
-      const updates = action.payload;
+    case BALANCES_CHANNEL_UPDATE_DATA: {
+      const update = action.payload;
       // filter out old balances from the balance state
       const balanceFiltered = state.balances.filter(
-        (balance) => !updates.some((update) => update.assetId === balance.assetId)
+        (balance) => balance.assetId !== update.assetId
       );
       // apply updates to the balances in the state
-      const newBalances = [...balanceFiltered, ...updates];
+      const newBalances = [...balanceFiltered, update];
       return {
         ...state,
         balances: newBalances,
-      };
-    }
-    case BALANCES_CHANNEL_TRANSFER_UPDATE_DATA: {
-      const { assetId, amount, name, symbol } = action.payload;
-      let update: Balance | undefined;
-      // filter out old balances from the balance state
-      const balanceFiltered = state.balances.filter(
-        (balance) => !(balance.assetId === assetId)
-      );
-      // check if balance already exists in the state
-      const balaceOfAsset = state.balances.find((balance) => balance.assetId === assetId);
-      if (!balaceOfAsset) {
-        // if not, create a new balance
-        update = {
-          assetId,
-          name,
-          symbol,
-          reserved_balance: "0",
-          free_balance: amount,
-        };
-      } else {
-        // if the assetId already exists in the state, update the free balance
-        const newFreeBalance = Number(balaceOfAsset.free_balance) + Number(amount);
-        update = {
-          ...balaceOfAsset,
-          free_balance: newFreeBalance.toString(),
-        };
-      }
-      return {
-        ...state,
-        balances: [...balanceFiltered, update],
       };
     }
     default:

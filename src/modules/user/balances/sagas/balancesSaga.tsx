@@ -1,6 +1,8 @@
 import { call, put, select } from "redux-saga/effects";
 import axios from "axios";
+import { API } from "aws-amplify";
 
+import * as queries from "../../../../graphql/queries";
 import { ProxyAccount } from "../../..";
 import { balancesData, BalancesFetch, BalanceBase } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
@@ -8,21 +10,17 @@ import { selectUserInfo } from "../../profile";
 
 import {
   selectAssetsFetchSuccess,
-  selectAllAssets,
-  IPublicAsset,
   selectAssetIdMap,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
-    const account = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectUserInfo);
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (account.address && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(account));
-      // very unoptimized way to map the asset data
-      // TODO: improve datastructure in the future
+      const balances = yield call(() => fetchbalancesAsync(account.main_addr));
       const list = balances.map((balance: IBalanceFromDb) => {
         const asset =
           balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
@@ -37,10 +35,11 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
       yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
+    console.warn(error);
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong..",
+          title: "Something has gone wrong (balances fetch)..",
           description: error.message,
         },
         type: "Error",
@@ -53,10 +52,38 @@ type IBalanceFromDb = {
   asset_type: string;
   reserved_balance: string;
   free_balance: string;
+  pending_withdrawal: string;
 };
 
-async function fetchbalancesAsync(account: ProxyAccount): Promise<IBalanceFromDb[]> {
-  const res: any = await axios.get("/api/user/assets/" + account.main_acc_id); // for testing purposes
-  console.log("fetch balance =>", res);
-  return res.data.data;
+async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
+  /*
+  {
+    "getAllBalancesByMainAccount": {
+        "items": [
+            {
+                "main_account": "esrPQes7pyxeWjvPjxzhqVYFeNVMCJfEJUbza4Zi1tt5d4Bgb",
+                "asset": "1",
+                "free": "7",
+                "reserved": "3",
+                "pending_withdrawal": "0.00000000"
+            },
+        ],
+        "nextToken": null
+    }
+}
+*/
+  const res: any = await API.graphql({
+    query: queries.getAllBalancesByMainAccount,
+    variables: { main_account: account },
+  });
+  const balances = res.data.getAllBalancesByMainAccount.items.map((val) => {
+    return {
+      asset_type: val.asset,
+      reserved_balance: val.reserved,
+      free_balance: val.free,
+      pending_withdrawal: val.pending_withdrawal,
+    };
+  });
+  console.log("fetch balance =>", balances);
+  return balances;
 }

@@ -17,7 +17,7 @@ import { UNIT_BN } from "@polkadex/web-constants";
 export function* fetchDepositsSaga(action: DepositsFetch) {
   try {
     console.log("depsoit saga called");
-    const { baseAsset, quoteAsset, isBase, amount } = action.payload;
+    const { asset, amount } = action.payload;
     const mainUser = yield select(selectMainAccount);
     const api = yield select(selectRangerApi);
     const isApiReady = yield select(selectRangerIsReady);
@@ -32,15 +32,7 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           },
         })
       );
-      const res = yield call(
-        depositToEnclave,
-        api,
-        mainUser,
-        baseAsset,
-        quoteAsset,
-        amount,
-        isBase
-      );
+      const res = yield call(depositToEnclave, api, mainUser, asset, amount);
       if (res.isSuccess) {
         yield put(depositsData());
         yield put(
@@ -74,13 +66,11 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
 async function depositToEnclave(
   api: ApiPromise,
   account: any,
-  baseAsset: Record<string, string | null>,
-  quoteAsset: Record<string, string | null>,
-  amount: string | number,
-  isBase: boolean
+  asset: Record<string, string | null>,
+  amount: string | number
 ): Promise<ExtrinsicResult> {
   const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
-  const ext = api.tx.ocex.deposit(baseAsset, quoteAsset, amountStr, isBase);
+  const ext = api.tx.ocex.deposit(asset, amountStr);
   const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
   return res;
 }

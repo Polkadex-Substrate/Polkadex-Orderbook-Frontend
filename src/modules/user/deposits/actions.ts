@@ -8,10 +8,8 @@ export interface DepositsData {
 export interface DepositsFetch {
   type: typeof DEPOSITS_FETCH;
   payload: {
-    baseAsset: Record<string, string | null>;
-    quoteAsset: Record<string, string | null>;
+    asset: Record<string, string | null>;
     amount: string | number;
-    isBase: boolean;
   };
 }
 

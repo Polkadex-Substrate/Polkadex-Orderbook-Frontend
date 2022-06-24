@@ -3,8 +3,7 @@ import OrderHistoryCard from "../OrderHistoryCard";
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -30,36 +29,38 @@ const OrderHistory = () => {
             </S.Tr>
           </S.Thead>
           <S.Tbody>
-            {orders.map((order, i) => {
-              // console.log("orderhistoryTable rows rendered");
-              const date = new Date(Number(order.timestamp)).toLocaleString();
-              const isSell = order.order_side === "Ask";
-              const isMarket = order.order_type === "MARKET";
-              const baseUnit = getAsset(order.base_asset_type).symbol;
-              const quoteUnit = getAsset(order.quote_asset_type).symbol;
-              const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
-              const status = order.status.toUpperCase();
-              return (
-                <OrderHistoryCard
-                  key={i}
-                  isSell={isSell}
-                  orderSide={order.order_side}
-                  baseUnit={baseUnit}
-                  quoteUnit={quoteUnit}
-                  data={[
-                    { value: date },
-                    { value: order.order_type },
-                    { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
-                    { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
-                    { value: Decimal.format(order.qty, amountFixed, ",") },
-                    { value: Decimal.format(order.filled_qty, amountFixed, ",") },
-                    {
-                      value: Decimal.format(avgPrice, priceFixed, ","),
-                    },
-                  ]}
-                />
-              );
-            })}
+            {orders &&
+              orders.map((order: OrderCommon, i) => {
+                // console.log("orderhistoryTable rows rendered");
+                const [base, quote] = order.m.split("-");
+                const date = new Date(order.time).toLocaleString();
+                const isSell = order.side === "Ask";
+                const isMarket = order.order_type === "MARKET";
+                const baseUnit = getAsset(base).symbol;
+                const quoteUnit = getAsset(quote).symbol;
+                const avgPrice = order.avg_filled_price;
+                return (
+                  <OrderHistoryCard
+                    key={i}
+                    isSell={isSell}
+                    orderSide={order.side}
+                    orderType={order.order_type}
+                    baseUnit={baseUnit}
+                    quoteUnit={quoteUnit}
+                    data={[
+                      { value: date },
+                      { value: order.order_type },
+                      { value: order.status },
+                      { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
+                      { value: Decimal.format(order.qty, amountFixed, ",") },
+                      { value: Decimal.format(order.filled_quantity, amountFixed, ",") },
+                      {
+                        value: Decimal.format(avgPrice, priceFixed, ","),
+                      },
+                    ]}
+                  />
+                );
+              })}
           </S.Tbody>
         </S.Table>
       ) : (

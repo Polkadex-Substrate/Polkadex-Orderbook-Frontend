@@ -10,26 +10,22 @@ import {
   MARKETS_TICKERS_DATA,
   MARKETS_TICKERS_ERROR,
   MARKETS_TICKERS_FETCH,
-  MARKET_PRICE_FETCH,
-  MARKET_PRICE_DATA,
-  MARKET_PRICE_ERROR,
-  MARKET_CURRENT_TICKERS_DATA,
-  MARKET_CURRENT_TICKERS_UPDATE,
 } from "./constants";
 import { Market, Ticker } from "./types";
 
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
-export const defaultTickers = {
-  amount: "0",
-  low: "0",
-  last: "0",
+export const defaultTickers: Ticker = {
+  m: "0-0",
+  priceChange24Hr: "0",
+  priceChangePercent24Hr: "0",
+  open: "0",
+  close: "0",
   high: "0",
-  volume: "0",
-  price_change_percent: "0.00%",
-  previous_close: "0",
-  average: "0",
-  timestamp: 0,
+  low: "0",
+  volumeBase24hr: "0",
+  volumeQuote24Hr: "0",
 };
+
 export interface MarketsState extends CommonState {
   list: Market[];
   filters: {
@@ -37,36 +33,31 @@ export interface MarketsState extends CommonState {
   };
   currentMarket: Market | undefined;
   currentTicker: Ticker;
+  tickersTimestamp: number;
+  timestamp: number;
   tickerLoading: boolean;
+  tickers: Ticker[];
   loading: boolean;
-  timestamp?: number;
-  tickersTimestamp?: number;
-  successMarketPriceFetch: boolean;
-  marketPrice: {
-    market: string;
-    side: string;
-    price: string;
-    created_at?: string;
-    updated_at?: string;
-  };
+  marketPrice: string;
 }
 
 export const initialMarketsState: MarketsState = {
   list: [],
   filters: {},
+  tickersTimestamp: 0,
+  timestamp: 0,
   currentMarket: undefined,
   currentTicker: defaultTickers,
+  tickers: [],
   tickerLoading: false,
   loading: false,
-  successMarketPriceFetch: false,
-  marketPrice: {
-    market: "",
-    side: "",
-    price: "",
-  },
+  marketPrice: "0",
 };
 
-export const marketsReducer = (state = initialMarketsState, action: MarketsAction) => {
+export const marketsReducer = (
+  state = initialMarketsState,
+  action: MarketsAction
+): MarketsState => {
   switch (action.type) {
     case MARKETS_FETCH:
       return {
@@ -102,21 +93,29 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
         loading: false,
       };
 
-    case MARKETS_SET_CURRENT_MARKET:
+    case MARKETS_SET_CURRENT_MARKET: {
+      const tickers = [...state.tickers];
+      const currentTicker = tickers.find((x) => x.m === action.payload.m);
       return {
         ...state,
         currentMarket: action.payload,
+        currentTicker,
       };
+    }
 
-    case MARKETS_SET_CURRENT_MARKET_IFUNSET:
+    case MARKETS_SET_CURRENT_MARKET_IFUNSET: {
       if (state.currentMarket) {
         return state;
       }
+      const tickers = [...state.tickers];
+      const currentTicker = tickers.find((x) => x.m === action.payload.m);
 
       return {
         ...state,
         currentMarket: action.payload,
+        currentTicker,
       };
+    }
 
     case MARKETS_TICKERS_FETCH:
       return {
@@ -128,49 +127,7 @@ export const marketsReducer = (state = initialMarketsState, action: MarketsActio
       return {
         ...state,
         tickerLoading: false,
-        tickers: action.payload.ticker,
-      };
-    case MARKET_CURRENT_TICKERS_DATA:
-      return {
-        ...state,
-        tickerLoading: false,
-        currentTicker: action.payload.ticker,
-      };
-    case MARKET_CURRENT_TICKERS_UPDATE: {
-      const updatedTicker = { ...state.currentTicker, ...action.payload };
-      return {
-        ...state,
-        currentTicker: updatedTicker,
-      };
-    }
-    case MARKETS_TICKERS_ERROR:
-      return {
-        ...state,
-        tickerLoading: false,
-      };
-    case MARKET_PRICE_FETCH:
-      return {
-        ...state,
-        marketPrice: {
-          ...state.marketPrice,
-          market: action.payload.market,
-          side: action.payload.side,
-        },
-      };
-    case MARKET_PRICE_DATA:
-      return {
-        ...state,
-        successMarketPriceFetch: true,
-        marketPrice: {
-          ...state.marketPrice,
-          ...action.payload,
-        },
-      };
-    case MARKET_PRICE_ERROR:
-      return {
-        ...state,
-        successMarketPriceFetch: false,
-        marketPrice: initialMarketsState.marketPrice,
+        tickers: action.payload,
       };
     default:
       return state;

@@ -1,45 +1,23 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
+import { API } from "aws-amplify";
 
-import {
-  FetchOrderUpdatesChannel,
-  OrderUpdateEvent,
-  userOrderChannelUpdateData,
-  userOrderUpdateAccepted,
-  userOrderUpdateFilled,
-  userOrderUpdatePartiallyFilled,
-} from "../actions";
+import { FetchOrderUpdatesChannel, userOrderChannelUpdateData } from "../actions";
 import { ProxyAccount, selectUserInfo } from "../../profile";
+import * as subscriptions from "../../../../graphql/subscriptions";
 
-import {
-  RabbitmqChannelType,
-  selectRabbitmqChannel,
-} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 
 export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
   console.log("orderUpdateChannel called");
   try {
-    const AmqpChannel = yield select(selectRabbitmqChannel);
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.address;
-    if (AmqpChannel && userAddress) {
-      const channel = yield call(() => fetchOrderUpdatesChannel(AmqpChannel, userAddress));
+    if (userAddress) {
+      const channel = createOrderUpdatesChannel(userAddress);
       while (true) {
-        const orderMsgRaw = yield take(channel);
-        console.log("order update=>" + orderMsgRaw);
-        const orderMsg: any = JSON.parse(orderMsgRaw);
-        if (orderMsg.update.Accepted) {
-          console.log("accepted");
-          yield put(userOrderUpdateAccepted(orderMsg));
-        } else if (orderMsg.update.PartiallyFilled) {
-          console.log("partially filled");
-          yield put(userOrderUpdatePartiallyFilled(orderMsg));
-        } else if (orderMsg.update.Filled) {
-          console.log("filled");
-          yield put(userOrderUpdateFilled(orderMsg));
-        }
+        const action = yield take(channel);
+        yield put(action);
       }
     }
   } catch (error) {
@@ -55,34 +33,17 @@ export function* orderUpdatesChannelSaga(action: FetchOrderUpdatesChannel) {
   }
 }
 
-async function fetchOrderUpdatesChannel(chann: RabbitmqChannelType, address: string) {
-  const queueName = `${address}-order-update-events`;
-  const routingKey = `${address}-order-update-events`;
-  console.log("fetchOrderUpdatesChannel=>", queueName, routingKey);
-  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
-  await queue.bind("topic_exchange", routingKey);
-  return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
-      const msg = u8aToString(res.body);
-      emitter(msg);
-      res.ack();
+function createOrderUpdatesChannel(address: string) {
+  return eventChannel((emit) => {
+    const subscription = API.graphql({
+      query: subscriptions.onOrderUpdate,
+      variables: { main_account: address },
+    }).subscribe({
+      next: (data) => {
+        emit(userOrderChannelUpdateData(data.value.data.onOrderUpdate));
+      },
+      error: (err) => console.warn(err),
     });
-    return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
-    };
+    return subscription.unsubscribe;
   });
 }
-
-// {
-//   trading_pair: "PDEX/1",
-//   update: {
-//     Accepted: {
-//       order_id: 335613430048268376252486492096633622314,
-//       user: "5DwPy8LFTXReZtboaDH3tFN9jqjMpqqnavLuimD2a5s7dHa5",
-//       side: "Bid",
-//       order_type: "LIMIT",
-//       price: "1",
-//       qty: "1",
-//     },
-//   },
-// };

@@ -1,32 +1,26 @@
 import { eventChannel } from "redux-saga";
-import { call, delay, put, select, take } from "redux-saga/effects";
-import { u8aToString } from "@polkadot/util";
-import cryptoRandomString from "crypto-random-string";
+import { call, put, select, take } from "redux-saga/effects";
+import { API, JS } from "aws-amplify";
 
-import { depthData, orderBookData, OrderBookState } from "..";
+import { depthDataIncrement } from "..";
 import { alertPush } from "../../alertHandler";
-import { RabbitmqChannelType, selectRabbitmqChannel } from "../../rabbitmqChannel";
-
-import { getDepthFromOrderbook } from "./helper";
-
-import { DEFAULT_RANDOM_STRING_LENGTH } from "@polkadex/web-constants";
+import * as subscriptions from "../../../../graphql/subscriptions";
+import { Market, selectCurrentMarket } from "../../markets";
 
 export function* orderBookChannelSaga() {
   try {
-    const rabbitmqConn = yield select(selectRabbitmqChannel);
-    const queueName =
-      cryptoRandomString({ length: DEFAULT_RANDOM_STRING_LENGTH }) + "-orderbook-snapshot";
-    if (rabbitmqConn) {
-      const channel = yield call(() =>
-        fetchOrderBookChannel(rabbitmqConn, queueName, "*.*.orderbook-snapshot")
-      );
+    const market: Market = yield select(selectCurrentMarket);
+    if (market?.id) {
+      console.log("orderbook channel started");
+      let [base, quote] = market.assetIdArray;
+      base = base === "-1" ? "PDEX" : base;
+      quote = quote === "-1" ? "PDEX" : quote;
+      const channel = fetchOrderBookChannel(`${base}-${quote}`);
       while (true) {
-        const tradesMsg = yield take(channel);
-        console.log("orderbook channel", tradesMsg);
-        const data: OrderBookState = JSON.parse(tradesMsg);
-        const { asks, bids } = data;
-        yield put(orderBookData(data));
-        yield put(depthData({ asks, bids }));
+        const msg = yield take(channel);
+        console.log("orderbook channel", msg);
+        const data = JSON.parse(msg);
+        yield put(depthDataIncrement(data));
       }
     }
   } catch (error) {
@@ -42,21 +36,17 @@ export function* orderBookChannelSaga() {
     );
   }
 }
-async function fetchOrderBookChannel(
-  chann: RabbitmqChannelType,
-  queueName: string,
-  routingKey: string
-) {
-  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
-  await queue.bind("topic_exchange", routingKey);
+function fetchOrderBookChannel(market: string) {
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false, exclusive: true }, (res) => {
-      const msg = u8aToString(res.body);
-      res.ack();
-      emitter(msg);
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: `${market}-ob-inc` },
+    }).subscribe({
+      next: (data) => emitter(data.value.data.websocket_streams.data),
+      error: (err) => console.log(err),
     });
     return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
+      subscription.unsubscribe();
     };
   });
 }

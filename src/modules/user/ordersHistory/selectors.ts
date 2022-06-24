@@ -4,6 +4,9 @@ import { OrderCommon } from "../../types";
 export const selectOrdersHistory = (state: RootState): OrderCommon[] =>
   state.user.ordersHistory.list;
 
+export const selectOpenOrders = (state: RootState): OrderCommon[] =>
+  state.user.ordersHistory.openOrders;
+
 export const selectOpenOrdersHistory = (state: RootState): OrderCommon[] =>
   state.user.ordersHistory.list.filter((order) => order.status === "Accepted");
 

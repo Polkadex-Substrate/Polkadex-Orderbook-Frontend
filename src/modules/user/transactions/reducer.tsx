@@ -2,22 +2,13 @@ import { TransactionsAction } from "./actions";
 import { TRANSACTIONS_DATA, TRANSACTIONS_ERROR, TRANSACTIONS_FETCH } from "./constants";
 
 export interface Transaction {
-  id: string;
-  txid: string;
-  timestamp: number;
-  from: string;
-  to: string;
-  transaction_type: string;
-  amount: number;
-  currency: string;
-  status: string;
-  updated_timestamp: null;
-  fee: Fee;
-}
-
-interface Fee {
-  currency: string;
-  cost: number;
+  amount: string;
+  asset: string;
+  fee: string;
+  main_account: string;
+  time: string;
+  status: "PENDING" | "CONFIRMED" | "FAILED";
+  txn_type: "DEPOSIT" | "WITHDRAW";
 }
 
 export interface TransactionsState {

@@ -22,6 +22,9 @@ export function useOrderbook() {
   const lastTrade = useReduxSelector(selectLastRecentTrade);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
 
+  const bidsSorted = sortArrayDescending(bids);
+  const asksSorted = sortArrayDescending(asks);
+
   const currentPrice = Number(currentTrade?.price);
   const lastPrice = Number(lastTrade?.price);
   /**
@@ -52,7 +55,10 @@ export function useOrderbook() {
     isPriceUp,
     lastPriceValue,
     hasMarket: !!currentMarket,
-    asks,
-    bids,
+    asks: asksSorted,
+    bids: bidsSorted,
   };
+}
+function sortArrayDescending(arr: string[][]) {
+  return arr?.sort((a, b) => Number(b[0]) - Number(a[0]));
 }

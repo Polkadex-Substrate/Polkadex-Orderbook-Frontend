@@ -8,43 +8,64 @@ import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
 import { AvailableMessage, Button } from "@polkadex/orderbook-ui/molecules";
 import { MyAccount, MyWallet, QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser } from "@polkadex/orderbook-modules";
+import {
+  selectCurrentMarket,
+  selectCurrentMarketTickers,
+  selectHasUser,
+  setCurrentMarket,
+} from "@polkadex/orderbook-modules";
 import { Notifications } from "@polkadex/orderbook-ui/templates";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const Navbar = ({ onOpenMarkets }) => {
   const hasUser = useReduxSelector(selectHasUser);
+  const getAsset = useReduxSelector(selectGetAsset);
+  const currMarket = useReduxSelector(selectCurrentMarket);
+  const currentTickers = useReduxSelector(selectCurrentMarketTickers);
+  const baseAsset = getAsset(currMarket?.assetIdArray[0]);
+  const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
+
+  const currPrice = Number(currentTickers?.close).toFixed(2);
+  const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
+  const isPriceChangeNegative = Number(currentTickers?.priceChange24Hr) < 0;
+  const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
+  const high = Number(currentTickers?.high).toFixed(2);
+  const low = Number(currentTickers?.low).toFixed(2);
+
   const router = useRouter();
   return (
     <S.Wrapper>
       <S.WrapperInfo>
         <S.ContainerPair>
-          <HeaderMarket pair="DOT" pairTicker="UDD" onOpenMarkets={onOpenMarkets} />
+          <HeaderMarket
+            pair={currMarket?.name}
+            pairTicker="UDD"
+            onOpenMarkets={onOpenMarkets}
+          />
         </S.ContainerPair>
         <S.ContainerInfo>
-          <NavbarItem label="Last Trade Price (BTC)" info="0.03209666" />
-          <NavbarItem label="Price 24h" info="+52.47%" color="Red" />
-          <NavbarItem label="Volume 24h (DOT)" info="71,459.80" />
+          <NavbarItem label={`Price (${quoteAsset?.symbol})`} info={currPrice} />
+          <NavbarItem
+            label="Price % 24h"
+            info={price_change_percent}
+            color={isPriceChangeNegative ? "Red" : ""}
+          />
+          <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
           <S.WrapperVolume>
             <S.VolumeHigh isNegative>
               <span>24h High</span>
-              <AvailableMessage message="Soon" color="secondaryBackgroundSolid" isVisible>
-                <p>0.5020201</p>
-              </AvailableMessage>
+              <p>{high}</p>
             </S.VolumeHigh>
             <S.VolumeLow>
-              <span>24h High</span>
-              <AvailableMessage message="Soon" color="secondaryBackgroundSolid" isVisible>
-                <p>0.5020201</p>
-              </AvailableMessage>
+              <span>24h Low</span>
+              <p>{low}</p>
             </S.VolumeLow>
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
       {hasUser ? (
         <S.Box>
-          <AvailableMessage message="Soon" isPriority>
-            <Notifications />
-          </AvailableMessage>
+          <Notifications />
           <MyWallet />
           <MyAccount />
         </S.Box>

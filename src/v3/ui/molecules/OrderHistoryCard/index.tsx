@@ -4,7 +4,14 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-const OrderHistoryCard = ({ isSell, orderSide, baseUnit, quoteUnit, data = [] }) => (
+const OrderHistoryCard = ({
+  isSell,
+  orderSide,
+  orderType,
+  baseUnit,
+  quoteUnit,
+  data = [],
+}) => (
   <S.Tr>
     <S.Td>
       <S.Tag>Pair</S.Tag>
@@ -19,13 +26,13 @@ const OrderHistoryCard = ({ isSell, orderSide, baseUnit, quoteUnit, data = [] })
     </S.Td>
     <S.Td>
       <S.Tag>Date</S.Tag>
-      <S.ContainerFlex>{moment(new Date()).format("LLL")}</S.ContainerFlex>
+      <S.ContainerFlex>{data[0].value}</S.ContainerFlex>
     </S.Td>
 
     <S.Td>
       <S.Tag>Type</S.Tag>
       <S.ContainerFlex>
-        <span>{orderSide}</span>
+        <span>{orderType}</span>
       </S.ContainerFlex>
     </S.Td>
 

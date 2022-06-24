@@ -19,10 +19,12 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
+import { IPublicAsset, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 const defaultValues = {
   amount: 0.0,
-  asset: "",
+  asset: POLKADEX_ASSET,
   market: null,
   address: "",
 };
@@ -30,7 +32,7 @@ const defaultValues = {
 const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const selectedAccount = useReduxSelector(selectMainAccount);
-  const markets = useReduxSelector(selectMarkets);
+  const assets: IPublicAsset[] = useReduxSelector(selectAllAssets);
 
   const dispatch = useDispatch();
 
@@ -40,16 +42,11 @@ const Deposit = () => {
         initialValues={defaultValues}
         validationSchema={depositValidations}
         onSubmit={async (values) => {
-          const isBase = values.market?.base_unit === values.asset;
-          const baseAsset =
-            values.market.assetIdArray[0] === "-1"
+          const asset =
+            values.asset.assetId === "-1"
               ? { polkadex: null }
-              : { asset: values.market.assetIdArray[0] };
-          const quoteAsset =
-            values.market.assetIdArray[1] === "-1"
-              ? { polkadex: null }
-              : { asset: values.market.assetIdArray[1] };
-          dispatch(depositsFetch({ baseAsset, quoteAsset, amount: values.amount, isBase }));
+              : { asset: values.asset.assetId };
+          dispatch(depositsFetch({ asset, amount: values.amount }));
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -93,7 +90,7 @@ const Deposit = () => {
                   isClickable
                   header={
                     <S.SelectWrapper>
-                      <span>{values?.market?.name || "Select Market"}</span>
+                      <span>{values?.asset?.name || "Select Asset"}</span>
                       <Icon
                         name="ArrowBottom"
                         size="small"
@@ -102,14 +99,14 @@ const Deposit = () => {
                       />
                     </S.SelectWrapper>
                   }>
-                  <S.SelectContainer isOverflow={markets?.length > 2}>
-                    {markets.map((market, idx) => (
+                  <S.SelectContainer isOverflow={assets?.length > 2}>
+                    {assets.map((asset: IPublicAsset, idx) => (
                       <S.SelectCard
                         key={idx}
                         onClick={() => {
-                          setFieldValue("market", market);
+                          setFieldValue("asset", asset);
                         }}>
-                        {market.name}
+                        {asset.name}
                       </S.SelectCard>
                     ))}
                   </S.SelectContainer>

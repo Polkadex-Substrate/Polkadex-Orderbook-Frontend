@@ -1,25 +1,24 @@
 import { eventChannel } from "redux-saga";
 import { u8aToString } from "@polkadot/util";
+import { API } from "aws-amplify";
 
-import { RabbitmqChannelType } from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import * as subscriptions from "../../../../graphql/subscriptions";
 
-export async function fetchBalanceUpdatesChannel(
-  chann: RabbitmqChannelType,
-  queueName: string,
-  routingKey: string
-) {
-  const queue = await chann.queue(queueName, { durable: false, autoDelete: true });
-  await queue.bind("topic_exchange", routingKey);
-  console.log("created balance update queue", queueName);
+export async function fetchBalanceUpdatesChannel(main_account: string) {
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
-      const msg = u8aToString(res.body);
-      console.log("balance update msg =>", msg);
-      emitter(msg);
-      res.ack();
+    const subscription = API.graphql({
+      query: subscriptions.onBalanceUpdate,
+      variables: { main_account: main_account },
+    }).subscribe({
+      next: (data) => {
+        emitter(data.value.data.onBalanceUpdate);
+      },
+      error: (err) => {
+        console.warn("error in balance channel", err);
+      },
     });
     return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
+      subscription.unsubscribe();
     };
   });
 }
