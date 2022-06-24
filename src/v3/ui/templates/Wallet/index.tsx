@@ -8,6 +8,7 @@ import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecu
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
+import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
@@ -15,25 +16,22 @@ const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposi
   ssr: false,
 });
 
-const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
-  ssr: false,
-});
 export const WalletTemplate = () => {
-  const [state, setState] = useState(true);
+  const [state, setState] = useState(false);
 
   const router = useRouter();
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
 
-  // useEffect(() => {
-  //   if (!isLoading && !user) router.push("/login");
-  // }, [isLoading, user, router]);
+  useEffect(() => {
+    if (!isLoading && !user) router.push("/login");
+  }, [isLoading, user, router]);
 
-  // if (!user) return <div />;
+  if (!user) return <div />;
   return (
     <S.Wrapper>
-      <Menu handleChange={() => setState(!state)} />
-      {state && <Markets hasMargin />}
+      <Menu isWallet handleChange={() => setState(!state)} />
+      {state && <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />}
       <Tabs>
         <S.Content>
           <S.ContainerWrapper>

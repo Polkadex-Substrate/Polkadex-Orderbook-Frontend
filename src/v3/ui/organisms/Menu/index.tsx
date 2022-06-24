@@ -9,8 +9,9 @@ import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 
 export type MenuProps = {
   handleChange?: () => void;
+  isWallet?: boolean;
 };
-const Menu = ({ handleChange = undefined }: MenuProps) => {
+const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   return (
     <S.Wrapper>
@@ -21,7 +22,7 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
             <div>
               <Icon name="Graph" background="none" size="large" />
             </div>
-            <S.Span>Markets</S.Span>
+            <S.Span>{isWallet ? "Tokens" : "Markets"}</S.Span>
           </S.WrapperIcon>
           <Link href="/v3/wallet">
             <S.WrapperIcon>

@@ -42,7 +42,7 @@ export const Grid = styled.div`
     display: grid;
     grid-gap: 1rem;
     @media screen and (min-width: 1260px) {
-      grid-template-columns: 2fr minmax(36rem, 38rem);
+      grid-template-columns: 2fr minmax(36rem, 1fr);
       flex: 1;
     }
   `}

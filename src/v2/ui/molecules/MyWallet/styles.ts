@@ -26,8 +26,8 @@ export const Header = styled.div<{ isActive?: boolean }>`
   `}
 `;
 
-export const Content = styled.div`
-  ${({ theme }) => css`
+export const Content = styled.div<{ hasMargin?: boolean }>`
+  ${({ theme, hasMargin }) => css`
     background: ${theme.colors.white};
     color: ${theme.colors.black};
     min-width: 35rem;
@@ -39,6 +39,8 @@ export const Content = styled.div`
     flex-direction: column;
     /* max-height: 80vh; */
     height: 100%;
+    margin-left: ${hasMargin ? "1rem" : 0};
+    margin-top: ${hasMargin ? "1rem" : 0};
   `}
 `;
 
