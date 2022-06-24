@@ -36,7 +36,7 @@ const Orderbook = () => {
   );
 };
 
-export const OrderbookTable = ({ isSell = false, orders = [] }: T.Props) => {
+export const OrderbookTable = ({ isSell = false, orders = [], lightMode }: T.Props) => {
   const contentRef = useRef(null);
 
   const {
@@ -53,7 +53,7 @@ export const OrderbookTable = ({ isSell = false, orders = [] }: T.Props) => {
     <>
       {orders.length ? (
         <S.Table isSell={isSell} ref={contentRef}>
-          <S.Head>
+          <S.Head lightMode={lightMode}>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>
             <S.CellHead>Cum({quoteUnit})</S.CellHead>

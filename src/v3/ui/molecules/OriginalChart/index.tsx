@@ -7,11 +7,12 @@ import * as S from "./styles";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentDarkTheme } from "@polkadex/orderbook-modules";
 
+export const getRamdom = (min = 3000, max = 5000) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
 const OriginalChart = ({ chart }) => {
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
   // Generate Ramdom numbers
-  const getRamdom = (min = 3000, max = 5000) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
 
   useEffect(() => {
     chart.current = init("original-chart", options());

@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
     border-radius: 0 3rem 3rem 3rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
+    min-height: 30rem;
     @media screen and (min-width: 980px) {
       grid-template-columns: 1fr auto;
     }
