@@ -1,6 +1,5 @@
 // TODO: Create User middleware
 import { call, put, select } from "redux-saga/effects";
-import axios from "axios";
 import { API } from "aws-amplify";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
@@ -11,13 +10,14 @@ import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 
-export function* ordersHistorySaga(action: UserOpenOrdersHistoryFetch) {
+export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
   try {
     console.log("openOrderhistory saga called");
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
       const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.address);
       console.log("orders =>", transactions);
+
       yield put(userOpenOrderHistoryData({ list: transactions }));
     }
   } catch (error) {
