@@ -11,7 +11,7 @@ import History from "@polkadex/orderbook-ui/organisms/History";
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
-const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
+const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposit"), {
   ssr: false,
 });
 
@@ -19,17 +19,17 @@ const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
   ssr: false,
 });
 export const WalletTemplate = () => {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(true);
 
   const router = useRouter();
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
 
-  useEffect(() => {
-    if (!isLoading && !user) router.push("/login");
-  }, [isLoading, user, router]);
+  // useEffect(() => {
+  //   if (!isLoading && !user) router.push("/login");
+  // }, [isLoading, user, router]);
 
-  if (!user) return <div />;
+  // if (!user) return <div />;
   return (
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />

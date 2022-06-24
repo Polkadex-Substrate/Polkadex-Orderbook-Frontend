@@ -43,6 +43,8 @@ export const Span = styled.span`
 `;
 
 export const Input = styled.input`
-  width: 100%;
-  color: white;
+  ${({ theme }) => css`
+    width: 100%;
+    color: ${theme.colors.text};
+  `}
 `;

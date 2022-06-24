@@ -4,7 +4,7 @@ import { Logo } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 
 export type MenuProps = {
@@ -23,14 +23,16 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
             </div>
             <S.Span>Markets</S.Span>
           </S.WrapperIcon>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="Exchange" background="none" size="large" />
-            </div>
-            <div>
-              <S.Span>Exchange</S.Span>
-            </div>
-          </S.WrapperIcon>
+          <Link href="/v3/wallet">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Exchange" background="none" size="large" />
+              </div>
+              <div>
+                <S.Span>Exchange</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </Link>
           <Link href="/v3/wallet">
             <S.WrapperIcon>
               <div>
@@ -43,32 +45,41 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
           </Link>
         </S.Container>
         <S.Container>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="History" background="none" size="large" />
-            </div>
-            <S.Span>My History</S.Span>
-          </S.WrapperIcon>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="Transactions" background="none" size="large" />
-            </div>
-            <S.Span>Transactions</S.Span>
-          </S.WrapperIcon>
+          <AvailableMessage message="Soon">
+            <S.WrapperIcon href="#">
+              <div>
+                <Icon name="History" background="none" size="large" />
+              </div>
+              <S.Span>My History</S.Span>
+            </S.WrapperIcon>
+          </AvailableMessage>
+          <AvailableMessage message="Soon">
+            <S.WrapperIcon href="#">
+              <div>
+                <Icon name="Transactions" background="none" size="large" />
+              </div>
+              <S.Span>Transactions</S.Span>
+            </S.WrapperIcon>
+          </AvailableMessage>
         </S.Container>
         <S.Container>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="News" background="none" size="large" />
-            </div>
-            <S.Span>Affiliates</S.Span>
-          </S.WrapperIcon>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="Help" background="none" size="large" />
-            </div>
-            <S.Span>Support</S.Span>
-          </S.WrapperIcon>
+          <AvailableMessage message="Soon">
+            <S.WrapperIcon href="#">
+              <div>
+                <Icon name="News" background="none" size="large" />
+              </div>
+              <S.Span>Affiliates</S.Span>
+            </S.WrapperIcon>
+          </AvailableMessage>
+
+          <AvailableMessage message="Soon">
+            <S.WrapperIcon href="#">
+              <div>
+                <Icon name="Help" background="none" size="large" />
+              </div>
+              <S.Span>Support</S.Span>
+            </S.WrapperIcon>
+          </AvailableMessage>
         </S.Container>
         <S.WrapperIcon onClick={changeTheme} as="div">
           <div>
@@ -78,7 +89,6 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
               size="large"
             />
           </div>
-
           <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
         </S.WrapperIcon>
       </S.WrapperLinks>

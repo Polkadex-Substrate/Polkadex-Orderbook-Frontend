@@ -35,7 +35,7 @@ export const Wrapper = styled.div<Partial<ListItemProps>>`
     border: 0;
     border-radius: 0.5rem;
     padding: ${theme.spacings.xxsmall};
-    color: white;
+    color: ${isActive ? theme.colors.white : theme.colors.text};
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     display: inline-block;
     cursor: pointer;

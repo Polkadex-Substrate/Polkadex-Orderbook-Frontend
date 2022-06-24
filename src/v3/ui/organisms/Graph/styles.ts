@@ -1,20 +1,21 @@
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
-  background: #2e303c;
-  border-radius: 0 3rem 3rem 3rem;
-  box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
-  display: grid;
-  @media screen and (min-width: 980px) {
-    grid-template-columns: 1fr auto;
-  }
+  ${({ theme }) => css`
+    background: ${theme.colors.tertiaryBackground};
+    border-radius: 0 3rem 3rem 3rem;
+    box-shadow: box-shadow: ${theme.shadows.smooth};
+    display: grid;
+    @media screen and (min-width: 980px) {
+      grid-template-columns: 1fr auto;
+    }
+  `}
 `;
 export const WrapperGraph = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 2rem;
-  box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
 `;
 // Header
 export const Header = styled.div`
@@ -63,6 +64,8 @@ export const Li = styled.li<{ isActive?: boolean }>`
     padding: 0.4rem;
     border-radius: 0.5rem;
     background: ${isActive ? theme.colors.primary : "none"};
+    color: ${isActive ? theme.colors.white : "inherit"};
+
     cursor: pointer; ;
   `}
 `;

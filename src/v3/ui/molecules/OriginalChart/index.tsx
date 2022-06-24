@@ -4,7 +4,11 @@ import { init, dispose } from "klinecharts";
 import { options } from "./options";
 import * as S from "./styles";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectCurrentDarkTheme } from "@polkadex/orderbook-modules";
+
 const OriginalChart = ({ chart }) => {
+  const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
   // Generate Ramdom numbers
   const getRamdom = (min = 3000, max = 5000) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
@@ -65,6 +69,10 @@ const OriginalChart = ({ chart }) => {
       process.browser && window.clearTimeout(clearData);
     };
   }, [chart]);
+
+  useEffect(() => {
+    chart.current.setStyleOptions(options(isDarkTheme));
+  }, [isDarkTheme, chart]);
 
   return <S.Wrapper id="original-chart" />;
 };

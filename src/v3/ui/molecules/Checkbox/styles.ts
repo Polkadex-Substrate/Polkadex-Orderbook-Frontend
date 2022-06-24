@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Label = styled.label`
   display: flex;
@@ -41,17 +41,19 @@ export const Input = styled.input`
   }
 `;
 export const Span = styled.span`
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #434658;
-  margin-right: 0.5rem;
-  border-radius: 0.4rem;
+  ${({ theme }) => css`
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: ${theme.colors.secondaryBackground};
+    margin-right: 0.5rem;
+    border-radius: 0.4rem;
 
-  /* Checkmark/indicator (hidden when not checked) */
-  :after {
-    content: "";
-    display: none;
-  }
+    /* Checkmark/indicator (hidden when not checked) */
+    :after {
+      content: "";
+      display: none;
+    }
+  `}
 `;
 export const Title = styled.p`
   font-size: 1.3rem;

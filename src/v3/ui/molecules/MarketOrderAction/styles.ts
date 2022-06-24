@@ -1,12 +1,13 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 // Order Box
 
 export const WrapperOrder = styled.div`
-  background: #2e303c;
-  border-radius: 0 3rem 3rem 3rem;
-  padding: 2rem;
-  box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
+  ${({ theme }) => css`
+    background: ${theme.colors.tertiaryBackground};
+    border-radius: 0 3rem 3rem 3rem;
+    padding: 2rem;
+  `}
 `;
 
 export const ContainerWallet = styled.div`

@@ -32,7 +32,7 @@ export const WrapperLinks = styled.div`
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
     transition-delay: initial;
     transition-property: initial;
-    box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
+    box-shadow: box-shadow: ${theme.shadows.smooth};
   `}
 `;
 

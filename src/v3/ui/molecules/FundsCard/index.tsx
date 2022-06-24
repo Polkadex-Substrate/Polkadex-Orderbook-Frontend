@@ -39,7 +39,7 @@ const FundsCard = ({
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        <Icon name="Options" background="none" />
+        <Icon name="Options" size="medium" background="none" />
       </S.ContainerActions>
     </S.Td>
   </S.Tr>

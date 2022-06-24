@@ -1,11 +1,14 @@
-export const options = () => {
+import { defaultThemes } from "src/styles";
+
+export const options = (isDarkTheme = true) => {
+  const theme = isDarkTheme ? defaultThemes.dark : defaultThemes.light;
   return {
     grid: {
       show: true,
       horizontal: {
         show: true,
         size: 1,
-        color: "#393939",
+        color: theme.colors.secondaryBackgroundOpacity,
         // 'solid'|'dash'
         style: "dash",
         dashValue: [2, 2],
@@ -13,7 +16,7 @@ export const options = () => {
       vertical: {
         show: true,
         size: 1,
-        color: "#393939",
+        color: theme.colors.secondaryBackgroundOpacity,
         // 'solid'|'dash'
         style: "dash",
         dashValue: [2, 2],
@@ -27,9 +30,9 @@ export const options = () => {
       // 'candle_solid'|'candle_stroke'|'candle_up_stroke'|'candle_down_stroke'|'ohlc'|'area'
       type: "candle_solid",
       bar: {
-        upColor: "#0CA564",
-        downColor: "#E6007A",
-        noChangeColor: "#8BA1BE",
+        upColor: theme.colors.green,
+        downColor: theme.colors.primary,
+        noChangeColor: theme.colors.secondaryBackground,
       },
       area: {
         lineSize: 2,
@@ -50,7 +53,7 @@ export const options = () => {
         show: true,
         high: {
           show: true,
-          color: "#D9D9D9",
+          color: theme.colors.text,
           textMargin: 5,
           textSize: 10,
           textFamily: "Helvetica Neue",
@@ -58,7 +61,7 @@ export const options = () => {
         },
         low: {
           show: true,
-          color: "#D9D9D9",
+          color: theme.colors.text,
           textMargin: 5,
           textSize: 10,
           textFamily: "Helvetica Neue",
@@ -66,9 +69,9 @@ export const options = () => {
         },
         last: {
           show: true,
-          upColor: "#26A69A",
-          downColor: "#E6007A",
-          noChangeColor: "#8BA1BE",
+          upColor: theme.colors.green,
+          downColor: theme.colors.primary,
+          noChangeColor: theme.colors.secondaryBackground,
           line: {
             show: true,
             // 'solid'|'dash'
@@ -83,7 +86,7 @@ export const options = () => {
             paddingTop: 2,
             paddingRight: 2,
             paddingBottom: 2,
-            color: "#FFFFFF",
+            color: theme.colors.white,
             family: "Helvetica Neue",
             weight: "normal",
             borderRadius: 2,
@@ -115,7 +118,7 @@ export const options = () => {
           size: 12,
           family: "Helvetica Neue",
           weight: "500",
-          color: "#D9D9D9",
+          color: theme.colors.text,
           marginLeft: 8,
           marginTop: 6,
           marginRight: 8,
@@ -129,18 +132,18 @@ export const options = () => {
         bottom: 0.1,
       },
       bar: {
-        upColor: "#0CA5647F",
-        downColor: "#E6007A7F",
-        noChangeColor: "#8BA1BE7F",
+        upColor: `${theme.colors.green}7F`,
+        downColor: `${theme.colors.primary}7F`,
+        noChangeColor: `${theme.colors.secondaryText}7F`,
       },
       line: {
         size: 1,
         colors: ["#FF9600", "#9D65C9", "#2196F3", "#E6007A", "#01C5C4"],
       },
       circle: {
-        upColor: "#0CA564",
-        downColor: "#E6007A",
-        noChangeColor: "#8BA1BE",
+        upColor: theme.colors.green,
+        downColor: theme.colors.primary,
+        noChangeColor: theme.colors.secondaryBackground,
       },
       lastValueMark: {
         show: false,
@@ -169,7 +172,7 @@ export const options = () => {
           size: 11,
           family: "Helvetica Neue",
           weight: "normal",
-          color: "#D9D9D9",
+          color: theme.colors.text,
           marginTop: 6,
           marginRight: 8,
           marginBottom: 0,
@@ -182,12 +185,12 @@ export const options = () => {
       height: null,
       axisLine: {
         show: true,
-        color: "rgba(139,161,190,0.2)",
+        color: theme.colors.secondaryBackground,
         size: 1,
       },
       tickText: {
         show: true,
-        color: "#8BA1BE",
+        color: theme.colors.secondaryText,
         family: "Helvetica Neue",
         weight: "normal",
         size: 12,
@@ -212,12 +215,12 @@ export const options = () => {
       reverse: false,
       axisLine: {
         show: true,
-        color: "rgba(139,161,190,0.2)",
+        color: theme.colors.secondaryBackground,
         size: 1,
       },
       tickText: {
         show: true,
-        color: "#D9D9D9",
+        color: theme.colors.secondaryText,
         family: "Helvetica Neue",
         weight: "normal",
         size: 12,
@@ -233,7 +236,7 @@ export const options = () => {
     },
     separator: {
       size: 1,
-      color: "rgba(139,161,190,0.5)",
+      color: theme.colors.secondaryBackground,
       fill: true,
       activeBackgroundColor: "rgba(230, 230, 230, .15)",
     },
@@ -251,7 +254,7 @@ export const options = () => {
         },
         text: {
           show: true,
-          color: "#D9D9D9",
+          color: theme.colors.white,
           size: 12,
           family: "Helvetica Neue",
           weight: "normal",
@@ -277,7 +280,7 @@ export const options = () => {
         },
         text: {
           show: true,
-          color: "#D9D9D9",
+          color: theme.colors.text,
           size: 12,
           family: "Helvetica Neue",
           weight: "normal",
