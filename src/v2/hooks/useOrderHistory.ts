@@ -16,10 +16,7 @@ export function useOrderHistory() {
   const dispatch = useDispatch();
 
   const orderlist = useReduxSelector(selectOrdersHistory);
-  const list = sortOrdersDescendingTime(orderlist).map((order) => ({
-    ...order,
-    timestamp: new Date(order.time).getTime(),
-  }));
+  const list = sortOrdersDescendingTime(orderlist);
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);

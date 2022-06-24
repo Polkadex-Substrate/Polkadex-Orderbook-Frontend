@@ -2,7 +2,7 @@ import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 export const sortOrdersDescendingTime = (orders: OrderCommon[]) =>
   orders.sort((a, b) => {
-    const timestampA = parseFloat(a.timestamp) * 1000;
-    const timestampB = parseFloat(b.timestamp) * 1000;
+    const timestampA = new Date(a.time).getTime();
+    const timestampB = new Date(b.time).getTime();
     return timestampB - timestampA;
   });

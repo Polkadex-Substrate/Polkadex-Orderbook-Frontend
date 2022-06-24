@@ -6,6 +6,7 @@ import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 
 const OrderBookTable = () => {
   const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
+  console.log("orderbook component", asks, bids);
 
   return (
     <S.Wrapper>

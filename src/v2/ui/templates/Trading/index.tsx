@@ -15,6 +15,7 @@ import {
 import {
   currentTickerFetch,
   currentTickersUpdate,
+  orderBookChannelFetch,
   orderBookFetch,
   selectCurrentMarket,
   selectCurrentMarketTickers,
@@ -86,8 +87,8 @@ export const Trading = () => {
   useEffect(() => {
     if (market) {
       const tickerMarketId = `${market.assetIdArray[0]}-${market.assetIdArray[1]}`;
-      // dispatch(rangerConnectFetch());
       dispatch(orderBookFetch(market));
+      dispatch(orderBookChannelFetch());
       dispatch(currentTickerFetch({ marketId: tickerMarketId }));
     }
   }, [dispatch, market]);

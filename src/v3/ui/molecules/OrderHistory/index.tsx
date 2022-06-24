@@ -3,8 +3,6 @@ import OrderHistoryCard from "../OrderHistoryCard";
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
@@ -41,18 +39,18 @@ const OrderHistory = () => {
                 const baseUnit = getAsset(base).symbol;
                 const quoteUnit = getAsset(quote).symbol;
                 const avgPrice = order.avg_filled_price;
-                const status = order.status.toUpperCase();
                 return (
                   <OrderHistoryCard
                     key={i}
                     isSell={isSell}
                     orderSide={order.side}
+                    orderType={order.order_type}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
                     data={[
                       { value: date },
                       { value: order.order_type },
-                      { value: isMarket ? "CLOSED" : calcStatusOfOrder(status) },
+                      { value: order.status },
                       { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
                       { value: Decimal.format(order.qty, amountFixed, ",") },
                       { value: Decimal.format(order.filled_quantity, amountFixed, ",") },

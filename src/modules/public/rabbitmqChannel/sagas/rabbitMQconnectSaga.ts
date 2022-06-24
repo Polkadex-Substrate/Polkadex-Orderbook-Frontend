@@ -1,7 +1,6 @@
 import { call, put } from "redux-saga/effects";
 
 import { alertPush } from "../../alertHandler";
-import { orderBookChannelFetch } from "../../orderBook";
 import { rabbitmqChannelData } from "../actions";
 
 import { AMQPWebSocketClient } from "./amqp-websocket-client.mjs";
@@ -19,9 +18,6 @@ export function* rabbitmqConnectionSaga() {
     );
     const channel = yield call(() => fetchrabbitmqChannelAsync(amqp));
     yield put(rabbitmqChannelData(channel));
-
-    // yield put(klineFetchChannelFetch());
-    yield put(orderBookChannelFetch());
   } catch (error) {
     yield put(
       alertPush({

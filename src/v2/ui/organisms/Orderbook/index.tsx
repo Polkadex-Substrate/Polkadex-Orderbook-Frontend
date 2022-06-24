@@ -47,8 +47,8 @@ export const OrderbookTable = ({ isSell = false, orders = [] }: T.Props) => {
     priceFixed,
     amountFixed,
     total,
-  } = useOrderbookTable({ isSell, orders, contentRef });
-  orders = isSell ? orders.reverse() : orders;
+  } = useOrderbookTable({ isSell, orders: [...orders], contentRef });
+
   return (
     <>
       {orders.length ? (
