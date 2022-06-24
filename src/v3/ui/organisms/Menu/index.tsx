@@ -85,7 +85,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         <S.WrapperIcon onClick={changeTheme} as="div">
           <div>
             <Icon
-              name={isDarkTheme ? "Moon" : "Sun"}
+              name={isDarkTheme ? "Sun" : "Moon"}
               background="secondaryBackground"
               size="large"
             />
