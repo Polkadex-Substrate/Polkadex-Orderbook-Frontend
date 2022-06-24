@@ -14,7 +14,33 @@ export const ContainerFlex = styled.div`
   display: flex;
   align-items: center;
 `;
+export const CardInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 0.5rem;
+  p {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  span {
+    opacity: 0.6;
+  }
+`;
 
+export const CardIconWrapper = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.white};
+  `}
+`;
 export const Image = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
     width: 2.5rem;
@@ -36,7 +62,6 @@ export const ContainerActions = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
   ${media.lessThan("large")`
       justify-content:flex-start;
   `}

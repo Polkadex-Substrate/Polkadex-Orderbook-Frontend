@@ -16,6 +16,7 @@ const imageModifier = {
 export const Link = styled.a<Partial<LogoProps>>`
   ${({ size = "Medium" }) => css`
     display: block;
+    cursor: pointer;
     ${imageModifier[size]}
   `}
 `;

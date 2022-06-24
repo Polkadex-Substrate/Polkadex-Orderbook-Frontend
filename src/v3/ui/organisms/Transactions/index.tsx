@@ -6,6 +6,7 @@ import OrderHistory from "../../molecules/OrderHistory";
 import TradeHistory from "../../molecules/TradeHistory";
 import { DropdownContent, DropdownHeader } from "../../molecules";
 import OpenOrders from "../../molecules/OpenOrders";
+import Funds from "../../molecules/Funds";
 
 import * as S from "./styles";
 
@@ -103,6 +104,9 @@ const Transactions = () => {
             </TabContent>
             <TabContent>
               <TradeHistory />
+            </TabContent>
+            <TabContent>
+              <Funds />
             </TabContent>
           </S.Content>
         ) : (

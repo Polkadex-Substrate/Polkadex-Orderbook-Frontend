@@ -47,6 +47,7 @@ const OpenOrderCard = ({ isSell, orderSide, baseUnit, quoteUnit, data = [] }) =>
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
+        <Icon name="Trash" background="primary" onClick={() => console.log("Remove")} />
         <Icon name="Options" background="none" />
       </S.ContainerActions>
     </S.Td>

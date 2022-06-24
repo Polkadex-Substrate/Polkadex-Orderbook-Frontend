@@ -10,7 +10,6 @@ const customMedia = generateMedia({
 export const Wrapper = styled.section`
   display: grid;
   grid-template-columns: auto auto;
-  padding-left: 2rem;
   margin-bottom: 1rem;
   ${customMedia.lessThan("custom")`
     grid-template-columns: 1fr;
