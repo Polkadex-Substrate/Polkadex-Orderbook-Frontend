@@ -1,8 +1,7 @@
 export type HistoryProps = {
-  date?: string;
-  address: string;
-  txid: string;
+  date: string;
+  address?: string;
   amount: string;
-  amountInFiat?: string;
-  isDeposit?: boolean;
+  status: string;
+  isDeposit: boolean;
 };
