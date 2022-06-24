@@ -8,7 +8,7 @@ import {
   RECENT_TRADES_PUSH,
   RECENT_TRADES_FETCH_CHANNEL,
 } from "./constants";
-import { PublicTrade, PublicTradeEvent } from "./types";
+import { PublicTrade } from "./types";
 
 export interface RecentTradesFetch {
   type: typeof RECENT_TRADES_FETCH;
@@ -31,10 +31,7 @@ export interface RecentTradesError {
 
 export interface RecentTradesPush {
   type: typeof RECENT_TRADES_PUSH;
-  payload: {
-    trades: PublicTradeEvent[];
-    market: string;
-  };
+  payload: PublicTrade;
 }
 
 export type RecentTradesActions =

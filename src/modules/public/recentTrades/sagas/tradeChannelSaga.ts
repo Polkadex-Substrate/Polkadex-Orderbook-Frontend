@@ -4,31 +4,29 @@ import { API } from "aws-amplify";
 
 import {
   alertPush,
-  klineUpdateFetch,
   Market,
-  recentTradesData,
+  PublicTrade,
   recentTradesPush,
   selectCurrentMarket,
-  selectRecentTrades,
 } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
 export function* fetchTradeChannelSaga() {
   try {
     const market: Market = yield select(selectCurrentMarket);
-
-    if (market?.name) {
-      const base = market.assetIdArray[0] === "-1" ? "PDEX" : market.assetIdArray[0];
-      const quote = market.assetIdArray[1] === "-1" ? "PDEX" : market.assetIdArray[1];
-      const channel = yield call(() => fetchTradesChannel(`${base}-${quote}`));
+    if (market?.m) {
+      const channel = yield call(() => fetchTradesChannel(market.m));
       while (true) {
         const tradesMsg = yield take(channel);
         console.log("tradesMsg =>", tradesMsg);
-        const trades = yield select(selectRecentTrades);
         const data = JSON.parse(tradesMsg);
-        const tradesArray = [data, ...trades];
-        yield put(recentTradesData(tradesArray));
-        yield put(klineUpdateFetch(data));
+        const trade: PublicTrade = {
+          price: data.price,
+          amount: data.quantity,
+          market_id: data.market,
+          timestamp: data.time,
+        };
+        yield put(recentTradesPush(trade));
       }
     }
   } catch (error) {
@@ -46,14 +44,13 @@ export function* fetchTradeChannelSaga() {
 
 async function fetchTradesChannel(marketid: string) {
   return eventChannel((emit) => {
-    console.log("fetchTradesChannel created");
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `PDEX-1-raw-trades` },
+      variables: { name: `PDEX-1-raw-trade` },
     }).subscribe({
       next: (data) => {
-        debugger;
-        emit(recentTradesPush(data.value.data.onOrderUpdate));
+        // "data": "{\"price\":\"1.20\",\"quantity\":\"1\",\"market\":\"PDEX-1\",\"time\":1656065662309}"
+        emit(data.value.data.websocket_streams.data);
       },
       error: (err) => console.warn(err),
     });
