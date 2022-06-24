@@ -5,7 +5,7 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
-import { Icon, Dropdown, AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
@@ -25,13 +25,9 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
-      <AvailableMessage message="Soon">
-        <Filters />
-      </AvailableMessage>
+      <Filters />
       <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
-      <AvailableMessage message="Soon">
-        <Footer tickers={marketTickers} />
-      </AvailableMessage>
+      <Footer tickers={marketTickers} />
     </S.Main>
   );
 };
@@ -137,34 +133,32 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
 );
 
 const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
-  <AvailableMessage message="Soon">
-    <S.Footer>
-      {!!tickers.length &&
-        tickers.map((ticker) => <S.FooterCard key={ticker}>{ticker}</S.FooterCard>)}
-      <S.FooterCard>DOT</S.FooterCard>
-      <S.FooterCard>
-        <Dropdown header="ALTS">
-          <p>ETH</p>
-          <p>SOL</p>
-          <p>DOGE</p>
-        </Dropdown>
-      </S.FooterCard>
-      <S.FooterCard>
-        <Dropdown header="FIAT">
-          <p>USDC</p>
-          <p>CUSD</p>
-          <p>EURT</p>
-        </Dropdown>
-      </S.FooterCard>
-      <S.FooterCard>
-        <Dropdown header="ZONES">
-          <p>DEFI</p>
-          <p>FINANCE</p>
-          <p>NFT</p>
-        </Dropdown>
-      </S.FooterCard>
-    </S.Footer>
-  </AvailableMessage>
+  <S.Footer>
+    {!!tickers.length &&
+      tickers.map((ticker) => <S.FooterCard key={ticker}>{ticker}</S.FooterCard>)}
+    <S.FooterCard>DOT</S.FooterCard>
+    <S.FooterCard>
+      <Dropdown header="ALTS">
+        <p>ETH</p>
+        <p>SOL</p>
+        <p>DOGE</p>
+      </Dropdown>
+    </S.FooterCard>
+    <S.FooterCard>
+      <Dropdown header="FIAT">
+        <p>USDC</p>
+        <p>CUSD</p>
+        <p>EURT</p>
+      </Dropdown>
+    </S.FooterCard>
+    <S.FooterCard>
+      <Dropdown header="ZONES">
+        <p>DEFI</p>
+        <p>FINANCE</p>
+        <p>NFT</p>
+      </Dropdown>
+    </S.FooterCard>
+  </S.Footer>
 );
 
 export default Markets;

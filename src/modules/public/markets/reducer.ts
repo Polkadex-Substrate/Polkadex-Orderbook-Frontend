@@ -15,7 +15,7 @@ import { Market, Ticker } from "./types";
 
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
 export const defaultTickers: Ticker = {
-  m: "PDEX-1",
+  m: "0-0",
   priceChange24Hr: "0",
   priceChangePercent24Hr: "0",
   open: "0",
