@@ -25,12 +25,12 @@ const Navbar = ({ onOpenMarkets }) => {
   const baseAsset = getAsset(currMarket?.assetIdArray[0]);
   const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
 
-  const currPrice = Number(currentTickers.close).toFixed(2);
+  const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
-  const isPriceChangeNegative = Number(currentTickers.priceChange24Hr) < 0;
+  const isPriceChangeNegative = Number(currentTickers?.priceChange24Hr) < 0;
   const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
-  const high = Number(currentTickers.high).toFixed(2);
-  const low = Number(currentTickers.low).toFixed(2);
+  const high = Number(currentTickers?.high).toFixed(2);
+  const low = Number(currentTickers?.low).toFixed(2);
 
   const router = useRouter();
   return (
@@ -44,13 +44,13 @@ const Navbar = ({ onOpenMarkets }) => {
           />
         </S.ContainerPair>
         <S.ContainerInfo>
-          <NavbarItem label={`Price (${quoteAsset.symbol})`} info={currPrice} />
+          <NavbarItem label={`Price (${quoteAsset?.symbol})`} info={currPrice} />
           <NavbarItem
             label="Price % 24h"
             info={price_change_percent}
             color={isPriceChangeNegative ? "Red" : ""}
           />
-          <NavbarItem label={`Volume 24h (${quoteAsset.symbol})`} info={volume} />
+          <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
           <S.WrapperVolume>
             <S.VolumeHigh isNegative>
               <span>24h High</span>

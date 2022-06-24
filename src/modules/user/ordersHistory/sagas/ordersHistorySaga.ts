@@ -17,9 +17,10 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
     console.log("orderhistory saga called");
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
-      const transactions: OrderCommon[] = yield call(fetchOrders, account.address, 1);
-      console.log("orders =>", transactions);
-      yield put(userOrdersHistoryData({ list: transactions }));
+      const orders: OrderCommon[] = yield call(fetchOrders, account.address, 1);
+      const closedOrders = orders.filter((order) => order.status === "CLOSED");
+      console.log("closed orders =>", closedOrders);
+      yield put(userOrdersHistoryData({ list: closedOrders }));
     }
   } catch (error) {
     yield put(
