@@ -22,11 +22,11 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-export const WalletContent = ({ title, locked = true, hasLink = true }) => {
+export const WalletContent = ({ title, locked = true, hasLink = true, hasMargin = false }) => {
   const { searchState, handleChange, balances } = useFunds();
 
   return (
-    <S.Content>
+    <S.Content hasMargin={hasMargin}>
       <S.Title>
         <h3>{title}</h3>
         {hasLink && <Link href="/wallet">Deposit/Withdraw</Link>}

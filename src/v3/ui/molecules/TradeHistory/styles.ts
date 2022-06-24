@@ -19,7 +19,6 @@ export const Thead = styled.thead`
   }
 `;
 export const Tbody = styled.tbody`
-  color: white;
   font-size: 1.3rem;
 
   ${media.greaterThan("large")`

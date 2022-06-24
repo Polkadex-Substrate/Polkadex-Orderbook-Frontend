@@ -8,7 +8,7 @@ const TradeHistoryCard = ({ isSell, orderSide, baseUnit, quoteUnit, data = [] })
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
         <S.Image isSell={isSell}>
-          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" color="text" />
+          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
         </S.Image>
         <span>
           {quoteUnit}/{baseUnit}

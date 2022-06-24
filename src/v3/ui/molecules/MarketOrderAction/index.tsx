@@ -27,12 +27,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
   return (
     <S.WrapperOrder>
       <S.ContainerWallet>
-        <Icon
-          name="Wallet"
-          background="secondaryBackground"
-          size="extraLarge"
-          stroke="white"
-        />
+        <Icon name="Wallet" background="secondaryBackground" size="extraLarge" stroke="text" />
         <S.WrapperBalance>
           <span>Available</span>
           <S.Span>

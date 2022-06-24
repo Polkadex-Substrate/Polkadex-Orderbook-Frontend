@@ -3,6 +3,8 @@ import media from "styled-media-query";
 
 export const Section = styled.section`
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 // Header
@@ -35,6 +37,12 @@ export const TabHeader = styled.li<{ isActive?: boolean }>`
     border-bottom-color: ${isActive ? theme.colors.text : "transparent"};
     cursor: pointer;
     white-space: nowrap;
+    user-select: none;
+    opacity: ${isActive ? 1 : 0.6};
+    transition: opacity 0.5s ease-in-out;
+    :hover {
+      opacity: 1;
+    }
   `}
 `;
 

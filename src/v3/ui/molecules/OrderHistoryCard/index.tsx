@@ -17,7 +17,7 @@ const OrderHistoryCard = ({
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
         <S.Image isSell={isSell}>
-          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" color="text" />
+          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
         </S.Image>
         <span>
           {quoteUnit}/{baseUnit}
@@ -54,7 +54,7 @@ const OrderHistoryCard = ({
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        <Icon name="Options" background="none" />
+        <Icon name="Options" size="medium" background="none" />
       </S.ContainerActions>
     </S.Td>
   </S.Tr>

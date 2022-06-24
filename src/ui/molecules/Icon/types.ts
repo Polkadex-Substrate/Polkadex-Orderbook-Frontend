@@ -10,4 +10,5 @@ export type Props = {
   background?: Colors;
   color?: Colors;
   stroke?: Colors;
+  fill?: Colors;
 } & HTMLAttributes<HTMLDivElement>;

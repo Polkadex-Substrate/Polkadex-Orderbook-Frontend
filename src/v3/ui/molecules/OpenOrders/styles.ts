@@ -25,7 +25,6 @@ export const Thead = styled(Grid)`
 `;
 
 export const Tbody = styled(Grid)`
-  color: white;
   font-size: 1.3rem;
 
   ${media.greaterThan("large")`

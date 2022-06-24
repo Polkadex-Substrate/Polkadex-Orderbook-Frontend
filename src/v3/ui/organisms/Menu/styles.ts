@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { LogoText } from "../../molecules/Logo/styles";
 
@@ -20,18 +20,20 @@ export const Span = styled.span`
 `;
 
 export const WrapperLinks = styled.div`
-  width: 4.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #2e303c;
-  border-radius: 0 3rem 3rem 3rem;
-  padding: 2rem 1rem;
-  transition-duration: 0.8s;
-  transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
-  transition-delay: initial;
-  transition-property: initial;
-  box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
+  ${({ theme }) => css`
+    width: 4.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: ${theme.colors.tertiaryBackground};
+    border-radius: 0 3rem 3rem 3rem;
+    padding: 2rem 1rem;
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
+    transition-delay: initial;
+    transition-property: initial;
+    box-shadow: box-shadow: ${theme.shadows.smooth};
+  `}
 `;
 
 export const Wrapper = styled.nav`

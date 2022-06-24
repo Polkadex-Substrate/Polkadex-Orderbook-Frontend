@@ -29,8 +29,8 @@ const Transactions = () => {
   const userLoggedIn = useReduxSelector(selectHasUser);
 
   // Filters Actions
-  const handleChangeHidden = () =>
-    setFilters({ ...filters, hiddenPairs: !filters.hiddenPairs });
+  const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
+    setFilters({ ...filters, [type]: !filters[type] });
 
   return (
     <S.Section>
@@ -54,18 +54,18 @@ const Transactions = () => {
             <Checkbox
               title="Hide Other Pairs"
               checked={filters.hiddenPairs}
-              action={handleChangeHidden}
+              action={() => handleChangeHidden("hiddenPairs")}
             />
             <S.ContainerActions>
               <Checkbox
                 title="Buy"
                 checked={filters.onlyBuy}
-                action={() => console.log("...")}
+                action={() => handleChangeHidden("onlyBuy")}
               />
               <Checkbox
                 title="Sell"
                 checked={filters.onlySell}
-                action={() => console.log("...")}
+                action={() => handleChangeHidden("onlySell")}
               />
             </S.ContainerActions>
             <S.ContainerTransactions>

@@ -29,18 +29,20 @@ export const ContainerPair = styled.div`
 `;
 
 export const ContainerInfo = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-column-gap: 3rem;
-  border-radius: 0 0 3rem 3rem;
-  background: #2e303a;
-  box-shadow: 0px 30px 45px rgba(0, 0, 0, 0.17);
-  padding: 1.5rem 2.5rem;
-  width: -webkit-fill-available;
-  ${media.lessThan("medium")`
+  ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-column-gap: 3rem;
+    border-radius: 0 0 3rem 3rem;
+    background: ${theme.colors.tertiaryBackground};
+    box-shadow: ${theme.shadows.smooth};
+    padding: 1.5rem 2.5rem;
+    width: -webkit-fill-available;
+    ${media.lessThan("medium")`
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
     grid-column-gap: 1rem;
+  `}
   `}
 `;
 export const WrapperInfo = styled.div`

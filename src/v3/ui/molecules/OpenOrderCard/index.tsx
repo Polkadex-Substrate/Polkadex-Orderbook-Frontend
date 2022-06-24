@@ -10,7 +10,7 @@ const OpenOrderCard = ({ isSell, orderSide, orderType, baseUnit, quoteUnit, data
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
         <S.Image isSell={isSell}>
-          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" color="text" />
+          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
         </S.Image>
         <span>
           {quoteUnit}/{baseUnit}
@@ -47,8 +47,8 @@ const OpenOrderCard = ({ isSell, orderSide, orderType, baseUnit, quoteUnit, data
     <S.Td>
       <S.Tag>Actions</S.Tag>
       <S.ContainerActions>
-        <Icon name="Trash" background="primary" onClick={() => console.log("Remove")} />
-        <Icon name="Options" background="none" />
+        <Icon name="Trash" stroke="text" size="medium" onClick={() => console.log("Remove")} />
+        <Icon name="Options" size="medium" background="none" />
       </S.ContainerActions>
     </S.Td>
   </S.Tr>

@@ -2,15 +2,15 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #242633;
-  border-radius: 0 3rem 3rem 3rem;
-  width: 100%;
-  box-shadow: 0px 0px 99px rgba(0, 0, 0, 0.65);
-  min-width: 30rem;
-  ${media.greaterThan("large")`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 30rem;
+    border-left: 1px solid ${theme.colors.secondaryBackground};
+    ${media.greaterThan("large")`
     max-width: 30rem;
+  `}
   `}
 `;
 
