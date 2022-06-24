@@ -38,7 +38,11 @@ const Deposit = () => {
         initialValues={defaultValues}
         validationSchema={depositValidations}
         onSubmit={async (values) => {
-          dispatch(depositsFetch({ asset: values.asset, amount: values.amount }));
+          const asset =
+            values.asset.assetId === "-1"
+              ? { polkadex: null }
+              : { asset: values.asset.assetId };
+          dispatch(depositsFetch({ asset: asset, amount: values.amount }));
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -82,7 +86,7 @@ const Deposit = () => {
                   isClickable
                   header={
                     <S.SelectWrapper>
-                      <span>{values?.asset || "Select Token"}</span>
+                      <span>{values?.asset.name || "Select Token"}</span>
                       <Icon
                         name="ArrowBottom"
                         size="small"
