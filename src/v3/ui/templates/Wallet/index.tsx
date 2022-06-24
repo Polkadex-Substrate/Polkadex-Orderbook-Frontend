@@ -29,6 +29,7 @@ export const WalletTemplate = () => {
     if (!isLoading && !user) router.push("/login");
   }, [isLoading, user, router]);
 
+  if (!user) return <div />;
   return (
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />

@@ -4,7 +4,7 @@ import { Logo } from "../../molecules";
 
 import * as S from "./styles";
 
-import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 
 export type MenuProps = {
@@ -34,7 +34,7 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
           <Link href="/v3/wallet">
             <S.WrapperIcon>
               <div>
-                <Icon name="Wallet" background="none" stroke="white" size="large" />
+                <Icon name="Wallet" background="none" stroke="text" size="large" />
               </div>
               <div>
                 <S.Span>Wallets</S.Span>
@@ -70,19 +70,17 @@ const Menu = ({ handleChange = undefined }: MenuProps) => {
             <S.Span>Support</S.Span>
           </S.WrapperIcon>
         </S.Container>
-        <AvailableMessage message="Soon">
-          <S.WrapperIcon onClick={changeTheme} as="div">
-            <div>
-              <Icon
-                name={isDarkTheme ? "Moon" : "Sun"}
-                background="secondaryBackground"
-                size="large"
-              />
-            </div>
+        <S.WrapperIcon onClick={changeTheme} as="div">
+          <div>
+            <Icon
+              name={isDarkTheme ? "Moon" : "Sun"}
+              background="secondaryBackground"
+              size="large"
+            />
+          </div>
 
-            <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-          </S.WrapperIcon>
-        </AvailableMessage>
+          <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
+        </S.WrapperIcon>
       </S.WrapperLinks>
       <S.WrapperProfile>
         <Icon name="Notifications" background="none" size="large" />
