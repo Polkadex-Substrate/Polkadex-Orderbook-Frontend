@@ -77,11 +77,17 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       api,
       tradingPair.quoteAsset
     );
-    //TODO: amount and price precision needs to be fetched from the api
+    // TODO: amount and price precision needs to be fetched from the api
+
+    const mId = `${baseAssetId === "-1" ? "PDEX" : baseAssetId}-${
+      quoteAssetId === "-1" ? "PDEX" : quoteAssetId
+    }`;
+
     return {
       id: baseSymbol + quoteSymbol,
       name: baseSymbol + "/" + quoteSymbol,
-      assetIdArray: [baseAssetId.toString(), quoteAssetId.toString()],
+      m: mId,
+      assetIdArray: [baseAssetId, quoteAssetId],
       base_ticker: baseSymbol,
       quote_ticker: quoteSymbol,
       base_unit: baseName,
@@ -105,5 +111,5 @@ const fetchAssetData = async (
     return ["POLKADEX", "PDEX", "-1"];
   }
   const assetMetadata: any = await (await api.query.assets.metadata(asset.asset)).toHuman();
-  return [assetMetadata.name, assetMetadata.symbol, asset.asset];
+  return [assetMetadata.name, assetMetadata.symbol, asset.asset.toString()];
 };

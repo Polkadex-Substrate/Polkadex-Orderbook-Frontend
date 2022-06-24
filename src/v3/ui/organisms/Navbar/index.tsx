@@ -8,11 +8,12 @@ import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
 import { AvailableMessage, Button } from "@polkadex/orderbook-ui/molecules";
 import { MyAccount, MyWallet, QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser } from "@polkadex/orderbook-modules";
+import { selectCurrentMarket, selectHasUser } from "@polkadex/orderbook-modules";
 import { Notifications } from "@polkadex/orderbook-ui/templates";
 
 const Navbar = ({ onOpenMarkets }) => {
   const hasUser = useReduxSelector(selectHasUser);
+  const currentMarket = useReduxSelector(selectCurrentMarket);
   const router = useRouter();
   return (
     <S.Wrapper>

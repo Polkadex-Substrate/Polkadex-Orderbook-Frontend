@@ -84,11 +84,11 @@ export function useMarkets() {
     const allTickets = markets.map((item) => {
       return {
         ...item,
-        last: (marketTickets || defaultTickers).last,
-        volume: (marketTickets || defaultTickers).volume,
-        price_change_percent: (marketTickets || defaultTickers).price_change_percent,
+        last: (marketTickets || defaultTickers).close,
+        volume: (marketTickets || defaultTickers).volumeBase24hr,
+        price_change_percent: (marketTickets || defaultTickers).priceChange24Hr,
         price_change_percent_num: Number.parseFloat(
-          (marketTickets || defaultTickers).price_change_percent
+          (marketTickets || defaultTickers).priceChangePercent24Hr
         ),
       };
     });
