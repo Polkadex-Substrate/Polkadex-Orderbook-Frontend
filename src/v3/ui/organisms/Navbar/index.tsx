@@ -12,6 +12,7 @@ import {
   selectCurrentMarket,
   selectCurrentMarketTickers,
   selectHasUser,
+  setCurrentMarket,
 } from "@polkadex/orderbook-modules";
 import { Notifications } from "@polkadex/orderbook-ui/templates";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
@@ -36,7 +37,11 @@ const Navbar = ({ onOpenMarkets }) => {
     <S.Wrapper>
       <S.WrapperInfo>
         <S.ContainerPair>
-          <HeaderMarket pair="DOT" pairTicker="UDD" onOpenMarkets={onOpenMarkets} />
+          <HeaderMarket
+            pair={currMarket?.name}
+            pairTicker="UDD"
+            onOpenMarkets={onOpenMarkets}
+          />
         </S.ContainerPair>
         <S.ContainerInfo>
           <NavbarItem label={`Price (${quoteAsset.symbol})`} info={currPrice} />

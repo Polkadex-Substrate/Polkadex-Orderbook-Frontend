@@ -95,9 +95,9 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
               pair={token.name}
               tokenTicker={token.tokenTickerName}
               vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
-              price="0"
+              price={Decimal.format(Number(token.last), token.price_precision, ",")}
               fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
-              change={"pice change"}
+              change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
               changeMarket={() => changeMarket(token.name)}
             />
           ))}
