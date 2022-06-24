@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section<{ isFull?: boolean }>`
-  ${({ theme, isFull }) => css`
+export const Main = styled.section<{ isFull?: boolean; hasMargin?: boolean }>`
+  ${({ theme, isFull, hasMargin }) => css`
     grid-area: Markets;
     background: ${theme.colors.secondaryBackgroundSolid};
     max-width: ${isFull ? "inherit" : "35rem"};
@@ -11,6 +11,8 @@ export const Main = styled.section<{ isFull?: boolean }>`
     height: 100vh;
     display: flex;
     flex-flow: column nowrap;
+    margin-left: ${hasMargin ? "1rem" : 0};
+    margin-top: ${hasMargin ? "1rem" : 0};
   `}
 `;
 
@@ -25,6 +27,7 @@ export const Header = styled.div`
   grid-gap: 1rem;
   align-items: center;
   cursor: pointer;
+  min-width: 25rem;
 `;
 
 export const HeaderAsideLeft = styled.div`

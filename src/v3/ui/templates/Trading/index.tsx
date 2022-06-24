@@ -22,6 +22,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
+import { Popup } from "@polkadex/orderbook-ui/molecules";
 
 const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
   ssr: false,
@@ -92,7 +93,17 @@ export function Trading() {
   return (
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />
-      {state && <Markets />}
+      <Popup
+        isVisible={state}
+        onClose={() => setState(!state)}
+        size="fitContent"
+        isRightPosition
+        style={{
+          maxWidth: "192rem",
+          margin: "0 auto",
+        }}>
+        <Markets />
+      </Popup>
       <S.WrapperMain>
         <Navbar onOpenMarkets={() => setState(!state)} />
         <S.WrapperGraph>

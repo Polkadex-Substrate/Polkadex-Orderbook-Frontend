@@ -163,6 +163,9 @@ export const CardInfo = styled.div`
   p {
     white-space: nowrap;
   }
+  span {
+    margin-left: 0.1rem;
+  }
 `;
 
 export const CardIconWrapper = styled.div`

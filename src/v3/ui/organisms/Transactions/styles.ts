@@ -7,9 +7,11 @@ export const Section = styled.section`
 
 // Header
 export const Header = styled.div`
-  display: grid;
-  grid-template-columns: 1.2fr auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   padding: 2rem 0;
+  justify-content: space-between;
   align-items: center;
   ${media.lessThan("large")`
       grid-template-columns: 1fr;
@@ -32,6 +34,7 @@ export const TabHeader = styled.li<{ isActive?: boolean }>`
     border-bottom: 2px solid;
     border-bottom-color: ${isActive ? theme.colors.text : "transparent"};
     cursor: pointer;
+    white-space: nowrap;
   `}
 `;
 

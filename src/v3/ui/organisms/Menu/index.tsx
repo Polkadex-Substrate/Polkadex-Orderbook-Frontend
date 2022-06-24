@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Logo } from "../../molecules";
 
 import * as S from "./styles";
@@ -6,14 +8,14 @@ import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 
 export type MenuProps = {
-  handleChange: () => void;
+  handleChange?: () => void;
 };
-const Menu = ({ handleChange }: MenuProps) => {
+const Menu = ({ handleChange = undefined }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   return (
     <S.Wrapper>
       <S.WrapperLinks>
-        <Logo size="Medium" />
+        <Logo size="Medium" href="/v3/trading" />
         <S.Container>
           <S.WrapperIcon onClick={handleChange}>
             <div>
@@ -29,14 +31,16 @@ const Menu = ({ handleChange }: MenuProps) => {
               <S.Span>Exchange</S.Span>
             </div>
           </S.WrapperIcon>
-          <S.WrapperIcon href="#">
-            <div>
-              <Icon name="Wallet" background="none" stroke="white" size="large" />
-            </div>
-            <div>
-              <S.Span>Wallets</S.Span>
-            </div>
-          </S.WrapperIcon>
+          <Link href="/v3/wallet">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Wallet" background="none" stroke="white" size="large" />
+              </div>
+              <div>
+                <S.Span>Wallets</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </Link>
         </S.Container>
         <S.Container>
           <S.WrapperIcon href="#">

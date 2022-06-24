@@ -55,4 +55,5 @@ export const Span = styled.span`
 `;
 export const Title = styled.p`
   font-size: 1.3rem;
+  white-space: nowrap;
 `;
