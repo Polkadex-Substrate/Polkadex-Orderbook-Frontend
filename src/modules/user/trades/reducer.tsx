@@ -5,12 +5,13 @@ export interface TradesState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: UserTrade[];
+  data: UserTrade[];
 }
 
 const initialState: TradesState = {
   loading: false,
   success: false,
+  data: [],
 };
 
 export const tradesReducer = (state = initialState, action: TradesAction) => {

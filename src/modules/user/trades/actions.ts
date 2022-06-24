@@ -3,17 +3,12 @@ import { CommonError } from "../../types";
 import { TRADES_DATA, TRADES_FETCH, TRADES_ERROR } from "./constants";
 
 export interface UserTrade {
-  id: string;
-  main_acc: string;
+  market_id: string;
+  price: string;
+  qty: string;
   timestamp: number;
-  order_id: string;
-  order_type: string;
-  order_side: string;
-  price: number;
-  base_asset: number;
-  quote_asset: number;
-  amount: number;
-  fee: Fee;
+  baseAsset: string;
+  quoteAsset: string;
 }
 
 export interface Fee {
@@ -21,31 +16,31 @@ export interface Fee {
   cost: number;
 }
 
-export interface TradesFetch {
+export interface UserTradesFetch {
   type: typeof TRADES_FETCH;
 }
-export interface TradesData {
+export interface UserTradesData {
   type: typeof TRADES_DATA;
   payload: UserTrade[];
 }
 
-export interface TradesError {
+export interface UserTradesError {
   type: typeof TRADES_ERROR;
   error: CommonError;
 }
 
-export type TradesAction = TradesFetch | TradesData | TradesError;
+export type TradesAction = UserTradesFetch | UserTradesData | UserTradesError;
 
-export const tradesFetch = (): TradesFetch => ({
+export const userTradesFetch = (): UserTradesFetch => ({
   type: TRADES_FETCH,
 });
 
-export const tradesData = (payload: UserTrade[]): TradesData => ({
+export const userTradesData = (payload: UserTrade[]): UserTradesData => ({
   type: TRADES_DATA,
   payload,
 });
 
-export const tradesError = (error: CommonError): TradesError => ({
+export const userTradesError = (error: CommonError): UserTradesError => ({
   type: TRADES_ERROR,
   error,
 });

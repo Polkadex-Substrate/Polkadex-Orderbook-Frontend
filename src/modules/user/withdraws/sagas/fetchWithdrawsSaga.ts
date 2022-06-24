@@ -1,6 +1,6 @@
 import { call, put, select } from "redux-saga/effects";
 
-import { tradesError } from "../../trades";
+import { userTradesError } from "../../trades";
 import { withdrawsData } from "..";
 
 import { API, RequestOptions } from "@polkadex/orderbook-config";
@@ -30,7 +30,7 @@ export function* fetchWithdrawsSaga() {
         error,
         processingType: "alert",
         extraOptions: {
-          actionError: tradesError,
+          actionError: userTradesError,
         },
       })
     );
