@@ -8,7 +8,6 @@ import {
   selectOrdersHistory,
   userOrdersHistoryFetch,
   selectUserLoggedIn,
-  transactionsFetch,
   selectOpenOrders,
   userOpenOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";

@@ -41,7 +41,7 @@ function createMarketTickersChannel(market: string) {
     }).subscribe({
       next: (data) => {
         debugger;
-        emit(data.value.data);
+        emit(data.value.data.onUpdateTransaction);
       },
       error: (err) => console.warn(err),
     });

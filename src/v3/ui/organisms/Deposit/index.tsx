@@ -86,7 +86,7 @@ const Deposit = () => {
                   isClickable
                   header={
                     <S.SelectWrapper>
-                      <span>{values?.asset.name || "Select Token"}</span>
+                      <span>{values?.asset?.name || "Select Token"}</span>
                       <Icon
                         name="ArrowBottom"
                         size="small"

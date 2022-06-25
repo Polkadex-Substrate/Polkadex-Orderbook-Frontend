@@ -2,15 +2,14 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { selectAssetsFetchSuccess } from "../modules/public/assets";
-import { selectCurrentMarket } from "../modules/public/markets";
 import {
   balanceTradeChannelFetch,
   balancesFetch,
-  selectBalancesSuccess,
   balanceTransferChannelFetch,
 } from "../modules/user/balances";
 import { userOrderUpdatesChannelFetch } from "../modules/user/ordersHistory";
 import { selectUserInfo } from "../modules/user/profile";
+import { transactionChannelFetch } from "../modules/user/transactions";
 
 import { useReduxSelector } from "./useReduxSelector";
 
@@ -30,6 +29,7 @@ export const useUserDataFetch = () => {
       dispatch(balanceTradeChannelFetch());
       dispatch(balanceTransferChannelFetch());
       dispatch(userOrderUpdatesChannelFetch());
+      dispatch(transactionChannelFetch());
     }
   }, [dispatch, user]);
 };
