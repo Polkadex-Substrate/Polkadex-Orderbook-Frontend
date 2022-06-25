@@ -48,13 +48,6 @@ export interface MarketsTickersFetch {
   type: typeof MARKETS_TICKERS_FETCH;
 }
 
-export interface MarketsTickersPush {
-  type: typeof MARKETS_TICKERS_PUSH;
-  payload: {
-    [pair: string]: TickerEvent;
-  };
-}
-
 export interface MarketsTickersData {
   type: typeof MARKETS_TICKERS_DATA;
   payload: Ticker[];
@@ -70,7 +63,7 @@ export interface MarketsTickerChannelFetch {
 }
 export interface MarketsTickersChannelData {
   type: typeof MARKET_TICKER_CHANNEL_DATA;
-  payload: any;
+  payload: Ticker;
 }
 export type MarketsAction =
   | MarketsFetch
@@ -123,13 +116,6 @@ export const marketsTickersData = (
 export const marketsTickersError = (error: CommonError): MarketsTickersError => ({
   type: MARKETS_TICKERS_ERROR,
   error,
-});
-
-export const marketsTickersPush = (
-  payload: MarketsTickersPush["payload"]
-): MarketsTickersPush => ({
-  type: MARKETS_TICKERS_PUSH,
-  payload,
 });
 
 export const marketsTickersChannelFetch = (): MarketsTickerChannelFetch => ({

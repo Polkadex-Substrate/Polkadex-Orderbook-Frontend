@@ -10,6 +10,7 @@ import {
   MARKETS_TICKERS_DATA,
   MARKETS_TICKERS_ERROR,
   MARKETS_TICKERS_FETCH,
+  MARKET_TICKER_CHANNEL_DATA,
 } from "./constants";
 import { Market, Ticker } from "./types";
 
@@ -129,6 +130,23 @@ export const marketsReducer = (
         tickerLoading: false,
         tickers: action.payload,
       };
+    case MARKET_TICKER_CHANNEL_DATA: {
+      const update = action.payload;
+      const tickers = [...state.tickers];
+      const idx = tickers.findIndex((x) => x.m === update.m);
+      if (idx < 0) {
+        tickers.push(update);
+        return {
+          ...state,
+          tickers,
+        };
+      }
+      tickers[idx] = update;
+      return {
+        ...state,
+        tickers,
+      };
+    }
     default:
       return state;
   }

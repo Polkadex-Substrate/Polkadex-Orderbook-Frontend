@@ -13,5 +13,5 @@ import { marketTickersChannelSaga } from "./tickersChannelSaga";
 export function* rootMarketsSaga() {
   yield takeLeading(MARKETS_FETCH, marketsFetchSaga);
   yield takeLeading(MARKETS_TICKERS_FETCH, marketTickersSaga);
-  yield takeLatest(MARKET_TICKER_CHANNEL_FETCH, marketTickersChannelSaga);
+  yield takeLeading(MARKET_TICKER_CHANNEL_FETCH, marketTickersChannelSaga);
 }
