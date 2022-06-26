@@ -13,7 +13,7 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       const channel = yield call(() => fetchKlineChannel(market, interval));
       while (true) {
         const data = yield take(channel);
-        // TODO: marketId and period will be dynamic
+        console.log("candlestick update=>", data);
         yield put(
           klinePush({
             kline: {
