@@ -98,7 +98,8 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
         error: action.error,
       };
     case DEPTH_DATA_INCREMENT: {
-      let { asks, bids } = { ...state };
+      let asks = [...state.asks];
+      let bids = [...state.bids];
       const update = action.payload;
 
       // check if any deletion need to made to orderbook
