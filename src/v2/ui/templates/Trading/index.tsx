@@ -84,7 +84,6 @@ export const Trading = () => {
   // intitialize market dependent events
   useEffect(() => {
     if (market?.m) {
-      debugger;
       dispatch(orderBookFetch(market));
       dispatch(orderBookChannelFetch(market));
     }

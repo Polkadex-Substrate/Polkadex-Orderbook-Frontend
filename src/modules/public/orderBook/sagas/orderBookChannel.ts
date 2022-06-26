@@ -10,7 +10,7 @@ import { Market } from "../../markets";
 export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
   try {
     const market: Market = action.payload;
-    debugger;
+
     if (market?.m) {
       const channel = fetchOrderBookChannel(market.m);
       while (true) {
