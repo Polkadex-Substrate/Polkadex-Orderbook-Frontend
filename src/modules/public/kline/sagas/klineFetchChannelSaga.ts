@@ -57,6 +57,7 @@ async function fetchKlineChannel(market: string, interval: string) {
       },
     });
     return () => {
+      console.log("unsubscribing current klines");
       subscription.unsubscribe();
     };
   });

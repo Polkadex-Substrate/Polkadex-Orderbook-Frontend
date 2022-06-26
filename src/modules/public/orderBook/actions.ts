@@ -30,6 +30,7 @@ export interface OrderBookError {
 
 export interface OrderBookChannelFetch {
   type: typeof ORDER_BOOK_CHANNEL_FETCH;
+  payload: Market;
 }
 
 type IncData = { price: string; qty: string; side: "Bid" | "Ask" };
@@ -65,8 +66,11 @@ export const orderBookFetch = (payload: OrderBookFetch["payload"]): OrderBookFet
   type: ORDER_BOOK_FETCH,
   payload,
 });
-export const orderBookChannelFetch = (): OrderBookChannelFetch => ({
+export const orderBookChannelFetch = (
+  payload: OrderBookChannelFetch["payload"]
+): OrderBookChannelFetch => ({
   type: ORDER_BOOK_CHANNEL_FETCH,
+  payload,
 });
 export const orderBookData = (payload: OrderBookData["payload"]): OrderBookData => ({
   type: ORDER_BOOK_DATA,

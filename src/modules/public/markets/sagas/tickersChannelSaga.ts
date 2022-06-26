@@ -44,7 +44,10 @@ function createMarketTickersChannel(market: string) {
       },
       error: (err) => console.warn(err),
     });
-    return subscription.unsubscribe;
+    return () => {
+      console.log("unsubscribing current ticker");
+      subscription.unsubscribe();
+    };
   });
 }
 

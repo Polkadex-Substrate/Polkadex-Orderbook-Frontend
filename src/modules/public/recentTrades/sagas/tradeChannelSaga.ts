@@ -6,14 +6,15 @@ import {
   alertPush,
   Market,
   PublicTrade,
+  RecentTradesChannelFetch,
   recentTradesPush,
   selectCurrentMarket,
 } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
-export function* fetchTradeChannelSaga() {
+export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
   try {
-    const market: Market = yield select(selectCurrentMarket);
+    const market: Market = action.payload;
     if (market?.m) {
       const channel = yield call(() => fetchTradesChannel(market.m));
       while (true) {
@@ -42,11 +43,11 @@ export function* fetchTradeChannelSaga() {
   }
 }
 
-async function fetchTradesChannel(marketid: string) {
+async function fetchTradesChannel(market: string) {
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `PDEX-1-raw-trade` },
+      variables: { name: `${market}-raw-trade` },
     }).subscribe({
       next: (data) => {
         // "data": "{\"price\":\"1.20\",\"quantity\":\"1\",\"market\":\"PDEX-1\",\"time\":1656065662309}"

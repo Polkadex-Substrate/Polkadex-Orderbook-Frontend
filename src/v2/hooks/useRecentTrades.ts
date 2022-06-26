@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { getIsDecreasingArray, getSymbolFromId } from "../helpers";
+import { getIsDecreasingArray } from "../helpers";
 
 import {
   selectCurrentMarket,
-  recentTradesFetch,
   selectRecentTradesOfCurrentMarket,
   recentTradesChannelFetch,
 } from "@polkadex/orderbook-modules";
@@ -16,7 +15,7 @@ export function useRecentTrades() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
   useEffect(() => {
-    if (currentMarket?.name) dispatch(recentTradesChannelFetch());
+    if (currentMarket?.m) dispatch(recentTradesChannelFetch(market));
   }, [dispatch, currentMarket]);
 
   const isDecreasing = getIsDecreasingArray(recentTrades);
