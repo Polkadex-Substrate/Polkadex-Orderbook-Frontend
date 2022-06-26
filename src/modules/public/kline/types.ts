@@ -1,5 +1,5 @@
 export interface KlineEvent {
-  time: number;
+  timestamp: number;
   close: number;
   open: number;
   high: number;
