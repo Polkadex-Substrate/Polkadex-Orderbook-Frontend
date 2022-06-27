@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Calendar } from "react-date-range";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { DateRangePicker, defaultStaticRanges } from "react-date-range";
+import subDays from "date-fns/subDays";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
@@ -29,22 +30,32 @@ const initialFilters = {
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 const Transactions = () => {
+  const now = useRef(new Date());
+
   const [filters, setFilters] = useState(initialFilters);
-  const [date, setDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
+  const [to, setTo] = useState(now.current);
+  const [from, setFrom] = useState(subDays(now.current, 7));
+
   const userLoggedIn = useReduxSelector(selectHasUser);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
 
-  const handleSelect = (date) => {
-    console.log(date); // native Date object
-  };
+  const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
+    setFrom(startDate);
+    setTo(endDate);
+  }, []);
 
+  const ranges = useMemo(() => {
+    return [
+      {
+        startDate: from,
+        endDate: to,
+        key: "selection",
+      },
+    ];
+  }, [from, to]);
   return (
     <S.Section>
       <Tabs>
@@ -107,7 +118,13 @@ const Transactions = () => {
                     style={{ marginLeft: 10 }}
                   />
                 }>
-                <Calendar ranges={[date]} onChange={handleSelect} />
+                <DateRangePicker
+                  ranges={ranges}
+                  onChange={handleSelect}
+                  rangeColors={["#E6007A"]}
+                  staticRanges={defaultStaticRanges}
+                  inputRanges={[]}
+                />
               </Dropdown>
             </S.ContainerTransactions>
           </S.WrapperActions>
