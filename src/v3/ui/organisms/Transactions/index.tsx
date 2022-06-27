@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Calendar } from "react-date-range";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
@@ -15,6 +16,9 @@ import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+
 const initialFilters = {
   hiddenPairs: false,
   onlyBuy: false,
@@ -26,11 +30,20 @@ const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 const Transactions = () => {
   const [filters, setFilters] = useState(initialFilters);
+  const [date, setDate] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
   const userLoggedIn = useReduxSelector(selectHasUser);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
+
+  const handleSelect = (date) => {
+    console.log(date); // native Date object
+  };
 
   return (
     <S.Section>
@@ -83,14 +96,19 @@ const Transactions = () => {
                   ))}
                 </DropdownContent>
               </Dropdown>
-              <Icon
-                name="Calendar"
-                stroke="text"
-                background="secondaryBackground"
-                color="secondaryBackground"
-                size="extraMedium"
-                style={{ marginLeft: 10 }}
-              />
+              <Dropdown
+                header={
+                  <Icon
+                    name="Calendar"
+                    stroke="text"
+                    background="secondaryBackground"
+                    color="secondaryBackground"
+                    size="extraMedium"
+                    style={{ marginLeft: 10 }}
+                  />
+                }>
+                <Calendar ranges={[date]} onChange={handleSelect} />
+              </Dropdown>
             </S.ContainerTransactions>
           </S.WrapperActions>
         </S.Header>

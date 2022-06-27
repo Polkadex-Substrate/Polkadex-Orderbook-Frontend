@@ -56,6 +56,7 @@ const RecentTrades = dynamic(() => import("@orderbook/v2/ui/organisms/RecentTrad
 
 export function Trading() {
   const [state, setState] = useState(false);
+  const [dateIsVisible, setDateIsVisible] = useState(false);
   const dispatch = useDispatch();
   const { id } = useRouter().query;
   useMarketsFetch(id as string);

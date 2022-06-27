@@ -18,8 +18,6 @@ const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposi
 });
 
 export const WalletTemplate = () => {
-  const [state, setState] = useState(true);
-
   const router = useRouter();
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
@@ -31,8 +29,8 @@ export const WalletTemplate = () => {
   if (!user) return <div />;
   return (
     <S.Wrapper>
-      <Menu isWallet handleChange={() => setState(!state)} />
-      {state && <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />}
+      <Menu isWallet />
+      <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />
       <Tabs>
         <S.Content>
           <S.ContainerWrapper>
