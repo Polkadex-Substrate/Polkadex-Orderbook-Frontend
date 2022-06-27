@@ -10,11 +10,13 @@ export const Wrapper = styled.div`
   max-width: 160rem;
   margin: 0 auto;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
+  flex-wrap: nowrap;
 `;
 
 export const Content = styled.div`
   width: 100%;
   padding: 2rem;
+  min-width: 400px;
 `;
 
 export const GoBack = styled.button`
@@ -35,12 +37,15 @@ export const GoBack = styled.button`
 export const ContainerWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
 `;
 
 export const Grid = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-gap: 1rem;
+    height: 100%;
+    flex: 1;
     @media screen and (min-width: 1260px) {
       grid-template-columns: 2fr minmax(36rem, 1fr);
       flex: 1;

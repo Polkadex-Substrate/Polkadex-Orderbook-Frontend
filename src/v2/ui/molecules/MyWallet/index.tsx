@@ -33,7 +33,7 @@ export const WalletContent = ({ title, locked = true, hasLink = true, hasMargin 
       </S.Title>
       <S.Box>
         <S.Search>
-          <Icon name="Search" stroke="black" size="extraSmall" />
+          <Icon name="Search" stroke="text" size="extraSmall" />
           <input
             type="text"
             placeholder="Search"
