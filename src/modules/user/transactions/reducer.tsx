@@ -1,5 +1,10 @@
 import { TransactionsAction } from "./actions";
-import { TRANSACTIONS_DATA, TRANSACTIONS_ERROR, TRANSACTIONS_FETCH } from "./constants";
+import {
+  TRANSACTIONS_DATA,
+  TRANSACTIONS_ERROR,
+  TRANSACTIONS_FETCH,
+  TRANSACTION_CHANNEL_DATA,
+} from "./constants";
 
 export interface Transaction {
   amount: string;
@@ -46,6 +51,13 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
         success: false,
         error: action.error,
       };
+    case TRANSACTION_CHANNEL_DATA: {
+      const { payload } = action;
+      return {
+        ...state,
+        transactions: [payload, ...state.transactions],
+      };
+    }
     default:
       return state;
   }

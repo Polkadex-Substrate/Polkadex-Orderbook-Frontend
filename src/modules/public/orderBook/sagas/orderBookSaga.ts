@@ -10,11 +10,8 @@ import { getDepthFromOrderbook } from "./helper";
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
     const market = action.payload;
-    if (market?.id) {
-      let [base, quote] = market.assetIdArray;
-      base = base === "-1" ? "PDEX" : base;
-      quote = quote === "-1" ? "PDEX" : quote;
-      const data = yield call(fetchOrderbook, `${base}-${quote}`);
+    if (market?.m) {
+      const data = yield call(fetchOrderbook, market.m);
       const { asks, bids } = getDepthFromOrderbook(data);
       yield put(depthData({ asks, bids }));
     }

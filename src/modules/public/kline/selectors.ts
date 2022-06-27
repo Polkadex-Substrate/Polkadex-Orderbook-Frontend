@@ -1,5 +1,5 @@
-import { RootState } from "../../";
+import { KlineEvent, KlineState, RootState } from "../../";
 
-import { KlineState } from "./reducer";
-
-export const selectKline = (state: RootState): KlineState => state.public.kline;
+export const selectKline = (state: RootState): KlineEvent[] => state.public.kline.data;
+export const selectLastKline = (state: RootState): KlineState["last"] =>
+  state.public.kline.last;

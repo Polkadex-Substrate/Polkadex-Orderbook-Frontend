@@ -17,6 +17,7 @@ export interface RecentTradesFetch {
 
 export interface RecentTradesChannelFetch {
   type: typeof RECENT_TRADES_FETCH_CHANNEL;
+  payload: Market;
 }
 
 export interface RecentTradesData {
@@ -48,8 +49,11 @@ export const recentTradesFetch = (
   payload,
 });
 
-export const recentTradesChannelFetch = (): RecentTradesChannelFetch => ({
+export const recentTradesChannelFetch = (
+  payload: RecentTradesChannelFetch["payload"]
+): RecentTradesChannelFetch => ({
   type: RECENT_TRADES_FETCH_CHANNEL,
+  payload,
 });
 
 export const recentTradesData = (payload: RecentTradesData["payload"]): RecentTradesData => ({

@@ -12,6 +12,8 @@ import {
   MARKETS_TICKERS_ERROR,
   MARKETS_TICKERS_FETCH,
   MARKETS_TICKERS_PUSH,
+  MARKET_TICKER_CHANNEL_DATA,
+  MARKET_TICKER_CHANNEL_FETCH,
 } from "./constants";
 import { Market, Ticker, TickerEvent } from "./types";
 
@@ -46,13 +48,6 @@ export interface MarketsTickersFetch {
   type: typeof MARKETS_TICKERS_FETCH;
 }
 
-export interface MarketsTickersPush {
-  type: typeof MARKETS_TICKERS_PUSH;
-  payload: {
-    [pair: string]: TickerEvent;
-  };
-}
-
 export interface MarketsTickersData {
   type: typeof MARKETS_TICKERS_DATA;
   payload: Ticker[];
@@ -63,6 +58,13 @@ export interface MarketsTickersError {
   error: CommonError;
 }
 
+export interface MarketsTickerChannelFetch {
+  type: typeof MARKET_TICKER_CHANNEL_FETCH;
+}
+export interface MarketsTickersChannelData {
+  type: typeof MARKET_TICKER_CHANNEL_DATA;
+  payload: Ticker;
+}
 export type MarketsAction =
   | MarketsFetch
   | MarketsData
@@ -71,7 +73,9 @@ export type MarketsAction =
   | MarketsTickersData
   | MarketsTickersError
   | SetCurrentMarket
-  | SetCurrentMarketIfUnset;
+  | SetCurrentMarketIfUnset
+  | MarketsTickerChannelFetch
+  | MarketsTickersChannelData;
 
 export const marketsFetch = (payload?: MarketsFetch["payload"]): MarketsFetch => ({
   type: MARKETS_FETCH,
@@ -114,9 +118,11 @@ export const marketsTickersError = (error: CommonError): MarketsTickersError => 
   error,
 });
 
-export const marketsTickersPush = (
-  payload: MarketsTickersPush["payload"]
-): MarketsTickersPush => ({
-  type: MARKETS_TICKERS_PUSH,
+export const marketsTickersChannelFetch = (): MarketsTickerChannelFetch => ({
+  type: MARKET_TICKER_CHANNEL_FETCH,
+});
+
+export const marketsTickersChannelData = (payload: MarketsTickersChannelData["payload"]) => ({
+  type: MARKET_TICKER_CHANNEL_DATA,
   payload,
 });

@@ -1,6 +1,12 @@
 import { CommonError } from "../../types";
 
-import { TRANSACTIONS_DATA, TRANSACTIONS_ERROR, TRANSACTIONS_FETCH } from "./constants";
+import {
+  TRANSACTIONS_DATA,
+  TRANSACTIONS_ERROR,
+  TRANSACTIONS_FETCH,
+  TRANSACTION_CHANNEL_DATA,
+  TRANSACTION_CHANNEL_FETCH,
+} from "./constants";
 
 import { Transaction } from ".";
 
@@ -18,7 +24,20 @@ export interface TransactionsData {
   payload: Transaction[];
 }
 
-export type TransactionsAction = TransactionsFetch | TransactionsData | TransactionsError;
+export interface TransactionChannelFetch {
+  type: typeof TRANSACTION_CHANNEL_FETCH;
+}
+
+export interface TransactionChannelData {
+  type: typeof TRANSACTION_CHANNEL_DATA;
+  payload: Transaction;
+}
+export type TransactionsAction =
+  | TransactionsFetch
+  | TransactionsData
+  | TransactionsError
+  | TransactionChannelFetch
+  | TransactionChannelData;
 
 export const transactionsFetch = (): TransactionsFetch => ({
   type: TRANSACTIONS_FETCH,
@@ -32,4 +51,15 @@ export const transactionsData = (payload: Transaction[]): TransactionsData => ({
 export const transactionsError = (error: CommonError): TransactionsError => ({
   type: TRANSACTIONS_ERROR,
   error,
+});
+
+export const transactionChannelFetch = (): TransactionChannelFetch => ({
+  type: TRANSACTION_CHANNEL_FETCH,
+});
+
+export const transactionChannelData = (
+  payload: TransactionChannelData["payload"]
+): TransactionChannelData => ({
+  type: TRANSACTION_CHANNEL_DATA,
+  payload,
 });

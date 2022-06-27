@@ -35,7 +35,6 @@ const fetchTransactions = async (address: string, monthsBefore: number, limit = 
       main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
-      limit: limit,
     },
   });
   const txs = res.data.listTransactionsByMainAccount.items;

@@ -31,7 +31,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
         <S.WrapperBalance>
           <span>Available</span>
           <S.Span>
-            {availableAmount} {baseTicker}
+            {availableAmount} {isSell ? baseTicker : quoteTicker}
           </S.Span>
         </S.WrapperBalance>
       </S.ContainerWallet>

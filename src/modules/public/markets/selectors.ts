@@ -38,3 +38,6 @@ export const selectShouldFetchMarkets = (state: RootState): boolean =>
 
 export const selectShouldFetchMarketsTickers = (state: RootState): boolean =>
   !selectMarketsTickersTimestamp(state);
+
+export const selectMarketTickers = (state: RootState): Ticker[] =>
+  selectMarketsState(state).tickers;

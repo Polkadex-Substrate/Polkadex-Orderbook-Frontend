@@ -12,9 +12,9 @@ export const useOrderBookMarketsFetch = () => {
   const currentMarket = useSelector(selectCurrentMarket);
 
   useEffect(() => {
-    if (currentMarket) {
+    if (currentMarket?.m) {
       dispatch(orderBookFetch(currentMarket));
-      dispatch(orderBookChannelFetch());
+      dispatch(orderBookChannelFetch(currentMarket));
     }
   }, [currentMarket, dispatch]);
 };

@@ -1,31 +1,31 @@
 import { call, put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
+import { API } from "aws-amplify";
 
-import { alertPush, klineEventToObject, klinePush } from "../../..";
+import { alertPush, klinePush, KlineSubscribe } from "../../..";
 
-import {
-  RabbitmqChannelType,
-  selectRabbitmqChannel,
-} from "@polkadex/orderbook/modules/public/rabbitmqChannel";
+import { onCandleStickEvents } from "@polkadex/orderbook/graphql/subscriptions";
 
-export function* fetchKlineChannelSaga() {
+export function* fetchKlineChannelSaga(action: KlineSubscribe) {
   try {
-    const rabbitmqConn = yield select(selectRabbitmqChannel);
-    if (rabbitmqConn) {
-      const channel = yield call(() =>
-        fetchKlineChannel(rabbitmqConn, "one.kline-events", "BTC.USD.kline-events")
-      );
+    const { market, interval } = action.payload;
+    if (market) {
+      const channel = yield call(() => fetchKlineChannel(market, interval));
       while (true) {
         const data = yield take(channel);
-        const klineEventToJson = JSON.parse(data);
-        const klineEvent = klineEventToObject(klineEventToJson);
-        // TODO: marketId and period will be dynamic
+        console.log("candlestick update=>", data);
         yield put(
           klinePush({
-            marketId: "pdgsdx",
-            kline: klineEvent,
-            period: "5m",
+            kline: {
+              open: Number(data.o),
+              close: Number(data.c),
+              high: Number(data.h),
+              low: Number(data.l),
+              timestamp: new Date(data.t).getTime() * Math.pow(10, 5),
+              volume: Number(data.v_base),
+            },
+            market: data.m,
+            interval: data.interval,
           })
         );
       }
@@ -43,21 +43,22 @@ export function* fetchKlineChannelSaga() {
   }
 }
 
-async function fetchKlineChannel(
-  chann: RabbitmqChannelType,
-  queueName: string,
-  routingKey: string
-) {
-  const queue = await chann.queue(queueName, { durable: false });
-  await queue.bind("topic_exchange", routingKey);
+async function fetchKlineChannel(market: string, interval: string) {
   return eventChannel((emitter) => {
-    const amqpConsumer = queue.subscribe({ noAck: false }, (res) => {
-      const msg = u8aToString(res.body);
-      emitter(msg);
-      res.ack();
+    const subscription = API.graphql({
+      query: onCandleStickEvents,
+      variables: { m: market, interval: interval },
+    }).subscribe({
+      next: (data) => {
+        emitter(data.value.data.onCandleStickEvents);
+      },
+      error: (err) => {
+        console.warn("error in onCandleStickEvents channel", err);
+      },
     });
     return () => {
-      amqpConsumer.then((consumer) => consumer.cancel());
+      console.log("unsubscribing current klines");
+      subscription.unsubscribe();
     };
   });
 }

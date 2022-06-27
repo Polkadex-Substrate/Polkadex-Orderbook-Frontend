@@ -20,7 +20,10 @@ const History = () => {
   const route = useRouter();
   const getAsset = useReduxSelector(selectGetAsset);
   const [selected, setSelected] = useState("All");
-  const transactionHistory = useReduxSelector(selectTransactionData);
+  const transactionsHistory = useReduxSelector(selectTransactionData);
+  const transactionHistory = transactionsHistory.sort(
+    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+  );
   // const depositHistory = useReduxSelector(selectDepositsData);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
