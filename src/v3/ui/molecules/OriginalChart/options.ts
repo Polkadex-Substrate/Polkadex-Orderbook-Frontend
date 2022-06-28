@@ -1,7 +1,23 @@
 import { checkCoordinateOnSegment } from "klinecharts/lib/shape/segment";
 
 import { defaultThemes } from "src/styles";
-
+export const chartType = [
+  {
+    key: "candle_solid",
+    name: "Candles Solid",
+    icon: "Candle",
+  },
+  {
+    key: "candle_stroke",
+    name: "Candles Stroke",
+    icon: "CandleStroke",
+  },
+  {
+    key: "area",
+    name: "Area",
+    icon: "Area",
+  },
+];
 export const options = (isDarkTheme = true) => {
   const theme = isDarkTheme ? defaultThemes.dark : defaultThemes.light;
   return {
