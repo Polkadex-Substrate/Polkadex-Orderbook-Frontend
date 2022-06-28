@@ -28,8 +28,7 @@ export const Header = styled.div<{ isActive?: boolean }>`
 
 export const Content = styled.div<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin }) => css`
-    background: ${theme.colors.white};
-    color: ${theme.colors.black};
+    background: ${theme.colors.tertiaryBackground};
     min-width: 35rem;
     height: max-content;
     border-radius: 1rem;
@@ -88,6 +87,7 @@ export const Search = styled.div`
     input {
       margin-left: 0.5rem;
       width: 100%;
+      color: ${theme.colors.text};
     }
     :hover {
       border-color: ${theme.colors.secondaryBackground};

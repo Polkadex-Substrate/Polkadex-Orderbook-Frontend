@@ -3,7 +3,7 @@ import Input from "../Input";
 
 import * as S from "./styles";
 
-import { Range } from "@orderbook/v2/ui/molecules";
+import { ButtonStatus, Range } from "@orderbook/v2/ui/molecules";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
@@ -23,6 +23,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
     baseTicker,
     orderSide,
     hasUser,
+    isOrderExecuted,
   } = usePlaceOrder(isSell, isLimit);
   return (
     <S.WrapperOrder>
@@ -80,12 +81,18 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
             disabled={isOrderLoading}
             readOnly
           />
-          <Button
+
+          <ButtonStatus
+            isSell={isSell}
+            heading={{
+              text: !hasUser ? "Connect your account" : `${orderSide} ${baseTicker}`,
+              loading: "Waiting",
+              success: "Order Created",
+            }}
+            isLoading={isOrderLoading}
+            isSuccess={isOrderExecuted}
             type="submit"
-            title={!hasUser ? "Connect your account" : `${orderSide} ${baseTicker}`}
-            fullWidth={true}
-            background={!hasUser ? "secondaryBackground" : isSell ? "primary" : "green"}
-            disabled={!hasUser}
+            disabled={!hasUser} // TODO: THIS HARCODED FOR TESTING PURPOSES ONLY
           />
         </form>
       </S.ContainerForm>

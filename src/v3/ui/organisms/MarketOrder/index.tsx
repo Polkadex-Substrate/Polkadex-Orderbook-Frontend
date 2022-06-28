@@ -6,7 +6,14 @@ import { DropdownContent, DropdownHeader } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Dropdown, Icon, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import {
+  Dropdown,
+  Icon,
+  Skeleton,
+  TabContent,
+  TabHeader,
+  Tabs,
+} from "@polkadex/orderbook-ui/molecules";
 
 const MarketOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
@@ -58,5 +65,6 @@ const MarketOrder = () => {
     </S.Section>
   );
 };
+export const MarketSkeleton = () => <Skeleton height="100%" width="100%" minWidth="350px" />;
 
 export default MarketOrder;

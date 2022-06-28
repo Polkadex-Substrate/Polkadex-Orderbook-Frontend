@@ -115,6 +115,7 @@ export const SelectMessage = styled.p`
 
 export const Container = styled.div`
   flex: 1;
+  width: 100%;
 `;
 
 export const Input = styled.div`

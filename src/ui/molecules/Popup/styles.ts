@@ -41,7 +41,7 @@ export const Container = styled.div<{ isBottomPosition: boolean; isRightPosition
 export const Content = styled.div<{ size: string; isMessage: boolean }>`
   ${({ size, isMessage }) => css`
     width: 100%;
-    z-index: ${isMessage ? 35 : 30};
+    z-index: ${isMessage ? 35 : 32};
     ${sizeModifier[size]()};
   `}
 `;

@@ -73,12 +73,12 @@ export const Table = styled.div<{ isSell?: boolean }>`
   `}
 `;
 
-export const Head = styled.div`
-  ${({ theme }) => css`
+export const Head = styled.div<{ lightMode?: boolean }>`
+  ${({ theme, lightMode }) => css`
     position: sticky;
     top: -0.1px;
     z-index: 2;
-    background: ${theme.colors.inverse};
+    background: ${lightMode ? theme.colors.tertiaryBackground : theme.colors.inverse};
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;

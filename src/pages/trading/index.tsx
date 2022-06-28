@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 function Home() {
   const router = useRouter();
 
-  router.push("/v3/trading/PDEXTBTC");
+  router.push("/trading/PDEXTBTC");
 
   return <div />;
 }

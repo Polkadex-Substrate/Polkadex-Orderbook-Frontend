@@ -1,6 +1,6 @@
 import * as S from "./styles";
 
-import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
@@ -59,6 +59,9 @@ const EmptyTrades = ({ message = "No Recent Trades" }) => (
       <p>{message}</p>
     </S.Empty>
   </S.Container>
+);
+export const RecentTradesSkeleton = () => (
+  <Skeleton height="100%" width="100%" style={{ maxWidth: "350px" }} />
 );
 
 export default RecentTrades;
