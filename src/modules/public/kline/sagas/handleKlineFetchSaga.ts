@@ -24,6 +24,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     const data: KlineDbData[] = yield call(() =>
       fetchKlineAsync(market, resolution, from, to)
     );
+
     const convertedData = data.map((x) => ({
       timestamp: new Date(x.t).getTime() * Math.pow(10, 5),
       open: Number(x.o),
