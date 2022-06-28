@@ -24,6 +24,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  transition: width 0.5s ease-in-out;
 `;
 
 export const Container = styled.div`

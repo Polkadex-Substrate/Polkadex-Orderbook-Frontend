@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
+import useResizeObserver from "@react-hook/resize-observer";
 
 import { options } from "./options";
 import * as S from "./styles";
@@ -21,9 +22,11 @@ export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
 const OriginalChart = ({ chart, resolution }) => {
+  const dispatch = useDispatch();
+  const target = useRef(null);
+
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const dispatch = useDispatch();
   const klines = useReduxSelector(selectKline);
   const lastKline = useReduxSelector(selectLastKline);
   const isLoading = useReduxSelector(selectKlineLoading);
@@ -81,8 +84,13 @@ const OriginalChart = ({ chart, resolution }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
+  useResizeObserver(target, (_) => chart.current.resize());
+
   return (
-    <S.Wrapper>
+    <S.Wrapper ref={target}>
+      <button type="button" onClick={() => chart.current.resize()}>
+        Test
+      </button>
       <S.Container id="original-chart" />
       {isLoading && (
         <S.LoadingeMessage>
