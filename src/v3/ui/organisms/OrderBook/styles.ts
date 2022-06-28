@@ -20,7 +20,7 @@ export const WrapperTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 2rem 1rem 1rem 1rem;
 `;
 
 export const DropdownContent = styled.div`
