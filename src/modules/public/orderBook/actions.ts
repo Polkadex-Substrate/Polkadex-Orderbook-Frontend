@@ -1,5 +1,5 @@
 import { CommonError } from "../../types";
-import { Market, MarketId } from "../markets/types";
+import { Market } from "../markets/types";
 
 import {
   DEPTH_DATA,

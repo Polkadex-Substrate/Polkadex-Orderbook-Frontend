@@ -11,6 +11,3 @@ export const KLINE_ERROR = "kline/KLINE_ERROR";
 
 export const KLINE_SUBSCRIBE = "kline/KLINE_SUBSCRIBE";
 export const KLINE_UNSUBSCRIBE = "kline/KLINE_UNSUBSCRIBE";
-
-export const KLINE_UPDATE_FETCH = "kline/KLINE_UPDATE_FETCH";
-export const KLINE_UPDATE_DATA = "kline/KLINE_UPDATE_DATA";

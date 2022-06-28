@@ -56,22 +56,6 @@ type IBalanceFromDb = {
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
-  /*
-  {
-    "getAllBalancesByMainAccount": {
-        "items": [
-            {
-                "main_account": "esrPQes7pyxeWjvPjxzhqVYFeNVMCJfEJUbza4Zi1tt5d4Bgb",
-                "asset": "1",
-                "free": "7",
-                "reserved": "3",
-                "pending_withdrawal": "0.00000000"
-            },
-        ],
-        "nextToken": null
-    }
-}
-*/
   const res: any = await API.graphql({
     query: queries.getAllBalancesByMainAccount,
     variables: { main_account: account },

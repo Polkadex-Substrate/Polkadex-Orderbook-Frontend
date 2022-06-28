@@ -47,19 +47,3 @@ function createTransactionsChannel(address: string) {
     return subscription.unsubscribe;
   });
 }
-
-/*
-{
-    "data": {
-        "onUpdateTransaction": {
-            "main_account": "eso5pshyDhzejRpiVmq7qwCnFZGXxDZY28XSbMVpbC9Junpaw",
-            "txn_type": "DEPOSIT",
-            "asset": "1",
-            "amount": "100",
-            "fee": "0.00000000",
-            "status": "CONFIRMED",
-            "time": "2022-06-25T08:32:25.248362536+00:00"
-        }
-    }
-}
-*/
