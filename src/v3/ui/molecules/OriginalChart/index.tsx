@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
 
+import { LoadingeMessage } from "../LoadingMessage";
+
 import { options } from "./options";
 import * as S from "./styles";
 
@@ -13,7 +15,11 @@ import {
   selectCurrentMarket,
   selectKline,
   selectLastKline,
+  selectKlineLoading,
 } from "@polkadex/orderbook-modules";
+
+export const getRamdom = (min = 3000, max = 5000) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 const OriginalChart = ({ chart }) => {
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
@@ -21,6 +27,8 @@ const OriginalChart = ({ chart }) => {
   const dispatch = useDispatch();
   const klines = useReduxSelector(selectKline);
   const lastKline = useReduxSelector(selectLastKline);
+  const isLoading = useReduxSelector(selectKlineLoading);
+
   useEffect(() => {
     if (currentMarket?.m) {
       dispatch(
@@ -34,9 +42,6 @@ const OriginalChart = ({ chart }) => {
       dispatch(klineSubscribe({ market: currentMarket.m, interval: "1m" }));
     }
   }, [currentMarket, dispatch]);
-  // Generate Ramdom numbers
-  const getRamdom = (min = 3000, max = 5000) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
 
   useEffect(() => {
     chart.current = init("original-chart", options());
@@ -47,8 +52,7 @@ const OriginalChart = ({ chart }) => {
      * @param {string | TechnicalIndicator } value KLineData array
      * @param {boolean} isStack - tells the chart if there are more historical data, it can be defaulted, the default is true
      * @param {PaneOptions} options
-     */
-    chart.current.createTechnicalIndicator({ name: "VOL" }, false);
+      .createTechnicalIndicator({ name: "VOL" }, false);
 
     /**
      * @description Add new data, this method will clear the chart data, no need to call the clearData method.
@@ -78,7 +82,13 @@ const OriginalChart = ({ chart }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
-  return <S.Wrapper id="original-chart" />;
+  return (
+    <S.Wrapper>
+      {/* <LoadingeMessage isVisible={isLoading}> */}
+      <S.Container id="original-chart" />
+      {/* </LoadingeMessage> */}
+    </S.Wrapper>
+  );
 };
 
 export default OriginalChart;

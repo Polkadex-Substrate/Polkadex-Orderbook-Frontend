@@ -52,7 +52,7 @@ export const LoginTemplate = () => {
   const isSignInLoading = useReduxSelector(selectSignInLoading);
 
   useEffect(() => {
-    if (hasUser) router.push("/v3/trading");
+    if (hasUser) router.push("/trading");
   }, [hasUser, router]);
 
   useEffect(() => {

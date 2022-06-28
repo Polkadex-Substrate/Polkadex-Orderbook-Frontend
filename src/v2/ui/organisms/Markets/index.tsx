@@ -5,7 +5,7 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Dropdown, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 
@@ -160,5 +160,6 @@ const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
     </S.FooterCard>
   </S.Footer>
 );
+export const MarketsSkeleton = () => <Skeleton height="100%" width="100%" />;
 
 export default Markets;

@@ -24,7 +24,6 @@ const History = () => {
   const transactionHistory = transactionsHistory.sort(
     (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
   );
-  // const depositHistory = useReduxSelector(selectDepositsData);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
   // const getValue = (values: Deposits[] | UserWithdraws[], isDeposit = false) => {
@@ -53,7 +52,6 @@ const History = () => {
   // console.log(selectedValue);
   useEffect(() => {
     if (userLoggedIn) {
-      // dispatch(depositsFetch());
       dispatch(transactionsFetch());
     }
   }, [userLoggedIn, dispatch]);

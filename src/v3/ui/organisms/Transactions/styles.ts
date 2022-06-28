@@ -71,7 +71,9 @@ export const ContainerActions = styled.div`
 `;
 
 export const ContainerTransactions = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  `}
 `;

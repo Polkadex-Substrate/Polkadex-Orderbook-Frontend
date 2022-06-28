@@ -9,6 +9,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
+import Withdraw from "@polkadex/orderbook-ui/organisms/Withdraw";
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
@@ -17,8 +18,6 @@ const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposi
 });
 
 export const WalletTemplate = () => {
-  const [state, setState] = useState(false);
-
   const router = useRouter();
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
@@ -30,8 +29,8 @@ export const WalletTemplate = () => {
   if (!user) return <div />;
   return (
     <S.Wrapper>
-      <Menu isWallet handleChange={() => setState(!state)} />
-      {state && <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />}
+      <Menu isWallet />
+      <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />
       <Tabs>
         <S.Content>
           <S.ContainerWrapper>
@@ -62,8 +61,7 @@ export const WalletTemplate = () => {
                   <Deposit />
                 </TabContent>
                 <TabContent>
-                  <p style={{ padding: "2rem", textAlign: "center" }}>Coming Soon</p>
-                  {/* <Withdraw /> */}
+                  <Withdraw />
                 </TabContent>
               </S.Container>
               <History />

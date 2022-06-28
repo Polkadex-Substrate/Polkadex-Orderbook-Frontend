@@ -5,7 +5,12 @@ export const Wrapper = styled.section`
     background: ${theme.colors.primaryBackground};
     border-radius: 1rem;
     box-shadow: ${theme.shadows.tertiary};
+    max-height: -webkit-fill-available;
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
     height: 100%;
+    overflow: hidden;
   `}
 `;
 
@@ -55,11 +60,28 @@ export const TitleIconWrapper = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 1rem;
-  @media screen and (max-width: 1260px) {
-    overflow: auto;
-    max-height: 40rem;
-  }
+  ${({ theme }) => css`
+    position: relative;
+    z-index: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    ::-webkit-scrollbar-thumb {
+      background: none;
+    }
+    ::-webkit-scrollbar-track {
+      background: none;
+    }
+    :hover {
+      ::-webkit-scrollbar-thumb {
+        background: ${theme.colors.secondaryBackground};
+      }
+
+      ::-webkit-scrollbar-track {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 
 export const Card = styled.div`
@@ -77,6 +99,9 @@ export const Card = styled.div`
     }
     :not(:last-child) {
       margin-bottom: 0.8rem;
+    }
+    :last-child {
+      margin-bottom: 20rem;
     }
   `}
 `;

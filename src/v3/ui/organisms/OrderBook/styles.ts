@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
     border-left: 1px solid ${theme.colors.secondaryBackground};
     ${media.greaterThan("large")`
     max-width: 30rem;
+    max-height: 43rem;
   `}
   `}
 `;

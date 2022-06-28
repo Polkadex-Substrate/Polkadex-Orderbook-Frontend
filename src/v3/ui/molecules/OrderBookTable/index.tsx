@@ -1,16 +1,19 @@
+import { useDispatch } from "react-redux";
+
+import { getRamdom } from "../OriginalChart";
+
 import * as S from "./styles";
 
 import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook/v2/ui/organisms";
 import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 
-const OrderBookTable = () => {
+const OrderBookTable = ({ lightMode = false }) => {
   const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
-  console.log("orderbook component", asks, bids);
 
   return (
     <S.Wrapper>
-      <OrderbookTable orders={asks} isSell />
+      <OrderbookTable orders={asks} isSell lightMode={lightMode} />
       <AvailableMessage message="Soon">
         {hasMarket && (
           <OrderbookPricing
@@ -21,7 +24,7 @@ const OrderBookTable = () => {
           />
         )}
       </AvailableMessage>
-      <OrderbookTable orders={bids} />
+      <OrderbookTable orders={bids} lightMode={lightMode} />
     </S.Wrapper>
   );
 };

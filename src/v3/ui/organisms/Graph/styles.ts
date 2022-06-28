@@ -1,11 +1,14 @@
 import styled, { css } from "styled-components";
 
+import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
     border-radius: 0 3rem 3rem 3rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
+    min-height: 30rem;
     @media screen and (min-width: 980px) {
       grid-template-columns: 1fr auto;
     }
@@ -88,6 +91,27 @@ export const FilterIcon = styled.div`
     }
     span {
       white-space: nowrap;
+    }
+  `}
+`;
+export const Tools = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    background: ${theme.colors.primaryBackground};
+    ${Icon} {
+      padding: 0.2rem;
+      cursor: pointer;
+      transition: background 0.5s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+      :active {
+        background: ${theme.colors.primary};
+      }
     }
   `}
 `;
