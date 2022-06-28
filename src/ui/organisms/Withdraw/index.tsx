@@ -11,16 +11,17 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectMainAccount } from "@polkadex/orderbook-modules";
+import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 const defaultValues = {
-  walletAddress: "",
+  asset: null,
   amount: 0.0,
-  amountInFiat: 0.0,
 };
 
 const Withdraw = () => {
   const mainAccount = useReduxSelector(selectMainAccount);
   const proxyAccount = useReduxSelector(selectMainAccount);
+  const assets = useReduxSelector(selectAllAssets);
 
   return (
     <S.Wrapper>
@@ -32,7 +33,7 @@ const Withdraw = () => {
 
           // );
         }}>
-        {({ errors, touched }) => (
+        {({ values, errors, setFieldValue }) => (
           <Form>
             <S.Form>
               <S.FormWallet>
@@ -56,23 +57,40 @@ const Withdraw = () => {
                 />
               </S.FormWallet>
               <S.FormAddress>
-                <SecondaryInput
-                  label="Wallet Address"
-                  name="walletAddress"
-                  value="0x1q2w3e4r5t6y7ui89o0pa1s2s3d4f5g6h7j7k8l9l0">
-                  <button type="button" onClick={() => console.log("Copy")}>
-                    PASTE
-                  </button>
-                </SecondaryInput>
+                <S.SelectPairWrapper>
+                  <Dropdown
+                    direction="bottom"
+                    isClickable
+                    header={
+                      <S.SelectWrapper>
+                        <span>{values?.asset?.name || "Select Token"}</span>
+                        <Icon
+                          name="ArrowBottom"
+                          size="small"
+                          style={{ marginLeft: "1rem" }}
+                          stroke="text"
+                        />
+                      </S.SelectWrapper>
+                    }>
+                    <S.SelectContainer isOverflow={assets?.length > 2}>
+                      {assets?.map((asset, idx) => (
+                        <S.SelectCard
+                          key={idx}
+                          onClick={() => {
+                            setFieldValue("asset", asset);
+                          }}>
+                          {asset.name}
+                        </S.SelectCard>
+                      ))}
+                    </S.SelectContainer>
+                  </Dropdown>
+                  {errors.asset && <S.Error>{errors.asset}</S.Error>}
+                </S.SelectPairWrapper>
               </S.FormAddress>
 
               <S.FormAmount>
                 <SecondaryInput label="Amount" name="amount">
                   <span>PDEX</span>
-                </SecondaryInput>
-                <Icon name="Exchange" size="medium" style={{ marginBottom: "0.5rem" }} />
-                <SecondaryInput label="In Fiat" name="amountInFiat">
-                  <span>USD</span>
                 </SecondaryInput>
               </S.FormAmount>
               <S.Info>

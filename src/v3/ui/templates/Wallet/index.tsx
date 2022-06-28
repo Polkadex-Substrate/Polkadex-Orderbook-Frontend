@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 
 import * as S from "./styles";
@@ -40,10 +40,6 @@ export const WalletTemplate = () => {
             </S.GoBack>
 
             <S.EstimateBalance>
-              <S.EstimatedBalanceWrapper>
-                <h2>My Wallet</h2>
-                <p>0.0 </p>
-              </S.EstimatedBalanceWrapper>
               <S.HeaderContainer>
                 <S.Header>
                   <TabHeader>
