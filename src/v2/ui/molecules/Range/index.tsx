@@ -39,7 +39,7 @@ export const Range = ({ values, setValues }: Props) => {
                 borderRadius: "4px",
                 background: getTrackBackground({
                   values: values,
-                  colors: ["#E6007A", "#69819476"],
+                  colors: ["#E6007A", "#00000033"],
                   min: MIN,
                   max: MAX,
                 }),

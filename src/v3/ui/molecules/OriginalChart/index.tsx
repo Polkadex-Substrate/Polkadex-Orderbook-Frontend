@@ -84,7 +84,7 @@ const OriginalChart = ({ chart, resolution }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
-  useResizeObserver(target, (_) => chart.current.resize());
+  useResizeObserver(target, () => chart.current.resize());
 
   return (
     <S.Wrapper ref={target}>
