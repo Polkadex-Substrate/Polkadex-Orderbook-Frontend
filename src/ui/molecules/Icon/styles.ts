@@ -58,6 +58,7 @@ export const Container = styled.div<Partial<Props>>`
     size = "small",
     isActive = false,
     isToken = false,
+    fill,
   }) => css`
     display: flex;
     align-items: center;
@@ -65,7 +66,7 @@ export const Container = styled.div<Partial<Props>>`
     background: ${isActive ? theme.colors.primary : theme.colors[background]};
     border-radius: 20%;
     svg {
-      fill: ${isActive ? theme.colors.white : theme.colors[color]};
+      fill: ${fill ? theme.colors[fill] : isActive ? theme.colors.white : theme.colors[color]};
       stroke: ${theme.colors[stroke]};
     }
     ${sizeModifier[size](isToken)};

@@ -6,8 +6,8 @@ import * as S from "./styles";
 import {
   selectCurrentMarket,
   selectUserLoggedIn,
-  selectTradesData,
-  tradesFetch,
+  selectUserTrades,
+  userTradesFetch,
   selectTradesLoading,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
@@ -23,7 +23,7 @@ import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers
 export const TradeHistory = () => {
   const dispatch = useDispatch();
 
-  const list = useReduxSelector(selectTradesData);
+  const list = useReduxSelector(selectUserTrades);
 
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
@@ -31,7 +31,7 @@ export const TradeHistory = () => {
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(tradesFetch());
+    if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
   }, [userLoggedIn, currentMarket, dispatch]);
 
   return (

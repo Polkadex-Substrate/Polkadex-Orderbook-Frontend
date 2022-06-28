@@ -1,26 +1,19 @@
+import { X } from "@styled-icons/crypto";
+
 import { DepthActions, OrderBookActions } from "./actions";
 import {
   DEPTH_DATA,
-  DEPTH_DATA_INCREMENT,
-  DEPTH_DATA_SNAPSHOT,
-  DEPTH_EMPTY_SNAP,
   DEPTH_ERROR,
   DEPTH_FETCH,
-  DEPTH_INCREMENT_EMPTY_SNAP,
-  DEPTH_INCREMENT_SUBSCRIBE,
-  DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING,
   ORDER_BOOK_DATA,
+  DEPTH_DATA_INCREMENT,
   ORDER_BOOK_ERROR,
   ORDER_BOOK_FETCH,
 } from "./constants";
 import { DepthIncrementState, DepthState, OrderBookState } from "./types";
 
-import {
-  handleIncrementalUpdate,
-  handleIncrementalUpdateArray,
-  sliceArray,
-} from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { sliceArray } from "@polkadex/web-helpers";
 
 const { orderBookSideLimit } = defaultConfig;
 // TODO: Move market depth to his own module
@@ -73,6 +66,7 @@ export const orderBookReducer = (
         loading: false,
         error: action.error,
       };
+
     default:
       return state;
   }
@@ -103,86 +97,41 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
         loading: false,
         error: action.error,
       };
-    case DEPTH_EMPTY_SNAP:
-      return {
-        ...state,
-        loading: false,
-        asks: [],
-        bids: [],
-      };
-    default:
-      return state;
-  }
-};
-
-export const incrementDepthReducer = (
-  state = initialIncrementDepth,
-  action: DepthActions
-): DepthIncrementState => {
-  switch (action.type) {
-    case DEPTH_INCREMENT_SUBSCRIBE:
-      return {
-        ...state,
-        marketId: action.payload,
-        loading: state.marketId === undefined || state.marketId !== action.payload,
-      };
     case DEPTH_DATA_INCREMENT: {
-      const payload = {
-        ...state,
-        sequence: action.payload.sequence,
-      };
+      let asks = [...state.asks];
+      let bids = [...state.bids];
+      const update = action.payload;
 
-      if (action.payload.asks) {
-        payload.asks = Array.isArray(action.payload.asks[0])
-          ? handleIncrementalUpdateArray(
-              state.asks,
-              action.payload.asks as string[][],
-              "asks"
-            ).slice(0, orderBookSideLimit)
-          : handleIncrementalUpdate(state.asks, action.payload.asks as string[], "asks").slice(
-              0,
-              orderBookSideLimit
-            );
+      // check if any deletion need to made to orderbook
+      if (update.dels.length > 0) {
+        const asksDels = update.dels.filter((x) => x.side === "Ask");
+        asks = asks.filter((val) => !asksDels.some((x) => x.price === val[0]));
+        const bidsDels = update.dels.filter((x) => x.side === "Bid");
+        bids = bids.filter((val) => !bidsDels.some((x) => x.price === val[0]));
       }
-
-      if (action.payload.bids) {
-        payload.bids = Array.isArray(action.payload.bids[0])
-          ? handleIncrementalUpdateArray(
-              state.bids,
-              action.payload.bids as string[][],
-              "bids"
-            ).slice(0, orderBookSideLimit)
-          : handleIncrementalUpdate(state.bids, action.payload.bids as string[], "bids").slice(
-              0,
-              orderBookSideLimit
-            );
+      // check if any updates need to be made to a prices in
+      else if (update.puts.length > 0) {
+        const asksPuts = update.puts.filter((x) => x.side === "Ask");
+        asksPuts.forEach((askPut) => {
+          const idx = asks.findIndex((x) => x[0] === askPut.price);
+          if (idx < 0) {
+            asks.push([askPut.price, askPut.qty]);
+          } else {
+            asks[idx] = [askPut.price, askPut.qty];
+          }
+        });
+        const bidsPuts = update.puts.filter((x) => x.side === "Bid");
+        bidsPuts.forEach((bidPut) => {
+          const idx = bids.findIndex((x) => x[0] === bidPut.price);
+          if (idx < 0) {
+            bids.push([bidPut.price, bidPut.qty]);
+          } else {
+            bids[idx] = [bidPut.price, bidPut.qty];
+          }
+        });
       }
-
-      return payload;
+      return { ...state, asks: asks, bids: bids };
     }
-    case DEPTH_DATA_SNAPSHOT: {
-      const { asks, bids, sequence } = action.payload;
-
-      return {
-        ...state,
-        asks: sliceArray(asks, orderBookSideLimit),
-        bids: sliceArray(bids, orderBookSideLimit),
-        sequence,
-        loading: false,
-      };
-    }
-    case DEPTH_INCREMENT_EMPTY_SNAP:
-      return {
-        ...state,
-        loading: false,
-        asks: [],
-        bids: [],
-      };
-    case DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING:
-      return {
-        ...state,
-        loading: false,
-      };
     default:
       return state;
   }

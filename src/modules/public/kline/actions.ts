@@ -1,33 +1,23 @@
 import { CommonError } from "../../types";
-import { PublicTradeEvent } from "../recentTrades";
 
 import {
   KLINE_DATA,
   KLINE_ERROR,
   KLINE_FETCH,
-  KLINE_FETCH_CHANNEL,
   KLINE_PUSH,
   KLINE_SUBSCRIBE,
   KLINE_UNSUBSCRIBE,
-  KLINE_UPDATE_FETCH,
   KLINE_UPDATE_PERIOD,
   KLINE_UPDATE_TIME_RANGE,
 } from "./constants";
 import { KlineEvent } from "./types";
 
-export type KlineRawElement = string | number;
-/* example KlineRawElement: [
-7.3571210693865545
-7.565695243097394
-7.2737877360532215
-7.482361909764061
-33.92802673466386
-]
-*/
 export interface KlinePush {
   type: typeof KLINE_PUSH;
   payload: {
     kline: KlineEvent;
+    market: string;
+    interval: string;
   };
 }
 
@@ -35,20 +25,17 @@ export interface KlineFetch {
   type: typeof KLINE_FETCH;
   payload: {
     market: string;
-    resolution: number;
-    from: string;
-    to: string;
+    resolution: string;
+    from: Date;
+    to: Date;
   };
 }
 
 export interface KlineData {
   type: typeof KLINE_DATA;
-  payload: KlineEvent;
+  payload: { list: KlineEvent[]; market: string; interval: string };
 }
-export interface KlineUpdateFetch {
-  type: typeof KLINE_UPDATE_FETCH;
-  payload: PublicTradeEvent;
-}
+
 export interface KlineUpdateTimeRange {
   type: typeof KLINE_UPDATE_TIME_RANGE;
   payload: {
@@ -70,8 +57,8 @@ export interface KlineError {
 export interface KlineSubscribe {
   type: typeof KLINE_SUBSCRIBE;
   payload: {
-    marketId: string;
-    period: string;
+    market: string;
+    interval: string;
   };
 }
 
@@ -101,10 +88,6 @@ export const klinePush = (payload: KlinePush["payload"]): KlinePush => ({
 export const klineFetch = (payload: KlineFetch["payload"]): KlineFetch => ({
   type: KLINE_FETCH,
   payload,
-});
-
-export const klineFetchChannelFetch = () => ({
-  type: KLINE_FETCH_CHANNEL,
 });
 
 export const klineData = (payload: KlineData["payload"]): KlineData => ({
@@ -138,10 +121,5 @@ export const klineSubscribe = (payload: KlineSubscribe["payload"]): KlineSubscri
 
 export const klineUnsubscribe = (payload: KlineUnsubscribe["payload"]): KlineUnsubscribe => ({
   type: KLINE_UNSUBSCRIBE,
-  payload,
-});
-
-export const klineUpdateFetch = (payload: KlineUpdateFetch["payload"]): KlineUpdateFetch => ({
-  type: KLINE_UPDATE_FETCH,
   payload,
 });

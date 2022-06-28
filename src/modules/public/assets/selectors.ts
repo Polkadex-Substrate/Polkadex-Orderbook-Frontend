@@ -22,10 +22,14 @@ export const selectAssetIdMap = (state: RootState): Record<string, IPublicAsset>
 
 export const selectGetAsset =
   (state: RootState) =>
-  (assetId: string | number): IPublicAsset | undefined =>
-    isAssetPDEX(assetId)
+  (assetId: string | number): IPublicAsset | null => {
+    if (!assetId) {
+      return null;
+    }
+    return isAssetPDEX(assetId)
       ? POLKADEX_ASSET
       : state.public.assets.list.find((asset) => asset.assetId === assetId.toString());
+  };
 
 export const isAssetPDEX = (assetId): boolean =>
   assetId === "-1" ||

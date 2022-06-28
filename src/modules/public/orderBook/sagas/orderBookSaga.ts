@@ -1,25 +1,20 @@
+import { API } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
-import { alertPush } from "../../../";
+import { alertPush, OrderBookDbState } from "../../../";
 import { depthData, orderBookData, orderBookError, OrderBookFetch } from "../actions";
+import * as queries from "../../../../graphql/queries";
 
 import { getDepthFromOrderbook } from "./helper";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-
-const orderBookOptions: RequestOptions = {
-  apiVersion: "apiPath",
-};
-
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
-    return
     const market = action.payload;
-    const res = yield call(API.get(orderBookOptions), `/transactions`);
-    const data = res.data;
-    const { asks, bids } = getDepthFromOrderbook(data);
-    yield put(orderBookData(data));
-    yield put(depthData({ asks, bids }));
+    if (market?.m) {
+      const data = yield call(fetchOrderbook, market.m);
+      const { asks, bids } = getDepthFromOrderbook(data);
+      yield put(depthData({ asks, bids }));
+    }
   } catch (error) {
     yield put(
       alertPush({
@@ -32,3 +27,11 @@ export function* orderBookSaga(action: OrderBookFetch) {
     );
   }
 }
+const fetchOrderbook = async (market: string): Promise<OrderBookDbState[]> => {
+  const res: any = await API.graphql({
+    query: queries.getOrderbook,
+    variables: { market: market },
+  });
+  const data = res.data.getOrderbook.items;
+  return data;
+};

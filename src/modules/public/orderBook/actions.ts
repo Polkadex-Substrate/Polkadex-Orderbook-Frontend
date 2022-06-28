@@ -1,27 +1,17 @@
 import { CommonError } from "../../types";
-import { Market, MarketId } from "../markets/types";
+import { Market } from "../markets/types";
 
 import {
   DEPTH_DATA,
-  DEPTH_DATA_INCREMENT,
-  DEPTH_DATA_SNAPSHOT,
-  DEPTH_EMPTY_SNAP,
   DEPTH_ERROR,
   DEPTH_FETCH,
-  DEPTH_INCREMENT_EMPTY_SNAP,
-  DEPTH_INCREMENT_SUBSCRIBE,
-  DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING,
   ORDER_BOOK_CHANNEL_FETCH,
   ORDER_BOOK_DATA,
+  DEPTH_DATA_INCREMENT,
   ORDER_BOOK_ERROR,
   ORDER_BOOK_FETCH,
 } from "./constants";
-import {
-  DepthIncrementState,
-  DepthIncrementUpdateData,
-  DepthState,
-  OrderBookState,
-} from "./types";
+import { DepthState, OrderBookState } from "./types";
 
 export interface OrderBookFetch {
   type: typeof ORDER_BOOK_FETCH;
@@ -36,6 +26,21 @@ export interface OrderBookData {
 export interface OrderBookError {
   type: typeof ORDER_BOOK_ERROR;
   error: CommonError;
+}
+
+export interface OrderBookChannelFetch {
+  type: typeof ORDER_BOOK_CHANNEL_FETCH;
+  payload: Market;
+}
+
+type IncData = { price: string; qty: string; side: "Bid" | "Ask" };
+export interface DepthDataIncrement {
+  type: typeof DEPTH_DATA_INCREMENT;
+  payload: {
+    puts: IncData[];
+    dels: IncData[];
+    m: string; // marketid
+  };
 }
 
 export type OrderBookActions = OrderBookFetch | OrderBookData | OrderBookError;
@@ -55,53 +60,17 @@ export interface DepthError {
   error: CommonError;
 }
 
-export interface DepthDataIncrement {
-  type: typeof DEPTH_DATA_INCREMENT;
-  payload: DepthIncrementUpdateData;
-}
-
-export interface DepthDataSnapshot {
-  type: typeof DEPTH_DATA_SNAPSHOT;
-  payload: DepthIncrementState;
-}
-
-export interface DepthIncrementSubscribe {
-  type: typeof DEPTH_INCREMENT_SUBSCRIBE;
-  payload: MarketId;
-}
-
-export interface DepthEmptySnap {
-  type: typeof DEPTH_EMPTY_SNAP;
-}
-
-export interface DepthIncrementEmptySnap {
-  type: typeof DEPTH_INCREMENT_EMPTY_SNAP;
-}
-
-export interface DepthIncrementSubscribeResetLoading {
-  type: typeof DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING;
-}
-
-export interface OrderBookChannelFetch {
-  type: typeof ORDER_BOOK_CHANNEL_FETCH;
-}
-export type DepthActions =
-  | DepthFetch
-  | DepthData
-  | DepthError
-  | DepthDataIncrement
-  | DepthDataSnapshot
-  | DepthIncrementSubscribe
-  | DepthEmptySnap
-  | DepthIncrementEmptySnap
-  | DepthIncrementSubscribeResetLoading;
+export type DepthActions = DepthFetch | DepthData | DepthError | DepthDataIncrement;
 
 export const orderBookFetch = (payload: OrderBookFetch["payload"]): OrderBookFetch => ({
   type: ORDER_BOOK_FETCH,
   payload,
 });
-export const orderBookChannelFetch = (): OrderBookChannelFetch => ({
+export const orderBookChannelFetch = (
+  payload: OrderBookChannelFetch["payload"]
+): OrderBookChannelFetch => ({
   type: ORDER_BOOK_CHANNEL_FETCH,
+  payload,
 });
 export const orderBookData = (payload: OrderBookData["payload"]): OrderBookData => ({
   type: ORDER_BOOK_DATA,
@@ -123,41 +92,12 @@ export const depthData = (payload: DepthData["payload"]): DepthData => ({
   payload,
 });
 
-export const depthDataIncrement = (
-  payload: DepthDataIncrement["payload"]
-): DepthDataIncrement => ({
-  type: DEPTH_DATA_INCREMENT,
-  payload,
-});
-
-export const depthDataSnapshot = (
-  payload: DepthDataSnapshot["payload"]
-): DepthDataSnapshot => ({
-  type: DEPTH_DATA_SNAPSHOT,
-  payload,
-});
-
 export const depthError = (error: DepthError["error"]): DepthError => ({
   type: DEPTH_ERROR,
   error,
 });
 
-export const depthIncrementSubscribe = (
-  payload: DepthIncrementSubscribe["payload"]
-): DepthIncrementSubscribe => ({
-  type: DEPTH_INCREMENT_SUBSCRIBE,
+export const depthDataIncrement = (payload: DepthDataIncrement["payload"]) => ({
+  type: DEPTH_DATA_INCREMENT,
   payload,
 });
-
-export const depthEmptySnap = (): DepthEmptySnap => ({
-  type: DEPTH_EMPTY_SNAP,
-});
-
-export const depthIncrementEmptySnap = (): DepthIncrementEmptySnap => ({
-  type: DEPTH_INCREMENT_EMPTY_SNAP,
-});
-
-export const depthIncrementSubscribeResetLoading =
-  (): DepthIncrementSubscribeResetLoading => ({
-    type: DEPTH_INCREMENT_SUBSCRIBE_RESET_LOADING,
-  });

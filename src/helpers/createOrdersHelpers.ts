@@ -24,7 +24,7 @@ export const createOrderPayload = (
   const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
   const orderType = { [type.toUpperCase()]: null };
   const orderSide = { [side === "Buy" ? "Bid" : "Ask"]: null };
-  const orderPayload = api.createType("OrderPayload", {
+  const jsonPayload = {
     user: proxyAddress,
     pair: {
       base_asset: baseAssetId,
@@ -35,7 +35,9 @@ export const createOrderPayload = (
     qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
     price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : null,
     nonce: nonce,
-  });
+  };
+  console.log("order final payload", jsonPayload);
+  const orderPayload = api.createType("OrderPayload", jsonPayload);
   return orderPayload;
 };
 type SignedOrderPayload = {

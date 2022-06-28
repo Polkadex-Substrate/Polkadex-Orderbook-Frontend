@@ -13,8 +13,7 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  currentTickerFetch,
-  currentTickersUpdate,
+  orderBookChannelFetch,
   orderBookFetch,
   selectCurrentMarket,
   selectCurrentMarketTickers,
@@ -84,11 +83,9 @@ export const Trading = () => {
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   // intitialize market dependent events
   useEffect(() => {
-    if (market) {
-      const tickerMarketId = `${market.assetIdArray[0]}-${market.assetIdArray[1]}`;
-      // dispatch(rangerConnectFetch());
+    if (market?.m) {
       dispatch(orderBookFetch(market));
-      dispatch(currentTickerFetch({ marketId: tickerMarketId }));
+      dispatch(orderBookChannelFetch(market));
     }
   }, [dispatch, market]);
 
@@ -99,7 +96,6 @@ export const Trading = () => {
   useEffect(() => {
     if (currentTrade && lastTrade) {
       const updatedTicker = updateTickerWithTrade(currentTrade, currentTicker);
-      dispatch(currentTickersUpdate(updatedTicker));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTrade, dispatch, lastTrade]);

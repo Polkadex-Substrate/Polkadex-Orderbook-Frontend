@@ -8,22 +8,22 @@ import * as T from "./types";
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  // Deposits,
-  depositsFetch,
-  // selectDepositsData,
   selectHasUser,
-  selectWithdrawsData,
-  UserWithdraws,
-  withdrawsFetch,
+  selectTransactionData,
+  transactionsFetch,
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const History = () => {
   const dispatch = useDispatch();
   const route = useRouter();
-
+  const getAsset = useReduxSelector(selectGetAsset);
   const [selected, setSelected] = useState("All");
-  const withdrawHistory = useReduxSelector(selectWithdrawsData);
+  const transactionsHistory = useReduxSelector(selectTransactionData);
+  const transactionHistory = transactionsHistory.sort(
+    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+  );
   // const depositHistory = useReduxSelector(selectDepositsData);
   const userLoggedIn = useReduxSelector(selectHasUser);
 
@@ -54,7 +54,7 @@ const History = () => {
   useEffect(() => {
     if (userLoggedIn) {
       // dispatch(depositsFetch());
-      dispatch(withdrawsFetch());
+      dispatch(transactionsFetch());
     }
   }, [userLoggedIn, dispatch]);
 
@@ -78,38 +78,26 @@ const History = () => {
         </S.TitleWrapper>
       </S.Title>
       <S.Content>
-        {/* {selectedValue?.length ? (
-          selectedValue
-            .filter((value) => value.currency === route.query.id)
-            .map((value) => (
-              <Card
-                key={value.id}
-                date={value.timestamp.toLocaleString()}
-                address={value.from}
-                txid={value.to}
-                amount={`${value.amount.toFixed(6)} ${getSymbolFromAssetId(
-                  Number(value.currency)
-                )}`}
-                amountInFiat={(0.0).toFixed(2)}
-                isDeposit={value.isDeposit}
-              />
-            ))
+        {transactionHistory?.length ? (
+          transactionHistory.map((value) => (
+            <Card
+              key={value.time}
+              date={new Date(value.time).toLocaleString()}
+              address={value.main_account}
+              amount={`${value.amount} ${getAsset(value.asset).symbol}`}
+              status={value.status}
+              isDeposit={value.txn_type === "DEPOSIT"}
+            />
+          ))
         ) : (
           <EmptyData />
-        )} */}
+        )}
       </S.Content>
     </S.Wrapper>
   );
 };
 
-export const Card = ({
-  date,
-  address,
-  txid,
-  amount,
-  amountInFiat = "0.0",
-  isDeposit,
-}: T.HistoryProps) => (
+export const Card = ({ date, amount, address, status, isDeposit }: T.HistoryProps) => (
   <S.Card>
     <S.CardLeft>
       <S.CardIconWrapper>
@@ -117,15 +105,13 @@ export const Card = ({
       </S.CardIconWrapper>
       <div>
         <span>{amount}</span>
-        <p>~{amountInFiat} USD</p>
+        <p>{status}</p>
       </div>
     </S.CardLeft>
     <S.CardRight>
       <p>{date}</p>
-      <a href="#txidHere" target="_blank">
-        <Icon name="Link" size="extraSmall" />
-        <span>{address}</span>
-      </a>
+      <Icon name="Link" size="extraSmall" />
+      <span>{address.substring(0, 8) + "..."}</span>
     </S.CardRight>
   </S.Card>
 );

@@ -22,7 +22,7 @@ ${({ theme }) => css`
     overflow-x: hidden;
     overflow-y: hidden;
     @media screen and (max-width: 1180px) {
-      overflow-y: scroll;
+      overflow-y: inherit;
     }
   }
   svg {

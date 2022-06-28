@@ -1,7 +1,7 @@
 import { CommonError } from "../../types";
 
 import {
-  BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  BALANCES_CHANNEL_UPDATE_DATA,
   BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
@@ -22,16 +22,11 @@ export interface Balance extends BalanceBase {
 export type FreeOrUsedOrTotal = Record<string, number>;
 
 export type BalanceMessage = {
-  trading_pair: string;
-  update: {
-    BalanceUpdate: {
-      user: string;
-      base_free: string;
-      base_reserved: string;
-      quote_free: string;
-      quote_reserved: string;
-    };
-  };
+  asset: string;
+  free: string;
+  main_account: string;
+  pending_withdrawal: string;
+  reserved: string;
 };
 export type BalanceTransferMessage = {
   trading_pair: string;
@@ -61,8 +56,8 @@ export interface BalanceChannelFetch {
 }
 
 export interface BalanceChannelUpdateData {
-  type: typeof BALANCES_CHANNEL_TRADE_UPDATE_DATA;
-  payload: Balance[];
+  type: typeof BALANCES_CHANNEL_UPDATE_DATA;
+  payload: Balance;
 }
 export interface BalanceChannelTransferFetch {
   type: typeof BALANCE_CHANNEL_TRANSFER_FETCH;
@@ -97,10 +92,10 @@ export const balanceTradeChannelFetch = (): BalanceChannelFetch => ({
   type: BALANCE_CHANNEL_TRADE_FETCH,
 });
 
-export const balanceChannelTradeUpdateData = (
+export const balanceChannelUpdateData = (
   payload: BalanceChannelUpdateData["payload"]
 ): BalanceChannelUpdateData => ({
-  type: BALANCES_CHANNEL_TRADE_UPDATE_DATA,
+  type: BALANCES_CHANNEL_UPDATE_DATA,
   payload,
 });
 

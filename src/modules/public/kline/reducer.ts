@@ -1,6 +1,6 @@
 import { CommonState } from "../../types";
 
-import { KlineActions, KlineRawElement } from "./actions";
+import { KlineActions } from "./actions";
 import {
   KLINE_DATA,
   KLINE_ERROR,
@@ -14,59 +14,26 @@ import {
 import { KlineEvent } from "./types";
 
 export interface KlineState extends CommonState {
-  last?: KlineEvent;
-  marketId?: string;
-  period?: string;
+  last?: {
+    kline: KlineEvent;
+    market: string;
+    interval: string;
+  };
+  market: string;
+  interval: string;
   message?: string;
   loading: boolean;
-  data: any;
+  data: KlineEvent[];
   range: {
     from: number;
     to: number;
   };
 }
 
-// needs to be update to suite new data structure
-export const klineArrayToObject = (el: KlineRawElement[]): KlineEvent => {
-  const [time, open, high, low, close, volume] = el.map((e: KlineRawElement) => {
-    switch (typeof e) {
-      case "number":
-        return e;
-      case "string":
-        return Number.parseFloat(e);
-      default:
-        throw new Error(`unexpected type ${typeof e} in kline: ${el}`);
-    }
-  });
-
-  return {
-    time: time * 1e3,
-    open,
-    high,
-    low,
-    close,
-    volume,
-  };
-};
-
-export const klineEventToObject = (data) => {
-  const { o: open, c: close, h: high, l: low, v: volume } = data.k;
-  const time = data.E;
-
-  return {
-    time: parseInt(time),
-    open: parseFloat(open),
-    high: parseFloat(high),
-    low: parseFloat(low),
-    close: parseFloat(close),
-    volume: parseFloat(volume),
-  };
-};
-
 export const initialKlineState: KlineState = {
   last: undefined,
-  marketId: undefined,
-  period: undefined,
+  market: undefined,
+  interval: undefined,
   message: undefined,
   loading: false,
   data: [],
@@ -81,22 +48,21 @@ export const klineReducer = (state = initialKlineState, action: KlineActions): K
     case KLINE_SUBSCRIBE:
       return {
         ...state,
-        marketId: action.payload.marketId,
-        period: action.payload.period,
         message: "subscribe",
       };
     case KLINE_UNSUBSCRIBE:
       return {
         ...state,
-        marketId: action.payload.marketId,
-        period: action.payload.period,
         message: "unsubscribe",
       };
     case KLINE_PUSH: {
-      const { kline } = action.payload;
       return {
         ...state,
-        last: kline,
+        last: {
+          kline: action.payload.kline,
+          market: action.payload.market,
+          interval: action.payload.interval,
+        },
       };
     }
     case KLINE_FETCH:
@@ -108,7 +74,9 @@ export const klineReducer = (state = initialKlineState, action: KlineActions): K
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        market: action.payload.market,
+        interval: action.payload.interval,
+        data: action.payload.list,
       };
     case KLINE_UPDATE_TIME_RANGE:
       return {
@@ -118,7 +86,7 @@ export const klineReducer = (state = initialKlineState, action: KlineActions): K
     case KLINE_UPDATE_PERIOD:
       return {
         ...state,
-        period: action.payload,
+        interval: action.payload,
       };
     case KLINE_ERROR:
       return initialKlineState;

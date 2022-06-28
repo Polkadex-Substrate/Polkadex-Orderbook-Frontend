@@ -5,6 +5,8 @@ import { assetsData } from "../actions";
 import { IPublicAsset } from "../types";
 import { selectRangerApi, alertPush } from "../../../";
 
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
+
 export function* fetchAssetsSaga() {
   try {
     const api = yield select(selectRangerApi);
@@ -14,6 +16,7 @@ export function* fetchAssetsSaga() {
         acc[asset.assetId] = asset;
         return acc;
       }, {});
+      assetsList.push(POLKADEX_ASSET);
       yield put(assetsData({ list: assetsList, assetIdMap }));
     }
   } catch (error) {

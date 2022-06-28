@@ -1,7 +1,12 @@
 import { CommonError } from "../../types";
 
 import { RecentTradesActions } from "./actions";
-import { RECENT_TRADES_DATA, RECENT_TRADES_ERROR, RECENT_TRADES_FETCH } from "./constants";
+import {
+  RECENT_TRADES_DATA,
+  RECENT_TRADES_ERROR,
+  RECENT_TRADES_FETCH,
+  RECENT_TRADES_PUSH,
+} from "./constants";
 import { PublicTrade } from "./types";
 
 import { sliceArray } from "@polkadex/web-helpers";
@@ -44,6 +49,12 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
       return {
         ...state,
         loading: true,
+      };
+    }
+    case RECENT_TRADES_PUSH: {
+      return {
+        ...state,
+        list: [...state.list, action.payload],
       };
     }
 

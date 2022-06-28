@@ -9,6 +9,7 @@ import {
   selectCurrentMarketTickers,
   setCurrentMarket,
   defaultTickers,
+  selectMarketTickers,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export type InitialMarkets = {
@@ -26,8 +27,8 @@ export function useMarkets() {
 
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const marketTickets = useReduxSelector(selectCurrentMarketTickers);
+  const allMarketTickers = useReduxSelector(selectMarketTickers);
+  const currentMarketTicker = useReduxSelector(selectCurrentMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
@@ -82,13 +83,14 @@ export function useMarkets() {
   const marketTokens = (): InitialMarkets[] => {
     const initialMarkets: InitialMarkets[] = [];
     const allTickets = markets.map((item) => {
+      const ticker = allMarketTickers.find((val) => val.m === item.m);
       return {
         ...item,
-        last: (marketTickets || defaultTickers).last,
-        volume: (marketTickets || defaultTickers).volume,
-        price_change_percent: (marketTickets || defaultTickers).price_change_percent,
+        last: (ticker || defaultTickers).close,
+        volume: (ticker || defaultTickers).volumeBase24hr,
+        price_change_percent: (ticker || defaultTickers).priceChange24Hr,
         price_change_percent_num: Number.parseFloat(
-          (marketTickets || defaultTickers).price_change_percent
+          (ticker || defaultTickers).priceChangePercent24Hr
         ),
       };
     });

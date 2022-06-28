@@ -83,7 +83,7 @@
       "@orderbook/v2/ui/templates": [
         "src/v2/ui/templates"
       ],
-      "@orderbook/v2/uitemplates/*": [
+      "@orderbook/v2/ui/templates/*": [
         "src/v2/ui/templates/*"
       ],
       "@orderbook/v2/ui/organisms": [
@@ -100,6 +100,24 @@
       ],
       "@orderbook/v2/hooks": [
         "src/v2/hooks"
+      ],
+      "@orderbook/v3/ui/templates": [
+        "src/v3/ui/templates"
+      ],
+      "@orderbook/v3/ui/templates/*": [
+        "src/v3/ui/templates/*"
+      ],
+      "@orderbook/v3/ui/organisms": [
+        "src/v3/ui/organisms"
+      ],
+      "@orderbook/v3/ui/organisms/*": [
+        "src/v3/ui/organisms/*"
+      ],
+      "@orderbook/v3/ui/molecules": [
+        "src/v3/ui/molecules"
+      ],
+      "@orderbook/v3/ui/molecules/*": [
+        "src/v3/ui/molecules/*"
       ],
     },
     "incremental": true
