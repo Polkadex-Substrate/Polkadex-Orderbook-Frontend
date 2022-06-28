@@ -88,9 +88,6 @@ const OriginalChart = ({ chart, resolution }) => {
 
   return (
     <S.Wrapper ref={target}>
-      <button type="button" onClick={() => chart.current.resize()}>
-        Test
-      </button>
       <S.Container id="original-chart" />
       {isLoading && (
         <S.LoadingeMessage>
