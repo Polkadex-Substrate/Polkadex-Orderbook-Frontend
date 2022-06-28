@@ -5,14 +5,13 @@ import NavbarItem from "../../molecules/NavbarItem";
 import * as S from "./styles";
 
 import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
-import { AvailableMessage, Button } from "@polkadex/orderbook-ui/molecules";
-import { MyAccount, MyWallet, QuickLogin } from "@polkadex/orderbook/v2/ui/molecules";
+import { Button } from "@polkadex/orderbook-ui/molecules";
+import { MyAccount, MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectCurrentMarket,
   selectCurrentMarketTickers,
   selectHasUser,
-  setCurrentMarket,
 } from "@polkadex/orderbook-modules";
 import { Notifications } from "@polkadex/orderbook-ui/templates";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
@@ -48,7 +47,7 @@ const Navbar = ({ onOpenMarkets }) => {
           <NavbarItem
             label="Price % 24h"
             info={price_change_percent}
-            color={isPriceChangeNegative ? "Red" : ""}
+            color={isPriceChangeNegative ? "primary" : "green"}
           />
           <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
           <S.WrapperVolume>
@@ -82,13 +81,6 @@ const Navbar = ({ onOpenMarkets }) => {
             }}>
             Login/Sign Up
           </Button>
-          <QuickLogin
-            label="Quick Access"
-            title="Log in with QR Code"
-            description="Scan this QR Code with the Polkadex mobile app to log in instantly."
-            qrCodeValue={"test1, test2, test3"}
-            background="inverse"
-          />
         </S.Box>
       )}
     </S.Wrapper>
