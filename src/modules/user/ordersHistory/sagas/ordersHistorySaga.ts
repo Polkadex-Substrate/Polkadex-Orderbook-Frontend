@@ -1,6 +1,5 @@
 // TODO: Create User middleware
 import { call, put, select } from "redux-saga/effects";
-import axios from "axios";
 import { API } from "aws-amplify";
 
 import { userOrdersHistoryData, UserOrdersHistoryFetch } from "../actions";

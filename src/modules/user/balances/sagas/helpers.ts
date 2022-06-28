@@ -1,5 +1,4 @@
 import { eventChannel } from "redux-saga";
-import { u8aToString } from "@polkadot/util";
 import { API } from "aws-amplify";
 
 import * as subscriptions from "../../../../graphql/subscriptions";

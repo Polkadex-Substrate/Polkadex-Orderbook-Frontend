@@ -30,7 +30,6 @@ import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
-import { RabbitmqChannelState, rootRabbitmqChannelSaga } from "./public/rabbitmqChannel";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
 import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
@@ -72,7 +71,6 @@ export interface RootState {
     orderBook: OrderBookState;
     recentTrades: RecentTradesState;
     ranger: RangerState;
-    rabbitmqChannel: RabbitmqChannelState;
     enclaveRpcClient: EnclaveRpcClientState;
     assets: AssetsState;
   };
@@ -123,7 +121,6 @@ export function* rootSaga() {
     call(rootTradesSaga),
     call(rootWithdrawsSaga),
     call(rootBalancesSaga),
-    call(rootRabbitmqChannelSaga),
     call(rootEnclaveRpcClientSaga),
     call(rootAssetsSaga),
   ]);

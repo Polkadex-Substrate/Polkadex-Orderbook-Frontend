@@ -1,7 +1,5 @@
 import { Client } from "rpc-websockets";
 
-import { CommonError } from "../../types";
-
 import {
   ENCLAVE_RPC_CLIENT_CONNECTION_OPEN,
   ENCLAVE_RPC_CLIENT_DATA,

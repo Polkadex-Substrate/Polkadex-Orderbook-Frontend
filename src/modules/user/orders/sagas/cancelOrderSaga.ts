@@ -1,6 +1,4 @@
 import { call, delay, put, select } from "redux-saga/effects";
-
-import { balancesFetch } from "../../balances";
 import {
   orderCancelData,
   orderCancelDataDelete,
@@ -10,7 +8,7 @@ import {
 
 import { formatPayload, signMessage } from "@polkadex/web-helpers";
 import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
-import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { API } from "@polkadex/orderbook-config";
 
 // TODO: CHANGE TO USE ENCLAVE WS TO CACNEL ORDER
 export function* cancelOrderSaga(action: OrderCancelFetch) {

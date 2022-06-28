@@ -1,5 +1,4 @@
 import { call, put } from "redux-saga/effects";
-import axios from "axios";
 import { API } from "aws-amplify";
 
 import { sendError } from "../../..";

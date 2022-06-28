@@ -1,4 +1,4 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, take } from "redux-saga/effects";
 import { Client } from "rpc-websockets";
 import { eventChannel } from "redux-saga";
 

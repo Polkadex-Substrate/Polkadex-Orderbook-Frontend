@@ -2,7 +2,7 @@ import { API } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
 import { alertPush, OrderBookDbState } from "../../../";
-import { depthData, orderBookData, orderBookError, OrderBookFetch } from "../actions";
+import { depthData, OrderBookFetch } from "../actions";
 import * as queries from "../../../../graphql/queries";
 
 import { getDepthFromOrderbook } from "./helper";

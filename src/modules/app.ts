@@ -7,7 +7,7 @@ import { currenciesReducer } from "./public/currencies";
 import { klineReducer } from "./public/kline";
 import { rangerReducer } from "./public/ranger";
 import { marketsReducer } from "./public/markets";
-import { depthReducer, incrementDepthReducer, orderBookReducer } from "./public/orderBook";
+import { depthReducer, orderBookReducer } from "./public/orderBook";
 import { recentTradesReducer } from "./public/recentTrades";
 import { authReducer } from "./user/auth";
 import { historyReducer } from "./user/history";
@@ -22,7 +22,6 @@ import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
-import { rabbitmqChannelReducer } from "./public/rabbitmqChannel";
 import { extensionWalletReducer } from "./user/mainAccount";
 import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
 import { assetsReducer } from "./public/assets";
@@ -36,10 +35,8 @@ export const publicReducer = combineReducers({
   markets: marketsReducer,
   orderBook: orderBookReducer,
   depth: depthReducer,
-  incrementDepth: incrementDepthReducer,
   recentTrades: recentTradesReducer,
   ranger: rangerReducer,
-  rabbitmqChannel: rabbitmqChannelReducer,
   enclaveRpcClient: enclaveRpcClientReducer,
   assets: assetsReducer,
 });
