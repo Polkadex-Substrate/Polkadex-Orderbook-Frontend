@@ -108,12 +108,12 @@ const Transactions = () => {
                 </DropdownContent>
               </Dropdown>
               <Dropdown
+                direction="bottomRight"
                 header={
                   <Icon
                     name="Calendar"
                     stroke="text"
                     background="secondaryBackground"
-                    color="secondaryBackground"
                     size="extraMedium"
                     style={{ marginLeft: 10 }}
                   />

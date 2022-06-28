@@ -405,3 +405,19 @@ export const options = (isDarkTheme = true) => {
     },
   };
 };
+
+export const tools = [
+  { key: "priceLine", iconName: "OriginalChartSingleLine" },
+  { key: "priceChannelLine", iconName: "OriginalChartSingleLineSpaceAround" },
+  { key: "parallelStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
+  { key: "fibonacciLine", iconName: "OriginalChartSingleLineVertical" },
+  { key: "rect", iconName: "OriginalChartSingleLineSpaceAroundVertical" },
+  { key: "circle", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
+  { key: "circle", iconName: "OriginalChartSingleLineInclined" },
+  { key: "circle", iconName: "OriginalChartSingleLineSpaceAroundInclined" },
+  { key: "circle", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
+  { key: "circle", iconName: "OriginalChartSingleLineNumber" },
+  { key: "circle", iconName: "OriginalChartDoubleLine" },
+  { key: "circle", iconName: "OriginalChartTripleLine" },
+  { key: "circle", iconName: "OriginalChartQuaternaryLine" },
+];

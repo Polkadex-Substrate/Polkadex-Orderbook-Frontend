@@ -1,5 +1,14 @@
 import { createGlobalStyle, css } from "styled-components";
 
+const iconThemingModifier = {
+  dark: () => css`
+    background-image: url("data:image/svg+xml;utf8,<svg width='9px' height='6px' viewBox='0 0 9 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g id='Artboard' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' transform='translate(-636.000000, -171.000000)' fill-opacity='0.368716033'><g id='input' transform='translate(172.000000, 37.000000)' fill='white' fill-rule='nonzero'><g id='Group-9' transform='translate(323.000000, 127.000000)'><path d='M142.280245,7.23952813 C141.987305,6.92353472 141.512432,6.92361662 141.219585,7.23971106 C140.926739,7.5558055 140.926815,8.06821394 141.219755,8.38420735 L145.498801,13 L149.780245,8.38162071 C150.073185,8.0656273 150.073261,7.55321886 149.780415,7.23712442 C149.487568,6.92102998 149.012695,6.92094808 148.719755,7.23694149 L145.498801,10.7113732 L142.280245,7.23952813 Z' id='arrow'></path></g></g></g></svg>");
+  `,
+  light: () => css`
+    background-image: url("data:image/svg+xml;utf8,<svg width='9px' height='6px' viewBox='0 0 9 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g id='Artboard' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' transform='translate(-636.000000, -171.000000)' fill-opacity='0.368716033'><g id='input' transform='translate(172.000000, 37.000000)' fill='black' fill-rule='nonzero'><g id='Group-9' transform='translate(323.000000, 127.000000)'><path d='M142.280245,7.23952813 C141.987305,6.92353472 141.512432,6.92361662 141.219585,7.23971106 C140.926739,7.5558055 140.926815,8.06821394 141.219755,8.38420735 L145.498801,13 L149.780245,8.38162071 C150.073185,8.0656273 150.073261,7.55321886 149.780415,7.23712442 C149.487568,6.92102998 149.012695,6.92094808 148.719755,7.23694149 L145.498801,10.7113732 L142.280245,7.23952813 Z' id='arrow'></path></g></g></g></svg>");
+  `,
+};
+
 const GlobalStyles = createGlobalStyle`
 ${({ theme }) => css`
   * {
@@ -301,38 +310,92 @@ Super Form Reset
   ::-webkit-scrollbar-thumb:hover {
     /* background: ${theme.colors.primary}; */
   }
-  /* React Tabs ------------------------------------
+  /* Calendar ------------------------------------
 -----------------------------------------------*/
-  .react-tabs__tab-list {
-    border-bottom: none;
+  .rdrDateRangePickerWrapper {
+    border: 1px solid ${theme.colors.secondaryBackground};
+    box-shadow: ${theme.shadows.primary};
+  }
+  .rdrCalendarWrapper {
+    color: ${theme.colors.text};
+    font-family: ${theme.font.family};
+  }
+  .rdrDateDisplayWrapper {
+    background: ${theme.colors.primaryBackground};
+  }
+  .rdrDateDisplayWrapper {
+    background: ${theme.colors.primaryBackground};
+  }
+  .rdrDateDisplayItem {
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    /* box-shadow: 0 1px 2px 0 rgba(35, 57, 66, 0.21);
+      border: 1px solid transparent; */
+  }
+  .rdrDateDisplayItemActive {
+    /* background-color: ${theme.colors.primary}; */
+    border-color: ${theme.colors.primary};
+  }
+  .rdrDefinedRangesWrapper {
+    border-right-color: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.tertiaryBackground};
+  }
+  .rdrStaticRange {
+    border-bottom-color: ${theme.colors.secondaryBackgroundOpacity};
     padding: 0;
-    font-size: 1.4rem;
-    margin: 0;
+    background: ${theme.colors.tertiaryBackground};
+  }
+  .rdrDateRangeWrapper {
+    background: ${theme.colors.tertiaryBackground};
+  }
+  .rdrDay span,
+  .rdrDayNumber span {
+    color: ${theme.colors.text};
   }
 
-  .react-tabs__tab {
-    padding: 0;
-    cursor: pointer;
+  .rdrDayPassive span {
+    opacity: 0.5;
   }
-  .react-tabs__tab:first-child {
-    margin-right: 1rem;
+  .rdrDay span,
+  .rdrDayPassive .rdrDayNumber span {
+    font-family: ${theme.font.family};
+    font-weight: 500;
   }
-  .react-tabs__tab--selected {
-    font-weight: bold;
-    background: none;
+
+  .rdrStaticRange:hover .rdrStaticRangeLabel,
+  .rdrStaticRange:focus .rdrStaticRangeLabel {
+    background: ${theme.colors.secondaryBackgroundOpacity};
+  }
+
+  .rdrMonthPicker,
+  .rdrYearPicker {
+    background: ${theme.colors.primaryBackgroundOpacity};
+    border-radius: 0.5rem;
+  }
+  .rdrNextPrevButton {
+    background: ${theme.colors.secondaryBackground};
+    transition: background 0.5s ease-in-out;
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :first-child i {
+      border-color: transparent ${theme.colors.text} transparent transparent;
+    }
+    :last-child i {
+      border-color: transparent transparent transparent ${theme.colors.text};
+    }
+  }
+  .rdrDayToday .rdrDayNumber span::after {
     border: none;
+    height: 0;
   }
 
-  .react-tabs__tab:focus {
-    box-shadow: none;
-    border-color: transparent;
-    outline: none;
+  .rdrMonthAndYearPickers select {
+    color: ${theme.colors.text}99;
+    font-family: ${theme.font.family};
+    ${iconThemingModifier[theme.colors.text === "#ffffff" ? "dark" : "light"]()};
   }
 
-  .react-tabs__tab:focus:after {
-    background: transparent;
-  }
-  /* React StockCharts ------------------------------------
+  /* Calendar ------------------------------------
 -----------------------------------------------*/
 `}
 `;
