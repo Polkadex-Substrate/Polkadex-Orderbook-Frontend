@@ -6,7 +6,7 @@ export const Wrapper = styled.main`
   position: relative;
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  min-height: 100vh;
   max-width: 160rem;
   margin: 0 auto;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
