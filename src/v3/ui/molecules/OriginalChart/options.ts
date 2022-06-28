@@ -1,3 +1,5 @@
+import { checkCoordinateOnSegment } from "klinecharts/lib/shape/segment";
+
 import { defaultThemes } from "src/styles";
 
 export const options = (isDarkTheme = true) => {
@@ -407,17 +409,104 @@ export const options = (isDarkTheme = true) => {
 };
 
 export const tools = [
-  { key: "priceLine", iconName: "OriginalChartSingleLine" },
-  { key: "priceChannelLine", iconName: "OriginalChartSingleLineSpaceAround" },
-  { key: "parallelStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
-  { key: "fibonacciLine", iconName: "OriginalChartSingleLineVertical" },
-  { key: "rect", iconName: "OriginalChartSingleLineSpaceAroundVertical" },
-  { key: "circle", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
-  { key: "circle", iconName: "OriginalChartSingleLineInclined" },
-  { key: "circle", iconName: "OriginalChartSingleLineSpaceAroundInclined" },
-  { key: "circle", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
-  { key: "circle", iconName: "OriginalChartSingleLineNumber" },
-  { key: "circle", iconName: "OriginalChartDoubleLine" },
-  { key: "circle", iconName: "OriginalChartTripleLine" },
-  { key: "circle", iconName: "OriginalChartQuaternaryLine" },
+  { key: "horizontalRayLine", iconName: "OriginalChartSingleLine" },
+  { key: "horizontalSegment", iconName: "OriginalChartSingleLineSpaceAround" },
+  { key: "horizontalStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
+  { key: "verticalRayLine", iconName: "OriginalChartSingleLineVertical" },
+  { key: "verticalSegment", iconName: "OriginalChartSingleLineSpaceAroundVertical" },
+  { key: "verticalStraightLine", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
+  { key: "rayLine", iconName: "OriginalChartSingleLineInclined" },
+  { key: "segment", iconName: "OriginalChartSingleLineSpaceAroundInclined" },
+  { key: "straightLine", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
+  { key: "priceLine", iconName: "OriginalChartSingleLineNumber" },
+  { key: "priceChannelLine", iconName: "OriginalChartDoubleLine" },
+  { key: "parallelStraightLine", iconName: "OriginalChartTripleLine" },
+  { key: "fibonacciLine", iconName: "OriginalChartQuaternaryLine" },
 ];
+
+export const rect = {
+  name: "rect",
+  totalStep: 3,
+  checkMousePointOn: (key, type, points, mousePoint) => {
+    return checkCoordinateOnSegment(points[0], points[1], mousePoint);
+  },
+  createGraphicDataSource: (step, tpPoint, xyPoints) => {
+    if (xyPoints.length === 2) {
+      return [
+        {
+          type: "line",
+          isDraw: false,
+          isCheck: true,
+          dataSource: [
+            [{ ...xyPoints[0] }, { x: xyPoints[1].x, y: xyPoints[0].y }],
+            [{ x: xyPoints[1].x, y: xyPoints[0].y }, { ...xyPoints[1] }],
+            [{ ...xyPoints[1] }, { x: xyPoints[0].x, y: xyPoints[1].y }],
+            [{ x: xyPoints[0].x, y: xyPoints[1].y }, { ...xyPoints[0] }],
+          ],
+        },
+        {
+          type: "polygon",
+          isDraw: true,
+          isCheck: false,
+          style: "fill",
+          dataSource: [
+            [
+              { ...xyPoints[0] },
+              { x: xyPoints[1].x, y: xyPoints[0].y },
+              { ...xyPoints[1] },
+              { x: xyPoints[0].x, y: xyPoints[1].y },
+            ],
+          ],
+        },
+        {
+          type: "polygon",
+          isDraw: true,
+          isCheck: false,
+          dataSource: [
+            [
+              { ...xyPoints[0] },
+              { x: xyPoints[1].x, y: xyPoints[0].y },
+              { ...xyPoints[1] },
+              { x: xyPoints[0].x, y: xyPoints[1].y },
+            ],
+          ],
+        },
+      ];
+    }
+    return [];
+  },
+};
+
+export const circle = {
+  name: "circle",
+  totalStep: 3,
+  checkMousePointOn: (key, type, points, mousePoint) => {
+    const xDis = Math.abs(points.x - mousePoint.x);
+    const yDis = Math.abs(points.y - mousePoint.y);
+    const r = Math.sqrt(xDis * xDis + yDis * yDis);
+    return Math.abs(r - points.radius) < 3;
+  },
+  createGraphicDataSource: (step, tpPoint, xyPoints) => {
+    if (xyPoints.length === 2) {
+      const xDis = Math.abs(xyPoints[0].x - xyPoints[1].x);
+      const yDis = Math.abs(xyPoints[0].y - xyPoints[1].y);
+      const radius = Math.sqrt(xDis * xDis + yDis * yDis);
+      return [
+        {
+          type: "arc",
+          isDraw: true,
+          isCheck: false,
+          style: "fill",
+          dataSource: [{ ...xyPoints[0], radius, startAngle: 0, endAngle: Math.PI * 2 }],
+        },
+        {
+          type: "arc",
+          isDraw: true,
+          isCheck: true,
+          dataSource: [{ ...xyPoints[0], radius, startAngle: 0, endAngle: Math.PI * 2 }],
+        },
+      ];
+    }
+    return [];
+  },
+};

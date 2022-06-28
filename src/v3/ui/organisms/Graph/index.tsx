@@ -80,16 +80,15 @@ const Graph = () => {
                       stroke="text"
                       size="extraMedium"
                       background="secondaryBackgroundOpacity"
-                      // onClick={() => chart.current.createGraphicMark(value.key)}
+                      // onClick={() => chart.current.addShapeTemplate(value.key)}
                     />
                   ))}
-
                   <Icon
                     name="Trash"
                     stroke="text"
                     size="extraMedium"
                     background="primaryBackgroundOpacity"
-                    onClick={() => chart.current.removeGraphicMark()}
+                    // onClick={() => chart.current.removeGraphicMark()}
                   />
                 </S.Tools>
               </Dropdown>

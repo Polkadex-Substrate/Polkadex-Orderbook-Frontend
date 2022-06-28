@@ -3,9 +3,11 @@ import styled, { css } from "styled-components";
 import { Props } from "./types";
 
 export const Wrapper = styled.div<Props>`
-  ${({ theme, width, height, isLight }) => css`
+  ${({ theme, width, minWidth, height, minHeight, isLight }) => css`
     width: ${width};
     height: ${height};
+    min-height: ${minHeight};
+    min-width: ${minWidth};
     border-radius: 0.4rem;
     background: ${isLight ? theme.skeleton.inverse : theme.skeleton.default};
     background-size: 400% 400%;

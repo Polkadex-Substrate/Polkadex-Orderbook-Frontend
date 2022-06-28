@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+// import { useCallback, useMemo, useRef, useState } from "react";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import subDays from "date-fns/subDays";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
@@ -12,7 +13,14 @@ import Funds from "../../molecules/Funds";
 
 import * as S from "./styles";
 
-import { Dropdown, Icon, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import {
+  Dropdown,
+  Icon,
+  Skeleton,
+  TabContent,
+  TabHeader,
+  Tabs,
+} from "@polkadex/orderbook-ui/molecules";
 import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser } from "@polkadex/orderbook-modules";
@@ -151,5 +159,8 @@ const Transactions = () => {
     </S.Section>
   );
 };
+export const TransactionsSkeleton = () => (
+  <Skeleton height="100%" width="100%" minWidth="350px" />
+);
 
 export default Transactions;

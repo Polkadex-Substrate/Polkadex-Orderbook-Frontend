@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -22,6 +22,10 @@ import {
 import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
+import { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
+import { MarketSkeleton } from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
+import { TransactionsSkeleton } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
+import { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
 
 const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
   ssr: false,
@@ -83,6 +87,7 @@ export function Trading() {
     <S.Wrapper>
       <Menu handleChange={() => setState(!state)} />
       <Popup
+        isMessage
         isVisible={state}
         onClose={() => setState(!state)}
         size="fitContent"
@@ -96,12 +101,20 @@ export function Trading() {
       <S.WrapperMain>
         <Navbar onOpenMarkets={() => setState(!state)} />
         <S.WrapperGraph>
-          <Graph />
-          <MarketOrder />
+          <Suspense fallback={<MarketsSkeleton />}>
+            <Graph />
+          </Suspense>
+          <Suspense fallback={<MarketSkeleton />}>
+            <MarketOrder />
+          </Suspense>
         </S.WrapperGraph>
         <S.BottomWrapper>
-          <Transactions />
-          <RecentTrades />
+          <Suspense fallback={<TransactionsSkeleton />}>
+            <Transactions />
+          </Suspense>
+          <Suspense fallback={<RecentTradesSkeleton />}>
+            <RecentTrades />
+          </Suspense>
         </S.BottomWrapper>
       </S.WrapperMain>
     </S.Wrapper>
