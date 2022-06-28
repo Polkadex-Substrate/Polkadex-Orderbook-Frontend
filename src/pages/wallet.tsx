@@ -1,4 +1,4 @@
-import { WalletTemplate } from "@polkadex/orderbook-ui/templates";
+import { WalletTemplate } from "@orderbook/v3/ui/templates";
 
 const Wallet = () => <WalletTemplate />;
 

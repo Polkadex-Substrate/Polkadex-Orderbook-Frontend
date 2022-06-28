@@ -4,7 +4,7 @@ import * as S from "./styles";
 import * as T from "./types";
 
 export const Polkadex = ({ size = "medium" }: T.Props) => (
-  <Link href="/v2/trading">
+  <Link href="/trading">
     <S.Wrapper size={size}>
       <svg
         width="420"

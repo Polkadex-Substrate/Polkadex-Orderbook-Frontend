@@ -16,7 +16,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
   return (
     <S.Wrapper>
       <S.WrapperLinks>
-        <Logo size="Medium" href="/v3/trading" />
+        <Logo size="Medium" href="/trading" />
         <S.Container>
           <S.WrapperIcon onClick={handleChange}>
             <div>
@@ -24,7 +24,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
             </div>
             <S.Span>{isWallet ? "Tokens" : "Markets"}</S.Span>
           </S.WrapperIcon>
-          <Link href="/v3/wallet">
+          <Link href="/wallet">
             <S.WrapperIcon>
               <div>
                 <Icon name="Exchange" background="none" size="large" />
@@ -34,7 +34,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-          <Link href="/v3/wallet">
+          <Link href="/wallet">
             <S.WrapperIcon>
               <div>
                 <Icon name="Wallet" background="none" stroke="text" size="large" />

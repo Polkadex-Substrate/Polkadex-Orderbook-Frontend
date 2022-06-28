@@ -28,9 +28,9 @@ export const WalletTemplate = () => {
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
 
-  // useEffect(() => {
-  //   if (!isLoading && !user) router.push("/login");
-  // }, [isLoading, user, router]);
+  useEffect(() => {
+    if (!isLoading && !user) router.push("/login");
+  }, [isLoading, user, router]);
 
   return (
     <S.Main>
