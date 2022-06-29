@@ -30,14 +30,13 @@ export const Content = styled.div<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin }) => css`
     background: ${theme.colors.tertiaryBackground};
     min-width: 35rem;
-    height: max-content;
+    height: auto;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
     display: flex;
     flex-direction: column;
     /* max-height: 80vh; */
-    height: 100%;
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};
   `}
