@@ -11,7 +11,7 @@ export const Content = styled.div`
     display: flex;
     place-items: center;
     gap: 1rem;
-    background: ${theme.colors.secondaryBackground};
+    background: ${theme.colors.primaryBackgroundOpacity};
     width: 1.3rem;
     height: 1.3rem;
     border-radius: 0.3rem;

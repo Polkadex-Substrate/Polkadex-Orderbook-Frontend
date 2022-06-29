@@ -79,7 +79,7 @@ const Deposit = () => {
               </Dropdown>
               {errors.address && <S.Error>{errors.address}</S.Error>}
             </S.SelectAccountContainer>
-            <S.SelectPairContainer onClick={() => console.log(errors, values)}>
+            <S.SelectPairContainer>
               <S.SelectPairWrapper>
                 <Dropdown
                   direction="bottom"

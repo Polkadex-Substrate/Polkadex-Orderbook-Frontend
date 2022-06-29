@@ -1,7 +1,23 @@
 import { checkCoordinateOnSegment } from "klinecharts/lib/shape/segment";
 
 import { defaultThemes } from "src/styles";
-
+export const chartType = [
+  {
+    key: "candle_solid",
+    name: "Candles Solid",
+    icon: "Candle",
+  },
+  {
+    key: "candle_stroke",
+    name: "Candles Stroke",
+    icon: "CandleStroke",
+  },
+  {
+    key: "area",
+    name: "Area",
+    icon: "Area",
+  },
+];
 export const options = (isDarkTheme = true) => {
   const theme = isDarkTheme ? defaultThemes.dark : defaultThemes.light;
   return {
@@ -58,7 +74,7 @@ export const options = (isDarkTheme = true) => {
           color: theme.colors.text,
           textMargin: 5,
           textSize: 10,
-          textFamily: "Helvetica Neue",
+          textFamily: theme.font.family,
           textWeight: "normal",
         },
         low: {
@@ -66,7 +82,7 @@ export const options = (isDarkTheme = true) => {
           color: theme.colors.text,
           textMargin: 5,
           textSize: 10,
-          textFamily: "Helvetica Neue",
+          textFamily: theme.font.family,
           textWeight: "normal",
         },
         last: {
@@ -89,7 +105,7 @@ export const options = (isDarkTheme = true) => {
             paddingRight: 2,
             paddingBottom: 2,
             color: theme.colors.white,
-            family: "Helvetica Neue",
+            family: theme.font.family,
             weight: "normal",
             borderRadius: 2,
           },
@@ -118,7 +134,7 @@ export const options = (isDarkTheme = true) => {
         },
         text: {
           size: 12,
-          family: "Helvetica Neue",
+          family: theme.font.family,
           weight: "500",
           color: theme.colors.text,
           marginLeft: 8,
@@ -153,7 +169,7 @@ export const options = (isDarkTheme = true) => {
           show: false,
           color: "#ffffff",
           size: 12,
-          family: "Helvetica Neue",
+          family: theme.font.family,
           weight: "normal",
           paddingLeft: 3,
           paddingTop: 2,
@@ -172,7 +188,7 @@ export const options = (isDarkTheme = true) => {
         defaultValue: "n/a",
         text: {
           size: 11,
-          family: "Helvetica Neue",
+          family: theme.font.family,
           weight: "normal",
           color: theme.colors.text,
           marginTop: 6,
@@ -193,7 +209,7 @@ export const options = (isDarkTheme = true) => {
       tickText: {
         show: true,
         color: theme.colors.secondaryText,
-        family: "Helvetica Neue",
+        family: theme.font.family,
         weight: "normal",
         size: 12,
         paddingTop: 3,
@@ -223,7 +239,7 @@ export const options = (isDarkTheme = true) => {
       tickText: {
         show: true,
         color: theme.colors.secondaryText,
-        family: "Helvetica Neue",
+        family: theme.font.family,
         weight: "normal",
         size: 12,
         paddingLeft: 3,
@@ -258,7 +274,7 @@ export const options = (isDarkTheme = true) => {
           show: true,
           color: theme.colors.white,
           size: 12,
-          family: "Helvetica Neue",
+          family: theme.font.family,
           weight: "normal",
           paddingLeft: 2,
           paddingRight: 2,
@@ -284,7 +300,7 @@ export const options = (isDarkTheme = true) => {
           show: true,
           color: theme.colors.text,
           size: 12,
-          family: "Helvetica Neue",
+          family: theme.font.family,
           weight: "normal",
           paddingLeft: 2,
           paddingRight: 2,
@@ -347,7 +363,7 @@ export const options = (isDarkTheme = true) => {
         style: "fill",
         color: "#2196F3",
         size: 12,
-        family: "Helvetica Neue",
+        family: theme.font.family,
         weight: "normal",
         offset: [0, 0],
       },
@@ -379,7 +395,7 @@ export const options = (isDarkTheme = true) => {
         color: "#FFFFFF",
         backgroundColor: "#2196F3",
         size: 12,
-        family: "Helvetica Neue",
+        family: theme.font.family,
         weight: "normal",
         paddingLeft: 2,
         paddingRight: 2,
@@ -394,7 +410,7 @@ export const options = (isDarkTheme = true) => {
         color: "#FFFFFF",
         backgroundColor: "#2196F3",
         size: 12,
-        family: "Helvetica Neue",
+        family: theme.font.family,
         weight: "normal",
         paddingLeft: 2,
         paddingRight: 2,

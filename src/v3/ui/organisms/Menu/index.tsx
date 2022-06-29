@@ -18,13 +18,15 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
       <S.WrapperLinks>
         <Logo size="Medium" href="/trading" />
         <S.Container>
-          <S.WrapperIcon onClick={handleChange}>
-            <div>
-              <Icon name="Graph" background="none" size="large" />
-            </div>
-            <S.Span>{isWallet ? "Tokens" : "Markets"}</S.Span>
-          </S.WrapperIcon>
-          <Link href="/wallet">
+          {!isWallet && (
+            <S.WrapperIcon onClick={handleChange}>
+              <div>
+                <Icon name="Graph" background="none" size="large" />
+              </div>
+              <S.Span>Markets</S.Span>
+            </S.WrapperIcon>
+          )}
+          <Link href="/trading">
             <S.WrapperIcon>
               <div>
                 <Icon name="Exchange" background="none" size="large" />

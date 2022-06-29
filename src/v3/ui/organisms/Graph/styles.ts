@@ -68,7 +68,7 @@ export const Li = styled.li<{ isActive?: boolean }>`
     border-radius: 0.5rem;
     background: ${isActive ? theme.colors.primary : "none"};
     color: ${isActive ? theme.colors.white : "inherit"};
-
+    user-select: none;
     cursor: pointer; ;
   `}
 `;

@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
-
-import { LoadingeMessage } from "../LoadingMessage";
+import useResizeObserver from "@react-hook/resize-observer";
 
 import { options } from "./options";
 import * as S from "./styles";
@@ -17,14 +16,17 @@ import {
   selectLastKline,
   selectKlineLoading,
 } from "@polkadex/orderbook-modules";
+import { Spinner } from "@polkadex/orderbook-ui/molecules";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-const OriginalChart = ({ chart }) => {
+const OriginalChart = ({ chart, resolution }) => {
+  const dispatch = useDispatch();
+  const target = useRef(null);
+
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const dispatch = useDispatch();
   const klines = useReduxSelector(selectKline);
   const lastKline = useReduxSelector(selectLastKline);
   const isLoading = useReduxSelector(selectKlineLoading);
@@ -34,14 +36,14 @@ const OriginalChart = ({ chart }) => {
       dispatch(
         klineFetch({
           market: currentMarket.m,
-          resolution: "1m",
+          resolution: resolution,
           from: new Date(27588600),
           to: new Date(Math.floor(new Date().getTime() / 60000)),
         })
       );
-      dispatch(klineSubscribe({ market: currentMarket.m, interval: "1m" }));
+      dispatch(klineSubscribe({ market: currentMarket.m, interval: resolution }));
     }
-  }, [currentMarket, dispatch]);
+  }, [currentMarket, dispatch, resolution]);
 
   useEffect(() => {
     chart.current = init("original-chart", options());
@@ -82,11 +84,18 @@ const OriginalChart = ({ chart }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
+  useResizeObserver(target, () => chart.current.resize());
+
   return (
-    <S.Wrapper>
-      {/* <LoadingeMessage isVisible={isLoading}> */}
+    <S.Wrapper ref={target}>
       <S.Container id="original-chart" />
-      {/* </LoadingeMessage> */}
+      {isLoading && (
+        <S.LoadingeMessage>
+          <S.LoadingWrapper>
+            <Spinner />
+          </S.LoadingWrapper>
+        </S.LoadingeMessage>
+      )}
     </S.Wrapper>
   );
 };

@@ -1,4 +1,3 @@
-import Button from "../Button";
 import Input from "../Input";
 
 import * as S from "./styles";
@@ -28,7 +27,12 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
   return (
     <S.WrapperOrder>
       <S.ContainerWallet>
-        <Icon name="Wallet" background="secondaryBackground" size="extraLarge" stroke="text" />
+        <Icon
+          name="Wallet"
+          background="primaryBackgroundOpacity"
+          size="extraLarge"
+          stroke="text"
+        />
         <S.WrapperBalance>
           <span>Available</span>
           <S.Span>
@@ -92,7 +96,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
             isLoading={isOrderLoading}
             isSuccess={isOrderExecuted}
             type="submit"
-            disabled={!hasUser} // TODO: THIS HARCODED FOR TESTING PURPOSES ONLY
+            disabled={!hasUser}
           />
         </form>
       </S.ContainerForm>

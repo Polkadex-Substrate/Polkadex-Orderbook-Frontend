@@ -6,20 +6,27 @@ export const Wrapper = styled.main`
   position: relative;
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
   max-width: 160rem;
   margin: 0 auto;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
+  @media screen and (min-height: 910px) or (max-width: 1295px) {
+    max-height: 100vh;
+  }
 `;
 
 export const WrapperMain = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   padding: 0 1rem;
   flex: 1;
+  @media screen and (min-width: 1190px) and (max-width: 1290px) {
+    overflow-y: auto;
+  }
+  @media screen and (max-width: 1190px) {
+    overflow-y: hidden;
+  }
 `;
 export const WrapperGraph = styled.div`
   display: grid;

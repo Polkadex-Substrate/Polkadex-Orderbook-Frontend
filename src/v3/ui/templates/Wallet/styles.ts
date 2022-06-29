@@ -123,7 +123,7 @@ export const TokenInfoWrapper = styled.div`
 
 export const HeaderContainer = styled.div`
   ${({ theme }) => css`
-    padding: 1rem 2rem 0 2rem;
+    padding: 0 2rem;
     border-radius: 0 0 1.5rem 1.5rem;
     box-shadow: ${theme.shadows.smooth};
   `}

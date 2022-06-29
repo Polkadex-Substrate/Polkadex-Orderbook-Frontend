@@ -17,24 +17,27 @@ export const ContainerInput = styled.div`
   flex-direction: column;
 `;
 export const Label = styled.label`
-  font-size: 1.2rem;
-  color: #8ba1be;
-  font-weight: 500;
-  svg {
-    display: inline-block;
-    width: 1.1rem;
-    height: 1.1rem;
-    margin-right: 0.5rem;
-  }
+  ${({ theme }) => css`
+    font-size: 1.2rem;
+    color: ${theme.colors.text};
+    font-weight: 500;
+    svg {
+      display: inline-block;
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-right: 0.5rem;
+    }
+  `}
 `;
 export const Box = styled.div<Partial<InputProps>>`
   ${({ theme, inputInfo, fullWidth }) => css`
     padding: 1rem;
     border-bottom: 0.1rem solid ${theme.colors.secondaryBackground};
     width: ${fullWidth ? "100%" : "20rem"};
+    transition: border 0.5s ease-in-out;
     ${inputInfo && inputModifier.Flex()}
     :hover {
-      border-bottom-color: ${theme.colors.primary};
+      border-bottom-color: ${theme.colors.text};
     }
   `}
 `;

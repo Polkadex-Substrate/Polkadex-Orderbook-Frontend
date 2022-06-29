@@ -18,7 +18,7 @@ export const Wrapper = styled.button<{
     width: 100%;
     transition: transform 0.2s ease, background 0.3s ease;
     :disabled {
-      background: ${theme.colors.secondaryBackground};
+      background: ${theme.colors.primaryBackground};
       color: ${theme.colors.text};
       span svg:nth-child(1) {
         stroke: transparent;

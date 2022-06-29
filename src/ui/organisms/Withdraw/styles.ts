@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 import { SecondaryWrapper as FormInput } from "@polkadex/orderbook-ui/molecules/Input/styles";
+import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -47,6 +47,7 @@ export const FormWallet = styled.div`
 
 export const FormAddress = styled.div`
   ${({ theme }) => css`
+    margin-bottom: 1rem;
     ${FormInput} {
       margin-bottom: 1.2rem;
     }
@@ -64,24 +65,70 @@ export const FormAddress = styled.div`
   `}
 `;
 
+export const SelectPairWrapper = styled.div`
+  flex: 1;
+`;
+
+export const SelectWrapper = styled.div`
+  ${({ theme }) => css`
+    padding: 1.5rem;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 1rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      display: block;
+    }
+  `}
+`;
+export const Select = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.colors.white};
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: ${theme.shadows.tertiary};
+    max-height: 20rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+  `}
+`;
+export const SelectContainer = styled(Select)<{ isOverflow?: boolean }>`
+  ${({ theme, isOverflow = false }) => css`
+    overflow: ${isOverflow ? "visible" : "hidden"};
+  `}
+`;
+export const Error = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-size: 1.2rem;
+    margin-left: 1.3rem;
+  `}
+`;
+export const SelectCard = styled.div`
+  ${({ theme }) => css`
+    padding: 0.4rem;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    color: black;
+    transition: background 0.5s ease-in-out;
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :not(:last-child) {
+      margin-bottom: 0.2rem;
+    }
+  `}
+`;
 export const FormAmount = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-  align-items: center;
   span {
     opacity: 0.6;
     font-weight: 500;
     white-space: nowrap;
     font-size: 1.2rem;
-  }
-  @media screen and (min-width: 630px) {
-    grid-template-columns: 1fr auto 1fr;
-  }
-  @media screen and (max-width: 630px) {
-    ${Icon} {
-      margin: 0 auto;
-      transform: rotateX(180deg);
-    }
   }
 `;
 

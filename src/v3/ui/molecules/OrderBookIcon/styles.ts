@@ -8,7 +8,7 @@ export const Wrapper = styled.div<Partial<OrderBookProps>>`
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: ${active ? theme.colors.white : theme.colors.secondaryBackground};
+    background: ${active ? theme.colors.white : theme.colors.primaryBackground};
     height: 2rem;
     width: 2rem;
     padding: ${theme.spacings.xxxsmall};
