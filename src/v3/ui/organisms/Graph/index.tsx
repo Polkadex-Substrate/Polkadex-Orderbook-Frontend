@@ -6,7 +6,7 @@ import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
 import { DropdownContent, DropdownHeader } from "../../molecules";
-import { chartType, tools } from "../../molecules/OriginalChart/options";
+import { chartType } from "../../molecules/OriginalChart/options";
 
 import * as S from "./styles";
 
@@ -46,38 +46,6 @@ const Graph = () => {
         <S.Header>
           <S.FlexWrapper>
             <S.List>
-              <Dropdown
-                direction="bottom"
-                priority="low"
-                header={
-                  <Icon
-                    name="Settings"
-                    stroke="text"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                  />
-                }>
-                <S.Tools>
-                  {tools.map((value) => (
-                    <Icon
-                      key={value.key}
-                      name={value.iconName}
-                      stroke="text"
-                      size="extraMedium"
-                      background="secondaryBackgroundOpacity"
-                      // onClick={() => chart.current.addShapeTemplate(value.key)}
-                    />
-                  ))}
-                  <Icon
-                    name="Trash"
-                    stroke="text"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                    // onClick={() => chart.current.removeGraphicMark()}
-                  />
-                </S.Tools>
-              </Dropdown>
-
               <ul>
                 {filters.map((item) => (
                   <S.Li key={item} isActive={item === filter} onClick={() => setFilter(item)}>

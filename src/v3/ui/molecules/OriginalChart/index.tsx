@@ -3,7 +3,7 @@ import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
 import useResizeObserver from "@react-hook/resize-observer";
 
-import { options } from "./options";
+import { tools, options } from "./options";
 import * as S from "./styles";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -16,7 +16,13 @@ import {
   selectLastKline,
   selectKlineLoading,
 } from "@polkadex/orderbook-modules";
-import { Spinner } from "@polkadex/orderbook-ui/molecules";
+import {
+  Icon,
+  Spinner,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -88,13 +94,43 @@ const OriginalChart = ({ chart, resolution }) => {
 
   return (
     <S.Wrapper ref={target}>
+      <S.Tools>
+        {tools.map(({ key, iconName, toolName }) => (
+          <Tooltip key={key}>
+            <TooltipHeader>
+              <Icon
+                name={iconName}
+                stroke="text"
+                size="large"
+                onClick={() => chart.current.createShape(key)}
+              />
+            </TooltipHeader>
+            <TooltipContent position="left" priority="high">
+              <p style={{ whiteSpace: "nowrap" }}> {toolName}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+        <Tooltip>
+          <TooltipHeader>
+            <Icon
+              name="Trash"
+              stroke="text"
+              size="medium"
+              onClick={() => chart.current.removeShape()}
+            />
+          </TooltipHeader>
+          <TooltipContent position="left" priority="high">
+            <p style={{ whiteSpace: "nowrap" }}> Clear</p>
+          </TooltipContent>
+        </Tooltip>
+      </S.Tools>
       <S.Container id="original-chart" />
       {isLoading && (
-        <S.LoadingeMessage>
-          <S.LoadingWrapper>
+        <S.LoadingWrapper>
+          <S.LoadingeMessage>
             <Spinner />
-          </S.LoadingWrapper>
-        </S.LoadingeMessage>
+          </S.LoadingeMessage>
+        </S.LoadingWrapper>
       )}
     </S.Wrapper>
   );

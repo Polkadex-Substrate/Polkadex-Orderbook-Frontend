@@ -425,19 +425,51 @@ export const options = (isDarkTheme = true) => {
 };
 
 export const tools = [
-  { key: "horizontalRayLine", iconName: "OriginalChartSingleLine" },
-  { key: "horizontalSegment", iconName: "OriginalChartSingleLineSpaceAround" },
-  { key: "horizontalStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
-  { key: "verticalRayLine", iconName: "OriginalChartSingleLineVertical" },
-  { key: "verticalSegment", iconName: "OriginalChartSingleLineSpaceAroundVertical" },
-  { key: "verticalStraightLine", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
-  { key: "rayLine", iconName: "OriginalChartSingleLineInclined" },
-  { key: "segment", iconName: "OriginalChartSingleLineSpaceAroundInclined" },
-  { key: "straightLine", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
-  { key: "priceLine", iconName: "OriginalChartSingleLineNumber" },
-  { key: "priceChannelLine", iconName: "OriginalChartDoubleLine" },
-  { key: "parallelStraightLine", iconName: "OriginalChartTripleLine" },
-  { key: "fibonacciLine", iconName: "OriginalChartQuaternaryLine" },
+  {
+    key: "horizontalRayLine",
+    iconName: "OriginalChartSingleLine",
+    toolName: "Horizontal Ray Line",
+  },
+  {
+    key: "horizontalSegment",
+    iconName: "OriginalChartSingleLineSpaceAround",
+    toolName: "Horizontal Segment",
+  },
+  // { key: "horizontalStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
+  {
+    key: "verticalRayLine",
+    iconName: "OriginalChartSingleLineVertical",
+    toolName: "Vertical Ray Line",
+  },
+  {
+    key: "verticalSegment",
+    iconName: "OriginalChartSingleLineSpaceAroundVertical",
+    toolName: "Vertical Segment",
+  },
+  // { key: "verticalStraightLine", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
+  { key: "rayLine", iconName: "OriginalChartSingleLineInclined", toolName: "Ray Line" },
+  {
+    key: "segment",
+    iconName: "OriginalChartSingleLineSpaceAroundInclined",
+    toolName: "Segment",
+  },
+  // { key: "straightLine", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
+  { key: "priceLine", iconName: "OriginalChartSingleLineNumber", toolName: "Price Line" },
+  {
+    key: "priceChannelLine",
+    iconName: "OriginalChartDoubleLine",
+    toolName: "Price Channel Line",
+  },
+  {
+    key: "parallelStraightLine",
+    iconName: "OriginalChartTripleLine",
+    toolName: "Parallel Straight Line",
+  },
+  {
+    key: "fibonacciLine",
+    iconName: "OriginalChartQuaternaryLine",
+    toolName: "Fibonacci Line",
+  },
 ];
 
 export const rect = {

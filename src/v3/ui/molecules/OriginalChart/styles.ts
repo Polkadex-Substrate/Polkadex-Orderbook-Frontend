@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+
 export const LoadingWrapper = styled.div`
   ${({ theme }) => css`
     position: absolute;
@@ -19,15 +21,32 @@ export const LoadingeMessage = styled.div`
   align-items: center;
   background: gray;
 `;
+
 export const Wrapper = styled.div`
   position: relative;
   display: flex;
-  flex-direction: column;
   flex: 1;
   transition: width 0.5s ease-in-out;
+  gap: 1rem;
 `;
 
 export const Container = styled.div`
   flex: 1;
   height: 100%;
+`;
+
+export const Tools = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    ${Icon} {
+      cursor: pointer;
+      transition: background 0.5s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;

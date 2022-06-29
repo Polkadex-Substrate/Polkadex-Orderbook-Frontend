@@ -41,6 +41,7 @@ export const TooltipContent = ({
   onDisplay,
   onDismiss,
   children,
+  priority = "low",
 }: T.TooltipContentProps) => {
   useEffect(() => {
     // called when mounted
@@ -55,6 +56,7 @@ export const TooltipContent = ({
       position={position}
       minWidth={minWidth}
       background={background}
+      priority={priority}
       role="tooltip"
       data-id="tooltip-content">
       {children}
