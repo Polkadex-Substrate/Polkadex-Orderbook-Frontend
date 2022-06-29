@@ -11,22 +11,13 @@ import {
   useOrderBookMarketsFetch,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
-import {
-  marketsTickersFetch,
-  orderBookFetch,
-  selectCurrentMarket,
-  selectCurrentMarketTickers,
-  selectCurrentTrade,
-  selectLastRecentTrade,
-} from "@polkadex/orderbook-modules";
-import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
+import { orderBookFetch, selectCurrentMarket } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
 import { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
 import { MarketSkeleton } from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
 import { TransactionsSkeleton } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
-
 const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
   ssr: false,
 });
@@ -60,7 +51,6 @@ const RecentTrades = dynamic(() => import("@orderbook/v2/ui/organisms/RecentTrad
 
 export function Trading() {
   const [state, setState] = useState(false);
-  const [dateIsVisible, setDateIsVisible] = useState(false);
   const dispatch = useDispatch();
   const { id } = useRouter().query;
   useMarketsFetch(id as string);
@@ -68,9 +58,7 @@ export function Trading() {
   useOrderBookMarketsFetch();
 
   const market = useReduxSelector(selectCurrentMarket);
-  const currentTrade = useReduxSelector(selectCurrentTrade);
-  const lastTrade = useReduxSelector(selectLastRecentTrade);
-  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
+
   // intitialize market dependent events
   useEffect(() => {
     if (market) {

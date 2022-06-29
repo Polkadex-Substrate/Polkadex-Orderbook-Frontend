@@ -6,37 +6,22 @@ import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
 import { DropdownContent, DropdownHeader } from "../../molecules";
-import { tools } from "../../molecules/OriginalChart/options";
+import { chartType, tools } from "../../molecules/OriginalChart/options";
 
 import * as S from "./styles";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
 
-const chartType = [
-  {
-    key: "candle_solid",
-    name: "Candles Solid",
-    icon: "Candle",
-  },
-  {
-    key: "candle_stroke",
-    name: "Candles Stroke",
-    icon: "CandleStroke",
-  },
-  {
-    key: "area",
-    name: "Area",
-    icon: "Area",
-  },
-];
+const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
+const filters = ["1m", "5m", "30min", "1H", "6H", "1D", "1W"];
 
 const Graph = () => {
   const now = useRef(new Date());
   const chart = useRef(null);
 
   const [state, setState] = useState(chartType[0]);
+  const [filter, setFilter] = useState("30min");
 
   const [to, setTo] = useState(now.current);
   const [from, setFrom] = useState(subDays(now.current, 7));
@@ -94,12 +79,11 @@ const Graph = () => {
               </Dropdown>
 
               <ul>
-                <S.Li>1h</S.Li>
-                <S.Li isActive>24h</S.Li>
-                <S.Li>7d</S.Li>
-                <S.Li>1m</S.Li>
-                <S.Li>1y</S.Li>
-                <S.Li>All</S.Li>
+                {filters.map((item) => (
+                  <S.Li key={item} isActive={item === filter} onClick={() => setFilter(item)}>
+                    {item}
+                  </S.Li>
+                ))}
               </ul>
               <Dropdown
                 direction="bottom"
@@ -159,7 +143,7 @@ const Graph = () => {
           </S.FlexWrapper>
         </S.Header>
         <S.ChartWrapper>
-          <OriginalChart chart={chart} />
+          <OriginalChart chart={chart} resolution={filter} />
         </S.ChartWrapper>
       </S.WrapperGraph>
       <OrderBook />

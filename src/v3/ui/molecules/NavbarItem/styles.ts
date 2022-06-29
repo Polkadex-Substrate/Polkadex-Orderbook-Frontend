@@ -15,6 +15,6 @@ export const Info = styled.p<Partial<NavbarItemPops>>`
   ${({ theme, color }) => css`
     font-size: ${theme.font.sizes.medium};
     color: ${color ? theme.colors.primary : "inherit"};
-    font-weight: 500;
+    font-weight: 550;
   `}
 `;

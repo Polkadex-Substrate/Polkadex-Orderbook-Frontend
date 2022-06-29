@@ -38,7 +38,9 @@ export const TabHeader = styled.li<{ isActive?: boolean }>`
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
-    opacity: ${isActive ? 1 : 0.6};
+    opacity: ${isActive ? 1 : 0.3};
+
+    font-weight: ${isActive ? 550 : 500};
     transition: opacity 0.5s ease-in-out;
     :hover {
       opacity: 1;
