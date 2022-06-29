@@ -29,7 +29,6 @@ ${({ theme }) => css`
     background-color: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
     overflow-x: hidden;
-    overflow-y: hidden;
     @media screen and (max-width: 1180px) {
       overflow-y: inherit;
     }

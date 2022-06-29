@@ -21,12 +21,7 @@ export const WrapperMain = styled.div`
   width: 100%;
   padding: 0 1rem;
   flex: 1;
-  @media screen and (min-width: 1190px) and (max-width: 1290px) {
-    overflow-y: auto;
-  }
-  @media screen and (max-width: 1190px) {
-    overflow-y: hidden;
-  }
+  overflow-y: hidden;
 `;
 export const WrapperGraph = styled.div`
   display: grid;

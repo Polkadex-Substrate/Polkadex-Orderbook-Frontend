@@ -6,7 +6,12 @@ import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
 import { DropdownContent, DropdownHeader } from "../../molecules";
-import { chartType, tools } from "../../molecules/OriginalChart/options";
+import {
+  chartType,
+  mainTechnicalIndicatorTypes,
+  subTechnicalIndicatorTypes,
+} from "../../molecules/OriginalChart/options";
+import Checkbox from "../../molecules/Checkbox";
 
 import * as S from "./styles";
 
@@ -22,6 +27,13 @@ const Graph = () => {
 
   const [state, setState] = useState(chartType[0]);
   const [filter, setFilter] = useState("30min");
+
+  const [mainTechnicalIndicator, setMainTechnicalIndicator] = useState(
+    mainTechnicalIndicatorTypes
+  );
+  const [subTechnicalIndicator, setSubTechnicalIndicator] = useState(
+    subTechnicalIndicatorTypes
+  );
 
   const [to, setTo] = useState(now.current);
   const [from, setFrom] = useState(subDays(now.current, 7));
@@ -57,27 +69,67 @@ const Graph = () => {
                     background="primaryBackgroundOpacity"
                   />
                 }>
-                <S.Tools>
-                  {tools.map((value) => (
-                    <Icon
-                      key={value.key}
-                      name={value.iconName}
-                      stroke="text"
-                      size="extraMedium"
-                      background="secondaryBackgroundOpacity"
-                      // onClick={() => chart.current.addShapeTemplate(value.key)}
-                    />
-                  ))}
-                  <Icon
-                    name="Trash"
-                    stroke="text"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                    // onClick={() => chart.current.removeGraphicMark()}
-                  />
-                </S.Tools>
+                <S.Indicator>
+                  <S.MainIndicator>
+                    <strong>Main Indicator</strong>
+                    {mainTechnicalIndicator.map(({ key, name, isActive }) => (
+                      <Checkbox
+                        key={key}
+                        title={name}
+                        checked={isActive}
+                        action={() => {
+                          isActive
+                            ? chart.current.removeTechnicalIndicator("candle_pane", key)
+                            : chart.current.createTechnicalIndicator(key, false, {
+                                id: "candle_pane",
+                              });
+                          setMainTechnicalIndicator((prevState) => {
+                            const newState = prevState.map((item) => {
+                              if (item.key === key) {
+                                return {
+                                  ...item,
+                                  isActive: !item.isActive,
+                                };
+                              }
+                              return item;
+                            });
+                            return newState;
+                          });
+                        }}
+                      />
+                    ))}
+                  </S.MainIndicator>
+                  <S.MainIndicator>
+                    <strong>Sub Indicator</strong>
+                    {subTechnicalIndicator.map(({ key, name, isActive }) => (
+                      <Checkbox
+                        key={key}
+                        title={name}
+                        checked={isActive}
+                        action={() => {
+                          isActive
+                            ? chart.current.removeTechnicalIndicator(key, key)
+                            : chart.current.createTechnicalIndicator(key, false, {
+                                id: key,
+                              });
+                          setSubTechnicalIndicator((prevState) => {
+                            const newState = prevState.map((item) => {
+                              if (item.key === key) {
+                                return {
+                                  ...item,
+                                  isActive: !item.isActive,
+                                };
+                              }
+                              return item;
+                            });
+                            return newState;
+                          });
+                        }}
+                      />
+                    ))}
+                  </S.MainIndicator>
+                </S.Indicator>
               </Dropdown>
-
               <ul>
                 {filters.map((item) => (
                   <S.Li key={item} isActive={item === filter} onClick={() => setFilter(item)}>

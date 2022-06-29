@@ -19,4 +19,5 @@ export type TooltipContentProps = {
   background?: Colors;
   onDisplay?: () => void;
   onDismiss?: () => void;
+  priority?: "low" | "high";
 } & AllHTMLAttributes<HTMLDivElement>;

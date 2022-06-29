@@ -5,12 +5,15 @@ import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  min-height: 100vh;
   overflow-y: hidden;
   max-width: 160rem;
   margin: 0 auto;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
   flex-wrap: nowrap;
+  @media screen and (min-height: 910px) or (max-width: 1295px) {
+    max-height: 100vh;
+  }
 `;
 
 export const Content = styled.div`
