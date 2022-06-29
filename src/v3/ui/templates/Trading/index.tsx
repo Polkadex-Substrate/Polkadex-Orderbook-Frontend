@@ -15,7 +15,6 @@ import { orderBookFetch, selectCurrentMarket } from "@polkadex/orderbook-modules
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
 import { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
-import { MarketSkeleton } from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
 import { TransactionsSkeleton } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
 const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
@@ -92,7 +91,7 @@ export function Trading() {
           <Suspense fallback={<MarketsSkeleton />}>
             <Graph />
           </Suspense>
-          <Suspense fallback={<MarketSkeleton />}>
+          <Suspense fallback={<MarketsSkeleton />}>
             <MarketOrder />
           </Suspense>
         </S.WrapperGraph>
