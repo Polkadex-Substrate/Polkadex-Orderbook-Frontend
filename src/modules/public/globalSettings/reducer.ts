@@ -10,11 +10,9 @@ export interface GlobalSettingsState {
   ordersHideOtherPairs: boolean;
   marketSelectorActive: boolean;
 }
-const currentGlobalSettings: string =
-  (process.browser && localStorage.getItem("colorTheme")) || "dark";
 
 export const initialChangeGlobalSettingsState: GlobalSettingsState = {
-  color: currentGlobalSettings,
+  color: (process.browser && localStorage.getItem("colorTheme")) || "dark",
   chartRebuild: false,
   marketSelectorActive: false,
   ordersHideOtherPairs: true,

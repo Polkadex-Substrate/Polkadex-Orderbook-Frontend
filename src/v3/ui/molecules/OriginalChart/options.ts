@@ -425,19 +425,51 @@ export const options = (isDarkTheme = true) => {
 };
 
 export const tools = [
-  { key: "horizontalRayLine", iconName: "OriginalChartSingleLine" },
-  { key: "horizontalSegment", iconName: "OriginalChartSingleLineSpaceAround" },
-  { key: "horizontalStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
-  { key: "verticalRayLine", iconName: "OriginalChartSingleLineVertical" },
-  { key: "verticalSegment", iconName: "OriginalChartSingleLineSpaceAroundVertical" },
-  { key: "verticalStraightLine", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
-  { key: "rayLine", iconName: "OriginalChartSingleLineInclined" },
-  { key: "segment", iconName: "OriginalChartSingleLineSpaceAroundInclined" },
-  { key: "straightLine", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
-  { key: "priceLine", iconName: "OriginalChartSingleLineNumber" },
-  { key: "priceChannelLine", iconName: "OriginalChartDoubleLine" },
-  { key: "parallelStraightLine", iconName: "OriginalChartTripleLine" },
-  { key: "fibonacciLine", iconName: "OriginalChartQuaternaryLine" },
+  {
+    key: "horizontalRayLine",
+    iconName: "OriginalChartSingleLine",
+    toolName: "Horizontal Ray Line",
+  },
+  {
+    key: "horizontalSegment",
+    iconName: "OriginalChartSingleLineSpaceAround",
+    toolName: "Horizontal Segment",
+  },
+  // { key: "horizontalStraightLine", iconName: "OriginalChartSingleLineSpaceBetween" },
+  {
+    key: "verticalRayLine",
+    iconName: "OriginalChartSingleLineVertical",
+    toolName: "Vertical Ray Line",
+  },
+  {
+    key: "verticalSegment",
+    iconName: "OriginalChartSingleLineSpaceAroundVertical",
+    toolName: "Vertical Segment",
+  },
+  // { key: "verticalStraightLine", iconName: "OriginalChartSingleLineSpaceBetweenVertical" },
+  { key: "rayLine", iconName: "OriginalChartSingleLineInclined", toolName: "Ray Line" },
+  {
+    key: "segment",
+    iconName: "OriginalChartSingleLineSpaceAroundInclined",
+    toolName: "Segment",
+  },
+  // { key: "straightLine", iconName: "OriginalChartSingleLineSpaceBetweenInclined" },
+  { key: "priceLine", iconName: "OriginalChartSingleLineNumber", toolName: "Price Line" },
+  {
+    key: "priceChannelLine",
+    iconName: "OriginalChartDoubleLine",
+    toolName: "Price Channel Line",
+  },
+  {
+    key: "parallelStraightLine",
+    iconName: "OriginalChartTripleLine",
+    toolName: "Parallel Straight Line",
+  },
+  {
+    key: "fibonacciLine",
+    iconName: "OriginalChartQuaternaryLine",
+    toolName: "Fibonacci Line",
+  },
 ];
 
 export const rect = {
@@ -526,3 +558,36 @@ export const circle = {
     return [];
   },
 };
+
+export const mainTechnicalIndicatorTypes = [
+  { key: "MA", name: "MA(Moving Average)", isActive: false },
+  { key: "EMA", name: "EMA(Exponential Moving Average)", isActive: false },
+  { key: "SMA", name: "SMA", isActive: false },
+  { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
+  { key: "BOLL", name: "BOLL(Bolinger Bands)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+];
+
+export const subTechnicalIndicatorTypes = [
+  { key: "VOL", name: "VOL(Volume)", isActive: true },
+  { key: "MACD", name: "MACD(Moving Average Convergence / Divergence)", isActive: false },
+  { key: "KDj", name: "KDJ(KDJ Index)", isActive: false },
+  { key: "RSI", name: "RSI(Relative Strength Index)", isActive: false },
+  { key: "BIAS", name: "BIAS(Bias Ratio)", isActive: false },
+  { key: "BRAR", name: "BRAR", isActive: false },
+  { key: "CCI", name: "CCI(Commodity Channel Index)", isActive: false },
+  { key: "DMI", name: "DMI(Directional Movement Index)", isActive: false },
+  { key: "CR", name: "CR", isActive: false },
+  { key: "PSY", name: "PSY(Psychological Line)", isActive: false },
+  { key: "DMA", name: "DMA(Different of Moving Average)", isActive: false },
+  { key: "OBV", name: "OBV(On Balance Volume)", isActive: false },
+  { key: "TRIX", name: "TRIX(Triple Exponentially Smoothed Moving Average)", isActive: false },
+  { key: "VR", name: "VR(Volatility Volume Ratio)", isActive: false },
+  { key: "MTM", name: "MTM(Momentum Index)", isActive: false },
+  { key: "EMV", name: "EMV(Ease of Movement Value)", isActive: false },
+  { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
+  { key: "ROC", name: "ROC(Price Rate of Change)", isActive: false },
+  { key: "PVT", name: "PVT(Price and Volume Trend)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+  { key: "AO", name: "AO(Awesome Oscillator)", isActive: false },
+];

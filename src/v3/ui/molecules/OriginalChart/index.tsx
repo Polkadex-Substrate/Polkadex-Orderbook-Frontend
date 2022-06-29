@@ -3,7 +3,7 @@ import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
 import useResizeObserver from "@react-hook/resize-observer";
 
-import { options } from "./options";
+import { tools, options } from "./options";
 import * as S from "./styles";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -16,7 +16,13 @@ import {
   selectLastKline,
   selectKlineLoading,
 } from "@polkadex/orderbook-modules";
-import { Spinner } from "@polkadex/orderbook-ui/molecules";
+import {
+  Icon,
+  Spinner,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -46,7 +52,7 @@ const OriginalChart = ({ chart, resolution }) => {
   }, [currentMarket, dispatch, resolution]);
 
   useEffect(() => {
-    chart.current = init("original-chart", options());
+    chart.current = init("original-chart", options(isDarkTheme));
 
     /**
      * @description Create sub technical indicator VOL
@@ -54,7 +60,10 @@ const OriginalChart = ({ chart, resolution }) => {
      * @param {string | TechnicalIndicator } value KLineData array
      * @param {boolean} isStack - tells the chart if there are more historical data, it can be defaulted, the default is true
      * @param {PaneOptions} options
-      .createTechnicalIndicator({ name: "VOL" }, false);
+     */
+    chart?.current?.createTechnicalIndicator("VOL", false, {
+      id: "VOL",
+    });
 
     /**
      * @description Add new data, this method will clear the chart data, no need to call the clearData method.
@@ -68,7 +77,7 @@ const OriginalChart = ({ chart, resolution }) => {
     return () => {
       dispose("original-chart");
     };
-  }, [chart, klines]);
+  }, [chart, klines, isDarkTheme]);
 
   useEffect(() => {
     /**
@@ -84,17 +93,47 @@ const OriginalChart = ({ chart, resolution }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
-  useResizeObserver(target, () => chart.current.resize());
+  useResizeObserver(target, () => chart?.current?.resize());
 
   return (
     <S.Wrapper ref={target}>
+      <S.Tools>
+        {tools.map(({ key, iconName, toolName }) => (
+          <Tooltip key={key}>
+            <TooltipHeader>
+              <Icon
+                name={iconName}
+                stroke="text"
+                size="large"
+                onClick={() => chart.current.createShape(key)}
+              />
+            </TooltipHeader>
+            <TooltipContent position="left" priority="high">
+              <p style={{ whiteSpace: "nowrap" }}> {toolName}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+        <Tooltip>
+          <TooltipHeader>
+            <Icon
+              name="Trash"
+              stroke="text"
+              size="medium"
+              onClick={() => chart.current.removeShape()}
+            />
+          </TooltipHeader>
+          <TooltipContent position="left" priority="high">
+            <p style={{ whiteSpace: "nowrap" }}> Clear</p>
+          </TooltipContent>
+        </Tooltip>
+      </S.Tools>
       <S.Container id="original-chart" />
       {isLoading && (
-        <S.LoadingeMessage>
-          <S.LoadingWrapper>
+        <S.LoadingWrapper>
+          <S.LoadingeMessage>
             <Spinner />
-          </S.LoadingWrapper>
-        </S.LoadingeMessage>
+          </S.LoadingeMessage>
+        </S.LoadingWrapper>
       )}
     </S.Wrapper>
   );

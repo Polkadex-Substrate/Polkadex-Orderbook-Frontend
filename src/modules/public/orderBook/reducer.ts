@@ -1,5 +1,3 @@
-import { X } from "@styled-icons/crypto";
-
 import { DepthActions, OrderBookActions } from "./actions";
 import {
   DEPTH_DATA,

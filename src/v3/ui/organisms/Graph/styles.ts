@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
@@ -94,24 +92,29 @@ export const FilterIcon = styled.div`
     }
   `}
 `;
-export const Tools = styled.div`
+export const Indicator = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 0.5rem;
-    border-radius: 0.7rem;
-    background: ${theme.colors.primaryBackground};
-    ${Icon} {
-      padding: 0.2rem;
-      cursor: pointer;
-      transition: background 0.5s ease-in-out;
-      :hover {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :active {
-        background: ${theme.colors.primary};
-      }
+    gap: 1.5em;
+    padding: 1rem;
+    background: ${theme.colors.secondaryBackgroundSolid};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    max-height: 60vh;
+    overflow-x: hidden;
+
+    overflow-y: auto;
+  `}
+`;
+export const MainIndicator = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    strong {
+      font-size: 1.5rem;
+      font-weight: 550;
+      display: block;
     }
   `}
 `;

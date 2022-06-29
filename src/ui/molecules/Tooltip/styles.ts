@@ -46,6 +46,7 @@ export const Content = styled.div<Partial<T.TooltipContentProps>>`
     position = "top",
     minWidth = "100%",
     background = "secondaryBackgroundSolid",
+    priority,
   }) => css`
     position: absolute;
     background: ${theme.colors[background]};
@@ -56,6 +57,7 @@ export const Content = styled.div<Partial<T.TooltipContentProps>>`
     /* white-space: nowrap; */
     animation: fadeIn ease-in-out 0.4s;
     ${directionModifier[position]()}
+    z-index: ${priority === "high" ? 10 : "auto"};
     @keyframes fadeIn {
       0% {
         opacity: 0;
