@@ -7,6 +7,7 @@ import { DropdownContent, DropdownHeader } from "../../molecules";
 import * as S from "./styles";
 
 import {
+  AvailableMessage,
   Dropdown,
   Icon,
   Skeleton,
@@ -48,10 +49,12 @@ const MarketOrder = () => {
                 title={isLimit ? "Limit Order" : "Market Order"}
                 handleAction={() => handleChangeType(true)}
               />
-              <DropdownItem
-                title={!isLimit ? "Limit Order" : "Market Order"}
-                handleAction={() => handleChangeType(false)}
-              />
+              <AvailableMessage message="Soon">
+                <DropdownItem
+                  title={!isLimit ? "Limit Order" : "Market Order"}
+                  handleAction={() => handleChangeType(false)}
+                />
+              </AvailableMessage>
             </DropdownContent>
           </Dropdown>
         </S.Header>

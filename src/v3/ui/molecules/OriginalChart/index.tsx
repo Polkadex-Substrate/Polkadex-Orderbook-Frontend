@@ -46,7 +46,7 @@ const OriginalChart = ({ chart, resolution }) => {
   }, [currentMarket, dispatch, resolution]);
 
   useEffect(() => {
-    chart.current = init("original-chart", options());
+    chart.current = init("original-chart", options(isDarkTheme));
 
     /**
      * @description Create sub technical indicator VOL
@@ -68,7 +68,7 @@ const OriginalChart = ({ chart, resolution }) => {
     return () => {
       dispose("original-chart");
     };
-  }, [chart, klines]);
+  }, [chart, klines, isDarkTheme]);
 
   useEffect(() => {
     /**

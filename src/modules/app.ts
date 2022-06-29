@@ -7,7 +7,7 @@ import { currenciesReducer } from "./public/currencies";
 import { klineReducer } from "./public/kline";
 import { rangerReducer } from "./public/ranger";
 import { marketsReducer } from "./public/markets";
-import { depthReducer, incrementDepthReducer, orderBookReducer } from "./public/orderBook";
+import { depthReducer, orderBookReducer } from "./public/orderBook";
 import { recentTradesReducer } from "./public/recentTrades";
 import { authReducer } from "./user/auth";
 import { historyReducer } from "./user/history";
@@ -36,7 +36,6 @@ export const publicReducer = combineReducers({
   markets: marketsReducer,
   orderBook: orderBookReducer,
   depth: depthReducer,
-  incrementDepth: incrementDepthReducer,
   recentTrades: recentTradesReducer,
   ranger: rangerReducer,
   rabbitmqChannel: rabbitmqChannelReducer,
