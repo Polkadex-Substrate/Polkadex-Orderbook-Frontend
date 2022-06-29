@@ -558,3 +558,36 @@ export const circle = {
     return [];
   },
 };
+
+export const mainTechnicalIndicatorTypes = [
+  { key: "MA", name: "MA(Moving Average)", isActive: false },
+  { key: "EMA", name: "EMA(Exponential Moving Average)", isActive: false },
+  { key: "SMA", name: "SMA", isActive: false },
+  { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
+  { key: "BOLL", name: "BOLL(Bolinger Bands)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+];
+
+export const subTechnicalIndicatorTypes = [
+  { key: "VOL", name: "VOL(Volume)", isActive: true },
+  { key: "MACD", name: "MACD(Moving Average Convergence / Divergence)", isActive: false },
+  { key: "KDj", name: "KDJ(KDJ Index)", isActive: false },
+  { key: "RSI", name: "RSI(Relative Strength Index)", isActive: false },
+  { key: "BIAS", name: "BIAS(Bias Ratio)", isActive: false },
+  { key: "BRAR", name: "BRAR", isActive: false },
+  { key: "CCI", name: "CCI(Commodity Channel Index)", isActive: false },
+  { key: "DMI", name: "DMI(Directional Movement Index)", isActive: false },
+  { key: "CR", name: "CR", isActive: false },
+  { key: "PSY", name: "PSY(Psychological Line)", isActive: false },
+  { key: "DMA", name: "DMA(Different of Moving Average)", isActive: false },
+  { key: "OBV", name: "OBV(On Balance Volume)", isActive: false },
+  { key: "TRIX", name: "TRIX(Triple Exponentially Smoothed Moving Average)", isActive: false },
+  { key: "VR", name: "VR(Volatility Volume Ratio)", isActive: false },
+  { key: "MTM", name: "MTM(Momentum Index)", isActive: false },
+  { key: "EMV", name: "EMV(Ease of Movement Value)", isActive: false },
+  { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
+  { key: "ROC", name: "ROC(Price Rate of Change)", isActive: false },
+  { key: "PVT", name: "PVT(Price and Volume Trend)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+  { key: "AO", name: "AO(Awesome Oscillator)", isActive: false },
+];

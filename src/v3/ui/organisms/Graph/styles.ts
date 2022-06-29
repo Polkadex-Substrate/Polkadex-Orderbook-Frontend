@@ -92,3 +92,29 @@ export const FilterIcon = styled.div`
     }
   `}
 `;
+export const Indicator = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 1rem;
+    background: ${theme.colors.secondaryBackgroundSolid};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    max-height: 60vh;
+    overflow-x: hidden;
+
+    overflow-y: auto;
+  `}
+`;
+export const MainIndicator = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    strong {
+      font-size: 1.5rem;
+      font-weight: 550;
+      display: block;
+    }
+  `}
+`;

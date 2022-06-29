@@ -60,7 +60,10 @@ const OriginalChart = ({ chart, resolution }) => {
      * @param {string | TechnicalIndicator } value KLineData array
      * @param {boolean} isStack - tells the chart if there are more historical data, it can be defaulted, the default is true
      * @param {PaneOptions} options
-      .createTechnicalIndicator({ name: "VOL" }, false);
+     */
+    chart?.current?.createTechnicalIndicator("VOL", false, {
+      id: "VOL",
+    });
 
     /**
      * @description Add new data, this method will clear the chart data, no need to call the clearData method.
@@ -90,7 +93,7 @@ const OriginalChart = ({ chart, resolution }) => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);
 
-  useResizeObserver(target, () => chart.current.resize());
+  useResizeObserver(target, () => chart?.current?.resize());
 
   return (
     <S.Wrapper ref={target}>

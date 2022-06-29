@@ -12,7 +12,7 @@ export const LoadingWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.colors.tertiaryBackground};
+    background: ${theme.colors.tertiaryBackgroundOpacity};
   `}
 `;
 
