@@ -58,7 +58,7 @@ export const OrderbookTable = ({ isSell = false, orders = [], lightMode }: T.Pro
             <S.CellHead>Amount({baseUnit})</S.CellHead>
             <S.CellHead>Cum({quoteUnit})</S.CellHead>
           </S.Head>
-          <S.Body>
+          <S.Body isSell={isSell}>
             {orders.map((order, i) => {
               const [price, volume] = order;
               /**
