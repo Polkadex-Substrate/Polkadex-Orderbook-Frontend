@@ -2,6 +2,21 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type RawTradeInput = {
+  m: string,
+  t: string,
+  p: string,
+  q: string,
+};
+
+export type RawTrade = {
+  __typename: "RawTrade",
+  m: string,
+  t: string,
+  p: string,
+  q: string,
+};
+
 export type SetOrderbookInput = {
   m: string,
   seq: string,
@@ -50,6 +65,17 @@ export type TickerStats = {
   low: string,
   volumeBase24hr: string,
   volumeQuote24Hr: string,
+};
+
+export type AddNewAssetInput = {
+  ticker: string,
+  withdrawal_fee: string,
+};
+
+export type Asset = {
+  __typename: "Asset",
+  ticker: string,
+  withdrawal_fee: string,
 };
 
 export type Channel = {
@@ -131,6 +157,7 @@ export type AddNewTradeInput = {
   m: string,
   p: string,
   q: string,
+  s: string,
   time: string,
 };
 
@@ -140,6 +167,7 @@ export type Trade = {
   m: string,
   p: string,
   q: string,
+  s: string,
   time: string,
 };
 
@@ -213,6 +241,18 @@ export type KlinesConnection = {
   items?:  Array<CandleStick | null > | null,
 };
 
+export type AssetsConnection = {
+  __typename: "AssetsConnection",
+  items?:  Array<Asset | null > | null,
+  nextToken?: string | null,
+};
+
+export type RecentTradesConnection = {
+  __typename: "RecentTradesConnection",
+  items?:  Array<RawTrade | null > | null,
+  nextToken?: string | null,
+};
+
 export type TickersConnection = {
   __typename: "TickersConnection",
   items?:  Array<TickerStats | null > | null,
@@ -247,6 +287,20 @@ export type TradesConnection = {
   __typename: "TradesConnection",
   items?:  Array<Trade | null > | null,
   nextToken?: string | null,
+};
+
+export type AddRawTradeMutationVariables = {
+  input: RawTradeInput,
+};
+
+export type AddRawTradeMutation = {
+  addRawTrade?:  {
+    __typename: "RawTrade",
+    m: string,
+    t: string,
+    p: string,
+    q: string,
+  } | null,
 };
 
 export type SetOrderbookPutsMutationVariables = {
@@ -291,6 +345,18 @@ export type SetTickerStatsMutation = {
     low: string,
     volumeBase24hr: string,
     volumeQuote24Hr: string,
+  } | null,
+};
+
+export type AddNewAssetMutationVariables = {
+  input: AddNewAssetInput,
+};
+
+export type AddNewAssetMutation = {
+  addNewAsset?:  {
+    __typename: "Asset",
+    ticker: string,
+    withdrawal_fee: string,
   } | null,
 };
 
@@ -381,6 +447,7 @@ export type AddNewTradeMutation = {
     m: string,
     p: string,
     q: string,
+    s: string,
     time: string,
   } | null,
 };
@@ -473,6 +540,45 @@ export type GetKlinesbyMarketIntervalQuery = {
       v_quote: string,
       t: string,
     } | null > | null,
+  } | null,
+};
+
+export type GetAllAssetsQueryVariables = {
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetAllAssetsQuery = {
+  // Gets all assets available in Orderbook
+  getAllAssets?:  {
+    __typename: "AssetsConnection",
+    items?:  Array< {
+      __typename: "Asset",
+      ticker: string,
+      withdrawal_fee: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetRecentTradesQueryVariables = {
+  m: string,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetRecentTradesQuery = {
+  // Gets recent trades
+  getRecentTrades?:  {
+    __typename: "RecentTradesConnection",
+    items?:  Array< {
+      __typename: "RawTrade",
+      m: string,
+      t: string,
+      p: string,
+      q: string,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -688,6 +794,7 @@ export type ListTradesByMainAccountQuery = {
       m: string,
       p: string,
       q: string,
+      s: string,
       time: string,
     } | null > | null,
     nextToken?: string | null,
@@ -745,6 +852,7 @@ export type OnCreateTradeSubscription = {
     m: string,
     p: string,
     q: string,
+    s: string,
     time: string,
   } | null,
 };
