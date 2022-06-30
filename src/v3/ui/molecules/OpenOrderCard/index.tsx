@@ -2,7 +2,7 @@ import moment from "moment";
 
 import * as S from "./styles";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 const OpenOrderCard = ({ isSell, orderSide, orderType, baseUnit, quoteUnit, data = [] }) => (
   <S.Tr>
@@ -46,10 +46,17 @@ const OpenOrderCard = ({ isSell, orderSide, orderType, baseUnit, quoteUnit, data
 
     <S.Td>
       <S.Tag>Actions</S.Tag>
-      <S.ContainerActions>
-        <Icon name="Trash" stroke="text" size="medium" onClick={() => console.log("Remove")} />
-        <Icon name="Options" size="medium" background="none" />
-      </S.ContainerActions>
+      <AvailableMessage message="Soon">
+        <S.ContainerActions>
+          <Icon
+            name="Trash"
+            stroke="text"
+            size="medium"
+            onClick={() => console.log("Remove")}
+          />
+          <Icon name="Options" size="medium" background="none" />
+        </S.ContainerActions>
+      </AvailableMessage>
     </S.Td>
   </S.Tr>
 );
