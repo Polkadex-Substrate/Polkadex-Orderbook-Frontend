@@ -134,14 +134,8 @@ export const marketsReducer = (
       const update = action.payload;
       const tickers = [...state.tickers];
       const idx = tickers.findIndex((x) => x.m === update.m);
-      if (idx < 0) {
-        tickers.push(update);
-        return {
-          ...state,
-          tickers,
-        };
-      }
-      tickers[idx] = update;
+      if (idx < 0) tickers.push(update);
+      else tickers[idx] = update;
       return {
         ...state,
         tickers,
