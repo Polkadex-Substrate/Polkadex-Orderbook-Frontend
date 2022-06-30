@@ -1,7 +1,6 @@
 import { BalancesAction, Balance } from "./actions";
 import {
   BALANCES_CHANNEL_UPDATE_DATA,
-  BALANCES_CHANNEL_TRANSFER_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
   BALANCES_FETCH,

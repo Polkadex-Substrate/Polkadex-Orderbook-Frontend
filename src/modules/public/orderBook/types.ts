@@ -1,4 +1,4 @@
-import { CommonState, Fee, OrderSide, OrderStatus, OrderType } from "../../types";
+import { CommonState, OrderSide } from "../../types";
 import { MarketId } from "../markets";
 
 export interface OrderBookOrder {

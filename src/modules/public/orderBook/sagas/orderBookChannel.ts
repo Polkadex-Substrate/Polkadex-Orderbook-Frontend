@@ -1,6 +1,6 @@
 import { eventChannel } from "redux-saga";
-import { call, put, select, take } from "redux-saga/effects";
-import { API, JS } from "aws-amplify";
+import { put, take } from "redux-saga/effects";
+import { API } from "aws-amplify";
 
 import { depthDataIncrement, OrderBookChannelFetch } from "..";
 import { alertPush } from "../../alertHandler";

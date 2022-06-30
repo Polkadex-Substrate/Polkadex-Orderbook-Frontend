@@ -39,7 +39,6 @@ export type DefaultConfig = {
   amqpWsUsername: string;
   polkadexFeature: string;
   enclaveUrl: string;
-  apiPath: string;
   polkadexChain: string;
   gaTrackerKey: string;
   withCredentials: boolean;

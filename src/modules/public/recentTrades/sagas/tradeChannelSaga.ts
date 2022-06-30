@@ -1,4 +1,4 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
@@ -8,7 +8,6 @@ import {
   PublicTrade,
   RecentTradesChannelFetch,
   recentTradesPush,
-  selectCurrentMarket,
 } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
