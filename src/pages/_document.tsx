@@ -34,7 +34,6 @@ export default class MyDocument extends Document {
           <link rel="shortcut icon" href="/favicon.ico" />
         </Head>
         <body>
-          <script src="/polkadex.js"></script>
           <Main />
           <div id="modal" />
           <NextScript />

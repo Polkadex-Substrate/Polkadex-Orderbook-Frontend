@@ -49,25 +49,6 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
     }
   );
 
-  /* example of tradingPairs
-  [
-  {
-    assetId: 'POLKADEX',
-    baseAsset: { polkadex: null },
-    quoteAsset: { asset: 1 },
-    minimumTradeAmount: 1000000000000,
-    maximumTradeAmount: 1000000000000000,
-    minimumWithdrawalAmount: 1000000000000,
-    minimumDepositAmount: 1000000000000,
-    maximumWithdrawalAmount: 1000000000000000,
-    maximumDepositAmount: 1000000000000000,
-    baseWithdrawalFee: 1,
-    quoteWithdrawalFee: 1,
-    enclaveId: 'esm9HVPQhFDaBtpe5LsV25bDfron3sNkfgHecRRoDShvJUxcF'
-  }
-]
-*/
-  console.log(tradingPairs);
   const markets = tradingPairs.map(async (tradingPair): Promise<Market> => {
     const [baseName, baseSymbol, baseAssetId] = await fetchAssetData(
       api,

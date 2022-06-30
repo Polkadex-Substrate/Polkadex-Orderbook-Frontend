@@ -1,12 +1,9 @@
-import { debug } from "console";
-
-import { put, delay, call, select } from "redux-saga/effects";
+import { put, call, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 
 import { sendError, selectMainAccount, selectRangerApi, alertPush } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
-import { notificationPush } from "../../notificationHandler";
 import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";

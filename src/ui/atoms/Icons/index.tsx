@@ -130,3 +130,7 @@ export * from "./OriginalChartSingleLineSpaceBetweenVertical";
 export * from "./OriginalChartDoubleLine";
 export * from "./OriginalChartTripleLine";
 export * from "./OriginalChartQuaternaryLine";
+export * from "./Timezone";
+export * from "./Screenshot";
+export * from "./ZoomOut";
+export * from "./ZoomIn";

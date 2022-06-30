@@ -13,10 +13,8 @@ export const WrapperIcon = styled.a`
   }
 `;
 export const Span = styled.span`
-  margin-left: 0.5rem;
+  margin-left: 0.8rem;
   font-size: 1.3rem;
-  display: none;
-  opacity: 0;
 `;
 
 export const WrapperLinks = styled.div`
@@ -45,15 +43,12 @@ export const Wrapper = styled.nav`
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
   transition-delay: initial;
   transition-property: initial;
+  overflow: hidden;
   & :hover,
   :hover ${WrapperLinks} {
     width: 17rem;
   }
   & :hover ${LogoText} {
-    display: block;
-    opacity: 1;
-  }
-  & :hover ${Span} {
     display: block;
     opacity: 1;
   }

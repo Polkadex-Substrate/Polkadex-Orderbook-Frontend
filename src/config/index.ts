@@ -15,7 +15,6 @@ export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
   enclaveUrl: process.env.ENCLAVE_URL,
-  apiPath: process.env.API_PATH,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
   withCredentials: false,
   incrementalOrderBook: false,

@@ -1,4 +1,4 @@
-import { CommonError, OrderCommon, OrderSide, OrderType } from "../../types";
+import { CommonError, OrderCommon } from "../../types";
 
 import {
   OPEN_ORDERS_HISTORY_DATA,
