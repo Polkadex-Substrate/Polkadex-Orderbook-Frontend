@@ -14,11 +14,8 @@ const RecentTrades = () => {
         <>
           <S.Header>
             <h2>Recent Trades</h2>
-            <AvailableMessage message="Soon">
-              {/* <Dropdown header="0.1000000">Testing</Dropdown> */}
-            </AvailableMessage>
+            {/* <Dropdown header="0.1000000">Testing</Dropdown> */}
           </S.Header>
-
           <S.Head>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>

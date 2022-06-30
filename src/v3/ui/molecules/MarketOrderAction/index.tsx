@@ -3,7 +3,7 @@ import Input from "../Input";
 import * as S from "./styles";
 
 import { ButtonStatus, Range } from "@orderbook/v2/ui/molecules";
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
 const MarketOrderAction = ({ isSell = false, isLimit }) => {
@@ -70,10 +70,12 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
             onChange={(e) => changeAmount(e.currentTarget.value)}
             disabled={isOrderLoading}
           />
+          <AvailableMessage message="Soon">
+            <S.RangeWrapper>
+              <Range values={rangeValue} setValues={updateRange} />
+            </S.RangeWrapper>
+          </AvailableMessage>
 
-          <S.RangeWrapper>
-            <Range values={rangeValue} setValues={updateRange} />
-          </S.RangeWrapper>
           <Input
             label="Total"
             inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
