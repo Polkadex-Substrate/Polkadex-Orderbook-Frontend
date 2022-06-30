@@ -79,37 +79,16 @@ const OriginalChart = ({ chart, resolution }) => {
     };
   }, [chart, klines, isDarkTheme]);
 
-  // useEffect(() => {
-  //   /**
-  //    * @description Add more historical data.
-  //    *
-  //    * @param {dataList} dataList KLineData array
-  //    * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
-  //    */
-  //   if (lastKline?.kline) chart.current.updateData(lastKline.kline);
-  // }, [chart, lastKline]);
-
   useEffect(() => {
-    const clearData = setInterval(() => {
-      /**
-       * @description Add more historical data.
-       *
-       * @param {dataList} dataList KLineData array
-       * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
-       */
-      chart.current.updateData({
-        close: getRamdom(),
-        high: getRamdom(),
-        low: getRamdom(),
-        open: getRamdom(),
-        timestamp: new Date().getTime(),
-        volume: getRamdom(10, 100),
-      });
-    }, 1000);
-    return () => {
-      process.browser && window.clearTimeout(clearData);
-    };
-  }, [chart]);
+    /**
+     * @description Add more historical data.
+     *
+     * @param {dataList} dataList KLineData array
+     * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
+     */
+    if (lastKline?.kline) chart.current.updateData(lastKline.kline);
+  }, [chart, lastKline]);
+
   useEffect(() => {
     chart.current.setStyleOptions(options(isDarkTheme));
   }, [isDarkTheme, chart]);

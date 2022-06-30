@@ -2,10 +2,10 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { subDays } from "date-fns";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
+import { tz } from "moment-timezone";
 
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
-import { DropdownContent } from "../../molecules";
 import {
   chartType,
   mainTechnicalIndicatorTypes,
@@ -15,7 +15,7 @@ import Checkbox from "../../molecules/Checkbox";
 
 import * as S from "./styles";
 
-import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
@@ -28,6 +28,7 @@ const Graph = () => {
   const [state, setState] = useState(chartType[0]);
   const [filter, setFilter] = useState("30min");
   const [space, setSpace] = useState(10);
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   const [mainTechnicalIndicator, setMainTechnicalIndicator] = useState(
     mainTechnicalIndicatorTypes
@@ -57,6 +58,10 @@ const Graph = () => {
   useEffect(() => {
     chart?.current?.setDataSpace(space);
   }, [space]);
+
+  useEffect(() => {
+    chart?.current?.setTimezone(timezone);
+  }, [timezone]);
 
   return (
     <S.Wrapper>
@@ -173,11 +178,12 @@ const Graph = () => {
                 }
                 direction="bottom"
                 isClickable>
-                <DropdownContent>
+                <S.TimezoneContent>
                   {chartType.map((item, i) => (
                     <FilterIcon
                       key={i}
                       icon={item.icon}
+                      isActive={state.key === item.key}
                       onClick={() => {
                         chart.current.setStyleOptions({
                           candle: {
@@ -189,9 +195,30 @@ const Graph = () => {
                       {item.name}
                     </FilterIcon>
                   ))}
-                </DropdownContent>
+                </S.TimezoneContent>
               </Dropdown>
-
+              <Dropdown
+                header={
+                  <Icon
+                    name="Timezone"
+                    size="extraMedium"
+                    background="primaryBackgroundOpacity"
+                    stroke="text"
+                  />
+                }
+                direction="bottom"
+                isClickable>
+                <S.TimezoneContent>
+                  {tz.names().map((item) => (
+                    <S.Button
+                      key={item}
+                      isActive={timezone === item}
+                      onClick={() => setTimezone(item)}>{`${item.replace("_", " ")} (${tz(
+                      item
+                    ).format("z Z")})`}</S.Button>
+                  ))}
+                </S.TimezoneContent>
+              </Dropdown>
               <button type="button" onClick={() => setSpace(space + 1)}>
                 <Icon
                   name="ZoomOut"
@@ -214,7 +241,10 @@ const Graph = () => {
           <S.FlexWrapper>
             <S.List>
               <ListItemButton title="Original" size="Small" isActive />
-              <ListItemButton title="Trading View" size="Small" />
+              <AvailableMessage message="Soon">
+                <ListItemButton title="Trading View" size="Small" />
+              </AvailableMessage>
+
               {/* <ListItemButton title="Deep Market" size="Small" /> */}
 
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
@@ -232,10 +262,10 @@ const Graph = () => {
 
 export default Graph;
 
-const FilterIcon = ({ icon, children, ...props }) => {
+const FilterIcon = ({ icon, isActive, children, ...props }) => {
   const IconComponent = Icons[icon];
   return (
-    <S.FilterIcon {...props}>
+    <S.FilterIcon isActive={isActive} {...props}>
       <IconComponent />
       <span>{children}</span>
     </S.FilterIcon>

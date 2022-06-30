@@ -26,7 +26,7 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
   flex-wrap: wrap;
   gap: 1.5rem;
 `;
@@ -75,7 +75,7 @@ export const List = styled.div`
 export const Li = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     list-style: none;
-    padding: 0.4rem;
+    padding: 0.2rem;
     border-radius: 0.5rem;
     background: ${isActive ? theme.colors.primary : "none"};
     color: ${isActive ? theme.colors.white : "inherit"};
@@ -88,12 +88,14 @@ export const WrapperFilters = styled.div``;
 
 // Graph
 export const Graph = styled.div``;
-export const FilterIcon = styled.div`
-  ${({ theme }) => css`
+export const FilterIcon = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
     display: flex;
     gap: 0.5rem;
     align-items: center;
     cursor: pointer;
+    padding: 0.5rem 1rem;
+    background: ${isActive ? theme.colors.primary : "none"};
     svg {
       width: 1.5rem;
       stroke: ${theme.colors.text};
@@ -120,14 +122,32 @@ export const Indicator = styled.div`
   `}
 `;
 export const MainIndicator = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  strong {
+    font-size: 1.5rem;
+    font-weight: 550;
+    display: block;
+  }
+`;
+export const TimezoneContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
-    strong {
-      font-size: 1.5rem;
-      font-weight: 550;
-      display: block;
-    }
+    gap: 1rem;
+    background: ${theme.colors.tertiaryBackground};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    max-height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  `}
+`;
+export const Button = styled.button<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    text-align: left;
+    white-space: nowrap;
+    background: ${isActive ? theme.colors.primary : "none"};
+    padding: 0.5rem 1rem;
   `}
 `;
