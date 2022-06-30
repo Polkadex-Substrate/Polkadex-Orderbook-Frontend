@@ -64,7 +64,7 @@ const Navbar = ({ onOpenMarkets }) => {
       </S.WrapperInfo>
       {hasUser ? (
         <S.Box>
-          <Notifications />
+          {/* <Notifications /> */}
           <MyWallet />
           <MyAccount />
         </S.Box>

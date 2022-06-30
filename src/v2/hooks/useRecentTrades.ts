@@ -14,6 +14,9 @@ export function useRecentTrades() {
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
+  const recentTradesSorted = recentTrades.sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
   useEffect(() => {
     if (currentMarket?.m) dispatch(recentTradesChannelFetch(currentMarket));
   }, [dispatch, currentMarket]);
@@ -22,7 +25,7 @@ export function useRecentTrades() {
 
   return {
     isDecreasing,
-    recentTrades,
+    recentTrades: recentTradesSorted,
     quoteUnit: currentMarket?.quote_ticker,
     baseUnit: currentMarket?.base_ticker,
     pricePrecision: currentMarket?.price_precision,

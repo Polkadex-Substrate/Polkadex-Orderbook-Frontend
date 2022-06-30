@@ -12,12 +12,13 @@ const RecentTrades = () => {
     <S.Main>
       {recentTrades.length ? (
         <>
-          <AvailableMessage message="Soon">
-            <S.Header>
-              <h2>Recent Trades</h2>
+          <S.Header>
+            <h2>Recent Trades</h2>
+            <AvailableMessage message="Soon">
               {/* <Dropdown header="0.1000000">Testing</Dropdown> */}
-            </S.Header>
-          </AvailableMessage>
+            </AvailableMessage>
+          </S.Header>
+
           <S.Head>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>

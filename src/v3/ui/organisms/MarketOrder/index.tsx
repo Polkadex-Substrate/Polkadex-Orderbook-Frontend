@@ -46,12 +46,12 @@ const MarketOrder = () => {
             isClickable>
             <DropdownContent>
               <DropdownItem
-                title={isLimit ? "Limit Order" : "Market Order"}
+                title={"Limit Order"}
                 handleAction={() => handleChangeType(true)}
               />
 
               <DropdownItem
-                title={!isLimit ? "Limit Order" : "Market Order"}
+                title={"Market Order"}
                 handleAction={() => handleChangeType(false)}
               />
             </DropdownContent>
