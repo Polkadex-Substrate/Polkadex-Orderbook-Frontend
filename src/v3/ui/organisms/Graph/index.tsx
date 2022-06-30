@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { subDays } from "date-fns";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
+import { tz } from "moment-timezone";
 
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
-import { DropdownContent, DropdownHeader } from "../../molecules";
 import {
   chartType,
   mainTechnicalIndicatorTypes,
@@ -15,7 +15,7 @@ import Checkbox from "../../molecules/Checkbox";
 
 import * as S from "./styles";
 
-import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
@@ -27,6 +27,8 @@ const Graph = () => {
 
   const [state, setState] = useState(chartType[0]);
   const [filter, setFilter] = useState("30min");
+  const [space, setSpace] = useState(10);
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   const [mainTechnicalIndicator, setMainTechnicalIndicator] = useState(
     mainTechnicalIndicatorTypes
@@ -36,7 +38,7 @@ const Graph = () => {
   );
 
   const [to, setTo] = useState(now.current);
-  const [from, setFrom] = useState(subDays(now.current, 7));
+  const [from, setFrom] = useState(subDays(now.current, 5));
 
   const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
@@ -52,6 +54,15 @@ const Graph = () => {
       },
     ];
   }, [from, to]);
+
+  useEffect(() => {
+    chart?.current?.setDataSpace(space);
+  }, [space]);
+
+  useEffect(() => {
+    chart?.current?.setTimezone(timezone);
+  }, [timezone]);
+
   return (
     <S.Wrapper>
       <S.WrapperGraph>
@@ -156,27 +167,23 @@ const Graph = () => {
                   inputRanges={[]}
                 />
               </Dropdown>
-            </S.List>
-          </S.FlexWrapper>
-
-          <S.FlexWrapper>
-            <S.List>
-              <ListItemButton title="Original" size="Small" isActive />
-              <ListItemButton title="Trading View" size="Small" />
-              {/* <ListItemButton title="Deep Market" size="Small" /> */}
               <Dropdown
                 header={
-                  <DropdownHeader>
-                    <FilterIcon icon={state.icon}>{state.name}</FilterIcon>
-                  </DropdownHeader>
+                  <Icon
+                    name={state.icon}
+                    size="extraMedium"
+                    background="primaryBackgroundOpacity"
+                    stroke="text"
+                  />
                 }
                 direction="bottom"
                 isClickable>
-                <DropdownContent>
+                <S.TimezoneContent>
                   {chartType.map((item, i) => (
                     <FilterIcon
                       key={i}
                       icon={item.icon}
+                      isActive={state.key === item.key}
                       onClick={() => {
                         chart.current.setStyleOptions({
                           candle: {
@@ -188,8 +195,58 @@ const Graph = () => {
                       {item.name}
                     </FilterIcon>
                   ))}
-                </DropdownContent>
+                </S.TimezoneContent>
               </Dropdown>
+              <Dropdown
+                header={
+                  <Icon
+                    name="Timezone"
+                    size="extraMedium"
+                    background="primaryBackgroundOpacity"
+                    stroke="text"
+                  />
+                }
+                direction="bottom"
+                isClickable>
+                <S.TimezoneContent>
+                  {tz.names().map((item) => (
+                    <S.Button
+                      key={item}
+                      isActive={timezone === item}
+                      onClick={() => setTimezone(item)}>{`${item.replace("_", " ")} (${tz(
+                      item
+                    ).format("z Z")})`}</S.Button>
+                  ))}
+                </S.TimezoneContent>
+              </Dropdown>
+              <button type="button" onClick={() => setSpace(space + 1)}>
+                <Icon
+                  name="ZoomOut"
+                  size="extraMedium"
+                  background="primaryBackgroundOpacity"
+                  stroke="text"
+                />
+              </button>
+              <button type="button" onClick={() => setSpace(space - 1)}>
+                <Icon
+                  name="ZoomIn"
+                  size="extraMedium"
+                  background="primaryBackgroundOpacity"
+                  stroke="text"
+                />
+              </button>
+            </S.List>
+          </S.FlexWrapper>
+
+          <S.FlexWrapper>
+            <S.List>
+              <ListItemButton title="Original" size="Small" isActive />
+              <AvailableMessage message="Soon">
+                <ListItemButton title="Trading View" size="Small" />
+              </AvailableMessage>
+
+              {/* <ListItemButton title="Deep Market" size="Small" /> */}
+
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
           </S.FlexWrapper>
@@ -205,10 +262,10 @@ const Graph = () => {
 
 export default Graph;
 
-const FilterIcon = ({ icon, children, ...props }) => {
+const FilterIcon = ({ icon, isActive, children, ...props }) => {
   const IconComponent = Icons[icon];
   return (
-    <S.FilterIcon {...props}>
+    <S.FilterIcon isActive={isActive} {...props}>
       <IconComponent />
       <span>{children}</span>
     </S.FilterIcon>

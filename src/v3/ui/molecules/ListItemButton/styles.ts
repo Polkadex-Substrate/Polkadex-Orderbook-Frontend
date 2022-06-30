@@ -34,7 +34,7 @@ export const Wrapper = styled.div<Partial<ListItemProps>>`
   ${({ theme, fullWidth, isActive }) => css`
     border: 0;
     border-radius: 0.5rem;
-    padding: ${theme.spacings.xxsmall};
+    padding: 0.2rem;
     color: ${isActive ? theme.colors.white : theme.colors.text};
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     display: inline-block;
