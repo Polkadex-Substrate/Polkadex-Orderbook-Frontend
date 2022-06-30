@@ -5,22 +5,16 @@ import { useRecentTrades } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 const RecentTrades = () => {
-  const {
-    isDecreasing,
-    // recentTrades,
-    quoteUnit,
-    baseUnit,
-    pricePrecision,
-    amountPrecision,
-  } = useRecentTrades();
-  const recentTrades = [
-    {
-      market_id: "1",
-      price: "0.000000000",
-      amount: "0.00000000",
-      timestamp: new Date().getTime(),
-    },
-  ];
+  const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+    useRecentTrades();
+  // const recentTrades = [
+  //   {
+  //     market_id: "1",
+  //     price: "0.000000000",
+  //     amount: "0.00000000",
+  //     timestamp: new Date().getTime(),
+  //   },
+  // ];
   return (
     <S.Main>
       {recentTrades.length ? (
