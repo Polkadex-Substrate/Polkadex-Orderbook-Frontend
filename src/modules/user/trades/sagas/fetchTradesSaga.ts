@@ -16,6 +16,7 @@ export function* fetchTradesSaga() {
         market_id: trade.m,
         price: trade.p,
         qty: trade.q,
+        side: trade.s,
         timestamp: new Date(trade.time).getTime(),
         baseAsset: trade.m.split("-")[0],
         quoteAsset: trade.m.split("-")[1],
@@ -56,7 +57,6 @@ const fetchUserTrades = async (
       main_account: proxy_account,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
-      limit: limit,
     },
   });
 
