@@ -34,8 +34,8 @@ const TradeHistory = () => {
               return (
                 <TradeHistoryCard
                   key={i}
-                  isSell={false}
-                  orderSide={"Bid"}
+                  isSell={trade.side === "Ask"}
+                  orderSide={trade.side}
                   baseUnit={baseUnit}
                   quoteUnit={quoteUnit}
                   data={[

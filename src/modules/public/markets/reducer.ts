@@ -97,6 +97,12 @@ export const marketsReducer = (
     case MARKETS_SET_CURRENT_MARKET: {
       const tickers = [...state.tickers];
       const currentTicker = tickers.find((x) => x.m === action.payload.m);
+      if (!currentTicker) {
+        return {
+          ...state,
+          currentMarket: action.payload,
+        };
+      }
       return {
         ...state,
         currentMarket: action.payload,
@@ -110,7 +116,12 @@ export const marketsReducer = (
       }
       const tickers = [...state.tickers];
       const currentTicker = tickers.find((x) => x.m === action.payload.m);
-
+      if (!currentTicker) {
+        return {
+          ...state,
+          currentMarket: action.payload,
+        };
+      }
       return {
         ...state,
         currentMarket: action.payload,
@@ -134,14 +145,15 @@ export const marketsReducer = (
       const update = action.payload;
       const tickers = [...state.tickers];
       const idx = tickers.findIndex((x) => x.m === update.m);
-      if (idx < 0) {
-        tickers.push(update);
+      if (idx < 0) tickers.push(update);
+      else tickers[idx] = update;
+      if (state.currentTicker.m === update.m) {
         return {
           ...state,
+          currentTicker: update,
           tickers,
         };
       }
-      tickers[idx] = update;
       return {
         ...state,
         tickers,

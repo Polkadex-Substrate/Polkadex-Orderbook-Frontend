@@ -11,7 +11,11 @@ import {
   useOrderBookMarketsFetch,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
-import { orderBookFetch, selectCurrentMarket } from "@polkadex/orderbook-modules";
+import {
+  orderBookFetch,
+  recentTradesFetch,
+  selectCurrentMarket,
+} from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
 import { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
@@ -63,6 +67,7 @@ export function Trading() {
     if (market) {
       // dispatch(rangerConnectFetch());
       dispatch(orderBookFetch(market));
+      dispatch(recentTradesFetch(market));
     }
   }, [dispatch, market]);
 

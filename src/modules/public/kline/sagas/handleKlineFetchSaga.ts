@@ -26,7 +26,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     );
 
     const convertedData = data.map((x) => ({
-      timestamp: new Date(x.t).getTime() * Math.pow(10, 5),
+      timestamp: new Date(x.t).getTime(),
       open: Number(x.o),
       high: Number(x.h),
       low: Number(x.l),
@@ -36,6 +36,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
 
     yield put(klineData({ list: convertedData, market, interval: resolution }));
   } catch (error) {
+    console.log(error);
     yield put(
       sendError({
         error,

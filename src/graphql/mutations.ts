@@ -2,6 +2,16 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const addRawTrade = /* GraphQL */ `
+  mutation AddRawTrade($input: RawTradeInput!) {
+    addRawTrade(input: $input) {
+      m
+      t
+      p
+      q
+    }
+  }
+`;
 export const setOrderbookPuts = /* GraphQL */ `
   mutation SetOrderbookPuts($input: SetOrderbookInput!) {
     setOrderbookPuts(input: $input) {
@@ -32,6 +42,14 @@ export const setTickerStats = /* GraphQL */ `
       low
       volumeBase24hr
       volumeQuote24Hr
+    }
+  }
+`;
+export const addNewAsset = /* GraphQL */ `
+  mutation AddNewAsset($input: AddNewAssetInput!) {
+    addNewAsset(input: $input) {
+      ticker
+      withdrawal_fee
     }
   }
 `;
@@ -95,6 +113,7 @@ export const addNewTrade = /* GraphQL */ `
       m
       p
       q
+      s
       time
     }
   }
