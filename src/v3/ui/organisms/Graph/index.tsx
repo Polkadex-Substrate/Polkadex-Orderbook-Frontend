@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { subDays } from "date-fns";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 
 import OrderBook from "../OrderBook";
 import ListItemButton from "../../molecules/ListItemButton";
-import { DropdownContent, DropdownHeader } from "../../molecules";
+import { DropdownContent } from "../../molecules";
 import {
   chartType,
   mainTechnicalIndicatorTypes,
@@ -27,6 +27,7 @@ const Graph = () => {
 
   const [state, setState] = useState(chartType[0]);
   const [filter, setFilter] = useState("30min");
+  const [space, setSpace] = useState(10);
 
   const [mainTechnicalIndicator, setMainTechnicalIndicator] = useState(
     mainTechnicalIndicatorTypes
@@ -36,7 +37,7 @@ const Graph = () => {
   );
 
   const [to, setTo] = useState(now.current);
-  const [from, setFrom] = useState(subDays(now.current, 7));
+  const [from, setFrom] = useState(subDays(now.current, 5));
 
   const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
@@ -52,6 +53,11 @@ const Graph = () => {
       },
     ];
   }, [from, to]);
+
+  useEffect(() => {
+    chart?.current?.setDataSpace(space);
+  }, [space]);
+
   return (
     <S.Wrapper>
       <S.WrapperGraph>
@@ -156,19 +162,14 @@ const Graph = () => {
                   inputRanges={[]}
                 />
               </Dropdown>
-            </S.List>
-          </S.FlexWrapper>
-
-          <S.FlexWrapper>
-            <S.List>
-              <ListItemButton title="Original" size="Small" isActive />
-              <ListItemButton title="Trading View" size="Small" />
-              {/* <ListItemButton title="Deep Market" size="Small" /> */}
               <Dropdown
                 header={
-                  <DropdownHeader>
-                    <FilterIcon icon={state.icon}>{state.name}</FilterIcon>
-                  </DropdownHeader>
+                  <Icon
+                    name={state.icon}
+                    size="extraMedium"
+                    background="primaryBackgroundOpacity"
+                    stroke="text"
+                  />
                 }
                 direction="bottom"
                 isClickable>
@@ -190,6 +191,32 @@ const Graph = () => {
                   ))}
                 </DropdownContent>
               </Dropdown>
+
+              <button type="button" onClick={() => setSpace(space + 1)}>
+                <Icon
+                  name="ZoomOut"
+                  size="extraMedium"
+                  background="primaryBackgroundOpacity"
+                  stroke="text"
+                />
+              </button>
+              <button type="button" onClick={() => setSpace(space - 1)}>
+                <Icon
+                  name="ZoomIn"
+                  size="extraMedium"
+                  background="primaryBackgroundOpacity"
+                  stroke="text"
+                />
+              </button>
+            </S.List>
+          </S.FlexWrapper>
+
+          <S.FlexWrapper>
+            <S.List>
+              <ListItemButton title="Original" size="Small" isActive />
+              <ListItemButton title="Trading View" size="Small" />
+              {/* <ListItemButton title="Deep Market" size="Small" /> */}
+
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
           </S.FlexWrapper>

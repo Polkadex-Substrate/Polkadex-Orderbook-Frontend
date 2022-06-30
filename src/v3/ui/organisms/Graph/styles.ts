@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
@@ -49,15 +51,26 @@ export const DropdownContent = styled.div`
 `;
 
 export const List = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-column-gap: 0.8rem;
-  align-items: center;
-  ul {
+  ${({ theme }) => css`
     display: flex;
+    gap: 0.8rem;
     align-items: center;
-    gap: 0.4rem;
-  }
+    ul {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    ${Icon} {
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+      :active {
+        background: ${theme.colors.primary};
+      }
+    }
+  `}
 `;
 export const Li = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
