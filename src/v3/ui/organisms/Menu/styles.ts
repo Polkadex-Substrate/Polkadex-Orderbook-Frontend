@@ -35,6 +35,9 @@ export const WrapperLinks = styled.div`
 `;
 
 export const Wrapper = styled.nav`
+  position: sticky;
+  top: 0;
+  right: 0;
   display: grid;
   grid-template-rows: 1.5fr 1fr;
   height: 100vh;
