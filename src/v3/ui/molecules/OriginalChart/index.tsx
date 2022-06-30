@@ -44,7 +44,7 @@ const OriginalChart = ({ chart, resolution }) => {
           market: currentMarket.m,
           resolution: resolution,
           from: new Date(27588600),
-          to: new Date(Math.floor(new Date().getTime() / 60000)),
+          to: getTimeFromResolution(resolution, new Date()),
         })
       );
       dispatch(klineSubscribe({ market: currentMarket.m, interval: resolution }));
@@ -139,4 +139,35 @@ const OriginalChart = ({ chart, resolution }) => {
   );
 };
 
+const getTimeFromResolution = (resolution: string, date: Date) => {
+  const resolutionMilliSeconds = getResolutionInMilliSeconds(resolution);
+  const bucketTime = Math.floor(date.getTime() / resolutionMilliSeconds);
+  const date_ = new Date(bucketTime * resolutionMilliSeconds);
+  return date_;
+};
+
+const getResolutionInMilliSeconds = (resolution: string): number => {
+  switch (resolution) {
+    case "1m":
+      return 60000;
+    case "5m":
+      return 300000;
+    case "15m":
+      return 900000;
+    case "30m":
+      return 1800000;
+    case "1h":
+      return 3600000;
+    case "2h":
+      return 7200000;
+    case "4h":
+      return 14400000;
+    case "1d":
+      return 86400000;
+    case "1w":
+      return 604800000;
+    default:
+      return 1;
+  }
+};
 export default OriginalChart;

@@ -14,6 +14,7 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       while (true) {
         const data = yield take(channel);
         console.log("candlestick update=>", data);
+        debugger;
         yield put(
           klinePush({
             kline: {
@@ -21,7 +22,7 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
               close: Number(data.c),
               high: Number(data.h),
               low: Number(data.l),
-              timestamp: new Date(data.t).getTime() * Math.pow(10, 5),
+              timestamp: new Date(data.t).getTime(),
               volume: Number(data.v_base),
             },
             market: data.m,
