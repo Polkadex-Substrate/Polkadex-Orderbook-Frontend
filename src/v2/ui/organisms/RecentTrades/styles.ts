@@ -3,10 +3,15 @@ import styled, { css } from "styled-components";
 export const Main = styled.section<{ hasData?: boolean }>`
   ${({ theme, hasData }) => css`
     grid-area: RecentTrades;
-    background: ${hasData ? theme.colors.inverse : theme.colors.secondaryBackgroundSolid};
-    border-radius: 1rem;
+    background: ${hasData ? theme.colors.inverse : theme.colors.tertiaryBackground};
     display: flex;
     flex-flow: column nowrap;
+    padding-bottom: 2rem;
+    border-radius: 0 3rem 3rem 3rem;
+    @media screen and (min-width: 1290px) {
+      min-width: 29rem;
+      max-width: 29rem;
+    }
   `}
 `;
 

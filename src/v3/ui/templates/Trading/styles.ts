@@ -39,12 +39,7 @@ export const BottomWrapper = styled.div`
     margin-top: 1rem;
     flex-direction: column;
     flex: 1;
-    ${RecentTrade} {
-      min-width: 29rem;
-      border-radius: 0 3rem 3rem 3rem;
-      padding: 2rem;
-      background: ${theme.colors.tertiaryBackground};
-    }
+
     @media screen and (min-width: 970px) {
       flex-direction: row;
       /* min-height: 3vh; */
