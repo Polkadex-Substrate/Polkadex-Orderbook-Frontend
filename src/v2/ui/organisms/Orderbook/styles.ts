@@ -157,7 +157,6 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
   ${({ theme, isPriceUp }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1rem;
-    border-radius: 0 1.2rem 1.2rem 0;
     flex: 1;
     span {
       font-size: 1.5rem;
