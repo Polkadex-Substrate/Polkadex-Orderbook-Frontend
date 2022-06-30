@@ -6,6 +6,7 @@ export interface UserTrade {
   market_id: string;
   price: string;
   qty: string;
+  side: string;
   timestamp: number;
   baseAsset: string;
   quoteAsset: string;

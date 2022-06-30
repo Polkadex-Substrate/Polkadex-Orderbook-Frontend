@@ -38,6 +38,7 @@ export const onCreateTrade = /* GraphQL */ `
       m
       p
       q
+      s
       time
     }
   }

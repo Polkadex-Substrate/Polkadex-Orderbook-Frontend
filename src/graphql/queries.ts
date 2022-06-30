@@ -49,6 +49,30 @@ export const getKlinesbyMarketInterval = /* GraphQL */ `
     }
   }
 `;
+export const getAllAssets = /* GraphQL */ `
+  query GetAllAssets($limit: Int, $nextToken: String) {
+    getAllAssets(limit: $limit, nextToken: $nextToken) {
+      items {
+        ticker
+        withdrawal_fee
+      }
+      nextToken
+    }
+  }
+`;
+export const getRecentTrades = /* GraphQL */ `
+  query GetRecentTrades($m: String!, $limit: Int, $nextToken: String) {
+    getRecentTrades(m: $m, limit: $limit, nextToken: $nextToken) {
+      items {
+        m
+        t
+        p
+        q
+      }
+      nextToken
+    }
+  }
+`;
 export const getAllMarketTickers = /* GraphQL */ `
   query GetAllMarketTickers {
     getAllMarketTickers {
@@ -244,6 +268,7 @@ export const listTradesByMainAccount = /* GraphQL */ `
         m
         p
         q
+        s
         time
       }
       nextToken

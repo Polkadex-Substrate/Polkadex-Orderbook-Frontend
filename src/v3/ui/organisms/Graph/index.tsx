@@ -19,14 +19,14 @@ import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecul
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
-const filters = ["1m", "5m", "30min", "1H", "6H", "1D", "1W"];
+const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
 
 const Graph = () => {
   const now = useRef(new Date());
   const chart = useRef(null);
 
   const [state, setState] = useState(chartType[0]);
-  const [filter, setFilter] = useState("30min");
+  const [filter, setFilter] = useState("1m");
   const [space, setSpace] = useState(10);
   const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
 

@@ -13,7 +13,7 @@ const OpenOrderCard = ({ isSell, orderSide, orderType, baseUnit, quoteUnit, data
           <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
         </S.Image>
         <span>
-          {quoteUnit}/{baseUnit}
+          {baseUnit}/{quoteUnit}
         </span>
       </S.ContainerFlex>
     </S.Td>
