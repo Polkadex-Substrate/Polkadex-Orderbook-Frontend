@@ -50,6 +50,8 @@ export const Table = styled.div<{ isSell?: boolean }>`
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
+    display: flex;
+    flex-direction: column;
     ::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -98,7 +100,14 @@ export const CellHead = styled.span`
   }
 `;
 
-export const Body = styled.div``;
+export const Body = styled.div<{ isSell?: boolean }>`
+  ${({ isSell }) => css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: ${isSell ? "flex-end" : "flex-start"};
+  `}
+`;
 
 // Card
 export const Card = styled.div<{ isSell?: boolean }>`
@@ -148,7 +157,6 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
   ${({ theme, isPriceUp }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1rem;
-    border-radius: 0 1.2rem 1.2rem 0;
     flex: 1;
     span {
       font-size: 1.5rem;

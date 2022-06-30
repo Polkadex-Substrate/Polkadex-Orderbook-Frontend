@@ -7,6 +7,7 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 const RecentTrades = () => {
   const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTrades();
+
   return (
     <S.Main>
       {recentTrades.length ? (
@@ -17,7 +18,6 @@ const RecentTrades = () => {
               {/* <Dropdown header="0.1000000">Testing</Dropdown> */}
             </S.Header>
           </AvailableMessage>
-
           <S.Head>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>

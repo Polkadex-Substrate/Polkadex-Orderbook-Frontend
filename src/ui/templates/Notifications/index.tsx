@@ -5,13 +5,6 @@ import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Notifications = ({ notificationsActive = false }) => (
   <S.Wrapper notificationsActive={notificationsActive}>
-    <h2>Notifications Center</h2>
-    <S.TitleWrapper>
-      <h3>Recent</h3>
-      <button type="button" onClick={() => console.log("Clean Notifications")}>
-        <Icon name="Clean" />
-      </button>
-    </S.TitleWrapper>
     <S.ContentWrapper>
       <NotificationCard
         icon="Deposit"
@@ -39,11 +32,11 @@ export const NotificationCard = ({
   ...props
 }: NotificationCardProps) => {
   return (
-    <S.NotificationCard active={active} {...props}>
-      <S.Container>
-        <Icon name={icon} />
+    <S.NotificationCard {...props}>
+      <S.Container isActive={active}>
+        <Icon size="large" name={icon} />
       </S.Container>
-      <S.Container>
+      <S.Container isActive={active}>
         <span>{title}</span>
         <p>{message}</p>
       </S.Container>

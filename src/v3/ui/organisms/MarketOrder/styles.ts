@@ -3,11 +3,9 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Section = styled.section`
-  @media screen and (min-width: 970px) {
-    @media screen and (min-width: 1290px) {
-      min-width: 29rem;
-      max-width: 29rem;
-    }
+  @media screen and (min-width: 1290px) {
+    min-width: 29rem;
+    max-width: 29rem;
   }
 `;
 // Header
