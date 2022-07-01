@@ -33,7 +33,6 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
       close: Number(x.c),
       volume: Number(x.v_base),
     }));
-
     yield put(klineData({ list: convertedData, market, interval: resolution }));
   } catch (error) {
     console.log(error);
