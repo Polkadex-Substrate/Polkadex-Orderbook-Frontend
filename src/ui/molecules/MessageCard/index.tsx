@@ -9,7 +9,12 @@ export const MessageCard = ({ icon, title, description }: Props) => {
   const color = getColor(icon as AlertTypes);
   return (
     <S.Wrapper>
-      <Icon name={icon} size="large" background={color} />
+      <Icon
+        name={icon}
+        size="large"
+        background={color}
+        color={icon === "Loading" ? "black" : "white"}
+      />
       <h3>{title}</h3>
       <p>{description}</p>
     </S.Wrapper>
