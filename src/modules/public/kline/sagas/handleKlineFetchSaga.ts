@@ -20,7 +20,6 @@ type KlineDbData = {
 
 export function* handleKlineFetchSaga(action: KlineFetch) {
   try {
-    const KlineData = [];
     const { market, resolution, from, to } = action.payload;
     const data: KlineDbData[] = yield call(() =>
       fetchKlineAsync(market, resolution, from, to)
@@ -34,8 +33,7 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
       close: Number(x.c),
       volume: Number(x.v_base),
     }));
-    KlineData.unshift(...convertedData);
-    yield put(klineData({ list: KlineData, market, interval: resolution }));
+    yield put(klineData({ list: convertedData, market, interval: resolution }));
   } catch (error) {
     console.log(error);
     yield put(
