@@ -102,14 +102,14 @@ export const FundsWrapper = styled.div<{ hasScroll?: boolean }>`
 `;
 
 export const FundsHeader = styled.div<{ hasLocked?: boolean }>`
-  ${({ hasLocked }) => css`
+  ${({ theme, hasLocked }) => css`
     display: grid;
     grid-template-columns: ${hasLocked ? "1fr 1fr 1fr" : "1fr 1fr"};
     grid-gap: 1rem;
     padding: 0.5rem 1rem;
     position: sticky;
     top: 0;
-    background: white;
+    background: ${theme.colors.tertiaryBackground};
     span {
       opacity: 0.4;
       :not(:first-child) {
@@ -179,5 +179,6 @@ export const CardIconWrapper = styled.div`
     margin-right: 0.4rem;
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.white};
   `}
 `;

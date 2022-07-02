@@ -179,7 +179,7 @@ export const SelectAccount = ({
 }: T.SelectAccountProps & HTMLAttributes<HTMLDivElement>) => {
   const shortAddress =
     address && address?.length >= 40
-      ? address.slice(0, 12) + "..." + address.slice(address.length - 12)
+      ? address.slice(0, 8) + "..." + address.slice(address.length - 8)
       : address;
 
   return (
