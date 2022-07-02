@@ -184,7 +184,7 @@ export const AvatarWrapper = styled.div``;
 
 export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    min-width: 25rem;
+    min-width: 22rem;
     background: ${theme.colors.white};
     border-radius: 1rem;
 

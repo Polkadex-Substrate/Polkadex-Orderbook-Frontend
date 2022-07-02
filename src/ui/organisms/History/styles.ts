@@ -20,6 +20,7 @@ export const Title = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem 0 2rem;
+    margin-bottom: 1rem;
     h2 {
       font-size: 1.6rem;
       font-weight: 550;
@@ -93,7 +94,6 @@ export const Card = styled.div`
     padding: 0.8rem;
     transition: box-shadow 0.2s ease-in-out;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 1rem;
     :hover {
       box-shadow: ${theme.shadows.tertiary};
     }
