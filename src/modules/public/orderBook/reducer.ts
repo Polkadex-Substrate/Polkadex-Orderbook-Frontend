@@ -108,7 +108,7 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
         bids = bids.filter((val) => !bidsDels.some((x) => x.price === val[0]));
       }
       // check if any updates need to be made to a prices in
-      else if (update.puts.length > 0) {
+      if (update.puts.length > 0) {
         const asksPuts = update.puts.filter((x) => x.side === "Ask");
         asksPuts.forEach((askPut) => {
           const idx = asks.findIndex((x) => x[0] === askPut.price);
