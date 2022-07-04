@@ -79,7 +79,7 @@ const Withdraw = () => {
                           onClick={() => {
                             setFieldValue("asset", asset);
                           }}>
-                          {asset.name}
+                          {asset?.name}
                         </S.SelectCard>
                       ))}
                     </S.SelectContainer>
