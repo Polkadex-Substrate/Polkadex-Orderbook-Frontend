@@ -54,7 +54,7 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
     case RECENT_TRADES_PUSH: {
       return {
         ...state,
-        list: [...state.list, action.payload],
+        list: sliceArray([...state.list, action.payload], defaultStorageLimit),
       };
     }
 
