@@ -44,7 +44,6 @@ const fetchOrders = async (
       main_account: proxy_acc,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
-      limit: limit,
     },
   });
   const orders = res.data.listOrderHistorybyMainAccount.items;
