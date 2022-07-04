@@ -44,6 +44,18 @@ export const ContainerActions = styled.div`
     align-items: center;
     justify-content: flex-end;
     gap: 0.2rem;
+    button {
+      border: 1px solid ${theme.colors.primary};
+      color: ${theme.colors.primary};
+      font-size: 1.2rem;
+      border-radius: 0.3rem;
+      white-space: nowrap;
+      padding: 0.3rem;
+      transition: background 0.5s ease-in-out;
+      :hover {
+        background: ${theme.colors.primary}22;
+      }
+    }
     ${Icon} {
       cursor: pointer;
       padding: 0.5rem;
