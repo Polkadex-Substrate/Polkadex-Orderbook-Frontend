@@ -9,7 +9,6 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
-import Withdraw from "@polkadex/orderbook-ui/organisms/Withdraw";
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
@@ -57,7 +56,7 @@ export const WalletTemplate = () => {
                   <Deposit />
                 </TabContent>
                 <TabContent>
-                  <Withdraw />
+                  <p style={{ padding: "2rem" }}> Coming Soon </p>
                 </TabContent>
               </S.Container>
               <History />
