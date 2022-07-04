@@ -8,7 +8,7 @@ import { DropdownContent, DropdownHeader } from "../../molecules";
 
 import * as S from "./styles";
 
-import { AvailableMessage, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 const initialState = [0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001];
 
@@ -24,26 +24,23 @@ const OrderBook = () => {
       <S.WrapperTitle>
         <Heading title="Order Book" />
         <S.ContainerTitle>
-          <AvailableMessage message="Soon">
-            <S.ContainerActions>
-              <OrderBookIcon
-                icon="OrderAsc"
-                filterState={filterState}
-                handleChange={handleChange}
-              />
-              <OrderBookIcon
-                icon="Order"
-                filterState={filterState}
-                handleChange={handleChange}
-              />
-              <OrderBookIcon
-                icon="OrderDesc"
-                filterState={filterState}
-                handleChange={handleChange}
-              />
-            </S.ContainerActions>
-          </AvailableMessage>
-
+          <S.ContainerActions>
+            <OrderBookIcon
+              icon="OrderAsc"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+            <OrderBookIcon
+              icon="Order"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+            <OrderBookIcon
+              icon="OrderDesc"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+          </S.ContainerActions>
           <Dropdown
             header={<DropdownHeader>{sizeState}</DropdownHeader>}
             direction="bottom"

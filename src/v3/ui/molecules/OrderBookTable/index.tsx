@@ -1,7 +1,3 @@
-import { useDispatch } from "react-redux";
-
-import { getRamdom } from "../OriginalChart";
-
 import * as S from "./styles";
 
 import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";

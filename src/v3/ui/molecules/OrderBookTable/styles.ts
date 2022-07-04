@@ -1,13 +1,13 @@
 import styled, { css } from "styled-components";
 
 import { Wrapper as EmptyData } from "@orderbook/v2/ui/molecules/EmptyData/styles";
-import { Table } from "@polkadex/orderbook/v2/ui/organisms/Orderbook/styles";
+import { Table, Body } from "@polkadex/orderbook/v2/ui/organisms/Orderbook/styles";
 
 export const Wrapper = styled.div<{ filterBy?: string }>`
   ${({ filterBy }) => css`
     flex: 1;
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: ${["OrderDesc"].includes(filterBy) ? "column-reverse" : "column"} nowrap;
     height: 100%;
     overflow: hidden;
     @media screen and (max-width: 700px) {
@@ -15,12 +15,14 @@ export const Wrapper = styled.div<{ filterBy?: string }>`
         padding: 3rem 1rem;
       }
     }
-
     ${Table}:first-child {
-      display: ${["OrderDesc", "Order"].includes(filterBy) ? "block" : "none"};
+      display: ${["OrderDesc", "Order"].includes(filterBy) ? "flex" : "none"};
+      ${Body} {
+        justify-content: ${["Order"].includes(filterBy) ? "flex-end" : "flex-start"};
+      }
     }
     ${Table}:last-child {
-      display: ${["OrderAsc", "Order"].includes(filterBy) ? "block" : "none"};
+      display: ${["OrderAsc", "Order"].includes(filterBy) ? "flex" : "none"};
     }
   `}
 `;
