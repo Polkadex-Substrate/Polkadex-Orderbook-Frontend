@@ -24,7 +24,7 @@ export const marketIdMap = {
 export const POLKADEX_ASSSET_ID = "-1";
 
 export const POLKADEX_ASSET = {
-  name: "POLKADEX",
+  name: "TEST PDEX",
   symbol: "PDEX",
   assetId: POLKADEX_ASSSET_ID,
 };
