@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import {
@@ -14,7 +14,11 @@ export function useTradeHistory() {
   const dispatch = useDispatch();
 
   const list = useReduxSelector(selectUserTrades);
-
+  const listSorted = useMemo(() => {
+    return list.sort((a, b) => {
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+    });
+  }, [list]);
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
@@ -24,7 +28,7 @@ export function useTradeHistory() {
   }, [userLoggedIn, currentMarket, dispatch]);
 
   return {
-    trades: list,
+    trades: listSorted,
     priceFixed: currentMarket?.price_precision,
     amountFixed: currentMarket?.amount_precision,
     userLoggedIn,

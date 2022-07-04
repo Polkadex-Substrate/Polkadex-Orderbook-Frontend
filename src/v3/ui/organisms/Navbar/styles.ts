@@ -68,10 +68,10 @@ export const Box = styled.div`
   `}
 `;
 
-export const VolumeHigh = styled.div<{ isNegative?: boolean }>`
-  ${({ theme, isNegative }) => css`
+export const VolumeHigh = styled.div`
+  ${({ theme }) => css`
     p {
-      color: ${isNegative ? theme.colors.primary : theme.colors.green};
+      color: inherit;
     }
   `}
 `;
@@ -79,7 +79,7 @@ export const VolumeHigh = styled.div<{ isNegative?: boolean }>`
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
     p {
-      color: ${isNegative ? theme.colors.primary : theme.colors.green};
+      color: inherit;
     }
   `}
 `;

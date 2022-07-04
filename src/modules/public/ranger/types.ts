@@ -87,6 +87,7 @@ export const orderbookTypes = {
     price: "u128",
     nonce: "u32",
   },
+  CancelOrderPayload: { id: "String" },
   TradingPair: {
     base_asset: "AssetId",
     quote_asset: "AssetId",

@@ -60,7 +60,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
           <Input
             label="Amount"
             icon="Amount"
-            inputInfo={baseTicker}
+            inputInfo={isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}
             fullWidth={true}
             type="text"
             placeholder="0.000000000"
@@ -76,17 +76,19 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
             </S.RangeWrapper>
           </AvailableMessage>
 
-          <Input
-            label="Total"
-            inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
-            fullWidth={true}
-            type="text"
-            defaultValue={total}
-            placeholder={isLimit ? "Total" : "Estimated Amount"}
-            autoComplete="off"
-            disabled={isOrderLoading}
-            readOnly
-          />
+          {isLimit && (
+            <Input
+              label="Total"
+              inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
+              fullWidth={true}
+              type="text"
+              defaultValue={total}
+              placeholder={isLimit ? "Total" : "Estimated Amount"}
+              autoComplete="off"
+              disabled={isOrderLoading}
+              readOnly
+            />
+          )}
 
           <ButtonStatus
             isSell={isSell}

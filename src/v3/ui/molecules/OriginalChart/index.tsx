@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { init, dispose } from "klinecharts";
 import { useDispatch } from "react-redux";
 import useResizeObserver from "@react-hook/resize-observer";
@@ -15,6 +15,7 @@ import {
   selectKline,
   selectLastKline,
   selectKlineLoading,
+  KlineEvent,
 } from "@polkadex/orderbook-modules";
 import {
   Icon,
@@ -23,6 +24,7 @@ import {
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
+import { fillKlineMissingData } from "@polkadex/orderbook/helpers/fillKlineMissingData";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -36,7 +38,10 @@ const OriginalChart = ({ chart, resolution }) => {
   const klines = useReduxSelector(selectKline);
   const lastKline = useReduxSelector(selectLastKline);
   const isLoading = useReduxSelector(selectKlineLoading);
-
+  const klinesFilled = useMemo(() => {
+    return fillKlineMissingData(klines, getResolutionInMilliSeconds(resolution));
+  }, [klines, resolution]);
+  console.log("klinesFilled", klinesFilled);
   useEffect(() => {
     if (currentMarket?.m) {
       dispatch(
@@ -71,7 +76,7 @@ const OriginalChart = ({ chart, resolution }) => {
      * @param {T.Props[]} dataList KLineData array
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
      */
-    chart?.current.applyNewData(klines);
+    chart?.current.applyNewData(klinesFilled);
 
     // Fill data
     return () => {

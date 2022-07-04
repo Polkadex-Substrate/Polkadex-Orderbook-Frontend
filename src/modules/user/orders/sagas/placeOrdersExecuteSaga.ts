@@ -15,7 +15,7 @@ import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/encla
 import {
   createOrderPayload,
   placeOrderToEnclave,
-  signOrderPayload,
+  signPayload,
 } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
@@ -43,7 +43,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         price,
         nonce
       );
-      const signature = signOrderPayload(api, keyringPair, payload);
+      const signature = signPayload(api, keyringPair, payload);
       const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
       console.log("placeOrderResult =>", res);
       yield put(orderExecuteData());

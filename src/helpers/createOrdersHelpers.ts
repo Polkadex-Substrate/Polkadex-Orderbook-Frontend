@@ -40,15 +40,35 @@ export const createOrderPayload = (
   const orderPayload = api.createType("OrderPayload", jsonPayload);
   return orderPayload;
 };
+
+export const createCancelOrderPayloadSigned = (
+  api: ApiPromise,
+  userKeyring: KeyringPair,
+  orderId: string,
+  base: Record<string, string>,
+  quote: Record<string, string>
+) => {
+  const orderIdCodec = api.createType("CancelOrderPayload", { id: orderId });
+  const tradingPair = api.createType("TradingPair", { base_asset: base, quote_asset: quote });
+  const signature = signPayload(api, userKeyring, orderIdCodec);
+  const payload = {
+    order_id: orderIdCodec,
+    account: userKeyring.address,
+    pair: tradingPair,
+    signature: signature,
+  };
+  return payload;
+};
+
 type SignedOrderPayload = {
   Sr25519: string;
 };
-export const signOrderPayload = (
+export const signPayload = (
   api: ApiPromise,
   userKeyring: KeyringPair,
-  orderPayload: Codec
+  payload: Codec
 ): SignedOrderPayload => {
-  const signatureU8 = userKeyring.sign(orderPayload.toU8a(), { withType: true });
+  const signatureU8 = userKeyring.sign(payload.toU8a(), { withType: true });
   const signature = u8aToHex(signatureU8);
   const multi_signature: any = api.createType("MultiSignature", signature);
   const multisignature = {
@@ -63,5 +83,21 @@ export const placeOrderToEnclave = async (
   multisignature: SignedOrderPayload
 ) => {
   const res = await enclaveClient.call("enclave_placeOrder", [order, multisignature]);
+  return res;
+};
+
+export const placeCancelOrderToEnclave = async (
+  enclaveClient: Client,
+  order_id: Codec,
+  account: string,
+  pair: any,
+  multisignature: SignedOrderPayload
+) => {
+  const res = await enclaveClient.call("enclave_cancelOrder", [
+    order_id,
+    account,
+    pair,
+    multisignature,
+  ]);
   return res;
 };
