@@ -3,7 +3,6 @@ import Link from "next/link";
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import { toCapitalize } from "@polkadex/web-helpers";
 import { useFunds } from "@polkadex/orderbook/v2/hooks";
 
 export const MyWallet = ({ hasLink = true }) => {
@@ -94,7 +93,7 @@ const Card = ({
           <Icon isToken name={ticker} color="black" size="large" />
         </S.CardIconWrapper>
         <S.CardInfo>
-          <p>{toCapitalize(name)}</p>
+          <p>{name}</p>
           <span>{ticker}</span>
         </S.CardInfo>
       </S.CardWrapper>
