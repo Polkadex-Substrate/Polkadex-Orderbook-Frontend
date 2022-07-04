@@ -6,6 +6,16 @@ export const Wrapper = styled.div`
     padding: 3rem 0;
     border-top-left-radius: 2rem;
     border-top-right-radius: 2rem;
+    animation: upAnimation 0.2s;
+    @keyframes upAnimation {
+      from {
+        transform: translateY(10rem);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
   `}
 `;
 
