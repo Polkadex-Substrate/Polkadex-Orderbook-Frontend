@@ -7,9 +7,7 @@ import {
   OrderCancelFetch,
 } from "..";
 
-import { formatPayload, signMessage } from "@polkadex/web-helpers";
 import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
-import { API } from "@polkadex/orderbook-config";
 import {
   createCancelOrderPayloadSigned,
   placeCancelOrderToEnclave,
