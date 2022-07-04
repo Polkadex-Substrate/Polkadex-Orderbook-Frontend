@@ -110,7 +110,7 @@ export const OrderbookPricing = ({ price, isPriceUp = false, hasFilter = true })
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
-        {/* <Icon name={isPriceUp ? "ArrowTop" : "SingleArrowBottom"} size="small" /> */}
+        <Icon name="SingleArrowBottom" size="extraSmall" />
         {price}
       </span>
     </S.PricingAsideLeft>
