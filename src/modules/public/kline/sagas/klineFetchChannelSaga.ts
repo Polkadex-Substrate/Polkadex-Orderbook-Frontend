@@ -14,7 +14,6 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       while (true) {
         const data = yield take(channel);
         console.log("candlestick update=>", data);
-        debugger;
         yield put(
           klinePush({
             kline: {
