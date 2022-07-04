@@ -161,12 +161,14 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
     span {
       font-size: 1.5rem;
       font-weight: 550;
-      color: ${isPriceUp ? theme.colors.green : theme.colors.primary};
+      color: ${isPriceUp ? theme.colors.primary : theme.colors.green};
+
       ${Icon} {
         transition: transform 0.2s ease-in-out;
         margin-right: 0.5rem;
+        transform: ${isPriceUp ? "rotate(0)" : "rotate(180deg)"};
         svg {
-          fill: ${isPriceUp ? theme.colors.green : theme.colors.primary};
+          fill: ${isPriceUp ? theme.colors.primary : theme.colors.green};
         }
       }
     }

@@ -4,11 +4,11 @@ import { selectCurrentMarket } from "../markets";
 export const selectRecentTrades = (state: RootState): PublicTrade[] =>
   state.public.recentTrades.list;
 
-export const selectCurrentTrade = (state: RootState): PublicTrade | undefined =>
-  state.public.recentTrades.currentTrade;
+export const selectCurrentTradePrice = (state: RootState): string =>
+  state.public.recentTrades.list.length > 0 ? state.public.recentTrades.list[0].price : "0";
 
-export const selectLastRecentTrade = (state: RootState): PublicTrade | undefined =>
-  state.public.recentTrades.lastTrade;
+export const selectLastTradePrice = (state: RootState): string =>
+  state.public.recentTrades.list.length > 1 ? state.public.recentTrades.list[1].price : "0";
 
 export const selectRecentTradesOfCurrentMarket = (state: RootState): PublicTrade[] => {
   const currentMarket = selectCurrentMarket(state);

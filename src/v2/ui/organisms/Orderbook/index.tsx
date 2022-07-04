@@ -106,19 +106,13 @@ export const OrderbookTable = ({ isSell = false, orders = [], lightMode }: T.Pro
   );
 };
 
-export const OrderbookPricing = ({
-  price,
-  priceInFiat,
-  isPriceUp = false,
-  hasFilter = true,
-}) => (
+export const OrderbookPricing = ({ price, isPriceUp = false, hasFilter = true }) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
-        {/* <Icon name={isPriceUp ? "SingleArrowTop" : "SingleArrowBottom"} size="extraSmall" /> */}
+        <Icon name="SingleArrowBottom" size="extraSmall" />
         {price}
       </span>
-      <p>${priceInFiat}</p>
     </S.PricingAsideLeft>
     {hasFilter && (
       <S.PricingAsideRight>
