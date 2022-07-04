@@ -1,4 +1,5 @@
 import { call, delay, put, select } from "redux-saga/effects";
+
 import {
   orderCancelData,
   orderCancelDataDelete,
@@ -7,28 +8,38 @@ import {
 } from "..";
 
 import { formatPayload, signMessage } from "@polkadex/web-helpers";
-import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
+import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 import { API } from "@polkadex/orderbook-config";
+import {
+  createCancelOrderPayloadSigned,
+  placeCancelOrderToEnclave,
+} from "@polkadex/orderbook/helpers/createOrdersHelpers";
+import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
+import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
 
-// TODO: CHANGE TO USE ENCLAVE WS TO CACNEL ORDER
 export function* cancelOrderSaga(action: OrderCancelFetch) {
-  return;
   try {
-    const { order_id } = action.payload;
+    const { orderId, base, quote } = action.payload;
+    const baseAsset = isAssetPDEX(base) ? { polkadex: null } : { asset: base };
+    const quoteAsset = isAssetPDEX(quote) ? { polkadex: null } : { asset: quote };
+    const client = yield select(selectEnclaveRpcClient);
+    const api = yield select(selectRangerApi);
     const { address, keyringPair } = yield select(selectUserInfo);
     if (address !== "" && keyringPair) {
-      const payload = createCancelOrderPayload(order_id, address);
-      const signature = yield call(() => signMessage(keyringPair, JSON.stringify(payload)));
-      const data = formatPayload(signature, payload);
-      const res = yield call(() => API.post(ordersOption)("/cancel_order", data));
-      if (res.FineWithMessage) {
-        yield put(orderCancelData());
-        console.log(res.Fine);
-        yield delay(1000);
-        yield put(orderCancelDataDelete());
-      } else {
-        throw new Error(res.Bad);
-      }
+      const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
+        api,
+        keyringPair,
+        orderId,
+        baseAsset,
+        quoteAsset
+      );
+      const res = yield call(() =>
+        placeCancelOrderToEnclave(client, order_id, account, pair, signature)
+      );
+      console.log("cancel order result =>", res);
+      yield put(orderCancelData());
+      yield delay(1000);
+      yield put(orderCancelDataDelete());
     }
   } catch (error) {
     console.log({ error });
@@ -43,7 +54,3 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     );
   }
 }
-const createCancelOrderPayload = (order_id: string, account: string) => ({
-  order_id: Number(order_id),
-  account,
-});

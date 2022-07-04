@@ -23,7 +23,9 @@ export interface OrderExecution {
   amount?: string;
 }
 export interface OrderCancellation {
-  order_id: string;
+  orderId: string;
+  base: string;
+  quote: string;
 }
 export interface OrderExecuteFetch {
   type: typeof ORDER_EXECUTE_FETCH;
