@@ -65,7 +65,7 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
           Privacy
         </a>
         <a href="#" target="_blank">
-          Termas and Conditions
+          Terms and Conditions
         </a>
         <p>Polkadex© 2021</p>
       </S.ContentFooter>
