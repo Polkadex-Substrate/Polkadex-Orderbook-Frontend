@@ -3,8 +3,9 @@ import styled, { css } from "styled-components";
 import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
 import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
 
-export const Main = styled.div`
+export const Main = styled.main`
   ${({ theme }) => css`
+    position: relative;
     background: ${theme.colors.primaryBackground};
     min-width: 100vw;
     min-height: 100vh;
