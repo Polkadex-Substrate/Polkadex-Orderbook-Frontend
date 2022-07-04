@@ -36,16 +36,18 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-          <Link href="/wallet">
-            <S.WrapperIcon>
-              <div>
-                <Icon name="Wallet" background="none" stroke="text" size="large" />
-              </div>
-              <div>
-                <S.Span>Wallets</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </Link>
+          {!isWallet && (
+            <Link href="/wallet">
+              <S.WrapperIcon>
+                <div>
+                  <Icon name="Wallet" background="none" stroke="text" size="large" />
+                </div>
+                <div>
+                  <S.Span>Wallets</S.Span>
+                </div>
+              </S.WrapperIcon>
+            </Link>
+          )}
         </S.Container>
         <S.Container>
           <AvailableMessage message="Soon">

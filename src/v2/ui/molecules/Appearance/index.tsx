@@ -10,7 +10,7 @@ export const Appearance = ({ navigateBack }: T.Props) => {
     <Navigation title="Appearance" onBack={navigateBack}>
       <Switcher
         title="Dark Mode"
-        description="Adjust the appearance of Polkadex to reduce  glare and give you eyes a break."
+        description="Adjust the appearance to reduce  glare and give your eyes a break."
         isActive={isDarkTheme}
         onChange={changeTheme}
       />

@@ -32,10 +32,13 @@ export const Input = styled.div`
       width: 100%;
       color: ${theme.colors.text};
     }
-    ${Icon} {
+    button {
       margin-left: 0.5rem;
       cursor: pointer;
       transition: opacity 0.3s ease-in-out;
+      background: ${theme.colors.text};
+      padding: 0.2rem;
+      border-radius: 0.4rem;
       :hover {
         opacity: 0.7;
       }
