@@ -51,7 +51,7 @@ const Navbar = ({ onOpenMarkets }) => {
           />
           <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
           <S.WrapperVolume>
-            <S.VolumeHigh isNegative>
+            <S.VolumeHigh>
               <span>24h High</span>
               <p>{high}</p>
             </S.VolumeHigh>
