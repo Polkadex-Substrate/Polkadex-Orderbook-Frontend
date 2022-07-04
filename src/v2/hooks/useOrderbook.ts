@@ -34,7 +34,7 @@ export function useOrderbook() {
   useEffect(() => {
     setIsPriceUp(isPriceUpValue);
     setPrevTradePrice(lastPrice);
-  }, [currentPrice, isPriceUpValue, lastPrice]);
+  }, [currentPrice, isPriceUpValue, lastPrice, currentMarket]);
 
   return {
     isPriceUp,
