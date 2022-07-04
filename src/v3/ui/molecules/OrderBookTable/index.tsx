@@ -14,16 +14,9 @@ const OrderBookTable = ({ lightMode = false, filterBy }) => {
   return (
     <S.Wrapper filterBy={filterBy}>
       <OrderbookTable orders={asks} isSell lightMode={lightMode} />
-      <AvailableMessage message="Soon">
-        {hasMarket && (
-          <OrderbookPricing
-            price={lastPriceValue}
-            isPriceUp={isPriceUp}
-            priceInFiat="0.00"
-            hasFilter={false}
-          />
-        )}
-      </AvailableMessage>
+      {hasMarket && (
+        <OrderbookPricing price={lastPriceValue} isPriceUp={isPriceUp} hasFilter={false} />
+      )}
       <OrderbookTable orders={bids} lightMode={lightMode} />
     </S.Wrapper>
   );
