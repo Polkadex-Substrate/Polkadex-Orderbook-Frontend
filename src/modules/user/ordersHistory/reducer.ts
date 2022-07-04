@@ -53,25 +53,25 @@ export const ordersHistoryReducer = (
     case ORDER_CHANNEL_UPDATE_DATA: {
       const openOrders = [...state.openOrders];
       const allOrders = [...state.list];
-      const payload = action.payload;
+      const newOrder = action.payload;
       // check if orderId is preseent in open Orders
-      let idx = openOrders.findIndex((order) => order.id === payload.id);
-      if (idx > 0 && payload.status === "OPEN") {
+      let idx = openOrders.findIndex((order) => order.id === newOrder.id);
+      if (idx >= 0 && newOrder.status === "OPEN") {
         // order present in open_order list, got partially filled
-        openOrders[idx] = payload;
-      } else if (idx > 0 && payload.status !== "OPEN") {
-        // order present in open_order list, got fully filled, remove from list
+        openOrders[idx] = newOrder;
+      } else if (idx >= 0 && newOrder.status !== "OPEN") {
+        // order present in open_order list, got fully filled or cancelled, remove from list
         openOrders.splice(idx, 1);
-      } else if (idx < 0 && payload.status === "OPEN") {
+      } else if (idx < 0 && newOrder.status === "OPEN") {
         // not present in open_orders list , ie order just created
-        openOrders.push(payload);
+        openOrders.push(newOrder);
       }
       // check if orderId is preseent in all Orders
-      idx = allOrders.findIndex((order) => order.id === payload.id);
-      if (idx > 0) {
-        allOrders[idx] = payload;
+      idx = allOrders.findIndex((order) => order.id === newOrder.id);
+      if (idx >= 0) {
+        allOrders[idx] = newOrder;
       } else {
-        allOrders.push(payload);
+        allOrders.push(newOrder);
       }
       return {
         ...state,
