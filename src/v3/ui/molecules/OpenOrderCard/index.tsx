@@ -1,23 +1,8 @@
-import moment from "moment";
-import { useDispatch } from "react-redux";
-
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { orderCancelFetch } from "@polkadex/orderbook-modules";
 
-const OpenOrderCard = ({
-  isSell,
-  orderSide,
-  orderType,
-  orderId,
-  base,
-  quote,
-  baseUnit,
-  quoteUnit,
-  data = [],
-}) => {
-  const dispatch = useDispatch();
+const OpenOrderCard = ({ isSell, orderType, baseUnit, quoteUnit, data = [] }) => {
   return (
     <S.Tr>
       <S.Td>
@@ -62,12 +47,6 @@ const OpenOrderCard = ({
         <S.Tag>Actions</S.Tag>
 
         <S.ContainerActions>
-          <Icon
-            name="Trash"
-            stroke="text"
-            size="medium"
-            onClick={() => dispatch(orderCancelFetch({ orderId, base, quote }))}
-          />
           <Icon name="Options" size="medium" background="none" />
         </S.ContainerActions>
       </S.Td>
