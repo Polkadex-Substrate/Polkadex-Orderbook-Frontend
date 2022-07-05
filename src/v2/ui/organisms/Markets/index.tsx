@@ -47,9 +47,6 @@ export const HeaderMarket = ({
         <S.HeaderInfo>
           <S.HeaderInfoContainer>
             <span>{pair}</span>
-            <S.HeaderInfoActions>
-              <Icon name="Exchange" />
-            </S.HeaderInfoActions>
           </S.HeaderInfoContainer>
           <p>{pairSymbol}</p>
         </S.HeaderInfo>
