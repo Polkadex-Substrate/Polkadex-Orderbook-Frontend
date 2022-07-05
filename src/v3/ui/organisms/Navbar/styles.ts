@@ -62,7 +62,7 @@ export const Box = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.2rem 1rem;
+    padding: 0.4rem 1rem;
     ${Button} {
       transition: background 0.5s ease-in-out;
       background: ${theme.colors.primary};

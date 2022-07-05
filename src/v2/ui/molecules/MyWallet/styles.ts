@@ -39,15 +39,29 @@ export const Content = styled.div<{ hasMargin?: boolean }>`
     /* max-height: 80vh; */
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};
+    @media screen and (max-width: 860px) {
+      height: fit-content;
+      max-height: 50vh;
+    }
   `}
 `;
 
-export const Title = styled.div`
-  ${({ theme }) => css`
+export const Title = styled.div<{ isWallet?: boolean }>`
+  ${({ theme, isWallet }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2rem 2rem 0 2rem;
+    @media screen and (max-width: 860px) {
+      cursor: ${isWallet ? "pointer" : "initial"};
+      padding-bottom: 2rem;
+    }
+
+    @media screen and (min-width: 860px) {
+      ${Icon} {
+        display: none;
+      }
+    }
     h3 {
       font-size: 1.6rem;
       font-weight: 550;

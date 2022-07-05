@@ -63,7 +63,7 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {!hasUser ? (
+      {hasUser ? (
         <S.Box>
           <S.Logo>
             <Logo size="Medium" href="/trading" />
@@ -76,6 +76,10 @@ const Navbar = ({ onOpenMarkets }) => {
         </S.Box>
       ) : (
         <S.Box>
+          <S.Logo>
+            <Logo size="Medium" href="/trading" />
+          </S.Logo>
+
           <Button
             onClick={() => router.push("/login")}
             color="white"

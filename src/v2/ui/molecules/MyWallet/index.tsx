@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 
 import * as S from "./styles";
 
@@ -21,57 +22,76 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-export const WalletContent = ({ title, locked = true, hasLink = true, hasMargin = false }) => {
+export const WalletContent = ({
+  title,
+  locked = true,
+  hasLink = true,
+  hasMargin = false,
+  isWallet = true,
+}) => {
+  const [state, setState] = useState(true);
   const { searchState, handleChange, balances } = useFunds();
+
+  const props = isWallet
+    ? {
+        onClick: () => setState(!state),
+        isWallet,
+      }
+    : {
+        isWallet,
+      };
 
   return (
     <S.Content hasMargin={hasMargin}>
-      <S.Title>
+      <S.Title {...props}>
         <h3>{title}</h3>
         {hasLink && <Link href="/wallet">Deposit/Withdraw</Link>}
+        {isWallet && <Icon name="ArrowBottom" stroke="text" />}
       </S.Title>
-      <S.Box>
-        <S.Search>
-          <Icon name="Search" stroke="text" size="extraSmall" />
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchState}
-            onChange={handleChange}
-          />
-        </S.Search>
-        {!!balances.length && (
-          <S.FundsWrapper hasScroll={balances.length > 5}>
-            <S.FundsHeader hasLocked={locked}>
-              <span>
-                Name <Icon name="IncreaseFilter" size="small" />
-              </span>
-              {locked && (
+      {isWallet && state && (
+        <S.Box>
+          <S.Search>
+            <Icon name="Search" stroke="text" size="extraSmall" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchState}
+              onChange={handleChange}
+            />
+          </S.Search>
+          {!!balances.length && (
+            <S.FundsWrapper hasScroll={balances.length > 5}>
+              <S.FundsHeader hasLocked={locked}>
                 <span>
-                  Available <Icon name="IncreaseFilter" size="small" />
+                  Name <Icon name="IncreaseFilter" size="small" />
                 </span>
-              )}
+                {locked && (
+                  <span>
+                    Available <Icon name="IncreaseFilter" size="small" />
+                  </span>
+                )}
 
-              <span>
-                Locked <Icon name="IncreaseFilter" size="small" />
-              </span>
-            </S.FundsHeader>
-            <S.FundsContent>
-              {balances?.map((balance, i) => (
-                <Card
-                  key={i}
-                  name={balance.name}
-                  ticker={balance.symbol}
-                  amount={Number(balance.free_balance) || 0}
-                  lockedAmount={Number(balance.reserved_balance) || 0}
-                  locked={locked}
-                  id={balance.symbol}
-                />
-              ))}
-            </S.FundsContent>
-          </S.FundsWrapper>
-        )}
-      </S.Box>
+                <span>
+                  Locked <Icon name="IncreaseFilter" size="small" />
+                </span>
+              </S.FundsHeader>
+              <S.FundsContent>
+                {balances?.map((balance, i) => (
+                  <Card
+                    key={i}
+                    name={balance.name}
+                    ticker={balance.symbol}
+                    amount={Number(balance.free_balance) || 0}
+                    lockedAmount={Number(balance.reserved_balance) || 0}
+                    locked={locked}
+                    id={balance.symbol}
+                  />
+                ))}
+              </S.FundsContent>
+            </S.FundsWrapper>
+          )}
+        </S.Box>
+      )}
     </S.Content>
   );
 };
