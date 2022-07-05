@@ -10,6 +10,7 @@ import {
   selectUserLoggedIn,
   selectOpenOrders,
   userOpenOrdersHistoryFetch,
+  selectUserSession,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -23,13 +24,14 @@ export function useOrderHistory() {
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userSession = useReduxSelector(selectUserSession);
 
   useEffect(() => {
     if (userLoggedIn) {
       dispatch(userOrdersHistoryFetch());
       dispatch(userOpenOrdersHistoryFetch());
     }
-  }, [userLoggedIn, dispatch]);
+  }, [userLoggedIn, dispatch, userSession]);
 
   return {
     orders: list,

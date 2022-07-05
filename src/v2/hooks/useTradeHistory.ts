@@ -7,6 +7,7 @@ import {
   selectUserTrades,
   userTradesFetch,
   selectTradesLoading,
+  selectUserSession,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -22,10 +23,11 @@ export function useTradeHistory() {
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userSession = useReduxSelector(selectUserSession);
 
   useEffect(() => {
     if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+  }, [userLoggedIn, currentMarket, dispatch, userSession]);
 
   return {
     trades: listSorted,
