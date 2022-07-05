@@ -51,7 +51,7 @@ export const Wrapper = styled.nav`
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
     transition-delay: initial;
     transition-property: initial;
-    z-index: 999;
+    z-index: 28;
     box-shadow: ${theme.shadows.tertiary};
 
     @media screen and (min-width: 590px) {

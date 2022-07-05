@@ -28,6 +28,7 @@ export const Header = styled.div`
   align-items: center;
   cursor: pointer;
   min-width: 25rem;
+  width: 100%;
 `;
 
 export const HeaderAsideLeft = styled.div`

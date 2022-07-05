@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 
 import NavbarItem from "../../molecules/NavbarItem";
+import { Logo } from "../../molecules";
 
 import * as S from "./styles";
 
@@ -62,11 +63,16 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {hasUser ? (
+      {!hasUser ? (
         <S.Box>
-          {/* <Notifications /> */}
-          <MyWallet />
-          <MyAccount />
+          <S.Logo>
+            <Logo size="Medium" href="/trading" />
+          </S.Logo>
+          <S.BoxWrapper>
+            {/* <Notifications /> */}
+            <MyWallet />
+            <MyAccount />
+          </S.BoxWrapper>
         </S.Box>
       ) : (
         <S.Box>
