@@ -4,7 +4,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const DropdownHeader = ({ children }) => (
   <S.Wrapper>
-    <div>{children}</div>
+    <S.Child>{children}</S.Child>
     <S.Content>
       <Icons.ArrowBottom />
     </S.Content>
