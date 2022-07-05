@@ -9,6 +9,7 @@ export const Label = styled.span`
     color: #8ba1be;
     opacity: 0.7;
     font-weight: 500;
+    white-space: nowrap;
   `}
 `;
 export const Info = styled.p<Partial<NavbarItemPops>>`

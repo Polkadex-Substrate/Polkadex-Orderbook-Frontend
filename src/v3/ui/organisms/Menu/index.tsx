@@ -13,10 +13,13 @@ export type MenuProps = {
 };
 const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
+
   return (
     <S.Wrapper>
       <S.WrapperLinks>
-        <Logo size="Medium" href="/trading" />
+        <S.Logo>
+          <Logo size="Medium" href="/trading" />
+        </S.Logo>
         <S.Container>
           {!isWallet && (
             <S.WrapperIcon onClick={handleChange}>

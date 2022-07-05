@@ -26,8 +26,8 @@ export const Header = styled.div<{ isActive?: boolean }>`
   `}
 `;
 
-export const Content = styled.div<{ hasMargin?: boolean }>`
-  ${({ theme, hasMargin }) => css`
+export const Content = styled.div<{ hasMargin?: boolean; isWallet?: boolean }>`
+  ${({ theme, hasMargin, isWallet }) => css`
     background: ${theme.colors.tertiaryBackground};
     min-width: 35rem;
     height: auto;
@@ -35,19 +35,40 @@ export const Content = styled.div<{ hasMargin?: boolean }>`
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
     display: flex;
+    max-height: ${!isWallet ? "92vh" : "95vh"};
     flex-direction: column;
-    /* max-height: 80vh; */
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};
+    ${isWallet &&
+    css`
+      @media screen and (max-width: 860px) {
+        height: fit-content;
+        max-height: 50vh;
+      }
+    `}
   `}
 `;
 
-export const Title = styled.div`
-  ${({ theme }) => css`
+export const Title = styled.div<{ isWallet?: boolean }>`
+  ${({ theme, isWallet }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2rem 2rem 0 2rem;
+    ${isWallet &&
+    css`
+      @media screen and (max-width: 860px) {
+        cursor: ${isWallet ? "pointer" : "initial"};
+        padding-bottom: 2rem;
+      }
+
+      @media screen and (min-width: 860px) {
+        ${Icon} {
+          display: none;
+        }
+      }
+    `}
+
     h3 {
       font-size: 1.6rem;
       font-weight: 550;
@@ -66,11 +87,16 @@ export const Title = styled.div`
   `}
 `;
 
-export const Box = styled.div`
-  padding: 1rem;
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
+export const Box = styled.div<{ isVisible?: boolean }>`
+  ${({ isVisible }) => css`
+    padding: 1rem;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    @media screen and (max-width: 860px) {
+      display: ${isVisible ? "flex" : "none"};
+    }
+  `}
 `;
 
 export const Search = styled.div`
@@ -110,6 +136,7 @@ export const FundsHeader = styled.div<{ hasLocked?: boolean }>`
     position: sticky;
     top: 0;
     background: ${theme.colors.tertiaryBackground};
+    z-index: 2;
     span {
       opacity: 0.4;
       :not(:first-child) {
