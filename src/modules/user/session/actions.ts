@@ -31,7 +31,7 @@ export const userSessionData = (payload: UserSessionPayload): UserSessionData =>
   payload,
 });
 
-export const userTradesError = (error: CommonError): UserSessionError => ({
+export const userSessionError = (error: CommonError): UserSessionError => ({
   type: SESSION_ERROR,
   error,
 });

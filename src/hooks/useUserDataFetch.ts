@@ -9,6 +9,7 @@ import {
 } from "../modules/user/balances";
 import { userOrderUpdatesChannelFetch } from "../modules/user/ordersHistory";
 import { selectUserInfo } from "../modules/user/profile";
+import { userSessionFetch } from "../modules/user/session";
 import { transactionChannelFetch } from "../modules/user/transactions";
 
 import { useReduxSelector } from "./useReduxSelector";
@@ -26,6 +27,7 @@ export const useUserDataFetch = () => {
 
   useEffect(() => {
     if (user.address) {
+      dispatch(userSessionFetch())
       dispatch(balanceTradeChannelFetch());
       dispatch(balanceTransferChannelFetch());
       dispatch(userOrderUpdatesChannelFetch());

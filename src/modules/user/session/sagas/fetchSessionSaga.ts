@@ -1,5 +1,5 @@
 import { put } from "redux-saga/effects";
-import { userTradesError } from "..";
+import { userSessionError } from "..";
 import { sendError } from "@polkadex/orderbook-modules";
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { userSessionData } from "../actions";
@@ -10,7 +10,6 @@ export function* fetchSessionSaga() {
     const dateFrom = subtractMonths(1).toISOString();
     const dateTo = new Date().toISOString();
     yield put(userSessionData({dateFrom, dateTo}))
-
   } catch (error) {
     console.log(error);
     yield put(
@@ -18,7 +17,7 @@ export function* fetchSessionSaga() {
         error,
         processingType: "alert",
         extraOptions: {
-          actionError: userTradesError,
+          actionError: userSessionError,
         },
       })
     );
