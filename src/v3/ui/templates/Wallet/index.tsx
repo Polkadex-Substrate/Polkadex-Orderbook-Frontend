@@ -31,7 +31,7 @@ export const WalletTemplate = () => {
       <Menu isWallet />
 
       <S.Main>
-        <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />
+        <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} isWallet />
         <Tabs>
           <S.Content>
             <S.ContainerWrapper>
