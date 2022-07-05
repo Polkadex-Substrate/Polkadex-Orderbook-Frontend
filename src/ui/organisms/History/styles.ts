@@ -145,6 +145,7 @@ export const HeaderFiltersContent = styled.div`
   ${({ theme }) => css`
     padding: 1rem;
     background: ${theme.colors.white};
+
     border-radius: 0.5rem;
   `}
 `;
@@ -157,6 +158,7 @@ export const HeaderFilters = styled.div<{ isHeader?: boolean }>`
     opacity: 1;
     transition: opacity 0.5s;
     span {
+      color: ${isHeader ? theme.colors.text : theme.colors.black};
       margin-right: 0.5rem;
     }
     ${!isHeader &&
