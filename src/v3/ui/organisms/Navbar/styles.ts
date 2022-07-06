@@ -15,6 +15,7 @@ export const Wrapper = styled.section`
   justify-content: space-between;
   flex-wrap: nowrap;
   margin-bottom: 1rem;
+  gap: 1rem;
 `;
 
 export const ContainerPair = styled.div`
@@ -22,10 +23,6 @@ export const ContainerPair = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-right: 2rem;
-  ${customMedia.lessThan("custom")`
-      margin-right:1rem;
-    `}
 `;
 
 export const ContainerInfo = styled.div`
@@ -103,6 +100,8 @@ export const BoxWrapper = styled.div`
 
 export const VolumeHigh = styled.div`
   ${({ theme }) => css`
+    align-items: center;
+
     p {
       color: inherit;
     }
@@ -111,6 +110,7 @@ export const VolumeHigh = styled.div`
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
+    align-items: baseline;
     p {
       color: inherit;
     }
@@ -119,6 +119,7 @@ export const VolumeLow = styled.div<{ isNegative?: boolean }>`
 
 export const WrapperVolume = styled.div`
   span {
+    display: block;
     margin-right: 1rem;
     font-size: 1.1rem;
     color: #8ba1be;

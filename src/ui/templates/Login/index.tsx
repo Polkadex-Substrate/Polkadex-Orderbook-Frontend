@@ -67,7 +67,7 @@ export const LoginTemplate = () => {
         onClose={() => setState(false)}
       />
       <S.Wrapper>
-        <HeaderBack />
+        <HeaderBack hasArrow={false} />
         <S.Container>
           <S.AsideLeft>
             <S.Title>

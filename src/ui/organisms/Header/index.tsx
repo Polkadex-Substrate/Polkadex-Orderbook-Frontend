@@ -67,12 +67,12 @@ export const Header = ({ withInfo = true }) => {
   );
 };
 
-export const HeaderBack = () => {
+export const HeaderBack = ({ hasArrow = true }) => {
   const router = useRouter();
   return (
     <S.HeaderBack>
       <S.HeaderBackContainer onClick={() => router.push("/")}>
-        <Icon size="large" name="Return" background="none" />
+        {hasArrow && <Icon size="large" name="Return" background="none" />}
         <Polkadex />
       </S.HeaderBackContainer>
     </S.HeaderBack>

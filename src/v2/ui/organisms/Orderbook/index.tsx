@@ -22,13 +22,7 @@ const Orderbook = () => {
       <S.Content>
         <OrderbookTable orders={asks} isSell />
         <AvailableMessage message="Soon">
-          {hasMarket && (
-            <OrderbookPricing
-              price={lastPriceValue}
-              isPriceUp={isPriceUp}
-              priceInFiat="0.00"
-            />
-          )}
+          {hasMarket && <OrderbookPricing price={lastPriceValue} isPriceUp={isPriceUp} />}
         </AvailableMessage>
         <OrderbookTable orders={bids} />
       </S.Content>

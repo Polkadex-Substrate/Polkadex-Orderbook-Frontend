@@ -18,6 +18,7 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
     handleMarketsTabsSelected,
     currentTickerImg,
     currentTickerName,
+    fieldValue,
   } = useMarkets();
 
   return (
@@ -25,9 +26,13 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
-      <Filters />
+      <Filters searchField={fieldValue.searchFieldValue} handleChange={handleFieldChange} />
       <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
-      <Footer tickers={marketTickers} />
+      <Footer
+        tickers={marketTickers}
+        changeMarket={handleMarketsTabsSelected}
+        tabField={fieldValue.marketsTabsSelected}
+      />
     </S.Main>
   );
 };
@@ -47,9 +52,6 @@ export const HeaderMarket = ({
         <S.HeaderInfo>
           <S.HeaderInfoContainer>
             <span>{pair}</span>
-            <S.HeaderInfoActions>
-              <Icon name="Exchange" />
-            </S.HeaderInfoActions>
           </S.HeaderInfoContainer>
           <p>{pairSymbol}</p>
         </S.HeaderInfo>
@@ -59,26 +61,33 @@ export const HeaderMarket = ({
           <SparklinesLine color="#E6007A" />
         </Sparklines>
       </S.HeaderAsideCenter>
-      <S.HeaderAsideRight>
-        <Icon name="ArrowBottom" stroke="text" />
-      </S.HeaderAsideRight>
     </S.Header>
   );
 };
 
-const Filters = () => (
-  <S.Title>
-    <h2>Markets</h2>
-    <S.TitleActions>
-      <S.TitleActionCard>
-        <Icon name="Search" size="extraSmall" stroke="text" />
-      </S.TitleActionCard>
-      <S.TitleActionCard>
-        <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
-      </S.TitleActionCard>
-    </S.TitleActions>
-  </S.Title>
-);
+const Filters = ({ searchField, handleChange }) => {
+  return (
+    <S.Title>
+      <h2>Markets</h2>
+      <S.TitleActions>
+        <S.Search>
+          <button>
+            <Icon name="Search" size="extraSmall" stroke="text" color="text" />
+          </button>
+          <input
+            type="text"
+            placeholder="Search Menu.."
+            value={searchField}
+            onChange={handleChange}
+          />
+        </S.Search>
+        <S.Favorite>
+          <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
+        </S.Favorite>
+      </S.TitleActions>
+    </S.Title>
+  );
+};
 
 const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
   tokens = [],
@@ -132,32 +141,28 @@ const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => 
   </S.Card>
 );
 
-const Footer: FC<{ tickers: string[] }> = ({ tickers }) => (
+const Footer: FC<{
+  tickers: string[];
+  changeMarket: (value: string) => void;
+  tabField: string;
+}> = ({ tickers, changeMarket, tabField }) => (
   <S.Footer>
     {!!tickers.length &&
-      tickers.map((ticker) => <S.FooterCard key={ticker}>{ticker}</S.FooterCard>)}
-    <S.FooterCard>DOT</S.FooterCard>
-    <S.FooterCard>
+      tickers.map((ticker) => (
+        <S.FooterCard
+          isActive={tabField === ticker}
+          onClick={() => changeMarket(ticker)}
+          key={ticker}>
+          {ticker}
+        </S.FooterCard>
+      ))}
+    {/* <S.FooterCard>
       <Dropdown header="ALTS">
         <p>ETH</p>
         <p>SOL</p>
         <p>DOGE</p>
       </Dropdown>
-    </S.FooterCard>
-    <S.FooterCard>
-      <Dropdown header="FIAT">
-        <p>USDC</p>
-        <p>CUSD</p>
-        <p>EURT</p>
-      </Dropdown>
-    </S.FooterCard>
-    <S.FooterCard>
-      <Dropdown header="ZONES">
-        <p>DEFI</p>
-        <p>FINANCE</p>
-        <p>NFT</p>
-      </Dropdown>
-    </S.FooterCard>
+    </S.FooterCard> */}
   </S.Footer>
 );
 export const MarketsSkeleton = () => <Skeleton height="100%" width="100%" />;
