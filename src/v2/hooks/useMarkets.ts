@@ -41,12 +41,6 @@ export function useMarkets() {
    * @returns - The single market information
    */
 
-  // const getTickerValue = (value: DefaultTickers) =>
-  //   (marketTickers[currentMarket?.id] || defaultTickers)[value];
-
-  // const bidUnit = currentMarket?.quote_unit?.toUpperCase();
-  // const isPositive = /\+/.test(getTickerValue("price_change_percent"));
-
   /**
    * Filter markets by tokens name
    *
@@ -100,7 +94,10 @@ export function useMarkets() {
         isFavourite: cookieData?.favouriteMarkets?.includes(item.id),
       };
     });
-    const allTicketsFilters = allTickets.reduce((pv, cv) => {
+    const allFavoriteFilters = allTickets.filter((value) =>
+      fieldValue.showFavourite ? value.isFavourite === fieldValue.showFavourite : value
+    );
+    const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
       const [_, quote] = cv.name.toLowerCase().split("/");
       if (
         cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
@@ -112,6 +109,7 @@ export function useMarkets() {
       }
       return pv;
     }, initialMarkets);
+
     return allTicketsFilters;
   };
 

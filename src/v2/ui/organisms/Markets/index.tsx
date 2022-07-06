@@ -106,30 +106,28 @@ const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite
 const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
   tokens = [],
   changeMarket,
-}) => {
-  return (
-    <S.Content>
-      <S.ContainerTitle></S.ContainerTitle>
-      <S.ContainerWrapper>
-        {!!tokens.length &&
-          tokens.map((token) => (
-            <Card
-              key={token.id}
-              id={token.id}
-              pair={token.name}
-              tokenTicker={token.tokenTickerName}
-              vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
-              price={Decimal.format(Number(token.last), token.price_precision, ",")}
-              fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
-              change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
-              changeMarket={() => changeMarket(token.name)}
-              isFavourite={token.isFavourite}
-            />
-          ))}
-      </S.ContainerWrapper>
-    </S.Content>
-  );
-};
+}) => (
+  <S.Content>
+    <S.ContainerTitle></S.ContainerTitle>
+    <S.ContainerWrapper>
+      {!!tokens.length &&
+        tokens.map((token) => (
+          <Card
+            key={token.id}
+            id={token.id}
+            pair={token.name}
+            tokenTicker={token.tokenTickerName}
+            vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
+            price={Decimal.format(Number(token.last), token.price_precision, ",")}
+            fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
+            change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
+            changeMarket={() => changeMarket(token.name)}
+            isFavourite={token.isFavourite}
+          />
+        ))}
+    </S.ContainerWrapper>
+  </S.Content>
+);
 
 const Card = ({
   id,
