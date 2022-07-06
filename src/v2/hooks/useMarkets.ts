@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import cookie from "cookie";
 
 import {
   Market,
@@ -16,12 +17,14 @@ export type InitialMarkets = {
   volume: string | number;
   price_change_percent: string;
   price_change_percent_num: number;
+  isFavourite?: boolean;
 } & Market;
 
 export function useMarkets() {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
+    showFavourite: false,
   });
 
   const dispatch = useDispatch();
@@ -29,6 +32,7 @@ export function useMarkets() {
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
+  const cookieData = cookie.parse(document.cookie);
 
   /**
    * @description Get the single market information for the current market
@@ -58,6 +62,9 @@ export function useMarkets() {
    */
   const handleMarketsTabsSelected = (value: string) =>
     setFieldValue({ ...fieldValue, marketsTabsSelected: value });
+
+  const handleShowFavourite = () =>
+    setFieldValue({ ...fieldValue, showFavourite: !fieldValue.showFavourite });
 
   /**
    * @description Change to selected market
@@ -90,6 +97,7 @@ export function useMarkets() {
         price_change_percent_num: Number.parseFloat(
           (ticker || defaultTickers).priceChangePercent24Hr
         ),
+        isFavourite: cookieData?.favouriteMarkets?.includes(item.id),
       };
     });
     const allTicketsFilters = allTickets.reduce((pv, cv) => {
@@ -128,6 +136,7 @@ export function useMarkets() {
     handleFieldChange,
     handleMarketsTabsSelected,
     handleChangeMarket,
+    handleShowFavourite,
     marketTokens,
     marketTickers,
     fieldValue,

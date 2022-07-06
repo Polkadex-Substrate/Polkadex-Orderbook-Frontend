@@ -20,6 +20,7 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
     currentTickerImg,
     currentTickerName,
     fieldValue,
+    handleShowFavourite,
   } = useMarkets();
 
   return (
@@ -27,7 +28,12 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
-      <Filters searchField={fieldValue.searchFieldValue} handleChange={handleFieldChange}  />
+      <Filters
+        searchField={fieldValue.searchFieldValue}
+        handleChange={handleFieldChange}
+        handleShowFavourite={handleShowFavourite}
+        showFavourite={fieldValue.showFavourite}
+      />
       <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
       <Footer
         tickers={marketTickers}
@@ -66,7 +72,7 @@ export const HeaderMarket = ({
   );
 };
 
-const Filters = ({ searchField, handleChange }) => {
+const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite }) => {
   return (
     <S.Title>
       <h2>Markets</h2>
@@ -83,7 +89,14 @@ const Filters = ({ searchField, handleChange }) => {
           />
         </S.Search>
         <S.Favorite>
-          <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
+          <button type="button" onClick={handleShowFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={showFavourite ? "orange" : "text"}
+              color={showFavourite ? "orange" : "secondaryBackground"}
+            />
+          </button>
         </S.Favorite>
       </S.TitleActions>
     </S.Title>
@@ -110,6 +123,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
               fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
               change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
               changeMarket={() => changeMarket(token.name)}
+              isFavourite={token.isFavourite}
             />
           ))}
       </S.ContainerWrapper>
@@ -117,8 +131,18 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
   );
 };
 
-const Card = ({ id, pair, tokenTicker, vol, price, fiat, change, changeMarket }) => {
-  const { handleChangeFavourite, isFavourite } = useCookieHook(id);
+const Card = ({
+  id,
+  pair,
+  tokenTicker,
+  vol,
+  price,
+  fiat,
+  change,
+  changeMarket,
+  isFavourite,
+}) => {
+  const { handleChangeFavourite } = useCookieHook(id);
   return (
     <S.Card onClick={changeMarket}>
       <S.CardInfo>
