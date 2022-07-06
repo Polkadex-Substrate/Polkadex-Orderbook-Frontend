@@ -15,6 +15,7 @@ export const Wrapper = styled.section`
   justify-content: space-between;
   flex-wrap: nowrap;
   margin-bottom: 1rem;
+  gap: 1rem;
 `;
 
 export const ContainerPair = styled.div`
@@ -22,10 +23,6 @@ export const ContainerPair = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-right: 2rem;
-  ${customMedia.lessThan("custom")`
-      margin-right:1rem;
-    `}
 `;
 
 export const ContainerInfo = styled.div`

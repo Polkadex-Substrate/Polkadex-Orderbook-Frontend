@@ -6,7 +6,6 @@ import {
   Market,
   selectCurrentMarket,
   selectMarkets,
-  selectCurrentMarketTickers,
   setCurrentMarket,
   defaultTickers,
   selectMarketTickers,
@@ -22,13 +21,12 @@ export type InitialMarkets = {
 export function useMarkets() {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
-    marketsTabsSelected: "",
+    marketsTabsSelected: "All",
   });
 
   const dispatch = useDispatch();
   const router = useRouter();
   const allMarketTickers = useReduxSelector(selectMarketTickers);
-  const currentMarketTicker = useReduxSelector(selectCurrentMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
 
@@ -95,7 +93,7 @@ export function useMarkets() {
       };
     });
     const allTicketsFilters = allTickets.reduce((pv, cv) => {
-      const [quote] = cv.name.toLowerCase().split("/");
+      const [_, quote] = cv.name.toLowerCase().split("/");
       if (
         cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
