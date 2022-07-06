@@ -5,12 +5,12 @@ export const chartType = [
   {
     key: "candle_solid",
     name: "Candles Solid",
-    icon: "Candle",
+    icon: "CandleStroke",
   },
   {
     key: "candle_stroke",
     name: "Candles Stroke",
-    icon: "CandleStroke",
+    icon: "Candle",
   },
   {
     key: "area",
