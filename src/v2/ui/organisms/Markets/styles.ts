@@ -205,7 +205,6 @@ export const CardInfoActions = styled.div`
   :hover {
     svg {
       transition: all 0.4s ease-in-out;
-      fill: orange;
       stroke: orange;
     }
   }

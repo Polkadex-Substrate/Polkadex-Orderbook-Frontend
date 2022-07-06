@@ -8,6 +8,7 @@ import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
 import { Icon, Dropdown, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
+import { useCookieHook } from "@polkadex/orderbook-hooks";
 
 const Markets = ({ isFull = false, hasMargin = false }) => {
   const {
@@ -26,7 +27,7 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
-      <Filters searchField={fieldValue.searchFieldValue} handleChange={handleFieldChange} />
+      <Filters searchField={fieldValue.searchFieldValue} handleChange={handleFieldChange}  />
       <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
       <Footer
         tickers={marketTickers}
@@ -101,6 +102,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
           tokens.map((token) => (
             <Card
               key={token.id}
+              id={token.id}
               pair={token.name}
               tokenTicker={token.tokenTickerName}
               vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
@@ -115,31 +117,41 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
   );
 };
 
-const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => (
-  <S.Card onClick={changeMarket}>
-    <S.CardInfo>
-      <S.CardInfoActions>
-        <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
-      </S.CardInfoActions>
-      <S.CardInfoContainer>
-        <S.CardToken>
-          <Icon isToken name={tokenTicker} size="large" color="text" />
-        </S.CardToken>
-        <S.CardInfoWrapper>
-          <span>{pair}</span>
-          <p>Vol:{vol}</p>
-        </S.CardInfoWrapper>
-      </S.CardInfoContainer>
-    </S.CardInfo>
-    <S.CardPricing>
-      <span>{price}</span>
-      <p>{fiat}</p>
-    </S.CardPricing>
-    <S.CardChange isNegative={isNegative(change.toString())}>
-      <span>{change}</span>
-    </S.CardChange>
-  </S.Card>
-);
+const Card = ({ id, pair, tokenTicker, vol, price, fiat, change, changeMarket }) => {
+  const { handleChangeFavourite, isFavourite } = useCookieHook(id);
+  return (
+    <S.Card onClick={changeMarket}>
+      <S.CardInfo>
+        <S.CardInfoActions>
+          <button type="button" onClick={handleChangeFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={isFavourite ? "orange" : "text"}
+              color={isFavourite ? "orange" : "secondaryBackground"}
+            />
+          </button>
+        </S.CardInfoActions>
+        <S.CardInfoContainer>
+          <S.CardToken>
+            <Icon isToken name={tokenTicker} size="large" color="text" />
+          </S.CardToken>
+          <S.CardInfoWrapper>
+            <span>{pair}</span>
+            <p>Vol:{vol}</p>
+          </S.CardInfoWrapper>
+        </S.CardInfoContainer>
+      </S.CardInfo>
+      <S.CardPricing>
+        <span>{price}</span>
+        <p>{fiat}</p>
+      </S.CardPricing>
+      <S.CardChange isNegative={isNegative(change.toString())}>
+        <span>{change}</span>
+      </S.CardChange>
+    </S.Card>
+  );
+};
 
 const Footer: FC<{
   tickers: string[];
