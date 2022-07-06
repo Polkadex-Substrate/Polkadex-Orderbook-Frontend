@@ -100,6 +100,8 @@ export const BoxWrapper = styled.div`
 
 export const VolumeHigh = styled.div`
   ${({ theme }) => css`
+    align-items: center;
+
     p {
       color: inherit;
     }
@@ -108,6 +110,7 @@ export const VolumeHigh = styled.div`
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
+    align-items: baseline;
     p {
       color: inherit;
     }
@@ -116,6 +119,7 @@ export const VolumeLow = styled.div<{ isNegative?: boolean }>`
 
 export const WrapperVolume = styled.div`
   span {
+    display: block;
     margin-right: 1rem;
     font-size: 1.1rem;
     color: #8ba1be;
