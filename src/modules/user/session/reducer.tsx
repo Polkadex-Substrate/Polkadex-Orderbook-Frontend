@@ -17,13 +17,14 @@ export const sessionReducer = (state = initialState, action: SessionAction) => {
       return {
         ...state,
       };
-    case SESSION_DATA:
+    case SESSION_DATA: {
       const { dateFrom, dateTo } = action.payload;
       return {
         ...state,
         dateTo,
         dateFrom,
       };
+    }
     case SESSION_ERROR:
       return {
         ...state,
