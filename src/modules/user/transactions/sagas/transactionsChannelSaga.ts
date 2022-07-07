@@ -9,7 +9,6 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 
 export function* transactionsChannelSaga(action: TransactionChannelFetch) {
-  console.log("transactionsChannelSaga called");
   try {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.main_addr;

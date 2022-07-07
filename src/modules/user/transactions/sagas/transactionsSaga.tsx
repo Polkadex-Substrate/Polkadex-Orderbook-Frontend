@@ -9,7 +9,6 @@ import * as queries from "../../../../graphql/queries";
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export function* transactionsSaga() {
-  console.log("transactions saga");
   try {
     const { main_addr } = yield select(selectUserInfo);
     const transactions = yield call(fetchTransactions, main_addr, 3, 10);
@@ -37,6 +36,5 @@ const fetchTransactions = async (address: string, monthsBefore: number, limit = 
     },
   });
   const txs = res.data.listTransactionsByMainAccount.items;
-  console.log("transaction data=>", txs);
   return txs;
 };

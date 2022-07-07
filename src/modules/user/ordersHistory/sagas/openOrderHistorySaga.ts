@@ -12,12 +12,9 @@ import { OrderCommon } from "src/modules/types";
 
 export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
   try {
-    console.log("openOrderhistory saga called");
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
       const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.address);
-      console.log("orders =>", transactions);
-
       yield put(userOpenOrderHistoryData({ list: transactions }));
     }
   } catch (error) {

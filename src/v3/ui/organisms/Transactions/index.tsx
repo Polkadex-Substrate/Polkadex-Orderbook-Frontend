@@ -107,11 +107,7 @@ const Transactions = () => {
                 isClickable>
                 <DropdownContent>
                   {initialState.map((status) => (
-                    <DropdownItem
-                      key={status}
-                      title={status}
-                      handleAction={() => console.log("...")}
-                    />
+                    <DropdownItem key={status} title={status} handleAction={undefined} />
                   ))}
                 </DropdownContent>
               </Dropdown>

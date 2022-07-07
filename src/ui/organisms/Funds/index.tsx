@@ -45,7 +45,6 @@ export const Funds = () => {
               const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
               const assetid = Number(token.symbol);
               const tokenName = getSymbolFromAssetId(assetid);
-              console.log("Token info:", token);
               return (
                 <CardComponent
                   key={i}
@@ -58,8 +57,8 @@ export const Funds = () => {
                   availableAmountFiat="0.0000000"
                   reservedAmount={parseFloat(token.used).toFixed(3)}
                   reservedAmountFiat="0.0000000"
-                  handleTransfer={() => console.log("Transfer")}
-                  handleTrade={() => console.log("Trade")}
+                  handleTransfer={undefined}
+                  handleTrade={undefined}
                 />
               );
             })}

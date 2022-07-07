@@ -41,7 +41,6 @@ const OriginalChart = ({ chart, resolution }) => {
   const klinesFilled = useMemo(() => {
     return fillKlineMissingData(klines, getResolutionInMilliSeconds(resolution));
   }, [klines, resolution]);
-  console.log("klinesFilled", klinesFilled);
   useEffect(() => {
     if (currentMarket?.m) {
       dispatch(

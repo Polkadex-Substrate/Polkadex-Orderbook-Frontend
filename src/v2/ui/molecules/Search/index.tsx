@@ -61,7 +61,7 @@ export const Search = () => {
           <S.RecentSearch>
             <S.Title>
               <h4>Recent Searches</h4>
-              <button type="button" onClick={() => console.log("Delete All")}>
+              <button type="button" onClick={undefined}>
                 Clear
               </button>
             </S.Title>
@@ -71,7 +71,7 @@ export const Search = () => {
                   <Icon name="Clock" size="extraSmall" stroke="text" />
                   Polkadex
                 </span>
-                <S.CardActions onClick={() => console.log("Delete Action")}>
+                <S.CardActions onClick={undefined}>
                   <Icon name="Close" color="text" />
                 </S.CardActions>
               </S.Card>

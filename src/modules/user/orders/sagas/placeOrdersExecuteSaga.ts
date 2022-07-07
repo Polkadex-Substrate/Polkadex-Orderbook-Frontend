@@ -45,12 +45,10 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       );
       const signature = signPayload(api, keyringPair, payload);
       const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
-      console.log("placeOrderResult =>", res);
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
     }
   } catch (error) {
-    console.log({ error });
     yield put(orderExecuteDataDelete());
     yield put(
       sendError({

@@ -18,7 +18,6 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
       const channel = yield call(() => fetchTradesChannel(market.m));
       while (true) {
         const tradesMsg = yield take(channel);
-        console.log("tradesMsg =>", tradesMsg);
         const data = JSON.parse(tradesMsg);
         const trade: PublicTrade = {
           price: data.price,

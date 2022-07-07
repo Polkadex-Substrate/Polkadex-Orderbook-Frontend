@@ -24,7 +24,6 @@ export function* fetchTradesSaga() {
       yield put(userTradesData(trades));
     }
   } catch (error) {
-    console.log(error);
     yield put(
       sendError({
         error,

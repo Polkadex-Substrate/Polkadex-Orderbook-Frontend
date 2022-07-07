@@ -49,7 +49,6 @@ const History = () => {
   //   }
   // }, [depositHistory, withdrawHistory, selected]);
 
-  // console.log(selectedValue);
   useEffect(() => {
     if (userLoggedIn) {
       dispatch(transactionsFetch());

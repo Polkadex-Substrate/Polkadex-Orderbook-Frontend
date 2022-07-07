@@ -69,7 +69,7 @@ const Card = ({ description, time, isRead = false }) => (
       <small>{time} ago</small>
     </S.CardContent>
     {isRead && (
-      <S.CardAction onClick={() => console.log("Clicked")}>
+      <S.CardAction onClick={undefined}>
         <Icon name="Verified" color="black" />
       </S.CardAction>
     )}
