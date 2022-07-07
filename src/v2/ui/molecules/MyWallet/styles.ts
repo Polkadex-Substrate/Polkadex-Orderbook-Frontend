@@ -205,7 +205,7 @@ export const CardIconWrapper = styled.div`
     height: 4rem;
     margin-right: 0.4rem;
     border-radius: 50%;
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background: ${theme.colors.white};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    background: ${theme.colors.primaryBackgroundOpacity};
   `}
 `;

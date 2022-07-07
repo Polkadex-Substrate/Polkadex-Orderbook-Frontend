@@ -44,7 +44,7 @@ export const CardIconWrapper = styled.div`
     margin-right: 0.4rem;
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background: ${theme.colors.white};
+    background: ${theme.colors.primaryBackgroundOpacity};
   `}
 `;
 export const Image = styled.div<{ isSell?: boolean }>`

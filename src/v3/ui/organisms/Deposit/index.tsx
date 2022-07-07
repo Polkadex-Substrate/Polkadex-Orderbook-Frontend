@@ -54,7 +54,6 @@ const Deposit = () => {
                 priority="medium"
                 header={
                   <SelectAccount
-                    isHeader
                     accountName={selectedAccount?.name || "Select your main account"}
                     address={selectedAccount?.address || "Polkadex is completely free"}
                   />

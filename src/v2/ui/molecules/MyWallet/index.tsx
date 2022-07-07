@@ -108,7 +108,7 @@ const Card = ({
     <S.Card hasLocked={locked}>
       <S.CardWrapper>
         <S.CardIconWrapper>
-          <Icon isToken name={ticker} color="black" size="large" />
+          <Icon isToken name={ticker} color="text" size="extraMedium" />
         </S.CardIconWrapper>
         <S.CardInfo>
           <p>{name}</p>

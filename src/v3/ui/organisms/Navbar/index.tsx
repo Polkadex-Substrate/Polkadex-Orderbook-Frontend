@@ -39,7 +39,7 @@ const Navbar = ({ onOpenMarkets }) => {
         <S.ContainerPair>
           <HeaderMarket
             pair={currMarket?.name}
-            pairTicker="UDD"
+            pairTicker={currMarket.base_ticker}
             onOpenMarkets={onOpenMarkets}
           />
         </S.ContainerPair>

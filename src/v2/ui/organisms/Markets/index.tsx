@@ -54,7 +54,7 @@ export const HeaderMarket = ({
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>
         <S.HeaderToken>
-          <Icon isToken name={pairTicker} size="large" color="text" />
+          <Icon isToken name={pairTicker} size="extraMedium" color="text" />
         </S.HeaderToken>
         <S.HeaderInfo>
           <S.HeaderInfoContainer>
@@ -108,7 +108,6 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
   changeMarket,
 }) => (
   <S.Content>
-    <S.ContainerTitle></S.ContainerTitle>
     <S.ContainerWrapper>
       {!!tokens.length &&
         tokens.map((token) => (
@@ -156,7 +155,7 @@ const Card = ({
         </S.CardInfoActions>
         <S.CardInfoContainer>
           <S.CardToken>
-            <Icon isToken name={tokenTicker} size="large" color="text" />
+            <Icon isToken name={tokenTicker} size="medium" color="text" />
           </S.CardToken>
           <S.CardInfoWrapper>
             <span>{pair}</span>
