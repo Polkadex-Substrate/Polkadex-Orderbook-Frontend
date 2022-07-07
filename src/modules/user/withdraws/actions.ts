@@ -2,15 +2,6 @@ import { CommonError } from "../../types";
 
 import { WITHDRAWS_DATA, WITHDRAWS_FETCH, WITHDRAWS_ERROR } from "./constants";
 
-export interface UserWithdraws {
-  id: string;
-  timestamp: number;
-  currency: string;
-  amount: number;
-  from: string;
-  to: string;
-  fee: Fee;
-}
 interface Fee {
   currency: string;
   cost: number;
@@ -18,10 +9,13 @@ interface Fee {
 
 export interface WithdrawsFetch {
   type: typeof WITHDRAWS_FETCH;
+  payload: {
+    asset: Record<string, string | null>;
+    amount: string;
+  };
 }
 export interface WithdrawsData {
   type: typeof WITHDRAWS_DATA;
-  payload: UserWithdraws[];
 }
 export interface WithdrawsError {
   type: typeof WITHDRAWS_ERROR;
@@ -30,13 +24,13 @@ export interface WithdrawsError {
 
 export type WithdrawsAction = WithdrawsFetch | WithdrawsData | WithdrawsError;
 
-export const withdrawsFetch = (): WithdrawsFetch => ({
+export const withdrawsFetch = (payload: WithdrawsFetch["payload"]): WithdrawsFetch => ({
   type: WITHDRAWS_FETCH,
+  payload,
 });
 
-export const withdrawsData = (payload: UserWithdraws[]): WithdrawsData => ({
+export const withdrawsData = (): WithdrawsData => ({
   type: WITHDRAWS_DATA,
-  payload,
 });
 
 export const withdrawsError = (error: CommonError): WithdrawsError => ({
