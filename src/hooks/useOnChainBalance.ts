@@ -1,5 +1,3 @@
-import { ApiPromise } from "@polkadot/api";
-import BigNumber from "bignumber.js";
 import { useEffect, useState } from "react";
 
 import { selectRangerApi, selectRangerIsReady } from "../modules/public/ranger";

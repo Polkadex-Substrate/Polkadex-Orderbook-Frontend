@@ -32,8 +32,7 @@ const Deposit = () => {
   const selectedAccount = useReduxSelector(selectMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const dispatch = useDispatch();
-  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance("1");
-  console.log("balance ", onChainBalance);
+
   return (
     <S.Wrapper>
       <Formik
@@ -99,13 +98,12 @@ const Deposit = () => {
                   }>
                   <S.SelectContainer isOverflow={assets?.length > 2}>
                     {assets.map((asset, idx) => (
-                      <S.SelectCard
+                      <Card
                         key={idx}
-                        onClick={() => {
-                          setFieldValue("asset", asset);
-                        }}>
-                        {asset?.name}
-                      </S.SelectCard>
+                        id={asset.assetId}
+                        onChange={() => setFieldValue("asset", asset)}
+                        name={asset?.name}
+                      />
                     ))}
                   </S.SelectContainer>
                 </Dropdown>
@@ -142,4 +140,13 @@ const Deposit = () => {
   );
 };
 
+const Card = ({ onChange, name, id }) => {
+  const { onChainBalance } = useOnChainBalance(id);
+  return (
+    <S.SelectCard onClick={onChange}>
+      <span>{name}</span>
+      {onChainBalance > 0 && <small>{`Avlb: ${onChainBalance} ${name}`}</small>}
+    </S.SelectCard>
+  );
+};
 export default Deposit;
