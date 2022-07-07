@@ -4,14 +4,19 @@ import { API } from "aws-amplify";
 import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
-import { selectUserInfo, selectUserSession, sendError, UserSessionPayload } from "@polkadex/orderbook-modules";
+import {
+  selectUserInfo,
+  selectUserSession,
+  sendError,
+  UserSessionPayload,
+} from "@polkadex/orderbook-modules";
 
 export function* fetchTradesSaga() {
   try {
     const { address } = yield select(selectUserInfo);
     if (address) {
-      const userSession: UserSessionPayload  = yield select(selectUserSession);
-      const {dateFrom, dateTo} = userSession;
+      const userSession: UserSessionPayload = yield select(selectUserSession);
+      const { dateFrom, dateTo } = userSession;
       const tradesRaw = yield call(fetchUserTrades, address, dateFrom, dateTo);
       const trades: UserTrade[] = tradesRaw.map((trade) => ({
         market_id: trade.m,
@@ -49,7 +54,7 @@ type TradesDb = {
 const fetchUserTrades = async (
   proxy_account: string,
   dateFrom: string,
-  dateTo: string,
+  dateTo: string
 ): Promise<TradesDb> => {
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
