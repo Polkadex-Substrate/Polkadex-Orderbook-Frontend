@@ -11,7 +11,7 @@ export interface WithdrawsFetch {
   type: typeof WITHDRAWS_FETCH;
   payload: {
     asset: Record<string, string | null>;
-    amount: string;
+    amount: string | number;
   };
 }
 export interface WithdrawsData {

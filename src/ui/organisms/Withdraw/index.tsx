@@ -1,4 +1,5 @@
 import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -10,8 +11,13 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectMainAccount } from "@polkadex/orderbook-modules";
-import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import {
+  selectLinkedMainAccount,
+  selectMainAccount,
+  selectUserInfo,
+  withdrawsFetch,
+} from "@polkadex/orderbook-modules";
+import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 const defaultValues = {
   asset: null,
@@ -19,27 +25,28 @@ const defaultValues = {
 };
 
 const Withdraw = () => {
-  const mainAccount = useReduxSelector(selectMainAccount);
-  const proxyAccount = useReduxSelector(selectMainAccount);
+  const mainAccount = useReduxSelector(selectLinkedMainAccount);
+  const proxyAccount = useReduxSelector(selectUserInfo);
   const assets = useReduxSelector(selectAllAssets);
-
+  const dispatch = useDispatch();
   return (
     <S.Wrapper>
       <Formik
         initialValues={defaultValues}
         onSubmit={async (values) => {
           console.log(values);
-          // dispatch(
-
-          // );
+          const asset = isAssetPDEX(values.asset.assetId)
+            ? { polkadex: null }
+            : { asset: values.asset.assetId };
+          dispatch(withdrawsFetch({ asset, amount: values.amount }));
         }}>
         {({ values, errors, setFieldValue }) => (
           <Form>
             <S.Form>
               <S.FormWallet>
                 <SelectAccount
-                  accountName={mainAccount?.name || "My Main account"}
-                  address={mainAccount?.address || "Polkadex is completely free"}
+                  accountName={proxyAccount.accountName || "My Proxy account"}
+                  address={proxyAccount?.address || "Polkadex is completely free"}
                   locked
                   isHoverable={false}
                 />
@@ -48,8 +55,8 @@ const Withdraw = () => {
                 </S.IconWrapper>
 
                 <SelectAccount
-                  accountName={proxyAccount?.name || "My Proxy account"}
-                  address={proxyAccount?.address || "Polkadex is completely free"}
+                  accountName={mainAccount?.meta?.name || "My Main account"}
+                  address={mainAccount?.address || "Polkadex is completely free"}
                   locked
                   iconBackground="secondaryBackground"
                   iconColor="black"
@@ -90,7 +97,7 @@ const Withdraw = () => {
 
               <S.FormAmount>
                 <SecondaryInput label="Amount" name="amount">
-                  <span>PDEX</span>
+                  <span>{values?.asset?.symbol}</span>
                 </SecondaryInput>
               </S.FormAmount>
               <S.Info>

@@ -15,6 +15,9 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposit"), {
   ssr: false,
 });
+const Withdraw = dynamic(() => import("@polkadex/orderbook/ui/organisms/Withdraw"), {
+  ssr: false,
+});
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -58,7 +61,7 @@ export const WalletTemplate = () => {
                     <Deposit />
                   </TabContent>
                   <TabContent>
-                    <p style={{ padding: "2rem" }}> Coming Soon </p>
+                    <Withdraw />
                   </TabContent>
                 </S.Container>
                 <History />
