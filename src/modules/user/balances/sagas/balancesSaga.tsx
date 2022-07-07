@@ -67,6 +67,5 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
       pending_withdrawal: val.pending_withdrawal,
     };
   });
-  console.log("fetch balance =>", balances);
   return balances;
 }

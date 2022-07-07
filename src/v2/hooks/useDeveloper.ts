@@ -93,7 +93,6 @@ export function useDeveloper() {
    * @returns {void} Dispatch Sign In action
    */
   const connectTestWallet = () => {
-    console.log(connectWallet.address, connectWallet.password);
     dispatch(signIn(connectWallet.address, connectWallet.password));
   };
 

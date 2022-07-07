@@ -10,7 +10,6 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 
 export function* rangerFetchSaga() {
   try {
-    console.log("fetching ranger");
     const channel = yield call(() => fetchRanger());
     while (true) {
       const action = yield take(channel);
@@ -45,7 +44,6 @@ function* fetchRanger() {
     });
 
     api.on("error", (error) => {
-      console.log("Error", error);
       return emitter(rangerConnectError());
     });
 

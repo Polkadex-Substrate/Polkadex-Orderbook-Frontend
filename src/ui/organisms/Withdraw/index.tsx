@@ -28,9 +28,7 @@ const Withdraw = () => {
       <Formik
         initialValues={defaultValues}
         onSubmit={async (values) => {
-          console.log(values);
           // dispatch(
-
           // );
         }}>
         {({ values, errors, setFieldValue }) => (

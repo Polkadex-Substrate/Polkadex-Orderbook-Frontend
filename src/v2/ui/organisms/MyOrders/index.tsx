@@ -89,7 +89,6 @@ const Header = ({ showList, changeToList }) => {
 
 const Content = ({ showList }) => {
   const { priceFixed, amountFixed, orders, userLoggedIn, trades } = useOrderHistory();
-  // console.log("MyOrders Content rendered");
   const getAsset = useReduxSelector(selectGetAsset);
   const OrderHistoryComponent = showList ? OrderHistoryTable : OrderHistory;
   const TradeHistoryComponent = showList ? TradeHistoryTable : TradeHistory;

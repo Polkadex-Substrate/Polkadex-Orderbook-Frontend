@@ -19,7 +19,7 @@ export const AmountInput = ({ data = [], error = "", ...props }) => (
                 tokenName={item.name}
                 ticket={item.ticket}
                 amount={item.amount}
-                onClick={() => console.log("...")}
+                onClick={undefined}
               />
             ))
           ) : (

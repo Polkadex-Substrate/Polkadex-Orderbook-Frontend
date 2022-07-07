@@ -33,7 +33,6 @@ const OpenOrders = () => {
           <S.Tbody>
             {openOrders &&
               openOrders.map((order: OrderCommon, i) => {
-                // console.log("orderhistoryTable rows rendered");
                 const [base, quote] = order.m.split("-");
                 const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";

@@ -27,7 +27,6 @@ const TradeHistory = () => {
           </S.Thead>
           <S.Tbody>
             {trades.map((trade, i) => {
-              // console.log("orderhistoryTable rows rendered");
               const date = new Date(trade.timestamp).toLocaleString();
               const baseUnit = getAsset(trade.baseAsset).symbol;
               const quoteUnit = getAsset(trade.quoteAsset).symbol;

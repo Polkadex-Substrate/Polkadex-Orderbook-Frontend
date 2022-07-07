@@ -95,7 +95,7 @@ const LanguageCurrency = ({ title = "USD" }: LanguageCurrencyProps) => (
 );
 
 const LanguageName = ({ title = "English", flag = "En" }: LanguageNameProps) => (
-  <S.LanguageNameWrapper onClick={() => console.log("Change Language to", flag)}>
+  <S.LanguageNameWrapper onClick={undefined}>
     <Icon name={flag} background="none" />
     <span> {title} </span>
   </S.LanguageNameWrapper>

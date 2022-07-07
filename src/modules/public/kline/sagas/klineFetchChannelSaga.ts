@@ -13,7 +13,6 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       const channel = yield call(() => fetchKlineChannel(market, interval));
       while (true) {
         const data = yield take(channel);
-        console.log("candlestick update=>", data);
         yield put(
           klinePush({
             kline: {
@@ -57,7 +56,6 @@ async function fetchKlineChannel(market: string, interval: string) {
       },
     });
     return () => {
-      console.log("unsubscribing current klines");
       subscription.unsubscribe();
     };
   });

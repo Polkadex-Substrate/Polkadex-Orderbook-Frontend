@@ -94,8 +94,24 @@ export const SelectCard = styled.div`
     padding: 0.4rem;
     cursor: pointer;
     border-radius: 0.4rem;
-    color: black;
     transition: background 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    span {
+      color: ${theme.colors.black};
+    }
+    span,
+    small {
+      display: block;
+    }
+    small {
+      font-size: 1.2rem;
+      color: #abb2bc;
+    }
+
     :hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
     }
