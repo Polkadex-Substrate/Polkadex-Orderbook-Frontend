@@ -31,6 +31,7 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
+import { SessionState, rootSessionSaga} from './user/session'
 import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 
@@ -40,6 +41,7 @@ export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
 export * from "./user/trades";
+export * from "./user/session";
 export * from "./user/transactions";
 export * from "./user/profile";
 export * from "./user/notificationHandler";
@@ -89,6 +91,7 @@ export interface RootState {
     transactions: TransactionsState;
     withdraws: WithdrawsState;
     notifications: NotificationState;
+    session: SessionState;
   };
 }
 
@@ -100,6 +103,7 @@ export const rootReducer = combineReducers({
 export function* rootSaga() {
   yield all([
     call(rootExtensionWalletSaga),
+    call(rootSessionSaga),
     call(rootAuthSaga),
     call(rootDepositsSaga),
     call(rootCurrenciesSaga),

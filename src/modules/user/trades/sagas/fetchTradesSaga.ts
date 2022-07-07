@@ -4,14 +4,20 @@ import { API } from "aws-amplify";
 import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
-import { selectUserInfo, sendError } from "@polkadex/orderbook-modules";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import {
+  selectUserInfo,
+  selectUserSession,
+  sendError,
+  UserSessionPayload,
+} from "@polkadex/orderbook-modules";
 
 export function* fetchTradesSaga() {
   try {
     const { address } = yield select(selectUserInfo);
     if (address) {
-      const tradesRaw = yield call(fetchUserTrades, address, 1);
+      const userSession: UserSessionPayload = yield select(selectUserSession);
+      const { dateFrom, dateTo } = userSession;
+      const tradesRaw = yield call(fetchUserTrades, address, dateFrom, dateTo);
       const trades: UserTrade[] = tradesRaw.map((trade) => ({
         market_id: trade.m,
         price: trade.p,
@@ -47,16 +53,15 @@ type TradesDb = {
 
 const fetchUserTrades = async (
   proxy_account: string,
-  monthsBefore: number,
-  limit = 10
+  dateFrom: string,
+  dateTo: string
 ): Promise<TradesDb> => {
-  const fromDate = subtractMonths(monthsBefore);
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
     variables: {
       main_account: proxy_account,
-      from: fromDate.toISOString(),
-      to: new Date().toISOString(),
+      from: dateFrom,
+      to: dateTo,
     },
   });
 

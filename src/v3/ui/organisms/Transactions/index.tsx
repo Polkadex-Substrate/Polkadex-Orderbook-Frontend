@@ -23,10 +23,11 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser } from "@polkadex/orderbook-modules";
+import { selectHasUser, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { useDispatch } from "react-redux";
 
 const initialFilters = {
   hiddenPairs: false,
@@ -38,6 +39,7 @@ const initialFilters = {
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 const Transactions = () => {
+  const dispatch = useDispatch();
   const now = useRef(new Date());
 
   const [filters, setFilters] = useState(initialFilters);
@@ -53,6 +55,7 @@ const Transactions = () => {
   const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
     setTo(endDate);
+    dispatch(userSessionData({dateFrom: startDate, dateTo: endDate}));
   }, []);
 
   const ranges = useMemo(() => {
