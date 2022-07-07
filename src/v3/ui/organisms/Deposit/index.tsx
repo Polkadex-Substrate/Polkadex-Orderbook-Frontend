@@ -19,6 +19,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const defaultValues = {
   amount: 0.0,
@@ -31,7 +32,8 @@ const Deposit = () => {
   const selectedAccount = useReduxSelector(selectMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const dispatch = useDispatch();
-
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance("1");
+  console.log("balance ", onChainBalance);
   return (
     <S.Wrapper>
       <Formik
