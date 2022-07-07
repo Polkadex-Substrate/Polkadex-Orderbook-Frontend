@@ -4,8 +4,7 @@ export const Main = styled.section<{ isFull?: boolean; hasMargin?: boolean }>`
   ${({ theme, isFull, hasMargin }) => css`
     grid-area: Markets;
     background: ${theme.colors.secondaryBackgroundSolid};
-    max-width: ${isFull ? "inherit" : "35rem"};
-    width: 100%;
+    width: 35rem;
     border-radius: 1.5rem;
     box-shadow: ${theme.shadows.secondary};
     height: 100vh;
@@ -28,6 +27,7 @@ export const Header = styled.div`
   align-items: center;
   cursor: pointer;
   min-width: 25rem;
+  width: 100%;
 `;
 
 export const HeaderAsideLeft = styled.div`
@@ -53,7 +53,6 @@ export const HeaderAsideCenter = styled.div`
   height: 100%;
   width: 100%;
 `;
-export const HeaderAsideRight = styled.div``;
 export const HeaderInfo = styled.div`
   margin-left: 0.5rem;
   p {
@@ -94,6 +93,7 @@ export const Title = styled.div`
     justify-content: space-between;
     background: ${theme.colors.secondaryBackgroundSolid};
     padding: 1rem 2rem;
+    gap: 1rem;
     h2 {
       font-size: 1.5rem;
       font-weight: 550;
@@ -102,9 +102,10 @@ export const Title = styled.div`
 `;
 
 export const TitleActions = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  flex: 1;
 `;
 
 export const TitleActionCard = styled.div`
@@ -120,6 +121,33 @@ export const TitleActionCard = styled.div`
     cursor: pointer;
     :hover {
       border-color: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const Favorite = styled(TitleActionCard)`
+  min-width: 3rem;
+  min-height: 3rem;
+`;
+
+export const Search = styled(TitleActionCard)`
+  ${({ theme }) => css`
+    overflow: hidden;
+    justify-content: flex-start;
+    width: 3rem;
+    transition: width 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    cursor: pointer;
+    :hover {
+      width: 100%;
+    }
+    button {
+      padding: 0 0.7rem;
+      height: 100%;
+    }
+    input {
+      color: ${theme.colors.text};
+      margin-left: 0.3rem;
+      width: 100%;
     }
   `}
 `;
@@ -195,8 +223,8 @@ export const CardToken = styled.div`
     justify-content: center;
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: 20rem;
-    width: 4rem;
-    height: 4rem;
+    width: 3.6rem;
+    height: 3.6rem;
   `}
 `;
 
@@ -241,11 +269,11 @@ export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background: ${theme.colors.text};
     color: ${theme.colors.inverse};
     padding: 1rem;
     border-radius: 1rem;
+    gap: 0.5rem;
   `}
 `;
 
@@ -253,6 +281,7 @@ export const FooterCard = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     padding: 1rem;
     background: ${isActive ? theme.colors.primary : "none"};
+    color: ${isActive ? theme.colors.white : theme.colors.inverse};
     border-radius: 1rem;
     text-transform: uppercase;
     font-weight: 500;
@@ -260,8 +289,7 @@ export const FooterCard = styled.div<{ isActive?: boolean }>`
     transition: background 0.4s ease-in-out;
     cursor: pointer;
     :hover {
-      background: ${theme.colors.text};
-      color: ${theme.colors.inverse};
+      background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
     }
   `}
 `;

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 
 import * as S from "./styles";
 
@@ -21,16 +22,33 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-export const WalletContent = ({ title, locked = true, hasLink = true, hasMargin = false }) => {
+export const WalletContent = ({
+  title,
+  locked = true,
+  hasLink = true,
+  hasMargin = false,
+  isWallet = false,
+}) => {
+  const [state, setState] = useState(true);
   const { searchState, handleChange, balances } = useFunds();
 
+  const props = isWallet
+    ? {
+        onClick: () => setState(!state),
+        isWallet,
+      }
+    : {
+        isWallet,
+      };
+  //
   return (
-    <S.Content hasMargin={hasMargin}>
-      <S.Title>
+    <S.Content hasMargin={hasMargin} isWallet={isWallet}>
+      <S.Title {...props}>
         <h3>{title}</h3>
         {hasLink && <Link href="/wallet">Deposit/Withdraw</Link>}
+        {isWallet && <Icon name="ArrowBottom" stroke="text" />}
       </S.Title>
-      <S.Box>
+      <S.Box isVisible={state || !isWallet}>
         <S.Search>
           <Icon name="Search" stroke="text" size="extraSmall" />
           <input

@@ -6,6 +6,11 @@ export const Wrapper = styled.div`
   gap: 0.5rem;
   user-select: none;
 `;
+export const Child = styled.div`
+  font-size: 1.3rem;
+  white-space: nowrap;
+`;
+
 export const Content = styled.div`
   ${({ theme }) => css`
     display: flex;

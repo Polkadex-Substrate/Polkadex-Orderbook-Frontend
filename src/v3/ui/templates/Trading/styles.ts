@@ -22,6 +22,9 @@ export const WrapperMain = styled.div`
   padding: 0 1rem;
   flex: 1;
   overflow-y: hidden;
+  @media screen and (max-width: 590px) {
+    margin-bottom: 8rem;
+  }
 `;
 export const WrapperGraph = styled.div`
   display: grid;

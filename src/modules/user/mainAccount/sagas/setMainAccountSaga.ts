@@ -34,6 +34,5 @@ export function* setMainAccountSaga({ payload }: SetMainAccountFetch) {
 async function fetchUserDataAsync(payload: SetMainAccountFetch["payload"]) {
   const { web3FromAddress } = await import("@polkadot/extension-dapp");
   const injector = await web3FromAddress(payload.address);
-
   return { injector };
 }

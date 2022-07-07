@@ -60,6 +60,9 @@ export const SelectAccountTitle = styled.div`
   ${IconWrapper} {
     margin-right: 0.2rem;
   }
+  p {
+    max-width: 30rem;
+  }
 `;
 export const SelectAccountHeaderWrapper = styled.div`
   flex: 1;
@@ -187,7 +190,7 @@ export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
     min-width: 22rem;
     background: ${theme.colors.white};
     border-radius: 1rem;
-
+    overflow: hidden;
     ${isFull &&
     css`
       flex: 1;

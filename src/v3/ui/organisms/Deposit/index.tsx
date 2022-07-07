@@ -10,25 +10,18 @@ import {
   InputPrimary,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  depositsFetch,
-  selectExtensionWalletAccounts,
-  selectMainAccount,
-  setMainAccountFetch,
-} from "@polkadex/orderbook-modules";
+import { depositsFetch, selectLinkedMainAccount } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
-const defaultValues = {
-  amount: 0.0,
-  asset: null,
-  address: "",
-};
-
 const Deposit = () => {
-  const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const linkedMainAccount = useReduxSelector(selectLinkedMainAccount);
+  const defaultValues = {
+    amount: 0.0,
+    asset: null,
+    address: linkedMainAccount.address,
+  };
   const assets = useReduxSelector(selectAllAssets);
   const dispatch = useDispatch();
 
@@ -42,41 +35,25 @@ const Deposit = () => {
             values.asset.assetId === "-1"
               ? { polkadex: null }
               : { asset: values.asset.assetId };
-          dispatch(depositsFetch({ asset: asset, amount: values.amount }));
+          dispatch(
+            depositsFetch({
+              asset: asset,
+              amount: values.amount,
+              mainAccount: linkedMainAccount,
+            })
+          );
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
             <S.SelectAccountContainer>
-              <Dropdown
-                direction="bottom"
-                isClickable
-                priority="medium"
-                header={
-                  <SelectAccount
-                    isHeader
-                    accountName={selectedAccount?.name || "Select your main account"}
-                    address={selectedAccount?.address || "Polkadex is completely free"}
-                  />
-                }>
-                <S.SelectContent isOverflow={accounts?.length > 2}>
-                  {accounts?.length ? (
-                    accounts.map((item, index) => (
-                      <SelectAccount
-                        isActive={item.address === selectedAccount?.address}
-                        key={index}
-                        accountName={item.meta.name || `Account ${index}`}
-                        address={item.address}
-                        onClick={() => {
-                          setFieldValue("address", item.address);
-                          dispatch(setMainAccountFetch(accounts[index]));
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <S.SelectMessage>You dont have account, please create one</S.SelectMessage>
-                  )}
-                </S.SelectContent>
-              </Dropdown>
+              <SelectAccount
+                isHeader
+                locked
+                withButton={false}
+                isHoverable={false}
+                accountName={linkedMainAccount?.meta.name || "My Main account"}
+                address={linkedMainAccount?.address || "Polkadex is completely free"}
+              />
               {errors.address && <S.Error>{errors.address}</S.Error>}
             </S.SelectAccountContainer>
             <S.SelectPairContainer>

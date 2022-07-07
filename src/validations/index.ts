@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 
 export const signInValidations = Yup.object().shape({
-  password: Yup.string().required("Required"),
-  accountName: Yup.string().required("Required"),
+  password: Yup.string().required("Required").min(2, "Too Short!").max(20, "Too Long!"),
+  accountName: Yup.string().required("Required").min(5, "Too Short!").max(15, "Too Long!"),
   selectedAccount: Yup.object({
     address: Yup.string().required("Required"),
   }),
