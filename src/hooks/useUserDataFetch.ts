@@ -27,7 +27,7 @@ export const useUserDataFetch = () => {
 
   useEffect(() => {
     if (user.address) {
-      dispatch(userSessionFetch())
+      dispatch(userSessionFetch());
       dispatch(balanceTradeChannelFetch());
       dispatch(balanceTransferChannelFetch());
       dispatch(userOrderUpdatesChannelFetch());

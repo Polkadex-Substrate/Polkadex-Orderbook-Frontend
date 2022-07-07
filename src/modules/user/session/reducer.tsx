@@ -2,13 +2,13 @@ import { SessionAction } from "./actions";
 import { SESSION_DATA, SESSION_ERROR, SESSION_FETCH } from "./constants";
 
 export interface SessionState {
-  dateTo: string,
-  dateFrom: string
+  dateTo: string;
+  dateFrom: string;
 }
 
 const initialState: SessionState = {
   dateTo: null,
-  dateFrom: null
+  dateFrom: null,
 };
 
 export const sessionReducer = (state = initialState, action: SessionAction) => {
@@ -18,11 +18,11 @@ export const sessionReducer = (state = initialState, action: SessionAction) => {
         ...state,
       };
     case SESSION_DATA:
-      const {dateFrom, dateTo} = action.payload;
+      const { dateFrom, dateTo } = action.payload;
       return {
         ...state,
         dateTo,
-        dateFrom
+        dateFrom,
       };
     case SESSION_ERROR:
       return {

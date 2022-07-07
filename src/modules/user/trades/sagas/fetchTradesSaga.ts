@@ -50,7 +50,6 @@ const fetchUserTrades = async (
   proxy_account: string,
   dateFrom: string,
   dateTo: string,
-  limit = 10
 ): Promise<TradesDb> => {
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,

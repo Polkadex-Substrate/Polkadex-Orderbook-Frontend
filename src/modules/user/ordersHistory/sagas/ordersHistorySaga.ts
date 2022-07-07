@@ -36,7 +36,6 @@ const fetchOrders = async (
   proxy_acc: string,
   dateFrom: string,
   dateTo: string,
-  limit = 10
 ): Promise<OrderCommon[]> => {
 
   const res: any = await API.graphql({

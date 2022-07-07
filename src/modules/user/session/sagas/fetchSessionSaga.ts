@@ -9,7 +9,7 @@ export function* fetchSessionSaga() {
     // add default user session values
     const dateFrom = subtractMonths(1).toISOString();
     const dateTo = new Date().toISOString();
-    yield put(userSessionData({dateFrom, dateTo}))
+    yield put(userSessionData({ dateFrom, dateTo }));
   } catch (error) {
     console.log(error);
     yield put(
@@ -23,5 +23,3 @@ export function* fetchSessionSaga() {
     );
   }
 }
-
-
