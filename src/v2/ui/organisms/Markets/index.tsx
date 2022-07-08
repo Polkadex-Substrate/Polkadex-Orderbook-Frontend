@@ -5,10 +5,11 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
-import { Icon, Dropdown, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 import { useCookieHook } from "@polkadex/orderbook-hooks";
+import { Search } from "@polkadex/orderbook/v3/ui/molecules";
 
 const Markets = ({ isFull = false, hasMargin = false }) => {
   const {
@@ -24,7 +25,7 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
   } = useMarkets();
 
   return (
-    <S.Main isFull={isFull} hasMargin={hasMargin}>
+    <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
@@ -77,17 +78,13 @@ const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite
     <S.Title>
       <h2>Markets</h2>
       <S.TitleActions>
-        <S.Search>
-          <button>
-            <Icon name="Search" size="extraSmall" stroke="text" color="text" />
-          </button>
-          <input
-            type="text"
-            placeholder="Search Menu.."
-            value={searchField}
-            onChange={handleChange}
-          />
-        </S.Search>
+        <Search
+          type="text"
+          placeholder="Search Menu.."
+          value={searchField}
+          onChange={handleChange}
+        />
+
         <S.Favorite>
           <button type="button" onClick={handleShowFavourite}>
             <Icon
