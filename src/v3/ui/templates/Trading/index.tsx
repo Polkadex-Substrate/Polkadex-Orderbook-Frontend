@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 import * as S from "./styles";
 
@@ -15,6 +16,7 @@ import {
   orderBookFetch,
   recentTradesFetch,
   selectCurrentMarket,
+  selectCurrentTradePrice,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
@@ -61,6 +63,7 @@ export function Trading() {
   useOrderBookMarketsFetch();
 
   const market = useReduxSelector(selectCurrentMarket);
+  const currentTrade = useReduxSelector(selectCurrentTradePrice);
 
   // intitialize market dependent events
   useEffect(() => {
@@ -75,8 +78,15 @@ export function Trading() {
   useUserDataFetch();
 
   if (!id) return <div />;
+  const marketName = market?.name?.replace("/", "");
   return (
     <S.Wrapper>
+      <Head>
+        <title>
+          {currentTrade?.length && marketName?.length && `${currentTrade} | ${marketName} | `}
+          Polkadex Orderbook
+        </title>
+      </Head>
       <Menu handleChange={() => setState(!state)} />
       <Popup
         isMessage
