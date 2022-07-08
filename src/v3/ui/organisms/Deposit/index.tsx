@@ -13,7 +13,8 @@ import {
 import { depositsFetch, selectLinkedMainAccount } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
-import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const Deposit = () => {
   const linkedMainAccount = useReduxSelector(selectLinkedMainAccount);
@@ -31,10 +32,9 @@ const Deposit = () => {
         initialValues={defaultValues}
         validationSchema={depositValidations}
         onSubmit={async (values) => {
-          const asset =
-            values.asset.assetId === "-1"
-              ? { polkadex: null }
-              : { asset: values.asset.assetId };
+          const asset = isAssetPDEX(values.asset.assetId)
+            ? { polkadex: null }
+            : { asset: values.asset.assetId };
           dispatch(
             depositsFetch({
               asset: asset,
@@ -74,13 +74,12 @@ const Deposit = () => {
                   }>
                   <S.SelectContainer isOverflow={assets?.length > 2}>
                     {assets.map((asset, idx) => (
-                      <S.SelectCard
+                      <Card
                         key={idx}
-                        onClick={() => {
-                          setFieldValue("asset", asset);
-                        }}>
-                        {asset?.name}
-                      </S.SelectCard>
+                        id={asset.assetId}
+                        onChange={() => setFieldValue("asset", asset)}
+                        name={asset?.name}
+                      />
                     ))}
                   </S.SelectContainer>
                 </Dropdown>
@@ -117,4 +116,13 @@ const Deposit = () => {
   );
 };
 
+const Card = ({ onChange, name, id }) => {
+  const { onChainBalance } = useOnChainBalance(id);
+  return (
+    <S.SelectCard onClick={onChange}>
+      <span>{name}</span>
+      {onChainBalance > 0 && <small>{`Avlb: ${onChainBalance} ${name}`}</small>}
+    </S.SelectCard>
+  );
+};
 export default Deposit;

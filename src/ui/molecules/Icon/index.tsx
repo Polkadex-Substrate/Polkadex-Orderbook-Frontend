@@ -19,7 +19,7 @@ export const Icon = ({
   const IconSvg = name && !isToken ? Icons[name] : Icons.Wallet;
   // const TokenSvg = isToken && name ? cryptoIcons[name] : cryptoIcons.Dot;
 
-  const TokenSvg = (isToken && name && Tokens[name]) ?? Tokens.DOT;
+  const TokenSvg = (isToken && name && Tokens[name]) ?? Tokens.UNKN;
   const IconComponent = (isToken && TokenSvg) || IconSvg;
   return (
     <S.Wrapper>

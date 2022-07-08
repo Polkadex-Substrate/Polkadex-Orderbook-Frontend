@@ -8,5 +8,4 @@ export const generateAccountsWithMnemonics = (N: number) => {
     const { pair } = keyring.addUri(mnemonic);
     res.push({ mnemonic, address: pair.address });
   }
-  console.log(res);
 };

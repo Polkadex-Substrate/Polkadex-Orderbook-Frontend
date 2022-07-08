@@ -33,7 +33,7 @@ export const Content = styled.div<{ hasMargin?: boolean; isWallet?: boolean }>`
     height: auto;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    box-shadow: ${theme.shadows.secondary};
+    box-shadow: ${theme.shadows.smooth};
     display: flex;
     max-height: ${!isWallet ? "92vh" : "95vh"};
     flex-direction: column;
@@ -205,7 +205,7 @@ export const CardIconWrapper = styled.div`
     height: 4rem;
     margin-right: 0.4rem;
     border-radius: 50%;
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background: ${theme.colors.white};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    background: ${theme.colors.primaryBackgroundOpacity};
   `}
 `;

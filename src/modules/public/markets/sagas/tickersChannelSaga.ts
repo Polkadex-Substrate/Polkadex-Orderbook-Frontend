@@ -10,7 +10,6 @@ import { selectCurrentMarket } from "..";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 
 export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
-  console.log("marketTicker channel called");
   try {
     const market: Market = yield select(selectCurrentMarket);
     if (market?.m) {
@@ -45,7 +44,6 @@ function createMarketTickersChannel(market: string) {
       error: (err) => console.warn(err),
     });
     return () => {
-      console.log("unsubscribing current ticker");
       subscription.unsubscribe();
     };
   });

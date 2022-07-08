@@ -20,7 +20,6 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
       yield put(recentTradesData(trades));
     }
   } catch (error) {
-    console.log(error);
     yield put(
       sendError({
         error,
@@ -35,6 +34,5 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
 
 const fetchRecentTrade = async (market: string, limit = 50) => {
   const res = await API.graphql({ query: getRecentTrades, variables: { m: market, limit } });
-  console.log(res);
   return res.data.getRecentTrades.items;
 };

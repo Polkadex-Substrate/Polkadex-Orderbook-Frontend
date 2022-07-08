@@ -49,7 +49,6 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
       }
     }
   } catch (error) {
-    console.log("err in depoit =>", error);
     yield put(
       sendError({
         error,

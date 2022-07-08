@@ -32,7 +32,6 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
       yield put(withdrawsData());
     }
   } catch (error) {
-    console.log(error);
     yield put(
       sendError({
         error,

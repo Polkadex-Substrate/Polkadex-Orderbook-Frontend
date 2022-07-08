@@ -35,7 +35,6 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     }));
     yield put(klineData({ list: convertedData, market, interval: resolution }));
   } catch (error) {
-    console.log(error);
     yield put(
       sendError({
         error,

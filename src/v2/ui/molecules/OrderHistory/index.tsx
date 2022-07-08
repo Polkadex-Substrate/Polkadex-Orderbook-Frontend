@@ -22,7 +22,6 @@ export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Pr
         const filled = Number(order.filled_qty);
         const avgPrice = calcAveragePrice(order.filled_qty, order.filled_price);
         const status = order.status.toUpperCase();
-        console.log(">>>", order.order_side);
         return (
           <S.Card key={i} isOpenOrder={order.status === "Open"}>
             <S.CardWrapper>

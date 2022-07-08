@@ -5,9 +5,11 @@ import * as S from "./styles";
 import * as F from "./fakeData";
 
 import { InitialMarkets, useMarkets } from "@orderbook/v2/hooks";
-import { Icon, Dropdown, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
+import { useCookieHook } from "@polkadex/orderbook-hooks";
+import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 
 const Markets = ({ isFull = false, hasMargin = false }) => {
   const {
@@ -19,14 +21,20 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
     currentTickerImg,
     currentTickerName,
     fieldValue,
+    handleShowFavourite,
   } = useMarkets();
 
   return (
-    <S.Main isFull={isFull} hasMargin={hasMargin}>
+    <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
       </S.HeaderWrapper>
-      <Filters searchField={fieldValue.searchFieldValue} handleChange={handleFieldChange} />
+      <Filters
+        searchField={fieldValue.searchFieldValue}
+        handleChange={handleFieldChange}
+        handleShowFavourite={handleShowFavourite}
+        showFavourite={fieldValue.showFavourite}
+      />
       <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
       <Footer
         tickers={marketTickers}
@@ -47,7 +55,7 @@ export const HeaderMarket = ({
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>
         <S.HeaderToken>
-          <Icon isToken name={pairTicker} size="large" color="text" />
+          <Icon isToken name={pairTicker} size="extraMedium" color="text" />
         </S.HeaderToken>
         <S.HeaderInfo>
           <S.HeaderInfoContainer>
@@ -65,24 +73,26 @@ export const HeaderMarket = ({
   );
 };
 
-const Filters = ({ searchField, handleChange }) => {
+const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite }) => {
   return (
     <S.Title>
       <h2>Markets</h2>
       <S.TitleActions>
-        <S.Search>
-          <button>
-            <Icon name="Search" size="extraSmall" stroke="text" color="text" />
-          </button>
-          <input
-            type="text"
-            placeholder="Search Menu.."
-            value={searchField}
-            onChange={handleChange}
-          />
-        </S.Search>
+        <Search
+          type="text"
+          placeholder="Search Menu.."
+          value={searchField}
+          onChange={handleChange}
+        />
         <S.Favorite>
-          <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
+          <button type="button" onClick={handleShowFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={showFavourite ? "orange" : "text"}
+              color={showFavourite ? "orange" : "secondaryBackground"}
+            />
+          </button>
         </S.Favorite>
       </S.TitleActions>
     </S.Title>
@@ -92,54 +102,76 @@ const Filters = ({ searchField, handleChange }) => {
 const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
   tokens = [],
   changeMarket,
+}) => (
+  <S.Content>
+    <S.ContainerWrapper>
+      {tokens.length ? (
+        tokens.map((token) => (
+          <Card
+            key={token.id}
+            id={token.id}
+            pair={token.name}
+            tokenTicker={token.tokenTickerName}
+            vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
+            price={Decimal.format(Number(token.last), token.price_precision, ",")}
+            fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
+            change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
+            changeMarket={() => changeMarket(token.name)}
+            isFavourite={token.isFavourite}
+          />
+        ))
+      ) : (
+        <ResultFound />
+      )}
+    </S.ContainerWrapper>
+  </S.Content>
+);
+
+const Card = ({
+  id,
+  pair,
+  tokenTicker,
+  vol,
+  price,
+  fiat,
+  change,
+  changeMarket,
+  isFavourite,
 }) => {
+  const { handleChangeFavourite } = useCookieHook(id);
   return (
-    <S.Content>
-      <S.ContainerTitle></S.ContainerTitle>
-      <S.ContainerWrapper>
-        {!!tokens.length &&
-          tokens.map((token) => (
-            <Card
-              key={token.id}
-              pair={token.name}
-              tokenTicker={token.tokenTickerName}
-              vol={Decimal.format(Number(token.volume), token.price_precision, ",")}
-              price={Decimal.format(Number(token.last), token.price_precision, ",")}
-              fiat={Decimal.format(Number(token.last), token.price_precision, ",")}
-              change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
-              changeMarket={() => changeMarket(token.name)}
+    <S.Card onClick={changeMarket}>
+      <S.CardInfo>
+        <S.CardInfoActions>
+          <button type="button" onClick={handleChangeFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={isFavourite ? "orange" : "text"}
+              color={isFavourite ? "orange" : "secondaryBackground"}
             />
-          ))}
-      </S.ContainerWrapper>
-    </S.Content>
+          </button>
+        </S.CardInfoActions>
+        <S.CardInfoContainer>
+          <S.CardToken>
+            <Icon isToken name={tokenTicker} size="medium" color="text" />
+          </S.CardToken>
+          <S.CardInfoWrapper>
+            <span>{pair}</span>
+            <p>Vol:{vol}</p>
+          </S.CardInfoWrapper>
+        </S.CardInfoContainer>
+      </S.CardInfo>
+      <S.CardPricing>
+        <span>{price}</span>
+        <p>{fiat}</p>
+      </S.CardPricing>
+      <S.CardChange isNegative={isNegative(change.toString())}>
+        <span>{change}</span>
+      </S.CardChange>
+    </S.Card>
   );
 };
-
-const Card = ({ pair, tokenTicker, vol, price, fiat, change, changeMarket }) => (
-  <S.Card onClick={changeMarket}>
-    <S.CardInfo>
-      <S.CardInfoActions>
-        <Icon name="Star" size="extraSmall" stroke="text" color="secondaryBackground" />
-      </S.CardInfoActions>
-      <S.CardInfoContainer>
-        <S.CardToken>
-          <Icon isToken name={tokenTicker} size="large" color="text" />
-        </S.CardToken>
-        <S.CardInfoWrapper>
-          <span>{pair}</span>
-          <p>Vol:{vol}</p>
-        </S.CardInfoWrapper>
-      </S.CardInfoContainer>
-    </S.CardInfo>
-    <S.CardPricing>
-      <span>{price}</span>
-      <p>{fiat}</p>
-    </S.CardPricing>
-    <S.CardChange isNegative={isNegative(change.toString())}>
-      <span>{change}</span>
-    </S.CardChange>
-  </S.Card>
-);
 
 const Footer: FC<{
   tickers: string[];

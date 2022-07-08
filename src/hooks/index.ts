@@ -7,3 +7,5 @@ export * from "./useOrderBookMarketsFetch";
 export * from "./useMarketsTickersFetch";
 export * from "./useWindowSize";
 export * from "./useAccount";
+export * from "./useCookies";
+export * from "./useHistory";

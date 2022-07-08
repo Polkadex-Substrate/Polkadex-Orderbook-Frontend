@@ -159,7 +159,7 @@ const dark = {
     secondary: "rgba(0, 0, 0, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",
     tertiary: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
     quaternary: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
-    smooth: "0px -20px 99px rgba(171, 192, 227, 0.17)",
+    smooth: "0px -20px 20px rgba(0, 0, 0, 0.1)",
     top: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;",
   },
   skeleton: {

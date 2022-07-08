@@ -9,7 +9,6 @@ import { fetchBalanceUpdatesChannel } from "./helpers";
 import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 export function* balanceChannelSaga(action: BalanceChannelFetch) {
-  console.log("balanceChannelSaga called");
   try {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.main_addr;
@@ -18,7 +17,6 @@ export function* balanceChannelSaga(action: BalanceChannelFetch) {
       const channel = yield call(() => fetchBalanceUpdatesChannel(userAddress));
       while (true) {
         const balanceMsg = yield take(channel);
-        console.log("balanceMsg =>", balanceMsg);
         const updateBalance = updateBalanceFromTradeMsg(balanceMsg, getAsset);
         yield put(balanceChannelUpdateData(updateBalance));
       }

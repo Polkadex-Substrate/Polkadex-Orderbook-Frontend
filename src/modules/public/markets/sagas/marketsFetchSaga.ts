@@ -19,7 +19,6 @@ export function* marketsFetchSaga(action: MarketsFetch) {
       yield put(setCurrentMarketIfUnset(markets[0]));
     }
   } catch (error) {
-    console.log("err => marketsFetchSaga", error);
     yield put(
       sendError({
         error,

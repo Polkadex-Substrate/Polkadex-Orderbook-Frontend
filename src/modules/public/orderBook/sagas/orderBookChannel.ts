@@ -15,13 +15,11 @@ export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
       const channel = fetchOrderBookChannel(market.m);
       while (true) {
         const msg = yield take(channel);
-        console.log("orderbook channel", msg);
         const data = JSON.parse(msg);
         yield put(depthDataIncrement(data));
       }
     }
   } catch (error) {
-    console.log({ error });
     yield put(
       alertPush({
         message: {
@@ -43,7 +41,6 @@ function fetchOrderBookChannel(market: string) {
       error: (err) => console.log(err),
     });
     return () => {
-      console.log("unsubscribing current orderbook");
       subscription.unsubscribe();
     };
   });

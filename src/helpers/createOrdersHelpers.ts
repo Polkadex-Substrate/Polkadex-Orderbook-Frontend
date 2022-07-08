@@ -37,7 +37,6 @@ export const createOrderPayload = (
     price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : null,
     nonce: nonce,
   };
-  console.log("order final payload", jsonPayload);
   const orderPayload = api.createType("OrderPayload", jsonPayload);
   return orderPayload;
 };
