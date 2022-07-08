@@ -34,13 +34,11 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
       const res = yield call(() =>
         placeCancelOrderToEnclave(client, order_id, account, pair, signature)
       );
-      console.log("cancel order result =>", res);
       yield put(orderCancelData());
       yield delay(1000);
       yield put(orderCancelDataDelete());
     }
   } catch (error) {
-    console.log({ error });
     yield put(
       sendError({
         error,

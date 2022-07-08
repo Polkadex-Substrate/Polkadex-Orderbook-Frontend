@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section<{ isFull?: boolean; hasMargin?: boolean }>`
-  ${({ theme, isFull, hasMargin }) => css`
+export const Main = styled.section<{ hasMargin?: boolean }>`
+  ${({ theme, hasMargin }) => css`
     grid-area: Markets;
     background: ${theme.colors.secondaryBackgroundSolid};
     width: 35rem;
@@ -130,28 +130,6 @@ export const Favorite = styled(TitleActionCard)`
   min-height: 3rem;
 `;
 
-export const Search = styled(TitleActionCard)`
-  ${({ theme }) => css`
-    overflow: hidden;
-    justify-content: flex-start;
-    width: 3rem;
-    transition: width 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    cursor: pointer;
-    :hover {
-      width: 100%;
-    }
-    button {
-      padding: 0 0.7rem;
-      height: 100%;
-    }
-    input {
-      color: ${theme.colors.text};
-      margin-left: 0.3rem;
-      width: 100%;
-    }
-  `}
-`;
-
 export const ContainerWrapper = styled.div`
   margin-bottom: 1rem;
 `;
@@ -205,7 +183,6 @@ export const CardInfoActions = styled.div`
   :hover {
     svg {
       transition: all 0.4s ease-in-out;
-      fill: orange;
       stroke: orange;
     }
   }

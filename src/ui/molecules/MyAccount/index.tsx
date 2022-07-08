@@ -78,7 +78,6 @@ export const MyAccountContent = ({
   //   apiVersion: "polkadexHostUrl",
   // };
   const handleFundsRequest = async () => {
-    console.log("handleFundsRequest");
     if (user.address) {
       try {
         const payloads = [
@@ -97,7 +96,6 @@ export const MyAccountContent = ({
           return res;
         });
         const res: any = await Promise.all(reqs);
-        console.log(res);
         if (res[0].Fine && res[1].Fine) {
           dispatch(balancesFetch());
           alert("Funds added, You are rich now!");

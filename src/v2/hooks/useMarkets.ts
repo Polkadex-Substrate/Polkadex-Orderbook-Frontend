@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import cookie from "cookie";
 
 import {
   Market,
@@ -16,12 +17,14 @@ export type InitialMarkets = {
   volume: string | number;
   price_change_percent: string;
   price_change_percent_num: number;
+  isFavourite?: boolean;
 } & Market;
 
 export function useMarkets() {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
+    showFavourite: false,
   });
 
   const dispatch = useDispatch();
@@ -29,6 +32,7 @@ export function useMarkets() {
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
+  const cookieData = cookie.parse(document.cookie);
 
   /**
    * @description Get the single market information for the current market
@@ -36,12 +40,6 @@ export function useMarkets() {
    * @param {string} e - Get default value for the market
    * @returns - The single market information
    */
-
-  // const getTickerValue = (value: DefaultTickers) =>
-  //   (marketTickers[currentMarket?.id] || defaultTickers)[value];
-
-  // const bidUnit = currentMarket?.quote_unit?.toUpperCase();
-  // const isPositive = /\+/.test(getTickerValue("price_change_percent"));
 
   /**
    * Filter markets by tokens name
@@ -58,6 +56,9 @@ export function useMarkets() {
    */
   const handleMarketsTabsSelected = (value: string) =>
     setFieldValue({ ...fieldValue, marketsTabsSelected: value });
+
+  const handleShowFavourite = () =>
+    setFieldValue({ ...fieldValue, showFavourite: !fieldValue.showFavourite });
 
   /**
    * @description Change to selected market
@@ -90,9 +91,13 @@ export function useMarkets() {
         price_change_percent_num: Number.parseFloat(
           (ticker || defaultTickers).priceChangePercent24Hr
         ),
+        isFavourite: cookieData?.favouriteMarkets?.includes(item.id),
       };
     });
-    const allTicketsFilters = allTickets.reduce((pv, cv) => {
+    const allFavoriteFilters = allTickets.filter((value) =>
+      fieldValue.showFavourite ? value.isFavourite === fieldValue.showFavourite : value
+    );
+    const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
       const [_, quote] = cv.name.toLowerCase().split("/");
       if (
         cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
@@ -104,6 +109,7 @@ export function useMarkets() {
       }
       return pv;
     }, initialMarkets);
+
     return allTicketsFilters;
   };
 
@@ -128,6 +134,7 @@ export function useMarkets() {
     handleFieldChange,
     handleMarketsTabsSelected,
     handleChangeMarket,
+    handleShowFavourite,
     marketTokens,
     marketTickers,
     fieldValue,

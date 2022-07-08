@@ -73,8 +73,6 @@ export const handleExtrinsicErrors = (events, api) => {
           // for module errors, we have the section indexed, lookup
           const decoded = api.registry.findMetaError(error.asModule);
           const { docs, method, section } = decoded;
-
-          console.log(`log: ${section}.${method}: ${docs.join(" ")}`);
         } else {
           // Other, CannotLookup, BadOrigin, no extra info
           console.log("log: ", error.toString());

@@ -98,12 +98,13 @@ export const FilterIcon = styled.div<{ isActive?: boolean }>`
     background: ${isActive ? theme.colors.primary : "none"};
     svg {
       width: 1.5rem;
-      stroke: ${theme.colors.text};
-      fill: ${theme.colors.text};
+      stroke: ${isActive ? theme.colors.white : theme.colors.text};
+      fill: ${isActive ? theme.colors.white : theme.colors.text};
       margin: 0;
     }
     span {
       white-space: nowrap;
+      color: ${isActive ? theme.colors.white : theme.colors.text};
     }
   `}
 `;

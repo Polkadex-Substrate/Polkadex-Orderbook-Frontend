@@ -30,7 +30,6 @@ const getKeyringAllAccounts = async () => {
   try {
     const { keyring } = await import("@polkadot/ui-keyring");
     const userPair = keyring.getAccounts()[0];
-    console.log(userPair);
     return userPair;
   } catch (e) {
     throw new Error(e);

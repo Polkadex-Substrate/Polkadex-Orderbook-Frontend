@@ -5,6 +5,7 @@ import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { useFunds } from "@polkadex/orderbook/v2/hooks";
+import { Search, ResultFound } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const MyWallet = ({ hasLink = true }) => {
   return (
@@ -49,16 +50,15 @@ export const WalletContent = ({
         {isWallet && <Icon name="ArrowBottom" stroke="text" />}
       </S.Title>
       <S.Box isVisible={state || !isWallet}>
-        <S.Search>
-          <Icon name="Search" stroke="text" size="extraSmall" />
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchState}
-            onChange={handleChange}
-          />
-        </S.Search>
-        {!!balances.length && (
+        <Search
+          isFull
+          type="text"
+          placeholder="Search"
+          value={searchState}
+          onChange={handleChange}
+        />
+
+        {balances.length ? (
           <S.FundsWrapper hasScroll={balances.length > 5}>
             <S.FundsHeader hasLocked={locked}>
               <span>
@@ -88,6 +88,8 @@ export const WalletContent = ({
               ))}
             </S.FundsContent>
           </S.FundsWrapper>
+        ) : (
+          <ResultFound />
         )}
       </S.Box>
     </S.Content>
@@ -108,7 +110,7 @@ const Card = ({
     <S.Card hasLocked={locked}>
       <S.CardWrapper>
         <S.CardIconWrapper>
-          <Icon isToken name={ticker} color="black" size="large" />
+          <Icon isToken name={ticker} color="text" size="extraMedium" />
         </S.CardIconWrapper>
         <S.CardInfo>
           <p>{name}</p>

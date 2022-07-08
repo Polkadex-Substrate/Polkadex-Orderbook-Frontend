@@ -16,7 +16,6 @@ import { UNIT_BN } from "@polkadex/web-constants";
 
 export function* fetchDepositsSaga(action: DepositsFetch) {
   try {
-    console.log("depsoit saga called");
     const { asset, amount } = action.payload;
     const mainUser = yield select(selectMainAccount);
     const api = yield select(selectRangerApi);
@@ -50,7 +49,6 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
       }
     }
   } catch (error) {
-    console.log("err in depoit =>", error);
     yield put(
       sendError({
         error,

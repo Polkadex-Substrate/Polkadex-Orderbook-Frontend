@@ -13,7 +13,6 @@ import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
   try {
-    console.log("orderhistory saga called");
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, 1);

@@ -24,7 +24,6 @@ export function* fetchWithdrawsSaga() {
       }
     }
   } catch (error) {
-    console.log(error);
     yield put(
       sendError({
         error,

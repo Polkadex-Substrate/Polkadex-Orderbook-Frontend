@@ -35,7 +35,6 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
             <Formik
               initialValues={defaultValues}
               onSubmit={async (values) => {
-                console.log(values);
                 // dispatch();
               }}>
               {({ values, errors, touched, setFieldValue }) => (

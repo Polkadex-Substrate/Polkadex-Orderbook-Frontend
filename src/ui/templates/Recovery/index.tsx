@@ -49,7 +49,6 @@ export const RecoveryTemplate = () => {
                   onSubmit={async (values) => {
                     if (state.tags.length === 12) {
                       const { password, accountName } = values;
-                      console.log(state.tags, password, accountName);
                       const mnemoicString = state.tags.join(" ");
                       dispatch(
                         importAccountFetch({
