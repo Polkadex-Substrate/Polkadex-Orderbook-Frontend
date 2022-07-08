@@ -5,7 +5,6 @@ import * as S from "./styles";
 
 import {
   notificationPush,
-  openOrdersCancelFetch,
   selectCurrentMarket,
   selectOpenOrdersHistory,
   selectOrdersHistoryLoading,
