@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import media, { generateMedia } from "styled-media-query";
 
+import { LogoText } from "../../molecules/Logo/styles";
+
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 const customMedia = generateMedia({
@@ -8,13 +10,12 @@ const customMedia = generateMedia({
 });
 
 export const Wrapper = styled.section`
-  display: grid;
-  grid-template-columns: auto auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
   margin-bottom: 1rem;
-  ${customMedia.lessThan("custom")`
-    grid-template-columns: 1fr;
-    padding-left: 0;
-  `}
+  gap: 1rem;
 `;
 
 export const ContainerPair = styled.div`
@@ -22,10 +23,6 @@ export const ContainerPair = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-right: 2rem;
-  ${customMedia.lessThan("custom")`
-      margin-right:1rem;
-    `}
 `;
 
 export const ContainerInfo = styled.div`
@@ -37,7 +34,7 @@ export const ContainerInfo = styled.div`
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1.5rem 2.5rem;
-    width: -webkit-fill-available;
+    width: 100%;
     ${media.lessThan("medium")`
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
@@ -47,7 +44,12 @@ export const ContainerInfo = styled.div`
 `;
 export const WrapperInfo = styled.div`
   display: flex;
-  @media screen and (max-width: 880px) {
+  flex: 1;
+  gap: 1rem;
+  @media screen and (max-width: 1100px) {
+    margin-top: 7rem;
+  }
+  @media screen and (max-width: 850px) {
     flex-direction: column;
   }
 `;
@@ -55,9 +57,9 @@ export const WrapperInfo = styled.div`
 export const Box = styled.div`
   ${({ theme }) => css`
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    justify-self: flex-end;
+    padding: 0.4rem 1rem;
     ${Button} {
       transition: background 0.5s ease-in-out;
       background: ${theme.colors.primary};
@@ -65,11 +67,41 @@ export const Box = styled.div`
         background: ${theme.colors.primary}D8;
       }
     }
+    @media screen and (max-width: 1100px) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      z-index: 27;
+      background: ${theme.colors.primaryBackground};
+      box-shadow: ${theme.shadows.tertiary};
+    }
   `}
+`;
+export const Logo = styled.div`
+  ${() => css`
+    visibility: hidden;
+    @media screen and (max-width: 590px) {
+      visibility: visible;
+      ${LogoText} {
+        display: block;
+        opacity: 1;
+      }
+    }
+  `}
+`;
+
+export const BoxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: flex-end;
 `;
 
 export const VolumeHigh = styled.div`
   ${({ theme }) => css`
+    align-items: center;
+
     p {
       color: inherit;
     }
@@ -78,6 +110,7 @@ export const VolumeHigh = styled.div`
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
+    align-items: baseline;
     p {
       color: inherit;
     }
@@ -86,11 +119,13 @@ export const VolumeLow = styled.div<{ isNegative?: boolean }>`
 
 export const WrapperVolume = styled.div`
   span {
+    display: block;
     margin-right: 1rem;
     font-size: 1.1rem;
     color: #8ba1be;
     opacity: 0.7;
     font-weight: 500;
+    white-space: nowrap;
   }
   div {
     display: flex;

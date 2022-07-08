@@ -21,7 +21,7 @@ const RecentTrades = () => {
             <S.CellHead>Amount({baseUnit})</S.CellHead>
             <S.CellHead>Time</S.CellHead>
           </S.Head>
-          <>
+          <S.Content>
             {recentTrades.map((order, i) => {
               const date = new Date(order.timestamp).toLocaleTimeString();
               return (
@@ -34,7 +34,7 @@ const RecentTrades = () => {
                 />
               );
             })}
-          </>
+          </S.Content>
         </>
       ) : (
         <EmptyTrades />

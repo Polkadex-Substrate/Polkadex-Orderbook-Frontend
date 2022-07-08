@@ -13,7 +13,7 @@ export const Thead = styled.thead`
   color: #8ba1be;
   tr {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -28,10 +28,10 @@ export const Tbody = styled.tbody`
   `}
   tr {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
     ${media.lessThan("large")`
-      grid-template-columns: repeat(4,1fr);
+      grid-template-columns: repeat(3,1fr);
       grid-row-gap: 2rem;
       grid-column-gap: 1rem;
     `}

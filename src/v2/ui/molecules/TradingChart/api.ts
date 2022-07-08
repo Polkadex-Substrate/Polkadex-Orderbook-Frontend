@@ -204,7 +204,6 @@ export const dataFeedObject = (tradingChart: TradingChartComponent, markets: Mar
       tradingChart.currentKlineSubscription = {};
     },
     onRealtimeCallback: (kline: KlineState) => {
-      // console.log("onRealtimeCallback => ", kline);
       if (
         kline.last &&
         kline.marketId === tradingChart.currentKlineSubscription.marketId &&

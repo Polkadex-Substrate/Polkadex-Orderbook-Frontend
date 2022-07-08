@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -7,13 +8,26 @@ import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
   const router = useRouter();
+  const buttonRef = useRef(null);
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy");
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(address);
+    buttonRef.current.innerHTML = "Copied";
+  };
   return (
     <S.ContentWrapper>
       <S.ContentHeader>
         <small>Connected with Polkadot.js</small>
         <S.Input>
           <input type="text" disabled value={address} />
-          <Icon name="Copy" background="secondaryBackground" stroke="text" size="large" />
+          <button
+            ref={buttonRef}
+            type="button"
+            onMouseOut={handleOnMouseOut}
+            onClick={handleCopy}>
+            Copy
+          </button>
         </S.Input>
       </S.ContentHeader>
       <S.ContentContainer>
@@ -38,7 +52,11 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
               onClick={() => onNavigate("Support")}
             />
           </AvailableMessage>
-          <Card title="Apperance" icon="Appearance" onClick={() => onNavigate("Appearance")} />
+          <Card
+            title="Appearance"
+            icon="Appearance"
+            onClick={() => onNavigate("Appearance")}
+          />
           <Card title="Log Out" icon="Logout" onClick={logout} />
         </S.ContentBox>
       </S.ContentContainer>
@@ -47,7 +65,7 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
           Privacy
         </a>
         <a href="#" target="_blank">
-          Termas and Conditions
+          Terms and Conditions
         </a>
         <p>Polkadex© 2021</p>
       </S.ContentFooter>

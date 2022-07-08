@@ -8,7 +8,7 @@ export const Wrapper = styled.main`
   flex-direction: row;
   max-width: 160rem;
   margin: 0 auto;
-  box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
   @media screen and (min-height: 910px) or (max-width: 1295px) {
     max-height: 100vh;
   }
@@ -22,6 +22,9 @@ export const WrapperMain = styled.div`
   padding: 0 1rem;
   flex: 1;
   overflow-y: hidden;
+  @media screen and (max-width: 590px) {
+    margin-bottom: 8rem;
+  }
 `;
 export const WrapperGraph = styled.div`
   display: grid;

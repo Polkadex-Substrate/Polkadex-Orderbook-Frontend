@@ -49,7 +49,6 @@ const History = () => {
   //   }
   // }, [depositHistory, withdrawHistory, selected]);
 
-  // console.log(selectedValue);
   useEffect(() => {
     if (userLoggedIn) {
       dispatch(transactionsFetch());
@@ -82,7 +81,7 @@ const History = () => {
               key={value.time}
               date={new Date(value.time).toLocaleString()}
               address={value.main_account}
-              amount={`${value.amount} ${getAsset(value.asset).symbol}`}
+              amount={`${value?.amount} ${getAsset(value?.asset)?.symbol}`}
               status={value.status}
               isDeposit={value.txn_type === "DEPOSIT"}
             />

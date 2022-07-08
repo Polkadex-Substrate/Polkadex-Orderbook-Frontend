@@ -23,7 +23,9 @@ export const Link = styled.a<Partial<LogoProps>>`
 
 export const Image = styled.img``;
 
-export const Svg = styled.svg``;
+export const Svg = styled.svg`
+  overflow: hidden;
+`;
 
 export const LogoText = styled.g`
   transition-duration: 3s;

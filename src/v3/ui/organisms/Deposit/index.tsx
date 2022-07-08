@@ -19,6 +19,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const defaultValues = {
   amount: 0.0,
@@ -53,7 +54,6 @@ const Deposit = () => {
                 priority="medium"
                 header={
                   <SelectAccount
-                    isHeader
                     accountName={selectedAccount?.name || "Select your main account"}
                     address={selectedAccount?.address || "Polkadex is completely free"}
                   />
@@ -97,13 +97,12 @@ const Deposit = () => {
                   }>
                   <S.SelectContainer isOverflow={assets?.length > 2}>
                     {assets.map((asset, idx) => (
-                      <S.SelectCard
+                      <Card
                         key={idx}
-                        onClick={() => {
-                          setFieldValue("asset", asset);
-                        }}>
-                        {asset.name}
-                      </S.SelectCard>
+                        id={asset.assetId}
+                        onChange={() => setFieldValue("asset", asset)}
+                        name={asset?.name}
+                      />
                     ))}
                   </S.SelectContainer>
                 </Dropdown>
@@ -140,4 +139,13 @@ const Deposit = () => {
   );
 };
 
+const Card = ({ onChange, name, id }) => {
+  const { onChainBalance } = useOnChainBalance(id);
+  return (
+    <S.SelectCard onClick={onChange}>
+      <span>{name}</span>
+      {onChainBalance > 0 && <small>{`Avlb: ${onChainBalance} ${name}`}</small>}
+    </S.SelectCard>
+  );
+};
 export default Deposit;

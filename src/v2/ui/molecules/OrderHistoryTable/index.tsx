@@ -24,7 +24,6 @@ export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }:
         "Average Price",
       ]}>
       {orders.map((order, i) => {
-        // console.log("orderhistoryTable rows rendered");
         const date = new Date(Number(order.timestamp)).toLocaleString();
         const isSell = order.order_side === "Ask";
         const isMarket = order.order_type === "MARKET";

@@ -57,7 +57,7 @@ const OrderBook = () => {
           </Dropdown>
         </S.ContainerTitle>
       </S.WrapperTitle>
-      <OrderBookTable lightMode />
+      <OrderBookTable lightMode filterBy={filterState} />
     </S.Wrapper>
   );
 };

@@ -28,9 +28,7 @@ const Withdraw = () => {
       <Formik
         initialValues={defaultValues}
         onSubmit={async (values) => {
-          console.log(values);
           // dispatch(
-
           // );
         }}>
         {({ values, errors, setFieldValue }) => (
@@ -79,7 +77,7 @@ const Withdraw = () => {
                           onClick={() => {
                             setFieldValue("asset", asset);
                           }}>
-                          {asset.name}
+                          {asset?.name}
                         </S.SelectCard>
                       ))}
                     </S.SelectContainer>

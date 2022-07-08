@@ -17,6 +17,7 @@ const Funds = () => {
               <S.Th>Token</S.Th>
               <S.Th>Available</S.Th>
               <S.Th>Locked</S.Th>
+              <S.Th>Reserved for withdraw</S.Th>
               <S.Th>Actions</S.Th>
             </S.Tr>
           </S.Thead>

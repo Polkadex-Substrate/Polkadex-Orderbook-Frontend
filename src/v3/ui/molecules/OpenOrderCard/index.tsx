@@ -62,12 +62,11 @@ const OpenOrderCard = ({
         <S.Tag>Actions</S.Tag>
 
         <S.ContainerActions>
-          <Icon
-            name="Trash"
-            stroke="text"
-            size="medium"
-            onClick={() => dispatch(orderCancelFetch({ orderId, base, quote }))}
-          />
+          <button
+            type="button"
+            onClick={() => dispatch(orderCancelFetch({ orderId, base, quote }))}>
+            Cancel Order
+          </button>
           <Icon name="Options" size="medium" background="none" />
         </S.ContainerActions>
       </S.Td>

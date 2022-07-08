@@ -12,6 +12,7 @@ export const Main = styled.section<{ hasData?: boolean }>`
       min-width: 29rem;
       max-width: 29rem;
     }
+    max-height: 50vh;
   `}
 `;
 

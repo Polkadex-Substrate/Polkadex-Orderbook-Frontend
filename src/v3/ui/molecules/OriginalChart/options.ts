@@ -5,12 +5,12 @@ export const chartType = [
   {
     key: "candle_solid",
     name: "Candles Solid",
-    icon: "Candle",
+    icon: "CandleStroke",
   },
   {
     key: "candle_stroke",
     name: "Candles Stroke",
-    icon: "CandleStroke",
+    icon: "Candle",
   },
   {
     key: "area",
@@ -565,7 +565,7 @@ export const mainTechnicalIndicatorTypes = [
   { key: "SMA", name: "SMA", isActive: false },
   { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
   { key: "BOLL", name: "BOLL(Bolinger Bands)", isActive: false },
-  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bear Index)", isActive: false },
 ];
 
 export const subTechnicalIndicatorTypes = [
@@ -588,6 +588,6 @@ export const subTechnicalIndicatorTypes = [
   { key: "SAR", name: "SAR(Stop and Reverse)", isActive: false },
   { key: "ROC", name: "ROC(Price Rate of Change)", isActive: false },
   { key: "PVT", name: "PVT(Price and Volume Trend)", isActive: false },
-  { key: "BBI", name: "BBI(Bull And Bearlndex)", isActive: false },
+  { key: "BBI", name: "BBI(Bull And Bear Index)", isActive: false },
   { key: "AO", name: "AO(Awesome Oscillator)", isActive: false },
 ];

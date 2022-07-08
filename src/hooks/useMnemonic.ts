@@ -9,7 +9,6 @@ export const useMnemonic = (defaultMnemonic = "") => {
 
   const createMnemonic = async ({ defaultMnemonic = "" }) => {
     let mnemonic_string = defaultMnemonic;
-    console.log("mnemonic_string", mnemonic_string);
     if (!mnemonic_string?.length) {
       await cryptoWaitReady();
       mnemonic_string = mnemonicGenerate();

@@ -55,6 +55,7 @@ export type Colors =
   | "transparent"
   | "overlayOpacity"
   | "none"
+  | "red"
   | "inverse";
 
 export const sizes = [

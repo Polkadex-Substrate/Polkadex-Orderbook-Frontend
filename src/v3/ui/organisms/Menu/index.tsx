@@ -13,10 +13,13 @@ export type MenuProps = {
 };
 const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
+
   return (
     <S.Wrapper>
       <S.WrapperLinks>
-        <Logo size="Medium" href="/trading" />
+        <S.Logo>
+          <Logo size="Medium" href="/trading" />
+        </S.Logo>
         <S.Container>
           {!isWallet && (
             <S.WrapperIcon onClick={handleChange}>
@@ -36,16 +39,18 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-          <Link href="/wallet">
-            <S.WrapperIcon>
-              <div>
-                <Icon name="Wallet" background="none" stroke="text" size="large" />
-              </div>
-              <div>
-                <S.Span>Wallets</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </Link>
+          {!isWallet && (
+            <Link href="/wallet">
+              <S.WrapperIcon>
+                <div>
+                  <Icon name="Wallet" background="none" stroke="text" size="large" />
+                </div>
+                <div>
+                  <S.Span>Wallets</S.Span>
+                </div>
+              </S.WrapperIcon>
+            </Link>
+          )}
         </S.Container>
         <S.Container>
           <AvailableMessage message="Soon">

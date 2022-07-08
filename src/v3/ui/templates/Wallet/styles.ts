@@ -3,16 +3,25 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   min-height: 100vh;
   overflow-y: hidden;
   max-width: 160rem;
   margin: 0 auto;
-  box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
   flex-wrap: nowrap;
   @media screen and (min-height: 910px) or (max-width: 1295px) {
     max-height: 100vh;
+  }
+`;
+export const Main = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 1rem;
+  @media screen and (max-width: 860px) {
+    flex-direction: column;
   }
 `;
 
@@ -58,7 +67,7 @@ export const Grid = styled.div`
 export const Container = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
-    box-shadow: ${theme.shadows.tertiary};
+    box-shadow: ${theme.shadows.smooth};
     border-radius: 1rem;
     height: fit-content;
   `}
@@ -67,7 +76,7 @@ export const Container = styled.div`
 export const EstimateBalance = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
-    box-shadow: ${theme.shadows.tertiary};
+    box-shadow: ${theme.shadows.smooth};
     border-radius: 1rem;
     margin-bottom: 1rem;
   `}

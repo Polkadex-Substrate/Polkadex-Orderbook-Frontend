@@ -9,7 +9,6 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
-import Withdraw from "@polkadex/orderbook-ui/organisms/Withdraw";
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
@@ -30,41 +29,44 @@ export const WalletTemplate = () => {
   return (
     <S.Wrapper>
       <Menu isWallet />
-      <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} />
-      <Tabs>
-        <S.Content>
-          <S.ContainerWrapper>
-            <S.GoBack onClick={() => router.back()}>
-              <Icon name="SingleArrowLeft" size="extraSmall" />
-              Go back
-            </S.GoBack>
 
-            <S.EstimateBalance>
-              <S.HeaderContainer>
-                <S.Header>
-                  <TabHeader>
-                    <S.Tab color="green">Deposit</S.Tab>
-                  </TabHeader>
-                  <TabHeader>
-                    <S.Tab color="primary">Withdraw</S.Tab>
-                  </TabHeader>
-                </S.Header>
-              </S.HeaderContainer>
-            </S.EstimateBalance>
-            <S.Grid>
-              <S.Container>
-                <TabContent>
-                  <Deposit />
-                </TabContent>
-                <TabContent>
-                  <Withdraw />
-                </TabContent>
-              </S.Container>
-              <History />
-            </S.Grid>
-          </S.ContainerWrapper>
-        </S.Content>
-      </Tabs>
+      <S.Main>
+        <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} isWallet />
+        <Tabs>
+          <S.Content>
+            <S.ContainerWrapper>
+              <S.GoBack onClick={() => router.back()}>
+                <Icon name="SingleArrowLeft" size="extraSmall" />
+                Go back
+              </S.GoBack>
+
+              <S.EstimateBalance>
+                <S.HeaderContainer>
+                  <S.Header>
+                    <TabHeader>
+                      <S.Tab color="green">Deposit</S.Tab>
+                    </TabHeader>
+                    <TabHeader>
+                      <S.Tab color="primary">Withdraw</S.Tab>
+                    </TabHeader>
+                  </S.Header>
+                </S.HeaderContainer>
+              </S.EstimateBalance>
+              <S.Grid>
+                <S.Container>
+                  <TabContent>
+                    <Deposit />
+                  </TabContent>
+                  <TabContent>
+                    <p style={{ padding: "2rem" }}> Coming Soon </p>
+                  </TabContent>
+                </S.Container>
+                <History />
+              </S.Grid>
+            </S.ContainerWrapper>
+          </S.Content>
+        </Tabs>
+      </S.Main>
     </S.Wrapper>
   );
 };

@@ -66,6 +66,7 @@ const defaultTheme = {
     blue: "#0090E1",
     overlayOpacity: "#00000030",
     light: "rgba(0, 0, 0, 0.08)",
+    red: "#F31260",
   },
   spacings: {
     xxxsmall: "0.5rem",

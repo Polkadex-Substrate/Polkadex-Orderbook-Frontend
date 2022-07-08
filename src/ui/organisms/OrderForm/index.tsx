@@ -273,7 +273,7 @@ export const MarketType = ({
               : "green"
             : "secondaryBackground"
         }>
-        {toCapitalize(side)}
+        {side}
       </Button>
       {orderCreated && <S.Message>Order created successfully</S.Message>}
     </form>

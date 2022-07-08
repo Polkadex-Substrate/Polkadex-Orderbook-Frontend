@@ -1,7 +1,6 @@
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { toCapitalize } from "@polkadex/web-helpers";
 
 const FundsCard = ({
   id,
@@ -18,10 +17,10 @@ const FundsCard = ({
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
         <S.CardIconWrapper>
-          <Icon isToken name={ticker} color="black" size="large" />
+          <Icon isToken name={ticker} color="text" size="medium" />
         </S.CardIconWrapper>
         <S.CardInfo>
-          <p>{toCapitalize(name)}</p>
+          <p>{name}</p>
           <span>{ticker}</span>
         </S.CardInfo>
       </S.ContainerFlex>
@@ -34,6 +33,12 @@ const FundsCard = ({
       <S.Tag>Locked</S.Tag>
       <S.ContainerFlex>
         <span>{lockedAmount.toFixed(7)}</span>
+      </S.ContainerFlex>
+    </S.Td>
+    <S.Td>
+      <S.Tag>Reserved for withdraw</S.Tag>
+      <S.ContainerFlex>
+        <span>0.000</span>
       </S.ContainerFlex>
     </S.Td>
     <S.Td>

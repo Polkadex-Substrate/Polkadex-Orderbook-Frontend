@@ -24,7 +24,8 @@ export const MessageCard = ({ icon, title, description }: Props) => {
 function getColor(messageType: AlertTypes): Colors {
   switch (messageType) {
     case "Error":
-      return "primary";
+    case "Alert":
+      return "red";
 
     case "Attention":
       return "orange";

@@ -43,7 +43,6 @@ export const useInit = () => {
     return 0;
   };
   const initInterval = () => {
-    console.log("Testing Initial Interval");
     timer = setInterval(() => {
       checkLastActivity();
     }, sessionCheckInterval);

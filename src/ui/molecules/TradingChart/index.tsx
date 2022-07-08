@@ -282,7 +282,6 @@ const mapDispatchProps: MapDispatchToPropsFunction<DispatchProps, Record<string,
   unSubscribeKline: (payload) => dispatch(klineUnsubscribe(payload)),
   klineUpdatePeriod: (payload) => dispatch(klineUpdatePeriod(payload)),
   klineSetLastBar: (payload) => {
-    // console.log(
     //   "graph called update last bar",
     //   payload.kline.time,
     //   new Date(payload.kline.time).toLocaleTimeString()

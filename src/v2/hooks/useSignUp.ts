@@ -24,6 +24,35 @@ export function useSignUp({ mnemonic = "" }) {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    documentTitle: "PolkadexPaperWallet",
+    pageStyle: `
+    @media all {
+      div {
+        width: 100%;
+        height: 100%;
+      }
+      main, body {
+        background: white !important;
+      }
+    }
+
+    @media print {
+      html, body {
+        height: initial !important;
+        width: initial !important;
+      }
+      body {
+        -webkit-print-color-adjust: exact;
+        -moz-print-color-adjust: exact;
+        -ms-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    @page {
+      size: landscape;
+    }
+    `,
   });
 
   useEffect(() => {

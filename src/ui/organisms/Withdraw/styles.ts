@@ -39,7 +39,7 @@ export const FormWallet = styled.div`
   display: grid;
   grid-gap: 1rem;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   @media screen and (min-width: 582px) {
     grid-template-columns: 1fr auto 1fr;
   }
