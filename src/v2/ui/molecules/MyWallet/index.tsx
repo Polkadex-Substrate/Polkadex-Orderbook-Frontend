@@ -5,7 +5,7 @@ import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { useFunds } from "@polkadex/orderbook/v2/hooks";
-import { Search } from "@polkadex/orderbook/v3/ui/molecules";
+import { Search, ResultFound } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const MyWallet = ({ hasLink = true }) => {
   return (
@@ -58,7 +58,7 @@ export const WalletContent = ({
           onChange={handleChange}
         />
 
-        {!!balances.length && (
+        {balances.length ? (
           <S.FundsWrapper hasScroll={balances.length > 5}>
             <S.FundsHeader hasLocked={locked}>
               <span>
@@ -88,6 +88,8 @@ export const WalletContent = ({
               ))}
             </S.FundsContent>
           </S.FundsWrapper>
+        ) : (
+          <ResultFound />
         )}
       </S.Box>
     </S.Content>

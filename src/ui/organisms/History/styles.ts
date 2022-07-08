@@ -93,12 +93,10 @@ export const Card = styled.div`
     justify-content: space-between;
     padding: 0.8rem;
     transition: box-shadow 0.2s ease-in-out;
-    border: 1px solid ${theme.colors.secondaryBackground};
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+
     :hover {
       box-shadow: ${theme.shadows.tertiary};
-    }
-    :not(:last-child) {
-      margin-bottom: 0.8rem;
     }
     :last-child {
       margin-bottom: 20rem;

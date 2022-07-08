@@ -9,7 +9,7 @@ import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/v2/helpers";
 import { useCookieHook } from "@polkadex/orderbook-hooks";
-import { Search } from "@polkadex/orderbook/v3/ui/molecules";
+import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 
 const Markets = ({ isFull = false, hasMargin = false }) => {
   const {
@@ -84,7 +84,6 @@ const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite
           value={searchField}
           onChange={handleChange}
         />
-
         <S.Favorite>
           <button type="button" onClick={handleShowFavourite}>
             <Icon
@@ -106,7 +105,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
 }) => (
   <S.Content>
     <S.ContainerWrapper>
-      {!!tokens.length &&
+      {tokens.length ? (
         tokens.map((token) => (
           <Card
             key={token.id}
@@ -120,7 +119,10 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
             changeMarket={() => changeMarket(token.name)}
             isFavourite={token.isFavourite}
           />
-        ))}
+        ))
+      ) : (
+        <ResultFound />
+      )}
     </S.ContainerWrapper>
   </S.Content>
 );
