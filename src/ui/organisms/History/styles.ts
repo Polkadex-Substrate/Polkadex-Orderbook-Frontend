@@ -138,10 +138,15 @@ export const CardRight = styled.div`
       color: ${theme.colors.secondaryBackgroundDark};
       text-align: right;
     }
-    span {
-      margin-left: 0.5rem;
-    }
   `}
+`;
+export const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  strong {
+    font-weight: normal;
+  }
 `;
 
 export const HeaderFiltersContent = styled.div`

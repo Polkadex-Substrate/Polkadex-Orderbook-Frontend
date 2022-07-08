@@ -1,7 +1,15 @@
+import { useRef } from "react";
+
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import {
+  Dropdown,
+  Icon,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 import { useHistory } from "@polkadex/orderbook-hooks";
 
@@ -52,24 +60,44 @@ const History = () => {
   );
 };
 
-export const Card = ({ date, amount, address, status, isDeposit }: T.HistoryProps) => (
-  <S.Card>
-    <S.CardLeft>
-      <S.CardIconWrapper>
-        <Icon name={isDeposit ? "WalletDeposit" : "WalletWithdraw"} size="extraMedium" />
-      </S.CardIconWrapper>
-      <div>
-        <span>{amount}</span>
-        <p>{status}</p>
-      </div>
-    </S.CardLeft>
-    <S.CardRight>
-      <p>{date}</p>
-      <Icon name="Link" size="extraSmall" />
-      <span>{address.substring(0, 15) + "..."}</span>
-    </S.CardRight>
-  </S.Card>
-);
+export const Card = ({ date, amount, address, status, isDeposit }: T.HistoryProps) => {
+  const ref = useRef(null);
+  const handleOnMouseOut = () => (ref.current.innerHTML = "Copy");
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(address);
+    ref.current.innerHTML = "Copied";
+  };
+  return (
+    <S.Card>
+      <S.CardLeft>
+        <S.CardIconWrapper>
+          <Icon name={isDeposit ? "WalletDeposit" : "WalletWithdraw"} size="extraMedium" />
+        </S.CardIconWrapper>
+        <div>
+          <span>{amount}</span>
+          <p>{status}</p>
+        </div>
+      </S.CardLeft>
+      <S.CardRight>
+        <p>{date}</p>
+        <S.Flex>
+          <Tooltip>
+            <TooltipHeader>
+              <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                <Icon name="Link" size="extraSmall" />
+              </button>
+            </TooltipHeader>
+            <TooltipContent position="topCenter">
+              <strong ref={ref}> Copy</strong>
+            </TooltipContent>
+          </Tooltip>
+          <span>{address.substring(0, 15) + "..."}</span>
+        </S.Flex>
+      </S.CardRight>
+    </S.Card>
+  );
+};
 
 const Filters = ({ handleChange }) => (
   <S.HeaderFiltersContent>
