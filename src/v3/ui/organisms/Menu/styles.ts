@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 
 import { LogoText } from "../../molecules/Logo/styles";
+
+import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Logo = styled.div`
   @media screen and (max-width: 590px) {
     display: none;
@@ -15,6 +17,9 @@ export const WrapperIcon = styled.a`
   cursor: pointer;
   :hover {
     opacity: 0.8;
+  }
+  ${Icon} {
+    border-radius: 10rem;
   }
 `;
 export const Span = styled.span`
@@ -31,12 +36,11 @@ export const WrapperLinks = styled.div`
     justify-content: space-between;
     background: ${theme.colors.tertiaryBackground};
     border-radius: 0 3rem 3rem 3rem;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 1rem 0.9rem;
     transition-duration: 0.8s;
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
     transition-delay: initial;
     transition-property: initial;
-    box-shadow: box-shadow: ${theme.shadows.smooth};
   `}
 `;
 
@@ -52,7 +56,6 @@ export const Wrapper = styled.nav`
     transition-delay: initial;
     transition-property: initial;
     z-index: 28;
-    box-shadow: ${theme.shadows.tertiary};
 
     @media screen and (min-width: 590px) {
       position: sticky;
