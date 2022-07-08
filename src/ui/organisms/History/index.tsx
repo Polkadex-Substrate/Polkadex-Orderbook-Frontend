@@ -1,78 +1,36 @@
-import { useState, useEffect, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectHasUser,
-  selectTransactionData,
-  transactionsFetch,
-} from "@polkadex/orderbook-modules";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
-import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
+import { useHistory } from "@polkadex/orderbook-hooks";
 
 const History = () => {
-  const dispatch = useDispatch();
-  const route = useRouter();
-  const getAsset = useReduxSelector(selectGetAsset);
-  const [selected, setSelected] = useState("All");
-  const transactionsHistory = useReduxSelector(selectTransactionData);
-  const transactionHistory = transactionsHistory.sort(
-    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
-  );
-  const userLoggedIn = useReduxSelector(selectHasUser);
-
-  // const getValue = (values: Deposits[] | UserWithdraws[], isDeposit = false) => {
-  //   return values?.map((item) => {
-  //     return {
-  //       ...item,
-  //       isDeposit: isDeposit,
-  //     };
-  //   });
-  // };
-
-  // const selectedValue = useMemo(() => {
-  //   switch (selected) {
-  //     case "Deposits":
-  //       return getValue(depositHistory, true);
-  //     case "Withdrawals":
-  //       return getValue(withdrawHistory);
-  //     default:
-  //       return [
-  //         ...(getValue(depositHistory, true) || []),
-  //         ...(getValue(withdrawHistory) || []),
-  //       ];
-  //   }
-  // }, [depositHistory, withdrawHistory, selected]);
-
-  useEffect(() => {
-    if (userLoggedIn) {
-      dispatch(transactionsFetch());
-    }
-  }, [userLoggedIn, dispatch]);
+  const {
+    filterByType,
+    onChangeFilterByType,
+    search,
+    onChangeSearch,
+    transactionHistory,
+    getAsset,
+  } = useHistory();
 
   return (
     <S.Wrapper>
       <S.Title>
         <h2>History</h2>
         <S.TitleWrapper>
-          <Dropdown
-            direction="bottomRight"
-            isClickable
-            header={<FiltersHeader selected={selected} />}>
-            <Filters handleChange={setSelected} />
-          </Dropdown>
+          <Search placeholder="Search by address" value={search} onChange={onChangeSearch} />
           <S.TitleIconWrapper>
             <Icon name="Calendar" size="extraSmall" />
           </S.TitleIconWrapper>
-          <S.TitleIconWrapper>
-            <Icon name="Search" stroke="text" size="extraSmall" />
-          </S.TitleIconWrapper>
         </S.TitleWrapper>
+        <Dropdown
+          direction="bottomRight"
+          isClickable
+          header={<FiltersHeader selected={filterByType} />}>
+          <Filters handleChange={onChangeFilterByType} />
+        </Dropdown>
       </S.Title>
       <S.Content>
         {transactionHistory?.length ? (
@@ -87,7 +45,7 @@ const History = () => {
             />
           ))
         ) : (
-          <EmptyData />
+          <ResultFound />
         )}
       </S.Content>
     </S.Wrapper>
@@ -108,14 +66,14 @@ export const Card = ({ date, amount, address, status, isDeposit }: T.HistoryProp
     <S.CardRight>
       <p>{date}</p>
       <Icon name="Link" size="extraSmall" />
-      <span>{address.substring(0, 8) + "..."}</span>
+      <span>{address.substring(0, 15) + "..."}</span>
     </S.CardRight>
   </S.Card>
 );
 
 const Filters = ({ handleChange }) => (
   <S.HeaderFiltersContent>
-    {["All", "Deposits", "Withdrawals"].map((value) => (
+    {["all", "deposit", "withdraw"].map((value) => (
       <S.HeaderFilters key={value} onClick={() => handleChange(value)}>
         <span>{value}</span>
       </S.HeaderFilters>
@@ -128,15 +86,6 @@ const FiltersHeader = ({ selected = "All" }) => (
     <span>{selected}</span>
     <Icon stroke="text" name="ArrowBottom" />
   </S.HeaderFilters>
-);
-
-const EmptyData = ({ message = "No Transactions" }) => (
-  <S.Empty>
-    <S.EmptyContainer>
-      <img src="/img/emptyOrderbookSell.png" alt="Empty Trades" />
-      <p>{message}</p>
-    </S.EmptyContainer>
-  </S.Empty>
 );
 
 export default History;

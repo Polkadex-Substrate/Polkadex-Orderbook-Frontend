@@ -21,6 +21,7 @@ export const Title = styled.div`
     align-items: center;
     padding: 1rem 2rem 0 2rem;
     margin-bottom: 1rem;
+    gap: 1rem;
     h2 {
       font-size: 1.6rem;
       font-weight: 550;
@@ -30,8 +31,10 @@ export const Title = styled.div`
 
 export const TitleWrapper = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
+  flex: 1;
+  justify-content: flex-end;
 `;
 
 export const TitleIconWrapper = styled.div`
@@ -39,8 +42,10 @@ export const TitleIconWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    min-width: 3rem;
+    max-width: 3rem;
+    max-height: 3rem;
+    min-height: 3rem;
     border-radius: 4rem;
     cursor: pointer;
     transition: background 0.2s ease-in-out border 0.2s ease-in-out;
@@ -143,7 +148,6 @@ export const HeaderFiltersContent = styled.div`
   ${({ theme }) => css`
     padding: 1rem;
     background: ${theme.colors.white};
-
     border-radius: 0.5rem;
   `}
 `;
@@ -158,6 +162,7 @@ export const HeaderFilters = styled.div<{ isHeader?: boolean }>`
     span {
       color: ${isHeader ? theme.colors.text : theme.colors.black};
       margin-right: 0.5rem;
+      text-transform: capitalize;
     }
     ${!isHeader &&
     css`

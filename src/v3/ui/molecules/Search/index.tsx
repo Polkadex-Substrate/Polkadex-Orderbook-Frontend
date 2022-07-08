@@ -8,6 +8,6 @@ export const Search = ({ isFull = false, ...props }: T.Props) => (
     <button>
       <Icon name="Search" size="extraSmall" stroke="text" color="text" />
     </button>
-    <input {...props} />
+    <input type="text" {...props} />
   </S.Wrapper>
 );
