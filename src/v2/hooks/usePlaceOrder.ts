@@ -37,14 +37,15 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const [tab, setTab] = useState({
     priceLimit: undefined,
   });
-
-  const [form, setForm] = useState({
+  const initialValue = {
     orderType: isLimit ? "Limit" : "Market",
     price: "",
     priceMarket: currentTicker?.last || 0,
     amountSell: "",
     amountBuy: "",
-  });
+  };
+
+  const [form, setForm] = useState(initialValue);
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
 
@@ -171,6 +172,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         amount: isSell ? form.amountSell : form.amountBuy,
       })
     );
+    setForm({ ...initialValue });
   };
 
   /**
