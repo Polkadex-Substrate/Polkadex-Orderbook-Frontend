@@ -45,7 +45,7 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           })
         );
       } else {
-        throw new Error("Depost failed");
+        throw new Error("Deposit failed");
       }
     }
   } catch (error) {
