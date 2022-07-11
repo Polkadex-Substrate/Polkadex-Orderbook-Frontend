@@ -2,6 +2,7 @@ import { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
+import { OverlayProvider } from "@react-aria/overlays";
 
 import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
@@ -17,10 +18,12 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
   return (
-    <ThemeWrapper>
-      <GlobalStyles />
-      <Component {...pageProps} />
-    </ThemeWrapper>
+    <OverlayProvider>
+      <ThemeWrapper>
+        <GlobalStyles />
+        <Component {...pageProps} />
+      </ThemeWrapper>
+    </OverlayProvider>
   );
 }
 

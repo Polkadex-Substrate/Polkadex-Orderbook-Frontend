@@ -10,6 +10,7 @@ import TradeHistory from "../../molecules/TradeHistory";
 import { DropdownContent, DropdownHeader } from "../../molecules";
 import OpenOrders from "../../molecules/OpenOrders";
 import Funds from "../../molecules/Funds";
+import { Popover, PopoverContent, PopoverTrigger } from "../../molecules/Popover";
 
 import * as S from "./styles";
 
@@ -23,10 +24,13 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+// eslint-disable-next-line import/order
 import { selectHasUser } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const initialFilters = {
   hiddenPairs: false,
@@ -111,25 +115,22 @@ const Transactions = () => {
                   ))}
                 </DropdownContent>
               </Dropdown>
-              <Dropdown
-                direction="bottomRight"
-                header={
-                  <Icon
-                    name="Calendar"
-                    stroke="text"
-                    background="secondaryBackground"
-                    size="extraMedium"
-                    style={{ marginLeft: 10 }}
+              <Popover placement="bottom left" defaultOpen={true}>
+                <PopoverTrigger>
+                  <S.Calendar>
+                    <Icons.Calendar />
+                  </S.Calendar>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <DateRangePicker
+                    ranges={ranges}
+                    onChange={handleSelect}
+                    rangeColors={["#E6007A"]}
+                    staticRanges={defaultStaticRanges}
+                    inputRanges={[]}
                   />
-                }>
-                <DateRangePicker
-                  ranges={ranges}
-                  onChange={handleSelect}
-                  rangeColors={["#E6007A"]}
-                  staticRanges={defaultStaticRanges}
-                  inputRanges={[]}
-                />
-              </Dropdown>
+                </PopoverContent>
+              </Popover>
             </S.ContainerTransactions>
           </S.WrapperActions>
         </S.Header>
