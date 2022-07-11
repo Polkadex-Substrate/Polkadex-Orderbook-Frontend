@@ -15,9 +15,9 @@ import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/encla
 import {
   createOrderPayload,
   placeOrderToEnclave,
-  signPayload,
 } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { getNonceForAccount } from "@polkadex/orderbook/helpers/getNonce";
+import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
