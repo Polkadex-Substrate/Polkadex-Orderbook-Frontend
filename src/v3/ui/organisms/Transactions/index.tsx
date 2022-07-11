@@ -64,7 +64,6 @@ const Transactions = () => {
       },
     ];
   }, [from, to]);
-  const { width } = useWindowSize();
   return (
     <S.Section>
       <Tabs>

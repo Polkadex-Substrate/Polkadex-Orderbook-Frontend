@@ -144,7 +144,10 @@ const Graph = () => {
                 </S.Indicator>
               </Dropdown>
               {width <= 600 ? (
-                <Dropdown direction="bottom" header={<S.Li isActive>{filter}</S.Li>}>
+                <Dropdown
+                  isClickable
+                  direction="bottom"
+                  header={<S.Li isActive>{filter}</S.Li>}>
                   <S.Ul isColumn>
                     {filters.map((item) => (
                       <S.Li
