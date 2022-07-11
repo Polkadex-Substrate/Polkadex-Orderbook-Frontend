@@ -14,7 +14,7 @@ export const Header = styled.div`
   gap: 1.5rem;
   padding: 2rem 0;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   ${media.lessThan("large")`
       grid-template-columns: 1fr;
       grid-row-gap: 2rem;
@@ -62,9 +62,9 @@ export const Tab = styled.ul`
 export const WrapperActions = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  gap: 3rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 `;
 export const ContainerActions = styled.div`
   display: grid;

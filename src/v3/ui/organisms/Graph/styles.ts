@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { Content as Dropdown } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -49,17 +50,24 @@ export const DropdownContent = styled.div`
     border-radius: 0.5rem;
   `}
 `;
+export const Ul = styled.ul<{ isColumn?: boolean }>`
+  ${({ theme, isColumn }) => css`
+    display: flex;
+    flex-direction: ${isColumn ? "column" : "row"};
+    gap: 0.8rem;
+    align-items: ${isColumn ? "flex-start" : "center"};
+    background: ${theme.colors.primaryBackground};
+    border-radius: 1rem;
+    padding: 1rem;
+  `}
+`;
 
 export const List = styled.div`
   ${({ theme }) => css`
     display: flex;
     gap: 0.8rem;
     align-items: center;
-    ul {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+
     ${Icon} {
       cursor: pointer;
       transition: background 0.3s ease-in-out;

@@ -17,6 +17,7 @@ import * as S from "./styles";
 
 import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useWindowSize } from "@polkadex/orderbook-hooks";
 
 const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
 const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
@@ -63,6 +64,7 @@ const Graph = () => {
     chart?.current?.setTimezone(timezone);
   }, [timezone]);
 
+  const { width } = useWindowSize();
   return (
     <S.Wrapper>
       <S.WrapperGraph>
@@ -141,13 +143,32 @@ const Graph = () => {
                   </S.MainIndicator>
                 </S.Indicator>
               </Dropdown>
-              <ul>
-                {filters.map((item) => (
-                  <S.Li key={item} isActive={item === filter} onClick={() => setFilter(item)}>
-                    {item}
-                  </S.Li>
-                ))}
-              </ul>
+              {width <= 600 ? (
+                <Dropdown direction="bottom" header={<S.Li isActive>{filter}</S.Li>}>
+                  <S.Ul isColumn>
+                    {filters.map((item) => (
+                      <S.Li
+                        key={item}
+                        isActive={item === filter}
+                        onClick={() => setFilter(item)}>
+                        {item}
+                      </S.Li>
+                    ))}
+                  </S.Ul>
+                </Dropdown>
+              ) : (
+                <S.Ul>
+                  {filters.map((item) => (
+                    <S.Li
+                      key={item}
+                      isActive={item === filter}
+                      onClick={() => setFilter(item)}>
+                      {item}
+                    </S.Li>
+                  ))}
+                </S.Ul>
+              )}
+
               <Dropdown
                 direction="bottom"
                 priority="low"
