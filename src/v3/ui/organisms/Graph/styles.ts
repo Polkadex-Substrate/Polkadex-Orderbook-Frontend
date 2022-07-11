@@ -56,9 +56,9 @@ export const Ul = styled.ul<{ isColumn?: boolean }>`
     flex-direction: ${isColumn ? "column" : "row"};
     gap: 0.8rem;
     align-items: ${isColumn ? "flex-start" : "center"};
-    background: ${isColumn ? theme.colors.primaryBackground : "none"};
+    background: ${theme.colors.primaryBackground};
     border-radius: 1rem;
-    padding: ${isColumn ? "1rem" : "0"};
+    padding: 1rem;
   `}
 `;
 

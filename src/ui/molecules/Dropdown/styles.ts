@@ -100,7 +100,6 @@ export const Content = styled.div<{ direction?: string; isFull?: boolean }>`
     flex-direction: column;
     position: absolute;
     min-width: ${isFull ? "100%" : "max-content"};
-
     ${directionModifier[direction]()};
   `}
 `;

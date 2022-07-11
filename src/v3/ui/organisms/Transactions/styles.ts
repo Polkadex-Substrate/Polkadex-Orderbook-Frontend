@@ -28,7 +28,6 @@ export const ContentWrapper = styled.div`
 export const HeaderContent = styled.ul`
   display: flex;
   gap: 2rem;
-  flex-wrap: wrap;
 `;
 export const TabHeader = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
@@ -60,20 +59,6 @@ export const Tab = styled.ul`
     margin-right: 2rem;
   }
 `;
-export const Calendar = styled.div`
-  ${({ theme }) => css`
-    background-color: ${theme.colors.tertiaryBackground};
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20%;
-    margin-left: 0.5rem; ;
-  `}
-`;
-
 export const WrapperActions = styled.div`
   display: flex;
   flex-direction: row;
