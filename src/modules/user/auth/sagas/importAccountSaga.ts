@@ -4,9 +4,7 @@ import { API } from "aws-amplify";
 
 import { alertPush, sendError } from "../../../";
 import { importAccountError, ImportAccountFetch, importAccountData } from "../actions";
-import { getMainAddrFromUserByProxyAccountRes } from "../helpers";
-
-import { findUserByProxyAccount } from "@polkadex/orderbook/graphql/queries";
+import { checkIfProxyAccountRegistered } from "../helpers";
 
 let proxyAddress: string;
 export function* importAccountSaga(action: ImportAccountFetch) {
@@ -27,7 +25,7 @@ export function* importAccountSaga(action: ImportAccountFetch) {
     );
     yield put(importAccountData());
   } catch (error) {
-    if (proxyAddress) keyring.forgetAddress(proxyAddress);
+    if (proxyAddress) keyring.forgetAccount(proxyAddress);
     yield put(
       sendError({
         error: error,
@@ -39,21 +37,6 @@ export function* importAccountSaga(action: ImportAccountFetch) {
     );
   }
 }
-
-const checkIfProxyAccountRegistered = async (address: string) => {
-  const res: any = await API.graphql({
-    query: findUserByProxyAccount,
-    variables: { proxy_account: address },
-  });
-  if (res.data?.findUserByProxyAccount.items.length === 0) {
-    throw new Error("This proxy account has not been registered yet!");
-  }
-  const queryResStr = res.data?.findUserByProxyAccount.items[0];
-  const main_addr = getMainAddrFromUserByProxyAccountRes(queryResStr);
-  if (!main_addr) {
-    throw new Error("This proxy account has not been registered yet!");
-  }
-};
 
 const checkifProxyAccountDuplicateName = (accountName: string) => {
   const accounts = keyring.getAccounts();

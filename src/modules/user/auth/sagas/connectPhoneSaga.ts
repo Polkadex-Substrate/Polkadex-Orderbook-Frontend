@@ -1,5 +1,5 @@
 import { put, delay, call, select } from "redux-saga/effects";
-import { ApiPromise, Keyring } from "@polkadot/api";
+import { Keyring } from "@polkadot/api";
 
 import {
   sendError,
@@ -10,8 +10,7 @@ import {
 } from "../../../";
 import { ConnectPhoneFetch, signUpError } from "../actions";
 import { MainAccount } from "../../mainAccount";
-
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { addProxyToAccount } from "../helpers";
 
 export function* connectPhoneSaga(action: ConnectPhoneFetch) {
   try {
@@ -65,13 +64,3 @@ export function* connectPhoneSaga(action: ConnectPhoneFetch) {
     );
   }
 }
-export const addProxyToAccount = async (
-  api: ApiPromise,
-  proxyAddress: string,
-  injector: any,
-  mainAddress: string
-): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
-  return res;
-};
