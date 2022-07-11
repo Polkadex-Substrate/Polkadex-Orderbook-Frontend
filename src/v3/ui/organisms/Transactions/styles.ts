@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
+import { Content as Dropdown } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 export const Section = styled.section`
   flex: 1;
   display: flex;
@@ -66,6 +67,16 @@ export const WrapperActions = styled.div`
   gap: 1rem;
   flex-wrap: wrap;
 `;
+
+export const Flex = styled(WrapperActions)``;
+export const Calendar = styled.div`
+  @media screen and (max-width: 426px) {
+    ${Dropdown} {
+      transform: translateX(6rem);
+    }
+  }
+`;
+
 export const ContainerActions = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
