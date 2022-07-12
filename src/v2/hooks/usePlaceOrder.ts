@@ -38,13 +38,25 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     priceLimit: undefined,
   });
 
-  const [form, setForm] = useState({
-    orderType: isLimit ? "Limit" : "Market",
-    price: "",
-    priceMarket: currentTicker?.last || 0,
-    amountSell: "",
-    amountBuy: "",
-  });
+  const [form, setForm] = useState<{
+    orderType: string;
+    price: string;
+    priceMarket: any;
+    amountSell: string;
+    amountBuy: string;
+  }>();
+
+  // when type is changed reset form.
+  useEffect(() => {
+    setForm({
+      orderType: isLimit ? "Limit" : "Market",
+      price: "",
+      priceMarket: currentTicker?.last || 0,
+      amountSell: "",
+      amountBuy: "",
+    });
+  }, [isLimit]);
+
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
 
