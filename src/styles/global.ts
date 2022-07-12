@@ -312,8 +312,12 @@ Super Form Reset
   /* Calendar ------------------------------------
 -----------------------------------------------*/
   .rdrDateRangePickerWrapper {
+    display: flex;
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.primary};
+    @media screen and (max-width: 836px) {
+      flex-direction: column;
+    }
   }
   .rdrCalendarWrapper {
     color: ${theme.colors.text};
@@ -337,6 +341,7 @@ Super Form Reset
   .rdrDefinedRangesWrapper {
     border-right-color: ${theme.colors.secondaryBackgroundOpacity};
     background: ${theme.colors.tertiaryBackground};
+    width: 100%;
   }
   .rdrStaticRange {
     border-bottom-color: ${theme.colors.secondaryBackgroundOpacity};
@@ -360,6 +365,11 @@ Super Form Reset
     font-weight: 500;
   }
 
+  .rdrStaticRangeLabel {
+    @media screen and (min-width: 1144px) {
+      white-space: nowrap;
+    }
+  }
   .rdrStaticRange:hover .rdrStaticRangeLabel,
   .rdrStaticRange:focus .rdrStaticRangeLabel {
     background: ${theme.colors.secondaryBackgroundOpacity};
