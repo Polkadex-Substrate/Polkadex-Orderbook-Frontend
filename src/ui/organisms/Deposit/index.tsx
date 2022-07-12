@@ -14,8 +14,6 @@ import {
   depositsFetch,
   selectExtensionWalletAccounts,
   selectMainAccount,
-  selectMarkets,
-  setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
@@ -46,7 +44,6 @@ const Deposit = () => {
             values.asset.assetId === "-1"
               ? { polkadex: null }
               : { asset: values.asset.assetId };
-          dispatch(depositsFetch({ asset, amount: values.amount }));
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
@@ -72,7 +69,6 @@ const Deposit = () => {
                         address={item.address}
                         onClick={() => {
                           setFieldValue("address", item.address);
-                          dispatch(setMainAccountFetch(accounts[index]));
                         }}
                       />
                     ))

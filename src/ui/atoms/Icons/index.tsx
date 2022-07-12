@@ -99,7 +99,10 @@ export { default as Link } from "./Link";
 export { default as WalletDeposit } from "./WalletDeposit";
 export { default as WalletWithdraw } from "./WalletWithdraw";
 export { default as DoubleArrowRight } from "./DoubleArrowRight";
+export { default as TokenPixel } from "./TokenPixel";
+
 export * from "./Android";
+export * from "./SearchPixel";
 export * from "./Apple";
 export * from "./Checked";
 export * from "./DownloadApple";

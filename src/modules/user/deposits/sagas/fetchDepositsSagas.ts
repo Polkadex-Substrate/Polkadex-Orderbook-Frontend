@@ -7,7 +7,7 @@ import { depositsError } from "..";
 import { selectMainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { alertPush, sendError } from "@polkadex/orderbook-modules";
+import { alertPush, InjectedAccount, sendError } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
   selectRangerIsReady,
@@ -16,11 +16,11 @@ import { UNIT_BN } from "@polkadex/web-constants";
 
 export function* fetchDepositsSaga(action: DepositsFetch) {
   try {
-    const { asset, amount } = action.payload;
-    const mainUser = yield select(selectMainAccount);
+    console.log("depsoit saga called");
+    const { asset, amount, mainAccount } = action.payload;
     const api = yield select(selectRangerApi);
     const isApiReady = yield select(selectRangerIsReady);
-    if (isApiReady && mainUser.address !== "") {
+    if (isApiReady && mainAccount.address !== "") {
       yield put(
         alertPush({
           type: "Loading",
@@ -31,7 +31,7 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
           },
         })
       );
-      const res = yield call(depositToEnclave, api, mainUser, asset, amount);
+      const res = yield call(depositToEnclave, api, mainAccount, asset, amount);
       if (res.isSuccess) {
         yield put(depositsData());
         yield put(
@@ -63,12 +63,14 @@ export function* fetchDepositsSaga(action: DepositsFetch) {
 
 async function depositToEnclave(
   api: ApiPromise,
-  account: any,
+  account: InjectedAccount,
   asset: Record<string, string | null>,
   amount: string | number
 ): Promise<ExtrinsicResult> {
+  const { web3FromAddress } = await import("@polkadot/extension-dapp");
+  const injector = await web3FromAddress(account.address);
   const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
   const ext = api.tx.ocex.deposit(asset, amountStr);
-  const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
+  const res = await signAndSendExtrinsic(api, ext, injector, account.address, true);
   return res;
 }
