@@ -68,7 +68,7 @@ export const Range = ({ values, setValues }: Props) => {
               }}
             />
             <output style={{ fontSize: "1rem", color: "white", fontWeight: 550 }}>
-              {values[0].toFixed()}%
+              {values[0]}%
             </output>
           </div>
         )}
