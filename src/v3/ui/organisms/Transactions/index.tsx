@@ -29,7 +29,14 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useDispatch } from "react-redux";
 
-const initialFilters = {
+export type Ifilters = {
+  hiddenPairs: boolean;
+  onlyBuy: boolean;
+  onlySell: boolean;
+  status: string;
+}
+
+const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
   onlySell: false,
@@ -139,13 +146,13 @@ const Transactions = () => {
         {userLoggedIn ? (
           <S.Content>
             <TabContent>
-              <OpenOrders />
+              <OpenOrders filters={filters}/>
             </TabContent>
             <TabContent>
-              <OrderHistory />
+              <OrderHistory filters={filters}/>
             </TabContent>
             <TabContent>
-              <TradeHistory />
+              <TradeHistory filters={filters} />
             </TabContent>
             <TabContent>
               <Funds />
