@@ -5,19 +5,24 @@ import Heading from "../../molecules/Heading";
 import OrderBookIcon from "../../molecules/OrderBookIcon";
 import OrderBookTable from "../../molecules/OrderBookTable";
 import { DropdownContent, DropdownHeader } from "../../molecules";
-
+import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 import * as S from "./styles";
 
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 
-const initialState = [0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001];
-
 const OrderBook = () => {
-  const [filterState, setFilterState] = useState("Order");
-  const [sizeState, setSizeState] = useState(initialState[0]);
-
-  const handleChange = (select: string) => setFilterState(select);
-  const handleAction = (select: number) => setSizeState(select);
+  const {
+    isPriceUp,
+    hasMarket,
+    asks,
+    bids,
+    lastPriceValue,
+    sizeState,
+    filterState,
+    initialState,
+    handleChange,
+    handleAction,
+  } = useOrderbook();
 
   return (
     <S.Wrapper>
@@ -42,14 +47,14 @@ const OrderBook = () => {
             />
           </S.ContainerActions>
           <Dropdown
-            header={<DropdownHeader>{sizeState}</DropdownHeader>}
+            header={<DropdownHeader>{sizeState.size}</DropdownHeader>}
             direction="bottom"
             isClickable>
             <DropdownContent>
               {initialState.map((item) => (
                 <DropdownItem
-                  key={item}
-                  title={item}
+                  key={item.size}
+                  title={item.size}
                   handleAction={() => handleAction(item)}
                 />
               ))}
@@ -57,7 +62,16 @@ const OrderBook = () => {
           </Dropdown>
         </S.ContainerTitle>
       </S.WrapperTitle>
-      <OrderBookTable lightMode filterBy={filterState} />
+      <OrderBookTable
+        lightMode
+        filterBy={filterState}
+        isPriceUp={isPriceUp}
+        hasMarket={hasMarket}
+        asks={asks}
+        bids={bids}
+        lastPriceValue={lastPriceValue}
+        precision={sizeState.length}
+      />
     </S.Wrapper>
   );
 };
