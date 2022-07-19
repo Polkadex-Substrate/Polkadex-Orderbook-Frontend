@@ -14,7 +14,10 @@ export const loginValidations = Yup.object().shape({
 });
 
 export const depositValidations = Yup.object().shape({
-  amount: Yup.number().required("Required").typeError("Must be a number"),
+  amount: Yup.number()
+    .required("Required")
+    .typeError("Must be a number")
+    .min(0.1, "Must be greater than 0.01"),
   asset: Yup.object({
     assetId: Yup.string(),
     name: Yup.string(),

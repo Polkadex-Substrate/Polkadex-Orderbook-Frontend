@@ -151,7 +151,7 @@ export const LoginTemplate = () => {
 
             <S.Footer>
               <p>
-                Do you want to import an account?{" "}
+                Do you already have a proxy account ?{" "}
                 <Link href="/recovery"> Import Account </Link>
               </p>
             </S.Footer>

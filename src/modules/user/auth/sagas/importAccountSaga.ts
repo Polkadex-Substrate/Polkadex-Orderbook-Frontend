@@ -1,17 +1,19 @@
 import { call, put } from "redux-saga/effects";
 import { keyring } from "@polkadot/ui-keyring";
-import axios from "axios";
+import { API } from "aws-amplify";
 
 import { alertPush, sendError } from "../../../";
 import { importAccountError, ImportAccountFetch, importAccountData } from "../actions";
+import { checkIfProxyAccountRegistered } from "../helpers";
 
 let proxyAddress: string;
 export function* importAccountSaga(action: ImportAccountFetch) {
   try {
     const { mnemonic, password, accountName } = action.payload;
+    checkifProxyAccountDuplicateName(accountName);
     const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
     proxyAddress = pair.address;
-    yield call(checkIfProxyAccountPresent, proxyAddress);
+    yield call(checkIfProxyAccountRegistered, proxyAddress);
     yield put(
       alertPush({
         type: "Successful",
@@ -23,7 +25,7 @@ export function* importAccountSaga(action: ImportAccountFetch) {
     );
     yield put(importAccountData());
   } catch (error) {
-    proxyAddress && keyring.forgetAddress(proxyAddress);
+    if (proxyAddress) keyring.forgetAccount(proxyAddress);
     yield put(
       sendError({
         error: error,
@@ -36,19 +38,10 @@ export function* importAccountSaga(action: ImportAccountFetch) {
   }
 }
 
-const checkIfProxyAccountPresent = (address: string) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`/api/user/proxy/main_account/${address}`)
-      .then((res: any) => {
-        if (res.data.data) {
-          resolve(res.data.data);
-        } else {
-          reject(new Error("This proxy account has not been registered yet!"));
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+const checkifProxyAccountDuplicateName = (accountName: string) => {
+  const accounts = keyring.getAccounts();
+  const account = accounts.find((acc) => acc.meta.name === accountName);
+  if (account) {
+    throw new Error("This proxy account name is already used!");
+  }
 };
