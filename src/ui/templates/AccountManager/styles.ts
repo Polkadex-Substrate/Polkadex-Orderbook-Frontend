@@ -15,63 +15,64 @@ export const Main = styled.main`
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   flex: 1;
+  padding: 4rem;
 `;
 
-export const Container = styled.div`
-  min-width: 80rem;
+export const Title = styled.div``;
+export const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
 `;
-
-export const Title = styled.div`
+export const TitleBalance = styled.div`
   ${({ theme }) => css`
     display: flex;
-    justify-content: space-between;
-    margin: 0 2rem 1rem 2rem;
+    gap: 1rem;
+    align-items: center;
     div {
-      max-width: 15rem;
-      svg {
-        width: 100%;
+      :first-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem;
+        height: 3.5rem;
+        border: 1px solid ${theme.colors.secondaryBackground};
+        border-radius: 10rem;
+      }
+      :last-child {
+        strong {
+          display: block;
+          margin-bottom: 0.3rem;
+          font-weight: 500;
+        }
+        strong,
+        small {
+          color: ${theme.colors.secondaryText};
+          font-size: 1.2rem;
+        }
+        span {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
       }
     }
-    a {
-      color: ${theme.colors.primary};
+    svg {
+      max-width: 1.5rem;
+      stroke: ${theme.colors.secondaryText};
     }
   `}
 `;
-
-export const Card = styled.div`
+export const TitleActions = styled.div`
   ${({ theme }) => css`
-    display: grid;
-    grid-template-columns: auto 1fr;
-    border-radius: 2rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
-    min-height: 40rem;
-  `}
-`;
-
-export const Column = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
-    width: 3rem;
-  `}
-`;
-
-export const Box = styled.div`
-  padding: 4rem;
-  min-width: 40rem;
-  justify-self: center;
-  align-self: center;
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 550;
-  }
-  form {
-    margin-top: 2rem;
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
+    gap: 1rem;
+    a {
+      color: ${theme.colors.secondaryText};
+      border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+    }
+  `}
 `;

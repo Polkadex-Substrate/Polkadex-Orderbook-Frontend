@@ -6,19 +6,37 @@ function SvgGraph(props: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
-      viewBox="0 0 20 20"
+      viewBox="0 0 25 24"
       {...props}>
-      <g>
-        <path
-          data-name="c2/pie-chart-02"
-          d="M13.87 9l3.038-3.037a7.945 7.945 0 01.83 2L16.7 9zM11 3.385l1.105-1.105a7.953 7.953 0 011.985.843L11 6.213z"
-          opacity={0.5}
-        />
-        <path
-          data-name="c1/pie-chart-02"
-          d="M10 20a10 10 0 1110-10 10.011 10.011 0 01-10 10zM9 2.062A8 8 0 1017.938 11H11a2 2 0 01-2-2zm7.338 3.055L12.454 9h5.484a8.121 8.121 0 00-.2-1.039 7.949 7.949 0 00-.831-2 8.058 8.058 0 00-.57-.845zM11 2.062v5.566L14.929 3.7a8.163 8.163 0 00-.839-.575A7.946 7.946 0 0011 2.062z"
-        />
-      </g>
+      <path
+        d="M2.49609 22H22.4961"
+        fill="none"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.2461 4V22H14.7461V4C14.7461 2.9 14.2961 2 12.9461 2H12.0461C10.6961 2 10.2461 2.9 10.2461 4Z"
+        fill="none"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.49609 10V22H7.49609V10C7.49609 8.9 7.09609 8 5.89609 8H5.09609C3.89609 8 3.49609 8.9 3.49609 10Z"
+        fill="none"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.4961 15V22H21.4961V15C21.4961 13.9 21.0961 13 19.8961 13H19.0961C17.8961 13 17.4961 13.9 17.4961 15Z"
+        fill="none"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
