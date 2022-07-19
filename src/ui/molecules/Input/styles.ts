@@ -21,21 +21,30 @@ export const Wrapper = styled.div`
 `;
 
 export const Primary = styled.div``;
-export const LineWrapper = styled.div``;
 
-export const LineBox = styled.div`
+export const LineContainer = styled.div`
   ${({ theme }) => css`
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
     input {
+      width: 100%;
       display: block;
-    }
-    span {
-      opacity: 0.6;
-    }
-    input {
       margin-top: 1rem;
       color: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const LineBox = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    border-bottom: 1px solid
+      ${error ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    span {
+      opacity: 0.6;
     }
   `}
 `;

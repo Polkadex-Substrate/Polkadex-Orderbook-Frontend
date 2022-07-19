@@ -8,3 +8,5 @@ export * from "./SignUp";
 export * from "./Wallet";
 export * from "./ConnectToPhone";
 export * from "./Sign";
+export * from "./SignIn";
+export * from "./CodeVerification";

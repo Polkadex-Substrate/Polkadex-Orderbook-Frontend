@@ -6,14 +6,14 @@ import { useFormik } from "formik";
 
 import * as S from "./styles";
 
-import { Button, Checkbox, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
-import { signValidations } from "@polkadex/orderbook/validations";
+import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
+import { signUpValidations } from "@polkadex/orderbook/validations";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
 
-export const SignTemplate = () => {
+export const SignInTemplate = () => {
   const [state, setState] = useState(false);
 
   const { touched, handleSubmit, errors, getFieldProps } = useFormik({
@@ -23,7 +23,7 @@ export const SignTemplate = () => {
       email: "",
       terms: false,
     },
-    validationSchema: signValidations,
+    validationSchema: signUpValidations,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -43,21 +43,18 @@ export const SignTemplate = () => {
                 <Orderbook />
               </div>
               <span>
-                Already a member? <Link href="/signIn"> Sign In</Link>
+                Not a member? <Link href="/sign"> Sign Up</Link>
               </span>
             </S.Title>
             <S.Card>
               <S.Column>
                 <div>
-                  <h2>Discover the decentralized world.</h2>
-                  <p>
-                    Polkadex is a fully non-custodial platform, so the assets in your wallet
-                    are always under your control.
-                  </p>
+                  <h2>Welcome Back!</h2>
+                  <p>Buy and Sell Cryptocurrencies. Fast and Secure</p>
                 </div>
               </S.Column>
               <S.Box>
-                <h1>Sign up to Orderbook</h1>
+                <h1>Sign In to Orderbook</h1>
                 <form onSubmit={handleSubmit}>
                   <InputLine
                     name="email"
@@ -74,35 +71,14 @@ export const SignTemplate = () => {
                     error={errors.password && touched.password && errors.password}
                     {...getFieldProps("password")}
                   />
-                  <InputLine
-                    name="repeatPassword"
-                    type="password"
-                    label="Repeat password"
-                    placeholder="Repeat your password"
-                    error={
-                      errors.repeatPassword && touched.repeatPassword && errors.repeatPassword
-                    }
-                    {...getFieldProps("repeatPassword")}
-                  />
-                  <S.Terms>
-                    <Checkbox
-                      error={errors.terms && touched.terms && errors.terms}
-                      id="terms"
-                      name="terms"
-                      {...getFieldProps("terms")}
-                    />
-                    <span>
-                      Creating an account means you’re okay with our
-                      <a href="/"> Terms of Service</a> and <a href="/"> Privacy Policy</a>
-                    </span>
-                  </S.Terms>
+
                   <Button
                     type="submit"
                     size="extraLarge"
                     background="primary"
                     color="white"
                     isFull>
-                    Create Account
+                    Log In
                   </Button>
                 </form>
               </S.Box>

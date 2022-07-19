@@ -22,7 +22,6 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div`
   min-width: 80rem;
-  max-width: 80rem;
 `;
 
 export const Title = styled.div`
@@ -45,9 +44,10 @@ export const Title = styled.div`
 export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 0.6fr 1fr;
+    grid-template-columns: auto 1fr;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
+    min-height: 40rem;
   `}
 `;
 
@@ -55,29 +55,15 @@ export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 2rem;
-    background-image: url("/img/signHero.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: bottom;
-    div {
-      padding: 3rem 2.5rem;
-      max-width: calc(90%);
-    }
-    h2 {
-      font-size: 2.2rem;
-      font-weight: 550;
-      margin-bottom: 1.5rem;
-    }
-    p {
-      line-height: 1.4;
-    }
+    width: 3rem;
   `}
 `;
 
 export const Box = styled.div`
   padding: 4rem;
-  max-width: 40rem;
+  min-width: 40rem;
   justify-self: center;
+  align-self: center;
   h1 {
     font-size: 1.8rem;
     font-weight: 550;
@@ -88,15 +74,4 @@ export const Box = styled.div`
     flex-direction: column;
     gap: 2rem;
   }
-`;
-
-export const Terms = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
-    a {
-      color: ${theme.colors.primary};
-    }
-  `}
 `;
