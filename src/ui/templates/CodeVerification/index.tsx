@@ -62,7 +62,7 @@ export const CodeVerificationTemplate = () => {
                     background="primary"
                     color="white"
                     isFull>
-                    Log In
+                    Verify code
                   </Button>
                 </form>
               </S.Box>

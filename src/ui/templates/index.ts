@@ -10,3 +10,4 @@ export * from "./ConnectToPhone";
 export * from "./Sign";
 export * from "./SignIn";
 export * from "./CodeVerification";
+export * from "./AccountManager";

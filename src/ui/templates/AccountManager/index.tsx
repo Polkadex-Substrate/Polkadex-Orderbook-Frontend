@@ -7,23 +7,20 @@ import { useFormik } from "formik";
 import * as S from "./styles";
 
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
-import { signValidations } from "@polkadex/orderbook/validations";
+import { codeValidations } from "@polkadex/orderbook/validations";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
 
-export const SignInTemplate = () => {
+export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
 
   const { touched, handleSubmit, errors, getFieldProps } = useFormik({
     initialValues: {
-      password: "",
-      repeatPassword: "",
-      email: "",
-      terms: false,
+      code: "",
     },
-    validationSchema: signValidations,
+    validationSchema: codeValidations,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -31,7 +28,7 @@ export const SignInTemplate = () => {
   return (
     <>
       <Head>
-        <title>New Account | Polkadex Orderbook</title>
+        <title>Account Manager | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -47,29 +44,16 @@ export const SignInTemplate = () => {
               </span>
             </S.Title>
             <S.Card>
-              <S.Column>
-                <div>
-                  <h2>Welcome Back!</h2>
-                  <p>Buy and Sell Cryptocurrencies. Fast and Secure</p>
-                </div>
-              </S.Column>
+              <S.Column />
               <S.Box>
-                <h1>Sign In to Orderbook</h1>
+                <h1>Code Verification</h1>
                 <form onSubmit={handleSubmit}>
                   <InputLine
-                    name="email"
-                    label="Email"
-                    placeholder="Enter your email"
-                    error={errors.email && touched.email && errors.email}
-                    {...getFieldProps("email")}
-                  />
-                  <InputLine
-                    name="password"
-                    type="password"
-                    label="Password"
-                    placeholder="Enter your password"
-                    error={errors.password && touched.password && errors.password}
-                    {...getFieldProps("password")}
+                    name="code"
+                    label="Code Verification"
+                    placeholder="Type the code sent code to your email"
+                    error={errors.code && touched.code && errors.code}
+                    {...getFieldProps("code")}
                   />
 
                   <Button
@@ -78,7 +62,7 @@ export const SignInTemplate = () => {
                     background="primary"
                     color="white"
                     isFull>
-                    Log In
+                    Verify code
                   </Button>
                 </form>
               </S.Box>

@@ -3,17 +3,19 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
 import { Button, Checkbox, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
-import { signValidations } from "@polkadex/orderbook/validations";
+import { signUpValidations } from "@polkadex/orderbook/validations";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
 
 export const SignTemplate = () => {
+  const router = useRouter();
   const [state, setState] = useState(false);
 
   const { touched, handleSubmit, errors, getFieldProps } = useFormik({
@@ -23,9 +25,10 @@ export const SignTemplate = () => {
       email: "",
       terms: false,
     },
-    validationSchema: signValidations,
+    validationSchema: signUpValidations,
     onSubmit: (values) => {
       console.log(values);
+      router.push("/codeVerification");
     },
   });
   return (
