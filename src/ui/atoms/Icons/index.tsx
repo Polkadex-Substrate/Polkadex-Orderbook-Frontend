@@ -79,6 +79,7 @@ export { default as Loan } from "./Loan";
 export { default as Marketplace } from "./Marketplace";
 export { default as Lock } from "./Lock";
 export { default as Play } from "./Play";
+export { default as DropdownArrow } from "./DropdownArrow";
 export { default as SingleArrowLeft } from "./SingleArrowLeft";
 export { default as Mobile } from "./Mobile";
 export { default as Appearance } from "./Appearance";
@@ -100,6 +101,7 @@ export { default as WalletDeposit } from "./WalletDeposit";
 export { default as WalletWithdraw } from "./WalletWithdraw";
 export { default as DoubleArrowRight } from "./DoubleArrowRight";
 export { default as TokenPixel } from "./TokenPixel";
+export { default as Plus } from "./Plus";
 
 export * from "./Android";
 export * from "./SearchPixel";
