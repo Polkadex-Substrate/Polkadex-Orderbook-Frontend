@@ -2,6 +2,7 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import subDays from "date-fns/subDays";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
@@ -27,14 +28,13 @@ import { selectHasUser, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { useDispatch } from "react-redux";
 
 export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
   status: string;
-}
+};
 
 const initialFilters: Ifilters = {
   hiddenPairs: false,
@@ -62,7 +62,7 @@ const Transactions = () => {
   const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
     setTo(endDate);
-    dispatch(userSessionData({dateFrom: startDate, dateTo: endDate}));
+    dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
   }, []);
 
   const ranges = useMemo(() => {
@@ -98,58 +98,62 @@ const Transactions = () => {
               checked={filters.hiddenPairs}
               action={() => handleChangeHidden("hiddenPairs")}
             />
-            <S.ContainerActions>
-              <Checkbox
-                title="Buy"
-                checked={filters.onlyBuy}
-                action={() => handleChangeHidden("onlyBuy")}
-              />
-              <Checkbox
-                title="Sell"
-                checked={filters.onlySell}
-                action={() => handleChangeHidden("onlySell")}
-              />
-            </S.ContainerActions>
-            <S.ContainerTransactions>
-              <Dropdown
-                header={<DropdownHeader>{filters.status} </DropdownHeader>}
-                direction="bottom"
-                isClickable>
-                <DropdownContent>
-                  {initialState.map((status) => (
-                    <DropdownItem key={status} title={status} handleAction={undefined} />
-                  ))}
-                </DropdownContent>
-              </Dropdown>
-              <Dropdown
-                direction="bottomRight"
-                header={
-                  <Icon
-                    name="Calendar"
-                    stroke="text"
-                    background="secondaryBackground"
-                    size="extraMedium"
-                    style={{ marginLeft: 10 }}
-                  />
-                }>
-                <DateRangePicker
-                  ranges={ranges}
-                  onChange={handleSelect}
-                  rangeColors={["#E6007A"]}
-                  staticRanges={defaultStaticRanges}
-                  inputRanges={[]}
+            <S.Flex>
+              <S.ContainerActions>
+                <Checkbox
+                  title="Buy"
+                  checked={filters.onlyBuy}
+                  action={() => handleChangeHidden("onlyBuy")}
                 />
-              </Dropdown>
-            </S.ContainerTransactions>
+                <Checkbox
+                  title="Sell"
+                  checked={filters.onlySell}
+                  action={() => handleChangeHidden("onlySell")}
+                />
+              </S.ContainerActions>
+              <S.ContainerTransactions>
+                <Dropdown
+                  header={<DropdownHeader>{filters.status} </DropdownHeader>}
+                  direction="bottom"
+                  isClickable>
+                  <DropdownContent>
+                    {initialState.map((status) => (
+                      <DropdownItem key={status} title={status} handleAction={undefined} />
+                    ))}
+                  </DropdownContent>
+                </Dropdown>
+                <S.Calendar>
+                  <Dropdown
+                    direction="bottomRight"
+                    header={
+                      <Icon
+                        name="Calendar"
+                        stroke="text"
+                        background="secondaryBackground"
+                        size="extraMedium"
+                        style={{ marginLeft: 10 }}
+                      />
+                    }>
+                    <DateRangePicker
+                      ranges={ranges}
+                      onChange={handleSelect}
+                      rangeColors={["#E6007A"]}
+                      staticRanges={defaultStaticRanges}
+                      inputRanges={[]}
+                    />
+                  </Dropdown>
+                </S.Calendar>
+              </S.ContainerTransactions>
+            </S.Flex>
           </S.WrapperActions>
         </S.Header>
         {userLoggedIn ? (
           <S.Content>
             <TabContent>
-              <OpenOrders filters={filters}/>
+              <OpenOrders filters={filters} />
             </TabContent>
             <TabContent>
-              <OrderHistory filters={filters}/>
+              <OrderHistory filters={filters} />
             </TabContent>
             <TabContent>
               <TradeHistory filters={filters} />
