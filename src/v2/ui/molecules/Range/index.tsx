@@ -4,7 +4,7 @@ import { getTrackBackground, Range as CustomRange } from "react-range";
 import * as S from "./styles";
 
 const STEP = 0.1;
-const MIN = 1;
+const MIN = 0;
 const MAX = 100;
 
 type Props = {
@@ -68,7 +68,7 @@ export const Range = ({ values, setValues }: Props) => {
               }}
             />
             <output style={{ fontSize: "1rem", color: "white", fontWeight: 550 }}>
-              {values[0].toFixed()}%
+              {values[0]}%
             </output>
           </div>
         )}

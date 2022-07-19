@@ -30,7 +30,12 @@ const Orderbook = () => {
   );
 };
 
-export const OrderbookTable = ({ isSell = false, orders = [], lightMode }: T.Props) => {
+export const OrderbookTable = ({
+  isSell = false,
+  orders = [],
+  precision,
+  lightMode,
+}: T.Props) => {
   const contentRef = useRef(null);
 
   const {
@@ -68,19 +73,19 @@ export const OrderbookTable = ({ isSell = false, orders = [], lightMode }: T.Pro
                   <S.CardCell>
                     <Decimal
                       key={i}
-                      fixed={priceFixed}
+                      fixed={precision}
                       thousSep=","
                       prevValue={orders[i + 1] ? orders[i + 1][0] : 0}>
                       {price}
                     </Decimal>
                   </S.CardCell>
                   <S.CardCell>
-                    <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    <Decimal key={i} fixed={precision} thousSep=",">
                       {volume}
                     </Decimal>
                   </S.CardCell>
                   <S.CardCell>
-                    <Decimal key={i} fixed={amountFixed} thousSep=",">
+                    <Decimal key={i} fixed={precision} thousSep=",">
                       {total[i]}
                     </Decimal>
                   </S.CardCell>

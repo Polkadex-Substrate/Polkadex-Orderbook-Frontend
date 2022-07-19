@@ -1,4 +1,5 @@
 import { CommonError } from "../../types";
+import { InjectedAccount } from "../proxyAccount";
 
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR } from "./constants";
 
@@ -10,6 +11,7 @@ export interface DepositsFetch {
   payload: {
     asset: Record<string, string | null>;
     amount: string | number;
+    mainAccount: InjectedAccount;
   };
 }
 

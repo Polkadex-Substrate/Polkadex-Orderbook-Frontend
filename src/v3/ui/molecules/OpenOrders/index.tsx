@@ -11,8 +11,8 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
-const OpenOrders = () => {
-  const { priceFixed, amountFixed, openOrders } = useOrderHistory();
+const OpenOrders = ({filters}) => {
+  const { priceFixed, amountFixed, openOrders } = useOrderHistory(filters);
   const getAsset = useReduxSelector(selectGetAsset);
 
   return (

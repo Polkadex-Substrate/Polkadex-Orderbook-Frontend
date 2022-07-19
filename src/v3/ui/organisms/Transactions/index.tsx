@@ -2,6 +2,7 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import subDays from "date-fns/subDays";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
@@ -22,13 +23,20 @@ import {
   Tabs,
 } from "@polkadex/orderbook-ui/molecules";
 import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { selectHasUser } from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectHasUser, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-const initialFilters = {
+export type Ifilters = {
+  hiddenPairs: boolean;
+  onlyBuy: boolean;
+  onlySell: boolean;
+  status: string;
+};
+
+const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
   onlySell: false,
@@ -38,6 +46,7 @@ const initialFilters = {
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 const Transactions = () => {
+  const dispatch = useDispatch();
   const now = useRef(new Date());
 
   const [filters, setFilters] = useState(initialFilters);
@@ -53,6 +62,7 @@ const Transactions = () => {
   const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
     setTo(endDate);
+    dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
   }, []);
 
   const ranges = useMemo(() => {
@@ -140,13 +150,13 @@ const Transactions = () => {
         {userLoggedIn ? (
           <S.Content>
             <TabContent>
-              <OpenOrders />
+              <OpenOrders filters={filters} />
             </TabContent>
             <TabContent>
-              <OrderHistory />
+              <OrderHistory filters={filters} />
             </TabContent>
             <TabContent>
-              <TradeHistory />
+              <TradeHistory filters={filters} />
             </TabContent>
             <TabContent>
               <Funds />

@@ -70,11 +70,9 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
             onChange={(e) => changeAmount(e.currentTarget.value)}
             disabled={isOrderLoading}
           />
-          <AvailableMessage message="Soon">
-            <S.RangeWrapper>
-              <Range values={rangeValue} setValues={updateRange} />
-            </S.RangeWrapper>
-          </AvailableMessage>
+          <S.RangeWrapper>
+            <Range values={rangeValue} setValues={updateRange} />
+          </S.RangeWrapper>
 
           {isLimit && (
             <Input
