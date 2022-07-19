@@ -29,4 +29,4 @@ export const POLKADEX_ASSET = {
   assetId: POLKADEX_ASSSET_ID,
 };
 
-export const WHITE_LISTED_ASSET_IDS = ["1", "2", "3", "4", "5"];
+export const ALLOWED_ASSET_IDS = ["1", "2", "3", "4", "5"];
