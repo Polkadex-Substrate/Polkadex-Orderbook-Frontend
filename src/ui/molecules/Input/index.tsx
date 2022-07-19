@@ -40,3 +40,14 @@ export const SecondaryInput = ({ label, children, ...props }: T.SecondaryInputPr
     </S.SecondaryWrapper>
   );
 };
+export const InputLine = ({ label, error, ...props }: T.Props) => (
+  <S.LineWrapper>
+    <S.LineBox>
+      <label htmlFor={props.name}>
+        {label && <span>{label}</span>}
+        <input {...props} />
+      </label>
+    </S.LineBox>
+    {error && <S.Error hasMargin={false}>{error}</S.Error>}
+  </S.LineWrapper>
+);

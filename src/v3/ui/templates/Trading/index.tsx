@@ -82,7 +82,10 @@ export function Trading() {
   return (
     <>
       <Head>
-        <title>Trading | Polkadex Orderbook</title>
+        <title>
+          {currentTrade?.length && marketName?.length && `${currentTrade} | ${marketName} | `}
+          Polkadex Orderbook
+        </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
       <S.Wrapper>

@@ -7,7 +7,7 @@ export const Wrapper = styled.div<Partial<Props>>`
   flex-direction: row;
   align-items: center;
 
-  ${({ theme }) => css`
+  ${({ theme, error }) => css`
     & label {
       width: fit-content;
       cursor: pointer;
@@ -28,7 +28,7 @@ export const Wrapper = styled.div<Partial<Props>>`
       transition: ${theme.transition.fast};
       position: relative;
       outline: none;
-
+      border: ${error?.length ? `1px solid ${theme.colors.primary}` : "none"};
       &:before {
         content: "";
         width: 0.5rem;

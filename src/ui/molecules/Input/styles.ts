@@ -21,6 +21,24 @@ export const Wrapper = styled.div`
 `;
 
 export const Primary = styled.div``;
+export const LineWrapper = styled.div``;
+
+export const LineBox = styled.div`
+  ${({ theme }) => css`
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    padding-bottom: 1rem;
+    input {
+      display: block;
+    }
+    span {
+      opacity: 0.6;
+    }
+    input {
+      margin-top: 1rem;
+      color: ${theme.colors.text};
+    }
+  `}
+`;
 
 export const Box = styled.div`
   ${({ theme }) => css`
@@ -46,11 +64,11 @@ export const Box = styled.div`
   `}
 `;
 
-export const Error = styled.span`
-  ${({ theme }) => css`
+export const Error = styled.span<{ hasMargin?: boolean }>`
+  ${({ theme, hasMargin = true }) => css`
     color: ${theme.colors.primary};
     font-size: 1.2rem;
-    margin-left: 1.3rem;
+    margin-left: ${hasMargin ? "1.3rem" : "none"};
   `}
 `;
 
