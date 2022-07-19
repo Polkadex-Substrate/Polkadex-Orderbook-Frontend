@@ -58,9 +58,7 @@ export const WalletTemplate = () => {
                   <TabContent>
                     <Deposit />
                   </TabContent>
-                  <TabContent>
-                    <Withdraw />
-                  </TabContent>
+                  <TabContent>{/* <Withdraw /> */}</TabContent>
                 </S.Container>
                 <History />
               </S.Grid>
