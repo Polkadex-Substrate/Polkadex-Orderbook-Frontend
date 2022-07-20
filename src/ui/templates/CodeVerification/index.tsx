@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
@@ -9,10 +8,7 @@ import * as S from "./styles";
 
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const CodeVerificationTemplate = () => {
   const router = useRouter();

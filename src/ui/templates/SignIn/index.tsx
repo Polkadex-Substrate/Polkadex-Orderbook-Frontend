@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
@@ -9,21 +8,19 @@ import * as S from "./styles";
 
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { signValidations } from "@polkadex/orderbook/validations";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import { Icons } from "@polkadex/orderbook-ui/atoms";
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const SignInTemplate = () => {
   const router = useRouter();
+
   const [state, setState] = useState(false);
+  const [view, setView] = useState(false);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
-      repeatPassword: "",
       email: "",
-      terms: false,
     },
     validationSchema: signValidations,
     onSubmit: (values) => {
@@ -31,6 +28,7 @@ export const SignInTemplate = () => {
       router.push("accountManager");
     },
   });
+
   return (
     <>
       <Head>
@@ -68,12 +66,15 @@ export const SignInTemplate = () => {
                   />
                   <InputLine
                     name="password"
-                    type="password"
+                    type={view ? "text" : "password"}
                     label="Password"
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
-                    {...getFieldProps("password")}
-                  />
+                    {...getFieldProps("password")}>
+                    <S.Show type="button" onClick={() => setView(!view)}>
+                      {view ? <Icons.Hidden /> : <Icons.Show />}
+                    </S.Show>
+                  </InputLine>
 
                   <Button
                     type="submit"

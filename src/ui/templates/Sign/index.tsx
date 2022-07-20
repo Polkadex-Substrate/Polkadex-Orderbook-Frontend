@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
@@ -9,14 +8,16 @@ import * as S from "./styles";
 
 import { Button, Checkbox, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const SignTemplate = () => {
   const router = useRouter();
   const [state, setState] = useState(false);
+  const [view, setView] = useState({
+    password: false,
+    repeatPassword: false,
+  });
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -71,22 +72,34 @@ export const SignTemplate = () => {
                   />
                   <InputLine
                     name="password"
-                    type="password"
+                    type={view.password ? "text" : "password"}
                     label="Password"
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
-                    {...getFieldProps("password")}
-                  />
+                    {...getFieldProps("password")}>
+                    <S.Show
+                      type="button"
+                      onClick={() => setView({ ...view, password: !view.password })}>
+                      {view.password ? <Icons.Hidden /> : <Icons.Show />}
+                    </S.Show>
+                  </InputLine>
                   <InputLine
                     name="repeatPassword"
-                    type="password"
+                    type={view.repeatPassword ? "text" : "password"}
                     label="Repeat password"
                     placeholder="Repeat your password"
                     error={
                       errors.repeatPassword && touched.repeatPassword && errors.repeatPassword
                     }
-                    {...getFieldProps("repeatPassword")}
-                  />
+                    {...getFieldProps("repeatPassword")}>
+                    <S.Show
+                      type="button"
+                      onClick={() =>
+                        setView({ ...view, repeatPassword: !view.repeatPassword })
+                      }>
+                      {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
+                    </S.Show>
+                  </InputLine>
                   <S.Terms>
                     <Checkbox
                       error={errors.terms && touched.terms && errors.terms}

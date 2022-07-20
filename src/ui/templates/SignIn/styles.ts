@@ -109,3 +109,19 @@ export const Box = styled.div`
     gap: 2rem;
   }
 `;
+
+export const Show = styled.button`
+  ${({ theme }) => css`
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0.3rem;
+    transition: background 0.5s ease-in;
+    border-radius: 10rem;
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+    svg {
+      stroke: ${theme.colors.text};
+    }
+  `}
+`;

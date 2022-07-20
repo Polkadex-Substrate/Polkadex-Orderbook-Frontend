@@ -25,6 +25,7 @@ export const Primary = styled.div``;
 export const LineContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
+    align-items: center;
     gap: 1rem;
     input {
       width: 100%;

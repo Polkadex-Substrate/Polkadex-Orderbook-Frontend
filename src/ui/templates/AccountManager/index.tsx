@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
@@ -14,10 +13,7 @@ import {
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);

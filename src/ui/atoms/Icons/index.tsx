@@ -102,7 +102,8 @@ export { default as WalletWithdraw } from "./WalletWithdraw";
 export { default as DoubleArrowRight } from "./DoubleArrowRight";
 export { default as TokenPixel } from "./TokenPixel";
 export { default as Plus } from "./Plus";
-
+export * from "./Show";
+export * from "./Hidden";
 export * from "./Android";
 export * from "./SearchPixel";
 export * from "./Apple";

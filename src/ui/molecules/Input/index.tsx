@@ -1,4 +1,5 @@
 import { Field } from "formik";
+import { forwardRef, Ref, useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -40,17 +41,26 @@ export const SecondaryInput = ({ label, children, ...props }: T.SecondaryInputPr
     </S.SecondaryWrapper>
   );
 };
-export const InputLine = ({ label, error, children, ...props }: T.Props) => (
-  <div>
-    <S.LineBox error={!!error?.length}>
-      <label htmlFor={props.name}>
-        {label && <span>{label}</span>}
-        <S.LineContainer>
-          <input {...props} />
-          {children}
-        </S.LineContainer>
-      </label>
-    </S.LineBox>
-    {error && <S.Error hasMargin={false}>{error}</S.Error>}
-  </div>
+
+export const InputLine = forwardRef(
+  ({ label, error, children, ...props }: T.Props, ref: T.ReactRef<HTMLInputElement>) => {
+    const inputRef = useRef(null);
+
+    return (
+      <div>
+        <S.LineBox error={!!error?.length}>
+          <label htmlFor={props.name}>
+            {label && <span>{label}</span>}
+            <S.LineContainer>
+              <input ref={ref || inputRef} {...props} />
+              {children}
+            </S.LineContainer>
+          </label>
+        </S.LineBox>
+        {error && <S.Error hasMargin={false}>{error}</S.Error>}
+      </div>
+    );
+  }
 );
+
+InputLine.displayName = "InputLine";
