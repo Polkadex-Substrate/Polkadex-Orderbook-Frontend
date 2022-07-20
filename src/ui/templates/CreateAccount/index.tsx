@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
@@ -76,6 +76,12 @@ export const CreateAccountTemplate = () => {
                   {...getFieldProps("amount")}
                 />
 
+                <PassCode
+                  handleChange={(e) => console.log(e)}
+                  name="passcode"
+                  placeholder="0"
+                  inputs={5}
+                />
                 <Button
                   type="submit"
                   size="extraLarge"

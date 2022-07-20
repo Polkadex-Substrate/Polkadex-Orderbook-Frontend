@@ -73,7 +73,24 @@ export const Box = styled.div`
     }
   `}
 `;
-
+export const PassCode = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+    gap: 1rem;
+  `}
+`;
+export const LinePassCode = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    display: flex;
+    border-bottom: 1px solid ${error ? theme.colors.primary : theme.colors.black};
+    padding-bottom: 1rem;
+    input {
+      width: 100%;
+      text-align: center;
+    }
+  `}
+`;
 export const Error = styled.span<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin = true }) => css`
     color: ${theme.colors.primary};
