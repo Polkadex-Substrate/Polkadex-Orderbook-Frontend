@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -14,6 +15,7 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 });
 
 export const CodeVerificationTemplate = () => {
+  const router = useRouter();
   const [state, setState] = useState(false);
 
   const { touched, handleSubmit, errors, getFieldProps } = useFormik({
@@ -23,6 +25,7 @@ export const CodeVerificationTemplate = () => {
     validationSchema: codeValidations,
     onSubmit: (values) => {
       console.log(values);
+      router.push("/accountManager");
     },
   });
   return (

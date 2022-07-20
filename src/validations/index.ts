@@ -45,3 +45,22 @@ export const signValidations = Yup.object().shape({
 export const codeValidations = Yup.object().shape({
   code: Yup.string().required("Required"),
 });
+
+export const withdrawValidations = Yup.object().shape({
+  amount: Yup.number()
+    .required("Required")
+    .min(0.01, "Too Short!")
+    .typeError("Must be a number"),
+  asset: Yup.object({
+    assetId: Yup.string(),
+    name: Yup.string(),
+    symbol: Yup.string(),
+    decimals: Yup.string(),
+    isFrozen: Yup.bool(),
+  })
+    .required("Required")
+    .nullable(),
+});
+export const typeValidations = Yup.object().shape({
+  account: Yup.string().required("Required"),
+});

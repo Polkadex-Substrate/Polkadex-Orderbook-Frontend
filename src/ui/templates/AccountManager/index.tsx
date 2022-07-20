@@ -8,10 +8,12 @@ import * as S from "./styles";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   Dropdown,
+  Popup,
   Tooltip,
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
+import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -19,9 +21,30 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const [remove, setRemove] = useState({
+    isRemoveDevice: false,
+    status: false,
+  });
 
+  const handleOpenRemove = (isDevice = false) =>
+    setRemove({
+      isRemoveDevice: !!isDevice,
+      status: true,
+    });
+  const handleClose = () =>
+    setRemove({
+      ...remove,
+      status: false,
+    });
   return (
     <>
+      <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
+        {remove.isRemoveDevice ? (
+          <RemoveFromDevice handleClose={handleClose} />
+        ) : (
+          <RemoveFromBlockchain handleClose={handleClose} />
+        )}
+      </Popup>
       <Head>
         <title>Account Manager | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -47,7 +70,7 @@ export const AccountManagerTemplate = () => {
                 <Link href="/deposit">
                   <a>Deposit</a>
                 </Link>
-                <Link href="/withdrw">
+                <Link href="/withdraw">
                   <a>Withdraw</a>
                 </Link>
                 <Link href="/history">
@@ -63,15 +86,15 @@ export const AccountManagerTemplate = () => {
                 title="Trading"
                 address="esrWSxZY...8N7cxP3B"
                 isUsing
-                onRemoveFromBlockchain={() => console.log("onRemoveFromBlockchain")}
-                onRemoveFromDevice={() => console.log("onRemoveFromDevice")}
+                onRemoveFromBlockchain={() => handleOpenRemove()}
+                onRemoveFromDevice={() => handleOpenRemove(true)}
                 onUse={() => console.log("onUse")}
               />
               <Card
                 title="Mobile"
                 address="esrWSxZY...8N7cxP3B"
-                onRemoveFromBlockchain={() => console.log("onRemoveFromBlockchain")}
-                onRemoveFromDevice={() => console.log("onRemoveFromDevice")}
+                onRemoveFromBlockchain={() => handleOpenRemove()}
+                onRemoveFromDevice={() => handleOpenRemove(true)}
                 onUse={() => console.log("onUse")}
               />
               <Link href="/createAccount">

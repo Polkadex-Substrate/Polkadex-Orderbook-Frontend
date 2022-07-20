@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -14,9 +15,10 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 });
 
 export const SignInTemplate = () => {
+  const router = useRouter();
   const [state, setState] = useState(false);
 
-  const { touched, handleSubmit, errors, getFieldProps } = useFormik({
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
@@ -26,6 +28,7 @@ export const SignInTemplate = () => {
     validationSchema: signValidations,
     onSubmit: (values) => {
       console.log(values);
+      router.push("accountManager");
     },
   });
   return (
@@ -77,6 +80,7 @@ export const SignInTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
+                    disabled={!(isValid && dirty)}
                     isFull>
                     Log In
                   </Button>

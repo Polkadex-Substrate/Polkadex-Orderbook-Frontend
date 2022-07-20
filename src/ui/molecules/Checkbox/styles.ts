@@ -33,12 +33,12 @@ export const Wrapper = styled.div<Partial<Props>>`
         content: "";
         width: 0.5rem;
         height: 0.9rem;
-        border: 0.2rem solid ${theme.colors.text};
+        border: 0.2rem solid ${theme.colors.white};
         border-top: 0;
         border-left: 0;
         transform: rotate(45deg);
         position: absolute;
-        top: 0.1rem;
+        top: 0.2rem;
         opacity: 0;
         transition: ${theme.transition.fast};
       }

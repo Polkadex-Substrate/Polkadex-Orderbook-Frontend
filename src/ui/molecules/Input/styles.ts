@@ -44,7 +44,7 @@ export const LineBox = styled.div<{ error?: boolean }>`
     flex-direction: column;
 
     span {
-      opacity: 0.6;
+      color: ${theme.colors.tertiaryText};
     }
   `}
 `;

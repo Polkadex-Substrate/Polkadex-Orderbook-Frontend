@@ -18,7 +18,7 @@ export const SignTemplate = () => {
   const router = useRouter();
   const [state, setState] = useState(false);
 
-  const { touched, handleSubmit, errors, getFieldProps } = useFormik({
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
@@ -104,6 +104,7 @@ export const SignTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
+                    disabled={!(isValid && dirty)}
                     isFull>
                     Create Account
                   </Button>

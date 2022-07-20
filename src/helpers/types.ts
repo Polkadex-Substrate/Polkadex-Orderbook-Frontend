@@ -40,6 +40,8 @@ export type Colors =
   | "teriaryBackgroundOpacity"
   | "secondaryBackgroundDark"
   | "quaternaryBackground"
+  | "secondaryText"
+  | "tertiraryText"
   | "popupBackground"
   | "gradientBackground"
   | "gradientGreen"

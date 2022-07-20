@@ -51,23 +51,23 @@ export const TitleBalance = styled.div`
       :last-child {
         strong {
           display: block;
-          margin-bottom: 0.3rem;
+          margin-bottom: 0.5rem;
           font-weight: 500;
         }
         strong,
         small {
-          color: ${theme.colors.secondaryText};
-          font-size: 1.2rem;
+          color: ${theme.colors.tertiaryText};
+          font-size: 1.4rem;
         }
         span {
-          font-size: 1.5rem;
+          font-size: 1.6rem;
           font-weight: 500;
         }
       }
     }
     svg {
       max-width: 1.5rem;
-      stroke: ${theme.colors.secondaryText};
+      stroke: ${theme.colors.tertiaryText};
     }
   `}
 `;
@@ -77,10 +77,17 @@ export const TitleActions = styled.div`
     display: flex;
     gap: 1rem;
     a {
-      color: ${theme.colors.secondaryText};
+      color: ${theme.colors.tertiaryText};
       border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 1rem;
+      transition: border 0.5s ease-in, background 0.5s ease-in;
+      :active {
+        border-color: ${theme.colors.primary};
+      }
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
     }
   `}
 `;
@@ -107,18 +114,25 @@ export const Card = styled.div<{ isActive?: boolean }>`
   `}
 `;
 export const CardHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  padding-bottom: 6rem;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    padding-bottom: 6rem;
+    :hover {
+      strong {
+        color: ${theme.colors.primary};
+      }
+    }
+  `}
 `;
 
 export const CardHeaderIcon = styled.div`
   ${({ theme }) => css`
     width: 1.5rem;
     svg {
-      stroke: ${theme.colors.secondaryText};
+      stroke: ${theme.colors.tertiaryText};
     }
   `}
 `;
@@ -130,6 +144,7 @@ export const CardHeaderContent = styled.div`
       font-size: 1.6rem;
       font-weight: 500;
       margin-bottom: 0.5rem;
+      transition: color 0.3s ease-in-out;
     }
     button {
       display: inline-block;
@@ -139,11 +154,11 @@ export const CardHeaderContent = styled.div`
       margin-right: 0.4rem;
       svg {
         display: block;
-        stroke: ${theme.colors.secondaryText};
+        stroke: ${theme.colors.tertiaryText};
       }
     }
     span {
-      color: ${theme.colors.secondaryText};
+      color: ${theme.colors.tertiaryText};
       font-size: 1.4rem;
       display: flex;
     }
@@ -164,7 +179,7 @@ export const DropdownHeader = styled.div`
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
     padding: 0.5rem 1rem;
-    color: ${theme.colors.secondaryText};
+    color: ${theme.colors.tertiaryText};
     font-size: 1.5rem;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
@@ -177,24 +192,26 @@ export const DropdownHeader = styled.div`
       height: 1rem;
       margin-left: 1rem;
       svg {
-        stroke: ${theme.colors.secondaryText};
+        stroke: ${theme.colors.tertiaryText};
       }
     }
   `}
 `;
 export const DropdownContent = styled.div`
   ${({ theme }) => css`
-    background: white;
+    background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
     button {
       white-space: nowrap;
-      color: ${theme.colors.secondaryText};
+      color: ${theme.colors.tertiaryText};
       font-size: 1.5rem;
       padding: 1.2rem;
       transition: background 0.5s ease-in;
       text-align: left;
       width: 100%;
+      border-radius: 0.8rem;
+
       :first-child {
         border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       }
@@ -216,11 +233,22 @@ export const ContentActions = styled.div`
       color: ${theme.colors.primary};
     }
     button {
-      color: ${theme.colors.secondaryText};
+      color: ${theme.colors.tertiaryText};
       background: ${theme.colors.secondaryBackgroundOpacity};
       border-radius: 0.8rem;
       padding: 0.8rem 1.8rem;
       height: fit-content;
+      border-width: 1px;
+      border-style: solid;
+      border-color: transparent;
+      transition: background 0.3s ease-in, border 0.3s ease-in;
+      :hover {
+        border-color: ${theme.colors.secondaryBackgroundOpacity};
+        background: none;
+      }
+      :active {
+        border-color: ${theme.colors.primary};
+      }
     }
   `}
 `;
@@ -238,13 +266,13 @@ export const CreateAccount = styled.a`
 export const CreateAccountWrapper = styled.div`
   ${({ theme }) => css`
     font-size: 1.5rem;
-    color: ${theme.colors.secondaryText};
+    color: ${theme.colors.tertiaryText};
     div {
       display: inline-block;
       width: 1rem;
       margin-right: 0.5rem;
       svg {
-        fill: ${theme.colors.secondaryText};
+        fill: ${theme.colors.tertiaryText};
       }
     }
     a {
