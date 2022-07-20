@@ -12,3 +12,4 @@ export * from "./SignIn";
 export * from "./CodeVerification";
 export * from "./AccountManager";
 export * from "./Deposit";
+export * from "./CreateAccount";
