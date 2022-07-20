@@ -16,7 +16,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 4rem 4rem 10rem 4rem;
+  padding: 2rem;
+  @media screen and (min-width: 590px) {
+    padding: 4rem 4rem 10rem 4rem;
+  }
 `;
 
 export const Title = styled.button`
@@ -57,7 +60,10 @@ export const Column = styled.div`
     background-image: url("/img/depositHero.svg");
     background-repeat: no-repeat;
     background-size: contain;
-    background-position: bottom;
+    background-position: right;
+    @media screen and (min-width: 830px) {
+      background-position: bottom;
+    }
     div {
       padding: 3.5rem;
     }
@@ -76,18 +82,20 @@ export const Container = styled.div`
   flex: 1;
   margin-top: 2rem;
   display: grid;
-  grid-template-columns: minmax(25rem, 30rem) 1fr;
   gap: 1rem;
+  @media screen and (min-width: 830px) {
+    grid-template-columns: minmax(25rem, 30rem) 1fr;
+  }
 `;
 
 export const Box = styled.div`
-  padding: 8rem 4rem 4rem 4rem;
-  max-width: 50rem;
-  form {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  @media screen and (min-width: 830px) {
+    padding: 8rem 4rem 4rem 4rem;
+    max-width: 40rem;
   }
 `;
 

@@ -18,16 +18,26 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
+  @media screen and (max-height: 830px) {
+    justify-content: flex-start;
+    margin-top: 3rem;
+  }
 `;
 
 export const Container = styled.div`
-  min-width: 80rem;
+  width: 100%;
+  @media screen and (min-width: 880px) {
+    min-width: 80rem;
+    max-width: 80rem;
+  }
 `;
 
 export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     margin: 0 2rem 1rem 2rem;
     div {
       max-width: 15rem;
@@ -44,10 +54,13 @@ export const Title = styled.div`
 export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 0.6fr 1fr;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    min-height: 40rem;
+    margin: 2rem;
+    @media screen and (min-width: 880px) {
+      grid-template-columns: 0.6fr 1fr;
+      min-height: 40rem;
+    }
   `}
 `;
 
@@ -55,10 +68,13 @@ export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 2rem;
-    background-image: url("/img/signInHero.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: bottom;
+
+    @media screen and (min-width: 880px) {
+      background-image: url("/img/signInHero.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: bottom;
+    }
     div {
       padding: 3rem 2.5rem;
       max-width: calc(90%);
@@ -75,10 +91,13 @@ export const Column = styled.div`
 `;
 
 export const Box = styled.div`
-  padding: 4rem;
-  min-width: 40rem;
-  justify-self: center;
-  align-self: center;
+  padding: 2rem;
+  @media screen and (min-width: 880px) {
+    min-width: 40rem;
+    padding: 4rem;
+    justify-self: center;
+    align-self: center;
+  }
   h1 {
     font-size: 1.8rem;
     font-weight: 550;

@@ -18,16 +18,26 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
+  @media screen and (max-height: 830px) {
+    justify-content: flex-start;
+    margin-top: 3rem;
+  }
 `;
 
 export const Container = styled.div`
-  min-width: 80rem;
+  width: 100%;
+  @media screen and (min-width: 880px) {
+    min-width: 80rem;
+    max-width: 80rem;
+  }
 `;
 
 export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     margin: 0 2rem 1rem 2rem;
     div {
       max-width: 15rem;
@@ -47,7 +57,10 @@ export const Card = styled.div`
     grid-template-columns: auto 1fr;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    min-height: 40rem;
+    margin: 2rem;
+    @media screen and (min-width: 880px) {
+      min-height: 40rem;
+    }
   `}
 `;
 
@@ -60,10 +73,14 @@ export const Column = styled.div`
 `;
 
 export const Box = styled.div`
-  padding: 4rem;
-  min-width: 40rem;
-  justify-self: center;
-  align-self: center;
+  padding: 2rem;
+  width: 100%;
+  @media screen and (min-width: 880px) {
+    max-width: 40rem;
+    padding: 4rem;
+    justify-self: center;
+    align-self: center;
+  }
   h1 {
     font-size: 1.8rem;
     font-weight: 550;

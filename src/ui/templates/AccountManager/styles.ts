@@ -16,7 +16,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 4rem;
+  padding: 2rem;
+  @media screen and (min-width: 590px) {
+    padding: 4rem;
+  }
 `;
 
 export const Title = styled.div`
@@ -31,6 +34,8 @@ export const TitleWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 2rem;
 `;
 
 export const TitleBalance = styled.div`
@@ -100,10 +105,11 @@ export const Content = styled.div`
 `;
 export const ContentGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 `;
+
 export const Card = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     border-radius: 1rem;
@@ -261,6 +267,7 @@ export const CreateAccount = styled.a`
     border-radius: 1rem;
     border: 3px dashed ${theme.colors.secondaryBackground};
     cursor: pointer;
+    min-height: 20rem;
   `}
 `;
 export const CreateAccountWrapper = styled.div`
