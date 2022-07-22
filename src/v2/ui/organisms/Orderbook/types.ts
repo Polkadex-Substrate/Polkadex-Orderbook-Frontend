@@ -4,4 +4,5 @@ export type Props = {
   isSell?: boolean;
   orders: DepthState["bids"];
   lightMode?: boolean;
+  precision?: number
 };

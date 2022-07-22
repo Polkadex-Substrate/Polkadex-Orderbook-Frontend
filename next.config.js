@@ -40,5 +40,6 @@ module.exports = {
     RMQ_USERNAME: process.env.RMQ_USERNAME,
     ENCLAVE_URL: process.env.ENCLAVE_URL || "wss://sgx.polkadex.trade:443",
     POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "wss://blockchain.polkadex.trade",
+    GOOGLE_ANALYTICS: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-PWZK8JEFLX",
   },
 };

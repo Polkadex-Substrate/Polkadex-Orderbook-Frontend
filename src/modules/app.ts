@@ -23,6 +23,7 @@ import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
 import { extensionWalletReducer } from "./user/mainAccount";
+import { sessionReducer } from "./user/session";
 import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
 import { assetsReducer } from "./public/assets";
 
@@ -56,4 +57,5 @@ export const userReducer = combineReducers({
   transactions: transactionsReducer,
   withdraws: withdrawsReducer,
   notifications: notificationReducer,
+  session: sessionReducer,
 });

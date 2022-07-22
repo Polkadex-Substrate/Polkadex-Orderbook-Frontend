@@ -2,20 +2,22 @@
 import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
-import { userOrdersHistoryData, UserOrdersHistoryFetch } from "../actions";
+import { userOrdersHistoryData } from "../actions";
 import { alertPush } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { selectUserSession, UserSessionPayload } from "../../session";
 
-export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
+export function* ordersHistorySaga() {
   try {
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
-      const orders: OrderCommon[] = yield call(fetchOrders, account.address, 1);
+      const userSession: UserSessionPayload  = yield select(selectUserSession);
+      const {dateFrom, dateTo} = userSession;
+      const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
   } catch (error) {
@@ -32,17 +34,16 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
 }
 const fetchOrders = async (
   proxy_acc: string,
-  monthsBefore: number,
-  limit = 10
+  dateFrom: string,
+  dateTo: string,
 ): Promise<OrderCommon[]> => {
-  const fromDate = subtractMonths(monthsBefore);
 
   const res: any = await API.graphql({
     query: queries.listOrderHistorybyMainAccount,
     variables: {
       main_account: proxy_acc,
-      from: fromDate.toISOString(),
-      to: new Date().toISOString(),
+      from: dateFrom,
+      to: dateTo,
     },
   });
   const orders = res.data.listOrderHistorybyMainAccount.items;

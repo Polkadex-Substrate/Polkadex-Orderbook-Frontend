@@ -1,11 +1,10 @@
-import { WithdrawsAction, UserWithdraws } from "./actions";
+import { WithdrawsAction } from "./actions";
 import { WITHDRAWS_DATA, WITHDRAWS_ERROR, WITHDRAWS_FETCH } from "./constants";
 
 export interface WithdrawsState {
   error?: string;
   loading: boolean;
   success: boolean;
-  data?: UserWithdraws[];
 }
 
 const initialState: WithdrawsState = {
@@ -26,7 +25,6 @@ export const withdrawsReducer = (state = initialState, action: WithdrawsAction) 
         ...state,
         laoding: false,
         success: true,
-        data: action.payload,
       };
     case WITHDRAWS_ERROR:
       return {

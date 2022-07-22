@@ -1,4 +1,4 @@
-import { RootState } from "../..";
+import { RootState, selectUserInfo } from "../..";
 import { InjectedAccount } from "../proxyAccount";
 
 import { MainAccount } from "./actions";
@@ -14,3 +14,11 @@ export const selectExtensionWalletAccounts = (state: RootState): InjectedAccount
 
 export const selectMainAccount = (state: RootState): MainAccount =>
   state.user.extensionWallet.selectedAccount;
+
+export const selectLinkedMainAccount = (state: RootState): InjectedAccount | undefined => {
+  const currUserMainAddress = selectUserInfo(state).main_addr;
+  const linkedAccount = selectExtensionWalletAccounts(state).find(
+    (account) => account.address === currUserMainAddress
+  );
+  return linkedAccount;
+};

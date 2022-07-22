@@ -202,7 +202,7 @@ export const ConnectToPhone = () => {
                         <p>Open Polkadex Exchange App and import your wallet via QR code. </p>
                       </S.StepTitle>
                       <S.StepContent>
-                        <QrCode mnemoicString={"['test1','test2','test3' ]"} />
+                        <QrCode mnemoicString={mnemoicString} />
                       </S.StepContent>
                     </S.Step>
                   </>
