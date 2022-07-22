@@ -66,7 +66,7 @@ export const WalletTemplate = () => {
                       <Deposit />
                     </TabContent>
                     <TabContent>
-                      <p style={{ padding: "2rem" }}> Coming Soon </p>
+                      <Withdraw />
                     </TabContent>
                   </S.Container>
                   <History />
