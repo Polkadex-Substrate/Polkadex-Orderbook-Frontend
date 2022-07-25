@@ -64,3 +64,11 @@ export const withdrawValidations = Yup.object().shape({
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),
 });
+
+export const createAccountValidations = Yup.object().shape({
+  name: Yup.string().required("Required").min(2, "Too Short!").max(10, "Too long!"),
+  passcode: Yup.number()
+    .typeError("Must be a number")
+    .min(6, "Must be exactly 5 digits")
+    .max(6, "Must be exactly 5 digits"),
+});

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 
 import { Button, InputLine, PassCode } from "@polkadex/orderbook-ui/molecules";
-import { withdrawValidations } from "@polkadex/orderbook/validations";
+import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
@@ -17,10 +17,10 @@ export const CreateAccountTemplate = () => {
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
-      amount: 0.0,
-      asset: null,
+      name: "",
+      passcode: "",
     },
-    validationSchema: withdrawValidations,
+    validationSchema: createAccountValidations,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -69,19 +69,25 @@ export const CreateAccountTemplate = () => {
             <S.Box>
               <form onSubmit={handleSubmit}>
                 <InputLine
-                  name="amount"
+                  name="name"
                   label="Account Name (Optional)"
                   placeholder="Enter a name for this account"
-                  error={errors.amount && touched.amount && errors.amount}
-                  {...getFieldProps("amount")}
+                  error={errors.name && touched.name && errors.name}
+                  {...getFieldProps("name")}
                 />
-
-                <PassCode
+                <InputLine
+                  name="passcode"
+                  label="Passcode"
+                  placeholder="000000"
+                  error={errors.passcode && touched.passcode && errors.passcode}
+                  {...getFieldProps("passcode")}
+                />
+                {/* <PassCode
                   handleChange={(e) => console.log(e)}
                   name="passcode"
                   placeholder="0"
                   inputs={5}
-                />
+                /> */}
                 <Button
                   type="submit"
                   size="extraLarge"
