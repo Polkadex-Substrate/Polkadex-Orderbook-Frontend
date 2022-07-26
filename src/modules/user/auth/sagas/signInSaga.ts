@@ -1,66 +1,52 @@
-import { put, delay, call, select } from "redux-saga/effects";
-import { Keyring } from "@polkadot/api";
+import { call, put } from "redux-saga/effects";
+import { keyring } from "@polkadot/ui-keyring";
+import { API } from "aws-amplify";
 
-import {
-  sendError,
-  selectMainAccount,
-  selectRangerApi,
-  connectPhoneData,
-  alertPush,
-} from "../../../";
-import { ConnectPhoneFetch, signUpError } from "../actions";
-import { MainAccount } from "../../mainAccount";
-import { addProxyToAccount } from "../helper";
+import * as queries from "../../../../graphql/queries";
+import { sendError } from "../../../";
+import { ProxyAccount, userData } from "../../profile";
+import { signInData, signInError, SignInFetch } from "../actions";
+import { getMainAddrFromUserByProxyAccountRes } from "../helper";
 
-export function* connectPhoneSaga(action: ConnectPhoneFetch) {
+export function* signInSaga(action: SignInFetch) {
   try {
-    const api = yield select(selectRangerApi);
-    const mainAccount: MainAccount = yield select(selectMainAccount);
-    const { mnemonic } = action.payload;
-    const keyring = new Keyring();
-    keyring.setSS58Format(88);
-    const pair = keyring.createFromUri(mnemonic);
-    const proxyAddress = pair.address;
-    if (api && mainAccount.address) {
-      yield put(
-        alertPush({
-          type: "Loading",
-          message: {
-            title: "Processing your transaction...",
-            description:
-              "Please sign the transaction and wait for block finalization. This may take a few minutes",
-          },
-        })
-      );
-      const res = yield call(() =>
-        addProxyToAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
-      );
-      if (res.isSuccess) {
-        yield put(
-          alertPush({
-            type: "Successful",
-            message: {
-              title: "Congratulations!",
-              description:
-                "New proxy account registered, please scan the QR code using polkadex app",
-            },
-          })
-        );
-        yield delay(3000);
-        yield put(connectPhoneData());
-      } else {
-        throw new Error(res.message);
-      }
-    }
+    const { address, password } = action.payload;
+    const user: ProxyAccount = yield call(() => getProxyKeyring(address, password));
+    yield put(userData({ user }));
+    yield put(signInData());
   } catch (error) {
     yield put(
       sendError({
-        error,
+        error: error,
         processingType: "alert",
         extraOptions: {
-          actionError: signUpError,
+          actionError: signInError,
         },
       })
     );
   }
 }
+const getProxyKeyring = async (address: string, password: string): Promise<ProxyAccount> => {
+  try {
+    const userPair = keyring.getPair(address);
+    const account = keyring.getAccount(address);
+    userPair.unlock(password);
+    const res: any = await API.graphql({
+      query: queries.findUserByProxyAccount,
+      variables: { proxy_account: address },
+    });
+    if (res.data?.findUserByProxyAccount.items.length === 0) {
+      throw new Error("This proxy account has not been registered yet!");
+    }
+    const queryResStr = res.data?.findUserByProxyAccount.items[0];
+    const main_addr = getMainAddrFromUserByProxyAccountRes(queryResStr);
+    return {
+      main_addr: main_addr,
+      accountName: account.meta.name,
+      address: userPair.address,
+      keyringPair: userPair,
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
