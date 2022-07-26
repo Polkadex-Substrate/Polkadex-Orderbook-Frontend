@@ -31,9 +31,9 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
-import { SessionState, rootSessionSaga} from './user/session'
 import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
+import { rootSessionSaga, SessionState } from "./user/session";
 
 export * from "./user/auth";
 export * from "./user/history";
