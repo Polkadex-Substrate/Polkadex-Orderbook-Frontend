@@ -29,11 +29,20 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
   try {
     const userPair = keyring.getPair(address);
     const account = keyring.getAccount(address);
-    userPair.unlock(password);
-    const res: any = await API.graphql({
-      query: queries.findUserByProxyAccount,
-      variables: { proxy_account: address },
-    });
+    let res: any = null;
+    try {
+      userPair.unlock(password);
+    } catch (error) {
+      throw new Error("Password not correct, check password and try again");
+    }
+    try {
+      res = await API.graphql({
+        query: queries.findUserByProxyAccount,
+        variables: { proxy_account: address },
+      });
+    } catch (error) {
+      throw new Error("API key is invalid");
+    }
     if (res.data?.findUserByProxyAccount.items.length === 0) {
       throw new Error("This proxy account has not been registered yet!");
     }
