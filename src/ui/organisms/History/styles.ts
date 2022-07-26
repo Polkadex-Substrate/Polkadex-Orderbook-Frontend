@@ -196,3 +196,8 @@ export const EmptyContainer = styled.div`
     max-width: 10rem;
   }
 `;
+
+export const Actions = styled.div`
+  padding: 0 2rem;
+  margin-top: 1rem;
+`;

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 
@@ -24,6 +24,12 @@ export const WalletTemplate = () => {
   const router = useRouter();
   const user = useReduxSelector(selectHasUser);
   const isLoading = useReduxSelector(selectUserFetching);
+  const [isDepositActive, setIsDepositActive] = useState(true);
+
+  const handleWalletTabSelected = (tab: MouseEvent) => {
+    const target = tab.target as HTMLElement;
+    setIsDepositActive(target.outerText.toLowerCase().trim() === "deposit");
+  };
 
   useEffect(() => {
     if (!isLoading && !user) router.push("/login");
@@ -50,7 +56,7 @@ export const WalletTemplate = () => {
 
                 <S.EstimateBalance>
                   <S.HeaderContainer>
-                    <S.Header>
+                    <S.Header onClick={(e) => handleWalletTabSelected(e)}>
                       <TabHeader>
                         <S.Tab color="green">Deposit</S.Tab>
                       </TabHeader>
@@ -69,7 +75,7 @@ export const WalletTemplate = () => {
                       <Withdraw />
                     </TabContent>
                   </S.Container>
-                  <History />
+                  <History isDepositActive={isDepositActive}/>
                 </S.Grid>
               </S.ContainerWrapper>
             </S.Content>

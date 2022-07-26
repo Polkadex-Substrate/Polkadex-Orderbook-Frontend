@@ -1,9 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import {
+  Button,
   Dropdown,
   Icon,
   Tooltip,
@@ -13,7 +14,7 @@ import {
 import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 import { useHistory } from "@polkadex/orderbook-hooks";
 
-const History = () => {
+const History = ({ isDepositActive }) => {
   const {
     filterByType,
     onChangeFilterByType,
@@ -21,12 +22,25 @@ const History = () => {
     onChangeSearch,
     transactionHistory,
     getAsset,
+    handleClaimWithdraws,
   } = useHistory();
 
   return (
     <S.Wrapper>
+      {!isDepositActive ? (
+        <S.Actions>
+          <Button
+            background="primary"
+            size="extraLarge"
+            color="white"
+            isFull
+            onClick={handleClaimWithdraws}>
+            Claim Withdrawals
+          </Button>
+        </S.Actions>
+      ) : null}
       <S.Title>
-        <h2>History</h2>
+        <h2> {isDepositActive ? "Deposit" : "Withdraws"} History</h2>
         <S.TitleWrapper>
           <Search placeholder="Search by address" value={search} onChange={onChangeSearch} />
           <S.TitleIconWrapper>
