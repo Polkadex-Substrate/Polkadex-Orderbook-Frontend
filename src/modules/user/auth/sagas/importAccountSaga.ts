@@ -1,54 +1,66 @@
-import { call, put } from "redux-saga/effects";
-import { keyring } from "@polkadot/ui-keyring";
-import axios from "axios";
+import { put, delay, call, select } from "redux-saga/effects";
+import { Keyring } from "@polkadot/api";
 
-import { alertPush, sendError } from "../../../";
-import { importAccountError, ImportAccountFetch, importAccountData } from "../actions";
+import {
+  sendError,
+  selectMainAccount,
+  selectRangerApi,
+  connectPhoneData,
+  alertPush,
+} from "../../../";
+import { ConnectPhoneFetch, signUpError } from "../actions";
+import { MainAccount } from "../../mainAccount";
+import { addProxyToAccount } from "../helper";
 
-let proxyAddress: string;
-export function* importAccountSaga(action: ImportAccountFetch) {
+export function* connectPhoneSaga(action: ConnectPhoneFetch) {
   try {
-    const { mnemonic, password, accountName } = action.payload;
-    const { pair } = keyring.addUri(mnemonic, password, { name: accountName });
-    proxyAddress = pair.address;
-    yield call(checkIfProxyAccountPresent, proxyAddress);
-    yield put(
-      alertPush({
-        type: "Successful",
-        message: {
-          title: "Congratulations!",
-          description: "Proxy account successfully imported!",
-        },
-      })
-    );
-    yield put(importAccountData());
+    const api = yield select(selectRangerApi);
+    const mainAccount: MainAccount = yield select(selectMainAccount);
+    const { mnemonic } = action.payload;
+    const keyring = new Keyring();
+    keyring.setSS58Format(88);
+    const pair = keyring.createFromUri(mnemonic);
+    const proxyAddress = pair.address;
+    if (api && mainAccount.address) {
+      yield put(
+        alertPush({
+          type: "Loading",
+          message: {
+            title: "Processing your transaction...",
+            description:
+              "Please sign the transaction and wait for block finalization. This may take a few minutes",
+          },
+        })
+      );
+      const res = yield call(() =>
+        addProxyToAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
+      );
+      if (res.isSuccess) {
+        yield put(
+          alertPush({
+            type: "Successful",
+            message: {
+              title: "Congratulations!",
+              description:
+                "New proxy account registered, please scan the QR code using polkadex app",
+            },
+          })
+        );
+        yield delay(3000);
+        yield put(connectPhoneData());
+      } else {
+        throw new Error(res.message);
+      }
+    }
   } catch (error) {
-    proxyAddress && keyring.forgetAddress(proxyAddress);
     yield put(
       sendError({
-        error: error,
+        error,
         processingType: "alert",
         extraOptions: {
-          actionError: importAccountError,
+          actionError: signUpError,
         },
       })
     );
   }
 }
-
-const checkIfProxyAccountPresent = (address: string) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`/api/user/proxy/main_account/${address}`)
-      .then((res: any) => {
-        if (res.data.data) {
-          resolve(res.data.data);
-        } else {
-          reject(new Error("This proxy account has not been registered yet!"));
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-};
