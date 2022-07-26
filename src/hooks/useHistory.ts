@@ -39,6 +39,10 @@ export function useHistory() {
     return transactions;
   }, [filterBy, transactionsHistory]);
 
+  const handleClaimWithdraws = () => {
+    // do your thing here
+  }
+
   useEffect(() => {
     if (userLoggedIn) dispatch(transactionsFetch());
   }, [userLoggedIn, dispatch]);
@@ -51,5 +55,6 @@ export function useHistory() {
       setFilterBy({ ...filterBy, fieldValue: e.target.value }),
     transactionHistory,
     getAsset,
+    handleClaimWithdraws,
   };
 }
