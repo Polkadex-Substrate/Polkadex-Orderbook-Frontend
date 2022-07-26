@@ -1,64 +1,66 @@
-import { call, put } from "redux-saga/effects";
-import { keyring } from "@polkadot/ui-keyring";
-import { API } from "aws-amplify";
+import { put, delay, call, select } from "redux-saga/effects";
+import { Keyring } from "@polkadot/api";
 
-import * as queries from "../../../../graphql/queries";
-import { sendError } from "../../../";
-import { ProxyAccount, userData } from "../../profile";
-import { signInData, signInError, SignInFetch } from "../actions";
+import {
+  sendError,
+  selectMainAccount,
+  selectRangerApi,
+  connectPhoneData,
+  alertPush,
+} from "../../../";
+import { ConnectPhoneFetch, signUpError } from "../actions";
+import { MainAccount } from "../../mainAccount";
+import { addProxyToAccount } from "../helper";
 
-export function* signInSaga(action: SignInFetch) {
+export function* connectPhoneSaga(action: ConnectPhoneFetch) {
   try {
-    const { address, password } = action.payload;
-    const user: ProxyAccount = yield call(() => getProxyKeyring(address, password));
-    yield put(userData({ user }));
-    yield put(signInData());
+    const api = yield select(selectRangerApi);
+    const mainAccount: MainAccount = yield select(selectMainAccount);
+    const { mnemonic } = action.payload;
+    const keyring = new Keyring();
+    keyring.setSS58Format(88);
+    const pair = keyring.createFromUri(mnemonic);
+    const proxyAddress = pair.address;
+    if (api && mainAccount.address) {
+      yield put(
+        alertPush({
+          type: "Loading",
+          message: {
+            title: "Processing your transaction...",
+            description:
+              "Please sign the transaction and wait for block finalization. This may take a few minutes",
+          },
+        })
+      );
+      const res = yield call(() =>
+        addProxyToAccount(api, proxyAddress, mainAccount.injector, mainAccount.address)
+      );
+      if (res.isSuccess) {
+        yield put(
+          alertPush({
+            type: "Successful",
+            message: {
+              title: "Congratulations!",
+              description:
+                "New proxy account registered, please scan the QR code using polkadex app",
+            },
+          })
+        );
+        yield delay(3000);
+        yield put(connectPhoneData());
+      } else {
+        throw new Error(res.message);
+      }
+    }
   } catch (error) {
     yield put(
       sendError({
-        error: error,
+        error,
         processingType: "alert",
         extraOptions: {
-          actionError: signInError,
+          actionError: signUpError,
         },
       })
     );
   }
 }
-const getProxyKeyring = async (address: string, password: string): Promise<ProxyAccount> => {
-  try {
-    const userPair = keyring.getPair(address);
-    const account = keyring.getAccount(address);
-    userPair.unlock(password);
-    const res: any = await API.graphql({
-      query: queries.findUserByProxyAccount,
-      variables: { proxy_account: address },
-    });
-    if (res.data?.findUserByProxyAccount.items.length === 0) {
-      throw new Error("This proxy account has not been registered yet!");
-    }
-    const queryResStr = res.data?.findUserByProxyAccount.items[0];
-    const main_addr = getMainAddrFromUserByProxyAccountRes(queryResStr);
-    return {
-      main_addr: main_addr,
-      accountName: account.meta.name,
-      address: userPair.address,
-      keyringPair: userPair,
-    };
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-const getMainAddrFromUserByProxyAccountRes = (s: string) => {
-  /*
-    eg of "s" := "{main_account=proxy-esoaqNF2F77yp1q5PxUdghRiCNnbHHLVkhmqh7E6pBoBMX4Jx, item_type=eso5pshyDhzejRpiVmq7qwCnFZGXxDZY28XSbMVpbC9Junpaw}"
-    here, item_type is the main_account address.
-  */
-  const n = s.length;
-  // slice "{ }" values from the ends
-  s = s.slice(2, n - 1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_a, b] = s.split(",");
-  const main_addr = b.split("=")[1];
-  return main_addr;
-};
