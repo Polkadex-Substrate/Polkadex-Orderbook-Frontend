@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 import * as S from "./styles";
 
@@ -15,6 +16,7 @@ import {
   orderBookFetch,
   recentTradesFetch,
   selectCurrentMarket,
+  selectCurrentTradePrice,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
@@ -61,6 +63,7 @@ export function Trading() {
   useOrderBookMarketsFetch();
 
   const market = useReduxSelector(selectCurrentMarket);
+  const currentTrade = useReduxSelector(selectCurrentTradePrice);
 
   // intitialize market dependent events
   useEffect(() => {
@@ -75,40 +78,55 @@ export function Trading() {
   useUserDataFetch();
 
   if (!id) return <div />;
+  const marketName = market?.name?.replace("/", "");
   return (
-    <S.Wrapper>
-      <Menu handleChange={() => setState(!state)} />
-      <Popup
-        isMessage
-        isVisible={state}
-        onClose={() => setState(!state)}
-        size="fitContent"
-        isRightPosition
-        style={{
-          maxWidth: "192rem",
-          margin: "0 auto",
-        }}>
-        <Markets />
-      </Popup>
-      <S.WrapperMain>
-        <Navbar onOpenMarkets={() => setState(!state)} />
-        <S.WrapperGraph>
-          <Suspense fallback={<MarketsSkeleton />}>
-            <Graph />
-          </Suspense>
-          <Suspense fallback={<MarketsSkeleton />}>
-            <MarketOrder />
-          </Suspense>
-        </S.WrapperGraph>
-        <S.BottomWrapper>
-          <Suspense fallback={<TransactionsSkeleton />}>
-            <Transactions />
-          </Suspense>
-          <Suspense fallback={<RecentTradesSkeleton />}>
-            <RecentTrades />
-          </Suspense>
-        </S.BottomWrapper>
-      </S.WrapperMain>
-    </S.Wrapper>
+    <>
+      <Head>
+        <title>Trading | Polkadex Orderbook</title>
+        <meta name="description" content="The trading engine of Web3" />
+      </Head>
+      <S.Wrapper>
+        <Head>
+          <title>
+            {currentTrade?.length &&
+              marketName?.length &&
+              `${currentTrade} | ${marketName} | `}
+            Polkadex Orderbook
+          </title>
+        </Head>
+        <Menu handleChange={() => setState(!state)} />
+        <Popup
+          isMessage
+          isVisible={state}
+          onClose={() => setState(!state)}
+          size="fitContent"
+          isRightPosition
+          style={{
+            maxWidth: "192rem",
+            margin: "0 auto",
+          }}>
+          <Markets />
+        </Popup>
+        <S.WrapperMain>
+          <Navbar onOpenMarkets={() => setState(!state)} />
+          <S.WrapperGraph>
+            <Suspense fallback={<MarketsSkeleton />}>
+              <Graph />
+            </Suspense>
+            <Suspense fallback={<MarketsSkeleton />}>
+              <MarketOrder />
+            </Suspense>
+          </S.WrapperGraph>
+          <S.BottomWrapper>
+            <Suspense fallback={<TransactionsSkeleton />}>
+              <Transactions />
+            </Suspense>
+            <Suspense fallback={<RecentTradesSkeleton />}>
+              <RecentTrades />
+            </Suspense>
+          </S.BottomWrapper>
+        </S.WrapperMain>
+      </S.Wrapper>
+    </>
   );
 }

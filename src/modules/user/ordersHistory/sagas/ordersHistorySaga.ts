@@ -5,18 +5,18 @@ import { API } from "aws-amplify";
 import { userOrdersHistoryData } from "../actions";
 import { alertPush } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
-import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
+import { selectUserSession, UserSessionPayload } from "../../session";
 
 export function* ordersHistorySaga() {
   try {
     const account: ProxyAccount = yield select(selectUserInfo);
     if (account.address) {
-      const userSession: UserSessionPayload = yield select(selectUserSession);
-      const { dateFrom, dateTo } = userSession;
+      const userSession: UserSessionPayload  = yield select(selectUserSession);
+      const {dateFrom, dateTo} = userSession;
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
@@ -35,8 +35,9 @@ export function* ordersHistorySaga() {
 const fetchOrders = async (
   proxy_acc: string,
   dateFrom: string,
-  dateTo: string
+  dateTo: string,
 ): Promise<OrderCommon[]> => {
+
   const res: any = await API.graphql({
     query: queries.listOrderHistorybyMainAccount,
     variables: {

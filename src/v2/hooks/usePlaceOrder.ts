@@ -296,27 +296,34 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       // limit and sell
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
-          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal}`;
+          form.amountSell = `${
+            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
       // limit and buy
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
           form.amountBuy = `${
-            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) / Number(form.price)
+            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
+            Number(form.price)
           }`;
         }
       }
       // market and sell
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
-          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal}`;
+          form.amountSell = `${
+            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
       // market and buy
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
-          form.amountBuy = `${Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal}`;
+          form.amountBuy = `${
+            Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
     },

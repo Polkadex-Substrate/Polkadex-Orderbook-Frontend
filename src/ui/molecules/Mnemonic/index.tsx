@@ -67,7 +67,7 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
           <li>
             <input
               ref={inputRef}
-              placeholder="Type mnemonic to add your proxy account to this browser"
+              placeholder="Type your secret phrase to restore your wallet"
               disabled={state.tags.length >= 12}
               onKeyDown={onInputKeyDown}
             />
