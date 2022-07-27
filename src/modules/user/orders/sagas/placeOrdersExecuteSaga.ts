@@ -32,6 +32,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     const enclaveRpcClient = yield select(selectEnclaveRpcClient);
     const nonce = yield call(() => getNonceForAccount(enclaveRpcClient, main_addr));
     const api = yield select(selectRangerApi);
+    const client_order_id = getNewClientId();
     if (address !== "" && keyringPair && enclaveRpcClient && api) {
       const payload = createOrderPayload(
         api,
@@ -42,7 +43,8 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         symbol[1],
         amount,
         price,
-        nonce
+        nonce,
+        client_order_id
       );
       const signature = signPayload(api, keyringPair, payload);
       const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
@@ -62,3 +64,13 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     );
   }
 }
+
+const getNewClientId = () => {
+  // 32 byte Uint8Array of random string with "webapp-" prefix
+  const client_order_id = new Uint8Array(32);
+  client_order_id.set(new TextEncoder().encode("webapp-"));
+  for (let i = 9; i < 32; i++) {
+    client_order_id[i] = Math.floor(Math.random() * 256);
+  }
+  return client_order_id;
+};
