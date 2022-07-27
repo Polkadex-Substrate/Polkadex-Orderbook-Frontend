@@ -60,9 +60,9 @@ export const WalletTemplate = () => {
                       <TabHeader>
                         <S.Tab color="green">Deposit</S.Tab>
                       </TabHeader>
-                      <TabHeader>
+                      {/* <TabHeader>
                         <S.Tab color="primary">Withdraw</S.Tab>
-                      </TabHeader>
+                      </TabHeader> */}
                     </S.Header>
                   </S.HeaderContainer>
                 </S.EstimateBalance>
@@ -75,7 +75,7 @@ export const WalletTemplate = () => {
                       <Withdraw />
                     </TabContent>
                   </S.Container>
-                  <History isDepositActive={isDepositActive}/>
+                  <History isDepositActive={isDepositActive} />
                 </S.Grid>
               </S.ContainerWrapper>
             </S.Content>
