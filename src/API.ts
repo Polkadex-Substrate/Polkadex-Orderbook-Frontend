@@ -109,7 +109,8 @@ export type Balance = {
 
 export type OrderUpdateInput = {
   main_account: string,
-  id: string,
+  client_order_id: string,
+  exchange_order_id: string,
   time: string,
   m: string,
   side: OrderSide,
@@ -139,7 +140,8 @@ export enum OrderStatus {
 export type Order = {
   __typename: "Order",
   main_account: string,
-  id: string,
+  client_order_id: string,
+  exchange_order_id: string,
   time: string,
   m: string,
   side: OrderSide,
@@ -422,7 +424,8 @@ export type SetOrderMutation = {
   setOrder?:  {
     __typename: "Order",
     main_account: string,
-    id: string,
+    client_order_id: string,
+    exchange_order_id: string,
     time: string,
     m: string,
     side: OrderSide,
@@ -676,7 +679,8 @@ export type FindOrderByMainAccountQuery = {
   findOrderByMainAccount?:  {
     __typename: "Order",
     main_account: string,
-    id: string,
+    client_order_id: string,
+    exchange_order_id: string,
     time: string,
     m: string,
     side: OrderSide,
@@ -705,7 +709,8 @@ export type ListOrderHistorybyMainAccountQuery = {
     items?:  Array< {
       __typename: "Order",
       main_account: string,
-      id: string,
+      client_order_id: string,
+      exchange_order_id: string,
       time: string,
       m: string,
       side: OrderSide,
@@ -734,7 +739,8 @@ export type ListOpenOrdersByMainAccountQuery = {
     items?:  Array< {
       __typename: "Order",
       main_account: string,
-      id: string,
+      client_order_id: string,
+      exchange_order_id: string,
       time: string,
       m: string,
       side: OrderSide,
@@ -826,7 +832,8 @@ export type OnOrderUpdateSubscription = {
   onOrderUpdate?:  {
     __typename: "Order",
     main_account: string,
-    id: string,
+    client_order_id: string,
+    exchange_order_id: string,
     time: string,
     m: string,
     side: OrderSide,

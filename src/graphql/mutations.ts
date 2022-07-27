@@ -92,7 +92,8 @@ export const setOrder = /* GraphQL */ `
   mutation SetOrder($input: OrderUpdateInput!) {
     setOrder(input: $input) {
       main_account
-      id
+      client_order_id
+      exchange_order_id
       time
       m
       side

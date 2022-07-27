@@ -144,7 +144,8 @@ export const findOrderByMainAccount = /* GraphQL */ `
       market: $market
     ) {
       main_account
-      id
+      client_order_id
+      exchange_order_id
       time
       m
       side
@@ -175,7 +176,8 @@ export const listOrderHistorybyMainAccount = /* GraphQL */ `
     ) {
       items {
         main_account
-        id
+        client_order_id
+        exchange_order_id
         time
         m
         side
@@ -204,7 +206,8 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `
     ) {
       items {
         main_account
-        id
+        client_order_id
+        exchange_order_id
         time
         m
         side
