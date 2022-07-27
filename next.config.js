@@ -1,5 +1,18 @@
 // TODO: Fix eslint and typescript build errors
 module.exports = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)?",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+        ],
+      },
+    ];
+  },
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,
