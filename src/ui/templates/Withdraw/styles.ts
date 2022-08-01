@@ -93,9 +93,10 @@ export const Box = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  flex: 1;
+
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
-    max-width: 40rem;
   }
 `;
 
@@ -221,6 +222,89 @@ export const DropdownContent = styled.div`
       }
       :hover {
         background: ${theme.colors.secondaryBackground};
+      }
+    }
+  `}
+`;
+
+export const Form = styled.div`
+  @media screen and (min-width: 830px) {
+    max-width: 40rem;
+  }
+`;
+export const History = styled.div`
+  margin-top: 4rem;
+  flex: 1;
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+`;
+export const HistoryContent = styled.div`
+  ${({ theme }) => css`
+    margin-top: 2rem;
+    :not(:last-child) {
+      border-bottom: 1px solid ${theme.colors.secondaryBackground};
+      padding-bottom: 1.5rem;
+    }
+  `}
+`;
+export const HistoryTable = styled.div`
+  margin-top: 1.5rem;
+`;
+
+export const Cell = styled.div`
+  ${({ theme }) => css`
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 500;
+    small {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
+    }
+    button {
+      display: inline-block;
+      width: 1.4rem;
+      height: 1.4rem;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+      svg {
+        display: block;
+        stroke: ${theme.colors.tertiaryText};
+      }
+    }
+  `}
+`;
+export const HeaderColumn = styled.strong`
+  ${({ theme }) => css`
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: ${theme.colors.tertiaryText};
+  `}
+`;
+
+export const HistoryTitle = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    strong {
+      font-weight: normal;
+      font-size: 1.5rem;
+    }
+    button {
+      color: ${theme.colors.tertiaryText};
+      font-size: 1.2rem;
+      padding: 0.6rem;
+      transition: background 0.3s ease-in, border 0.3s ease-in;
+      background: ${theme.colors.primary}22;
+      color: ${theme.colors.primary};
+      border-radius: 0.8rem;
+      border: 1px solid;
+      border-color: transparent;
+      :hover {
+        background: transparent;
+        border-color: ${theme.colors.primary};
       }
     }
   `}
