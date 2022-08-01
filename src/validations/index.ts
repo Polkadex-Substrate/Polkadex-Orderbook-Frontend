@@ -66,9 +66,9 @@ export const typeValidations = Yup.object().shape({
 });
 
 export const createAccountValidations = Yup.object().shape({
-  name: Yup.string().required("Required").min(2, "Too Short!").max(10, "Too long!"),
-  passcode: Yup.number()
-    .typeError("Must be a number")
-    .min(6, "Must be exactly 5 digits")
-    .max(6, "Must be exactly 5 digits"),
+  name: Yup.string().min(2, "Too Short!").max(10, "Too long!"),
+  passcode: Yup.string()
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(5, "Must be exactly 5 digits")
+    .max(5, "Must be exactly 5 digits"),
 });

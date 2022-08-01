@@ -9,6 +9,7 @@ import { Button, InputLine, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
@@ -68,6 +69,7 @@ export const CreateAccountTemplate = () => {
             </S.Column>
             <S.Box>
               <form onSubmit={handleSubmit}>
+                <Mnemonic />
                 <InputLine
                   name="name"
                   label="Account Name (Optional)"

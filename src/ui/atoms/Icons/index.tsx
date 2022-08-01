@@ -140,3 +140,4 @@ export * from "./Timezone";
 export * from "./Screenshot";
 export * from "./ZoomOut";
 export * from "./ZoomIn";
+export * from "./Download";

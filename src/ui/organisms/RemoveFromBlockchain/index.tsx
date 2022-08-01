@@ -39,6 +39,7 @@ export const RemoveFromBlockchain = ({ handleClose }) => {
               To verify, type <S.Strong> delete {accountName} account</S.Strong> below:
             </>
           }
+          placeholder="Type here"
           error={errors.account && touched.account && errors.account}
           {...getFieldProps("account")}
         />
