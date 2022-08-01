@@ -79,7 +79,6 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
               <S.Span>Affiliates</S.Span>
             </S.WrapperIcon>
           </AvailableMessage>
-
           <AvailableMessage message="Soon">
             <S.WrapperIcon href="#">
               <div>
@@ -101,7 +100,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         </S.WrapperIcon>
       </S.WrapperLinks>
       <S.WrapperProfile>
-        <Icon name="Notifications" background="none" size="large" />\{" "}
+        <Icon name="Notifications" background="none" size="large" />
       </S.WrapperProfile>
     </S.Wrapper>
   );
