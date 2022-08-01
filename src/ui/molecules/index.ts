@@ -36,3 +36,4 @@ export * from "./Status";
 export * from "./Loading";
 export * from "./TradeHistoryCard";
 export * from "./TransactionHistoryCard";
+export * from "./Table";

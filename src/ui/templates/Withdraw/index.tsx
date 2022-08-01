@@ -14,23 +14,22 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
 });
 
-export const DepositTemplate = () => {
+export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
-    initialValues: {
-      amount: 0.0,
-      asset: null,
-    },
-    validationSchema: withdrawValidations,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
-
-  console.log("Selected Token id via url:", router.query.id);
+  const { touched, handleSubmit, errors, getFieldProps, setFieldValue, isValid, dirty } =
+    useFormik({
+      initialValues: {
+        amount: 0.0,
+        asset: null,
+      },
+      validationSchema: withdrawValidations,
+      onSubmit: (values) => {
+        console.log(values);
+      },
+    });
   return (
     <>
       <Head>
