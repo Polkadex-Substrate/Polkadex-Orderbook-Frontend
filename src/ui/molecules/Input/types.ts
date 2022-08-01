@@ -1,11 +1,14 @@
-import { ReactNode, InputHTMLAttributes } from "react";
+import { MutableRefObject, Ref, RefObject, ReactNode, InputHTMLAttributes } from "react";
 
 export type Props = {
-  label?: string;
+  label?: string | JSX.Element;
   error?: string;
+  children?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export type SecondaryInputProps = {
   label?: string;
   children?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
+
+export type ReactRef<T> = Ref<T> | RefObject<T> | MutableRefObject<T> | null;

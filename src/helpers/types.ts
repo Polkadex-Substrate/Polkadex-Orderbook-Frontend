@@ -40,6 +40,8 @@ export type Colors =
   | "teriaryBackgroundOpacity"
   | "secondaryBackgroundDark"
   | "quaternaryBackground"
+  | "secondaryText"
+  | "tertiraryText"
   | "popupBackground"
   | "gradientBackground"
   | "gradientGreen"
@@ -289,3 +291,7 @@ export type TokensName =
   | "1Inch"
   | "Bitcoin"
   | "Dash";
+
+export type BackgroundStyle = "flat" | "ghost" | "outline" | "transparent";
+
+export type BorderStyle = "rounded" | "semiRounded" | "squared";

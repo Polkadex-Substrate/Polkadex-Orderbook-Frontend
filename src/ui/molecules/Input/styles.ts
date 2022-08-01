@@ -22,6 +22,34 @@ export const Wrapper = styled.div`
 
 export const Primary = styled.div``;
 
+export const LineContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    input {
+      width: 100%;
+      display: block;
+      margin-top: 1rem;
+      color: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const LineBox = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    border-bottom: 1px solid
+      ${error ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    span {
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
 export const Box = styled.div`
   ${({ theme }) => css`
     padding: 1.2rem;
@@ -45,12 +73,29 @@ export const Box = styled.div`
     }
   `}
 `;
-
-export const Error = styled.span`
-  ${({ theme }) => css`
+export const PassCode = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+    gap: 1rem;
+  `}
+`;
+export const LinePassCode = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    display: flex;
+    border-bottom: 1px solid ${error ? theme.colors.primary : theme.colors.black};
+    padding-bottom: 1rem;
+    input {
+      width: 100%;
+      text-align: center;
+    }
+  `}
+`;
+export const Error = styled.span<{ hasMargin?: boolean }>`
+  ${({ theme, hasMargin = true }) => css`
     color: ${theme.colors.primary};
     font-size: 1.2rem;
-    margin-left: 1.3rem;
+    margin-left: ${hasMargin ? "1.3rem" : "none"};
   `}
 `;
 

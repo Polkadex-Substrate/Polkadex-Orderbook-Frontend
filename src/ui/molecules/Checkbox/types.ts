@@ -1,8 +1,14 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, ReactNode } from "react";
+import { AriaCheckboxProps } from "react-aria";
 
-type Props = {
-  label?: string;
-  error?: string;
-} & InputHTMLAttributes<HTMLInputElement>;
+import { Colors, Sizes } from "@polkadex/web-helpers";
 
-export default Props;
+export type Props = {
+  children?: ReactNode;
+  fill?: Colors;
+  color?: Colors;
+  checboxSize?: Sizes;
+  backgroundStyle?: "flat" | "ghost" | "outline" | "none";
+  borderStyle?: "rounded" | "squared" | "semiRounded";
+} & Omit<InputHTMLAttributes<HTMLInputElement>, keyof AriaCheckboxProps> &
+  AriaCheckboxProps;

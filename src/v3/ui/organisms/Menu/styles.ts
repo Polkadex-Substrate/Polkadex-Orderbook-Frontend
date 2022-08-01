@@ -110,10 +110,3 @@ export const WrapperProfile = styled.div`
     display: none;
   }
 `;
-
-export const Profile = styled.img`
-  border-radius: 55rem;
-  margin: 1.5rem 0;
-  width: 2.5rem;
-  height: 2.5rem;
-`;

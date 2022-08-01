@@ -20,7 +20,7 @@ import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainAccountFetch, signUp, signUpData } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
 import { signInValidations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
@@ -61,7 +61,7 @@ export const SignUpTemplate = () => {
             <PaperWallet
               mnemonic={mnemonic}
               mnemoicString={mnemoicString}
-              forwardedRef={componentRef}
+              ref={componentRef}
             />
           </div>
         )}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
+import { useRouter } from "next/router";
 
 import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
@@ -17,7 +18,18 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
-
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      (window as any).gtag("config", process.env.GOOGLE_ANALYTICS, {
+        page_path: url,
+      });
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
   return (
     <ThemeWrapper>
       <GlobalStyles />

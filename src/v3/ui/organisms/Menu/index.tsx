@@ -24,7 +24,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           {!isWallet && (
             <S.WrapperIcon onClick={handleChange}>
               <div>
-                <Icon name="Graph" background="none" size="large" />
+                <Icon name="Graph" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Markets</S.Span>
             </S.WrapperIcon>
@@ -32,7 +32,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <Link href="/trading">
             <S.WrapperIcon>
               <div>
-                <Icon name="Exchange" background="none" size="large" />
+                <Icon name="Exchange" background="none" stroke="text" size="large" />
               </div>
               <div>
                 <S.Span>Exchange</S.Span>
@@ -56,7 +56,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <AvailableMessage message="Soon">
             <S.WrapperIcon href="#">
               <div>
-                <Icon name="History" background="none" size="large" />
+                <Icon name="History" background="none" stroke="text" size="large" />
               </div>
               <S.Span>My History</S.Span>
             </S.WrapperIcon>
@@ -64,7 +64,7 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <AvailableMessage message="Soon">
             <S.WrapperIcon href="#">
               <div>
-                <Icon name="Transactions" background="none" size="large" />
+                <Icon name="Transactions" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Transactions</S.Span>
             </S.WrapperIcon>
@@ -74,16 +74,15 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <AvailableMessage message="Soon">
             <S.WrapperIcon href="#">
               <div>
-                <Icon name="News" background="none" size="large" />
+                <Icon name="News" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Affiliates</S.Span>
             </S.WrapperIcon>
           </AvailableMessage>
-
           <AvailableMessage message="Soon">
             <S.WrapperIcon href="#">
               <div>
-                <Icon name="Help" background="none" size="large" />
+                <Icon name="Help" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Support</S.Span>
             </S.WrapperIcon>
@@ -102,7 +101,6 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
       </S.WrapperLinks>
       <S.WrapperProfile>
         <Icon name="Notifications" background="none" size="large" />
-        <S.Profile src="/img/Avatar.png" />
       </S.WrapperProfile>
     </S.Wrapper>
   );

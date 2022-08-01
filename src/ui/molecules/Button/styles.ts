@@ -17,6 +17,10 @@ const sizeModifier = {
     padding: 0.8rem;
     border-radius: 0.8rem;
   `,
+  large: () => css`
+    padding: 1.2rem;
+    border-radius: 0.6rem;
+  `,
   extraLarge: () => css`
     padding: 1.5rem 2rem;
     border-radius: 0.8rem;

@@ -57,6 +57,7 @@ const defaultTheme = {
     gradientPrimary: "linear-gradient(180deg, #E6007A13 0%, rgba(230, 0, 122, 0) 100%);",
     transparent: "transparent",
     secondaryText: "#8BA1BE",
+    tertiaryText: "#A8ADB7",
     none: "none",
     green: "#0CA564",
     white: "#ffffff",
