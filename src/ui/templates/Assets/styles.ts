@@ -104,6 +104,7 @@ export const Search = styled.div`
     display: flex;
     align-items: center;
     input {
+      color: ${theme.colors.text};
       margin-left: 1rem;
     }
     ${Icon} {

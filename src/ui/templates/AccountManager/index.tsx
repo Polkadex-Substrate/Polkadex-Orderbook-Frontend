@@ -129,7 +129,7 @@ export const Card = ({
   };
   return (
     <S.Card isActive={isUsing}>
-      <Link href="/accountManager">
+      <Link href="/assets">
         <a>
           <S.CardHeader>
             <S.CardHeaderContent>
