@@ -72,3 +72,4 @@ export const createAccountValidations = Yup.object().shape({
     .min(5, "Must be exactly 5 digits")
     .max(5, "Must be exactly 5 digits"),
 });
+export const linkAccountValidations = Yup.object().shape({});
