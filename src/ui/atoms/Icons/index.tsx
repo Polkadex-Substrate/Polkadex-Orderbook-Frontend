@@ -141,3 +141,6 @@ export * from "./Screenshot";
 export * from "./ZoomOut";
 export * from "./ZoomIn";
 export * from "./Download";
+export * from "./InformationAlert";
+export * from "./ErrorAlert";
+export * from "./AttentionAlert";

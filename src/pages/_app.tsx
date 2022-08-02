@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
@@ -15,6 +15,7 @@ import {
   selectCurrentColorTheme,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
+import { Notifications } from "@polkadex/orderbook-ui/templates";
 
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
@@ -41,6 +42,7 @@ function App({ Component, pageProps }: AppProps) {
 
 const ThemeWrapper = ({ children }) => {
   const [state, setState] = useState(false);
+  const [example, setExample] = useState([]);
   const color = useSelector(selectCurrentColorTheme);
   const alert = useSelector(selectAlertState);
 
@@ -52,9 +54,39 @@ const ThemeWrapper = ({ children }) => {
 
   if (!state) return <div />;
 
+  const handleRemove = (id: number) =>
+    setExample((prev) => prev.filter((item) => item.id !== id));
+
+  const handleAdd = () => {
+    const number = Math.floor(Math.random() * 1000);
+    const n = Math.floor(Math.random() * (4 - 1) + 1);
+
+    const selectedType = () => {
+      switch (n) {
+        case 1:
+          return "ErrorAlert";
+        case 2:
+          return "AttentionAlert";
+        default:
+          return "InformationAlert";
+      }
+    };
+    setExample([
+      ...example,
+      {
+        id: number,
+        type: selectedType(),
+        title: `Fetch Information Error ${number}`,
+        message: "Polkadex Orderbook is under maintenance, try again later.",
+        time: new Date().toLocaleString(),
+        active: true,
+      },
+    ]);
+  };
+
   return (
     <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      {/* {!!notifications.length && <Notifications />} */}
+      {/* {<Notifications notifications={example} onRemove={handleRemove} onAdd={handleAdd} />} */}
       {alert.status && (
         <Message
           isVisible={alert.status}

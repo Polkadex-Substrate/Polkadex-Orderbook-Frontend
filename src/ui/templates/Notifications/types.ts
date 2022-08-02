@@ -1,10 +1,12 @@
 import { LinkHTMLAttributes } from "react";
 
-import { Icons } from "@polkadex/web-helpers";
-
-export type NotificationCardProps = {
+export type CardProps = {
   title: string;
   message: string;
-  icon: Icons;
+  type: "InformationAlert" | "ErrorAlert" | "AttentionAlert" | string;
   active?: boolean;
+  time: string;
+  actionUrl?: string;
+  actionTitle?: string;
+  onRemove: () => void;
 } & Pick<LinkHTMLAttributes<HTMLLinkElement>, "href">;
