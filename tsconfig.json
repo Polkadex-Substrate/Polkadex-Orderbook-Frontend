@@ -1,144 +1,144 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "target": "ES2020",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "es6",
-      "scripthost",
-      "webworker",
-      "es5",
-      "es7",
-      "es2017"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": false,
-    "noEmit": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "noImplicitAny": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "paths": {
-      "@polkadex/orderbook-modules": [
-        "src/modules"
-      ],
-      "@polkadex/orderbook-hooks": [
-        "src/hooks"
-      ],
-      "@polkadex/web-helpers": [
-        "src/helpers"
-      ],
-      "@polkadex/web-constants": [
-        "src/constants"
-      ],
-      "@polkadex/orderbook-ui/templates": [
-        "src/ui/templates"
-      ],
-      "@polkadex/orderbook-ui/templates/*": [
-        "src/ui/templates/*"
-      ],
-      "@polkadex/orderbook-ui/organisms": [
-        "src/ui/organisms"
-      ],
-      "@polkadex/orderbook-ui/organisms/*": [
-        "src/ui/organisms/*"
-      ],
-      "@polkadex/orderbook-ui/atoms": [
-        "src/ui/atoms"
-      ],
-      "@polkadex/orderbook-ui/atoms/*": [
-        "src/ui/atoms/*"
-      ],
-      "@polkadex/orderbook-ui/molecules": [
-        "src/ui/molecules"
-      ],
-      "@polkadex/orderbook-ui/molecules/*": [
-        "src/ui/molecules/*"
-      ],
-      "@polkadex/orderbook-config": [
-        "src/config"
-      ],
-      "lib/*": [
-        "src/lib/*"
-      ],
-      "@polkadex/orderbook/*": [
-        "src/*"
-      ],
-      "@orderbook/v2/ui/atoms": [
-        "src/v2/ui/atoms"
-      ],
-      "@orderbook/v2/ui/templates": [
-        "src/v2/ui/templates"
-      ],
-      "@orderbook/v2/ui/templates/*": [
-        "src/v2/ui/templates/*"
-      ],
-      "@orderbook/v2/ui/organisms": [
-        "src/v2/ui/organisms"
-      ],
-      "@orderbook/v2/ui/organisms/*": [
-        "src/v2/ui/organisms/*"
-      ],
-      "@orderbook/v2/ui/molecules": [
-        "src/v2/ui/molecules"
-      ],
-      "@orderbook/v2/ui/molecules/*": [
-        "src/v2/ui/molecules/*"
-      ],
-      "@orderbook/v2/hooks": [
-        "src/v2/hooks"
-      ],
-      "@orderbook/v3/ui/templates": [
-        "src/v3/ui/templates"
-      ],
-      "@orderbook/v3/ui/templates/*": [
-        "src/v3/ui/templates/*"
-      ],
-      "@orderbook/v3/ui/organisms": [
-        "src/v3/ui/organisms"
-      ],
-      "@orderbook/v3/ui/organisms/*": [
-        "src/v3/ui/organisms/*"
-      ],
-      "@orderbook/v3/ui/molecules": [
-        "src/v3/ui/molecules"
-      ],
-      "@orderbook/v3/ui/molecules/*": [
-        "src/v3/ui/molecules/*"
-      ],
-    },
-    "incremental": true
+  "compilerOptions":{
+     "baseUrl":".",
+     "target":"ES2020",
+     "lib":[
+        "dom",
+        "dom.iterable",
+        "esnext",
+        "es6",
+        "scripthost",
+        "webworker",
+        "es5",
+        "es7",
+        "es2017"
+     ],
+     "allowJs":true,
+     "skipLibCheck":true,
+     "strict":false,
+     "forceConsistentCasingInFileNames":false,
+     "noEmit":true,
+     "experimentalDecorators":true,
+     "sourceMap":true,
+     "allowSyntheticDefaultImports":true,
+     "esModuleInterop":true,
+     "noImplicitAny":false,
+     "module":"esnext",
+     "moduleResolution":"node",
+     "resolveJsonModule":true,
+     "isolatedModules":true,
+     "jsx":"preserve",
+     "typeRoots":[
+        "./node_modules/@types"
+     ],
+     "paths":{
+        "@polkadex/orderbook-modules":[
+           "src/modules"
+        ],
+        "@polkadex/orderbook-hooks":[
+           "src/hooks"
+        ],
+        "@polkadex/web-helpers":[
+           "src/helpers"
+        ],
+        "@polkadex/web-constants":[
+           "src/constants"
+        ],
+        "@polkadex/orderbook-ui/templates":[
+           "src/ui/templates"
+        ],
+        "@polkadex/orderbook-ui/templates/*":[
+           "src/ui/templates/*"
+        ],
+        "@polkadex/orderbook-ui/organisms":[
+           "src/ui/organisms"
+        ],
+        "@polkadex/orderbook-ui/organisms/*":[
+           "src/ui/organisms/*"
+        ],
+        "@polkadex/orderbook-ui/atoms":[
+           "src/ui/atoms"
+        ],
+        "@polkadex/orderbook-ui/atoms/*":[
+           "src/ui/atoms/*"
+        ],
+        "@polkadex/orderbook-ui/molecules":[
+           "src/ui/molecules"
+        ],
+        "@polkadex/orderbook-ui/molecules/*":[
+           "src/ui/molecules/*"
+        ],
+        "@polkadex/orderbook-config":[
+           "src/config"
+        ],
+        "lib/*":[
+           "src/lib/*"
+        ],
+        "@polkadex/orderbook/*":[
+           "src/*"
+        ],
+        "@orderbook/v2/ui/atoms":[
+           "src/v2/ui/atoms"
+        ],
+        "@orderbook/v2/ui/templates":[
+           "src/v2/ui/templates"
+        ],
+        "@orderbook/v2/ui/templates/*":[
+           "src/v2/ui/templates/*"
+        ],
+        "@orderbook/v2/ui/organisms":[
+           "src/v2/ui/organisms"
+        ],
+        "@orderbook/v2/ui/organisms/*":[
+           "src/v2/ui/organisms/*"
+        ],
+        "@orderbook/v2/ui/molecules":[
+           "src/v2/ui/molecules"
+        ],
+        "@orderbook/v2/ui/molecules/*":[
+           "src/v2/ui/molecules/*"
+        ],
+        "@orderbook/v2/hooks":[
+           "src/v2/hooks"
+        ],
+        "@orderbook/v3/ui/templates":[
+           "src/v3/ui/templates"
+        ],
+        "@orderbook/v3/ui/templates/*":[
+           "src/v3/ui/templates/*"
+        ],
+        "@orderbook/v3/ui/organisms":[
+           "src/v3/ui/organisms"
+        ],
+        "@orderbook/v3/ui/organisms/*":[
+           "src/v3/ui/organisms/*"
+        ],
+        "@orderbook/v3/ui/molecules":[
+           "src/v3/ui/molecules"
+        ],
+        "@orderbook/v3/ui/molecules/*":[
+           "src/v3/ui/molecules/*"
+        ]
+     },
+     "incremental":true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+  "include":[
+     "next-env.d.ts",
+     "**/*.ts",
+     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    "public",
-    "mocks",
-    "__mocks__",
-    "scripts",
-    "spec",
-    "jest.config.js",
-    "webpack",
-    "./src/*.test.*",
+  "exclude":[
+     "node_modules",
+     "public",
+     "mocks",
+     "__mocks__",
+     "scripts",
+     "spec",
+     "jest.config.js",
+     "webpack",
+     "./src/*.test.*"
   ],
-  "files": [
-    "src/styles/styled.d.ts"
+  "files":[
+     "src/styles/styled.d.ts"
   ]
 }
