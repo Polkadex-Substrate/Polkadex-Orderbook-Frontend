@@ -6,7 +6,18 @@ const awsmobile = {
     "aws_appsync_graphqlEndpoint": "https://pdbbdqroynawbgejojs4fjgfiq.appsync-api.ap-south-1.amazonaws.com/graphql",
     "aws_appsync_region": "ap-south-1",
     "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-uyr6rr4omrfmvdjh55mgiub5na"
+    "aws_appsync_apiKey": "da2-uyr6rr4omrfmvdjh55mgiub5na",
+    Auth: {
+        // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+        identityPoolId: 'ap-south-1_G7xhCI6s5',
+        // REQUIRED - Amazon Cognito Region
+        region: 'ap-south-1',
+        // OPTIONAL - Amazon Cognito User Pool ID
+        userPoolId: 'XX-XXXX-X_abcd1234',
+        // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+        userPoolWebClientId: 'orderba2aee476_app_clientWeb',
+    }
+
 };
 
 
