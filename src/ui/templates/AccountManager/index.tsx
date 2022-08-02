@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { X } from "@styled-icons/crypto";
 
 import * as S from "./styles";
 

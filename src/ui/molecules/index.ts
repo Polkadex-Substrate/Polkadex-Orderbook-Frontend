@@ -37,3 +37,4 @@ export * from "./Loading";
 export * from "./TradeHistoryCard";
 export * from "./TransactionHistoryCard";
 export * from "./Table";
+export * from "./createAccountBanner";
