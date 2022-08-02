@@ -10,6 +10,16 @@
       "StackName": "amplify-orderbookfrontend-dev-213922",
       "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-dev-213922/59f148c0-f0b3-11ec-93ea-0a1621de353a",
       "AmplifyAppId": "djf6q4n044sil"
+    },
+    "categories": {
+      "auth": {
+        "orderbookfrontend80237148": {
+          "userPoolId": "ap-south-1_G7xhCI6s5",
+          "userPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
+          "webClientId": "6ccnjqn0ik28hf8v0603pq3m81",
+          "nativeClientId": "4cmd6mbm93vb7u87v72911n279"
+        }
+      }
     }
   }
 }
