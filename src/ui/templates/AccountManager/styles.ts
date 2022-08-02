@@ -105,7 +105,7 @@ export const Content = styled.div`
 `;
 export const ContentGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 `;
@@ -203,6 +203,7 @@ export const DropdownHeader = styled.div`
     }
   `}
 `;
+
 export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
@@ -270,6 +271,7 @@ export const CreateAccount = styled.a`
     min-height: 20rem;
   `}
 `;
+
 export const CreateAccountWrapper = styled.div`
   ${({ theme }) => css`
     font-size: 1.5rem;
@@ -284,6 +286,80 @@ export const CreateAccountWrapper = styled.div`
     }
     a {
       color: ${theme.colors.primary};
+    }
+  `}
+`;
+
+export const LinkAccount = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    border-radius: 1.5rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    flex-wrap: wrap;
+  `}
+`;
+
+export const LinkAccountColumn = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    flex: 1;
+    :first-child {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
+      border-radius: 1.5rem;
+      span {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 550;
+        margin-bottom: 0.3rem;
+      }
+    }
+    :last-child {
+      cursor: pointer;
+      :hover {
+        span {
+          color: ${theme.colors.primary};
+        }
+        ${LinkAccountColumnWrapper}:last-child svg {
+          stroke: ${theme.colors.primary};
+        }
+      }
+    }
+  `}
+`;
+
+export const FlexCenter = styled.div``;
+
+export const LinkAccountColumnWrapper = styled.div`
+  ${({ theme }) => css`
+    :first-child {
+      svg {
+        width: 3rem;
+      }
+    }
+    :last-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      span {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: 550;
+        margin-bottom: 0.3rem;
+        transition: color 0.3s ease-in-out;
+      }
+      div {
+        :last-child {
+          width: 1.5rem;
+          svg {
+            transition: stroke 0.3s ease-in-out;
+            stroke: ${theme.colors.tertiaryText};
+          }
+        }
+      }
     }
   `}
 `;

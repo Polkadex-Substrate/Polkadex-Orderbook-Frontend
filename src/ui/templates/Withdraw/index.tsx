@@ -176,7 +176,7 @@ export const WithdrawTemplate = () => {
                 {testData.map((value) => (
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
-                      <strong>Block {value.block}</strong>
+                      <strong>Id {value.block}</strong>
                       <button type="button" onClick={() => console.log("Claim")}>
                         Claim
                       </button>
