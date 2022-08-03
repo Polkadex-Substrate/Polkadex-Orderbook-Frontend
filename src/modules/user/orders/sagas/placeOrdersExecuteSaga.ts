@@ -1,5 +1,5 @@
 import { call, put, select } from "redux-saga/effects";
-import { Client } from "rpc-websockets";
+import { API } from "aws-amplify";
 
 import {
   sendError,
@@ -11,11 +11,10 @@ import {
   selectRangerApi,
 } from "../../..";
 
+import * as mutation from "./../../../../graphql/mutations";
+
 import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
-import {
-  createOrderPayload,
-  placeOrderToEnclave,
-} from "@polkadex/orderbook/helpers/createOrdersHelpers";
+import { createOrderPayload } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { getNonceForAccount } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 
@@ -34,7 +33,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     const api = yield select(selectRangerApi);
     const client_order_id = getNewClientId();
     if (address !== "" && keyringPair && enclaveRpcClient && api) {
-      const payload = createOrderPayload(
+      const order = createOrderPayload(
         api,
         address,
         order_type,
@@ -46,8 +45,9 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         nonce,
         client_order_id
       );
-      const signature = signPayload(api, keyringPair, payload);
-      const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
+      const signature = signPayload(api, keyringPair, order);
+      const res = yield call(() => executePlaceOrder([order, signature]));
+      console.info("placed order: ", res);
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
     }
@@ -73,4 +73,13 @@ const getNewClientId = () => {
     client_order_id[i] = Math.floor(Math.random() * 256);
   }
   return client_order_id;
+};
+
+const executePlaceOrder = async (orderPayload) => {
+  const payload = { PlaceOrder: orderPayload };
+  const res = await API.graphql({
+    query: mutation.place_order,
+    variables: { input: payload },
+  });
+  return res;
 };

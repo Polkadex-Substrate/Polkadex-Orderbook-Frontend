@@ -61,28 +61,3 @@ export const createCancelOrderPayloadSigned = (
   };
   return payload;
 };
-
-export const placeOrderToEnclave = async (
-  enclaveClient: Client,
-  order: Codec,
-  multisignature: SignedOrderPayload
-) => {
-  const res = await enclaveClient.call("enclave_placeOrder", [order, multisignature]);
-  return res;
-};
-
-export const placeCancelOrderToEnclave = async (
-  enclaveClient: Client,
-  order_id: Codec,
-  account: string,
-  pair: any,
-  multisignature: SignedOrderPayload
-) => {
-  const res = await enclaveClient.call("enclave_cancelOrder", [
-    order_id,
-    account,
-    pair,
-    multisignature,
-  ]);
-  return res;
-};

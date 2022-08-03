@@ -43,6 +43,9 @@ function createUserEventsChannel(address: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: address },
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => {
         emit(createActionFromUserEvent(data));
