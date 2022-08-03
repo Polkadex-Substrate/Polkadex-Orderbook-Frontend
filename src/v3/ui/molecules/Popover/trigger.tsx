@@ -11,7 +11,7 @@ import {
 
 import { usePopoverContext } from "./context";
 
-const Trigger = forwardRef(({ children }: PropsWithChildren<{}>, ref: Ref<HTMLElement>) => {
+const Trigger = forwardRef(({ children }: PropsWithChildren<any>, ref: Ref<HTMLElement>) => {
   const { triggerRef, triggerProps, buttonProps } = usePopoverContext();
 
   const child = Children.only(children);

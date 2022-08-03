@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as S from "./styles";
 
 import { AlertCard } from "@orderbook/v2/ui/molecules";
-import { notificationDeleteByIndex, selectNotifications } from "@polkadex/orderbook-modules";
+import { notificationDeleteById, selectNotifications } from "@polkadex/orderbook-modules";
 
 export const Notifications = () => {
   const notifications = useSelector(selectNotifications);
@@ -20,7 +20,7 @@ export const Notifications = () => {
               title={notification.message.title}
               description={notification.message.description}
               icon="Clock"
-              onClick={() => dispatch(notificationDeleteByIndex(i))}
+              onClick={() => dispatch(notificationDeleteById(i))}
             />
           </CSSTransition>
         ))}

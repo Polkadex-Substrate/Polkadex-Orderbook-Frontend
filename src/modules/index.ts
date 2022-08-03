@@ -127,5 +127,6 @@ export function* rootSaga() {
     call(rootBalancesSaga),
     call(rootEnclaveRpcClientSaga),
     call(rootAssetsSaga),
+    call(rootNotificationSaga),
   ]);
 }

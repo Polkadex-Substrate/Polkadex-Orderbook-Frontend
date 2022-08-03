@@ -14,11 +14,12 @@ export const fakeInformation = () => {
   };
 
   return {
+    id: Math.floor(Math.random() * 1000),
     type: selectedType(),
     message: {
       title: `Fetch Information Error ${number}`,
       description: "Polkadex Orderbook is under maintenance, try again later.",
     },
-    time: new Date().toLocaleString(),
+    time: new Date().getTime(),
   };
 };

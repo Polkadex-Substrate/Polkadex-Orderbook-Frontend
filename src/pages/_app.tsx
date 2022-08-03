@@ -7,17 +7,15 @@ import { useRouter } from "next/router";
 import { OverlayProvider } from "@react-aria/overlays";
 
 import { wrapper } from "../store";
-import { useAppDaemon } from "../hooks/useAppDaemon";
 import { useReduxSelector } from "../hooks/useReduxSelector";
+import { useAppDaemon } from "../hooks/useAppDaemon";
 
 import { Message } from "@polkadex/orderbook-ui/organisms";
 import {
   alertDelete,
-  notificationDeleteAll,
-  notificationDeleteById,
   selectAlertState,
   selectCurrentColorTheme,
-  selectNotifications,
+  selectNotificationsAlert,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { Notifications } from "@polkadex/orderbook-ui/templates";
@@ -49,7 +47,7 @@ const ThemeWrapper = ({ children }) => {
   const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
   const alert = useSelector(selectAlertState);
-  const notifications = useReduxSelector(selectNotifications);
+  const notifications = useReduxSelector(selectNotificationsAlert);
 
   const dispatch = useDispatch();
 
@@ -62,11 +60,7 @@ const ThemeWrapper = ({ children }) => {
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        <Notifications
-          notifications={notifications}
-          onRemove={(e) => dispatch(notificationDeleteById(e))}
-          onRemoveAll={() => dispatch(notificationDeleteAll())}
-        />
+        <Notifications notifications={notifications} />
         {alert.status && (
           <Message
             isVisible={alert.status}
