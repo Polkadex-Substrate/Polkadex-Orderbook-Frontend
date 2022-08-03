@@ -17,7 +17,7 @@ import { notificationReducer } from "./user/notificationHandler";
 import { profileReducer } from "./user/profile";
 import { polkadotWalletReducer } from "./user/proxyAccount";
 import { walletsReducer } from "./user/wallets";
-import { depositsReducer } from "./user/deposits";
+import { depositsReducer } from "./user/deposit";
 import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
