@@ -16,7 +16,6 @@ import {
 } from "./public/orderBook";
 import { RecentTradesState, rootRecentTradesSaga } from "./public/recentTrades";
 import { AuthState, rootAuthSaga } from "./user/auth";
-import { HistoryState, rootHistorySaga } from "./user/history";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
 import { ProfileState, rootProfileSaga } from "./user/profile";
@@ -37,7 +36,6 @@ import { rootSessionSaga, SessionState } from "./user/session";
 import { rootUserEventsSaga } from "./user/userEventsListener";
 
 export * from "./user/auth";
-export * from "./user/history";
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
@@ -82,7 +80,6 @@ export interface RootState {
     extensionWallet: ExtensionWalletState;
     auth: AuthState;
     balances: BalancesState;
-    history: HistoryState;
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
     profile: ProfileState;
@@ -112,7 +109,6 @@ export function* rootSaga() {
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
-    call(rootHistorySaga),
     call(rootKlineFetchSaga),
     call(rootMarketsSaga),
     call(rootRangerSaga),

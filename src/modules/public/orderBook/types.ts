@@ -14,9 +14,9 @@ export interface OrderBookState extends CommonState {
   bids: string[][];
 }
 export interface OrderBookDbState {
-  price: string;
-  qty: string;
-  side: "Bid" | "Ask";
+  p: string;
+  q: string;
+  s: "Bid" | "Ask";
 }
 export interface OrderBookEntry extends CommonState {
   remaining_volume: string;
