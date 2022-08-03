@@ -18,6 +18,7 @@ export type OrderKind = "bid" | "ask";
 export interface OrderCommon {
   main_account: string;
   id: string;
+  client_order_id: string;
   time: string;
   m: string; // marketid
   side: string;

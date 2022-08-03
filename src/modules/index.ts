@@ -34,6 +34,7 @@ import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccoun
 import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 import { rootSessionSaga, SessionState } from "./user/session";
+import { rootUserEventsSaga } from "./user/userEventsListener";
 
 export * from "./user/auth";
 export * from "./user/history";
@@ -127,5 +128,6 @@ export function* rootSaga() {
     call(rootBalancesSaga),
     call(rootEnclaveRpcClientSaga),
     call(rootAssetsSaga),
+    call(rootUserEventsSaga),
   ]);
 }

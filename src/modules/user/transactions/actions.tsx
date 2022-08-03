@@ -4,11 +4,21 @@ import {
   TRANSACTIONS_DATA,
   TRANSACTIONS_ERROR,
   TRANSACTIONS_FETCH,
-  TRANSACTION_CHANNEL_DATA,
-  TRANSACTION_CHANNEL_FETCH,
+  TRANSACTIONS_UPDATE_EVENT,
+  TRANSACTIONS_UPDATE_EVENT_DATA,
 } from "./constants";
 
 import { Transaction } from ".";
+
+export type TransactionUpdatePayload = {
+  event_id: number;
+  user: string;
+  asset: "polkadex" | string;
+  fee: number;
+  amount: number;
+  status: "PENDING" | "CONFIRMED" | "FAILED";
+  txn_type: "DEPOSIT" | "WITHDRAW";
+};
 
 export interface TransactionsFetch {
   type: typeof TRANSACTIONS_FETCH;
@@ -24,20 +34,20 @@ export interface TransactionsData {
   payload: Transaction[];
 }
 
-export interface TransactionChannelFetch {
-  type: typeof TRANSACTION_CHANNEL_FETCH;
+export interface TransactionsUpdateEvent {
+  type: typeof TRANSACTIONS_UPDATE_EVENT;
+  payload: TransactionUpdatePayload;
 }
 
-export interface TransactionChannelData {
-  type: typeof TRANSACTION_CHANNEL_DATA;
-  payload: Transaction;
+export interface TransactionsUpdateEventData {
+  type: typeof TRANSACTIONS_UPDATE_EVENT_DATA;
+  payload: TransactionUpdatePayload;
 }
 export type TransactionsAction =
   | TransactionsFetch
   | TransactionsData
   | TransactionsError
-  | TransactionChannelFetch
-  | TransactionChannelData;
+  | TransactionsUpdateEventData;
 
 export const transactionsFetch = (): TransactionsFetch => ({
   type: TRANSACTIONS_FETCH,
@@ -53,13 +63,16 @@ export const transactionsError = (error: CommonError): TransactionsError => ({
   error,
 });
 
-export const transactionChannelFetch = (): TransactionChannelFetch => ({
-  type: TRANSACTION_CHANNEL_FETCH,
+export const transactionsUpdateEvent = (
+  payload: TransactionsUpdateEvent["payload"]
+): TransactionsUpdateEvent => ({
+  type: TRANSACTIONS_UPDATE_EVENT,
+  payload,
 });
 
-export const transactionChannelData = (
-  payload: TransactionChannelData["payload"]
-): TransactionChannelData => ({
-  type: TRANSACTION_CHANNEL_DATA,
+export const transactionsUpdateEventData = (
+  payload: TransactionsUpdateEventData["payload"]
+): TransactionsUpdateEventData => ({
+  type: TRANSACTIONS_UPDATE_EVENT_DATA,
   payload,
 });

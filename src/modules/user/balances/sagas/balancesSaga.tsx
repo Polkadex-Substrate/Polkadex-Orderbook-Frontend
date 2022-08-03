@@ -34,7 +34,7 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
       yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
-    console.warn(error);
+    console.error(error);
     yield put(
       alertPush({
         message: {
