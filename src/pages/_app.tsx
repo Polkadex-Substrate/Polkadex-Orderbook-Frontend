@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
 import { useRouter } from "next/router";
+import { OverlayProvider } from "@react-aria/overlays";
 
 import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
@@ -59,23 +60,25 @@ const ThemeWrapper = ({ children }) => {
   if (!state) return <div />;
 
   return (
-    <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      <Notifications
-        notifications={notifications}
-        onRemove={(e) => dispatch(notificationDeleteById(e))}
-        onRemoveAll={() => dispatch(notificationDeleteAll())}
-      />
-      {alert.status && (
-        <Message
-          isVisible={alert.status}
-          onClose={() => dispatch(alertDelete())}
-          type={alert.type}
-          title={alert.message.title}
-          description={alert.message.description}
+    <OverlayProvider>
+      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        <Notifications
+          notifications={notifications}
+          onRemove={(e) => dispatch(notificationDeleteById(e))}
+          onRemoveAll={() => dispatch(notificationDeleteAll())}
         />
-      )}
-      {children}
-    </ThemeProvider>
+        {alert.status && (
+          <Message
+            isVisible={alert.status}
+            onClose={() => dispatch(alertDelete())}
+            type={alert.type}
+            title={alert.message.title}
+            description={alert.message.description}
+          />
+        )}
+        {children}
+      </ThemeProvider>
+    </OverlayProvider>
   );
 };
 
