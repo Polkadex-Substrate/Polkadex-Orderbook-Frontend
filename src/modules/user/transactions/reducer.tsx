@@ -7,7 +7,7 @@ import {
 } from "./constants";
 
 export interface Transaction {
-  event_id: number;
+  event_id?: number;
   amount: string;
   asset: string;
   fee: string;
@@ -56,11 +56,11 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       const { payload } = action;
       const newTransaction: Transaction = {
         event_id: payload.event_id,
-        amount: payload.amount,
+        amount: payload.amount.toString(),
         asset: payload.asset,
-        fee: payload.fee,
+        fee: payload.fee.toString(),
         main_account: payload.user,
-        time: new Date().getTime(),
+        time: new Date().toISOString(),
         status: payload.status,
         txn_type: payload.txn_type,
       };

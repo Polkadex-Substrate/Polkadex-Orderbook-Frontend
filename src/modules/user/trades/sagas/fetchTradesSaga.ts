@@ -11,22 +11,21 @@ import {
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
 
+type TradesQueryResult = {
+  m: string;
+  p: string;
+  q: string;
+  s: string;
+  t: string;
+};
+
 export function* fetchTradesSaga() {
   try {
     const { address } = yield select(selectUserInfo);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
-      const tradesRaw = yield call(fetchUserTrades, address, dateFrom, dateTo);
-      const trades: UserTrade[] = tradesRaw.map((trade) => ({
-        market_id: trade.m,
-        price: trade.p,
-        qty: trade.q,
-        side: trade.s,
-        timestamp: new Date(trade.time).getTime(),
-        baseAsset: trade.m.split("-")[0],
-        quoteAsset: trade.m.split("-")[1],
-      }));
+      const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }
   } catch (error) {
@@ -42,19 +41,11 @@ export function* fetchTradesSaga() {
   }
 }
 
-type TradesDb = {
-  main_account: string;
-  m: string;
-  p: string;
-  q: string;
-  time: string;
-};
-
 const fetchUserTrades = async (
   proxy_account: string,
   dateFrom: string,
   dateTo: string
-): Promise<TradesDb> => {
+): Promise<UserTrade[]> => {
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
     variables: {
@@ -63,6 +54,15 @@ const fetchUserTrades = async (
       to: dateTo,
     },
   });
-
-  return res.data.listTradesByMainAccount.items;
+  const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
+  const trades: UserTrade[] = tradesRaw.map((trade) => ({
+    market_id: trade.m,
+    price: trade.p,
+    qty: trade.q,
+    side: trade.s,
+    timestamp: new Date(trade.t).getTime(),
+    baseAsset: trade.m.split("-")[0],
+    quoteAsset: trade.m.split("-")[1],
+  }));
+  return trades;
 };

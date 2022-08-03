@@ -5,9 +5,19 @@ import { transactionsData, TransactionsFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 import * as queries from "../../../../graphql/queries";
+import { Transaction } from "../reducer";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
+
+type TransactionQueryResult = {
+  tt: string;
+  a: string;
+  q: string;
+  fee: string;
+  st: string;
+  t: string;
+};
 
 export function* transactionsSaga(action: TransactionsFetch) {
   try {
@@ -27,7 +37,12 @@ export function* transactionsSaga(action: TransactionsFetch) {
     );
   }
 }
-const fetchTransactions = async (address: string, monthsBefore: number, limit = 10) => {
+
+const fetchTransactions = async (
+  address: string,
+  monthsBefore: number,
+  limit = 10
+): Promise<Transaction[]> => {
   const fromDate = subtractMonths(monthsBefore);
   const res: any = await API.graphql({
     query: queries.listTransactionsByMainAccount,
@@ -37,6 +52,15 @@ const fetchTransactions = async (address: string, monthsBefore: number, limit = 
       to: new Date().toISOString(),
     },
   });
-  const txs = res.data.listTransactionsByMainAccount.items;
-  return txs;
+  const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
+  const transactions: Transaction[] = txs.map((item) => ({
+    amount: item.a,
+    asset: "1",
+    fee: item.fee,
+    main_account: address,
+    time: item.t,
+    status: item.st as Transaction["status"],
+    txn_type: item.tt as Transaction["txn_type"],
+  }));
+  return transactions;
 };

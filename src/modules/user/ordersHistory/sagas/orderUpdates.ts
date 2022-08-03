@@ -8,7 +8,7 @@ import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
-    const order = createOrderData(action.payload);
+    const order = processOrderData(action.payload);
     yield put(orderUpdateEventData(order));
   } catch (error) {
     yield put(
@@ -23,20 +23,20 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   }
 }
 
-function createOrderData(eventData: SetOrder): OrderCommon {
+function processOrderData(eventData: SetOrder): OrderCommon {
   return {
     main_account: eventData.user,
-    id: eventData.id,
+    id: eventData.id.toString(),
     client_order_id: eventData.client_order_id,
-    time: new Date().getTime(),
-    m: eventData.event_id, // marketid
+    time: new Date().toISOString(),
+    m: eventData.event_id.toString(), // marketid
     side: eventData.side,
     order_type: eventData.order_type,
     status: eventData.status,
-    price: eventData.price,
-    qty: eventData.qty,
-    avg_filled_price: eventData.avg_filled_price,
-    filled_quantity: eventData.filled_quantity,
-    fee: eventData.fee,
+    price: eventData.price.toString(),
+    qty: eventData.qty.toString(),
+    avg_filled_price: eventData.avg_filled_price.toString(),
+    filled_quantity: eventData.filled_quantity.toString(),
+    fee: eventData.fee.toString(),
   };
 }
