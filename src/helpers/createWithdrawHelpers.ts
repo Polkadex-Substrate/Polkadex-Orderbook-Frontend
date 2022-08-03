@@ -18,12 +18,3 @@ export const createWithdrawPayload = (
   return withdraw_paylod;
 };
 
-export const placeWithdrawToEnclave = async (
-  ws: Client,
-  payload: Codec,
-  address: string,
-  signature: SignedOrderPayload
-) => {
-  const res = await ws.call("enclave_withdraw", [address, payload, signature]);
-  return res;
-};
