@@ -24,7 +24,7 @@ export const selectAssetIdMap = (state: RootState): Record<string, IPublicAsset>
 
 export const selectGetAsset =
   (state: RootState) =>
-  (assetId: string | number | Record<"asset", string>): IPublicAsset | null => {
+  (assetId: string | number | Record<string, string>): IPublicAsset | null => {
     if (!assetId) {
       return null;
     }
