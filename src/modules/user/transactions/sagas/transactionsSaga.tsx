@@ -54,8 +54,8 @@ const fetchTransactions = async (
   });
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
-    amount: item.a,
-    asset: "1",
+    amount: item.q,
+    asset: item.a,
     fee: item.fee,
     main_account: address,
     time: item.t,

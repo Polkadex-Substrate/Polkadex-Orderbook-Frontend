@@ -35,11 +35,13 @@ export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
 function createMarketTickersChannel(market: string) {
   return eventChannel((emit) => {
     const subscription = API.graphql({
-      query: subscriptions.onNewTicker,
-      variables: { m: market },
+      query: subscriptions.websocket_streams,
+      variables: { name: "PDEX-1-ticker" },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => {
-        emit(marketsTickersChannelData(data.value.data.onNewTicker));
+        emit(marketsTickersChannelData(data.value.data.websocket_streams.data));
       },
       error: (err) => console.warn(err),
     });
