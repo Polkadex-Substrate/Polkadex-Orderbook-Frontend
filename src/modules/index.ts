@@ -21,7 +21,6 @@ import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory"
 import { ProfileState, rootProfileSaga } from "./user/profile";
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/proxyAccount";
 import { publicReducer, userReducer } from "./app";
-import { WalletsState, rootWalletsSaga } from "./user/wallets";
 import { DepositsState } from "./user/deposit/reducer";
 import { rootDepositsSaga } from "./user/deposit";
 import { rootTradesSaga, TradesState } from "./user/trades";
@@ -46,7 +45,6 @@ export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/proxyAccount";
 export * from "./user/mainAccount";
-export * from "./user/wallets";
 export * from "./user/deposit";
 export * from "./user/withdraws";
 export * from "./public/errorHandler";
@@ -83,7 +81,6 @@ export interface RootState {
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
     profile: ProfileState;
-    wallets: WalletsState;
     deposits: DepositsState;
     trades: TradesState;
     transactions: TransactionsState;
@@ -113,7 +110,6 @@ export function* rootSaga() {
     call(rootMarketsSaga),
     call(rootRangerSaga),
     call(rootOrderBookSaga),
-    call(rootWalletsSaga),
     call(rootOrdersHistorySaga),
     call(rootOrdersSaga),
     call(rootProfileSaga),
