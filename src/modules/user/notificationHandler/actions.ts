@@ -1,32 +1,26 @@
 import {
   NOTIFICATION_DATA,
-  NOTIFICATION_DELETE,
+  NOTIFICATION_DELETE_ALL,
   NOTIFICATION_PUSH,
-  NOTIFICATION_DELETE_BY_INDEX,
+  NOTIFICATION_DELETE_BY_ID,
 } from "./constants";
 
-export type NotificationTypes =
-  | "CancelOrder"
-  | "OrderSuccessfull"
-  | "Deposit"
-  | "Withdraw"
-  | "Error"
-  | "Loading"
-  | "Buy"
-  | "Sell";
+export type NotificationTypes = "InformationAlert" | "ErrorAlert" | "AttentionAlert" | string;
 
 export interface Notification {
+  id?: number;
   type?: NotificationTypes;
   isRead?: boolean;
   message?: {
     title?: string;
     description?: string;
   };
+  time?: string;
+  actionUrl?: string;
+  actionTitle?: string;
 }
 
-export interface NotificationState {
-  notifications?: Notification[];
-}
+export type NotificationState = Notification[];
 
 export interface NotificationPush {
   type: typeof NOTIFICATION_PUSH;
@@ -38,19 +32,19 @@ export interface NotificationData {
   payload: Notification;
 }
 
-export interface NotificationDelete {
-  type: typeof NOTIFICATION_DELETE;
+export interface NotificationDeleteAll {
+  type: typeof NOTIFICATION_DELETE_ALL;
 }
 
-export interface NotificationDeleteByIndex {
-  type: typeof NOTIFICATION_DELETE_BY_INDEX;
-  index: number;
+export interface NotificationDeleteById {
+  type: typeof NOTIFICATION_DELETE_BY_ID;
+  id: number;
 }
 export type NotificationAction =
   | NotificationPush
   | NotificationData
-  | NotificationDelete
-  | NotificationDeleteByIndex;
+  | NotificationDeleteAll
+  | NotificationDeleteById;
 
 export const notificationPush = (payload: NotificationPush["payload"]): NotificationPush => ({
   type: NOTIFICATION_PUSH,
@@ -62,11 +56,11 @@ export const notificationData = (payload: NotificationData["payload"]): Notifica
   payload,
 });
 
-export const notificationDelete = (): NotificationDelete => ({
-  type: NOTIFICATION_DELETE,
+export const notificationDeleteAll = (): NotificationDeleteAll => ({
+  type: NOTIFICATION_DELETE_ALL,
 });
 
-export const notificationDeleteByIndex = (index: number): NotificationDeleteByIndex => ({
-  type: NOTIFICATION_DELETE_BY_INDEX,
-  index,
+export const notificationDeleteById = (id: number): NotificationDeleteById => ({
+  type: NOTIFICATION_DELETE_BY_ID,
+  id,
 });

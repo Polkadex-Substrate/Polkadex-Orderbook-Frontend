@@ -6,7 +6,7 @@ const directionModifier = {
     left: 0;
   `,
   topRight: () => css`
-    bottom: calc(100%);
+    top: calc(100%);
     right: 0;
   `,
   bottom: () => css`

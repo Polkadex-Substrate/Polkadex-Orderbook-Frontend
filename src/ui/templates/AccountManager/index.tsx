@@ -15,23 +15,46 @@ import {
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
+const testAccounts = [
+  {
+    id: 1,
+    name: "Trading",
+    address: "esrWSxZY...8N7cxP3B",
+    isActive: true,
+  },
+  {
+    id: 2,
+    name: "Mobile",
+    address: "8N7cxP3B...esrWSxZY",
+    isActive: false,
+  },
+];
+
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const [remove, setRemove] = useState({
+  const [remove, setRemove] = useState<{
+    isRemoveDevice: boolean;
+    status: boolean;
+    id?: string | number;
+  }>({
     isRemoveDevice: false,
     status: false,
   });
 
-  const handleOpenRemove = (isDevice = false) =>
+  const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
       isRemoveDevice: !!isDevice,
       status: true,
+      id,
     });
   const handleClose = () =>
     setRemove({
       ...remove,
       status: false,
     });
+
+  const isLinkedAccount = true;
+
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
@@ -77,33 +100,59 @@ export const AccountManagerTemplate = () => {
           </S.Title>
           <S.Content>
             <h2>My wallets</h2>
+
             <S.ContentGrid>
-              <Card
-                title="Trading"
-                address="esrWSxZY...8N7cxP3B"
-                isUsing
-                onRemoveFromBlockchain={() => handleOpenRemove()}
-                onRemoveFromDevice={() => handleOpenRemove(true)}
-                onUse={() => console.log("onUse")}
-              />
-              <Card
-                title="Mobile"
-                address="esrWSxZY...8N7cxP3B"
-                onRemoveFromBlockchain={() => handleOpenRemove()}
-                onRemoveFromDevice={() => handleOpenRemove(true)}
-                onUse={() => console.log("onUse")}
-              />
-              <Link href="/createAccount">
-                <S.CreateAccount>
-                  <S.CreateAccountWrapper>
-                    <div>
-                      <Icons.Plus />
-                    </div>
-                    Create new account or
-                    <Link href="/importAccount"> Import</Link>
-                  </S.CreateAccountWrapper>
-                </S.CreateAccount>
-              </Link>
+              {!isLinkedAccount ? (
+                <S.LinkAccount>
+                  <S.LinkAccountColumn>
+                    <S.FlexCenter>
+                      <span>Link your account</span>
+                      <p>Connect your account to a main wallet to start using Orderbook</p>
+                    </S.FlexCenter>
+                  </S.LinkAccountColumn>
+                  <Link href="/linkAccount">
+                    <S.LinkAccountColumn as="a">
+                      <S.LinkAccountColumnWrapper>
+                        <Icons.PolkadotJs />
+                      </S.LinkAccountColumnWrapper>
+                      <S.LinkAccountColumnWrapper>
+                        <div>
+                          <span>Polkadot.js</span>
+                          <p>Link your account using Polkadot.js extension</p>
+                        </div>
+                        <div>
+                          <Icons.ArrowRight />
+                        </div>
+                      </S.LinkAccountColumnWrapper>
+                    </S.LinkAccountColumn>
+                  </Link>
+                </S.LinkAccount>
+              ) : (
+                <>
+                  {testAccounts.map((value) => (
+                    <Card
+                      key={value.id}
+                      title={value.name}
+                      address={value.address}
+                      isUsing={value.isActive}
+                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                      onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                      onUse={() => console.log("onUse account id:", value.id)}
+                    />
+                  ))}
+                  <Link href="/createAccount">
+                    <S.CreateAccount>
+                      <S.CreateAccountWrapper>
+                        <div>
+                          <Icons.Plus />
+                        </div>
+                        Create new account or
+                        <Link href="/importAccount"> Import</Link>
+                      </S.CreateAccountWrapper>
+                    </S.CreateAccount>
+                  </Link>
+                </>
+              )}
             </S.ContentGrid>
           </S.Content>
         </S.Wrapper>

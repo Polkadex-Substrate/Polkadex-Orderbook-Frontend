@@ -9,7 +9,7 @@ export const Table = styled.table<{ cellSpacing?: string | number }>`
     border-spacing: 0 ${cellSpacing}rem;
     th,
     td {
-      padding: 0.5rem;
+      padding: 0.5rem 0.5rem 0.5rem 0;
     }
   `}
 `;

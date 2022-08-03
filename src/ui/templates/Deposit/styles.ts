@@ -210,7 +210,7 @@ export const DropdownContent = styled.div`
     border-radius: 0.8rem;
     button {
       white-space: nowrap;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       padding: 1.2rem;
       border-radius: 0.8rem;
       transition: background 0.5s ease-in;

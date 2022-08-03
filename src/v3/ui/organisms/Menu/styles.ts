@@ -102,11 +102,35 @@ export const Container = styled.div`
 `;
 
 export const WrapperProfile = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-left: 1rem;
-  @media screen and (max-width: 590px) {
-    display: none;
-  }
+  ${({ theme }) => css`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-left: 1rem;
+    padding-bottom: 1.5rem;
+    @media screen and (max-width: 590px) {
+      display: none;
+    }
+  `}
+`;
+
+export const Notifications = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    position: relative;
+    width: 1.8rem;
+    height: 1.8rem;
+    ${isActive &&
+    css`
+      div {
+        position: absolute;
+        top: 0.2rem;
+        right: 0.1rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 5rem;
+        background: ${theme.colors.primary};
+      }
+    `}
+  `}
 `;
