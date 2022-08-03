@@ -21,5 +21,28 @@
         }
       }
     }
+  },
+  "orderbook": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-orderbookfrontend-orderbook-235331-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-orderbookfrontend-orderbook-235331-deployment",
+      "UnauthRoleName": "amplify-orderbookfrontend-orderbook-235331-unauthRole",
+      "StackName": "amplify-orderbookfrontend-orderbook-235331",
+      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-orderbook-235331/620204f0-1359-11ed-8572-02501297e2fe",
+      "AmplifyAppId": "djf6q4n044sil"
+    },
+    "categories": {
+      "auth": {
+        "orderbookfrontend80237148": {
+          "userPoolId": "ap-south-1_G7xhCI6s5",
+          "userPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
+          "webClientId": "6ccnjqn0ik28hf8v0603pq3m81",
+          "nativeClientId": "4cmd6mbm93vb7u87v72911n279"
+        }
+      }
+    }
   }
 }

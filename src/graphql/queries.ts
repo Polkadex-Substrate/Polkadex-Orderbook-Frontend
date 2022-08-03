@@ -2,21 +2,13 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getChannel = /* GraphQL */ `
-  query GetChannel {
-    getChannel {
-      name
-      data
-    }
-  }
-`;
 export const getOrderbook = /* GraphQL */ `
   query GetOrderbook($market: String!, $limit: Int, $nextToken: String) {
     getOrderbook(market: $market, limit: $limit, nextToken: $nextToken) {
       items {
-        price
-        qty
-        side
+        p
+        q
+        s
       }
       nextToken
     }
@@ -36,15 +28,14 @@ export const getKlinesbyMarketInterval = /* GraphQL */ `
       to: $to
     ) {
       items {
-        m
-        interval
         o
         c
         h
         l
         v_base
         v_quote
-        t
+        nt
+        time
       }
     }
   }
@@ -78,16 +69,29 @@ export const getAllMarketTickers = /* GraphQL */ `
     getAllMarketTickers {
       items {
         m
-        priceChange24Hr
-        priceChangePercent24Hr
-        open
-        close
-        high
-        low
-        volumeBase24hr
-        volumeQuote24Hr
+        pc
+        pcp
+        o
+        c
+        h
+        l
+        v_base
+        v_quote
+        nt
       }
       nextToken
+    }
+  }
+`;
+export const getAllMarkets = /* GraphQL */ `
+  query GetAllMarkets {
+    getAllMarkets {
+      items {
+        market
+        max_trade_amount
+        min_trade_amount
+        min_qty
+      }
     }
   }
 `;
@@ -102,19 +106,17 @@ export const findUserByProxyAccount = /* GraphQL */ `
 export const findUserByMainAccount = /* GraphQL */ `
   query FindUserByMainAccount($main_account: String!) {
     findUserByMainAccount(main_account: $main_account) {
-      main_account
-      proxy_accounts
+      proxies
     }
   }
 `;
 export const findBalanceByMainAccount = /* GraphQL */ `
   query FindBalanceByMainAccount($main_account: String!, $asset: String!) {
     findBalanceByMainAccount(main_account: $main_account, asset: $asset) {
-      main_account
-      asset
-      free
-      reserved
-      pending_withdrawal
+      a
+      f
+      r
+      p
     }
   }
 `;
@@ -122,11 +124,10 @@ export const getAllBalancesByMainAccount = /* GraphQL */ `
   query GetAllBalancesByMainAccount($main_account: String!) {
     getAllBalancesByMainAccount(main_account: $main_account) {
       items {
-        main_account
-        asset
-        free
-        reserved
-        pending_withdrawal
+        a
+        f
+        r
+        p
       }
       nextToken
     }
@@ -143,18 +144,18 @@ export const findOrderByMainAccount = /* GraphQL */ `
       order_id: $order_id
       market: $market
     ) {
-      main_account
-      client_order_id
-      exchange_order_id
-      time
+      u
+      cid
+      id
+      t
       m
-      side
-      order_type
-      status
-      price
-      qty
-      avg_filled_price
-      filled_quantity
+      s
+      ot
+      st
+      p
+      q
+      afp
+      fq
       fee
     }
   }
@@ -175,18 +176,18 @@ export const listOrderHistorybyMainAccount = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        main_account
-        client_order_id
-        exchange_order_id
-        time
+        u
+        cid
+        id
+        t
         m
-        side
-        order_type
-        status
-        price
-        qty
-        avg_filled_price
-        filled_quantity
+        s
+        ot
+        st
+        p
+        q
+        afp
+        fq
         fee
       }
       nextToken
@@ -205,18 +206,18 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        main_account
-        client_order_id
-        exchange_order_id
-        time
+        u
+        cid
+        id
+        t
         m
-        side
-        order_type
-        status
-        price
-        qty
-        avg_filled_price
-        filled_quantity
+        s
+        ot
+        st
+        p
+        q
+        afp
+        fq
         fee
       }
       nextToken
@@ -239,13 +240,12 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        main_account
-        txn_type
-        asset
-        amount
+        tt
+        a
+        q
         fee
-        status
-        time
+        st
+        t
       }
       nextToken
     }
@@ -267,12 +267,11 @@ export const listTradesByMainAccount = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        main_account
         m
         p
         q
         s
-        time
+        t
       }
       nextToken
     }
