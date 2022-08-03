@@ -19,7 +19,7 @@ export const createOrderPayload = (
   quoteAsset: string | null,
   quantity: string,
   price: string,
-  nonce = "0",
+  nonce = 0,
   client_order_id: Uint8Array
 ): Codec => {
   const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };

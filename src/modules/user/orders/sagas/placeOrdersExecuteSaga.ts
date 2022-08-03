@@ -13,9 +13,8 @@ import {
 
 import * as mutation from "./../../../../graphql/mutations";
 
-import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
 import { createOrderPayload } from "@polkadex/orderbook/helpers/createOrdersHelpers";
-import { getNonceForAccount } from "@polkadex/orderbook/helpers/getNonce";
+import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
@@ -27,12 +26,11 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     if (order_type === "MARKET" && Number(amount) <= 0) {
       throw new Error("Invalid amount");
     }
-    const { address, keyringPair, main_addr } = yield select(selectUserInfo);
-    const enclaveRpcClient = yield select(selectEnclaveRpcClient);
-    const nonce = yield call(() => getNonceForAccount(enclaveRpcClient, main_addr));
+    const { address, keyringPair } = yield select(selectUserInfo);
+    const nonce = getNonce();
     const api = yield select(selectRangerApi);
     const client_order_id = getNewClientId();
-    if (address !== "" && keyringPair && enclaveRpcClient && api) {
+    if (address !== "" && keyringPair && api) {
       const order = createOrderPayload(
         api,
         address,
