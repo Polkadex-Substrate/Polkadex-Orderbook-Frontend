@@ -35,6 +35,7 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
       yield put(orderCancelDataDelete());
     }
   } catch (error) {
+    console.error("cancel order error: ", error);
     yield put(
       sendError({
         error,
