@@ -29,7 +29,6 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
-import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 import { rootSessionSaga, SessionState } from "./user/session";
 import { rootUserEventsSaga } from "./user/userEventsListener";
@@ -70,7 +69,6 @@ export interface RootState {
     orderBook: OrderBookState;
     recentTrades: RecentTradesState;
     ranger: RangerState;
-    enclaveRpcClient: EnclaveRpcClientState;
     assets: AssetsState;
   };
   user: {
@@ -118,7 +116,6 @@ export function* rootSaga() {
     call(rootTradesSaga),
     call(rootWithdrawsSaga),
     call(rootBalancesSaga),
-    call(rootEnclaveRpcClientSaga),
     call(rootAssetsSaga),
     call(rootUserEventsSaga),
   ]);

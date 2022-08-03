@@ -24,7 +24,7 @@ import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
 import { extensionWalletReducer } from "./user/mainAccount";
 import { sessionReducer } from "./user/session";
-import { enclaveRpcClientReducer } from "./public/enclaveRpcClient";
+import { eventListenerReducer } from "./public/eventsListener";
 import { assetsReducer } from "./public/assets";
 
 export const publicReducer = combineReducers({
@@ -38,7 +38,7 @@ export const publicReducer = combineReducers({
   depth: depthReducer,
   recentTrades: recentTradesReducer,
   ranger: rangerReducer,
-  enclaveRpcClient: enclaveRpcClientReducer,
+  enclaveRpcClient: eventListenerReducer,
   assets: assetsReducer,
 });
 
