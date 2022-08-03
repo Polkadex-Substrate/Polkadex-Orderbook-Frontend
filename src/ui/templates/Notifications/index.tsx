@@ -2,23 +2,20 @@ import Link from "next/link";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import * as S from "./styles";
-import { CardProps } from "./types";
+import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const Notifications = ({ notifications, onRemove, onAdd }) => {
+export const Notifications = ({ notifications = [], onRemove }: T.NotificationsProps) => {
   return (
     <S.Wrapper>
-      <button type="button" onClick={onAdd}>
-        Add
-      </button>
       <S.ContentWrapper>
         <TransitionGroup className="notifications">
           {notifications
-            .sort((a, b) => b.time - a.time)
+            .sort((a, b) => Number(b.time) - Number(a.time))
             .map((value) => (
-              <CSSTransition key={value.id} timeout={700} classNames="notification">
+              <CSSTransition key={value.id} timeout={300} classNames="notification">
                 <Card onRemove={() => onRemove(value.id)} {...value} />
               </CSSTransition>
             ))}
@@ -30,15 +27,14 @@ export const Notifications = ({ notifications, onRemove, onAdd }) => {
 
 export const Card = ({
   type = "InformationAlert",
-  title,
   message,
   time,
-  active = false,
+  isRead = true,
   actionTitle,
   actionUrl,
   onRemove,
   ...props
-}: CardProps) => {
+}: T.CardProps) => {
   const boxColor = (color: string) => {
     switch (color) {
       case "InformationAlert":
@@ -50,15 +46,15 @@ export const Card = ({
     }
   };
   return (
-    <S.CardWrapper className="notification-wrapper" borderColor={boxColor(type)} {...props}>
+    <S.CardWrapper borderColor={boxColor(type)} {...props}>
       <S.Card>
         <div style={{ alignSelf: "flex-start" }}>
           <Icon size="extraSmall" name={type} />
         </div>
-        <S.Container isActive={active}>
+        <S.Container isActive={isRead}>
           <S.Title>
-            <span>{title}</span>
-            <p>{message}</p>
+            <span>{message.title}</span>
+            <p>{message.description}</p>
           </S.Title>
 
           <S.Actions>

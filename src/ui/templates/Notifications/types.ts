@@ -1,12 +1,14 @@
 import { LinkHTMLAttributes } from "react";
 
+import { Notification } from "@polkadex/orderbook-modules";
+
+export type NotificationsProps = {
+  onRemove: (e: number) => void;
+  onRemoveAll: () => void;
+  notifications: Notification[];
+};
+
 export type CardProps = {
-  title: string;
-  message: string;
-  type: "InformationAlert" | "ErrorAlert" | "AttentionAlert" | string;
-  active?: boolean;
-  time: string;
-  actionUrl?: string;
-  actionTitle?: string;
   onRemove: () => void;
-} & Pick<LinkHTMLAttributes<HTMLLinkElement>, "href">;
+} & Omit<Notification, "id"> &
+  Pick<LinkHTMLAttributes<HTMLLinkElement>, "href">;
