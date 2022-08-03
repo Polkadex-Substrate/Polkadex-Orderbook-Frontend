@@ -7,6 +7,7 @@ import { UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
+import { orderUpdateEvent } from "../../ordersHistory";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
@@ -58,5 +59,7 @@ function createActionFromUserEvent(eventData: any) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {
     return transactionsUpdateEvent(data.SetTransaction);
+  } else if (isKeyPresentInObject(data, "SetOrder")) {
+    return orderUpdateEvent(data.SetOrder);
   }
 }

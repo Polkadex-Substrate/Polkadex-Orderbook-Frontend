@@ -8,7 +8,7 @@ import {
 
 import { openOrdersHistorySaga } from "./openOrderHistorySaga";
 import { ordersHistorySaga } from "./ordersHistorySaga";
-import { orderUpdatesChannelSaga } from "./ordersUpdatesChannel";
+import { orderUpdatesChannelSaga } from "./orderUpdates";
 
 export function* rootOrdersHistorySaga() {
   yield takeLeading(ORDERS_HISTORY_FETCH, ordersHistorySaga);
