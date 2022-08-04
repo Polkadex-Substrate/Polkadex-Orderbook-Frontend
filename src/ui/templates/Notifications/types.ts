@@ -1,5 +1,3 @@
-import { LinkHTMLAttributes } from "react";
-
 import { Notification } from "@polkadex/orderbook-modules";
 
 export type NotificationsProps = {
@@ -8,5 +6,4 @@ export type NotificationsProps = {
 
 export type CardProps = {
   onRemove: () => void;
-} & Omit<Notification, "id"> &
-  Pick<LinkHTMLAttributes<HTMLLinkElement>, "href">;
+} & Notification;

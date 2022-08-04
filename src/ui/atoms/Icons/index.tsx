@@ -144,3 +144,5 @@ export * from "./Download";
 export * from "./InformationAlert";
 export * from "./ErrorAlert";
 export * from "./AttentionAlert";
+export * from "./SuccessAlert";
+export * from "./LoadingAlert";

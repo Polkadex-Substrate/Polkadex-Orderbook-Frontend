@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -10,24 +10,25 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { notificationMarkAsReadBy } from "@polkadex/orderbook-modules";
 
 export const Notifications = ({ notifications = [] }: T.NotificationsProps) => {
-  console.log("notifications", notifications);
-
   const dispatch = useDispatch();
 
   return (
     <S.Wrapper>
       <S.ContentWrapper>
         <TransitionGroup className="notifications">
-          {notifications?.map((value) => (
-            <CSSTransition key={value.id} timeout={300} classNames="notification">
-              <Card
-                onRemove={() =>
-                  dispatch(notificationMarkAsReadBy({ id: value.id, by: "isActive" }))
-                }
-                {...value}
-              />
-            </CSSTransition>
-          ))}
+          {notifications?.map((value) => {
+            console.log(value);
+            return (
+              <CSSTransition key={value.id} timeout={300} classNames="notification">
+                <Card
+                  onRemove={() =>
+                    dispatch(notificationMarkAsReadBy({ id: value.id, by: "isActive" }))
+                  }
+                  {...value}
+                />
+              </CSSTransition>
+            );
+          })}
         </TransitionGroup>
       </S.ContentWrapper>
     </S.Wrapper>
@@ -41,20 +42,23 @@ export const Card = ({
   actionTitle,
   actionUrl,
   onRemove,
-  ...props
 }: T.CardProps) => {
   const boxColor = (color: string) => {
     switch (color) {
       case "InformationAlert":
         return "blue";
+      case "SuccessAlert":
+        return "green";
       case "ErrorAlert":
         return "primary";
+      case "LoadingAlert":
+        return "tertiaryText";
       default:
         return "orange";
     }
   };
   return (
-    <S.CardWrapper borderColor={boxColor(type)} {...props}>
+    <S.CardWrapper borderColor={boxColor(type)}>
       <S.Card>
         <div style={{ alignSelf: "flex-start" }}>
           <Icon size="extraSmall" name={type} />
@@ -67,11 +71,7 @@ export const Card = ({
 
           <S.Actions>
             <small>{new Date(time).toLocaleString()}</small>
-            {actionUrl?.length && (
-              <button type="button" onClick={undefined}>
-                {actionTitle}
-              </button>
-            )}
+            {actionUrl?.length && <Link href={actionUrl}>{actionTitle}</Link>}
           </S.Actions>
         </S.Container>
       </S.Card>

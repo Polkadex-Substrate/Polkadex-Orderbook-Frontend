@@ -42,7 +42,7 @@ export const ContentWrapper = styled.div`
   `}
 `;
 
-export const CardWrapper = styled.a<{ borderColor: string }>`
+export const CardWrapper = styled.div<{ borderColor: string }>`
   ${({ theme, borderColor }) => css`
     display: block;
     position: relative;
@@ -123,6 +123,7 @@ export const Close = styled.button`
     padding: 0.6rem;
     border-radius: 5rem;
     transition: background-color 0.3s ease-in-out;
+
     :hover {
       background-color: ${theme.colors.secondaryBackgroundOpacity};
     }
