@@ -5,7 +5,7 @@ import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectHasUser,
-  selectTransactionData,
+  selectTransactionDepositData,
   transactionsFetch,
 } from "@polkadex/orderbook-modules";
 
@@ -19,7 +19,7 @@ export function useHistory() {
 
   const getAsset = useReduxSelector(selectGetAsset);
   const userLoggedIn = useReduxSelector(selectHasUser);
-  const transactionsHistory = useReduxSelector(selectTransactionData);
+  const transactionsHistory = useReduxSelector(selectTransactionDepositData);
 
   const transactionHistory = useMemo(() => {
     const transactionsBydate = transactionsHistory?.sort(
@@ -41,7 +41,7 @@ export function useHistory() {
 
   const handleClaimWithdraws = () => {
     // do your thing here
-  }
+  };
 
   useEffect(() => {
     if (userLoggedIn) dispatch(transactionsFetch());

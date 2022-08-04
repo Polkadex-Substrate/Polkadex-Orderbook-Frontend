@@ -1,7 +1,7 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { selectUserBalance } from "@polkadex/orderbook-modules";
+import { Balance, selectUserBalance } from "@polkadex/orderbook-modules";
 
 export function useFunds() {
   const [state, setState] = useState("");
@@ -9,7 +9,7 @@ export function useFunds() {
 
   const userBalances = useSelector(selectUserBalance);
 
-  const balances = useMemo(
+  const balances: Balance[] = useMemo(
     () =>
       userBalances.reduce((pv, cv) => {
         if (
