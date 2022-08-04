@@ -76,6 +76,7 @@ export const WithdrawTemplate = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
@@ -86,6 +87,7 @@ export const WithdrawTemplate = () => {
       console.log(values);
     },
   });
+
   return (
     <>
       <Head>
@@ -185,7 +187,9 @@ export const WithdrawTemplate = () => {
                       </button>
                     </S.HistoryTitle>
                     <S.HistoryTable>
-                      <Table style={{ width: "100%" }}>
+                      <Table
+                        aria-label="Polkadex Withdraw History Table"
+                        style={{ width: "100%" }}>
                         <Table.Header fill="none">
                           <Table.Column>
                             <S.HeaderColumn>Name</S.HeaderColumn>

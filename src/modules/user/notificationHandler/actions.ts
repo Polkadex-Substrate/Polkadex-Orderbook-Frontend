@@ -6,7 +6,12 @@ import {
   NOTIFICATION_MARK_AS_READ_BY,
 } from "./constants";
 
-export type NotificationTypes = "InformationAlert" | "ErrorAlert" | "AttentionAlert" | string;
+export type NotificationTypes =
+  | "InformationAlert"
+  | "ErrorAlert"
+  | "AttentionAlert"
+  | "SuccessAlert"
+  | "LoadingAlert";
 
 export interface Notification {
   id?: number;

@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 import * as S from "./styles";
 
@@ -11,6 +12,7 @@ import {
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { notificationMarkAsReadBy, NotificationState } from "@polkadex/orderbook-modules";
+import { ResultFound } from "@polkadex/orderbook/v3/ui/molecules";
 
 type Props = {
   notifications: NotificationState;
@@ -45,26 +47,41 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
           </ul>
         </S.RecentTitle>
         <S.RecentContent isScrollable={allNotifications?.length > 3}>
-          {allNotifications?.map((notification) => (
-            <Card
-              key={notification.id}
-              title={notification.message.title}
-              description={notification.message.description}
-              time={new Date(notification.time).toLocaleString()}
-              isRead={!notification.isRead}
-              type={notification.type}
-              onMarkAsRead={() =>
-                dispatch(notificationMarkAsReadBy({ id: notification.id, by: "isRead" }))
-              }
-            />
-          ))}
+          {allNotifications?.length ? (
+            allNotifications.map((notification) => (
+              <Card
+                key={notification.id}
+                title={notification.message.title}
+                description={notification.message.description}
+                time={new Date(notification.time).toLocaleString()}
+                isRead={!notification.isRead}
+                type={notification.type}
+                actionUrl={notification.actionUrl}
+                actionTitle={notification.actionTitle}
+                onMarkAsRead={() =>
+                  dispatch(notificationMarkAsReadBy({ id: notification.id, by: "isRead" }))
+                }
+              />
+            ))
+          ) : (
+            <ResultFound />
+          )}
         </S.RecentContent>
       </S.Recent>
     </S.Content>
   );
 };
 
-const Card = ({ title, description, type, time, isRead = false, onMarkAsRead }) => (
+const Card = ({
+  title,
+  description,
+  type,
+  time,
+  isRead = false,
+  onMarkAsRead,
+  actionUrl,
+  actionTitle,
+}) => (
   <S.Card isRead={isRead}>
     <S.CardIcon>
       <Icon size="extraSmall" name={type} />
@@ -73,7 +90,11 @@ const Card = ({ title, description, type, time, isRead = false, onMarkAsRead }) 
     <S.CardContent>
       <strong>{title}</strong>
       <p>{description}</p>
-      <small>{time}</small>
+
+      <S.Actions>
+        <small>{time}</small>
+        {actionUrl?.length && <Link href={actionUrl}>{actionTitle}</Link>}
+      </S.Actions>
     </S.CardContent>
     {isRead && (
       <S.CardActionContainer>

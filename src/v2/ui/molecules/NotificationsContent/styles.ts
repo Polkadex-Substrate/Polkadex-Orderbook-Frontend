@@ -165,3 +165,30 @@ export const CardContent = styled.div`
     font-weight: 550;
   }
 `;
+
+export const Actions = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    small {
+      display: block;
+      font-size: 1.2rem;
+      color: ${theme.colors.tertiaryText};
+    }
+    a {
+      background: ${theme.colors.primary}33;
+      color: ${theme.colors.primary};
+      padding: 0.3rem 0.4rem;
+      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      border: 1px solid transparent;
+      transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+      :hover {
+        border-color: ${theme.colors.primary};
+        background: transparent;
+      }
+    }
+  `}
+`;
