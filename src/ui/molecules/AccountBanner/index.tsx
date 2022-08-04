@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const CreateAccountBanner = () => (
+export const AccountBanner = () => (
   <S.Wrapper>
     <S.Container>
       <S.Column>
