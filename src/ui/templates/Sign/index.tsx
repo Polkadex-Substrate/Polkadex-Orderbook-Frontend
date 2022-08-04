@@ -32,6 +32,7 @@ export const SignTemplate = () => {
       router.push("/codeVerification");
     },
   });
+
   return (
     <>
       <Head>

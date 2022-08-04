@@ -232,6 +232,7 @@ export const Form = styled.div`
     max-width: 40rem;
   }
 `;
+
 export const History = styled.div`
   margin-top: 4rem;
   flex: 1;
