@@ -78,7 +78,7 @@ const executePlaceOrder = async (orderPayload) => {
   const payload = { PlaceOrder: orderPayload };
   const res = await API.graphql({
     query: mutation.place_order,
-    variables: { input: payload },
+    variables: { input: { payload } },
   });
   return res;
 };

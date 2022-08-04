@@ -51,7 +51,7 @@ const executeCancelOrder = async (cancelOrderPayload) => {
   const payload = { CancelOrder: cancelOrderPayload };
   const res = await API.graphql({
     query: mutation.cancel_order,
-    variables: payload,
+    variables: { input: { payload } },
   });
   return res;
 };

@@ -43,7 +43,7 @@ const executeWithdraw = async (withdrawPayload) => {
   const payload = { Withdraw: withdrawPayload };
   const res = await API.graphql({
     query: mutations.withdraw,
-    variables: payload,
+    variables: { input: { payload } },
   });
   return res;
 };
