@@ -118,5 +118,6 @@ export function* rootSaga() {
     call(rootBalancesSaga),
     call(rootAssetsSaga),
     call(rootUserEventsSaga),
+    call(rootNotificationSaga),
   ]);
 }

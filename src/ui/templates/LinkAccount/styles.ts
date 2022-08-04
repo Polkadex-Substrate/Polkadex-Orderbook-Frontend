@@ -93,10 +93,9 @@ export const Box = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  flex: 1;
-
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
+    max-width: 40rem;
   }
 `;
 
@@ -126,78 +125,46 @@ export const SelectInputContainer = styled.div`
     }
   `}
 `;
-export const Available = styled.span`
-  ${({ theme }) => css`
-    display: block;
-    align-self: flex-end;
-    font-size: 1.3rem;
-    strong {
-      color: ${theme.colors.text};
-      font-weight: 500;
-    }
-  `}
-`;
 
 export const SelectAccount = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+`;
+export const SelectAccountContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     gap: 1rem;
     align-items: center;
-    div {
-      :first-child {
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 0.8rem;
-        padding: 0.8rem;
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :last-child {
-        strong {
-          font-size: 1.4rem;
-          font-weight: 500;
-        }
-        span {
-          color: ${theme.colors.tertiaryText};
-        }
-        strong,
-        span {
-          display: block;
-        }
-      }
-    }
-  `}
-`;
 
-export const DropdownHeader = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-content: space-between;
-    flex: 1;
-    div {
+    :first-child {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 0.8rem;
+      padding: 0.8rem;
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :last-child {
+      flex: 1;
+      justify-content: space-between;
+      strong {
+        font-size: 1.4rem;
+        font-weight: 500;
+      }
+      span {
+        color: ${theme.colors.tertiaryText};
+      }
+      strong,
       span {
         display: block;
       }
-      :first-child {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        span {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 10rem;
-          padding: 0.4rem;
-          background: ${theme.colors.secondaryBackgroundOpacity};
-        }
-      }
-      :last-child {
-        span {
-          width: 1rem;
-          height: 1rem;
-          svg {
-            stroke: ${theme.colors.secondaryText};
-          }
+      div:last-child {
+        width: 1.1rem;
+        align-self: flex-end;
+        svg {
+          fill: ${theme.colors.tertiaryText};
+          stroke: ${theme.colors.tertiaryText};
         }
       }
     }
@@ -217,94 +184,15 @@ export const DropdownContent = styled.div`
       transition: background 0.5s ease-in;
       text-align: left;
       width: 100%;
+      span {
+        display: inline-block;
+        margin-left: 0.4rem;
+      }
       :first-child {
         border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       }
       :hover {
         background: ${theme.colors.secondaryBackground};
-      }
-    }
-  `}
-`;
-
-export const Form = styled.div`
-  @media screen and (min-width: 830px) {
-    max-width: 40rem;
-  }
-`;
-export const History = styled.div`
-  margin-top: 4rem;
-  flex: 1;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 500;
-  }
-`;
-export const HistoryContent = styled.div`
-  ${({ theme }) => css`
-    margin-top: 2rem;
-    :not(:last-child) {
-      border-bottom: 1px solid ${theme.colors.secondaryBackground};
-      padding-bottom: 1.5rem;
-    }
-  `}
-`;
-export const HistoryTable = styled.div`
-  margin-top: 1.5rem;
-`;
-
-export const Cell = styled.div`
-  ${({ theme }) => css`
-    display: inline-block;
-    vertical-align: middle;
-    font-weight: 500;
-    small {
-      font-size: 1.3rem;
-      color: ${theme.colors.tertiaryText};
-    }
-    button {
-      display: inline-block;
-      width: 1.4rem;
-      height: 1.4rem;
-      vertical-align: middle;
-      margin-right: 0.4rem;
-      svg {
-        display: block;
-        stroke: ${theme.colors.tertiaryText};
-      }
-    }
-  `}
-`;
-export const HeaderColumn = styled.strong`
-  ${({ theme }) => css`
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: ${theme.colors.tertiaryText};
-  `}
-`;
-
-export const HistoryTitle = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    strong {
-      font-weight: normal;
-      font-size: 1.5rem;
-    }
-    button {
-      color: ${theme.colors.tertiaryText};
-      font-size: 1.2rem;
-      padding: 0.6rem;
-      transition: background 0.3s ease-in, border 0.3s ease-in;
-      background: ${theme.colors.primary}22;
-      color: ${theme.colors.primary};
-      border-radius: 0.8rem;
-      border: 1px solid;
-      border-color: transparent;
-      :hover {
-        background: transparent;
-        border-color: ${theme.colors.primary};
       }
     }
   `}

@@ -1,18 +1,24 @@
 import Link from "next/link";
 
-import { Logo } from "../../molecules";
+import { Logo, Popover } from "../../molecules";
 
 import * as S from "./styles";
 
+import { NotificationsContent } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectNotifications } from "@polkadex/orderbook-modules";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type MenuProps = {
   handleChange?: () => void;
   isWallet?: boolean;
 };
+
 const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
+  const notifications = useReduxSelector(selectNotifications);
 
   return (
     <S.Wrapper>
@@ -100,7 +106,17 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         </S.WrapperIcon>
       </S.WrapperLinks>
       <S.WrapperProfile>
-        <Icon name="Notifications" background="none" size="large" />
+        <Popover>
+          <Popover.Trigger>
+            <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
+              <Icons.Notifications />
+              <div />
+            </S.Notifications>
+          </Popover.Trigger>
+          <Popover.Content>
+            <NotificationsContent notifications={notifications} />
+          </Popover.Content>
+        </Popover>
       </S.WrapperProfile>
     </S.Wrapper>
   );

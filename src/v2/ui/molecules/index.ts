@@ -1,5 +1,5 @@
 export * from "./MyAccount";
-export * from "./Notifications";
+export * from "./NotificationsContent";
 export * from "./Menu";
 export * from "./Search";
 export * from "./QuickLogin";

@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
 import { useRouter } from "next/router";
+import { OverlayProvider } from "@react-aria/overlays";
 
 import { wrapper } from "../store";
+import { useReduxSelector } from "../hooks/useReduxSelector";
 import { useAppDaemon } from "../hooks/useAppDaemon";
 
 import { Message } from "@polkadex/orderbook-ui/organisms";
@@ -13,8 +15,10 @@ import {
   alertDelete,
   selectAlertState,
   selectCurrentColorTheme,
+  selectNotificationsAlert,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
+import { Notifications } from "@polkadex/orderbook-ui/templates";
 
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
@@ -43,6 +47,7 @@ const ThemeWrapper = ({ children }) => {
   const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
   const alert = useSelector(selectAlertState);
+  const notifications = useReduxSelector(selectNotificationsAlert);
 
   const dispatch = useDispatch();
 
@@ -53,19 +58,21 @@ const ThemeWrapper = ({ children }) => {
   if (!state) return <div />;
 
   return (
-    <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      {/* {!!notifications.length && <Notifications />} */}
-      {alert.status && (
-        <Message
-          isVisible={alert.status}
-          onClose={() => dispatch(alertDelete())}
-          type={alert.type}
-          title={alert.message.title}
-          description={alert.message.description}
-        />
-      )}
-      {children}
-    </ThemeProvider>
+    <OverlayProvider>
+      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        <Notifications notifications={notifications} />
+        {alert.status && (
+          <Message
+            isVisible={alert.status}
+            onClose={() => dispatch(alertDelete())}
+            type={alert.type}
+            title={alert.message.title}
+            description={alert.message.description}
+          />
+        )}
+        {children}
+      </ThemeProvider>
+    </OverlayProvider>
   );
 };
 

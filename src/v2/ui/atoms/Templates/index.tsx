@@ -20,6 +20,10 @@ export const SpaceBetween = styled(Flex)`
 export const SpaceBetweenCenter = styled(Flex)`
   justify-content: space-between;
   align-items: center;
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 550;
+  }
 `;
 
 export const Grid = styled.div`

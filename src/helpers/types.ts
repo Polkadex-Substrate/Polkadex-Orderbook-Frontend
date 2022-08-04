@@ -158,6 +158,7 @@ export const icons = [
 export type Icons =
   | "ArrowTop"
   | "Menu"
+  | "Information"
   | "Verified"
   | "Avatar"
   | "Alert"
