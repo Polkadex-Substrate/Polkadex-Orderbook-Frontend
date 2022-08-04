@@ -81,7 +81,7 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.Logo>
 
           <Button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/signIn")}
             color="white"
             icon={{
               name: "Wallet",
