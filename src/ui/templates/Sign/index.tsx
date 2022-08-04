@@ -101,12 +101,7 @@ export const SignTemplate = () => {
                     </S.Show>
                   </InputLine>
                   <S.Terms>
-                    <Checkbox
-                      error={errors.terms && touched.terms && errors.terms}
-                      id="terms"
-                      name="terms"
-                      {...getFieldProps("terms")}
-                    />
+                    <Checkbox id="terms" name="terms" {...getFieldProps("terms")} />
                     <span>
                       Creating an account means you’re okay with our
                       <a href="/"> Terms of Service</a> and <a href="/"> Privacy Policy</a>
