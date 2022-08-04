@@ -67,21 +67,18 @@ export const Card = styled.div`
   padding: 1.5rem;
 `;
 
-export const Container = styled.div<{ isActive?: boolean }>`
-  ${({ isActive }) => css`
-    opacity: ${isActive ? 1 : 0.5};
-    margin-left: 0.5rem;
-    flex: 1;
-    span {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-    p {
-      opacity: 0.7;
-    }
-  `}
+export const Container = styled.div`
+  margin-left: 0.5rem;
+  flex: 1;
+  span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  p {
+    opacity: 0.7;
+  }
 `;
 export const Title = styled.div`
   margin-right: 2rem;

@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -17,6 +18,8 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
+import { notificationPush } from "@polkadex/orderbook-modules";
+import { fakeInformation } from "@polkadex/orderbook/utils/fakeNotification";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -72,7 +75,7 @@ export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
@@ -177,7 +180,7 @@ export const WithdrawTemplate = () => {
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
                       <strong>Id {value.block}</strong>
-                      <button type="button" onClick={() => console.log("Claim")}>
+                      <button type="button" onClick={undefined}>
                         Claim
                       </button>
                     </S.HistoryTitle>

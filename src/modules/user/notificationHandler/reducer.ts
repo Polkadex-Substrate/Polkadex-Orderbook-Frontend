@@ -4,10 +4,11 @@ import {
   NOTIFICATION_DELETE_ALL,
   NOTIFICATION_PUSH,
   NOTIFICATION_DELETE_BY_ID,
+  NOTIFICATION_MARK_AS_READ_BY,
 } from "./constants";
 
 export const initialNotificationState: Notification[] =
-  process.browser && JSON.parse(window.localStorage.getItem("notifications"));
+  (process.browser && JSON.parse(window.localStorage.getItem("notifications"))) || [];
 
 export const notificationReducer = (
   state = initialNotificationState,
@@ -15,13 +16,14 @@ export const notificationReducer = (
 ) => {
   switch (action.type) {
     case NOTIFICATION_PUSH: {
-      action.payload.id = Math.floor(Math.random() * 1000);
       const prevObj = JSON.parse(window.localStorage.getItem("notifications")) || [];
-      window.localStorage.setItem(
-        "notifications",
-        JSON.stringify([...prevObj, action.payload])
-      );
-      return [...state, action.payload];
+      const data = {
+        isRead: false,
+        isActive: false,
+        ...action.payload,
+      };
+      window.localStorage.setItem("notifications", JSON.stringify([...prevObj, data]));
+      return [...state, data];
     }
 
     case NOTIFICATION_DELETE_ALL:
@@ -34,6 +36,30 @@ export const notificationReducer = (
 
       window.localStorage.setItem("notifications", JSON.stringify([...newObj]));
       return state.filter((item) => item.id !== action.id);
+    }
+
+    case NOTIFICATION_MARK_AS_READ_BY: {
+      const prevObj = JSON.parse(window.localStorage.getItem("notifications")) || [];
+      const newObj = prevObj?.map((item) => {
+        if (item.id === action.payload.id) {
+          return {
+            ...item,
+            [action.payload.by]: true,
+          };
+        }
+        return item;
+      });
+
+      window.localStorage.setItem("notifications", JSON.stringify([...newObj]));
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          return {
+            ...item,
+            [action.payload.by]: true,
+          };
+        }
+        return item;
+      });
     }
 
     case NOTIFICATION_DATA:

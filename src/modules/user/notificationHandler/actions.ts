@@ -3,6 +3,7 @@ import {
   NOTIFICATION_DELETE_ALL,
   NOTIFICATION_PUSH,
   NOTIFICATION_DELETE_BY_ID,
+  NOTIFICATION_MARK_AS_READ_BY,
 } from "./constants";
 
 export type NotificationTypes = "InformationAlert" | "ErrorAlert" | "AttentionAlert" | string;
@@ -11,11 +12,12 @@ export interface Notification {
   id?: number;
   type?: NotificationTypes;
   isRead?: boolean;
+  isActive?: boolean;
   message?: {
     title?: string;
     description?: string;
   };
-  time?: string;
+  time?: number;
   actionUrl?: string;
   actionTitle?: string;
 }
@@ -40,11 +42,20 @@ export interface NotificationDeleteById {
   type: typeof NOTIFICATION_DELETE_BY_ID;
   id: number;
 }
+export interface NotificationMarkAsReadBy {
+  type: typeof NOTIFICATION_MARK_AS_READ_BY;
+  payload: {
+    id: number;
+    by?: "isRead" | "isActive";
+  };
+}
+
 export type NotificationAction =
   | NotificationPush
   | NotificationData
   | NotificationDeleteAll
-  | NotificationDeleteById;
+  | NotificationDeleteById
+  | NotificationMarkAsReadBy;
 
 export const notificationPush = (payload: NotificationPush["payload"]): NotificationPush => ({
   type: NOTIFICATION_PUSH,
@@ -63,4 +74,11 @@ export const notificationDeleteAll = (): NotificationDeleteAll => ({
 export const notificationDeleteById = (id: number): NotificationDeleteById => ({
   type: NOTIFICATION_DELETE_BY_ID,
   id,
+});
+
+export const notificationMarkAsReadBy = (
+  payload: NotificationMarkAsReadBy["payload"]
+): NotificationMarkAsReadBy => ({
+  type: NOTIFICATION_MARK_AS_READ_BY,
+  payload,
 });

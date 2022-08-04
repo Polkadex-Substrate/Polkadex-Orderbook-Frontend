@@ -110,22 +110,21 @@ export const AccountManagerTemplate = () => {
                       <p>Connect your account to a main wallet to start using Orderbook</p>
                     </S.FlexCenter>
                   </S.LinkAccountColumn>
-                  <Link href="/linkAccount">
-                    <S.LinkAccountColumn as="a">
-                      <S.LinkAccountColumnWrapper>
-                        <Icons.PolkadotJs />
-                      </S.LinkAccountColumnWrapper>
-                      <S.LinkAccountColumnWrapper>
-                        <div>
-                          <span>Polkadot.js</span>
-                          <p>Link your account using Polkadot.js extension</p>
-                        </div>
-                        <div>
-                          <Icons.ArrowRight />
-                        </div>
-                      </S.LinkAccountColumnWrapper>
-                    </S.LinkAccountColumn>
-                  </Link>
+
+                  <S.LinkAccountColumn type="button" onClick={undefined}>
+                    <S.LinkAccountColumnWrapper>
+                      <Icons.PolkadotJs />
+                    </S.LinkAccountColumnWrapper>
+                    <S.LinkAccountColumnWrapper>
+                      <div>
+                        <span>Polkadot.js</span>
+                        <p>Link your account using Polkadot.js extension</p>
+                      </div>
+                      <div>
+                        <Icons.ArrowRight />
+                      </div>
+                    </S.LinkAccountColumnWrapper>
+                  </S.LinkAccountColumn>
                 </S.LinkAccount>
               ) : (
                 <>

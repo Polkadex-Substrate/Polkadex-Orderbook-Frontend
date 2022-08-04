@@ -2,34 +2,11 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Main = styled.div``;
-
-export const Header = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s ease-in-out;
-    border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
-    background: ${isActive ? theme.colors.inverse : theme.colors.text};
-    ${Icon} svg {
-      fill: ${isActive ? theme.colors.text : theme.colors.inverse};
-    }
-    :hover {
-      background: ${theme.colors.inverse};
-      ${Icon} svg {
-        fill: ${theme.colors.text};
-      }
-    }
-  `}
-`;
-
 export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     min-width: 35rem;
+    max-width: 40rem;
     border-radius: 1rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
@@ -98,11 +75,20 @@ export const RecentContent = styled.div<{ isScrollable?: boolean }>`
     scrollbar-width: none;
   `}
 `;
+export const CardActionContainer = styled.div`
+  visibility: hidden;
+  opacity: 0;
+  right: 0;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  p {
+    white-space: nowrap;
+  }
+`;
 
 export const CardAction = styled.div`
   ${({ theme }) => css`
-    visibility: hidden;
-    opacity: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,12 +97,10 @@ export const CardAction = styled.div`
     border-radius: 5rem;
     width: 3rem;
     height: 3rem;
-    position: absolute;
-    top: 50%;
+
     transform: translate(-15%, -50%);
-    right: 0;
-    z-index: 2;
-    transition: opacity 0.6s ease-in-out;
+
+    transition: border-color 0.6s ease-in-out;
     :hover {
       border-color: ${theme.colors.primary};
     }
@@ -136,7 +120,7 @@ export const Card = styled.div<{ isRead?: boolean }>`
     cursor: pointer;
     :hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
-      ${CardAction} {
+      ${CardActionContainer} {
         visibility: visible;
         opacity: 1;
       }
@@ -147,11 +131,11 @@ export const Card = styled.div<{ isRead?: boolean }>`
 export const CardIcon = styled.div`
   ${({ theme }) => css`
     position: relative;
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.primaryBackground};
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackground};
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 3.6rem;
+    height: 3.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -175,5 +159,9 @@ export const CardContent = styled.div`
     font-size: 1.2rem;
     opacity: 0.6;
     line-height: 2;
+  }
+  strong {
+    font-size: 1.4rem;
+    font-weight: 550;
   }
 `;

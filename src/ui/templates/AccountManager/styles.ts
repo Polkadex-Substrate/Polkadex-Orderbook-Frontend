@@ -299,7 +299,7 @@ export const LinkAccount = styled.div`
   `}
 `;
 
-export const LinkAccountColumn = styled.div`
+export const LinkAccountColumn = styled.button`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
