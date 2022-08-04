@@ -1,10 +1,9 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
 import { alertPush, klinePush, KlineSubscribe } from "../../..";
-
-import { onCandleStickEvents } from "@polkadex/orderbook/graphql/subscriptions";
+import * as subscriptions from "../../../../graphql/subscriptions";
 
 export function* fetchKlineChannelSaga(action: KlineSubscribe) {
   try {
@@ -45,11 +44,13 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
 async function fetchKlineChannel(market: string, interval: string) {
   return eventChannel((emitter) => {
     const subscription = API.graphql({
-      query: onCandleStickEvents,
-      variables: { m: market, interval: interval },
+      query: subscriptions.websocket_streams,
+      variables: { name: `${market}_${interval}` },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => {
-        emitter(data.value.data.onCandleStickEvents);
+        emitter(data.value.data.websocket_streams.data);
       },
       error: (err) => {
         console.warn("error in onCandleStickEvents channel", err);

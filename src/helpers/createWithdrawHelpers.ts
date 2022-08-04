@@ -7,7 +7,7 @@ import { SignedOrderPayload } from "./enclavePayloadSigner";
 export const createWithdrawPayload = (
   api: ApiPromise,
   asset: Record<string, string | null>,
-  amount: string,
+  amount: string | number,
   nonce: number
 ) => {
   const withdraw_paylod = api.createType("WithdrawPayload", {
@@ -18,12 +18,3 @@ export const createWithdrawPayload = (
   return withdraw_paylod;
 };
 
-export const placeWithdrawToEnclave = async (
-  ws: Client,
-  payload: Codec,
-  address: string,
-  signature: SignedOrderPayload
-) => {
-  const res = await ws.call("enclave_withdraw", [address, payload, signature]);
-  return res;
-};

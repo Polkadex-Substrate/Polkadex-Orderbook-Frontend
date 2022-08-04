@@ -1,11 +1,11 @@
-import { takeLeading } from "redux-saga/effects";
+import { takeEvery, takeLeading } from "redux-saga/effects";
 
-import { TRANSACTIONS_FETCH, TRANSACTION_CHANNEL_FETCH } from "../constants";
+import { TRANSACTIONS_FETCH, TRANSACTIONS_UPDATE_EVENT } from "../constants";
 
-import { transactionsChannelSaga } from "./transactionsChannelSaga";
 import { transactionsSaga } from "./transactionsSaga";
+import { transactionsUpdateSaga } from "./transactionsUpdate";
 
 export function* rootTransactionsSaga() {
   yield takeLeading(TRANSACTIONS_FETCH, transactionsSaga);
-  yield takeLeading(TRANSACTION_CHANNEL_FETCH, transactionsChannelSaga);
+  yield takeEvery(TRANSACTIONS_UPDATE_EVENT, transactionsUpdateSaga);
 }

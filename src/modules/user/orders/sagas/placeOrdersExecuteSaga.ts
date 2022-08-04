@@ -1,5 +1,5 @@
 import { call, put, select } from "redux-saga/effects";
-import { Client } from "rpc-websockets";
+import { API } from "aws-amplify";
 
 import {
   sendError,
@@ -11,12 +11,10 @@ import {
   selectRangerApi,
 } from "../../..";
 
-import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
-import {
-  createOrderPayload,
-  placeOrderToEnclave,
-} from "@polkadex/orderbook/helpers/createOrdersHelpers";
-import { getNonceForAccount } from "@polkadex/orderbook/helpers/getNonce";
+import * as mutation from "./../../../../graphql/mutations";
+
+import { createOrderPayload } from "@polkadex/orderbook/helpers/createOrdersHelpers";
+import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
@@ -28,13 +26,12 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     if (order_type === "MARKET" && Number(amount) <= 0) {
       throw new Error("Invalid amount");
     }
-    const { address, keyringPair, main_addr } = yield select(selectUserInfo);
-    const enclaveRpcClient = yield select(selectEnclaveRpcClient);
-    const nonce = yield call(() => getNonceForAccount(enclaveRpcClient, main_addr));
+    const { address, keyringPair } = yield select(selectUserInfo);
+    const nonce = getNonce();
     const api = yield select(selectRangerApi);
     const client_order_id = getNewClientId();
-    if (address !== "" && keyringPair && enclaveRpcClient && api) {
-      const payload = createOrderPayload(
+    if (address !== "" && keyringPair && api) {
+      const order = createOrderPayload(
         api,
         address,
         order_type,
@@ -46,12 +43,14 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         nonce,
         client_order_id
       );
-      const signature = signPayload(api, keyringPair, payload);
-      const res = yield call(() => placeOrderToEnclave(enclaveRpcClient, payload, signature));
+      const signature = signPayload(api, keyringPair, order);
+      const res = yield call(() => executePlaceOrder([order, signature]));
+      console.info("placed order: ", res);
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
     }
   } catch (error) {
+    console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
     yield put(
       sendError({
@@ -73,4 +72,13 @@ const getNewClientId = () => {
     client_order_id[i] = Math.floor(Math.random() * 256);
   }
   return client_order_id;
+};
+
+const executePlaceOrder = async (orderPayload) => {
+  const payload = { PlaceOrder: orderPayload };
+  const res = await API.graphql({
+    query: mutation.place_order,
+    variables: { input: { payload } },
+  });
+  return res;
 };

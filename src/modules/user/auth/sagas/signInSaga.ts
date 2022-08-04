@@ -8,6 +8,11 @@ import { ProxyAccount, userData } from "../../profile";
 import { signInData, signInError, SignInFetch } from "../actions";
 import { getMainAddrFromUserByProxyAccountRes } from "../helper";
 
+import {
+  formatAddressToDefault,
+  formatAddressToPolkadex,
+} from "@polkadex/orderbook/helpers/formatAddress";
+
 export function* signInSaga(action: SignInFetch) {
   try {
     const { address, password } = action.payload;
@@ -33,7 +38,7 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
     userPair.unlock(password);
     const res: any = await API.graphql({
       query: queries.findUserByProxyAccount,
-      variables: { proxy_account: address },
+      variables: { proxy_account: formatAddressToDefault(address) },
     });
     if (res.data?.findUserByProxyAccount.items.length === 0) {
       throw new Error("This proxy account has not been registered yet!");
@@ -41,7 +46,7 @@ const getProxyKeyring = async (address: string, password: string): Promise<Proxy
     const queryResStr = res.data?.findUserByProxyAccount.items[0];
     const main_addr = getMainAddrFromUserByProxyAccountRes(queryResStr);
     return {
-      main_addr: main_addr,
+      main_addr: formatAddressToPolkadex(main_addr),
       accountName: account.meta.name,
       address: userPair.address,
       keyringPair: userPair,

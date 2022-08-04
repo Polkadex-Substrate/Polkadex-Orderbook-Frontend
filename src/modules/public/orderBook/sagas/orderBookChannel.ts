@@ -36,6 +36,8 @@ function fetchOrderBookChannel(market: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market}-ob-inc` },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => emitter(data.value.data.websocket_streams.data),
       error: (err) => console.log(err),

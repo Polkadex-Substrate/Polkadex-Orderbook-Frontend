@@ -33,6 +33,9 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
 }
 
 const fetchRecentTrade = async (market: string, limit = 50) => {
-  const res = await API.graphql({ query: getRecentTrades, variables: { m: market, limit } });
+  const res: any = await API.graphql({
+    query: getRecentTrades,
+    variables: { m: market, limit },
+  });
   return res.data.getRecentTrades.items;
 };

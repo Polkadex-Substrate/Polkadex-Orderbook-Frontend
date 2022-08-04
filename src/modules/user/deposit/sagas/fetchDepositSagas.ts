@@ -14,7 +14,7 @@ import {
 } from "@polkadex/orderbook/modules/public/ranger";
 import { UNIT_BN } from "@polkadex/web-constants";
 
-export function* fetchDepositsSaga(action: DepositsFetch) {
+export function* fetchDepositSaga(action: DepositsFetch) {
   try {
     console.log("depsoit saga called");
     const { asset, amount, mainAccount } = action.payload;

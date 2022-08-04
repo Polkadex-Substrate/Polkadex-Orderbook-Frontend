@@ -3,10 +3,11 @@ import {
   TRANSACTIONS_DATA,
   TRANSACTIONS_ERROR,
   TRANSACTIONS_FETCH,
-  TRANSACTION_CHANNEL_DATA,
+  TRANSACTIONS_UPDATE_EVENT_DATA,
 } from "./constants";
 
 export interface Transaction {
+  event_id?: number;
   amount: string;
   asset: string;
   fee: string;
@@ -34,28 +35,38 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
     case TRANSACTIONS_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case TRANSACTIONS_DATA:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: true,
         transactions: action.payload,
       };
     case TRANSACTIONS_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };
-    case TRANSACTION_CHANNEL_DATA: {
+    case TRANSACTIONS_UPDATE_EVENT_DATA: {
       const { payload } = action;
+      const newTransaction: Transaction = {
+        event_id: payload.event_id,
+        amount: payload.amount.toString(),
+        asset: payload.asset,
+        fee: payload.fee.toString(),
+        main_account: payload.user,
+        time: new Date().toISOString(),
+        status: payload.status,
+        txn_type: payload.txn_type,
+      };
       return {
         ...state,
-        transactions: [payload, ...state.transactions],
+        transactions: [newTransaction, ...state.transactions],
       };
     }
     default:

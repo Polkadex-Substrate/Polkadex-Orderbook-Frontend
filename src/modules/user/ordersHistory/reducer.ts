@@ -6,7 +6,7 @@ import {
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
-  ORDER_CHANNEL_UPDATE_DATA,
+  ORDER_UPDATE_EVENT_DATA,
 } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
@@ -50,7 +50,7 @@ export const ordersHistoryReducer = (
     case OPEN_ORDERS_HISTORY_DATA:
       return { ...state, openOrders: sliceArray(action.payload.list, defaultStorageLimit) };
 
-    case ORDER_CHANNEL_UPDATE_DATA: {
+    case ORDER_UPDATE_EVENT_DATA: {
       const openOrders = [...state.openOrders];
       const allOrders = [...state.list];
       const newOrder = action.payload;

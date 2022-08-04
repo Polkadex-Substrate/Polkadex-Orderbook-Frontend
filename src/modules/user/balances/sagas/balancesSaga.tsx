@@ -13,6 +13,13 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
+type BalanceQueryResult = {
+  a: string;
+  f: string;
+  r: string;
+  p: string;
+};
+
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
     const account: ProxyAccount = yield select(selectUserInfo);
@@ -34,7 +41,7 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
       yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
-    console.warn(error);
+    console.error(error);
     yield put(
       alertPush({
         message: {
@@ -59,12 +66,13 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
     query: queries.getAllBalancesByMainAccount,
     variables: { main_account: account },
   });
-  const balances = res.data.getAllBalancesByMainAccount.items.map((val) => {
+  const balancesRaw: BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
+  const balances = balancesRaw.map((val) => {
     return {
-      asset_type: val.asset,
-      reserved_balance: val.reserved,
-      free_balance: val.free,
-      pending_withdrawal: val.pending_withdrawal,
+      asset_type: val.a,
+      reserved_balance: val.r,
+      free_balance: val.f,
+      pending_withdrawal: val.p,
     };
   });
   return balances;

@@ -1,37 +1,32 @@
 import { call, put, select } from "redux-saga/effects";
+import { API } from "aws-amplify";
 
+import * as mutations from "../../../../graphql/mutations";
 import { userTradesError } from "../../trades";
 import { withdrawsData, WithdrawsFetch } from "..";
 
-import { API, RequestOptions } from "@polkadex/orderbook-config";
-import { signMessage, formatPayload } from "@polkadex/web-helpers";
 import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
-import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
-import { getNonceForAccount } from "@polkadex/orderbook/helpers/getNonce";
-import {
-  createWithdrawPayload,
-  placeWithdrawToEnclave,
-} from "@polkadex/orderbook/helpers/createWithdrawHelpers";
+import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
+import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 
 // TOOD: CHANGE TO USE ENCLAVE WS
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
-    const { address, keyringPair, main_addr } = yield select(selectUserInfo);
-    const enclaveRpcClient = yield select(selectEnclaveRpcClient);
-    const nonce = yield call(() => getNonceForAccount(enclaveRpcClient, main_addr));
+
+    const { address, keyringPair } = yield select(selectUserInfo);
+    const nonce = getNonce();
     const api = yield select(selectRangerApi);
-    if (address !== "" && keyringPair && enclaveRpcClient && api) {
+    if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amount, nonce);
       const signature = signPayload(api, keyringPair, payload);
-      const res = yield call(() =>
-        placeWithdrawToEnclave(enclaveRpcClient, payload, address, signature)
-      );
-      console.log("withrawRes =>", res);
+      const res = yield call(() => executeWithdraw([address, payload, signature]));
+      console.info("withdraw res: ", res);
       yield put(withdrawsData());
     }
   } catch (error) {
+    console.error("withdraw error: ", error);
     yield put(
       sendError({
         error,
@@ -43,3 +38,12 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
     );
   }
 }
+
+const executeWithdraw = async (withdrawPayload) => {
+  const payload = { Withdraw: withdrawPayload };
+  const res = await API.graphql({
+    query: mutations.withdraw,
+    variables: { input: { payload } },
+  });
+  return res;
+};

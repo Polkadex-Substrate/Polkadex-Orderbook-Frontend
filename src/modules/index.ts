@@ -16,27 +16,24 @@ import {
 } from "./public/orderBook";
 import { RecentTradesState, rootRecentTradesSaga } from "./public/recentTrades";
 import { AuthState, rootAuthSaga } from "./user/auth";
-import { HistoryState, rootHistorySaga } from "./user/history";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
 import { ProfileState, rootProfileSaga } from "./user/profile";
 import { PolkadotWalletState, rootPolkadotWalletSaga } from "./user/proxyAccount";
 import { publicReducer, userReducer } from "./app";
-import { WalletsState, rootWalletsSaga } from "./user/wallets";
-import { DepositsState } from "./user/deposits/reducer";
-import { rootDepositsSaga } from "./user/deposits";
+import { DepositsState } from "./user/deposit/reducer";
+import { rootDepositsSaga } from "./user/deposit";
 import { rootTradesSaga, TradesState } from "./user/trades";
 import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
-import { EnclaveRpcClientState, rootEnclaveRpcClientSaga } from "./public/enclaveRpcClient";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 import { rootSessionSaga, SessionState } from "./user/session";
+import { rootUserEventsSaga } from "./user/userEventsListener";
 
 export * from "./user/auth";
-export * from "./user/history";
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
@@ -47,8 +44,7 @@ export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/proxyAccount";
 export * from "./user/mainAccount";
-export * from "./user/wallets";
-export * from "./user/deposits";
+export * from "./user/deposit";
 export * from "./user/withdraws";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
@@ -73,7 +69,6 @@ export interface RootState {
     orderBook: OrderBookState;
     recentTrades: RecentTradesState;
     ranger: RangerState;
-    enclaveRpcClient: EnclaveRpcClientState;
     assets: AssetsState;
   };
   user: {
@@ -81,11 +76,9 @@ export interface RootState {
     extensionWallet: ExtensionWalletState;
     auth: AuthState;
     balances: BalancesState;
-    history: HistoryState;
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
     profile: ProfileState;
-    wallets: WalletsState;
     deposits: DepositsState;
     trades: TradesState;
     transactions: TransactionsState;
@@ -111,12 +104,10 @@ export function* rootSaga() {
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
-    call(rootHistorySaga),
     call(rootKlineFetchSaga),
     call(rootMarketsSaga),
     call(rootRangerSaga),
     call(rootOrderBookSaga),
-    call(rootWalletsSaga),
     call(rootOrdersHistorySaga),
     call(rootOrdersSaga),
     call(rootProfileSaga),
@@ -125,8 +116,8 @@ export function* rootSaga() {
     call(rootTradesSaga),
     call(rootWithdrawsSaga),
     call(rootBalancesSaga),
-    call(rootEnclaveRpcClientSaga),
     call(rootAssetsSaga),
+    call(rootUserEventsSaga),
     call(rootNotificationSaga),
   ]);
 }
