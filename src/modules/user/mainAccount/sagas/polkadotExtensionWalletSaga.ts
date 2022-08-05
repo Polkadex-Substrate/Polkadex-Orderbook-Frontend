@@ -4,7 +4,7 @@ import { sendError } from "../../..";
 import { extensionWalletData } from "../actions";
 import { InjectedAccount } from "../../tradeAccount";
 
-export function* extensionWalletSaga() {
+export function* polkadotExtensionWalletSaga() {
   try {
     const allAccounts: InjectedAccount[] = yield call(getAllExtensionWalletAccounts);
     yield put(extensionWalletData({ allAccounts }));

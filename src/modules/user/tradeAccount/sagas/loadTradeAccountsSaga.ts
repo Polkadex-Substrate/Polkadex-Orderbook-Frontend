@@ -9,6 +9,8 @@ import * as queries from "../../../../graphql/queries";
 export function* loadProxyAccountsSaga() {
   try {
     const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
+    // TODO:
+    // get all trade accounts from the blockchain and merge them with the browser accounts
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
   } catch (error) {
     yield put(

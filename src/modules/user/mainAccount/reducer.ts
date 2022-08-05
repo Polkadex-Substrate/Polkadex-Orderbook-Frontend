@@ -2,19 +2,23 @@ import { InjectedAccount } from "../tradeAccount";
 
 import { GetExtensionWalletAction, MainAccount } from "./actions";
 import {
-  EXTENSION_WALLET_FETCH,
-  EXTENSION_WALLET_ERROR,
-  EXTENSION_WALLET_DATA,
+  POLKADOT_EXTENSION_WALLET_FETCH,
+  POLKADOT_EXTENSION_WALLET_ERROR,
+  POLKADOT_EXTENSION_WALLET_DATA,
   MAIN_ACCOUNT_SET_FETCH,
   EXTENSION_WALLET_RESET,
   MAIN_ACCOUNT_SET_DATA,
+  REGISTER_MAIN_ACCOUNT_FETCH,
 } from "./constants";
 
-export interface ExtensionWalletState {
+export interface MainAccountState {
   success?: boolean;
   isFetching: boolean;
-  allAccounts: InjectedAccount[];
+  allBrowserAccounts: InjectedAccount[];
+  allAccounts: string[];
   selectedAccount: MainAccount;
+  registerMainAccountLoading: boolean;
+  registerMainAccountSuccess: boolean;
 }
 
 const defaultAccount: MainAccount = {
@@ -24,32 +28,35 @@ const defaultAccount: MainAccount = {
   name: "",
 };
 
-const initialState: ExtensionWalletState = {
+const initialState: MainAccountState = {
   isFetching: false,
   success: false,
+  allBrowserAccounts: [],
   allAccounts: [],
   selectedAccount: defaultAccount,
+  registerMainAccountLoading: false,
+  registerMainAccountSuccess: false,
 };
 
-export const extensionWalletReducer = (
+export const mainAccountReducer = (
   state = initialState,
   action: GetExtensionWalletAction
-): ExtensionWalletState => {
+): MainAccountState => {
   switch (action.type) {
-    case EXTENSION_WALLET_DATA:
+    case POLKADOT_EXTENSION_WALLET_DATA:
       return {
         ...state,
         isFetching: false,
         success: true,
-        allAccounts: action.payload.allAccounts,
+        allBrowserAccounts: action.payload.allAccounts,
       };
-    case EXTENSION_WALLET_ERROR:
+    case POLKADOT_EXTENSION_WALLET_ERROR:
       return {
         ...state,
         isFetching: false,
         success: false,
       };
-    case EXTENSION_WALLET_FETCH:
+    case POLKADOT_EXTENSION_WALLET_FETCH:
       return {
         ...state,
         success: false,
@@ -64,6 +71,19 @@ export const extensionWalletReducer = (
       return {
         ...initialState,
       };
+    case REGISTER_MAIN_ACCOUNT_FETCH:
+      return {
+        ...state,
+        registerMainAccountLoading: true,
+        registerMainAccountSuccess: false,
+      };
+    case MAIN_ACCOUNT_SET_FETCH:
+      return {
+        ...state,
+        registerMainAccountLoading: false,
+        registerMainAccountSuccess: false,
+      };
+
     default:
       return state;
   }

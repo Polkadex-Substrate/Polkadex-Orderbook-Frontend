@@ -24,28 +24,6 @@ export const checkIfMainAccountExists = async (api: ApiPromise, address: string)
   return resJson !== null;
 };
 
-export const addProxyToAccount = async (
-  api: ApiPromise,
-  proxyAddress: string,
-  injector: any,
-  mainAddress: string
-): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
-  return res;
-};
-
-export const registerAccount = async (
-  api: ApiPromise,
-  proxyAddress: string,
-  injector: any,
-  mainAddress: string
-): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.registerMainAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
-  return res;
-};
-
 export const checkIfProxyAccountRegistered = async (address: string) => {
   const res: any = await API.graphql({
     query: findUserByProxyAccount,

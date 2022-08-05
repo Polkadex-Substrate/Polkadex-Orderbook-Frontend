@@ -19,7 +19,7 @@ import { AuthState, rootAuthSaga } from "./user/auth";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
 import { ProfileState, rootProfileSaga } from "./user/profile";
-import { PolkadotWalletState, rootTradeAccountsSaga } from "./user/tradeAccount";
+import { TradeAccountsState, rootTradeAccountsSaga } from "./user/tradeAccount";
 import { publicReducer, userReducer } from "./app";
 import { DepositsState } from "./user/deposit/reducer";
 import { rootDepositsSaga } from "./user/deposit";
@@ -28,7 +28,7 @@ import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
-import { ExtensionWalletState, rootExtensionWalletSaga } from "./user/mainAccount";
+import { MainAccountState, rootMainAccountsSaga } from "./user/mainAccount";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 import { rootSessionSaga, SessionState } from "./user/session";
 import { rootUserEventsSaga } from "./user/userEventsListener";
@@ -72,8 +72,8 @@ export interface RootState {
     assets: AssetsState;
   };
   user: {
-    polkadotWallet: PolkadotWalletState;
-    extensionWallet: ExtensionWalletState;
+    polkadotWallet: TradeAccountsState;
+    extensionWallet: MainAccountState;
     auth: AuthState;
     balances: BalancesState;
     orders: OrdersState;
@@ -95,7 +95,7 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield all([
-    call(rootExtensionWalletSaga),
+    call(rootMainAccountsSaga),
     call(rootSessionSaga),
     call(rootAuthSaga),
     call(rootDepositsSaga),

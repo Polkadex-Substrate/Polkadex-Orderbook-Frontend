@@ -20,7 +20,7 @@ import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
-import { extensionWalletReducer } from "./user/mainAccount";
+import { mainAccountReducer } from "./user/mainAccount";
 import { sessionReducer } from "./user/session";
 import { assetsReducer } from "./public/assets";
 
@@ -41,7 +41,7 @@ export const publicReducer = combineReducers({
 export const userReducer = combineReducers({
   auth: authReducer,
   polkadotWallet: TradeAccountsReducer,
-  extensionWallet: extensionWalletReducer,
+  extensionWallet: mainAccountReducer,
   balances: balancesReducer,
   orders: ordersReducer,
   ordersHistory: ordersHistoryReducer,

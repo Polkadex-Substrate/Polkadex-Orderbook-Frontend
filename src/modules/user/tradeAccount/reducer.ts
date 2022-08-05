@@ -4,32 +4,39 @@ import {
   USER_TRADE_ACCOUNTS_FETCH,
   USER_TRADE_ACCOUNTS_DATA,
   SET_CURRENT_TRADE_ACCOUNT,
+  USER_REGISTER_TRADE_ACCOUNT_FETCH,
+  USER_REGISTER_TRADE_ACCOUNT_DATA,
+  USER_REGISTER_TRADE_ACCOUNT_ERROR,
 } from "./constants";
 
-export interface PolkadotWalletState {
+export interface TradeAccountsState {
   success?: boolean;
   isFetching: boolean;
   allAccounts: string[];
   allBrowserAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
+  registerAccountLoading: boolean;
+  registerAccountSuccess: boolean;
 }
 export const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
   type: "",
 };
-const initialState: PolkadotWalletState = {
+const initialState: TradeAccountsState = {
   isFetching: false,
   success: false,
   allAccounts: [],
   allBrowserAccounts: [],
   selectedAccount: defaultAccount,
+  registerAccountLoading: false,
+  registerAccountSuccess: false,
 };
 
 export const TradeAccountsReducer = (
   state = initialState,
   action: TradeAccountsAction
-): PolkadotWalletState => {
+): TradeAccountsState => {
   switch (action.type) {
     case USER_TRADE_ACCOUNTS_DATA:
       return {
@@ -55,7 +62,24 @@ export const TradeAccountsReducer = (
         ...state,
         selectedAccount: action.payload,
       };
-
+    case USER_REGISTER_TRADE_ACCOUNT_FETCH:
+      return {
+        ...state,
+        registerAccountLoading: true,
+        registerAccountSuccess: false,
+      };
+    case USER_REGISTER_TRADE_ACCOUNT_DATA:
+      return {
+        ...state,
+        registerAccountLoading: false,
+        registerAccountSuccess: true,
+      };
+    case USER_REGISTER_TRADE_ACCOUNT_ERROR:
+      return {
+        ...state,
+        registerAccountLoading: false,
+        registerAccountSuccess: false,
+      };
     default:
       return state;
   }

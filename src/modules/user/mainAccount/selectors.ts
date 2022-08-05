@@ -10,7 +10,7 @@ export const selectExtensionWalletSuccess = (state: RootState): boolean =>
   state.user.extensionWallet.success;
 
 export const selectExtensionWalletAccounts = (state: RootState): InjectedAccount[] =>
-  state.user.extensionWallet.allAccounts;
+  state.user.extensionWallet.allBrowserAccounts;
 
 export const selectMainAccount = (state: RootState): MainAccount =>
   state.user.extensionWallet.selectedAccount;
