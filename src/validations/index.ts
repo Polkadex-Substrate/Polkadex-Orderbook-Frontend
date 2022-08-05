@@ -34,7 +34,7 @@ export const signUpValidations = Yup.object().shape({
   password: Yup.string().required("Required").min(2, "Too Short!").max(20, "Too Long!"),
   repeatPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
   email: Yup.string().email("Must be a valid email").required("Required"),
-  terms: Yup.bool().oneOf([true], "Field must be checked"),
+  // terms: Yup.bool().oneOf([true], "Field must be checked"),
 });
 
 export const signValidations = Yup.object().shape({

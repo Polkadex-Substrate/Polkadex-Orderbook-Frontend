@@ -12,7 +12,7 @@ import {
   selectSignInError,
   selectSignInLoading,
   selectUserInfo,
-  signIn,
+  signInFetch,
 } from "@polkadex/orderbook-modules";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -93,7 +93,7 @@ export function useDeveloper() {
    * @returns {void} Dispatch Sign In action
    */
   const connectTestWallet = () => {
-    dispatch(signIn(connectWallet.address, connectWallet.password));
+    dispatch(signInFetch(connectWallet.address, connectWallet.password));
   };
 
   /**

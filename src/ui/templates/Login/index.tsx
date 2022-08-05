@@ -18,7 +18,7 @@ import {
   selectSignInLoading,
   selectSignUpSuccess,
   setProxyAccount,
-  signIn,
+  signInFetch,
   selectImportAccountSuccess,
 } from "@polkadex/orderbook-modules";
 import {
@@ -93,7 +93,7 @@ export const LoginTemplate = () => {
                     initialValues={defaultValues}
                     validationSchema={loginValidations}
                     onSubmit={async (values) => {
-                      dispatch(signIn(selectedAccount.address, values.password));
+                      dispatch(signInFetch(selectedAccount.address, values.password));
                     }}>
                     {({ errors, touched, values, setFieldValue }) => (
                       <Form>

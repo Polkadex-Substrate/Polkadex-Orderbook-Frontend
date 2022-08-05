@@ -10,11 +10,11 @@ import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useTimer } from "@polkadex/orderbook/v2/hooks";
+import { useCodeVerification } from "@polkadex/orderbook-hooks";
 
 export const CodeVerificationTemplate = () => {
-  const router = useRouter();
   const [state, setState] = useState(false);
-
+  const { verifyCode, resendVerificationCode } = useCodeVerification();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       code: "",
@@ -22,7 +22,7 @@ export const CodeVerificationTemplate = () => {
     validationSchema: codeValidations,
     onSubmit: (values) => {
       console.log(values);
-      router.push("/accountManager");
+      verifyCode(values.code);
     },
   });
 
@@ -55,7 +55,7 @@ export const CodeVerificationTemplate = () => {
                     placeholder="000000"
                     error={errors.code && touched.code && errors.code}
                     {...getFieldProps("code")}>
-                    <Resend onResend={() => console.log("Resending")} />
+                    <Resend onResend={() => resendVerificationCode()} />
                   </InputLine>
                   <Button
                     disabled={!(isValid && dirty)}

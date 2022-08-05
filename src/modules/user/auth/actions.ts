@@ -1,15 +1,14 @@
 import { CommonError } from "../../types";
 
 import {
-  AUTH_CONNECT_PHONE_DATA,
-  AUTH_CONNECT_PHONE_ERROR,
-  AUTH_CONNECT_PHONE_FETCH,
-  AUTH_IMPORT_ACCOUNT_DATA,
-  AUTH_IMPORT_ACCOUNT_ERROR,
-  AUTH_IMPORT_ACCOUNT_FETCH,
-  AUTH_KEYRING_SIGN_IN_DATA,
+  AUTH_CODE_VERIFY_DATA,
+  AUTH_CODE_VERIFY_ERROR,
+  AUTH_CODE_VERIFY_FETCH,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
+  AUTH_RESEND_CODE_DATA,
+  AUTH_RESEND_CODE_ERROR,
+  AUTH_RESEND_CODE_FETCH,
   AUTH_SIGN_IN_DATA,
   AUTH_SIGN_IN_ERROR,
   AUTH_SIGN_IN_FETCH,
@@ -41,7 +40,7 @@ export interface GeetestCaptchaResponse {
 export interface SignInFetch {
   type: typeof AUTH_SIGN_IN_FETCH;
   payload: {
-    address: string;
+    email: string;
     password: string;
   };
 }
@@ -58,14 +57,17 @@ export interface SignInData {
 export interface SignUpFetch {
   type: typeof AUTH_SIGN_UP_FETCH;
   payload: {
-    accountName: string;
-    mnemonic: string;
+    email: string;
     password: string;
   };
 }
 
 export interface SignUpData {
   type: typeof AUTH_SIGN_UP_DATA;
+  payload: {
+    userConfirmed: boolean;
+    email: string;
+  };
 }
 
 export interface SignUpError {
@@ -73,6 +75,22 @@ export interface SignUpError {
   error: CommonError;
 }
 
+export interface CodeVerifyFetch {
+  type: typeof AUTH_CODE_VERIFY_FETCH;
+  payload: {
+    email: string;
+    code: string;
+  };
+}
+
+export interface CodeVerifyData {
+  type: typeof AUTH_CODE_VERIFY_DATA;
+}
+
+export interface CodeVerifyError {
+  type: typeof AUTH_CODE_VERIFY_ERROR;
+  error: CommonError;
+}
 export interface LogoutFetch {
   type: typeof AUTH_LOGOUT_FETCH;
 }
@@ -82,35 +100,18 @@ export interface LogoutFailed {
   error: CommonError;
 }
 
-export interface ConnectPhoneFetch {
-  type: typeof AUTH_CONNECT_PHONE_FETCH;
+export interface ResendCodeFetch {
+  type: typeof AUTH_RESEND_CODE_FETCH;
   payload: {
-    mnemonic: string;
+    email: string;
   };
 }
-export interface ConnectPhoneData {
-  type: typeof AUTH_CONNECT_PHONE_DATA;
+export interface ResendCodeData {
+  type: typeof AUTH_RESEND_CODE_DATA;
 }
 
-export interface ConnectPhoneError {
-  type: typeof AUTH_CONNECT_PHONE_ERROR;
-  error: CommonError;
-}
-
-export interface ImportAccountFetch {
-  type: typeof AUTH_IMPORT_ACCOUNT_FETCH;
-  payload: {
-    accountName: string;
-    mnemonic: string;
-    password: string;
-  };
-}
-export interface ImportAccountData {
-  type: typeof AUTH_IMPORT_ACCOUNT_DATA;
-}
-
-export interface ImportAccountError {
-  type: typeof AUTH_IMPORT_ACCOUNT_ERROR;
+export interface ResendCodeError {
+  type: typeof AUTH_RESEND_CODE_ERROR;
   error: CommonError;
 }
 export type AuthAction =
@@ -122,23 +123,16 @@ export type AuthAction =
   | SignUpError
   | LogoutFailed
   | LogoutFetch
-  | ConnectPhoneFetch
-  | ConnectPhoneData
-  | ConnectPhoneError
-  | ImportAccountFetch
-  | ImportAccountData
-  | ImportAccountError;
+  | CodeVerifyFetch
+  | CodeVerifyData
+  | CodeVerifyError
+  | ResendCodeFetch
+  | ResendCodeData
+  | ResendCodeError;
 
-export const signInKeyRingData = (payload: SignInKeyRingData["payload"]) => ({
-  type: AUTH_KEYRING_SIGN_IN_DATA,
-  payload,
-});
-export const signIn = (address: string, password: string): SignInFetch => ({
+export const signInFetch = (payload: SignInFetch["payload"]): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,
-  payload: {
-    address,
-    password,
-  },
+  payload,
 });
 
 export const signInData = (): SignInData => ({
@@ -150,13 +144,14 @@ export const signInError = (error: CommonError): SignInError => ({
   error,
 });
 
-export const signUp = (payload: SignUpFetch["payload"]): SignUpFetch => ({
+export const signUpFetch = (payload: SignUpFetch["payload"]): SignUpFetch => ({
   type: AUTH_SIGN_UP_FETCH,
   payload,
 });
 
-export const signUpData = (): SignUpData => ({
+export const signUpData = (payload: SignUpData["payload"]): SignUpData => ({
   type: AUTH_SIGN_UP_DATA,
+  payload,
 });
 
 export const signUpError = (error: CommonError): SignUpError => ({
@@ -173,34 +168,30 @@ export const logoutError = (error: CommonError): LogoutFailed => ({
   error,
 });
 
-export const connectPhoneFetch = (
-  payload: ConnectPhoneFetch["payload"]
-): ConnectPhoneFetch => ({
-  type: AUTH_CONNECT_PHONE_FETCH,
+export const codeVerifyFetch = (payload: CodeVerifyFetch["payload"]): CodeVerifyFetch => ({
+  type: AUTH_CODE_VERIFY_FETCH,
   payload,
 });
 
-export const connectPhoneData = (): ConnectPhoneData => ({
-  type: AUTH_CONNECT_PHONE_DATA,
+export const codeVerifyData = (): CodeVerifyData => ({
+  type: AUTH_CODE_VERIFY_DATA,
 });
 
-export const connectPhoneError = (error: CommonError): ConnectPhoneError => ({
-  type: AUTH_CONNECT_PHONE_ERROR,
+export const codeVerifyError = (error: CommonError): CodeVerifyError => ({
+  type: AUTH_CODE_VERIFY_ERROR,
   error,
 });
 
-export const importAccountFetch = (
-  payload: ImportAccountFetch["payload"]
-): ImportAccountFetch => ({
-  type: AUTH_IMPORT_ACCOUNT_FETCH,
+export const resendCodeFetch = (payload: ResendCodeFetch["payload"]): ResendCodeFetch => ({
+  type: AUTH_RESEND_CODE_FETCH,
   payload,
 });
 
-export const importAccountData = (): ImportAccountData => ({
-  type: AUTH_IMPORT_ACCOUNT_DATA,
+export const resendCodeData = (): ResendCodeData => ({
+  type: AUTH_RESEND_CODE_DATA,
 });
 
-export const importAccountError = (error: CommonError): ImportAccountError => ({
-  type: AUTH_IMPORT_ACCOUNT_ERROR,
+export const resendCodeError = (error: CommonError): ResendCodeError => ({
+  type: AUTH_RESEND_CODE_ERROR,
   error,
 });

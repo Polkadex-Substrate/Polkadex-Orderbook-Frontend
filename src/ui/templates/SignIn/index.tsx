@@ -10,10 +10,10 @@ import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { useSignIn } from "@polkadex/orderbook-hooks";
 
 export const SignInTemplate = () => {
-  const router = useRouter();
-
+  const { signIn } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
 
@@ -25,7 +25,8 @@ export const SignInTemplate = () => {
     validationSchema: signValidations,
     onSubmit: (values) => {
       console.log(values);
-      router.push("accountManager");
+      const { password, email } = values;
+      signIn(email, password);
     },
   });
 
