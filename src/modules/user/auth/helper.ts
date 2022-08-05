@@ -1,7 +1,6 @@
 import { ApiPromise } from "@polkadot/api";
 import { API } from "aws-amplify";
 
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { findUserByProxyAccount } from "@polkadex/orderbook/graphql/queries";
 
 export const getMainAddrFromUserByProxyAccountRes = (s: string) => {
@@ -22,28 +21,6 @@ export const checkIfMainAccountExists = async (api: ApiPromise, address: string)
   const res = await api.query.ocex.accounts(address);
   const resJson = res.toJSON();
   return resJson !== null;
-};
-
-export const addProxyToAccount = async (
-  api: ApiPromise,
-  proxyAddress: string,
-  injector: any,
-  mainAddress: string
-): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
-  return res;
-};
-
-export const registerAccount = async (
-  api: ApiPromise,
-  proxyAddress: string,
-  injector: any,
-  mainAddress: string
-): Promise<ExtrinsicResult> => {
-  const ext = api.tx.ocex.registerMainAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
-  return res;
 };
 
 export const checkIfProxyAccountRegistered = async (address: string) => {

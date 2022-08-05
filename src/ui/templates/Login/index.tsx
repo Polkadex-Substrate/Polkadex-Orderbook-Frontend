@@ -11,14 +11,14 @@ import * as S from "./styles";
 import { HeaderBack, TemporaryMessage } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
-  selectProxyAccount,
-  selectPolkadotWalletAccounts,
-  selectPolkadotWalletLoading,
-  selectPolkadotWalletSuccess,
+  selectTradeAccount,
+  selectBrowserTradeAccounts,
+  selectTradeAccountsLoading,
+  selectTradeAccountsSuccess,
   selectSignInLoading,
   selectSignUpSuccess,
-  setProxyAccount,
-  signIn,
+  setCurrentTradeAccount,
+  signInFetch,
   selectImportAccountSuccess,
 } from "@polkadex/orderbook-modules";
 import {
@@ -43,12 +43,12 @@ export const LoginTemplate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const isLoading = useReduxSelector(selectPolkadotWalletLoading);
+  const accounts = useReduxSelector(selectBrowserTradeAccounts);
+  const isLoading = useReduxSelector(selectTradeAccountsLoading);
   const isImportAccountSuccess = useReduxSelector(selectImportAccountSuccess);
-  const selectedAccount = useReduxSelector(selectProxyAccount);
+  const selectedAccount = useReduxSelector(selectTradeAccount);
   const hasUser = useReduxSelector(selectHasUser);
-  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
+  const isSuccess = useReduxSelector(selectTradeAccountsSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const isSignInLoading = useReduxSelector(selectSignInLoading);
 
@@ -93,7 +93,7 @@ export const LoginTemplate = () => {
                     initialValues={defaultValues}
                     validationSchema={loginValidations}
                     onSubmit={async (values) => {
-                      dispatch(signIn(selectedAccount.address, values.password));
+                      dispatch(signInFetch(selectedAccount.address, values.password));
                     }}>
                     {({ errors, touched, values, setFieldValue }) => (
                       <Form>
@@ -124,7 +124,7 @@ export const LoginTemplate = () => {
                                     address={item.address}
                                     onClick={() => {
                                       setFieldValue("address", item.address);
-                                      dispatch(setProxyAccount(accounts[index]));
+                                      dispatch(setCurrentTradeAccount(accounts[index]));
                                     }}
                                   />
                                 ))

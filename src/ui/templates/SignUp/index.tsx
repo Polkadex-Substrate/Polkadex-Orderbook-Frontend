@@ -19,8 +19,7 @@ import {
 import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 import { FlexSpaceBetween } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
-import { useSignUp } from "@polkadex/orderbook/v2/hooks";
-import { setMainAccountFetch, signUp } from "@polkadex/orderbook-modules";
+import { setMainAccountFetch } from "@polkadex/orderbook-modules";
 import { signInValidations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
@@ -39,14 +38,6 @@ const defaultValues = {
 export const SignUpTemplate = () => {
   const dispatch = useDispatch();
   const { mnemonic, mnemoicString } = useMnemonic();
-  const {
-    signUpLoading,
-    isLoading,
-    handlePrint,
-    signUpSuccess,
-    componentRef,
-    extensionAccounts,
-  } = useSignUp({ mnemonic: mnemoicString });
 
   if (signUpSuccess) return <div />;
   return (
@@ -84,13 +75,13 @@ export const SignUpTemplate = () => {
                       validationSchema={signInValidations}
                       onSubmit={async (values) => {
                         const { password, accountName } = values;
-                        dispatch(
-                          signUp({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
+                        // dispatch(
+                        //   signUpFetch({
+                        //     accountName,
+                        //     mnemonic: mnemoicString,
+                        //     password,
+                        //   })
+                        // );
                       }}>
                       {({ values, errors, touched, setFieldValue }) => (
                         <Form>

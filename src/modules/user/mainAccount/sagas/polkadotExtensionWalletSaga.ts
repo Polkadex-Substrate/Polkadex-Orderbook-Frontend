@@ -2,9 +2,9 @@ import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../..";
 import { extensionWalletData } from "../actions";
-import { InjectedAccount } from "../../proxyAccount";
+import { InjectedAccount } from "../../tradeAccount";
 
-export function* extensionWalletSaga() {
+export function* polkadotExtensionWalletSaga() {
   try {
     const allAccounts: InjectedAccount[] = yield call(getAllExtensionWalletAccounts);
     yield put(extensionWalletData({ allAccounts }));

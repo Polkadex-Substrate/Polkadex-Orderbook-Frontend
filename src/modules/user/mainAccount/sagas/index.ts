@@ -1,11 +1,17 @@
-import { takeLatest } from "redux-saga/effects";
+import { takeLatest, takeLeading } from "redux-saga/effects";
 
-import { EXTENSION_WALLET_FETCH, MAIN_ACCOUNT_SET_FETCH } from "../constants";
+import {
+  POLKADOT_EXTENSION_WALLET_FETCH,
+  MAIN_ACCOUNT_SET_FETCH,
+  REGISTER_MAIN_ACCOUNT_FETCH,
+} from "../constants";
 
-import { extensionWalletSaga } from "./extensionWalletSaga";
+import { polkadotExtensionWalletSaga } from "./polkadotExtensionWalletSaga";
+import { registerMainAccountSaga } from "./registerMainAccount";
 import { setMainAccountSaga } from "./setMainAccountSaga";
 
-export function* rootExtensionWalletSaga() {
-  yield takeLatest(EXTENSION_WALLET_FETCH, extensionWalletSaga);
+export function* rootMainAccountsSaga() {
+  yield takeLatest(POLKADOT_EXTENSION_WALLET_FETCH, polkadotExtensionWalletSaga);
   yield takeLatest(MAIN_ACCOUNT_SET_FETCH, setMainAccountSaga);
+  yield takeLeading(REGISTER_MAIN_ACCOUNT_FETCH, registerMainAccountSaga);
 }

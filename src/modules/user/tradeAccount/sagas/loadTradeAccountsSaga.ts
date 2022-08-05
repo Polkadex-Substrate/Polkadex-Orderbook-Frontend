@@ -1,13 +1,17 @@
 import { call, put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
+import { API } from "aws-amplify";
 
 import { sendError } from "../../..";
-import { polkadotWalletData, InjectedAccount } from "../actions";
+import { tradeAccountsData, InjectedAccount } from "../actions";
+import * as queries from "../../../../graphql/queries";
 
 export function* loadProxyAccountsSaga() {
   try {
-    const allAccounts: InjectedAccount[] = yield call(getAllPoladotWalletAccounts);
-    yield put(polkadotWalletData({ allAccounts }));
+    const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
+    // TODO:
+    // get all trade accounts from the blockchain and merge them with the browser accounts
+    yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
   } catch (error) {
     yield put(
       sendError({
@@ -18,7 +22,7 @@ export function* loadProxyAccountsSaga() {
   }
 }
 
-async function getAllPoladotWalletAccounts(): Promise<InjectedAccount[]> {
+async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
   try {
     const { cryptoWaitReady } = await import("@polkadot/util-crypto");
     await cryptoWaitReady();

@@ -13,3 +13,6 @@ export const selectTransactionLoading = (state: RootState): boolean =>
 
 export const selectTransactionData = (state: RootState): Transaction[] =>
   state.user.transactions.transactions;
+
+export const selectTransactionDepositData = (state: RootState): Transaction[] =>
+  state.user.transactions.transactions?.filter((value) => value.txn_type === "DEPOSIT");

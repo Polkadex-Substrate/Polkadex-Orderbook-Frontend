@@ -92,3 +92,20 @@ export const Box = styled.div`
     gap: 2rem;
   }
 `;
+export const ResendButton = styled.button`
+  ${({ theme }) => css`
+    font-size: 1.2rem;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    margin-top: 0.8rem;
+    background: ${theme.colors.primary}22;
+    color: ${theme.colors.primary};
+    white-space: nowrap;
+    :disabled {
+      background: ${theme.colors.secondaryBackground};
+      color: ${theme.colors.text};
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  `}
+`;

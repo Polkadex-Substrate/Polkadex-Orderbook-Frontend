@@ -53,7 +53,7 @@ export const AccountManagerTemplate = () => {
       status: false,
     });
 
-  const isLinkedAccount = true;
+  const isLinkedAccount = false;
 
   return (
     <>
@@ -86,10 +86,10 @@ export const AccountManagerTemplate = () => {
                 </div>
               </S.TitleBalance>
               <S.TitleActions>
-                <Link href="/deposit">
+                <Link href="/deposit/PDEX">
                   <a>Deposit</a>
                 </Link>
-                <Link href="/withdraw">
+                <Link href="/withdraw/PDEX">
                   <a>Withdraw</a>
                 </Link>
                 <Link href="/history">

@@ -9,21 +9,23 @@ import * as S from "./styles";
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { useTimer } from "@polkadex/orderbook/v2/hooks";
+import { useCodeVerification } from "@polkadex/orderbook-hooks";
 
 export const CodeVerificationTemplate = () => {
-  const router = useRouter();
   const [state, setState] = useState(false);
-
-  const { touched, handleSubmit, errors, getFieldProps } = useFormik({
+  const { verifyCode, resendVerificationCode } = useCodeVerification();
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       code: "",
     },
     validationSchema: codeValidations,
     onSubmit: (values) => {
       console.log(values);
-      router.push("/accountManager");
+      verifyCode(values.code);
     },
   });
+
   return (
     <>
       <Head>
@@ -50,12 +52,13 @@ export const CodeVerificationTemplate = () => {
                   <InputLine
                     name="code"
                     label="Code Verification"
-                    placeholder="Type the code sent code to your email"
+                    placeholder="000000"
                     error={errors.code && touched.code && errors.code}
-                    {...getFieldProps("code")}
-                  />
-
+                    {...getFieldProps("code")}>
+                    <Resend onResend={() => resendVerificationCode()} />
+                  </InputLine>
                   <Button
+                    disabled={!(isValid && dirty)}
                     type="submit"
                     size="extraLarge"
                     background="primary"
@@ -70,5 +73,18 @@ export const CodeVerificationTemplate = () => {
         </S.Wrapper>
       </S.Main>
     </>
+  );
+};
+
+const Resend = ({ onResend }) => {
+  const { time, setTime } = useTimer({ direction: "down" });
+  const handleResend = () => {
+    setTime(60);
+    onResend();
+  };
+  return (
+    <S.ResendButton disabled={time !== 0} type="button" onClick={handleResend}>
+      {time === 0 ? "Resend Code" : `Resend Code in ${time}s`}
+    </S.ResendButton>
   );
 };

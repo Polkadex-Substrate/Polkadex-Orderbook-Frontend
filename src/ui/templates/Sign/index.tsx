@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -10,9 +9,10 @@ import { Button, Checkbox, InputLine, Orderbook } from "@polkadex/orderbook-ui/m
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useSignUp } from "@polkadex/orderbook-hooks";
 
 export const SignTemplate = () => {
-  const router = useRouter();
+  const { signUp } = useSignUp();
   const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,
@@ -29,9 +29,11 @@ export const SignTemplate = () => {
     validationSchema: signUpValidations,
     onSubmit: (values) => {
       console.log(values);
-      router.push("/codeVerification");
+      const { password, email } = values;
+      signUp(email, password);
     },
   });
+
   return (
     <>
       <Head>
@@ -100,18 +102,13 @@ export const SignTemplate = () => {
                       {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
                     </S.Show>
                   </InputLine>
-                  <S.Terms>
-                    <Checkbox
-                      error={errors.terms && touched.terms && errors.terms}
-                      id="terms"
-                      name="terms"
-                      {...getFieldProps("terms")}
-                    />
+                  {/* <S.Terms>
+                    <Checkbox id="terms" name="terms" {...getFieldProps("terms")} />
                     <span>
                       Creating an account means you’re okay with our
                       <a href="/"> Terms of Service</a> and <a href="/"> Privacy Policy</a>
                     </span>
-                  </S.Terms>
+                  </S.Terms> */}
                   <Button
                     type="submit"
                     size="extraLarge"

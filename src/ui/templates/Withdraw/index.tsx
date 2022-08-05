@@ -18,8 +18,6 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { notificationPush } from "@polkadex/orderbook-modules";
-import { fakeInformation } from "@polkadex/orderbook/utils/fakeNotification";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -75,7 +73,6 @@ export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {

@@ -26,6 +26,7 @@ export const Span = styled.span`
   margin-left: 0.8rem;
   font-size: 1.3rem;
   display: none;
+  white-space: nowrap;
 `;
 
 export const WrapperLinks = styled.div`
