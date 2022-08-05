@@ -1,7 +1,6 @@
 import { ApiPromise } from "@polkadot/api";
 import { API } from "aws-amplify";
 
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { findUserByProxyAccount } from "@polkadex/orderbook/graphql/queries";
 
 export const getMainAddrFromUserByProxyAccountRes = (s: string) => {
