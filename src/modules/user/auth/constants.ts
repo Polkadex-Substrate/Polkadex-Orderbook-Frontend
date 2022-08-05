@@ -15,4 +15,5 @@ export const AUTH_RESEND_CODE_DATA = "auth/RESEND_CODE_DATA";
 export const AUTH_RESEND_CODE_ERROR = "auth/RESEND_CODE_ERROR";
 
 export const AUTH_LOGOUT_FETCH = "auth/LOGOUT_FETCH";
+export const AUTH_LOGOUT_DATA = "auth/LOGOUT_DATA";
 export const AUTH_LOGOUT_FAILURE = "auth/LOGOUT_FAILURE";

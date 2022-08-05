@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
-  logoutFetch,
+  logOutFetch,
   notificationPush,
   selectHasUser,
   selectNotifications,
@@ -101,7 +101,7 @@ export function useDeveloper() {
    *
    * @returns {void} Dispatch Logout action
    */
-  const disconnectTestWallet = () => dispatch(logoutFetch());
+  const disconnectTestWallet = () => dispatch(logOutFetch());
 
   /**
    * @description Create a new notification

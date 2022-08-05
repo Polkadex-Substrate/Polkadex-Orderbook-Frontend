@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import {
-  logoutFetch,
+  logOutFetch,
   selectUserFetching,
   selectUserInfo,
   selectUserLoggedIn,
@@ -61,7 +61,7 @@ export const useInit = () => {
         });
       }
 
-      dispatch(logoutFetch());
+      dispatch(logOutFetch());
       clearInterval(timer);
     }
   };

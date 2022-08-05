@@ -3,6 +3,7 @@ import { CommonError } from "../../types";
 import { AuthAction } from "./actions";
 import {
   AUTH_CODE_VERIFY_DATA,
+  AUTH_LOGOUT_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_SIGN_IN_DATA,
@@ -45,7 +46,13 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
     case AUTH_SIGN_IN_FETCH:
       return { ...state, signInLoading: true };
     case AUTH_SIGN_IN_DATA:
-      return { ...state, signInLoading: false, signInSuccess: true };
+      return {
+        ...state,
+        signInLoading: false,
+        signInSuccess: true,
+        email: action.payload.email,
+        userConfirmed: true,
+      };
     case AUTH_SIGN_IN_ERROR:
       return { ...state, authError: action.error, signInLoading: false };
     case AUTH_SIGN_UP_FETCH:
@@ -66,6 +73,9 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state, signUpError: action.error, signUpLoading: false };
     case AUTH_LOGOUT_FETCH:
       return { ...state };
+    case AUTH_LOGOUT_DATA: {
+      return { ...state, ...initialStateAuth };
+    }
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
     default:

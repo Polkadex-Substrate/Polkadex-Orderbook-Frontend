@@ -4,6 +4,7 @@ import {
   AUTH_CODE_VERIFY_DATA,
   AUTH_CODE_VERIFY_ERROR,
   AUTH_CODE_VERIFY_FETCH,
+  AUTH_LOGOUT_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_RESEND_CODE_DATA,
@@ -52,6 +53,9 @@ export interface SignInError {
 
 export interface SignInData {
   type: typeof AUTH_SIGN_IN_DATA;
+  payload: {
+    email: string;
+  };
 }
 
 export interface SignUpFetch {
@@ -95,6 +99,10 @@ export interface LogoutFetch {
   type: typeof AUTH_LOGOUT_FETCH;
 }
 
+export interface LogoutData {
+  type: typeof AUTH_LOGOUT_DATA;
+}
+
 export interface LogoutFailed {
   type: typeof AUTH_LOGOUT_FAILURE;
   error: CommonError;
@@ -123,6 +131,7 @@ export type AuthAction =
   | SignUpError
   | LogoutFailed
   | LogoutFetch
+  | LogoutData
   | CodeVerifyFetch
   | CodeVerifyData
   | CodeVerifyError
@@ -135,8 +144,9 @@ export const signInFetch = (payload: SignInFetch["payload"]): SignInFetch => ({
   payload,
 });
 
-export const signInData = (): SignInData => ({
+export const signInData = (payload: SignInData["payload"]): SignInData => ({
   type: AUTH_SIGN_IN_DATA,
+  payload,
 });
 
 export const signInError = (error: CommonError): SignInError => ({
@@ -159,11 +169,15 @@ export const signUpError = (error: CommonError): SignUpError => ({
   error,
 });
 
-export const logoutFetch = (): LogoutFetch => ({
+export const logOutFetch = (): LogoutFetch => ({
   type: AUTH_LOGOUT_FETCH,
 });
 
-export const logoutError = (error: CommonError): LogoutFailed => ({
+export const logOutData = (): LogoutData => ({
+  type: AUTH_LOGOUT_DATA,
+});
+
+export const logOutError = (error: CommonError): LogoutFailed => ({
   type: AUTH_LOGOUT_FAILURE,
   error,
 });

@@ -9,9 +9,7 @@ export function* signInSaga(action: SignInFetch) {
   try {
     const { email, password } = action.payload;
     const res = yield call(signIn, email, password);
-    console.log("res", res);
-    debugger;
-    yield put(signInData());
+    yield put(signInData({ email }));
   } catch (error) {
     console.error(error);
     if (error.name === "UserNotConfirmedException") {

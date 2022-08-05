@@ -1,20 +1,21 @@
-import { put } from "redux-saga/effects";
+import { Auth } from "aws-amplify";
+import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../../";
 import { userReset } from "../../profile";
-import { logoutError, LogoutFetch } from "../actions";
+import { logOutData, logOutError, LogoutFetch } from "../actions";
 
 export function* logoutSaga(action: LogoutFetch) {
   try {
-    yield put(userReset());
-    process.browser && localStorage.removeItem("csrfToken");
+    yield call(logOut);
+    yield put(logOutData());
   } catch (error) {
     yield put(
       sendError({
         error,
         processingType: "alert",
         extraOptions: {
-          actionError: logoutError,
+          actionError: logOutError,
         },
       })
     );
@@ -23,4 +24,9 @@ export function* logoutSaga(action: LogoutFetch) {
       yield put(userReset());
     }
   }
+}
+
+async function logOut() {
+  const res = await Auth.signOut();
+  return res;
 }
