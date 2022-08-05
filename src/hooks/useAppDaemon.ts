@@ -6,10 +6,10 @@ import { assetsFetch } from "../modules/public/assets";
 import { useReduxSelector } from "./useReduxSelector";
 
 import {
-  polkadotWalletFetch,
   extensionWalletFetch,
   rangerConnectFetch,
   selectRangerIsReady,
+  tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useAppDaemon = () => {
@@ -18,7 +18,7 @@ export const useAppDaemon = () => {
   // basic initialization
   useEffect(() => {
     dispatch(rangerConnectFetch());
-    dispatch(polkadotWalletFetch());
+    dispatch(tradeAccountsFetch());
     dispatch(extensionWalletFetch());
   }, [dispatch]);
 
