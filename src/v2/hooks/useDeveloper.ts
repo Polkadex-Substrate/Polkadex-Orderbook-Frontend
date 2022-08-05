@@ -8,7 +8,7 @@ import {
   notificationPush,
   selectHasUser,
   selectNotifications,
-  selectPolkadotWalletAccounts,
+  selectTradeAccountsAccounts,
   selectSignInError,
   selectSignInLoading,
   selectUserInfo,
@@ -33,7 +33,7 @@ export function useDeveloper() {
   const user = useReduxSelector(selectUserInfo);
   const hasUser = useReduxSelector(selectHasUser);
   const notifications = useReduxSelector(selectNotifications);
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
+  const accounts = useReduxSelector(selectTradeAccountsAccounts);
 
   const walletLoading = useReduxSelector(selectSignInLoading);
   const walletError = useReduxSelector(selectSignInError);

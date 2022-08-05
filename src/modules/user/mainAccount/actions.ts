@@ -1,5 +1,5 @@
 import { CommonError } from "../../types";
-import { InjectedAccount } from "../proxyAccount";
+import { InjectedAccount } from "../tradeAccount";
 
 import {
   EXTENSION_WALLET_FETCH,

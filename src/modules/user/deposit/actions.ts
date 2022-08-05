@@ -1,5 +1,5 @@
 import { CommonError } from "../../types";
-import { InjectedAccount } from "../proxyAccount";
+import { InjectedAccount } from "../tradeAccount";
 
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR } from "./constants";
 

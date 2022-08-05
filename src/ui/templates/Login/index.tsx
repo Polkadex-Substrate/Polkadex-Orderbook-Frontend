@@ -11,13 +11,13 @@ import * as S from "./styles";
 import { HeaderBack, TemporaryMessage } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
-  selectProxyAccount,
-  selectPolkadotWalletAccounts,
-  selectPolkadotWalletLoading,
-  selectPolkadotWalletSuccess,
+  selectTradeAccount,
+  selectTradeAccountsAccounts,
+  selectTradeAccountsLoading,
+  selectTradeAccountsSuccess,
   selectSignInLoading,
   selectSignUpSuccess,
-  setProxyAccount,
+  SetCurrentTradeAccount,
   signInFetch,
   selectImportAccountSuccess,
 } from "@polkadex/orderbook-modules";
@@ -43,12 +43,12 @@ export const LoginTemplate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
-  const isLoading = useReduxSelector(selectPolkadotWalletLoading);
+  const accounts = useReduxSelector(selectTradeAccountsAccounts);
+  const isLoading = useReduxSelector(selectTradeAccountsLoading);
   const isImportAccountSuccess = useReduxSelector(selectImportAccountSuccess);
-  const selectedAccount = useReduxSelector(selectProxyAccount);
+  const selectedAccount = useReduxSelector(selectTradeAccount);
   const hasUser = useReduxSelector(selectHasUser);
-  const isSuccess = useReduxSelector(selectPolkadotWalletSuccess);
+  const isSuccess = useReduxSelector(selectTradeAccountsSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
   const isSignInLoading = useReduxSelector(selectSignInLoading);
 
@@ -124,7 +124,7 @@ export const LoginTemplate = () => {
                                     address={item.address}
                                     onClick={() => {
                                       setFieldValue("address", item.address);
-                                      dispatch(setProxyAccount(accounts[index]));
+                                      dispatch(SetCurrentTradeAccount(accounts[index]));
                                     }}
                                   />
                                 ))

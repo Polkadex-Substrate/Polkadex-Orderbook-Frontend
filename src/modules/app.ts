@@ -14,7 +14,7 @@ import { ordersReducer } from "./user/orders";
 import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
 import { profileReducer } from "./user/profile";
-import { polkadotWalletReducer } from "./user/proxyAccount";
+import { TradeAccountsReducer } from "./user/tradeAccount";
 import { depositsReducer } from "./user/deposit";
 import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
@@ -40,7 +40,7 @@ export const publicReducer = combineReducers({
 
 export const userReducer = combineReducers({
   auth: authReducer,
-  polkadotWallet: polkadotWalletReducer,
+  polkadotWallet: TradeAccountsReducer,
   extensionWallet: extensionWalletReducer,
   balances: balancesReducer,
   orders: ordersReducer,

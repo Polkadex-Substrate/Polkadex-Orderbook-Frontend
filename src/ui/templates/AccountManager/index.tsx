@@ -53,7 +53,7 @@ export const AccountManagerTemplate = () => {
       status: false,
     });
 
-  const isLinkedAccount = true;
+  const isLinkedAccount = false;
 
   return (
     <>

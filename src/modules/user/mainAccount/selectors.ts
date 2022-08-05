@@ -1,5 +1,5 @@
 import { RootState, selectUserInfo } from "../..";
-import { InjectedAccount } from "../proxyAccount";
+import { InjectedAccount } from "../tradeAccount";
 
 import { MainAccount } from "./actions";
 

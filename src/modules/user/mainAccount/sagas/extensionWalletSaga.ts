@@ -2,7 +2,7 @@ import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../..";
 import { extensionWalletData } from "../actions";
-import { InjectedAccount } from "../../proxyAccount";
+import { InjectedAccount } from "../../tradeAccount";
 
 export function* extensionWalletSaga() {
   try {

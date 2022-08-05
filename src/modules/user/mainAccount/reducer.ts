@@ -1,4 +1,4 @@
-import { InjectedAccount } from "../proxyAccount";
+import { InjectedAccount } from "../tradeAccount";
 
 import { GetExtensionWalletAction, MainAccount } from "./actions";
 import {
