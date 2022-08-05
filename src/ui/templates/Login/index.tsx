@@ -12,12 +12,12 @@ import { HeaderBack, TemporaryMessage } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
   selectTradeAccount,
-  selectTradeAccountsAccounts,
+  selectBrowserTradeAccounts,
   selectTradeAccountsLoading,
   selectTradeAccountsSuccess,
   selectSignInLoading,
   selectSignUpSuccess,
-  SetCurrentTradeAccount,
+  setCurrentTradeAccount,
   signInFetch,
   selectImportAccountSuccess,
 } from "@polkadex/orderbook-modules";
@@ -43,7 +43,7 @@ export const LoginTemplate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const accounts = useReduxSelector(selectTradeAccountsAccounts);
+  const accounts = useReduxSelector(selectBrowserTradeAccounts);
   const isLoading = useReduxSelector(selectTradeAccountsLoading);
   const isImportAccountSuccess = useReduxSelector(selectImportAccountSuccess);
   const selectedAccount = useReduxSelector(selectTradeAccount);
@@ -124,7 +124,7 @@ export const LoginTemplate = () => {
                                     address={item.address}
                                     onClick={() => {
                                       setFieldValue("address", item.address);
-                                      dispatch(SetCurrentTradeAccount(accounts[index]));
+                                      dispatch(setCurrentTradeAccount(accounts[index]));
                                     }}
                                   />
                                 ))

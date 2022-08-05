@@ -7,6 +7,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_FETCH,
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
+  REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
 } from "./constants";
 
 export interface TradeAccountsState {
@@ -80,6 +81,16 @@ export const TradeAccountsReducer = (
         registerAccountLoading: false,
         registerAccountSuccess: false,
       };
+    case REMOVE_TRADE_ACCOUNT_FROM_BROWSER: {
+      const { address } = action.payload;
+      const newAccounts = state.allBrowserAccounts.filter(
+        (account) => account.address !== address
+      );
+      return {
+        ...state,
+        allBrowserAccounts: newAccounts,
+      };
+    }
     default:
       return state;
   }
