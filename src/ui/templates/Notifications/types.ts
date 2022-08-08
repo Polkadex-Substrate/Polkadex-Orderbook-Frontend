@@ -1,10 +1,9 @@
-import { LinkHTMLAttributes } from "react";
+import { Notification } from "@polkadex/orderbook-modules";
 
-import { Icons } from "@polkadex/web-helpers";
+export type NotificationsProps = {
+  notifications: Notification[];
+};
 
-export type NotificationCardProps = {
-  title: string;
-  message: string;
-  icon: Icons;
-  active?: boolean;
-} & Pick<LinkHTMLAttributes<HTMLLinkElement>, "href">;
+export type CardProps = {
+  onRemove: () => void;
+} & Notification;

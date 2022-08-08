@@ -2,12 +2,8 @@ import { CommonError } from "../../types";
 
 import { AuthAction } from "./actions";
 import {
-  AUTH_CONNECT_PHONE_DATA,
-  AUTH_CONNECT_PHONE_ERROR,
-  AUTH_CONNECT_PHONE_FETCH,
-  AUTH_IMPORT_ACCOUNT_DATA,
-  AUTH_IMPORT_ACCOUNT_ERROR,
-  AUTH_IMPORT_ACCOUNT_FETCH,
+  AUTH_CODE_VERIFY_DATA,
+  AUTH_LOGOUT_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
   AUTH_SIGN_IN_DATA,
@@ -19,38 +15,30 @@ import {
 } from "./constants";
 
 export interface AuthState {
+  email: string;
   require2FA?: boolean;
   requireVerification?: boolean;
-  emailVerified?: boolean;
+  userConfirmed?: boolean;
   logoutError?: CommonError;
   authError?: CommonError;
   signUpError?: CommonError;
   current_password_entropy: number;
   signInLoading: boolean;
+  signInSuccess: boolean;
   signUpLoading: boolean;
   signUpSuccess: boolean;
-  connectPhoneSuccess?: boolean;
-  connectPhoneLoading: boolean;
-  connectPhoneError?: CommonError;
-  importAccountLoading: boolean;
-  importAccountError?: CommonError;
-  importAccountSuccess: boolean;
 }
 
 export const initialStateAuth: AuthState = {
+  email: "",
   require2FA: false,
   requireVerification: false,
-  emailVerified: false,
+  userConfirmed: false,
   current_password_entropy: 0,
   signInLoading: false,
+  signInSuccess: false,
   signUpLoading: false,
   signUpSuccess: false,
-  connectPhoneSuccess: false,
-  connectPhoneLoading: false,
-  connectPhoneError: undefined,
-  importAccountLoading: false,
-  importAccountError: undefined,
-  importAccountSuccess: false,
 };
 
 export const authReducer = (state = initialStateAuth, action: AuthAction) => {
@@ -58,32 +46,38 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
     case AUTH_SIGN_IN_FETCH:
       return { ...state, signInLoading: true };
     case AUTH_SIGN_IN_DATA:
-      return { ...state, signInLoading: false };
-
-    case AUTH_CONNECT_PHONE_FETCH:
-      return { ...state, connectPhoneLoading: true };
-    case AUTH_CONNECT_PHONE_DATA:
-      return { ...state, connectPhoneLoading: false, connectPhoneSuccess: true };
-    case AUTH_CONNECT_PHONE_ERROR:
-      return { ...state, connectPhoneLoading: false, connectPhoneError: action.error };
+      return {
+        ...state,
+        signInLoading: false,
+        signInSuccess: true,
+        email: action.payload.email,
+        userConfirmed: true,
+      };
     case AUTH_SIGN_IN_ERROR:
       return { ...state, authError: action.error, signInLoading: false };
     case AUTH_SIGN_UP_FETCH:
       return { ...state, signUpLoading: true };
-    case AUTH_SIGN_UP_DATA:
-      return { ...state, signUpLoading: false, signUpSuccess: true };
+    case AUTH_SIGN_UP_DATA: {
+      const { email, userConfirmed } = action.payload;
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpSuccess: true,
+        userConfirmed,
+        email,
+      };
+    }
+    case AUTH_CODE_VERIFY_DATA:
+      return { ...state, userConfirmed: true };
     case AUTH_SIGN_UP_ERROR:
       return { ...state, signUpError: action.error, signUpLoading: false };
     case AUTH_LOGOUT_FETCH:
       return { ...state };
+    case AUTH_LOGOUT_DATA: {
+      return { ...state, ...initialStateAuth };
+    }
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
-    case AUTH_IMPORT_ACCOUNT_FETCH:
-      return { ...state, importAccountLoading: true };
-    case AUTH_IMPORT_ACCOUNT_DATA:
-      return { ...state, importAccountLoading: false, importAccountSuccess: true };
-    case AUTH_IMPORT_ACCOUNT_ERROR:
-      return { ...state, importAccountLoading: false, importAccountError: action.error };
     default:
       return state;
   }

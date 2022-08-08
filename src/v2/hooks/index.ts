@@ -8,5 +8,5 @@ export * from "./usePlaceOrder";
 export * from "./useInformation";
 export * from "./useAppearance";
 export * from "./useTradingView";
-export * from "./useSignUp";
 export * from "./useFunds";
+export * from "./useTimer";

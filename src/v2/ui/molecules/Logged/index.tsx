@@ -8,8 +8,8 @@ export const Logged = () => {
         <h2>Connect your wallet</h2>
         <p>Import your existing wallet, or create a new wallet</p>
         <div>
-          <Link href="/recovery">Import Wallet</Link>
-          <Link href="/signUp">Create New Wallet</Link>
+          <Link href="/signIn">Login</Link>
+          <Link href="/sign">Create New Wallet</Link>
         </div>
       </S.Container>
     </S.Wrapper>

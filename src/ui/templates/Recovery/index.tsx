@@ -12,7 +12,11 @@ import { importValiations } from "./validations";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { importAccountFetch, selectImportAccountSuccess } from "@polkadex/orderbook-modules";
+import {
+  importAccountFetch,
+  selectImportAccountLoading,
+  selectImportAccountSuccess,
+} from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const defaultValues = {
@@ -24,7 +28,7 @@ export const RecoveryTemplate = () => {
   const dispatch = useDispatch();
   const signUpSuccess = useReduxSelector(selectImportAccountSuccess);
   const router = useRouter();
-
+  const importLoading = useReduxSelector(selectImportAccountLoading);
   const [state, setState] = useState({ tags: [] });
   useEffect(() => {
     if (signUpSuccess) router.push("/login");
@@ -43,9 +47,9 @@ export const RecoveryTemplate = () => {
             <S.Container>
               <S.AsideLeft>
                 <S.Title>
-                  <h1>Import an account</h1>
+                  <h1>Import proxy account</h1>
                   <p>
-                    Do you have an account? <Link href="/login"> Sign in </Link>
+                    Do you have a proxy account? <Link href="/login"> Sign in </Link>
                   </p>
                 </S.Title>
                 <S.Form>
@@ -93,7 +97,7 @@ export const RecoveryTemplate = () => {
                           type="submit"
                           disabled={state.tags.length < 12}
                           style={{ marginTop: 20 }}>
-                          Import Account
+                          {importLoading ? "Loading" : "Import Account"}
                         </Button>
                       </Form>
                     )}

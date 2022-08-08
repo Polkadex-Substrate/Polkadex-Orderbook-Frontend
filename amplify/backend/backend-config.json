@@ -1,1 +1,11 @@
-{}
+{
+  "auth": {
+    "orderbookfrontend80237148": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

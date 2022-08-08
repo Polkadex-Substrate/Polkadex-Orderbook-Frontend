@@ -3,12 +3,13 @@ import { CommonError, OrderCommon } from "../../types";
 import {
   OPEN_ORDERS_HISTORY_DATA,
   OPEN_ORDERS_HISTORY_FETCH,
-  ORDERS_CHANNEL_FETCH,
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
-  ORDER_CHANNEL_UPDATE_DATA,
+  ORDER_UPDATE_EVENT,
+  ORDER_UPDATE_EVENT_DATA,
 } from "./constants";
+import { SetOrder } from "./types";
 
 export interface UserOrdersHistoryFetch {
   type: typeof ORDERS_HISTORY_FETCH;
@@ -30,12 +31,13 @@ export interface UserOpenOrdersHistoryData {
   type: typeof OPEN_ORDERS_HISTORY_DATA;
   payload: { list: OrderCommon[] };
 }
-export interface FetchOrderUpdatesChannel {
-  type: typeof ORDERS_CHANNEL_FETCH;
+export interface OrderUpdateEvent {
+  type: typeof ORDER_UPDATE_EVENT;
+  payload: SetOrder;
 }
 
-export interface OrderUpdatesChannelData {
-  type: typeof ORDER_CHANNEL_UPDATE_DATA;
+export interface OrderUpdateEventData {
+  type: typeof ORDER_UPDATE_EVENT_DATA;
   payload: OrderCommon;
 }
 
@@ -43,8 +45,7 @@ export type OrdersHistoryAction =
   | UserOrdersHistoryFetch
   | UserOrdersHistoryData
   | UserOrdersHistoryError
-  | FetchOrderUpdatesChannel
-  | OrderUpdatesChannelData
+  | OrderUpdateEventData
   | UserOpenOrdersHistoryData;
 
 export const userOrdersHistoryFetch = (): UserOrdersHistoryFetch => ({
@@ -74,13 +75,14 @@ export const userOpenOrderHistoryData = (
   payload,
 });
 
-export const userOrderUpdatesChannelFetch = (): FetchOrderUpdatesChannel => ({
-  type: ORDERS_CHANNEL_FETCH,
+export const orderUpdateEvent = (payload: OrderUpdateEvent["payload"]): OrderUpdateEvent => ({
+  type: ORDER_UPDATE_EVENT,
+  payload,
 });
 
-export const userOrderChannelUpdateData = (
-  payload: OrderUpdatesChannelData["payload"]
-): OrderUpdatesChannelData => ({
-  type: ORDER_CHANNEL_UPDATE_DATA,
+export const orderUpdateEventData = (
+  payload: OrderUpdateEventData["payload"]
+): OrderUpdateEventData => ({
+  type: ORDER_UPDATE_EVENT_DATA,
   payload,
 });

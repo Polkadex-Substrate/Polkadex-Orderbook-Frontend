@@ -1,9 +1,9 @@
 import { BalancesAction, Balance } from "./actions";
 import {
-  BALANCES_CHANNEL_UPDATE_DATA,
   BALANCES_DATA,
   BALANCES_ERROR,
   BALANCES_FETCH,
+  BALANCES_UPDATE_EVENT_DATA,
 } from "./constants";
 
 export interface BalancesState {
@@ -46,7 +46,7 @@ export const balancesReducer = (
         success: false,
         error: action.error,
       };
-    case BALANCES_CHANNEL_UPDATE_DATA: {
+    case BALANCES_UPDATE_EVENT_DATA: {
       const update = action.payload;
       // filter out old balances from the balance state
       const balanceFiltered = state.balances.filter(

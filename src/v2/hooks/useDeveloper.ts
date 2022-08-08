@@ -4,15 +4,15 @@ import { useState } from "react";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
-  logoutFetch,
+  logOutFetch,
   notificationPush,
   selectHasUser,
   selectNotifications,
-  selectPolkadotWalletAccounts,
+  selectBrowserTradeAccounts,
   selectSignInError,
   selectSignInLoading,
   selectUserInfo,
-  signIn,
+  signInFetch,
 } from "@polkadex/orderbook-modules";
 import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
@@ -33,7 +33,7 @@ export function useDeveloper() {
   const user = useReduxSelector(selectUserInfo);
   const hasUser = useReduxSelector(selectHasUser);
   const notifications = useReduxSelector(selectNotifications);
-  const accounts = useReduxSelector(selectPolkadotWalletAccounts);
+  const accounts = useReduxSelector(selectBrowserTradeAccounts);
 
   const walletLoading = useReduxSelector(selectSignInLoading);
   const walletError = useReduxSelector(selectSignInError);
@@ -93,7 +93,7 @@ export function useDeveloper() {
    * @returns {void} Dispatch Sign In action
    */
   const connectTestWallet = () => {
-    dispatch(signIn(connectWallet.address, connectWallet.password));
+    dispatch(signInFetch(connectWallet.address, connectWallet.password));
   };
 
   /**
@@ -101,7 +101,7 @@ export function useDeveloper() {
    *
    * @returns {void} Dispatch Logout action
    */
-  const disconnectTestWallet = () => dispatch(logoutFetch());
+  const disconnectTestWallet = () => dispatch(logOutFetch());
 
   /**
    * @description Create a new notification

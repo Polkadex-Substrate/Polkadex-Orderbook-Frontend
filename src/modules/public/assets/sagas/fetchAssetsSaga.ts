@@ -5,19 +5,22 @@ import { assetsData } from "../actions";
 import { IPublicAsset } from "../types";
 import { selectRangerApi, alertPush } from "../../../";
 
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { POLKADEX_ASSET, ALLOWED_ASSET_IDS } from "@polkadex/web-constants";
 
 export function* fetchAssetsSaga() {
   try {
     const api = yield select(selectRangerApi);
     if (api) {
-      const assetsList = yield call(() => fetchAllAssetMetadata(api));
+      const assetsList: IPublicAsset[] = yield call(() => fetchAllAssetMetadata(api));
+      const whiteList = assetsList.filter((asset) =>
+        ALLOWED_ASSET_IDS.includes(asset.assetId)
+      );
       const assetIdMap = assetsList.reduce((acc, asset) => {
         acc[asset.assetId] = asset;
         return acc;
       }, {});
-      assetsList.push(POLKADEX_ASSET);
-      yield put(assetsData({ list: assetsList, assetIdMap }));
+      whiteList.push(POLKADEX_ASSET);
+      yield put(assetsData({ list: whiteList, assetIdMap }));
     }
   } catch (error) {
     yield put(

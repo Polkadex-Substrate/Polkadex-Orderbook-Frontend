@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { enclaveRpcClientFetch } from "../modules/public/enclaveRpcClient";
+
 import { assetsFetch } from "../modules/public/assets";
+
 import { useReduxSelector } from "./useReduxSelector";
 
 import {
-  polkadotWalletFetch,
   extensionWalletFetch,
   rangerConnectFetch,
   selectRangerIsReady,
+  tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useAppDaemon = () => {
@@ -16,9 +17,8 @@ export const useAppDaemon = () => {
   const isApi = useReduxSelector(selectRangerIsReady);
   // basic initialization
   useEffect(() => {
-    dispatch(enclaveRpcClientFetch());
     dispatch(rangerConnectFetch());
-    dispatch(polkadotWalletFetch());
+    dispatch(tradeAccountsFetch());
     dispatch(extensionWalletFetch());
   }, [dispatch]);
 

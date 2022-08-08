@@ -3,6 +3,8 @@ import { RootState } from "../../";
 import { IPublicAsset } from "./types";
 
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
+import { Asset } from "@polkadex/orderbook/API";
 
 export const selectAssetsFetchSuccess = (state: RootState): boolean =>
   state.public.assets.success;
@@ -22,9 +24,12 @@ export const selectAssetIdMap = (state: RootState): Record<string, IPublicAsset>
 
 export const selectGetAsset =
   (state: RootState) =>
-  (assetId: string | number): IPublicAsset | null => {
+  (assetId: string | number | Record<string, string>): IPublicAsset | null => {
     if (!assetId) {
       return null;
+    }
+    if (isKeyPresentInObject(assetId, "asset")) {
+      assetId = assetId.asset;
     }
     return isAssetPDEX(assetId)
       ? POLKADEX_ASSET
@@ -36,4 +41,5 @@ export const isAssetPDEX = (assetId): boolean =>
   assetId === null ||
   assetId === -1 ||
   assetId === "POLKADEX" ||
-  assetId === "PDEX";
+  assetId === "PDEX" ||
+  assetId === "polkadex";

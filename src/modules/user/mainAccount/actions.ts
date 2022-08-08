@@ -1,14 +1,17 @@
 import { CommonError } from "../../types";
-import { InjectedAccount } from "../proxyAccount";
+import { InjectedAccount } from "../tradeAccount";
 
 import {
-  EXTENSION_WALLET_FETCH,
-  EXTENSION_WALLET_ERROR,
-  EXTENSION_WALLET_DATA,
+  POLKADOT_EXTENSION_WALLET_FETCH,
+  POLKADOT_EXTENSION_WALLET_ERROR,
+  POLKADOT_EXTENSION_WALLET_DATA,
   MAIN_ACCOUNT_SET_FETCH,
   EXTENSION_WALLET_RESET,
   MAIN_ACCOUNT_SET_DATA,
   MAIN_ACCOUNT_SET_ERROR,
+  REGISTER_MAIN_ACCOUNT_FETCH,
+  REGISTER_MAIN_ACCOUNT_DATA,
+  REGISTER_MAIN_ACCOUNT_ERROR,
 } from "./constants";
 
 export interface MainAccount {
@@ -22,16 +25,16 @@ export interface ExtensionWalletFetchPayload {
 }
 
 export interface ExtensionWalletFetch {
-  type: typeof EXTENSION_WALLET_FETCH;
+  type: typeof POLKADOT_EXTENSION_WALLET_FETCH;
 }
 
 export interface ExtensionWalletError {
-  type: typeof EXTENSION_WALLET_ERROR;
+  type: typeof POLKADOT_EXTENSION_WALLET_ERROR;
   error: CommonError;
 }
 
 export interface ExtensionWalletData {
-  type: typeof EXTENSION_WALLET_DATA;
+  type: typeof POLKADOT_EXTENSION_WALLET_DATA;
   payload: ExtensionWalletFetchPayload;
 }
 export interface SetMainAccountFetch {
@@ -51,28 +54,45 @@ export interface ResetExtensionWallet {
   type: typeof EXTENSION_WALLET_RESET;
 }
 
+export interface RegisterMainAccountFetch {
+  type: typeof REGISTER_MAIN_ACCOUNT_FETCH;
+  payload: { mainAccount: MainAccount; tradeAddress: string };
+}
+
+export interface RegisterMainAccountData {
+  type: typeof REGISTER_MAIN_ACCOUNT_DATA;
+}
+
+export interface RegisterMainAccountError {
+  type: typeof REGISTER_MAIN_ACCOUNT_ERROR;
+  error: CommonError;
+}
+
 export type GetExtensionWalletAction =
   | ExtensionWalletFetch
   | ExtensionWalletError
   | ExtensionWalletData
   | SetMainAccountFetch
   | SetMainAccountData
-  | ResetExtensionWallet;
+  | ResetExtensionWallet
+  | RegisterMainAccountFetch
+  | RegisterMainAccountData
+  | RegisterMainAccountError;
 
 export const extensionWalletData = (
   payload: ExtensionWalletFetchPayload
 ): ExtensionWalletData => ({
-  type: EXTENSION_WALLET_DATA,
+  type: POLKADOT_EXTENSION_WALLET_DATA,
   payload,
 });
 
 export const extensionWalletError = (error: CommonError): ExtensionWalletError => ({
-  type: EXTENSION_WALLET_ERROR,
+  type: POLKADOT_EXTENSION_WALLET_ERROR,
   error,
 });
 
 export const extensionWalletFetch = (): ExtensionWalletFetch => ({
-  type: EXTENSION_WALLET_FETCH,
+  type: POLKADOT_EXTENSION_WALLET_FETCH,
 });
 
 export const setMainAccountFetch = (
@@ -94,4 +114,18 @@ export const setMainAccountError = (error: CommonError): SetMainAccountError => 
 
 export const resetExtensionWallet = () => ({
   type: EXTENSION_WALLET_RESET,
+});
+
+export const registerMainAccountFetch = (payload: RegisterMainAccountFetch["payload"]) => ({
+  type: REGISTER_MAIN_ACCOUNT_FETCH,
+  payload,
+});
+
+export const registerMainAccountData = (): RegisterMainAccountData => ({
+  type: REGISTER_MAIN_ACCOUNT_DATA,
+});
+
+export const registerMainAccountError = (error: CommonError): RegisterMainAccountError => ({
+  type: REGISTER_MAIN_ACCOUNT_ERROR,
+  error,
 });

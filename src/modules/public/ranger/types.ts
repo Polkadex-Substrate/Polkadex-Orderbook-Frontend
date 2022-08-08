@@ -20,6 +20,7 @@ export const orderbookTypes = {
     data: "AccountData",
   },
   OrderPayload: {
+    client_order_id: "H256",
     user: "AccountId",
     pair: "TradingPair",
     side: "OrderSide",

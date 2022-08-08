@@ -40,6 +40,8 @@ export type Colors =
   | "teriaryBackgroundOpacity"
   | "secondaryBackgroundDark"
   | "quaternaryBackground"
+  | "secondaryText"
+  | "tertiraryText"
   | "popupBackground"
   | "gradientBackground"
   | "gradientGreen"
@@ -156,6 +158,7 @@ export const icons = [
 export type Icons =
   | "ArrowTop"
   | "Menu"
+  | "Information"
   | "Verified"
   | "Avatar"
   | "Alert"
@@ -289,3 +292,7 @@ export type TokensName =
   | "1Inch"
   | "Bitcoin"
   | "Dash";
+
+export type BackgroundStyle = "flat" | "ghost" | "outline" | "transparent";
+
+export type BorderStyle = "rounded" | "semiRounded" | "squared";

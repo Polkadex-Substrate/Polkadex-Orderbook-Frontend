@@ -1,0 +1,365 @@
+import styled, { css } from "styled-components";
+
+export const Main = styled.main`
+  ${({ theme }) => css`
+    position: relative;
+    background: ${theme.colors.primaryBackground};
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    max-width: 160rem;
+    box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
+  `}
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 2rem;
+  @media screen and (min-width: 590px) {
+    padding: 4rem;
+  }
+`;
+
+export const Title = styled.div`
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 550;
+  }
+`;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+`;
+
+export const TitleBalance = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    div {
+      :first-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem;
+        height: 3.5rem;
+        border: 1px solid ${theme.colors.secondaryBackground};
+        border-radius: 10rem;
+      }
+      :last-child {
+        strong {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+        strong,
+        small {
+          color: ${theme.colors.tertiaryText};
+          font-size: 1.4rem;
+        }
+        span {
+          font-size: 1.6rem;
+          font-weight: 500;
+        }
+      }
+    }
+    svg {
+      max-width: 1.5rem;
+      stroke: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const TitleActions = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1rem;
+    a {
+      color: ${theme.colors.tertiaryText};
+      border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      transition: border 0.5s ease-in, background 0.5s ease-in;
+      :active {
+        border-color: ${theme.colors.primary};
+      }
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
+`;
+export const Content = styled.div`
+  margin-top: 4rem;
+  h2 {
+    font-size: 2rem;
+    font-weight: 550;
+  }
+`;
+export const ContentGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+`;
+
+export const Card = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    border-radius: 1rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
+    border-left-width: ${isActive ? "6px" : "1px"};
+  `}
+`;
+export const CardHeader = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    padding-bottom: 6rem;
+    :hover {
+      strong {
+        color: ${theme.colors.primary};
+      }
+    }
+  `}
+`;
+
+export const CardHeaderIcon = styled.div`
+  ${({ theme }) => css`
+    width: 1.5rem;
+    svg {
+      stroke: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const CardHeaderContent = styled.div`
+  ${({ theme }) => css`
+    strong {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease-in-out;
+    }
+    button {
+      display: inline-block;
+      width: 1.4rem;
+      height: 1.4rem;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+      svg {
+        display: block;
+        stroke: ${theme.colors.tertiaryText};
+      }
+    }
+    span {
+      color: ${theme.colors.tertiaryText};
+      font-size: 1.4rem;
+      display: flex;
+    }
+    p {
+      white-space: nowrap;
+    }
+  `}
+`;
+
+export const CardContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem 2rem 2rem;
+`;
+
+export const DropdownHeader = styled.div`
+  ${({ theme }) => css`
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.8rem;
+    padding: 0.5rem 1rem;
+    color: ${theme.colors.tertiaryText};
+    font-size: 1.5rem;
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.8rem;
+    padding: 0.5rem 1rem;
+    user-select: none;
+    div {
+      vertical-align: middle;
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      margin-left: 1rem;
+      svg {
+        stroke: ${theme.colors.tertiaryText};
+      }
+    }
+  `}
+`;
+
+export const DropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.8rem;
+    button {
+      white-space: nowrap;
+      color: ${theme.colors.tertiaryText};
+      font-size: 1.5rem;
+      padding: 1.2rem;
+      transition: background 0.5s ease-in;
+      text-align: left;
+      width: 100%;
+      border-radius: 0.8rem;
+
+      :first-child {
+        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      }
+      :hover {
+        background: ${theme.colors.secondaryBackground};
+      }
+    }
+  `}
+`;
+
+export const ContentActions = styled.div`
+  ${({ theme }) => css`
+    span,
+    button {
+      font-size: 1.5rem;
+    }
+    span {
+      display: block;
+      color: ${theme.colors.primary};
+    }
+    button {
+      color: ${theme.colors.tertiaryText};
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      border-radius: 0.8rem;
+      padding: 0.8rem 1.8rem;
+      height: fit-content;
+      border-width: 1px;
+      border-style: solid;
+      border-color: transparent;
+      transition: background 0.3s ease-in, border 0.3s ease-in;
+      :hover {
+        border-color: ${theme.colors.secondaryBackgroundOpacity};
+        background: none;
+      }
+      :active {
+        border-color: ${theme.colors.primary};
+      }
+    }
+  `}
+`;
+
+export const CreateAccount = styled.a`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    border: 3px dashed ${theme.colors.secondaryBackground};
+    cursor: pointer;
+    min-height: 20rem;
+  `}
+`;
+
+export const CreateAccountWrapper = styled.div`
+  ${({ theme }) => css`
+    font-size: 1.5rem;
+    color: ${theme.colors.tertiaryText};
+    div {
+      display: inline-block;
+      width: 1rem;
+      margin-right: 0.5rem;
+      svg {
+        fill: ${theme.colors.tertiaryText};
+      }
+    }
+    a {
+      color: ${theme.colors.primary};
+    }
+  `}
+`;
+
+export const LinkAccount = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    border-radius: 1.5rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    flex-wrap: wrap;
+  `}
+`;
+
+export const LinkAccountColumn = styled.a`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    flex: 1;
+    :first-child {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
+      border-radius: 1.5rem;
+      span {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 550;
+        margin-bottom: 0.3rem;
+      }
+    }
+    :last-child {
+      cursor: pointer;
+      :hover {
+        span {
+          color: ${theme.colors.primary};
+        }
+        ${LinkAccountColumnWrapper}:last-child svg {
+          stroke: ${theme.colors.primary};
+        }
+      }
+    }
+  `}
+`;
+
+export const FlexCenter = styled.div``;
+
+export const LinkAccountColumnWrapper = styled.div`
+  ${({ theme }) => css`
+    :first-child {
+      svg {
+        width: 3rem;
+      }
+    }
+    :last-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      span {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: 550;
+        margin-bottom: 0.3rem;
+        transition: color 0.3s ease-in-out;
+      }
+      div {
+        :last-child {
+          width: 1.5rem;
+          svg {
+            transition: stroke 0.3s ease-in-out;
+            stroke: ${theme.colors.tertiaryText};
+          }
+        }
+      }
+    }
+  `}
+`;
