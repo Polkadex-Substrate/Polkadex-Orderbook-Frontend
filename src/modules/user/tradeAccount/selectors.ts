@@ -14,5 +14,5 @@ export const selectAllTradeAccounts = (state: RootState): string[] =>
 export const selectBrowserTradeAccounts = (state: RootState): InjectedAccount[] =>
   state.user.polkadotWallet.allBrowserAccounts;
 
-export const selectTradeAccount = (state: RootState): InjectedAccount =>
+export const selectCurrentTradeAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;

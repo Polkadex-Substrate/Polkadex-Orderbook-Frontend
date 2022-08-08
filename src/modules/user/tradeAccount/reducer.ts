@@ -86,8 +86,11 @@ export const TradeAccountsReducer = (
       const newAccounts = state.allBrowserAccounts.filter(
         (account) => account.address !== address
       );
+
       return {
         ...state,
+        selectedAccount:
+          state.selectedAccount.address === address ? defaultAccount : state.selectedAccount,
         allBrowserAccounts: newAccounts,
       };
     }

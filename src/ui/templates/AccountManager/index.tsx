@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -15,27 +14,11 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { useAccountManager, useReduxSelector } from "@polkadex/orderbook-hooks";
-
-const testAccounts = [
-  {
-    id: 1,
-    name: "Trading",
-    address: "esrWSxZY...8N7cxP3B",
-    isActive: true,
-  },
-  {
-    id: 2,
-    name: "Mobile",
-    address: "8N7cxP3B...esrWSxZY",
-    isActive: false,
-  },
-];
+import { useAccountManager } from "@polkadex/orderbook-hooks";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const router = useRouter();
-  const { tradingAccounts } = useAccountManager();
+  const { tradingAccounts, handleSelectTradeAccount } = useAccountManager();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -57,7 +40,7 @@ export const AccountManagerTemplate = () => {
       status: false,
     });
 
-  const isLinkedAccount = false;
+  const isLinkedAccount = tradingAccounts?.length > 0;
 
   return (
     <>
@@ -103,7 +86,7 @@ export const AccountManagerTemplate = () => {
             </S.TitleWrapper>
           </S.Title>
           <S.Content>
-            <h2>My wallets</h2>
+            <h2>My Trading Accounts</h2>
 
             <S.ContentGrid>
               {!isLinkedAccount ? (
@@ -133,7 +116,7 @@ export const AccountManagerTemplate = () => {
                 </S.LinkAccount>
               ) : (
                 <>
-                  {testAccounts.map((value) => (
+                  {tradingAccounts.map((value) => (
                     <Card
                       key={value.id}
                       title={value.name}
@@ -141,7 +124,7 @@ export const AccountManagerTemplate = () => {
                       isUsing={value.isActive}
                       onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => console.log("onUse account id:", value.id)}
+                      onUse={() => handleSelectTradeAccount(value.address)}
                     />
                   ))}
                   <Link href="/createAccount">
@@ -186,7 +169,7 @@ export const Card = ({
         <a>
           <S.CardHeader>
             <S.CardHeaderContent>
-              <strong>{title} Account</strong>
+              <strong>{title}</strong>
               <span>
                 <Tooltip>
                   <TooltipHeader>

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import {
   removeTradeAccountFromBrowser,
   selectBrowserTradeAccounts,
-  selectAllTradeAccounts,
+  selectCurrentTradeAccount,
   setCurrentTradeAccount,
 } from "../modules/user/tradeAccount";
 
@@ -13,7 +13,13 @@ import { useReduxSelector } from "./useReduxSelector";
 export const useAccountManager = () => {
   const dispatch = useDispatch();
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
-  const tradingAccounts = useReduxSelector(selectAllTradeAccounts);
+  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount);
+  const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts)?.map((acc) => ({
+    id: acc.address,
+    address: acc.address,
+    name: acc.meta.name,
+    isActive: acc.address === currentTradeAddr.address,
+  }));
 
   const removeFromDevice = (address: string) => {
     keyring.forgetAccount(address);
@@ -29,5 +35,6 @@ export const useAccountManager = () => {
     removeFromDevice,
     handleSelectTradeAccount,
     tradingAccounts,
+    currentTradeAddr,
   };
 };

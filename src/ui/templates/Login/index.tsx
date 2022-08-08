@@ -11,7 +11,7 @@ import * as S from "./styles";
 import { HeaderBack, TemporaryMessage } from "@polkadex/orderbook-ui/organisms";
 import {
   selectHasUser,
-  selectTradeAccount,
+  selectCurrentTradeAccount,
   selectBrowserTradeAccounts,
   selectTradeAccountsLoading,
   selectTradeAccountsSuccess,
@@ -46,7 +46,7 @@ export const LoginTemplate = () => {
   const accounts = useReduxSelector(selectBrowserTradeAccounts);
   const isLoading = useReduxSelector(selectTradeAccountsLoading);
   const isImportAccountSuccess = useReduxSelector(selectImportAccountSuccess);
-  const selectedAccount = useReduxSelector(selectTradeAccount);
+  const selectedAccount = useReduxSelector(selectCurrentTradeAccount);
   const hasUser = useReduxSelector(selectHasUser);
   const isSuccess = useReduxSelector(selectTradeAccountsSuccess);
   const signUpSuccess = useReduxSelector(selectSignUpSuccess);
