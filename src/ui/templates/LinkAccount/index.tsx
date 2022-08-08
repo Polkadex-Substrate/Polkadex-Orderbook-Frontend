@@ -9,6 +9,7 @@ import * as S from "./styles";
 import { Button, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -18,12 +19,14 @@ export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
+  const { mainAccounts, handleSelectMainAccount, currentMainAccount, registerMainAccount } =
+    useLinkMainAccount();
 
   const { handleSubmit, isValid, dirty } = useFormik({
     initialValues: {},
     validationSchema: linkAccountValidations,
     onSubmit: (values) => {
-      console.log(values);
+      registerMainAccount(currentMainAccount);
     },
   });
 
@@ -68,8 +71,8 @@ export const LinkAccountTemplate = () => {
                           </S.SelectAccountContainer>
                           <S.SelectAccountContainer>
                             <div>
-                              <strong>Main Account</strong>
-                              <span>esoDF9faq...9dD7GtQvg</span>
+                              <strong>{currentMainAccount?.name}</strong>
+                              <span>{currentMainAccount?.address}</span>
                             </div>
                             <div>
                               <Icons.ArrowBottom />
@@ -78,10 +81,17 @@ export const LinkAccountTemplate = () => {
                         </S.SelectAccount>
                       }>
                       <S.DropdownContent>
-                        <button type="button" onClick={undefined}>
-                          Main Account
-                          <span>(esoDF9faq...9dD7GtQvg)</span>
-                        </button>
+                        {mainAccounts.map((account) => {
+                          return (
+                            <button
+                              key={account.address}
+                              type="button"
+                              onClick={() => handleSelectMainAccount(account.address)}>
+                              {account.meta.name}
+                              <span>{account.address}</span>
+                            </button>
+                          );
+                        })}
                       </S.DropdownContent>
                     </Dropdown>
                   </S.SelectInputContainer>
@@ -92,9 +102,9 @@ export const LinkAccountTemplate = () => {
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={!(isValid && dirty)}
+                  disabled={false}
                   isFull>
-                  Link Account
+                  Register Account
                 </Button>
               </form>
             </S.Box>

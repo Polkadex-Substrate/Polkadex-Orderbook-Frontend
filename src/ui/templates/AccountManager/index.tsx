@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -14,6 +15,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { useAccountManager, useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const testAccounts = [
   {
@@ -32,6 +34,8 @@ const testAccounts = [
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const router = useRouter();
+  const { tradingAccounts } = useAccountManager();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -111,7 +115,9 @@ export const AccountManagerTemplate = () => {
                     </S.FlexCenter>
                   </S.LinkAccountColumn>
 
-                  <S.LinkAccountColumn type="button" onClick={undefined}>
+                  <S.LinkAccountColumn
+                    type="button"
+                    onClick={() => router.push("/linkAccount")}>
                     <S.LinkAccountColumnWrapper>
                       <Icons.PolkadotJs />
                     </S.LinkAccountColumnWrapper>

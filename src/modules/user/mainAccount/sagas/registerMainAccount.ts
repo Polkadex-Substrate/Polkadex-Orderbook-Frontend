@@ -1,14 +1,17 @@
 import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
+import keyring from "@polkadot/ui-keyring";
 
 import { selectRangerApi, sendError } from "../../..";
 import { registerMainAccountData, RegisterMainAccountFetch } from "../actions";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
+let tradeAddr = "";
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
     const { mainAccount, tradeAddress } = action.payload;
+    tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
     if (mainAccount.address) {
       const res = yield call(() =>
@@ -17,6 +20,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       yield put(registerMainAccountData());
     }
   } catch (error) {
+    keyring.forgetAddress(tradeAddr);
     yield put(
       sendError({
         error,
