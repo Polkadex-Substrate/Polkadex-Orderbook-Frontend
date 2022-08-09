@@ -161,7 +161,7 @@ export const AccountManagerTemplate = () => {
   );
 };
 
-export const Card = ({
+const Card = ({
   title,
   address,
   isUsing = false,

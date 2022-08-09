@@ -1,4 +1,4 @@
-import { checkCoordinateOnSegment } from "klinecharts/lib/shape/segment";
+import { checkCoordinateOnSegment } from "klinecharts/lib/shape/shapeHelper";
 
 import { defaultThemes } from "src/styles";
 export const chartType = [

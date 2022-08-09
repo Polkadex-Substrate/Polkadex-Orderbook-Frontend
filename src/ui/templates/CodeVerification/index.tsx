@@ -3,14 +3,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useTimer } from "@polkadex/orderbook/v2/hooks";
 import { useCodeVerification } from "@polkadex/orderbook-hooks";
+const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
+  ssr: false,
+});
 
 export const CodeVerificationTemplate = () => {
   const [state, setState] = useState(false);

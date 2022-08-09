@@ -37,7 +37,8 @@ module.exports = withPlugins([
       // Enables the styled-components SWC transform
       styledComponents: true,
     },
-
+    target: "experimental-serverless-trace",
+    staticPageGenerationTimeout: 300,
     optimization: {
       mergeDuplicateChunks: true,
     },
