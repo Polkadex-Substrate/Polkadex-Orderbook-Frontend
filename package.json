@@ -13,6 +13,7 @@
     "checkTypes": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^12.2.4",
     "@polkadot/api": "^8.0.2",
     "@polkadot/extension-dapp": "^0.43.2",
     "@polkadot/ui-keyring": "^2.2.1",
@@ -41,6 +42,7 @@
     "moment-timezone": "^0.5.33",
     "mysql2": "^2.3.3",
     "next": "12.1.0",
+    "next-compose-plugins": "^2.2.1",
     "next-redux-wrapper": "^7.0.5",
     "react": "^17.0.2",
     "react-aria": "^3.18.0",
