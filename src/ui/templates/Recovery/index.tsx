@@ -1,9 +1,7 @@
 // TODO: Move mnemonic state to Formik
 import Link from "next/link";
 import { Formik, Form } from "formik";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import Head from "next/head";
 
 import * as S from "./styles";
@@ -12,12 +10,6 @@ import { importValiations } from "./validations";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import {
-  importAccountFetch,
-  selectImportAccountLoading,
-  selectImportAccountSuccess,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 const defaultValues = {
   password: "",
@@ -25,14 +17,7 @@ const defaultValues = {
 };
 
 export const RecoveryTemplate = () => {
-  const dispatch = useDispatch();
-  const signUpSuccess = useReduxSelector(selectImportAccountSuccess);
-  const router = useRouter();
-  const importLoading = useReduxSelector(selectImportAccountLoading);
   const [state, setState] = useState({ tags: [] });
-  useEffect(() => {
-    if (signUpSuccess) router.push("/login");
-  }, [signUpSuccess, router]);
 
   return (
     <>
@@ -60,13 +45,6 @@ export const RecoveryTemplate = () => {
                       if (state.tags.length === 12) {
                         const { password, accountName } = values;
                         const mnemoicString = state.tags.join(" ");
-                        dispatch(
-                          importAccountFetch({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
                       }
                     }}>
                     {({ errors, touched, values }) => (
@@ -97,7 +75,7 @@ export const RecoveryTemplate = () => {
                           type="submit"
                           disabled={state.tags.length < 12}
                           style={{ marginTop: 20 }}>
-                          {importLoading ? "Loading" : "Import Account"}
+                          Import Account
                         </Button>
                       </Form>
                     )}

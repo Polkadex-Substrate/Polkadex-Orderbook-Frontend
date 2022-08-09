@@ -18,8 +18,6 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  connectPhoneFetch,
-  selectConnectPhoneSuccess,
   selectExtensionWalletAccounts,
   selectCurrentMainAccount,
   setMainAccountFetch,
@@ -53,9 +51,8 @@ export const ConnectToPhone = () => {
 
   const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
-  const showQrCode = connectPhoneSuccess || isMnemonicFromSignUp;
-  const showUnlockQr = !connectPhoneSuccess && !isMnemonicFromSignUp;
+  const showQrCode = isMnemonicFromSignUp;
+  const showUnlockQr = !isMnemonicFromSignUp;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -64,11 +61,7 @@ export const ConnectToPhone = () => {
     <S.Main>
       {!!mnemonic?.length && (
         <div style={{ display: "none" }}>
-          <PaperWallet
-            mnemonic={mnemonic}
-            mnemoicString={mnemoicString}
-            forwardedRef={componentRef}
-          />
+          <PaperWallet mnemonic={mnemonic} mnemoicString={mnemoicString} ref={componentRef} />
         </div>
       )}
       <S.Wrapper>
@@ -129,11 +122,7 @@ export const ConnectToPhone = () => {
                                 key={index}
                                 accountName={item.meta.name || `Account ${index}`}
                                 address={item.address}
-                                onClick={() =>
-                                  connectPhoneSuccess
-                                    ? undefined
-                                    : dispatch(setMainAccountFetch(accounts[index]))
-                                }
+                                onClick={() => dispatch(setMainAccountFetch(accounts[index]))}
                               />
                             ))
                           ) : (
@@ -151,13 +140,7 @@ export const ConnectToPhone = () => {
                         Wallet or Mnemonic.
                       </p>
                       {showUnlockQr && (
-                        <Button
-                          background="secondaryBackground"
-                          color="black"
-                          type="button"
-                          onClick={() => {
-                            dispatch(connectPhoneFetch({ mnemonic: mnemoicString }));
-                          }}>
+                        <Button background="secondaryBackground" color="black" type="button">
                           Unlock QR Code
                         </Button>
                       )}

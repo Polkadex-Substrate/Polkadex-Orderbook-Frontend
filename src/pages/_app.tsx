@@ -5,12 +5,12 @@ import { ThemeProvider } from "styled-components";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { OverlayProvider } from "@react-aria/overlays";
+import dynamic from "next/dynamic";
 
 import { wrapper } from "../store";
-import { useReduxSelector } from "../hooks/useReduxSelector";
 import { useAppDaemon } from "../hooks/useAppDaemon";
+import { useReduxSelector } from "../hooks/useReduxSelector";
 
-import { Message } from "@polkadex/orderbook-ui/organisms";
 import {
   alertDelete,
   selectAlertState,
@@ -18,8 +18,21 @@ import {
   selectNotificationsAlert,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
-import { Notifications } from "@polkadex/orderbook-ui/templates";
 
+const Message = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
+  {
+    ssr: false,
+  }
+);
+
+const Notifications = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/templates/Notifications").then((mod) => mod.Notifications),
+  {
+    ssr: false,
+  }
+);
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
   const router = useRouter();

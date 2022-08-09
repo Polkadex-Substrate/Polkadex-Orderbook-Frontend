@@ -1,15 +1,17 @@
 import { CSSTransition } from "react-transition-group";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
-import { useAccount } from "@polkadex/orderbook-hooks";
+import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { logOutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
 
 export const MyAccount = () => {
-  const { userAddress, userName, logout } = useAccount();
+  const { userAddress, userName } = useAccount();
 
   return (
     <S.Main>
@@ -18,7 +20,7 @@ export const MyAccount = () => {
         direction="bottomRight"
         priority="medium"
         style={{ overflow: "hidden" }}>
-        <Content address={userAddress} logout={logout} />
+        <WalletContent />
       </Dropdown>
     </S.Main>
   );
@@ -48,11 +50,12 @@ const Header = ({
   );
 };
 
-const Content = ({ address = "0x00000000000", logout = undefined }) => {
+export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
+  const dispatch = useDispatch();
+  const { address } = useReduxSelector(selectUserInfo);
 
-  // TODO: Add types
   const calculateHeight = (el) => {
     const height = el.offsetHeight;
     setMenuHeight(height);
@@ -68,7 +71,11 @@ const Content = ({ address = "0x00000000000", logout = undefined }) => {
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
-        <AccountOverview address={address} logout={logout} onNavigate={onNavigate} />
+        <AccountOverview
+          address={address || "0x000000000"}
+          logout={() => dispatch(logOutFetch())}
+          onNavigate={onNavigate}
+        />
       </CSSTransition>
       <CSSTransition
         in={activeMenu === "Appearance"}

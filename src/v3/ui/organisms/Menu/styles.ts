@@ -108,12 +108,19 @@ export const WrapperProfile = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    align-items: flex-start;
     padding-left: 1rem;
     padding-bottom: 1.5rem;
     @media screen and (max-width: 590px) {
       display: none;
     }
   `}
+`;
+export const ContainerProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 `;
 
 export const Notifications = styled.div<{ isActive?: boolean }>`
@@ -135,3 +142,4 @@ export const Notifications = styled.div<{ isActive?: boolean }>`
     `}
   `}
 `;
+export const Profile = styled.div``;

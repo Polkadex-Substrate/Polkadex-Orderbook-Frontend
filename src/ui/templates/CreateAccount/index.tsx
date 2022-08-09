@@ -2,14 +2,17 @@ import Head from "next/head";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
 import { Button, InputLine, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
+const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
+  ssr: false,
+});
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);

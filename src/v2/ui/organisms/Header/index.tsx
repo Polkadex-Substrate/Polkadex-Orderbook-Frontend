@@ -3,14 +3,7 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 
 import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
-import {
-  MyAccount,
-  Notifications,
-  MyWallet,
-  Menu,
-  Search,
-  QuickLogin,
-} from "@orderbook/v2/ui/molecules";
+import { MyAccount, MyWallet, Menu, Search, QuickLogin } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Button, Polkadex } from "@polkadex/orderbook-ui/molecules";
 import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -32,9 +25,6 @@ export const Header = () => {
           </AvailableMessage>
           {hasUser ? (
             <>
-              <AvailableMessage message="Soon" isPriority>
-                <Notifications />
-              </AvailableMessage>
               <MyWallet />
               <MyAccount />
             </>
