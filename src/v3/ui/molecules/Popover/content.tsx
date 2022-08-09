@@ -20,7 +20,7 @@ const Content = forwardRef(
 
     return (
       <S.ContentMain>
-        <FocusScope restoreFocus>
+        <FocusScope>
           <S.ContentWrapper
             {...mergeProps(overlayProps, overlayTriggerProps, positionProps, modalProps)}
             ref={mergeRefs(overlayRef, ref)}>

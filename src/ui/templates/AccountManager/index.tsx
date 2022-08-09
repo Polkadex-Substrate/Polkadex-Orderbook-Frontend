@@ -61,7 +61,7 @@ export const AccountManagerTemplate = () => {
         <Menu handleChange={() => setState(!state)} />
         <S.Wrapper>
           <S.Title>
-            <h1>Acount Manager</h1>
+            <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
                 <small>Polkadot.js account selected</small>

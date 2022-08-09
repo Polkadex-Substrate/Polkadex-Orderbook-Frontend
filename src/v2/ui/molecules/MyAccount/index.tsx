@@ -1,6 +1,7 @@
 import { CSSTransition } from "react-transition-group";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -8,7 +9,7 @@ import * as T from "./types";
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
+import { logOutFetch, selectHasUser, selectUserInfo } from "@polkadex/orderbook-modules";
 
 export const MyAccount = () => {
   const { userAddress, userName } = useAccount();
@@ -53,8 +54,10 @@ const Header = ({
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
+
   const dispatch = useDispatch();
   const { address } = useReduxSelector(selectUserInfo);
+  const hasUser = useReduxSelector(selectHasUser);
 
   const calculateHeight = (el) => {
     const height = el.offsetHeight;
@@ -71,11 +74,33 @@ export const WalletContent = () => {
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
-        <AccountOverview
-          address={address || "0x000000000"}
-          logout={() => dispatch(logOutFetch())}
-          onNavigate={onNavigate}
-        />
+        {hasUser ? (
+          <AccountOverview
+            address={address || "0x000000000"}
+            logout={() => dispatch(logOutFetch())}
+            onNavigate={onNavigate}
+          />
+        ) : (
+          <S.Empty>
+            <S.EmptyHeader>
+              <figure>
+                <img
+                  src="/img/loginEmpty.svg"
+                  alt="Hand coming out of a smartphone with a pen in hand"
+                />
+              </figure>
+            </S.EmptyHeader>
+            <S.EmptyContent>
+              <h2>Ops, it seems that you are not logged in</h2>
+              <p>Explore a new way to trade with your own wallet!</p>
+              <S.EmptyActions>
+                <Link href="sign">Sign Up</Link>
+                <Link href="signIn">Login</Link>
+                <div />
+              </S.EmptyActions>
+            </S.EmptyContent>
+          </S.Empty>
+        )}
       </CSSTransition>
       <CSSTransition
         in={activeMenu === "Appearance"}
