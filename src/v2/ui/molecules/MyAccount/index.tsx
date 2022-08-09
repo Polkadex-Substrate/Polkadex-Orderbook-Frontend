@@ -94,8 +94,8 @@ export const WalletContent = () => {
               <h2>Ops, it seems that you are not logged in</h2>
               <p>Explore a new way to trade with your own wallet!</p>
               <S.EmptyActions>
-                <Link href="sign">Sign Up</Link>
-                <Link href="signIn">Login</Link>
+                <Link href="/sign">Sign Up</Link>
+                <Link href="/signIn">Login</Link>
                 <div />
               </S.EmptyActions>
             </S.EmptyContent>
