@@ -7,14 +7,13 @@ import * as S from "./styles";
 
 import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
 import { Button } from "@polkadex/orderbook-ui/molecules";
-import { MyAccount, MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
+import { MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectCurrentMarket,
   selectCurrentMarketTickers,
   selectHasUser,
 } from "@polkadex/orderbook-modules";
-import { Notifications } from "@polkadex/orderbook-ui/templates";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const Navbar = ({ onOpenMarkets }) => {
@@ -69,9 +68,7 @@ const Navbar = ({ onOpenMarkets }) => {
             <Logo size="Medium" href="/trading" />
           </S.Logo>
           <S.BoxWrapper>
-            {/* <Notifications /> */}
             <MyWallet />
-            <MyAccount />
           </S.BoxWrapper>
         </S.Box>
       ) : (

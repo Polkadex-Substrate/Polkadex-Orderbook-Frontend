@@ -11,7 +11,7 @@ export const MyWallet = ({ hasLink = true }) => {
   return (
     <S.Main>
       <Dropdown header={<Header />} direction="bottomRight" priority="high">
-        <WalletContent title="My Funds" hasLink={hasLink} />
+        <MyWalletContent title="My Funds" hasLink={hasLink} />
       </Dropdown>
     </S.Main>
   );
@@ -23,7 +23,7 @@ const Header = ({ isActive = false }) => (
   </S.Header>
 );
 
-export const WalletContent = ({
+export const MyWalletContent = ({
   title,
   locked = true,
   hasLink = true,

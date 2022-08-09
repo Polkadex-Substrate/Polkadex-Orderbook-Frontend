@@ -5,18 +5,34 @@ import { ThemeProvider } from "styled-components";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { OverlayProvider } from "@react-aria/overlays";
+import dynamic from "next/dynamic";
 
 import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
+import { useReduxSelector } from "../hooks/useReduxSelector";
 
-import { Message } from "@polkadex/orderbook-ui/organisms";
 import {
   alertDelete,
   selectAlertState,
   selectCurrentColorTheme,
+  selectNotificationsAlert,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 
+const Message = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
+  {
+    ssr: false,
+  }
+);
+
+const Notifications = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/templates/Notifications").then((mod) => mod.Notifications),
+  {
+    ssr: false,
+  }
+);
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
   const router = useRouter();
@@ -44,6 +60,7 @@ const ThemeWrapper = ({ children }) => {
   const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
   const alert = useSelector(selectAlertState);
+  const notifications = useReduxSelector(selectNotificationsAlert);
 
   const dispatch = useDispatch();
 
@@ -56,6 +73,7 @@ const ThemeWrapper = ({ children }) => {
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        <Notifications notifications={notifications} />
         {alert.status && (
           <Message
             isVisible={alert.status}

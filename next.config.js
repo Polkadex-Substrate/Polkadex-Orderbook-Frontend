@@ -38,7 +38,7 @@ module.exports = withPlugins([
       styledComponents: true,
     },
     target: "experimental-serverless-trace",
-    staticPageGenerationTimeout: 300,
+    staticPageGenerationTimeout: 120,
     optimization: {
       mergeDuplicateChunks: true,
     },
