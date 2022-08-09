@@ -4,7 +4,7 @@ import { Logo, Popover } from "../../molecules";
 
 import * as S from "./styles";
 
-import { NotificationsContent } from "@orderbook/v2/ui/molecules";
+import { NotificationsContent, WalletContent } from "@orderbook/v2/ui/molecules";
 import {
   AvailableMessage,
   Icon,
@@ -116,17 +116,29 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         </S.WrapperIcon>
       </S.WrapperLinks>
       <S.WrapperProfile>
-        <Popover>
-          <Popover.Trigger>
-            <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
-              <Icons.Notifications />
-              <div />
-            </S.Notifications>
-          </Popover.Trigger>
-          <Popover.Content>
-            <NotificationsContent notifications={notifications} />
-          </Popover.Content>
-        </Popover>
+        <S.ContainerProfile>
+          <Popover>
+            <Popover.Trigger>
+              <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
+                <Icons.Notifications />
+                <div />
+              </S.Notifications>
+            </Popover.Trigger>
+            <Popover.Content>
+              <NotificationsContent notifications={notifications} />
+            </Popover.Content>
+          </Popover>
+          <Popover>
+            <Popover.Trigger>
+              <S.Profile>
+                <Icon name="Avatar" color="text" size="extraMedium" />
+              </S.Profile>
+            </Popover.Trigger>
+            <Popover.Content>
+              <WalletContent />
+            </Popover.Content>
+          </Popover>
+        </S.ContainerProfile>
       </S.WrapperProfile>
     </S.Wrapper>
   );
