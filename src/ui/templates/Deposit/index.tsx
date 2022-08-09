@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -17,9 +18,14 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { Transaction } from "@polkadex/orderbook-modules";
-import { useHistory } from "@polkadex/orderbook-hooks";
+import {
+  depositsFetch,
+  selectCurrentMainAccount,
+  Transaction,
+} from "@polkadex/orderbook-modules";
+import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
+import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -27,17 +33,31 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
-
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { transactionHistory } = useHistory();
+  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const assets = useReduxSelector(selectAllAssets);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
       asset: null,
     },
+    // TODO: re-add the validations
     validationSchema: withdrawValidations,
     onSubmit: (values) => {
-      console.log(values);
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
+      dispatch(
+        depositsFetch({
+          asset: asset,
+          amount: values.amount,
+          mainAccount: currMainAcc,
+        })
+      );
     },
   });
 
@@ -53,7 +73,6 @@ export const DepositTemplate = () => {
         return "primary";
     }
   };
-  const { transactionHistory } = useHistory();
 
   return (
     <>
@@ -87,8 +106,8 @@ export const DepositTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>Main Account</strong>
-                    <span>esoDF9faq...9dD7GtQvg</span>
+                    <strong>{currMainAcc?.name}</strong>
+                    <span>{currMainAcc?.address}</span>
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
@@ -104,7 +123,7 @@ export const DepositTemplate = () => {
                               <span>
                                 <Tokens.PDEX />
                               </span>
-                              Polkadex PDEX
+                              {selectedAsset?.name}
                             </div>
                             <div>
                               <span>
@@ -114,9 +133,14 @@ export const DepositTemplate = () => {
                           </S.DropdownHeader>
                         }>
                         <S.DropdownContent>
-                          <button type="button" onClick={undefined}>
-                            Polkadex PDEX
-                          </button>
+                          {assets.map((asset) => (
+                            <button
+                              key={asset.assetId}
+                              type="button"
+                              onClick={() => setSelectedAsset(asset)}>
+                              {asset.name}
+                            </button>
+                          ))}
                         </S.DropdownContent>
                       </Dropdown>
                     </S.SelectInputContainer>
@@ -137,7 +161,7 @@ export const DepositTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty)}
+                    disabled={false}
                     isFull>
                     Deposit
                   </Button>

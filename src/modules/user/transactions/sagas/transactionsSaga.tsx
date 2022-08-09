@@ -8,7 +8,6 @@ import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
 
 type TransactionQueryResult = {
   tt: string;
@@ -47,7 +46,7 @@ const fetchTransactions = async (
   const res: any = await API.graphql({
     query: queries.listTransactionsByMainAccount,
     variables: {
-      main_account: formatAddressToDefault(address),
+      main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
     },

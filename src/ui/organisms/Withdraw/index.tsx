@@ -13,7 +13,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectLinkedMainAccount,
-  selectMainAccount,
+  selectCurrentMainAccount,
   selectUserInfo,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";

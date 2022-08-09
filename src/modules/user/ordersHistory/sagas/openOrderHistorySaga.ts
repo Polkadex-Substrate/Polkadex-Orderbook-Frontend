@@ -9,7 +9,6 @@ import { ProxyAccount, selectUserInfo } from "../../profile";
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -50,7 +49,7 @@ export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
 const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
   const res: any = await API.graphql({
     query: queries.listOpenOrdersByMainAccount,
-    variables: { main_account: formatAddressToDefault(proxy_acc) },
+    variables: { main_account: proxy_acc },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOpenOrdersByMainAccount.items;
   const orders = ordersRaw.map((order) => ({

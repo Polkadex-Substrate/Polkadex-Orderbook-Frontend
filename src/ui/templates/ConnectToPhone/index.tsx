@@ -21,7 +21,7 @@ import {
   connectPhoneFetch,
   selectConnectPhoneSuccess,
   selectExtensionWalletAccounts,
-  selectMainAccount,
+  selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
 const HeaderBack = dynamic(
@@ -51,7 +51,7 @@ export const ConnectToPhone = () => {
     router?.query?.mnemonic as string
   );
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
   const showQrCode = connectPhoneSuccess || isMnemonicFromSignUp;

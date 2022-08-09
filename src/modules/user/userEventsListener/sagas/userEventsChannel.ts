@@ -10,7 +10,6 @@ import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 
 export function* userEventsChannelSaga(action: UserEventsFetch) {
@@ -18,7 +17,7 @@ export function* userEventsChannelSaga(action: UserEventsFetch) {
     const userInfo: ProxyAccount = yield select(selectUserInfo);
     const userAddress = userInfo.main_addr;
     if (userAddress) {
-      const channel = createUserEventsChannel(formatAddressToDefault(userAddress));
+      const channel = createUserEventsChannel(userAddress);
       while (true) {
         const action = yield take(channel);
         yield put(action);

@@ -1,11 +1,14 @@
 import keyring from "@polkadot/ui-keyring";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { notificationPush } from "../modules/user/notificationHandler";
 import {
   removeTradeAccountFromBrowser,
   selectBrowserTradeAccounts,
   selectCurrentTradeAccount,
   setCurrentTradeAccount,
+  tradeAccountsFetch,
 } from "../modules/user/tradeAccount";
 
 import { useReduxSelector } from "./useReduxSelector";
@@ -24,6 +27,12 @@ export const useAccountManager = () => {
   const removeFromDevice = (address: string) => {
     keyring.forgetAccount(address);
     dispatch(removeTradeAccountFromBrowser({ address }));
+    dispatch(
+      notificationPush({
+        message: { title: "Removed from device", description: address },
+        type: "SuccessAlert",
+      })
+    );
   };
 
   const handleSelectTradeAccount = (address: string) => {

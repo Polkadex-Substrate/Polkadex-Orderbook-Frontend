@@ -18,7 +18,7 @@ import { useAccountManager } from "@polkadex/orderbook-hooks";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const { tradingAccounts, handleSelectTradeAccount } = useAccountManager();
+  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -46,7 +46,7 @@ export const AccountManagerTemplate = () => {
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
         {remove.isRemoveDevice ? (
-          <RemoveFromDevice handleClose={handleClose} />
+          <RemoveFromDevice handleClose={removeFromDevice} />
         ) : (
           <RemoveFromBlockchain handleClose={handleClose} />
         )}
@@ -73,6 +73,9 @@ export const AccountManagerTemplate = () => {
                 </div>
               </S.TitleBalance>
               <S.TitleActions>
+                <Link href="/linkAccount">
+                  <a>Select Main Account</a>
+                </Link>
                 <Link href="/deposit/PDEX">
                   <a>Deposit</a>
                 </Link>

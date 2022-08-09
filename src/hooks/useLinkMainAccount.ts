@@ -5,7 +5,7 @@ import {
   MainAccount,
   registerMainAccountFetch,
   selectExtensionWalletAccounts,
-  selectMainAccount,
+  selectCurrentMainAccount,
   setMainAccountFetch,
 } from "../modules/user/mainAccount";
 
@@ -15,7 +15,7 @@ import { useReduxSelector } from "./useReduxSelector";
 export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const currentMainAccount = useReduxSelector(selectMainAccount);
+  const currentMainAccount = useReduxSelector(selectCurrentMainAccount);
   const { mnemoicString } = useMnemonic();
   const handleSelectMainAccount = (address: string) => {
     dispatch(setMainAccountFetch(mainAccounts.find((acc) => acc.address === address)));

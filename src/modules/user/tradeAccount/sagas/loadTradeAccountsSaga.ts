@@ -1,12 +1,10 @@
 import { call, put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
-import { API } from "aws-amplify";
 
 import { sendError } from "../../..";
-import { tradeAccountsData, InjectedAccount } from "../actions";
-import * as queries from "../../../../graphql/queries";
+import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actions";
 
-export function* loadProxyAccountsSaga() {
+export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   try {
     const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
     // TODO:
