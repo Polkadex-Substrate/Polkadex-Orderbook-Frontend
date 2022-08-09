@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -38,12 +38,25 @@ export const DepositTemplate = () => {
   const { transactionHistory } = useHistory();
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
-  const [selectedAsset, setSelectedAsset] = useState(null);
+
+  const defaultValue = useMemo(
+    () =>
+      assets?.length
+        ? assets?.find((item) => item.symbol === router?.query?.id)
+        : {
+            name: "TEST PDEX",
+            symbol: "PDEX",
+            assetId: "-1",
+          },
+    [assets, router.query.id]
+  );
+
+  const [selectedAsset, setSelectedAsset] = useState(defaultValue);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
-      asset: null,
+      asset: defaultValue,
     },
     // TODO: re-add the validations
     validationSchema: withdrawValidations,
@@ -60,8 +73,6 @@ export const DepositTemplate = () => {
       );
     },
   });
-
-  console.log("Selected Token id via url:", router.query.id);
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {

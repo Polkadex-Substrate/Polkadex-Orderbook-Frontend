@@ -88,7 +88,7 @@ export const AccountManagerTemplate = () => {
                       </S.SelectAccount>
                     }>
                     <S.MyDropdownContent>
-                      {mainAccounts.map((account) => {
+                      {mainAccounts?.map((account) => {
                         const shortAddress =
                           account?.address?.slice(0, 10) +
                           "..." +
