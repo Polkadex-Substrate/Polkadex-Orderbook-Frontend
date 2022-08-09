@@ -108,9 +108,6 @@ export const AccountManagerTemplate = () => {
                 </S.SelectInputContainer>
               </S.TitleBalance>
               <S.TitleActions>
-                <Link href="/linkAccount">
-                  <a>Select Main Account</a>
-                </Link>
                 <Link href="/deposit/PDEX">
                   <a>Deposit</a>
                 </Link>
