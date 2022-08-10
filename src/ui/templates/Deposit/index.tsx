@@ -123,7 +123,7 @@ export const DepositTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>{currMainAcc?.name}</strong>
+                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
                     <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>

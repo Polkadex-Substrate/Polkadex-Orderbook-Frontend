@@ -123,12 +123,14 @@ export const ContainerProfile = styled.div`
   gap: 1rem;
 `;
 
-export const Notifications = styled.div<{ isActive?: boolean }>`
+export const Notifications = styled.div`
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+`;
+export const NotificationsWrapper = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    position: relative;
-    width: 1.8rem;
-    height: 1.8rem;
-    cursor: pointer;
     ${isActive &&
     css`
       div {
@@ -143,6 +145,7 @@ export const Notifications = styled.div<{ isActive?: boolean }>`
     `}
   `}
 `;
+
 export const Profile = styled.div`
   cursor: pointer;
 `;
