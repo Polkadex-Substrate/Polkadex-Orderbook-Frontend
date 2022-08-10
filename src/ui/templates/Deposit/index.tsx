@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -39,6 +39,16 @@ export const DepositTemplate = () => {
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const [selectedAsset, setSelectedAsset] = useState(null);
+  const routedAsset = router.query.id as string;
+
+  useEffect(() => {
+    const initialAsset = assets.find(
+      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+    );
+    if (initialAsset) {
+      setSelectedAsset(initialAsset);
+    }
+  }, [assets, routedAsset]);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -60,8 +70,6 @@ export const DepositTemplate = () => {
       );
     },
   });
-
-  console.log("Selected Token id via url:", router.query.id);
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {

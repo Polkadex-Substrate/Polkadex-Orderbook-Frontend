@@ -6,6 +6,8 @@ import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
+import { selectCurrentMainAccount } from "../../mainAccount";
+import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
@@ -20,9 +22,21 @@ type TransactionQueryResult = {
 
 export function* transactionsSaga(action: TransactionsFetch) {
   try {
-    const { main_addr } = yield select(selectUserInfo);
-    const transactions = yield call(fetchTransactions, main_addr, 3, 10);
-    yield put(transactionsData(transactions));
+    const { address } = yield select(selectCurrentMainAccount);
+    if (address) {
+      const transactions = yield call(fetchTransactions, address, 3, 10);
+      yield put(transactionsData(transactions));
+    } else {
+      yield put(
+        notificationPush({
+          message: {
+            title: "Main account not selelected",
+            description: "Please select the main account from account manager page",
+          },
+          type: "ErrorAlert",
+        })
+      );
+    }
   } catch (error) {
     console.error(error);
     yield put(

@@ -6,7 +6,10 @@ import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actio
 
 export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   try {
+    debugger;
+    yield call(loadKeyring);
     const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
+    debugger;
     // TODO:
     // get all trade accounts from the blockchain and merge them with the browser accounts
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
@@ -20,20 +23,23 @@ export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   }
 }
 
-async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
+async function loadKeyring() {
   try {
     const { cryptoWaitReady } = await import("@polkadot/util-crypto");
     await cryptoWaitReady();
     keyring.loadAll({ ss58Format: 88, type: "sr25519" });
-    const allAccounts = keyring.getAccounts();
-    return allAccounts.map((account) => {
-      return {
-        address: account.address,
-        meta: account.meta,
-        type: account.publicKey,
-      };
-    });
   } catch (error) {
     console.log(error.message);
   }
+}
+
+async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
+  const allAccounts = keyring.getAccounts();
+  return allAccounts.map((account) => {
+    return {
+      address: account.address,
+      meta: account.meta,
+      type: account.publicKey,
+    };
+  });
 }
