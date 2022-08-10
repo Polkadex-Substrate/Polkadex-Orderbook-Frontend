@@ -8,7 +8,7 @@ export const selectUserLoggedIn = (state: RootState): boolean => {
   return state.user.profile.userData.user.address !== "";
 };
 export const selectHasUser = (state: RootState): boolean =>
-  !!state.user.profile.userData.user.address;
+  !!state.user.profile.userData.user?.address?.length;
 
 export const selectUserInfo = (state: RootState): ProxyAccount =>
   state.user.profile.userData.user;

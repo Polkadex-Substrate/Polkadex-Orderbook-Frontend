@@ -26,6 +26,7 @@ import {
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -38,7 +39,7 @@ export const DepositTemplate = () => {
   const { transactionHistory } = useHistory();
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
-  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const routedAsset = router.query.id as string;
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export const DepositTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
-      asset: null,
+      asset: selectedAsset,
     },
     // TODO: re-add the validations
     validationSchema: withdrawValidations,

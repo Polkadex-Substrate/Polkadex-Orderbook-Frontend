@@ -18,7 +18,9 @@ ${({ theme }) => css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
+  *:focus {
+    outline: none;
+  }
   html {
     font-size: 62.5%;
   }

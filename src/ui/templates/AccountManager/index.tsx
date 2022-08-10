@@ -14,7 +14,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { useAccountManager } from "@polkadex/orderbook-hooks";
+import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
@@ -41,6 +41,8 @@ export const AccountManagerTemplate = () => {
     });
 
   const isLinkedAccount = tradingAccounts?.length > 0;
+  const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
+    useLinkMainAccount();
 
   return (
     <>
@@ -59,23 +61,53 @@ export const AccountManagerTemplate = () => {
         <Menu handleChange={() => setState(!state)} />
         <S.Wrapper>
           <S.Title>
-            <h1>Acount Manager</h1>
+            <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
-                <div>
-                  <Icons.Wallet />
-                </div>
-                <div>
-                  <strong>Estimated Balance</strong>
-                  <span>
-                    25.622 PDEX <small> ~0.00 USD</small>
-                  </span>
-                </div>
+                <small>Polkadot.js account selected</small>
+                <S.SelectInputContainer>
+                  <Dropdown
+                    isClickable
+                    direction="bottom"
+                    header={
+                      <S.SelectAccount>
+                        <S.SelectAccountContainer>
+                          <Icons.Avatar />
+                        </S.SelectAccountContainer>
+                        <S.SelectAccountContainer>
+                          <div>
+                            <strong>
+                              {currentMainAccount?.name || "Select your main account"}
+                            </strong>
+                            <span>{shortWallet}</span>
+                          </div>
+                          <div>
+                            <Icons.ArrowBottom />
+                          </div>
+                        </S.SelectAccountContainer>
+                      </S.SelectAccount>
+                    }>
+                    <S.MyDropdownContent>
+                      {mainAccounts?.map((account) => {
+                        const shortAddress =
+                          account?.address?.slice(0, 10) +
+                          "..." +
+                          account?.address?.slice(account?.address?.length - 10);
+                        return (
+                          <button
+                            key={account.address}
+                            type="button"
+                            onClick={() => handleSelectMainAccount(account.address)}>
+                            {account.meta.name}
+                            <span>{shortAddress}</span>
+                          </button>
+                        );
+                      })}
+                    </S.MyDropdownContent>
+                  </Dropdown>
+                </S.SelectInputContainer>
               </S.TitleBalance>
               <S.TitleActions>
-                <Link href="/linkAccount">
-                  <a>Select Main Account</a>
-                </Link>
                 <Link href="/deposit/PDEX">
                   <a>Deposit</a>
                 </Link>
@@ -166,6 +198,8 @@ const Card = ({
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
+
+  const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
   return (
     <S.Card isActive={isUsing}>
       <Link href="/assets">
@@ -184,8 +218,7 @@ const Card = ({
                     <p ref={buttonRef}>Copy to clipboard</p>
                   </TooltipContent>
                 </Tooltip>
-
-                {address}
+                {shortAddress}
               </span>
             </S.CardHeaderContent>
             <S.CardHeaderIcon>

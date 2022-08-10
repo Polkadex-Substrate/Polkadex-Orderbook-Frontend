@@ -40,7 +40,7 @@ export const Dropdown = ({
   const { isOpen, setIsOpen } = useDropdown({
     el: dropdownRef,
     initialState: false,
-    isClickable: isClickable,
+    isClickable: false,
   });
 
   const toogleDropdown = () => setIsOpen(!isOpen);

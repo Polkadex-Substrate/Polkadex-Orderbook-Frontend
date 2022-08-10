@@ -41,38 +41,13 @@ export const TitleWrapper = styled.div`
 export const TitleBalance = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
-    align-items: center;
-    div {
-      :first-child {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 3.5rem;
-        height: 3.5rem;
-        border: 1px solid ${theme.colors.secondaryBackground};
-        border-radius: 10rem;
-      }
-      :last-child {
-        strong {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-        }
-        strong,
-        small {
-          color: ${theme.colors.tertiaryText};
-          font-size: 1.4rem;
-        }
-        span {
-          font-size: 1.6rem;
-          font-weight: 500;
-        }
-      }
-    }
-    svg {
-      max-width: 1.5rem;
-      stroke: ${theme.colors.tertiaryText};
+    flex-direction: column;
+    user-select: none;
+    small {
+      display: block;
+      color: ${theme.colors.tertiaryText};
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
     }
   `}
 `;
@@ -359,6 +334,101 @@ export const LinkAccountColumnWrapper = styled.div`
             stroke: ${theme.colors.tertiaryText};
           }
         }
+      }
+    }
+  `}
+`;
+
+export const SelectInput = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    span {
+      display: block;
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const SelectInputContainer = styled.div`
+  ${({ theme }) => css`
+    input {
+      width: 100%;
+      display: block;
+      color: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const SelectAccount = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+`;
+export const SelectAccountContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    :first-child {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 0.8rem;
+      padding: 0.8rem;
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :last-child {
+      flex: 1;
+      justify-content: space-between;
+      strong {
+        font-size: 1.4rem;
+        font-weight: 500;
+      }
+      span {
+        color: ${theme.colors.tertiaryText};
+      }
+      strong,
+      span {
+        display: block;
+      }
+      div:last-child {
+        width: 1.1rem;
+        align-self: flex-end;
+        svg {
+          fill: ${theme.colors.tertiaryText};
+          stroke: ${theme.colors.tertiaryText};
+        }
+      }
+    }
+  `}
+`;
+
+export const MyDropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.8rem;
+    button {
+      white-space: nowrap;
+      font-size: 1.3rem;
+      padding: 1.2rem;
+      border-radius: 0.8rem;
+      transition: background 0.5s ease-in;
+      text-align: left;
+      width: 100%;
+      span {
+        display: inline-block;
+        margin-left: 0.4rem;
+        color: ${theme.colors.tertiaryText};
+      }
+      :first-child {
+        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      }
+      :hover {
+        background: ${theme.colors.secondaryBackground};
       }
     }
   `}

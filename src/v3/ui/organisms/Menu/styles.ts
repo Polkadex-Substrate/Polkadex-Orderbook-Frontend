@@ -128,6 +128,7 @@ export const Notifications = styled.div<{ isActive?: boolean }>`
     position: relative;
     width: 1.8rem;
     height: 1.8rem;
+    cursor: pointer;
     ${isActive &&
     css`
       div {
@@ -142,4 +143,6 @@ export const Notifications = styled.div<{ isActive?: boolean }>`
     `}
   `}
 `;
-export const Profile = styled.div``;
+export const Profile = styled.div`
+  cursor: pointer;
+`;

@@ -120,8 +120,17 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <Popover>
             <Popover.Trigger>
               <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
-                <Icons.Notifications />
-                <div />
+                <Tooltip>
+                  <TooltipHeader>
+                    <>
+                      <Icons.Notifications />
+                      <div />
+                    </>
+                  </TooltipHeader>
+                  <TooltipContent position="left">
+                    <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
+                  </TooltipContent>
+                </Tooltip>
               </S.Notifications>
             </Popover.Trigger>
             <Popover.Content>
@@ -131,7 +140,14 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <Popover>
             <Popover.Trigger>
               <S.Profile>
-                <Icon name="Avatar" color="text" size="extraMedium" />
+                <Tooltip>
+                  <TooltipHeader>
+                    <Icon name="Avatar" color="text" size="large" />
+                  </TooltipHeader>
+                  <TooltipContent position="left">
+                    <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
+                  </TooltipContent>
+                </Tooltip>
               </S.Profile>
             </Popover.Trigger>
             <Popover.Content>

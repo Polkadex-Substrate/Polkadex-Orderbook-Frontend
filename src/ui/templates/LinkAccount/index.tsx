@@ -19,8 +19,13 @@ export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const { mainAccounts, handleSelectMainAccount, currentMainAccount, registerMainAccount } =
-    useLinkMainAccount();
+  const {
+    mainAccounts,
+    handleSelectMainAccount,
+    currentMainAccount,
+    shortWallet,
+    registerMainAccount,
+  } = useLinkMainAccount();
 
   const { handleSubmit, isValid, dirty } = useFormik({
     initialValues: {},
@@ -71,8 +76,10 @@ export const LinkAccountTemplate = () => {
                           </S.SelectAccountContainer>
                           <S.SelectAccountContainer>
                             <div>
-                              <strong>{currentMainAccount?.name}</strong>
-                              <span>{currentMainAccount?.address}</span>
+                              <strong>
+                                {currentMainAccount?.name || "Select your main account"}
+                              </strong>
+                              <span>{shortWallet}</span>
                             </div>
                             <div>
                               <Icons.ArrowBottom />
@@ -82,13 +89,17 @@ export const LinkAccountTemplate = () => {
                       }>
                       <S.DropdownContent>
                         {mainAccounts.map((account) => {
+                          const shortAddress =
+                            account?.address?.slice(0, 10) +
+                            "..." +
+                            account?.address?.slice(account?.address?.length - 10);
                           return (
                             <button
                               key={account.address}
                               type="button"
                               onClick={() => handleSelectMainAccount(account.address)}>
                               {account.meta.name}
-                              <span>{account.address}</span>
+                              <span>{shortAddress}</span>
                             </button>
                           );
                         })}
