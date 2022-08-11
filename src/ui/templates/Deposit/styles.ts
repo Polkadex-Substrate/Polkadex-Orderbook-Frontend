@@ -142,16 +142,18 @@ export const Available = styled.span`
     }
   `}
 `;
+export const SelectAccountAvatar = styled.div``;
 
 export const SelectAccount = styled.div`
   ${({ theme }) => css`
     display: flex;
     gap: 1rem;
     align-items: center;
+    margin-bottom: 2rem;
     div {
       :first-child {
-        width: 3.5rem;
-        height: 3.5rem;
+        min-width: 3.5rem;
+        min-height: 3.5rem;
         border-radius: 0.8rem;
         padding: 0.8rem;
         background: ${theme.colors.secondaryBackgroundOpacity};

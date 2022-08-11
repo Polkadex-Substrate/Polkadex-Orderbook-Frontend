@@ -119,13 +119,14 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         <S.ContainerProfile>
           <Popover>
             <Popover.Trigger>
-              <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
+              <S.Notifications>
                 <Tooltip>
                   <TooltipHeader>
-                    <>
+                    <S.NotificationsWrapper
+                      isActive={!!notifications?.find((value) => !value.isRead)}>
                       <Icons.Notifications />
                       <div />
-                    </>
+                    </S.NotificationsWrapper>
                   </TooltipHeader>
                   <TooltipContent position="left">
                     <p style={{ whiteSpace: "nowrap" }}>Notifications</p>

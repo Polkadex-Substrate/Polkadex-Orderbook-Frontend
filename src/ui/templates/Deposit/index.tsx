@@ -35,14 +35,21 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
+
+  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const assets = useReduxSelector(selectAllAssets);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { transactionHistory } = useHistory();
-  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
-  const assets = useReduxSelector(selectAllAssets);
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
+
+  const shortAddress =
+    currMainAcc?.address?.slice(0, 15) +
+    "..." +
+    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
 
   useEffect(() => {
     const initialAsset = assets.find(
@@ -117,8 +124,8 @@ export const DepositTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>{currMainAcc?.name}</strong>
-                    <span>{currMainAcc?.address}</span>
+                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                    <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
