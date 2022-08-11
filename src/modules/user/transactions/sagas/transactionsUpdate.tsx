@@ -1,10 +1,17 @@
 import { put } from "redux-saga/effects";
 
-import { alertPush, transactionsUpdateEventData, TransactionsUpdateEventData } from "../../..";
+import {
+  alertPush,
+  Transaction,
+  transactionsUpdateEventData,
+  TransactionsUpdateEventData,
+  TransactionUpdatePayload,
+} from "../../..";
 
 export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
   try {
-    yield put(transactionsUpdateEventData(action.payload));
+    const data = formatTransactionData(action.payload);
+    yield put(transactionsUpdateEventData(data));
   } catch (error) {
     yield put(
       alertPush({
@@ -17,3 +24,11 @@ export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
     );
   }
 }
+
+const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
+  return {
+    ...data,
+    asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+    time: new Date().toISOString(),
+  };
+};

@@ -25,7 +25,6 @@ export const useAccountManager = () => {
     name: acc.meta.name,
     isActive: acc.address === currentTradeAddr.address,
   }));
-  debugger;
   useEffect(() => {
     dispatch(tradeAccountsFetch());
   }, [currentMainAcc, dispatch]);

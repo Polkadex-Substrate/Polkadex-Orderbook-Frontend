@@ -27,6 +27,7 @@ import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -40,6 +41,7 @@ export const DepositTemplate = () => {
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
 
   useEffect(() => {
@@ -154,7 +156,8 @@ export const DepositTemplate = () => {
                       </Dropdown>
                     </S.SelectInputContainer>
                     <S.Available>
-                      Avlb <strong>120PDEX</strong>
+                      Available{" "}
+                      <strong>{onChainBalanceLoading ? "Loading..." : onChainBalance}</strong>
                     </S.Available>
                   </S.SelectInput>
                   <InputLine

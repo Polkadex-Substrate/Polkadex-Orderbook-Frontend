@@ -2,22 +2,21 @@ import { put, select, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { ProxyAccount, selectUserInfo } from "../../profile";
 import { UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
+import { selectCurrentMainAccount } from "../../mainAccount";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 
 export function* userEventsChannelSaga(action: UserEventsFetch) {
   try {
-    const userInfo: ProxyAccount = yield select(selectUserInfo);
-    const userAddress = userInfo.main_addr;
-    if (userAddress) {
-      const channel = createUserEventsChannel(userAddress);
+    const { address } = yield select(selectCurrentMainAccount);
+    if (address) {
+      const channel = createUserEventsChannel(address);
       while (true) {
         const action = yield take(channel);
         yield put(action);
@@ -56,7 +55,9 @@ function createUserEventsChannel(address: string) {
 }
 
 function createActionFromUserEvent(eventData: any) {
+  console.info("User Event: ", eventData);
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
+  debugger;
   if (isKeyPresentInObject(data, "SetBalance")) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {

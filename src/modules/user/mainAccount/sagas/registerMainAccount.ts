@@ -34,7 +34,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       }
     }
   } catch (error) {
-    keyring.forgetAddress(tradeAddr);
+    keyring.forgetAccount(tradeAddr);
     yield put(
       notificationPush({
         message: { title: "Cannot Register Account !", description: error.message },

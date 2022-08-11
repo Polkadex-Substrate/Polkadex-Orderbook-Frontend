@@ -9,9 +9,9 @@ import {
 export interface Transaction {
   event_id?: number;
   amount: string;
-  asset: string;
+  asset: "PDEX" | string;
   fee: string;
-  main_account: string;
+  main_account?: string;
   time: string;
   status: "PENDING" | "CONFIRMED" | "FAILED";
   txn_type: "DEPOSIT" | "WITHDRAW";
