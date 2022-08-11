@@ -44,7 +44,7 @@ export interface SetMainAccountFetch {
 
 export interface SetMainAccountData {
   type: typeof MAIN_ACCOUNT_SET_DATA;
-  payload: MainAccount;
+  payload: { user: MainAccount; tradeAccounts: string[] };
 }
 export interface SetMainAccountError {
   type: typeof MAIN_ACCOUNT_SET_ERROR;

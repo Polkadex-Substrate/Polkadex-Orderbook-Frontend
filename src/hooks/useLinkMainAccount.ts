@@ -23,7 +23,7 @@ export const useLinkMainAccount = () => {
   };
 
   const registerMainAccount = (acc: MainAccount) => {
-    const tradeAcc = keyring.addUri(mnemoicString, "", { name: "trade-account-1" });
+    const tradeAcc = keyring.addUri(mnemoicString, null, { name: "trade-account" });
     dispatch(
       registerMainAccountFetch({ mainAccount: acc, tradeAddress: tradeAcc.pair.address })
     );

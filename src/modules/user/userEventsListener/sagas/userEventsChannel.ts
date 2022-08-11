@@ -8,6 +8,7 @@ import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
 import { selectCurrentMainAccount } from "../../mainAccount";
+import { notificationPush } from "../../notificationHandler";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
@@ -57,12 +58,19 @@ function createUserEventsChannel(address: string) {
 function createActionFromUserEvent(eventData: any) {
   console.info("User Event: ", eventData);
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
-  debugger;
   if (isKeyPresentInObject(data, "SetBalance")) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {
     return transactionsUpdateEvent(data.SetTransaction);
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
-  }
+  } else if (isKeyPresentInObject(data, "RegisterAccount")) {
+    return notificationPush({
+      type: "SuccessAlert",
+      message: {
+        title: "Account registered",
+        description: "Your account has been registered",
+      },
+    });
+  } else throw new Error("Unknown event type", eventData);
 }

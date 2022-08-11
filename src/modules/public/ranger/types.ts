@@ -27,7 +27,7 @@ export const orderbookTypes = {
     order_type: "OrderType",
     qty: "u128",
     price: "u128",
-    nonce: "u32",
+    timestamp: "i64",
   },
   CancelOrderPayload: { id: "String" },
   TradingPair: {
