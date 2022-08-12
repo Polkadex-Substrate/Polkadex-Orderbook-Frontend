@@ -11,6 +11,7 @@ import {
   OrderExecuteFetch,
   selectRangerApi,
   selectCurrentTradeAccount,
+  notificationPush,
 } from "../../..";
 
 import * as mutation from "./../../../../graphql/mutations";
@@ -56,13 +57,15 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   } catch (error) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
+    const msg = error?.errors[0]?.message;
     yield put(
-      sendError({
-        error,
-        processingType: "alert",
-        extraOptions: {
-          actionError: orderExecuteError,
+      notificationPush({
+        type: "ErrorAlert",
+        message: {
+          title: "Order failed",
+          description: msg ? JSON.parse(msg)?.errorMessage?.message : error.message,
         },
+        time: new Date().getTime(),
       })
     );
   }
