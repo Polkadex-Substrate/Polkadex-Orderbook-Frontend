@@ -10,6 +10,7 @@ import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { Utils } from "@polkadex/web-helpers";
 
 type TransactionQueryResult = {
   tt: string;
@@ -30,7 +31,7 @@ export function* transactionsSaga(action: TransactionsFetch) {
       yield put(
         notificationPush({
           message: {
-            title: "Main account not selelected",
+            title: "Main account not selected",
             description: "Please select the main account from account manager page",
           },
           type: "ErrorAlert",
@@ -67,11 +68,11 @@ const fetchTransactions = async (
   });
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
-    amount: item.q,
+    amount: Utils.decimals.formatToString(item.q),
     asset: item.a,
-    fee: item.fee,
+    fee: Utils.decimals.formatToString(item.fee),
     main_account: address,
-    time: item.t,
+    time: new Date(Number(item.t)).toISOString(),
     status: item.st as Transaction["status"],
     txn_type: item.tt as Transaction["txn_type"],
   }));

@@ -32,7 +32,6 @@ export function useOrderbook() {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const lastTrade = useReduxSelector(selectLastTradePrice);
-
   const bidsSorted = sortArrayDescending(bids);
   const asksSorted = sortArrayDescending(asks);
 
@@ -57,7 +56,7 @@ export function useOrderbook() {
     filterState,
     sizeState,
     handleChange,
-    handleAction
+    handleAction,
   };
 }
 function sortArrayDescending(arr: string[][]) {

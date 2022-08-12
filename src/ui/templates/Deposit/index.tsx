@@ -25,7 +25,11 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
-import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import {
+  isAssetPDEX,
+  selectAllAssets,
+  selectGetAsset,
+} from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
@@ -39,7 +43,7 @@ export const DepositTemplate = () => {
 
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
-
+  const getAsset = useReduxSelector(selectGetAsset);
   const dispatch = useDispatch();
   const router = useRouter();
   const { transactionHistory } = useHistory();
@@ -207,7 +211,7 @@ export const DepositTemplate = () => {
                           <S.HeaderColumn>Amount</S.HeaderColumn>
                         </Table.Column>
                         <Table.Column>
-                          <S.HeaderColumn>Transaction ID</S.HeaderColumn>
+                          <S.HeaderColumn>Fee</S.HeaderColumn>
                         </Table.Column>
                       </Table.Header>
                       <Table.Body>
@@ -215,7 +219,7 @@ export const DepositTemplate = () => {
                           <Table.Row key={item.event_id}>
                             <Table.Cell>
                               <S.Cell>
-                                <span>{item.asset}</span>
+                                <span>{getAsset(item.asset)?.symbol}</span>
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
@@ -232,13 +236,13 @@ export const DepositTemplate = () => {
                             </Table.Cell>
                             <Table.Cell>
                               <S.Cell>
-                                <span>
-                                  {item.amount} <small>$0.00</small>
-                                </span>
+                                <span>{item.amount}</span>
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
-                              <Copy copyData={item.main_account} />
+                              <S.Cell>
+                                <span>{item.fee}</span>
+                              </S.Cell>
                             </Table.Cell>
                           </Table.Row>
                         ))}

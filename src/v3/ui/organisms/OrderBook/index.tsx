@@ -5,9 +5,10 @@ import Heading from "../../molecules/Heading";
 import OrderBookIcon from "../../molecules/OrderBookIcon";
 import OrderBookTable from "../../molecules/OrderBookTable";
 import { DropdownContent, DropdownHeader } from "../../molecules";
-import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
+
 import * as S from "./styles";
 
+import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 
 const OrderBook = () => {

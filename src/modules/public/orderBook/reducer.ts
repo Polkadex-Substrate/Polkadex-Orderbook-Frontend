@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { DepthActions, OrderBookActions } from "./actions";
 import {
   DEPTH_DATA,
@@ -103,7 +105,7 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
           book = deleteFromBook(book, item.price, item.side.toLowerCase());
         } else book = replaceOrAddToBook(book, item.price, item.qty, item.side.toLowerCase());
       });
-      return { ...state, asks: [...book.ask], bids: [...book.bid] };
+      return { ...state, asks: _.cloneDeep(book.ask), bids: _.cloneDeep(book.bid) };
     }
     default:
       return state;

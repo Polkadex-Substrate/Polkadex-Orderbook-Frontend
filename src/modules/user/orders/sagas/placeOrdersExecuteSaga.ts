@@ -51,6 +51,18 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       const signature = signPayload(api, keyringPair, order);
       const res = yield call(() => executePlaceOrder([order, signature]));
       console.info("placed order: ", res);
+      if (res.data.place_order) {
+        yield put(
+          notificationPush({
+            type: "SuccessAlert",
+            message: {
+              title: "Order placed",
+              description: `OrderId: ${res.data.place_order}`,
+            },
+            time: new Date().getTime(),
+          })
+        );
+      }
       yield put(orderExecuteData());
       yield put(orderExecuteDataDelete());
     }

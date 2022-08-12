@@ -8,6 +8,8 @@ import {
   TransactionUpdatePayload,
 } from "../../..";
 
+import { Utils } from "@polkadex/web-helpers";
+
 export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
   try {
     const data = formatTransactionData(action.payload);
@@ -28,6 +30,8 @@ export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
 const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
   return {
     ...data,
+    fee: Utils.decimals.formatToString(data.fee),
+    amount: Utils.decimals.formatToString(data.amount),
     asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
     time: new Date().toISOString(),
   };
