@@ -5,6 +5,7 @@ import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
 import {
+  selectCurrentTradeAccount,
   selectUserInfo,
   selectUserSession,
   sendError,
@@ -21,7 +22,7 @@ type TradesQueryResult = {
 
 export function* fetchTradesSaga() {
   try {
-    const { address } = yield select(selectUserInfo);
+    const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;

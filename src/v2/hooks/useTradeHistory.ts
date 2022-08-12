@@ -8,6 +8,7 @@ import {
   userTradesFetch,
   selectTradesLoading,
   selectUserSession,
+  selectHasUser,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
@@ -23,7 +24,7 @@ export function useTradeHistory(filters: Ifilters) {
   }, [list]);
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userLoggedIn = useReduxSelector(selectHasUser);
   const userSession = useReduxSelector(selectUserSession);
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
@@ -42,7 +43,7 @@ export function useTradeHistory(filters: Ifilters) {
     } else if (filters?.hiddenPairs) {
       setUpdatedTradeList(
         list.filter((data) => {
-          return data.side.toUpperCase() != "ASK" && data.side.toUpperCase() != "BID";
+          return data.side.toUpperCase() !== "ASK" && data.side.toUpperCase() !== "BID";
         })
       );
     } else {

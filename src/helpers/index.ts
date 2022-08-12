@@ -26,3 +26,5 @@ export * from "./signMessage";
 export * from "./periodMinutesToString";
 export * from "./periodStringToMinutes";
 export * from "./types";
+export * from "./Utils";
+export * from "./updateBook";

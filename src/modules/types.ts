@@ -22,8 +22,8 @@ export interface OrderCommon {
   side: string;
   order_type: string;
   status: string;
-  price: string;
-  qty: string;
+  price: number;
+  qty: number;
   avg_filled_price: string;
   filled_quantity: string;
   fee: string;

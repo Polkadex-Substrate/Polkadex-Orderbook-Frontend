@@ -3,7 +3,7 @@ import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
-import { alertPush } from "../../../";
+import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
@@ -13,7 +13,7 @@ import { OrderCommon } from "src/modules/types";
 
 export function* ordersHistorySaga() {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
