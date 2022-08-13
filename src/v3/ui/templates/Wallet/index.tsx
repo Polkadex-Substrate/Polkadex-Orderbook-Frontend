@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, MouseEvent } from "react";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 
 import * as S from "./styles";
@@ -10,15 +9,9 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
-const Deposit = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Deposit"), {
-  ssr: false,
-});
-const Withdraw = dynamic(() => import("@polkadex/orderbook/ui/organisms/Withdraw"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import Deposit from "@polkadex/orderbook/v3/ui/organisms/Deposit";
+import Withdraw from "@polkadex/orderbook/ui/organisms/Withdraw";
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -45,7 +38,7 @@ export const WalletTemplate = () => {
       <S.Wrapper>
         <Menu isWallet />
         <S.Main>
-          <WalletContent hasMargin title="Tokens" locked={false} hasLink={false} isWallet />
+          <WalletContent />
           <Tabs>
             <S.Content>
               <S.ContainerWrapper>

@@ -1,16 +1,14 @@
-import { ConnectToPhone } from "@polkadex/orderbook-ui/templates";
+import dynamic from "next/dynamic";
 
-const SignUp = () => (
-  <>
-    <ConnectToPhone />
-    <style jsx global>
-      {`
-        body {
-          overflow-y: scroll;
-        }
-      `}
-    </style>
-  </>
+const ConnectToPhone = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/templates/ConnectToPhone").then(
+      (mod) => mod.ConnectToPhone
+    ),
+  {
+    ssr: false,
+  }
 );
+const SignUp = () => <ConnectToPhone />;
 
 export default SignUp;

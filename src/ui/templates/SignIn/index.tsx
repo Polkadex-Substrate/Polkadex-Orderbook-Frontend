@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
@@ -10,9 +9,7 @@ import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignIn } from "@polkadex/orderbook-hooks";
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const SignInTemplate = () => {
   const { signIn } = useSignIn();

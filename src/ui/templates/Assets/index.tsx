@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
@@ -16,9 +15,8 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+
 export const AssetsTemplate = () => {
   const [state, setState] = useState(false);
 

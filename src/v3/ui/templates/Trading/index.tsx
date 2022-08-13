@@ -20,39 +20,15 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { Popup } from "@polkadex/orderbook-ui/molecules";
-import { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
-import { TransactionsSkeleton } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
-import { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
-const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
-  ssr: false,
-});
-
-const Graph = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Graph"), {
-  ssr: false,
-});
-
-const MarketOrder = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/MarketOrder"), {
-  ssr: false,
-});
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
-
-const Navbar = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Navbar"), {
-  ssr: false,
-});
-
-const Transactions = dynamic(
-  () => import("@polkadex/orderbook/v3/ui/organisms/Transactions"),
-  {
-    ssr: false,
-  }
-);
-
-const RecentTrades = dynamic(() => import("@orderbook/v2/ui/organisms/RecentTrades"), {
-  ssr: false,
-});
+import Markets, { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
+import Transactions, {
+  TransactionsSkeleton,
+} from "@polkadex/orderbook/v3/ui/organisms/Transactions";
+import RecentTrades, { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
+import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
+import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
 export function Trading() {
   const [state, setState] = useState(false);

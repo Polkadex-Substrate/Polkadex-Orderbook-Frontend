@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import { useFormik } from "formik";
@@ -10,10 +9,7 @@ import { Button, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
