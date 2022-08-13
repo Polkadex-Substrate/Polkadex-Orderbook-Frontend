@@ -2,7 +2,7 @@ import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
-import { ProxyAccount } from "../../..";
+import { ProxyAccount, selectCurrentMainAccount } from "../../..";
 import { balancesData, BalancesFetch, BalanceBase } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
@@ -10,8 +10,10 @@ import { selectUserInfo } from "../../profile";
 import {
   selectAssetsFetchSuccess,
   selectAssetIdMap,
+  isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { Utils } from "@polkadex/web-helpers";
 
 type BalanceQueryResult = {
   a: string;
@@ -22,14 +24,15 @@ type BalanceQueryResult = {
 
 export function* balancesSaga(balancesFetch: BalancesFetch) {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentMainAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (account.address && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(account.main_addr));
+      const balances = yield call(() => fetchbalancesAsync(account.address));
       const list = balances.map((balance: IBalanceFromDb) => {
-        const asset =
-          balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
+        const asset = isAssetPDEX(balance.asset_type)
+          ? POLKADEX_ASSET
+          : assetMap[balance.asset_type];
         return {
           assetId: asset.assetId,
           name: asset.name,
@@ -70,9 +73,9 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
   const balances = balancesRaw.map((val) => {
     return {
       asset_type: val.a,
-      reserved_balance: val.r,
-      free_balance: val.f,
-      pending_withdrawal: val.p,
+      reserved_balance: Utils.decimals.formatToString(val.r),
+      free_balance: Utils.decimals.formatToString(val.f),
+      pending_withdrawal: Utils.decimals.formatToString(val.p),
     };
   });
   return balances;

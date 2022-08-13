@@ -17,7 +17,7 @@ import {
 export interface MainAccount {
   account: any;
   address: string;
-  injector: any;
+  injector?: any;
   name: string;
 }
 export interface ExtensionWalletFetchPayload {

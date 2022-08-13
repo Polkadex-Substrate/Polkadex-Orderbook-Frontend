@@ -5,10 +5,12 @@ import { SetOrder } from "../types";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { Utils } from "@polkadex/web-helpers";
 
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
     const order = processOrderData(action.payload);
+    debugger;
     yield put(orderUpdateEventData(order));
   } catch (error) {
     yield put(
@@ -33,10 +35,10 @@ function processOrderData(eventData: SetOrder): OrderCommon {
     side: eventData.side,
     order_type: eventData.order_type,
     status: eventData.status,
-    price: eventData.price.toString(),
-    qty: eventData.qty.toString(),
-    avg_filled_price: eventData.avg_filled_price.toString(),
-    filled_quantity: eventData.filled_quantity.toString(),
-    fee: eventData.fee.toString(),
+    price: Utils.decimals.formatToNumber(eventData.price),
+    qty: Utils.decimals.formatToNumber(eventData.qty),
+    avg_filled_price: Utils.decimals.formatToString(eventData.avg_filled_price),
+    filled_quantity: Utils.decimals.formatToString(eventData.filled_quantity),
+    fee: Utils.decimals.formatToString(eventData.fee),
   };
 }

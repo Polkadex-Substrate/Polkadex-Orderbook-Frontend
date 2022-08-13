@@ -9,6 +9,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
+  SET_CURRENT_TRADE_ACCOUNT_DATA,
 } from "./constants";
 
 export interface InjectedAccount {
@@ -41,6 +42,10 @@ export interface SetCurrentTradeAccount {
   payload: InjectedAccount;
 }
 
+export interface SetCurrentTradeAccountData {
+  type: typeof SET_CURRENT_TRADE_ACCOUNT_DATA;
+  payload: InjectedAccount;
+}
 export interface RegisterTradeAccountFetch {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_FETCH;
   payload: {
@@ -67,7 +72,7 @@ export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
   | TradeAccountsData
-  | SetCurrentTradeAccount
+  | SetCurrentTradeAccountData
   | RegisterTradeAccountFetch
   | RegisterTradeAccountData
   | RegisterTradeAccountError
@@ -91,6 +96,13 @@ export const setCurrentTradeAccount = (
   payload: SetCurrentTradeAccount["payload"]
 ): SetCurrentTradeAccount => ({
   type: SET_CURRENT_TRADE_ACCOUNT,
+  payload,
+});
+
+export const setCurrentTradeAccountData = (
+  payload: SetCurrentTradeAccountData["payload"]
+): SetCurrentTradeAccountData => ({
+  type: SET_CURRENT_TRADE_ACCOUNT_DATA,
   payload,
 });
 

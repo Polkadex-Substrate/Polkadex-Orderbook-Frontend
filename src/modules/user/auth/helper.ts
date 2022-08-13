@@ -3,7 +3,7 @@ import { API } from "aws-amplify";
 
 import { findUserByProxyAccount } from "@polkadex/orderbook/graphql/queries";
 
-export const getMainAddrFromUserByProxyAccountRes = (s: string) => {
+export const getMainAddrFromQueryRes = (s: string) => {
   /*
     eg of "s" := "{eid=1, hash_key=proxy-5CkD7azDTk52NyyU6XdcnhsnZ3as1p4zrPExmTNDiSSJwFYA, range_key=5DARJdE3HSJ9ecTWCtPGAWyw724jdAFCeFHiurnAS1Mwb65X}"
     here, item_type is the main_account address.
@@ -32,7 +32,7 @@ export const checkIfProxyAccountRegistered = async (address: string) => {
     throw new Error("This proxy account has not been registered yet!");
   }
   const queryResStr = res.data?.findUserByProxyAccount.items[0];
-  const main_addr = getMainAddrFromUserByProxyAccountRes(queryResStr);
+  const main_addr = getMainAddrFromQueryRes(queryResStr);
   if (!main_addr) {
     throw new Error("This proxy account has not been registered yet!");
   }

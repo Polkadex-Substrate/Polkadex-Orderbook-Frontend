@@ -8,6 +8,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
+  SET_CURRENT_TRADE_ACCOUNT_DATA,
 } from "./constants";
 
 export interface TradeAccountsState {
@@ -58,7 +59,7 @@ export const TradeAccountsReducer = (
         success: false,
         isFetching: true,
       };
-    case SET_CURRENT_TRADE_ACCOUNT:
+    case SET_CURRENT_TRADE_ACCOUNT_DATA:
       return {
         ...state,
         selectedAccount: action.payload,

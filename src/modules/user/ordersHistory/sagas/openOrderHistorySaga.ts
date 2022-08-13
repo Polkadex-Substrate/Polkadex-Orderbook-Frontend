@@ -57,7 +57,7 @@ const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
     main_account: proxy_acc,
     id: order.id,
     client_order_id: order.cid,
-    time: order.t,
+    time: new Date(Number(order.t)).toISOString(),
     m: order.m, // marketid
     side: order.s,
     order_type: order.ot,

@@ -18,23 +18,27 @@ export function* setMainAccountSaga({ payload }: SetMainAccountFetch) {
     const associatedTradeAccounts = yield call(fetchAssociatedTradeAccounts, payload.address);
     yield put(setMainAccountData({ user, tradeAccounts: associatedTradeAccounts }));
   } catch (error) {
-    console.error(error);
-    // yield put(
-    //   sendError({
-    //     error: error,
-    //     processingType: "alert",
-    //     // extraOptions: {
-    //     //   actionError: userError,
-    //     // },
-    //   })
-    // );
+    yield put(
+      sendError({
+        error: error,
+        processingType: "alert",
+        // extraOptions: {
+        //   actionError: userError,
+        // },
+      })
+    );
   }
 }
 
 async function fetchUserDataAsync(payload: SetMainAccountFetch["payload"]) {
-  const { web3FromAddress } = await import("@polkadot/extension-dapp");
-  const injector = await web3FromAddress(payload.address);
-  return { injector };
+  try {
+    const { web3FromAddress } = await import("@polkadot/extension-dapp");
+    const injector = await web3FromAddress(payload.address);
+    return { injector };
+  } catch (error) {
+    console.error(error);
+    return { injector: null };
+  }
 }
 
 async function fetchAssociatedTradeAccounts(main_account: string): Promise<string[] | null> {
