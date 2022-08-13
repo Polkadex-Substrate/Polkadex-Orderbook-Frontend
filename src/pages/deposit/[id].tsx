@@ -1,4 +1,11 @@
-import { DepositTemplate } from "@polkadex/orderbook-ui/templates";
+import dynamic from "next/dynamic";
+
+const DepositTemplate = dynamic(
+  () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
+  {
+    ssr: false,
+  }
+);
 
 const Deposit = () => <DepositTemplate />;
 

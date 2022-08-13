@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
@@ -32,10 +31,7 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
-
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);

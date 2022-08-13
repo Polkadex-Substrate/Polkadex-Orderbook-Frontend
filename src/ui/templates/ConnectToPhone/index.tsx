@@ -22,24 +22,15 @@ import {
   selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
-const HeaderBack = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.HeaderBack),
-  {
-    ssr: false,
-  }
-);
-
-const QrCode = dynamic(() => import("@polkadex/orderbook-ui/organisms/QrCode"), {
-  ssr: false,
-});
-const PaperWallet = dynamic(() => import("@polkadex/orderbook-ui/templates/PaperWallet"), {
-  ssr: false,
-});
+import QrCode from "@polkadex/orderbook-ui/organisms/QrCode";
+import { HeaderBack } from "@polkadex/orderbook-ui/organisms/Header";
+import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 
 export const ConnectToPhone = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const componentRef = useRef();
+
   // Change to Saga
   const isLoading = false;
   const isSuccess = true;
@@ -51,8 +42,6 @@ export const ConnectToPhone = () => {
 
   const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const showQrCode = isMnemonicFromSignUp;
-  const showUnlockQr = !isMnemonicFromSignUp;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -139,7 +128,7 @@ export const ConnectToPhone = () => {
                         I am aware that Polkadex does not store any information related to
                         Wallet or Mnemonic.
                       </p>
-                      {showUnlockQr && (
+                      {!isMnemonicFromSignUp && (
                         <Button background="secondaryBackground" color="black" type="button">
                           Unlock QR Code
                         </Button>
@@ -147,7 +136,7 @@ export const ConnectToPhone = () => {
                     </S.SelectAccount>
                   </S.StepContent>
                 </S.Step>
-                {showQrCode && (
+                {isMnemonicFromSignUp && (
                   <>
                     <S.Step>
                       <S.StepTitle>
@@ -210,6 +199,13 @@ export const ConnectToPhone = () => {
           </S.Card>
         </S.Box>
       </S.Wrapper>
+      <style jsx global>
+        {`
+          body {
+            overflow-y: scroll;
+          }
+        `}
+      </style>
     </S.Main>
   );
 };
