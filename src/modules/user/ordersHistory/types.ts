@@ -12,7 +12,7 @@ export interface SetOrder {
   order_type: string;
   qty: number;
   price: number;
-  nonce: number;
+  timestamp: number;
 }
 interface Pair {
   base_asset: string | OtherAsset;

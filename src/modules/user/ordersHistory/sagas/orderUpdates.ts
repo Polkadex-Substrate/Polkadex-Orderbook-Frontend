@@ -25,12 +25,16 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
 }
 
 function processOrderData(eventData: SetOrder): OrderCommon {
+  const base =
+    eventData.pair.base_asset === "polkadex" ? "PDEX" : eventData.pair.base_asset.asset;
+  const quote =
+    eventData.pair.quote_asset === "polkadex" ? "PDEX" : eventData.pair.quote_asset.asset;
   return {
     main_account: eventData.user,
     id: eventData.id.toString(),
     client_order_id: eventData.client_order_id,
     time: new Date().toISOString(),
-    m: eventData.event_id.toString(), // marketid
+    m: `${base}-${quote}`, // marketid
     side: eventData.side,
     order_type: eventData.order_type,
     status: eventData.status,

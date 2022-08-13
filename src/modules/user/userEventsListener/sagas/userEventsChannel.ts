@@ -1,43 +1,51 @@
-import { put, select, take } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
+import { call, put, select, take } from "redux-saga/effects";
+import { EventChannel, eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { UserEventsFetch } from "../actions";
+import { UserEventsFetch, userUnknownEvent } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
 import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
+import { selectCurrentTradeAccount } from "../../tradeAccount";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 
 export function* userEventsChannelSaga(action: UserEventsFetch) {
+  const mainAcc = yield select(selectCurrentMainAccount);
+  const tradeAcc = yield select(selectCurrentTradeAccount);
+  yield call(userEventsChannelHandler, tradeAcc.address);
+  yield call(userEventsChannelHandler, mainAcc.address);
+}
+
+export function* userEventsChannelHandler(address) {
   try {
-    const { address } = yield select(selectCurrentMainAccount);
-    if (address) {
-      const channel = createUserEventsChannel(address);
-      while (true) {
-        const action = yield take(channel);
-        yield put(action);
-      }
+    console.log("created User Events Channel...");
+    const channel = yield call(createUserEventsChannel, address);
+    while (true) {
+      const action = yield take(channel);
+      console.log({ action });
+      yield put(action);
     }
   } catch (error) {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong (userEventsChannelSaga channel)...",
+          title: "Something has gone wrong (userEventsChannelHandler channel)...",
           description: error.message,
         },
         type: "Error",
       })
     );
+  } finally {
+    console.log("User Events Channel closed...");
   }
 }
 
 function createUserEventsChannel(address: string) {
-  console.log("created User Events Channel...");
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
@@ -56,8 +64,8 @@ function createUserEventsChannel(address: string) {
 }
 
 function createActionFromUserEvent(eventData: any) {
-  console.info("User Event: ", eventData);
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
+  console.info("User Event: ", data);
   if (isKeyPresentInObject(data, "SetBalance")) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {
@@ -72,5 +80,9 @@ function createActionFromUserEvent(eventData: any) {
         description: "Your account has been registered",
       },
     });
-  } else throw new Error("Unknown event type", eventData);
+  } else {
+    // handle trade update events
+    console.log("Unknown User Event: ", eventData);
+    return userUnknownEvent();
+  }
 }
