@@ -3,13 +3,13 @@ import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
-import { alertPush } from "../../../";
+import { alertPush, selectCurrentTradeAccount } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
+import { Utils } from "@polkadex/web-helpers";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -29,7 +29,7 @@ type orderHistoryQueryResult = {
 
 export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.address);
       yield put(userOpenOrderHistoryData({ list: transactions }));
@@ -50,23 +50,23 @@ export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
 const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
   const res: any = await API.graphql({
     query: queries.listOpenOrdersByMainAccount,
-    variables: { main_account: formatAddressToDefault(proxy_acc) },
+    variables: { main_account: proxy_acc },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOpenOrdersByMainAccount.items;
   const orders = ordersRaw.map((order) => ({
     main_account: proxy_acc,
     id: order.id,
     client_order_id: order.cid,
-    time: order.t,
+    time: new Date(Number(order.t)).toISOString(),
     m: order.m, // marketid
     side: order.s,
     order_type: order.ot,
     status: order.st,
-    price: order.p,
-    qty: order.q,
-    avg_filled_price: order.afp,
-    filled_quantity: order.fq,
-    fee: order.fee,
+    price: Utils.decimals.formatToNumber("0x" + order.p),
+    qty: Utils.decimals.formatToNumber("0x" + order.q),
+    avg_filled_price: Utils.decimals.formatToString("0x" + order.afp),
+    filled_quantity: Utils.decimals.formatToString("0x" + order.fq),
+    fee: Utils.decimals.formatToString("0x" + order.fee),
   }));
   return orders;
 };

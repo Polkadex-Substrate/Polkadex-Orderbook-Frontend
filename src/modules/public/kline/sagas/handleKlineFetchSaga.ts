@@ -15,7 +15,7 @@ type KlineDbData = {
   l: string;
   v_base: string;
   v_quote: string;
-  t: string;
+  time: string;
 };
 
 export function* handleKlineFetchSaga(action: KlineFetch) {
@@ -24,9 +24,8 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     const data: KlineDbData[] = yield call(() =>
       fetchKlineAsync(market, resolution, from, to)
     );
-
     const convertedData = data.map((x) => ({
-      timestamp: new Date(x.t).getTime(),
+      timestamp: Number(x.time),
       open: Number(x.o),
       high: Number(x.h),
       low: Number(x.l),

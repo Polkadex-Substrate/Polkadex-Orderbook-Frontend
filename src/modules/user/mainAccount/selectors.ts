@@ -12,9 +12,12 @@ export const selectExtensionWalletSuccess = (state: RootState): boolean =>
 export const selectExtensionWalletAccounts = (state: RootState): InjectedAccount[] =>
   state.user.extensionWallet.allBrowserAccounts;
 
-export const selectMainAccount = (state: RootState): MainAccount =>
+export const selectCurrentMainAccount = (state: RootState): MainAccount =>
   state.user.extensionWallet.selectedAccount;
 
+export const selectIsCurrentMainAccountInWallet = (state: RootState): boolean => {
+  return selectCurrentMainAccount(state).injector !== null;
+};
 export const selectLinkedMainAccount = (state: RootState): InjectedAccount | undefined => {
   const currUserMainAddress = selectUserInfo(state).main_addr;
   const linkedAccount = selectExtensionWalletAccounts(state).find(

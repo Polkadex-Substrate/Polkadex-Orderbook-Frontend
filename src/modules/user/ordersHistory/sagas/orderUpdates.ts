@@ -5,6 +5,7 @@ import { SetOrder } from "../types";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { Utils } from "@polkadex/web-helpers";
 
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
@@ -24,19 +25,23 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
 }
 
 function processOrderData(eventData: SetOrder): OrderCommon {
+  const base =
+    eventData.pair.base_asset === "polkadex" ? "PDEX" : eventData.pair.base_asset.asset;
+  const quote =
+    eventData.pair.quote_asset === "polkadex" ? "PDEX" : eventData.pair.quote_asset.asset;
   return {
     main_account: eventData.user,
     id: eventData.id.toString(),
     client_order_id: eventData.client_order_id,
     time: new Date().toISOString(),
-    m: eventData.event_id.toString(), // marketid
+    m: `${base}-${quote}`, // marketid
     side: eventData.side,
     order_type: eventData.order_type,
     status: eventData.status,
-    price: eventData.price.toString(),
-    qty: eventData.qty.toString(),
-    avg_filled_price: eventData.avg_filled_price.toString(),
-    filled_quantity: eventData.filled_quantity.toString(),
-    fee: eventData.fee.toString(),
+    price: Utils.decimals.formatToNumber(eventData.price),
+    qty: Utils.decimals.formatToNumber(eventData.qty),
+    avg_filled_price: Utils.decimals.formatToString(eventData.avg_filled_price),
+    filled_quantity: Utils.decimals.formatToString(eventData.filled_quantity),
+    fee: Utils.decimals.formatToString(eventData.fee),
   };
 }

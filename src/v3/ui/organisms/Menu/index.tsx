@@ -119,9 +119,19 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
         <S.ContainerProfile>
           <Popover>
             <Popover.Trigger>
-              <S.Notifications isActive={!!notifications?.find((value) => !value.isRead)}>
-                <Icons.Notifications />
-                <div />
+              <S.Notifications>
+                <Tooltip>
+                  <TooltipHeader>
+                    <S.NotificationsWrapper
+                      isActive={!!notifications?.find((value) => !value.isRead)}>
+                      <Icons.Notifications />
+                      <div />
+                    </S.NotificationsWrapper>
+                  </TooltipHeader>
+                  <TooltipContent position="left">
+                    <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
+                  </TooltipContent>
+                </Tooltip>
               </S.Notifications>
             </Popover.Trigger>
             <Popover.Content>
@@ -131,7 +141,14 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
           <Popover>
             <Popover.Trigger>
               <S.Profile>
-                <Icon name="Avatar" color="text" size="extraMedium" />
+                <Tooltip>
+                  <TooltipHeader>
+                    <Icon name="Avatar" color="text" size="large" />
+                  </TooltipHeader>
+                  <TooltipContent position="left">
+                    <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
+                  </TooltipContent>
+                </Tooltip>
               </S.Profile>
             </Popover.Trigger>
             <Popover.Content>

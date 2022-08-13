@@ -6,9 +6,11 @@ import { alertPush } from "../../../public/alertHandler";
 import { selectUserInfo } from "../../profile";
 import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
+import { selectCurrentMainAccount } from "../../mainAccount";
+import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
+import { Utils } from "@polkadex/web-helpers";
 
 type TransactionQueryResult = {
   tt: string;
@@ -21,9 +23,21 @@ type TransactionQueryResult = {
 
 export function* transactionsSaga(action: TransactionsFetch) {
   try {
-    const { main_addr } = yield select(selectUserInfo);
-    const transactions = yield call(fetchTransactions, main_addr, 3, 10);
-    yield put(transactionsData(transactions));
+    const { address } = yield select(selectCurrentMainAccount);
+    if (address) {
+      const transactions = yield call(fetchTransactions, address, 3, 10);
+      yield put(transactionsData(transactions));
+    } else {
+      yield put(
+        notificationPush({
+          message: {
+            title: "Main account not selected",
+            description: "Please select the main account from account manager page",
+          },
+          type: "ErrorAlert",
+        })
+      );
+    }
   } catch (error) {
     console.error(error);
     yield put(
@@ -47,18 +61,18 @@ const fetchTransactions = async (
   const res: any = await API.graphql({
     query: queries.listTransactionsByMainAccount,
     variables: {
-      main_account: formatAddressToDefault(address),
+      main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
     },
   });
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
-    amount: item.q,
+    amount: Utils.decimals.formatToString(item.q),
     asset: item.a,
-    fee: item.fee,
+    fee: Utils.decimals.formatToString(item.fee),
     main_account: address,
-    time: item.t,
+    time: new Date(Number(item.t)).toISOString(),
     status: item.st as Transaction["status"],
     txn_type: item.tt as Transaction["txn_type"],
   }));

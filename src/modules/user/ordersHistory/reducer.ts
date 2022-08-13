@@ -11,7 +11,6 @@ import {
 
 import { sliceArray } from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { OpenOrders } from "@polkadex/orderbook-ui/organisms/OpenOrders";
 
 const { defaultStorageLimit } = defaultConfig;
 export interface OrdersHistoryState {

@@ -11,6 +11,14 @@ import {
 } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
+import { Utils } from "@polkadex/web-helpers";
+
+type RawTradeEvent = {
+  m: string;
+  p: string;
+  q: string;
+  t: number;
+};
 export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
   try {
     const market: Market = action.payload;
@@ -18,12 +26,12 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
       const channel = yield call(() => fetchTradesChannel(market.m));
       while (true) {
         const tradesMsg = yield take(channel);
-        const data = JSON.parse(tradesMsg);
+        const data: RawTradeEvent = JSON.parse(tradesMsg);
         const trade: PublicTrade = {
-          price: data.price,
-          amount: data.quantity,
-          market_id: data.market,
-          timestamp: data.time,
+          price: Utils.decimals.formatToString(data.p),
+          amount: Utils.decimals.formatToString(data.q),
+          market_id: data.m,
+          timestamp: new Date(data.t).toISOString(),
         };
         yield put(recentTradesPush(trade));
       }
@@ -42,13 +50,13 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
 }
 
 async function fetchTradesChannel(market: string) {
+  console.log("recent trades channel", `${market}-recent-trades`);
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `${market}-raw-trade` },
+      variables: { name: `${market}-recent-trades` },
     }).subscribe({
       next: (data) => {
-        // "data": "{\"price\":\"1.20\",\"quantity\":\"1\",\"market\":\"PDEX-1\",\"time\":1656065662309}"
         emit(data.value.data.websocket_streams.data);
       },
       error: (err) => console.warn(err),

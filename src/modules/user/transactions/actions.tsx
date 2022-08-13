@@ -13,7 +13,7 @@ import { Transaction } from ".";
 export type TransactionUpdatePayload = {
   event_id: number;
   user: string;
-  asset: "polkadex" | string;
+  asset: string | { asset: string };
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";
@@ -41,7 +41,7 @@ export interface TransactionsUpdateEvent {
 
 export interface TransactionsUpdateEventData {
   type: typeof TRANSACTIONS_UPDATE_EVENT_DATA;
-  payload: TransactionUpdatePayload;
+  payload: Transaction;
 }
 export type TransactionsAction =
   | TransactionsFetch

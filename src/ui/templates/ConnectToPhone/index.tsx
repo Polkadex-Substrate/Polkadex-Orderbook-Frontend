@@ -19,7 +19,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectExtensionWalletAccounts,
-  selectMainAccount,
+  selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
 const HeaderBack = dynamic(
@@ -49,7 +49,7 @@ export const ConnectToPhone = () => {
     router?.query?.mnemonic as string
   );
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const showQrCode = isMnemonicFromSignUp;
   const showUnlockQr = !isMnemonicFromSignUp;

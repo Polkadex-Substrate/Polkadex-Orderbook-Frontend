@@ -13,7 +13,7 @@ import {
 import {
   depositsFetch,
   selectExtensionWalletAccounts,
-  selectMainAccount,
+  selectCurrentMainAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
@@ -29,7 +29,7 @@ const defaultValues = {
 
 const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const assets: IPublicAsset[] = useReduxSelector(selectAllAssets);
 
   const dispatch = useDispatch();

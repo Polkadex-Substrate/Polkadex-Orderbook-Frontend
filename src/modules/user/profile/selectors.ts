@@ -5,11 +5,8 @@ import { ProxyAccount } from "./types";
 import { UserSkeleton } from ".";
 
 export const selectUserLoggedIn = (state: RootState): boolean => {
-  return state.user.profile.userData.user.address !== "";
+  return state.user.polkadotWallet.selectedAccount?.address !== "";
 };
-export const selectHasUser = (state: RootState): boolean =>
-  !!state.user.profile.userData.user.address;
-
 export const selectUserInfo = (state: RootState): ProxyAccount =>
   state.user.profile.userData.user;
 

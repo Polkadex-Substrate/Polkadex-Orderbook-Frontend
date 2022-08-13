@@ -7,10 +7,10 @@ import {
   selectCurrentMarket,
   selectOrdersHistory,
   userOrdersHistoryFetch,
-  selectUserLoggedIn,
   selectOpenOrders,
   userOpenOrdersHistoryFetch,
   selectUserSession,
+  selectHasUser,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
@@ -23,7 +23,7 @@ export function useOrderHistory(filters: Ifilters) {
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userLoggedIn = useReduxSelector(selectHasUser);
   const userSession = useReduxSelector(selectUserSession);
 
   const [updatedList, setUpdatedList] = useState(list);
@@ -53,12 +53,12 @@ export function useOrderHistory(filters: Ifilters) {
     } else if (filters?.hiddenPairs) {
       setUpdatedList(
         list.filter((data) => {
-          return data.side.toUpperCase() != "ASK" && data.side.toUpperCase() != "BID";
+          return data.side.toUpperCase() !== "ASK" && data.side.toUpperCase() !== "BID";
         })
       );
       setUpdatedOpenOrdersSorted(
         openOrdersSorted.filter((data) => {
-          return data.side.toUpperCase() != "ASK" && data.side.toUpperCase() != "BID";
+          return data.side.toUpperCase() !== "ASK" && data.side.toUpperCase() !== "BID";
         })
       );
     } else {

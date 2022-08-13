@@ -12,4 +12,5 @@ export * from "./useHistory";
 export * from "./useSignUp";
 export * from "./useCodeVerification";
 export * from "./useSignIn";
+export * from "./useLinkMainAccount";
 export * from "./useAccountManager";

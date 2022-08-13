@@ -2,7 +2,7 @@ import { call, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 
-import { MainAccount, selectMainAccount } from "../../mainAccount";
+import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
 import {
   registerTradeAccountData,
   registerTradeAccountError,
@@ -18,7 +18,7 @@ let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   try {
     const api = yield select(selectRangerApi);
-    const mainAccount: MainAccount = yield select(selectMainAccount);
+    const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
     if (!mainAccount.address) {
       throw new Error("Pleaes select a main account!");
     }

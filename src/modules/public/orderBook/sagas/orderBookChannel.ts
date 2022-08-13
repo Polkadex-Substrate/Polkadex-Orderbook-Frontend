@@ -7,15 +7,23 @@ import { alertPush } from "../../alertHandler";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../../markets";
 
+import { Utils } from "@polkadex/web-helpers";
+
+type OrderbookRawUpdate = {
+  side: "Bid" | "Ask";
+  price: string;
+  qty: string;
+  seq: number;
+};
+
 export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
   try {
     const market: Market = action.payload;
-
     if (market?.m) {
       const channel = fetchOrderBookChannel(market.m);
       while (true) {
         const msg = yield take(channel);
-        const data = JSON.parse(msg);
+        const data: OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
         yield put(depthDataIncrement(data));
       }
     }
@@ -39,7 +47,9 @@ function fetchOrderBookChannel(market: string) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
-      next: (data) => emitter(data.value.data.websocket_streams.data),
+      next: (data) => {
+        emitter(data.value.data.websocket_streams.data);
+      },
       error: (err) => console.log(err),
     });
     return () => {
@@ -47,3 +57,13 @@ function fetchOrderBookChannel(market: string) {
     };
   });
 }
+
+const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
+  const data = JSON.parse(dataStr);
+  return data.map((item) => ({
+    side: item.side,
+    price: Utils.decimals.formatToString(item.price),
+    qty: Utils.decimals.formatToString(item.qty),
+    seq: item.seq,
+  }));
+};

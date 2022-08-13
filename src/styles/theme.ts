@@ -111,7 +111,7 @@ const light = {
     secondaryBackgroundSolid: "#FBFBFB",
     quaternaryBackground: "#272934",
     text: "#000000",
-    inverse: "#ffffff",
+    inverse: "#1C1C26",
   },
   shadows: {
     primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",

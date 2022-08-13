@@ -15,6 +15,9 @@ import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
+  payload: {
+    proxyAddress: string;
+  };
 }
 
 export interface UserInfo {
@@ -51,8 +54,9 @@ export type ProfileAction =
   | UserListFetch
   | UserListData;
 
-export const userFetch = (): UserFetch => ({
+export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
+  payload,
 });
 
 export const userData = (payload: UserInfo["payload"]): UserInfo => ({

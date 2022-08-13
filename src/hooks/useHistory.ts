@@ -16,10 +16,12 @@ export function useHistory() {
   });
 
   const dispatch = useDispatch();
-
   const getAsset = useReduxSelector(selectGetAsset);
-  const userLoggedIn = useReduxSelector(selectHasUser);
   const transactionsHistory = useReduxSelector(selectTransactionDepositData);
+
+  useEffect(() => {
+    dispatch(transactionsFetch());
+  }, [dispatch]);
 
   const transactionHistory = useMemo(() => {
     const transactionsBydate = transactionsHistory?.sort(
@@ -44,8 +46,8 @@ export function useHistory() {
   };
 
   useEffect(() => {
-    if (userLoggedIn) dispatch(transactionsFetch());
-  }, [userLoggedIn, dispatch]);
+    dispatch(transactionsFetch());
+  }, [dispatch]);
 
   return {
     filterByType: filterBy.type,

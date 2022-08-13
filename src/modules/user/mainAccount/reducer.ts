@@ -19,6 +19,7 @@ export interface MainAccountState {
   selectedAccount: MainAccount;
   registerMainAccountLoading: boolean;
   registerMainAccountSuccess: boolean;
+  associatedTradeAccounts: string[];
 }
 
 const defaultAccount: MainAccount = {
@@ -33,6 +34,7 @@ const initialState: MainAccountState = {
   success: false,
   allBrowserAccounts: [],
   allAccounts: [],
+  associatedTradeAccounts: [],
   selectedAccount: defaultAccount,
   registerMainAccountLoading: false,
   registerMainAccountSuccess: false,
@@ -65,7 +67,8 @@ export const mainAccountReducer = (
     case MAIN_ACCOUNT_SET_DATA:
       return {
         ...state,
-        selectedAccount: action.payload,
+        selectedAccount: action.payload.user,
+        associatedTradeAccounts: action.payload.tradeAccounts,
       };
     case EXTENSION_WALLET_RESET:
       return {

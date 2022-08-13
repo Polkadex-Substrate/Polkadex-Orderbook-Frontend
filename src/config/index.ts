@@ -9,9 +9,6 @@ export * from "./config";
 Amplify.configure(awsconfig);
 
 export const defaultConfig: DefaultConfig = {
-  influxDBUrl: process.env.INFLUX_DB_URL,
-  amqpWsPassword: process.env.RMQ_KEY,
-  amqpWsUsername: process.env.RMQ_USERNAME,
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
   enclaveUrl: process.env.ENCLAVE_URL,

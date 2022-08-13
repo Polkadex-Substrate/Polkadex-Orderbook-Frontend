@@ -22,7 +22,7 @@ export const ContentWrapper = styled.div`
     }
 
     .notification-enter-active {
-      transition: all 300ms ease-out;
+      transition: transform 300ms ease-out;
       transform: translate(0, 0);
     }
 
@@ -32,11 +32,11 @@ export const ContentWrapper = styled.div`
 
     .notification-exit ~ ${CardWrapper} {
       transform: translate(0, -113%);
-      transition: all 200ms ease-out calc(300ms - 200ms);
+      transition: transform 200ms ease-out calc(300ms - 200ms);
     }
 
     .notification-exit-active {
-      transition: all 300ms ease-out;
+      transition: transform 300ms ease-out;
       transform: translate(110%, 0);
     }
   `}

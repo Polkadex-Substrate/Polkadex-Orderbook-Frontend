@@ -51,15 +51,6 @@ export const withdrawValidations = Yup.object().shape({
     .required("Required")
     .min(0.01, "Too Short!")
     .typeError("Must be a number"),
-  asset: Yup.object({
-    assetId: Yup.string(),
-    name: Yup.string(),
-    symbol: Yup.string(),
-    decimals: Yup.string(),
-    isFrozen: Yup.bool(),
-  })
-    .required("Required")
-    .nullable(),
 });
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),

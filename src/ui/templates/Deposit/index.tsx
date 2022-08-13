@@ -1,8 +1,9 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -17,9 +18,20 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { Transaction } from "@polkadex/orderbook-modules";
-import { useHistory } from "@polkadex/orderbook-hooks";
+import {
+  depositsFetch,
+  selectCurrentMainAccount,
+  Transaction,
+} from "@polkadex/orderbook-modules";
+import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
+import {
+  isAssetPDEX,
+  selectAllAssets,
+  selectGetAsset,
+} from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
   ssr: false,
@@ -27,21 +39,51 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
 
+  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const assets = useReduxSelector(selectAllAssets);
+  const getAsset = useReduxSelector(selectGetAsset);
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { transactionHistory } = useHistory();
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+  const routedAsset = router.query.id as string;
+
+  const shortAddress =
+    currMainAcc?.address?.slice(0, 15) +
+    "..." +
+    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+
+  useEffect(() => {
+    const initialAsset = assets.find(
+      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+    );
+    if (initialAsset) {
+      setSelectedAsset(initialAsset);
+    }
+  }, [assets, routedAsset]);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
-      asset: null,
+      asset: selectedAsset,
     },
+    // TODO: re-add the validations
     validationSchema: withdrawValidations,
     onSubmit: (values) => {
-      console.log(values);
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
+      dispatch(
+        depositsFetch({
+          asset: asset,
+          amount: values.amount,
+          mainAccount: currMainAcc,
+        })
+      );
     },
   });
-
-  console.log("Selected Token id via url:", router.query.id);
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -53,7 +95,6 @@ export const DepositTemplate = () => {
         return "primary";
     }
   };
-  const { transactionHistory } = useHistory();
 
   return (
     <>
@@ -87,8 +128,8 @@ export const DepositTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>Main Account</strong>
-                    <span>esoDF9faq...9dD7GtQvg</span>
+                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                    <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
@@ -104,7 +145,7 @@ export const DepositTemplate = () => {
                               <span>
                                 <Tokens.PDEX />
                               </span>
-                              Polkadex PDEX
+                              {selectedAsset?.name}
                             </div>
                             <div>
                               <span>
@@ -114,14 +155,20 @@ export const DepositTemplate = () => {
                           </S.DropdownHeader>
                         }>
                         <S.DropdownContent>
-                          <button type="button" onClick={undefined}>
-                            Polkadex PDEX
-                          </button>
+                          {assets.map((asset) => (
+                            <button
+                              key={asset.assetId}
+                              type="button"
+                              onClick={() => setSelectedAsset(asset)}>
+                              {asset.name}
+                            </button>
+                          ))}
                         </S.DropdownContent>
                       </Dropdown>
                     </S.SelectInputContainer>
                     <S.Available>
-                      Avlb <strong>120PDEX</strong>
+                      Available{" "}
+                      <strong>{onChainBalanceLoading ? "Loading..." : onChainBalance}</strong>
                     </S.Available>
                   </S.SelectInput>
                   <InputLine
@@ -137,7 +184,7 @@ export const DepositTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty)}
+                    disabled={false}
                     isFull>
                     Deposit
                   </Button>
@@ -164,7 +211,7 @@ export const DepositTemplate = () => {
                           <S.HeaderColumn>Amount</S.HeaderColumn>
                         </Table.Column>
                         <Table.Column>
-                          <S.HeaderColumn>Transaction ID</S.HeaderColumn>
+                          <S.HeaderColumn>Fee</S.HeaderColumn>
                         </Table.Column>
                       </Table.Header>
                       <Table.Body>
@@ -172,7 +219,7 @@ export const DepositTemplate = () => {
                           <Table.Row key={item.event_id}>
                             <Table.Cell>
                               <S.Cell>
-                                <span>{item.asset}</span>
+                                <span>{getAsset(item.asset)?.symbol}</span>
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
@@ -189,13 +236,13 @@ export const DepositTemplate = () => {
                             </Table.Cell>
                             <Table.Cell>
                               <S.Cell>
-                                <span>
-                                  {item.amount} <small>$0.00</small>
-                                </span>
+                                <span>{item.amount}</span>
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
-                              <Copy copyData={item.main_account} />
+                              <S.Cell>
+                                <span>{item.fee}</span>
+                              </S.Cell>
                             </Table.Cell>
                           </Table.Row>
                         ))}

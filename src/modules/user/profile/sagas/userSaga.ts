@@ -6,6 +6,7 @@ import { userData, userError, UserFetch } from "../actions";
 
 export function* userSaga(action: UserFetch) {
   try {
+    const { proxyAddress } = action.payload;
     const userAccount = yield call(() => getKeyringAllAccounts());
     const user = {
       username: userAccount.meta.name,

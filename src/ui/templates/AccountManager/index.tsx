@@ -14,24 +14,11 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-
-const testAccounts = [
-  {
-    id: 1,
-    name: "Trading",
-    address: "esrWSxZY...8N7cxP3B",
-    isActive: true,
-  },
-  {
-    id: 2,
-    name: "Mobile",
-    address: "8N7cxP3B...esrWSxZY",
-    isActive: false,
-  },
-];
+import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -53,13 +40,15 @@ export const AccountManagerTemplate = () => {
       status: false,
     });
 
-  const isLinkedAccount = false;
+  const isLinkedAccount = tradingAccounts?.length > 0;
+  const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
+    useLinkMainAccount();
 
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
         {remove.isRemoveDevice ? (
-          <RemoveFromDevice handleClose={handleClose} />
+          <RemoveFromDevice handleClose={removeFromDevice} />
         ) : (
           <RemoveFromBlockchain handleClose={handleClose} />
         )}
@@ -72,18 +61,51 @@ export const AccountManagerTemplate = () => {
         <Menu handleChange={() => setState(!state)} />
         <S.Wrapper>
           <S.Title>
-            <h1>Acount Manager</h1>
+            <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
-                <div>
-                  <Icons.Wallet />
-                </div>
-                <div>
-                  <strong>Estimated Balance</strong>
-                  <span>
-                    25.622 PDEX <small> ~0.00 USD</small>
-                  </span>
-                </div>
+                <small>Polkadot.js account selected</small>
+                <S.SelectInputContainer>
+                  <Dropdown
+                    isClickable
+                    direction="bottom"
+                    header={
+                      <S.SelectAccount>
+                        <S.SelectAccountContainer>
+                          <Icons.Avatar />
+                        </S.SelectAccountContainer>
+                        <S.SelectAccountContainer>
+                          <div>
+                            <strong>
+                              {currentMainAccount?.name || "Select your main account"}
+                            </strong>
+                            <span>{shortWallet}</span>
+                          </div>
+                          <div>
+                            <Icons.ArrowBottom />
+                          </div>
+                        </S.SelectAccountContainer>
+                      </S.SelectAccount>
+                    }>
+                    <S.MyDropdownContent>
+                      {mainAccounts?.map((account) => {
+                        const shortAddress =
+                          account?.address?.slice(0, 10) +
+                          "..." +
+                          account?.address?.slice(account?.address?.length - 10);
+                        return (
+                          <button
+                            key={account.address}
+                            type="button"
+                            onClick={() => handleSelectMainAccount(account.address)}>
+                            {account.meta.name}
+                            <span>{shortAddress}</span>
+                          </button>
+                        );
+                      })}
+                    </S.MyDropdownContent>
+                  </Dropdown>
+                </S.SelectInputContainer>
               </S.TitleBalance>
               <S.TitleActions>
                 <Link href="/deposit/PDEX">
@@ -99,7 +121,7 @@ export const AccountManagerTemplate = () => {
             </S.TitleWrapper>
           </S.Title>
           <S.Content>
-            <h2>My wallets</h2>
+            <h2>My Trading Accounts</h2>
 
             <S.ContentGrid>
               {!isLinkedAccount ? (
@@ -129,7 +151,7 @@ export const AccountManagerTemplate = () => {
                 </S.LinkAccount>
               ) : (
                 <>
-                  {testAccounts.map((value) => (
+                  {tradingAccounts.map((value) => (
                     <Card
                       key={value.id}
                       title={value.name}
@@ -137,7 +159,7 @@ export const AccountManagerTemplate = () => {
                       isUsing={value.isActive}
                       onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => console.log("onUse account id:", value.id)}
+                      onUse={() => handleSelectTradeAccount(value.address)}
                     />
                   ))}
                   <Link href="/createAccount">
@@ -176,13 +198,15 @@ const Card = ({
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
+
+  const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
   return (
     <S.Card isActive={isUsing}>
       <Link href="/assets">
         <a>
           <S.CardHeader>
             <S.CardHeaderContent>
-              <strong>{title} Account</strong>
+              <strong>{title}</strong>
               <span>
                 <Tooltip>
                   <TooltipHeader>
@@ -194,8 +218,7 @@ const Card = ({
                     <p ref={buttonRef}>Copy to clipboard</p>
                   </TooltipContent>
                 </Tooltip>
-
-                {address}
+                {shortAddress}
               </span>
             </S.CardHeaderContent>
             <S.CardHeaderIcon>

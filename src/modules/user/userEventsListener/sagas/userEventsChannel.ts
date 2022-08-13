@@ -1,44 +1,51 @@
-import { put, select, take } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
+import { call, put, select, take } from "redux-saga/effects";
+import { EventChannel, eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { ProxyAccount, selectUserInfo } from "../../profile";
-import { UserEventsFetch } from "../actions";
+import { UserEventsFetch, userUnknownEvent } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
+import { selectCurrentMainAccount } from "../../mainAccount";
+import { notificationPush } from "../../notificationHandler";
+import { selectCurrentTradeAccount } from "../../tradeAccount";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
-import { formatAddressToDefault } from "@polkadex/orderbook/helpers/formatAddress";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 
 export function* userEventsChannelSaga(action: UserEventsFetch) {
+  const mainAcc = yield select(selectCurrentMainAccount);
+  const tradeAcc = yield select(selectCurrentTradeAccount);
+  yield call(userEventsChannelHandler, tradeAcc.address);
+  yield call(userEventsChannelHandler, mainAcc.address);
+}
+
+export function* userEventsChannelHandler(address) {
   try {
-    const userInfo: ProxyAccount = yield select(selectUserInfo);
-    const userAddress = userInfo.main_addr;
-    if (userAddress) {
-      const channel = createUserEventsChannel(formatAddressToDefault(userAddress));
-      while (true) {
-        const action = yield take(channel);
-        yield put(action);
-      }
+    console.log("created User Events Channel...");
+    const channel = yield call(createUserEventsChannel, address);
+    while (true) {
+      const action = yield take(channel);
+      console.log({ action });
+      yield put(action);
     }
   } catch (error) {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong (userEventsChannelSaga channel)...",
+          title: "Something has gone wrong (userEventsChannelHandler channel)...",
           description: error.message,
         },
         type: "Error",
       })
     );
+  } finally {
+    console.log("User Events Channel closed...");
   }
 }
 
 function createUserEventsChannel(address: string) {
-  console.log("created User Events Channel...");
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
@@ -58,11 +65,24 @@ function createUserEventsChannel(address: string) {
 
 function createActionFromUserEvent(eventData: any) {
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
+  console.info("User Event: ", data);
   if (isKeyPresentInObject(data, "SetBalance")) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {
     return transactionsUpdateEvent(data.SetTransaction);
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
+  } else if (isKeyPresentInObject(data, "RegisterAccount")) {
+    return notificationPush({
+      type: "SuccessAlert",
+      message: {
+        title: "Account registered",
+        description: "Your account has been registered",
+      },
+    });
+  } else {
+    // handle trade update events
+    console.log("Unknown User Event: ", eventData);
+    return userUnknownEvent();
   }
 }

@@ -6,9 +6,9 @@ import * as S from "./styles";
 import {
   notificationPush,
   selectCurrentMarket,
+  selectHasUser,
   selectOpenOrdersHistory,
   selectOrdersHistoryLoading,
-  selectUserLoggedIn,
   userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
@@ -25,13 +25,13 @@ export const OpenOrders = () => {
   const openOrders = useReduxSelector(selectOpenOrdersHistory);
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userLoggedIn = useReduxSelector(selectHasUser);
   const { width } = useWindowSize();
 
   const handleCancel = (id: string) =>
     dispatch(
       notificationPush({
-        type: "Error",
+        type: "ErrorAlert",
         message: {
           title: "Not Available in Beta",
           description: "Polkadex team is currently working on this functionality.",

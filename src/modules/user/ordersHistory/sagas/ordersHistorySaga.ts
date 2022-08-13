@@ -3,17 +3,34 @@ import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
-import { alertPush } from "../../../";
+import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
 import { ProxyAccount, selectUserInfo } from "../../profile";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
+import { Utils } from "@polkadex/web-helpers";
+
+type orderHistoryQueryResult = {
+  u: string;
+  cid: string;
+  id: string;
+  t: string;
+  m: string;
+  s: string;
+  ot: string;
+  st: string;
+  p: string;
+  q: string;
+  afp: string;
+  fq: string;
+  fee: string;
+};
 
 export function* ordersHistorySaga() {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
@@ -45,6 +62,22 @@ const fetchOrders = async (
       to: dateTo,
     },
   });
-  const orders = res.data.listOrderHistorybyMainAccount.items;
+  const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;
+  const orders: OrderCommon[] = ordersRaw.map((order: any) => ({
+    main_account: proxy_acc,
+    id: order.id,
+    client_order_id: order.cid,
+    time: new Date(Number(order.t)).toISOString(),
+    m: order.m, // marketid
+    side: order.s,
+    order_type: order.ot,
+    status: order.st,
+    price: Utils.decimals.formatToNumber("0x" + order.p),
+    qty: Utils.decimals.formatToNumber("0x" + order.q),
+    avg_filled_price: Utils.decimals.formatToString("0x" + order.afp),
+    filled_quantity: Utils.decimals.formatToString("0x" + order.fq),
+    fee: Utils.decimals.formatToString("0x" + order.fee),
+  }));
+
   return orders;
 };

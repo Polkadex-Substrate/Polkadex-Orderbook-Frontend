@@ -5,11 +5,13 @@ import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
 import {
+  selectCurrentTradeAccount,
   selectUserInfo,
   selectUserSession,
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
+import { Utils } from "@polkadex/web-helpers";
 
 type TradesQueryResult = {
   m: string;
@@ -21,7 +23,7 @@ type TradesQueryResult = {
 
 export function* fetchTradesSaga() {
   try {
-    const { address } = yield select(selectUserInfo);
+    const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
@@ -57,10 +59,10 @@ const fetchUserTrades = async (
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
   const trades: UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
-    price: trade.p,
-    qty: trade.q,
+    price: Utils.decimals.formatToString(trade.p),
+    qty: Utils.decimals.formatToString(trade.q),
     side: trade.s,
-    timestamp: new Date(trade.t).getTime(),
+    timestamp: Number(trade.t),
     baseAsset: trade.m.split("-")[0],
     quoteAsset: trade.m.split("-")[1],
   }));

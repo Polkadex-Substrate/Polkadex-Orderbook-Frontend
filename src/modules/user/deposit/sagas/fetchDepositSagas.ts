@@ -4,10 +4,10 @@ import { ApiPromise } from "@polkadot/api";
 
 import { depositsData, DepositsFetch } from "../actions";
 import { depositsError } from "..";
-import { selectMainAccount } from "../../mainAccount";
+import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { alertPush, InjectedAccount, sendError } from "@polkadex/orderbook-modules";
+import { notificationPush, sendError } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
   selectRangerIsReady,
@@ -22,8 +22,8 @@ export function* fetchDepositSaga(action: DepositsFetch) {
     const isApiReady = yield select(selectRangerIsReady);
     if (isApiReady && mainAccount.address !== "") {
       yield put(
-        alertPush({
-          type: "Loading",
+        notificationPush({
+          type: "InformationAlert",
           message: {
             title: "Processing Deposit",
             description:
@@ -35,8 +35,8 @@ export function* fetchDepositSaga(action: DepositsFetch) {
       if (res.isSuccess) {
         yield put(depositsData());
         yield put(
-          alertPush({
-            type: "Successful",
+          notificationPush({
+            type: "SuccessAlert",
             message: {
               title: "Deposit Successful",
               description:
@@ -63,14 +63,12 @@ export function* fetchDepositSaga(action: DepositsFetch) {
 
 async function depositToEnclave(
   api: ApiPromise,
-  account: InjectedAccount,
+  account: MainAccount,
   asset: Record<string, string | null>,
   amount: string | number
 ): Promise<ExtrinsicResult> {
-  const { web3FromAddress } = await import("@polkadot/extension-dapp");
-  const injector = await web3FromAddress(account.address);
   const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
   const ext = api.tx.ocex.deposit(asset, amountStr);
-  const res = await signAndSendExtrinsic(api, ext, injector, account.address, true);
+  const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
   return res;
 }

@@ -4,6 +4,7 @@ import {
   USER_EVENTSCHANNEL_DATA,
   USER_EVENTSCHANNEL_ERROR,
   USER_EVENTSCHANNEL_FETCH,
+  USER_UNKNOWN_EVENT,
 } from "./constants";
 
 export type UserEvent = any;
@@ -36,4 +37,8 @@ export const userEventsData = (payload: UserEvent[]): UserEventsData => ({
 export const userEventsError = (error: CommonError): UserEventsError => ({
   type: USER_EVENTSCHANNEL_ERROR,
   error,
+});
+
+export const userUnknownEvent = () => ({
+  type: USER_UNKNOWN_EVENT,
 });

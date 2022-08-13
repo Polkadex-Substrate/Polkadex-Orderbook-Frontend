@@ -19,7 +19,7 @@ export const createOrderPayload = (
   quoteAsset: string | null,
   quantity: string,
   price: string,
-  nonce = 0,
+  timestamp = 0,
   client_order_id: Uint8Array
 ): Codec => {
   const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
@@ -36,7 +36,7 @@ export const createOrderPayload = (
     order_type: orderType,
     qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
     price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : null,
-    nonce: nonce,
+    timestamp: timestamp,
     client_order_id,
   };
   const orderPayload = api.createType("OrderPayload", jsonPayload);

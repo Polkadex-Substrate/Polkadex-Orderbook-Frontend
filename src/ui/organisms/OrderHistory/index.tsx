@@ -10,6 +10,7 @@ import {
   selectUserInfo,
   selectOrdersHistoryLoading,
   userOrdersHistoryFetch,
+  selectHasUser,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import {
@@ -50,7 +51,7 @@ export const OrderHistory = () => {
 
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+  const userLoggedIn = useReduxSelector(selectHasUser);
   const { width } = useWindowSize();
 
   useEffect(() => {

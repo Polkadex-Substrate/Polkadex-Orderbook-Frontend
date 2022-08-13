@@ -34,9 +34,6 @@ export type ApiWrapper = {
 };
 
 export type DefaultConfig = {
-  influxDBUrl: string;
-  amqpWsPassword: string;
-  amqpWsUsername: string;
   polkadexFeature: string;
   enclaveUrl: string;
   polkadexChain: string;

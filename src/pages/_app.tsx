@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { wrapper } from "../store";
 import { useAppDaemon } from "../hooks/useAppDaemon";
 import { useReduxSelector } from "../hooks/useReduxSelector";
+import { useUserDataFetch } from "../hooks/useUserDataFetch";
 
 import {
   alertDelete,
@@ -35,6 +36,7 @@ const Notifications = dynamic(
 );
 function App({ Component, pageProps }: AppProps) {
   useAppDaemon();
+  useUserDataFetch();
   const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url) => {

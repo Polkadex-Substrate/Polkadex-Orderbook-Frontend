@@ -85,7 +85,7 @@ const OriginalChart = ({ chart, resolution }) => {
 
   useEffect(() => {
     /**
-     * @description Add more historical data.
+     * @description Add new kline data.
      *
      * @param {dataList} dataList KLineData array
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
