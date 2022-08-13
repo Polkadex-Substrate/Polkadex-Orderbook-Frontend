@@ -10,7 +10,6 @@ import { Utils } from "@polkadex/web-helpers";
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
     const order = processOrderData(action.payload);
-    debugger;
     yield put(orderUpdateEventData(order));
   } catch (error) {
     yield put(

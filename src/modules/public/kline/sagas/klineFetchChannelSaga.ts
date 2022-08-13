@@ -11,7 +11,8 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
     if (market) {
       const channel = yield call(() => fetchKlineChannel(market, interval));
       while (true) {
-        const data = yield take(channel);
+        const dataStr = yield take(channel);
+        const data = JSON.parse(dataStr);
         yield put(
           klinePush({
             kline: {
@@ -19,7 +20,7 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
               close: Number(data.c),
               high: Number(data.h),
               low: Number(data.l),
-              timestamp: new Date(data.t).getTime(),
+              timestamp: data.timestamp,
               volume: Number(data.v_base),
             },
             market: data.m,
@@ -43,9 +44,10 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
 
 async function fetchKlineChannel(market: string, interval: string) {
   return eventChannel((emitter) => {
+    console.log("kline channel", `${market}_${interval.toLowerCase()}`);
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `${market}_${interval}` },
+      variables: { name: `${market}_${interval.toLowerCase()}` },
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
