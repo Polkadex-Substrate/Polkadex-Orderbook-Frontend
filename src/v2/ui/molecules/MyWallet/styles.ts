@@ -17,6 +17,7 @@ export const Header = styled.div<{ isActive?: boolean }>`
 
     :hover {
       background: ${theme.colors.inverse};
+      border: 1px solid ${theme.colors.text};
       ${Icon} svg {
         stroke: ${theme.colors.text};
         fill: ${theme.colors.text};
