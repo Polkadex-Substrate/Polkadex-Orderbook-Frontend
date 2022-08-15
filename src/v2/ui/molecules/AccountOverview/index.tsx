@@ -15,6 +15,8 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
+  const email = "rodolfo.polkadex.trade";
+
   return (
     <S.ContentWrapper>
       <S.ContentHeader>
@@ -31,6 +33,9 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
         </S.Input>
       </S.ContentHeader>
       <S.ContentContainer>
+        <S.ContentEmail>
+          <Card title={email} icon="Email" />
+        </S.ContentEmail>
         <S.ContentFeedback>
           <AvailableMessage message="Soon">
             <Card
@@ -41,7 +46,11 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
           </AvailableMessage>
         </S.ContentFeedback>
         <S.ContentBox>
-          <Card title="My Wallet" icon="Wallet" onClick={() => router.push("/wallet")} />
+          <Card
+            title="My Wallet"
+            icon="Wallet"
+            onClick={() => router.push("/accountManager")}
+          />
           <AvailableMessage message="Soon">
             <Card title="Settings" icon="Settings" onClick={() => onNavigate("Settings")} />
           </AvailableMessage>
@@ -62,19 +71,16 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
       </S.ContentContainer>
       <S.ContentFooter>
         <a href="#" target="_blank">
-          Privacy
-        </a>
-        <a href="#" target="_blank">
           Terms and Conditions
         </a>
-        <p>Polkadex© 2021</p>
+        <p>Polkadex© 2022</p>
       </S.ContentFooter>
     </S.ContentWrapper>
   );
 };
 
 const Card = ({ title, description, icon, ...props }: T.Card) => (
-  <S.Card {...props}>
+  <S.Card isHoverable={!!props?.onClick} {...props}>
     <S.CardContent>
       <Icon name={icon} stroke="text" color="text" size="medium" />
       <S.CardTitle>
@@ -82,6 +88,6 @@ const Card = ({ title, description, icon, ...props }: T.Card) => (
         {description && <p>{description}</p>}
       </S.CardTitle>
     </S.CardContent>
-    <Icon name="ArrowRight" stroke="text" />
+    {props.onClick && <Icon name="ArrowRight" stroke="text" />}
   </S.Card>
 );

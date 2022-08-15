@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -15,6 +16,8 @@ import {
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { registerMainAccount } from "@polkadex/orderbook/modules/user/mainAccount/sagas/registerMainAccount";
+import { registerMainAccountFetch } from "@polkadex/orderbook-modules";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
@@ -27,6 +30,8 @@ export const AccountManagerTemplate = () => {
     isRemoveDevice: false,
     status: false,
   });
+
+  const dispatch = useDispatch();
 
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
@@ -64,7 +69,7 @@ export const AccountManagerTemplate = () => {
             <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
-                <small>Polkadot.js account selected</small>
+                <S.TitleText>Select Your Polkadex Account</S.TitleText>
                 <S.SelectInputContainer>
                   <Dropdown
                     isClickable
@@ -79,7 +84,7 @@ export const AccountManagerTemplate = () => {
                             <strong>
                               {currentMainAccount?.name || "Select your main account"}
                             </strong>
-                            <span>{shortWallet}</span>
+                            {shortWallet.length ? <span>{shortWallet}</span> : ""}
                           </div>
                           <div>
                             <Icons.ArrowBottom />
@@ -93,14 +98,35 @@ export const AccountManagerTemplate = () => {
                           account?.address?.slice(0, 10) +
                           "..." +
                           account?.address?.slice(account?.address?.length - 10);
+
+                        const isVerified = false;
+
                         return (
-                          <button
+                          <div
                             key={account.address}
-                            type="button"
+                            role="button"
                             onClick={() => handleSelectMainAccount(account.address)}>
                             {account.meta.name}
                             <span>{shortAddress}</span>
-                          </button>
+                            {isVerified ? (
+                              <S.Verified>
+                                <Icons.Verified /> Verified
+                              </S.Verified>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  console.log("register account");
+                                  // dispatch(
+                                  //   registerMainAccountFetch({
+                                  //     mainAccount: account,
+                                  //   })
+                                  // );
+                                }}>
+                                Verify Now
+                              </button>
+                            )}
+                          </div>
                         );
                       })}
                     </S.MyDropdownContent>

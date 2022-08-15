@@ -14,13 +14,12 @@ export const Header = styled.div<{ isActive?: boolean }>`
     width: 4rem;
     height: 4rem;
     background: ${isActive ? theme.colors.inverse : theme.colors.text};
-    ${Icon} svg {
-      stroke: ${isActive ? theme.colors.text : theme.colors.inverse};
-    }
+
     :hover {
       background: ${theme.colors.inverse};
       ${Icon} svg {
         stroke: ${theme.colors.text};
+        fill: ${theme.colors.text};
       }
     }
   `}

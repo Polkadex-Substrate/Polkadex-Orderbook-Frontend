@@ -39,16 +39,16 @@ export const TitleWrapper = styled.div`
 `;
 
 export const TitleBalance = styled.div`
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+`;
+export const TitleText = styled.small`
   ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-    small {
-      display: block;
-      color: ${theme.colors.tertiaryText};
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
+    display: block;
+    color: ${theme.colors.tertiaryText};
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
   `}
 `;
 
@@ -367,6 +367,7 @@ export const SelectAccount = styled.div`
   align-items: center;
   flex: 1;
 `;
+
 export const SelectAccountContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -390,8 +391,8 @@ export const SelectAccountContainer = styled.div`
       span {
         color: ${theme.colors.tertiaryText};
       }
-      strong,
-      span {
+      span,
+      strong {
         display: block;
       }
       div:last-child {
@@ -406,12 +407,29 @@ export const SelectAccountContainer = styled.div`
   `}
 `;
 
+export const Verified = styled.small`
+  ${({ theme }) => css`
+    display: inline-block !important;
+    margin-left: 1rem;
+    white-space: nowrap;
+    background: ${theme.colors.green}33;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    font-size: 1.2rem;
+    svg {
+      width: 1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  `}
+`;
+
 export const MyDropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
-    button {
+    div {
       white-space: nowrap;
       font-size: 1.3rem;
       padding: 1.2rem;
@@ -429,6 +447,21 @@ export const MyDropdownContent = styled.div`
       }
       :hover {
         background: ${theme.colors.secondaryBackground};
+      }
+    }
+    button {
+      display: inline-block !important;
+      margin-left: 1rem;
+      white-space: nowrap;
+      border: 1px solid ${theme.colors.primary};
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.3rem;
+      font-size: 1.2rem;
+      color: ${theme.colors.primary};
+      transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+      :hover {
+        background: ${theme.colors.primary};
+        color: ${theme.colors.white};
       }
     }
   `}

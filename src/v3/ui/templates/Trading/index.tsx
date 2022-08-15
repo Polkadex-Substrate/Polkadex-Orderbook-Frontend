@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 
 import * as S from "./styles";
