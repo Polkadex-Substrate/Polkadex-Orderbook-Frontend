@@ -25,7 +25,7 @@ export const fakeInformation = (info?: Notification) => {
     message: {
       title: `Fetch Information Error ${number}`,
       description: "Polkadex Orderbook is under maintenance, try again later.",
-      ...info.message,
+      ...info?.message,
     },
     time: new Date().getTime(),
     ...info,

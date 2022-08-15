@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -16,8 +15,6 @@ import {
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
-import { registerMainAccount } from "@polkadex/orderbook/modules/user/mainAccount/sagas/registerMainAccount";
-import { registerMainAccountFetch } from "@polkadex/orderbook-modules";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
@@ -30,8 +27,6 @@ export const AccountManagerTemplate = () => {
     isRemoveDevice: false,
     status: false,
   });
-
-  const dispatch = useDispatch();
 
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
