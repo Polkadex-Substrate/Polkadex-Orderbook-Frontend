@@ -34,6 +34,7 @@ export function* transactionsSaga(action: TransactionsFetch) {
             description: "Please select the main account from account manager page",
           },
           type: "ErrorAlert",
+          time: new Date().getTime(),
         })
       );
     }

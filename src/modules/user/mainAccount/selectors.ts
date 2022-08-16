@@ -28,3 +28,6 @@ export const selectLinkedMainAccount = (state: RootState): InjectedAccount | und
   );
   return linkedAccount;
 };
+
+export const selectIsRegisterMainAccountLoading = (state: RootState): boolean =>
+  state.user.extensionWallet.registerMainAccountLoading;

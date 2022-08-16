@@ -79,6 +79,7 @@ function createActionFromUserEvent(eventData: any) {
         title: "Account registered",
         description: "Your account has been registered",
       },
+      time: new Date().getTime(),
     });
   } else {
     // handle trade update events

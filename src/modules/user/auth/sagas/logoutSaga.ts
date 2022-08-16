@@ -19,9 +19,7 @@ export function* logoutSaga(action: LogoutFetch) {
         time: new Date().getTime(),
       })
     );
-    yield put(
-      userData({ email: "", isConfirmed: true, isAuthenticated: false, userExists: true })
-    );
+    yield put(userFetch());
   } catch (error) {
     yield put(
       sendError({

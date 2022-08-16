@@ -20,6 +20,7 @@ export const LinkAccountTemplate = () => {
     handleSelectMainAccount,
     currentMainAccount,
     shortWallet,
+    loading,
     registerMainAccount,
   } = useLinkMainAccount();
 
@@ -111,7 +112,7 @@ export const LinkAccountTemplate = () => {
                   color="white"
                   disabled={false}
                   isFull>
-                  Register Account
+                  {loading ? "Loading..." : "Register Account"}
                 </Button>
               </form>
             </S.Box>
