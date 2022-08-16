@@ -82,6 +82,10 @@ export const Container = styled.div`
 `;
 export const Title = styled.div`
   margin-right: 2rem;
+  span,
+  p {
+    word-wrap: anywhere;
+  }
 `;
 
 export const Actions = styled.div`

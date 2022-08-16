@@ -32,7 +32,7 @@ export const SignInTemplate = () => {
   return (
     <>
       <Head>
-        <title>New Account | Polkadex Orderbook</title>
+        <title>Login | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>

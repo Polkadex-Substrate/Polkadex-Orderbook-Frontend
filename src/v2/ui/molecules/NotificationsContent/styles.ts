@@ -155,6 +155,10 @@ export const Read = styled.div`
 `;
 
 export const CardContent = styled.div`
+  p,
+  strong {
+    word-break: break-all;
+  }
   small {
     font-size: 1.2rem;
     opacity: 0.6;

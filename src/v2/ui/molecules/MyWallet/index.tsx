@@ -19,7 +19,7 @@ export const MyWallet = ({ hasLink = true }) => {
 
 const Header = ({ isActive = false }) => (
   <S.Header isActive={isActive}>
-    <Icon name="Wallet" stroke="inverse" size="extraSmall" />
+    <Icon name="Wallet" fill="inverse" stroke="inverse" size="extraSmall" />
   </S.Header>
 );
 
