@@ -423,32 +423,30 @@ export const Verified = styled.small`
     }
   `}
 `;
-
-export const MyDropdownContent = styled.div`
+export const MyDropdownContentTitle = styled.div`
+  padding: 1.2rem;
+`;
+export const MyDropdownContentCard = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundSolid};
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.8rem;
-    div {
-      white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
-      transition: background 0.5s ease-in;
-      text-align: left;
-      width: 100%;
-      span {
-        display: inline-block;
-        margin-left: 0.4rem;
-        color: ${theme.colors.tertiaryText};
-      }
-      :first-child {
-        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackground};
-      }
+    white-space: nowrap;
+    font-size: 1.3rem;
+    padding: 1.2rem;
+    transition: background 0.5s ease-in;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    span {
+      display: inline-block;
+      margin-left: 0.4rem;
+      color: ${theme.colors.tertiaryText};
     }
+    :first-child {
+      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+
     button {
       display: inline-block !important;
       margin-left: 1rem;
@@ -464,5 +462,13 @@ export const MyDropdownContent = styled.div`
         color: ${theme.colors.white};
       }
     }
+  `}
+`;
+
+export const MyDropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.8rem;
   `}
 `;
