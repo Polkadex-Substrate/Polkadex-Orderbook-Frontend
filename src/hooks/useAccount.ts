@@ -20,7 +20,8 @@ export function useAccount() {
 
   useEffect(() => {
     if (!isSignedIn) dispatch(userFetch());
-  });
+  }, [dispatch, isSignedIn]);
+
   return {
     userEmail: email,
     isSignedIn,
