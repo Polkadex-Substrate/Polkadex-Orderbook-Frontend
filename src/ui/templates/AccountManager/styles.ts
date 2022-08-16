@@ -350,6 +350,13 @@ export const SelectInput = styled.div`
     }
   `}
 `;
+export const SelectInputFlex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+`;
+export const SelectInputWrapper = styled.div``;
 
 export const SelectInputContainer = styled.div`
   ${({ theme }) => css`
@@ -409,6 +416,7 @@ export const SelectAccountContainer = styled.div`
 
 export const Verified = styled.small`
   ${({ theme }) => css`
+    align-self: flex-start;
     display: inline-block !important;
     margin-left: 1rem;
     white-space: nowrap;
@@ -424,45 +432,54 @@ export const Verified = styled.small`
   `}
 `;
 
+export const UnVerified = styled.button`
+  ${({ theme }) => css`
+    align-self: flex-start;
+    display: inline-block !important;
+    margin-left: 1rem;
+    white-space: nowrap;
+    border: 1px solid ${theme.colors.primary};
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    font-size: 1.2rem;
+    color: ${theme.colors.primary};
+    transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    :hover {
+      background: ${theme.colors.primary};
+      color: ${theme.colors.white};
+    }
+  `}
+`;
+export const MyDropdownContentTitle = styled.div`
+  padding: 1.2rem;
+`;
+export const MyDropdownContentCard = styled.div`
+  ${({ theme }) => css`
+    white-space: nowrap;
+    font-size: 1.3rem;
+    padding: 1.2rem;
+    transition: background 0.5s ease-in;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    span {
+      display: inline-block;
+      margin-left: 0.4rem;
+      color: ${theme.colors.tertiaryText};
+    }
+    :first-child {
+      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+  `}
+`;
+
 export const MyDropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
-    div {
-      white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
-      transition: background 0.5s ease-in;
-      text-align: left;
-      width: 100%;
-      span {
-        display: inline-block;
-        margin-left: 0.4rem;
-        color: ${theme.colors.tertiaryText};
-      }
-      :first-child {
-        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackground};
-      }
-    }
-    button {
-      display: inline-block !important;
-      margin-left: 1rem;
-      white-space: nowrap;
-      border: 1px solid ${theme.colors.primary};
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.3rem;
-      font-size: 1.2rem;
-      color: ${theme.colors.primary};
-      transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
-      :hover {
-        background: ${theme.colors.primary};
-        color: ${theme.colors.white};
-      }
-    }
   `}
 `;

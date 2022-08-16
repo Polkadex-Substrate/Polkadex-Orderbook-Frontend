@@ -1,10 +1,11 @@
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Search } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Dropdown,
   Popup,
@@ -19,6 +20,8 @@ import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
+  const [search, setSearch] = useState("");
+
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -44,6 +47,15 @@ export const AccountManagerTemplate = () => {
   const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
     useLinkMainAccount();
 
+  const allMainAccounts = useMemo(
+    () =>
+      mainAccounts.reduce((pv, cv) => {
+        if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
+        return pv;
+      }, []),
+    [mainAccounts, search]
+  );
+
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
@@ -66,66 +78,77 @@ export const AccountManagerTemplate = () => {
               <S.TitleBalance>
                 <S.TitleText>Select Your Polkadex Account</S.TitleText>
                 <S.SelectInputContainer>
-                  <Dropdown
-                    isClickable
-                    direction="bottom"
-                    header={
-                      <S.SelectAccount>
-                        <S.SelectAccountContainer>
-                          <Icons.Avatar />
-                        </S.SelectAccountContainer>
-                        <S.SelectAccountContainer>
-                          <div>
-                            <strong>
-                              {currentMainAccount?.name || "Select your main account"}
-                            </strong>
-                            {shortWallet.length ? <span>{shortWallet}</span> : ""}
-                          </div>
-                          <div>
-                            <Icons.ArrowBottom />
-                          </div>
-                        </S.SelectAccountContainer>
-                      </S.SelectAccount>
-                    }>
-                    <S.MyDropdownContent>
-                      {mainAccounts?.map((account) => {
-                        const shortAddress =
-                          account?.address?.slice(0, 10) +
-                          "..." +
-                          account?.address?.slice(account?.address?.length - 10);
+                  <S.SelectInputFlex>
+                    <S.SelectInputWrapper>
+                      <Dropdown
+                        isClickable
+                        direction="bottom"
+                        header={
+                          <S.SelectAccount>
+                            <S.SelectAccountContainer>
+                              <Icons.Avatar />
+                            </S.SelectAccountContainer>
+                            <S.SelectAccountContainer>
+                              <div>
+                                <strong>
+                                  {currentMainAccount?.name || "Select your main account"}
+                                </strong>
+                                {shortWallet.length ? <span>{shortWallet}</span> : ""}
+                              </div>
+                              <div>
+                                <Icons.ArrowBottom />
+                              </div>
+                            </S.SelectAccountContainer>
+                          </S.SelectAccount>
+                        }>
+                        <S.MyDropdownContent>
+                          <S.MyDropdownContentTitle>
+                            <Search
+                              type="text"
+                              placeholder="Search.."
+                              isFull
+                              value={search}
+                              onChange={(e) => setSearch(e.target.value)}
+                            />
+                          </S.MyDropdownContentTitle>
+                          {allMainAccounts?.map((account) => {
+                            const shortAddress =
+                              account?.address?.slice(0, 10) +
+                              "..." +
+                              account?.address?.slice(account?.address?.length - 10);
 
-                        const isVerified = false;
-
-                        return (
-                          <div
-                            key={account.address}
-                            role="button"
-                            onClick={() => handleSelectMainAccount(account.address)}>
-                            {account.meta.name}
-                            <span>{shortAddress}</span>
-                            {isVerified ? (
-                              <S.Verified>
-                                <Icons.Verified /> Verified
-                              </S.Verified>
-                            ) : (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  console.log("register account");
-                                  // dispatch(
-                                  //   registerMainAccountFetch({
-                                  //     mainAccount: account,
-                                  //   })
-                                  // );
-                                }}>
-                                Verify Now
-                              </button>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </S.MyDropdownContent>
-                  </Dropdown>
+                            return (
+                              <S.MyDropdownContentCard
+                                key={account.address}
+                                role="button"
+                                onClick={() => handleSelectMainAccount(account.address)}>
+                                {account.meta.name}
+                                <span>{shortAddress}</span>
+                              </S.MyDropdownContentCard>
+                            );
+                          })}
+                        </S.MyDropdownContent>
+                      </Dropdown>
+                    </S.SelectInputWrapper>
+                    {true ? (
+                      <S.Verified>
+                        <Icons.Verified /> Verified
+                      </S.Verified>
+                    ) : (
+                      <S.UnVerified
+                        type="button"
+                        onClick={() => {
+                          console.log("register account");
+                          // dispatch(
+                          //   registerMainAccountFetch({
+                          //     mainAccount: account,
+                          //   })
+                          // );
+                        }}>
+                        Verify Now
+                      </S.UnVerified>
+                    )}
+                  </S.SelectInputFlex>
                 </S.SelectInputContainer>
               </S.TitleBalance>
               <S.TitleActions>
