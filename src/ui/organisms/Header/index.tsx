@@ -15,10 +15,9 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import { logOutFetch, selectUserInfo } from "@polkadex/orderbook-modules";
+import { logOutFetch } from "@polkadex/orderbook-modules";
 
 export const Header = ({ withInfo = true }) => {
-  const user = useReduxSelector(selectUserInfo);
   const { width } = useWindowSize();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,16 +35,14 @@ export const Header = ({ withInfo = true }) => {
         </S.Column>
         <S.Column>
           <ThemeSwitch />
-          {user.address ? (
+          {true ? (
             <Dropdown
               isOpacity
               direction="centerRight"
-              header={
-                <MyAccountHeader accountName={user.accountName} address={user.address} />
-              }>
+              header={<MyAccountHeader accountName={"Fix this"} address={"Fix this"} />}>
               <MyAccountContent
-                accountName={user.accountName}
-                address={user.address}
+                accountName={"Fix this"}
+                address={"fix this"}
                 onClick={() => dispatch(logOutFetch())}
               />
             </Dropdown>

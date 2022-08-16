@@ -4,7 +4,7 @@ import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
 import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
-import { ProxyAccount, selectUserInfo } from "../../profile";
+import { ProxyAccount } from "../../profile";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";

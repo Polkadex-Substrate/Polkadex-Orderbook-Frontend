@@ -1,5 +1,6 @@
 import { call, delay, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
+import keyring from "@polkadot/ui-keyring";
 
 import {
   orderCancelData,
@@ -9,7 +10,11 @@ import {
 } from "..";
 import * as mutation from "../../../../graphql/mutations";
 
-import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
+import {
+  selectCurrentTradeAccount,
+  selectRangerApi,
+  sendError,
+} from "@polkadex/orderbook-modules";
 import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
 
@@ -19,7 +24,8 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const baseAsset = isAssetPDEX(base) ? { polkadex: null } : { asset: base };
     const quoteAsset = isAssetPDEX(quote) ? { polkadex: null } : { asset: quote };
     const api = yield select(selectRangerApi);
-    const { address, keyringPair } = yield select(selectUserInfo);
+    const { address } = yield select(selectCurrentTradeAccount);
+    const keyringPair = keyring.getPair(address);
     if (address !== "" && keyringPair) {
       const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
         api,

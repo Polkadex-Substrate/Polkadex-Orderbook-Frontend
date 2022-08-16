@@ -6,7 +6,6 @@ import * as queries from "../../../../graphql/queries";
 
 import {
   selectCurrentTradeAccount,
-  selectUserInfo,
   selectUserSession,
   sendError,
   UserSessionPayload,

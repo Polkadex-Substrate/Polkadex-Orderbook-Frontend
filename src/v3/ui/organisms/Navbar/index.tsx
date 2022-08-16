@@ -8,22 +8,20 @@ import * as S from "./styles";
 import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
 import { Button } from "@polkadex/orderbook-ui/molecules";
 import { MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectCurrentMarket,
   selectCurrentMarketTickers,
-  selectHasUser,
+  selectHasCurrentTradeAccount,
 } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const Navbar = ({ onOpenMarkets }) => {
-  const hasUser = useReduxSelector(selectHasUser);
+  const { userEmail, isSignedIn } = useAccount();
   const getAsset = useReduxSelector(selectGetAsset);
   const currMarket = useReduxSelector(selectCurrentMarket);
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
-  const baseAsset = getAsset(currMarket?.assetIdArray[0]);
   const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
-
   const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = Number(currentTickers?.priceChange24Hr) < 0;
@@ -62,7 +60,7 @@ const Navbar = ({ onOpenMarkets }) => {
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {hasUser ? (
+      {isSignedIn ? (
         <S.Box>
           <S.Logo>
             <Logo size="Medium" href="/trading" />

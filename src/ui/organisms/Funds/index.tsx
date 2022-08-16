@@ -12,7 +12,7 @@ import {
 import {
   selectUserBalance,
   balancesFetch,
-  selectHasUser,
+  selectHasCurrentTradeAccount,
   selectBalancesLoading,
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
@@ -21,7 +21,7 @@ export const Funds = () => {
   const dispatch = useDispatch();
   const { width } = useWindowSize();
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasUser);
+  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {

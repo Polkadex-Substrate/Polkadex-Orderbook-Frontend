@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -21,7 +22,6 @@ export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
   const [search, setSearch] = useState("");
-
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -30,7 +30,7 @@ export const AccountManagerTemplate = () => {
     isRemoveDevice: false,
     status: false,
   });
-
+  const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
       isRemoveDevice: !!isDevice,
@@ -44,8 +44,13 @@ export const AccountManagerTemplate = () => {
     });
 
   const isLinkedAccount = tradingAccounts?.length > 0;
-  const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
-    useLinkMainAccount();
+  const {
+    mainAccounts,
+    isRegistered,
+    handleSelectMainAccount,
+    shortWallet,
+    currentMainAccount,
+  } = useLinkMainAccount();
 
   const allMainAccounts = useMemo(
     () =>
@@ -130,22 +135,13 @@ export const AccountManagerTemplate = () => {
                         </S.MyDropdownContent>
                       </Dropdown>
                     </S.SelectInputWrapper>
-                    {true ? (
+                    {isRegistered ? (
                       <S.Verified>
                         <Icons.Verified /> Verified
                       </S.Verified>
                     ) : (
-                      <S.UnVerified
-                        type="button"
-                        onClick={() => {
-                          console.log("register account");
-                          // dispatch(
-                          //   registerMainAccountFetch({
-                          //     mainAccount: account,
-                          //   })
-                          // );
-                        }}>
-                        Verify Now
+                      <S.UnVerified type="button" onClick={() => router.push("/linkAccount")}>
+                        Register Now
                       </S.UnVerified>
                     )}
                   </S.SelectInputFlex>

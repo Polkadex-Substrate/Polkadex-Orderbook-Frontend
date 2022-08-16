@@ -7,6 +7,7 @@ import {
   selectExtensionWalletAccounts,
   selectCurrentMainAccount,
   setMainAccountFetch,
+  selectIsCurrentAccountRegistered,
 } from "../modules/user/mainAccount";
 
 import { useMnemonic } from "./useMnemonic";
@@ -16,6 +17,7 @@ export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
   const currentMainAccount = useReduxSelector(selectCurrentMainAccount);
+  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
 
   const { mnemoicString } = useMnemonic();
   const handleSelectMainAccount = (address: string) => {
@@ -34,6 +36,7 @@ export const useLinkMainAccount = () => {
     handleSelectMainAccount,
     currentMainAccount,
     registerMainAccount,
+    isRegistered,
     shortWallet: currentMainAccount?.address
       ? currentMainAccount?.address?.slice(0, 10) +
         "..." +
