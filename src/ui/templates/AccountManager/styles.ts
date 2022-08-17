@@ -78,6 +78,22 @@ export const Content = styled.div`
     font-weight: 550;
   }
 `;
+export const ContentTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  span {
+    user-select: none;
+  }
+  div {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+`;
+
 export const ContentGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));

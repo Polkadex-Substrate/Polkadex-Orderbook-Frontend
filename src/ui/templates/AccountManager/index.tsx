@@ -17,11 +17,12 @@ import {
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
   const [search, setSearch] = useState("");
+  const [showSelected, setShowSelected] = useState(false);
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -30,6 +31,9 @@ export const AccountManagerTemplate = () => {
     isRemoveDevice: false,
     status: false,
   });
+
+  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
+
   const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
@@ -59,6 +63,10 @@ export const AccountManagerTemplate = () => {
         return pv;
       }, []),
     [mainAccounts, search]
+  );
+  const allTradingAccounts = useMemo(
+    () => tradingAccounts.filter((value) => value),
+    [tradingAccounts]
   );
 
   return (
@@ -161,8 +169,16 @@ export const AccountManagerTemplate = () => {
             </S.TitleWrapper>
           </S.Title>
           <S.Content>
-            <h2>My Trading Accounts</h2>
-
+            <S.ContentTitle>
+              <h2>My Trading Accounts</h2>
+              <div>
+                <span>Show only selected account</span>
+                <Switch
+                  isActive={showSelected}
+                  onChange={() => setShowSelected(!showSelected)}
+                />
+              </div>
+            </S.ContentTitle>
             <S.ContentGrid>
               {!isLinkedAccount ? (
                 <S.LinkAccount>
@@ -191,7 +207,7 @@ export const AccountManagerTemplate = () => {
                 </S.LinkAccount>
               ) : (
                 <>
-                  {tradingAccounts.map((value) => (
+                  {allTradingAccounts.map((value) => (
                     <Card
                       key={value.id}
                       title={value.name}
