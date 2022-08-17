@@ -32,7 +32,12 @@ export const AccountManagerTemplate = () => {
     status: false,
   });
 
-  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
+  const {
+    tradingAccounts,
+    handleSelectTradeAccount,
+    removeFromDevice,
+    associatedTradeAccounts,
+  } = useAccountManager();
 
   const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
@@ -65,8 +70,11 @@ export const AccountManagerTemplate = () => {
     [mainAccounts, search]
   );
   const allTradingAccounts = useMemo(
-    () => tradingAccounts.filter((value) => value),
-    [tradingAccounts]
+    () =>
+      tradingAccounts.filter((value) =>
+        showSelected ? associatedTradeAccounts?.includes(value?.address) : value
+      ),
+    [tradingAccounts, associatedTradeAccounts, showSelected]
   );
 
   return (
