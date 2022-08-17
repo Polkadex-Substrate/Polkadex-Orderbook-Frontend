@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import { Button, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Button, Dropdown, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
@@ -24,15 +24,17 @@ export const LinkAccountTemplate = () => {
     registerMainAccount,
   } = useLinkMainAccount();
 
-  const { handleSubmit, isValid, dirty } = useFormik({
-    initialValues: {},
+  const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
+    initialValues: {
+      name: "",
+    },
     validationSchema: linkAccountValidations,
     onSubmit: (values) => {
+      // console.log(values.name);
       registerMainAccount(currentMainAccount);
     },
   });
 
-  console.log("Selected Token id via url:", router.query.id);
   return (
     <>
       <Head>
@@ -104,13 +106,19 @@ export const LinkAccountTemplate = () => {
                     </Dropdown>
                   </S.SelectInputContainer>
                 </S.SelectInput>
-
+                <InputLine
+                  name="name"
+                  label="Default account name (Optional)"
+                  placeholder="Enter a default name"
+                  error={errors.name && touched.name && errors.name}
+                  {...getFieldProps("name")}
+                />
                 <Button
                   type="submit"
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={false}
+                  disabled={!(isValid && dirty)}
                   isFull>
                   {loading ? "Loading..." : "Register Account"}
                 </Button>
