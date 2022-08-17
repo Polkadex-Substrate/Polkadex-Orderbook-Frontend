@@ -1,4 +1,4 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, select, take, fork } from "redux-saga/effects";
 import { EventChannel, eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
@@ -17,13 +17,12 @@ import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentIn
 export function* userEventsChannelSaga(action: UserEventsFetch) {
   const mainAcc = yield select(selectCurrentMainAccount);
   const tradeAcc = yield select(selectCurrentTradeAccount);
-  yield call(userEventsChannelHandler, tradeAcc.address);
-  yield call(userEventsChannelHandler, mainAcc.address);
+  yield fork(userEventsChannelHandler, tradeAcc.address);
+  yield fork(userEventsChannelHandler, mainAcc.address);
 }
 
 export function* userEventsChannelHandler(address) {
   try {
-    console.log("created User Events Channel...");
     const channel = yield call(createUserEventsChannel, address);
     while (true) {
       const action = yield take(channel);
@@ -46,6 +45,8 @@ export function* userEventsChannelHandler(address) {
 }
 
 function createUserEventsChannel(address: string) {
+  console.log("created User Events Channel...", address);
+
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
