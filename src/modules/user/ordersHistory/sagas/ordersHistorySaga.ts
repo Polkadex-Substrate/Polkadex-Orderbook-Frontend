@@ -54,12 +54,14 @@ const fetchOrders = async (
   dateFrom: string,
   dateTo: string
 ): Promise<OrderCommon[]> => {
+  const dateFromStr = Utils.date.formatDateToISO(dateFrom);
+  const dateToStr = Utils.date.formatDateToISO(dateTo);
   const res: any = await API.graphql({
     query: queries.listOrderHistorybyMainAccount,
     variables: {
       main_account: proxy_acc,
-      from: dateFrom,
-      to: dateTo,
+      from: dateFromStr,
+      to: dateToStr,
     },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;
