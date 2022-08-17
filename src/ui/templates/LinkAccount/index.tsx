@@ -111,6 +111,7 @@ export const LinkAccountTemplate = () => {
                   label="Default account name (Optional)"
                   placeholder="Enter a default name"
                   error={errors.name && touched.name && errors.name}
+                  style={{ marginBottom: 10 }}
                   {...getFieldProps("name")}
                 />
                 <Button
