@@ -19,7 +19,6 @@ export const CreateAccountTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       name: "",
-      passcode: "",
     },
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
@@ -76,13 +75,6 @@ export const CreateAccountTemplate = () => {
                   placeholder="Enter a name for this account"
                   error={errors.name && touched.name && errors.name}
                   {...getFieldProps("name")}
-                />
-                <InputLine
-                  name="passcode"
-                  label="Passcode"
-                  placeholder="000000"
-                  error={errors.passcode && touched.passcode && errors.passcode}
-                  {...getFieldProps("passcode")}
                 />
                 {/* <PassCode
                   handleChange={(e) => console.log(e)}
