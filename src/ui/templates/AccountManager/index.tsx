@@ -63,7 +63,7 @@ export const AccountManagerTemplate = () => {
 
   const allMainAccounts = useMemo(
     () =>
-      mainAccounts.reduce((pv, cv) => {
+      mainAccounts?.reduce((pv, cv) => {
         if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
         return pv;
       }, []),
