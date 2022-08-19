@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -10,19 +11,35 @@ import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import {
+  registerTradeAccountFetch,
+  selectRegisterTradeAccountLoading,
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
-
+  const [mnemoicString, setMnemonicString] = useState("");
+  const isLoading = useReduxSelector(selectRegisterTradeAccountLoading);
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  const handleMnemonicUpdate = (value) => {
+    setMnemonicString(value);
+  };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
-      name: "",
+      name: "trade-account-2",
     },
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
       console.log(values);
+      dispatch(
+        registerTradeAccountFetch({
+          name: values.name,
+          password: null,
+          mnemonic: mnemoicString,
+        })
+      );
     },
   });
   return (
@@ -68,7 +85,7 @@ export const CreateAccountTemplate = () => {
             </S.Column>
             <S.Box>
               <form onSubmit={handleSubmit}>
-                <Mnemonic />
+                <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
                 <InputLine
                   name="name"
                   label="Account Name (Optional)"
@@ -87,9 +104,9 @@ export const CreateAccountTemplate = () => {
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={!(isValid && dirty)}
+                  disabled={!isValid || isLoading}
                   isFull>
-                  Create Account
+                  {isLoading ? "Create Account" : "Loading..."}
                 </Button>
               </form>
             </S.Box>

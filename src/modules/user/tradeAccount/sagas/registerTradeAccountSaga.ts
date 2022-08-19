@@ -8,6 +8,7 @@ import {
   registerTradeAccountError,
   RegisterTradeAccountFetch,
 } from "../actions";
+import { notificationPush } from "../../notificationHandler";
 
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
@@ -28,13 +29,14 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
     if (api && mainAccount.address) {
       // TODO: change to notifications here
       yield put(
-        alertPush({
-          type: "Loading",
+        notificationPush({
+          type: "LoadingAlert",
           message: {
             title: "Processing your transaction...",
             description:
               "Please sign the transaction and wait for block finalization. This may take a few minutes",
           },
+          time: new Date().getTime(),
         })
       );
       const res = yield call(() =>
@@ -43,12 +45,14 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       // TODO: change to notifications here
       if (res.isSuccess) {
         yield put(
-          alertPush({
-            type: "Successful",
+          notificationPush({
+            type: "SuccessAlert",
             message: {
               title: "Congratulations!",
-              description: "New proxy account registered",
+              description:
+                "New Trade account registered! Use the downloaded paper wallet to connect it with Polkadex Mobile App",
             },
+            time: new Date().getTime(),
           })
         );
         yield put(registerTradeAccountData());
