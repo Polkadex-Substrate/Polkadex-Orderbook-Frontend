@@ -26,12 +26,12 @@ export const LinkAccountTemplate = () => {
 
   const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
     initialValues: {
-      name: "",
+      name: "trade-account",
     },
     validationSchema: linkAccountValidations,
     onSubmit: (values) => {
       // console.log(values.name);
-      registerMainAccount(currentMainAccount);
+      registerMainAccount(currentMainAccount, values.name);
     },
   });
 
@@ -108,8 +108,8 @@ export const LinkAccountTemplate = () => {
                 </S.SelectInput>
                 <InputLine
                   name="name"
-                  label="Default account name (Optional)"
-                  placeholder="Enter a default name"
+                  label="Trading account name (Optional)"
+                  placeholder="Enter a name for your trading account"
                   error={errors.name && touched.name && errors.name}
                   style={{ marginBottom: 10 }}
                   {...getFieldProps("name")}
