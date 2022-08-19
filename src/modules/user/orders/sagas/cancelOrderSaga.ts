@@ -11,6 +11,7 @@ import {
 import * as mutation from "../../../../graphql/mutations";
 
 import {
+  notificationPush,
   selectCurrentTradeAccount,
   selectRangerApi,
   sendError,
@@ -26,6 +27,7 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const api = yield select(selectRangerApi);
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
+    keyringPair.unlock();
     if (address !== "" && keyringPair) {
       const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
         api,
@@ -37,6 +39,16 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
       const res = yield call(() => executeCancelOrder([order_id, account, pair, signature]));
       console.info("cancelled order: ", res);
       yield put(orderCancelData());
+      yield put(
+        notificationPush({
+          type: "SuccessAlert",
+          message: {
+            title: "Order cancelled",
+            description: `OrderId: ${orderId}`,
+          },
+          time: new Date().getTime(),
+        })
+      );
       yield delay(1000);
       yield put(orderCancelDataDelete());
     }
@@ -54,7 +66,7 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
   }
 }
 const executeCancelOrder = async (cancelOrderPayload) => {
-  const payload = { CancelOrder: cancelOrderPayload };
+  const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
   const res = await API.graphql({
     query: mutation.cancel_order,
     variables: { input: { payload } },

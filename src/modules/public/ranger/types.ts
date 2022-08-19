@@ -29,7 +29,7 @@ export const orderbookTypes = {
     price: "u128",
     timestamp: "i64",
   },
-  CancelOrderPayload: { id: "String" },
+  order_id: "H256",
   TradingPair: {
     base_asset: "AssetId",
     quote_asset: "AssetId",
