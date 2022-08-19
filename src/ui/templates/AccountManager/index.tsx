@@ -153,7 +153,7 @@ export const AccountManagerTemplate = () => {
                     </S.SelectInputWrapper>
                     {isRegistered ? (
                       <S.Verified>
-                        <Icons.Verified /> Verified
+                        <Icons.Verified /> Registered
                       </S.Verified>
                     ) : (
                       <S.UnVerified type="button" onClick={() => router.push("/linkAccount")}>
