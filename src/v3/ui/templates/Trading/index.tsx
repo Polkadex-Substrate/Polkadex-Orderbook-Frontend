@@ -18,7 +18,7 @@ import {
   selectCurrentTradePrice,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
-import { Popup } from "@polkadex/orderbook-ui/molecules";
+import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
 import Markets, { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
 import Transactions, {
   TransactionsSkeleton,
@@ -31,6 +31,8 @@ import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
 export function Trading() {
   const [state, setState] = useState(false);
+  const [banner, setBanner] = useState(true);
+
   const dispatch = useDispatch();
   const { id } = useRouter().query;
   useMarketsFetch(id as string);
@@ -64,15 +66,14 @@ export function Trading() {
         <meta name="description" content="The trading engine of Web3" />
       </Head>
       <S.Wrapper>
-        <Head>
-          <title>
-            {currentTrade?.length &&
-              marketName?.length &&
-              `${currentTrade} | ${marketName} | `}
-            Polkadex Orderbook
-          </title>
-        </Head>
         <Menu handleChange={() => setState(!state)} />
+        <Popup
+          style={{ justifyContent: "flex-end", alignItems: "flex-start" }}
+          isVisible={banner}
+          isMessage
+          onClose={() => setBanner(!banner)}>
+          <AccountBanner onClose={() => setBanner(!banner)} />
+        </Popup>
         <Popup
           isMessage
           isVisible={state}

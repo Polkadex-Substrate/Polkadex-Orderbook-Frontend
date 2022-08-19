@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const AccountBanner = () => (
+export const AccountBanner = ({ onClose }) => (
   <S.Wrapper>
     <S.Container>
       <S.Column>
@@ -21,12 +21,14 @@ export const AccountBanner = () => (
           </p>
         </div>
         <div>
-          <button>Close</button>
+          <button type="button" onClick={onClose}>
+            Close
+          </button>
           <Link href="createAccount">Create Account</Link>
         </div>
       </S.Content>
     </S.Container>
-    <S.Close>
+    <S.Close type="button" onClick={onClose}>
       <Icons.Close />
     </S.Close>
   </S.Wrapper>
