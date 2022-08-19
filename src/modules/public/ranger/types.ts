@@ -3,8 +3,8 @@ export const orderbookTypes = {
   LookupSource: "MultiAddress",
   AssetId: {
     _enum: {
-      POLKADEX: null,
       Asset: "u128",
+      POLKADEX: null,
     },
   },
   CurrencyId: "AssetId",
