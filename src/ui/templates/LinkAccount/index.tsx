@@ -119,7 +119,7 @@ export const LinkAccountTemplate = () => {
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={!(isValid && dirty)}
+                  disabled={!(isValid && dirty) || loading}
                   isFull>
                   {loading ? "Loading..." : "Register Account"}
                 </Button>
