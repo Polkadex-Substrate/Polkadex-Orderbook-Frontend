@@ -10,6 +10,7 @@ import { orderUpdateEvent } from "../../ordersHistory";
 import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 import { selectCurrentTradeAccount } from "../../tradeAccount";
+import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
@@ -74,17 +75,18 @@ function createActionFromUserEvent(eventData: any) {
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
   } else if (isKeyPresentInObject(data, "RegisterAccount")) {
-    return notificationPush({
-      type: "SuccessAlert",
-      message: {
-        title: "Account registered",
-        description: "Your account has been registered",
-      },
-      time: new Date().getTime(),
-    });
+    return registerSuccessNofiication();
   } else {
-    // handle trade update events
-    console.log("Unknown User Event: ", eventData);
-    return userUnknownEvent();
+    return userTradesUpdateEvent(data);
   }
 }
+
+const registerSuccessNofiication = () =>
+  notificationPush({
+    type: "SuccessAlert",
+    message: {
+      title: "Account registered",
+      description: "Your account has been registered",
+    },
+    time: new Date().getTime(),
+  });
