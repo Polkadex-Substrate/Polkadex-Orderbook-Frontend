@@ -153,10 +153,11 @@ export const AccountManagerTemplate = () => {
                     <a>Withdraw</a>
                   </Link>
                 </AvailableMessage>
-
-                <Link href="/history">
-                  <a>History</a>
-                </Link>
+                <AvailableMessage message="Soon">
+                  <Link href="/history">
+                    <a>History</a>
+                  </Link>
+                </AvailableMessage>
               </S.TitleActions>
             </S.TitleWrapper>
           </S.Title>
