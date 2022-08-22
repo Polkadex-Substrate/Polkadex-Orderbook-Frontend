@@ -19,7 +19,6 @@ export interface TradeAccountsState {
   selectedAccount: InjectedAccount;
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
-  mainAddress: string;
 }
 export const defaultAccount: InjectedAccount = {
   address: "",
@@ -34,7 +33,6 @@ const initialState: TradeAccountsState = {
   selectedAccount: defaultAccount,
   registerAccountLoading: false,
   registerAccountSuccess: false,
-  mainAddress: "",
 };
 
 export const TradeAccountsReducer = (
@@ -64,8 +62,7 @@ export const TradeAccountsReducer = (
     case SET_CURRENT_TRADE_ACCOUNT_DATA:
       return {
         ...state,
-        selectedAccount: action.payload.tradeAccount,
-        mainAddress: action.payload?.mainAddress,
+        selectedAccount: action.payload,
       };
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
       return {

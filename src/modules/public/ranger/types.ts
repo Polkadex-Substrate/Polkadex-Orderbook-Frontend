@@ -3,8 +3,8 @@ export const orderbookTypes = {
   LookupSource: "MultiAddress",
   AssetId: {
     _enum: {
-      Asset: "u128",
       POLKADEX: null,
+      Asset: "u128",
     },
   },
   CurrencyId: "AssetId",
@@ -29,7 +29,7 @@ export const orderbookTypes = {
     price: "u128",
     timestamp: "i64",
   },
-  order_id: "H256",
+  CancelOrderPayload: { id: "String" },
   TradingPair: {
     base_asset: "AssetId",
     quote_asset: "AssetId",

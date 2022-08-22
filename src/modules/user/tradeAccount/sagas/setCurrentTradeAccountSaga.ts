@@ -15,16 +15,13 @@ export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
   try {
     const account = action.payload;
     const mainAccounts = yield select(selectExtensionWalletAccounts);
-    yield put(setCurrentTradeAccountData({ tradeAccount: account }));
+    yield put(setCurrentTradeAccountData(account));
     const mainAccAddr = yield call(findMainAccFromTradeAcc, account.address);
     if (mainAccAddr) {
-      yield put(
-        setCurrentTradeAccountData({ tradeAccount: account, mainAddress: mainAccAddr })
-      );
+      let mainAcc = mainAccounts.find((acc) => acc.address === mainAccAddr);
+      mainAcc = mainAcc || { address: mainAccAddr, meta: { name: "" } };
+      yield put(setMainAccountFetch(mainAcc));
     }
-    let mainAcc = mainAccounts.find((acc) => acc.address === mainAccAddr);
-    mainAcc = mainAcc || { address: mainAccAddr, meta: { name: "" } };
-    yield put(setMainAccountFetch(mainAcc));
   } catch (error) {
     yield put(
       notificationPush({

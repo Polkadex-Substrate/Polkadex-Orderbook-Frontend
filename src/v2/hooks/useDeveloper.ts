@@ -6,13 +6,15 @@ import {
   balancesFetch,
   logOutFetch,
   notificationPush,
-  selectHasCurrentTradeAccount,
+  selectHasUser,
   selectNotifications,
   selectBrowserTradeAccounts,
   selectSignInError,
   selectSignInLoading,
+  selectUserInfo,
   signInFetch,
 } from "@polkadex/orderbook-modules";
+import { API, RequestOptions } from "@polkadex/orderbook-config";
 import { signMessage } from "@polkadex/web-helpers";
 
 type CommomState = {
@@ -28,7 +30,8 @@ type Notifications = { repeatNumber: number; repeatTime: number };
 // TODO: REMOVED IN PRODUCTION
 export function useDeveloper() {
   const dispatch = useDispatch();
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const user = useReduxSelector(selectUserInfo);
+  const hasUser = useReduxSelector(selectHasUser);
   const notifications = useReduxSelector(selectNotifications);
   const accounts = useReduxSelector(selectBrowserTradeAccounts);
 
@@ -58,8 +61,8 @@ export function useDeveloper() {
     setFunds((funds) => ({ ...funds, loading: true }));
     try {
       const payloads = [
-        { account: user?.address, asset: 1, amount: funds.amount },
-        { account: user?.address, asset: 0, amount: funds.amount },
+        { account: user.address, asset: 1, amount: funds.amount },
+        { account: user.address, asset: 0, amount: funds.amount },
       ];
 
       const response: any = await Promise.all(
@@ -89,7 +92,9 @@ export function useDeveloper() {
    *
    * @returns {void} Dispatch Sign In action
    */
-  const connectTestWallet = () => {};
+  const connectTestWallet = () => {
+    dispatch(signInFetch(connectWallet.address, connectWallet.password));
+  };
 
   /**
    * @description Disconnect Wallet

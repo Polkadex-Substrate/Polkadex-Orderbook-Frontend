@@ -1,7 +1,6 @@
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { SessionAction } from "./actions";
 import { SESSION_DATA, SESSION_ERROR, SESSION_FETCH } from "./constants";
-
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export interface SessionState {
   dateTo: string;

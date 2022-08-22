@@ -4,14 +4,15 @@ import awsconfig from "../aws-exports";
 
 import { DefaultConfig } from ".";
 export * from "./types";
+export * from "./config";
 
 Amplify.configure(awsconfig);
 
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
+  enclaveUrl: process.env.ENCLAVE_URL,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
-  landingPageMarket: "PDEXTDOT",
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,

@@ -1,16 +1,11 @@
 import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
-import keyring from "@polkadot/ui-keyring";
 
 import * as mutations from "../../../../graphql/mutations";
 import { userTradesError } from "../../trades";
 import { withdrawsData, WithdrawsFetch } from "..";
 
-import {
-  selectCurrentTradeAccount,
-  selectRangerApi,
-  sendError,
-} from "@polkadex/orderbook-modules";
+import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
@@ -20,8 +15,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
 
-    const { address } = yield select(selectCurrentTradeAccount);
-    const keyringPair = keyring.getPair(address);
+    const { address, keyringPair } = yield select(selectUserInfo);
     const nonce = getNonce();
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {

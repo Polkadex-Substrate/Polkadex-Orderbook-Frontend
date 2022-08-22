@@ -7,7 +7,7 @@ export type CommonState = {
   error?: CommonError;
   loading?: boolean;
 };
-export type OrderStatus = "OPEN" | "CLOSED" | "Expired" | "CANCELLED" | "Failed";
+export type OrderStatus = "Open" | "Closed" | "Expired" | "Canceled" | "Failed";
 export type OrderSide = "Sell" | "Buy";
 export type OrderType = "LIMIT" | "MARKET";
 export type OrderKind = "bid" | "ask";

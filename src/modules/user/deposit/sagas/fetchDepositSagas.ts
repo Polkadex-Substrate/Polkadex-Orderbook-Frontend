@@ -29,7 +29,6 @@ export function* fetchDepositSaga(action: DepositsFetch) {
             description:
               "Please wait while the deposit is processed and the block is finalized. This may take a few mins.",
           },
-          time: new Date().getTime(),
         })
       );
       const res = yield call(depositToEnclave, api, mainAccount, asset, amount);
@@ -43,7 +42,6 @@ export function* fetchDepositSaga(action: DepositsFetch) {
               description:
                 "Congratulations! You have successfully deposited assets to your proxy account.",
             },
-            time: new Date().getTime(),
           })
         );
       } else {

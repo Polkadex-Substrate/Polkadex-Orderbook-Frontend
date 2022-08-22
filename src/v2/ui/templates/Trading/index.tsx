@@ -18,7 +18,7 @@ import {
   selectCurrentMarket,
   selectCurrentMarketTickers,
   selectCurrentTradePrice,
-  selectHasCurrentTradeAccount,
+  selectHasUser,
   selectLastTradePrice,
 } from "@polkadex/orderbook-modules";
 import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerWithTrade";
@@ -76,7 +76,7 @@ export const Trading = () => {
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
 
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasUser);
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const lastTrade = useReduxSelector(selectLastTradePrice);

@@ -6,7 +6,7 @@ import { marketsTickersError, marketsTickersData, MarketsTickersFetch } from "..
 import { Ticker } from "..";
 import * as queries from "../../../../graphql/queries";
 
-export type TickerQueryResult = {
+type TickerQueryResult = {
   m: string;
   pc: string;
   pcp: string;

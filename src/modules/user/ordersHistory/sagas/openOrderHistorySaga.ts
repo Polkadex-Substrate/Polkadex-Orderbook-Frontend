@@ -4,7 +4,7 @@ import { API } from "aws-amplify";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
 import { alertPush, selectCurrentTradeAccount } from "../../../";
-import { ProxyAccount } from "../../profile";
+import { ProxyAccount, selectUserInfo } from "../../profile";
 
 import * as queries from "./../../../../graphql/queries";
 
@@ -50,7 +50,7 @@ export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
 const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
   const res: any = await API.graphql({
     query: queries.listOpenOrdersByMainAccount,
-    variables: { main_account: proxy_acc, limit: 1000 },
+    variables: { main_account: proxy_acc },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOpenOrdersByMainAccount.items;
   const orders = ordersRaw.map((order) => ({

@@ -20,7 +20,6 @@ import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
   depositsFetch,
   selectCurrentMainAccount,
-  selectDepositsLoading,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -46,7 +45,7 @@ export const DepositTemplate = () => {
   const { transactionHistory } = useHistory();
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
-  const loading = useReduxSelector(selectDepositsLoading);
+
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
     "..." +
@@ -183,7 +182,7 @@ export const DepositTemplate = () => {
                     color="white"
                     disabled={false}
                     isFull>
-                    {loading ? "Loading..." : "Deposit"}
+                    Deposit
                   </Button>
                 </form>
               </S.Form>

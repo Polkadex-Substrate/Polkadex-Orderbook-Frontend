@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -11,35 +10,20 @@ import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import {
-  registerTradeAccountFetch,
-  selectRegisterTradeAccountLoading,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
-  const [mnemoicString, setMnemonicString] = useState("");
-  const isLoading = useReduxSelector(selectRegisterTradeAccountLoading);
+
   const router = useRouter();
-  const dispatch = useDispatch();
-  const handleMnemonicUpdate = (value) => {
-    setMnemonicString(value);
-  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
-      name: "trade-account-2",
+      name: "",
+      passcode: "",
     },
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
       console.log(values);
-      dispatch(
-        registerTradeAccountFetch({
-          name: values.name,
-          password: null,
-          mnemonic: mnemoicString,
-        })
-      );
     },
   });
   return (
@@ -85,13 +69,20 @@ export const CreateAccountTemplate = () => {
             </S.Column>
             <S.Box>
               <form onSubmit={handleSubmit}>
-                <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
+                <Mnemonic />
                 <InputLine
                   name="name"
                   label="Account Name (Optional)"
                   placeholder="Enter a name for this account"
                   error={errors.name && touched.name && errors.name}
                   {...getFieldProps("name")}
+                />
+                <InputLine
+                  name="passcode"
+                  label="Passcode"
+                  placeholder="000000"
+                  error={errors.passcode && touched.passcode && errors.passcode}
+                  {...getFieldProps("passcode")}
                 />
                 {/* <PassCode
                   handleChange={(e) => console.log(e)}
@@ -104,9 +95,9 @@ export const CreateAccountTemplate = () => {
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={!isValid || isLoading}
+                  disabled={!(isValid && dirty)}
                   isFull>
-                  {isLoading ? "Loading..." : "Create Account"}
+                  Create Account
                 </Button>
               </form>
             </S.Box>

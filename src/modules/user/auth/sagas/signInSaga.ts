@@ -1,24 +1,20 @@
 import { put, call } from "redux-saga/effects";
 import { API, Auth } from "aws-amplify";
-import router from "next/router";
 
 import { signInData, signInError, SignInFetch } from "../actions";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 
-let userEmail = "";
 export function* signInSaga(action: SignInFetch) {
   try {
     const { email, password } = action.payload;
-    userEmail = email;
     const res = yield call(signIn, email, password);
-    yield put(signInData({ email, isConfirmed: true }));
+    yield put(signInData({ email }));
   } catch (error) {
     console.error(error);
     if (error.name === "UserNotConfirmedException") {
-      yield put(signInData({ email: userEmail, isConfirmed: false }));
-      yield call(router.push, "/codeVerification");
-      return;
+      // TODO
+      // nofify that the user is hasn't confirmed his account and redirect to the code verification page.
     }
     yield put(
       sendError({

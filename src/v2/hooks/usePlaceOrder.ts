@@ -14,10 +14,9 @@ import {
   selectBestBidPrice,
   orderExecuteFetch,
   selectOrderExecuteLoading,
-  selectHasCurrentTradeAccount,
+  selectHasUser,
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
-  selectIsUserSignedIn,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -32,8 +31,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const bestBidPrice = useReduxSelector(selectBestBidPrice);
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
-  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
+  const hasUser = useReduxSelector(selectHasUser);
   const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
 
   const [tab, setTab] = useState({
@@ -213,11 +211,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
     if (!isLimit) {
       return (
-        isOrderLoading ||
-        !amountInput ||
-        amountAvailable ||
-        !amountUnavailable ||
-        !hasTradeAccount
+        isOrderLoading || !amountInput || amountAvailable || !amountUnavailable || !hasUser
       );
     } else {
       return (
@@ -226,7 +220,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         !Number(form.price) ||
         amountAvailable ||
         !amountUnavailable ||
-        !hasTradeAccount
+        !hasUser
       );
     }
   }, [
@@ -238,7 +232,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     availableBaseAmount,
     availableQuoteAmount,
     isLimit,
-    hasTradeAccount,
+    hasUser,
   ]);
 
   const calculateTotal = () => {
@@ -382,8 +376,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     isOrderExecuted,
     quoteTicker,
     baseTicker,
-    isSignedIn,
     orderSide: isSell ? "Sell" : "Buy",
-    hasUser: hasTradeAccount,
+    hasUser,
   };
 }
