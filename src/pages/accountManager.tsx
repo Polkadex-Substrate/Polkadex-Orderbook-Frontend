@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectHasUser } from "../modules/user/tradeAccount";
 
 const AccountManagerTemplate = dynamic(
   () =>
@@ -15,7 +14,6 @@ const AccountManagerTemplate = dynamic(
 );
 const AccountManager = () => {
   const router = useRouter();
-  const hasUser = useReduxSelector(selectHasUser);
 
   // if (!hasUser) {
   //   router?.push("/sign");

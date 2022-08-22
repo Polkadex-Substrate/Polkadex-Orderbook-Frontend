@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -21,8 +21,8 @@ import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
   const [search, setSearch] = useState("");
+  const [showSelected, setShowSelected] = useState(false);
 
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -56,21 +56,19 @@ export const AccountManagerTemplate = () => {
   const isLinkedAccount = tradingAccounts?.length > 0;
   const {
     mainAccounts,
-    isRegistered,
     handleSelectMainAccount,
     shortWallet,
     currentMainAccount,
+    isRegistered,
   } = useLinkMainAccount();
 
-  const allMainAccounts = useMemo(
+  const allTradingAccounts = useMemo(
     () =>
-      mainAccounts.reduce((pv, cv) => {
-        if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
-        return pv;
-      }, []),
-    [mainAccounts, search]
+      tradingAccounts.filter((value) =>
+        showSelected ? associatedTradeAccounts?.includes(value?.address) : value
+      ),
+    [tradingAccounts, associatedTradeAccounts, showSelected]
   );
-
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
