@@ -33,6 +33,7 @@ export const WrapperLinks = styled.div`
   ${({ theme }) => css`
     width: 100%;
     min-width: 4.5rem;
+    min-height: 42rem;
     display: flex;
     justify-content: space-between;
     background: ${theme.colors.tertiaryBackground};

@@ -67,13 +67,6 @@ export function Trading() {
   }, [hasAssociatedAccounts, isSignedIn]);
 
   if (!id) return <div />;
-  console.log(
-    "banner",
-    banner,
-
-    "hasAssociatedAccounts",
-    !!hasAssociatedAccounts
-  );
 
   return (
     <>

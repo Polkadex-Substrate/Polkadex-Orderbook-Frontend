@@ -1,5 +1,4 @@
 import { Auth } from "aws-amplify";
-import { defaultConfig } from "next/dist/server/config-shared";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -7,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { selectSignInLoading, selectSignInSuccess, signInFetch } from "../modules/user/auth";
 
 import { useReduxSelector } from "./useReduxSelector";
+
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const useSignIn = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export const useSignIn = () => {
 
   useEffect(() => {
     if (isSuccess || isAuthenticated)
-      router.push("trading/" + defaultConfig.landingPageMarket);
+      router.push("/trading/" + defaultConfig.landingPageMarket);
   }, [isAuthenticated, isSuccess, router]);
 
   const signIn = (email: string, password: string) => {

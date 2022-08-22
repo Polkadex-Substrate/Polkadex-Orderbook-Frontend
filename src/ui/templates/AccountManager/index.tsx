@@ -91,7 +91,9 @@ export const AccountManagerTemplate = () => {
             <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
-                <S.TitleText>Select Your Polkadex Account</S.TitleText>
+                {!userHasSelectedMainAccount && (
+                  <S.TitleText>Select Your Polkadex Account</S.TitleText>
+                )}
                 <S.SelectInputContainer>
                   <S.SelectInputFlex>
                     <S.SelectInputWrapper>
