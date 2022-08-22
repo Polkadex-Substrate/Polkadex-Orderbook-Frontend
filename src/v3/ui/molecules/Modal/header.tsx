@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { Close } from "./Close";
+import { Close } from "./close";
 import { useModalContext } from "./context";
 import * as S from "./styles";
 
