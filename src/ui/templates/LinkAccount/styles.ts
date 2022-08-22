@@ -175,29 +175,18 @@ export const SelectAccountContainer = styled.div`
   `}
 `;
 
-export const DropdownContent = styled.div`
+export const DropdownItem = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundSolid};
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    white-space: nowrap;
+    font-size: 1.3rem;
     border-radius: 0.8rem;
-    button {
-      white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
-      transition: background 0.5s ease-in;
-      text-align: left;
-      width: 100%;
-      span {
-        display: inline-block;
-        margin-left: 0.4rem;
-      }
-      :first-child {
-        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackground};
-      }
+    transition: background 0.5s ease-in;
+    text-align: left;
+    width: 100%;
+    span {
+      display: inline-block;
+      margin-left: 0.4rem;
+      opacity: 0.5;
     }
   `}
 `;
