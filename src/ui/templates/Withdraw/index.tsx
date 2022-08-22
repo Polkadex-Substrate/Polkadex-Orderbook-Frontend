@@ -5,9 +5,9 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
-  Dropdown,
   InputLine,
   Table,
   Tooltip,
@@ -120,10 +120,8 @@ export const WithdrawTemplate = () => {
                   <S.SelectInput>
                     <span>Select a coin</span>
                     <S.SelectInputContainer>
-                      <Dropdown
-                        isClickable
-                        direction="bottom"
-                        header={
+                      <Dropdown>
+                        <Dropdown.Trigger>
                           <S.DropdownHeader>
                             <div>
                               <span>
@@ -137,12 +135,10 @@ export const WithdrawTemplate = () => {
                               </span>
                             </div>
                           </S.DropdownHeader>
-                        }>
-                        <S.DropdownContent>
-                          <button type="button" onClick={undefined}>
-                            Polkadex PDEX
-                          </button>
-                        </S.DropdownContent>
+                        </Dropdown.Trigger>
+                        <Dropdown.Menu fill="secondaryBackgroundSolid">
+                          <Dropdown.Item>Polkadex PDEX</Dropdown.Item>
+                        </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputContainer>
                     <S.Available>
