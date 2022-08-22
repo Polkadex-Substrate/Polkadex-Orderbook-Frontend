@@ -28,6 +28,16 @@ export const colors = [
   "none",
   "inverse",
 ];
+export type Direction =
+  | "bottom left"
+  | "bottom right"
+  | "bottom start"
+  | "top left"
+  | "top right"
+  | "top start"
+  | "start"
+  | "start left"
+  | "start right";
 
 export type Colors =
   | "primary"
