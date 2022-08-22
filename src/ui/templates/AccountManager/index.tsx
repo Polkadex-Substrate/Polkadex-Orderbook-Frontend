@@ -1,13 +1,12 @@
 import Head from "next/head";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Search } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
-  Dropdown,
   Popup,
   Tooltip,
   TooltipContent,
@@ -20,7 +19,6 @@ import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
-  const [search, setSearch] = useState("");
 
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -47,15 +45,6 @@ export const AccountManagerTemplate = () => {
   const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
     useLinkMainAccount();
 
-  const allMainAccounts = useMemo(
-    () =>
-      mainAccounts.reduce((pv, cv) => {
-        if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
-        return pv;
-      }, []),
-    [mainAccounts, search]
-  );
-
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
@@ -80,10 +69,8 @@ export const AccountManagerTemplate = () => {
                 <S.SelectInputContainer>
                   <S.SelectInputFlex>
                     <S.SelectInputWrapper>
-                      <Dropdown
-                        isClickable
-                        direction="bottom"
-                        header={
+                      <Dropdown>
+                        <Dropdown.Trigger>
                           <S.SelectAccount>
                             <S.SelectAccountContainer>
                               <Icons.Avatar />
@@ -100,34 +87,26 @@ export const AccountManagerTemplate = () => {
                               </div>
                             </S.SelectAccountContainer>
                           </S.SelectAccount>
-                        }>
-                        <S.MyDropdownContent>
-                          <S.MyDropdownContentTitle>
-                            <Search
-                              type="text"
-                              placeholder="Search.."
-                              isFull
-                              value={search}
-                              onChange={(e) => setSearch(e.target.value)}
-                            />
-                          </S.MyDropdownContentTitle>
-                          {allMainAccounts?.map((account) => {
+                        </Dropdown.Trigger>
+                        <Dropdown.Menu fill="secondaryBackgroundSolid">
+                          {mainAccounts?.map((account) => {
                             const shortAddress =
                               account?.address?.slice(0, 10) +
                               "..." +
                               account?.address?.slice(account?.address?.length - 10);
 
                             return (
-                              <S.MyDropdownContentCard
-                                key={account.address}
-                                role="button"
-                                onClick={() => handleSelectMainAccount(account.address)}>
-                                {account.meta.name}
-                                <span>{shortAddress}</span>
-                              </S.MyDropdownContentCard>
+                              <Dropdown.Item key={account.address}>
+                                <S.MyDropdownContentCard
+                                  role="button"
+                                  onClick={() => handleSelectMainAccount(account.address)}>
+                                  {account.meta.name}
+                                  <span>{shortAddress}</span>
+                                </S.MyDropdownContentCard>
+                              </Dropdown.Item>
                             );
                           })}
-                        </S.MyDropdownContent>
+                        </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputWrapper>
                     {true ? (
@@ -272,26 +251,25 @@ const Card = ({
         </a>
       </Link>
       <S.CardContent>
-        <Dropdown
-          isClickable
-          direction="bottom"
-          header={
+        <Dropdown>
+          <Dropdown.Trigger>
             <S.DropdownHeader>
               Remove
               <div>
                 <Icons.DropdownArrow stroke="secondaryText" />
               </div>
             </S.DropdownHeader>
-          }>
-          <S.DropdownContent>
-            <button type="button" onClick={onRemoveFromBlockchain}>
+          </Dropdown.Trigger>
+          <Dropdown.Menu fill="secondaryBackgroundSolid">
+            <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
               Remove from the blockchain
-            </button>
-            <button type="button" onClick={onRemoveFromDevice}>
+            </Dropdown.Item>
+            <Dropdown.Item key="removeBrowser" onAction={onRemoveFromDevice}>
               Remove from my browser
-            </button>
-          </S.DropdownContent>
+            </Dropdown.Item>
+          </Dropdown.Menu>
         </Dropdown>
+
         <S.ContentActions>
           {isUsing ? (
             <span>Using</span>

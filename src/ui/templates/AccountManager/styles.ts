@@ -457,19 +457,16 @@ export const MyDropdownContentCard = styled.div`
   ${({ theme }) => css`
     white-space: nowrap;
     font-size: 1.3rem;
-    padding: 1.2rem;
     transition: background 0.5s ease-in;
     text-align: left;
-    width: 100%;
+
     cursor: pointer;
     span {
       display: inline-block;
       margin-left: 0.4rem;
       color: ${theme.colors.tertiaryText};
     }
-    :first-child {
-      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    }
+
     :hover {
       background: ${theme.colors.secondaryBackground};
     }
