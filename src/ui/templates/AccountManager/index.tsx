@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -16,10 +17,12 @@ import {
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const { tradingAccounts, handleSelectTradeAccount, removeFromDevice } = useAccountManager();
+  const [search, setSearch] = useState("");
 
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -30,6 +33,14 @@ export const AccountManagerTemplate = () => {
     status: false,
   });
 
+  const {
+    tradingAccounts,
+    handleSelectTradeAccount,
+    removeFromDevice,
+    associatedTradeAccounts,
+  } = useAccountManager();
+
+  const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
       isRemoveDevice: !!isDevice,
@@ -43,8 +54,22 @@ export const AccountManagerTemplate = () => {
     });
 
   const isLinkedAccount = tradingAccounts?.length > 0;
-  const { mainAccounts, handleSelectMainAccount, shortWallet, currentMainAccount } =
-    useLinkMainAccount();
+  const {
+    mainAccounts,
+    isRegistered,
+    handleSelectMainAccount,
+    shortWallet,
+    currentMainAccount,
+  } = useLinkMainAccount();
+
+  const allMainAccounts = useMemo(
+    () =>
+      mainAccounts.reduce((pv, cv) => {
+        if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
+        return pv;
+      }, []),
+    [mainAccounts, search]
+  );
 
   return (
     <>
@@ -110,22 +135,13 @@ export const AccountManagerTemplate = () => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputWrapper>
-                    {true ? (
+                    {isRegistered ? (
                       <S.Verified>
-                        <Icons.Verified /> Verified
+                        <Icons.Verified /> Registered
                       </S.Verified>
                     ) : (
-                      <S.UnVerified
-                        type="button"
-                        onClick={() => {
-                          console.log("register account");
-                          // dispatch(
-                          //   registerMainAccountFetch({
-                          //     mainAccount: account,
-                          //   })
-                          // );
-                        }}>
-                        Verify Now
+                      <S.UnVerified type="button" onClick={() => router.push("/linkAccount")}>
+                        Register Now
                       </S.UnVerified>
                     )}
                   </S.SelectInputFlex>
@@ -148,8 +164,16 @@ export const AccountManagerTemplate = () => {
             </S.TitleWrapper>
           </S.Title>
           <S.Content>
-            <h2>My Trading Accounts</h2>
-
+            <S.ContentTitle>
+              <h2>My Trading Accounts</h2>
+              <div>
+                <span>Show only selected account</span>
+                <Switch
+                  isActive={showSelected}
+                  onChange={() => setShowSelected(!showSelected)}
+                />
+              </div>
+            </S.ContentTitle>
             <S.ContentGrid>
               {!isLinkedAccount ? (
                 <S.LinkAccount>
@@ -178,7 +202,7 @@ export const AccountManagerTemplate = () => {
                 </S.LinkAccount>
               ) : (
                 <>
-                  {tradingAccounts.map((value) => (
+                  {allTradingAccounts.map((value) => (
                     <Card
                       key={value.id}
                       title={value.name}

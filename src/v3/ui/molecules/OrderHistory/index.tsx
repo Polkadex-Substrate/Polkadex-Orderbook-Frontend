@@ -36,8 +36,8 @@ const OrderHistory = ({ filters }) => {
                 const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";
                 const isMarket = order.order_type === "MARKET";
-                const baseUnit = getAsset(base).symbol;
-                const quoteUnit = getAsset(quote).symbol;
+                const baseUnit = getAsset(base)?.symbol;
+                const quoteUnit = getAsset(quote)?.symbol;
                 const avgPrice = order.avg_filled_price;
                 return (
                   <OrderHistoryCard

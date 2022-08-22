@@ -22,7 +22,7 @@ export interface Notification {
     title?: string;
     description?: string;
   };
-  time?: number;
+  time: number;
   actionUrl?: string;
   actionTitle?: string;
 }

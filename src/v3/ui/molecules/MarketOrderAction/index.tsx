@@ -22,6 +22,7 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
     baseTicker,
     orderSide,
     hasUser,
+    isSignedIn,
     isOrderExecuted,
   } = usePlaceOrder(isSell, isLimit);
   return (
@@ -91,14 +92,18 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
           <ButtonStatus
             isSell={isSell}
             heading={{
-              text: !hasUser ? "Connect your account" : `${orderSide} ${baseTicker}`,
+              text: !isSignedIn
+                ? "Sign In to Place Order"
+                : !hasUser
+                ? "Connect Trading Account"
+                : `${orderSide} ${baseTicker}`,
               loading: "Waiting",
               success: "Order Created",
             }}
             isLoading={isOrderLoading}
             isSuccess={isOrderExecuted}
             type="submit"
-            disabled={!hasUser}
+            disabled={!hasUser || !isSignedIn}
           />
         </form>
       </S.ContainerForm>

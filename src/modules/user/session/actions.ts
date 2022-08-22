@@ -3,8 +3,8 @@ import { CommonError } from "../../types";
 import { SESSION_FETCH, SESSION_DATA, SESSION_ERROR } from "./constants";
 
 export interface UserSessionPayload {
-  dateTo: string,
-  dateFrom: string
+  dateTo: string;
+  dateFrom: string;
 }
 
 export interface UserSessionFetch {

@@ -12,7 +12,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
   selectBalancesLoading,
-  selectHasUser,
+  selectHasCurrentTradeAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 
@@ -23,7 +23,7 @@ export const Tokens = () => {
   });
 
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasUser);
+  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {

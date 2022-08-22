@@ -13,4 +13,12 @@ export const Utils = {
       return new BigNumber(str).div(UNIT_BN).toString();
     },
   },
+  date: {
+    formatDateToISO(date: Date | string | number): string {
+      if (date instanceof Date) {
+        return date.toISOString();
+      }
+      return new Date(date).toISOString();
+    },
+  },
 };

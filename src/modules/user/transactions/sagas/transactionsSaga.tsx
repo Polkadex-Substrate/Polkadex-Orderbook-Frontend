@@ -3,7 +3,6 @@ import { API } from "aws-amplify";
 
 import { transactionsData, TransactionsFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
-import { selectUserInfo } from "../../profile";
 import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
 import { selectCurrentMainAccount } from "../../mainAccount";
@@ -35,6 +34,7 @@ export function* transactionsSaga(action: TransactionsFetch) {
             description: "Please select the main account from account manager page",
           },
           type: "ErrorAlert",
+          time: new Date().getTime(),
         })
       );
     }

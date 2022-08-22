@@ -8,7 +8,7 @@ import * as S from "./styles";
 import { Checkbox, Icon, Table } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
-  selectHasUser,
+  selectHasCurrentTradeAccount,
   selectUserBalance,
   selectUserFetching,
 } from "@polkadex/orderbook-modules";
@@ -21,7 +21,7 @@ export const AssetsTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const user = useReduxSelector(selectHasUser);
+  const user = useReduxSelector(selectHasCurrentTradeAccount);
   const isLoading = useReduxSelector(selectUserFetching);
 
   const assets = useReduxSelector(selectAllAssets);

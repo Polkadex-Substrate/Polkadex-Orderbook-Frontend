@@ -37,7 +37,7 @@ function processOrderData(eventData: SetOrder): OrderCommon {
     m: `${base}-${quote}`, // marketid
     side: eventData.side,
     order_type: eventData.order_type,
-    status: eventData.status,
+    status: eventData.status.toUpperCase(),
     price: Utils.decimals.formatToNumber(eventData.price),
     qty: Utils.decimals.formatToNumber(eventData.qty),
     avg_filled_price: Utils.decimals.formatToString(eventData.avg_filled_price),
