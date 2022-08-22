@@ -75,18 +75,23 @@ function createActionFromUserEvent(eventData: any) {
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
   } else if (isKeyPresentInObject(data, "RegisterAccount")) {
-    return registerSuccessNofiication();
+    return registerSuccessNofiication(
+      "Account registered",
+      "Your account has been registered"
+    );
+  } else if (isKeyPresentInObject(data, "AddProxy")) {
+    return registerSuccessNofiication("Trade account added", "New Trade account created");
   } else {
     return userTradesUpdateEvent(data);
   }
 }
 
-const registerSuccessNofiication = () =>
+const registerSuccessNofiication = (title: string, description: string) =>
   notificationPush({
     type: "SuccessAlert",
     message: {
-      title: "Account registered",
-      description: "Your account has been registered",
+      title,
+      description,
     },
     time: new Date().getTime(),
   });
