@@ -11,6 +11,7 @@ import {
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
 import { Utils } from "@polkadex/web-helpers";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 type TradesQueryResult = {
   m: string;
@@ -25,7 +26,9 @@ export function* fetchTradesSaga() {
     const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      const { dateFrom, dateTo } = userSession;
+      // const { dateFrom, dateTo } = userSession;
+      const dateTo = new Date().toISOString();
+      const dateFrom = subtractMonths(1).toISOString();
       const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }

@@ -11,6 +11,7 @@ import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 import { Utils } from "@polkadex/web-helpers";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -33,7 +34,9 @@ export function* ordersHistorySaga() {
     const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      const { dateFrom, dateTo } = userSession;
+      // const { dateFrom, dateTo } = userSession;
+      const dateTo = new Date().toISOString();
+      const dateFrom = subtractMonths(1).toISOString();
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
