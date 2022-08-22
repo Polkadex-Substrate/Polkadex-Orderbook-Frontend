@@ -15,26 +15,18 @@ import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
-  payload: {
-    proxyAddress: string;
-  };
 }
 
 export interface UserInfo {
   type: typeof PROFILE_USER_DATA;
   payload: {
-    user: Partial<ProxyAccount>;
+    email: string;
+    isConfirmed: boolean;
+    isAuthenticated: boolean;
+    userExists: boolean;
+    session?: any;
+    jwt?: string;
   };
-}
-
-export interface UserListData {
-  type: typeof PROFILE_USER_LIST_DATA;
-  payload: {
-    userList: Array<UserSkeleton>;
-  };
-}
-export interface UserListFetch {
-  type: typeof PROFILE_USER_LIST_FETCH;
 }
 
 export interface UserError {
@@ -46,30 +38,14 @@ export interface UserReset {
   type: typeof PROFILE_RESET_USER;
 }
 
-export type ProfileAction =
-  | UserFetch
-  | UserInfo
-  | UserError
-  | UserReset
-  | UserListFetch
-  | UserListData;
+export type ProfileAction = UserFetch | UserInfo | UserError | UserReset;
 
-export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
+export const userFetch = (): UserFetch => ({
   type: PROFILE_USER_FETCH,
-  payload,
 });
 
 export const userData = (payload: UserInfo["payload"]): UserInfo => ({
   type: PROFILE_USER_DATA,
-  payload,
-});
-
-export const userListFetch = (): UserListFetch => ({
-  type: PROFILE_USER_LIST_FETCH,
-});
-
-export const userListData = (payload: UserListData["payload"]): UserListData => ({
-  type: PROFILE_USER_LIST_DATA,
   payload,
 });
 

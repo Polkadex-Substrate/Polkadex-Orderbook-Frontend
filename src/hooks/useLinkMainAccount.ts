@@ -7,6 +7,8 @@ import {
   selectExtensionWalletAccounts,
   selectCurrentMainAccount,
   setMainAccountFetch,
+  selectIsCurrentAccountRegistered,
+  selectIsRegisterMainAccountLoading,
 } from "../modules/user/mainAccount";
 
 import { useMnemonic } from "./useMnemonic";
@@ -16,14 +18,15 @@ export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
   const currentMainAccount = useReduxSelector(selectCurrentMainAccount);
-
+  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
+  const loading = useReduxSelector(selectIsRegisterMainAccountLoading);
   const { mnemoicString } = useMnemonic();
   const handleSelectMainAccount = (address: string) => {
     dispatch(setMainAccountFetch(mainAccounts.find((acc) => acc.address === address)));
   };
 
-  const registerMainAccount = (acc: MainAccount) => {
-    const tradeAcc = keyring.addUri(mnemoicString, null, { name: "trade-account" });
+  const registerMainAccount = (acc: MainAccount, name = "trade-account") => {
+    const tradeAcc = keyring.addUri(mnemoicString, null, { name });
     dispatch(
       registerMainAccountFetch({ mainAccount: acc, tradeAddress: tradeAcc.pair.address })
     );
@@ -34,6 +37,8 @@ export const useLinkMainAccount = () => {
     handleSelectMainAccount,
     currentMainAccount,
     registerMainAccount,
+    loading,
+    isRegistered,
     shortWallet: currentMainAccount?.address
       ? currentMainAccount?.address?.slice(0, 10) +
         "..." +

@@ -55,6 +55,7 @@ export interface SignInData {
   type: typeof AUTH_SIGN_IN_DATA;
   payload: {
     email: string;
+    isConfirmed: boolean;
   };
 }
 

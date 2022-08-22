@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import { Button, Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { Button, Dropdown, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
@@ -20,18 +20,21 @@ export const LinkAccountTemplate = () => {
     handleSelectMainAccount,
     currentMainAccount,
     shortWallet,
+    loading,
     registerMainAccount,
   } = useLinkMainAccount();
 
-  const { handleSubmit, isValid, dirty } = useFormik({
-    initialValues: {},
+  const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
+    initialValues: {
+      name: "trade-account",
+    },
     validationSchema: linkAccountValidations,
     onSubmit: (values) => {
-      registerMainAccount(currentMainAccount);
+      // console.log(values.name);
+      registerMainAccount(currentMainAccount, values.name);
     },
   });
 
-  console.log("Selected Token id via url:", router.query.id);
   return (
     <>
       <Head>
@@ -103,15 +106,22 @@ export const LinkAccountTemplate = () => {
                     </Dropdown>
                   </S.SelectInputContainer>
                 </S.SelectInput>
-
+                <InputLine
+                  name="name"
+                  label="Trading account name (Optional)"
+                  placeholder="Enter a name for your trading account"
+                  error={errors.name && touched.name && errors.name}
+                  style={{ marginBottom: 10 }}
+                  {...getFieldProps("name")}
+                />
                 <Button
                   type="submit"
                   size="extraLarge"
                   background="primary"
                   color="white"
-                  disabled={false}
+                  disabled={!(isValid && dirty) || loading}
                   isFull>
-                  Register Account
+                  {loading ? "Loading..." : "Register Account"}
                 </Button>
               </form>
             </S.Box>

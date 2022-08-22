@@ -1,19 +1,31 @@
 import { useDispatch } from "react-redux";
+import { Auth } from "aws-amplify";
+import { useEffect } from "react";
 
-import { selectUserInfo } from "../modules/user/profile";
+import { useReduxSelector } from "./useReduxSelector";
 
-import { useReduxSelector } from ".";
-
-import { logOutFetch } from "@polkadex/orderbook-modules";
+import {
+  logOutFetch,
+  selectIsUserSignedIn,
+  selectIsUserVerified,
+  selectUserIdentity,
+  userFetch,
+} from "@polkadex/orderbook-modules";
 
 export function useAccount() {
   const dispatch = useDispatch();
+  const email = useReduxSelector(selectUserIdentity);
+  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
+  const isVerified = useReduxSelector(selectIsUserVerified);
 
-  const user = useReduxSelector(selectUserInfo);
+  useEffect(() => {
+    if (!isSignedIn) dispatch(userFetch());
+  }, [dispatch, isSignedIn]);
 
   return {
-    userAddress: user?.address || "0x000000000",
-    userName: user?.accountName || "Account",
+    userEmail: email,
+    isSignedIn,
+    isVerified,
     logout: () => dispatch(logOutFetch()),
   };
 }

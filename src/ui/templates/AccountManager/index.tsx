@@ -5,9 +5,9 @@ import Link from "next/link";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Search } from "@polkadex/orderbook/v3/ui/molecules";
 import {
-  AvailableMessage,
+  Dropdown,
   Popup,
   Tooltip,
   TooltipContent,
