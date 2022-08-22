@@ -16,9 +16,8 @@ export const useSignUp = () => {
     if (isSuccess) router.push("/codeVerification");
   }, [isSuccess, router]);
 
-  const signUp = (email: string, password: string) => {
+  const signUp = (email: string, password: string) =>
     dispatch(signUpFetch({ email, password }));
-  };
 
   return { signUp, loading };
 };

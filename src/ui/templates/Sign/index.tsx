@@ -15,7 +15,7 @@ const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
 });
 
 export const SignTemplate = () => {
-  const { signUp } = useSignUp();
+  const { signUp, loading } = useSignUp();
   const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,
@@ -31,7 +31,6 @@ export const SignTemplate = () => {
     },
     validationSchema: signUpValidations,
     onSubmit: (values) => {
-      console.log(values);
       const { password, email } = values;
       signUp(email, password);
     },
@@ -118,7 +117,8 @@ export const SignTemplate = () => {
                     background="primary"
                     color="white"
                     disabled={!(isValid && dirty)}
-                    isFull>
+                    isFull
+                    isLoading={loading}>
                     Create Account
                   </Button>
                 </form>

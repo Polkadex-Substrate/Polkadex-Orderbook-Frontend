@@ -14,6 +14,7 @@ import { useReduxSelector } from "./useReduxSelector";
 export const useCodeVerification = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+
   const isVerficationSuccess = useReduxSelector(selectUserConfirmed);
   const email = useReduxSelector(selectUserAuthEmail);
 
@@ -21,12 +22,9 @@ export const useCodeVerification = () => {
     if (isVerficationSuccess) router.push("/accountManager");
   }, [isVerficationSuccess, router]);
 
-  const verifyCode = (code: string) => {
-    dispatch(codeVerifyFetch({ email, code }));
-  };
+  const verifyCode = (code: string) => dispatch(codeVerifyFetch({ email, code }));
 
-  const resendVerificationCode = () => {
-    dispatch(resendCodeFetch({ email }));
-  };
+  const resendVerificationCode = () => dispatch(resendCodeFetch({ email }));
+
   return { verifyCode, resendVerificationCode };
 };

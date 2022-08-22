@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -16,6 +16,8 @@ import {
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
+  selectHasBrowserTradeAccounts,
+  selectHasUser,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
@@ -36,6 +38,9 @@ export function Trading() {
 
   const dispatch = useDispatch();
   const { id } = useRouter().query;
+  const hasUser = useReduxSelector(selectHasUser);
+  const hasAccounts = useReduxSelector(selectHasBrowserTradeAccounts);
+
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
@@ -69,7 +74,7 @@ export function Trading() {
       <S.Wrapper>
         <Menu handleChange={() => setState(!state)} />
         <Modal
-          open={banner}
+          open={banner && !hasAccounts && hasUser}
           onClose={() => setBanner(false)}
           onOpen={() => setBanner(true)}
           placement="top right"

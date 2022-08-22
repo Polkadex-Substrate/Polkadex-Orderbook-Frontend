@@ -55,6 +55,7 @@ export const TitleText = styled.small`
 export const TitleActions = styled.div`
   ${({ theme }) => css`
     display: flex;
+    align-items: center;
     gap: 1rem;
     a {
       color: ${theme.colors.tertiaryText};

@@ -7,6 +7,7 @@ import * as S from "./styles";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
+  AvailableMessage,
   Popup,
   Tooltip,
   TooltipContent,
@@ -134,9 +135,12 @@ export const AccountManagerTemplate = () => {
                 <Link href="/deposit/PDEX">
                   <a>Deposit</a>
                 </Link>
-                <Link href="/withdraw/PDEX">
-                  <a>Withdraw</a>
-                </Link>
+                <AvailableMessage message="Soon">
+                  <Link href="/withdraw/PDEX">
+                    <a>Withdraw</a>
+                  </Link>
+                </AvailableMessage>
+
                 <Link href="/history">
                   <a>History</a>
                 </Link>

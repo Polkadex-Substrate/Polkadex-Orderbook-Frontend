@@ -12,7 +12,7 @@ import { useSignIn } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const SignInTemplate = () => {
-  const { signIn } = useSignIn();
+  const { signIn, loading } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
 
@@ -22,11 +22,7 @@ export const SignInTemplate = () => {
       email: "",
     },
     validationSchema: signValidations,
-    onSubmit: (values) => {
-      console.log(values);
-      const { password, email } = values;
-      signIn(email, password);
-    },
+    onSubmit: (values) => signIn(values.email, values.password),
   });
 
   return (
@@ -82,7 +78,8 @@ export const SignInTemplate = () => {
                     background="primary"
                     color="white"
                     disabled={!(isValid && dirty)}
-                    isFull>
+                    isFull
+                    isLoading={loading}>
                     Log In
                   </Button>
                 </form>
