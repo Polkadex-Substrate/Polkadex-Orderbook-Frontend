@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
+import { selectIsUserSignedIn } from "../modules/user/profile";
 
 const AccountManagerTemplate = dynamic(
   () =>
@@ -14,6 +15,7 @@ const AccountManagerTemplate = dynamic(
 );
 const AccountManager = () => {
   const router = useRouter();
+  const hasUser = useReduxSelector(selectIsUserSignedIn);
 
   // if (!hasUser) {
   //   router?.push("/sign");

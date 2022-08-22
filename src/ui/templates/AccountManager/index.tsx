@@ -21,7 +21,6 @@ import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const [search, setSearch] = useState("");
   const [showSelected, setShowSelected] = useState(false);
 
   const [remove, setRemove] = useState<{
@@ -287,11 +286,11 @@ const Card = ({
             </S.DropdownHeader>
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
-              Remove from the blockchain
+            <Dropdown.Item key="removeBlockchain">
+              <AvailableMessage>Remove from the blockchain</AvailableMessage>
             </Dropdown.Item>
-            <Dropdown.Item key="removeBrowser" onAction={onRemoveFromDevice}>
-              Remove from my browser
+            <Dropdown.Item key="removeBrowser">
+              <AvailableMessage>Remove from my browser</AvailableMessage>
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

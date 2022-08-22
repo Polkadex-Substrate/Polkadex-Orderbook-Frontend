@@ -17,6 +17,7 @@ import {
   selectCurrentMarket,
   selectCurrentTradePrice,
   selectHasBrowserTradeAccounts,
+  selectIsUserSignedIn,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
@@ -33,7 +34,7 @@ import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
 export function Trading() {
   const [state, setState] = useState(false);
-  const [banner, setBanner] = useState(true);
+  const [banner, setBanner] = useState(false);
 
   const dispatch = useDispatch();
   const { id } = useRouter().query;
@@ -45,6 +46,7 @@ export function Trading() {
 
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
+  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
 
   // intitialize market dependent events
   useEffect(() => {
@@ -58,8 +60,17 @@ export function Trading() {
   // initialize user specific sagas
   useUserDataFetch();
 
-  if (!id) return <div />;
   const marketName = market?.name?.replace("/", "");
+
+  useEffect(() => {
+    if (!hasAccounts && isSignedIn) {
+      setBanner(true);
+    }
+  }, [hasAccounts, isSignedIn]);
+
+  if (!id) return <div />;
+  console.log("banner", banner, "hasAccounts", hasAccounts, "isLogged", isSignedIn);
+
   return (
     <>
       <Head>
@@ -72,7 +83,7 @@ export function Trading() {
       <S.Wrapper>
         <Menu handleChange={() => setState(!state)} />
         <Modal
-          open={banner && !hasAccounts}
+          open={banner}
           onClose={() => setBanner(false)}
           onOpen={() => setBanner(true)}
           placement="top right"

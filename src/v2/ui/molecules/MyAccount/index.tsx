@@ -64,7 +64,6 @@ export const WalletContent = () => {
   const dispatch = useDispatch();
 
   const address = currentTradeAddr;
-  const hasUser = isSignedIn;
 
   const calculateHeight = (el) => {
     const height = el.offsetHeight;
@@ -81,7 +80,7 @@ export const WalletContent = () => {
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
-        {hasUser ? (
+        {isSignedIn ? (
           <AccountOverview
             address={address || "0x000000000"}
             logout={() => dispatch(logOutFetch())}
