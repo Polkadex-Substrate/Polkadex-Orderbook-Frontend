@@ -14,18 +14,16 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
+  selectAssociatedTradeAccounts,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  selectHasBrowserTradeAccounts,
   selectIsUserSignedIn,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
-import Markets, { MarketsSkeleton } from "@orderbook/v2/ui/organisms/Markets";
-import Transactions, {
-  TransactionsSkeleton,
-} from "@polkadex/orderbook/v3/ui/organisms/Transactions";
-import RecentTrades, { RecentTradesSkeleton } from "@orderbook/v2/ui/organisms/RecentTrades";
+import Markets from "@orderbook/v2/ui/organisms/Markets";
+import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
+import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
 import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
 import { Modal } from "@polkadex/orderbook/v3/ui/molecules";
@@ -38,7 +36,6 @@ export function Trading() {
 
   const dispatch = useDispatch();
   const { id } = useRouter().query;
-  const hasAccounts = useReduxSelector(selectHasBrowserTradeAccounts);
 
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
@@ -47,6 +44,7 @@ export function Trading() {
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
+  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts);
 
   // intitialize market dependent events
   useEffect(() => {
@@ -63,13 +61,19 @@ export function Trading() {
   const marketName = market?.name?.replace("/", "");
 
   useEffect(() => {
-    if (!hasAccounts && isSignedIn) {
+    if (!hasAssociatedAccounts && isSignedIn) {
       setBanner(true);
     }
-  }, [hasAccounts, isSignedIn]);
+  }, [hasAssociatedAccounts, isSignedIn]);
 
   if (!id) return <div />;
-  console.log("banner", banner, "hasAccounts", hasAccounts, "isLogged", isSignedIn);
+  console.log(
+    "banner",
+    banner,
+
+    "hasAssociatedAccounts",
+    !!hasAssociatedAccounts
+  );
 
   return (
     <>

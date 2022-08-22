@@ -14,14 +14,6 @@ export const selectAllTradeAccounts = (state: RootState): string[] =>
 export const selectBrowserTradeAccounts = (state: RootState): InjectedAccount[] =>
   state.user.polkadotWallet.allBrowserAccounts;
 
-export const selectHasBrowserTradeAccounts = (state: RootState): boolean =>
-  !!state.user.polkadotWallet?.allBrowserAccounts?.map((acc) => ({
-    id: acc.address,
-    address: acc.address,
-    name: acc.meta.name,
-    isActive: acc.address === state.user.polkadotWallet?.selectedAccount?.address,
-  })).length;
-
 export const selectCurrentTradeAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;
 

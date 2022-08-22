@@ -23,10 +23,15 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.div`
-  h1 {
-    font-size: 2.3rem;
-    font-weight: 550;
-  }
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 1rem;
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 550;
+    }
+  `}
 `;
 
 export const TitleWrapper = styled.div`
@@ -421,8 +426,7 @@ export const SelectAccountContainer = styled.div`
       }
       div:last-child {
         width: 1.1rem;
-        align-self: flex-end;
-        svg {
+        align-self: center;
           fill: ${theme.colors.tertiaryText};
           stroke: ${theme.colors.tertiaryText};
         }
@@ -495,5 +499,26 @@ export const MyDropdownContent = styled.div`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
+  `}
+`;
+
+export const ContentEmpty = styled.div`
+  ${({ theme }) => css`
+    margin-top: 2rem;
+    border-radius: 1.5rem;
+    border: 2px solid ${theme.colors.tertiaryBackground};
+    display: grid;
+
+    gap: 2.5rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    padding: 2rem;
+    opacity: 0.8;
+    div {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
+      width: 100%;
+      height: 8rem;
+      border-radius: 1.5rem;
+    }
   `}
 `;

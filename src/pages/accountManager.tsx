@@ -17,10 +17,10 @@ const AccountManager = () => {
   const router = useRouter();
   const hasUser = useReduxSelector(selectIsUserSignedIn);
 
-  // if (!hasUser) {
-  //   router?.push("/sign");
-  //   return <div />;
-  // }
+  if (!hasUser) {
+    router?.push("/signIn");
+    return <div />;
+  }
   return <AccountManagerTemplate />;
 };
 

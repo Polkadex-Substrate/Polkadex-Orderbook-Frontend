@@ -1,4 +1,9 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+
+import { useReduxSelector } from "../hooks/useReduxSelector";
+import { selectIsCurrentAccountRegistered } from "../modules/user/mainAccount";
+import { selectIsUserSignedIn } from "../modules/user/profile";
 
 const LinkAccountTemplate = dynamic(
   () =>
@@ -9,6 +14,16 @@ const LinkAccountTemplate = dynamic(
     ssr: false,
   }
 );
-const LinkAccount = () => <LinkAccountTemplate />;
+const LinkAccount = () => {
+  const router = useRouter();
+  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
+  const hasUser = useReduxSelector(selectIsUserSignedIn);
+
+  if (!hasUser || isRegistered) {
+    router?.push("/accountManager");
+    return <div />;
+  }
+  return <LinkAccountTemplate />;
+};
 
 export default LinkAccount;
