@@ -106,7 +106,7 @@ export const CreateAccountTemplate = () => {
                   color="white"
                   disabled={!isValid || isLoading}
                   isFull>
-                  {isLoading ? "Create Account" : "Loading..."}
+                  {isLoading ? "Loading..." : "Create Account"}
                 </Button>
               </form>
             </S.Box>
