@@ -107,20 +107,12 @@ export function Trading() {
         <S.WrapperMain>
           <Navbar onOpenMarkets={() => setState(!state)} />
           <S.WrapperGraph>
-            <Suspense fallback={<MarketsSkeleton />}>
-              <Graph />
-            </Suspense>
-            <Suspense fallback={<MarketsSkeleton />}>
-              <MarketOrder />
-            </Suspense>
+            <Graph />
+            <MarketOrder />
           </S.WrapperGraph>
           <S.BottomWrapper>
-            <Suspense fallback={<TransactionsSkeleton />}>
-              <Transactions />
-            </Suspense>
-            <Suspense fallback={<RecentTradesSkeleton />}>
-              <RecentTrades />
-            </Suspense>
+            <Transactions />
+            <RecentTrades />
           </S.BottomWrapper>
         </S.WrapperMain>
       </S.Wrapper>

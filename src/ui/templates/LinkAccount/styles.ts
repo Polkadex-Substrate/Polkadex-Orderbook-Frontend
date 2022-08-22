@@ -93,6 +93,9 @@ export const Box = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  form p {
+    margin-top: 2rem;
+  }
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
     max-width: 40rem;

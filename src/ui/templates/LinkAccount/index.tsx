@@ -123,6 +123,7 @@ export const LinkAccountTemplate = () => {
                   isFull>
                   {loading ? "Loading..." : "Register Account"}
                 </Button>
+                <p>Block finalization will take a few mins.</p>
               </form>
             </S.Box>
           </S.Container>

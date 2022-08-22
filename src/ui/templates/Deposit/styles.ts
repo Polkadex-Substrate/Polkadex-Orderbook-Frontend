@@ -103,6 +103,9 @@ export const Form = styled.div`
   @media screen and (min-width: 830px) {
     max-width: 40rem;
   }
+  form p {
+    margin-top: 2rem;
+  }
 `;
 
 export const SelectInput = styled.div`

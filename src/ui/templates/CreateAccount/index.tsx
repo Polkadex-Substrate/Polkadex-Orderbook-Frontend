@@ -108,6 +108,7 @@ export const CreateAccountTemplate = () => {
                   isFull>
                   {isLoading ? "Loading..." : "Create Account"}
                 </Button>
+                <p>Block finalization will take a few mins.</p>
               </form>
             </S.Box>
           </S.Container>
