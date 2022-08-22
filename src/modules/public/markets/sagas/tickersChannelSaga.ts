@@ -7,8 +7,6 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../types";
 import { selectCurrentMarket } from "..";
 
-import { TickerQueryResult } from "./marketTickersFetchSaga";
-
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 
 export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
@@ -38,16 +36,12 @@ function createMarketTickersChannel(market: string) {
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: market + "-ticker" },
+      variables: { name: "PDEX-1-ticker" },
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        const data_parsed: TickerQueryResult = JSON.parse(
-          data.value.data.websocket_streams.data
-        );
-        const ticker_data = convertToTicker(data_parsed);
-        emit(marketsTickersChannelData(ticker_data));
+        emit(marketsTickersChannelData(data.value.data.websocket_streams.data));
       },
       error: (err) => console.warn(err),
     });
@@ -57,16 +51,16 @@ function createMarketTickersChannel(market: string) {
   });
 }
 
-const convertToTicker = (elem) => {
-  return {
-    m: elem.m,
-    priceChange24Hr: elem.pc,
-    priceChangePercent24Hr: elem.pcp,
-    open: elem.o,
-    close: elem.c,
-    high: elem.h,
-    low: elem.l,
-    volumeBase24hr: elem.v_base,
-    volumeQuote24Hr: elem.v_quote,
-  };
-};
+/*
+{
+    "m": "PDEX-1",
+    "priceChange24Hr": "-0.19999999999999996",
+    "priceChangePercent24Hr": "-0.16666666666666663",
+    "open": "1.2",
+    "close": "1",
+    "high": "1.2",
+    "low": "1.2",
+    "volumeBase24hr": "3",
+    "volumeQuote24Hr": "3.2"
+}
+*/

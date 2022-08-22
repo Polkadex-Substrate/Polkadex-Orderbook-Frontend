@@ -141,6 +141,7 @@ export const marketsReducer = (
         tickerLoading: false,
         tickers: action.payload,
       };
+
     case MARKET_TICKER_CHANNEL_DATA: {
       const update = action.payload;
       const tickers = [...state.tickers];

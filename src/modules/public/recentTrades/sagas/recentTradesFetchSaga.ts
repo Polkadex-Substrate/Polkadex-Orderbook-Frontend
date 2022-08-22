@@ -22,7 +22,7 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
         market_id: x.m,
         price: Utils.decimals.formatToString(x.p),
         amount: Utils.decimals.formatToString(x.q),
-        timestamp: new Date(Number(x.t)).toISOString(),
+        timestamp: new Date(Number(x.t) * 1000).toISOString(),
       }));
       yield put(recentTradesData(trades));
     }

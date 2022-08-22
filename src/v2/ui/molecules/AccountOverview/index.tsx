@@ -5,18 +5,17 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useAccount } from "@polkadex/orderbook-hooks";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
   const router = useRouter();
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy");
-  const { userEmail } = useAccount();
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
-  const email = userEmail;
+  const email = "rodolfo.polkadex.trade";
 
   return (
     <S.ContentWrapper>

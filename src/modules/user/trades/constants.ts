@@ -1,6 +1,3 @@
-export const TRADES_FETCH = "UserTrades/FETCH";
-export const TRADES_DATA = "UserTrades/DATA";
-export const TRADES_ERROR = "UserTrades/ERROR";
-
-export const USER_TRADES_UPDATE_EVENT = "UserTrades/USER_TRADES_UPDATE_EVENT";
-export const USER_TRADES_UPDATE_DATA = "UserTrades/USER_TRADES_UPDATE_DATA";
+export const TRADES_FETCH = "trades/FETCH";
+export const TRADES_DATA = "trades/DATA";
+export const TRADES_ERROR = "trades/ERROR";

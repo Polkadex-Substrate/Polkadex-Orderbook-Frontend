@@ -38,9 +38,6 @@ export const Switch = styled.div<{ isActive?: boolean }>`
     position: relative;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-    span {
-      user-select: none;
-    }
     div {
       position: absolute;
       bottom: 50%;

@@ -20,6 +20,7 @@ const TradeHistory = ({filters}) => {
             <S.Tr>
               <S.Th>Pair</S.Th>
               <S.Th>Date</S.Th>
+              <S.Th>Type</S.Th>
               <S.Th>Price</S.Th>
               <S.Th>Quantity</S.Th>
             </S.Tr>
@@ -33,6 +34,7 @@ const TradeHistory = ({filters}) => {
                 <TradeHistoryCard
                   key={i}
                   isSell={trade.side === "Ask"}
+                  orderSide={trade.side}
                   baseUnit={baseUnit}
                   quoteUnit={quoteUnit}
                   data={[

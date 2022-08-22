@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { selectRangerApi, selectRangerIsReady } from "../modules/public/ranger";
+import { selectUserInfo } from "../modules/user/profile";
 import { fetchOnChainBalance } from "../helpers/fetchOnChainBalance";
 import { selectUserBalance } from "../modules/user/balances";
 import { selectCurrentMainAccount } from "../modules/user/mainAccount";

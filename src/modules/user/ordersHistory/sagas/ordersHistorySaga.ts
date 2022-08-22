@@ -4,14 +4,13 @@ import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
 import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
-import { ProxyAccount } from "../../profile";
+import { ProxyAccount, selectUserInfo } from "../../profile";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 import { Utils } from "@polkadex/web-helpers";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -34,9 +33,7 @@ export function* ordersHistorySaga() {
     const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      // const { dateFrom, dateTo } = userSession;
-      const dateTo = new Date().toISOString();
-      const dateFrom = subtractMonths(1).toISOString();
+      const { dateFrom, dateTo } = userSession;
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
@@ -57,16 +54,12 @@ const fetchOrders = async (
   dateFrom: string,
   dateTo: string
 ): Promise<OrderCommon[]> => {
-  // TODO: make limit resonable by utilizing nextToken
-  const dateFromStr = Utils.date.formatDateToISO(dateFrom);
-  const dateToStr = Utils.date.formatDateToISO(dateTo);
   const res: any = await API.graphql({
     query: queries.listOrderHistorybyMainAccount,
     variables: {
       main_account: proxy_acc,
-      from: dateFromStr,
-      to: dateToStr,
-      limit: 1000,
+      from: dateFrom,
+      to: dateTo,
     },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;

@@ -8,10 +8,10 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
 import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 
-export const Mnemonic = ({ handleMnemonicUpdate }) => {
+export const Mnemonic = () => {
   const [state, setState] = useState(true);
   const { mnemonic, mnemoicString } = useMnemonic();
-  handleMnemonicUpdate(mnemoicString);
+
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({

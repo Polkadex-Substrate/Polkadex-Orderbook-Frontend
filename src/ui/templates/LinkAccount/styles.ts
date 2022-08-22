@@ -104,7 +104,6 @@ export const SelectInput = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
-    margin-bottom: 2rem;
     span {
       display: block;
       color: ${theme.colors.tertiaryText};

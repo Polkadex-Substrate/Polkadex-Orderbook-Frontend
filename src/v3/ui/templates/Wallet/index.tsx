@@ -5,6 +5,8 @@ import Head from "next/head";
 import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
@@ -12,15 +14,21 @@ import Deposit from "@polkadex/orderbook/v3/ui/organisms/Deposit";
 import Withdraw from "@polkadex/orderbook/ui/organisms/Withdraw";
 
 export const WalletTemplate = () => {
-  // TODO: remove this component
   const router = useRouter();
+  const user = useReduxSelector(selectHasUser);
+  const isLoading = useReduxSelector(selectUserFetching);
   const [isDepositActive, setIsDepositActive] = useState(true);
 
   const handleWalletTabSelected = (tab: MouseEvent) => {
     const target = tab.target as HTMLElement;
     setIsDepositActive(target.outerText.toLowerCase().trim() === "deposit");
   };
-  if (true) return <div />;
+
+  useEffect(() => {
+    if (!isLoading && !user) router.push("/login");
+  }, [isLoading, user, router]);
+
+  if (!user) return <div />;
   return (
     <>
       <Head>

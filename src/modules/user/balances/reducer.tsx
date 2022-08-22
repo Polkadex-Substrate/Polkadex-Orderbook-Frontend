@@ -50,7 +50,7 @@ export const balancesReducer = (
       const update = action.payload;
       // filter out old balances from the balance state
       const balanceFiltered = state.balances.filter(
-        (balance) => balance.assetId.toString() !== update.assetId.toString()
+        (balance) => balance.assetId !== update.assetId
       );
       // apply updates to the balances in the state
       const newBalances = [...balanceFiltered, update];

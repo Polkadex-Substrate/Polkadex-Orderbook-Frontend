@@ -50,7 +50,7 @@ export const createCancelOrderPayloadSigned = (
   base: Record<string, string>,
   quote: Record<string, string>
 ) => {
-  const orderIdCodec = api.createType("order_id", orderId);
+  const orderIdCodec = api.createType("CancelOrderPayload", { id: orderId });
   const tradingPair = api.createType("TradingPair", { base_asset: base, quote_asset: quote });
   const signature = signPayload(api, userKeyring, orderIdCodec);
   const payload = {

@@ -4,6 +4,7 @@ import keyring from "@polkadot/ui-keyring";
 
 import {
   sendError,
+  selectUserInfo,
   orderExecuteDataDelete,
   orderExecuteData,
   orderExecuteError,

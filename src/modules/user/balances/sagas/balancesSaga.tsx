@@ -5,6 +5,7 @@ import * as queries from "../../../../graphql/queries";
 import { ProxyAccount, selectCurrentMainAccount } from "../../..";
 import { balancesData, BalancesFetch, BalanceBase } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
+import { selectUserInfo } from "../../profile";
 
 import {
   selectAssetsFetchSuccess,

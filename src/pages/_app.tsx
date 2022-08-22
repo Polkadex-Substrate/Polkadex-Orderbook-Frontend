@@ -8,7 +8,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 
 import { wrapper } from "../store";
-import { useInit } from "../hooks/useInit";
+import { useAppDaemon } from "../hooks/useAppDaemon";
 import { useReduxSelector } from "../hooks/useReduxSelector";
 import { useUserDataFetch } from "../hooks/useUserDataFetch";
 
@@ -35,7 +35,7 @@ const Notifications = dynamic(
   }
 );
 function App({ Component, pageProps }: AppProps) {
-  useInit();
+  useAppDaemon();
   useUserDataFetch();
   const router = useRouter();
   useEffect(() => {

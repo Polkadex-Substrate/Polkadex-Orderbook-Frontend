@@ -1,5 +1,4 @@
 import { Auth } from "aws-amplify";
-import { defaultConfig } from "next/dist/server/config-shared";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -31,8 +30,7 @@ export const useSignIn = () => {
   }, []);
 
   useEffect(() => {
-    if (isSuccess || isAuthenticated)
-      router.push("trading/" + defaultConfig.landingPageMarket);
+    if (isSuccess || isAuthenticated) router.push("/accountManager");
   }, [isAuthenticated, isSuccess, router]);
 
   const signIn = (email: string, password: string) => {

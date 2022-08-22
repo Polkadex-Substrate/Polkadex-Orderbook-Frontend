@@ -2,10 +2,7 @@ import keyring from "@polkadot/ui-keyring";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import {
-  selectAssociatedTradeAccounts,
-  selectCurrentMainAccount,
-} from "../modules/user/mainAccount";
+import { selectCurrentMainAccount } from "../modules/user/mainAccount";
 import { notificationPush } from "../modules/user/notificationHandler";
 import {
   removeTradeAccountFromBrowser,
@@ -22,7 +19,6 @@ export const useAccountManager = () => {
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
   const currentMainAcc = useReduxSelector(selectCurrentMainAccount);
   const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount);
-  const associatedTradeAccounts = useReduxSelector(selectAssociatedTradeAccounts);
   const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts)?.map((acc) => ({
     id: acc.address,
     address: acc.address,
@@ -40,7 +36,6 @@ export const useAccountManager = () => {
       notificationPush({
         message: { title: "Removed from device", description: address },
         type: "SuccessAlert",
-        time: new Date().getTime(),
       })
     );
   };
@@ -55,6 +50,5 @@ export const useAccountManager = () => {
     handleSelectTradeAccount,
     tradingAccounts,
     currentTradeAddr,
-    associatedTradeAccounts,
   };
 };

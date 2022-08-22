@@ -9,20 +9,15 @@ import * as T from "./types";
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  logOutFetch,
-  selectCurrentTradeAccount,
-  selectHasCurrentTradeAccount,
-  userFetch,
-} from "@polkadex/orderbook-modules";
+import { logOutFetch, selectHasUser, selectUserInfo } from "@polkadex/orderbook-modules";
 
 export const MyAccount = () => {
-  const { userEmail } = useAccount();
+  const { userAddress, userName } = useAccount();
 
   return (
     <S.Main>
       <Dropdown
-        header={<Header address={userEmail} accountName={userEmail} />}
+        header={<Header address={userAddress} accountName={userName} />}
         direction="bottomRight"
         priority="medium"
         style={{ overflow: "hidden" }}>
@@ -59,12 +54,10 @@ const Header = ({
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
-  const { userEmail, isSignedIn, isVerified } = useAccount();
-  const dispatch = useDispatch();
 
-  const address = currentTradeAddr;
-  const hasUser = isSignedIn;
+  const dispatch = useDispatch();
+  const { address } = useReduxSelector(selectUserInfo);
+  const hasUser = useReduxSelector(selectHasUser);
 
   const calculateHeight = (el) => {
     const height = el.offsetHeight;
@@ -98,7 +91,7 @@ export const WalletContent = () => {
               </figure>
             </S.EmptyHeader>
             <S.EmptyContent>
-              <h2>Oops, it seems that you are not logged in</h2>
+              <h2>Ops, it seems that you are not logged in</h2>
               <p>Explore a new way to trade with your own wallet!</p>
               <S.EmptyActions>
                 <Link href="/sign">Sign Up</Link>

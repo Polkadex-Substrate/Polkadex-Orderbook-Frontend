@@ -18,7 +18,7 @@ export interface AuthState {
   email: string;
   require2FA?: boolean;
   requireVerification?: boolean;
-  userConfirmed: boolean;
+  userConfirmed?: boolean;
   logoutError?: CommonError;
   authError?: CommonError;
   signUpError?: CommonError;
@@ -51,7 +51,7 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
         signInLoading: false,
         signInSuccess: true,
         email: action.payload.email,
-        userConfirmed: action.payload.isConfirmed,
+        userConfirmed: true,
       };
     case AUTH_SIGN_IN_ERROR:
       return { ...state, authError: action.error, signInLoading: false };

@@ -5,11 +5,11 @@ import * as S from "./styles";
 import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
 import { MyAccount, MyWallet, Menu, Search, QuickLogin } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Button, Polkadex } from "@polkadex/orderbook-ui/molecules";
-import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
+import { selectHasUser } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const Header = () => {
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasUser);
   const router = useRouter();
 
   return (
