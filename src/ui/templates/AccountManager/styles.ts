@@ -63,10 +63,10 @@ export const TitleActions = styled.div`
     align-items: center;
     gap: 1rem;
     a {
-      color: ${theme.colors.tertiaryText};
       border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 1rem;
+      font-weight: 500;
       transition: border 0.5s ease-in, background 0.5s ease-in;
       :active {
         border-color: ${theme.colors.primary};
@@ -77,6 +77,17 @@ export const TitleActions = styled.div`
     }
   `}
 `;
+export const Deposit = styled.a`
+  ${({ theme }) => css`
+    background: ${theme.colors.green};
+    color: ${theme.colors.white};
+    cursor: pointer;
+    :hover {
+      background: ${theme.colors.green}33;
+    }
+  `}
+`;
+
 export const Content = styled.div`
   margin-top: 4rem;
   h2 {
@@ -257,7 +268,7 @@ export const ContentActions = styled.div`
   `}
 `;
 
-export const CreateAccount = styled.a`
+export const CreateAccount = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
@@ -278,7 +289,7 @@ export const CreateAccountWrapper = styled.div`
       width: 1rem;
       margin-right: 0.5rem;
       svg {
-        fill: ${theme.colors.tertiaryText};
+        fill: ${theme.colors.primary};
       }
     }
     a {

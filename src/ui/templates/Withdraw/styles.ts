@@ -105,7 +105,6 @@ export const SelectInput = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
-    margin-top: 1.5rem;
     span {
       display: block;
       color: ${theme.colors.tertiaryText};
@@ -118,7 +117,6 @@ export const SelectInputContainer = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding-bottom: 1rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;
 
     input {
       width: 100%;
@@ -232,15 +230,26 @@ export const Form = styled.div`
   @media screen and (min-width: 830px) {
     max-width: 40rem;
   }
+  form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
 `;
 
 export const History = styled.div`
-  margin-top: 4rem;
-  flex: 1;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 500;
-  }
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-top: 4rem;
+    flex: 1;
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+  `}
 `;
 export const HistoryContent = styled.div`
   ${({ theme }) => css`

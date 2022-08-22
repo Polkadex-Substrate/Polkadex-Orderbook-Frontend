@@ -111,7 +111,6 @@ export const LinkAccountTemplate = () => {
                   label="Trading account name (Optional)"
                   placeholder="Enter a name for your trading account"
                   error={errors.name && touched.name && errors.name}
-                  style={{ marginBottom: 10 }}
                   {...getFieldProps("name")}
                 />
                 <Button

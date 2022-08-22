@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 import * as S from "./styles";
@@ -11,7 +11,8 @@ import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 export const Mnemonic = ({ handleMnemonicUpdate }) => {
   const [state, setState] = useState(true);
   const { mnemonic, mnemoicString } = useMnemonic();
-  handleMnemonicUpdate(mnemoicString);
+  useEffect(() => handleMnemonicUpdate(mnemoicString), []);
+
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({

@@ -89,12 +89,14 @@ export const Container = styled.div`
 `;
 
 export const Box = styled.div`
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  form p {
-    margin-top: 2rem;
+  form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
   }
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
@@ -107,7 +109,6 @@ export const SelectInput = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
-    margin-bottom: 2rem;
     span {
       display: block;
       color: ${theme.colors.tertiaryText};
@@ -120,7 +121,6 @@ export const SelectInputContainer = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding-bottom: 1rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;
 
     input {
       width: 100%;

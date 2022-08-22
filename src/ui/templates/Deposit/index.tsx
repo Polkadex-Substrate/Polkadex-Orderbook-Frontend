@@ -176,13 +176,14 @@ export const DepositTemplate = () => {
                   <Button
                     type="submit"
                     size="extraLarge"
-                    background="primary"
+                    background="green"
                     color="white"
                     disabled={false}
-                    isFull>
-                    {loading ? "Loading..." : "Deposit"}
+                    isFull
+                    isLoading={loading}>
+                    Deposit
                   </Button>
-                  <p>Block finalization will take a few mins.</p>
+                  {loading && <p>Block finalization will take a few mins.</p>}
                 </form>
               </S.Form>
               <S.History>

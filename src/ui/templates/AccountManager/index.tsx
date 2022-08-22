@@ -158,7 +158,7 @@ export const AccountManagerTemplate = () => {
               {userHasSelectedMainAccount && (
                 <S.TitleActions>
                   <Link href="/deposit/PDEX">
-                    <a>Deposit</a>
+                    <S.Deposit>Deposit</S.Deposit>
                   </Link>
                   <AvailableMessage message="Soon">
                     <Link href="/withdraw/PDEX">
@@ -225,17 +225,20 @@ export const AccountManagerTemplate = () => {
                         onUse={() => handleSelectTradeAccount(value.address)}
                       />
                     ))}
-                    <Link href="/createAccount">
-                      <S.CreateAccount>
-                        <S.CreateAccountWrapper>
-                          <div>
-                            <Icons.Plus />
-                          </div>
-                          Create new account or
-                          <Link href="/importAccount"> Import</Link>
-                        </S.CreateAccountWrapper>
-                      </S.CreateAccount>
-                    </Link>
+                    <S.CreateAccount>
+                      <S.CreateAccountWrapper>
+                        <Link href="/createAccount">
+                          <a>
+                            <div>
+                              <Icons.Plus />
+                            </div>
+                            Create new account
+                          </a>
+                        </Link>{" "}
+                        or
+                        <Link href="/importAccount"> Import</Link>
+                      </S.CreateAccountWrapper>
+                    </S.CreateAccount>
                   </>
                 )}
               </S.ContentGrid>

@@ -15,10 +15,11 @@ export const selectUserBalance = (state: RootState): Balance[] => state.user.bal
 export const selectGetFreeProxyBalance =
   (state: RootState): ((assetId: string) => string) =>
   (assetId: string) => {
-    const balance = state.user.balances.balances.find(
+    const balance = state?.user?.balances?.balances?.find(
       (balance) =>
-        balance.assetId === assetId || (balance.assetId === "PDEX" && assetId === "-1")
+        balance?.assetId?.toString() === assetId ||
+        (balance?.assetId?.toString() === "PDEX" && assetId === "-1")
     );
-    if (!balance) return "0";
+    if (!balance?.assetId) return "0";
     return balance.free_balance;
   };

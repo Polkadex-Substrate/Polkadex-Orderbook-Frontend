@@ -103,8 +103,11 @@ export const Form = styled.div`
   @media screen and (min-width: 830px) {
     max-width: 40rem;
   }
-  form p {
-    margin-top: 2rem;
+  form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
   }
 `;
 
@@ -152,7 +155,6 @@ export const SelectAccount = styled.div`
     display: flex;
     gap: 1rem;
     align-items: center;
-    margin-bottom: 2rem;
     div {
       :first-child {
         min-width: 3.5rem;
@@ -238,12 +240,17 @@ export const DropdownContent = styled.div`
 `;
 
 export const History = styled.div`
-  margin-top: 4rem;
-  flex: 1;
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 500;
-  }
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-top: 4rem;
+    flex: 1;
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+  `}
 `;
 export const HistoryContent = styled.div`
   ${({ theme }) => css`

@@ -32,7 +32,6 @@ export const CreateAccountTemplate = () => {
     },
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
-      console.log(values);
       dispatch(
         registerTradeAccountFetch({
           name: values.name,
@@ -93,22 +92,17 @@ export const CreateAccountTemplate = () => {
                   error={errors.name && touched.name && errors.name}
                   {...getFieldProps("name")}
                 />
-                {/* <PassCode
-                  handleChange={(e) => console.log(e)}
-                  name="passcode"
-                  placeholder="0"
-                  inputs={5}
-                /> */}
                 <Button
                   type="submit"
                   size="extraLarge"
                   background="primary"
                   color="white"
                   disabled={!isValid || isLoading}
-                  isFull>
-                  {isLoading ? "Loading..." : "Create Account"}
+                  isFull
+                  isLoading={isLoading}>
+                  Create Account
                 </Button>
-                <p>Block finalization will take a few mins.</p>
+                {isLoading && <p>Block finalization will take a few mins.</p>}
               </form>
             </S.Box>
           </S.Container>
