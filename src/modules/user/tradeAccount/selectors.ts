@@ -17,5 +17,12 @@ export const selectBrowserTradeAccounts = (state: RootState): InjectedAccount[] 
 export const selectCurrentTradeAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;
 
-export const selectHasUser = (state: RootState): boolean =>
+export const selectHasCurrentTradeAccount = (state: RootState): boolean =>
   state.user.polkadotWallet.selectedAccount.address !== "";
+
+export const selectLinkedMainAddress = (state: RootState): string => {
+  return state.user.polkadotWallet.mainAddress;
+};
+
+export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
+  state.user.polkadotWallet.registerAccountLoading;

@@ -44,7 +44,7 @@ export interface SetCurrentTradeAccount {
 
 export interface SetCurrentTradeAccountData {
   type: typeof SET_CURRENT_TRADE_ACCOUNT_DATA;
-  payload: InjectedAccount;
+  payload: { tradeAccount: InjectedAccount; mainAddress?: string };
 }
 export interface RegisterTradeAccountFetch {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_FETCH;

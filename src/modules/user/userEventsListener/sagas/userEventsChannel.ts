@@ -1,4 +1,4 @@
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, select, take, fork } from "redux-saga/effects";
 import { EventChannel, eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
@@ -10,6 +10,7 @@ import { orderUpdateEvent } from "../../ordersHistory";
 import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 import { selectCurrentTradeAccount } from "../../tradeAccount";
+import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
@@ -17,13 +18,12 @@ import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentIn
 export function* userEventsChannelSaga(action: UserEventsFetch) {
   const mainAcc = yield select(selectCurrentMainAccount);
   const tradeAcc = yield select(selectCurrentTradeAccount);
-  yield call(userEventsChannelHandler, tradeAcc.address);
-  yield call(userEventsChannelHandler, mainAcc.address);
+  yield fork(userEventsChannelHandler, tradeAcc.address);
+  yield fork(userEventsChannelHandler, mainAcc.address);
 }
 
 export function* userEventsChannelHandler(address) {
   try {
-    console.log("created User Events Channel...");
     const channel = yield call(createUserEventsChannel, address);
     while (true) {
       const action = yield take(channel);
@@ -46,6 +46,8 @@ export function* userEventsChannelHandler(address) {
 }
 
 function createUserEventsChannel(address: string) {
+  console.log("created User Events Channel...", address);
+
   return eventChannel((emit) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
@@ -73,16 +75,23 @@ function createActionFromUserEvent(eventData: any) {
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
   } else if (isKeyPresentInObject(data, "RegisterAccount")) {
-    return notificationPush({
-      type: "SuccessAlert",
-      message: {
-        title: "Account registered",
-        description: "Your account has been registered",
-      },
-    });
+    return registerSuccessNofiication(
+      "Account registered",
+      "Your account has been registered"
+    );
+  } else if (isKeyPresentInObject(data, "AddProxy")) {
+    return registerSuccessNofiication("Trade account added", "New Trade account created");
   } else {
-    // handle trade update events
-    console.log("Unknown User Event: ", eventData);
-    return userUnknownEvent();
+    return userTradesUpdateEvent(data);
   }
 }
+
+const registerSuccessNofiication = (title: string, description: string) =>
+  notificationPush({
+    type: "SuccessAlert",
+    message: {
+      title,
+      description,
+    },
+    time: new Date().getTime(),
+  });

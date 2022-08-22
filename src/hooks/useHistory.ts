@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectHasUser,
+  selectHasCurrentTradeAccount,
   selectTransactionDepositData,
   transactionsFetch,
 } from "@polkadex/orderbook-modules";
