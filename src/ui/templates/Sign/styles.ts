@@ -114,6 +114,7 @@ export const Terms = styled.div`
     align-items: flex-start;
     a {
       color: ${theme.colors.primary};
+      text-decoration: underline;
     }
   `}
 `;

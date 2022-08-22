@@ -104,13 +104,14 @@ export const SignTemplate = () => {
                       {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
                     </S.Show>
                   </InputLine>
-                  {/* <S.Terms>
-                    <Checkbox id="terms" name="terms" {...getFieldProps("terms")} />
+                  <S.Terms>
                     <span>
-                      Creating an account means you’re okay with our
-                      <a href="/"> Terms of Service</a> and <a href="/"> Privacy Policy</a>
+                      By clicking the submit button below,I hereby agree with Polkadex{" "}
+                      <a href="/terms" target="_blank">
+                        Terms of Service and Privacy Policy
+                      </a>
                     </span>
-                  </S.Terms> */}
+                  </S.Terms>
                   <Button
                     type="submit"
                     size="extraLarge"

@@ -71,7 +71,14 @@ export const SignInTemplate = () => {
                       {view ? <Icons.Hidden /> : <Icons.Show />}
                     </S.Show>
                   </InputLine>
-
+                  <S.Terms>
+                    <span>
+                      By clicking the submit button below,I hereby agree with Polkadex{" "}
+                      <a href="/terms" target="_blank">
+                        Terms of Service and Privacy Policy
+                      </a>
+                    </span>
+                  </S.Terms>
                   <Button
                     type="submit"
                     size="extraLarge"

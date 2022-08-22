@@ -89,7 +89,17 @@ export const Column = styled.div`
     }
   `}
 `;
-
+export const Terms = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    a {
+      color: ${theme.colors.primary};
+      text-decoration: underline;
+    }
+  `}
+`;
 export const Box = styled.div`
   padding: 2rem;
   @media screen and (min-width: 880px) {
