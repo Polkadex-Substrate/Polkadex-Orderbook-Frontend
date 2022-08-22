@@ -9,6 +9,7 @@ import {
   EXTENSION_WALLET_RESET,
   MAIN_ACCOUNT_SET_DATA,
   REGISTER_MAIN_ACCOUNT_FETCH,
+  REGISTER_MAIN_ACCOUNT_DATA,
 } from "./constants";
 
 export interface MainAccountState {
@@ -80,11 +81,11 @@ export const mainAccountReducer = (
         registerMainAccountLoading: true,
         registerMainAccountSuccess: false,
       };
-    case MAIN_ACCOUNT_SET_FETCH:
+    case REGISTER_MAIN_ACCOUNT_DATA:
       return {
         ...state,
         registerMainAccountLoading: false,
-        registerMainAccountSuccess: false,
+        registerMainAccountSuccess: true,
       };
 
     default:

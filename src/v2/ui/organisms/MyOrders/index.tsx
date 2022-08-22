@@ -20,7 +20,7 @@ import {
   EmptyData,
 } from "@orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser, selectOrdersHistory } from "@polkadex/orderbook-modules";
+import { selectHasCurrentTradeAccount, selectOrdersHistory } from "@polkadex/orderbook-modules";
 import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
@@ -37,7 +37,7 @@ const MyOrders = () => {
 };
 
 const Header = ({ showList, changeToList }) => {
-  const hasUser = useReduxSelector(selectHasUser);
+  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
   return (
     <S.Header>
       <S.HeaderWrapper>

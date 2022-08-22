@@ -6,7 +6,7 @@ import * as S from "./styles";
 import {
   notificationPush,
   selectCurrentMarket,
-  selectHasUser,
+  selectHasCurrentTradeAccount,
   selectOpenOrdersHistory,
   selectOrdersHistoryLoading,
   userOrdersHistoryFetch,
@@ -25,7 +25,7 @@ export const OpenOrders = () => {
   const openOrders = useReduxSelector(selectOpenOrdersHistory);
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
-  const userLoggedIn = useReduxSelector(selectHasUser);
+  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
   const { width } = useWindowSize();
 
   const handleCancel = (id: string) =>

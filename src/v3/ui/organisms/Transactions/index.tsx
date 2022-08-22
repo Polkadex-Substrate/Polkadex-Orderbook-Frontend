@@ -24,7 +24,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser, userSessionData } from "@polkadex/orderbook-modules";
+import { selectHasCurrentTradeAccount, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -53,7 +53,7 @@ const Transactions = () => {
   const [to, setTo] = useState(now.current);
   const [from, setFrom] = useState(subDays(now.current, 7));
 
-  const userLoggedIn = useReduxSelector(selectHasUser);
+  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>

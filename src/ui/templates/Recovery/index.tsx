@@ -12,7 +12,6 @@ import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
 
 const defaultValues = {
-  password: "",
   accountName: "Main Account",
 };
 
@@ -43,7 +42,7 @@ export const RecoveryTemplate = () => {
                     validationSchema={importValiations}
                     onSubmit={async (values) => {
                       if (state.tags.length === 12) {
-                        const { password, accountName } = values;
+                        const { accountName } = values;
                         const mnemoicString = state.tags.join(" ");
                       }
                     }}>
@@ -62,13 +61,6 @@ export const RecoveryTemplate = () => {
                           error={
                             errors.accountName && touched.accountName && errors.accountName
                           }
-                        />
-                        <InputPrimary
-                          label="Password"
-                          placeholder="Enter your password for this account"
-                          type="password"
-                          name="password"
-                          error={errors.password && touched.password && errors.password}
                         />
                         <Button
                           size="extraLarge"

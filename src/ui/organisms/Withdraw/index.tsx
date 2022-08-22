@@ -14,7 +14,6 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectLinkedMainAccount,
   selectCurrentMainAccount,
-  selectUserInfo,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
@@ -26,7 +25,6 @@ const defaultValues = {
 
 const Withdraw = () => {
   const mainAccount = useReduxSelector(selectLinkedMainAccount);
-  const proxyAccount = useReduxSelector(selectUserInfo);
   const assets = useReduxSelector(selectAllAssets);
   const dispatch = useDispatch();
   return (

@@ -6,12 +6,12 @@ import * as queries from "../../../../graphql/queries";
 
 import {
   selectCurrentTradeAccount,
-  selectUserInfo,
   selectUserSession,
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
 import { Utils } from "@polkadex/web-helpers";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 type TradesQueryResult = {
   m: string;
@@ -26,7 +26,9 @@ export function* fetchTradesSaga() {
     const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      const { dateFrom, dateTo } = userSession;
+      // const { dateFrom, dateTo } = userSession;
+      const dateTo = new Date().toISOString();
+      const dateFrom = subtractMonths(1).toISOString();
       const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }
@@ -48,12 +50,14 @@ const fetchUserTrades = async (
   dateFrom: string,
   dateTo: string
 ): Promise<UserTrade[]> => {
+  // TODO: make limit resonable by utilizing nextToken
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
     variables: {
       main_account: proxy_account,
       from: dateFrom,
       to: dateTo,
+      limit: 1000,
     },
   });
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;

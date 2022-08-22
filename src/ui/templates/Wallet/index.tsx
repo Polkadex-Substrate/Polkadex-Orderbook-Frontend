@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasUser, selectUserFetching } from "@polkadex/orderbook-modules";
+import { selectHasCurrentTradeAccount, selectUserFetching } from "@polkadex/orderbook-modules";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 
@@ -25,7 +25,7 @@ const Header = dynamic(
 
 export const WalletTemplate = () => {
   const router = useRouter();
-  const user = useReduxSelector(selectHasUser);
+  const user = useReduxSelector(selectHasCurrentTradeAccount);
   const isLoading = useReduxSelector(selectUserFetching);
 
   useEffect(() => {

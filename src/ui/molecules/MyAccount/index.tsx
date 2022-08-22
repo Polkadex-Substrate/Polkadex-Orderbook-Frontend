@@ -7,8 +7,7 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { balancesFetch, selectUserInfo } from "@polkadex/orderbook-modules";
-import { API, RequestOptions } from "@polkadex/orderbook-config";
+import { balancesFetch } from "@polkadex/orderbook-modules";
 import { signMessage } from "@polkadex/web-helpers";
 
 const MyAccount = ({
@@ -71,7 +70,6 @@ export const MyAccountContent = ({
 
   // add test funds
   // TODO: should be removed at relesse
-  const user = useReduxSelector(selectUserInfo);
   const dispatch = useDispatch();
   const userKeyring = user.keyringPair;
   // const option: RequestOptions = {
@@ -81,8 +79,8 @@ export const MyAccountContent = ({
     if (user.address) {
       try {
         const payloads = [
-          { account: user.address, asset: 1, amount: "100.0" },
-          { account: user.address, asset: 0, amount: "100.0" },
+          { account: user?.address, asset: 1, amount: "100.0" },
+          { account: user?.address, asset: 0, amount: "100.0" },
         ];
         const reqs = payloads.map(async (payload) => {
           const signature = await signMessage(userKeyring, JSON.stringify(payload));

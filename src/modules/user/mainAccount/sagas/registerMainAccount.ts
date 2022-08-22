@@ -16,8 +16,13 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     if (mainAccount.address) {
       yield put(
         notificationPush({
-          message: { title: "Registering account..." },
-          type: "InformationAlert",
+          message: {
+            title: "Registering account...",
+            description:
+              "Please sign the transaction and wait for block finalization. This may take a few minutes",
+          },
+          type: "LoadingAlert",
+          time: new Date().getTime(),
         })
       );
       const res = yield call(() =>
@@ -26,8 +31,9 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       if (res.isSuccess) {
         yield put(
           notificationPush({
-            message: { title: "Successfully Registered" },
+            message: { title: "Successfully Registered!" },
             type: "SuccessAlert",
+            time: new Date().getTime(),
           })
         );
         yield put(registerMainAccountData());
@@ -39,6 +45,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       notificationPush({
         message: { title: "Cannot Register Account !", description: error.message },
         type: "ErrorAlert",
+        time: new Date().getTime(),
       })
     );
   }
