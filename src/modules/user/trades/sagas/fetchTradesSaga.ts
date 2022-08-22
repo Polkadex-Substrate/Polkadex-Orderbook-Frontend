@@ -50,12 +50,14 @@ const fetchUserTrades = async (
   dateFrom: string,
   dateTo: string
 ): Promise<UserTrade[]> => {
+  // TODO: make limit resonable by utilizing nextToken
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
     variables: {
       main_account: proxy_account,
       from: dateFrom,
       to: dateTo,
+      limit: 1000,
     },
   });
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
