@@ -75,14 +75,6 @@ export function Trading() {
     dispatch(userChangeInitBanner());
   };
 
-  console.log(
-    "isSignedIn",
-    isSignedIn,
-    "shouldShowInitialBanner",
-    shouldShowInitialBanner,
-    "hasAssociatedAccounts",
-    !!hasAssociatedAccounts
-  );
   if (!id) return <div />;
 
   return (
