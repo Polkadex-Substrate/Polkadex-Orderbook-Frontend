@@ -19,10 +19,7 @@ export const CodeVerificationTemplate = () => {
       code: "",
     },
     validationSchema: codeValidations,
-    onSubmit: (values) => {
-      console.log(values);
-      verifyCode(values.code);
-    },
+    onSubmit: (values) => verifyCode(values.code),
   });
 
   return (

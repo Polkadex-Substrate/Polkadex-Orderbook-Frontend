@@ -1,7 +1,8 @@
-import { OverlayTriggerProps } from "@react-aria/overlays";
+import { OverlayTriggerProps as OverlayTriggerPropsAria } from "@react-aria/overlays";
+import { OverlayTriggerProps } from "@react-types/overlays";
 import {
   ForwardRefExoticComponent,
-  PropsWithoutRef,
+  PropsWithChildren,
   ReactNode,
   RefAttributes,
   RefObject,
@@ -18,30 +19,25 @@ export type PopoverProps = {
 } & UsePopoverProps;
 
 export type UsePopoverProps = {
-  defaultOpen?: boolean;
-  placement?: Placement;
-  triggerType?: OverlayTriggerProps["type"];
-  isDismissable?: boolean;
-  offset?: number;
-  shouldFlip?: boolean;
-  shouldCloseOnBlur?: boolean;
-  isKeyboardDismissDisabled?: boolean;
-  shouldCloseOnInteractOutside?: (element: HTMLElement) => boolean;
-  ref?: RefObject<HTMLElement>;
-  popoverTriggerRef?: RefObject<HTMLElement>;
-  popoverScrollRef?: RefObject<HTMLElement>;
-} & UsePopover;
-export type UsePopover = {
   onClose?: () => void;
   onOpen?: () => void;
   isOpen?: boolean;
-};
+  defaultOpen?: boolean;
+  placement?: Placement;
+  triggerType?: OverlayTriggerPropsAria["type"];
+  isDismissable?: boolean;
+  offset?: number;
+  shouldFlip?: boolean;
+  popoverScrollRef?: RefObject<HTMLElement>;
+} & OverlayTriggerProps;
 
 export type UsePopoverReturn = ReturnType<typeof usePopover>;
 
-export type PopoverComponent<T, P = {}> = ForwardRefExoticComponent<
-  PropsWithoutRef<P> & RefAttributes<T>
-> & {
+export type PopoverComponent<T = {}, P = HTMLDivElement> = ForwardRefExoticComponent<
+  PropsWithChildren<T> & RefAttributes<P>
+>;
+
+export type PopoverBaseComponent = PopoverComponent<PopoverProps, HTMLDivElement> & {
   Trigger: typeof Trigger;
   Content: typeof Content;
 };

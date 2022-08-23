@@ -1,4 +1,3 @@
-import { useButton } from "@react-aria/button";
 import {
   useModal,
   useOverlay,
@@ -6,7 +5,7 @@ import {
   useOverlayTrigger,
 } from "@react-aria/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
 import * as T from "./types";
 
@@ -17,20 +16,19 @@ export function usePopover({
   isDismissable = true,
   offset = 12,
   shouldFlip = true,
-  shouldCloseOnBlur = false,
-  isKeyboardDismissDisabled = false,
-  shouldCloseOnInteractOutside,
-  popoverTriggerRef,
-  ref,
+  onClose,
+  isOpen,
+  onOpenChange,
   popoverScrollRef,
 }: T.UsePopoverProps) {
-  const state = useOverlayTriggerState({ defaultOpen });
+  const overlayRef = useRef(null);
+  const triggerRef = useRef(null);
 
-  const overlayDomRef = useRef(null);
-  const triggerDomRef = useRef(null);
-
-  const triggerRef = popoverTriggerRef || triggerDomRef;
-  const overlayRef = ref || overlayDomRef;
+  const state = useOverlayTriggerState({
+    defaultOpen,
+    onOpenChange,
+    isOpen,
+  });
 
   // Get props for the trigger and overlay. This also handles
   // hiding the overlay when a parent element of the trigger scrolls
@@ -45,49 +43,40 @@ export function usePopover({
   const { overlayProps: positionProps } = useOverlayPosition({
     targetRef: triggerRef,
     overlayRef,
-    scrollRef: popoverScrollRef,
     placement,
     offset,
     isOpen: state.isOpen,
     shouldFlip,
+    scrollRef: popoverScrollRef,
   });
-
-  // useButton ensures that focus management is handled correctly,
-  // across all browsers. Focus is restored to the button once the
-  // popover closes.
-  const { buttonProps } = useButton(
-    {
-      onPress: () => state.open(),
-      elementType: "div",
-    },
-    overlayRef
-  );
 
   // Hide content outside the modal from screen readers.
   const { modalProps } = useModal();
+
+  const handleClose = useCallback(() => {
+    onClose?.();
+    state.close();
+  }, [state, onClose]);
 
   // Handle interacting outside the dialog and pressing
   // the Escape key to close the modal.
   const overlay = useOverlay(
     {
-      onClose: state.close,
+      onClose: handleClose,
       isOpen: state.isOpen,
-      isDismissable,
-      shouldCloseOnBlur,
-      isKeyboardDismissDisabled,
-      shouldCloseOnInteractOutside,
+      isDismissable: isDismissable && state.isOpen,
     },
     overlayRef
   );
 
   return {
     isOpen: state.isOpen,
-    onClose: () => state.close(),
-    onOpen: () => state.open(),
+    onClose: handleClose,
+    onOpen: state.open,
+    state,
     placement,
     triggerRef,
     overlayRef,
-    buttonProps,
     modalProps,
     positionProps,
     triggerProps,

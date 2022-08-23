@@ -17,7 +17,6 @@ export const Notifications = ({ notifications = [] }: T.NotificationsProps) => {
       <S.ContentWrapper>
         <TransitionGroup className="notifications">
           {notifications?.map((value) => {
-            console.log(value);
             return (
               <CSSTransition key={value.id} timeout={300} classNames="notification">
                 <Card

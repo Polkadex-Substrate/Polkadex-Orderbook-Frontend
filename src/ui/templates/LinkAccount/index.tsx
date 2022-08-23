@@ -5,11 +5,12 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import { Button, Dropdown, InputLine } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
@@ -65,10 +66,8 @@ export const LinkAccountTemplate = () => {
                 <S.SelectInput>
                   <span>Select main account</span>
                   <S.SelectInputContainer>
-                    <Dropdown
-                      isClickable
-                      direction="bottom"
-                      header={
+                    <Dropdown>
+                      <Dropdown.Trigger>
                         <S.SelectAccount>
                           <S.SelectAccountContainer>
                             <Icons.Avatar />
@@ -85,24 +84,25 @@ export const LinkAccountTemplate = () => {
                             </div>
                           </S.SelectAccountContainer>
                         </S.SelectAccount>
-                      }>
-                      <S.DropdownContent>
+                      </Dropdown.Trigger>
+                      <Dropdown.Menu fill="secondaryBackgroundSolid">
                         {mainAccounts.map((account) => {
                           const shortAddress =
                             account?.address?.slice(0, 10) +
                             "..." +
                             account?.address?.slice(account?.address?.length - 10);
                           return (
-                            <button
+                            <Dropdown.Item
                               key={account.address}
-                              type="button"
-                              onClick={() => handleSelectMainAccount(account.address)}>
-                              {account.meta.name}
-                              <span>{shortAddress}</span>
-                            </button>
+                              onAction={() => handleSelectMainAccount(account.address)}>
+                              <S.DropdownItem>
+                                {account.meta.name}
+                                <span>{shortAddress}</span>
+                              </S.DropdownItem>
+                            </Dropdown.Item>
                           );
                         })}
-                      </S.DropdownContent>
+                      </Dropdown.Menu>
                     </Dropdown>
                   </S.SelectInputContainer>
                 </S.SelectInput>
@@ -111,7 +111,6 @@ export const LinkAccountTemplate = () => {
                   label="Trading account name (Optional)"
                   placeholder="Enter a name for your trading account"
                   error={errors.name && touched.name && errors.name}
-                  style={{ marginBottom: 10 }}
                   {...getFieldProps("name")}
                 />
                 <Button
@@ -123,6 +122,7 @@ export const LinkAccountTemplate = () => {
                   isFull>
                   {loading ? "Loading..." : "Register Account"}
                 </Button>
+                <p>Block finalization will take a few mins.</p>
               </form>
             </S.Box>
           </S.Container>

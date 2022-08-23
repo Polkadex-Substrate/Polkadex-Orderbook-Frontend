@@ -1,27 +1,56 @@
+import { useButton } from "@react-aria/button";
 import { mergeProps, mergeRefs } from "@react-aria/utils";
 import {
   Children,
   cloneElement,
   forwardRef,
   JSXElementConstructor,
-  PropsWithChildren,
   ReactElement,
-  Ref,
 } from "react";
 
+import Button from "../Button";
+
 import { usePopoverContext } from "./context";
+import * as T from "./types";
 
-const Trigger = forwardRef(({ children }: PropsWithChildren<any>, ref: Ref<HTMLElement>) => {
-  const { triggerRef, triggerProps, buttonProps } = usePopoverContext();
+import { validateChild } from "@polkadex/orderbook/helpers/validateChild";
 
-  const child = Children.only(children);
+export const Trigger: T.PopoverComponent<{}, HTMLElement> = forwardRef(
+  ({ children, ...props }, ref) => {
+    const { triggerRef, overlayTriggerProps, onOpen } = usePopoverContext();
 
-  return cloneElement(child as ReactElement<any, string | JSXElementConstructor<any>>, {
-    ...mergeProps(buttonProps, triggerProps),
-    ref: mergeRefs(triggerRef, ref),
-    as: "div",
-  });
-});
+    // useButton ensures that focus management is handled correctly,
+    // across all browsers. Focus is restored to the button once the
+    // popover closes.
+    const { buttonProps } = useButton(
+      {
+        onPress: onOpen,
+        elementType: "div",
+        ...props,
+      },
+      triggerRef
+    );
+
+    const childrenComponent = typeof children === "string" ? <div>{children}</div> : children;
+
+    const [child] = Children.toArray(childrenComponent);
+    const hasChildren = !!validateChild(children, Button)[1]?.length;
+
+    return cloneElement(child as ReactElement<any, string | JSXElementConstructor<any>>, {
+      ...mergeProps(
+        hasChildren
+          ? {
+              onPress: onOpen,
+              ...props,
+            }
+          : buttonProps,
+        overlayTriggerProps
+      ),
+      ref: mergeRefs(triggerRef, ref),
+      as: "div",
+      style: { outline: "none" },
+    });
+  }
+);
 
 Trigger.displayName = "Trigger";
-export { Trigger };

@@ -89,10 +89,15 @@ export const Container = styled.div`
 `;
 
 export const Box = styled.div`
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
     max-width: 40rem;
@@ -104,7 +109,6 @@ export const SelectInput = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
-    margin-bottom: 2rem;
     span {
       display: block;
       color: ${theme.colors.tertiaryText};
@@ -117,7 +121,6 @@ export const SelectInputContainer = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding-bottom: 1rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;
 
     input {
       width: 100%;
@@ -172,29 +175,18 @@ export const SelectAccountContainer = styled.div`
   `}
 `;
 
-export const DropdownContent = styled.div`
+export const DropdownItem = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundSolid};
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    white-space: nowrap;
+    font-size: 1.3rem;
     border-radius: 0.8rem;
-    button {
-      white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
-      transition: background 0.5s ease-in;
-      text-align: left;
-      width: 100%;
-      span {
-        display: inline-block;
-        margin-left: 0.4rem;
-      }
-      :first-child {
-        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackground};
-      }
+    transition: background 0.5s ease-in;
+    text-align: left;
+    width: 100%;
+    span {
+      display: inline-block;
+      margin-left: 0.4rem;
+      opacity: 0.5;
     }
   `}
 `;

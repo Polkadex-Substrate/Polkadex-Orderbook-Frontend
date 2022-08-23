@@ -265,10 +265,6 @@ const Graph = () => {
           <S.FlexWrapper>
             <S.List>
               <ListItemButton title="Original" size="Small" isActive />
-              <AvailableMessage message="Soon">
-                <ListItemButton title="Trading View" size="Small" />
-              </AvailableMessage>
-
               {/* <ListItemButton title="Deep Market" size="Small" /> */}
 
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />

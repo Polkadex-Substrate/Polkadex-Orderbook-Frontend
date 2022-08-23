@@ -6,7 +6,7 @@ import { Logo } from "../../molecules";
 import * as S from "./styles";
 
 import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
-import { Button } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, Button } from "@polkadex/orderbook-ui/molecules";
 import { MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
@@ -42,22 +42,26 @@ const Navbar = ({ onOpenMarkets }) => {
         </S.ContainerPair>
         <S.ContainerInfo>
           <NavbarItem label={`Price (${quoteAsset?.symbol})`} info={currPrice} />
-          <NavbarItem
-            label="Price % 24h"
-            info={price_change_percent}
-            color={isPriceChangeNegative ? "primary" : "green"}
-          />
+          <AvailableMessage message="Soon">
+            <NavbarItem
+              label="Price % 24h"
+              info={price_change_percent}
+              color={isPriceChangeNegative ? "primary" : "green"}
+            />
+          </AvailableMessage>
           <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
-          <S.WrapperVolume>
-            <S.VolumeHigh>
-              <span>24h High</span>
-              <p>{high}</p>
-            </S.VolumeHigh>
-            <S.VolumeLow>
-              <span>24h Low</span>
-              <p>{low}</p>
-            </S.VolumeLow>
-          </S.WrapperVolume>
+          <AvailableMessage message="Soon">
+            <S.WrapperVolume>
+              <S.VolumeHigh>
+                <span>24h High</span>
+                <p>{high}</p>
+              </S.VolumeHigh>
+              <S.VolumeLow>
+                <span>24h Low</span>
+                <p>{low}</p>
+              </S.VolumeLow>
+            </S.WrapperVolume>
+          </AvailableMessage>
         </S.ContainerInfo>
       </S.WrapperInfo>
       {isSignedIn ? (

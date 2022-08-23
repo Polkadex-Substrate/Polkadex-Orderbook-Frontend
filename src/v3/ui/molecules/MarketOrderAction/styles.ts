@@ -40,3 +40,22 @@ export const WrapperActions = styled.div`
 export const RangeWrapper = styled.div`
   margin-bottom: 1rem;
 `;
+
+export const Connect = styled.a`
+  ${({ theme }) => css`
+    cursor: pointer;
+    display: block;
+    background: ${theme.colors.primaryBackground};
+    color: ${theme.colors.white};
+    padding: 1rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    transition: background 0.2s ease;
+
+    :hover {
+      background: ${theme.colors.primaryBackgroundOpacity};
+    }
+  `}
+`;

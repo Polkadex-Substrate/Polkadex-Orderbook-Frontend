@@ -21,6 +21,15 @@ export const HeaderWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   align-items: center;
 `;
+export const DropdownTrigger = styled.div`
+  cursor: pointer;
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+  }
+`;
 
 export const ActionItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`

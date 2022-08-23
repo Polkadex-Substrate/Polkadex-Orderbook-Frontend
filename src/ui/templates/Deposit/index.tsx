@@ -6,9 +6,9 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
-  Dropdown,
   InputLine,
   Table,
   Tooltip,
@@ -133,10 +133,8 @@ export const DepositTemplate = () => {
                   <S.SelectInput>
                     <span>Select a coin</span>
                     <S.SelectInputContainer>
-                      <Dropdown
-                        isClickable
-                        direction="bottom"
-                        header={
+                      <Dropdown>
+                        <Dropdown.Trigger>
                           <S.DropdownHeader>
                             <div>
                               <span>
@@ -150,17 +148,16 @@ export const DepositTemplate = () => {
                               </span>
                             </div>
                           </S.DropdownHeader>
-                        }>
-                        <S.DropdownContent>
+                        </Dropdown.Trigger>
+                        <Dropdown.Menu fill="secondaryBackgroundSolid">
                           {assets.map((asset) => (
-                            <button
+                            <Dropdown.Item
                               key={asset.assetId}
-                              type="button"
-                              onClick={() => setSelectedAsset(asset)}>
+                              onAction={() => setSelectedAsset(asset)}>
                               {asset.name}
-                            </button>
+                            </Dropdown.Item>
                           ))}
-                        </S.DropdownContent>
+                        </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputContainer>
                     <S.Available>
@@ -179,12 +176,14 @@ export const DepositTemplate = () => {
                   <Button
                     type="submit"
                     size="extraLarge"
-                    background="primary"
+                    background="green"
                     color="white"
                     disabled={false}
-                    isFull>
-                    {loading ? "Loading..." : "Deposit"}
+                    isFull
+                    isLoading={loading}>
+                    Deposit
                   </Button>
+                  {loading && <p>Block finalization will take a few mins.</p>}
                 </form>
               </S.Form>
               <S.History>

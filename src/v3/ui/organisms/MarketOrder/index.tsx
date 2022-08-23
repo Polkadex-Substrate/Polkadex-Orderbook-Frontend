@@ -1,20 +1,12 @@
 import { useState } from "react";
 
-import DropdownItem from "../../molecules/DropdownItem";
 import MarketOrderAction from "../../molecules/MarketOrderAction";
-import { DropdownContent, DropdownHeader } from "../../molecules";
+import { DropdownHeader, Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
-import {
-  AvailableMessage,
-  Dropdown,
-  Icon,
-  Skeleton,
-  TabContent,
-  TabHeader,
-  Tabs,
-} from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const MarketOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
@@ -38,23 +30,20 @@ const MarketOrder = () => {
               </S.ActionItem>
             </TabHeader>
           </S.HeaderWrapper>
-          <Dropdown
-            header={
-              <DropdownHeader>{isLimit ? "Limit Order" : "Market Order"}</DropdownHeader>
-            }
-            direction="bottom"
-            isClickable>
-            <DropdownContent>
-              <DropdownItem
-                title={"Limit Order"}
-                handleAction={() => handleChangeType(true)}
-              />
-
-              <DropdownItem
-                title={"Market Order"}
-                handleAction={() => handleChangeType(false)}
-              />
-            </DropdownContent>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <S.DropdownTrigger>
+                {isLimit ? "Limit Order" : "Market Order"} <Icons.ArrowBottom />
+              </S.DropdownTrigger>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="secondaryBackgroundSolid">
+              <Dropdown.Item key="limit" onAction={() => handleChangeType(true)}>
+                Limit Order
+              </Dropdown.Item>
+              <Dropdown.Item key="limit" onAction={() => handleChangeType(false)}>
+                Market Order
+              </Dropdown.Item>
+            </Dropdown.Menu>
           </Dropdown>
         </S.Header>
         <TabContent>

@@ -1,37 +1,49 @@
 import { FocusScope } from "@react-aria/focus";
-import { DismissButton } from "@react-aria/overlays";
+import { DismissButton, OverlayContainer } from "@react-aria/overlays";
 import { mergeProps, mergeRefs } from "@react-aria/utils";
-import { forwardRef, PropsWithChildren, Ref } from "react";
+import { forwardRef, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
 
 import { usePopoverContext } from "./context";
 import * as S from "./styles";
+import * as T from "./types";
 
-const Content = forwardRef(
-  ({ children }: PropsWithChildren<any>, ref: Ref<HTMLDivElement>) => {
-    const {
-      isDismissable,
-      onClose,
-      overlayRef,
-      positionProps,
-      modalProps,
-      overlayProps,
-      overlayTriggerProps,
-    } = usePopoverContext();
+export const Content: T.PopoverComponent = forwardRef(({ children, ...props }, ref) => {
+  const {
+    isDismissable,
+    onClose,
+    overlayRef,
+    positionProps,
+    modalProps,
+    overlayProps,
+    isOpen,
+    onOpen,
+  } = usePopoverContext();
 
-    return (
-      <S.ContentMain>
-        <FocusScope restoreFocus>
-          <S.ContentWrapper
-            {...mergeProps(overlayProps, overlayTriggerProps, positionProps, modalProps)}
-            ref={mergeRefs(overlayRef, ref)}>
-            {children}
-            {isDismissable && <DismissButton onDismiss={onClose} />}
-          </S.ContentWrapper>
-        </FocusScope>
-      </S.ContentMain>
-    );
-  }
-);
+  const componentRef = useRef();
+  return (
+    <FocusScope restoreFocus>
+      <CSSTransition
+        key={S.ContentMain}
+        in={isOpen}
+        timeout={120}
+        unmountOnExit
+        onEnter={onOpen}
+        onExited={onClose}
+        nodeRef={componentRef}>
+        <OverlayContainer>
+          <S.ContentMain ref={componentRef}>
+            <S.ContentWrapper
+              ref={mergeRefs(overlayRef, ref)}
+              {...mergeProps(overlayProps, positionProps, modalProps, props)}>
+              {children}
+              {isDismissable && <DismissButton onDismiss={onClose} />}
+            </S.ContentWrapper>
+          </S.ContentMain>
+        </OverlayContainer>
+      </CSSTransition>
+    </FocusScope>
+  );
+});
 
 Content.displayName = "Content";
-export { Content };

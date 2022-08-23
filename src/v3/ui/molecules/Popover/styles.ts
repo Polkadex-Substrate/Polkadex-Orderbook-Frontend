@@ -1,7 +1,6 @@
-import { OverlayContainer } from "@react-aria/overlays";
 import styled, { css } from "styled-components";
 
-export const ContentMain = styled(OverlayContainer)`
+export const ContentMain = styled.div`
   ${({ theme }) => css`
     &.enter ${ContentWrapper} {
       opacity: 0;
@@ -15,7 +14,7 @@ export const ContentMain = styled(OverlayContainer)`
     &.enter-done ${ContentWrapper} {
       opacity: 1;
       transform: scale(1);
-      transition: opacity 120ms, transform 120ms;
+      transition: opacity 120ms, transform 120ms ease-out;
     }
 
     &.exit ${ContentWrapper} {

@@ -23,10 +23,15 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.div`
-  h1 {
-    font-size: 2.3rem;
-    font-weight: 550;
-  }
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 1rem;
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 550;
+    }
+  `}
 `;
 
 export const TitleWrapper = styled.div`
@@ -55,12 +60,13 @@ export const TitleText = styled.small`
 export const TitleActions = styled.div`
   ${({ theme }) => css`
     display: flex;
+    align-items: center;
     gap: 1rem;
     a {
-      color: ${theme.colors.tertiaryText};
       border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 1rem;
+      font-weight: 500;
       transition: border 0.5s ease-in, background 0.5s ease-in;
       :active {
         border-color: ${theme.colors.primary};
@@ -71,6 +77,17 @@ export const TitleActions = styled.div`
     }
   `}
 `;
+export const Deposit = styled.a`
+  ${({ theme }) => css`
+    background: ${theme.colors.green};
+    color: ${theme.colors.white};
+    cursor: pointer;
+    :hover {
+      background: ${theme.colors.green}33;
+    }
+  `}
+`;
+
 export const Content = styled.div`
   margin-top: 4rem;
   h2 {
@@ -251,7 +268,7 @@ export const ContentActions = styled.div`
   `}
 `;
 
-export const CreateAccount = styled.a`
+export const CreateAccount = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
@@ -272,7 +289,7 @@ export const CreateAccountWrapper = styled.div`
       width: 1rem;
       margin-right: 0.5rem;
       svg {
-        fill: ${theme.colors.tertiaryText};
+        fill: ${theme.colors.primary};
       }
     }
     a {
@@ -420,8 +437,7 @@ export const SelectAccountContainer = styled.div`
       }
       div:last-child {
         width: 1.1rem;
-        align-self: flex-end;
-        svg {
+        align-self: center;
           fill: ${theme.colors.tertiaryText};
           stroke: ${theme.colors.tertiaryText};
         }
@@ -473,19 +489,16 @@ export const MyDropdownContentCard = styled.div`
   ${({ theme }) => css`
     white-space: nowrap;
     font-size: 1.3rem;
-    padding: 1.2rem;
     transition: background 0.5s ease-in;
     text-align: left;
-    width: 100%;
+
     cursor: pointer;
     span {
       display: inline-block;
       margin-left: 0.4rem;
       color: ${theme.colors.tertiaryText};
     }
-    :first-child {
-      border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    }
+
     :hover {
       background: ${theme.colors.secondaryBackground};
     }
@@ -497,5 +510,26 @@ export const MyDropdownContent = styled.div`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 0.8rem;
+  `}
+`;
+
+export const ContentEmpty = styled.div`
+  ${({ theme }) => css`
+    margin-top: 2rem;
+    border-radius: 1.5rem;
+    border: 2px solid ${theme.colors.tertiaryBackground};
+    display: grid;
+
+    gap: 2.5rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    padding: 2rem;
+    opacity: 0.8;
+    div {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
+      width: 100%;
+      height: 8rem;
+      border-radius: 1.5rem;
+    }
   `}
 `;

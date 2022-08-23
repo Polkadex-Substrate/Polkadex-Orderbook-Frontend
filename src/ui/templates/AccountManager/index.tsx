@@ -6,9 +6,9 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Search } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
-  Dropdown,
+  AvailableMessage,
   Popup,
   Tooltip,
   TooltipContent,
@@ -21,8 +21,8 @@ import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
-  const [search, setSearch] = useState("");
-  const [showSelected, setShowSelected] = useState(false);
+  const [showSelected, setShowSelected] = useState(true);
+
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -55,20 +55,12 @@ export const AccountManagerTemplate = () => {
   const isLinkedAccount = tradingAccounts?.length > 0;
   const {
     mainAccounts,
-    isRegistered,
     handleSelectMainAccount,
     shortWallet,
     currentMainAccount,
+    isRegistered,
   } = useLinkMainAccount();
 
-  const allMainAccounts = useMemo(
-    () =>
-      mainAccounts?.reduce((pv, cv) => {
-        if (cv.meta.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) pv.push(cv);
-        return pv;
-      }, []),
-    [mainAccounts, search]
-  );
   const allTradingAccounts = useMemo(
     () =>
       tradingAccounts.filter((value) =>
@@ -76,6 +68,8 @@ export const AccountManagerTemplate = () => {
       ),
     [tradingAccounts, associatedTradeAccounts, showSelected]
   );
+
+  const userHasSelectedMainAccount = currentMainAccount?.name;
 
   return (
     <>
@@ -97,14 +91,14 @@ export const AccountManagerTemplate = () => {
             <h1>Account Manager</h1>
             <S.TitleWrapper>
               <S.TitleBalance>
-                <S.TitleText>Select Your Polkadex Account</S.TitleText>
+                {!userHasSelectedMainAccount && (
+                  <S.TitleText>Select Your Polkadex Account</S.TitleText>
+                )}
                 <S.SelectInputContainer>
                   <S.SelectInputFlex>
                     <S.SelectInputWrapper>
-                      <Dropdown
-                        isClickable
-                        direction="bottom"
-                        header={
+                      <Dropdown>
+                        <Dropdown.Trigger>
                           <S.SelectAccount>
                             <S.SelectAccountContainer>
                               <Icons.Avatar />
@@ -121,126 +115,142 @@ export const AccountManagerTemplate = () => {
                               </div>
                             </S.SelectAccountContainer>
                           </S.SelectAccount>
-                        }>
-                        <S.MyDropdownContent>
-                          <S.MyDropdownContentTitle>
-                            <Search
-                              type="text"
-                              placeholder="Search.."
-                              isFull
-                              value={search}
-                              onChange={(e) => setSearch(e.target.value)}
-                            />
-                          </S.MyDropdownContentTitle>
-                          {allMainAccounts?.map((account) => {
+                        </Dropdown.Trigger>
+                        <Dropdown.Menu fill="secondaryBackgroundSolid">
+                          {mainAccounts?.map((account) => {
                             const shortAddress =
                               account?.address?.slice(0, 10) +
                               "..." +
                               account?.address?.slice(account?.address?.length - 10);
 
                             return (
-                              <S.MyDropdownContentCard
-                                key={account.address}
-                                role="button"
-                                onClick={() => handleSelectMainAccount(account.address)}>
-                                {account.meta.name}
-                                <span>{shortAddress}</span>
-                              </S.MyDropdownContentCard>
+                              <Dropdown.Item key={account.address}>
+                                <S.MyDropdownContentCard
+                                  role="button"
+                                  onClick={() => handleSelectMainAccount(account.address)}>
+                                  {account.meta.name}
+                                  <span>{shortAddress}</span>
+                                </S.MyDropdownContentCard>
+                              </Dropdown.Item>
                             );
                           })}
-                        </S.MyDropdownContent>
+                        </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputWrapper>
-                    {isRegistered ? (
-                      <S.Verified>
-                        <Icons.Verified /> Registered
-                      </S.Verified>
-                    ) : (
-                      <S.UnVerified type="button" onClick={() => router.push("/linkAccount")}>
-                        Register Now
-                      </S.UnVerified>
+                    {userHasSelectedMainAccount && (
+                      <>
+                        {isRegistered ? (
+                          <S.Verified>
+                            <Icons.Verified /> Registered
+                          </S.Verified>
+                        ) : (
+                          <S.UnVerified
+                            type="button"
+                            onClick={() => router.push("/linkAccount")}>
+                            Register Now
+                          </S.UnVerified>
+                        )}
+                      </>
                     )}
                   </S.SelectInputFlex>
                 </S.SelectInputContainer>
               </S.TitleBalance>
-              <S.TitleActions>
-                <Link href="/deposit/PDEX">
-                  <a>Deposit</a>
-                </Link>
-                <Link href="/withdraw/PDEX">
-                  <a>Withdraw</a>
-                </Link>
-                <Link href="/history">
-                  <a>History</a>
-                </Link>
-              </S.TitleActions>
+              {userHasSelectedMainAccount && (
+                <S.TitleActions>
+                  <Link href="/deposit/PDEX">
+                    <S.Deposit>Deposit</S.Deposit>
+                  </Link>
+                  <AvailableMessage message="Soon">
+                    <Link href="/withdraw/PDEX">
+                      <a>Withdraw</a>
+                    </Link>
+                  </AvailableMessage>
+                  <AvailableMessage message="Soon">
+                    <Link href="/history">
+                      <a>History</a>
+                    </Link>
+                  </AvailableMessage>
+                </S.TitleActions>
+              )}
             </S.TitleWrapper>
           </S.Title>
-          <S.Content>
-            <S.ContentTitle>
-              <h2>My Trading Accounts</h2>
-              <div>
-                <span>Show only selected account</span>
-                <Switch
-                  isActive={showSelected}
-                  onChange={() => setShowSelected(!showSelected)}
-                />
-              </div>
-            </S.ContentTitle>
-            <S.ContentGrid>
-              {!isLinkedAccount ? (
-                <S.LinkAccount>
-                  <S.LinkAccountColumn>
-                    <S.FlexCenter>
-                      <span>Link your account</span>
-                      <p>Connect your account to a main wallet to start using Orderbook</p>
-                    </S.FlexCenter>
-                  </S.LinkAccountColumn>
-                  <Link href="linkAccount">
+          {userHasSelectedMainAccount ? (
+            <S.Content>
+              <S.ContentTitle>
+                <h2>My Trading Accounts</h2>
+                <div>
+                  <span>Show only selected account</span>
+                  <Switch
+                    isActive={showSelected}
+                    onChange={() => setShowSelected(!showSelected)}
+                  />
+                </div>
+              </S.ContentTitle>
+              <S.ContentGrid>
+                {!isLinkedAccount ? (
+                  <S.LinkAccount>
                     <S.LinkAccountColumn>
-                      <S.LinkAccountColumnWrapper>
-                        <Icons.PolkadotJs />
-                      </S.LinkAccountColumnWrapper>
-                      <S.LinkAccountColumnWrapper>
-                        <div>
-                          <span>Polkadot.js</span>
-                          <p>Link your account using Polkadot.js extension</p>
-                        </div>
-                        <div>
-                          <Icons.ArrowRight />
-                        </div>
-                      </S.LinkAccountColumnWrapper>
+                      <S.FlexCenter>
+                        <span>Link your account</span>
+                        <p>Connect your account to a main wallet to start using Orderbook</p>
+                      </S.FlexCenter>
                     </S.LinkAccountColumn>
-                  </Link>
-                </S.LinkAccount>
-              ) : (
-                <>
-                  {allTradingAccounts.map((value) => (
-                    <Card
-                      key={value.id}
-                      title={value.name}
-                      address={value.address}
-                      isUsing={value.isActive}
-                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
-                      onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => handleSelectTradeAccount(value.address)}
-                    />
-                  ))}
-                  <Link href="/createAccount">
+                    <Link href="linkAccount">
+                      <S.LinkAccountColumn>
+                        <S.LinkAccountColumnWrapper>
+                          <Icons.PolkadotJs />
+                        </S.LinkAccountColumnWrapper>
+                        <S.LinkAccountColumnWrapper>
+                          <div>
+                            <span>Polkadot.js</span>
+                            <p>Link your account using Polkadot.js extension</p>
+                          </div>
+                          <div>
+                            <Icons.ArrowRight />
+                          </div>
+                        </S.LinkAccountColumnWrapper>
+                      </S.LinkAccountColumn>
+                    </Link>
+                  </S.LinkAccount>
+                ) : (
+                  <>
+                    {allTradingAccounts.map((value) => (
+                      <Card
+                        key={value.id}
+                        title={value.name}
+                        address={value.address}
+                        isUsing={value.isActive}
+                        onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                        onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                        onUse={() => handleSelectTradeAccount(value.address)}
+                      />
+                    ))}
                     <S.CreateAccount>
                       <S.CreateAccountWrapper>
-                        <div>
-                          <Icons.Plus />
-                        </div>
-                        Create new account or
+                        <Link href="/createAccount">
+                          <a>
+                            <div>
+                              <Icons.Plus />
+                            </div>
+                            Create new account
+                          </a>
+                        </Link>{" "}
+                        or
                         <Link href="/importAccount"> Import</Link>
                       </S.CreateAccountWrapper>
                     </S.CreateAccount>
-                  </Link>
-                </>
-              )}
-            </S.ContentGrid>
-          </S.Content>
+                  </>
+                )}
+              </S.ContentGrid>
+            </S.Content>
+          ) : (
+            <S.ContentEmpty>
+              <div />
+              <div />
+              <div />
+              <div />
+            </S.ContentEmpty>
+          )}
         </S.Wrapper>
       </S.Main>
     </>
@@ -292,26 +302,25 @@ const Card = ({
         </a>
       </Link>
       <S.CardContent>
-        <Dropdown
-          isClickable
-          direction="bottom"
-          header={
+        <Dropdown>
+          <Dropdown.Trigger>
             <S.DropdownHeader>
               Remove
               <div>
                 <Icons.DropdownArrow stroke="secondaryText" />
               </div>
             </S.DropdownHeader>
-          }>
-          <S.DropdownContent>
-            <button type="button" onClick={onRemoveFromBlockchain}>
-              Remove from the blockchain
-            </button>
-            <button type="button" onClick={onRemoveFromDevice}>
-              Remove from my browser
-            </button>
-          </S.DropdownContent>
+          </Dropdown.Trigger>
+          <Dropdown.Menu fill="secondaryBackgroundSolid">
+            <Dropdown.Item key="removeBlockchain">
+              <AvailableMessage>Remove from the blockchain</AvailableMessage>
+            </Dropdown.Item>
+            <Dropdown.Item key="removeBrowser">
+              <AvailableMessage>Remove from my browser</AvailableMessage>
+            </Dropdown.Item>
+          </Dropdown.Menu>
         </Dropdown>
+
         <S.ContentActions>
           {isUsing ? (
             <span>Using</span>

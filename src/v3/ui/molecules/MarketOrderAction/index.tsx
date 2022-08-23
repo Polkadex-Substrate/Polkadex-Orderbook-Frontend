@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import Input from "../Input";
+import Button from "../Button";
 
 import * as S from "./styles";
 
@@ -88,23 +91,24 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
               readOnly
             />
           )}
-
-          <ButtonStatus
-            isSell={isSell}
-            heading={{
-              text: !isSignedIn
-                ? "Sign In to Place Order"
-                : !hasUser
-                ? "Connect Trading Account"
-                : `${orderSide} ${baseTicker}`,
-              loading: "Waiting",
-              success: "Order Created",
-            }}
-            isLoading={isOrderLoading}
-            isSuccess={isOrderExecuted}
-            type="submit"
-            disabled={!hasUser || !isSignedIn}
-          />
+          {hasUser ? (
+            <ButtonStatus
+              isSell={isSell}
+              heading={{
+                text: !isSignedIn ? "Sign In to Place Order" : `${orderSide} ${baseTicker}`,
+                loading: "Waiting",
+                success: "Order Created",
+              }}
+              isLoading={isOrderLoading}
+              isSuccess={isOrderExecuted}
+              type="submit"
+              disabled={!hasUser || !isSignedIn}
+            />
+          ) : (
+            <Link href="/accountManager">
+              <S.Connect>Connect Trading Account</S.Connect>
+            </Link>
+          )}
         </form>
       </S.ContainerForm>
     </S.WrapperOrder>
