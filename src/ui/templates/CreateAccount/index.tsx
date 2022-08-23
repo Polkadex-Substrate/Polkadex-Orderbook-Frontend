@@ -102,7 +102,7 @@ export const CreateAccountTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty) || isLoading}
+                    disabled={!isValid || isLoading}
                     isFull
                     isLoading={isLoading}>
                     Create Account
