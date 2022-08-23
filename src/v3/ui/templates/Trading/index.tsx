@@ -32,7 +32,7 @@ import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
 export function Trading() {
   const [state, setState] = useState(false);
-  const [banner, setBanner] = useState(false);
+  const [banner, setBanner] = useState(true);
 
   const dispatch = useDispatch();
   const { id } = useRouter().query;
@@ -77,30 +77,32 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <Popup
+        isMessage
+        isVisible={banner}
+        onClose={() => setBanner(false)}
+        style={{
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          paddingTop: "2rem",
+        }}>
+        <AccountBanner onClose={() => setBanner(!banner)} />
+      </Popup>
+      <Popup
+        isMessage
+        isVisible={state}
+        onClose={() => setState(!state)}
+        size="fitContent"
+        isRightPosition
+        style={{
+          maxWidth: "192rem",
+          margin: "0 auto",
+        }}>
+        <Markets />
+      </Popup>
       <S.Wrapper>
         <Menu handleChange={() => setState(!state)} />
-        <Modal
-          open={banner}
-          onClose={() => setBanner(false)}
-          onOpen={() => setBanner(true)}
-          placement="top right"
-          isBlur>
-          <Modal.Body>
-            <AccountBanner onClose={() => setBanner(!banner)} />
-          </Modal.Body>
-        </Modal>
-        <Popup
-          isMessage
-          isVisible={state}
-          onClose={() => setState(!state)}
-          size="fitContent"
-          isRightPosition
-          style={{
-            maxWidth: "192rem",
-            margin: "0 auto",
-          }}>
-          <Markets />
-        </Popup>
+
         <S.WrapperMain>
           <Navbar onOpenMarkets={() => setState(!state)} />
           <S.WrapperGraph>
