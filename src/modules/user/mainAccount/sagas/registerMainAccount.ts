@@ -40,13 +40,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         registerMainAccount(api, tradeAddress, mainAccount.injector, mainAccount.address)
       );
       if (res.isSuccess) {
-        yield put(
-          notificationPush({
-            message: { title: "Successfully Registered!" },
-            type: "SuccessAlert",
-            time: new Date().getTime(),
-          })
-        );
         yield put(registerMainAccountData());
       }
     }

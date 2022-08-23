@@ -12,6 +12,8 @@ import {
   REGISTER_MAIN_ACCOUNT_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
   REGISTER_MAIN_ACCOUNT_ERROR,
+  REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
+  REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
 } from "./constants";
 
 export interface MainAccount {
@@ -68,6 +70,16 @@ export interface RegisterMainAccountError {
   error: CommonError;
 }
 
+export interface RegisterMainAccountUpdateEvent {
+  type: typeof REGISTER_MAIN_ACCOUNT_UPDATE_FETCH;
+  payload: any;
+}
+
+export interface RegisterMainAccountUpdateData {
+  type: typeof REGISTER_MAIN_ACCOUNT_UPDATE_DATA;
+  payload: any;
+}
+
 export type GetExtensionWalletAction =
   | ExtensionWalletFetch
   | ExtensionWalletError
@@ -77,7 +89,9 @@ export type GetExtensionWalletAction =
   | ResetExtensionWallet
   | RegisterMainAccountFetch
   | RegisterMainAccountData
-  | RegisterMainAccountError;
+  | RegisterMainAccountError
+  | RegisterMainAccountUpdateEvent
+  | RegisterMainAccountUpdateData;
 
 export const extensionWalletData = (
   payload: ExtensionWalletFetchPayload
@@ -128,4 +142,18 @@ export const registerMainAccountData = (): RegisterMainAccountData => ({
 export const registerMainAccountError = (error: CommonError): RegisterMainAccountError => ({
   type: REGISTER_MAIN_ACCOUNT_ERROR,
   error,
+});
+
+export const registerMainAccountUpdateEvent = (
+  payload: RegisterMainAccountUpdateEvent["payload"]
+) => ({
+  type: REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
+  payload,
+});
+
+export const registerMainAccountUpdateData = (
+  payload: RegisterMainAccountUpdateData["payload"]
+) => ({
+  type: REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
+  payload,
 });
