@@ -31,7 +31,7 @@ export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
         type: "ErrorAlert",
         message: {
           title: "Cant find main account",
-          description: "Main accoun is not found, please register account",
+          description: "Main account is not found, please register account",
         },
         time: new Date().getTime(),
       })

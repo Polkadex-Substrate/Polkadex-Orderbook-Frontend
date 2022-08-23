@@ -7,7 +7,7 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
-import { selectCurrentMainAccount } from "../../mainAccount";
+import { registerMainAccountUpdateEvent, selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 import { selectCurrentTradeAccount } from "../../tradeAccount";
 import { userTradesUpdateEvent } from "../../trades";
@@ -75,10 +75,7 @@ function createActionFromUserEvent(eventData: any) {
   } else if (isKeyPresentInObject(data, "SetOrder")) {
     return orderUpdateEvent(data.SetOrder);
   } else if (isKeyPresentInObject(data, "RegisterAccount")) {
-    return registerSuccessNofiication(
-      "Account registered",
-      "Your account has been registered"
-    );
+    return registerMainAccountUpdateEvent(data.RegisterAccount);
   } else if (isKeyPresentInObject(data, "AddProxy")) {
     return registerSuccessNofiication("Trade account added", "New Trade account created");
   } else {

@@ -19,7 +19,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   try {
     const api = yield select(selectRangerApi);
     const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
-    if (!mainAccount.address) {
+    if (!mainAccount?.address) {
       throw new Error("Pleaes select a main account!");
     }
     const { mnemonic, password, name } = action.payload;

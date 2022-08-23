@@ -16,8 +16,13 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { useAccountManager, useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import {
+  useAccountManager,
+  useLinkMainAccount,
+  useReduxSelector,
+} from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
+import { selectIsSetMainAccountLoading } from "@polkadex/orderbook-modules";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
@@ -70,7 +75,7 @@ export const AccountManagerTemplate = () => {
   );
 
   const userHasSelectedMainAccount = currentMainAccount?.name;
-
+  const loading = useReduxSelector(selectIsSetMainAccountLoading);
   return (
     <>
       <Popup isVisible={remove.status} onClose={handleClose} size="fitContent" isMessage>
@@ -106,7 +111,8 @@ export const AccountManagerTemplate = () => {
                             <S.SelectAccountContainer>
                               <div>
                                 <strong>
-                                  {currentMainAccount?.name || "Select your main account"}
+                                  {currentMainAccount?.name ||
+                                    (loading ? "Loading..." : "Select your main account")}
                                 </strong>
                                 {shortWallet.length ? <span>{shortWallet}</span> : ""}
                               </div>
@@ -155,7 +161,7 @@ export const AccountManagerTemplate = () => {
                   </S.SelectInputFlex>
                 </S.SelectInputContainer>
               </S.TitleBalance>
-              {userHasSelectedMainAccount && (
+              {userHasSelectedMainAccount && isRegistered && (
                 <S.TitleActions>
                   <Link href="/deposit/PDEX">
                     <S.Deposit>Deposit</S.Deposit>
@@ -227,7 +233,7 @@ export const AccountManagerTemplate = () => {
                     ))}
                     <S.CreateAccount>
                       <S.CreateAccountWrapper>
-                        <Link href="/createAccount">
+                        <Link href={isRegistered ? "/createAccount" : "/linkAccount"}>
                           <a>
                             <div>
                               <Icons.Plus />
