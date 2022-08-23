@@ -9,6 +9,9 @@ export const selectUserIdentity = (state: RootState): string =>
 export const selectSignedInUserInfo = (state: RootState): ProfileState["userData"] =>
   state.user.profile.userData;
 
+export const selectShouldShowInitialBanner = (state: RootState): boolean =>
+  state.user.profile.userData.shouldShowInitialBanner;
+
 export const selectIsUserSignedIn = (state: RootState): boolean => {
   return state.user.profile.userData.isAuthenticated;
 };

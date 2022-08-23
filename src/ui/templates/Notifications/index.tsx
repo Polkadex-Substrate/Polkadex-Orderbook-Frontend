@@ -16,9 +16,9 @@ export const Notifications = ({ notifications = [] }: T.NotificationsProps) => {
     <S.Wrapper>
       <S.ContentWrapper>
         <TransitionGroup className="notifications">
-          {notifications?.map((value) => {
+          {notifications?.map((value, i) => {
             return (
-              <CSSTransition key={value.id} timeout={300} classNames="notification">
+              <CSSTransition key={i} timeout={300} classNames="notification">
                 <Card
                   onRemove={() =>
                     dispatch(notificationMarkAsReadBy({ id: value.id, by: "isActive" }))

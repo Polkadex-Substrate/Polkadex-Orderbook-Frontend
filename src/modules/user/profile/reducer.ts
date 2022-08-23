@@ -1,18 +1,10 @@
-import { CommonError } from "../../types";
-
 import { ProfileAction, UserInfo } from "./actions";
 import {
-  PROFILE_RESET_USER,
   PROFILE_USER_DATA,
   PROFILE_USER_ERROR,
   PROFILE_USER_FETCH,
-  PROFILE_USER_LIST_DATA,
-  PROFILE_USER_LIST_FETCH,
+  PROFILE_USER_CHANGE_INIT_BANNER,
 } from "./constants";
-
-import { UserSkeleton } from "./";
-
-import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface ProfileState {
   userData: UserInfo["payload"];
@@ -27,6 +19,7 @@ const defaultUser: ProfileState["userData"] = {
   userExists: false,
   session: null,
   jwt: "",
+  shouldShowInitialBanner: false,
 };
 
 export const initialStateProfile: ProfileState = {
@@ -46,7 +39,10 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
       return {
         ...state,
         isFetching: false,
-        userData: action.payload,
+        userData: {
+          ...state.userData,
+          ...action.payload,
+        },
         isSuccess: true,
       };
     case PROFILE_USER_ERROR:
@@ -55,7 +51,14 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         isFetching: false,
         error: action.error,
       };
-
+    case PROFILE_USER_CHANGE_INIT_BANNER:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          shouldShowInitialBanner: action.payload,
+        },
+      };
     default:
       return state;
   }
