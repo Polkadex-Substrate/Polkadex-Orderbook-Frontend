@@ -11,7 +11,7 @@ import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
 export const Mnemonic = ({ handleMnemonicUpdate }) => {
   const [state, setState] = useState(true);
   const { mnemonic, mnemoicString } = useMnemonic();
-  useEffect(() => handleMnemonicUpdate(mnemoicString), []);
+  useEffect(() => handleMnemonicUpdate(mnemoicString), [handleMnemonicUpdate, mnemoicString]);
 
   const componentRef = useRef();
 
