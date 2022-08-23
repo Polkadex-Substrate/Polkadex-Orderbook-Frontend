@@ -124,10 +124,10 @@ export const AccountManagerTemplate = () => {
                               account?.address?.slice(account?.address?.length - 10);
 
                             return (
-                              <Dropdown.Item key={account.address}>
-                                <S.MyDropdownContentCard
-                                  role="button"
-                                  onClick={() => handleSelectMainAccount(account.address)}>
+                              <Dropdown.Item
+                                key={account.address}
+                                onAction={() => handleSelectMainAccount(account.address)}>
+                                <S.MyDropdownContentCard>
                                   {account.meta.name}
                                   <span>{shortAddress}</span>
                                 </S.MyDropdownContentCard>
