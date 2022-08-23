@@ -144,7 +144,7 @@ export const MyAccountContent = ({
           <p>Support</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
-        <a href="/terms">
+        <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf">
           <p>Terms and Conditions</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
