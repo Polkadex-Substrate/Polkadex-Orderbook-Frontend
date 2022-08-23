@@ -72,7 +72,7 @@ export const Box = styled.div`
       top: 0;
       right: 0;
       width: 100%;
-      z-index: 27;
+      z-index: 32;
       background: ${theme.colors.primaryBackground};
       box-shadow: ${theme.shadows.tertiary};
     }

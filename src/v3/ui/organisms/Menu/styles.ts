@@ -33,8 +33,8 @@ export const WrapperLinks = styled.div`
   ${({ theme }) => css`
     width: 100%;
     min-width: 4.5rem;
-    min-height: 42rem;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     background: ${theme.colors.tertiaryBackground};
     border-radius: 0 3rem 3rem 3rem;
@@ -45,6 +45,7 @@ export const WrapperLinks = styled.div`
     transition-property: initial;
     @media screen and (min-width: 590px) {
       padding: 2rem 1rem 1rem 0.9rem;
+      min-height: 42rem;
     }
   `}
 `;

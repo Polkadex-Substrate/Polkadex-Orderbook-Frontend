@@ -492,15 +492,10 @@ export const MyDropdownContentCard = styled.div`
     transition: background 0.5s ease-in;
     text-align: left;
 
-    cursor: pointer;
     span {
       display: inline-block;
       margin-left: 0.4rem;
       color: ${theme.colors.tertiaryText};
-    }
-
-    :hover {
-      background: ${theme.colors.secondaryBackground};
     }
   `}
 `;

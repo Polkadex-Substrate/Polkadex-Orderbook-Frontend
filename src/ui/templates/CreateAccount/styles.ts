@@ -67,7 +67,7 @@ export const Column = styled.div`
     @media screen and (min-width: 830px) {
       background-position: bottom;
     }
-    @media screen and (max-height: 770px) {
+    @media screen and (max-height: 770px), (max-width: 830px) {
       background-image: none;
     }
 
