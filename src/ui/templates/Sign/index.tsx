@@ -106,8 +106,11 @@ export const SignTemplate = () => {
                   </InputLine>
                   <S.Terms>
                     <span>
-                      By clicking the submit button below,I hereby agree with Polkadex{" "}
-                      <a href="/terms" target="_blank">
+                      By clicking the submit button below, I hereby agree with Polkadex{" "}
+                      <a
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Privacy%20Policy"
+                        target="_blank"
+                        rel="noreferrer">
                         Terms of Service and Privacy Policy
                       </a>
                     </span>

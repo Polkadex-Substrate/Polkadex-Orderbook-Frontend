@@ -74,7 +74,10 @@ export const SignInTemplate = () => {
                   <S.Terms>
                     <span>
                       By clicking the submit button below,I hereby agree with Polkadex{" "}
-                      <a href="/terms" target="_blank">
+                      <a
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Privacy%20Policy"
+                        target="_blank"
+                        rel="noreferrer">
                         Terms of Service and Privacy Policy
                       </a>
                     </span>
