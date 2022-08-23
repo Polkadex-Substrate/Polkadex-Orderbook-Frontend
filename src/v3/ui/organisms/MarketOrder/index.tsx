@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import MarketOrderAction from "../../molecules/MarketOrderAction";
-import { DropdownHeader, Dropdown } from "../../molecules";
+import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 

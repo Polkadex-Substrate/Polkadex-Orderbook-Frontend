@@ -57,6 +57,7 @@ export const ordersReducer = (state = initialState, action: OrdersAction) => {
       return {
         ...state,
         executeSuccess: false,
+        executeLoading: false,
       };
 
     case ORDER_EXECUTE_ERROR:
