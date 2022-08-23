@@ -26,13 +26,12 @@ import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
 import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
-import { Modal } from "@polkadex/orderbook/v3/ui/molecules";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
 export function Trading() {
   const [state, setState] = useState(false);
-  const [banner, setBanner] = useState(true);
+  const [banner, setBanner] = useState(false);
 
   const dispatch = useDispatch();
   const { id } = useRouter().query;
