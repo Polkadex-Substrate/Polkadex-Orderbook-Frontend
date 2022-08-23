@@ -16,6 +16,7 @@ import {
   selectRegisterTradeAccountLoading,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Loading } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
@@ -83,27 +84,31 @@ export const CreateAccountTemplate = () => {
               </S.ColumnWrapper>
             </S.Column>
             <S.Box>
-              <form onSubmit={handleSubmit}>
-                <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
-                <InputLine
-                  name="name"
-                  label="Account Name (Optional)"
-                  placeholder="Enter a name for this account"
-                  error={errors.name && touched.name && errors.name}
-                  {...getFieldProps("name")}
-                />
-                <Button
-                  type="submit"
-                  size="extraLarge"
-                  background="primary"
-                  color="white"
-                  disabled={!isValid || isLoading}
-                  isFull
-                  isLoading={isLoading}>
-                  Create Account
-                </Button>
-                {isLoading && <p>Block finalization will take a few mins.</p>}
-              </form>
+              <Loading
+                message="Block finalization will take a few mins."
+                isVisible={isLoading}>
+                <form onSubmit={handleSubmit}>
+                  <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
+                  <InputLine
+                    name="name"
+                    label="Account Name (Optional)"
+                    placeholder="Enter a name for this account"
+                    error={errors.name && touched.name && errors.name}
+                    disabled={isLoading}
+                    {...getFieldProps("name")}
+                  />
+                  <Button
+                    type="submit"
+                    size="extraLarge"
+                    background="primary"
+                    color="white"
+                    disabled={!(isValid && dirty) || isLoading}
+                    isFull
+                    isLoading={isLoading}>
+                    Create Account
+                  </Button>
+                </form>
+              </Loading>
             </S.Box>
           </S.Container>
         </S.Wrapper>
