@@ -26,7 +26,6 @@ import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
 import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
-import { Modal } from "@polkadex/orderbook/v3/ui/molecules";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
 
@@ -77,30 +76,32 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <Popup
+        isMessage
+        isVisible={banner}
+        onClose={() => setBanner(false)}
+        style={{
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          paddingTop: "2rem",
+        }}>
+        <AccountBanner onClose={() => setBanner(!banner)} />
+      </Popup>
+      <Popup
+        isMessage
+        isVisible={state}
+        onClose={() => setState(!state)}
+        size="fitContent"
+        isRightPosition
+        style={{
+          maxWidth: "192rem",
+          margin: "0 auto",
+        }}>
+        <Markets />
+      </Popup>
       <S.Wrapper>
         <Menu handleChange={() => setState(!state)} />
-        <Modal
-          open={banner}
-          onClose={() => setBanner(false)}
-          onOpen={() => setBanner(true)}
-          placement="top right"
-          isBlur>
-          <Modal.Body>
-            <AccountBanner onClose={() => setBanner(!banner)} />
-          </Modal.Body>
-        </Modal>
-        <Popup
-          isMessage
-          isVisible={state}
-          onClose={() => setState(!state)}
-          size="fitContent"
-          isRightPosition
-          style={{
-            maxWidth: "192rem",
-            margin: "0 auto",
-          }}>
-          <Markets />
-        </Popup>
+
         <S.WrapperMain>
           <Navbar onOpenMarkets={() => setState(!state)} />
           <S.WrapperGraph>
