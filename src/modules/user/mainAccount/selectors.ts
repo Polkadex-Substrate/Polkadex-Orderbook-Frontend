@@ -34,3 +34,6 @@ export const selectLinkedMainAccount = (state: RootState): InjectedAccount | und
 
 export const selectIsRegisterMainAccountLoading = (state: RootState): boolean =>
   state.user.extensionWallet.registerMainAccountLoading;
+
+export const selectIsSetMainAccountLoading = (state: RootState): boolean =>
+  state.user.extensionWallet.setMainAccountLoading;
