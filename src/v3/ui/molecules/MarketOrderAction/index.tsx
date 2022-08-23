@@ -1,12 +1,11 @@
 import Link from "next/link";
 
 import Input from "../Input";
-import Button from "../Button";
 
 import * as S from "./styles";
 
 import { ButtonStatus, Range } from "@orderbook/v2/ui/molecules";
-import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
 
 const MarketOrderAction = ({ isSell = false, isLimit }) => {
