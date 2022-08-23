@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { selectSignInLoading, selectSignInSuccess, signInFetch } from "../modules/user/auth";
+import { userChangeInitBanner } from "../modules/user/profile";
 
 import { useReduxSelector } from "./useReduxSelector";
 
@@ -32,9 +33,11 @@ export const useSignIn = () => {
   }, []);
 
   useEffect(() => {
-    if (isSuccess || isAuthenticated)
+    if (isSuccess || isAuthenticated) {
+      dispatch(userChangeInitBanner(true));
       router.push("/trading/" + defaultConfig.landingPageMarket);
-  }, [isAuthenticated, isSuccess, router]);
+    }
+  }, [isAuthenticated, isSuccess, router, dispatch]);
 
   const signIn = (email: string, password: string) => {
     dispatch(signInFetch({ email, password }));

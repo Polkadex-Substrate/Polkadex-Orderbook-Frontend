@@ -5,18 +5,16 @@ import {
   PROFILE_USER_DATA,
   PROFILE_USER_ERROR,
   PROFILE_USER_FETCH,
-  PROFILE_USER_LIST_DATA,
-  PROFILE_USER_LIST_FETCH,
+  PROFILE_USER_CHANGE_INIT_BANNER,
 } from "./constants";
-
-import { UserSkeleton } from "./";
-
-import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
 }
-
+export interface UserChangeInitBanner {
+  type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
+  payload: boolean;
+}
 export interface UserInfo {
   type: typeof PROFILE_USER_DATA;
   payload: {
@@ -26,6 +24,7 @@ export interface UserInfo {
     userExists: boolean;
     session?: any;
     jwt?: string;
+    shouldShowInitialBanner?: boolean;
   };
 }
 
@@ -38,10 +37,20 @@ export interface UserReset {
   type: typeof PROFILE_RESET_USER;
 }
 
-export type ProfileAction = UserFetch | UserInfo | UserError | UserReset;
+export type ProfileAction =
+  | UserFetch
+  | UserInfo
+  | UserError
+  | UserReset
+  | UserChangeInitBanner;
 
 export const userFetch = (): UserFetch => ({
   type: PROFILE_USER_FETCH,
+});
+
+export const userChangeInitBanner = (payload = false): UserChangeInitBanner => ({
+  type: PROFILE_USER_CHANGE_INIT_BANNER,
+  payload,
 });
 
 export const userData = (payload: UserInfo["payload"]): UserInfo => ({

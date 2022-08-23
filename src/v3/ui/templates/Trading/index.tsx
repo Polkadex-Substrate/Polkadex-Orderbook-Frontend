@@ -1,3 +1,5 @@
+import { setTimeout } from "timers";
+
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -18,6 +20,8 @@ import {
   selectCurrentMarket,
   selectCurrentTradePrice,
   selectIsUserSignedIn,
+  selectShouldShowInitialBanner,
+  userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
@@ -42,8 +46,9 @@ export function Trading() {
 
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
+  const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts);
+  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
 
   // intitialize market dependent events
   useEffect(() => {
@@ -60,11 +65,24 @@ export function Trading() {
   const marketName = market?.name?.replace("/", "");
 
   useEffect(() => {
-    if (!hasAssociatedAccounts && isSignedIn) {
+    if (isSignedIn && shouldShowInitialBanner && !hasAssociatedAccounts) {
       setBanner(true);
     }
-  }, [hasAssociatedAccounts, isSignedIn]);
+  }, [isSignedIn, hasAssociatedAccounts, dispatch, shouldShowInitialBanner]);
 
+  const closeBanner = () => {
+    setBanner(false);
+    dispatch(userChangeInitBanner());
+  };
+
+  console.log(
+    "isSignedIn",
+    isSignedIn,
+    "shouldShowInitialBanner",
+    shouldShowInitialBanner,
+    "hasAssociatedAccounts",
+    !!hasAssociatedAccounts
+  );
   if (!id) return <div />;
 
   return (
@@ -79,13 +97,13 @@ export function Trading() {
       <Popup
         isMessage
         isVisible={banner}
-        onClose={() => setBanner(false)}
+        onClose={closeBanner}
         style={{
           justifyContent: "flex-end",
           alignItems: "flex-start",
           paddingTop: "2rem",
         }}>
-        <AccountBanner onClose={() => setBanner(!banner)} />
+        <AccountBanner onClose={closeBanner} />
       </Popup>
       <Popup
         isMessage
