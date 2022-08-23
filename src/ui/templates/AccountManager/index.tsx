@@ -122,24 +122,30 @@ export const AccountManagerTemplate = () => {
                             </S.SelectAccountContainer>
                           </S.SelectAccount>
                         </Dropdown.Trigger>
-                        <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          {mainAccounts?.map((account) => {
-                            const shortAddress =
-                              account?.address?.slice(0, 10) +
-                              "..." +
-                              account?.address?.slice(account?.address?.length - 10);
+                        <Dropdown.Menu
+                          fill="secondaryBackgroundSolid"
+                          disabledKeys={["empty"]}>
+                          {mainAccounts?.length ? (
+                            mainAccounts.map((account) => {
+                              const shortAddress =
+                                account?.address?.slice(0, 10) +
+                                "..." +
+                                account?.address?.slice(account?.address?.length - 10);
 
-                            return (
-                              <Dropdown.Item
-                                key={account.address}
-                                onAction={() => handleSelectMainAccount(account.address)}>
-                                <S.MyDropdownContentCard>
-                                  {account.meta.name}
-                                  <span>{shortAddress}</span>
-                                </S.MyDropdownContentCard>
-                              </Dropdown.Item>
-                            );
-                          })}
+                              return (
+                                <Dropdown.Item
+                                  key={account.address}
+                                  onAction={() => handleSelectMainAccount(account.address)}>
+                                  <S.MyDropdownContentCard>
+                                    {account.meta.name}
+                                    <span>{shortAddress}</span>
+                                  </S.MyDropdownContentCard>
+                                </Dropdown.Item>
+                              );
+                            })
+                          ) : (
+                            <Dropdown.Item key="empty">Empty</Dropdown.Item>
+                          )}
                         </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputWrapper>
