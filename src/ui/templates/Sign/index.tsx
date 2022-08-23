@@ -108,7 +108,7 @@ export const SignTemplate = () => {
                     <span>
                       By clicking the submit button below, I hereby agree with Polkadex{" "}
                       <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Privacy%20Policy"
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Terms of Service and Privacy Policy
