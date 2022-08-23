@@ -178,7 +178,7 @@ export const DepositTemplate = () => {
                     size="extraLarge"
                     background="green"
                     color="white"
-                    disabled={false}
+                    disabled={loading}
                     isFull
                     isLoading={loading}>
                     Deposit
