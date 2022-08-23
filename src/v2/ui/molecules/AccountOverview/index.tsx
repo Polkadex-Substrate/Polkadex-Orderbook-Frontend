@@ -71,8 +71,11 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
         </S.ContentBox>
       </S.ContentContainer>
       <S.ContentFooter>
-        <a href="#" target="_blank">
-          Terms and Conditions
+        <a
+          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+          target="_blank"
+          rel="noreferrer">
+          Privacy Policy
         </a>
         <p>Polkadex© 2022</p>
       </S.ContentFooter>

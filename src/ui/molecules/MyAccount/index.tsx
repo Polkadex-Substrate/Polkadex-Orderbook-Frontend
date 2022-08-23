@@ -144,8 +144,11 @@ export const MyAccountContent = ({
           <p>Support</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
-        <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf">
-          <p>Terms and Conditions</p>
+        <a
+          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+          target="_blank"
+          rel="noreferrer">
+          <p>Privacy Policy</p>
           <Icon name="ArrowRight" size="small" color="black" />
         </a>
         <a href="#" onClick={handleFundsRequest}>
