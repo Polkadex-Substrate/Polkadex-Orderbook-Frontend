@@ -170,24 +170,19 @@ export const AccountManagerTemplate = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </S.SelectInputWrapper>
-                      {userHasSelectedMainAccount && (
-                        <>
-                          {isRegistered ? (
-                            <S.Verified>
-                              <Icons.Verified /> Registered
-                            </S.Verified>
-                          ) : (
-                            <S.UnVerified
-                              type="button"
-                              onClick={() => router.push("/linkAccount")}>
-                              Register Now
-                            </S.UnVerified>
-                          )}
-                        </>
+                      {userHasSelectedMainAccount && isRegistered && (
+                        <S.Verified>
+                          <Icons.Verified /> Registered
+                        </S.Verified>
                       )}
                     </S.SelectInputFlex>
                   </S.SelectInputContainer>
                 </S.TitleBalance>
+                {userHasSelectedMainAccount && !isRegistered && (
+                  <Link href="/linkAccount">
+                    <S.UnVerified>Register Now</S.UnVerified>
+                  </Link>
+                )}
                 {userHasSelectedMainAccount && isRegistered && (
                   <S.TitleActions>
                     <Link href="/deposit/PDEX">
@@ -208,7 +203,7 @@ export const AccountManagerTemplate = () => {
               </S.TitleWrapper>
             )}
           </S.Title>
-          {userHasSelectedMainAccount ? (
+          {userHasSelectedMainAccount && isRegistered ? (
             <S.Content>
               <S.ContentTitle>
                 <h2>My Trading Accounts</h2>

@@ -423,9 +423,8 @@ export const SelectAccountContainer = styled.div`
       div:last-child {
         width: 1.1rem;
         align-self: center;
-          fill: ${theme.colors.tertiaryText};
-          stroke: ${theme.colors.tertiaryText};
-        }
+        fill: ${theme.colors.tertiaryText};
+        stroke: ${theme.colors.tertiaryText};
       }
     }
   `}
@@ -449,21 +448,18 @@ export const Verified = styled.small`
   `}
 `;
 
-export const UnVerified = styled.button`
+export const UnVerified = styled.a`
   ${({ theme }) => css`
-    align-self: flex-start;
-    display: inline-block !important;
-    margin-left: 1rem;
-    white-space: nowrap;
-    border: 1px solid ${theme.colors.primary};
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.3rem;
-    font-size: 1.2rem;
-    color: ${theme.colors.primary};
-    transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: background-color 0.5s ease-in, color 0.5s ease-in;
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+    cursor: pointer;
     :hover {
-      background: ${theme.colors.primary};
-      color: ${theme.colors.white};
+      background: ${theme.colors.primary}33;
+      color: ${theme.colors.primary};
     }
   `}
 `;
