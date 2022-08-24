@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 
@@ -8,15 +8,25 @@ import * as S from "./styles";
 import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { useLinkMainAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import {
+  selectIsRegisterMainAccountSuccess,
+  selectTradeAccountsLoading,
+  selectTradeAccountsSuccess,
+} from "@polkadex/orderbook-modules";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const { mainAccounts, currentMainAccount, shortWallet, loading, registerMainAccount } =
+
+  const successRegisterMainAccount = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const successRegisterTradeAccount = useReduxSelector(selectTradeAccountsSuccess);
+  const isRegisterTradeAccountLoading = useReduxSelector(selectTradeAccountsLoading);
+
+  const { currentMainAccount, shortWallet, loading, registerMainAccount } =
     useLinkMainAccount();
 
   const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
@@ -27,7 +37,11 @@ export const LinkAccountTemplate = () => {
     onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
   });
 
-  console.log(mainAccounts);
+  useEffect(() => {
+    if (successRegisterMainAccount && successRegisterTradeAccount)
+      router.push("/accountManager");
+  }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
+
   return (
     <>
       <Head>
@@ -54,7 +68,9 @@ export const LinkAccountTemplate = () => {
               </div>
             </S.Column>
             <S.Box>
-              <Loading message="Block finalization will take a few mins." isVisible={loading}>
+              <Loading
+                message="Block finalization will take a few mins."
+                isVisible={loading || isRegisterTradeAccountLoading}>
                 <form onSubmit={handleSubmit}>
                   <S.SelectInput>
                     <S.SelectInputContainer>
