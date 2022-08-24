@@ -41,12 +41,14 @@ export const DepositTemplate = () => {
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
+  const loading = useReduxSelector(selectDepositsLoading);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { transactionHistory } = useHistory();
+
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
-  const loading = useReduxSelector(selectDepositsLoading);
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
     "..." +
@@ -181,6 +183,7 @@ export const DepositTemplate = () => {
                       type="submit"
                       size="extraLarge"
                       background="green"
+                      hoverColor="green"
                       color="white"
                       disabled={!(isValid && dirty) || loading}
                       isFull

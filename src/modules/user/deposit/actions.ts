@@ -1,8 +1,7 @@
 import { CommonError } from "../../types";
 import { MainAccount } from "../mainAccount";
-import { InjectedAccount } from "../tradeAccount";
 
-import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR } from "./constants";
+import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_RESET } from "./constants";
 
 export interface DepositsData {
   type: typeof DEPOSITS_DATA;
@@ -21,7 +20,11 @@ export interface DepositsError {
   error: CommonError;
 }
 
-export type DepositsAction = DepositsFetch | DepositsData | DepositsError;
+export interface DepositsReset {
+  type: typeof DEPOSITS_RESET;
+}
+
+export type DepositsAction = DepositsFetch | DepositsData | DepositsError | DepositsReset;
 
 export const depositsFetch = (payload: DepositsFetch["payload"]): DepositsFetch => ({
   type: DEPOSITS_FETCH,
@@ -35,4 +38,8 @@ export const depositsData = (): DepositsData => ({
 export const depositsError = (error: CommonError): DepositsError => ({
   type: DEPOSITS_ERROR,
   error,
+});
+
+export const depositsReset = (): DepositsReset => ({
+  type: DEPOSITS_RESET,
 });

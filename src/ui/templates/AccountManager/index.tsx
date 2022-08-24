@@ -1,7 +1,6 @@
 import Head from "next/head";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -22,14 +21,15 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  selectHasCurrentTradeAccount,
   selectHasExtension,
+  selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
 } from "@polkadex/orderbook-modules";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const [showSelected, setShowSelected] = useState(true);
-  const hasExtension = useReduxSelector(selectHasExtension);
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -38,6 +38,10 @@ export const AccountManagerTemplate = () => {
     isRemoveDevice: false,
     status: false,
   });
+  const hasExtension = useReduxSelector(selectHasExtension);
+  const loading = useReduxSelector(selectIsSetMainAccountLoading);
+  const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
 
   const {
     tradingAccounts,
@@ -46,7 +50,6 @@ export const AccountManagerTemplate = () => {
     associatedTradeAccounts,
   } = useAccountManager();
 
-  const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
     setRemove({
       isRemoveDevice: !!isDevice,
@@ -75,8 +78,25 @@ export const AccountManagerTemplate = () => {
     [tradingAccounts, associatedTradeAccounts, showSelected]
   );
 
-  const userHasSelectedMainAccount = currentMainAccount?.name;
-  const loading = useReduxSelector(selectIsSetMainAccountLoading);
+  const shouldSelectDefaultTradeAccount = useMemo(
+    () =>
+      userHasSelectedMainAccount &&
+      isRegistered &&
+      !!associatedTradeAccounts?.length &&
+      !userHasSelectedProxyAccount,
+    [
+      userHasSelectedMainAccount,
+      isRegistered,
+      associatedTradeAccounts,
+      userHasSelectedProxyAccount,
+    ]
+  );
+
+  useEffect(() => {
+    if (shouldSelectDefaultTradeAccount)
+      handleSelectTradeAccount(allTradingAccounts[0].address);
+  }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
+
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -190,12 +210,12 @@ export const AccountManagerTemplate = () => {
                     </Link>
                     <AvailableMessage message="Soon">
                       <Link href="/withdraw/PDEX">
-                        <a>Withdraw</a>
+                        <S.OthersActions>Withdraw</S.OthersActions>
                       </Link>
                     </AvailableMessage>
                     <AvailableMessage message="Soon">
                       <Link href="/history">
-                        <a>History</a>
+                        <S.OthersActions>History</S.OthersActions>
                       </Link>
                     </AvailableMessage>
                   </S.TitleActions>

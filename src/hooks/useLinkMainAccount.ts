@@ -21,9 +21,8 @@ export const useLinkMainAccount = () => {
   const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
   const loading = useReduxSelector(selectIsRegisterMainAccountLoading);
   const { mnemoicString } = useMnemonic();
-  const handleSelectMainAccount = (address: string) => {
+  const handleSelectMainAccount = (address: string) =>
     dispatch(setMainAccountFetch(mainAccounts.find((acc) => acc.address === address)));
-  };
 
   const registerMainAccount = (acc: MainAccount, name = "trade-account") => {
     const tradeAcc = keyring.addUri(mnemoicString, null, { name });

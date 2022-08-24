@@ -25,6 +25,7 @@ export interface Notification {
   time: number;
   actionUrl?: string;
   actionTitle?: string;
+  hasConfetti?: boolean;
 }
 
 export type NotificationState = Notification[];

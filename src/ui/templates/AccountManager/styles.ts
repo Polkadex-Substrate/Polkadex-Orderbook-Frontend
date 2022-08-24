@@ -63,20 +63,25 @@ export const TitleActions = styled.div`
     align-items: center;
     gap: 1rem;
     a {
-      border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 1rem;
       font-weight: 500;
       transition: border 0.5s ease-in, background 0.5s ease-in;
-      :active {
-        border-color: ${theme.colors.primary};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
     }
   `}
 `;
+export const OthersActions = styled.a`
+  ${({ theme }) => css`
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    :active {
+      border-color: ${theme.colors.primary};
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+  `}
+`;
+
 export const Deposit = styled.a`
   ${({ theme }) => css`
     background: ${theme.colors.green};
@@ -246,6 +251,10 @@ export const ContentActions = styled.div`
     span {
       display: block;
       color: ${theme.colors.primary};
+      background-color: ${theme.colors.primary}22;
+      padding: 0.6rem 1rem;
+      border-radius: 0.8rem;
+      cursor: not-allowed;
     }
     button {
       color: ${theme.colors.tertiaryText};

@@ -1,5 +1,5 @@
 import { DepositsAction } from "./actions";
-import { DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_FETCH } from "./constants";
+import { DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_FETCH, DEPOSITS_RESET } from "./constants";
 
 export interface DepositsState {
   error?: string;
@@ -33,6 +33,9 @@ export const depositsReducer = (state = initialState, action: DepositsAction) =>
         success: false,
         error: action.error,
       };
+    case DEPOSITS_RESET:
+      return initialState;
+
     default:
       return state;
   }

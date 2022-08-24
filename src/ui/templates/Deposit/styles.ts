@@ -149,6 +149,11 @@ export const Available = styled.span`
   `}
 `;
 export const SelectAccountAvatar = styled.div``;
+export const Success = styled.div`
+  h3 {
+    margin-bottom: 1rem;
+  }
+`;
 
 export const SelectAccount = styled.div`
   ${({ theme }) => css`
