@@ -12,7 +12,6 @@ import { useModal } from "./useModal";
 
 const Modal: T.ModalComponent = ({
   children,
-  fill,
   bgStyle,
   border,
   isFull,
@@ -45,7 +44,6 @@ const Modal: T.ModalComponent = ({
                 {...context.underlayProps}
                 ref={overlayRef}>
                 <S.Container
-                  fill={fill}
                   bgStyle={bgStyle}
                   border={border}
                   isFull={isFull}

@@ -232,6 +232,5 @@ Overlay.defaultProps = {
 };
 
 Container.defaultProps = {
-  fill: "secondaryBackground",
   border: "rounded",
 };
