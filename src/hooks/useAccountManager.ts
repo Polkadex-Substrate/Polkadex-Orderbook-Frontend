@@ -1,5 +1,5 @@
 import keyring from "@polkadot/ui-keyring";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import {
@@ -17,7 +17,7 @@ import {
 
 import { useReduxSelector } from "./useReduxSelector";
 
-export const useAccountManager = () => {
+export const useAccountManager = (showSelected: boolean = false) => {
   const dispatch = useDispatch();
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
   const currentMainAcc = useReduxSelector(selectCurrentMainAccount);
@@ -50,11 +50,27 @@ export const useAccountManager = () => {
     dispatch(setCurrentTradeAccount(acc));
   };
 
+  const allTradingAccounts = useMemo(
+    () =>
+      tradingAccounts.filter((value) =>
+        showSelected ? associatedTradeAccounts?.includes(value?.address) : value
+      ),
+    [tradingAccounts, associatedTradeAccounts, showSelected]
+  );
+
+  useEffect(() => {
+    if (tradingAccounts.length === 1 && !tradingAccounts[0].isActive) {
+      handleSelectTradeAccount(tradingAccounts[0].address);
+    }
+  }, [allTradingAccounts]);
+
+
   return {
     removeFromDevice,
     handleSelectTradeAccount,
     tradingAccounts,
     currentTradeAddr,
     associatedTradeAccounts,
+    allTradingAccounts
   };
 };

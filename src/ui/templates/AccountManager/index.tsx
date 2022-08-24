@@ -41,8 +41,8 @@ export const AccountManagerTemplate = () => {
     tradingAccounts,
     handleSelectTradeAccount,
     removeFromDevice,
-    associatedTradeAccounts,
-  } = useAccountManager();
+    allTradingAccounts
+  } = useAccountManager(showSelected);
 
   const router = useRouter();
   const handleOpenRemove = (isDevice = false, id: string | number) =>
@@ -65,14 +65,6 @@ export const AccountManagerTemplate = () => {
     currentMainAccount,
     isRegistered,
   } = useLinkMainAccount();
-
-  const allTradingAccounts = useMemo(
-    () =>
-      tradingAccounts.filter((value) =>
-        showSelected ? associatedTradeAccounts?.includes(value?.address) : value
-      ),
-    [tradingAccounts, associatedTradeAccounts, showSelected]
-  );
 
   const userHasSelectedMainAccount = currentMainAccount?.name;
   const loading = useReduxSelector(selectIsSetMainAccountLoading);
