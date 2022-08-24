@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import { Modal } from "../../molecules";
+
 import * as S from "./styles";
 
 import {
@@ -86,32 +88,20 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
-      <Popup
-        isMessage
-        isVisible={banner}
-        onClose={closeBanner}
-        style={{
-          justifyContent: "flex-end",
-          alignItems: "flex-start",
-          paddingTop: "2rem",
-        }}>
+      <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner onClose={closeBanner} />
-      </Popup>
-      <Popup
-        isMessage
-        isVisible={state}
-        onClose={() => setState(!state)}
-        size="fitContent"
-        isRightPosition
-        style={{
-          maxWidth: "192rem",
-          margin: "0 auto",
-        }}>
+      </Modal>
+      <Modal
+        open={state}
+        onClose={() => setState(false)}
+        onOpen={() => setState(true)}
+        placement="start left"
+        isFullHeight>
         <Markets />
-      </Popup>
+      </Modal>
+
       <S.Wrapper>
         <Menu handleChange={() => setState(!state)} />
-
         <S.WrapperMain>
           <Navbar onOpenMarkets={() => setState(!state)} />
           <S.WrapperGraph>

@@ -3,6 +3,7 @@ import { DismissButton, OverlayContainer } from "@react-aria/overlays";
 import { Children, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 
+import { Content } from "./content";
 import { ModalProvider } from "./context";
 import * as S from "./styles";
 import { ModalBaseComponent } from "./types";
@@ -35,29 +36,31 @@ const Modal: T.ModalComponent = ({
         onExited={context.state.close}
         nodeRef={overlayRef}>
         <OverlayContainer>
-          <S.Overlay
-            isBlur={isBlur}
-            placement={placement}
-            isFull={isFull}
-            {...context.underlayProps}
-            ref={overlayRef}>
+          <Content>
             <FocusScope contain restoreFocus autoFocus>
-              <S.Container
-                fill={fill}
-                bgStyle={bgStyle}
-                border={border}
+              <S.Overlay
+                isBlur={isBlur}
+                placement={placement}
                 isFull={isFull}
-                isFullWidth={isFullWidth}
-                isFullHeight={isFullHeight}
-                {...context.dialogProps}
-                ref={context.modalRef}>
-                {Header}
-                {Footer}
-                {Body}
-              </S.Container>
+                {...context.underlayProps}
+                ref={overlayRef}>
+                <S.Container
+                  fill={fill}
+                  bgStyle={bgStyle}
+                  border={border}
+                  isFull={isFull}
+                  isFullWidth={isFullWidth}
+                  isFullHeight={isFullHeight}
+                  {...context.dialogProps}
+                  ref={context.modalRef}>
+                  {Header}
+                  {Footer}
+                  {Body}
+                </S.Container>
+              </S.Overlay>
+              {context.isDismissable && <DismissButton onDismiss={context.onClose} />}
             </FocusScope>
-          </S.Overlay>
-          {context.isDismissable && <DismissButton onDismiss={context.onClose} />}
+          </Content>
         </OverlayContainer>
       </CSSTransition>
     </ModalProvider>

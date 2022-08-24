@@ -3,12 +3,11 @@ import styled, { css } from "styled-components";
 export const Main = styled.section<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin }) => css`
     grid-area: Markets;
-    background: ${theme.colors.secondaryBackgroundSolid};
-    width: 35rem;
     border-radius: 1.5rem;
+    background: ${theme.colors.secondaryBackgroundSolid};
     box-shadow: ${theme.shadows.secondary};
-    height: 100vh;
     display: flex;
+    height: 100%;
     flex-flow: column nowrap;
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};

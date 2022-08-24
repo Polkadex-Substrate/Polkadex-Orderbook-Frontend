@@ -49,11 +49,9 @@ export const ClosePath = styled("path")(({ theme }) =>
 );
 
 export const Container = styled("div")<T.ModalStyleProps>(
-  ({ theme, fill }) =>
-    css({
-      background: theme.colors[fill],
-      minWidth: "40rem",
-    }),
+  {
+    minWidth: "40rem",
+  },
   variant({
     prop: "border",
     variants: {
@@ -218,7 +216,7 @@ export const Overlay = styled("div")<{
       "start left": {
         alignItems: "center",
         [Container]: {
-          marginLeft: "2rem",
+          padding: "2rem 2rem 2rem 2rem",
         },
       },
       start: {
