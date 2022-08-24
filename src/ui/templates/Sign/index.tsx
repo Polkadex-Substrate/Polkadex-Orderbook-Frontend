@@ -72,6 +72,7 @@ export const SignTemplate = () => {
                     label="Email"
                     placeholder="Enter your email"
                     error={errors.email && touched.email && errors.email}
+                    disabled={loading}
                     {...getFieldProps("email")}
                   />
                   <InputLine
@@ -79,6 +80,7 @@ export const SignTemplate = () => {
                     type={view.password ? "text" : "password"}
                     label="Password"
                     placeholder="Enter your password"
+                    disabled={loading}
                     error={errors.password && touched.password && errors.password}
                     {...getFieldProps("password")}>
                     <S.Show
@@ -92,6 +94,7 @@ export const SignTemplate = () => {
                     type={view.repeatPassword ? "text" : "password"}
                     label="Repeat password"
                     placeholder="Repeat your password"
+                    disabled={loading}
                     error={
                       errors.repeatPassword && touched.repeatPassword && errors.repeatPassword
                     }
@@ -120,7 +123,7 @@ export const SignTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty)}
+                    disabled={!(isValid && dirty) || loading}
                     isFull
                     isLoading={loading}>
                     Create Account

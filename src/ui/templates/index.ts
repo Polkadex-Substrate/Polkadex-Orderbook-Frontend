@@ -14,4 +14,3 @@ export * from "./CreateAccount";
 export * from "./Assets";
 export * from "./Withdraw";
 export * from "./LinkAccount";
-export * from "./Privacy";
