@@ -298,15 +298,6 @@ export const CreateAccountWrapper = styled.div`
   `}
 `;
 
-export const LinkAccount = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    border-radius: 1.5rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
-    flex-wrap: wrap;
-  `}
-`;
-
 export const LinkAccountColumn = styled.a`
   ${({ theme }) => css`
     display: flex;
@@ -314,26 +305,20 @@ export const LinkAccountColumn = styled.a`
     gap: 0.5rem;
     padding: 2rem;
     flex: 1;
-    :first-child {
-      background: ${theme.colors.tertiaryBackgroundOpacity};
-      border-radius: 1.5rem;
-      span {
-        display: block;
-        font-size: 1.6rem;
-        font-weight: 550;
-        margin-bottom: 0.3rem;
-      }
+    background: ${theme.colors.tertiaryBackgroundOpacity};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 1.5rem;
+    margin-top: 1rem;
+    transition: transform 0.2s ease-in, box-shadow 0.2s ease-in;
+    :hover {
+      transform: translateY(0.2rem);
+      box-shadow: ${theme.shadows.tertiary};
     }
-    :last-child {
-      cursor: pointer;
-      :hover {
-        span {
-          color: ${theme.colors.primary};
-        }
-        ${LinkAccountColumnWrapper}:last-child svg {
-          stroke: ${theme.colors.primary};
-        }
-      }
+    span {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 550;
+      margin-bottom: 0.3rem;
     }
   `}
 `;
