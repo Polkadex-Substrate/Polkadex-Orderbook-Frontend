@@ -207,10 +207,20 @@ export const Search = styled.div`
 `;
 
 export const ContentGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
+  ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    max-height: 31rem;
+    scrollbar-color: ${theme.colors.secondaryBackgroundOpacity};
+    scrollbar-width: thin;
+    overflow: hidden;
+    :hover {
+      padding-right: 1rem;
+      overflow-y: auto;
+    }
+  `}
 `;
 
 export const Card = styled.div<{ isActive?: boolean }>`

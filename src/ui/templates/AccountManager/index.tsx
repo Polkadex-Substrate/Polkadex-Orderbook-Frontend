@@ -239,17 +239,6 @@ export const AccountManagerTemplate = () => {
                 </div>
               </S.ContentTitle>
               <S.ContentGrid>
-                {allTradingAccounts?.map((value) => (
-                  <Card
-                    key={value.id}
-                    title={value.name}
-                    address={value.address}
-                    isUsing={value.isActive}
-                    onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
-                    onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                    onUse={() => handleSelectTradeAccount(value.address)}
-                  />
-                ))}
                 <S.CreateAccount>
                   <S.CreateAccountWrapper>
                     <Link href={isRegistered ? "/createAccount" : "/linkAccount"}>
@@ -264,6 +253,17 @@ export const AccountManagerTemplate = () => {
                     <Link href="/importAccount"> Import</Link>
                   </S.CreateAccountWrapper>
                 </S.CreateAccount>
+                {allTradingAccounts?.map((value) => (
+                  <Card
+                    key={value.id}
+                    title={value.name}
+                    address={value.address}
+                    isUsing={value.isActive}
+                    onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                    onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                    onUse={() => handleSelectTradeAccount(value.address)}
+                  />
+                ))}
               </S.ContentGrid>
             </S.Content>
           ) : (
