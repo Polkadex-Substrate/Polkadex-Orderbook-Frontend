@@ -10,6 +10,7 @@ import {
   MAIN_ACCOUNT_SET_DATA,
   REGISTER_MAIN_ACCOUNT_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
+  EXTENSION_WALLET_RESET_SELECTED,
 } from "./constants";
 
 export interface MainAccountState {

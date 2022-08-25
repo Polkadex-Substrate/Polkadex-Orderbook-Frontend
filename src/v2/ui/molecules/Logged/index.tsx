@@ -9,7 +9,7 @@ export const Logged = () => {
         <p>Import your existing wallet, or create a new wallet</p>
         <div>
           <Link href="/accountManager">Use Existing</Link>
-          <Link href="/sign">Create New</Link>
+          <Link href="/createAccount">Create New</Link>
         </div>
       </S.Container>
     </S.Wrapper>

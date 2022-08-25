@@ -60,6 +60,8 @@ export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+
   const { isSignedIn } = useAccount();
   const dispatch = useDispatch();
 
@@ -80,7 +82,7 @@ export const WalletContent = () => {
         timeout={400}
         classNames="menu-primary"
         onEnter={calculateHeight}>
-        {isSignedIn ? (
+        {isSignedIn && userHasSelectedProxyAccount ? (
           <AccountOverview
             address={address || "0x000000000"}
             logout={() => dispatch(logOutFetch())}

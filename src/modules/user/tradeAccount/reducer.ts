@@ -9,6 +9,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
   SET_CURRENT_TRADE_ACCOUNT_DATA,
+  RESET_CURRENT_TRADE_ACCOUNT,
 } from "./constants";
 
 export interface TradeAccountsState {
@@ -49,6 +50,7 @@ export const TradeAccountsReducer = (
         success: true,
         allBrowserAccounts: action.payload.allAccounts,
       };
+
     case USER_TRADE_ACCOUNTS_FETCH:
       return {
         ...state,
@@ -67,6 +69,14 @@ export const TradeAccountsReducer = (
         selectedAccount: action.payload.tradeAccount,
         mainAddress: action.payload?.mainAddress,
       };
+
+    case RESET_CURRENT_TRADE_ACCOUNT:
+      return {
+        ...state,
+        selectedAccount: defaultAccount,
+        mainAddress: "",
+      };
+
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
       return {
         ...state,

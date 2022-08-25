@@ -93,7 +93,7 @@ export const AccountManagerTemplate = () => {
   );
 
   useEffect(() => {
-    if (shouldSelectDefaultTradeAccount)
+    if (shouldSelectDefaultTradeAccount && !!allTradingAccounts?.length)
       handleSelectTradeAccount(allTradingAccounts[0].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
@@ -236,7 +236,7 @@ export const AccountManagerTemplate = () => {
                 </div>
               </S.ContentTitle>
               <S.ContentGrid>
-                {allTradingAccounts.map((value) => (
+                {allTradingAccounts?.map((value) => (
                   <Card
                     key={value.id}
                     title={value.name}
