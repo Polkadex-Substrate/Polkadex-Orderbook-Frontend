@@ -48,6 +48,7 @@ export const AccountManagerTemplate = () => {
   const loading = useReduxSelector(selectIsSetMainAccountLoading);
   const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
   const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+
   const assets = useReduxSelector(selectAllAssets);
   const balances = useReduxSelector(selectUserBalance);
   const {
@@ -238,7 +239,7 @@ export const AccountManagerTemplate = () => {
                   />
                 </div>
               </S.ContentTitle>
-              <S.ContentGrid>
+              <S.ContentGrid hasScroll={allTradingAccounts?.length >= 3}>
                 <S.CreateAccount>
                   <S.CreateAccountWrapper>
                     <Link href={isRegistered ? "/createAccount" : "/linkAccount"}>
@@ -272,7 +273,7 @@ export const AccountManagerTemplate = () => {
               <div />
             </S.ContentEmpty>
           )}
-          {assets?.length ? (
+          {userHasSelectedProxyAccount && assets?.length && (
             <S.Content>
               <S.Header>
                 <h2>Assets</h2>
@@ -365,8 +366,6 @@ export const AccountManagerTemplate = () => {
                 </Table>
               </S.Assets>
             </S.Content>
-          ) : (
-            <EmptyData title="Empty data" />
           )}
         </S.Wrapper>
       </S.Main>

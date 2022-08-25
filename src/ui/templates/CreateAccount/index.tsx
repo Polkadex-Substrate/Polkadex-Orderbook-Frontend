@@ -22,12 +22,12 @@ export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
   const [mnemoicString, setMnemonicString] = useState("");
   const isLoading = useReduxSelector(selectRegisterTradeAccountLoading);
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const handleMnemonicUpdate = (value) => {
-    setMnemonicString(value);
-  };
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+  const handleMnemonicUpdate = (value) => setMnemonicString(value);
+
+  const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
       name: "trade-account-2",
     },

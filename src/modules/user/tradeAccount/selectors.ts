@@ -26,3 +26,6 @@ export const selectLinkedMainAddress = (state: RootState): string => {
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.registerAccountLoading;
+
+export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
+  state.user.polkadotWallet.registerAccountSuccess;
