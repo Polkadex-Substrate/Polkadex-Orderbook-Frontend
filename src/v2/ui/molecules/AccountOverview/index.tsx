@@ -5,11 +5,14 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useAccount } from "@polkadex/orderbook-hooks";
+import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
   const router = useRouter();
   const buttonRef = useRef(null);
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy");
   const { userEmail } = useAccount();
   const handleCopy = async () => {
@@ -20,19 +23,22 @@ export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
 
   return (
     <S.ContentWrapper>
-      <S.ContentHeader>
-        <small>Connected with Polkadot.js</small>
-        <S.Input>
-          <input type="text" disabled value={address} />
-          <button
-            ref={buttonRef}
-            type="button"
-            onMouseOut={handleOnMouseOut}
-            onClick={handleCopy}>
-            Copy
-          </button>
-        </S.Input>
-      </S.ContentHeader>
+      {userHasSelectedProxyAccount && (
+        <S.ContentHeader>
+          <small>Connected with Polkadot.js</small>
+          <S.Input>
+            <input type="text" disabled value={address} />
+            <button
+              ref={buttonRef}
+              type="button"
+              onMouseOut={handleOnMouseOut}
+              onClick={handleCopy}>
+              Copy
+            </button>
+          </S.Input>
+        </S.ContentHeader>
+      )}
+
       <S.ContentContainer>
         <S.ContentEmail>
           <Card title={email} icon="Email" />
