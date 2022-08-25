@@ -288,7 +288,7 @@ export const AccountManagerTemplate = () => {
                 <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
                   <Table.Header fill="none">
                     <Table.Column>
-                      <S.Column>Name</S.Column>
+                      <S.Column style={{ paddingLeft: 10 }}>Name</S.Column>
                     </Table.Column>
                     <Table.Column>
                       <S.Column>Available</S.Column>
@@ -348,9 +348,13 @@ export const AccountManagerTemplate = () => {
                           </Table.Cell>
                           <Table.Cell>
                             <S.Actions>
-                              <Link href={`/deposit/${item.symbol}`}>Deposit</Link>
+                              <Link href={`/deposit/${item.symbol}`}>
+                                <S.DepositLink>Deposit</S.DepositLink>
+                              </Link>
                               <AvailableMessage message="Soon">
-                                <Link href={`/withdraw/${item.symbol}`}>Withdraw</Link>
+                                <Link href={`/withdraw/${item.symbol}`}>
+                                  <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                                </Link>
                               </AvailableMessage>
                             </S.Actions>
                           </Table.Cell>

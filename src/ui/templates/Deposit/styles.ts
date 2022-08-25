@@ -281,23 +281,14 @@ export const Cell = styled.div`
     display: inline-block;
     vertical-align: middle;
     font-weight: 500;
-    small {
-      font-size: 1.3rem;
-      color: ${theme.colors.tertiaryText};
-    }
-    button {
-      display: inline-block;
-      width: 1.4rem;
-      height: 1.4rem;
-      vertical-align: middle;
-      margin-right: 0.4rem;
-      svg {
-        display: block;
-        stroke: ${theme.colors.tertiaryText};
-      }
-    }
   `}
 `;
+
+export const CellName = styled(Cell)`
+  padding-left: 1rem;
+`;
+
+export const Cellamount = styled(Cell)``;
 export const HeaderColumn = styled.strong`
   ${({ theme }) => css`
     font-size: 1.2rem;

@@ -120,6 +120,7 @@ export const Assets = styled.div`
 export const CellFlex = styled.div`
   display: flex;
   align-items: center;
+  padding-left: 1rem;
 `;
 
 export const TokenIcon = styled.div`
@@ -157,15 +158,25 @@ export const Actions = styled.div`
       border-radius: 0.4rem;
       padding: 0.2rem 0.4rem;
       font-size: 1.3rem;
-      color: ${theme.colors.tertiaryText};
+      color: ${theme.colors.white};
       transition: background 0.4s ease-in-out;
       border: 1px solid ${theme.colors.secondaryBackground};
+      cursor: pointer;
+    }
+  `}
+`;
+
+export const DepositLink = styled.a`
+  ${({ theme }) => css`
+    :first-child {
+      background: ${theme.colors.green};
       :hover {
-        background-color: ${theme.colors.secondaryBackgroundOpacity};
+        background-color: ${theme.colors.green}33;
       }
     }
   `}
 `;
+export const WithdrawLink = styled.a``;
 
 export const Column = styled.strong`
   ${({ theme }) => css`
@@ -264,6 +275,7 @@ export const CardHeaderContent = styled.div`
       color: ${theme.colors.tertiaryText};
       font-size: 1.4rem;
       display: flex;
+      user-select: none;
     }
     p {
       white-space: nowrap;
@@ -368,7 +380,6 @@ export const CreateAccount = styled.div`
     justify-content: center;
     border-radius: 1rem;
     border: 3px dashed ${theme.colors.secondaryBackground};
-    cursor: pointer;
   `}
 `;
 
