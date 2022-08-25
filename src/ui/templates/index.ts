@@ -11,6 +11,5 @@ export * from "./CodeVerification";
 export * from "./AccountManager";
 export * from "./Deposit";
 export * from "./CreateAccount";
-export * from "./Assets";
 export * from "./Withdraw";
 export * from "./LinkAccount";

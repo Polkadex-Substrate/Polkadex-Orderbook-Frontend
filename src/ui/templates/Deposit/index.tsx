@@ -219,8 +219,8 @@ export const DepositTemplate = () => {
                         </Table.Column>
                       </Table.Header>
                       <Table.Body>
-                        {transactionHistory.map((item) => (
-                          <Table.Row key={item.event_id}>
+                        {transactionHistory.map((item, i) => (
+                          <Table.Row key={i}>
                             <Table.Cell>
                               <S.Cell>
                                 <span>{getAsset(item.asset)?.symbol}</span>

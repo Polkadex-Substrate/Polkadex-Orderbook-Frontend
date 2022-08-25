@@ -4,14 +4,17 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown, Modal } from "@polkadex/orderbook/v3/ui/molecules";
 import {
+  Checkbox,
+  Icon,
+  Table,
   AvailableMessage,
   Tooltip,
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Dropdown, Modal } from "@polkadex/orderbook/v3/ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
@@ -25,7 +28,10 @@ import {
   selectHasExtension,
   selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
+  selectUserBalance,
 } from "@polkadex/orderbook-modules";
+import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
+import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
@@ -42,7 +48,8 @@ export const AccountManagerTemplate = () => {
   const loading = useReduxSelector(selectIsSetMainAccountLoading);
   const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
   const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
-
+  const assets = useReduxSelector(selectAllAssets);
+  const balances = useReduxSelector(selectUserBalance);
   const {
     tradingAccounts,
     handleSelectTradeAccount,
@@ -90,6 +97,10 @@ export const AccountManagerTemplate = () => {
       associatedTradeAccounts,
       userHasSelectedProxyAccount,
     ]
+  );
+  const userBalances = useMemo(
+    () => balances?.filter((value) => assets.some((item) => item.assetId === value.assetId)),
+    [assets, balances]
   );
 
   useEffect(() => {
@@ -205,14 +216,6 @@ export const AccountManagerTemplate = () => {
                 )}
                 {userHasSelectedMainAccount && isRegistered && (
                   <S.TitleActions>
-                    <Link href="/deposit/PDEX">
-                      <S.Deposit>Deposit</S.Deposit>
-                    </Link>
-                    <AvailableMessage message="Soon">
-                      <Link href="/withdraw/PDEX">
-                        <S.OthersActions>Withdraw</S.OthersActions>
-                      </Link>
-                    </AvailableMessage>
                     <AvailableMessage message="Soon">
                       <Link href="/history">
                         <S.OthersActions>History</S.OthersActions>
@@ -267,9 +270,99 @@ export const AccountManagerTemplate = () => {
             <S.ContentEmpty>
               <div />
               <div />
-              <div />
-              <div />
             </S.ContentEmpty>
+          )}
+          {assets?.length ? (
+            <S.Content>
+              <S.Header>
+                <h2>Assets</h2>
+                <S.HeaderWrapper>
+                  <S.Search>
+                    <Icon name="Search" size="extraSmall" stroke="text" />
+                    <input type="text" placeholder="Search.." />
+                  </S.Search>
+                  <Checkbox name="hide">Hide small balances</Checkbox>
+                </S.HeaderWrapper>
+              </S.Header>
+              <S.Assets>
+                <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
+                  <Table.Header fill="none">
+                    <Table.Column>
+                      <S.Column>Name</S.Column>
+                    </Table.Column>
+                    <Table.Column>
+                      <S.Column>Available</S.Column>
+                    </Table.Column>
+                    <Table.Column>
+                      <S.Column>Locked</S.Column>
+                    </Table.Column>
+                    <Table.Column>
+                      <S.Column>In Orders</S.Column>
+                    </Table.Column>
+                    <Table.Column>
+                      <S.Column>Actions</S.Column>
+                    </Table.Column>
+                  </Table.Header>
+                  <Table.Body striped>
+                    {assets.map((item) => {
+                      const balance = userBalances?.find(
+                        (value) => value.assetId === item.assetId
+                      );
+                      return (
+                        <Table.Row key={item.assetId}>
+                          <Table.Cell>
+                            <S.CellFlex>
+                              <S.TokenIcon>
+                                <Icon isToken name={item.symbol} size="extraSmall" />
+                              </S.TokenIcon>
+                              <S.Cell>
+                                <span>
+                                  {item.symbol} <small>{item.name?.toLowerCase()}</small>
+                                </span>
+                              </S.Cell>
+                            </S.CellFlex>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <S.Cell>
+                              <span>
+                                {Number(balance?.free_balance || 0).toFixed(8)}{" "}
+                                <small>$0.00</small>
+                              </span>
+                            </S.Cell>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <S.Cell>
+                              <span>
+                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                <small>$0.00</small>
+                              </span>
+                            </S.Cell>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <S.Cell>
+                              <span>
+                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                <small>$0.00</small>
+                              </span>
+                            </S.Cell>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <S.Actions>
+                              <Link href={`/deposit/${item.symbol}`}>Deposit</Link>
+                              <AvailableMessage message="Soon">
+                                <Link href={`/withdraw/${item.symbol}`}>Withdraw</Link>
+                              </AvailableMessage>
+                            </S.Actions>
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                  </Table.Body>
+                </Table>
+              </S.Assets>
+            </S.Content>
+          ) : (
+            <EmptyData title="Empty data" />
           )}
         </S.Wrapper>
       </S.Main>
@@ -296,31 +389,24 @@ const Card = ({
   const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
   return (
     <S.Card isActive={isUsing}>
-      <Link href="/assets">
-        <a>
-          <S.CardHeader>
-            <S.CardHeaderContent>
-              <strong>{title}</strong>
-              <span>
-                <Tooltip>
-                  <TooltipHeader>
-                    <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
-                      <Icons.Copy />
-                    </button>
-                  </TooltipHeader>
-                  <TooltipContent>
-                    <p ref={buttonRef}>Copy to clipboard</p>
-                  </TooltipContent>
-                </Tooltip>
-                {shortAddress}
-              </span>
-            </S.CardHeaderContent>
-            <S.CardHeaderIcon>
-              <Icons.ArrowRight />
-            </S.CardHeaderIcon>
-          </S.CardHeader>
-        </a>
-      </Link>
+      <S.CardHeader>
+        <S.CardHeaderContent>
+          <strong>{title}</strong>
+          <span>
+            <Tooltip>
+              <TooltipHeader>
+                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                  <Icons.Copy />
+                </button>
+              </TooltipHeader>
+              <TooltipContent>
+                <p ref={buttonRef}>Copy to clipboard</p>
+              </TooltipContent>
+            </Tooltip>
+            {shortAddress}
+          </span>
+        </S.CardHeaderContent>
+      </S.CardHeader>
       <S.CardContent>
         <Dropdown>
           <Dropdown.Trigger>
