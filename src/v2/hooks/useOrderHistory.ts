@@ -58,7 +58,7 @@ export function useOrderHistory(filters: Ifilters) {
       );
       setUpdatedOpenOrdersSorted(
         openOrdersSorted.filter((data) => {
-          return data.side.toUpperCase() !== "ASK" && data.side.toUpperCase() !== "BID";
+          return data.side.toUpperCase() !== "ASK" || data.side.toUpperCase() !== "BID";
         })
       );
     } else {
