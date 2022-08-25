@@ -92,7 +92,7 @@ export const AssetsTemplate = () => {
                               </S.TokenIcon>
                               <S.Cell>
                                 <span>
-                                  {item.name} <small>{item.name}</small>
+                                  {item.symbol} <small>{item.name?.toLowerCase()}</small>
                                 </span>
                               </S.Cell>
                             </S.CellFlex>
