@@ -19,3 +19,6 @@ export const selectRangerTimestamp = (state: RootState): number | undefined =>
 
 export const selectShouldRangerConnect = (state: RootState): boolean =>
   !selectRangerTimestamp(state) && !selectRangerIsConnecting(state);
+
+export const selectHasExtension = (state: RootState): boolean =>
+  state.public.ranger.hasExtension;

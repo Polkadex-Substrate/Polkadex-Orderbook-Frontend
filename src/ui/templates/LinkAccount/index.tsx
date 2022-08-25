@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 
@@ -8,22 +8,26 @@ import * as S from "./styles";
 import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { useLinkMainAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { Dropdown, Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import { Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import {
+  selectIsRegisterMainAccountSuccess,
+  selectTradeAccountsLoading,
+  selectTradeAccountsSuccess,
+} from "@polkadex/orderbook-modules";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const {
-    mainAccounts,
-    handleSelectMainAccount,
-    currentMainAccount,
-    shortWallet,
-    loading,
-    registerMainAccount,
-  } = useLinkMainAccount();
+
+  const successRegisterMainAccount = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const successRegisterTradeAccount = useReduxSelector(selectTradeAccountsSuccess);
+  const isRegisterTradeAccountLoading = useReduxSelector(selectTradeAccountsLoading);
+
+  const { currentMainAccount, shortWallet, loading, registerMainAccount } =
+    useLinkMainAccount();
 
   const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
     initialValues: {
@@ -33,7 +37,11 @@ export const LinkAccountTemplate = () => {
     onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
   });
 
-  console.log(mainAccounts);
+  useEffect(() => {
+    if (successRegisterMainAccount && successRegisterTradeAccount)
+      router.push("/accountManager");
+  }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
+
   return (
     <>
       <Head>
@@ -60,49 +68,25 @@ export const LinkAccountTemplate = () => {
               </div>
             </S.Column>
             <S.Box>
-              <Loading message="Block finalization will take a few mins." isVisible={loading}>
+              <Loading
+                message="Block finalization will take a few mins."
+                isVisible={loading || isRegisterTradeAccountLoading}>
                 <form onSubmit={handleSubmit}>
                   <S.SelectInput>
-                    <span>Select main account</span>
                     <S.SelectInputContainer>
-                      <Dropdown>
-                        <Dropdown.Trigger>
-                          <S.SelectAccount>
-                            <S.SelectAccountContainer>
-                              <Icons.Avatar />
-                            </S.SelectAccountContainer>
-                            <S.SelectAccountContainer>
-                              <div>
-                                <strong>
-                                  {currentMainAccount?.name || "Select your main account"}
-                                </strong>
-                                <span>{shortWallet}</span>
-                              </div>
-                              <div>
-                                <Icons.ArrowBottom />
-                              </div>
-                            </S.SelectAccountContainer>
-                          </S.SelectAccount>
-                        </Dropdown.Trigger>
-                        <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          {mainAccounts.map((account) => {
-                            const shortAddress =
-                              account?.address?.slice(0, 10) +
-                              "..." +
-                              account?.address?.slice(account?.address?.length - 10);
-                            return (
-                              <Dropdown.Item
-                                key={account.address}
-                                onAction={() => handleSelectMainAccount(account.address)}>
-                                <S.DropdownItem>
-                                  {account.meta.name}
-                                  <span>{shortAddress}</span>
-                                </S.DropdownItem>
-                              </Dropdown.Item>
-                            );
-                          })}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                      <S.SelectAccount>
+                        <S.SelectAccountContainer>
+                          <Icons.Avatar />
+                        </S.SelectAccountContainer>
+                        <S.SelectAccountContainer>
+                          <div>
+                            <strong>
+                              {currentMainAccount?.name || "Select your main account"}
+                            </strong>
+                            <span>{shortWallet}</span>
+                          </div>
+                        </S.SelectAccountContainer>
+                      </S.SelectAccount>
                     </S.SelectInputContainer>
                   </S.SelectInput>
                   <InputLine

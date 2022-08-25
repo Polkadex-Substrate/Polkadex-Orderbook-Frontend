@@ -60,7 +60,7 @@ export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
-  const { userEmail, isSignedIn, isVerified } = useAccount();
+  const { isSignedIn } = useAccount();
   const dispatch = useDispatch();
 
   const address = currentTradeAddr;

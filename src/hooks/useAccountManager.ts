@@ -1,5 +1,5 @@
 import keyring from "@polkadot/ui-keyring";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import {
@@ -45,10 +45,13 @@ export const useAccountManager = () => {
     );
   };
 
-  const handleSelectTradeAccount = (address: string) => {
-    const acc = allTradeAccInDevice.find((acc) => acc.address === address);
-    dispatch(setCurrentTradeAccount(acc));
-  };
+  const handleSelectTradeAccount = useCallback(
+    (address: string) => {
+      const acc = allTradeAccInDevice.find((acc) => acc.address === address);
+      dispatch(setCurrentTradeAccount(acc));
+    },
+    [allTradeAccInDevice, dispatch]
+  );
 
   return {
     removeFromDevice,

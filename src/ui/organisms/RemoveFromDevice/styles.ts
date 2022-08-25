@@ -4,7 +4,7 @@ import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/style
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.primaryBackground};
+    background: ${theme.colors.secondaryBackgroundSolid};
     border-radius: 1.5rem;
     padding: 3rem;
     form {

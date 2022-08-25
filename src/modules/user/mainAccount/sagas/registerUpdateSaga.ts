@@ -22,6 +22,7 @@ export function* registerMainAccountUpdateSaga(action: RegisterMainAccountUpdate
         message: { title: "Successfully Registered!" },
         type: "SuccessAlert",
         time: new Date().getTime(),
+        hasConfetti: true,
       })
     );
   } catch (error) {

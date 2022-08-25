@@ -1,8 +1,8 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, delay, put, select } from "redux-saga/effects";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
 
-import { depositsData, DepositsFetch } from "../actions";
+import { depositsData, DepositsFetch, depositsReset } from "../actions";
 import { depositsError } from "..";
 import { MainAccount } from "../../mainAccount";
 
@@ -16,7 +16,6 @@ import { UNIT_BN } from "@polkadex/web-constants";
 
 export function* fetchDepositSaga(action: DepositsFetch) {
   try {
-    console.log("depsoit saga called");
     const { asset, amount, mainAccount } = action.payload;
     const api = yield select(selectRangerApi);
     const isApiReady = yield select(selectRangerIsReady);
@@ -44,8 +43,10 @@ export function* fetchDepositSaga(action: DepositsFetch) {
                 "Congratulations! You have successfully deposited assets to your proxy account.",
             },
             time: new Date().getTime(),
+            hasConfetti: true,
           })
         );
+        yield put(depositsReset());
       } else {
         throw new Error("Deposit failed");
       }
