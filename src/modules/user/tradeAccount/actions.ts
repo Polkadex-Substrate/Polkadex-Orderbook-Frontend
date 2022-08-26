@@ -10,6 +10,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
   SET_CURRENT_TRADE_ACCOUNT_DATA,
+  RESET_CURRENT_TRADE_ACCOUNT,
 } from "./constants";
 
 export interface InjectedAccount {
@@ -54,7 +55,9 @@ export interface RegisterTradeAccountFetch {
     name?: string;
   };
 }
-
+export interface ResetCurrentTradeAccount {
+  type: typeof RESET_CURRENT_TRADE_ACCOUNT;
+}
 export interface RegisterTradeAccountData {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_DATA;
 }
@@ -76,7 +79,8 @@ export type TradeAccountsAction =
   | RegisterTradeAccountFetch
   | RegisterTradeAccountData
   | RegisterTradeAccountError
-  | RemoveTradeAccountFromBrowser;
+  | RemoveTradeAccountFromBrowser
+  | ResetCurrentTradeAccount;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -104,6 +108,10 @@ export const setCurrentTradeAccountData = (
 ): SetCurrentTradeAccountData => ({
   type: SET_CURRENT_TRADE_ACCOUNT_DATA,
   payload,
+});
+
+export const resetCurrentTradeAccount = (): ResetCurrentTradeAccount => ({
+  type: RESET_CURRENT_TRADE_ACCOUNT,
 });
 
 export const registerTradeAccountFetch = (

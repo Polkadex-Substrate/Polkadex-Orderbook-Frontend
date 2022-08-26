@@ -4,7 +4,6 @@ export const Wrapper = styled.div`
   min-height: 28rem;
   max-width: 60rem;
   display: flex;
-  flex-direction: column;
   position: relative;
 `;
 export const Close = styled.button`

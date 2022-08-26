@@ -63,20 +63,25 @@ export const TitleActions = styled.div`
     align-items: center;
     gap: 1rem;
     a {
-      border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 1rem;
       font-weight: 500;
       transition: border 0.5s ease-in, background 0.5s ease-in;
-      :active {
-        border-color: ${theme.colors.primary};
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
     }
   `}
 `;
+export const OthersActions = styled.a`
+  ${({ theme }) => css`
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    :active {
+      border-color: ${theme.colors.primary};
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+    }
+  `}
+`;
+
 export const Deposit = styled.a`
   ${({ theme }) => css`
     background: ${theme.colors.green};
@@ -246,6 +251,10 @@ export const ContentActions = styled.div`
     span {
       display: block;
       color: ${theme.colors.primary};
+      background-color: ${theme.colors.primary}22;
+      padding: 0.6rem 1rem;
+      border-radius: 0.8rem;
+      cursor: not-allowed;
     }
     button {
       color: ${theme.colors.tertiaryText};
@@ -298,15 +307,6 @@ export const CreateAccountWrapper = styled.div`
   `}
 `;
 
-export const LinkAccount = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    border-radius: 1.5rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
-    flex-wrap: wrap;
-  `}
-`;
-
 export const LinkAccountColumn = styled.a`
   ${({ theme }) => css`
     display: flex;
@@ -314,26 +314,20 @@ export const LinkAccountColumn = styled.a`
     gap: 0.5rem;
     padding: 2rem;
     flex: 1;
-    :first-child {
-      background: ${theme.colors.tertiaryBackgroundOpacity};
-      border-radius: 1.5rem;
-      span {
-        display: block;
-        font-size: 1.6rem;
-        font-weight: 550;
-        margin-bottom: 0.3rem;
-      }
+    background: ${theme.colors.tertiaryBackgroundOpacity};
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 1.5rem;
+    margin-top: 1rem;
+    transition: transform 0.2s ease-in, box-shadow 0.2s ease-in;
+    :hover {
+      transform: translateY(0.2rem);
+      box-shadow: ${theme.shadows.tertiary};
     }
-    :last-child {
-      cursor: pointer;
-      :hover {
-        span {
-          color: ${theme.colors.primary};
-        }
-        ${LinkAccountColumnWrapper}:last-child svg {
-          stroke: ${theme.colors.primary};
-        }
-      }
+    span {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 550;
+      margin-bottom: 0.3rem;
     }
   `}
 `;
@@ -438,9 +432,8 @@ export const SelectAccountContainer = styled.div`
       div:last-child {
         width: 1.1rem;
         align-self: center;
-          fill: ${theme.colors.tertiaryText};
-          stroke: ${theme.colors.tertiaryText};
-        }
+        fill: ${theme.colors.tertiaryText};
+        stroke: ${theme.colors.tertiaryText};
       }
     }
   `}
@@ -464,21 +457,18 @@ export const Verified = styled.small`
   `}
 `;
 
-export const UnVerified = styled.button`
+export const UnVerified = styled.a`
   ${({ theme }) => css`
-    align-self: flex-start;
-    display: inline-block !important;
-    margin-left: 1rem;
-    white-space: nowrap;
-    border: 1px solid ${theme.colors.primary};
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.3rem;
-    font-size: 1.2rem;
-    color: ${theme.colors.primary};
-    transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: background-color 0.5s ease-in, color 0.5s ease-in;
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+    cursor: pointer;
     :hover {
-      background: ${theme.colors.primary};
-      color: ${theme.colors.white};
+      background: ${theme.colors.primary}33;
+      color: ${theme.colors.primary};
     }
   `}
 `;

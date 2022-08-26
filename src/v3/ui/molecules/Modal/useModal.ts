@@ -1,7 +1,4 @@
-import {
-  useModal as useModalAria,
-  usePreventScroll,
-} from "@react-aria/overlays";
+import { useModal as useModalAria } from "@react-aria/overlays";
 import { mergeProps } from "@react-aria/utils";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import { useRef } from "react";
@@ -21,9 +18,6 @@ export function useModal({
   const modalRef = useRef(null);
   const headerRef = useRef(null);
 
-  // Prevent scrolling while the modal is open, and hide content
-  // outside the modal from screen readers.
-  usePreventScroll();
   const { modalProps } = useModalAria();
 
   // Get props for the dialog and its title
@@ -41,7 +35,7 @@ export function useModal({
       isDismissable: isDismissable && state.isOpen,
       ...props,
     },
-    modalRef,
+    modalRef
   );
 
   return {

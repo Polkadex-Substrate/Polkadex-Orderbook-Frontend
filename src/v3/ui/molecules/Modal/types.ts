@@ -19,7 +19,6 @@ export type ModalProps = {
 } & ModalStyleProps;
 
 export type ModalStyleProps = {
-  fill?: Colors;
   border?: BorderStyle;
   bgStyle?: BackgroundStyle;
   isFull?: boolean;

@@ -124,7 +124,7 @@ export const AssetsTemplate = () => {
                           <Table.Cell>
                             <S.Actions>
                               <Link href={`/deposit/${item.symbol}`}>Deposit</Link>
-                              <Link href={`/withdraw/${item.symbol}`}>Withdraw</Link>
+                              {/* <Link href={`/withdraw/${item.symbol}`}>Withdraw</Link> */}
                             </S.Actions>
                           </Table.Cell>
                         </Table.Row>

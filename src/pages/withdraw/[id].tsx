@@ -7,6 +7,9 @@ const WithdrawTemplate = dynamic(
     ssr: false,
   }
 );
-const Withdraw = () => <WithdrawTemplate />;
+const Withdraw = () => {
+  return <div />;
+  <WithdrawTemplate />;
+};
 
 export default Withdraw;

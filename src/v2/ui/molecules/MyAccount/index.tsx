@@ -9,12 +9,7 @@ import * as T from "./types";
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  logOutFetch,
-  selectCurrentTradeAccount,
-  selectHasCurrentTradeAccount,
-  userFetch,
-} from "@polkadex/orderbook-modules";
+import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
 
 export const MyAccount = () => {
   const { userEmail } = useAccount();
@@ -60,7 +55,8 @@ export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
-  const { userEmail, isSignedIn, isVerified } = useAccount();
+
+  const { isSignedIn } = useAccount();
   const dispatch = useDispatch();
 
   const address = currentTradeAddr;

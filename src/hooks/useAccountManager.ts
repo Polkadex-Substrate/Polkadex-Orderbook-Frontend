@@ -1,5 +1,5 @@
 import keyring from "@polkadot/ui-keyring";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import {
@@ -17,7 +17,7 @@ import {
 
 import { useReduxSelector } from "./useReduxSelector";
 
-export const useAccountManager = (showSelected: boolean = false) => {
+export const useAccountManager = () => {
   const dispatch = useDispatch();
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
   const currentMainAcc = useReduxSelector(selectCurrentMainAccount);
@@ -45,25 +45,13 @@ export const useAccountManager = (showSelected: boolean = false) => {
     );
   };
 
-  const handleSelectTradeAccount = (address: string) => {
-    const acc = allTradeAccInDevice.find((acc) => acc.address === address);
-    dispatch(setCurrentTradeAccount(acc));
-  };
-
-  const allTradingAccounts = useMemo(
-    () =>
-      tradingAccounts.filter((value) =>
-        showSelected ? associatedTradeAccounts?.includes(value?.address) : value
-      ),
-    [tradingAccounts, associatedTradeAccounts, showSelected]
+  const handleSelectTradeAccount = useCallback(
+    (address: string) => {
+      const acc = allTradeAccInDevice.find((acc) => acc.address === address);
+      dispatch(setCurrentTradeAccount(acc));
+    },
+    [allTradeAccInDevice, dispatch]
   );
-
-  useEffect(() => {
-    if (tradingAccounts.length === 1 && !tradingAccounts[0].isActive) {
-      handleSelectTradeAccount(tradingAccounts[0].address);
-    }
-  }, [allTradingAccounts]);
-
 
   return {
     removeFromDevice,
@@ -71,6 +59,5 @@ export const useAccountManager = (showSelected: boolean = false) => {
     tradingAccounts,
     currentTradeAddr,
     associatedTradeAccounts,
-    allTradingAccounts
   };
 };

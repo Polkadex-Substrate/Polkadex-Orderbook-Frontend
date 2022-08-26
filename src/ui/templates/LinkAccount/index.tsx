@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 
@@ -8,33 +8,39 @@ import * as S from "./styles";
 import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useLinkMainAccount } from "@polkadex/orderbook-hooks";
+import { useLinkMainAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import {
+  selectIsRegisterMainAccountSuccess,
+  selectTradeAccountsLoading,
+  selectTradeAccountsSuccess,
+} from "@polkadex/orderbook-modules";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
 
   const router = useRouter();
-  const {
-    mainAccounts,
-    handleSelectMainAccount,
-    currentMainAccount,
-    shortWallet,
-    loading,
-    registerMainAccount,
-  } = useLinkMainAccount();
+
+  const successRegisterMainAccount = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const successRegisterTradeAccount = useReduxSelector(selectTradeAccountsSuccess);
+  const isRegisterTradeAccountLoading = useReduxSelector(selectTradeAccountsLoading);
+
+  const { currentMainAccount, shortWallet, loading, registerMainAccount } =
+    useLinkMainAccount();
 
   const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
     initialValues: {
       name: "trade-account",
     },
     validationSchema: linkAccountValidations,
-    onSubmit: (values) => {
-      // console.log(values.name);
-      registerMainAccount(currentMainAccount, values.name);
-    },
+    onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
   });
+
+  useEffect(() => {
+    if (successRegisterMainAccount && successRegisterTradeAccount)
+      router.push("/accountManager");
+  }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
 
   return (
     <>
@@ -62,68 +68,46 @@ export const LinkAccountTemplate = () => {
               </div>
             </S.Column>
             <S.Box>
-              <form onSubmit={handleSubmit}>
-                <S.SelectInput>
-                  <span>Select main account</span>
-                  <S.SelectInputContainer>
-                    <Dropdown>
-                      <Dropdown.Trigger>
-                        <S.SelectAccount>
-                          <S.SelectAccountContainer>
-                            <Icons.Avatar />
-                          </S.SelectAccountContainer>
-                          <S.SelectAccountContainer>
-                            <div>
-                              <strong>
-                                {currentMainAccount?.name || "Select your main account"}
-                              </strong>
-                              <span>{shortWallet}</span>
-                            </div>
-                            <div>
-                              <Icons.ArrowBottom />
-                            </div>
-                          </S.SelectAccountContainer>
-                        </S.SelectAccount>
-                      </Dropdown.Trigger>
-                      <Dropdown.Menu fill="secondaryBackgroundSolid">
-                        {mainAccounts.map((account) => {
-                          const shortAddress =
-                            account?.address?.slice(0, 10) +
-                            "..." +
-                            account?.address?.slice(account?.address?.length - 10);
-                          return (
-                            <Dropdown.Item
-                              key={account.address}
-                              onAction={() => handleSelectMainAccount(account.address)}>
-                              <S.DropdownItem>
-                                {account.meta.name}
-                                <span>{shortAddress}</span>
-                              </S.DropdownItem>
-                            </Dropdown.Item>
-                          );
-                        })}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </S.SelectInputContainer>
-                </S.SelectInput>
-                <InputLine
-                  name="name"
-                  label="Trading account name (Optional)"
-                  placeholder="Enter a name for your trading account"
-                  error={errors.name && touched.name && errors.name}
-                  {...getFieldProps("name")}
-                />
-                <Button
-                  type="submit"
-                  size="extraLarge"
-                  background="primary"
-                  color="white"
-                  disabled={!isValid || loading}
-                  isFull>
-                  {loading ? "Loading..." : "Register Account"}
-                </Button>
-                <p>Block finalization will take a few mins.</p>
-              </form>
+              <Loading
+                message="Block finalization will take a few mins."
+                isVisible={loading || isRegisterTradeAccountLoading}>
+                <form onSubmit={handleSubmit}>
+                  <S.SelectInput>
+                    <S.SelectInputContainer>
+                      <S.SelectAccount>
+                        <S.SelectAccountContainer>
+                          <Icons.Avatar />
+                        </S.SelectAccountContainer>
+                        <S.SelectAccountContainer>
+                          <div>
+                            <strong>
+                              {currentMainAccount?.name || "Select your main account"}
+                            </strong>
+                            <span>{shortWallet}</span>
+                          </div>
+                        </S.SelectAccountContainer>
+                      </S.SelectAccount>
+                    </S.SelectInputContainer>
+                  </S.SelectInput>
+                  <InputLine
+                    name="name"
+                    label="Trading account name (Optional)"
+                    placeholder="Enter a name for your trading account"
+                    error={errors.name && touched.name && errors.name}
+                    disabled={loading}
+                    {...getFieldProps("name")}
+                  />
+                  <Button
+                    type="submit"
+                    size="extraLarge"
+                    background="primary"
+                    color="white"
+                    disabled={!isValid || loading}
+                    isFull>
+                    {loading ? "Loading..." : "Register Account"}
+                  </Button>
+                </form>
+              </Loading>
             </S.Box>
           </S.Container>
         </S.Wrapper>

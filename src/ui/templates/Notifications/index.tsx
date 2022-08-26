@@ -1,6 +1,8 @@
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -41,6 +43,7 @@ export const Card = ({
   actionTitle,
   actionUrl,
   onRemove,
+  hasConfetti = false,
 }: T.CardProps) => {
   const boxColor = (color: string) => {
     switch (color) {
@@ -56,6 +59,17 @@ export const Card = ({
         return "orange";
     }
   };
+  useEffect(() => {
+    if (hasConfetti)
+      confetti({
+        zIndex: 9999,
+        origin: {
+          x: 0.9,
+          y: 0.4,
+        },
+      });
+  }, [hasConfetti]);
+
   return (
     <S.CardWrapper borderColor={boxColor(type)}>
       <S.Card>

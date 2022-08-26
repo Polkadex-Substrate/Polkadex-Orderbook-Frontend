@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Loading, Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
   InputLine,
@@ -41,12 +41,14 @@ export const DepositTemplate = () => {
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
+  const loading = useReduxSelector(selectDepositsLoading);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { transactionHistory } = useHistory();
+
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
-  const loading = useReduxSelector(selectDepositsLoading);
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
     "..." +
@@ -120,72 +122,78 @@ export const DepositTemplate = () => {
             </S.Column>
             <S.Box>
               <S.Form>
-                <S.SelectAccount>
-                  <div>
-                    <Icons.Avatar />
-                  </div>
-                  <div>
-                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
-                    <span>{shortAddress}</span>
-                  </div>
-                </S.SelectAccount>
-                <form onSubmit={handleSubmit}>
-                  <S.SelectInput>
-                    <span>Select a coin</span>
-                    <S.SelectInputContainer>
-                      <Dropdown>
-                        <Dropdown.Trigger>
-                          <S.DropdownHeader>
-                            <div>
-                              <span>
-                                <Tokens.PDEX />
-                              </span>
-                              {selectedAsset?.name}
-                            </div>
-                            <div>
-                              <span>
-                                <Icons.ArrowBottom />
-                              </span>
-                            </div>
-                          </S.DropdownHeader>
-                        </Dropdown.Trigger>
-                        <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          {assets.map((asset) => (
-                            <Dropdown.Item
-                              key={asset.assetId}
-                              onAction={() => setSelectedAsset(asset)}>
-                              {asset.name}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </S.SelectInputContainer>
-                    <S.Available>
-                      Available{" "}
-                      <strong>{onChainBalanceLoading ? "Loading..." : onChainBalance}</strong>
-                    </S.Available>
-                  </S.SelectInput>
-                  <InputLine
-                    name="amount"
-                    label="Token Amount"
-                    placeholder="0.00"
-                    error={errors.amount && touched.amount && errors.amount}
-                    {...getFieldProps("amount")}
-                  />
-
-                  <Button
-                    type="submit"
-                    size="extraLarge"
-                    background="green"
-                    color="white"
-                    disabled={loading}
-                    isFull
-                    isLoading={loading}>
-                    Deposit
-                  </Button>
-                  {loading && <p>Block finalization will take a few mins.</p>}
-                </form>
+                <Loading
+                  message="Block finalization will take a few mins."
+                  isVisible={loading}>
+                  <S.SelectAccount>
+                    <div>
+                      <Icons.Avatar />
+                    </div>
+                    <div>
+                      <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                      <span>{shortAddress}</span>
+                    </div>
+                  </S.SelectAccount>
+                  <form onSubmit={handleSubmit}>
+                    <S.SelectInput>
+                      <span>Select a coin</span>
+                      <S.SelectInputContainer>
+                        <Dropdown>
+                          <Dropdown.Trigger>
+                            <S.DropdownHeader>
+                              <div>
+                                <span>
+                                  <Tokens.PDEX />
+                                </span>
+                                {selectedAsset?.name}
+                              </div>
+                              <div>
+                                <span>
+                                  <Icons.ArrowBottom />
+                                </span>
+                              </div>
+                            </S.DropdownHeader>
+                          </Dropdown.Trigger>
+                          <Dropdown.Menu fill="secondaryBackgroundSolid">
+                            {assets.map((asset) => (
+                              <Dropdown.Item
+                                key={asset.assetId}
+                                onAction={() => setSelectedAsset(asset)}>
+                                {asset.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </S.SelectInputContainer>
+                      <S.Available>
+                        Available{" "}
+                        <strong>
+                          {onChainBalanceLoading ? "Loading..." : onChainBalance}
+                        </strong>
+                      </S.Available>
+                    </S.SelectInput>
+                    <InputLine
+                      name="amount"
+                      label="Token Amount"
+                      placeholder="0.00"
+                      error={errors.amount && touched.amount && errors.amount}
+                      {...getFieldProps("amount")}
+                    />
+                    <Button
+                      type="submit"
+                      size="extraLarge"
+                      background="green"
+                      hoverColor="green"
+                      color="white"
+                      disabled={!(isValid && dirty) || loading}
+                      isFull
+                      isLoading={loading}>
+                      Deposit
+                    </Button>
+                  </form>
+                </Loading>
               </S.Form>
+
               <S.History>
                 <h2>History</h2>
                 {transactionHistory.length ? (

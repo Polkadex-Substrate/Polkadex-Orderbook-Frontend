@@ -3,7 +3,7 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { eventChannel } from "@redux-saga/core";
 
 import { alertPush } from "../../..";
-import { rangerConnectError, rangerConnectData } from "../actions";
+import { rangerConnectError, rangerConnectData, rangerNoExtension } from "../actions";
 import { orderbookTypes as types } from "../types";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
@@ -30,8 +30,11 @@ export function* rangerFetchSaga() {
 
 function* fetchRanger() {
   const { web3Enable } = yield call(() => import("@polkadot/extension-dapp"));
-  yield call(() => web3Enable("PolkadexIdo"));
+  const extension = yield call(() => web3Enable("PolkadexIdo"));
 
+  if (!extension?.length) {
+    yield put(rangerNoExtension());
+  }
   return eventChannel((emitter) => {
     const provider = new WsProvider(defaultConfig.polkadexChain);
 

@@ -34,7 +34,6 @@ export const WrapperLinks = styled.div`
     width: 100%;
     min-width: 4.5rem;
     display: flex;
-    align-items: center;
     justify-content: space-between;
     background: ${theme.colors.tertiaryBackground};
     border-radius: 0 3rem 3rem 3rem;
@@ -61,7 +60,7 @@ export const Wrapper = styled.nav`
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
     transition-delay: initial;
     transition-property: initial;
-    z-index: 28;
+    z-index: 33;
 
     @media screen and (min-width: 590px) {
       position: sticky;

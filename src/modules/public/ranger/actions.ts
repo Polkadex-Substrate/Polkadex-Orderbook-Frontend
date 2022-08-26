@@ -6,6 +6,7 @@ import {
   RANGER_CONNECT_FETCH,
   RANGER_DISCONNECT_DATA,
   RANGER_DISCONNECT_FETCH,
+  RANGER_NO_EXTENSION,
 } from "./constants";
 
 export interface RangerConnectFetch {
@@ -32,12 +33,16 @@ export interface RangerConnectError {
     message: string[];
   };
 }
+export interface RangerNoExtension {
+  type: typeof RANGER_NO_EXTENSION;
+}
 
 export type RangerAction =
   | RangerConnectFetch
   | RangerConnectData
   | RangerConnectError
-  | RangerDisconnectData;
+  | RangerDisconnectData
+  | RangerNoExtension;
 
 export type RangerErrorType = typeof RANGER_CONNECT_ERROR;
 
@@ -60,4 +65,8 @@ export const rangerDisconnectData = (): RangerDisconnectData => ({
 
 export const rangerDisconnectFetch = (): RangerDisconnectFetch => ({
   type: RANGER_DISCONNECT_FETCH,
+});
+
+export const rangerNoExtension = (): RangerNoExtension => ({
+  type: RANGER_NO_EXTENSION,
 });

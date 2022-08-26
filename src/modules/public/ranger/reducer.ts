@@ -6,18 +6,21 @@ import {
   RANGER_CONNECT_ERROR,
   RANGER_CONNECT_FETCH,
   RANGER_DISCONNECT_DATA,
+  RANGER_NO_EXTENSION,
 } from "./constants";
 
 export interface RangerState {
   connected: boolean;
   connecting: boolean;
   timestamp?: number;
+  hasExtension?: boolean;
   api?: ApiPromise;
 }
 
 const initialRangerState: RangerState = {
   connected: false,
   connecting: false,
+  hasExtension: true,
 };
 
 export const rangerReducer = (
@@ -48,7 +51,11 @@ export const rangerReducer = (
         connected: false,
         connecting: false,
       };
-
+    case RANGER_NO_EXTENSION:
+      return {
+        ...state,
+        hasExtension: false,
+      };
     default:
   }
 

@@ -1,7 +1,7 @@
-import { Body } from "./body";
-import { Footer } from "./footer";
 import { Header } from "./header";
+import { Footer } from "./footer";
 import Modal from "./modal";
+import { Body } from "./body";
 
 Modal.Header = Header;
 Modal.Body = Body;

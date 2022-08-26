@@ -43,6 +43,7 @@ export const SignInTemplate = () => {
                 Not a member? <Link href="/sign"> Sign Up</Link>
               </span>
             </S.Title>
+
             <S.Card>
               <S.Column>
                 <div>
@@ -58,6 +59,7 @@ export const SignInTemplate = () => {
                     label="Email"
                     placeholder="Enter your email"
                     error={errors.email && touched.email && errors.email}
+                    disabled={loading}
                     {...getFieldProps("email")}
                   />
                   <InputLine
@@ -66,6 +68,7 @@ export const SignInTemplate = () => {
                     label="Password"
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
+                    disabled={loading}
                     {...getFieldProps("password")}>
                     <S.Show type="button" onClick={() => setView(!view)}>
                       {view ? <Icons.Hidden /> : <Icons.Show />}
@@ -87,7 +90,7 @@ export const SignInTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty)}
+                    disabled={!(isValid && dirty) || loading}
                     isFull
                     isLoading={loading}>
                     Log In
