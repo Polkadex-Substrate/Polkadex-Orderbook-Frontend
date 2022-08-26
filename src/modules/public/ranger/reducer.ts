@@ -50,10 +50,6 @@ export const rangerReducer = (
         ...state,
         connected: false,
         connecting: false,
-      };
-    case RANGER_NO_EXTENSION:
-      return {
-        ...state,
         hasExtension: false,
       };
     default:

@@ -30,7 +30,6 @@ import {
   selectIsSetMainAccountLoading,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
-import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 export const AccountManagerTemplate = () => {
