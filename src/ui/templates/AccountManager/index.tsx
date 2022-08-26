@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -29,6 +30,7 @@ import {
   selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
   selectUserBalance,
+  tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
@@ -108,6 +110,7 @@ export const AccountManagerTemplate = () => {
       handleSelectTradeAccount(allTradingAccounts[0].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
+  const dispatch = useDispatch();
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -124,6 +127,16 @@ export const AccountManagerTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
+        {/* <button
+          style={{ background: "red", padding: 10 }}
+          type="button"
+          onClick={() => {
+            console.log("allTradingAccounts", allTradingAccounts);
+            console.log("associatedTradeAccounts", associatedTradeAccounts);
+            console.log("tradingAccounts", tradingAccounts);
+          }}>
+          Click me
+        </button> */}
         <Menu handleChange={() => setState(!state)} />
         <S.Wrapper>
           <S.Title>

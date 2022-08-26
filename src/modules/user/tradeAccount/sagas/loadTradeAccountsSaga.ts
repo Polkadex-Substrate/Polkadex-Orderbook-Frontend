@@ -6,8 +6,9 @@ import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actio
 
 export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   try {
-    yield call(loadKeyring);
+    // yield call(loadKeyring);
     const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
+    console.log(allBrowserAccounts);
     // TODO:
     // get all trade accounts from the blockchain and merge them with the browser accounts
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));

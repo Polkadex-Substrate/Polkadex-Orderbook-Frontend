@@ -37,6 +37,7 @@ module.exports = withPlugins([
       // Enables the styled-components SWC transform
       styledComponents: true,
     },
+
     target: "experimental-serverless-trace",
     staticPageGenerationTimeout: 120,
     optimization: {
@@ -52,7 +53,7 @@ module.exports = withPlugins([
       if (isServer) {
         config.externals.push("_http_common");
       }
-
+      config.experiments = { ...config.experiments, ...{ topLevelAwait: true } };
       return config;
     },
     typescript: {

@@ -47,7 +47,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       if (res.isSuccess) {
         yield call(tradeAccountsFetch);
         yield put(registerTradeAccountData());
-        yield put(registerTradeAccountReset());
+        // yield put(registerTradeAccountReset());
         yield put(
           notificationPush({
             type: "SuccessAlert",
