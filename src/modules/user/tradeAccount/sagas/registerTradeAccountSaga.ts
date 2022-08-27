@@ -2,13 +2,16 @@ import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 
-import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
+import {
+  MainAccount,
+  selectCurrentMainAccount,
+  setAssociatedAccountsFetch,
+} from "../../mainAccount";
 import {
   registerTradeAccountData,
   registerTradeAccountError,
   RegisterTradeAccountFetch,
   registerTradeAccountReset,
-  tradeAccountsFetch,
 } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 
@@ -45,9 +48,10 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       );
       // TODO: change to notifications here
       if (res.isSuccess) {
-        yield call(tradeAccountsFetch);
+        yield put(setAssociatedAccountsFetch());
+        yield delay(2000);
         yield put(registerTradeAccountData());
-        // yield put(registerTradeAccountReset());
+        yield put(registerTradeAccountReset());
         yield put(
           notificationPush({
             type: "SuccessAlert",

@@ -1,8 +1,10 @@
 import { call, put } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
-import { setMainAccountData, SetMainAccountFetch } from "../actions";
-import * as queries from "../../../../graphql/queries";
+import {
+  setAssociatedAccountsFetch,
+  setMainAccountData,
+  SetMainAccountFetch,
+} from "../actions";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 
@@ -15,8 +17,8 @@ export function* setMainAccountSaga({ payload }: SetMainAccountFetch) {
       address: payload.address,
       injector: injector,
     };
-    const associatedTradeAccounts = yield call(fetchAssociatedTradeAccounts, payload.address);
-    yield put(setMainAccountData({ user, tradeAccounts: associatedTradeAccounts }));
+    yield put(setMainAccountData({ user }));
+    yield put(setAssociatedAccountsFetch());
   } catch (error) {
     yield put(
       sendError({
@@ -39,12 +41,4 @@ async function fetchUserDataAsync(payload: SetMainAccountFetch["payload"]) {
     console.error(error);
     return { injector: null };
   }
-}
-
-async function fetchAssociatedTradeAccounts(main_account: string): Promise<string[] | null> {
-  const res: any = await API.graphql({
-    query: queries.findUserByMainAccount,
-    variables: { main_account },
-  });
-  return res?.data?.findUserByMainAccount?.proxies;
 }
