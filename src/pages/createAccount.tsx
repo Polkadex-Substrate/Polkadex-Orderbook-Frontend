@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
 import {
@@ -8,10 +7,7 @@ import {
   selectIsCurrentMainAccountInWallet,
 } from "../modules/user/mainAccount";
 import { selectIsUserSignedIn } from "../modules/user/profile";
-import {
-  selectRegisterTradeAccountLoading,
-  selectRegisterTradeAccountSuccess,
-} from "../modules/user/tradeAccount";
+import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeAccount";
 
 const CreateAccountTemplate = dynamic(
   () =>

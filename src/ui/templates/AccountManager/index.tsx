@@ -14,7 +14,7 @@ import {
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown, Modal } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown, Loading, Modal } from "@polkadex/orderbook/v3/ui/molecules";
 import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
@@ -24,6 +24,7 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
   selectIsCurrentMainAccountInWallet,
@@ -45,6 +46,7 @@ export const AccountManagerTemplate = () => {
   });
   const hasExtension = useReduxSelector(selectHasExtension);
   const loading = useReduxSelector(selectIsSetMainAccountLoading);
+  const loadingTradeAccounts = useReduxSelector(selectAssociatedTradeAccountsLoading);
   const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
   const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
 
@@ -209,11 +211,14 @@ export const AccountManagerTemplate = () => {
                     </S.SelectInputFlex>
                   </S.SelectInputContainer>
                 </S.TitleBalance>
-                {userHasSelectedMainAccount && !isRegistered && (
-                  <Link href="/linkAccount">
-                    <S.UnVerified>Register Now</S.UnVerified>
-                  </Link>
-                )}
+                {userHasSelectedMainAccount &&
+                  !isRegistered &&
+                  !loading &&
+                  !loadingTradeAccounts && (
+                    <Link href="/linkAccount">
+                      <S.UnVerified>Register Now</S.UnVerified>
+                    </Link>
+                  )}
                 {userHasSelectedMainAccount && isRegistered && (
                   <S.TitleActions>
                     <AvailableMessage message="Soon">
@@ -227,52 +232,54 @@ export const AccountManagerTemplate = () => {
             )}
           </S.Title>
           {userHasSelectedMainAccount && isRegistered ? (
-            <S.Content>
-              <S.ContentTitle>
-                <h2>My Trading Accounts</h2>
-                <div>
-                  <span>Show only selected account</span>
-                  <Switch
-                    isActive={showSelected}
-                    onChange={() => setShowSelected(!showSelected)}
-                  />
-                </div>
-              </S.ContentTitle>
-              <S.ContentGrid hasScroll={allTradingAccounts?.length >= 3}>
-                <S.CreateAccount>
-                  <S.CreateAccountWrapper>
-                    <Link href={isRegistered ? "/createAccount" : "/linkAccount"}>
-                      <a>
-                        <div>
-                          <Icons.Plus />
-                        </div>
-                        Create new account
-                      </a>
-                    </Link>{" "}
-                    or
-                    <Link href="/importAccount"> Import</Link>
-                  </S.CreateAccountWrapper>
-                </S.CreateAccount>
-                {allTradingAccounts?.map((value) => (
-                  <Card
-                    key={value.id}
-                    title={value.name}
-                    address={value.address}
-                    isUsing={value.isActive}
-                    onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
-                    onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                    onUse={() => handleSelectTradeAccount(value.address)}
-                  />
-                ))}
-              </S.ContentGrid>
-            </S.Content>
+            <Loading message="Loading..." isVisible={loadingTradeAccounts}>
+              <S.Content>
+                <S.ContentTitle>
+                  <h2>My Trading Accounts</h2>
+                  <div>
+                    <span>Show only selected account</span>
+                    <Switch
+                      isActive={showSelected}
+                      onChange={() => setShowSelected(!showSelected)}
+                    />
+                  </div>
+                </S.ContentTitle>
+                <S.ContentGrid hasScroll={allTradingAccounts?.length >= 3}>
+                  <S.CreateAccount>
+                    <S.CreateAccountWrapper>
+                      <Link href={isRegistered ? "/createAccount" : "/linkAccount"}>
+                        <a>
+                          <div>
+                            <Icons.Plus />
+                          </div>
+                          Create new account
+                        </a>
+                      </Link>{" "}
+                      or
+                      <Link href="/importAccount"> Import</Link>
+                    </S.CreateAccountWrapper>
+                  </S.CreateAccount>
+                  {allTradingAccounts?.map((value) => (
+                    <Card
+                      key={value.id}
+                      title={value.name}
+                      address={value.address}
+                      isUsing={value.isActive}
+                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                      onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                      onUse={() => handleSelectTradeAccount(value.address)}
+                    />
+                  ))}
+                </S.ContentGrid>
+              </S.Content>
+            </Loading>
           ) : (
             <S.ContentEmpty>
               <div />
               <div />
             </S.ContentEmpty>
           )}
-          {userHasSelectedProxyAccount && assets?.length && (
+          {userHasSelectedProxyAccount && isRegistered && assets?.length && (
             <S.Content>
               <S.Header>
                 <h2>Assets</h2>

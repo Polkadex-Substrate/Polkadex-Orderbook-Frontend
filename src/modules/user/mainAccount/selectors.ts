@@ -21,6 +21,9 @@ export const selectIsCurrentAccountRegistered = (state: RootState): boolean =>
 export const selectAssociatedTradeAccounts = (state: RootState): string[] =>
   state.user.extensionWallet?.associatedTradeAccounts;
 
+export const selectAssociatedTradeAccountsLoading = (state: RootState): boolean =>
+  state.user.extensionWallet?.associatedAccountsLoading;
+
 export const selectIsCurrentMainAccountInWallet = (state: RootState): boolean => {
   return selectCurrentMainAccount(state).injector !== null;
 };

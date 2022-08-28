@@ -84,6 +84,7 @@ export const mainAccountReducer = (
         ...state,
         selectedAccount: action.payload.user,
         setMainAccountLoading: false,
+        associatedAccountsLoading: true,
       };
     case SET_ASSOCIATED_ACCOUNTS_FETCH:
       return {
@@ -95,6 +96,7 @@ export const mainAccountReducer = (
         ...state,
         associatedTradeAccounts: action.payload,
         associatedAccountsSuccess: true,
+        associatedAccountsLoading: false,
       };
     case SET_ASSOCIATED_ACCOUNTS_ERROR:
       return {
