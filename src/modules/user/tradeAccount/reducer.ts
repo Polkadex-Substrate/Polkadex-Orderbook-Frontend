@@ -26,6 +26,7 @@ export const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
   type: "",
+  isPassworded: false
 };
 const initialState: TradeAccountsState = {
   isFetching: false,
