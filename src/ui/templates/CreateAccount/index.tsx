@@ -95,7 +95,6 @@ export const CreateAccountTemplate = () => {
                     label="Account Name (Optional)"
                     placeholder="Enter a name for this account"
                     error={errors.name && touched.name && errors.name}
-                    disabled={isLoading}
                     {...getFieldProps("name")}
                   />
                   <InputLine
