@@ -49,7 +49,6 @@ export const orderbookTypes = {
   WithdrawPayload: {
     asset_id: "AssetId",
     amount: "Balance",
-    account: "AccountId",
     nonce: "u32",
   },
 };

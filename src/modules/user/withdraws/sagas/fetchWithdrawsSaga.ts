@@ -22,7 +22,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
-    const nonce = getNonce();
+    const nonce = 2;
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amount, nonce);
@@ -46,7 +46,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 }
 
 const executeWithdraw = async (withdrawPayload) => {
-  const payload = { Withdraw: withdrawPayload };
+  const payload = JSON.stringify({ Withdraw: withdrawPayload });
   const res = await API.graphql({
     query: mutations.withdraw,
     variables: { input: { payload } },
