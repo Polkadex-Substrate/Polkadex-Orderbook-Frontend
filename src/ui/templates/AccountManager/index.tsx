@@ -15,7 +15,11 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown, Loading, Modal } from "@polkadex/orderbook/v3/ui/molecules";
-import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
+import {
+  AddPasscode,
+  RemoveFromBlockchain,
+  RemoveFromDevice,
+} from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
   useAccountManager,
@@ -36,6 +40,11 @@ import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
   const [showSelected, setShowSelected] = useState(true);
+  const [showPassword, setShowPassword] = useState<{ status: boolean; id?: string }>({
+    status: false,
+    id: "",
+  });
+
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -71,6 +80,7 @@ export const AccountManagerTemplate = () => {
       status: false,
     });
 
+  const handleSetPasscode = (id: string) => setShowPassword({ status: true, id });
   const {
     mainAccounts,
     handleSelectMainAccount,
@@ -119,6 +129,11 @@ export const AccountManagerTemplate = () => {
           ) : (
             <RemoveFromBlockchain handleClose={handleClose} />
           )}
+        </Modal.Body>
+      </Modal>
+      <Modal open={showPassword.status} onClose={() => setShowPassword({ status: false })}>
+        <Modal.Body>
+          <AddPasscode handleClose={() => setShowPassword({ status: false })} />
         </Modal.Body>
       </Modal>
       <Head>
@@ -268,6 +283,7 @@ export const AccountManagerTemplate = () => {
                       onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
                       onUse={() => handleSelectTradeAccount(value.address)}
+                      onSetPasscode={() => handleSetPasscode(value.id)}
                     />
                   ))}
                 </S.ContentGrid>
@@ -385,6 +401,7 @@ const Card = ({
   isUsing = false,
   onRemoveFromBlockchain,
   onRemoveFromDevice,
+  onSetPasscode,
   onUse,
 }) => {
   const buttonRef = useRef(null);
@@ -420,7 +437,7 @@ const Card = ({
         <Dropdown>
           <Dropdown.Trigger>
             <S.DropdownHeader>
-              Remove
+              Actions
               <div>
                 <Icons.DropdownArrow stroke="secondaryText" />
               </div>
@@ -432,6 +449,9 @@ const Card = ({
             </Dropdown.Item>
             <Dropdown.Item key="removeBrowser">
               <AvailableMessage>Remove from my browser</AvailableMessage>
+            </Dropdown.Item>
+            <Dropdown.Item key="passcode" onAction={onSetPasscode}>
+              Set passcode
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

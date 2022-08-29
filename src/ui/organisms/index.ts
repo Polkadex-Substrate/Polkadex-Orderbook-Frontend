@@ -14,3 +14,4 @@ export * from "./TemporaryMessage";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
 export * from "./Mnemonic";
+export * from "./AddPasscode";
