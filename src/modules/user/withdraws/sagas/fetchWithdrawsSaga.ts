@@ -1,6 +1,7 @@
 import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 import keyring from "@polkadot/ui-keyring";
+import BigNumber from "bignumber.js";
 
 import * as mutations from "../../../../graphql/mutations";
 import { userTradesError } from "../../trades";
@@ -14,18 +15,19 @@ import {
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
+import { UNIT_BN } from "@polkadex/web-constants";
 
 // TOOD: CHANGE TO USE ENCLAVE WS
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
-
+    const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
     const nonce = 2;
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
-      const payload = createWithdrawPayload(api, asset, amount, nonce);
+      const payload = createWithdrawPayload(api, asset, amountStr, nonce);
       const signature = signPayload(api, keyringPair, payload);
       const res = yield call(() => executeWithdraw([address, payload, signature]));
       console.info("withdraw res: ", res);
