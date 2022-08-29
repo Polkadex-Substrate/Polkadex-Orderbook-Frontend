@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -17,57 +18,45 @@ import {
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  selectCurrentMainAccount,
+  selectWithdrawsLoading,
+  withdrawsFetch,
+} from "@polkadex/orderbook-modules";
+import {
+  isAssetPDEX,
+  selectAllAssets,
+  selectGetAsset,
+} from "@polkadex/orderbook/modules/public/assets";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-const testData = [
-  {
-    id: 1,
-    block: "#10192",
-    items: [
-      {
-        id: 1,
-        name: "Polkadex",
-        ticker: "PDEX",
-        date: new Date().toLocaleString(),
-        transactionId: Math.floor(Math.random() * 100000000000000),
-        amount: (0.0).toFixed(5),
-      },
-      {
-        id: 2,
-        name: "Polkadot",
-        ticker: "DOT",
-        date: new Date().toLocaleString(),
-        transactionId: Math.floor(Math.random() * 100000000000000),
-        amount: (0.0).toFixed(5),
-      },
-      {
-        id: 3,
-        name: "Uniswap",
-        ticker: "UNI",
-        date: new Date().toLocaleString(),
-        transactionId: Math.floor(Math.random() * 100000000000000),
-        amount: (0.0).toFixed(5),
-      },
-    ],
-  },
-  {
-    id: 2,
-    block: "#10190",
-    items: [
-      {
-        id: 1,
-        name: "Polkadex",
-        ticker: "PDEX",
-        date: new Date().toLocaleString(),
-        transactionId: Math.floor(Math.random() * 100000000000000),
-        amount: (0.0).toFixed(5),
-      },
-    ],
-  },
-];
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
 
+  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const assets = useReduxSelector(selectAllAssets);
+  const getAsset = useReduxSelector(selectGetAsset);
+  const loading = useReduxSelector(selectWithdrawsLoading);
+
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { withdrawals } = useHistory();
+  const routedAsset = router.query.id as string;
+  const shortAddress =
+    currMainAcc?.address?.slice(0, 15) +
+    "..." +
+    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+
+  useEffect(() => {
+    const initialAsset = assets.find(
+      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+    );
+    if (initialAsset) {
+      setSelectedAsset(initialAsset);
+    }
+  }, [assets, routedAsset]);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -76,7 +65,15 @@ export const WithdrawTemplate = () => {
     },
     validationSchema: withdrawValidations,
     onSubmit: (values) => {
-      console.log(values);
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
+      dispatch(
+        withdrawsFetch({
+          asset: asset,
+          amount: values.amount,
+        })
+      );
     },
   });
 
@@ -112,8 +109,8 @@ export const WithdrawTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>Main Account</strong>
-                    <span>esoDF9faq...9dD7GtQvg</span>
+                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                    <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
@@ -127,7 +124,7 @@ export const WithdrawTemplate = () => {
                               <span>
                                 <Tokens.PDEX />
                               </span>
-                              Polkadex PDEX
+                              {selectedAsset?.name}
                             </div>
                             <div>
                               <span>
@@ -137,7 +134,13 @@ export const WithdrawTemplate = () => {
                           </S.DropdownHeader>
                         </Dropdown.Trigger>
                         <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          <Dropdown.Item>Polkadex PDEX</Dropdown.Item>
+                          {assets.map((asset) => (
+                            <Dropdown.Item
+                              key={asset.assetId}
+                              onAction={() => setSelectedAsset(asset)}>
+                              {asset.name}
+                            </Dropdown.Item>
+                          ))}
                         </Dropdown.Menu>
                       </Dropdown>
                     </S.SelectInputContainer>
@@ -160,16 +163,16 @@ export const WithdrawTemplate = () => {
                     color="white"
                     disabled={!(isValid && dirty)}
                     isFull>
-                    Deposit
+                    Withdraw
                   </Button>
                 </form>
               </S.Form>
               <S.History>
                 <h2>History</h2>
-                {testData.map((value) => (
+                {withdrawals.map((value) => (
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
-                      <strong>Id {value.block}</strong>
+                      <strong>Id #{value.eventId}</strong>
                       <button type="button" onClick={undefined}>
                         Claim
                       </button>
@@ -188,9 +191,6 @@ export const WithdrawTemplate = () => {
                           <Table.Column>
                             <S.HeaderColumn>Amount</S.HeaderColumn>
                           </Table.Column>
-                          <Table.Column>
-                            <S.HeaderColumn>Transaction ID</S.HeaderColumn>
-                          </Table.Column>
                         </Table.Header>
                         <Table.Body>
                           {value.items.map((item) => (
@@ -198,7 +198,8 @@ export const WithdrawTemplate = () => {
                               <Table.Cell>
                                 <S.Cell>
                                   <span>
-                                    {item.name} <small>{item.ticker}</small>
+                                    {getAsset(item.asset)?.name}{" "}
+                                    <small>{getAsset(item.asset)?.symbol}</small>
                                   </span>
                                 </S.Cell>
                               </Table.Cell>
@@ -209,13 +210,8 @@ export const WithdrawTemplate = () => {
                               </Table.Cell>
                               <Table.Cell>
                                 <S.Cell>
-                                  <span>
-                                    {item.amount} <small>$0.00</small>
-                                  </span>
+                                  <span>{item.amount}</span>
                                 </S.Cell>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <Copy copyData={item.transactionId} />
                               </Table.Cell>
                             </Table.Row>
                           ))}

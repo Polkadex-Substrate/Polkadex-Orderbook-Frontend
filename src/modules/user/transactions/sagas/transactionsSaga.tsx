@@ -8,7 +8,7 @@ import { Transaction } from "../reducer";
 import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { addDay, subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { Utils } from "@polkadex/web-helpers";
 
 type TransactionQueryResult = {
@@ -64,6 +64,7 @@ const fetchTransactions = async (
       main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
+      limit: 10000,
     },
   });
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;

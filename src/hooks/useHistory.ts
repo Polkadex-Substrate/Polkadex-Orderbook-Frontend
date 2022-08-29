@@ -5,7 +5,9 @@ import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectHasCurrentTradeAccount,
+  selectTransactions,
   selectTransactionDepositData,
+  Transaction,
   transactionsFetch,
 } from "@polkadex/orderbook-modules";
 
@@ -17,13 +19,13 @@ export function useHistory() {
 
   const dispatch = useDispatch();
   const getAsset = useReduxSelector(selectGetAsset);
-  const transactionsHistory = useReduxSelector(selectTransactionDepositData);
+  const transactionsHistory = useReduxSelector(selectTransactions);
 
   useEffect(() => {
     dispatch(transactionsFetch());
   }, [dispatch]);
 
-  const transactionHistory = useMemo(() => {
+  const transactionHistory: Transaction[] = useMemo(() => {
     const transactionsBydate = transactionsHistory?.sort(
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
     );
@@ -40,6 +42,11 @@ export function useHistory() {
     }, []);
     return transactions;
   }, [filterBy, transactionsHistory]);
+  console.log({ transactionHistory });
+  const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type === "WITHDRAW");
+  const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
+
+  const withdrawals = groupWithdrawsByEventIds(withdrawalsList);
 
   const handleClaimWithdraws = () => {
     // do your thing here
@@ -56,7 +63,45 @@ export function useHistory() {
     onChangeSearch: (e: ChangeEvent<HTMLInputElement>) =>
       setFilterBy({ ...filterBy, fieldValue: e.target.value }),
     transactionHistory,
-    getAsset,
+    withdrawals,
+    deposits,
     handleClaimWithdraws,
   };
 }
+
+export type WithdrawGroup = {
+  id: number;
+  eventId: number;
+  items: WithdrawGroupItem[];
+};
+
+export type WithdrawGroupItem = {
+  id: number;
+  asset: string;
+  date: string;
+  amount: string;
+};
+
+// use event_id from withdraw list as block and index as id for withdraw item and data
+const groupWithdrawsByEventIds = (withdrawalsList: Transaction[]): WithdrawGroup[] => {
+  const withdrawals: WithdrawGroup[] = [];
+
+  withdrawalsList.forEach((withdrawal, index) => {
+    const id = index;
+    const eventId = withdrawal.event_id;
+    const items: WithdrawGroupItem[] = [];
+
+    withdrawalsList.forEach((item) => {
+      if (item.event_id === eventId) {
+        items.push({
+          id,
+          asset: item.asset,
+          date: item.time,
+          amount: item.amount,
+        });
+      }
+    });
+    withdrawals.push({ id, eventId, items });
+  });
+  return withdrawals;
+};
