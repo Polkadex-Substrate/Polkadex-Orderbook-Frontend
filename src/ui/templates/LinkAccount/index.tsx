@@ -32,6 +32,7 @@ export const LinkAccountTemplate = () => {
   const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
     initialValues: {
       name: "trade-account",
+      passcode: "",
     },
     validationSchema: linkAccountValidations,
     onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
@@ -96,6 +97,14 @@ export const LinkAccountTemplate = () => {
                     error={errors.name && touched.name && errors.name}
                     disabled={loading}
                     {...getFieldProps("name")}
+                  />
+                  <InputLine
+                    name="passcode"
+                    label="Passcode (Optional)"
+                    placeholder="Type here"
+                    error={errors.passcode && touched.passcode && errors.passcode}
+                    disabled={loading}
+                    {...getFieldProps("passcode")}
                   />
                   <Button
                     type="submit"

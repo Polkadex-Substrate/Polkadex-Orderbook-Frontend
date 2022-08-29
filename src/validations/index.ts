@@ -65,9 +65,6 @@ export const createAccountValidations = Yup.object().shape({
 });
 export const linkAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
-});
-
-export const addPasscodeValidations = Yup.object().shape({
   passcode: Yup.string()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(5, "Must be exactly 5 digits")
