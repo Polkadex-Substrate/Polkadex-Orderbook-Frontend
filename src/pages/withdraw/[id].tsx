@@ -8,8 +8,7 @@ const WithdrawTemplate = dynamic(
   }
 );
 const Withdraw = () => {
-  return <div />;
-  <WithdrawTemplate />;
+  return <WithdrawTemplate />;
 };
 
 export default Withdraw;
