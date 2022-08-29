@@ -169,6 +169,8 @@ export type Transaction = {
   fee: string,
   st: string,
   t: string,
+  eid: string,
+  sid: string,
 };
 
 export type TradesConnection = {
@@ -530,6 +532,8 @@ export type ListTransactionsByMainAccountQuery = {
       fee: string,
       st: string,
       t: string,
+      eid: string,
+      sid: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,

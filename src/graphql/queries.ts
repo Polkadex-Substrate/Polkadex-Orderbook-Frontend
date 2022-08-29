@@ -251,6 +251,8 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
         fee
         st
         t
+        eid
+        sid
       }
       nextToken
     }

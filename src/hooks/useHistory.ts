@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, ChangeEvent } from "react";
+import { useState, useEffect, useMemo, ChangeEvent, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
@@ -42,11 +42,13 @@ export function useHistory() {
     }, []);
     return transactions;
   }, [filterBy, transactionsHistory]);
-  console.log({ transactionHistory });
   const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type === "WITHDRAW");
   const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
 
-  const withdrawals = groupWithdrawsByEventIds(withdrawalsList);
+  const withdrawals = useMemo(
+    () => groupWithdrawsByEventIds(withdrawalsList),
+    [withdrawalsList]
+  );
 
   const handleClaimWithdraws = () => {
     // do your thing here
