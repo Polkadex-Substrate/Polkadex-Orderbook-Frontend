@@ -8,6 +8,7 @@ import { userTradesError } from "../../trades";
 import { withdrawsData, WithdrawsFetch } from "..";
 
 import {
+  notificationPush,
   selectCurrentTradeAccount,
   selectRangerApi,
   sendError,
@@ -24,7 +25,8 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
-    const nonce = 2;
+    keyringPair.unlock("");
+    const nonce = 11;
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amountStr, nonce);
@@ -32,8 +34,19 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
       const res = yield call(() => executeWithdraw([address, payload, signature]));
       console.info("withdraw res: ", res);
       yield put(withdrawsData());
+      yield put(
+        notificationPush({
+          type: "SuccessAlert",
+          message: {
+            title: "Withdraw Successful",
+            description: "Your withdraw has been processed.",
+          },
+          time: new Date().getTime(),
+        })
+      );
     }
   } catch (error) {
+    yield put(withdrawsData());
     console.error("withdraw error: ", error);
     yield put(
       sendError({

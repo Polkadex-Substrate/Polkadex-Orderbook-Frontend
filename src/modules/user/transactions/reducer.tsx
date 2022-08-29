@@ -7,7 +7,8 @@ import {
 } from "./constants";
 
 export interface Transaction {
-  event_id?: number;
+  event_id: number;
+  sid: number;
   amount: string;
   asset: "PDEX" | string;
   fee: string;
@@ -54,19 +55,16 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       };
     case TRANSACTIONS_UPDATE_EVENT_DATA: {
       const { payload } = action;
-      const newTransaction: Transaction = {
-        event_id: payload.event_id,
-        amount: payload.amount.toString(),
-        asset: payload.asset,
-        fee: payload.fee.toString(),
-        main_account: payload.user,
-        time: new Date().toISOString(),
-        status: payload.status,
-        txn_type: payload.txn_type,
-      };
+      const transactions = [...state.transactions];
+      const index = transactions.findIndex(({ event_id }) => event_id === payload.event_id);
+      if (index !== -1) {
+        transactions[index] = payload;
+      } else {
+        transactions.push(payload);
+      }
       return {
         ...state,
-        transactions: [newTransaction, ...state.transactions],
+        transactions,
       };
     }
     default:

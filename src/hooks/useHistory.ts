@@ -73,7 +73,7 @@ export function useHistory() {
 
 export type WithdrawGroup = {
   id: number;
-  eventId: number;
+  sid: number;
   items: WithdrawGroupItem[];
 };
 
@@ -81,7 +81,9 @@ export type WithdrawGroupItem = {
   id: number;
   asset: string;
   date: string;
+  event_id: number;
   amount: string;
+  status: string;
 };
 
 // use event_id from withdraw list as block and index as id for withdraw item and data
@@ -90,20 +92,21 @@ const groupWithdrawsByEventIds = (withdrawalsList: Transaction[]): WithdrawGroup
 
   withdrawalsList.forEach((withdrawal, index) => {
     const id = index;
-    const eventId = withdrawal.event_id;
+    const sid = withdrawal.sid;
     const items: WithdrawGroupItem[] = [];
-
     withdrawalsList.forEach((item) => {
-      if (item.event_id === eventId) {
+      if (item.sid === sid) {
         items.push({
           id,
+          event_id: item.event_id,
           asset: item.asset,
-          date: item.time,
+          date: new Date(item.time).toLocaleString(),
           amount: item.amount,
+          status: item.status,
         });
       }
     });
-    withdrawals.push({ id, eventId, items });
+    withdrawals.push({ id, sid: sid, items });
   });
   return withdrawals;
 };

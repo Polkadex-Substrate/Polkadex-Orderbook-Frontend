@@ -12,24 +12,27 @@ const initialState: WithdrawsState = {
   success: false,
 };
 
-export const withdrawsReducer = (state = initialState, action: WithdrawsAction) => {
+export const withdrawsReducer = (
+  state = initialState,
+  action: WithdrawsAction
+): WithdrawsState => {
   switch (action.type) {
     case WITHDRAWS_FETCH:
       return {
         ...state,
-        laoding: true,
+        loading: true,
         success: false,
       };
     case WITHDRAWS_DATA:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: true,
       };
     case WITHDRAWS_ERROR:
       return {
         ...state,
-        laoding: false,
+        loading: false,
         success: false,
         error: action.error,
       };

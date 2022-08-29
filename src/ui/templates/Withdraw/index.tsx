@@ -163,7 +163,7 @@ export const WithdrawTemplate = () => {
                     color="white"
                     disabled={!(isValid && dirty)}
                     isFull>
-                    Withdraw
+                    {loading ? "Loading..." : "Withdraw"}
                   </Button>
                 </form>
               </S.Form>
@@ -172,7 +172,7 @@ export const WithdrawTemplate = () => {
                 {withdrawals.map((value) => (
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
-                      <strong>Id #{value.eventId}</strong>
+                      <strong>Id #{value.sid}</strong>
                       <button type="button" onClick={undefined}>
                         Claim
                       </button>
@@ -190,6 +190,9 @@ export const WithdrawTemplate = () => {
                           </Table.Column>
                           <Table.Column>
                             <S.HeaderColumn>Amount</S.HeaderColumn>
+                          </Table.Column>
+                          <Table.Column>
+                            <S.HeaderColumn>Status</S.HeaderColumn>
                           </Table.Column>
                         </Table.Header>
                         <Table.Body>
@@ -211,6 +214,11 @@ export const WithdrawTemplate = () => {
                               <Table.Cell>
                                 <S.Cell>
                                   <span>{item.amount}</span>
+                                </S.Cell>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <S.Cell>
+                                  <span>{item.status}</span>
                                 </S.Cell>
                               </Table.Cell>
                             </Table.Row>
