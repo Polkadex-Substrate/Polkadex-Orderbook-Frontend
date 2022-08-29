@@ -9,6 +9,7 @@ import {
   selectTransactionDepositData,
   Transaction,
   transactionsFetch,
+  withdrawsClaimFetch,
 } from "@polkadex/orderbook-modules";
 
 export function useHistory() {
@@ -50,8 +51,8 @@ export function useHistory() {
     [withdrawalsList]
   );
 
-  const handleClaimWithdraws = () => {
-    // do your thing here
+  const handleClaimWithdraws = (sid: number) => {
+    dispatch(withdrawsClaimFetch({ sid }));
   };
 
   useEffect(() => {

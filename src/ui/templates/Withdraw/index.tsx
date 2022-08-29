@@ -42,7 +42,7 @@ export const WithdrawTemplate = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { withdrawals } = useHistory();
+  const { withdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
@@ -173,7 +173,7 @@ export const WithdrawTemplate = () => {
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
                       <strong>Id #{value.sid}</strong>
-                      <button type="button" onClick={undefined}>
+                      <button type="button" onClick={() => handleClaimWithdraws(value.sid)}>
                         Claim
                       </button>
                     </S.HistoryTitle>
