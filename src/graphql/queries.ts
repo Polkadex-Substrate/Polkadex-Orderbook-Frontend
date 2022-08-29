@@ -2,6 +2,11 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getTime = /* GraphQL */ `
+  query GetTime {
+    getTime
+  }
+`;
 export const getOrderbook = /* GraphQL */ `
   query GetOrderbook($market: String!, $limit: Int, $nextToken: String) {
     getOrderbook(market: $market, limit: $limit, nextToken: $nextToken) {
@@ -274,6 +279,15 @@ export const listTradesByMainAccount = /* GraphQL */ `
         t
       }
       nextToken
+    }
+  }
+`;
+export const listMainAccountsByEmail = /* GraphQL */ `
+  query ListMainAccountsByEmail($email: String!) {
+    listMainAccountsByEmail(email: $email) {
+      hash_key
+      range_key
+      accounts
     }
   }
 `;
