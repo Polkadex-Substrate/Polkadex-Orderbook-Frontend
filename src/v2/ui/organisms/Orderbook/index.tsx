@@ -105,12 +105,17 @@ export const OrderbookTable = ({
   );
 };
 
-export const OrderbookPricing = ({ price, isPriceUp = false, hasFilter = true }) => (
+export const OrderbookPricing = ({
+  price,
+  isPriceUp = false,
+  hasFilter = true,
+  precision,
+}) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
         <Icon name="SingleArrowBottom" size="extraSmall" />
-        {price}
+        <Decimal fixed={precision}>{price}</Decimal>
       </span>
     </S.PricingAsideLeft>
     {hasFilter && (
