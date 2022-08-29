@@ -17,7 +17,7 @@ import {
   selectRangerIsReady,
 } from "@polkadex/orderbook/modules/public/ranger";
 
-export function* fetchDepositSaga(action: WithdrawsClaimFetch) {
+export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
   try {
     const { sid } = action.payload;
     const api = yield select(selectRangerApi);
