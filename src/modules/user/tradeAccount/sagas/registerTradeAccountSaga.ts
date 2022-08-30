@@ -64,11 +64,8 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
             time: new Date().getTime(),
           })
         );
-<<<<<<< HEAD
-=======
         yield put(registerTradeAccountData());
-        yield call(setIsTradeAccountPassworded, tradeAddress, password ? true : false);
->>>>>>> origin/feat/add-trading-password
+        yield call(setIsTradeAccountPassworded, tradeAddress, !!password);
       } else {
         throw new Error(res.message);
       }

@@ -30,13 +30,8 @@ export const CreateAccountTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
       name: "trade-account-2",
-<<<<<<< HEAD
-      passcode: "",
-    },
-=======
       password: null,
     } as Record<string, string>,
->>>>>>> origin/feat/add-trading-password
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
       dispatch(
@@ -103,14 +98,6 @@ export const CreateAccountTemplate = () => {
                     {...getFieldProps("name")}
                   />
                   <InputLine
-<<<<<<< HEAD
-                    name="passcode"
-                    label="Passcode (Optional)"
-                    placeholder="Type here"
-                    error={errors.passcode && touched.passcode && errors.passcode}
-                    disabled={isLoading}
-                    {...getFieldProps("passcode")}
-=======
                     name="password"
                     label="Password (Optional)"
                     placeholder="Enter a password for this account"
@@ -118,7 +105,6 @@ export const CreateAccountTemplate = () => {
                     error={errors.password && touched.password && errors.password}
                     disabled={isLoading}
                     {...getFieldProps("password")}
->>>>>>> origin/feat/add-trading-password
                   />
                   <Button
                     type="submit"
