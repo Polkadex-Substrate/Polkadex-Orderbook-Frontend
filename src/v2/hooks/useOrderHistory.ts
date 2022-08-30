@@ -53,7 +53,7 @@ export function useOrderHistory(filters: Ifilters) {
     } else if (filters?.hiddenPairs) {
       setUpdatedList(
         list.filter((data) => {
-          return data.side.toUpperCase() !== "ASK" && data.side.toUpperCase() !== "BID";
+          return data.side.toUpperCase() !== "ASK" || data.side.toUpperCase() !== "BID";
         })
       );
       setUpdatedOpenOrdersSorted(

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { addDays, formatDistance, formatRelative, intlFormat, subDays } from "date-fns";
 
 import * as S from "./styles";
 
@@ -16,7 +17,7 @@ import {
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
-import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
   depositsFetch,
   selectCurrentMainAccount,
@@ -203,7 +204,7 @@ export const DepositTemplate = () => {
                       style={{ width: "100%" }}>
                       <Table.Header fill="none">
                         <Table.Column>
-                          <S.HeaderColumn>Name</S.HeaderColumn>
+                          <S.HeaderColumn style={{ paddingLeft: 10 }}>Name</S.HeaderColumn>
                         </Table.Column>
                         <Table.Column>
                           <S.HeaderColumn>Date</S.HeaderColumn>
@@ -218,17 +219,29 @@ export const DepositTemplate = () => {
                           <S.HeaderColumn>Fee</S.HeaderColumn>
                         </Table.Column>
                       </Table.Header>
-                      <Table.Body>
-                        {transactionHistory.map((item) => (
-                          <Table.Row key={item.event_id}>
+                      <Table.Body striped>
+                        {transactionHistory.map((item, i) => (
+                          <Table.Row key={i}>
                             <Table.Cell>
-                              <S.Cell>
+                              <S.CellName>
                                 <span>{getAsset(item.asset)?.symbol}</span>
-                              </S.Cell>
+                              </S.CellName>
                             </Table.Cell>
                             <Table.Cell>
                               <S.Cell>
-                                <span>{new Date(item.time).toDateString()}</span>
+                                <span>
+                                  {intlFormat(
+                                    new Date(item.time),
+                                    {
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    },
+                                    { locale: "EN" }
+                                  )}
+                                </span>
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
@@ -239,13 +252,13 @@ export const DepositTemplate = () => {
                               </S.Cell>
                             </Table.Cell>
                             <Table.Cell>
-                              <S.Cell>
-                                <span>{item.amount}</span>
-                              </S.Cell>
+                              <S.Cellamount>
+                                <Decimal fixed={5}>{item.amount}</Decimal>
+                              </S.Cellamount>
                             </Table.Cell>
                             <Table.Cell>
                               <S.Cell>
-                                <span>{item.fee}</span>
+                                <Decimal fixed={5}>{item.fee}</Decimal>
                               </S.Cell>
                             </Table.Cell>
                           </Table.Row>

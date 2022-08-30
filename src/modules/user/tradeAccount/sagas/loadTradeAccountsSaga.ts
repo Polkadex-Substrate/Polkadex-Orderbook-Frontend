@@ -3,11 +3,13 @@ import keyring from "@polkadot/ui-keyring";
 
 import { sendError } from "../../..";
 import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actions";
+import { getFromStorage } from "@polkadex/orderbook/helpers/storage";
 
 export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   try {
-    yield call(loadKeyring);
+    // yield call(loadKeyring);
     const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
+    console.log(allBrowserAccounts);
     // TODO:
     // get all trade accounts from the blockchain and merge them with the browser accounts
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
@@ -38,6 +40,7 @@ async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
       address: account.address,
       meta: account.meta,
       type: account.publicKey,
+      isPassworded: getFromStorage(`trading_acc_${account.address}`) === 'true'
     };
   });
 }

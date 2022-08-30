@@ -14,6 +14,9 @@ import {
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
+  SET_ASSOCIATED_ACCOUNTS_FETCH,
+  SET_ASSOCIATED_ACCOUNTS_DATA,
+  SET_ASSOCIATED_ACCOUNTS_ERROR,
 } from "./constants";
 
 export interface MainAccount {
@@ -43,14 +46,26 @@ export interface SetMainAccountFetch {
   type: typeof MAIN_ACCOUNT_SET_FETCH;
   payload: InjectedAccount;
 }
-
 export interface SetMainAccountData {
   type: typeof MAIN_ACCOUNT_SET_DATA;
-  payload: { user: MainAccount; tradeAccounts: string[] };
+  payload: {
+    user: MainAccount;
+  };
 }
 export interface SetMainAccountError {
   type: typeof MAIN_ACCOUNT_SET_ERROR;
   error: CommonError;
+}
+export interface SetAssociatedAccountsFetch {
+  type: typeof SET_ASSOCIATED_ACCOUNTS_FETCH;
+}
+export interface SetAssociatedAccountsData {
+  type: typeof SET_ASSOCIATED_ACCOUNTS_DATA;
+  payload: string[];
+}
+export interface SetAssociatedAccountsError {
+  type: typeof SET_ASSOCIATED_ACCOUNTS_ERROR;
+  payload: CommonError;
 }
 export interface ResetExtensionWallet {
   type: typeof EXTENSION_WALLET_RESET;
@@ -91,7 +106,10 @@ export type GetExtensionWalletAction =
   | RegisterMainAccountData
   | RegisterMainAccountError
   | RegisterMainAccountUpdateEvent
-  | RegisterMainAccountUpdateData;
+  | RegisterMainAccountUpdateData
+  | SetAssociatedAccountsFetch
+  | SetAssociatedAccountsData
+  | SetAssociatedAccountsError;
 
 export const extensionWalletData = (
   payload: ExtensionWalletFetchPayload
@@ -124,6 +142,22 @@ export const setMainAccountData = (payload: SetMainAccountData["payload"]) => ({
 export const setMainAccountError = (error: CommonError): SetMainAccountError => ({
   type: MAIN_ACCOUNT_SET_ERROR,
   error,
+});
+
+export const setAssociatedAccountsFetch = () => ({
+  type: SET_ASSOCIATED_ACCOUNTS_FETCH,
+});
+
+export const setAssociatedAccountsData = (payload: SetAssociatedAccountsData["payload"]) => ({
+  type: SET_ASSOCIATED_ACCOUNTS_DATA,
+  payload,
+});
+
+export const SetAssociatedAccountsError = (
+  payload: SetAssociatedAccountsError["payload"]
+) => ({
+  type: SET_ASSOCIATED_ACCOUNTS_ERROR,
+  payload,
 });
 
 export const resetExtensionWallet = () => ({

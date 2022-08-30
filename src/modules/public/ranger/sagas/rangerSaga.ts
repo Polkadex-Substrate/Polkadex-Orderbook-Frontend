@@ -30,11 +30,8 @@ export function* rangerFetchSaga() {
 
 function* fetchRanger() {
   const { web3Enable } = yield call(() => import("@polkadot/extension-dapp"));
-  const extension = yield call(() => web3Enable("PolkadexIdo"));
+  yield call(() => web3Enable("PolkadexIdo"));
 
-  if (!extension?.length) {
-    yield put(rangerNoExtension());
-  }
   return eventChannel((emitter) => {
     const provider = new WsProvider(defaultConfig.polkadexChain);
 

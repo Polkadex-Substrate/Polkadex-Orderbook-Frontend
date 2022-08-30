@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -82,17 +84,6 @@ export const OthersActions = styled.a`
   `}
 `;
 
-export const Deposit = styled.a`
-  ${({ theme }) => css`
-    background: ${theme.colors.green};
-    color: ${theme.colors.white};
-    cursor: pointer;
-    :hover {
-      background: ${theme.colors.green}33;
-    }
-  `}
-`;
-
 export const Content = styled.div`
   margin-top: 4rem;
   h2 {
@@ -100,6 +91,7 @@ export const Content = styled.div`
     font-weight: 550;
   }
 `;
+
 export const ContentTitle = styled.div`
   display: flex;
   justify-content: space-between;
@@ -116,11 +108,134 @@ export const ContentTitle = styled.div`
   }
 `;
 
-export const ContentGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+export const Assets = styled.div`
+  ${({ theme }) => css`
+    margin-top: 1rem;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 1rem;
+  `}
+`;
+
+export const CellFlex = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+`;
+
+export const TokenIcon = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 0.3rem;
+    background: ${theme.colors.primaryBackground};
+  `}
+`;
+
+export const Cell = styled.div`
+  ${({ theme }) => css`
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 500;
+    small {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const Actions = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    a {
+      border-radius: 0.4rem;
+      padding: 0.2rem 0.4rem;
+      font-size: 1.3rem;
+      color: ${theme.colors.white};
+      transition: background 0.4s ease-in-out;
+      border: 1px solid ${theme.colors.secondaryBackground};
+      cursor: pointer;
+    }
+  `}
+`;
+
+export const DepositLink = styled.a`
+  ${({ theme }) => css`
+    :first-child {
+      background: ${theme.colors.green};
+      :hover {
+        background-color: ${theme.colors.green}33;
+      }
+    }
+  `}
+`;
+export const WithdrawLink = styled.a``;
+
+export const Column = styled.strong`
+  ${({ theme }) => css`
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: ${theme.colors.tertiaryText};
+  `}
+`;
+
+export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 1rem;
-  margin-top: 1.5rem;
+`;
+export const HeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const Search = styled.div`
+  ${({ theme }) => css`
+    padding: 0.8rem;
+    border-radius: 3rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    input {
+      color: ${theme.colors.text};
+      margin-left: 1rem;
+    }
+    ${Icon} {
+      margin-left: 0.2rem;
+      stroke: ${theme.colors.inverse};
+    }
+  `}
+`;
+
+export const ContentGrid = styled.div<{ hasScroll?: boolean }>`
+  ${({ theme, hasScroll }) => css`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    max-height: 31rem;
+
+    ${hasScroll &&
+    css`
+      scrollbar-color: ${theme.colors.secondaryBackgroundOpacity};
+      scrollbar-width: thin;
+      overflow: hidden;
+      :hover {
+        padding-right: 1rem;
+        overflow-y: auto;
+      }
+    `}
+  `}
 `;
 
 export const Card = styled.div<{ isActive?: boolean }>`
@@ -129,38 +244,22 @@ export const Card = styled.div<{ isActive?: boolean }>`
     border-width: 1px;
     border-style: solid;
     border-color: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
-    border-left-width: ${isActive ? "6px" : "1px"};
+    border-left-width: 6px;
   `}
 `;
 export const CardHeader = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem;
-    padding-bottom: 6rem;
-    :hover {
-      strong {
-        color: ${theme.colors.primary};
-      }
-    }
-  `}
-`;
-
-export const CardHeaderIcon = styled.div`
-  ${({ theme }) => css`
-    width: 1.5rem;
-    svg {
-      stroke: ${theme.colors.tertiaryText};
-    }
-  `}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  padding-bottom: 2rem;
 `;
 
 export const CardHeaderContent = styled.div`
   ${({ theme }) => css`
     strong {
       display: block;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 500;
       margin-bottom: 0.5rem;
       transition: color 0.3s ease-in-out;
@@ -180,6 +279,7 @@ export const CardHeaderContent = styled.div`
       color: ${theme.colors.tertiaryText};
       font-size: 1.4rem;
       display: flex;
+      user-select: none;
     }
     p {
       white-space: nowrap;
@@ -247,12 +347,15 @@ export const ContentActions = styled.div`
     span,
     button {
       font-size: 1.5rem;
+      padding: 0.6rem 1rem;
+      border-width: 1px;
+      border-style: solid;
+      border-color: transparent;
     }
     span {
       display: block;
       color: ${theme.colors.primary};
       background-color: ${theme.colors.primary}22;
-      padding: 0.6rem 1rem;
       border-radius: 0.8rem;
       cursor: not-allowed;
     }
@@ -260,11 +363,8 @@ export const ContentActions = styled.div`
       color: ${theme.colors.tertiaryText};
       background: ${theme.colors.secondaryBackgroundOpacity};
       border-radius: 0.8rem;
-      padding: 0.8rem 1.8rem;
       height: fit-content;
-      border-width: 1px;
-      border-style: solid;
-      border-color: transparent;
+
       transition: background 0.3s ease-in, border 0.3s ease-in;
       :hover {
         border-color: ${theme.colors.secondaryBackgroundOpacity};
@@ -284,8 +384,6 @@ export const CreateAccount = styled.div`
     justify-content: center;
     border-radius: 1rem;
     border: 3px dashed ${theme.colors.secondaryBackground};
-    cursor: pointer;
-    min-height: 20rem;
   `}
 `;
 
@@ -293,6 +391,7 @@ export const CreateAccountWrapper = styled.div`
   ${({ theme }) => css`
     font-size: 1.5rem;
     color: ${theme.colors.tertiaryText};
+    padding: 6rem 2rem;
     div {
       display: inline-block;
       width: 1rem;

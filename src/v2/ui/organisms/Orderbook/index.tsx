@@ -9,27 +9,6 @@ import { useOrderbookTable } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@orderbook/v2/ui/molecules";
 
-const Orderbook = () => {
-  const { isPriceUp, hasMarket, asks, bids, lastPriceValue } = useOrderbook();
-  return (
-    <S.Main>
-      <AvailableMessage message="Soon">
-        <S.Header>
-          <h2>Orderbook</h2>
-          <Dropdown header="">Testing</Dropdown>
-        </S.Header>
-      </AvailableMessage>
-      <S.Content>
-        <OrderbookTable orders={asks} isSell />
-        <AvailableMessage message="Soon">
-          {hasMarket && <OrderbookPricing price={lastPriceValue} isPriceUp={isPriceUp} />}
-        </AvailableMessage>
-        <OrderbookTable orders={bids} />
-      </S.Content>
-    </S.Main>
-  );
-};
-
 export const OrderbookTable = ({
   isSell = false,
   orders = [],
@@ -105,12 +84,17 @@ export const OrderbookTable = ({
   );
 };
 
-export const OrderbookPricing = ({ price, isPriceUp = false, hasFilter = true }) => (
+export const OrderbookPricing = ({
+  price,
+  isPriceUp = false,
+  hasFilter = true,
+  precision,
+}) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       <span>
         <Icon name="SingleArrowBottom" size="extraSmall" />
-        {price}
+        <Decimal fixed={precision}>{price}</Decimal>
       </span>
     </S.PricingAsideLeft>
     {hasFilter && (
@@ -120,4 +104,3 @@ export const OrderbookPricing = ({ price, isPriceUp = false, hasFilter = true })
     )}
   </S.Pricing>
 );
-export default Orderbook;

@@ -22,21 +22,22 @@ export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
   const [mnemoicString, setMnemonicString] = useState("");
   const isLoading = useReduxSelector(selectRegisterTradeAccountLoading);
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const handleMnemonicUpdate = (value) => {
-    setMnemonicString(value);
-  };
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+  const handleMnemonicUpdate = (value) => setMnemonicString(value);
+
+  const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
       name: "trade-account-2",
-    },
+      password: null,
+    } as Record<string, string>,
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
       dispatch(
         registerTradeAccountFetch({
           name: values.name,
-          password: null,
+          password: values.password,
           mnemonic: mnemoicString,
         })
       );
@@ -94,8 +95,16 @@ export const CreateAccountTemplate = () => {
                     label="Account Name (Optional)"
                     placeholder="Enter a name for this account"
                     error={errors.name && touched.name && errors.name}
-                    disabled={isLoading}
                     {...getFieldProps("name")}
+                  />
+                  <InputLine
+                    name="password"
+                    label="Password (Optional)"
+                    placeholder="Enter a password for this account"
+                    type="password"
+                    error={errors.password && touched.password && errors.password}
+                    disabled={isLoading}
+                    {...getFieldProps("password")}
                   />
                   <Button
                     type="submit"

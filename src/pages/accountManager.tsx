@@ -18,7 +18,7 @@ const AccountManager = () => {
   const hasUser = useReduxSelector(selectIsUserSignedIn);
 
   if (!hasUser) {
-    router?.push("/signIn");
+    router?.push("/trading/");
     return <div />;
   }
   return <AccountManagerTemplate />;

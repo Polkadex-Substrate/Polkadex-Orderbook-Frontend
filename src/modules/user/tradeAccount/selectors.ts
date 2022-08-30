@@ -17,6 +17,9 @@ export const selectBrowserTradeAccounts = (state: RootState): InjectedAccount[] 
 export const selectCurrentTradeAccount = (state: RootState): InjectedAccount =>
   state.user.polkadotWallet.selectedAccount;
 
+export const selectCurrentTradeAccountIsPassword = (state: RootState): boolean =>
+  state.user.polkadotWallet.selectedAccount.isPassworded;
+
 export const selectHasCurrentTradeAccount = (state: RootState): boolean =>
   state.user.polkadotWallet.selectedAccount.address !== "";
 
@@ -26,3 +29,6 @@ export const selectLinkedMainAddress = (state: RootState): string => {
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.registerAccountLoading;
+
+export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
+  state.user.polkadotWallet.registerAccountSuccess;

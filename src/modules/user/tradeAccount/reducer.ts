@@ -7,6 +7,7 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_FETCH,
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
+  USER_REGISTER_TRADE_ACCOUNT_RESET,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
   SET_CURRENT_TRADE_ACCOUNT_DATA,
   RESET_CURRENT_TRADE_ACCOUNT,
@@ -26,6 +27,7 @@ export const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
   type: "",
+  isPassworded: false
 };
 const initialState: TradeAccountsState = {
   isFetching: false,
@@ -83,12 +85,14 @@ export const TradeAccountsReducer = (
         registerAccountLoading: true,
         registerAccountSuccess: false,
       };
+
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,
         registerAccountLoading: false,
         registerAccountSuccess: true,
       };
+    case USER_REGISTER_TRADE_ACCOUNT_RESET:
     case USER_REGISTER_TRADE_ACCOUNT_ERROR:
       return {
         ...state,
