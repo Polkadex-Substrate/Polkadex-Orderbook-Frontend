@@ -26,7 +26,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
     keyringPair.unlock("");
-    const nonce = 11;
+    const nonce = getNonce();
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amountStr, nonce);
