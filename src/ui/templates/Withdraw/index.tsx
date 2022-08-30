@@ -172,7 +172,7 @@ export const WithdrawTemplate = () => {
                 {withdrawals.map((value) => (
                   <S.HistoryContent key={value.id}>
                     <S.HistoryTitle>
-                      <strong>Id #{value.sid}</strong>
+                      <strong>Id #{value.sid ?? "QUEUED"}</strong>
                       <button type="button" onClick={() => handleClaimWithdraws(value.sid)}>
                         Claim
                       </button>
@@ -197,7 +197,7 @@ export const WithdrawTemplate = () => {
                         </Table.Header>
                         <Table.Body>
                           {value.items.map((item) => (
-                            <Table.Row key={item.id}>
+                            <Table.Row key={item.event_id}>
                               <Table.Cell>
                                 <S.Cell>
                                   <span>
