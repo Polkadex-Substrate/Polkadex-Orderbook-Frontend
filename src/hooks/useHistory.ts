@@ -90,13 +90,15 @@ export type WithdrawGroupItem = {
 // use event_id from withdraw list as block and index as id for withdraw item and data
 const groupWithdrawsByEventIds = (withdrawalsList: Transaction[]): WithdrawGroup[] => {
   const withdrawals: WithdrawGroup[] = [];
+  const sidsProcessed: Set<number> = new Set();
 
   withdrawalsList.forEach((withdrawal, index) => {
     const id = index;
-    const sid = withdrawal.sid;
+    const sid = Number(withdrawal.sid);
     const items: WithdrawGroupItem[] = [];
+    if (sidsProcessed.has(sid)) return;
     withdrawalsList.forEach((item) => {
-      if (item.sid === sid) {
+      if (Number(item.sid) === sid) {
         items.push({
           id,
           event_id: item.event_id,
@@ -107,6 +109,7 @@ const groupWithdrawsByEventIds = (withdrawalsList: Transaction[]): WithdrawGroup
         });
       }
     });
+    sidsProcessed.add(sid);
     withdrawals.push({ id, sid: sid, items });
   });
   return withdrawals;

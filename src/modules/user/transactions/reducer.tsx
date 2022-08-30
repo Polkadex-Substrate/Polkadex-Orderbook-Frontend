@@ -56,7 +56,9 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
     case TRANSACTIONS_UPDATE_EVENT_DATA: {
       const { payload } = action;
       const transactions = [...state.transactions];
-      const index = transactions.findIndex(({ event_id }) => event_id === payload.event_id);
+      const index = transactions.findIndex(
+        ({ event_id }) => Number(event_id) === Number(payload.event_id)
+      );
       if (index !== -1) {
         transactions[index] = payload;
       } else {
