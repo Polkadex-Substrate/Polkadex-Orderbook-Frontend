@@ -2,7 +2,7 @@ export * from "./Toolbar";
 export * from "./OrderForm";
 export * from "./Accounts";
 export * from "./Markets";
-export * from "./OrderHistory";
+// export * from "./OrderHistory";
 export * from "./Funds";
 export * from "./Header";
 export * from "./Message";

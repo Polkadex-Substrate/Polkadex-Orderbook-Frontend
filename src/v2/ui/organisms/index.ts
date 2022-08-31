@@ -1,4 +1,4 @@
-export * from "./Chart";
+// export * from "./Chart";
 export * from "./ExploreMarket";
 export * from "./Header";
 export * from "./Information";
