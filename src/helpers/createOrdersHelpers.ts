@@ -20,7 +20,8 @@ export const createOrderPayload = (
   quantity: string,
   price: string,
   timestamp = 0,
-  client_order_id: Uint8Array
+  client_order_id: Uint8Array,
+  mainAddress: string
 ): Codec => {
   const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
   const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
@@ -28,6 +29,7 @@ export const createOrderPayload = (
   const orderSide = { [side === "Buy" ? "Bid" : "Ask"]: null };
   const jsonPayload = {
     user: proxyAddress,
+    main_account: mainAddress,
     pair: {
       base_asset: baseAssetId,
       quote_asset: quoteAssetId,

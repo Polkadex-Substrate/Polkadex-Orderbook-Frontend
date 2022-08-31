@@ -11,6 +11,7 @@ import {
   selectRangerApi,
   selectCurrentTradeAccount,
   notificationPush,
+  selectLinkedMainAddress,
 } from "../../..";
 
 import * as mutation from "./../../../../graphql/mutations";
@@ -29,6 +30,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       throw new Error("Invalid amount");
     }
     const { address } = yield select(selectCurrentTradeAccount);
+    const mainAddress = yield select(selectLinkedMainAddress);
     const keyringPair = keyring.getPair(address);
     keyringPair.unlock("");
     const timestamp = getNonce();
@@ -45,7 +47,8 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         amount,
         price,
         timestamp,
-        client_order_id
+        client_order_id,
+        mainAddress
       );
       const signature = signPayload(api, keyringPair, order);
       const res = yield call(() => executePlaceOrder([order, signature]));
