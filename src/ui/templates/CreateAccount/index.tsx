@@ -30,7 +30,7 @@ export const CreateAccountTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
       name: "trade-account-2",
-      password: null,
+      password: "",
     } as Record<string, string>,
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
@@ -97,7 +97,7 @@ export const CreateAccountTemplate = () => {
                     error={errors.name && touched.name && errors.name}
                     {...getFieldProps("name")}
                   />
-                  <InputLine
+                  {/* <InputLine
                     name="password"
                     label="Password (Optional)"
                     placeholder="Enter a password for this account"
@@ -105,7 +105,7 @@ export const CreateAccountTemplate = () => {
                     error={errors.password && touched.password && errors.password}
                     disabled={isLoading}
                     {...getFieldProps("password")}
-                  />
+                  /> */}
                   <Button
                     type="submit"
                     size="extraLarge"
