@@ -2,16 +2,9 @@ import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 
+import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
 import {
-  MainAccount,
-  selectCurrentMainAccount,
-  setAssociatedAccountsFetch,
-} from "../../mainAccount";
-import {
-  registerTradeAccountData,
   registerTradeAccountError,
-  RegisterTradeAccountFetch,
-  registerTradeAccountReset,
   removeProxyAccountFromChainData,
   RemoveProxyAccountFromChainFetch,
 } from "../actions";
@@ -21,7 +14,7 @@ import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
-export function* removeProxyAccountFromChain(action: RemoveProxyAccountFromChainFetch) {
+export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
     const api = yield select(selectRangerApi);
     const mainAccount: MainAccount = yield select(selectCurrentMainAccount);

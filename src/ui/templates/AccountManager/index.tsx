@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -24,6 +25,7 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  removeProxyAccountFromChainFetch,
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
@@ -391,7 +393,7 @@ const Card = ({
 }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-
+  const dispatch = useDispatch();
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
@@ -430,7 +432,12 @@ const Card = ({
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
             <Dropdown.Item key="removeBlockchain">
-              <AvailableMessage>Remove from the blockchain</AvailableMessage>
+              <p
+                onClick={() => {
+                  dispatch(removeProxyAccountFromChainFetch({ address }));
+                }}>
+                Remove from the blockchain
+              </p>
             </Dropdown.Item>
             <Dropdown.Item key="removeBrowser">
               <AvailableMessage>Remove from my browser</AvailableMessage>
