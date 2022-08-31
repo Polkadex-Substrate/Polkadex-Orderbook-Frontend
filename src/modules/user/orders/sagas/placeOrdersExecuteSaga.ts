@@ -51,7 +51,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         mainAddress
       );
       const signature = signPayload(api, keyringPair, order);
-      const res = yield call(() => executePlaceOrder([order, signature]));
+      const res = yield call(() => executePlaceOrder([order, signature], address));
       console.info("placed order: ", res);
       if (res.data.place_order) {
         yield put(
@@ -95,12 +95,13 @@ const getNewClientId = () => {
   return client_order_id;
 };
 
-const executePlaceOrder = async (orderPayload: any[]) => {
+const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
   const payloadStr = JSON.stringify({ PlaceOrder: orderPayload });
   console.log("payload: ", payloadStr);
   const res = await API.graphql({
     query: mutation.place_order,
     variables: { input: { payload: payloadStr } },
+    authToken: proxyAddress,
   });
   return res;
 };
