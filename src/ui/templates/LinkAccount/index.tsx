@@ -98,14 +98,14 @@ export const LinkAccountTemplate = () => {
                     disabled={loading}
                     {...getFieldProps("name")}
                   />
-                  <InputLine
+                  {/* <InputLine
                     name="passcode"
                     label="Passcode (Optional)"
                     placeholder="Type here"
                     error={errors.passcode && touched.passcode && errors.passcode}
                     disabled={loading}
                     {...getFieldProps("passcode")}
-                  />
+                  /> */}
                   <Button
                     type="submit"
                     size="extraLarge"
