@@ -30,30 +30,21 @@ export const LinkAccountTemplate = () => {
   const { currentMainAccount, shortWallet, loading, registerMainAccount } =
     useLinkMainAccount();
 
-  const {
-    values,
-    errors,
-    touched,
-    handleSubmit,
-    isValid,
-    dirty,
-    getFieldProps,
-    setFieldValue,
-  } = useFormik({
-    initialValues: {
-      name: "trade-account",
-      // passcode: "",
-    },
-    validationSchema: linkAccountValidations,
-    onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
-  });
+  const { values, errors, touched, handleSubmit, isValid, getFieldProps, setFieldValue } =
+    useFormik({
+      initialValues: {
+        name: "trade-account",
+        passcode: "",
+      },
+      validationSchema: linkAccountValidations,
+      onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
+    });
 
   useEffect(() => {
     if (successRegisterMainAccount && successRegisterTradeAccount)
       router.push("/accountManager");
   }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
 
-  console.log(errors, values);
   return (
     <>
       <Head>
@@ -109,7 +100,7 @@ export const LinkAccountTemplate = () => {
                     disabled={loading}
                     {...getFieldProps("name")}
                   />
-                  {/* <PassCode
+                  <PassCode
                     numInputs={5}
                     onChange={(e) => setFieldValue("passcode", e)}
                     value={values.passcode}
@@ -117,7 +108,8 @@ export const LinkAccountTemplate = () => {
                     label="5-digit trading password (Optional)"
                     error={errors.passcode}
                     isDisabled={loading}
-                  /> */}
+                  />
+
                   <Button
                     type="submit"
                     size="extraLarge"

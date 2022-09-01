@@ -2,7 +2,6 @@ import { Field } from "formik";
 import {
   ChangeEvent,
   forwardRef,
-  Ref,
   useEffect,
   useRef,
   useState,
@@ -130,7 +129,7 @@ export const PassCode = ({
   // Change value at focused input
   const changeCodeAtFocus = (inputValue: string) => {
     const currentVal = currentValue;
-    currentVal[state] = inputValue[0];
+    currentVal[state] = inputValue;
     handleChange(currentVal);
   };
 
@@ -143,22 +142,24 @@ export const PassCode = ({
     focusNextInput();
   };
 
-  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) return;
-    if (e.target.value && e.target.value.length > 1) {
-      e.preventDefault();
-      const otp = currentValue;
+  const handleOnPaste = (e) => {
+    e.preventDefault();
+    const otp = currentValue;
 
-      // Get pastedData in an array of max size (num of inputs - current position)
-      const pastedData = e.target.value.slice(0, numInputs - state).split("");
-      // Paste data from focused input onwards
-      for (let pos = 0; pos < numInputs; ++pos) {
-        if (pos >= state && pastedData.length > 0) {
-          otp[pos] = pastedData.shift();
-        }
+    // Get pastedData in an array of max size (num of inputs - current position)
+    const pastedData = e.clipboardData
+      .getData("text/plain")
+      .slice(0, numInputs - state)
+      .split("");
+
+    // Paste data from focused input onwards
+    for (let pos = 0; pos < numInputs; ++pos) {
+      if (pos >= state && pastedData.length > 0) {
+        otp[pos] = pastedData.shift();
       }
-      handleChange(otp);
     }
+
+    handleChange(otp);
   };
 
   // Handle cases of backspace, delete, left arrow, right arrow
@@ -187,13 +188,10 @@ export const PassCode = ({
             <S.LinePassCode key={i} error={!!error?.length}>
               <TextInput
                 onChange={handleOnChange}
-                onFocus={(e) => {
-                  setState(i);
-                  e.target.select();
-                }}
-                onInput={handleOnInput}
+                onFocus={() => setState(i)}
                 focus={state === i}
                 onKeyDown={handleOnKeyDown}
+                onPaste={handleOnPaste}
                 value={value ? value.toString().charAt(i) : ""}
                 disabled={isDisabled}
                 placeholder="0"
@@ -225,14 +223,6 @@ const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
   }, [focus]);
 
   return (
-    <input
-      type="number"
-      maxLength={1}
-      min={0}
-      max={9}
-      inputMode="numeric"
-      ref={ref}
-      {...props}
-    />
+    <input type="tel" pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...props} />
   );
 };
