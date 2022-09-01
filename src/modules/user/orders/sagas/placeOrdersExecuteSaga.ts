@@ -72,12 +72,14 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
     const msg = error?.errors[0]?.message;
+    const errortext = parseError(msg);
+    console.log("msg: ", msg);
     yield put(
       notificationPush({
         type: "ErrorAlert",
         message: {
           title: "Order failed",
-          description: msg ? JSON.parse(msg)?.errorMessage?.message : error.message,
+          description: errortext,
         },
         time: new Date().getTime(),
       })
@@ -104,4 +106,12 @@ const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
     authToken: proxyAddress,
   });
   return res;
+};
+
+const parseError = (msg: any) => {
+  if (typeof msg === "string") {
+    return msg;
+  } else {
+    return JSON.stringify(msg);
+  }
 };
