@@ -55,7 +55,11 @@ export const withdrawValidations = Yup.object().shape({
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),
 });
-
+export const unLockAccountValidations = Yup.object().shape({
+  password: Yup.string()
+    .required("Required")
+    .matches(/^[0-9]+$/, "Must be only digits"),
+});
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
   password: Yup.string()

@@ -34,9 +34,15 @@ import {
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { UnlockAccount } from "@polkadex/orderbook-ui/organisms/UnlockAccount";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const [unlockAccount, setUnlockAccount] = useState({
+    address: "",
+    status: false,
+  });
+
   const [showSelected, setShowSelected] = useState(true);
 
   const [remove, setRemove] = useState<{
@@ -113,6 +119,17 @@ export const AccountManagerTemplate = () => {
       handleSelectTradeAccount(allTradingAccounts[0].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
+  const handleUnlockClose = () =>
+    setUnlockAccount({
+      address: "",
+      status: false,
+    });
+
+  const handleUnlockOpen = (address: string) =>
+    setUnlockAccount({
+      address,
+      status: true,
+    });
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -124,7 +141,15 @@ export const AccountManagerTemplate = () => {
           )}
         </Modal.Body>
       </Modal>
-
+      <Modal open={unlockAccount.status} onClose={handleUnlockClose}>
+        <Modal.Body>
+          <UnlockAccount
+            handleClose={handleUnlockClose}
+            handleSelectTradeAccount={handleSelectTradeAccount}
+            address={unlockAccount.address}
+          />
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Account Manager | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -271,7 +296,10 @@ export const AccountManagerTemplate = () => {
                       isUsing={value.isActive}
                       onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => handleSelectTradeAccount(value.address)}
+                      onUse={() => {
+                        handleSelectTradeAccount(value.address);
+                        // handleUnlockOpen(value.address);
+                      }}
                     />
                   ))}
                 </S.ContentGrid>
