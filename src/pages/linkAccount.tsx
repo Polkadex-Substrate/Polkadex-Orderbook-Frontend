@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
 import {
-  selectCurrentMainAccount,
   selectIsCurrentAccountRegistered,
   selectIsCurrentMainAccountInWallet,
 } from "../modules/user/mainAccount";
@@ -31,7 +30,7 @@ const LinkAccount = () => {
   );
 
   useEffect(() => {
-    router.push("/accountManager");
+    if (shouldRedirect) router.push("/accountManager");
   }, [router, shouldRedirect]);
 
   if (shouldRedirect) return <div />;
