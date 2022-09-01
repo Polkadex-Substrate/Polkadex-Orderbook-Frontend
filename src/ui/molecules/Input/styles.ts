@@ -73,21 +73,47 @@ export const Box = styled.div`
     }
   `}
 `;
-export const PassCode = styled.div<{ error?: boolean }>`
-  ${({ theme, error }) => css`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
-    gap: 1rem;
+export const PassCodeWrapper = styled.div`
+  ${({ theme }) => css`
+    span {
+      margin-bottom: 1rem;
+      display: block;
+      color: ${theme.colors.tertiaryText};
+    }
   `}
+`;
+
+export const PassCode = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+  gap: 1rem;
 `;
 export const LinePassCode = styled.div<{ error?: boolean }>`
   ${({ theme, error }) => css`
     display: flex;
-    border-bottom: 1px solid ${error ? theme.colors.primary : theme.colors.black};
-    padding-bottom: 1rem;
+
     input {
       width: 100%;
       text-align: center;
+      color: ${theme.colors.text};
+      border-bottom: 1px solid;
+      border-bottom-color: ${error ? theme.colors.primary : theme.colors.text}66;
+      padding-bottom: 1rem;
+      :-webkit-outer-spin-button,
+      :-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      &[type="number"] {
+        -moz-appearance: textfield !important;
+      }
+      :disabled {
+        border-bottom-color: gray;
+        opacity: 0.6;
+      }
+      ::placeholder {
+        opacity: 0.1;
+      }
     }
   `}
 `;

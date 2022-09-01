@@ -16,6 +16,7 @@ import {
   selectTradeAccountsLoading,
   selectTradeAccountsSuccess,
 } from "@polkadex/orderbook-modules";
+import { PassCode } from "@polkadex/orderbook-ui/molecules/Input";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
@@ -29,10 +30,19 @@ export const LinkAccountTemplate = () => {
   const { currentMainAccount, shortWallet, loading, registerMainAccount } =
     useLinkMainAccount();
 
-  const { errors, touched, handleSubmit, isValid, dirty, getFieldProps } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    isValid,
+    dirty,
+    getFieldProps,
+    setFieldValue,
+  } = useFormik({
     initialValues: {
       name: "trade-account",
-      passcode: "",
+      // passcode: "",
     },
     validationSchema: linkAccountValidations,
     onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
@@ -43,6 +53,7 @@ export const LinkAccountTemplate = () => {
       router.push("/accountManager");
   }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
 
+  console.log(errors, values);
   return (
     <>
       <Head>
@@ -98,13 +109,14 @@ export const LinkAccountTemplate = () => {
                     disabled={loading}
                     {...getFieldProps("name")}
                   />
-                  {/* <InputLine
+                  {/* <PassCode
+                    numInputs={5}
+                    onChange={(e) => setFieldValue("passcode", e)}
+                    value={values.passcode}
                     name="passcode"
-                    label="Passcode (Optional)"
-                    placeholder="Type here"
-                    error={errors.passcode && touched.passcode && errors.passcode}
-                    disabled={loading}
-                    {...getFieldProps("passcode")}
+                    label="5-digit trading password (Optional)"
+                    error={errors.passcode}
+                    isDisabled={loading}
                   /> */}
                   <Button
                     type="submit"

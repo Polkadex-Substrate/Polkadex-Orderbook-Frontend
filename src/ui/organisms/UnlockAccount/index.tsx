@@ -21,7 +21,7 @@ export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }
     <S.Wrapper>
       <S.Title>
         <h2>Unlock account</h2>
-        <p>Inout 6-digit trading password to unlock your account</p>
+        <p>Input 5-digit trading password to unlock your account</p>
       </S.Title>
       <form onSubmit={handleSubmit}>
         <InputLine
