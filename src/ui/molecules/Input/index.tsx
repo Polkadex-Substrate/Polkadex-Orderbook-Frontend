@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   InputHTMLAttributes,
+  useMemo,
 } from "react";
 
 import * as S from "./styles";
@@ -101,12 +102,13 @@ export const PassCode = ({
   name,
 }: PasscodeProps) => {
   const [state, setState] = useState(0);
-  const getValue = () => (value ? value.toString().split("") : []);
+
+  const currentValue = useMemo(() => value?.toString().split(""), [value]);
 
   // Helper to return value from input
-  const handleChange = (otp: string[]) => {
-    const inputValue = otp.join("");
-    onChange(Number(inputValue));
+  const handleChange = (e: string[]) => {
+    const inputValue = e.join("");
+    onChange(inputValue.length ? Number(inputValue) : "");
   };
 
   // Focus on input by index
@@ -127,9 +129,9 @@ export const PassCode = ({
 
   // Change value at focused input
   const changeCodeAtFocus = (inputValue: string) => {
-    const currentValue = getValue();
-    currentValue[state] = inputValue[0];
-    handleChange(currentValue);
+    const currentVal = currentValue;
+    currentVal[state] = inputValue[0];
+    handleChange(currentVal);
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,7 +147,7 @@ export const PassCode = ({
     if (!e.target.value) return;
     if (e.target.value && e.target.value.length > 1) {
       e.preventDefault();
-      const otp = getValue();
+      const otp = currentValue;
 
       // Get pastedData in an array of max size (num of inputs - current position)
       const pastedData = e.target.value.slice(0, numInputs - state).split("");
