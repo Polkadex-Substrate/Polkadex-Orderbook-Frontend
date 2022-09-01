@@ -9,8 +9,8 @@ import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 export function* fetchSessionSaga() {
   try {
     // add default user session values
-    const dateFrom = subtractMonths(1).toISOString();
-    const dateTo = new Date().toISOString();
+    const dateFrom = subtractMonths(1);
+    const dateTo = new Date();
     yield put(userSessionData({ dateFrom, dateTo }));
   } catch (error) {
     console.log(error);

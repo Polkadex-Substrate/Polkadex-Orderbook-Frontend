@@ -26,9 +26,7 @@ export function* fetchTradesSaga() {
     const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      // const { dateFrom, dateTo } = userSession;
-      const dateTo = new Date().toISOString();
-      const dateFrom = subtractMonths(1).toISOString();
+      const { dateFrom, dateTo } = userSession;
       const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }
@@ -47,16 +45,16 @@ export function* fetchTradesSaga() {
 
 const fetchUserTrades = async (
   proxy_account: string,
-  dateFrom: string,
-  dateTo: string
+  dateFrom: Date,
+  dateTo: Date
 ): Promise<UserTrade[]> => {
   // TODO: make limit resonable by utilizing nextToken
   const res: any = await API.graphql({
     query: queries.listTradesByMainAccount,
     variables: {
       main_account: proxy_account,
-      from: dateFrom,
-      to: dateTo,
+      from: dateFrom.toISOString(),
+      to: dateTo.toISOString(),
       limit: 1000,
     },
   });
