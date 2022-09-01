@@ -116,7 +116,7 @@ export const AccountManagerTemplate = () => {
 
   useEffect(() => {
     if (shouldSelectDefaultTradeAccount && !!allTradingAccounts?.length)
-      handleSelectTradeAccount(allTradingAccounts[0].address);
+      handleSelectTradeAccount(allTradingAccounts[allTradingAccounts.length - 1].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
   const handleUnlockClose = () =>
