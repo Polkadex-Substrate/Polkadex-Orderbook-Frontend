@@ -9,10 +9,15 @@ import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { notificationMarkAsReadBy } from "@polkadex/orderbook-modules";
+import {
+  notificationMarkAsReadBy,
+  selectNotificationsAlert,
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
-export const Notifications = ({ notifications = [] }: T.NotificationsProps) => {
+export const Notifications = () => {
   const dispatch = useDispatch();
+  const notifications = useReduxSelector(selectNotificationsAlert);
 
   return (
     <S.Wrapper>

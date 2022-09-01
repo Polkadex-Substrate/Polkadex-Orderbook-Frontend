@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
 import {
@@ -24,10 +25,17 @@ const LinkAccount = () => {
   const hasUser = useReduxSelector(selectIsUserSignedIn);
   const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
 
-  if (!hasUser || isRegistered || !hasSelectedAccount) {
-    router?.push("/accountManager");
-    return <div />;
-  }
+  const shouldRedirect = useMemo(
+    () => !hasUser || isRegistered || !hasSelectedAccount,
+    [hasUser, isRegistered, hasSelectedAccount]
+  );
+
+  useEffect(() => {
+    router.push("/accountManager");
+  }, [router, shouldRedirect]);
+
+  if (shouldRedirect) return <div />;
+
   return <LinkAccountTemplate />;
 };
 

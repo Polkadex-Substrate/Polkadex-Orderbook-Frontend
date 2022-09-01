@@ -4,4 +4,6 @@ import { Icons, TokensTicker } from "@polkadex/web-helpers";
 
 export type Props = {
   icon?: Icons | TokensTicker | AlertTypes | string;
+  title: string;
+  description: string;
 } & Partial<MessageProps>;
