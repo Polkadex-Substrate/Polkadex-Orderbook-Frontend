@@ -50,6 +50,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         client_order_id,
         mainAddress
       );
+      console.log("place order", order.toJSON());
       const signature = signPayload(api, keyringPair, order);
       const res = yield call(() => executePlaceOrder([order, signature], address));
       console.info("placed order: ", res);

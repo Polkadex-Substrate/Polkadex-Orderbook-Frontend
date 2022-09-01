@@ -316,6 +316,7 @@ export const AccountManagerTemplate = () => {
                   </Table.Header>
                   <Table.Body striped>
                     {assets.map((item) => {
+                      console.log("balances table item:", item);
                       const balance = userBalances?.find(
                         (value) => value.assetId === item.assetId
                       );
@@ -335,26 +336,17 @@ export const AccountManagerTemplate = () => {
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.free_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.free_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
