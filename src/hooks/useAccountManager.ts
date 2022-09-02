@@ -34,7 +34,6 @@ export const useAccountManager = () => {
   }, [currentMainAcc, dispatch]);
 
   const removeFromDevice = (address: string) => {
-    keyring.forgetAccount(address);
     dispatch(removeTradeAccountFromBrowser({ address }));
     dispatch(
       notificationPush({

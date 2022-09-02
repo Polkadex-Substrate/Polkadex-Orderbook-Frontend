@@ -1,3 +1,5 @@
+import { keyring } from "@polkadot/ui-keyring";
+
 import { TradeAccountsAction, InjectedAccount } from "./actions";
 import {
   USER_TRADE_ACCOUNTS_ERROR,
@@ -27,7 +29,7 @@ export const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
   type: "",
-  isPassworded: false
+  isPassworded: false,
 };
 const initialState: TradeAccountsState = {
   isFetching: false,
@@ -104,7 +106,7 @@ export const TradeAccountsReducer = (
       const newAccounts = state.allBrowserAccounts.filter(
         (account) => account.address !== address
       );
-
+      keyring.forgetAddress(address);
       return {
         ...state,
         selectedAccount:

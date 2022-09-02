@@ -36,7 +36,9 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
         baseAsset,
         quoteAsset
       );
-      const res = yield call(() => executeCancelOrder([order_id, account, pair, signature]));
+      const res = yield call(() =>
+        executeCancelOrder([order_id, account, pair, signature], address)
+      );
       console.info("cancelled order: ", res);
       yield put(orderCancelData());
       yield put(
@@ -65,11 +67,12 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     );
   }
 }
-const executeCancelOrder = async (cancelOrderPayload) => {
+const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
   const res = await API.graphql({
     query: mutation.cancel_order,
     variables: { input: { payload } },
+    authToken: proxyAddress,
   });
   return res;
 };

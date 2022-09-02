@@ -8,7 +8,6 @@ import {
   isAssetPDEX,
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
-import { UNIT } from "@polkadex/web-constants";
 import { Utils } from "@polkadex/web-helpers";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {
@@ -37,7 +36,7 @@ const updateBalanceFromEvent = (
   const newBalance = {
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,
-    assetId: assetId,
+    assetId: assetId.toString(),
     free_balance: Utils.decimals.formatToString(msg.free),
     reserved_balance: Utils.decimals.formatToString(msg.reserved),
     pending_withdrawal: Utils.decimals.formatToString(msg.pending_withdrawal),
