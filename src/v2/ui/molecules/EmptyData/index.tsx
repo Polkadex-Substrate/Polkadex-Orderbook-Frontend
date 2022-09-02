@@ -4,9 +4,10 @@ export const EmptyData = ({
   title = "You don't have any recent transactions",
   image = "emptyData",
   alt = "Empty Orders",
+  ...props
 }) => {
   return (
-    <S.Wrapper>
+    <S.Wrapper {...props}>
       <S.Container>
         <S.Box>
           <img src={`/img/${image}.png`} alt={alt} />

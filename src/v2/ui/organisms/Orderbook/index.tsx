@@ -3,8 +3,7 @@ import { useRef } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useOrderbook } from "@polkadex/orderbook/v2/hooks/useOrderbook";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useOrderbookTable } from "@polkadex/orderbook/v2/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@orderbook/v2/ui/molecules";
@@ -78,6 +77,7 @@ export const OrderbookTable = ({
         <EmptyData
           image={isSell ? "emptyOrderbook" : "emptyOrderbookSell"}
           title={`No ${isSell ? "Asks" : "Bids"}`}
+          style={{ paddingBottom: 20 }}
         />
       )}
     </>

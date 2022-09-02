@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import DropdownItem from "../../molecules/DropdownItem";
 import Heading from "../../molecules/Heading";
 import OrderBookIcon from "../../molecules/OrderBookIcon";

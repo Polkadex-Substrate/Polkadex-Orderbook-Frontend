@@ -15,7 +15,7 @@ import Checkbox from "../../molecules/Checkbox";
 
 import * as S from "./styles";
 
-import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
 
@@ -143,7 +143,7 @@ const Graph = () => {
                   </S.MainIndicator>
                 </S.Indicator>
               </Dropdown>
-              {width <= 600 ? (
+              {width <= 1240 ? (
                 <Dropdown
                   isClickable
                   direction="bottom"

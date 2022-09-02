@@ -25,7 +25,6 @@ export const Header = styled.div`
   grid-gap: 1rem;
   align-items: center;
   cursor: pointer;
-  min-width: 25rem;
   width: 100%;
 `;
 
@@ -51,6 +50,10 @@ export const HeaderAsideCenter = styled.div`
   max-width: 10rem;
   height: 100%;
   width: 100%;
+  min-width: 10rem;
+  @media screen and (max-width: 850px) {
+    display: none;
+  }
 `;
 export const HeaderInfo = styled.div`
   margin-left: 0.5rem;
@@ -63,6 +66,7 @@ export const HeaderInfoContainer = styled.div`
   align-items: center;
   span {
     font-weight: 550;
+    white-space: nowrap;
   }
 `;
 
