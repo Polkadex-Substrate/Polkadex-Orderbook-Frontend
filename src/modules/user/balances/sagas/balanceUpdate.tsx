@@ -8,7 +8,6 @@ import {
   isAssetPDEX,
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
-import { UNIT } from "@polkadex/web-constants";
 import { Utils } from "@polkadex/web-helpers";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {

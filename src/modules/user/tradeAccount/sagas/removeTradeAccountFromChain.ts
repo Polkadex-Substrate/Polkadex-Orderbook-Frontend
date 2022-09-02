@@ -7,6 +7,7 @@ import {
   registerTradeAccountError,
   removeProxyAccountFromChainData,
   RemoveProxyAccountFromChainFetch,
+  removeTradeAccountFromBrowser,
 } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 
@@ -51,7 +52,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
           })
         );
         yield put(removeProxyAccountFromChainData());
-        keyring.forgetAccount(tradeAddress);
+        yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
       } else {
         throw new Error(res.message);
       }

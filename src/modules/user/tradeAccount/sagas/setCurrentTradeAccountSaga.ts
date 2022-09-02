@@ -5,10 +5,7 @@ import { SetCurrentTradeAccount, setCurrentTradeAccountData } from "../actions";
 import * as queries from "../../../../graphql/queries";
 import { getMainAddrFromQueryRes } from "../../auth/helper";
 import { notificationPush } from "../../notificationHandler";
-import {
-  selectExtensionWalletAccounts,
-  setMainAccountFetch,
-} from "../../mainAccount";
+import { selectExtensionWalletAccounts, setMainAccountFetch } from "../../mainAccount";
 
 export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
   try {
@@ -44,6 +41,7 @@ export const findMainAccFromTradeAcc = async (tradeAcc: string): Promise<string>
     variables: {
       proxy_account: tradeAcc,
     },
+    authToken: "READ_ONLY",
   });
   const queryResStr = res.data?.findUserByProxyAccount.items[0];
   return getMainAddrFromQueryRes(queryResStr);
