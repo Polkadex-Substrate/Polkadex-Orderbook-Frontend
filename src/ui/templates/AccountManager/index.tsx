@@ -284,7 +284,7 @@ export const AccountManagerTemplate = () => {
                         </a>
                       </Link>{" "}
                       or
-                      <Link href="/importAccount"> Import</Link>
+                      <Link href="/recovery"> Import</Link>
                     </S.CreateAccountWrapper>
                   </S.CreateAccount>
                   {allTradingAccounts?.map((value) => (
