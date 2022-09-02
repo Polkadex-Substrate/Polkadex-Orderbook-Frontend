@@ -14,7 +14,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/v2/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectNotifications } from "@polkadex/orderbook-modules";
+import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type MenuProps = {
@@ -22,9 +22,10 @@ export type MenuProps = {
   isWallet?: boolean;
 };
 
-const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
+const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
+  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
 
   return (
     <S.Wrapper>
@@ -51,16 +52,18 @@ const Menu = ({ handleChange = undefined, isWallet = false }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-          <Link href="/accountManager">
-            <S.WrapperIcon>
-              <div>
-                <Icon name="Wallet" background="none" stroke="text" size="large" />
-              </div>
-              <div>
-                <S.Span>Account Manager</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </Link>
+          {isSignedIn && (
+            <Link href="/accountManager">
+              <S.WrapperIcon>
+                <div>
+                  <Icon name="Wallet" background="none" stroke="text" size="large" />
+                </div>
+                <div>
+                  <S.Span>Account Manager</S.Span>
+                </div>
+              </S.WrapperIcon>
+            </Link>
+          )}
         </S.Container>
         <S.Container>
           <AvailableMessage message="Soon">

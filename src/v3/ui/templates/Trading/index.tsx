@@ -101,7 +101,7 @@ export function Trading() {
       </Modal>
 
       <S.Wrapper>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu handleChange={() => setState(!state)} isWallet={false} />
         <S.WrapperMain>
           <Navbar onOpenMarkets={() => setState(!state)} />
           <S.WrapperGraph>

@@ -1,27 +1,27 @@
 import { useFormik } from "formik";
 import { useMemo } from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { typeValidations } from "@polkadex/orderbook/validations";
+import { removeProxyAccountFromChainFetch } from "@polkadex/orderbook-modules";
 
-export const RemoveFromBlockchain = ({ handleClose }) => {
+export const RemoveFromBlockchain = ({ handleClose, address }) => {
+  const dispatch = useDispatch();
   const { values, touched, handleSubmit, errors, getFieldProps } = useFormik({
     initialValues: {
       account: "",
     },
     validationSchema: typeValidations,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: () => {
+      dispatch(removeProxyAccountFromChainFetch({ address }));
     },
   });
-  const accountName = "trading";
+  const phrase = "delete account";
 
-  const isDisabled = useMemo(
-    () => values.account === `delete ${accountName} account`,
-    [values]
-  );
+  const isDisabled = useMemo(() => values.account === phrase, [values]);
   return (
     <S.Wrapper>
       <S.Tag>
@@ -36,7 +36,7 @@ export const RemoveFromBlockchain = ({ handleClose }) => {
           name="account"
           label={
             <>
-              To verify, type <S.Strong> delete {accountName} account</S.Strong> below:
+              To verify, type <S.Strong>{phrase}</S.Strong> below:
             </>
           }
           placeholder="Type here"
