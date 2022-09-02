@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -24,6 +25,7 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  removeProxyAccountFromChainFetch,
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
@@ -128,7 +130,6 @@ export const AccountManagerTemplate = () => {
       address,
       status: true,
     });
-
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>

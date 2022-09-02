@@ -27,7 +27,7 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
     if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amount, nonce);
       const signature = signPayload(api, keyringPair, payload);
-      const res = yield call(() => executeWithdraw([address, payload, signature]));
+      const res = yield call(() => executeWithdraw([address, payload, signature], address));
       console.info("withdraw res: ", res);
       yield put(withdrawsData());
     }
@@ -45,11 +45,12 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   }
 }
 
-const executeWithdraw = async (withdrawPayload) => {
+const executeWithdraw = async (withdrawPayload, address: string) => {
   const payload = { Withdraw: withdrawPayload };
   const res = await API.graphql({
     query: mutations.withdraw,
     variables: { input: { payload } },
+    authToken: address,
   });
   return res;
 };
