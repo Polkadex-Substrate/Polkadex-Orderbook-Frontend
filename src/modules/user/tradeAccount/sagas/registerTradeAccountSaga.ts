@@ -18,6 +18,7 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { setToStorage } from "@polkadex/orderbook/helpers/storage";
 
 let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
@@ -63,6 +64,8 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
             time: new Date().getTime(),
           })
         );
+        yield put(registerTradeAccountData());
+        yield call(setIsTradeAccountPassworded, tradeAddress, !!password);
       } else {
         throw new Error(res.message);
       }
@@ -92,4 +95,8 @@ export const addProxyToAccount = async (
   const ext = api.tx.ocex.addProxyAccount(proxyAddress);
   const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
   return res;
+};
+
+export const setIsTradeAccountPassworded = (tradeAddress: string, isPassworded: boolean) => {
+  setToStorage(`trading_acc_${tradeAddress}`, isPassworded);
 };

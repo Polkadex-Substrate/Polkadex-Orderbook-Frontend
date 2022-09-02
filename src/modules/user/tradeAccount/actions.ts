@@ -16,6 +16,7 @@ import {
 
 export interface InjectedAccount {
   address: string;
+  isPassworded: boolean;
   meta: {
     name?: string;
     source?: any;

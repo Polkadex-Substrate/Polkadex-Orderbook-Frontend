@@ -6,7 +6,6 @@ import * as queries from "../../../../graphql/queries";
 import { getMainAddrFromQueryRes } from "../../auth/helper";
 import { notificationPush } from "../../notificationHandler";
 import {
-  selectCurrentMainAccount,
   selectExtensionWalletAccounts,
   setMainAccountFetch,
 } from "../../mainAccount";

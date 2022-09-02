@@ -30,14 +30,14 @@ export const CreateAccountTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
       name: "trade-account-2",
-      passcode: "",
-    },
+      password: null,
+    } as Record<string, string>,
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
       dispatch(
         registerTradeAccountFetch({
           name: values.name,
-          password: null,
+          password: values.password,
           mnemonic: mnemoicString,
         })
       );
@@ -95,7 +95,6 @@ export const CreateAccountTemplate = () => {
                     label="Account Name (Optional)"
                     placeholder="Enter a name for this account"
                     error={errors.name && touched.name && errors.name}
-                    disabled={isLoading}
                     {...getFieldProps("name")}
                   />
                   <InputLine

@@ -360,9 +360,11 @@ export const AccountManagerTemplate = () => {
                               <Link href={`/deposit/${item.symbol}`}>
                                 <S.DepositLink>Deposit</S.DepositLink>
                               </Link>
-                              <Link href={`/withdraw/${item.symbol}`}>
-                                <S.WithdrawLink>Withdraw</S.WithdrawLink>
-                              </Link>
+                              <AvailableMessage message="Soon">
+                                <Link href={`/withdraw/${item.symbol}`}>
+                                  <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                                </Link>
+                              </AvailableMessage>
                             </S.Actions>
                           </Table.Cell>
                         </Table.Row>
