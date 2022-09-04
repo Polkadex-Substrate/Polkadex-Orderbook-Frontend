@@ -11,6 +11,7 @@ import {
   selectRangerApi,
   selectCurrentTradeAccount,
   notificationPush,
+  selectLinkedMainAddress,
 } from "../../..";
 
 import * as mutation from "./../../../../graphql/mutations";
@@ -29,6 +30,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
       throw new Error("Invalid amount");
     }
     const { address } = yield select(selectCurrentTradeAccount);
+    const mainAddress = yield select(selectLinkedMainAddress);
     const keyringPair = keyring.getPair(address);
     keyringPair.unlock("");
     const timestamp = getNonce();
@@ -45,10 +47,11 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
         amount,
         price,
         timestamp,
-        client_order_id
+        client_order_id,
+        mainAddress
       );
       const signature = signPayload(api, keyringPair, order);
-      const res = yield call(() => executePlaceOrder([order, signature]));
+      const res = yield call(() => executePlaceOrder([order, signature], address));
       console.info("placed order: ", res);
       if (res.data.place_order) {
         yield put(
@@ -69,12 +72,14 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
     const msg = error?.errors[0]?.message;
+    const errortext = parseError(msg);
+    console.log("msg: ", msg);
     yield put(
       notificationPush({
         type: "ErrorAlert",
         message: {
           title: "Order failed",
-          description: msg ? JSON.parse(msg)?.errorMessage?.message : error.message,
+          description: errortext,
         },
         time: new Date().getTime(),
       })
@@ -92,12 +97,21 @@ const getNewClientId = () => {
   return client_order_id;
 };
 
-const executePlaceOrder = async (orderPayload: any[]) => {
+const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
   const payloadStr = JSON.stringify({ PlaceOrder: orderPayload });
   console.log("payload: ", payloadStr);
   const res = await API.graphql({
     query: mutation.place_order,
     variables: { input: { payload: payloadStr } },
+    authToken: proxyAddress,
   });
   return res;
+};
+
+const parseError = (msg: any) => {
+  if (typeof msg === "string") {
+    return msg;
+  } else {
+    return JSON.stringify(msg);
+  }
 };

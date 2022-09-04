@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -24,6 +25,7 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  removeProxyAccountFromChainFetch,
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
@@ -32,9 +34,15 @@ import {
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { UnlockAccount } from "@polkadex/orderbook-ui/organisms/UnlockAccount";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const [unlockAccount, setUnlockAccount] = useState({
+    address: "",
+    status: false,
+  });
+
   const [showSelected, setShowSelected] = useState(true);
 
   const [remove, setRemove] = useState<{
@@ -111,6 +119,17 @@ export const AccountManagerTemplate = () => {
       handleSelectTradeAccount(allTradingAccounts[0].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
+  const handleUnlockClose = () =>
+    setUnlockAccount({
+      address: "",
+      status: false,
+    });
+
+  const handleUnlockOpen = (address: string) =>
+    setUnlockAccount({
+      address,
+      status: true,
+    });
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -122,7 +141,15 @@ export const AccountManagerTemplate = () => {
           )}
         </Modal.Body>
       </Modal>
-
+      <Modal open={unlockAccount.status} onClose={handleUnlockClose}>
+        <Modal.Body>
+          <UnlockAccount
+            handleClose={handleUnlockClose}
+            handleSelectTradeAccount={handleSelectTradeAccount}
+            address={unlockAccount.address}
+          />
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Account Manager | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -269,7 +296,10 @@ export const AccountManagerTemplate = () => {
                       isUsing={value.isActive}
                       onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => handleSelectTradeAccount(value.address)}
+                      onUse={() => {
+                        handleSelectTradeAccount(value.address);
+                        // handleUnlockOpen(value.address);
+                      }}
                     />
                   ))}
                 </S.ContentGrid>
@@ -333,26 +363,17 @@ export const AccountManagerTemplate = () => {
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.free_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.free_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
@@ -391,7 +412,7 @@ const Card = ({
 }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-
+  const dispatch = useDispatch();
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
@@ -430,7 +451,12 @@ const Card = ({
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
             <Dropdown.Item key="removeBlockchain">
-              <AvailableMessage>Remove from the blockchain</AvailableMessage>
+              <p
+                onClick={() => {
+                  dispatch(removeProxyAccountFromChainFetch({ address }));
+                }}>
+                Remove from the blockchain
+              </p>
             </Dropdown.Item>
             <Dropdown.Item key="removeBrowser">
               <AvailableMessage>Remove from my browser</AvailableMessage>
