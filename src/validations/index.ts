@@ -62,7 +62,7 @@ export const unLockAccountValidations = Yup.object().shape({
 });
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
-  password: Yup.string()
+  passcode: Yup.string()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(5, "Must be exactly 5 digits")
     .max(5, "Must be exactly 5 digits")

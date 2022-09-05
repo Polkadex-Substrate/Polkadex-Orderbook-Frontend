@@ -38,6 +38,32 @@
                 "GraphQLAPIKeyOutput": "da2-uyr6rr4omrfmvdjh55mgiub5na"
             },
             "lastPushTimeStamp": "2022-08-03T18:26:28.554Z"
+        },
+        "emmanuel2-orderbook-api": {
+            "service": "AppSync",
+            "output": {
+                "authConfig": {
+                    "defaultAuthentication": {
+                        "authenticationType": "API_KEY"
+                    },
+                    "additionalAuthenticationProviders": [
+                        {
+                            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                            "userPoolConfig": {
+                                "userPoolId": "ap-south-1_G7xhCI6s5",
+                                "awsRegion": "ap-south-1",
+                                "appIdClientRegex": null
+                            }
+                        }
+                    ]
+                },
+                "GraphQLAPIIdOutput": "4tndt44ktzbalp7gncsezvfbny",
+                "GraphQLAPIEndpointOutput": "https://ydrbutixgrfqnlbpybe5fqtjli.appsync-api.ap-south-1.amazonaws.com/graphql",
+                "name": "emmanuel2-orderbook-api",
+                "region": "ap-south-1",
+                "GraphQLAPIKeyOutput": "da2-zzv2nfzdy5dxldxizwfro3g43q"
+            },
+            "lastPushTimeStamp": "2022-08-29T22:12:46.343Z"
         }
     }
 }

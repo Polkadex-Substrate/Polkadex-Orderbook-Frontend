@@ -18,6 +18,8 @@ type TransactionQueryResult = {
   fee: string;
   st: string;
   t: string;
+  eid: number;
+  sid: number;
 };
 
 export function* transactionsSaga(action: TransactionsFetch) {
@@ -64,12 +66,15 @@ const fetchTransactions = async (
       main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
+      limit: 10000,
     },
   });
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
     amount: Utils.decimals.formatToString(item.q),
     asset: item.a,
+    event_id: item.eid,
+    sid: item.sid,
     fee: Utils.decimals.formatToString(item.fee),
     main_account: address,
     time: new Date(Number(item.t)).toISOString(),
