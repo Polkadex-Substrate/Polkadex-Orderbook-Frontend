@@ -207,9 +207,9 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
     const amountUnavailable = isSell
       ? Number(availableBaseAmount) >=
-      Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
+        Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
       : Number(availableQuoteAmount) >=
-      Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
+        Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
 
     if (!isLimit) {
       return (
@@ -302,30 +302,34 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       // limit and sell
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
-          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
-            }`;
+          form.amountSell = `${
+            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
       // limit and buy
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
-          form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
+          form.amountBuy = `${
+            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
             Number(form.price)
-            }`;
+          }`;
         }
       }
       // market and sell
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
-          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
-            }`;
+          form.amountSell = `${
+            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
       // market and buy
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
-          form.amountBuy = `${Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
-            }`;
+          form.amountBuy = `${
+            Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
+          }`;
         }
       }
     },
