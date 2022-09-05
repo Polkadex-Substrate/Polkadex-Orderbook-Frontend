@@ -1,5 +1,13 @@
 import { Field } from "formik";
-import { ChangeEvent, forwardRef, Ref, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  InputHTMLAttributes,
+  useMemo,
+} from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -65,26 +73,46 @@ export const InputLine = forwardRef(
 
 InputLine.displayName = "InputLine";
 
+type PasscodeProps = {
+  numInputs: number;
+  onChange: (v: string | number) => void;
+  isDisabled?: boolean;
+  error?: string;
+  value?: string;
+  shouldAutoFocus?: boolean;
+  name: string;
+  label: string;
+};
+
+// keyCode constants
+const BACKSPACE = 8;
+const LEFT_ARROW = 37;
+const RIGHT_ARROW = 39;
+const DELETE = 46;
+
 export const PassCode = ({
+  numInputs,
+  onChange,
+  isDisabled,
+  value,
   error,
-  inputs,
-  handleChange,
-  maxLength = 1,
-  ...props
-}: T.Props & { handleChange: (otp: number | string) => void; inputs: number }) => {
+  shouldAutoFocus,
+  label,
+  name,
+}: PasscodeProps) => {
   const [state, setState] = useState(0);
 
-  const getOtpValue = () => (props.value ? props.value.toString().split("") : []);
+  const currentValue = useMemo(() => value?.toString().split(""), [value]);
 
-  // Helper to return OTP from input
-  const handleOtpChange = (otp: string[]) => {
-    const otpValue = otp.join("");
-    handleChange(otpValue);
+  // Helper to return value from input
+  const handleChange = (e: string[]) => {
+    const inputValue = e.join("");
+    onChange(inputValue.length ? Number(inputValue) : "");
   };
 
   // Focus on input by index
   const focusInput = (input: number) => {
-    const activeInput = Math.max(Math.min(inputs - 1, input), 0);
+    const activeInput = Math.max(Math.min(numInputs - 1, input), 0);
     setState(activeInput);
   };
 
@@ -98,11 +126,11 @@ export const PassCode = ({
     focusInput(state - 1);
   };
 
-  // Change OTP value at focused input
-  const changeCodeAtFocus = (value: string) => {
-    const otp = getOtpValue();
-    otp[state] = value[0];
-    handleOtpChange(otp);
+  // Change value at focused input
+  const changeCodeAtFocus = (inputValue: string) => {
+    const currentVal = currentValue;
+    currentVal[state] = inputValue;
+    handleChange(currentVal);
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -113,55 +141,88 @@ export const PassCode = ({
     changeCodeAtFocus(e.target.value);
     focusNextInput();
   };
-  const handleOnInput = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) return;
-    if (e.target.value && e.target.value.length > 1) {
-      e.preventDefault();
-      const otp = getOtpValue();
 
-      // Get pastedData in an array of max size (num of inputs - current position)
-      const pastedData = e.target.value.slice(0, inputs - state).split("");
-      // Paste data from focused input onwards
-      for (let pos = 0; pos < inputs; ++pos) {
-        if (pos >= state && pastedData.length > 0) {
-          otp[pos] = pastedData.shift();
-        }
+  const handleOnPaste = (e) => {
+    e.preventDefault();
+    const otp = currentValue;
+
+    // Get pastedData in an array of max size (num of inputs - current position)
+    const pastedData = e.clipboardData
+      .getData("text/plain")
+      .slice(0, numInputs - state)
+      .split("");
+
+    // Paste data from focused input onwards
+    for (let pos = 0; pos < numInputs; ++pos) {
+      if (pos >= state && pastedData.length > 0) {
+        otp[pos] = pastedData.shift();
       }
-      handleOtpChange(otp);
+    }
+
+    handleChange(otp);
+  };
+
+  // Handle cases of backspace, delete, left arrow, right arrow
+  const handleOnKeyDown = (e) => {
+    if (e.keyCode === BACKSPACE || e.key === "Backspace") {
+      e.preventDefault();
+      changeCodeAtFocus("");
+      focusPrevInput();
+    } else if (e.keyCode === DELETE || e.key === "Delete") {
+      e.preventDefault();
+      changeCodeAtFocus("");
+    } else if (e.keyCode === LEFT_ARROW || e.key === "ArrowLeft") {
+      e.preventDefault();
+      focusPrevInput();
+    } else if (e.keyCode === RIGHT_ARROW || e.key === "ArrowRight") {
+      e.preventDefault();
+      focusNextInput();
     }
   };
   return (
-    <div>
-      <S.PassCode error={!!error?.length}>
-        {[...Array(inputs)].map((_, i) => (
-          <S.LinePassCode key={i}>
-            <TextInput
-              onFocus={(e) => {
-                setState(i);
-                e.target.select();
-              }}
-              onInput={handleOnInput}
-              shouldAutoFocus={state === i}
-              type="text"
-              maxLength={maxLength}
-              {...props}
-            />
-          </S.LinePassCode>
-        ))}
-      </S.PassCode>
-      {error && <S.Error hasMargin={false}>{error}</S.Error>}
-    </div>
+    <S.PassCodeWrapper>
+      <label htmlFor={name}>
+        {label && <span>{label}</span>}
+        <S.PassCode>
+          {[...Array(numInputs)].map((_, i) => (
+            <S.LinePassCode key={i} error={!!error?.length}>
+              <TextInput
+                onChange={handleOnChange}
+                onFocus={() => setState(i)}
+                focus={state === i}
+                onKeyDown={handleOnKeyDown}
+                onPaste={handleOnPaste}
+                value={value ? value.toString().charAt(i) : ""}
+                disabled={isDisabled}
+                placeholder="0"
+                shouldAutoFocus={shouldAutoFocus}
+              />
+            </S.LinePassCode>
+          ))}
+        </S.PassCode>
+      </label>
+      {!!error?.length && (
+        <S.Error style={{ display: "block", marginTop: 10 }} hasMargin={false}>
+          {error}
+        </S.Error>
+      )}
+    </S.PassCodeWrapper>
   );
 };
 
-const TextInput = ({ shouldAutoFocus, ...props }) => {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (shouldAutoFocus) {
-      console.log("focus");
-      ref.current.focus();
-    }
-  }, [shouldAutoFocus]);
+type TextInputProps = {
+  shouldAutoFocus?: boolean;
+  focus?: boolean;
+} & InputHTMLAttributes<HTMLInputElement>;
 
-  return <input ref={ref} {...props} />;
+const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (focus) ref.current.focus();
+  }, [focus]);
+
+  return (
+    <input type="tel" pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...props} />
+  );
 };

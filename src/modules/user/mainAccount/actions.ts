@@ -82,7 +82,6 @@ export interface RegisterMainAccountData {
 
 export interface RegisterMainAccountError {
   type: typeof REGISTER_MAIN_ACCOUNT_ERROR;
-  error: CommonError;
 }
 
 export interface RegisterMainAccountUpdateEvent {
@@ -173,9 +172,8 @@ export const registerMainAccountData = (): RegisterMainAccountData => ({
   type: REGISTER_MAIN_ACCOUNT_DATA,
 });
 
-export const registerMainAccountError = (error: CommonError): RegisterMainAccountError => ({
+export const registerMainAccountError = (): RegisterMainAccountError => ({
   type: REGISTER_MAIN_ACCOUNT_ERROR,
-  error,
 });
 
 export const registerMainAccountUpdateEvent = (

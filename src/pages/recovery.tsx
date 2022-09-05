@@ -1,4 +1,9 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+import { useReduxSelector } from "../hooks/useReduxSelector";
+import { selectIsUserSignedIn } from "../modules/user/profile";
 
 const RecoveryTemplate = dynamic(
   () =>
@@ -7,6 +12,17 @@ const RecoveryTemplate = dynamic(
     ssr: false,
   }
 );
-const Recovery = () => <RecoveryTemplate />;
+
+const Recovery = () => {
+  const router = useRouter();
+  const hasUser = useReduxSelector(selectIsUserSignedIn);
+
+  useEffect(() => {
+    if (!hasUser) router.push("/accountManager");
+  }, [router, hasUser]);
+
+  if (!hasUser) return <div />;
+  return <RecoveryTemplate />;
+};
 
 export default Recovery;

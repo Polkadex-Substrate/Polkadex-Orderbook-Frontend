@@ -1,23 +1,14 @@
-import { useRouter } from "next/router";
-
 import NavbarItem from "../../molecules/NavbarItem";
-import { Logo } from "../../molecules";
 
 import * as S from "./styles";
 
 import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
-import { AvailableMessage, Button } from "@polkadex/orderbook-ui/molecules";
-import { MyWallet } from "@polkadex/orderbook/v2/ui/molecules";
-import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectCurrentMarket,
-  selectCurrentMarketTickers,
-  selectHasCurrentTradeAccount,
-} from "@polkadex/orderbook-modules";
+import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 const Navbar = ({ onOpenMarkets }) => {
-  const { userEmail, isSignedIn } = useAccount();
   const getAsset = useReduxSelector(selectGetAsset);
   const currMarket = useReduxSelector(selectCurrentMarket);
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
@@ -28,8 +19,6 @@ const Navbar = ({ onOpenMarkets }) => {
   const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
   const high = Number(currentTickers?.high).toFixed(2);
   const low = Number(currentTickers?.low).toFixed(2);
-
-  const router = useRouter();
   return (
     <S.Wrapper>
       <S.WrapperInfo>
@@ -64,34 +53,6 @@ const Navbar = ({ onOpenMarkets }) => {
           </AvailableMessage>
         </S.ContainerInfo>
       </S.WrapperInfo>
-      {isSignedIn ? (
-        <S.Box>
-          <S.Logo>
-            <Logo size="Medium" href="/trading" />
-          </S.Logo>
-          <S.BoxWrapper>
-            <MyWallet />
-          </S.BoxWrapper>
-        </S.Box>
-      ) : (
-        <S.Box>
-          <S.Logo>
-            <Logo size="Medium" href="/trading" />
-          </S.Logo>
-
-          <Button
-            onClick={() => router.push("/signIn")}
-            color="white"
-            icon={{
-              name: "Wallet",
-              background: "black",
-              size: "extraMedium",
-              stroke: "white",
-            }}>
-            Login/Sign Up
-          </Button>
-        </S.Box>
-      )}
     </S.Wrapper>
   );
 };

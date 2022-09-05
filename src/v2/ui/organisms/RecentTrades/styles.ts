@@ -1,18 +1,30 @@
 import styled, { css } from "styled-components";
+export const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
 
-export const Main = styled.section<{ hasData?: boolean }>`
+export const Main = styled.div<{ hasData?: boolean }>`
   ${({ theme, hasData }) => css`
-    grid-area: RecentTrades;
     background: ${hasData ? theme.colors.inverse : theme.colors.tertiaryBackground};
     display: flex;
-    flex-flow: column nowrap;
-    padding-bottom: 2rem;
-    border-radius: 0 3rem 3rem 3rem;
+    flex-flow: column;
+    flex: 1;
+    border-radius: 0 3rem 3rem 0rem;
+    min-width: 29rem;
+    height: 100%;
+    min-height: 33rem;
+
     @media screen and (min-width: 1290px) {
-      min-width: 29rem;
       max-width: 29rem;
     }
-    max-height: 50vh;
+    @media screen and (max-height: 800px) {
+      max-height: 35rem;
+    }
+    @media screen and (min-height: 1200px) {
+      max-height: 80rem;
+    }
   `}
 `;
 
@@ -33,6 +45,7 @@ export const Content = styled.div`
     padding-bottom: 2rem;
     flex: 1;
     overflow: auto;
+    height: 100%;
     ::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -78,7 +91,6 @@ export const CellHead = styled.span`
 // Card
 export const Card = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;

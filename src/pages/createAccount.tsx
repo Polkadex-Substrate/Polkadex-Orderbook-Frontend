@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
 import {
@@ -26,10 +27,16 @@ const CreateAccount = () => {
   const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
   const success = useReduxSelector(selectRegisterTradeAccountSuccess);
 
-  if (!hasUser || !isRegistered || !hasSelectedAccount || success) {
-    router?.push("/accountManager");
-    return <div />;
-  }
+  const shouldRedirect = useMemo(
+    () => !hasUser || !isRegistered || !hasSelectedAccount || success,
+    [hasUser, isRegistered, hasSelectedAccount, success]
+  );
+
+  useEffect(() => {
+    if (shouldRedirect) router.push("/accountManager");
+  }, [shouldRedirect, router]);
+
+  if (shouldRedirect) return <div />;
 
   return <CreateAccountTemplate />;
 };

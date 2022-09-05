@@ -116,7 +116,7 @@ export const AccountManagerTemplate = () => {
 
   useEffect(() => {
     if (shouldSelectDefaultTradeAccount && !!allTradingAccounts?.length)
-      handleSelectTradeAccount(allTradingAccounts[0].address);
+      handleSelectTradeAccount(allTradingAccounts[allTradingAccounts.length - 1].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
   const handleUnlockClose = () =>
@@ -137,7 +137,7 @@ export const AccountManagerTemplate = () => {
           {remove.isRemoveDevice ? (
             <RemoveFromDevice handleClose={removeFromDevice} />
           ) : (
-            <RemoveFromBlockchain handleClose={handleClose} />
+            <RemoveFromBlockchain handleClose={handleClose} address={remove.id} />
           )}
         </Modal.Body>
       </Modal>
@@ -285,7 +285,7 @@ export const AccountManagerTemplate = () => {
                         </a>
                       </Link>{" "}
                       or
-                      <Link href="/importAccount"> Import</Link>
+                      <Link href="/recovery"> Import</Link>
                     </S.CreateAccountWrapper>
                   </S.CreateAccount>
                   {allTradingAccounts?.map((value) => (
@@ -294,7 +294,7 @@ export const AccountManagerTemplate = () => {
                       title={value.name}
                       address={value.address}
                       isUsing={value.isActive}
-                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.address)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
                       onUse={() => {
                         handleSelectTradeAccount(value.address);
@@ -344,6 +344,7 @@ export const AccountManagerTemplate = () => {
                   </Table.Header>
                   <Table.Body striped>
                     {assets.map((item) => {
+                      console.log("balances table item:", item);
                       const balance = userBalances?.find(
                         (value) => value.assetId === item.assetId
                       );
@@ -410,67 +411,65 @@ const Card = ({
 }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-  const dispatch = useDispatch();
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
 
   const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
+  // TODO!: Create removing sagas
+  const isRemoving = false;
   return (
-    <S.Card isActive={isUsing}>
-      <S.CardHeader>
-        <S.CardHeaderContent>
-          <strong>{title}</strong>
-          <span>
-            <Tooltip>
-              <TooltipHeader>
-                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
-                  <Icons.Copy />
-                </button>
-              </TooltipHeader>
-              <TooltipContent>
-                <p ref={buttonRef}>Copy to clipboard</p>
-              </TooltipContent>
-            </Tooltip>
-            {shortAddress}
-          </span>
-        </S.CardHeaderContent>
-      </S.CardHeader>
-      <S.CardContent>
-        <Dropdown>
-          <Dropdown.Trigger>
-            <S.DropdownHeader>
-              Actions
-              <div>
-                <Icons.DropdownArrow stroke="secondaryText" />
-              </div>
-            </S.DropdownHeader>
-          </Dropdown.Trigger>
-          <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item key="removeBlockchain">
-              <p
-                onClick={() => {
-                  dispatch(removeProxyAccountFromChainFetch({ address }));
-                }}>
+    <Loading message="Loading..." isVisible={isRemoving}>
+      <S.Card isActive={isUsing}>
+        <S.CardHeader>
+          <S.CardHeaderContent>
+            <strong>{title}</strong>
+            <span>
+              <Tooltip>
+                <TooltipHeader>
+                  <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                    <Icons.Copy />
+                  </button>
+                </TooltipHeader>
+                <TooltipContent>
+                  <p ref={buttonRef}>Copy to clipboard</p>
+                </TooltipContent>
+              </Tooltip>
+              {shortAddress}
+            </span>
+          </S.CardHeaderContent>
+        </S.CardHeader>
+        <S.CardContent>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <S.DropdownHeader>
+                Actions
+                <div>
+                  <Icons.DropdownArrow stroke="secondaryText" />
+                </div>
+              </S.DropdownHeader>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="secondaryBackgroundSolid">
+              <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
                 Remove from the blockchain
-              </p>
-            </Dropdown.Item>
-            <Dropdown.Item key="removeBrowser">
-              <AvailableMessage>Remove from my browser</AvailableMessage>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <S.ContentActions>
-          {isUsing ? (
-            <span>Using</span>
-          ) : (
-            <button type="button" onClick={onUse}>
-              Use
-            </button>
-          )}
-        </S.ContentActions>
-      </S.CardContent>
-    </S.Card>
+              </Dropdown.Item>
+              <Dropdown.Item key="removeBrowser">
+                <AvailableMessage>Remove from my browser</AvailableMessage>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <S.ContentActions>
+            {isUsing ? (
+              <span>Using</span>
+            ) : (
+              <button type="button" onClick={onUse}>
+                Use
+              </button>
+            )}
+          </S.ContentActions>
+        </S.CardContent>
+      </S.Card>
+    </Loading>
   );
 };

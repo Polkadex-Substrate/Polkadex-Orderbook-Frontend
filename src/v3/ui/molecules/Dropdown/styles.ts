@@ -102,6 +102,7 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
   ({ theme, fill, itemFill }) => css`
     background: ${theme.colors[fill]};
     min-width: 20rem;
+    border: 1px solid ${theme.colors.text}11;
     ${Item} {
       transition: background-color 0.2s ease-in-out;
       &:hover {
@@ -123,7 +124,7 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
         },
       },
       rounded: {
-        borderRadius: "1.5rem",
+        borderRadius: "1.3rem",
         padding: "0.8rem 0.7rem",
         [Item]: {
           borderRadius: "1rem",

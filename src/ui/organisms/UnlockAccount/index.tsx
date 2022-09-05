@@ -2,17 +2,17 @@ import { useFormik } from "formik";
 
 import * as S from "./styles";
 
-import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
+import { Button, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { unLockAccountValidations } from "@polkadex/orderbook/validations";
 
 export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }) => {
-  const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
+  const { setFieldValue, values, handleSubmit, errors, isValid } = useFormik({
     initialValues: {
       password: "",
     },
     validationSchema: unLockAccountValidations,
     onSubmit: (values) => {
-      // Add password
+      // Add password values.password
       handleSelectTradeAccount(address);
     },
   });
@@ -21,15 +21,16 @@ export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }
     <S.Wrapper>
       <S.Title>
         <h2>Unlock account</h2>
-        <p>Inout 6-digit trading password to unlock your account</p>
+        <p>Input 5-digit trading password to unlock your account</p>
       </S.Title>
       <form onSubmit={handleSubmit}>
-        <InputLine
+        <PassCode
+          numInputs={5}
+          onChange={(e) => setFieldValue("password", e)}
+          value={values.password}
           name="password"
           label="Enter your password"
-          placeholder="Type here"
-          error={errors.password && touched.password && errors.password}
-          {...getFieldProps("password")}
+          error={errors.password}
         />
         <S.Actions>
           <Button
@@ -46,7 +47,7 @@ export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }
             color="white"
             type="submit"
             disabled={!isValid}>
-            Continue
+            Unlock
           </Button>
         </S.Actions>
       </form>

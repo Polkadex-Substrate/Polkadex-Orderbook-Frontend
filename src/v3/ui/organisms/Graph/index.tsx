@@ -12,10 +12,11 @@ import {
   subTechnicalIndicatorTypes,
 } from "../../molecules/OriginalChart/options";
 import Checkbox from "../../molecules/Checkbox";
+import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
-import { AvailableMessage, Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import { Dropdown as DropdownCustom, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
 
@@ -71,7 +72,7 @@ const Graph = () => {
         <S.Header>
           <S.FlexWrapper>
             <S.List>
-              <Dropdown
+              <DropdownCustom
                 direction="bottom"
                 priority="low"
                 header={
@@ -142,9 +143,9 @@ const Graph = () => {
                     ))}
                   </S.MainIndicator>
                 </S.Indicator>
-              </Dropdown>
-              {width <= 600 ? (
-                <Dropdown
+              </DropdownCustom>
+              {width <= 1240 ? (
+                <DropdownCustom
                   isClickable
                   direction="bottom"
                   header={<S.Li isActive>{filter}</S.Li>}>
@@ -158,7 +159,7 @@ const Graph = () => {
                       </S.Li>
                     ))}
                   </S.Ul>
-                </Dropdown>
+                </DropdownCustom>
               ) : (
                 <S.Ul>
                   {filters.map((item) => (
@@ -172,7 +173,7 @@ const Graph = () => {
                 </S.Ul>
               )}
 
-              <Dropdown
+              <DropdownCustom
                 direction="bottom"
                 priority="low"
                 header={
@@ -190,25 +191,18 @@ const Graph = () => {
                   staticRanges={defaultStaticRanges}
                   inputRanges={[]}
                 />
-              </Dropdown>
-              <Dropdown
-                header={
-                  <Icon
-                    name={state.icon}
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                    stroke="text"
-                  />
-                }
-                direction="bottom"
-                isClickable>
-                <S.TimezoneContent>
+              </DropdownCustom>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <div>
+                    <IconComponent name={state.icon} />
+                  </div>
+                </Dropdown.Trigger>
+                <Dropdown.Menu fill="tertiaryBackground">
                   {chartType.map((item, i) => (
-                    <FilterIcon
+                    <Dropdown.Item
                       key={i}
-                      icon={item.icon}
-                      isActive={state.key === item.key}
-                      onClick={() => {
+                      onAction={() => {
                         chart.current.setStyleOptions({
                           candle: {
                             type: item.key,
@@ -216,12 +210,15 @@ const Graph = () => {
                         });
                         setState(item);
                       }}>
-                      {item.name}
-                    </FilterIcon>
+                      <FilterIcon icon={item.icon} isActive={state.key === item.key}>
+                        {item.name}
+                      </FilterIcon>
+                    </Dropdown.Item>
                   ))}
-                </S.TimezoneContent>
+                </Dropdown.Menu>
               </Dropdown>
-              <Dropdown
+
+              <DropdownCustom
                 header={
                   <Icon
                     name="Timezone"
@@ -242,7 +239,7 @@ const Graph = () => {
                     ).format("z Z")})`}</S.Button>
                   ))}
                 </S.TimezoneContent>
-              </Dropdown>
+              </DropdownCustom>
               <button type="button" onClick={() => setSpace(space + 1)}>
                 <Icon
                   name="ZoomOut"
@@ -265,8 +262,6 @@ const Graph = () => {
           <S.FlexWrapper>
             <S.List>
               <ListItemButton title="Original" size="Small" isActive />
-              {/* <ListItemButton title="Deep Market" size="Small" /> */}
-
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
           </S.FlexWrapper>
@@ -290,4 +285,9 @@ const FilterIcon = ({ icon, isActive, children, ...props }) => {
       <span>{children}</span>
     </S.FilterIcon>
   );
+};
+
+const IconComponent = ({ name }) => {
+  const Icon = Icons[name];
+  return <S.IconComponent>{<Icon />}</S.IconComponent>;
 };

@@ -40,7 +40,7 @@ export function* fetchDepositSaga(action: DepositsFetch) {
             message: {
               title: "Deposit Successful",
               description:
-                "Congratulations! You have successfully deposited assets to your proxy account.",
+                "Congratulations! You have successfully deposited assets to your trading account.",
             },
             time: new Date().getTime(),
             hasConfetti: true,
