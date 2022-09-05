@@ -110,17 +110,14 @@ export const FilterIcon = styled.div<{ isActive?: boolean }>`
     gap: 0.5rem;
     align-items: center;
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    background: ${isActive ? theme.colors.primary : "none"};
     svg {
       width: 1.5rem;
-      stroke: ${isActive ? theme.colors.white : theme.colors.text};
-      fill: ${isActive ? theme.colors.white : theme.colors.text};
+      stroke: ${theme.colors.text};
+      fill: ${theme.colors.text};
       margin: 0;
     }
     span {
       white-space: nowrap;
-      color: ${isActive ? theme.colors.white : theme.colors.text};
     }
   `}
 `;
@@ -165,5 +162,23 @@ export const Button = styled.button<{ isActive?: boolean }>`
     white-space: nowrap;
     background: ${isActive ? theme.colors.primary : "none"};
     padding: 0.5rem 1rem;
+  `}
+`;
+
+export const IconComponent = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.colors.primaryBackgroundOpacity};
+    border-radius: 20%;
+    width: 2.3rem;
+    height: 2.3rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
   `}
 `;
