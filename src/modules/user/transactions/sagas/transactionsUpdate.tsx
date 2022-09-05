@@ -3,15 +3,16 @@ import { put } from "redux-saga/effects";
 import {
   alertPush,
   Transaction,
+  TransactionsUpdateEvent,
   transactionsUpdateEventData,
-  TransactionsUpdateEventData,
   TransactionUpdatePayload,
 } from "../../..";
 
 import { Utils } from "@polkadex/web-helpers";
 
-export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
+export function* transactionsUpdateSaga(action: TransactionsUpdateEvent) {
   try {
+    console.log("transactionsUpdateSaga", action.payload);
     const data = formatTransactionData(action.payload);
     yield put(transactionsUpdateEventData(data));
   } catch (error) {
@@ -28,11 +29,26 @@ export function* transactionsUpdateSaga(action: TransactionsUpdateEventData) {
 }
 
 const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
-  return {
-    ...data,
-    fee: Utils.decimals.formatToString(data.fee),
-    amount: Utils.decimals.formatToString(data.amount),
-    asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
-    time: new Date().toISOString(),
-  };
+  if (data.txn_type === "DEPOSIT") {
+    return {
+      ...data,
+      sid: data.sid ?? 0,
+      main_account: data.user,
+      fee: Utils.decimals.formatToString(data.fee),
+      amount: Utils.decimals.formatToString(data.amount),
+      asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+      time: new Date().toISOString(),
+    };
+  } else {
+    return {
+      ...data,
+      sid: data.sid ?? 0,
+      txn_type: "WITHDRAW",
+      main_account: data.user,
+      fee: Utils.decimals.formatToString(data.fee),
+      amount: Utils.decimals.formatToString(data.amount),
+      asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+      time: new Date().toISOString(),
+    };
+  }
 };

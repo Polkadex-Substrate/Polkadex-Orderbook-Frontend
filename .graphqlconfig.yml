@@ -1,5 +1,5 @@
 projects:
-  EmmanuelTest-orderbook-api:
+  emmanuel2-orderbook-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -11,7 +11,7 @@ projects:
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
         region: ap-south-1
-        apiId: i7ibmtykkfbrzdild523l4fwh4
+        apiId: 4tndt44ktzbalp7gncsezvfbny
         maxDepth: 2
 extensions:
   amplify:

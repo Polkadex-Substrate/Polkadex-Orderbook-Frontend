@@ -6,23 +6,6 @@ export type UserActionInput = {
   payload: string,
 };
 
-export type Order = {
-  __typename: "Order",
-  u: string,
-  cid: string,
-  id: number,
-  t: string,
-  m: string,
-  s: string,
-  ot: string,
-  st: string,
-  p: number,
-  q: number,
-  afp: number,
-  fq: number,
-  fee: number,
-};
-
 export type Channel = {
   __typename: "Channel",
   name: string,
@@ -149,6 +132,23 @@ export type BalanceConnection = {
   nextToken?: string | null,
 };
 
+export type Order = {
+  __typename: "Order",
+  u: string,
+  cid: string,
+  id: string,
+  t: string,
+  m: string,
+  s: string,
+  ot: string,
+  st: string,
+  p: string,
+  q: string,
+  afp: string,
+  fq: string,
+  fee: string,
+};
+
 export type OrdersConnection = {
   __typename: "OrdersConnection",
   items?:  Array<Order | null > | null,
@@ -169,6 +169,8 @@ export type Transaction = {
   fee: string,
   st: string,
   t: string,
+  eid: string,
+  sid: string,
 };
 
 export type TradesConnection = {
@@ -186,27 +188,27 @@ export type Trade = {
   t: string,
 };
 
+export type MainAddressConnection = {
+  __typename: "MainAddressConnection",
+  hash_key?: string | null,
+  range_key?: string | null,
+  accounts?: Array< string | null > | null,
+};
+
+export type Register_userMutationVariables = {
+  input: UserActionInput,
+};
+
+export type Register_userMutation = {
+  register_user?: string | null,
+};
+
 export type Place_orderMutationVariables = {
   input: UserActionInput,
 };
 
 export type Place_orderMutation = {
-  place_order?:  {
-    __typename: "Order",
-    u: string,
-    cid: string,
-    id: number,
-    t: string,
-    m: string,
-    s: string,
-    ot: string,
-    st: string,
-    p: number,
-    q: number,
-    afp: number,
-    fq: number,
-    fee: number,
-  } | null,
+  place_order?: string | null,
 };
 
 export type Cancel_orderMutationVariables = {
@@ -214,22 +216,7 @@ export type Cancel_orderMutationVariables = {
 };
 
 export type Cancel_orderMutation = {
-  cancel_order?:  {
-    __typename: "Order",
-    u: string,
-    cid: string,
-    id: number,
-    t: string,
-    m: string,
-    s: string,
-    ot: string,
-    st: string,
-    p: number,
-    q: number,
-    afp: number,
-    fq: number,
-    fee: number,
-  } | null,
+  cancel_order?: string | null,
 };
 
 export type WithdrawMutationVariables = {
@@ -251,6 +238,11 @@ export type PublishMutation = {
     name: string,
     data: string,
   } | null,
+};
+
+export type GetTimeQuery = {
+  // Get Enclave time
+  getTime: string,
 };
 
 export type GetOrderbookQueryVariables = {
@@ -444,17 +436,17 @@ export type FindOrderByMainAccountQuery = {
     __typename: "Order",
     u: string,
     cid: string,
-    id: number,
+    id: string,
     t: string,
     m: string,
     s: string,
     ot: string,
     st: string,
-    p: number,
-    q: number,
-    afp: number,
-    fq: number,
-    fee: number,
+    p: string,
+    q: string,
+    afp: string,
+    fq: string,
+    fee: string,
   } | null,
 };
 
@@ -474,17 +466,17 @@ export type ListOrderHistorybyMainAccountQuery = {
       __typename: "Order",
       u: string,
       cid: string,
-      id: number,
+      id: string,
       t: string,
       m: string,
       s: string,
       ot: string,
       st: string,
-      p: number,
-      q: number,
-      afp: number,
-      fq: number,
-      fee: number,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
+      fee: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -504,17 +496,17 @@ export type ListOpenOrdersByMainAccountQuery = {
       __typename: "Order",
       u: string,
       cid: string,
-      id: number,
+      id: string,
       t: string,
       m: string,
       s: string,
       ot: string,
       st: string,
-      p: number,
-      q: number,
-      afp: number,
-      fq: number,
-      fee: number,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
+      fee: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -540,6 +532,8 @@ export type ListTransactionsByMainAccountQuery = {
       fee: string,
       st: string,
       t: string,
+      eid: string,
+      sid: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -566,6 +560,19 @@ export type ListTradesByMainAccountQuery = {
       t: string,
     } | null > | null,
     nextToken?: string | null,
+  } | null,
+};
+
+export type ListMainAccountsByEmailQueryVariables = {
+  email: string,
+};
+
+export type ListMainAccountsByEmailQuery = {
+  listMainAccountsByEmail?:  {
+    __typename: "MainAddressConnection",
+    hash_key?: string | null,
+    range_key?: string | null,
+    accounts?: Array< string | null > | null,
   } | null,
 };
 
