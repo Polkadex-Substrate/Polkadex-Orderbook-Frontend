@@ -5,6 +5,7 @@ import { sendError } from "../../..";
 import { marketsTickersError, marketsTickersData, MarketsTickersFetch } from "../actions";
 import { Ticker } from "..";
 import * as queries from "../../../../graphql/queries";
+
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export type TickerQueryResult = {
