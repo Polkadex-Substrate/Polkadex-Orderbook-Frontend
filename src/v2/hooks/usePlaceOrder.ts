@@ -71,7 +71,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
-    currentMarket?.price_precision || 0
+    currentMarket?.quote_precision || 0
   );
 
   /**
@@ -96,10 +96,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     (total: number): string =>
       Decimal.format(
         total,
-        currentMarket?.amount_precision || 0 + currentMarket?.price_precision || 0,
+        currentMarket?.base_precision || 0 + currentMarket?.quote_precision || 0,
         ","
       ),
-    [currentMarket?.amount_precision, currentMarket?.price_precision]
+    [currentMarket?.base_precision, currentMarket?.quote_precision]
   );
 
   /**
@@ -124,7 +124,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      if (convertedValue?.match(precisionRegExp(currentMarket?.amount_precision || 0))) {
+      if (convertedValue?.match(precisionRegExp(currentMarket?.base_precision || 0))) {
         setForm({
           ...form,
           price: convertedValue,
@@ -134,7 +134,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       handleCleanPrice && handleCleanPrice();
     },
 
-    [currentMarket?.amount_precision, form, handleCleanPrice]
+    [currentMarket?.base_precision, form, handleCleanPrice]
   );
 
   /**
@@ -146,7 +146,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-      if (convertedValue.match(precisionRegExp(currentMarket?.price_precision || 0))) {
+      if (convertedValue.match(precisionRegExp(currentMarket?.quote_precision || 0))) {
         if (isSell) {
           setForm({
             ...form,
@@ -168,7 +168,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         };
       });
     },
-    [currentMarket?.price_precision, form, isSell, bestBidPrice, bestAskPrice]
+    [currentMarket?.quote_precision, form, isSell, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -207,9 +207,9 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
     const amountUnavailable = isSell
       ? Number(availableBaseAmount) >=
-        Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
+      Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
       : Number(availableQuoteAmount) >=
-        Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
+      Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
 
     if (!isLimit) {
       return (
@@ -302,34 +302,30 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       // limit and sell
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
-          form.amountSell = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
-          }`;
+          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            }`;
         }
       }
       // limit and buy
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
-          form.amountBuy = `${
-            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
+          form.amountBuy = `${(Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
             Number(form.price)
-          }`;
+            }`;
         }
       }
       // market and sell
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
-          form.amountSell = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
-          }`;
+          form.amountSell = `${Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            }`;
         }
       }
       // market and buy
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
-          form.amountBuy = `${
-            Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
-          }`;
+          form.amountBuy = `${Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
+            }`;
         }
       }
     },
@@ -362,7 +358,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     tab.priceLimit,
     form.orderType,
     form.price,
-    currentMarket?.price_precision,
+    currentMarket?.quote_precision,
     nextPriceLimitTruncated,
     handlePriceChange,
   ]);

@@ -67,8 +67,8 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     baseUnit: currentMarket?.base_ticker,
     valumeData,
     changeMarketPrice,
-    priceFixed: currentMarket?.price_precision || 0,
-    amountFixed: currentMarket?.amount_precision || 0,
+    priceFixed: currentMarket?.quote_precision || 0,
+    amountFixed: currentMarket?.base_precision || 0,
     total: cumulativeVolume,
   };
 }

@@ -28,7 +28,7 @@ export function useRecentTrades() {
     recentTrades: recentTradesSorted,
     quoteUnit: currentMarket?.quote_ticker,
     baseUnit: currentMarket?.base_ticker,
-    pricePrecision: currentMarket?.price_precision,
-    amountPrecision: currentMarket?.amount_precision,
+    pricePrecision: currentMarket?.quote_precision,
+    amountPrecision: currentMarket?.base_precision,
   };
 }
