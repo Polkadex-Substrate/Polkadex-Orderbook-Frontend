@@ -19,8 +19,6 @@ export const WrapperGraph = styled.section`
   flex-direction: column;
   width: 100%;
   padding: 2rem;
-  overflow: hidden;
-
   @media screen and (min-width: 1240px) {
     min-width: 58rem;
   }
