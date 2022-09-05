@@ -18,6 +18,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {
@@ -69,10 +70,10 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
 }
 const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
-  const res = await API.graphql({
-    query: mutation.cancel_order,
-    variables: { input: { payload } },
-    authToken: proxyAddress,
-  });
+  const res = await sendQueryToAppSync(
+    mutation.cancel_order,
+    { input: { payload } },
+    proxyAddress
+  );
   return res;
 };

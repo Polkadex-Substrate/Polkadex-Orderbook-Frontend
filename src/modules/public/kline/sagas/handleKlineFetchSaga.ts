@@ -5,6 +5,7 @@ import { sendError } from "../../../";
 import { klineData, klineError, KlineFetch } from "../actions";
 
 import { getKlinesbyMarketInterval } from "@polkadex/orderbook/graphql/queries";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type KlineDbData = {
   m: string;
@@ -52,14 +53,11 @@ const fetchKlineAsync = async (
   from: Date,
   to: Date
 ): Promise<KlineDbData[]> => {
-  const res: any = await API.graphql({
-    query: getKlinesbyMarketInterval,
-    variables: {
-      market,
-      interval,
-      from: from.toISOString(),
-      to: to.toISOString(),
-    },
+  const res: any = await sendQueryToAppSync(getKlinesbyMarketInterval, {
+    market,
+    interval,
+    from: from.toISOString(),
+    to: to.toISOString(),
   });
   return res.data.getKlinesbyMarketInterval.items;
 };

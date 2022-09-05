@@ -8,6 +8,7 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../../markets";
 
 import { Utils } from "@polkadex/web-helpers";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 type OrderbookRawUpdate = {
   side: "Bid" | "Ask";
@@ -44,6 +45,7 @@ function fetchOrderBookChannel(market: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market}-ob-inc` },
+      authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({

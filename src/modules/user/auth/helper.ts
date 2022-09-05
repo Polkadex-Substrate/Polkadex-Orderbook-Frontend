@@ -2,6 +2,7 @@ import { ApiPromise } from "@polkadot/api";
 import { API } from "aws-amplify";
 
 import { findUserByProxyAccount } from "@polkadex/orderbook/graphql/queries";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export const getMainAddrFromQueryRes = (s: string) => {
   /*
@@ -24,9 +25,8 @@ export const checkIfMainAccountExists = async (api: ApiPromise, address: string)
 };
 
 export const checkIfProxyAccountRegistered = async (address: string) => {
-  const res: any = await API.graphql({
-    query: findUserByProxyAccount,
-    variables: { proxy_account: address },
+  const res: any = await sendQueryToAppSync(findUserByProxyAccount, {
+    proxy_account: address,
   });
   if (res.data?.findUserByProxyAccount.items.length === 0) {
     throw new Error("This proxy account has not been registered yet!");

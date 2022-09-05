@@ -1,12 +1,12 @@
 import { API } from "aws-amplify";
 
-import { AUTH_TOKEN } from "@polkadex/web-constants";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export const sendQueryToAppSync = async (query: string, variables: any) => {
+export const sendQueryToAppSync = async (query: string, variables?: any, token?: string) => {
   const res = await API.graphql({
     query,
     variables,
-    authToken: AUTH_TOKEN,
+    authToken: token ?? READ_ONLY_TOKEN,
   });
   return res;
 };
