@@ -106,18 +106,19 @@ export function Trading() {
               <S.Logo>
                 <Logo size="Medium" href="/trading" />
               </S.Logo>
-
-              <Button
-                onClick={() => router.push("/signIn")}
-                color="white"
-                icon={{
-                  name: "Wallet",
-                  background: "black",
-                  size: "extraMedium",
-                  stroke: "white",
-                }}>
-                Login/Sign Up
-              </Button>
+              {!isSignedIn && (
+                <Button
+                  onClick={() => router.push("/signIn")}
+                  color="white"
+                  icon={{
+                    name: "Wallet",
+                    background: "black",
+                    size: "extraMedium",
+                    stroke: "white",
+                  }}>
+                  Login/Sign Up
+                </Button>
+              )}
             </S.Box>
             <S.Content>
               <S.WrapperGraph>
