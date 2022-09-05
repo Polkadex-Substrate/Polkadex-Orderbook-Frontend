@@ -37,6 +37,10 @@ export const createOrderPayload = (
     side: orderSide,
     order_type: orderType,
     qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
+    quote_order_quantity:
+      type === "MARKET" && side === "Buy"
+        ? new BigNumber(quantity).multipliedBy(UNIT_BN).toString()
+        : "0",
     price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : "0",
     timestamp: timestamp,
     client_order_id,
