@@ -58,6 +58,8 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       min_amount: new BigNumber(pair.min_order_qty).div(UNIT_BN),
       max_amount: new BigNumber(pair.max_order_qty).div(UNIT_BN),
       tokenTickerName: baseSymbol,
+      price_tick_size: new BigNumber(pair.price_tick_size).div(UNIT_BN),
+      qty_step_size: new BigNumber(pair.qty_step_size).div(UNIT_BN),
     };
   });
   return Promise.all(markets);

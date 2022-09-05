@@ -37,6 +37,8 @@ export interface Market {
   tokenTickerName?: string;
   base_ticker: string;
   quote_ticker: string;
+  price_tick_size: BigNumber;
+  qty_step_size: BigNumber;
 }
 
 export interface Ticker {
