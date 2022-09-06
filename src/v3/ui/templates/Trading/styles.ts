@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { LogoText } from "../../molecules/Logo/styles";
+import { LogoText, Link as LogoWrapper } from "../../molecules/Logo/styles";
 
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
@@ -73,8 +73,10 @@ export const Box = styled.div`
   ${({ theme }) => css`
     justify-content: space-between;
     align-items: center;
-    padding: 0.4rem 1rem;
+    /* Setting the padding for the Box component. */
+    /* padding: 0.4rem 1rem; */
     display: none;
+    padding: 0 1rem;
     ${Button} {
       transition: background 0.5s ease-in-out;
       background: ${theme.colors.primary};
@@ -82,7 +84,10 @@ export const Box = styled.div`
         background: ${theme.colors.primary}D8;
       }
     }
-    @media screen and (max-width: 1080px) {
+    ${Logo} {
+      margin: 1rem 0;
+    }
+    @media screen and (max-width: 590px) {
       display: flex;
       position: sticky;
       top: 0;
