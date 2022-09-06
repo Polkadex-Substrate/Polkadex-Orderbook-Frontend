@@ -1,12 +1,11 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { Client } from "rpc-websockets";
 import BigNumber from "bignumber.js";
 
-import { OrderSide, OrderType } from "../modules/types";
+import { OrderSide, OrderType, OrderTypeEnum, OrderSideEnum, OrderKindEnum } from "../modules/types";
 
-import { SignedOrderPayload, signPayload } from "./enclavePayloadSigner";
+import { signPayload } from "./enclavePayloadSigner";
 
 import { UNIT_BN } from "@polkadex/web-constants";
 
@@ -26,7 +25,7 @@ export const createOrderPayload = (
   const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
   const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
   const orderType = { [type.toUpperCase()]: null };
-  const orderSide = { [side === "Buy" ? "Bid" : "Ask"]: null };
+  const orderSide = { [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null };
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
@@ -38,10 +37,10 @@ export const createOrderPayload = (
     order_type: orderType,
     qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
     quote_order_quantity:
-      type === "MARKET" && side === "Buy"
+      type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy
         ? new BigNumber(quantity).multipliedBy(UNIT_BN).toString()
         : "0",
-    price: type === "LIMIT" ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : "0",
+    price: type === OrderTypeEnum.LIMIT ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : "0",
     timestamp: timestamp,
     client_order_id,
   };
