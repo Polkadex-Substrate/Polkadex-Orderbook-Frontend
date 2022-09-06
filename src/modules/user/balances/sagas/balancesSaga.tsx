@@ -13,6 +13,7 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { Utils } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type BalanceQueryResult = {
   a: string;
@@ -64,9 +65,8 @@ type IBalanceFromDb = {
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
-  const res: any = await API.graphql({
-    query: queries.getAllBalancesByMainAccount,
-    variables: { main_account: account },
+  const res: any = await sendQueryToAppSync(queries.getAllBalancesByMainAccount, {
+    main_account: account,
   });
   const balancesRaw: BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
   const balances = balancesRaw.map((val) => {

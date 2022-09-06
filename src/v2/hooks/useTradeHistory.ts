@@ -53,8 +53,8 @@ export function useTradeHistory(filters: Ifilters) {
 
   return {
     trades: updatedTradeList,
-    priceFixed: currentMarket?.price_precision,
-    amountFixed: currentMarket?.amount_precision,
+    priceFixed: currentMarket?.quote_precision,
+    amountFixed: currentMarket?.base_precision,
     userLoggedIn,
     isLoading: fetching,
   };

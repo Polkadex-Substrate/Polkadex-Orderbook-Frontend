@@ -14,6 +14,7 @@ import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 export function* userEventsChannelSaga(action: UserEventsFetch) {
   const mainAcc = yield select(selectCurrentMainAccount);
@@ -52,6 +53,7 @@ function createUserEventsChannel(address: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: address },
+      authToken: READ_ONLY_TOKEN,
       // ignore type error here as its a known bug in aws library
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

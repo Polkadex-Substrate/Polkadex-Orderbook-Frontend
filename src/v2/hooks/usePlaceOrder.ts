@@ -71,7 +71,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
-    currentMarket?.price_precision || 0
+    currentMarket?.quote_precision || 0
   );
 
   /**
@@ -96,10 +96,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     (total: number): string =>
       Decimal.format(
         total,
-        currentMarket?.amount_precision || 0 + currentMarket?.price_precision || 0,
+        currentMarket?.base_precision || 0 + currentMarket?.quote_precision || 0,
         ","
       ),
-    [currentMarket?.amount_precision, currentMarket?.price_precision]
+    [currentMarket?.base_precision, currentMarket?.quote_precision]
   );
 
   /**
@@ -124,7 +124,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      if (convertedValue?.match(precisionRegExp(currentMarket?.amount_precision || 0))) {
+      if (convertedValue?.match(precisionRegExp(currentMarket?.base_precision || 0))) {
         setForm({
           ...form,
           price: convertedValue,
@@ -134,7 +134,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       handleCleanPrice && handleCleanPrice();
     },
 
-    [currentMarket?.amount_precision, form, handleCleanPrice]
+    [currentMarket?.base_precision, form, handleCleanPrice]
   );
 
   /**
@@ -146,7 +146,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-      if (convertedValue.match(precisionRegExp(currentMarket?.price_precision || 0))) {
+      if (convertedValue.match(precisionRegExp(currentMarket?.quote_precision || 0))) {
         if (isSell) {
           setForm({
             ...form,
@@ -168,7 +168,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         };
       });
     },
-    [currentMarket?.price_precision, form, isSell, bestBidPrice, bestAskPrice]
+    [currentMarket?.quote_precision, form, isSell, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -362,7 +362,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     tab.priceLimit,
     form.orderType,
     form.price,
-    currentMarket?.price_precision,
+    currentMarket?.quote_precision,
     nextPriceLimitTruncated,
     handlePriceChange,
   ]);

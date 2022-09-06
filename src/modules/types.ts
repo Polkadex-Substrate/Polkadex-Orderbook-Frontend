@@ -12,6 +12,22 @@ export type OrderSide = "Sell" | "Buy";
 export type OrderType = "LIMIT" | "MARKET";
 export type OrderKind = "bid" | "ask";
 
+export enum OrderTypeEnum  {
+  LIMIT = "LIMIT",
+  MARKET = "MARKET"
+}
+
+export enum OrderSideEnum  {
+  Sell = "Sell",
+  Buy = "Buy"
+}
+
+export enum OrderKindEnum  {
+  Bid = "Bid",
+  Ask = "Ask"
+}
+
+
 // TODO: Integrate new Types.
 export interface OrderCommon {
   main_account: string;

@@ -12,6 +12,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { Utils } from "@polkadex/web-helpers";
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type TradesQueryResult = {
   m: string;
@@ -49,14 +50,11 @@ const fetchUserTrades = async (
   dateTo: Date
 ): Promise<UserTrade[]> => {
   // TODO: make limit resonable by utilizing nextToken
-  const res: any = await API.graphql({
-    query: queries.listTradesByMainAccount,
-    variables: {
-      main_account: proxy_account,
-      from: dateFrom.toISOString(),
-      to: dateTo.toISOString(),
-      limit: 1000,
-    },
+  const res: any = await sendQueryToAppSync(queries.listTradesByMainAccount, {
+    main_account: proxy_account,
+    from: dateFrom.toISOString(),
+    to: dateTo.toISOString(),
+    limit: 1000,
   });
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
   const trades: UserTrade[] = tradesRaw.map((trade) => ({

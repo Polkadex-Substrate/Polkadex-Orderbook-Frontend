@@ -71,8 +71,8 @@ export function useOrderHistory(filters: Ifilters) {
     orders: updatedList,
     trades: [],
     openOrders: updatedOpenOrdersSorted,
-    priceFixed: currentMarket?.price_precision,
-    amountFixed: currentMarket?.amount_precision,
+    priceFixed: currentMarket?.quote_precision,
+    amountFixed: currentMarket?.base_precision,
     userLoggedIn,
   };
 }

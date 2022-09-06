@@ -58,7 +58,7 @@ export const Toolbar = () => {
             currentMarket &&
             `${Decimal.format(
               Number(getTickerValue("last")),
-              currentMarket?.price_precision,
+              currentMarket?.quote_precision,
               ","
             )} ${bidUnit || ""}`
           }
@@ -74,7 +74,7 @@ export const Toolbar = () => {
             currentMarket &&
             `${Decimal.format(
               Number(getTickerValue("volume")),
-              currentMarket?.price_precision,
+              currentMarket?.quote_precision,
               ","
             )} ${bidUnit || ""}`
           }
@@ -88,7 +88,7 @@ export const Toolbar = () => {
               currentMarket &&
               `${Decimal.format(
                 Number(getTickerValue("high")),
-                currentMarket?.price_precision,
+                currentMarket?.quote_precision,
                 ","
               )} ${bidUnit || ""}`
             }
@@ -101,7 +101,7 @@ export const Toolbar = () => {
               currentMarket &&
               `${Decimal.format(
                 Number(getTickerValue("low")),
-                currentMarket?.price_precision,
+                currentMarket?.quote_precision,
                 ","
               )} ${bidUnit || ""}`
             }
