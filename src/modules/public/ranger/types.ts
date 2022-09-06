@@ -22,11 +22,12 @@ export const orderbookTypes = {
   OrderPayload: {
     client_order_id: "H256",
     user: "AccountId",
+    main_account: "AccountId",
     pair: "TradingPair",
     side: "OrderSide",
     order_type: "OrderType",
-    qty: "u128",
-    price: "u128",
+    qty: "String",
+    price: "String",
     timestamp: "i64",
   },
   order_id: "H256",
@@ -49,8 +50,7 @@ export const orderbookTypes = {
   WithdrawPayload: {
     asset_id: "AssetId",
     amount: "Balance",
-    account: "AccountId",
-    nonce: "u32",
+    timestamp: "i64",
   },
 };
 

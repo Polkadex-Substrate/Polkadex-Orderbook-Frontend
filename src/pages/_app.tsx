@@ -10,15 +10,9 @@ import keyring from "@polkadot/ui-keyring";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
-import { useReduxSelector } from "../hooks/useReduxSelector";
 import { useUserDataFetch } from "../hooks/useUserDataFetch";
 
-import {
-  alertDelete,
-  selectAlertState,
-  selectCurrentColorTheme,
-  selectNotificationsAlert,
-} from "@polkadex/orderbook-modules";
+import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 const { cryptoWaitReady } = await import("@polkadot/util-crypto");
 const Message = dynamic(
@@ -60,12 +54,7 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const ThemeWrapper = ({ children }) => {
-  const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
-  const alert = useSelector(selectAlertState);
-  const notifications = useReduxSelector(selectNotificationsAlert);
-
-  const dispatch = useDispatch();
 
   const cryptoWait = async () => {
     await cryptoWaitReady();
@@ -73,25 +62,14 @@ const ThemeWrapper = ({ children }) => {
   };
 
   useEffect(() => {
-    setState(true);
     cryptoWait();
   }, []);
-
-  if (!state) return <div />;
 
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        <Notifications notifications={notifications} />
-        {alert.status && (
-          <Message
-            isVisible={alert.status}
-            onClose={() => dispatch(alertDelete())}
-            type={alert.type}
-            title={alert.message.title}
-            description={alert.message.description}
-          />
-        )}
+        <Notifications />
+        <Message />
         {children}
       </ThemeProvider>
     </OverlayProvider>

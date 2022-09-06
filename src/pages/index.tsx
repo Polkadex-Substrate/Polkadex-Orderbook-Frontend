@@ -1,11 +1,14 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 function Home() {
   const router = useRouter();
 
-  router.push("/trading/" + defaultConfig.landingPageMarket);
+  useEffect(() => {
+    router.push("/trading/" + defaultConfig.landingPageMarket);
+  }, [router]);
 
   return <div />;
 }

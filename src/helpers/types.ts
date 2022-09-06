@@ -47,6 +47,7 @@ export type Colors =
   | "secondaryBackground"
   | "secondaryBackgroundOpacity"
   | "secondaryBackgroundSolid"
+  | "tertiaryBackground"
   | "teriaryBackgroundOpacity"
   | "secondaryBackgroundDark"
   | "quaternaryBackground"

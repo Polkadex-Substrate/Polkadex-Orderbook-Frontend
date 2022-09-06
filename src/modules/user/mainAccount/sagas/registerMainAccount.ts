@@ -2,17 +2,11 @@ import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 import keyring from "@polkadot/ui-keyring";
 
-import {
-  notificationPush,
-  selectCurrentMainAccount,
-  selectExtensionWalletAccounts,
-  selectRangerApi,
-  sendError,
-} from "../../..";
+import { notificationPush, selectExtensionWalletAccounts, selectRangerApi } from "../../..";
 import {
   registerMainAccountData,
+  registerMainAccountError,
   RegisterMainAccountFetch,
-  setMainAccountFetch,
 } from "../actions";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
@@ -23,7 +17,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     const { mainAccount, tradeAddress } = action.payload;
     tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
-    const mainAccounts = yield select(selectExtensionWalletAccounts);
+    yield select(selectExtensionWalletAccounts);
     if (mainAccount.address) {
       yield put(
         notificationPush({
@@ -45,10 +39,10 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     }
   } catch (error) {
     keyring.forgetAccount(tradeAddr);
-    yield put(registerMainAccountData());
+    yield put(registerMainAccountError());
     yield put(
       notificationPush({
-        message: { title: "Cannot Register Account !", description: error.message },
+        message: { title: "Cannot Register Account!", description: error.message },
         type: "ErrorAlert",
         time: new Date().getTime(),
       })

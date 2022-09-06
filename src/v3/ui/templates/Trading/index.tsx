@@ -1,11 +1,9 @@
-import { setTimeout } from "timers";
-
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { Modal } from "../../molecules";
+import { Logo, Modal } from "../../molecules";
 
 import * as S from "./styles";
 
@@ -26,7 +24,7 @@ import {
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
-import { AccountBanner, Popup } from "@polkadex/orderbook-ui/molecules";
+import { AccountBanner, Button } from "@polkadex/orderbook-ui/molecules";
 import Markets from "@orderbook/v2/ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
@@ -39,6 +37,7 @@ export function Trading() {
   const [state, setState] = useState(false);
   const [banner, setBanner] = useState(false);
 
+  const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useRouter().query;
 
@@ -99,21 +98,58 @@ export function Trading() {
         isFullHeight>
         <Markets />
       </Modal>
+      <S.Container>
+        <S.Wrapper>
+          <Menu handleChange={() => setState(!state)} isWallet={false} />
+          <S.WrapperMain>
+            <S.Box>
+              <S.Logo>
+                <Logo size="Medium" href="/trading" />
+              </S.Logo>
 
-      <S.Wrapper>
-        <Menu handleChange={() => setState(!state)} />
-        <S.WrapperMain>
-          <Navbar onOpenMarkets={() => setState(!state)} />
-          <S.WrapperGraph>
-            <Graph />
-            <MarketOrder />
-          </S.WrapperGraph>
-          <S.BottomWrapper>
-            <Transactions />
-            <RecentTrades />
-          </S.BottomWrapper>
-        </S.WrapperMain>
-      </S.Wrapper>
+              <Button
+                onClick={() => router.push("/signIn")}
+                color="white"
+                icon={{
+                  name: "Wallet",
+                  background: "black",
+                  size: "extraMedium",
+                  stroke: "white",
+                }}>
+                Login/Sign Up
+              </Button>
+            </S.Box>
+            <S.Content>
+              <S.WrapperGraph>
+                <Navbar onOpenMarkets={() => setState(!state)} />
+                <Graph />
+                <Transactions />
+              </S.WrapperGraph>
+              <S.WrapperRight>
+                <S.Actions>
+                  {!isSignedIn && (
+                    <Button
+                      onClick={() => router.push("/signIn")}
+                      color="black"
+                      isFull
+                      icon={{
+                        name: "Wallet",
+                        background: "black",
+                        size: "extraMedium",
+                        stroke: "white",
+                        fill: "white",
+                      }}>
+                      Login/Sign Up
+                    </Button>
+                  )}
+                </S.Actions>
+                <MarketOrder />
+                <RecentTrades />
+              </S.WrapperRight>
+            </S.Content>
+          </S.WrapperMain>
+        </S.Wrapper>
+      </S.Container>
     </>
   );
 }

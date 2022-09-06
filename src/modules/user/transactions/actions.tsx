@@ -18,6 +18,8 @@ export type TransactionUpdatePayload = {
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";
   txn_type: "DEPOSIT" | "WITHDRAW";
+  t: number;
+  sid: number; // snapshot id
 };
 
 export interface TransactionsFetch {

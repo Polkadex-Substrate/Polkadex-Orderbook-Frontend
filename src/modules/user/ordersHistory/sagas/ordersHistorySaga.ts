@@ -34,9 +34,7 @@ export function* ordersHistorySaga() {
     const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
-      // const { dateFrom, dateTo } = userSession;
-      const dateTo = new Date().toISOString();
-      const dateFrom = subtractMonths(1).toISOString();
+      const { dateFrom, dateTo } = userSession;
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
@@ -54,8 +52,8 @@ export function* ordersHistorySaga() {
 }
 const fetchOrders = async (
   proxy_acc: string,
-  dateFrom: string,
-  dateTo: string
+  dateFrom: Date,
+  dateTo: Date
 ): Promise<OrderCommon[]> => {
   // TODO: make limit resonable by utilizing nextToken
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
@@ -79,11 +77,11 @@ const fetchOrders = async (
     side: order.s,
     order_type: order.ot,
     status: order.st,
-    price: Utils.decimals.formatToNumber("0x" + order.p),
-    qty: Utils.decimals.formatToNumber("0x" + order.q),
-    avg_filled_price: Utils.decimals.formatToString("0x" + order.afp),
-    filled_quantity: Utils.decimals.formatToString("0x" + order.fq),
-    fee: Utils.decimals.formatToString("0x" + order.fee),
+    price: Utils.decimals.formatToNumber(order.p),
+    qty: Utils.decimals.formatToNumber(order.q),
+    avg_filled_price: Utils.decimals.formatToString(order.afp),
+    filled_quantity: Utils.decimals.formatToString(order.fq),
+    fee: Utils.decimals.formatToString(order.fee),
   }));
 
   return orders;

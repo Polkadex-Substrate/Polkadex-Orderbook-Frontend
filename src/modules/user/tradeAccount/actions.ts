@@ -12,6 +12,8 @@ import {
   SET_CURRENT_TRADE_ACCOUNT_DATA,
   RESET_CURRENT_TRADE_ACCOUNT,
   USER_REGISTER_TRADE_ACCOUNT_RESET,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
 } from "./constants";
 
 export interface InjectedAccount {
@@ -75,6 +77,16 @@ export interface RemoveTradeAccountFromBrowser {
   type: typeof REMOVE_TRADE_ACCOUNT_FROM_BROWSER;
   payload: { address: string };
 }
+
+export interface RemoveProxyAccountFromChainFetch {
+  type: typeof USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH;
+  payload: { address: string };
+}
+
+export interface RemoveProxyAccountFromChainData {
+  type: typeof USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA;
+}
+
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -85,7 +97,9 @@ export type TradeAccountsAction =
   | RegisterTradeAccountError
   | RemoveTradeAccountFromBrowser
   | ResetCurrentTradeAccount
-  | RegisterTradeAccountReset;
+  | RegisterTradeAccountReset
+  | RemoveProxyAccountFromChainFetch
+  | RemoveProxyAccountFromChainData;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -144,4 +158,15 @@ export const removeTradeAccountFromBrowser = (
 ): RemoveTradeAccountFromBrowser => ({
   type: REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
   payload,
+});
+
+export const removeProxyAccountFromChainFetch = (
+  payload: RemoveProxyAccountFromChainFetch["payload"]
+): RemoveProxyAccountFromChainFetch => ({
+  type: USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
+  payload,
+});
+
+export const removeProxyAccountFromChainData = (): RemoveProxyAccountFromChainData => ({
+  type: USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
 });

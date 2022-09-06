@@ -34,7 +34,7 @@ function SvgWallet(props: React.SVGProps<SVGSVGElement>) {
           fillRule="evenodd"
           clipRule="evenodd"
           d="M0.496094 0H21.1347V19.1729H0.496094V0Z"
-          fill="white"
+          stroke="none"
         />
       </mask>
       <g mask="url(#mask0_1081_3177)">

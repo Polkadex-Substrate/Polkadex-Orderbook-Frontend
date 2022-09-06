@@ -13,6 +13,7 @@ import {
   SET_ASSOCIATED_ACCOUNTS_FETCH,
   SET_ASSOCIATED_ACCOUNTS_DATA,
   SET_ASSOCIATED_ACCOUNTS_ERROR,
+  REGISTER_MAIN_ACCOUNT_ERROR,
 } from "./constants";
 
 export interface MainAccountState {
@@ -120,7 +121,12 @@ export const mainAccountReducer = (
         registerMainAccountLoading: false,
         registerMainAccountSuccess: true,
       };
-
+    case REGISTER_MAIN_ACCOUNT_ERROR:
+      return {
+        ...state,
+        registerMainAccountLoading: false,
+        registerMainAccountSuccess: false,
+      };
     default:
       return state;
   }

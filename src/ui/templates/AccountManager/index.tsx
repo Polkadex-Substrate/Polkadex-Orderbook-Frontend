@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -24,6 +25,7 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
+  removeProxyAccountFromChainFetch,
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
@@ -32,9 +34,15 @@ import {
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { UnlockAccount } from "@polkadex/orderbook-ui/organisms/UnlockAccount";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
+  const [unlockAccount, setUnlockAccount] = useState({
+    address: "",
+    status: false,
+  });
+
   const [showSelected, setShowSelected] = useState(true);
 
   const [remove, setRemove] = useState<{
@@ -108,9 +116,20 @@ export const AccountManagerTemplate = () => {
 
   useEffect(() => {
     if (shouldSelectDefaultTradeAccount && !!allTradingAccounts?.length)
-      handleSelectTradeAccount(allTradingAccounts[0].address);
+      handleSelectTradeAccount(allTradingAccounts[allTradingAccounts.length - 1].address);
   }, [shouldSelectDefaultTradeAccount, allTradingAccounts, handleSelectTradeAccount]);
 
+  const handleUnlockClose = () =>
+    setUnlockAccount({
+      address: "",
+      status: false,
+    });
+
+  const handleUnlockOpen = (address: string) =>
+    setUnlockAccount({
+      address,
+      status: true,
+    });
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -118,11 +137,19 @@ export const AccountManagerTemplate = () => {
           {remove.isRemoveDevice ? (
             <RemoveFromDevice handleClose={removeFromDevice} />
           ) : (
-            <RemoveFromBlockchain handleClose={handleClose} />
+            <RemoveFromBlockchain handleClose={handleClose} address={remove.id} />
           )}
         </Modal.Body>
       </Modal>
-
+      <Modal open={unlockAccount.status} onClose={handleUnlockClose}>
+        <Modal.Body>
+          <UnlockAccount
+            handleClose={handleUnlockClose}
+            handleSelectTradeAccount={handleSelectTradeAccount}
+            address={unlockAccount.address}
+          />
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Account Manager | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -258,7 +285,7 @@ export const AccountManagerTemplate = () => {
                         </a>
                       </Link>{" "}
                       or
-                      <Link href="/importAccount"> Import</Link>
+                      <Link href="/recovery"> Import</Link>
                     </S.CreateAccountWrapper>
                   </S.CreateAccount>
                   {allTradingAccounts?.map((value) => (
@@ -267,9 +294,12 @@ export const AccountManagerTemplate = () => {
                       title={value.name}
                       address={value.address}
                       isUsing={value.isActive}
-                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.id)}
+                      onRemoveFromBlockchain={() => handleOpenRemove(false, value.address)}
                       onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
-                      onUse={() => handleSelectTradeAccount(value.address)}
+                      onUse={() => {
+                        handleSelectTradeAccount(value.address);
+                        // handleUnlockOpen(value.address);
+                      }}
                     />
                   ))}
                 </S.ContentGrid>
@@ -314,6 +344,7 @@ export const AccountManagerTemplate = () => {
                   </Table.Header>
                   <Table.Body striped>
                     {assets.map((item) => {
+                      console.log("balances table item:", item);
                       const balance = userBalances?.find(
                         (value) => value.assetId === item.assetId
                       );
@@ -333,26 +364,17 @@ export const AccountManagerTemplate = () => {
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.free_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.free_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
                             <S.Cell>
-                              <span>
-                                {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                <small>$0.00</small>
-                              </span>
+                              <span>{Number(balance?.reserved_balance || 0).toFixed(8)} </span>
                             </S.Cell>
                           </Table.Cell>
                           <Table.Cell>
@@ -360,11 +382,9 @@ export const AccountManagerTemplate = () => {
                               <Link href={`/deposit/${item.symbol}`}>
                                 <S.DepositLink>Deposit</S.DepositLink>
                               </Link>
-                              <AvailableMessage message="Soon">
-                                <Link href={`/withdraw/${item.symbol}`}>
-                                  <S.WithdrawLink>Withdraw</S.WithdrawLink>
-                                </Link>
-                              </AvailableMessage>
+                              <Link href={`/withdraw/${item.symbol}`}>
+                                <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                              </Link>
                             </S.Actions>
                           </Table.Cell>
                         </Table.Row>
@@ -391,62 +411,65 @@ const Card = ({
 }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
 
   const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
+  // TODO!: Create removing sagas
+  const isRemoving = false;
   return (
-    <S.Card isActive={isUsing}>
-      <S.CardHeader>
-        <S.CardHeaderContent>
-          <strong>{title}</strong>
-          <span>
-            <Tooltip>
-              <TooltipHeader>
-                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
-                  <Icons.Copy />
-                </button>
-              </TooltipHeader>
-              <TooltipContent>
-                <p ref={buttonRef}>Copy to clipboard</p>
-              </TooltipContent>
-            </Tooltip>
-            {shortAddress}
-          </span>
-        </S.CardHeaderContent>
-      </S.CardHeader>
-      <S.CardContent>
-        <Dropdown>
-          <Dropdown.Trigger>
-            <S.DropdownHeader>
-              Actions
-              <div>
-                <Icons.DropdownArrow stroke="secondaryText" />
-              </div>
-            </S.DropdownHeader>
-          </Dropdown.Trigger>
-          <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item key="removeBlockchain">
-              <AvailableMessage>Remove from the blockchain</AvailableMessage>
-            </Dropdown.Item>
-            <Dropdown.Item key="removeBrowser">
-              <AvailableMessage>Remove from my browser</AvailableMessage>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <S.ContentActions>
-          {isUsing ? (
-            <span>Using</span>
-          ) : (
-            <button type="button" onClick={onUse}>
-              Use
-            </button>
-          )}
-        </S.ContentActions>
-      </S.CardContent>
-    </S.Card>
+    <Loading message="Loading..." isVisible={isRemoving}>
+      <S.Card isActive={isUsing}>
+        <S.CardHeader>
+          <S.CardHeaderContent>
+            <strong>{title}</strong>
+            <span>
+              <Tooltip>
+                <TooltipHeader>
+                  <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                    <Icons.Copy />
+                  </button>
+                </TooltipHeader>
+                <TooltipContent>
+                  <p ref={buttonRef}>Copy to clipboard</p>
+                </TooltipContent>
+              </Tooltip>
+              {shortAddress}
+            </span>
+          </S.CardHeaderContent>
+        </S.CardHeader>
+        <S.CardContent>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <S.DropdownHeader>
+                Actions
+                <div>
+                  <Icons.DropdownArrow stroke="secondaryText" />
+                </div>
+              </S.DropdownHeader>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="secondaryBackgroundSolid">
+              <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
+                Remove from the blockchain
+              </Dropdown.Item>
+              <Dropdown.Item key="removeBrowser">
+                <AvailableMessage>Remove from my browser</AvailableMessage>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <S.ContentActions>
+            {isUsing ? (
+              <span>Using</span>
+            ) : (
+              <button type="button" onClick={onUse}>
+                Use
+              </button>
+            )}
+          </S.ContentActions>
+        </S.CardContent>
+      </S.Card>
+    </Loading>
   );
 };
