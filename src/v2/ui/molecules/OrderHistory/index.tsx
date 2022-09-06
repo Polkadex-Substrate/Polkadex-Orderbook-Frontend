@@ -6,8 +6,8 @@ import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
+import { calcStatusOfOrder } from "@polkadex/orderbook/helpers/calcOrderStatus";
+import { calcAveragePrice } from "@polkadex/orderbook/helpers/calcAverageTradePrice";
 
 export const OrderHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   const dispatch = useDispatch();

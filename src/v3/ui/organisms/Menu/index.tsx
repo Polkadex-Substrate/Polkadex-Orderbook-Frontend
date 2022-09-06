@@ -12,7 +12,7 @@ import {
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
-import { useAppearance } from "@polkadex/orderbook/v2/hooks";
+import { useAppearance } from "@polkadex/orderbook/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";

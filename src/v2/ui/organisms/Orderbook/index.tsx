@@ -4,7 +4,7 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { useOrderbookTable } from "@polkadex/orderbook/v2/hooks";
+import { useOrderbookTable } from "@polkadex/orderbook/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@orderbook/v2/ui/molecules";
 

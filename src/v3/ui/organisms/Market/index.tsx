@@ -5,7 +5,7 @@ import MarketTable from "../../molecules/MarketTable";
 import * as S from "./styles";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useMarkets } from "@polkadex/orderbook/v2/hooks";
+import { useMarkets } from "@polkadex/orderbook/hooks";
 
 const Market = () => {
   const {

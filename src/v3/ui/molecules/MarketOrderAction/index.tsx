@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 import { ButtonStatus, Range } from "@orderbook/v2/ui/molecules";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
+import { usePlaceOrder } from "@polkadex/orderbook/hooks";
 
 const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
