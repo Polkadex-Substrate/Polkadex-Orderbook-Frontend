@@ -12,6 +12,7 @@ import {
 import * as subscriptions from "../../../../graphql/subscriptions";
 
 import { Utils } from "@polkadex/web-helpers";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 type RawTradeEvent = {
   m: string;
@@ -55,6 +56,9 @@ async function fetchTradesChannel(market: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market}-recent-trades` },
+      authToken: READ_ONLY_TOKEN,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => {
         emit(data.value.data.websocket_streams.data);

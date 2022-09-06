@@ -17,6 +17,7 @@ import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { UNIT_BN } from "@polkadex/web-constants";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 // TOOD: CHANGE TO USE ENCLAVE WS
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
@@ -62,10 +63,6 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
 const executeWithdraw = async (withdrawPayload, address) => {
   const payload = JSON.stringify({ Withdraw: withdrawPayload });
-  const res = await API.graphql({
-    query: mutations.withdraw,
-    variables: { input: { payload } },
-    authToken: address,
-  });
+  const res = await sendQueryToAppSync(mutations.withdraw, { input: { payload } });
   return res;
 };

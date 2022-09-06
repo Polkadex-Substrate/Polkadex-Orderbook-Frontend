@@ -6,15 +6,13 @@ import * as queries from "../../../../graphql/queries";
 import { selectCurrentMainAccount } from "../selectors";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export function* setAssociatedTradeAccountsSaga() {
   const { address } = yield select(selectCurrentMainAccount);
   try {
     const res: any = yield call(() =>
-      API.graphql({
-        query: queries.findUserByMainAccount,
-        variables: { main_account: address },
-      })
+      sendQueryToAppSync(queries.findUserByMainAccount, { main_account: address })
     );
     yield put(setAssociatedAccountsData(res?.data?.findUserByMainAccount?.proxies));
   } catch (error) {

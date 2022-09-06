@@ -29,13 +29,16 @@ export interface Market {
   min_price: BigNumber;
   max_price: BigNumber;
   min_amount: BigNumber;
-  amount_precision: number;
-  price_precision: number;
+  max_amount: BigNumber;
+  base_precision: number;
+  quote_precision: number;
   state?: string;
   filters?: MarketFilter[];
   tokenTickerName?: string;
   base_ticker: string;
   quote_ticker: string;
+  price_tick_size: BigNumber;
+  qty_step_size: BigNumber;
 }
 
 export interface Ticker {
@@ -68,4 +71,15 @@ export interface MarketPriceInterface {
   price: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface MarketQueryResult {
+  market: string;
+  max_order_qty: string;
+  max_price: string;
+  min_order_qty: string;
+  min_price: string;
+  price_tick_size: string;
+  qty_step_size: string;
+  quote_asset_precision: string;
 }

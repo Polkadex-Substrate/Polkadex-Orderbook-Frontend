@@ -87,8 +87,8 @@ export const OrderHistory = () => {
               status,
               order_type,
             } = item;
-            const priceFixed = currentMarket ? currentMarket.price_precision : 0;
-            const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
+            const priceFixed = currentMarket ? currentMarket.quote_precision : 0;
+            const amountFixed = currentMarket ? currentMarket.base_precision : 0;
             const isSell = order_side === "Sell";
             const orderPrice = price;
             // TODO: Check  average object

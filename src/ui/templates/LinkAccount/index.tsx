@@ -17,11 +17,15 @@ import {
   selectTradeAccountsSuccess,
 } from "@polkadex/orderbook-modules";
 import { PassCode } from "@polkadex/orderbook-ui/molecules/Input";
+import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
 
 export const LinkAccountTemplate = () => {
   const [state, setState] = useState(false);
+  const [mnemoicString, setMnemonicString] = useState("");
 
   const router = useRouter();
+
+  const handleMnemonicUpdate = (value) => setMnemonicString(value);
 
   const successRegisterMainAccount = useReduxSelector(selectIsRegisterMainAccountSuccess);
   const successRegisterTradeAccount = useReduxSelector(selectTradeAccountsSuccess);
@@ -37,7 +41,8 @@ export const LinkAccountTemplate = () => {
         passcode: "",
       },
       validationSchema: linkAccountValidations,
-      onSubmit: (values) => registerMainAccount(currentMainAccount, values.name),
+      onSubmit: (values) =>
+        registerMainAccount(currentMainAccount, values.name, mnemoicString),
     });
 
   useEffect(() => {
@@ -75,6 +80,7 @@ export const LinkAccountTemplate = () => {
                 message="Block finalization will take a few mins."
                 isVisible={loading || isRegisterTradeAccountLoading}>
                 <form onSubmit={handleSubmit}>
+                  <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
                   <S.SelectInput>
                     <S.SelectInputContainer>
                       <S.SelectAccount>

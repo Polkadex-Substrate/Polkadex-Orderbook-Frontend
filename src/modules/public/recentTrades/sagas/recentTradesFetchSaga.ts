@@ -6,6 +6,7 @@ import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
 import { Utils } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type RawTrades = {
   m: string;
@@ -41,9 +42,6 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
 }
 
 const fetchRecentTrade = async (market: string, limit = 50) => {
-  const res: any = await API.graphql({
-    query: getRecentTrades,
-    variables: { m: market, limit },
-  });
+  const res: any = await sendQueryToAppSync(getRecentTrades, { m: market, limit });
   return res.data.getRecentTrades.items;
 };

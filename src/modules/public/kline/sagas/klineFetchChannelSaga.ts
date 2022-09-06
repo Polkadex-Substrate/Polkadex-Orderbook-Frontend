@@ -5,6 +5,8 @@ import { API } from "aws-amplify";
 import { alertPush, klinePush, KlineSubscribe } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+
 export function* fetchKlineChannelSaga(action: KlineSubscribe) {
   try {
     const { market, interval } = action.payload;
@@ -48,6 +50,7 @@ async function fetchKlineChannel(market: string, interval: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market}_${interval.toLowerCase()}` },
+      authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({

@@ -6,6 +6,8 @@ import { marketsTickersError, marketsTickersData, MarketsTickersFetch } from "..
 import { Ticker } from "..";
 import * as queries from "../../../../graphql/queries";
 
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
 export type TickerQueryResult = {
   m: string;
   pc: string;
@@ -38,7 +40,7 @@ export function* marketTickersSaga(action: MarketsTickersFetch) {
 }
 
 const fetchMarketTickers = async (): Promise<Ticker[]> => {
-  const res: any = await API.graphql({ query: queries.getAllMarketTickers });
+  const res: any = await sendQueryToAppSync(queries.getAllMarketTickers);
   const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
   const tickers: Ticker[] = tickersRaw.map((elem) => ({
     m: elem.m,

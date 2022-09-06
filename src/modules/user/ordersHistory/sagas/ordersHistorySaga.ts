@@ -12,6 +12,7 @@ import * as queries from "./../../../../graphql/queries";
 import { OrderCommon } from "src/modules/types";
 import { Utils } from "@polkadex/web-helpers";
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -58,14 +59,11 @@ const fetchOrders = async (
   // TODO: make limit resonable by utilizing nextToken
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
   const dateToStr = Utils.date.formatDateToISO(dateTo);
-  const res: any = await API.graphql({
-    query: queries.listOrderHistorybyMainAccount,
-    variables: {
-      main_account: proxy_acc,
-      from: dateFromStr,
-      to: dateToStr,
-      limit: 1000,
-    },
+  const res: any = await sendQueryToAppSync(queries.listOrderHistorybyMainAccount, {
+    main_account: proxy_acc,
+    from: dateFromStr,
+    to: dateToStr,
+    limit: 1000,
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;
   const orders: OrderCommon[] = ordersRaw.map((order: any) => ({

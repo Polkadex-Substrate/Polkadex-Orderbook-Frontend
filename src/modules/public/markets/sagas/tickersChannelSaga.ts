@@ -10,6 +10,7 @@ import { selectCurrentMarket } from "..";
 import { TickerQueryResult } from "./marketTickersFetchSaga";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
   try {
@@ -39,6 +40,7 @@ function createMarketTickersChannel(market: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: market + "-ticker" },
+      authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({

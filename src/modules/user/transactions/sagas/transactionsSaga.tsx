@@ -10,6 +10,7 @@ import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { Utils } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type TransactionQueryResult = {
   tt: string;
@@ -60,15 +61,13 @@ const fetchTransactions = async (
   limit = 10
 ): Promise<Transaction[]> => {
   const fromDate = subtractMonths(monthsBefore);
-  const res: any = await API.graphql({
-    query: queries.listTransactionsByMainAccount,
-    variables: {
-      main_account: address,
-      from: fromDate.toISOString(),
-      to: new Date().toISOString(),
-      limit: 10000,
-    },
+  const res: any = await sendQueryToAppSync(queries.listTransactionsByMainAccount, {
+    main_account: address,
+    from: fromDate.toISOString(),
+    to: new Date().toISOString(),
+    limit: 10000,
   });
+
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
     amount: Utils.decimals.formatToString(item.q),

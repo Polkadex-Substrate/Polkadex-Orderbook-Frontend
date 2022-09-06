@@ -7,6 +7,8 @@ import { getMainAddrFromQueryRes } from "../../auth/helper";
 import { notificationPush } from "../../notificationHandler";
 import { selectExtensionWalletAccounts, setMainAccountFetch } from "../../mainAccount";
 
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
 export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
   try {
     const account = action.payload;
@@ -36,12 +38,8 @@ export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
 }
 
 export const findMainAccFromTradeAcc = async (tradeAcc: string): Promise<string> => {
-  const res: any = await API.graphql({
-    query: queries.findUserByProxyAccount,
-    variables: {
-      proxy_account: tradeAcc,
-    },
-    authToken: "READ_ONLY",
+  const res: any = await sendQueryToAppSync(queries.findUserByProxyAccount, {
+    proxy_account: tradeAcc,
   });
   const queryResStr = res.data?.findUserByProxyAccount.items[0];
   return getMainAddrFromQueryRes(queryResStr);

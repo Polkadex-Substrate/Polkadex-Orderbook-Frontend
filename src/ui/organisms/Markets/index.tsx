@@ -161,10 +161,10 @@ export const Markets = ({ marketActive = false }) => {
                         key={item.id}
                         tokenIcon={item.tokenTickerName}
                         pair={item.name}
-                        vol={Decimal.format(Number(item.volume), item.price_precision, ",")}
+                        vol={Decimal.format(Number(item.volume), item.quote_precision, ",")}
                         priceFiat={Decimal.format(
                           Number(item.last),
-                          item.price_precision,
+                          item.quote_precision,
                           ","
                         )}
                         price="0"

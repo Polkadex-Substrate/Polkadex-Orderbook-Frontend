@@ -8,6 +8,7 @@ import * as queries from "../../../../graphql/queries";
 import { getDepthFromOrderbook } from "./helper";
 
 import { Utils } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
@@ -31,10 +32,7 @@ export function* orderBookSaga(action: OrderBookFetch) {
   }
 }
 const fetchOrderbook = async (market: string): Promise<OrderBookDbState[]> => {
-  const res: any = await API.graphql({
-    query: queries.getOrderbook,
-    variables: { market: market },
-  });
+  const res: any = await sendQueryToAppSync(queries.getOrderbook, { market: market });
   const data = res.data.getOrderbook.items;
   return data;
 };

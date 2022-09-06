@@ -19,6 +19,7 @@ import * as mutation from "./../../../../graphql/mutations";
 import { createOrderPayload } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
@@ -100,11 +101,12 @@ const getNewClientId = () => {
 const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
   const payloadStr = JSON.stringify({ PlaceOrder: orderPayload });
   console.log("payload: ", payloadStr);
-  const res = await API.graphql({
-    query: mutation.place_order,
-    variables: { input: { payload: payloadStr } },
-    authToken: proxyAddress,
-  });
+  const res = await sendQueryToAppSync(
+    mutation.place_order,
+    { input: { payload: payloadStr } },
+    proxyAddress
+  );
+
   return res;
 };
 
