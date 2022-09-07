@@ -29,8 +29,8 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
         const tradesMsg = yield take(channel);
         const data: RawTradeEvent = JSON.parse(tradesMsg);
         const trade: PublicTrade = {
-          price: Utils.decimals.formatToString(data.p),
-          amount: Utils.decimals.formatToString(data.q),
+          price: data.p,
+          amount: data.q,
           market_id: data.m,
           timestamp: new Date(data.t).toISOString(),
         };

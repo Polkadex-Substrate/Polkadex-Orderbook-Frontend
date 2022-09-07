@@ -64,6 +64,8 @@ export const getRecentTrades = /* GraphQL */ `
         t
         p
         q
+        sid
+        isReverted
       }
       nextToken
     }
@@ -93,9 +95,14 @@ export const getAllMarkets = /* GraphQL */ `
     getAllMarkets {
       items {
         market
-        max_trade_amount
-        min_trade_amount
-        min_qty
+        max_order_price
+        min_order_price
+        min_order_qty
+        max_order_qty
+        price_tick_size
+        qty_step_size
+        base_asset_precision
+        quote_asset_precision
       }
     }
   }
@@ -162,6 +169,8 @@ export const findOrderByMainAccount = /* GraphQL */ `
       afp
       fq
       fee
+      sid
+      isReverted
     }
   }
 `;
@@ -194,6 +203,8 @@ export const listOrderHistorybyMainAccount = /* GraphQL */ `
         afp
         fq
         fee
+        sid
+        isReverted
       }
       nextToken
     }
@@ -224,6 +235,8 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `
         afp
         fq
         fee
+        sid
+        isReverted
       }
       nextToken
     }
@@ -253,6 +266,7 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
         t
         eid
         sid
+        isReverted
       }
       nextToken
     }
@@ -279,6 +293,8 @@ export const listTradesByMainAccount = /* GraphQL */ `
         q
         s
         t
+        sid
+        isReverted
       }
       nextToken
     }

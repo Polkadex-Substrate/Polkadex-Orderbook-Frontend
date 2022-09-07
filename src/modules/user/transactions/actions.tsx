@@ -13,7 +13,7 @@ import { Transaction } from ".";
 export type TransactionUpdatePayload = {
   event_id: number;
   user: string;
-  asset: string | { asset: string };
+  asset: string & { asset: string };
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";

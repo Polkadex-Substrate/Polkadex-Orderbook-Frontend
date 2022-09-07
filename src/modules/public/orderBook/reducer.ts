@@ -101,7 +101,7 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
       let book = { ask: [...state.asks], bid: [...state.bids] };
       const incrementalData = action.payload;
       incrementalData.forEach((item) => {
-        if (item.qty === "0") {
+        if (Number(item.qty) === 0) {
           book = deleteFromBook(book, item.price, item.side.toLowerCase());
         } else book = replaceOrAddToBook(book, item.price, item.qty, item.side.toLowerCase());
       });

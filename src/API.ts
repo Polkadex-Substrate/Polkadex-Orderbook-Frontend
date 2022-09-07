@@ -72,6 +72,8 @@ export type RawTrade = {
   t: string,
   p: string,
   q: string,
+  sid: string,
+  isReverted?: boolean | null,
 };
 
 export type TickersConnection = {
@@ -102,9 +104,14 @@ export type MarketsConnection = {
 export type Market = {
   __typename: "Market",
   market: string,
-  max_trade_amount: string,
-  min_trade_amount: string,
-  min_qty: string,
+  max_order_price: string,
+  min_order_price: string,
+  min_order_qty: string,
+  max_order_qty: string,
+  price_tick_size: string,
+  qty_step_size: string,
+  base_asset_precision: string,
+  quote_asset_precision: string,
 };
 
 export type ProxyConnection = {
@@ -147,6 +154,8 @@ export type Order = {
   afp: string,
   fq: string,
   fee: string,
+  sid: string,
+  isReverted?: boolean | null,
 };
 
 export type OrdersConnection = {
@@ -171,6 +180,7 @@ export type Transaction = {
   t: string,
   eid: string,
   sid: string,
+  isReverted?: boolean | null,
 };
 
 export type TradesConnection = {
@@ -186,6 +196,8 @@ export type Trade = {
   q: string,
   s: string,
   t: string,
+  sid: string,
+  isReverted?: boolean | null,
 };
 
 export type MainAddressConnection = {
@@ -324,6 +336,8 @@ export type GetRecentTradesQuery = {
       t: string,
       p: string,
       q: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -357,9 +371,14 @@ export type GetAllMarketsQuery = {
     items?:  Array< {
       __typename: "Market",
       market: string,
-      max_trade_amount: string,
-      min_trade_amount: string,
-      min_qty: string,
+      max_order_price: string,
+      min_order_price: string,
+      min_order_qty: string,
+      max_order_qty: string,
+      price_tick_size: string,
+      qty_step_size: string,
+      base_asset_precision: string,
+      quote_asset_precision: string,
     } | null > | null,
   } | null,
 };
@@ -447,6 +466,8 @@ export type FindOrderByMainAccountQuery = {
     afp: string,
     fq: string,
     fee: string,
+    sid: string,
+    isReverted?: boolean | null,
   } | null,
 };
 
@@ -477,6 +498,8 @@ export type ListOrderHistorybyMainAccountQuery = {
       afp: string,
       fq: string,
       fee: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -507,6 +530,8 @@ export type ListOpenOrdersByMainAccountQuery = {
       afp: string,
       fq: string,
       fee: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -534,6 +559,7 @@ export type ListTransactionsByMainAccountQuery = {
       t: string,
       eid: string,
       sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -558,6 +584,8 @@ export type ListTradesByMainAccountQuery = {
       q: string,
       s: string,
       t: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,

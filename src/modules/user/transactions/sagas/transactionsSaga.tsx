@@ -70,11 +70,11 @@ const fetchTransactions = async (
 
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
   const transactions: Transaction[] = txs.map((item) => ({
-    amount: Utils.decimals.formatToString(item.q),
+    amount: item.q,
     asset: item.a,
     event_id: item.eid,
     sid: item.sid,
-    fee: Utils.decimals.formatToString(item.fee),
+    fee: item.fee,
     main_account: address,
     time: new Date(Number(item.t)).toISOString(),
     status: item.st as Transaction["status"],

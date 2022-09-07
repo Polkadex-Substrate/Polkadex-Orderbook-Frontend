@@ -27,8 +27,11 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
 function processOrderData(eventData: SetOrder): OrderCommon {
   const base =
     eventData.pair.base_asset === "polkadex" ? "PDEX" : eventData.pair.base_asset.asset;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const quote =
     eventData.pair.quote_asset === "polkadex" ? "PDEX" : eventData.pair.quote_asset.asset;
+
   return {
     main_account: eventData.user,
     id: eventData.id.toString(),
@@ -38,10 +41,10 @@ function processOrderData(eventData: SetOrder): OrderCommon {
     side: eventData.side,
     order_type: eventData.order_type,
     status: eventData.status.toUpperCase(),
-    price: Utils.decimals.formatToNumber(eventData.price),
-    qty: Utils.decimals.formatToNumber(eventData.qty),
-    avg_filled_price: Utils.decimals.formatToString(eventData.avg_filled_price),
-    filled_quantity: Utils.decimals.formatToString(eventData.filled_quantity),
-    fee: Utils.decimals.formatToString(eventData.fee),
+    price: Number(eventData.price),
+    qty: Number(eventData.qty),
+    avg_filled_price: eventData.avg_filled_price.toString(),
+    filled_quantity: eventData.filled_quantity.toString(),
+    fee: eventData.fee.toString(),
   };
 }

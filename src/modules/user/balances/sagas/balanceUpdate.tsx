@@ -37,9 +37,9 @@ const updateBalanceFromEvent = (
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,
     assetId: assetId.toString(),
-    free_balance: Utils.decimals.formatToString(msg.free),
-    reserved_balance: Utils.decimals.formatToString(msg.reserved),
-    pending_withdrawal: Utils.decimals.formatToString(msg.pending_withdrawal),
+    free_balance: msg.free,
+    reserved_balance: msg.reserved,
+    pending_withdrawal: msg.pending_withdrawal,
   };
   return newBalance;
 };

@@ -64,8 +64,8 @@ const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
   const data = JSON.parse(dataStr);
   return data.map((item) => ({
     side: item.side,
-    price: Utils.decimals.formatToString(item.price),
-    qty: Utils.decimals.formatToString(item.qty),
+    price: item.price,
+    qty: item.qty,
     seq: item.seq,
   }));
 };

@@ -31,8 +31,8 @@ function processTradeData(eventData: UserTradeEvent): UserTrade {
   const [base, quote] = eventData.m.split("-");
   return {
     market_id: eventData.m,
-    price: Utils.decimals.formatToString(eventData.p),
-    qty: Utils.decimals.formatToString(eventData.q),
+    price: eventData.p,
+    qty: eventData.q,
     baseAsset: base,
     quoteAsset: quote,
     timestamp: eventData.t,

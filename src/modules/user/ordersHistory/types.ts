@@ -15,8 +15,8 @@ export interface SetOrder {
   timestamp: number;
 }
 interface Pair {
-  base_asset: string | OtherAsset;
-  quote_asset: string | OtherAsset;
+  base_asset: string & OtherAsset;
+  quote_asset: string & OtherAsset;
 }
 interface OtherAsset {
   asset: number;

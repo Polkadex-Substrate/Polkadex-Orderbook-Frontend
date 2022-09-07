@@ -75,11 +75,11 @@ const fetchOrders = async (
     side: order.s,
     order_type: order.ot,
     status: order.st,
-    price: Utils.decimals.formatToNumber(order.p),
-    qty: Utils.decimals.formatToNumber(order.q),
-    avg_filled_price: Utils.decimals.formatToString(order.afp),
-    filled_quantity: Utils.decimals.formatToString(order.fq),
-    fee: Utils.decimals.formatToString(order.fee),
+    price: Number(order.p),
+    qty: Number(order.q),
+    avg_filled_price: order.afp,
+    filled_quantity: order.fq,
+    fee: order.fee,
   }));
 
   return orders;

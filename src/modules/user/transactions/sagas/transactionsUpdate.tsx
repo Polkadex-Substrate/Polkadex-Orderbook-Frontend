@@ -8,8 +8,6 @@ import {
   TransactionUpdatePayload,
 } from "../../..";
 
-import { Utils } from "@polkadex/web-helpers";
-
 export function* transactionsUpdateSaga(action: TransactionsUpdateEvent) {
   try {
     console.log("transactionsUpdateSaga", action.payload);
@@ -34,8 +32,8 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
       ...data,
       sid: data.sid ?? 0,
       main_account: data.user,
-      fee: Utils.decimals.formatToString(data.fee),
-      amount: Utils.decimals.formatToString(data.amount),
+      fee: data.fee.toString(),
+      amount: data.amount.toString(),
       asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
       time: new Date().toISOString(),
     };
@@ -45,8 +43,8 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
       sid: data.sid ?? 0,
       txn_type: "WITHDRAW",
       main_account: data.user,
-      fee: Utils.decimals.formatToString(data.fee),
-      amount: Utils.decimals.formatToString(data.amount),
+      fee: data.fee.toString(),
+      amount: data.amount.toString(),
       asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
       time: new Date().toISOString(),
     };
