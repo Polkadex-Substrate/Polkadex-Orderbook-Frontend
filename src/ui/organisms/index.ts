@@ -7,7 +7,6 @@ export * from "./TradeHistory";
 export * from "./TransactionHistory";
 export * from "./Tokens";
 export * from "./History";
-export * from "./TemporaryMessage";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
 export * from "./Mnemonic";

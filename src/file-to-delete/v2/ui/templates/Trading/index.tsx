@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Popup } from "@polkadex/orderbook-ui/molecules";
+import { Popup } from "@polkadex/orderbook/file-to-delete/ui/molecules/Popup";
 import {
   useMarketsFetch,
   useMarketsTickersFetch,

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Props } from "./types";
 import * as S from "./styles";
 
-import { MessageCard, Popup, Icon } from "@polkadex/orderbook-ui/molecules";
+import { MessageCard, Icon } from "@polkadex/orderbook-ui/molecules";
 import { alertDelete, selectAlertState } from "@polkadex/orderbook-modules";
+import { Popup } from "@polkadex/orderbook/file-to-delete/ui/molecules/Popup";
 
 export const Message = ({ children }: Props) => {
   const dispatch = useDispatch();

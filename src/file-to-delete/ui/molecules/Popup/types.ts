@@ -1,6 +1,6 @@
 import { ReactNode, AllHTMLAttributes } from "react";
 
-import { Sizes } from "../../../helpers";
+import { Sizes } from "../../../../helpers";
 
 export type Props = {
   isVisible: boolean;

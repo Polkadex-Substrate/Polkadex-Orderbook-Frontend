@@ -5,7 +5,6 @@ export * from "./WalletInput";
 export * from "./ThemeSwitch";
 export * from "./Dropdown";
 export * from "./Mnemonic";
-export * from "./Popup";
 export * from "./Spinner";
 export * from "./Tabs";
 export * from "./Button";
