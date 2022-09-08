@@ -4,8 +4,8 @@ import * as T from "./types";
 
 import { TableRow, TableCard } from "@orderbook/v2/ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
+import { calcAveragePrice } from "@polkadex/orderbook/helpers/calcAverageTradePrice";
+import { calcStatusOfOrder } from "@polkadex/orderbook/helpers/calcOrderStatus";
 
 export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   return (

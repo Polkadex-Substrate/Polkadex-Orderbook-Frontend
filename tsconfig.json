@@ -98,9 +98,6 @@
         "@orderbook/v2/ui/molecules/*":[
            "src/v2/ui/molecules/*"
         ],
-        "@orderbook/v2/hooks":[
-           "src/v2/hooks"
-        ],
         "@orderbook/v3/ui/templates":[
            "src/v3/ui/templates"
         ],
@@ -136,7 +133,8 @@
      "spec",
      "jest.config.js",
      "webpack",
-     "./src/*.test.*"
+     "./src/*.test.*",
+     "src/file-to-delete"
   ],
   "files":[
      "src/styles/styled.d.ts"

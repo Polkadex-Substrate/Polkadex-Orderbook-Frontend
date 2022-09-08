@@ -4,7 +4,7 @@ import { useState } from "react";
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import { useFunds } from "@polkadex/orderbook/v2/hooks";
+import { useFunds } from "@polkadex/orderbook/hooks";
 import { Search, ResultFound } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const MyWallet = ({ hasLink = true }) => {

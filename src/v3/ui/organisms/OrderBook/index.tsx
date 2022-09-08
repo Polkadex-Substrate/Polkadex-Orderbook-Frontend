@@ -6,7 +6,7 @@ import { Dropdown, DropdownContent, DropdownHeader } from "../../molecules";
 
 import * as S from "./styles";
 
-import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
+import { useOrderbook } from "@polkadex/orderbook/hooks";
 
 const OrderBook = () => {
   const {

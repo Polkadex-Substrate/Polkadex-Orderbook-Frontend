@@ -3,10 +3,8 @@ import OpenOrderCard from "../OpenOrderCard";
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { calcAveragePrice } from "@polkadex/orderbook/v2/helpers/calcAverageTradePrice";
-import { calcStatusOfOrder } from "@polkadex/orderbook/v2/helpers/calcOrderStatus";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
-import { useOrderHistory } from "@polkadex/orderbook/v2/hooks";
+import { useOrderHistory } from "@polkadex/orderbook/hooks";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
