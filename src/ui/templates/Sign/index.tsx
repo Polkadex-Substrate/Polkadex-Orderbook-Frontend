@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Button, Checkbox, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignUp } from "@polkadex/orderbook-hooks";

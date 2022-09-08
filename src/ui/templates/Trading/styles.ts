@@ -1,8 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { LogoText, Link as LogoWrapper } from "../../molecules/Logo/styles";
-
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
+import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
 export const Container = styled.div`
   min-height: 100vh;

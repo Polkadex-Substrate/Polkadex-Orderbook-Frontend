@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Logo, Popover } from "../../molecules";
+import { Popover } from "../../molecules";
 
 import * as S from "./styles";
 
@@ -8,12 +8,12 @@ import { NotificationsContent, WalletContent } from "@orderbook/v2/ui/molecules"
 import {
   AvailableMessage,
   Icon,
+  Logo,
   Tooltip,
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
-import { useAppearance } from "@polkadex/orderbook/hooks";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 

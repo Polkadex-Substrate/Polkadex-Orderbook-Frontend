@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import * as S from "./styles";

@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { Logo, Modal } from "../../../v3/ui/molecules";
-
 import * as S from "./styles";
 
 import {
@@ -24,7 +22,7 @@ import {
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
-import { AccountBanner, Button } from "@polkadex/orderbook-ui/molecules";
+import { AccountBanner, Button, Logo, Modal } from "@polkadex/orderbook-ui/molecules";
 import Markets from "@orderbook/v2/ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";

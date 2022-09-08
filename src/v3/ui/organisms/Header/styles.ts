@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { LogoText } from "@orderbook/v3/ui/molecules/Logo/styles";
+import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`

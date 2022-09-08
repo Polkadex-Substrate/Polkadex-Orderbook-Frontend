@@ -7,7 +7,6 @@ import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Accounts = () => {
   const [state, setState] = useState(false);
-  // Form..
 
   return (
     <S.Wrapper>

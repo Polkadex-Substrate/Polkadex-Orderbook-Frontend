@@ -8,13 +8,13 @@ import {
   Icon,
   Button,
   Dropdown,
-  Polkadex,
+  Logo,
   ThemeSwitch,
   MyAccountHeader,
   MyAccountContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { Toolbar } from "@polkadex/orderbook-ui/organisms";
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
+import { useWindowSize } from "@polkadex/orderbook-hooks";
 import { logOutFetch } from "@polkadex/orderbook-modules";
 
 export const Header = ({ withInfo = true }) => {
@@ -28,7 +28,7 @@ export const Header = ({ withInfo = true }) => {
         <S.Column>
           <Link href="/">
             <a>
-              <Polkadex />
+              <Logo />
             </a>
           </Link>
           {withInfo && width >= 1050 && <Toolbar />}
@@ -70,7 +70,7 @@ export const HeaderBack = ({ hasArrow = true }) => {
     <S.HeaderBack>
       <S.HeaderBackContainer onClick={() => router.push("/")}>
         {hasArrow && <Icon size="large" name="Return" background="none" />}
-        <Polkadex />
+        <Logo />
       </S.HeaderBackContainer>
     </S.HeaderBack>
   );
