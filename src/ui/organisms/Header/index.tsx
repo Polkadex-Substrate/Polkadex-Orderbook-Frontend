@@ -13,9 +13,9 @@ import {
   MyAccountHeader,
   MyAccountContent,
 } from "@polkadex/orderbook-ui/molecules";
-import { Toolbar } from "@polkadex/orderbook-ui/organisms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
 import { logOutFetch } from "@polkadex/orderbook-modules";
+import { Toolbar } from "@polkadex/orderbook/file-to-delete/ui/organisms/Toolbar";
 
 export const Header = ({ withInfo = true }) => {
   const { width } = useWindowSize();
