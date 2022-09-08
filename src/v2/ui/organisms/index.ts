@@ -13,5 +13,3 @@
 
 export * from "./RecentTrades";
 export * from "./Orderbook";
-export * from "./Markets";
-

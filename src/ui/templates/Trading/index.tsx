@@ -23,7 +23,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Button, Logo, Modal } from "@polkadex/orderbook-ui/molecules";
-import Markets from "@orderbook/v2/ui/organisms/Markets";
+import Markets from "@polkadex/orderbook-ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";

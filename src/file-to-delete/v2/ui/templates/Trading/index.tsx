@@ -25,43 +25,67 @@ import { updateTickerWithTrade } from "@polkadex/orderbook/helpers/updateTickerW
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 
 const Header = dynamic(
-  () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
+  () =>
+    import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Header").then(
+      (mod) => mod.Header
+    ),
   {
     ssr: false,
   }
 );
 const Footer = dynamic(
-  () => import("@orderbook/v2/ui/organisms/Footer").then((mod) => mod.Footer),
+  () =>
+    import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Footer").then(
+      (mod) => mod.Footer
+    ),
   {
     ssr: false,
   }
 );
-const Orderbook = dynamic(() => import("@orderbook/v2/ui/organisms/Orderbook"), {
+// const Orderbook = dynamic(
+//   () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Orderbook"),
+//   {
+//     ssr: false,
+//   }
+// );
+const Chart = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Chart"),
+  {
+    ssr: false,
+  }
+);
+const News = dynamic(() => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/News"), {
   ssr: false,
 });
-const Chart = dynamic(() => import("@orderbook/v2/ui/organisms/Chart"), {
-  ssr: false,
-});
-const News = dynamic(() => import("@orderbook/v2/ui/organisms/News"), {
-  ssr: false,
-});
-const MyOrders = dynamic(() => import("@orderbook/v2/ui/organisms/MyOrders"), {
-  ssr: false,
-});
-const PlaceOrder = dynamic(() => import("@orderbook/v2/ui/organisms/PlaceOrder"), {
-  ssr: false,
-});
-const RecentTrades = dynamic(() => import("@orderbook/v2/ui/organisms/RecentTrades"), {
-  ssr: false,
-});
-const Information = dynamic(() => import("@orderbook/v2/ui/organisms/Information"), {
-  ssr: false,
-});
-const Markets = dynamic(() => import("@orderbook/v2/ui/organisms/Markets"), {
+// const MyOrders = dynamic(
+//   () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/MyOrders"),
+//   {
+//     ssr: false,
+//   }
+// );
+const PlaceOrder = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/PlaceOrder"),
+  {
+    ssr: false,
+  }
+);
+// const RecentTrades = dynamic(
+//   () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/RecentTrades"),
+//   {
+//     ssr: false,
+//   }
+// );
+const Information = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Information"),
+  {
+    ssr: false,
+  }
+);
+const Markets = dynamic(() => import("@polkadex/orderbook-ui/organisms/Markets"), {
   ssr: false,
 });
 // const ExploreMarket = dynamic(
-//   () => import("@orderbook/v2/ui/organisms/ExploreMarket").then((mod) => mod.ExploreMarket),
+//   () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/ExploreMarket").then((mod) => mod.ExploreMarket),
 //   {
 //     ssr: false,
 //   }
@@ -113,11 +137,11 @@ export const Trading = () => {
         <S.Container>
           <Information onOpenMarkets={handleClose} />
           <Chart />
-          <Orderbook />
+          {/* <Orderbook /> */}
         </S.Container>
         <PlaceOrder />
-        <MyOrders />
-        <RecentTrades />
+        {/* <MyOrders />
+        <RecentTrades /> */}
       </S.Wrapper>
       <Footer />
     </S.Main>
