@@ -25,11 +25,11 @@ import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import { AccountBanner, Button, Logo, Modal } from "@polkadex/orderbook-ui/molecules";
 import Markets from "@polkadex/orderbook-ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
-import RecentTrades from "@orderbook/v2/ui/organisms/RecentTrades";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
 import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
+import { RecentTrades } from "@polkadex/orderbook-ui/organisms";
 
 export function Trading() {
   const [state, setState] = useState(false);

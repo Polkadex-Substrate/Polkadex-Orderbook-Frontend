@@ -16,3 +16,4 @@ export * from "./PaperWallet";
 export * from "./Notifications";
 export * from "./Markets";
 export * from "./Orderbook";
+export * from "./RecentTrades";

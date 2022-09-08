@@ -4,7 +4,7 @@ import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
-const RecentTrades = () => {
+export const RecentTrades = () => {
   const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTrades();
 
@@ -62,5 +62,3 @@ const EmptyTrades = ({ message = "No Recent Trades" }) => (
 export const RecentTradesSkeleton = () => (
   <Skeleton height="100%" width="100%" style={{ maxWidth: "350px" }} />
 );
-
-export default RecentTrades;
