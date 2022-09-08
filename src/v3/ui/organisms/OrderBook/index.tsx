@@ -1,8 +1,7 @@
-import DropdownItem from "../../molecules/DropdownItem";
 import Heading from "../../molecules/Heading";
 import OrderBookIcon from "../../molecules/OrderBookIcon";
 import OrderBookTable from "../../molecules/OrderBookTable";
-import { Dropdown, DropdownContent, DropdownHeader } from "../../molecules";
+import { Dropdown, DropdownHeader } from "../../molecules";
 
 import * as S from "./styles";
 

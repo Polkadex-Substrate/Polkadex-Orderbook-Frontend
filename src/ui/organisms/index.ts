@@ -15,3 +15,4 @@ export * from "./LoadingSpinner";
 export * from "./PaperWallet";
 export * from "./Notifications";
 export * from "./Markets";
+export * from "./Orderbook";
