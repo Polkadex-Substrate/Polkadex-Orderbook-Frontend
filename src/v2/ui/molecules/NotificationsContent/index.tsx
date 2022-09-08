@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
+import { SpaceBetweenCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
 import {
   Icon,
   Tooltip,

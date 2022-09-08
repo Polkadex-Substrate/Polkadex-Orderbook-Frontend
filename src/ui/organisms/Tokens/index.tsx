@@ -14,7 +14,7 @@ import {
   selectHasCurrentTradeAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
-import { FlexCenter } from "@polkadex/orderbook/v2/ui/atoms";
+import { FlexCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
 
 export const Tokens = () => {
   const dispatch = useDispatch();

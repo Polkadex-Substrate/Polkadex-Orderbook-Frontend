@@ -77,9 +77,6 @@
         "@polkadex/orderbook/*":[
            "src/*"
         ],
-        "@orderbook/v2/ui/atoms":[
-           "src/v2/ui/atoms"
-        ],
         "@orderbook/v2/ui/templates":[
            "src/v2/ui/templates"
         ],

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { FlexCenter, Grid } from "@orderbook/v2/ui/atoms";
+import { FlexCenter, Grid } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
 import { Wrapper as Logo } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Logo2/styles";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
