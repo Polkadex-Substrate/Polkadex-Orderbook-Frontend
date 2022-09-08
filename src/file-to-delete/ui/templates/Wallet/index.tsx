@@ -16,12 +16,6 @@ const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit")
 const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
   ssr: false,
 });
-const Header = dynamic(
-  () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
-  {
-    ssr: false,
-  }
-);
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -34,7 +28,6 @@ export const WalletTemplate = () => {
 
   return (
     <S.Main>
-      <Header />
       <Tabs>
         <S.Wrapper>
           <WalletContent />

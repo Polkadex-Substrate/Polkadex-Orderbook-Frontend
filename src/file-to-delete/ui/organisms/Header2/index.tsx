@@ -2,8 +2,8 @@ import React from "react";
 
 import * as S from "./styles";
 
-import { Logo } from "@orderbook/v3/ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Logo } from "@polkadex/orderbook-ui/molecules";
 
 export const Header = () => {
   return (
