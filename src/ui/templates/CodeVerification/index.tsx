@@ -7,7 +7,7 @@ import * as S from "./styles";
 
 import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
-import { useTimer } from "@polkadex/orderbook/v2/hooks";
+import { useTimer } from "@polkadex/orderbook/hooks";
 import { useCodeVerification } from "@polkadex/orderbook-hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
@@ -19,7 +19,9 @@ export const CodeVerificationTemplate = () => {
       code: "",
     },
     validationSchema: codeValidations,
-    onSubmit: (values) => verifyCode(values.code),
+    onSubmit: (values) => {
+      verifyCode(values.code)
+    },
   });
 
   return (

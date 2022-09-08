@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
 import { Skeleton } from "@polkadex/orderbook-ui/molecules";
-import { useRecentTrades } from "@polkadex/orderbook/v2/hooks";
+import { useRecentTrades } from "@polkadex/orderbook/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 const RecentTrades = () => {

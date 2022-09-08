@@ -3,7 +3,7 @@ export * from "./Notifications";
 export * from "./LoadingSpinner";
 export * from "./TransferInteraction";
 export * from "./Recovery";
-export * from "./Wallet";
+// export * from "./Wallet";
 export * from "./ConnectToPhone";
 export * from "./Sign";
 export * from "./SignIn";

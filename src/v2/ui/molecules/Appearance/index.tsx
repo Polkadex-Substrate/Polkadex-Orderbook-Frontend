@@ -2,7 +2,7 @@ import * as T from "./types";
 
 import { Navigation, Switcher } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
-import { useAppearance } from "@polkadex/orderbook/v2/hooks";
+import { useAppearance } from "@polkadex/orderbook/hooks";
 
 export const Appearance = ({ navigateBack }: T.Props) => {
   const { isDarkTheme, changeTheme } = useAppearance();

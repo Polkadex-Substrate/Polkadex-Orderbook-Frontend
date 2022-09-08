@@ -15,7 +15,7 @@ export * from "./TradeHistory";
 export * from "./Appearance";
 export * from "./AccountOverview";
 export * from "./EmptyData";
-export * from "./TradingView";
+// export * from "./TradingView";
 export * from "./OrderHistoryTable";
 export * from "./TableRow";
 export * from "./TradeHistoryTable";
