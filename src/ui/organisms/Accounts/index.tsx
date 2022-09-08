@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { TransferInteraction } from "@polkadex/orderbook-ui/templates";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { TransferInteraction } from "@polkadex/orderbook/file-to-delete/v2/ui/organisms/TransferInteraction";
 
 export const Accounts = () => {
   const [state, setState] = useState(false);

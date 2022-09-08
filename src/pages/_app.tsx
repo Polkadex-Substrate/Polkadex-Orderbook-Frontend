@@ -1,6 +1,6 @@
 import { AppProps } from "next/app";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
 import { useRouter } from "next/router";
@@ -24,7 +24,7 @@ const Message = dynamic(
 
 const Notifications = dynamic(
   () =>
-    import("@polkadex/orderbook-ui/templates/Notifications").then((mod) => mod.Notifications),
+    import("@polkadex/orderbook-ui/organisms/Notifications").then((mod) => mod.Notifications),
   {
     ssr: false,
   }

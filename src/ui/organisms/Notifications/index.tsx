@@ -41,7 +41,7 @@ export const Notifications = () => {
   );
 };
 
-export const Card = ({
+const Card = ({
   type = "InformationAlert",
   message,
   time,

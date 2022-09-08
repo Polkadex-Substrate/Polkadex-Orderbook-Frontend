@@ -36,7 +36,6 @@ export const signUpValidations = Yup.object().shape({
     .required()
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
   email: Yup.string().email("Must be a valid email").required("Required"),
-  // terms: Yup.bool().oneOf([true], "Field must be checked"),
 });
 
 export const signValidations = Yup.object().shape({
@@ -78,3 +77,12 @@ export const linkAccountValidations = Yup.object().shape({
     .max(5, "Must be exactly 5 digits")
     .nullable(),
 });
+
+export const importValiations = () => {
+  return Yup.object().shape({
+    accountName: Yup.string()
+      .min(3, "Account name should be greater than 4 characters")
+      .max(13, "Too large!")
+      .required("Required"),
+  });
+};

@@ -5,11 +5,11 @@ import { useState } from "react";
 import Head from "next/head";
 
 import * as S from "./styles";
-import { importValiations } from "./validations";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
 import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
+import { importValiations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
   accountName: "Main Account",

@@ -3,7 +3,7 @@ import { useRef, useEffect, forwardRef, PropsWithChildren, Ref } from "react";
 
 import * as S from "./styles";
 
-const PaperWallet = forwardRef(
+export const PaperWallet = forwardRef(
   (
     {
       mnemonic,
@@ -314,5 +314,3 @@ const divideArray = (values: string[]) => {
   }
   return result;
 };
-
-export default PaperWallet;
