@@ -134,7 +134,6 @@
      "jest.config.js",
      "webpack",
      "./src/*.test.*",
-     "src/file-to-delete"
   ],
   "files":[
      "src/styles/styled.d.ts"

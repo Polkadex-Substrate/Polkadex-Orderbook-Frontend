@@ -37,7 +37,7 @@ export const WalletTemplate = () => {
       <Header />
       <Tabs>
         <S.Wrapper>
-          <WalletContent title="Tokens" locked={false} hasLink={false} />
+          <WalletContent />
           <S.ContainerWrapper>
             <S.GoBack onClick={() => router.back()}>
               <Icon name="SingleArrowLeft" size="extraSmall" />

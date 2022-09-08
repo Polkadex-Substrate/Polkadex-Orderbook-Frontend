@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { Logo, Modal } from "../../molecules";
+import { Logo, Modal } from "../../../v3/ui/molecules";
 
 import * as S from "./styles";
 
