@@ -5,32 +5,27 @@ import * as S from "./styles";
 
 import {
   selectCurrentMarket,
-  selectUserLoggedIn,
-  selectTransactionData,
   selectTransactionLoading,
   transactionsFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
+import { DEFAULT_MARKET } from "@polkadex/web-constants";
 import {
-  LoadingTransactions,
   TransactionHistoryCard,
   TransactionHistoryCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TransactionHistoryCard";
 
 export const TransactionHistory = () => {
   const dispatch = useDispatch();
-
-  const list = useReduxSelector(selectTransactionData);
-
+  const list = [];
   const fetching = useReduxSelector(selectTransactionLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
+
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(transactionsFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+    if (currentMarket) dispatch(transactionsFetch());
+  }, [currentMarket, dispatch]);
 
   return (
     <S.Wrapper>
@@ -47,7 +42,7 @@ export const TransactionHistory = () => {
           <span>Fee</span>
         </S.Header>
       )}
-      {!fetching ? (
+      {!fetching && (
         <S.Content>
           {list?.length &&
             list.map((transaction) => {
@@ -81,8 +76,6 @@ export const TransactionHistory = () => {
               );
             })}
         </S.Content>
-      ) : (
-        <LoadingTransactions />
       )}
     </S.Wrapper>
   );

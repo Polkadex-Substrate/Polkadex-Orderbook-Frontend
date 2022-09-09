@@ -1,9 +1,9 @@
+import { useDeveloper } from "../../../hooks/useDeveloper";
+
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { useDeveloper } from "@polkadex/orderbook/v2/hooks";
-import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const DeveloperContent = () => {
   const { funds, hasUser, wallet, notifications } = useDeveloper();

@@ -4,11 +4,7 @@ import { useEffect } from "react";
 import * as S from "./styles";
 
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  FundCard,
-  FundCardReponsive,
-  LoadingTransactions,
-} from "@polkadex/orderbook-ui/molecules";
+import { FundCard, FundCardReponsive } from "@polkadex/orderbook-ui/molecules";
 import {
   selectUserBalance,
   balancesFetch,
@@ -38,7 +34,7 @@ export const Funds = () => {
           <span>Actions</span>
         </S.Header>
       )}
-      {!isLoading ? (
+      {!isLoading && (
         <S.Content>
           {balances?.length &&
             balances?.map((token, i) => {
@@ -49,13 +45,13 @@ export const Funds = () => {
                 <CardComponent
                   key={i}
                   tokenTicker={token.symbol}
-                  tokenTickerName={token.tickerName}
+                  tokenTickerName={""}
                   tokenName={tokenName}
-                  totalAmount={parseFloat(token.total).toFixed(3)}
+                  totalAmount={""}
                   totalAmountFiat="0.0000000"
-                  availableAmount={parseFloat(token.free).toFixed(3)}
+                  availableAmount={""}
                   availableAmountFiat="0.0000000"
-                  reservedAmount={parseFloat(token.used).toFixed(3)}
+                  reservedAmount={""}
                   reservedAmountFiat="0.0000000"
                   handleTransfer={undefined}
                   handleTrade={undefined}
@@ -63,8 +59,6 @@ export const Funds = () => {
               );
             })}
         </S.Content>
-      ) : (
-        <LoadingTransactions />
       )}
     </S.Wrapper>
   );

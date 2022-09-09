@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
 import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import QrCode from "@polkadex/orderbook-ui/organisms/QrCode";
+import { QrCode } from "@polkadex/orderbook-ui/organisms";
 
 export const QuickLogin = ({
   isFull = false,

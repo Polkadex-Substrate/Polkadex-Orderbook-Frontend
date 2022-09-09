@@ -5,34 +5,30 @@ import * as S from "./styles";
 
 import {
   selectCurrentMarket,
-  selectUserLoggedIn,
-  selectUserTrades,
   userTradesFetch,
   selectTradesLoading,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  TradeHistoryCard,
-  TradeHistoryCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 import { DEFAULT_MARKET } from "@polkadex/web-constants";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import {
+  TradeHistoryCard,
+  TradeHistoryCardReponsive,
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TradeHistoryCard";
 
 export const TradeHistory = () => {
   const dispatch = useDispatch();
 
-  const list = useReduxSelector(selectUserTrades);
+  const list = [];
 
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+    if (currentMarket) dispatch(userTradesFetch());
+  }, [currentMarket, dispatch]);
 
   return (
     <S.Wrapper>
@@ -45,7 +41,7 @@ export const TradeHistory = () => {
           <span>Quantity</span>
         </S.Header>
       )}
-      {!fetching ? (
+      {!fetching && (
         <S.Content>
           {list?.length &&
             list.map((trade, idx) => {
@@ -79,8 +75,6 @@ export const TradeHistory = () => {
               );
             })}
         </S.Content>
-      ) : (
-        <LoadingTransactions />
       )}
     </S.Wrapper>
   );

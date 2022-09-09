@@ -10,9 +10,12 @@ import { selectHasCurrentTradeAccount, selectUserFetching } from "@polkadex/orde
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 
-const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
-  ssr: false,
-});
+const Deposit = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Deposit"),
+  {
+    ssr: false,
+  }
+);
 const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
   ssr: false,
 });

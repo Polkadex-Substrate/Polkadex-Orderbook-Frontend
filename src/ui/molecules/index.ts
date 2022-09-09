@@ -18,3 +18,4 @@ export * from "./Table";
 export * from "./AccountBanner";
 export * from "./Logo";
 export * from "./Modal";
+export * from "./Loading";
