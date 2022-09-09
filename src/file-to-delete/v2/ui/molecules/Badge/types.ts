@@ -1,4 +1,4 @@
-import { Colors, Sizes } from "../../../helpers";
+import { Colors, Sizes } from "../../../../../helpers";
 
 export type Props = {
   children?: string;

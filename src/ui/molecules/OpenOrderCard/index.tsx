@@ -3,10 +3,11 @@ import { ReactNode } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 import { convertExponentialToString } from "@polkadex/orderbook/helpers/convertExponential";
+import { Bar } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Bar";
 
 export const OpenOrderCard = ({
   order_id,
