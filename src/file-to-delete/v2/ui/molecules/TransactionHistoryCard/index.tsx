@@ -3,61 +3,87 @@ import { ReactNode } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { localeDate } from "@polkadex/web-helpers";
+import { Bar } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Bar";
 
-export const TradeHistoryCard = ({
+export const TransactionHistoryCard = ({
   date,
-  symbol,
+  txid,
   fee,
-  profit,
-  side,
-  price,
-  quantity,
+  from,
+  to,
+  type,
+  amount,
+  currency,
+  status,
 }: Props) => {
   return (
     <S.Wrapper>
       <S.Container>
-        <span>{date}</span>
+        <span>{localeDate(new Date(date), "fullDate")}</span>
       </S.Container>
       <S.Container>
-        <span>{symbol}</span>
+        <span>{txid}</span>
       </S.Container>
       <S.Container>
-        <S.Side isSell={side === "Sell"}>{side}</S.Side>
+        <span>{from}</span>
       </S.Container>
       <S.Container>
-        <span>{price}</span>
+        <span>{to}</span>
       </S.Container>
       <S.Container>
-        <span>{quantity}</span>
+        <span>{type}</span>
+      </S.Container>
+      <S.Container>
+        <span>{amount}</span>
+      </S.Container>
+      <S.Container>
+        <span>{currency}</span>
+      </S.Container>
+      <S.Container>
+        <span>{status}</span>
+      </S.Container>
+      <S.Container>
+        <span>{fee}</span>
       </S.Container>
     </S.Wrapper>
   );
 };
 
-export const TradeHistoryCardReponsive = ({
+export const TransactionHistoryCardReponsive = ({
   date,
-  symbol,
+  txid,
   fee,
-  profit,
-  side,
-  price,
-  quantity,
+  from,
+  to,
+  type,
+  amount,
+  currency,
+  status,
 }: Props) => {
   return (
     <S.Box>
-      <S.Header isSell={side === "Sell"}>
+      <S.Header>
         <div>
-          <p>{symbol}</p>
-          <span>{side}</span>
+          <p>{currency}</p>
+          <span>{type}</span>
         </div>
       </S.Header>
       <S.Content>
-        <TradeHistoryInfo label="Date" value={date} />
-        <TradeHistoryInfo label="Price" value={price} />
-        <TradeHistoryInfo label="Quantity" value={quantity} />
+        <TransactionHistoryInfo label="TXID" value={txid} />
+        <TransactionHistoryInfo label="Date" value={localeDate(new Date(date), "fullDate")} />
+        <TransactionHistoryInfo label="From" value={from} />
+        <TransactionHistoryInfo label="To" value={to} />
+        <TransactionHistoryInfo label="Fee" value={fee} />
       </S.Content>
+      <S.Footer>
+        <S.FlexJustify>
+          <span>{amount}</span>
+          <p>{status}</p>
+        </S.FlexJustify>
+        <Bar percent={0} />
+      </S.Footer>
     </S.Box>
   );
 };
@@ -66,14 +92,14 @@ type InfoProps = {
   label?: string;
   value?: string | number | ReactNode;
 };
-const TradeHistoryInfo = ({ label = "", value = "" }: InfoProps) => (
+const TransactionHistoryInfo = ({ label = "", value = "" }: InfoProps) => (
   <S.Info>
     <span>{label}</span>
     <p>{value}</p>
   </S.Info>
 );
 
-export const TradeHistoryLoading = () => {
+export const TransactionHistoryLoading = () => {
   return (
     <div style={{ paddingRight: "1rem", paddingLeft: "1rem" }}>
       <LoadingTransactionItem />

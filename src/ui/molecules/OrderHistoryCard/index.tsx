@@ -3,7 +3,8 @@ import { ReactNode } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import { Bar, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Bar } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Bar";
 
 export const OrderHistoryCard = ({
   date,

@@ -1,4 +1,4 @@
-import { Icon } from "..";
+import { Icon } from "../../../../../ui/molecules";
 
 import * as S from "./styles";
 export const NotificationCard = ({ title = "Example", description, onClose }) => {
