@@ -40,7 +40,7 @@ const fetchOrderbook = async (market: string): Promise<OrderBookDbState[]> => {
 const formatOrderBookData = (data: OrderBookDbState[]): OrderBookDbState[] => {
   return data.map((item) => ({
     ...item,
-    p: Utils.decimals.formatToString(item.p),
-    q: Utils.decimals.formatToString(item.q),
+    p: item.p,
+    q: item.q,
   }));
 };

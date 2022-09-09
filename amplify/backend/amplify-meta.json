@@ -1,14 +1,14 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-orderbookfrontend-orderbook-235331-authRole",
-      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-authRole",
+      "AuthRoleName": "amplify-orderbookfrontend-dev-213922-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-authRole",
       "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-orderbookfrontend-orderbook-235331-deployment",
-      "UnauthRoleName": "amplify-orderbookfrontend-orderbook-235331-unauthRole",
-      "StackName": "amplify-orderbookfrontend-orderbook-235331",
-      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-orderbook-235331/620204f0-1359-11ed-8572-02501297e2fe",
+      "DeploymentBucketName": "amplify-orderbookfrontend-dev-213922-deployment",
+      "UnauthRoleName": "amplify-orderbookfrontend-dev-213922-unauthRole",
+      "StackName": "amplify-orderbookfrontend-dev-213922",
+      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-dev-213922/59f148c0-f0b3-11ec-93ea-0a1621de353a",
       "AmplifyAppId": "djf6q4n044sil"
     }
   },
@@ -46,57 +46,30 @@
     }
   },
   "api": {
-    "EmmanuelTest-orderbook-api": {
+    "emmanuel-orderbook-api": {
       "service": "AppSync",
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "API_KEY"
+            "authenticationType": "AWS_LAMBDA"
           },
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "ap-south-1_G7xhCI6s5",
+                "userPoolId": "ap-south-1_QTi29vXb2",
                 "awsRegion": "ap-south-1",
                 "appIdClientRegex": null
               }
             }
           ]
         },
-        "GraphQLAPIIdOutput": "i7ibmtykkfbrzdild523l4fwh4",
-        "GraphQLAPIEndpointOutput": "https://pdbbdqroynawbgejojs4fjgfiq.appsync-api.ap-south-1.amazonaws.com/graphql",
-        "name": "EmmanuelTest-orderbook-api",
-        "region": "ap-south-1",
-        "GraphQLAPIKeyOutput": "da2-uyr6rr4omrfmvdjh55mgiub5na"
+        "GraphQLAPIIdOutput": "x2i3wkh75zf6jbnakg53mgdhjq",
+        "GraphQLAPIEndpointOutput": "https://6d7lnart6rhbpkteiosj4ptsk4.appsync-api.ap-south-1.amazonaws.com/graphql",
+        "name": "emmanuel-orderbook-api",
+        "region": "ap-south-1"
       },
-      "lastPushTimeStamp": "2022-08-03T18:26:28.554Z"
-    },
-    "emmanuel2-orderbook-api": {
-      "service": "AppSync",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY"
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "ap-south-1_G7xhCI6s5",
-                "awsRegion": "ap-south-1",
-                "appIdClientRegex": null
-              }
-            }
-          ]
-        },
-        "GraphQLAPIIdOutput": "4tndt44ktzbalp7gncsezvfbny",
-        "GraphQLAPIEndpointOutput": "https://ydrbutixgrfqnlbpybe5fqtjli.appsync-api.ap-south-1.amazonaws.com/graphql",
-        "name": "emmanuel2-orderbook-api",
-        "region": "ap-south-1",
-        "GraphQLAPIKeyOutput": "da2-zzv2nfzdy5dxldxizwfro3g43q"
-      },
-      "lastPushTimeStamp": "2022-08-29T22:12:46.343Z"
+      "lastPushTimeStamp": "2022-09-07T08:22:38.140Z"
     }
   }
 }

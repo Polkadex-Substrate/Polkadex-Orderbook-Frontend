@@ -26,7 +26,7 @@ export const orderbookTypes = {
     pair: "TradingPair",
     side: "OrderSide",
     order_type: "OrderType",
-    quote_order_quantity: "Balance", // Quantity is defined in base asset
+    quote_order_quantity: "String", // Quantity is defined in base asset
     qty: "String",
     price: "String", // Price is defined in quote asset per unit base asset
     timestamp: "i64",

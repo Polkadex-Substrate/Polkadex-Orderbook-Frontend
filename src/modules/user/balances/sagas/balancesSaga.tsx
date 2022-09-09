@@ -72,9 +72,9 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
   const balances = balancesRaw.map((val) => {
     return {
       asset_type: val.a,
-      reserved_balance: Utils.decimals.formatToString(val.r),
-      free_balance: Utils.decimals.formatToString(val.f),
-      pending_withdrawal: Utils.decimals.formatToString(val.p),
+      reserved_balance: val.r,
+      free_balance: val.f,
+      pending_withdrawal: val.p,
     };
   });
   return balances;

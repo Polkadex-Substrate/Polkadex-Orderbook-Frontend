@@ -22,6 +22,7 @@ export function* marketsFetchSaga(action: MarketsFetch) {
       yield put(setCurrentMarketIfUnset(markets[0]));
     }
   } catch (error) {
+    console.log("error in fetch market", error);
     yield put(
       sendError({
         error,
@@ -53,13 +54,13 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
       quote_unit: quoteAsset,
       base_precision: Number(pair.quote_asset_precision),
       quote_precision: Number(pair.quote_asset_precision),
-      min_price: new BigNumber(pair.min_price).div(UNIT_BN),
-      max_price: new BigNumber(pair.max_price).div(UNIT_BN),
-      min_amount: new BigNumber(pair.min_order_qty).div(UNIT_BN),
-      max_amount: new BigNumber(pair.max_order_qty).div(UNIT_BN),
+      min_price: Number(pair.min_order_price),
+      max_price: Number(pair.max_order_price),
+      min_amount: Number(pair.min_order_qty),
+      max_amount: Number(pair.max_order_qty),
       tokenTickerName: baseSymbol,
-      price_tick_size: new BigNumber(pair.price_tick_size).div(UNIT_BN),
-      qty_step_size: new BigNumber(pair.qty_step_size).div(UNIT_BN),
+      price_tick_size: Number(pair.price_tick_size),
+      qty_step_size: Number(pair.qty_step_size),
     };
   });
   return Promise.all(markets);

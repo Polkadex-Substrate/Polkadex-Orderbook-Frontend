@@ -21,8 +21,8 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
       const res: any = yield call(() => fetchRecentTrade(market));
       const trades: PublicTrade[] = res.map((x) => ({
         market_id: x.m,
-        price: Utils.decimals.formatToString(x.p),
-        amount: Utils.decimals.formatToString(x.q),
+        price: x.p,
+        amount: x.q,
         timestamp: new Date(Number(x.t)).toISOString(),
       }));
       yield put(recentTradesData(trades));

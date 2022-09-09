@@ -3,7 +3,13 @@ import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
 import BigNumber from "bignumber.js";
 
-import { OrderSide, OrderType, OrderTypeEnum, OrderSideEnum, OrderKindEnum } from "../modules/types";
+import {
+  OrderSide,
+  OrderType,
+  OrderTypeEnum,
+  OrderSideEnum,
+  OrderKindEnum,
+} from "../modules/types";
 
 import { signPayload } from "./enclavePayloadSigner";
 
@@ -25,7 +31,10 @@ export const createOrderPayload = (
   const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
   const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
   const orderType = { [type.toUpperCase()]: null };
-  const orderSide = { [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null };
+  const orderSide = {
+    [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
+  };
+  const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
@@ -35,12 +44,9 @@ export const createOrderPayload = (
     },
     side: orderSide,
     order_type: orderType,
-    qty: new BigNumber(quantity).multipliedBy(UNIT_BN).toString(),
-    quote_order_quantity:
-      type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy
-        ? new BigNumber(quantity).multipliedBy(UNIT_BN).toString()
-        : "0",
-    price: type === OrderTypeEnum.LIMIT ? new BigNumber(price).multipliedBy(UNIT_BN).toString() : "0",
+    qty: isMarketBid ? "0" : quantity.toString(),
+    quote_order_quantity: isMarketBid ? quantity.toString() : "0",
+    price: type === OrderTypeEnum.LIMIT ? price.toString() : "0",
     timestamp: timestamp,
     client_order_id,
   };

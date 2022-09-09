@@ -59,8 +59,8 @@ const fetchUserTrades = async (
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
   const trades: UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
-    price: Utils.decimals.formatToString(trade.p),
-    qty: Utils.decimals.formatToString(trade.q),
+    price: trade.p,
+    qty: trade.q,
     side: trade.s,
     timestamp: Number(trade.t),
     baseAsset: trade.m.split("-")[0],
