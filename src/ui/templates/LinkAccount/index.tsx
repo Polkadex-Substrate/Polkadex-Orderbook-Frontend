@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { linkAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useLinkMainAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -16,7 +16,6 @@ import {
   selectTradeAccountsLoading,
   selectTradeAccountsSuccess,
 } from "@polkadex/orderbook-modules";
-import { PassCode } from "@polkadex/orderbook-ui/molecules/Input";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
 
 export const LinkAccountTemplate = () => {

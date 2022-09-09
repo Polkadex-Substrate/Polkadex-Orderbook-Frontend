@@ -1,4 +1,3 @@
-import moment from "moment";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";

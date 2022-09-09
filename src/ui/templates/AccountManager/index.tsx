@@ -16,7 +16,11 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown, Loading } from "@polkadex/orderbook/v3/ui/molecules";
-import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
+import {
+  RemoveFromBlockchain,
+  RemoveFromDevice,
+  UnlockAccount,
+} from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
   useAccountManager,
@@ -33,7 +37,6 @@ import {
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
-import { UnlockAccount } from "@polkadex/orderbook-ui/organisms/UnlockAccount";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);

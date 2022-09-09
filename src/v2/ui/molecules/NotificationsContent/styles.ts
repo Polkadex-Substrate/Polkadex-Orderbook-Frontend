@@ -16,16 +16,12 @@ export const Content = styled.div`
 export const Title = styled.div`
   ${({ theme }) => css`
     padding: 2rem;
-    a {
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      transition: background 0.3s ease-in-out;
-      ${Icon} {
-        display: inline-block;
-        margin-left: 0.5rem;
-      }
-      :hover {
-        background: ${theme.colors.secondaryBackground};
+    div {
+      justify-content: space-between;
+      align-items: center;
+      h3 {
+        font-size: 1.6rem;
+        font-weight: 550;
       }
     }
   `}

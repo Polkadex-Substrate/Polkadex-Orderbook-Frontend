@@ -7,8 +7,7 @@ import Head from "next/head";
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
-import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
+import { Button, Icon, InputPrimary, MnemonicImport } from "@polkadex/orderbook-ui/molecules";
 import { importValiations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {

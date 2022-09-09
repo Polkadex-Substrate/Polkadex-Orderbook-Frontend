@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 import * as S from "./styles";
 
-const QrCode = ({ mnemoicString }) => {
+export const QrCode = ({ mnemoicString }) => {
   const componentRef = useRef(null);
 
   useEffect(() => {
@@ -24,5 +24,3 @@ const QrCode = ({ mnemoicString }) => {
 
   return <S.Wrapper ref={componentRef} />;
 };
-
-export default QrCode;

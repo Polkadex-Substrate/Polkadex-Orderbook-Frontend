@@ -21,9 +21,7 @@ import {
   selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
-import QrCode from "@polkadex/orderbook-ui/organisms/QrCode";
-import { HeaderBack } from "@polkadex/orderbook-ui/organisms/Header";
-import { PaperWallet } from "@polkadex/orderbook-ui/organisms";
+import { QrCode, PaperWallet, HeaderBack } from "@polkadex/orderbook-ui/organisms";
 
 export const ConnectToPhone = () => {
   const router = useRouter();

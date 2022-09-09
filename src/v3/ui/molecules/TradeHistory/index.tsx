@@ -8,7 +8,7 @@ import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
 
-const TradeHistory = ({filters}) => {
+const TradeHistory = ({ filters }) => {
   const { priceFixed, amountFixed, trades } = useTradeHistory(filters);
   const getAsset = useReduxSelector(selectGetAsset);
 

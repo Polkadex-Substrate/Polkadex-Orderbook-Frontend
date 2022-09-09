@@ -1,9 +1,8 @@
 import { useDispatch } from "react-redux";
 import { MutableRefObject, useEffect } from "react";
 
-import { getSymbolFromId, mapValues } from "../helpers";
+import { getSymbolFromId, mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 
-import { accumulateVolume, calcMaxVolume } from "@polkadex/web-helpers";
 import {
   DepthState,
   selectCurrentMarket,

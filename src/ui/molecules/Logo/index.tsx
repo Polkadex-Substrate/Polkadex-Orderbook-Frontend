@@ -84,7 +84,7 @@ export const Logo = ({ href = "#", size }: LogoProps) => (
   </Link>
 );
 
-export const Orderbook = () => (
+export const OrderbookLogo = () => (
   <svg
     width="192"
     height="45"

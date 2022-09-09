@@ -16,3 +16,5 @@ export * from "./Notifications";
 export * from "./Markets";
 export * from "./Orderbook";
 export * from "./RecentTrades";
+export * from "./UnlockAccount";
+export * from "./QrCode";

@@ -1,5 +1,3 @@
-import moment from "moment";
-
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
