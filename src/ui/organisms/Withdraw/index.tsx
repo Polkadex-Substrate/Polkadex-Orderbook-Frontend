@@ -11,11 +11,7 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectLinkedMainAccount,
-  selectCurrentMainAccount,
-  withdrawsFetch,
-} from "@polkadex/orderbook-modules";
+import { selectLinkedMainAccount, withdrawsFetch } from "@polkadex/orderbook-modules";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
 const defaultValues = {
@@ -43,8 +39,8 @@ const Withdraw = () => {
             <S.Form>
               <S.FormWallet>
                 <SelectAccount
-                  accountName={proxyAccount.accountName || "My Proxy account"}
-                  address={proxyAccount?.address || "Polkadex is completely free"}
+                  accountName={"My Proxy account"}
+                  address={"Polkadex is completely free"}
                   locked
                   isHoverable={false}
                 />
