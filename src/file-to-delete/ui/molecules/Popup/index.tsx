@@ -1,7 +1,7 @@
-import { Portal } from "../../../../ui/molecules";
-
 import * as S from "./styles";
 import { Props } from "./types";
+
+import { Portal } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Portal";
 
 export const Popup = ({
   isVisible = false,

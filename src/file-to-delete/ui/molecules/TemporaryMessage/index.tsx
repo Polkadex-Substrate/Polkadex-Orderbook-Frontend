@@ -1,8 +1,8 @@
 import * as S from "./styles";
 
 import { Popup } from "@polkadex/orderbook/file-to-delete/ui/molecules/Popup";
-import { Portal } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Portal } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Portal";
 
 export const TemporaryMessage = ({ isVisible, onClose, message }) => {
   return (

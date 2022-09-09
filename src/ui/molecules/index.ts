@@ -5,8 +5,6 @@ export * from "./Mnemonic";
 export * from "./Spinner";
 export * from "./Tabs";
 export * from "./Button";
-export * from "./Portal";
-export * from "./OpenOrderCard";
 export * from "./AvailableMessage";
 export * from "./FundCard";
 export * from "./Icon";

@@ -2,10 +2,11 @@ import React from "react";
 import { Formik, Form } from "formik";
 
 import { AmountInput } from "../../molecules/AmountInput";
+import { Portal } from "../../molecules/Portal";
 
 import * as S from "./styles";
 
-import { Button, SelectAccount, Portal } from "@polkadex/orderbook-ui/molecules";
+import { Button, SelectAccount } from "@polkadex/orderbook-ui/molecules";
 import { Popup } from "@polkadex/orderbook/file-to-delete/ui/molecules/Popup";
 
 export const TransferInteraction = ({ isActive = false, onClose }) => {

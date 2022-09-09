@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 import { Range, ButtonStatus } from "@orderbook/v2/ui/molecules";
 import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder } from "@polkadex/orderbook/v2/hooks";
+import { usePlaceOrder } from "@polkadex/orderbook-hooks";
 
 const PlaceOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
