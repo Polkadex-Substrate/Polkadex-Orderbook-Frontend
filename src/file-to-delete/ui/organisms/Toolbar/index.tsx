@@ -5,13 +5,13 @@ import * as S from "./styles";
 import {
   AvailableMessage,
   Dropdown,
-  Information,
   SelectPairHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Markets } from "@polkadex/orderbook/file-to-delete/ui/organisms/Markets";
+import { Information } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Information";
 
 const defaultTicker = {
   amount: 0,
