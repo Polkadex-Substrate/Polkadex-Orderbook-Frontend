@@ -2,16 +2,13 @@ import React from "react";
 
 import * as S from "./styles";
 
-import {
-  AvailableMessage,
-  Dropdown,
-  SelectPairHeader,
-} from "@polkadex/orderbook-ui/molecules";
+import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Markets } from "@polkadex/orderbook/file-to-delete/ui/organisms/Markets";
 import { Information } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Information";
+import { SelectPairHeader } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/SelectPair";
 
 const defaultTicker = {
   amount: 0,

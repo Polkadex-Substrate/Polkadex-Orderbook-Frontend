@@ -1,4 +1,4 @@
-import { Tooltip, TooltipHeader, TooltipContent } from "..";
+import { Tooltip, TooltipHeader, TooltipContent } from "../../../../../ui/molecules";
 
 import * as S from "./styles";
 import * as T from "./types";

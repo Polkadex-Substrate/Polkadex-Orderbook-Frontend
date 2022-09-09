@@ -6,14 +6,8 @@ import * as cryptoIcons from "@styled-icons/crypto";
 import * as S from "./styles";
 import { Props } from "./types";
 
-import {
-  Icon,
-  Skeleton,
-  Tabs,
-  TabContent,
-  TabHeader,
-  Tag,
-} from "@polkadex/orderbook-ui/molecules";
+import { Tag } from "@polkadex/orderbook/file-to-delete/ui/organisms/Tag";
+import { Icon, Skeleton, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
 import {
   Market,
   selectMarkets,

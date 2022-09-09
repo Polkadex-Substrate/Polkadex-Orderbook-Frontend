@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as WrapperTag } from "@polkadex/orderbook-ui/molecules/Tag/styles";
+import { Wrapper as WrapperTag } from "@polkadex/orderbook/file-to-delete/ui/organisms/Tag/styles";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
 export const Section = styled.section<{ marketActive?: boolean }>`
