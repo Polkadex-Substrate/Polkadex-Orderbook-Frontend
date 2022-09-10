@@ -10,9 +10,11 @@ import {
 
 export function* transactionsUpdateSaga(action: TransactionsUpdateEvent) {
   try {
-    console.log("transactionsUpdateSaga", action.payload);
-    const data = formatTransactionData(action.payload);
-    yield put(transactionsUpdateEventData(data));
+    if (action.payload) {
+      console.log("transactionsUpdateSaga", action.payload);
+      const data = formatTransactionData(action.payload);
+      yield put(transactionsUpdateEventData(data));
+    }
   } catch (error) {
     yield put(
       alertPush({
@@ -40,7 +42,7 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
   } else {
     return {
       ...data,
-      sid: data.sid ?? 0,
+      sid: Number(data.sid) ?? 0,
       txn_type: "WITHDRAW",
       main_account: data.user,
       fee: data.fee.toString(),
