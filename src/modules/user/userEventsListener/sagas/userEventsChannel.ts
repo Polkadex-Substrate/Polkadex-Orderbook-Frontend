@@ -87,7 +87,7 @@ function createActionFromUserEvent(eventData: any) {
       "Trade account removed",
       "Trade account removal Confirmed"
     );
-  } 
+  }
 }
 
 const registerSuccessNofiication = (title: string, description: string) =>
