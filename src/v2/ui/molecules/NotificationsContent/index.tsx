@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import { SpaceBetweenCenter } from "@orderbook/v2/ui/atoms";
 import {
   Icon,
   Tooltip,
@@ -30,9 +29,9 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
   return (
     <S.Content>
       <S.Title>
-        <SpaceBetweenCenter>
+        <div>
           <h3>Notifications Center</h3>
-        </SpaceBetweenCenter>
+        </div>
       </S.Title>
       <S.Recent>
         <S.RecentTitle>

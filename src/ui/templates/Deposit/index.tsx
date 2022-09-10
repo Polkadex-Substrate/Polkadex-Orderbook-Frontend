@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { addDays, formatDistance, formatRelative, intlFormat, subDays } from "date-fns";
+import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
@@ -277,6 +277,7 @@ export const DepositTemplate = () => {
     </>
   );
 };
+
 const Copy = ({ copyData }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");

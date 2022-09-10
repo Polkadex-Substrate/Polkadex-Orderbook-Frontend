@@ -5,10 +5,8 @@ import * as S from "./styles";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
-import { useOrderHistory } from "@polkadex/orderbook/hooks";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
-import { Ifilters } from "../../organisms/Transactions";
 
 const OrderHistory = ({ filters }) => {
   const { priceFixed, amountFixed, orders } = useOrderHistory(filters);

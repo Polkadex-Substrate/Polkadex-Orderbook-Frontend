@@ -77,9 +77,6 @@
         "@polkadex/orderbook/*":[
            "src/*"
         ],
-        "@orderbook/v2/ui/atoms":[
-           "src/v2/ui/atoms"
-        ],
         "@orderbook/v2/ui/templates":[
            "src/v2/ui/templates"
         ],
@@ -134,7 +131,6 @@
      "jest.config.js",
      "webpack",
      "./src/*.test.*",
-     "src/file-to-delete"
   ],
   "files":[
      "src/styles/styled.d.ts"

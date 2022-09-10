@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import * as S from "./styles";
@@ -22,9 +21,7 @@ import {
   selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
-import QrCode from "@polkadex/orderbook-ui/organisms/QrCode";
-import { HeaderBack } from "@polkadex/orderbook-ui/organisms/Header";
-import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
+import { QrCode, PaperWallet, HeaderBack } from "@polkadex/orderbook-ui/organisms";
 
 export const ConnectToPhone = () => {
   const router = useRouter();

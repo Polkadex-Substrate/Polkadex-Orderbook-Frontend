@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 
 import * as S from "./styles";
 
-import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignIn } from "@polkadex/orderbook-hooks";
@@ -37,7 +37,7 @@ export const SignInTemplate = () => {
           <S.Container>
             <S.Title>
               <div>
-                <Orderbook />
+                <OrderbookLogo />
               </div>
               <span>
                 Not a member? <Link href="/sign"> Sign Up</Link>

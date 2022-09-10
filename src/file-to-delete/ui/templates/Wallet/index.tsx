@@ -10,18 +10,15 @@ import { selectHasCurrentTradeAccount, selectUserFetching } from "@polkadex/orde
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 import History from "@polkadex/orderbook-ui/organisms/History";
 
-const Deposit = dynamic(() => import("@polkadex/orderbook-ui/organisms/Deposit"), {
-  ssr: false,
-});
-const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
-  ssr: false,
-});
-const Header = dynamic(
-  () => import("@orderbook/v2/ui/organisms/Header").then((mod) => mod.Header),
+const Deposit = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Deposit"),
   {
     ssr: false,
   }
 );
+const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
+  ssr: false,
+});
 
 export const WalletTemplate = () => {
   const router = useRouter();
@@ -34,10 +31,9 @@ export const WalletTemplate = () => {
 
   return (
     <S.Main>
-      <Header />
       <Tabs>
         <S.Wrapper>
-          <WalletContent title="Tokens" locked={false} hasLink={false} />
+          <WalletContent />
           <S.ContainerWrapper>
             <S.GoBack onClick={() => router.back()}>
               <Icon name="SingleArrowLeft" size="extraSmall" />

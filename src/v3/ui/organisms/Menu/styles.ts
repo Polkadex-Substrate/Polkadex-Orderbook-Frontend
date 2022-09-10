@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { LogoText } from "../../molecules/Logo/styles";
+import { LogoText } from "../../../../ui/molecules/Logo/styles";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Logo = styled.div`

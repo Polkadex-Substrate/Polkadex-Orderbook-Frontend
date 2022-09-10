@@ -2,11 +2,11 @@ import NavbarItem from "../../molecules/NavbarItem";
 
 import * as S from "./styles";
 
-import { HeaderMarket } from "@polkadex/orderbook/v2/ui/organisms";
 import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 
 const Navbar = ({ onOpenMarkets }) => {
   const getAsset = useReduxSelector(selectGetAsset);

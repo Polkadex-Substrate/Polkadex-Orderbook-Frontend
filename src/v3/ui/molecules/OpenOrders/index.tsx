@@ -4,12 +4,11 @@ import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
-import { useOrderHistory } from "@polkadex/orderbook/hooks";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
-const OpenOrders = ({filters}) => {
+const OpenOrders = ({ filters }) => {
   const { priceFixed, amountFixed, openOrders } = useOrderHistory(filters);
   const getAsset = useReduxSelector(selectGetAsset);
 

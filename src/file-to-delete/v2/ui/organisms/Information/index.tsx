@@ -1,9 +1,9 @@
 import * as S from "./styles";
 import * as T from "./types";
 
-import { HeaderMarket } from "@orderbook/v2/ui/organisms/Markets";
-import { useInformation } from "@polkadex/orderbook/v2/hooks";
+import { HeaderMarket } from "@polkadex/orderbook-ui/organisms/Markets";
 import { AvailableMessage } from "@polkadex/orderbook-ui/molecules";
+import { useInformation } from "@polkadex/orderbook-hooks";
 
 const Information = ({ onOpenMarkets }) => {
   const {

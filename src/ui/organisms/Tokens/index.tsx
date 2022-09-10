@@ -7,7 +7,6 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { FlexCenter } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
@@ -15,6 +14,7 @@ import {
   selectHasCurrentTradeAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
+import { FlexCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
 
 export const Tokens = () => {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ export const Tokens = () => {
                   key={index}
                   tokenName={token.symbol}
                   tokenTicker={token.symbol}
-                  amount={token.free as number}
+                  amount={0}
                 />
               ))
             ) : (

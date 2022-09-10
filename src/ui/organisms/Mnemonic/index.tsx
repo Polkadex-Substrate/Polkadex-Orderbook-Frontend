@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@polkadex/orderbook-hooks";
-import PaperWallet from "@polkadex/orderbook-ui/templates/PaperWallet";
+import { PaperWallet } from "@polkadex/orderbook-ui/organisms";
 
 export const Mnemonic = ({ handleMnemonicUpdate }) => {
   const [state, setState] = useState(true);

@@ -1,6 +1,6 @@
 import * as S from "./styles";
 
-import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook/v2/ui/organisms";
+import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook-ui/organisms";
 
 const OrderBookTable = ({
   lightMode = false,

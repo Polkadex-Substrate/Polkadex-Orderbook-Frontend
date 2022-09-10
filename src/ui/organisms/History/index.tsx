@@ -21,7 +21,6 @@ const History = ({ isDepositActive }) => {
     search,
     onChangeSearch,
     transactionHistory,
-    getAsset,
     handleClaimWithdraws,
   } = useHistory();
 

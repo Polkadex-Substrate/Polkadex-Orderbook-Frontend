@@ -5,10 +5,9 @@ import { useFormik } from "formik";
 
 import * as S from "./styles";
 
-import { Button, InputLine, Orderbook } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
-import { useTimer } from "@polkadex/orderbook/hooks";
-import { useCodeVerification } from "@polkadex/orderbook-hooks";
+import { useTimer, useCodeVerification } from "@polkadex/orderbook/hooks";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 
 export const CodeVerificationTemplate = () => {
@@ -20,7 +19,7 @@ export const CodeVerificationTemplate = () => {
     },
     validationSchema: codeValidations,
     onSubmit: (values) => {
-      verifyCode(values.code)
+      verifyCode(values.code);
     },
   });
 
@@ -36,7 +35,7 @@ export const CodeVerificationTemplate = () => {
           <S.Container>
             <S.Title>
               <div>
-                <Orderbook />
+                <OrderbookLogo />
               </div>
               <span>
                 Not a member? <Link href="/sign"> Sign Up</Link>

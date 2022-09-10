@@ -8,12 +8,11 @@ import {
   ReactElement,
 } from "react";
 
-import Button from "../Button";
-
 import { usePopoverContext } from "./context";
 import * as T from "./types";
 
 import { validateChild } from "@polkadex/orderbook/helpers/validateChild";
+import { Button } from "@polkadex/orderbook-ui/molecules";
 
 export const Trigger: T.PopoverComponent<{}, HTMLElement> = forwardRef(
   ({ children, ...props }, ref) => {

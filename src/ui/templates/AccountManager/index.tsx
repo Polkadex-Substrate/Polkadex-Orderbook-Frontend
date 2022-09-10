@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -13,10 +12,15 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown, Loading, Modal } from "@polkadex/orderbook/v3/ui/molecules";
-import { RemoveFromBlockchain, RemoveFromDevice } from "@polkadex/orderbook-ui/organisms";
+import { Dropdown, Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import {
+  RemoveFromBlockchain,
+  RemoveFromDevice,
+  UnlockAccount,
+} from "@polkadex/orderbook-ui/organisms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
   useAccountManager,
@@ -25,7 +29,6 @@ import {
 } from "@polkadex/orderbook-hooks";
 import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
-  removeProxyAccountFromChainFetch,
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,
   selectHasExtension,
@@ -34,7 +37,6 @@ import {
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
-import { UnlockAccount } from "@polkadex/orderbook-ui/organisms/UnlockAccount";
 
 export const AccountManagerTemplate = () => {
   const [state, setState] = useState(false);
