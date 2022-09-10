@@ -73,9 +73,9 @@ function createActionFromUserEvent(eventData: any) {
   if (isKeyPresentInObject(data, "SetBalance")) {
     return balanceUpdateEvent(data.SetBalance);
   } else if (isKeyPresentInObject(data, "SetTransaction")) {
-    return transactionsUpdateEvent(data.SetTransaction);
+    return transactionsUpdateEvent(data.SetTransaction[0]);
   } else if (isKeyPresentInObject(data, "SetOrder")) {
-    return orderUpdateEvent(data.SetOrder);
+    return orderUpdateEvent(data.SetOrder[0]);
   } else if (isKeyPresentInObject(data, "RegisterAccount")) {
     return registerMainAccountUpdateEvent(data.RegisterAccount);
   } else if (isKeyPresentInObject(data, "AddProxy")) {
@@ -85,7 +85,7 @@ function createActionFromUserEvent(eventData: any) {
       "Trade account removed",
       "Trade account removal Confirmed"
     );
-  } else {
+  } else if (isKeyPresentInObject(data, "AddTrade")) {
     return userTradesUpdateEvent(data);
   }
 }
