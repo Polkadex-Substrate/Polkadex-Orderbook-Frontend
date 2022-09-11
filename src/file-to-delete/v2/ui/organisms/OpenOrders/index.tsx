@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { OpenOrderCard, OpenOrderCardReponsive } from "../../molecules/OpenOrderCard";
+
 import * as S from "./styles";
 
 import {
@@ -12,34 +14,16 @@ import {
   userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  OpenOrderCard,
-  OpenOrderCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
 
 export const OpenOrders = () => {
   const dispatch = useDispatch();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const openOrders = useReduxSelector(selectOpenOrdersHistory);
+  const openOrders = [];
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
   const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
   const { width } = useWindowSize();
-
-  const handleCancel = (id: string) =>
-    dispatch(
-      notificationPush({
-        type: "ErrorAlert",
-        message: {
-          title: "Not Available in Beta",
-          description: "Polkadex team is currently working on this functionality.",
-        },
-      })
-    );
-
-  // const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
 
   useEffect(() => {
     if (userLoggedIn) dispatch(userOrdersHistoryFetch());
@@ -60,7 +44,7 @@ export const OpenOrders = () => {
           <span></span>
         </S.Header>
       )}
-      {!fetching ? (
+      {!fetching && (
         <S.Content>
           {openOrders?.map((item) => {
             const {
@@ -79,7 +63,7 @@ export const OpenOrders = () => {
             return (
               <CardComponent
                 key={order_id}
-                order_id={order_id}
+                order_id={""}
                 timestamp={timestamp}
                 base_asset={base_asset}
                 quote_asset={quote_asset}
@@ -88,13 +72,11 @@ export const OpenOrders = () => {
                 filled_qty={filled_qty}
                 amount={amount}
                 order_type={order_type}
-                onCancel={() => handleCancel(order_id)}
+                onCancel={undefined}
               />
             );
           })}
         </S.Content>
-      ) : (
-        <LoadingTransactions />
       )}
     </S.Wrapper>
   );
