@@ -20,8 +20,8 @@ import {
   TabContent,
   TabHeader,
   Tabs,
+  Logged,
 } from "@polkadex/orderbook-ui/molecules";
-import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasCurrentTradeAccount, userSessionData } from "@polkadex/orderbook-modules";
 

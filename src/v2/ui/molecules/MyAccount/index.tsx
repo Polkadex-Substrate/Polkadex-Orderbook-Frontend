@@ -6,8 +6,7 @@ import Link from "next/link";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon, Dropdown } from "@polkadex/orderbook-ui/molecules";
-import { Appearance, AccountOverview } from "@orderbook/v2/ui/molecules";
+import { Icon, Dropdown, Appearance, AccountOverview } from "@polkadex/orderbook-ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
 

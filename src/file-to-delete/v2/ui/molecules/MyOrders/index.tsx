@@ -10,14 +10,14 @@ import {
   TabContent,
   TabHeader,
   AvailableMessage,
+  EmptyData,
+  Logged,
 } from "@polkadex/orderbook-ui/molecules";
 import {
   OrderHistory,
   TradeHistory,
   TradeHistoryTable,
   OrderHistoryTable,
-  Logged,
-  EmptyData,
 } from "@orderbook/v2/ui/molecules";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";

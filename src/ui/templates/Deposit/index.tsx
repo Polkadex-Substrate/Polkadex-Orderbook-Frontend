@@ -15,6 +15,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  EmptyData,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
@@ -25,7 +26,6 @@ import {
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import {
   isAssetPDEX,
   selectAllAssets,

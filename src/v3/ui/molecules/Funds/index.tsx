@@ -3,7 +3,7 @@ import FundsCard from "../FundsCard";
 import * as S from "./styles";
 
 import { useFunds } from "@polkadex/orderbook/hooks";
-import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
+import { EmptyData } from "@polkadex/orderbook-ui/molecules";
 
 const Funds = () => {
   const { balances } = useFunds();
