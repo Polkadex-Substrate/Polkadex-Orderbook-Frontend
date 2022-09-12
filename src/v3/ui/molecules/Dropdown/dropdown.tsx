@@ -1,10 +1,10 @@
 import { Children, forwardRef } from "react";
 
-import { Popover } from "../Popover";
-
 import { DropdownProvider } from "./context";
 import * as T from "./types";
 import { useDropdown } from "./useDropdown";
+
+import { Popover } from "@polkadex/orderbook-ui/molecules";
 
 const Dropdown: T.DropdownComponent<T.DropdownProps> = forwardRef(
   ({ children, ...props }: T.DropdownProps, _) => {

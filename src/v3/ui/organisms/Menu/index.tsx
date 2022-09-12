@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { Popover } from "../../molecules";
-
 import * as S from "./styles";
 
 import {
@@ -12,6 +10,7 @@ import {
   TooltipContent,
   TooltipHeader,
   WalletContent,
+  Popover,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";

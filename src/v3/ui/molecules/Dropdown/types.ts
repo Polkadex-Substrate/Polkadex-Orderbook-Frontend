@@ -13,7 +13,7 @@ import {
   RefAttributes,
 } from "react";
 
-import { UsePopoverProps } from "../Popover/types";
+import { UsePopoverProps } from "../../../../ui/molecules/Popover/types";
 
 import { ItemBase, SectionBase } from "./base";
 import { Button } from "./button";

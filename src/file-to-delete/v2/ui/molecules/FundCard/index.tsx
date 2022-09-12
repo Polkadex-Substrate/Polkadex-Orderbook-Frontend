@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import * as cryptoIcons from "@styled-icons/crypto";
 
-import { AvailableMessage } from "../AvailableMessage";
+import { AvailableMessage } from "../../../../../ui/molecules/AvailableMessage";
 
 import * as S from "./styles";
 import { Props } from "./types";

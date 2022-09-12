@@ -1,11 +1,11 @@
-import FundsCard from "../FundsCard";
+import FundsCard from "../../molecules/FundsCard";
 
 import * as S from "./styles";
 
 import { useFunds } from "@polkadex/orderbook/hooks";
 import { EmptyData } from "@polkadex/orderbook-ui/molecules";
 
-const Funds = () => {
+export const Funds = () => {
   const { balances } = useFunds();
 
   return (
@@ -44,5 +44,3 @@ const Funds = () => {
     </S.Wrapper>
   );
 };
-
-export default Funds;

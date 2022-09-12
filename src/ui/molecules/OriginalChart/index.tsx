@@ -29,7 +29,7 @@ import { fillKlineMissingData } from "@polkadex/orderbook/helpers/fillKlineMissi
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-const OriginalChart = ({ chart, resolution }) => {
+export const OriginalChart = ({ chart, resolution }) => {
   const dispatch = useDispatch();
   const target = useRef(null);
 
@@ -180,4 +180,3 @@ const getResolutionInMilliSeconds = (resolution: string): number => {
       return 1;
   }
 };
-export default OriginalChart;
