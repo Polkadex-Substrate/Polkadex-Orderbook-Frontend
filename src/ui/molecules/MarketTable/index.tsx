@@ -1,8 +1,8 @@
-import MarketToken from "../MarketToken";
-
 import * as S from "./styles";
 
-const MarketTable = () => (
+import { MarketToken } from "@polkadex/orderbook-ui/molecules";
+
+export const MarketTable = () => (
   <S.Wrapper>
     <S.Table>
       <S.Thead>
@@ -57,5 +57,3 @@ const MarketTable = () => (
     </S.Table>
   </S.Wrapper>
 );
-
-export default MarketTable;

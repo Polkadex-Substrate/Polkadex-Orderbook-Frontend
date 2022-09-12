@@ -1,12 +1,14 @@
-import Heading from "../../molecules/Heading";
-import OrderBookIcon from "../../molecules/OrderBookIcon";
-import OrderBookTable from "../../molecules/OrderBookTable";
 import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
 import { useOrderbook } from "@polkadex/orderbook/hooks";
-import { DropdownHeader } from "@polkadex/orderbook-ui/molecules";
+import {
+  DropdownHeader,
+  OrderBookTable,
+  OrderBookIcon,
+  Heading,
+} from "@polkadex/orderbook-ui/molecules";
 
 const OrderBook = () => {
   const {

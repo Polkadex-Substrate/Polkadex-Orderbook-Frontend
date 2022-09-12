@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook-ui/organisms";
 
-const OrderBookTable = ({
+export const OrderBookTable = ({
   lightMode = false,
   filterBy,
   isPriceUp,
@@ -27,5 +27,3 @@ const OrderBookTable = ({
     </S.Wrapper>
   );
 };
-
-export default OrderBookTable;

@@ -8,7 +8,7 @@ export type OrderBookProps = {
   handleChange: (name: string) => void;
   active?: boolean;
 };
-const OrderBookIcon = ({ icon, filterState, handleChange }: OrderBookProps) => {
+export const OrderBookIcon = ({ icon, filterState, handleChange }: OrderBookProps) => {
   const IconComponent = Icons[icon];
 
   return (
@@ -17,5 +17,3 @@ const OrderBookIcon = ({ icon, filterState, handleChange }: OrderBookProps) => {
     </S.Wrapper>
   );
 };
-
-export default OrderBookIcon;

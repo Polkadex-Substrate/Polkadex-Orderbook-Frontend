@@ -11,7 +11,7 @@ export type MarketTokenProps = {
   percent: number;
 };
 
-const MarketToken = ({
+export const MarketToken = ({
   name,
   shortName,
   source,
@@ -38,5 +38,3 @@ const MarketToken = ({
     </S.Td>
   </S.Tr>
 );
-
-export default MarketToken;
