@@ -1,6 +1,6 @@
-import * as S from "./styles";
+import { MarketToken } from "../MarketToken";
 
-import { MarketToken } from "@polkadex/orderbook-ui/molecules";
+import * as S from "./styles";
 
 export const MarketTable = () => (
   <S.Wrapper>

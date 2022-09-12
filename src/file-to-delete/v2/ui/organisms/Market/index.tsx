@@ -1,12 +1,9 @@
+import { MarketTable } from "../../molecules/MarketTable";
+import { SearchInput } from "../../molecules/SearchInput";
+
 import * as S from "./styles";
 
-import {
-  Dropdown,
-  Icon,
-  MarketTable,
-  Heading,
-  SearchInput,
-} from "@polkadex/orderbook-ui/molecules";
+import { Dropdown, Icon, Heading } from "@polkadex/orderbook-ui/molecules";
 import { useMarkets } from "@polkadex/orderbook/hooks";
 
 const Market = () => {

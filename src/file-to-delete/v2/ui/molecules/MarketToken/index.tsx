@@ -1,6 +1,6 @@
-import * as S from "./styles";
+import { CoinIcon } from "../CoinIcon";
 
-import { CoinIcon } from "@polkadex/orderbook-ui/molecules";
+import * as S from "./styles";
 
 export type MarketTokenProps = {
   name: string;
