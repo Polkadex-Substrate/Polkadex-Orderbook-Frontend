@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
+import * as T from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/OrderHistoryTable/types";
 
 export const TradeHistory = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => (
   <>

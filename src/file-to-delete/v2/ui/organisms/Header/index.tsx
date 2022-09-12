@@ -4,10 +4,11 @@ import { QuickLogin } from "../../molecules/QuickLogin";
 
 import * as S from "./styles";
 
+import { Search } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Search";
 import { Menu } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/Menu";
 import { MyWallet } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/MyWallet";
 import { SpaceBetweenCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
-import { MyAccount, Search } from "@orderbook/v2/ui/molecules";
+import { MyAccount } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Button, Logo } from "@polkadex/orderbook-ui/molecules";
 import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";

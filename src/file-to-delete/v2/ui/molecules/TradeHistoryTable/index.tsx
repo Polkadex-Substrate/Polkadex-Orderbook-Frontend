@@ -2,7 +2,7 @@ import { TableCard, TableRow } from "../TableRow";
 
 import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
+import * as T from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/OrderHistoryTable/types";
 
 export const TradeHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   return (

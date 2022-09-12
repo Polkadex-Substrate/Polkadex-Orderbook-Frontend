@@ -5,22 +5,20 @@ import * as S from "./styles";
 
 import {
   selectCurrentMarket,
-  selectUserLoggedIn,
   selectOrdersHistory,
   selectOrdersHistoryLoading,
   userOrdersHistoryFetch,
   selectHasCurrentTradeAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  OrderHistoryCard,
-  OrderHistoryCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { localeDate } from "@polkadex/web-helpers";
 import { DEFAULT_MARKET } from "@polkadex/web-constants";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import {
+  OrderHistoryCard,
+  OrderHistoryCardReponsive,
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/OrderHistoryCard";
 
 const timeFrom = String(Math.floor((Date.now() - 1000 * 60 * 60 * 24) / 1000));
 const handleHighlightValue = (prevValue: string, curValue: string) => {
@@ -72,7 +70,7 @@ export const OrderHistory = () => {
           <span>Status</span>
         </S.Header>
       )}
-      {!fetching ? (
+      {!fetching && (
         <S.Content>
           {list?.map((item, i) => {
             const {
@@ -113,8 +111,6 @@ export const OrderHistory = () => {
             );
           })}
         </S.Content>
-      ) : (
-        <LoadingTransactions />
       )}
     </S.Wrapper>
   );

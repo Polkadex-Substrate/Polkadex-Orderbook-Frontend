@@ -5,7 +5,7 @@ import * as S from "./styles";
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
-import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";
+import * as T from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/OrderHistoryTable/types";
 import { calcStatusOfOrder } from "@polkadex/orderbook/helpers/calcOrderStatus";
 import { calcAveragePrice } from "@polkadex/orderbook/helpers/calcAverageTradePrice";
 
