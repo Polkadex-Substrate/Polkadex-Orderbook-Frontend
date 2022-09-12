@@ -10,46 +10,6 @@ import { Icon, Dropdown, Appearance, AccountOverview } from "@polkadex/orderbook
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
 
-export const MyAccount = () => {
-  const { userEmail } = useAccount();
-
-  return (
-    <S.Main>
-      <Dropdown
-        header={<Header address={userEmail} accountName={userEmail} />}
-        direction="bottomRight"
-        priority="medium"
-        style={{ overflow: "hidden" }}>
-        <WalletContent />
-      </Dropdown>
-    </S.Main>
-  );
-};
-
-const Header = ({
-  balance = "0.000000",
-  address,
-  accountName,
-  isFull = false,
-  ...props
-}: T.Props) => {
-  const shortAddress = address
-    ? address.slice(0, 3) + ".." + address.slice(address.length - 3)
-    : "";
-
-  return (
-    <S.Header isFull={isFull} {...props}>
-      <Icon name="Avatar" background="secondaryBackground" color="text" size="extraLarge" />
-      <S.HeaderContainer>
-        <S.HeaderInfo>
-          <p>{`${accountName} (${shortAddress})`}</p>
-          <span>Estimated: {balance}</span>
-        </S.HeaderInfo>
-      </S.HeaderContainer>
-    </S.Header>
-  );
-};
-
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);

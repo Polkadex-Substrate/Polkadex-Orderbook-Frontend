@@ -4,7 +4,6 @@ import { Popover } from "../../molecules";
 
 import * as S from "./styles";
 
-import { WalletContent } from "@orderbook/v2/ui/molecules";
 import {
   AvailableMessage,
   Icon,
@@ -12,6 +11,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  WalletContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
