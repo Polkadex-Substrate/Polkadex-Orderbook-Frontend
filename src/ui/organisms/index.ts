@@ -1,7 +1,6 @@
 export * from "./HeaderBack";
 export * from "./Message";
 export * from "./Tokens";
-export * from "./History";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
 export * from "./Mnemonic";

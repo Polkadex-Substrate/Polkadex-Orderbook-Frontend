@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
 
+import { QuickLogin } from "../../molecules/QuickLogin";
+
 import * as S from "./styles";
 
 import { SpaceBetweenCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
-import { MyAccount, MyWallet, Menu, Search, QuickLogin } from "@orderbook/v2/ui/molecules";
+import { MyAccount, MyWallet, Menu, Search } from "@orderbook/v2/ui/molecules";
 import { AvailableMessage, Button, Logo } from "@polkadex/orderbook-ui/molecules";
 import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
