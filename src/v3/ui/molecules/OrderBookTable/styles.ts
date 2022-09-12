@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as EmptyData } from "@orderbook/v2/ui/molecules/EmptyData/styles";
+import { Wrapper as EmptyData } from "@polkadex/orderbook-ui/molecules/EmptyData/styles";
 import { Table, Body } from "@polkadex/orderbook-ui/organisms/Orderbook/styles";
 
 export const Wrapper = styled.div<{ filterBy?: string }>`

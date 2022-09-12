@@ -3,8 +3,8 @@ import OrderHistoryCard from "../OrderHistoryCard";
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { EmptyData } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
-import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
