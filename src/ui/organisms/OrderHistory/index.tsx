@@ -1,5 +1,3 @@
-import OrderHistoryCard from "../OrderHistoryCard";
-
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -7,8 +5,9 @@ import { EmptyData } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import OrderHistoryCard from "@polkadex/orderbook/v3/ui/molecules/OrderHistoryCard";
 
-const OrderHistory = ({ filters }) => {
+export const OrderHistory = ({ filters }) => {
   const { priceFixed, amountFixed, orders } = useOrderHistory(filters);
   const getAsset = useReduxSelector(selectGetAsset);
 
@@ -69,5 +68,3 @@ const OrderHistory = ({ filters }) => {
     </S.Wrapper>
   );
 };
-
-export default OrderHistory;

@@ -1,4 +1,4 @@
-import OpenOrderCard from "../OpenOrderCard";
+import OpenOrderCard from "../../../v3/ui/molecules/OpenOrderCard";
 
 import * as S from "./styles";
 
@@ -8,7 +8,7 @@ import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData } from "@polkadex/orderbook-ui/molecules";
 
-const OpenOrders = ({ filters }) => {
+export const OpenOrders = ({ filters }) => {
   const { priceFixed, amountFixed, openOrders } = useOrderHistory(filters);
   const getAsset = useReduxSelector(selectGetAsset);
 
@@ -72,5 +72,3 @@ const OpenOrders = ({ filters }) => {
     </S.Wrapper>
   );
 };
-
-export default OpenOrders;

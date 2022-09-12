@@ -13,3 +13,6 @@ export * from "./RecentTrades";
 export * from "./UnlockAccount";
 export * from "./QrCode";
 export * from "./Funds";
+export * from "./TradeHistory";
+export * from "./OpenOrders";
+export * from "./OrderHistory";
