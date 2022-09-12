@@ -1,4 +1,5 @@
-import { TableRow, TableCard } from "@orderbook/v2/ui/molecules";
+import { TableCard, TableRow } from "../TableRow";
+
 import { localeDate } from "@polkadex/web-helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import * as T from "@orderbook/v2/ui/molecules/OrderHistoryTable/types";

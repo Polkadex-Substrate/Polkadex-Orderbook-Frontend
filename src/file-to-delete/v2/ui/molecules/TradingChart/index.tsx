@@ -6,7 +6,7 @@ import { connect, MapDispatchToPropsFunction, MapStateToProps } from "react-redu
 import {
   IChartingLibraryWidget,
   LanguageCode,
-} from "../../../../../public/charting_library/charting_library.min";
+} from "../../../../../../public/charting_library/charting_library.min";
 
 import { CurrentKlineSubscription, dataFeedObject, print } from "./api";
 import { widgetOptions, widgetParams } from "./config";
@@ -84,7 +84,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
 
   public async componentDidMount() {
     const { widget } = await import(
-      "../../../../../public/charting_library/charting_library.min"
+      "../../../../../../public/charting_library/charting_library.min"
     );
 
     const isMobileDevice = false;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { LibrarySymbolInfo } from "../../../../../public/charting_library/datafeed-api";
+import { LibrarySymbolInfo } from "../../../../../../public/charting_library/datafeed-api";
 
 import { TradingApiResponse } from "./types";
 

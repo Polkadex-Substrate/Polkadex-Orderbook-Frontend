@@ -1,4 +1,4 @@
-import { ThemeName } from "../../../../../public/charting_library/charting_library.min";
+import { ThemeName } from "../../../../../../public/charting_library/charting_library.min";
 
 import { DEFAULT_TRADING_VIEW_INTERVAL } from "@polkadex/web-constants";
 import { darkTheme, lightTheme } from "@polkadex/orderbook/styles/theme";

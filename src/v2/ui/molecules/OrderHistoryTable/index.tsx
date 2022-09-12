@@ -2,10 +2,13 @@ import React from "react";
 
 import * as T from "./types";
 
-import { TableRow, TableCard } from "@orderbook/v2/ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { calcAveragePrice } from "@polkadex/orderbook/helpers/calcAverageTradePrice";
 import { calcStatusOfOrder } from "@polkadex/orderbook/helpers/calcOrderStatus";
+import {
+  TableCard,
+  TableRow,
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TableRow";
 
 export const OrderHistoryTable = ({ orders, priceFixed, amountFixed, getAsset }: T.Props) => {
   return (

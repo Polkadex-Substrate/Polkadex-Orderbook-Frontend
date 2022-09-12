@@ -1,4 +1,4 @@
-import { Timezone } from "../../../../../public/charting_library/datafeed-api";
+import { Timezone } from "../../../../../../public/charting_library/datafeed-api";
 
 /*
  ** TimeZones for Daylight Saving Time (Summer time)

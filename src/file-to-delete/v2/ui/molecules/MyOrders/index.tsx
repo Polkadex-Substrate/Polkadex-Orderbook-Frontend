@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { Flex } from "../../atoms";
+import { TradeHistoryTable } from "../TradeHistoryTable";
+import { TradeHistory } from "../TradeHistory";
 
 import * as S from "./styles";
 
@@ -13,12 +15,7 @@ import {
   EmptyData,
   Logged,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  OrderHistory,
-  TradeHistory,
-  TradeHistoryTable,
-  OrderHistoryTable,
-} from "@orderbook/v2/ui/molecules";
+import { OrderHistory, OrderHistoryTable } from "@orderbook/v2/ui/molecules";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
