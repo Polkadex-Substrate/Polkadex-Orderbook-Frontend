@@ -7,7 +7,7 @@ export type ListItemProps = {
   isActive?: boolean;
 };
 
-const ListItemButton = ({
+export const ListItemButton = ({
   title,
   size = "Medium",
   fullWidth = false,
@@ -17,5 +17,3 @@ const ListItemButton = ({
     {title}
   </S.Wrapper>
 );
-
-export default ListItemButton;

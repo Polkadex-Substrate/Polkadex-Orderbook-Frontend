@@ -9,9 +9,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  ResultFound,
 } from "@polkadex/orderbook-ui/molecules";
 import { notificationMarkAsReadBy, NotificationState } from "@polkadex/orderbook-modules";
-import { ResultFound } from "@polkadex/orderbook/v3/ui/molecules";
 
 type Props = {
   notifications: NotificationState;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -10,8 +10,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  ResultFound,
+  Search,
 } from "@polkadex/orderbook-ui/molecules";
-import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 import { useHistory } from "@polkadex/orderbook-hooks";
 
 const History = ({ isDepositActive }) => {
