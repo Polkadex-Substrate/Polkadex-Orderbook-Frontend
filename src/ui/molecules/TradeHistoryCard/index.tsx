@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-const TradeHistoryCard = ({ isSell, baseUnit, quoteUnit, data = [] }) => (
+export const TradeHistoryCard = ({ isSell, baseUnit, quoteUnit, data = [] }) => (
   <S.Tr>
     <S.Td>
       <S.Tag>Pair</S.Tag>
@@ -29,5 +29,3 @@ const TradeHistoryCard = ({ isSell, baseUnit, quoteUnit, data = [] }) => (
     </S.Td>
   </S.Tr>
 );
-
-export default TradeHistoryCard;

@@ -5,7 +5,7 @@ import * as S from "./styles";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
 
-const OpenOrderCard = ({
+export const OpenOrderCard = ({
   isSell,
   orderSide,
   orderType,
@@ -72,5 +72,3 @@ const OpenOrderCard = ({
     </S.Tr>
   );
 };
-
-export default OpenOrderCard;

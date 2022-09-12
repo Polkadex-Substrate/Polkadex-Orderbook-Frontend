@@ -2,7 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-const FundsCard = ({
+export const FundsCard = ({
   id,
   name,
   ticker,
@@ -49,5 +49,3 @@ const FundsCard = ({
     </S.Td>
   </S.Tr>
 );
-
-export default FundsCard;

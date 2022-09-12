@@ -1,12 +1,10 @@
-import OpenOrderCard from "../../../v3/ui/molecules/OpenOrderCard";
-
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
-import { EmptyData } from "@polkadex/orderbook-ui/molecules";
+import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 
 export const OpenOrders = ({ filters }) => {
   const { priceFixed, amountFixed, openOrders } = useOrderHistory(filters);

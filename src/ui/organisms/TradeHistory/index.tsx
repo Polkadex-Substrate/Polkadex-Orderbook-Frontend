@@ -4,8 +4,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
-import { EmptyData } from "@polkadex/orderbook-ui/molecules";
-import TradeHistoryCard from "@polkadex/orderbook/v3/ui/molecules/TradeHistoryCard";
+import { EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
 
 export const TradeHistory = ({ filters }) => {
   const { priceFixed, amountFixed, trades } = useTradeHistory(filters);

@@ -1,11 +1,10 @@
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { EmptyData } from "@polkadex/orderbook-ui/molecules";
+import { OrderHistoryCard, EmptyData } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
-import OrderHistoryCard from "@polkadex/orderbook/v3/ui/molecules/OrderHistoryCard";
 
 export const OrderHistory = ({ filters }) => {
   const { priceFixed, amountFixed, orders } = useOrderHistory(filters);

@@ -1,9 +1,7 @@
-import FundsCard from "../../molecules/FundsCard";
-
 import * as S from "./styles";
 
 import { useFunds } from "@polkadex/orderbook/hooks";
-import { EmptyData } from "@polkadex/orderbook-ui/molecules";
+import { EmptyData, FundsCard } from "@polkadex/orderbook-ui/molecules";
 
 export const Funds = () => {
   const { balances } = useFunds();
