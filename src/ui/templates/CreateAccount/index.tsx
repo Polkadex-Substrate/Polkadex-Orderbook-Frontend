@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
@@ -16,7 +16,6 @@ import {
   selectRegisterTradeAccountLoading,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Loading } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);

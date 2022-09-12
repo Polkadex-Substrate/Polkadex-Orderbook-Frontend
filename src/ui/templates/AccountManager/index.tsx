@@ -14,9 +14,10 @@ import {
   TooltipHeader,
   Modal,
   Switch,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown, Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   RemoveFromBlockchain,
   RemoveFromDevice,

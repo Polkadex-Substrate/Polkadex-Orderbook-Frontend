@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-import DropdownItem from "../DropdownItem";
-
 import * as S from "./styles";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
+import DropdownItem from "@polkadex/orderbook-ui/molecules/DropdownItem";
 
 type IPairs = {
   id: number;

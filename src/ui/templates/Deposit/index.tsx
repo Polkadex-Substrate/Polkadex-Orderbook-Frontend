@@ -7,7 +7,7 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Loading, Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
   InputLine,
@@ -16,6 +16,7 @@ import {
   TooltipContent,
   TooltipHeader,
   EmptyData,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
