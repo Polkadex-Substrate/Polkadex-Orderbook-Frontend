@@ -1,10 +1,8 @@
 import Link from "next/link";
 
-import Input from "../../../v3/ui/molecules/Input";
-
 import * as S from "./styles";
 
-import { Icon, ButtonStatus, Range } from "@polkadex/orderbook-ui/molecules";
+import { Icon, ButtonStatus, Range, MarketInput } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/hooks";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
@@ -45,7 +43,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
       <S.ContainerForm>
         <form onSubmit={executeOrder}>
           {isLimit && (
-            <Input
+            <MarketInput
               label="Price"
               icon="Price"
               inputInfo={quoteTicker}
@@ -59,7 +57,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
               disabled={isOrderLoading}
             />
           )}
-          <Input
+          <MarketInput
             label="Amount"
             icon="Amount"
             inputInfo={isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}
@@ -77,7 +75,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
           </S.RangeWrapper>
 
           {isLimit && (
-            <Input
+            <MarketInput
               label="Total"
               inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
               fullWidth={true}

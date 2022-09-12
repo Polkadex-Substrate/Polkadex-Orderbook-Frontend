@@ -11,7 +11,7 @@ export type InputProps = {
   icon?: "Price" | "Amount";
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Input = ({
+export const MarketInput = ({
   label = "Label",
   inputInfo,
   fullWidth = false,
@@ -34,5 +34,3 @@ const Input = ({
     </S.Wrapper>
   );
 };
-
-export default Input;

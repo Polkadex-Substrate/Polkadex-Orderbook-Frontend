@@ -45,4 +45,6 @@ export * from "./MarketOrderAction";
 export * from "./NotificationsContent";
 export * from "./NavbarItem";
 export * from "./Loading";
+export * from "./MarketInput";
+
 export * as LoadingIcons from "./LoadingIcons";
