@@ -1,6 +1,6 @@
-import { LoadingIcons } from "..";
-
 import * as S from "./styles";
+
+import { LoadingIcons } from "@polkadex/orderbook-ui/molecules";
 
 export const Loading = ({
   message = "This may take a few minutes..",

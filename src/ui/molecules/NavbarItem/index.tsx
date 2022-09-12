@@ -5,11 +5,9 @@ export type NavbarItemPops = {
   info?: string | number;
   color?: "primary" | "green";
 };
-const NavbarItem = ({ label, info, color }: NavbarItemPops) => (
+export const NavbarItem = ({ label, info, color }: NavbarItemPops) => (
   <S.Wrapper>
     <S.Label>{label}</S.Label>
     <S.Info color={color}>{info}</S.Info>
   </S.Wrapper>
 );
-
-export default NavbarItem;

@@ -1,13 +1,13 @@
 import Link from "next/link";
 
-import Input from "../Input";
+import Input from "../../../v3/ui/molecules/Input";
 
 import * as S from "./styles";
 
 import { Icon, ButtonStatus, Range } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook/hooks";
 
-const MarketOrderAction = ({ isSell = false, isLimit }) => {
+export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
     changeAmount,
     changePrice,
@@ -112,5 +112,3 @@ const MarketOrderAction = ({ isSell = false, isLimit }) => {
     </S.WrapperOrder>
   );
 };
-
-export default MarketOrderAction;

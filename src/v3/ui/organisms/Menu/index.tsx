@@ -11,11 +11,11 @@ import {
   TooltipHeader,
   WalletContent,
   Popover,
+  NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { NotificationsContent } from "@polkadex/orderbook-ui/molecules/NotificationsContent";
 
 export type MenuProps = {
   handleChange?: () => void;
