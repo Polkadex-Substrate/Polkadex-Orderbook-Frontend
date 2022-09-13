@@ -22,7 +22,13 @@ import {
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
-import { AccountBanner, Button, Logo, Modal } from "@polkadex/orderbook-ui/molecules";
+import {
+  AccountBanner,
+  Button,
+  EmptyMyAccount,
+  Logo,
+  Modal,
+} from "@polkadex/orderbook-ui/molecules";
 import Markets from "@polkadex/orderbook-ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
@@ -122,7 +128,7 @@ export function Trading() {
               <S.WrapperGraph>
                 <Navbar onOpenMarkets={() => setState(!state)} />
                 <Graph />
-                <Transactions />
+                {isSignedIn ? <Transactions /> : <EmptyMyAccount hasLimit />}
               </S.WrapperGraph>
               <S.WrapperRight>
                 <S.Actions>

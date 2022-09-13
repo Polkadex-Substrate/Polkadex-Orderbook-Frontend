@@ -270,35 +270,57 @@ export const Content = styled.div<{ hasUser?: boolean }>`
     }
   `}
 `;
+export const EmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
-export const Empty = styled.div`
-  ${({ theme }) => css`
+export const Empty = styled.div<{ hasLimit?: boolean }>`
+  ${({ theme, hasLimit }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     border-radius: 1.5rem;
     padding: 1rem;
-    max-width: 25rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    ${!hasLimit &&
+    css`
+      max-width: 25rem;
+      ${EmptyHeader} {
+        background: ${theme.colors.inverse};
+      }
+    `}
   `}
 `;
 export const EmptyHeader = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.inverse};
     border-radius: 1.5rem;
     padding: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    flex: 1;
     img {
       width: 100%;
+      max-width: 25rem;
     }
   `}
 `;
 export const EmptyContent = styled.div`
   ${({ theme }) => css`
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     h2 {
       font-size: 1.8rem;
       font-weight: 550;
     }
     p {
-      margin: 1.5rem 0 3rem 0;
+      margin: 1rem 0 3rem 0;
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -312,6 +334,7 @@ export const EmptyActions = styled.div`
     background-color: ${theme.colors.primaryBackgroundOpacity};
     border-radius: 1rem;
     position: relative;
+    max-width: 25rem;
 
     :hover a {
       :nth-child(1) {
