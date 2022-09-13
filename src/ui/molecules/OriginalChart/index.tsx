@@ -122,7 +122,7 @@ export const OriginalChart = ({ chart, resolution }) => {
             <Icon
               name="Trash"
               stroke="text"
-              size="medium"
+              size="large"
               onClick={() => chart.current.removeShape()}
             />
           </TooltipHeader>
