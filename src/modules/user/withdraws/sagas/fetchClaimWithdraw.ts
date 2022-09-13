@@ -73,7 +73,7 @@ async function claimWithdrawal(
   account: MainAccount,
   sid: number
 ): Promise<ExtrinsicResult> {
-  const ext = api.tx.ocex.withdraw(sid);
+  const ext = api.tx.ocex.claimWithdraw(sid, account.address);
   const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
   return res;
 }
