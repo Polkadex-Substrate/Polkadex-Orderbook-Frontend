@@ -80,13 +80,13 @@ function createActionFromUserEvent(eventData: any) {
     return registerMainAccountUpdateEvent(data.RegisterAccount);
   } else if (isKeyPresentInObject(data, "AddProxy")) {
     return registerSuccessNofiication("Trade account added", "New Trade account created");
+  } else if (isKeyPresentInObject(data, "AddTrade")) {
+    return userTradesUpdateEvent(data.AddTrade);
   } else if (isKeyPresentInObject(data, "RemoveProxy")) {
     return registerSuccessNofiication(
       "Trade account removed",
       "Trade account removal Confirmed"
     );
-  } else if (isKeyPresentInObject(data, "AddTrade")) {
-    return userTradesUpdateEvent(data);
   }
 }
 

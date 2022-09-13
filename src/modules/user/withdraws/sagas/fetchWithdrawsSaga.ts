@@ -23,14 +23,13 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
-    const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
     keyringPair.unlock("");
     const nonce = getNonce();
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
-      const payload = createWithdrawPayload(api, asset, amountStr, nonce);
+      const payload = createWithdrawPayload(api, asset, amount, nonce);
       const signature = signPayload(api, keyringPair, payload);
       const res = yield call(() => executeWithdraw([address, payload, signature], address));
       console.info("withdraw res: ", res);
@@ -63,6 +62,6 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
 const executeWithdraw = async (withdrawPayload, address) => {
   const payload = JSON.stringify({ Withdraw: withdrawPayload });
-  const res = await sendQueryToAppSync(mutations.withdraw, { input: { payload } });
+  const res = await sendQueryToAppSync(mutations.withdraw, { input: { payload } }, address);
   return res;
 };

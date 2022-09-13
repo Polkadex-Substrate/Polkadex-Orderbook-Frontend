@@ -25,6 +25,7 @@ export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
       while (true) {
         const msg = yield take(channel);
         const data: OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
+        console.log("ob-update event: ", data);
         yield put(depthDataIncrement(data));
       }
     }
