@@ -5,22 +5,27 @@ import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import { tz } from "moment-timezone";
 
 import OrderBook from "../OrderBook";
-import ListItemButton from "../../molecules/ListItemButton";
-import {
-  chartType,
-  mainTechnicalIndicatorTypes,
-  subTechnicalIndicatorTypes,
-} from "../../molecules/OriginalChart/options";
 import Checkbox from "../../molecules/Checkbox";
 import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Dropdown as DropdownCustom, Icon } from "@polkadex/orderbook-ui/molecules";
+import {
+  Dropdown as DropdownCustom,
+  Icon,
+  ListItemButton,
+} from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
+import {
+  chartType,
+  mainTechnicalIndicatorTypes,
+  subTechnicalIndicatorTypes,
+} from "@polkadex/orderbook-ui/molecules/OriginalChart/options";
 
-const OriginalChart = dynamic(() => import("../../molecules/OriginalChart"));
+const OriginalChart = dynamic(() =>
+  import("../../../../ui/molecules/OriginalChart").then((mod) => mod.OriginalChart)
+);
 const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
 
 const Graph = () => {

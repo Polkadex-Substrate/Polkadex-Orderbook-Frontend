@@ -13,9 +13,11 @@ import {
   TooltipContent,
   TooltipHeader,
   Modal,
+  Switch,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown, Loading } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   RemoveFromBlockchain,
   RemoveFromDevice,
@@ -27,7 +29,6 @@ import {
   useLinkMainAccount,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
-import { Switch } from "@polkadex/orderbook/v2/ui/molecules/Switcher";
 import {
   selectAssociatedTradeAccountsLoading,
   selectHasCurrentTradeAccount,

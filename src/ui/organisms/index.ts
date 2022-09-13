@@ -1,7 +1,6 @@
-export * from "./Header";
+export * from "./HeaderBack";
 export * from "./Message";
 export * from "./Tokens";
-export * from "./History";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
 export * from "./Mnemonic";
@@ -13,3 +12,7 @@ export * from "./Orderbook";
 export * from "./RecentTrades";
 export * from "./UnlockAccount";
 export * from "./QrCode";
+export * from "./Funds";
+export * from "./TradeHistory";
+export * from "./OpenOrders";
+export * from "./OrderHistory";

@@ -1,12 +1,19 @@
 import * as S from "./styles";
 
-import { Spinner } from "@polkadex/orderbook-ui/molecules";
+import { LoadingIcons } from "@polkadex/orderbook-ui/molecules";
 
-export const Loading = ({ isActive = true, color = "tertiaryBackground", children }) => (
+export const Loading = ({
+  message = "This may take a few minutes..",
+  children,
+  isVisible = true,
+}) => (
   <S.Wrapper>
     {children}
-    <S.Container color={color} isActive={isActive}>
-      <Spinner />
+    <S.Container isVisible={isVisible}>
+      <div>
+        <LoadingIcons.Pulse size="medium" />
+        <p>{message}</p>
+      </div>
     </S.Container>
   </S.Wrapper>
 );

@@ -5,11 +5,11 @@ import Head from "next/head";
 import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
-import History from "@polkadex/orderbook-ui/organisms/History";
+import History from "@polkadex/orderbook/file-to-delete/v2/ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import Deposit from "@polkadex/orderbook/v3/ui/organisms/Deposit";
-import Withdraw from "@polkadex/orderbook/ui/organisms/Withdraw";
+import Withdraw from "@polkadex/orderbook/file-to-delete/ui/organisms/Withdraw";
 
 export const WalletTemplate = () => {
   // TODO: remove this component

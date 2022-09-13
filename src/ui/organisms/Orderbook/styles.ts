@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as EmptyData } from "@polkadex/orderbook-ui/molecules/EmptyData/styles";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-import { Wrapper as EmptyData } from "@orderbook/v2/ui/molecules/EmptyData/styles";
 
 export const Main = styled.section`
   ${({ theme }) => css`

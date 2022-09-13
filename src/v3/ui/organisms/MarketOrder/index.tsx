@@ -1,11 +1,17 @@
 import { useState } from "react";
 
-import MarketOrderAction from "../../molecules/MarketOrderAction";
 import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
-import { Icon, Skeleton, TabContent, TabHeader, Tabs } from "@polkadex/orderbook-ui/molecules";
+import {
+  Icon,
+  Skeleton,
+  TabContent,
+  TabHeader,
+  Tabs,
+  MarketOrderAction,
+} from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 const MarketOrder = () => {

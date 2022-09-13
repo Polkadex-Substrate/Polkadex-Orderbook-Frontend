@@ -4,8 +4,14 @@ import { useState } from "react";
 
 import * as S from "./styles";
 
-import { Range, ButtonStatus } from "@orderbook/v2/ui/molecules";
-import { Icon, Tabs, TabContent, TabHeader } from "@polkadex/orderbook-ui/molecules";
+import {
+  Icon,
+  Tabs,
+  TabContent,
+  TabHeader,
+  ButtonStatus,
+  Range,
+} from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder } from "@polkadex/orderbook-hooks";
 
 const PlaceOrder = () => {

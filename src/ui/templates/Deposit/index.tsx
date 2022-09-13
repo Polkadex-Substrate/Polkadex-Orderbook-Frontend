@@ -7,7 +7,7 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Loading, Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
   InputLine,
@@ -15,6 +15,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  EmptyData,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
@@ -25,7 +27,6 @@ import {
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { EmptyData } from "@polkadex/orderbook/v2/ui/molecules";
 import {
   isAssetPDEX,
   selectAllAssets,

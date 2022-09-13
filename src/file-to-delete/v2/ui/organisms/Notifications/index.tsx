@@ -1,9 +1,10 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
 
+import { AlertCard } from "../../molecules/AlertCard";
+
 import * as S from "./styles";
 
-import { AlertCard } from "@orderbook/v2/ui/molecules";
 import { notificationDeleteById, selectNotifications } from "@polkadex/orderbook-modules";
 
 export const Notifications = () => {

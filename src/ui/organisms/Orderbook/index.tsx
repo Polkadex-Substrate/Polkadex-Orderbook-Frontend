@@ -3,10 +3,9 @@ import { useRef } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { Icon, EmptyData } from "@polkadex/orderbook-ui/molecules";
 import { useOrderbookTable } from "@polkadex/orderbook/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { EmptyData } from "@orderbook/v2/ui/molecules";
 
 export const OrderbookTable = ({
   isSell = false,

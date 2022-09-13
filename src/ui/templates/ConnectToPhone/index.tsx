@@ -10,7 +10,7 @@ import {
   Button,
   Dropdown,
   Icon,
-  Loading,
+  LoadingSection,
   MyAccountLoading,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
@@ -59,7 +59,7 @@ export const ConnectToPhone = () => {
                 <h1>Connect to Phone</h1>
                 <p>Trade Anywhere Anytime</p>
               </S.Title>
-              <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
+              <LoadingSection isActive={true} color="primaryBackgroundOpacity">
                 <S.Step>
                   <S.StepTitle>
                     <h3>Download Polkadex App</h3>
@@ -176,7 +176,7 @@ export const ConnectToPhone = () => {
                     </S.Step>
                   </>
                 )}
-              </Loading>
+              </LoadingSection>
             </S.AsideLeft>
             <S.AsideRight></S.AsideRight>
           </S.Container>

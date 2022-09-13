@@ -4,11 +4,10 @@ import { FC } from "react";
 import * as S from "./styles";
 import * as F from "./fakeData";
 
-import { Icon, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { Icon, Skeleton, ResultFound, Search } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
 import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
-import { ResultFound, Search } from "@polkadex/orderbook/v3/ui/molecules";
 
 const Markets = ({ isFull = false, hasMargin = false }) => {
   const {

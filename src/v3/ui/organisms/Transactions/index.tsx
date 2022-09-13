@@ -3,13 +3,7 @@ import subDays from "date-fns/subDays";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import DropdownItem from "../../molecules/DropdownItem";
 import Checkbox from "../../molecules/Checkbox";
-import OrderHistory from "../../molecules/OrderHistory";
-import TradeHistory from "../../molecules/TradeHistory";
-import { DropdownContent, DropdownHeader } from "../../molecules";
-import OpenOrders from "../../molecules/OpenOrders";
-import Funds from "../../molecules/Funds";
 
 import * as S from "./styles";
 
@@ -20,13 +14,23 @@ import {
   TabContent,
   TabHeader,
   Tabs,
+  Logged,
+  DropdownHeader,
+  DropdownContent,
 } from "@polkadex/orderbook-ui/molecules";
-import { Logged } from "@polkadex/orderbook/v2/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+// eslint-disable-next-line import/order
 import { selectHasCurrentTradeAccount, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import DropdownItem from "@polkadex/orderbook-ui/molecules/DropdownItem";
+import {
+  Funds,
+  OpenOrders,
+  OrderHistory,
+  TradeHistory,
+} from "@polkadex/orderbook-ui/organisms";
 
 export type Ifilters = {
   hiddenPairs: boolean;

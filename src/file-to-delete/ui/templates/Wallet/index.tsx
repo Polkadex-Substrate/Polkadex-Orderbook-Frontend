@@ -7,8 +7,8 @@ import * as S from "./styles";
 import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectHasCurrentTradeAccount, selectUserFetching } from "@polkadex/orderbook-modules";
-import { WalletContent } from "@polkadex/orderbook/v2/ui/molecules";
-import History from "@polkadex/orderbook-ui/organisms/History";
+import History from "@polkadex/orderbook/file-to-delete/v2/ui/organisms/History";
+import { WalletContent } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/MyAccount";
 
 const Deposit = dynamic(
   () => import("@polkadex/orderbook/file-to-delete/v2/ui/organisms/Deposit"),
@@ -16,9 +16,12 @@ const Deposit = dynamic(
     ssr: false,
   }
 );
-const Withdraw = dynamic(() => import("@polkadex/orderbook-ui/organisms/Withdraw"), {
-  ssr: false,
-});
+const Withdraw = dynamic(
+  () => import("@polkadex/orderbook/file-to-delete/ui/organisms/Withdraw"),
+  {
+    ssr: false,
+  }
+);
 
 export const WalletTemplate = () => {
   const router = useRouter();
