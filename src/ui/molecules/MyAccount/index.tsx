@@ -153,7 +153,7 @@ export const EmptyMyAccount = ({
       <S.EmptyContent>
         <h2>{title}</h2>
         <p>{description}</p>
-        <S.EmptyActions>
+        <S.EmptyActions hasLimit={hasLimit}>
           <Link href={primaryLink}>{primaryLinkTitle}</Link>
           <Link href={secondaryLink}>{secondaryLinkTitle}</Link>
           <div />

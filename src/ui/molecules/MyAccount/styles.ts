@@ -327,13 +327,15 @@ export const EmptyContent = styled.div`
     }
   `}
 `;
-export const EmptyActions = styled.div`
-  ${({ theme }) => css`
+export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
+  ${({ theme, hasLimit }) => css`
     display: flex;
     align-items: center;
     justify-content: space-around;
     width: 100%;
-    background-color: ${theme.colors.primaryBackgroundOpacity};
+    background: ${hasLimit
+      ? theme.colors.secondaryBackgroundOpacity
+      : theme.colors.primaryBackgroundOpacity};
     border-radius: 1rem;
     position: relative;
     max-width: 25rem;
