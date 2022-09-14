@@ -50,7 +50,7 @@ export const orderbookTypes = {
   },
   WithdrawPayload: {
     asset_id: "AssetId",
-    amount: "Balance",
+    amount: "String",
     timestamp: "i64",
   },
 };

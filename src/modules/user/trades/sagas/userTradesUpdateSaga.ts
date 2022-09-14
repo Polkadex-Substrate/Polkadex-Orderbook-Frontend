@@ -18,7 +18,7 @@ export function* userTradeUpdateSaga(action: UserTradesUpdateEvent) {
     yield put(
       alertPush({
         message: {
-          title: "Something has gone wrong (order updates channel)...",
+          title: "Something has gone wrong (user trades channel)...",
           description: error.message,
         },
         type: "Error",

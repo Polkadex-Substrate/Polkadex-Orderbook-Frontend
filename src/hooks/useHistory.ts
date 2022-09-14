@@ -45,7 +45,7 @@ export function useHistory() {
     }, []);
     return transactions;
   }, [filterBy, transactionsHistory]);
-  const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type === "WITHDRAW");
+  const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type !== "DEPOSIT");
   const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
 
   const withdrawals = useMemo(
