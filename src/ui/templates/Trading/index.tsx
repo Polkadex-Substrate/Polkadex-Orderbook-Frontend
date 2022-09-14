@@ -17,6 +17,7 @@ import {
   selectAssociatedTradeAccounts,
   selectCurrentMarket,
   selectCurrentTradePrice,
+  selectHasCurrentTradeAccount,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
   userChangeInitBanner,
@@ -54,6 +55,19 @@ export function Trading() {
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
+  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = isSignedIn && hasTradeAccount;
+
+  const hasSelectedAccount = isSignedIn &&
+    !hasTradeAccount && {
+      image: "emptyWallet",
+      title: "Connect your Trading Account",
+      description: "Import your existing wallet, or create a new wallet",
+      primaryLink: "/createAccount",
+      primaryLinkTitle: "Create Account",
+      secondaryLink: "/accountManager",
+      secondaryLinkTitle: "Select Account",
+    };
 
   // intitialize market dependent events
   useEffect(() => {
@@ -128,7 +142,11 @@ export function Trading() {
               <S.WrapperGraph>
                 <Navbar onOpenMarkets={() => setState(!state)} />
                 <Graph />
-                {isSignedIn ? <Transactions /> : <EmptyMyAccount hasLimit />}
+                {hasUser ? (
+                  <Transactions />
+                ) : (
+                  <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                )}
               </S.WrapperGraph>
               <S.WrapperRight>
                 <S.Actions>

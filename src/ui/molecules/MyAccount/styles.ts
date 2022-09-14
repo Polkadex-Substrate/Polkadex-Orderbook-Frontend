@@ -305,6 +305,7 @@ export const EmptyHeader = styled.div`
     img {
       width: 100%;
       max-width: 25rem;
+      max-height: 18rem;
     }
   `}
 `;
@@ -353,6 +354,8 @@ export const EmptyActions = styled.div`
     a {
       z-index: 1;
       padding: 1.5rem;
+      white-space: nowrap;
+      font-weight: 500;
       :nth-child(1) {
         color: ${theme.colors.white};
       }
