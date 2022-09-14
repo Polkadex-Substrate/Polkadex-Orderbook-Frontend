@@ -6,10 +6,10 @@ export const createWithdrawPayload = (
   amount: string | number,
   timestamp: number
 ) => {
-  const withdraw_paylod = api.createType("WithdrawPayload", {
+  const withdraw_payload = api.createType("WithdrawPayload", {
     asset_id: asset,
     amount,
     timestamp,
   });
-  return withdraw_paylod;
+  return withdraw_payload;
 };
