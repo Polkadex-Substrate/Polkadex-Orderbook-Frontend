@@ -41,7 +41,8 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
     };
   } else {
     return {
-      ...data,
+      event_id: data.event_id,
+      status: data.status,
       sid: Number(data.sid) ?? 0,
       txn_type: "WITHDRAW",
       main_account: data.user,
