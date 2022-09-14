@@ -153,14 +153,15 @@ export function Trading() {
                   {!isSignedIn && (
                     <Button
                       onClick={() => router.push("/signIn")}
-                      color="black"
+                      color="inverse"
+                      background="text"
                       isFull
                       icon={{
                         name: "Wallet",
-                        background: "black",
+                        background: "inverse",
                         size: "extraMedium",
-                        stroke: "white",
-                        fill: "white",
+                        stroke: "text",
+                        fill: "text",
                       }}>
                       Login/Sign Up
                     </Button>
