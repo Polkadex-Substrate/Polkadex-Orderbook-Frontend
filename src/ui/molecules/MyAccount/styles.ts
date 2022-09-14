@@ -279,7 +279,7 @@ export const EmptyContainer = styled.div`
 
 export const Empty = styled.div<{ hasLimit?: boolean }>`
   ${({ theme, hasLimit }) => css`
-    background: ${theme.colors.secondaryBackgroundSolid};
+    background: ${!hasLimit ? theme.colors.secondaryBackgroundSolid : "inherit"};
     border: 1px solid ${!hasLimit ? theme.colors.secondaryBackground : "none"};
     border-radius: 1.5rem;
     padding: 1rem;
