@@ -14,6 +14,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
@@ -43,6 +44,7 @@ export const WithdrawTemplate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { withdrawals, handleClaimWithdraws } = useHistory();
+
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
@@ -114,57 +116,61 @@ export const WithdrawTemplate = () => {
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
-                  <S.SelectInput>
-                    <span>Select a coin</span>
-                    <S.SelectInputContainer>
-                      <Dropdown>
-                        <Dropdown.Trigger>
-                          <S.DropdownHeader>
-                            <div>
-                              <span>
-                                <Tokens.PDEX />
-                              </span>
-                              {selectedAsset?.name}
-                            </div>
-                            <div>
-                              <span>
-                                <Icons.ArrowBottom />
-                              </span>
-                            </div>
-                          </S.DropdownHeader>
-                        </Dropdown.Trigger>
-                        <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          {assets.map((asset) => (
-                            <Dropdown.Item
-                              key={asset.assetId}
-                              onAction={() => setSelectedAsset(asset)}>
-                              {asset.name}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </S.SelectInputContainer>
-                    <S.Available>
-                      Avlb <strong>120PDEX</strong>
-                    </S.Available>
-                  </S.SelectInput>
-                  <InputLine
-                    name="amount"
-                    label="Token Amount"
-                    placeholder="0.00"
-                    error={errors.amount && touched.amount && errors.amount}
-                    {...getFieldProps("amount")}
-                  />
-
-                  <Button
-                    type="submit"
-                    size="extraLarge"
-                    background="primary"
-                    color="white"
-                    disabled={!(isValid && dirty)}
-                    isFull>
-                    {loading ? "Loading..." : "Withdraw"}
-                  </Button>
+                  <Loading
+                    message="Block finalization will take a few mins."
+                    isVisible={loading}>
+                    <S.SelectInput>
+                      <span>Select a coin</span>
+                      <S.SelectInputContainer>
+                        <Dropdown>
+                          <Dropdown.Trigger>
+                            <S.DropdownHeader>
+                              <div>
+                                <span>
+                                  <Tokens.PDEX />
+                                </span>
+                                {selectedAsset?.name}
+                              </div>
+                              <div>
+                                <span>
+                                  <Icons.ArrowBottom />
+                                </span>
+                              </div>
+                            </S.DropdownHeader>
+                          </Dropdown.Trigger>
+                          <Dropdown.Menu fill="secondaryBackgroundSolid">
+                            {assets.map((asset) => (
+                              <Dropdown.Item
+                                key={asset.assetId}
+                                onAction={() => setSelectedAsset(asset)}>
+                                {asset.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </S.SelectInputContainer>
+                      <S.Available>
+                        Avlb <strong>120PDEX</strong>
+                      </S.Available>
+                    </S.SelectInput>
+                    <InputLine
+                      name="amount"
+                      label="Token Amount"
+                      placeholder="0.00"
+                      error={errors.amount && touched.amount && errors.amount}
+                      {...getFieldProps("amount")}
+                    />
+                    <Button
+                      type="submit"
+                      size="extraLarge"
+                      background="primary"
+                      color="white"
+                      disabled={!(isValid && dirty) || loading}
+                      isFull
+                      isLoading={loading}>
+                      Withdraw
+                    </Button>
+                  </Loading>
                 </form>
               </S.Form>
               <S.History>
