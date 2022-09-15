@@ -105,7 +105,7 @@ export const WithdrawTemplate = () => {
           <S.Container>
             <S.Column>
               <div>
-                <h1>Deposit Crypto</h1>
+                <h1>Withdraw Crypto</h1>
                 <p>
                   Polkadex is a fully non-custodial platform, so the assets in your wallet are
                   always under your control.
