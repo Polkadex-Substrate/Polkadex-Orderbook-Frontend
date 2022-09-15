@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
   flex: 1;
   padding: 2rem;
   @media screen and (min-width: 590px) {
-    padding: 4rem 4rem 10rem 4rem;
+    padding: 4rem;
   }
 `;
 
@@ -241,19 +241,29 @@ export const Form = styled.div`
 export const History = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 2rem;
     border-radius: 1rem;
     margin-top: 4rem;
     flex: 1;
     h2 {
+      padding: 2rem 2rem 0 2rem;
+
       font-size: 1.8rem;
       font-weight: 500;
     }
   `}
 `;
+export const HistoryWrapper = styled.div`
+  max-height: 35rem;
+  overflow-y: hidden;
+  padding: 2rem;
+
+  :hover {
+    overflow-y: auto;
+  }
+`;
+
 export const HistoryContent = styled.div`
   ${({ theme }) => css`
-    margin-top: 2rem;
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackground};
       padding-bottom: 1.5rem;

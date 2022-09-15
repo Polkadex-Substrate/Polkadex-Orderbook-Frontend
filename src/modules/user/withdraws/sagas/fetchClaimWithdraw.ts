@@ -42,9 +42,9 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
           notificationPush({
             type: "SuccessAlert",
             message: {
-              title: "Deposit Successful",
+              title: "Claim Withdraw Successful",
               description:
-                "Congratulations! You have successfully deposited assets to your proxy account.",
+                "Congratulations! You have successfully withdrawn your assets to your main account.",
             },
             time: new Date().getTime(),
             hasConfetti: true,

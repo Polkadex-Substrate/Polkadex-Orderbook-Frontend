@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Loading,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
@@ -21,6 +22,7 @@ import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectCurrentMainAccount,
+  selectUserBalance,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -39,15 +41,22 @@ export const WithdrawTemplate = () => {
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectWithdrawsLoading);
+  const userBalances = useReduxSelector(selectUserBalance);
 
   const dispatch = useDispatch();
   const router = useRouter();
   const { withdrawals, handleClaimWithdraws } = useHistory();
+
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
     "..." +
     currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+
+  const availableAmount = useMemo(
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
+    [userBalances, selectedAsset]
+  );
 
   useEffect(() => {
     const initialAsset = assets.find(
@@ -114,120 +123,136 @@ export const WithdrawTemplate = () => {
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
-                  <S.SelectInput>
-                    <span>Select a coin</span>
-                    <S.SelectInputContainer>
-                      <Dropdown>
-                        <Dropdown.Trigger>
-                          <S.DropdownHeader>
-                            <div>
-                              <span>
-                                <Tokens.PDEX />
-                              </span>
-                              {selectedAsset?.name}
-                            </div>
-                            <div>
-                              <span>
-                                <Icons.ArrowBottom />
-                              </span>
-                            </div>
-                          </S.DropdownHeader>
-                        </Dropdown.Trigger>
-                        <Dropdown.Menu fill="secondaryBackgroundSolid">
-                          {assets.map((asset) => (
-                            <Dropdown.Item
-                              key={asset.assetId}
-                              onAction={() => setSelectedAsset(asset)}>
-                              {asset.name}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </S.SelectInputContainer>
-                    <S.Available>
-                      Avlb <strong>120PDEX</strong>
-                    </S.Available>
-                  </S.SelectInput>
-                  <InputLine
-                    name="amount"
-                    label="Token Amount"
-                    placeholder="0.00"
-                    error={errors.amount && touched.amount && errors.amount}
-                    {...getFieldProps("amount")}
-                  />
-
-                  <Button
-                    type="submit"
-                    size="extraLarge"
-                    background="primary"
-                    color="white"
-                    disabled={!(isValid && dirty)}
-                    isFull>
-                    {loading ? "Loading..." : "Withdraw"}
-                  </Button>
+                  <Loading
+                    message="Block finalization will take a few mins."
+                    isVisible={loading}>
+                    <S.SelectInput>
+                      <span>Select a coin</span>
+                      <S.SelectInputContainer>
+                        <Dropdown>
+                          <Dropdown.Trigger>
+                            <S.DropdownHeader>
+                              <div>{selectedAsset?.name}</div>
+                              <div>
+                                <span>
+                                  <Icons.ArrowBottom />
+                                </span>
+                              </div>
+                            </S.DropdownHeader>
+                          </Dropdown.Trigger>
+                          <Dropdown.Menu fill="secondaryBackgroundSolid">
+                            {assets.map((asset) => (
+                              <Dropdown.Item
+                                key={asset.assetId}
+                                onAction={() => setSelectedAsset(asset)}>
+                                {asset.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </S.SelectInputContainer>
+                      <S.Available>
+                        Avlb{" "}
+                        <strong>
+                          {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
+                        </strong>
+                      </S.Available>
+                    </S.SelectInput>
+                    <InputLine
+                      name="amount"
+                      label="Token Amount"
+                      placeholder="0.00"
+                      error={errors.amount && touched.amount && errors.amount}
+                      {...getFieldProps("amount")}
+                    />
+                    <Button
+                      type="submit"
+                      size="extraLarge"
+                      background="primary"
+                      color="white"
+                      disabled={!(isValid && dirty) || loading}
+                      isFull
+                      isLoading={loading}>
+                      Withdraw
+                    </Button>
+                  </Loading>
                 </form>
               </S.Form>
               <S.History>
                 <h2>History</h2>
-                {withdrawals.map((value) => (
-                  <S.HistoryContent key={value.id}>
-                    <S.HistoryTitle>
-                      <strong>Id #{value.sid ?? "QUEUED"}</strong>
-                      <button type="button" onClick={() => handleClaimWithdraws(value.sid)}>
-                        Claim
-                      </button>
-                    </S.HistoryTitle>
-                    <S.HistoryTable>
-                      <Table
-                        aria-label="Polkadex Withdraw History Table"
-                        style={{ width: "100%" }}>
-                        <Table.Header fill="none">
-                          <Table.Column>
-                            <S.HeaderColumn>Name</S.HeaderColumn>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.HeaderColumn>Date</S.HeaderColumn>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.HeaderColumn>Amount</S.HeaderColumn>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.HeaderColumn>Status</S.HeaderColumn>
-                          </Table.Column>
-                        </Table.Header>
-                        <Table.Body>
-                          {value.items.map((item) => (
-                            <Table.Row key={item.event_id}>
-                              <Table.Cell>
-                                <S.Cell>
-                                  <span>
-                                    {getAsset(item.asset)?.name}{" "}
-                                    <small>{getAsset(item.asset)?.symbol}</small>
-                                  </span>
-                                </S.Cell>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <S.Cell>
-                                  <span>{item.date}</span>
-                                </S.Cell>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <S.Cell>
-                                  <span>{item.amount}</span>
-                                </S.Cell>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <S.Cell>
-                                  <span>{item.status}</span>
-                                </S.Cell>
-                              </Table.Cell>
-                            </Table.Row>
-                          ))}
-                        </Table.Body>
-                      </Table>
-                    </S.HistoryTable>
-                  </S.HistoryContent>
-                ))}
+                <S.HistoryWrapper>
+                  {withdrawals?.map((value) => {
+                    const hasPendingWithdraws = value.items.filter(
+                      (v) => v.status === "CONFIRMED"
+                    );
+                    return (
+                      <S.HistoryContent key={value.id}>
+                        <S.HistoryTitle>
+                          <strong>Id #{value.sid ?? "QUEUED"}</strong>
+                          {!!hasPendingWithdraws.length && (
+                            <button
+                              type="button"
+                              onClick={
+                                undefined
+                                // () => handleClaimWithdraws(value.sid)
+                              }>
+                              Claim
+                            </button>
+                          )}
+                        </S.HistoryTitle>
+                        <S.HistoryTable>
+                          <Table
+                            aria-label="Polkadex Withdraw History Table"
+                            style={{ width: "100%" }}>
+                            <Table.Header fill="none">
+                              <Table.Column width="10rem">
+                                <S.HeaderColumn>Name</S.HeaderColumn>
+                              </Table.Column>
+                              <Table.Column width="10rem">
+                                <S.HeaderColumn>Date</S.HeaderColumn>
+                              </Table.Column>
+                              <Table.Column width="10rem">
+                                <S.HeaderColumn>Amount</S.HeaderColumn>
+                              </Table.Column>
+                              <Table.Column width="10rem">
+                                <S.HeaderColumn>Status</S.HeaderColumn>
+                              </Table.Column>
+                            </Table.Header>
+                            <Table.Body>
+                              {value.items.map((item) => (
+                                <Table.Row key={item.event_id}>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>
+                                        {getAsset(item.asset)?.name}{" "}
+                                        <small>{getAsset(item.asset)?.symbol}</small>
+                                      </span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>{item.date}</span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>{item.amount}</span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>{item.status}</span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                </Table.Row>
+                              ))}
+                            </Table.Body>
+                          </Table>
+                        </S.HistoryTable>
+                      </S.HistoryContent>
+                    );
+                  })}
+                </S.HistoryWrapper>
               </S.History>
             </S.Box>
           </S.Container>
