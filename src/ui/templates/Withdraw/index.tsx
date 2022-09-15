@@ -15,6 +15,7 @@ import {
   TooltipContent,
   TooltipHeader,
   Loading,
+  EmptyData,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
@@ -181,77 +182,78 @@ export const WithdrawTemplate = () => {
               <S.History>
                 <h2>History</h2>
                 <S.HistoryWrapper>
-                  {withdrawals?.map((value) => {
-                    const hasPendingWithdraws = value.items.filter(
-                      (v) => v.status === "CONFIRMED"
-                    );
-                    return (
-                      <S.HistoryContent key={value.id}>
-                        <S.HistoryTitle>
-                          <strong>Id #{value.sid ?? "QUEUED"}</strong>
-                          {!!hasPendingWithdraws.length && (
-                            <button
-                              type="button"
-                              onClick={
-                                undefined
-                                // () => handleClaimWithdraws(value.sid)
-                              }>
-                              Claim
-                            </button>
-                          )}
-                        </S.HistoryTitle>
-                        <S.HistoryTable>
-                          <Table
-                            aria-label="Polkadex Withdraw History Table"
-                            style={{ width: "100%" }}>
-                            <Table.Header fill="none">
-                              <Table.Column width="10rem">
-                                <S.HeaderColumn>Name</S.HeaderColumn>
-                              </Table.Column>
-                              <Table.Column width="10rem">
-                                <S.HeaderColumn>Date</S.HeaderColumn>
-                              </Table.Column>
-                              <Table.Column width="10rem">
-                                <S.HeaderColumn>Amount</S.HeaderColumn>
-                              </Table.Column>
-                              <Table.Column width="10rem">
-                                <S.HeaderColumn>Status</S.HeaderColumn>
-                              </Table.Column>
-                            </Table.Header>
-                            <Table.Body>
-                              {value.items.map((item) => (
-                                <Table.Row key={item.event_id}>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {getAsset(item.asset)?.name}{" "}
-                                        <small>{getAsset(item.asset)?.symbol}</small>
-                                      </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{item.date}</span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{item.amount}</span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{item.status}</span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                </Table.Row>
-                              ))}
-                            </Table.Body>
-                          </Table>
-                        </S.HistoryTable>
-                      </S.HistoryContent>
-                    );
-                  })}
+                  {withdrawals?.length ? (
+                    withdrawals.map((value) => {
+                      const hasPendingWithdraws = value.items.filter(
+                        (v) => v.status === "CONFIRMED"
+                      );
+                      return (
+                        <S.HistoryContent key={value.id}>
+                          <S.HistoryTitle>
+                            <strong>Id #{value.sid ?? "QUEUED"}</strong>
+                            {!!hasPendingWithdraws.length && (
+                              <button
+                                type="button"
+                                onClick={() => handleClaimWithdraws(value.sid)}>
+                                Claim
+                              </button>
+                            )}
+                          </S.HistoryTitle>
+                          <S.HistoryTable>
+                            <Table
+                              aria-label="Polkadex Withdraw History Table"
+                              style={{ width: "100%" }}>
+                              <Table.Header fill="none">
+                                <Table.Column width="10rem">
+                                  <S.HeaderColumn>Name</S.HeaderColumn>
+                                </Table.Column>
+                                <Table.Column width="10rem">
+                                  <S.HeaderColumn>Date</S.HeaderColumn>
+                                </Table.Column>
+                                <Table.Column width="10rem">
+                                  <S.HeaderColumn>Amount</S.HeaderColumn>
+                                </Table.Column>
+                                <Table.Column width="10rem">
+                                  <S.HeaderColumn>Status</S.HeaderColumn>
+                                </Table.Column>
+                              </Table.Header>
+                              <Table.Body>
+                                {value.items.map((item) => (
+                                  <Table.Row key={item.event_id}>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>
+                                          {getAsset(item.asset)?.name}{" "}
+                                          <small>{getAsset(item.asset)?.symbol}</small>
+                                        </span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>{item.date}</span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>{item.amount}</span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>{item.status}</span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                  </Table.Row>
+                                ))}
+                              </Table.Body>
+                            </Table>
+                          </S.HistoryTable>
+                        </S.HistoryContent>
+                      );
+                    })
+                  ) : (
+                    <EmptyData />
+                  )}
                 </S.HistoryWrapper>
               </S.History>
             </S.Box>
