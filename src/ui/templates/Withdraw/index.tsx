@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -22,6 +22,7 @@ import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectCurrentMainAccount,
+  selectUserBalance,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -40,6 +41,7 @@ export const WithdrawTemplate = () => {
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectWithdrawsLoading);
+  const userBalances = useReduxSelector(selectUserBalance);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -50,6 +52,11 @@ export const WithdrawTemplate = () => {
     currMainAcc?.address?.slice(0, 15) +
     "..." +
     currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+
+  const availableAmount = useMemo(
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
+    [userBalances, selectedAsset]
+  );
 
   useEffect(() => {
     const initialAsset = assets.find(
@@ -125,12 +132,7 @@ export const WithdrawTemplate = () => {
                         <Dropdown>
                           <Dropdown.Trigger>
                             <S.DropdownHeader>
-                              <div>
-                                <span>
-                                  <Tokens.PDEX />
-                                </span>
-                                {selectedAsset?.name}
-                              </div>
+                              <div>{selectedAsset?.name}</div>
                               <div>
                                 <span>
                                   <Icons.ArrowBottom />
@@ -150,7 +152,10 @@ export const WithdrawTemplate = () => {
                         </Dropdown>
                       </S.SelectInputContainer>
                       <S.Available>
-                        Avlb <strong>120PDEX</strong>
+                        Avlb{" "}
+                        <strong>
+                          {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
+                        </strong>
                       </S.Available>
                     </S.SelectInput>
                     <InputLine
