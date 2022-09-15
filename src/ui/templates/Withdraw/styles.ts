@@ -130,6 +130,7 @@ export const Available = styled.span`
     display: block;
     align-self: flex-end;
     font-size: 1.3rem;
+    margin-top: 0.2rem;
     strong {
       color: ${theme.colors.text};
       font-weight: 500;
