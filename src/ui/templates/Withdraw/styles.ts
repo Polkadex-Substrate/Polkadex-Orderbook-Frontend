@@ -257,7 +257,7 @@ export const HistoryWrapper = styled.div`
   max-height: 35rem;
   overflow-y: hidden;
   padding: 2rem;
-
+  height: 100%;
   :hover {
     overflow-y: auto;
   }
@@ -268,11 +268,16 @@ export const HistoryContent = styled.div`
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackground};
       padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
   `}
 `;
 export const HistoryTable = styled.div`
   margin-top: 1.5rem;
+  th,
+  td {
+    width: 10rem;
+  }
 `;
 
 export const Cell = styled.div`

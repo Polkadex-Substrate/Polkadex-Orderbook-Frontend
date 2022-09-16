@@ -204,16 +204,16 @@ export const WithdrawTemplate = () => {
                               aria-label="Polkadex Withdraw History Table"
                               style={{ width: "100%" }}>
                               <Table.Header fill="none">
-                                <Table.Column width="10rem">
+                                <Table.Column>
                                   <S.HeaderColumn>Name</S.HeaderColumn>
                                 </Table.Column>
-                                <Table.Column width="10rem">
+                                <Table.Column>
                                   <S.HeaderColumn>Date</S.HeaderColumn>
                                 </Table.Column>
-                                <Table.Column width="10rem">
+                                <Table.Column>
                                   <S.HeaderColumn>Amount</S.HeaderColumn>
                                 </Table.Column>
-                                <Table.Column width="10rem">
+                                <Table.Column>
                                   <S.HeaderColumn>Status</S.HeaderColumn>
                                 </Table.Column>
                               </Table.Header>
