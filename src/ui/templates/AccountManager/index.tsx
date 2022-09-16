@@ -455,7 +455,7 @@ const Card = ({
             </Dropdown.Trigger>
             <Dropdown.Menu fill="secondaryBackgroundSolid">
               <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
-                Remove from the blockchain
+                Remove from blockchain
               </Dropdown.Item>
               <Dropdown.Item key="removeBrowser">
                 <AvailableMessage>Remove from my browser</AvailableMessage>

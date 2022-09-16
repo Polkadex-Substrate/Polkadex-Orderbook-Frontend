@@ -28,6 +28,7 @@ export const WrapperBalance = styled.div`
 export const Span = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
+  word-break: break-word;
 `;
 export const ContainerForm = styled.div``;
 export const WrapperActions = styled.div`
