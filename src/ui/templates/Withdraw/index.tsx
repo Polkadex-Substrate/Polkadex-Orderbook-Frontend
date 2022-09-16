@@ -218,10 +218,10 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
       <S.HistoryTitle>
         <strong>Id #{sid ?? "QUEUED"}</strong>
 
-        {claimWithdrawsInLoading.length >= 1 && !claimIsLoading ? (
+        {claimWithdrawsInLoading?.length >= 1 && !claimIsLoading ? (
           <p>There is already a transaction in progress</p>
         ) : (
-          hasPendingWithdraws.length && (
+          !!hasPendingWithdraws?.length && (
             <Button
               type="button"
               disabled={claimIsLoading}
