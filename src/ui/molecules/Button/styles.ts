@@ -61,6 +61,9 @@ export const Wrapper = styled.button<{
     color: ${theme.colors[color]};
     background: ${isDisabled ? "gray" : theme.colors[background]};
     white-space: nowrap;
+    :disabled {
+      cursor: not-allowed;
+    }
     ${sizeModifier[size]()};
     ${
       hasIcon &&

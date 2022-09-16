@@ -11,6 +11,7 @@ import {
   withdrawsClaimData,
   WithdrawsClaimFetch,
   withdrawsError,
+  withdrawClaimCancel,
 } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
@@ -38,6 +39,8 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
       const res = yield call(claimWithdrawal, api, curreMainAcc, sid);
       if (res.isSuccess) {
         yield put(withdrawsClaimData({ sid }));
+        // TODO?: Check delay
+        yield delay(3000);
         yield put(
           notificationPush({
             type: "SuccessAlert",
@@ -56,6 +59,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
       }
     }
   } catch (error) {
+    yield put(withdrawClaimCancel(action.payload.sid));
     yield put(
       sendError({
         error,

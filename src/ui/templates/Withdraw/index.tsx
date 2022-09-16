@@ -16,12 +16,14 @@ import {
   TooltipHeader,
   Loading,
   EmptyData,
+  ButtonStatus,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
-import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  selectClaimWithdrawsInLoading,
   selectCurrentMainAccount,
   selectUserBalance,
   selectWithdrawsLoading,
@@ -40,7 +42,6 @@ export const WithdrawTemplate = () => {
 
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
-  const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
 
@@ -58,7 +59,6 @@ export const WithdrawTemplate = () => {
     () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
-
   useEffect(() => {
     const initialAsset = assets.find(
       (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
@@ -183,74 +183,15 @@ export const WithdrawTemplate = () => {
                 <h2>History</h2>
                 <S.HistoryWrapper>
                   {withdrawals?.length ? (
-                    withdrawals.map((value) => {
-                      const hasPendingWithdraws = value.items.filter(
-                        (v) => v.status === "READY"
-                      );
-                      return (
-                        <S.HistoryContent key={value.id}>
-                          <S.HistoryTitle>
-                            <strong>Id #{value.sid ?? "QUEUED"}</strong>
-                            {!!hasPendingWithdraws.length && (
-                              <button
-                                type="button"
-                                onClick={() => handleClaimWithdraws(value.sid)}>
-                                Claim
-                              </button>
-                            )}
-                          </S.HistoryTitle>
-                          <S.HistoryTable>
-                            <Table
-                              aria-label="Polkadex Withdraw History Table"
-                              style={{ width: "100%" }}>
-                              <Table.Header fill="none">
-                                <Table.Column>
-                                  <S.HeaderColumn>Name</S.HeaderColumn>
-                                </Table.Column>
-                                <Table.Column>
-                                  <S.HeaderColumn>Date</S.HeaderColumn>
-                                </Table.Column>
-                                <Table.Column>
-                                  <S.HeaderColumn>Amount</S.HeaderColumn>
-                                </Table.Column>
-                                <Table.Column>
-                                  <S.HeaderColumn>Status</S.HeaderColumn>
-                                </Table.Column>
-                              </Table.Header>
-                              <Table.Body>
-                                {value.items.map((item) => (
-                                  <Table.Row key={item.event_id}>
-                                    <Table.Cell>
-                                      <S.Cell>
-                                        <span>
-                                          {getAsset(item.asset)?.name}{" "}
-                                          <small>{getAsset(item.asset)?.symbol}</small>
-                                        </span>
-                                      </S.Cell>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                      <S.Cell>
-                                        <span>{item.date}</span>
-                                      </S.Cell>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                      <S.Cell>
-                                        <span>{item.amount}</span>
-                                      </S.Cell>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                      <S.Cell>
-                                        <span>{item.status}</span>
-                                      </S.Cell>
-                                    </Table.Cell>
-                                  </Table.Row>
-                                ))}
-                              </Table.Body>
-                            </Table>
-                          </S.HistoryTable>
-                        </S.HistoryContent>
-                      );
-                    })
+                    withdrawals.map((value) => (
+                      <HistoryCard
+                        key={value.id}
+                        sid={value.sid}
+                        hasPendingWithdraws={value.items.filter((v) => v.status === "READY")}
+                        handleClaimWithdraws={() => handleClaimWithdraws(value.sid)}
+                        items={value.items}
+                      />
+                    ))
                   ) : (
                     <EmptyData />
                   )}
@@ -261,6 +202,84 @@ export const WithdrawTemplate = () => {
         </S.Wrapper>
       </S.Main>
     </>
+  );
+};
+
+const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) => {
+  const getAsset = useReduxSelector(selectGetAsset);
+  const claimWithdrawsInLoading = useReduxSelector(selectClaimWithdrawsInLoading);
+
+  const claimIsLoading = useMemo(
+    () => claimWithdrawsInLoading.includes(sid),
+    [claimWithdrawsInLoading, sid]
+  );
+  return (
+    <S.HistoryContent>
+      <S.HistoryTitle>
+        <strong>Id #{sid ?? "QUEUED"}</strong>
+
+        {claimWithdrawsInLoading.length >= 1 && !claimIsLoading ? (
+          <p>There is already a transaction in progress</p>
+        ) : (
+          hasPendingWithdraws.length && (
+            <Button
+              type="button"
+              disabled={claimIsLoading}
+              isLoading={claimIsLoading}
+              onClick={handleClaimWithdraws}>
+              Claim
+            </Button>
+          )
+        )}
+      </S.HistoryTitle>
+      <S.HistoryTable>
+        <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
+          <Table.Header fill="none">
+            <Table.Column>
+              <S.HeaderColumn>Name</S.HeaderColumn>
+            </Table.Column>
+            <Table.Column>
+              <S.HeaderColumn>Date</S.HeaderColumn>
+            </Table.Column>
+            <Table.Column>
+              <S.HeaderColumn>Amount</S.HeaderColumn>
+            </Table.Column>
+            <Table.Column>
+              <S.HeaderColumn>Status</S.HeaderColumn>
+            </Table.Column>
+          </Table.Header>
+          <Table.Body>
+            {items.map((item) => (
+              <Table.Row key={item.event_id}>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>
+                      {getAsset(item.asset)?.name}{" "}
+                      <small>{getAsset(item.asset)?.symbol}</small>
+                    </span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{item.date}</span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{item.amount}</span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{item.status}</span>
+                  </S.Cell>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </S.HistoryTable>
+    </S.HistoryContent>
   );
 };
 

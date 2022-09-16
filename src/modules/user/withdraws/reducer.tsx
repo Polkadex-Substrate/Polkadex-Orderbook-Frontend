@@ -1,6 +1,7 @@
 import { WithdrawsAction } from "./actions";
 import {
   CLAIM_WITHDRAW_RESET,
+  CLAIM_WITHDRAW_CANCEL,
   WITHDRAWS_CLAIM_DATA,
   WITHDRAWS_CLAIM_ERROR,
   WITHDRAWS_CLAIM_FETCH,
@@ -73,6 +74,16 @@ export const withdrawsReducer = (
       };
     case CLAIM_WITHDRAW_RESET:
       return initialState;
+
+    case CLAIM_WITHDRAW_CANCEL: {
+      const claimsInLoading = state.claimsInLoading.filter(
+        (value) => value !== action.payload
+      );
+      return {
+        ...state,
+        claimsInLoading,
+      };
+    }
     default:
       return state;
   }

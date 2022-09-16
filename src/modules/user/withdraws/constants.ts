@@ -6,3 +6,4 @@ export const WITHDRAWS_CLAIM_FETCH = "withdraws/CLAIM";
 export const WITHDRAWS_CLAIM_DATA = "withdraws/CLAIM_DATA";
 export const WITHDRAWS_CLAIM_ERROR = "withdraws/CLAIM_ERROR";
 export const CLAIM_WITHDRAW_RESET = "withdraws/CLAIM_RESET";
+export const CLAIM_WITHDRAW_CANCEL = "withdraws/CLAIM_CANCEL";

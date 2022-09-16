@@ -320,19 +320,9 @@ export const HistoryTitle = styled.div`
       font-size: 1.5rem;
     }
     button {
-      color: ${theme.colors.tertiaryText};
+      width: fit-content;
       font-size: 1.2rem;
-      padding: 0.6rem;
-      transition: background 0.3s ease-in, border 0.3s ease-in;
-      background: ${theme.colors.primary}22;
-      color: ${theme.colors.primary};
-      border-radius: 0.8rem;
-      border: 1px solid;
-      border-color: transparent;
-      :hover {
-        background: transparent;
-        border-color: ${theme.colors.primary};
-      }
+      padding: 0.8rem;
     }
   `}
 `;

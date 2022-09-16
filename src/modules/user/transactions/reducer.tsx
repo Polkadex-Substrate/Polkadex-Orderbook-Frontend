@@ -18,6 +18,9 @@ export interface Transaction {
   time: string;
   status: "PENDING" | "CONFIRMED" | "FAILED";
   txn_type: "DEPOSIT" | "WITHDRAW";
+  claimLoading: boolean;
+  claimsInLoading: Array<number>;
+  claimSuccess: boolean;
 }
 
 export interface TransactionsState {
