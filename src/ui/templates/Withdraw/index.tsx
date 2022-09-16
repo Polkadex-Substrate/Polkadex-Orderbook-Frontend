@@ -185,7 +185,7 @@ export const WithdrawTemplate = () => {
                   {withdrawals?.length ? (
                     withdrawals.map((value) => {
                       const hasPendingWithdraws = value.items.filter(
-                        (v) => v.status === "CONFIRMED"
+                        (v) => v.status === "READY"
                       );
                       return (
                         <S.HistoryContent key={value.id}>
