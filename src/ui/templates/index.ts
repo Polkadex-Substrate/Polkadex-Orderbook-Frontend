@@ -9,3 +9,4 @@ export * from "./CreateAccount";
 export * from "./Withdraw";
 export * from "./LinkAccount";
 export * from "./Trading";
+export * from "./Error";

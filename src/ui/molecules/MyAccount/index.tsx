@@ -115,25 +115,7 @@ export const WalletContent = () => {
             onNavigate={onNavigate}
           />
         ) : (
-          <S.Empty>
-            <S.EmptyHeader>
-              <figure>
-                <img
-                  src="/img/loginEmpty.svg"
-                  alt="Hand coming out of a smartphone with a pen in hand"
-                />
-              </figure>
-            </S.EmptyHeader>
-            <S.EmptyContent>
-              <h2>Oops, it seems that you are not logged in</h2>
-              <p>Explore a new way to trade with your own wallet!</p>
-              <S.EmptyActions>
-                <Link href="/sign">Sign Up</Link>
-                <Link href="/signIn">Login</Link>
-                <div />
-              </S.EmptyActions>
-            </S.EmptyContent>
-          </S.Empty>
+          <EmptyMyAccount />
         )}
       </CSSTransition>
       <CSSTransition
@@ -147,3 +129,36 @@ export const WalletContent = () => {
     </S.Content>
   );
 };
+
+export const EmptyMyAccount = ({
+  hasLimit = false,
+  image = "loginEmpty",
+  title = "Oops, it seems that you are not logged in",
+  description = "Explore a new way to trade with your own wallet!",
+  primaryLink = "/sign",
+  primaryLinkTitle = "Sign Up",
+  secondaryLink = "/signIn",
+  secondaryLinkTitle = "Login",
+}) => (
+  <S.Empty hasLimit={hasLimit}>
+    <S.EmptyContainer>
+      <S.EmptyHeader>
+        <figure>
+          <img
+            src={`/img/${image}.svg`}
+            alt="Hand coming out of a smartphone with a pen in hand"
+          />
+        </figure>
+      </S.EmptyHeader>
+      <S.EmptyContent>
+        <h2>{title}</h2>
+        <p>{description}</p>
+        <S.EmptyActions hasLimit={hasLimit}>
+          <Link href={primaryLink}>{primaryLinkTitle}</Link>
+          <Link href={secondaryLink}>{secondaryLinkTitle}</Link>
+          <div />
+        </S.EmptyActions>
+      </S.EmptyContent>
+    </S.EmptyContainer>
+  </S.Empty>
+);

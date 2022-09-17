@@ -28,7 +28,11 @@ const Navbar = ({ onOpenMarkets }) => {
           />
         </S.ContainerPair>
         <S.ContainerInfo>
-          <NavbarItem label={`Price (${quoteAsset?.symbol})`} info={currPrice} />
+          <NavbarItem
+            label={`Price ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
+            info={currPrice}
+          />
+
           <AvailableMessage message="Soon">
             <NavbarItem
               label="Price % 24h"
@@ -36,7 +40,11 @@ const Navbar = ({ onOpenMarkets }) => {
               color={isPriceChangeNegative ? "primary" : "green"}
             />
           </AvailableMessage>
-          <NavbarItem label={`Volume 24h (${quoteAsset?.symbol})`} info={volume} />
+          <NavbarItem
+            label={`Volume 24h ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
+            info={volume}
+          />
+
           <AvailableMessage message="Soon">
             <S.WrapperVolume>
               <S.VolumeHigh>
