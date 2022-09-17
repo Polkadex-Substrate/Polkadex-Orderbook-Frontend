@@ -14,13 +14,11 @@ import {
   TabContent,
   TabHeader,
   Tabs,
-  Logged,
   DropdownHeader,
   DropdownContent,
 } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 // eslint-disable-next-line import/order
-import { selectHasCurrentTradeAccount, userSessionData } from "@polkadex/orderbook-modules";
+import { userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -55,8 +53,6 @@ const Transactions = () => {
   const [filters, setFilters] = useState(initialFilters);
   const [to, setTo] = useState(now.current);
   const [from, setFrom] = useState(subDays(now.current, 7));
-
-  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
@@ -150,24 +146,20 @@ const Transactions = () => {
             </S.Flex>
           </S.WrapperActions>
         </S.Header>
-        {userLoggedIn ? (
-          <S.Content>
-            <TabContent>
-              <OpenOrders filters={filters} />
-            </TabContent>
-            <TabContent>
-              <OrderHistory filters={filters} />
-            </TabContent>
-            <TabContent>
-              <TradeHistory filters={filters} />
-            </TabContent>
-            <TabContent>
-              <Funds />
-            </TabContent>
-          </S.Content>
-        ) : (
-          <Logged />
-        )}
+        <S.Content>
+          <TabContent>
+            <OpenOrders filters={filters} />
+          </TabContent>
+          <TabContent>
+            <OrderHistory filters={filters} />
+          </TabContent>
+          <TabContent>
+            <TradeHistory filters={filters} />
+          </TabContent>
+          <TabContent>
+            <Funds />
+          </TabContent>
+        </S.Content>
       </Tabs>
     </S.Section>
   );

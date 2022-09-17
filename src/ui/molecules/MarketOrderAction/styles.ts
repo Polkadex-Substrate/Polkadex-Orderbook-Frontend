@@ -47,7 +47,7 @@ export const Connect = styled.a`
     cursor: pointer;
     display: block;
     background: ${theme.colors.primaryBackground};
-    color: ${theme.colors.white};
+    color: ${theme.colors.text};
     padding: 1rem;
     border-radius: 1rem;
     font-weight: 500;

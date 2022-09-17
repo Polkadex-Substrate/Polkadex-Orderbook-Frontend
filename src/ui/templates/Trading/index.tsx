@@ -17,12 +17,19 @@ import {
   selectAssociatedTradeAccounts,
   selectCurrentMarket,
   selectCurrentTradePrice,
+  selectHasCurrentTradeAccount,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
-import { AccountBanner, Button, Logo, Modal } from "@polkadex/orderbook-ui/molecules";
+import {
+  AccountBanner,
+  Button,
+  EmptyMyAccount,
+  Logo,
+  Modal,
+} from "@polkadex/orderbook-ui/molecules";
 import Markets from "@polkadex/orderbook-ui/organisms/Markets";
 import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
 import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
@@ -48,6 +55,19 @@ export function Trading() {
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
+  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = isSignedIn && hasTradeAccount;
+
+  const hasSelectedAccount = isSignedIn &&
+    !hasTradeAccount && {
+      image: "emptyWallet",
+      title: "Connect your Trading Account",
+      description: "Import your existing wallet, or create a new wallet",
+      primaryLink: "/createAccount",
+      primaryLinkTitle: "Create Account",
+      secondaryLink: "/accountManager",
+      secondaryLinkTitle: "Select Account",
+    };
 
   // intitialize market dependent events
   useEffect(() => {
@@ -122,21 +142,26 @@ export function Trading() {
               <S.WrapperGraph>
                 <Navbar onOpenMarkets={() => setState(!state)} />
                 <Graph />
-                <Transactions />
+                {hasUser ? (
+                  <Transactions />
+                ) : (
+                  <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                )}
               </S.WrapperGraph>
               <S.WrapperRight>
                 <S.Actions>
                   {!isSignedIn && (
                     <Button
                       onClick={() => router.push("/signIn")}
-                      color="black"
+                      color="inverse"
+                      background="text"
                       isFull
                       icon={{
                         name: "Wallet",
-                        background: "black",
+                        background: "inverse",
                         size: "extraMedium",
-                        stroke: "white",
-                        fill: "white",
+                        stroke: "text",
+                        fill: "text",
                       }}>
                       Login/Sign Up
                     </Button>

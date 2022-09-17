@@ -1,6 +1,11 @@
-import Error from "next/error";
+import dynamic from "next/dynamic";
 
-export default function NotFound() {
-  // Opinionated: do not record an exception in Sentry for 404
-  return <p>Error..</p>;
-}
+const ErrorTemplate = dynamic(
+  () => import("@polkadex/orderbook-ui/templates/Error").then((mod) => mod.ErrorTemplate),
+  {
+    ssr: false,
+  }
+);
+const NotFound = () => <ErrorTemplate />;
+
+export default NotFound;
