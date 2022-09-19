@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import keyring from "@polkadot/ui-keyring";
+import NextNProgress from "nextjs-progressbar";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -46,6 +47,15 @@ function App({ Component, pageProps }: AppProps) {
   }, [router.events]);
   return (
     <ThemeWrapper>
+      <NextNProgress
+        color="#E6007A"
+        startPosition={0.3}
+        height={2}
+        showOnShallow={true}
+        options={{
+          showSpinner: false,
+        }}
+      />
       <GlobalStyles />
       <Component {...pageProps} />
       <Analytics />
