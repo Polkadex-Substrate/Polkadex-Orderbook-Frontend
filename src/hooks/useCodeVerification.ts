@@ -11,8 +11,6 @@ import {
 
 import { useReduxSelector } from "./useReduxSelector";
 
-import { defaultConfig } from "@polkadex/orderbook-config";
-
 export const useCodeVerification = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -21,7 +19,7 @@ export const useCodeVerification = () => {
   const email = useReduxSelector(selectUserAuthEmail);
 
   useEffect(() => {
-    if (isVerficationSuccess) router.push("/trading/" + defaultConfig.landingPageMarket);
+    if (isVerficationSuccess) router.push("/signIn");
   }, [isVerficationSuccess, router]);
 
   const verifyCode = (code: string) => dispatch(codeVerifyFetch({ email, code }));
