@@ -133,8 +133,8 @@ export const WalletContent = () => {
 export const EmptyMyAccount = ({
   hasLimit = false,
   image = "loginEmpty",
-  title = "Oops, it seems that you are not logged in",
-  description = "Explore a new way to trade with your own wallet!",
+  title = "Looks like you're not logged in",
+  description = "Explore a new way of trading with your own wallet!",
   primaryLink = "/sign",
   primaryLinkTitle = "Sign Up",
   secondaryLink = "/signIn",
