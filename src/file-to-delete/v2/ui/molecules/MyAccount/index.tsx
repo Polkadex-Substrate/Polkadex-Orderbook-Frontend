@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 
 import * as S from "./styles";
-import * as T from "./types";
 
-import { Icon, Dropdown, Appearance, AccountOverview } from "@polkadex/orderbook-ui/molecules";
+import { Appearance, AccountOverview } from "@polkadex/orderbook-ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
 
@@ -52,8 +51,8 @@ export const WalletContent = () => {
               </figure>
             </S.EmptyHeader>
             <S.EmptyContent>
-              <h2>Oops, it seems that you are not logged in</h2>
-              <p>Explore a new way to trade with your own wallet!</p>
+              <h2>Looks like you&apos;re not logged in</h2>
+              <p>Explore a new way of trading with your own wallet!</p>
               <S.EmptyActions>
                 <Link href="/sign">Sign Up</Link>
                 <Link href="/signIn">Login</Link>

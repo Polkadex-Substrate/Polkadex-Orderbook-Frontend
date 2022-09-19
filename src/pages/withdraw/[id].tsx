@@ -23,7 +23,7 @@ const Withdraw = () => {
   const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
 
   const shouldRedirect = useMemo(
-    () => !hasUser || isRegistered || !hasSelectedAccount,
+    () => !hasUser || !isRegistered || !hasSelectedAccount,
     [hasUser, isRegistered, hasSelectedAccount]
   );
 

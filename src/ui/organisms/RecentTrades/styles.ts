@@ -15,7 +15,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     min-width: 29rem;
     height: 100%;
     min-height: 33rem;
-
+    max-height: 70rem;
     @media screen and (min-width: 1290px) {
       max-width: 29rem;
     }
@@ -44,8 +44,9 @@ export const Content = styled.div`
   ${({ theme }) => css`
     padding-bottom: 2rem;
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
     height: 100%;
+
     ::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -53,6 +54,7 @@ export const Content = styled.div`
       background: none;
     }
     :hover {
+      overflow: auto;
       ::-webkit-scrollbar-thumb {
         background: ${theme.colors.secondaryBackground};
       }
