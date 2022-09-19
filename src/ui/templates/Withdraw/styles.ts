@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
   flex: 1;
   padding: 2rem;
   @media screen and (min-width: 590px) {
-    padding: 4rem 4rem 10rem 4rem;
+    padding: 4rem;
   }
 `;
 
@@ -130,6 +130,7 @@ export const Available = styled.span`
     display: block;
     align-self: flex-end;
     font-size: 1.3rem;
+    margin-top: 0.2rem;
     strong {
       color: ${theme.colors.text};
       font-weight: 500;
@@ -241,27 +242,42 @@ export const Form = styled.div`
 export const History = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 2rem;
     border-radius: 1rem;
     margin-top: 4rem;
     flex: 1;
     h2 {
+      padding: 2rem 2rem 0 2rem;
+
       font-size: 1.8rem;
       font-weight: 500;
     }
   `}
 `;
+export const HistoryWrapper = styled.div`
+  max-height: 35rem;
+  overflow-y: hidden;
+  padding: 2rem;
+  height: 100%;
+  :hover {
+    overflow-y: auto;
+  }
+`;
+
 export const HistoryContent = styled.div`
   ${({ theme }) => css`
-    margin-top: 2rem;
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackground};
       padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
   `}
 `;
 export const HistoryTable = styled.div`
   margin-top: 1.5rem;
+  th,
+  td {
+    width: 10rem;
+  }
 `;
 
 export const Cell = styled.div`
@@ -304,19 +320,9 @@ export const HistoryTitle = styled.div`
       font-size: 1.5rem;
     }
     button {
-      color: ${theme.colors.tertiaryText};
+      width: fit-content;
       font-size: 1.2rem;
-      padding: 0.6rem;
-      transition: background 0.3s ease-in, border 0.3s ease-in;
-      background: ${theme.colors.primary}22;
-      color: ${theme.colors.primary};
-      border-radius: 0.8rem;
-      border: 1px solid;
-      border-color: transparent;
-      :hover {
-        background: transparent;
-        border-color: ${theme.colors.primary};
-      }
+      padding: 0.8rem;
     }
   `}
 `;

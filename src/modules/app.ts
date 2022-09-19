@@ -3,7 +3,6 @@ import { combineReducers } from "redux";
 import { alertReducer } from "./public/alertHandler";
 import { changeGlobalSettingsReducer } from "./public/globalSettings";
 import { errorHandlerReducer } from "./public/errorHandler";
-import { currenciesReducer } from "./public/currencies";
 import { klineReducer } from "./public/kline";
 import { rangerReducer } from "./public/ranger";
 import { marketsReducer } from "./public/markets";
@@ -27,7 +26,6 @@ import { assetsReducer } from "./public/assets";
 export const publicReducer = combineReducers({
   alerts: alertReducer,
   globalSettings: changeGlobalSettingsReducer,
-  currencies: currenciesReducer,
   errorHandler: errorHandlerReducer,
   kline: klineReducer,
   markets: marketsReducer,

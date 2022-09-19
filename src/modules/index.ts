@@ -4,7 +4,6 @@ import { combineReducers } from "redux";
 import { GlobalSettingsState } from "./public/globalSettings";
 import { rootHandleAlertSaga, AlertState } from "./public/alertHandler";
 import { ErrorHandlerState, rootErrorHandlerSaga } from "./public/errorHandler";
-import { CurrenciesState, rootCurrenciesSaga } from "./public/currencies";
 import { KlineState, rootKlineFetchSaga } from "./public/kline";
 import { MarketsState, rootMarketsSaga } from "./public/markets";
 import { RangerState, rootRangerSaga } from "./public/ranger";
@@ -49,7 +48,6 @@ export * from "./user/withdraws";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
 export * from "./public/alertHandler";
-export * from "./public/currencies";
 export * from "./public/kline";
 export * from "./public/markets";
 export * from "./public/orderBook";
@@ -60,7 +58,6 @@ export interface RootState {
   public: {
     alerts: AlertState;
     globalSettings: GlobalSettingsState;
-    currencies: CurrenciesState;
     depth: DepthState;
     errorHandler: ErrorHandlerState;
     incrementDepth: DepthIncrementState;
@@ -99,7 +96,6 @@ export function* rootSaga() {
     call(rootSessionSaga),
     call(rootAuthSaga),
     call(rootDepositsSaga),
-    call(rootCurrenciesSaga),
     call(rootTransactionsSaga),
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),

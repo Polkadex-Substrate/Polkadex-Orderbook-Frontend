@@ -11,6 +11,7 @@ import {
   withdrawsClaimData,
   WithdrawsClaimFetch,
   withdrawsError,
+  withdrawClaimCancel,
 } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
@@ -38,13 +39,15 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
       const res = yield call(claimWithdrawal, api, curreMainAcc, sid);
       if (res.isSuccess) {
         yield put(withdrawsClaimData({ sid }));
+        // TODO?: Check delay
+        yield delay(3000);
         yield put(
           notificationPush({
             type: "SuccessAlert",
             message: {
-              title: "Deposit Successful",
+              title: "Claim Withdraw Successful",
               description:
-                "Congratulations! You have successfully deposited assets to your proxy account.",
+                "Congratulations! You have successfully withdrawn your assets to your main account.",
             },
             time: new Date().getTime(),
             hasConfetti: true,
@@ -56,6 +59,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
       }
     }
   } catch (error) {
+    yield put(withdrawClaimCancel(action.payload.sid));
     yield put(
       sendError({
         error,

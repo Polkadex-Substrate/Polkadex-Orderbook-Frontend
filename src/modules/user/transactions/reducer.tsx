@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { TransactionsAction } from "./actions";
 import {
   TRANSACTIONS_DATA,
@@ -55,7 +57,8 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       };
     case TRANSACTIONS_UPDATE_EVENT_DATA: {
       const { payload } = action;
-      const transactions = [...state.transactions];
+      const transactions = _.cloneDeep(state.transactions);
+      console.log("inside tx-update reducer", action, transactions);
       const index = transactions.findIndex(
         ({ event_id }) => Number(event_id) === Number(payload.event_id)
       );
@@ -64,6 +67,7 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       } else {
         transactions.push(payload);
       }
+      console.log("finished tx reducer", transactions);
       return {
         ...state,
         transactions,

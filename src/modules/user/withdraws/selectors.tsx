@@ -5,3 +5,5 @@ export const selectWithdrawsSuccess = (state: RootState): boolean =>
 export const selectWithdrawsError = (state: RootState): string => state.user.withdraws.error;
 export const selectWithdrawsLoading = (state: RootState): boolean =>
   state.user.withdraws.loading;
+export const selectClaimWithdrawsInLoading = (state: RootState): Array<number> =>
+  state.user.withdraws.claimsInLoading;

@@ -25,11 +25,11 @@ export const RemoveFromBlockchain = ({ handleClose, address }) => {
   return (
     <S.Wrapper>
       <S.Tag>
-        <strong>Warning: </strong> Warning: This action is not reversible
+        <strong>Warning: </strong>This action is not reversible
       </S.Tag>
       <S.Title>
         <h2>Remove account from the blockchain</h2>
-        <p>Don’t worry your funds are safe in the your main account</p>
+        <p>Don’t worry, your funds are safe in the your main account</p>
       </S.Title>
       <form onSubmit={handleSubmit}>
         <InputLine
