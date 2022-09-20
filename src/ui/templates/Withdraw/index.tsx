@@ -14,9 +14,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
-  Loading,
   EmptyData,
-  ButtonStatus,
+  LoadingSection,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -124,9 +123,7 @@ export const WithdrawTemplate = () => {
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
-                  <Loading
-                    message="Block finalization will take a few mins."
-                    isVisible={loading}>
+                  <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
                     <S.SelectInput>
                       <span>Select a coin</span>
                       <S.SelectInputContainer>
@@ -176,7 +173,7 @@ export const WithdrawTemplate = () => {
                       isLoading={loading}>
                       Withdraw
                     </Button>
-                  </Loading>
+                  </LoadingSection>
                 </form>
               </S.Form>
               <S.History>
