@@ -15,11 +15,15 @@ import {
   orderBookFetch,
   recentTradesFetch,
   selectAssociatedTradeAccounts,
+  selectCurrentMainAccount,
   selectCurrentMarket,
+  selectCurrentTradeAccount,
   selectCurrentTradePrice,
   selectHasCurrentTradeAccount,
+  selectIsCurrentMainAccountInWallet,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
+  selectUserIdentity,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -27,6 +31,7 @@ import {
   AccountBanner,
   Button,
   EmptyMyAccount,
+  Icon,
   Logo,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
@@ -57,6 +62,10 @@ export function Trading() {
   const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
   const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
   const hasUser = isSignedIn && hasTradeAccount;
+  const email = useReduxSelector(selectUserIdentity);
+  const hasMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const currentMainAccount = useReduxSelector(selectCurrentMainAccount).address;
+  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
 
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
@@ -124,18 +133,29 @@ export function Trading() {
               <S.Logo>
                 <Logo size="Medium" href="/trading" />
               </S.Logo>
-              {!isSignedIn && (
+              {!isSignedIn ? (
                 <Button
                   onClick={() => router.push("/signIn")}
-                  color="white"
+                  color="inverse"
+                  background="text"
+                  isFull
                   icon={{
                     name: "Wallet",
-                    background: "black",
+                    background: "inverse",
                     size: "extraMedium",
-                    stroke: "white",
+                    stroke: "text",
+                    fill: "text",
                   }}>
                   Login/Sign Up
                 </Button>
+              ) : (
+                <Profile
+                  hasTradeAccount={hasTradeAccount}
+                  hasMainAccount={hasMainAccount}
+                  currentMainAccount={currentMainAccount}
+                  currentTradeAccount={currentTradeAddr}
+                  email={email}
+                />
               )}
             </S.Box>
             <S.Content>
@@ -149,13 +169,13 @@ export function Trading() {
                 )}
               </S.WrapperGraph>
               <S.WrapperRight>
-                <S.Actions>
-                  {!isSignedIn && (
+                <S.Actions isSignedIn={isSignedIn}>
+                  {!isSignedIn ? (
                     <Button
                       onClick={() => router.push("/signIn")}
                       color="inverse"
                       background="text"
-                      isFull
+                      style={{ alignSelf: "flex-end" }}
                       icon={{
                         name: "Wallet",
                         background: "inverse",
@@ -165,6 +185,14 @@ export function Trading() {
                       }}>
                       Login/Sign Up
                     </Button>
+                  ) : (
+                    <Profile
+                      hasTradeAccount={hasTradeAccount}
+                      hasMainAccount={hasMainAccount}
+                      currentMainAccount={currentMainAccount}
+                      currentTradeAccount={currentTradeAddr}
+                      email={email}
+                    />
                   )}
                 </S.Actions>
                 <MarketOrder />
@@ -177,3 +205,26 @@ export function Trading() {
     </>
   );
 }
+
+const Profile = ({
+  hasTradeAccount,
+  hasMainAccount,
+  currentMainAccount,
+  currentTradeAccount,
+  email,
+}) => {
+  const address = hasTradeAccount ? currentTradeAccount : currentMainAccount;
+  const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
+
+  return (
+    <S.Profile>
+      <Icon
+        name={hasTradeAccount || hasMainAccount ? "Wallet" : "Email"}
+        background="secondaryBackgroundOpacity"
+        size="large"
+        stroke="text"
+      />
+      <span>{shortAddress.length ? shortAddress : email}</span>
+    </S.Profile>
+  );
+};
