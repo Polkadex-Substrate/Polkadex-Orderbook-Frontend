@@ -31,6 +31,7 @@ import {
   AccountBanner,
   Button,
   EmptyMyAccount,
+  Footer,
   Icon,
   Logo,
   Modal,
@@ -129,76 +130,79 @@ export function Trading() {
         <S.Wrapper>
           <Menu handleChange={() => setState(!state)} isWallet={false} />
           <S.WrapperMain>
-            <S.Box>
-              <S.Logo>
-                <Logo size="Medium" href="/trading" />
-              </S.Logo>
-              {!isSignedIn ? (
-                <Button
-                  onClick={() => router.push("/signIn")}
-                  color="inverse"
-                  background="text"
-                  isFull
-                  icon={{
-                    name: "Wallet",
-                    background: "inverse",
-                    size: "extraMedium",
-                    stroke: "text",
-                    fill: "text",
-                  }}>
-                  Login/Sign Up
-                </Button>
-              ) : (
-                <Profile
-                  hasTradeAccount={hasTradeAccount}
-                  hasMainAccount={hasMainAccount}
-                  currentMainAccount={currentMainAccount}
-                  currentTradeAccount={currentTradeAddr}
-                  email={email}
-                />
-              )}
-            </S.Box>
-            <S.Content>
-              <S.WrapperGraph>
-                <Navbar onOpenMarkets={() => setState(!state)} />
-                <Graph />
-                {hasUser ? (
-                  <Transactions />
+            <S.ContainerMain>
+              <S.Box>
+                <S.Logo>
+                  <Logo size="Medium" href="/trading" />
+                </S.Logo>
+                {!isSignedIn ? (
+                  <Button
+                    onClick={() => router.push("/signIn")}
+                    color="inverse"
+                    background="text"
+                    isFull
+                    icon={{
+                      name: "Wallet",
+                      background: "inverse",
+                      size: "extraMedium",
+                      stroke: "text",
+                      fill: "text",
+                    }}>
+                    Login/Sign Up
+                  </Button>
                 ) : (
-                  <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                  <Profile
+                    hasTradeAccount={hasTradeAccount}
+                    hasMainAccount={hasMainAccount}
+                    currentMainAccount={currentMainAccount}
+                    currentTradeAccount={currentTradeAddr}
+                    email={email}
+                  />
                 )}
-              </S.WrapperGraph>
-              <S.WrapperRight>
-                <S.Actions isSignedIn={isSignedIn}>
-                  {!isSignedIn ? (
-                    <Button
-                      onClick={() => router.push("/signIn")}
-                      color="inverse"
-                      background="text"
-                      style={{ alignSelf: "flex-end" }}
-                      icon={{
-                        name: "Wallet",
-                        background: "inverse",
-                        size: "extraMedium",
-                        stroke: "text",
-                        fill: "text",
-                      }}>
-                      Login/Sign Up
-                    </Button>
+              </S.Box>
+              <S.Content>
+                <S.WrapperGraph>
+                  <Navbar onOpenMarkets={() => setState(!state)} />
+                  <Graph />
+                  {hasUser ? (
+                    <Transactions />
                   ) : (
-                    <Profile
-                      hasTradeAccount={hasTradeAccount}
-                      hasMainAccount={hasMainAccount}
-                      currentMainAccount={currentMainAccount}
-                      currentTradeAccount={currentTradeAddr}
-                      email={email}
-                    />
+                    <EmptyMyAccount hasLimit {...hasSelectedAccount} />
                   )}
-                </S.Actions>
-                <MarketOrder />
-                <RecentTrades />
-              </S.WrapperRight>
-            </S.Content>
+                </S.WrapperGraph>
+                <S.WrapperRight>
+                  <S.Actions isSignedIn={isSignedIn}>
+                    {!isSignedIn ? (
+                      <Button
+                        onClick={() => router.push("/signIn")}
+                        color="inverse"
+                        background="text"
+                        style={{ alignSelf: "flex-end" }}
+                        icon={{
+                          name: "Wallet",
+                          background: "inverse",
+                          size: "extraMedium",
+                          stroke: "text",
+                          fill: "text",
+                        }}>
+                        Login/Sign Up
+                      </Button>
+                    ) : (
+                      <Profile
+                        hasTradeAccount={hasTradeAccount}
+                        hasMainAccount={hasMainAccount}
+                        currentMainAccount={currentMainAccount}
+                        currentTradeAccount={currentTradeAddr}
+                        email={email}
+                      />
+                    )}
+                  </S.Actions>
+                  <MarketOrder />
+                  <RecentTrades />
+                </S.WrapperRight>
+              </S.Content>
+            </S.ContainerMain>
+            <Footer />
           </S.WrapperMain>
         </S.Wrapper>
       </S.Container>
