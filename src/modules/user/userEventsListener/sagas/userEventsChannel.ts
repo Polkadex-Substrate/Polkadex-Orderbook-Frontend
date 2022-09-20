@@ -68,21 +68,23 @@ function createUserEventsChannel(address: string) {
 }
 
 function createActionFromUserEvent(eventData: any) {
+  console.log("got raw event", eventData);
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
   console.info("User Event: ", data);
-  if (isKeyPresentInObject(data, "SetBalance")) {
-    return balanceUpdateEvent(data.SetBalance);
-  } else if (isKeyPresentInObject(data, "SetTransaction")) {
-    return transactionsUpdateEvent(data.SetTransaction[0]);
-  } else if (isKeyPresentInObject(data, "SetOrder")) {
-    return orderUpdateEvent(data.SetOrder[0]);
-  } else if (isKeyPresentInObject(data, "RegisterAccount")) {
-    return registerMainAccountUpdateEvent(data.RegisterAccount);
-  } else if (isKeyPresentInObject(data, "AddProxy")) {
+  const eventType = data.type;
+  if (eventType === "SetBalance") {
+    return balanceUpdateEvent(data);
+  } else if (eventType === "SetTransaction") {
+    return transactionsUpdateEvent(data);
+  } else if (eventType === "Order") {
+    return orderUpdateEvent(data);
+  } else if (eventType === "RegisterAccount") {
+    return registerMainAccountUpdateEvent(data);
+  } else if (eventType === "AddProxy") {
     return registerSuccessNofiication("Trade account added", "New Trade account created");
-  } else if (isKeyPresentInObject(data, "AddTrade")) {
-    return userTradesUpdateEvent(data.AddTrade);
-  } else if (isKeyPresentInObject(data, "RemoveProxy")) {
+  } else if (eventType === "TradeFormat") {
+    return userTradesUpdateEvent(data);
+  } else if (eventType === "RemoveProxy") {
     return registerSuccessNofiication(
       "Trade account removed",
       "Trade account removal Confirmed"

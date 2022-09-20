@@ -24,8 +24,8 @@ export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
       const channel = fetchOrderBookChannel(market.m);
       while (true) {
         const msg = yield take(channel);
+        console.log("ob-update event: ", msg);
         const data: OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
-        console.log("ob-update event: ", data);
         yield put(depthDataIncrement(data));
       }
     }
@@ -63,10 +63,10 @@ function fetchOrderBookChannel(market: string) {
 
 const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
   const data = JSON.parse(dataStr);
-  return data.map((item) => ({
-    side: item.side,
-    price: item.price,
-    qty: item.qty,
-    seq: item.seq,
+  return data.changes.map((item) => ({
+    side: item[0],
+    price: item[1],
+    qty: item[2],
+    seq: item[3],
   }));
 };

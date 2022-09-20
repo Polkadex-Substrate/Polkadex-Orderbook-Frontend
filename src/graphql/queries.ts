@@ -60,7 +60,6 @@ export const getRecentTrades = /* GraphQL */ `
   query GetRecentTrades($m: String!, $limit: Int, $nextToken: String) {
     getRecentTrades(m: $m, limit: $limit, nextToken: $nextToken) {
       items {
-        m
         t
         p
         q
