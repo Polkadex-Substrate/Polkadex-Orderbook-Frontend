@@ -224,7 +224,7 @@ const Profile = ({
         size="large"
         stroke="text"
       />
-      <span>{shortAddress.length ? shortAddress : email}</span>
+      <span>{address.length ? shortAddress : email}</span>
     </S.Profile>
   );
 };
