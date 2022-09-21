@@ -8,7 +8,7 @@ const awsmobile = {
     "aws_appsync_authenticationType": "AWS_LAMBDA",
     "Auth": {
         "identityPoolId": "eu-central-1:2bd4d23f-cade-4558-a85f-702b996ceec8",
-        "region": "ap-south-1",
+        "region": "eu-central-1",
         "identityPoolRegion": "eu-central-1",
         "userPoolId": "eu-central-1_e8BSYapFN",
         "userPoolWebClientId": "2qh16tj1nuspq0n4m9kdu33c3j"
