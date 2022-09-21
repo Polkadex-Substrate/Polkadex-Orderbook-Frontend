@@ -16,6 +16,7 @@ import {
   selectLastKline,
   selectKlineLoading,
   KlineEvent,
+  selectKlineInterval,
 } from "@polkadex/orderbook-modules";
 import {
   Icon,
@@ -36,6 +37,7 @@ export const OriginalChart = ({ chart, resolution }) => {
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const klines = useReduxSelector(selectKline);
+  const klineInterval = useReduxSelector(selectKlineInterval);
   const lastKline = useReduxSelector(selectLastKline);
   const isLoading = useReduxSelector(selectKlineLoading);
   const klinesFilled = useMemo(() => {
@@ -81,7 +83,7 @@ export const OriginalChart = ({ chart, resolution }) => {
     return () => {
       dispose("original-chart");
     };
-  }, [chart, klines, isDarkTheme]);
+  }, [chart, klines, klineInterval, isDarkTheme]);
 
   useEffect(() => {
     /**
@@ -90,6 +92,7 @@ export const OriginalChart = ({ chart, resolution }) => {
      * @param {dataList} dataList KLineData array
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
      */
+    console.log("lastkline", lastKline?.kline);
     if (lastKline?.kline) chart.current.updateData(lastKline.kline);
   }, [chart, lastKline]);
 

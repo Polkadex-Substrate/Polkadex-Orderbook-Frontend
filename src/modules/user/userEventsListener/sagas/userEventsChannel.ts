@@ -72,23 +72,24 @@ function createActionFromUserEvent(eventData: any) {
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
   console.info("User Event: ", data);
   const eventType = data.type;
-  if (eventType === "SetBalance") {
-    return balanceUpdateEvent(data);
-  } else if (eventType === "SetTransaction") {
-    return transactionsUpdateEvent(data);
-  } else if (eventType === "Order") {
-    return orderUpdateEvent(data);
-  } else if (eventType === "RegisterAccount") {
-    return registerMainAccountUpdateEvent(data);
-  } else if (eventType === "AddProxy") {
-    return registerSuccessNofiication("Trade account added", "New Trade account created");
-  } else if (eventType === "TradeFormat") {
-    return userTradesUpdateEvent(data);
-  } else if (eventType === "RemoveProxy") {
-    return registerSuccessNofiication(
-      "Trade account removed",
-      "Trade account removal Confirmed"
-    );
+  switch (eventType) {
+    case "SetBalance":
+      return balanceUpdateEvent(data);
+    case "SetTransaction":
+      return transactionsUpdateEvent(data);
+    case "Order":
+      return orderUpdateEvent(data);
+    case "RegisterAccount":
+      return registerMainAccountUpdateEvent(data);
+    case "AddProxy":
+      return registerSuccessNofiication("Trade account added", "New Trade account created");
+    case "TradeFormat":
+      return userTradesUpdateEvent(data);
+    case "RemoveProxy":
+      return registerSuccessNofiication(
+        "Trade account removed",
+        "Trade account removal Confirmed"
+      );
   }
 }
 
