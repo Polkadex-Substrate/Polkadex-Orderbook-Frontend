@@ -40,7 +40,6 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
-import { WithdrawGroup } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -357,7 +356,19 @@ const HistoryTable = ({ items }) => {
               </Table.Cell>
               <Table.Cell>
                 <S.Cell>
-                  <span>{item.date}</span>
+                  <span>
+                    {intlFormat(
+                      item.date,
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      },
+                      { locale: "EN" }
+                    )}
+                  </span>
                 </S.Cell>
               </Table.Cell>
               <Table.Cell>
