@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
@@ -23,7 +24,7 @@ import {
   TabContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
@@ -361,7 +362,9 @@ const HistoryTable = ({ items }) => {
               </Table.Cell>
               <Table.Cell>
                 <S.Cell>
-                  <span>{item.amount}</span>
+                  <span>
+                    <Decimal fixed={5}>{item.amount}</Decimal>
+                  </span>
                 </S.Cell>
               </Table.Cell>
               <Table.Cell>
