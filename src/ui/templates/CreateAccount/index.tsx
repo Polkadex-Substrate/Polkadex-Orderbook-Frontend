@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
-import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, Loading, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
@@ -26,22 +26,23 @@ export const CreateAccountTemplate = () => {
   const dispatch = useDispatch();
   const handleMnemonicUpdate = (value) => setMnemonicString(value);
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
-    initialValues: {
-      name: "trade-account-2",
-      password: "",
-    } as Record<string, string>,
-    validationSchema: createAccountValidations,
-    onSubmit: (values) => {
-      dispatch(
-        registerTradeAccountFetch({
-          name: values.name,
-          password: values.password,
-          mnemonic: mnemoicString,
-        })
-      );
-    },
-  });
+  const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
+    useFormik({
+      initialValues: {
+        name: "trade-account-2",
+        passcode: "",
+      } as Record<string, string>,
+      validationSchema: createAccountValidations,
+      onSubmit: (values) => {
+        dispatch(
+          registerTradeAccountFetch({
+            name: values.name,
+            password: String(values.passcode),
+            mnemonic: mnemoicString,
+          })
+        );
+      },
+    });
   return (
     <>
       <Head>
@@ -96,15 +97,15 @@ export const CreateAccountTemplate = () => {
                     error={errors.name && touched.name && errors.name}
                     {...getFieldProps("name")}
                   />
-                  {/* <InputLine
-                    name="password"
-                    label="Password (Optional)"
-                    placeholder="Enter a password for this account"
-                    type="password"
-                    error={errors.password && touched.password && errors.password}
-                    disabled={isLoading}
-                    {...getFieldProps("password")}
-                  /> */}
+                  <PassCode
+                    numInputs={5}
+                    onChange={(e) => setFieldValue("passcode", e)}
+                    value={values.passcode}
+                    name="passcode"
+                    label="5-digit trading password (Optional)"
+                    error={errors.passcode}
+                    isDisabled={isLoading}
+                  />
                   <Button
                     type="submit"
                     size="extraLarge"

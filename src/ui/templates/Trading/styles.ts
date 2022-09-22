@@ -19,6 +19,13 @@ export const Wrapper = styled.main`
 export const WrapperMain = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
+  gap: 1rem;
+`;
+
+export const ContainerMain = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 
   padding: 0 1rem;
@@ -59,14 +66,16 @@ export const WrapperRight = styled.div`
     }
   `}
 `;
-export const Actions = styled.div`
-  padding-top: 1rem;
-  max-width: 15rem;
-  justify-self: flex-end;
-  align-self: flex-end;
-  @media screen and (max-width: 1080px) {
-    display: none;
-  }
+export const Actions = styled.div<{ isSignedIn?: boolean }>`
+  ${({ isSignedIn }) => css`
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    width: 100%;
+    @media screen and (max-width: 1080px) {
+      display: none;
+    }
+  `}
 `;
 export const Box = styled.div`
   ${({ theme }) => css`
@@ -109,4 +118,11 @@ export const Logo = styled.div`
       }
     }
   `}
+`;
+export const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  justify-self: flex-end;
+  align-self: flex-end;
 `;

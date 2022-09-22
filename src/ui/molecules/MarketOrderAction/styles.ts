@@ -16,6 +16,7 @@ export const ContainerWallet = styled.div`
   align-items: center;
   margin-bottom: 2rem;
 `;
+
 export const WrapperBalance = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,6 +58,45 @@ export const Connect = styled.a`
 
     :hover {
       background: ${theme.colors.primaryBackgroundOpacity};
+    }
+  `}
+`;
+
+export const ProtectPassword = styled.div`
+  padding: 0.5rem 0 1rem 0;
+`;
+export const ProtectPasswordTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  span {
+    display: block;
+    font-weight: 500;
+  }
+`;
+export const ProtectPasswordContent = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  `}
+`;
+
+export const Show = styled.button`
+  ${({ theme }) => css`
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0.3rem;
+    transition: background 0.5s ease-in;
+    border-radius: 10rem;
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+    svg {
+      stroke: ${theme.colors.text};
     }
   `}
 `;

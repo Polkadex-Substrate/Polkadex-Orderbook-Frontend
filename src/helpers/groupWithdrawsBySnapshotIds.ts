@@ -9,7 +9,7 @@ export type WithdrawGroup = {
 export type WithdrawGroupItem = {
   id: number;
   asset: string;
-  date: string;
+  date: string | Date;
   event_id: number;
   amount: string;
   status: string;
@@ -33,7 +33,7 @@ export const groupWithdrawsBySnapShotIds = (
           id,
           event_id: item.event_id,
           asset: item.asset,
-          date: new Date(item.time).toLocaleString(),
+          date: new Date(item.time),
           amount: item.amount,
           status: item.status,
         });
