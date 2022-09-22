@@ -1,5 +1,5 @@
 projects:
-  emmanuel-orderbook-api:
+  nueltest3-orderbook-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,8 +10,8 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
-        region: ap-south-1
-        apiId: x2i3wkh75zf6jbnakg53mgdhjq
+        region: eu-central-1
+        apiId: lp2nc7jbu5bzhi5afc2iwk5fhu
         maxDepth: 2
 extensions:
   amplify:

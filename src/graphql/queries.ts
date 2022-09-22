@@ -37,10 +37,9 @@ export const getKlinesbyMarketInterval = /* GraphQL */ `
         c
         h
         l
-        v_base
-        v_quote
-        nt
-        time
+        vb
+        vq
+        t
       }
     }
   }
@@ -60,6 +59,7 @@ export const getRecentTrades = /* GraphQL */ `
   query GetRecentTrades($m: String!, $limit: Int, $nextToken: String) {
     getRecentTrades(m: $m, limit: $limit, nextToken: $nextToken) {
       items {
+        m
         t
         p
         q

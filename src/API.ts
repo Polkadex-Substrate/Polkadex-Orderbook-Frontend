@@ -42,10 +42,9 @@ export type CandleStick = {
   c: string,
   h: string,
   l: string,
-  v_base: string,
-  v_quote: string,
-  nt: string,
-  time: string,
+  vb: string,
+  vq: string,
+  t: string,
 };
 
 export type AssetsConnection = {
@@ -294,10 +293,9 @@ export type GetKlinesbyMarketIntervalQuery = {
       c: string,
       h: string,
       l: string,
-      v_base: string,
-      v_quote: string,
-      nt: string,
-      time: string,
+      vb: string,
+      vq: string,
+      t: string,
     } | null > | null,
   } | null,
 };
