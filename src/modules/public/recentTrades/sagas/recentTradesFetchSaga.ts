@@ -5,7 +5,7 @@ import { PublicTrade, recentTradesData, sendError } from "../../../";
 import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
-import { Utils } from "@polkadex/web-helpers";
+import { getIsDecreasingArray, Utils } from "@polkadex/web-helpers";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type RawTrades = {
@@ -19,11 +19,13 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
     const market = action.payload?.m;
     if (market) {
       const res: any = yield call(() => fetchRecentTrade(market));
-      const trades: PublicTrade[] = res.map((x) => ({
+      const isDecreasing = getIsDecreasingArray(res, "p");
+      const trades: PublicTrade[] = res.map((x, i) => ({
         market_id: x.m,
         price: x.p,
         amount: x.q,
         timestamp: new Date(Number(x.t)).toISOString(),
+        side: isDecreasing[i] ? "sell" : "buy",
       }));
       yield put(recentTradesData(trades));
     }

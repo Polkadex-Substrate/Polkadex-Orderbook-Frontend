@@ -47,6 +47,7 @@ export const DropdownTrigger = styled.div`
     border-radius: 0.7rem;
     padding: 0.4rem 0.6rem;
     user-select: none;
+    text-transform: capitalize;
     transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
     font-size: 1.2rem;
     svg {
@@ -59,6 +60,9 @@ export const DropdownTrigger = styled.div`
       background: ${theme.colors.secondaryBackground};
     }
   `}
+`;
+export const DropdownMenuItem = styled.div`
+  text-transform: capitalize;
 `;
 export const Content = styled.div`
   ${({ theme }) => css`
