@@ -22,6 +22,8 @@ import {
   Tabs,
   TabHeader,
   TabContent,
+  Checkbox,
+  Icon,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -207,17 +209,22 @@ export const WithdrawTemplate = () => {
               <S.History>
                 <Tabs>
                   <h2>History</h2>
-                  <S.HistoryTabs>
-                    <TabHeader>
-                      <S.HistoryTab>Pending</S.HistoryTab>
-                    </TabHeader>
-                    <TabHeader>
-                      <S.HistoryTab>Ready to Claim</S.HistoryTab>
-                    </TabHeader>
-                    <TabHeader>
-                      <S.HistoryTab>Claimed</S.HistoryTab>
-                    </TabHeader>
-                  </S.HistoryTabs>
+                  <S.HistoryHeader>
+                    <S.HistoryTabs>
+                      <TabHeader>
+                        <S.HistoryTab>Pending</S.HistoryTab>
+                      </TabHeader>
+                      <TabHeader>
+                        <S.HistoryTab>Ready to Claim</S.HistoryTab>
+                      </TabHeader>
+                      <TabHeader>
+                        <S.HistoryTab>Claimed</S.HistoryTab>
+                      </TabHeader>
+                    </S.HistoryTabs>
+                    <S.HistoryHeaderAside>
+                      <Checkbox name="hide">Show only selected coin</Checkbox>
+                    </S.HistoryHeaderAside>
+                  </S.HistoryHeader>
                   <S.HistoryWrapper>
                     <TabContent>
                       {pendingWithdraws?.length ? (

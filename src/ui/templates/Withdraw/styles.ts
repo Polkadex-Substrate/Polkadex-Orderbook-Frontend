@@ -326,11 +326,21 @@ export const HistoryTitle = styled.div`
     }
   `}
 `;
+
 export const HistoryTabs = styled.div`
   ${({ theme }) => css`
-    padding: 0 2rem;
     display: flex;
     gap: 2rem;
+  `}
+`;
+
+export const HistoryHeader = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0 2rem;
     margin-top: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
@@ -339,9 +349,14 @@ export const HistoryTab = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     border-bottom: 2px solid;
     border-bottom-color: ${isActive ? theme.colors.primary : "transparent"};
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
     opacity: ${isActive ? 1 : 0.5};
     cursor: pointer;
     user-select: none;
   `}
+`;
+export const HistoryHeaderAside = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
