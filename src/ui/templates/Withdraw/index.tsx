@@ -1,8 +1,11 @@
+// TODO: Refactor history
+
 import Head from "next/head";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
@@ -14,12 +17,16 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
-  Loading,
   EmptyData,
-  ButtonStatus,
+  LoadingSection,
+  Tabs,
+  TabHeader,
+  TabContent,
+  Checkbox,
+  Icon,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
@@ -87,6 +94,28 @@ export const WithdrawTemplate = () => {
     },
   });
 
+  const selectedWithdraw = useCallback(
+    (status: "PENDING" | "CONFIRMED") => {
+      const result = withdrawals
+        ?.map((value) => value?.items.filter((v) => v.status === status))
+        .filter((a) => a);
+
+      // eslint-disable-next-line prefer-spread
+      return [].concat.apply([], result);
+    },
+    [withdrawals]
+  );
+
+  const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
+  const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
+  const readyToClaim = useMemo(
+    () =>
+      withdrawals
+        ?.map((value) => value?.items?.filter((v) => v.status === "READY").length && value)
+        ?.filter((a) => a),
+    [withdrawals]
+  );
+
   return (
     <>
       <Head>
@@ -124,9 +153,7 @@ export const WithdrawTemplate = () => {
                   </div>
                 </S.SelectAccount>
                 <form onSubmit={handleSubmit}>
-                  <Loading
-                    message="Block finalization will take a few mins."
-                    isVisible={loading}>
+                  <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
                     <S.SelectInput>
                       <span>Select a coin</span>
                       <S.SelectInputContainer>
@@ -176,26 +203,62 @@ export const WithdrawTemplate = () => {
                       isLoading={loading}>
                       Withdraw
                     </Button>
-                  </Loading>
+                  </LoadingSection>
                 </form>
               </S.Form>
               <S.History>
-                <h2>History</h2>
-                <S.HistoryWrapper>
-                  {withdrawals?.length ? (
-                    withdrawals.map((value) => (
-                      <HistoryCard
-                        key={value.id}
-                        sid={value.sid}
-                        hasPendingWithdraws={value.items.filter((v) => v.status === "READY")}
-                        handleClaimWithdraws={() => handleClaimWithdraws(value.sid)}
-                        items={value.items}
-                      />
-                    ))
-                  ) : (
-                    <EmptyData />
-                  )}
-                </S.HistoryWrapper>
+                <Tabs>
+                  <h2>History</h2>
+                  <S.HistoryHeader>
+                    <S.HistoryTabs>
+                      <TabHeader>
+                        <S.HistoryTab>Pending</S.HistoryTab>
+                      </TabHeader>
+                      <TabHeader>
+                        <S.HistoryTab>Ready to Claim</S.HistoryTab>
+                      </TabHeader>
+                      <TabHeader>
+                        <S.HistoryTab>Claimed</S.HistoryTab>
+                      </TabHeader>
+                    </S.HistoryTabs>
+                    <S.HistoryHeaderAside>
+                      <Checkbox name="hide">Show only selected coin</Checkbox>
+                    </S.HistoryHeaderAside>
+                  </S.HistoryHeader>
+                  <S.HistoryWrapper>
+                    <TabContent>
+                      {pendingWithdraws?.length ? (
+                        <HistoryTable items={pendingWithdraws} />
+                      ) : (
+                        <EmptyData />
+                      )}
+                    </TabContent>
+                    <TabContent>
+                      {readyToClaim?.length ? (
+                        readyToClaim?.map((value) => (
+                          <HistoryCard
+                            key={value.id}
+                            sid={value.sid}
+                            hasPendingWithdraws={value?.items.filter(
+                              (v) => v.status === "READY"
+                            )}
+                            handleClaimWithdraws={() => handleClaimWithdraws(value.sid)}
+                            items={value.items.filter((v) => v.status === "READY")}
+                          />
+                        ))
+                      ) : (
+                        <EmptyData />
+                      )}
+                    </TabContent>
+                    <TabContent>
+                      {claimedWithdraws?.length ? (
+                        <HistoryTable items={claimedWithdraws} />
+                      ) : (
+                        <EmptyData />
+                      )}
+                    </TabContent>
+                  </S.HistoryWrapper>
+                </Tabs>
               </S.History>
             </S.Box>
           </S.Container>
@@ -206,7 +269,6 @@ export const WithdrawTemplate = () => {
 };
 
 const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) => {
-  const getAsset = useReduxSelector(selectGetAsset);
   const claimWithdrawsInLoading = useReduxSelector(selectClaimWithdrawsInLoading);
 
   const claimIsLoading = useMemo(
@@ -232,53 +294,7 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
           )
         )}
       </S.HistoryTitle>
-      <S.HistoryTable>
-        <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
-          <Table.Header fill="none">
-            <Table.Column>
-              <S.HeaderColumn>Name</S.HeaderColumn>
-            </Table.Column>
-            <Table.Column>
-              <S.HeaderColumn>Date</S.HeaderColumn>
-            </Table.Column>
-            <Table.Column>
-              <S.HeaderColumn>Amount</S.HeaderColumn>
-            </Table.Column>
-            <Table.Column>
-              <S.HeaderColumn>Status</S.HeaderColumn>
-            </Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {items.map((item) => (
-              <Table.Row key={item.event_id}>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>
-                      {getAsset(item.asset)?.name}{" "}
-                      <small>{getAsset(item.asset)?.symbol}</small>
-                    </span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{item.date}</span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{item.amount}</span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{item.status}</span>
-                  </S.Cell>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </S.HistoryTable>
+      <HistoryTable items={items} />
     </S.HistoryContent>
   );
 };
@@ -305,5 +321,72 @@ const Copy = ({ copyData }) => {
         </TooltipContent>
       </Tooltip>
     </S.Cell>
+  );
+};
+
+const HistoryTable = ({ items }) => {
+  const getAsset = useReduxSelector(selectGetAsset);
+
+  return (
+    <S.HistoryTable>
+      <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
+        <Table.Header fill="none">
+          <Table.Column>
+            <S.HeaderColumn>Name</S.HeaderColumn>
+          </Table.Column>
+          <Table.Column>
+            <S.HeaderColumn>Date</S.HeaderColumn>
+          </Table.Column>
+          <Table.Column>
+            <S.HeaderColumn>Amount</S.HeaderColumn>
+          </Table.Column>
+          <Table.Column>
+            <S.HeaderColumn>Status</S.HeaderColumn>
+          </Table.Column>
+        </Table.Header>
+        <Table.Body>
+          {items.map((item) => (
+            <Table.Row key={item.event_id}>
+              <Table.Cell>
+                <S.Cell>
+                  <span>
+                    {getAsset(item.asset)?.name} <small>{getAsset(item.asset)?.symbol}</small>
+                  </span>
+                </S.Cell>
+              </Table.Cell>
+              <Table.Cell>
+                <S.Cell>
+                  <span>
+                    {intlFormat(
+                      item.date,
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      },
+                      { locale: "EN" }
+                    )}
+                  </span>
+                </S.Cell>
+              </Table.Cell>
+              <Table.Cell>
+                <S.Cell>
+                  <span>
+                    <Decimal fixed={5}>{item.amount}</Decimal>
+                  </span>
+                </S.Cell>
+              </Table.Cell>
+              <Table.Cell>
+                <S.Cell>
+                  <span>{item.status}</span>
+                </S.Cell>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </S.HistoryTable>
   );
 };

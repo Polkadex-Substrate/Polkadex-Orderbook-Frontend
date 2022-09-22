@@ -73,7 +73,7 @@ export interface ResetExtensionWallet {
 
 export interface RegisterMainAccountFetch {
   type: typeof REGISTER_MAIN_ACCOUNT_FETCH;
-  payload: { mainAccount: MainAccount; tradeAddress: string };
+  payload: { mainAccount: MainAccount; tradeAddress: string; password: string };
 }
 
 export interface RegisterMainAccountData {

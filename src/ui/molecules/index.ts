@@ -46,5 +46,6 @@ export * from "./NotificationsContent";
 export * from "./NavbarItem";
 export * from "./Loading";
 export * from "./MarketInput";
+export * from "./Footer";
 
 export * as LoadingIcons from "./LoadingIcons";

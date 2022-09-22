@@ -81,7 +81,8 @@ type PasscodeProps = {
   value?: string;
   shouldAutoFocus?: boolean;
   name: string;
-  label: string;
+  label?: string;
+  type?: "text" | "number" | "password" | "tel";
 };
 
 // keyCode constants
@@ -99,6 +100,7 @@ export const PassCode = ({
   shouldAutoFocus,
   label,
   name,
+  type = "tel",
 }: PasscodeProps) => {
   const [state, setState] = useState(0);
 
@@ -196,6 +198,7 @@ export const PassCode = ({
                 disabled={isDisabled}
                 placeholder="0"
                 shouldAutoFocus={shouldAutoFocus}
+                type={type}
               />
             </S.LinePassCode>
           ))}
@@ -222,7 +225,5 @@ const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
     if (focus) ref.current.focus();
   }, [focus]);
 
-  return (
-    <input type="tel" pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...props} />
-  );
+  return <input pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...props} />;
 };

@@ -18,10 +18,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 2rem;
-  @media screen and (min-width: 590px) {
-    padding: 4rem;
-  }
+  gap: 1rem;
 `;
 
 export const Title = styled.div`
@@ -34,6 +31,15 @@ export const Title = styled.div`
       font-weight: 550;
     }
   `}
+`;
+export const ContainerMain = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 2rem;
+  @media screen and (min-width: 590px) {
+    padding: 4rem;
+  }
 `;
 
 export const TitleWrapper = styled.div`

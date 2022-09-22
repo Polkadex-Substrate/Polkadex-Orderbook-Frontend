@@ -1,9 +1,8 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
-import { getSymbolFromId } from "../helpers";
+import { getSymbolFromId, cleanPositiveFloatInput, precisionRegExp } from "../helpers";
 
-import { cleanPositiveFloatInput, precisionRegExp } from "@polkadex/web-helpers";
 import {
   selectCurrentMarket,
   selectCurrentPrice,
@@ -18,6 +17,7 @@ import {
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
   selectIsUserSignedIn,
+  selectCurrentTradeAccountIsPassword,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -35,6 +35,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
+  const showProtectedPassword = false;
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
@@ -385,5 +386,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     isSignedIn,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
+    showProtectedPassword: hasTradeAccount && showProtectedPassword,
   };
 }

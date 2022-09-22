@@ -24,16 +24,10 @@ const MarketOrder = () => {
         <S.Header>
           <S.HeaderWrapper>
             <TabHeader>
-              <S.ActionItem isActive>
-                <Icon name="BuyOrder" size="medium" />
-                Buy
-              </S.ActionItem>
+              <S.ActionItem isActive>Buy</S.ActionItem>
             </TabHeader>
             <TabHeader>
-              <S.ActionItem>
-                <Icon name="SellOrder" size="medium" />
-                Sell
-              </S.ActionItem>
+              <S.ActionItem>Sell</S.ActionItem>
             </TabHeader>
           </S.HeaderWrapper>
           <Dropdown>
