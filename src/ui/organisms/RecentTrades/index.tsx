@@ -2,11 +2,22 @@ import * as S from "./styles";
 
 import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/hooks";
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+
+export const filters = ["All", "Buy", "Sell"];
 
 export const RecentTrades = () => {
-  const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
-    useRecentTrades();
+  const {
+    isDecreasing,
+    recentTrades,
+    quoteUnit,
+    baseUnit,
+    pricePrecision,
+    amountPrecision,
+    filter,
+    handleChangeFilter,
+  } = useRecentTrades();
 
   return (
     <S.MainContainer>
@@ -15,6 +26,22 @@ export const RecentTrades = () => {
           <>
             <S.Header>
               <h2>Recent Trades</h2>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <S.DropdownTrigger>
+                    {filter} <Icons.ArrowBottom />
+                  </S.DropdownTrigger>
+                </Dropdown.Trigger>
+                <Dropdown.Menu fill="secondaryBackgroundSolid">
+                  {filters.map((value) => (
+                    <Dropdown.Item
+                      key={value}
+                      onAction={() => handleChangeFilter({ filterBy: value })}>
+                      {value}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </S.Header>
             <S.Head>
               <S.CellHead>Price({quoteUnit})</S.CellHead>

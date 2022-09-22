@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
 export const Section = styled.section`
   flex: 1;
 `;

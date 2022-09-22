@@ -40,6 +40,26 @@ export const Header = styled.div`
   }
 `;
 
+export const DropdownTrigger = styled.div`
+  ${({ theme }) => css`
+    cursor: pointer;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.7rem;
+    padding: 0.4rem 0.6rem;
+    user-select: none;
+    transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    font-size: 1.2rem;
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+  `}
+`;
 export const Content = styled.div`
   ${({ theme }) => css`
     padding-bottom: 2rem;
