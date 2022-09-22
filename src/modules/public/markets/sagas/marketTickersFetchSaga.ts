@@ -23,8 +23,8 @@ export type TickerQueryResult = {
 
 export function* marketTickersSaga(action: MarketsTickersFetch) {
   try {
-    const tickers = yield call(fetchMarketTickers);
-    yield put(marketsTickersData(tickers));
+    // const tickers = yield call(fetchMarketTickers);
+    // yield put(marketsTickersData(tickers));
   } catch (error) {
     console.error("marekt ticker fetch error", error);
     yield put(

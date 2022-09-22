@@ -14,8 +14,9 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       const channel = yield call(() => fetchKlineChannel(market, interval));
       while (true) {
         const dataStr = yield take(channel);
-        console.log("got kline", dataStr);
+        console.log("got new kline raw", dataStr);
         const data = JSON.parse(dataStr);
+        console.log("got new kline", data);
         yield put(
           klinePush({
             kline: {

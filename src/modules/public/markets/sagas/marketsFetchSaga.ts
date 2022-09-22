@@ -18,6 +18,7 @@ export function* marketsFetchSaga(action: MarketsFetch) {
     const isApi = yield select(selectRangerIsReady);
     if (isApi) {
       const markets = yield call(fetchMarkets, api);
+      console.log("markets fetched", markets);
       yield put(marketsData(markets));
       yield put(setCurrentMarketIfUnset(markets[0]));
     }
