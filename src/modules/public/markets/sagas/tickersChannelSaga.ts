@@ -48,7 +48,7 @@ function createMarketTickersChannel(market: string) {
         const data_parsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
-        const ticker_data = convertToTicker(data_parsed);
+        const ticker_data = convertToTicker(data_parsed, market);
         emit(marketsTickersChannelData(ticker_data));
       },
       error: (err) => console.warn(err),
@@ -59,9 +59,9 @@ function createMarketTickersChannel(market: string) {
   });
 }
 
-const convertToTicker = (elem) => {
+const convertToTicker = (elem: TickerQueryResult, market: string) => {
   return {
-    m: elem.m,
+    m: market,
     priceChange24Hr: elem.pc,
     priceChangePercent24Hr: elem.pcp,
     open: elem.o,

@@ -9,7 +9,7 @@ import * as queries from "../../../../graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export type TickerQueryResult = {
-  m: string;
+  m?: string;
   pc: string;
   pcp: string;
   o: string;
@@ -18,7 +18,6 @@ export type TickerQueryResult = {
   l: string;
   v_base: string;
   v_quote;
-  nt: string;
 };
 
 export function* marketTickersSaga(action: MarketsTickersFetch) {

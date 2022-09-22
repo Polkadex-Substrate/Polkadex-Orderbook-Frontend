@@ -25,7 +25,6 @@ import {
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
-import { fillKlineMissingData } from "@polkadex/orderbook/helpers/fillKlineMissingData";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -40,9 +39,6 @@ export const OriginalChart = ({ chart, resolution }) => {
   const klineInterval = useReduxSelector(selectKlineInterval);
   const lastKline = useReduxSelector(selectLastKline);
   const isLoading = useReduxSelector(selectKlineLoading);
-  const klinesFilled = useMemo(() => {
-    return fillKlineMissingData(klines, getResolutionInMilliSeconds(resolution));
-  }, [klines, resolution]);
   useEffect(() => {
     if (currentMarket?.m) {
       dispatch(
@@ -77,7 +73,7 @@ export const OriginalChart = ({ chart, resolution }) => {
      * @param {T.Props[]} dataList KLineData array
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
      */
-    chart?.current.applyNewData(klinesFilled);
+    chart?.current.applyNewData(klines);
 
     // Fill data
     return () => {
@@ -92,8 +88,10 @@ export const OriginalChart = ({ chart, resolution }) => {
      * @param {dataList} dataList KLineData array
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
      */
-    console.log("lastkline", lastKline?.kline);
-    if (lastKline?.kline) chart.current.updateData(lastKline.kline);
+    if (lastKline?.kline) {
+      console.log("lastkline", lastKline?.kline);
+      chart.current.updateData(lastKline.kline);
+    }
   }, [chart, lastKline]);
 
   useEffect(() => {
