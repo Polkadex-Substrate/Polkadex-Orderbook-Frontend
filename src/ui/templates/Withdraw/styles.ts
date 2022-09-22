@@ -273,7 +273,6 @@ export const HistoryContent = styled.div`
   `}
 `;
 export const HistoryTable = styled.div`
-  margin-top: 1.5rem;
   th,
   td {
     width: 10rem;
@@ -315,6 +314,7 @@ export const HistoryTitle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1.5rem;
     strong {
       font-weight: normal;
       font-size: 1.5rem;
@@ -325,4 +325,38 @@ export const HistoryTitle = styled.div`
       padding: 0.8rem;
     }
   `}
+`;
+
+export const HistoryTabs = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 2rem;
+  `}
+`;
+
+export const HistoryHeader = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0 2rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+export const HistoryTab = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    border-bottom: 2px solid;
+    border-bottom-color: ${isActive ? theme.colors.primary : "transparent"};
+    padding-bottom: 1.5rem;
+    opacity: ${isActive ? 1 : 0.5};
+    cursor: pointer;
+    user-select: none;
+  `}
+`;
+export const HistoryHeaderAside = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;

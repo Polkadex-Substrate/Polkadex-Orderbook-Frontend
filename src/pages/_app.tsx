@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
-import { useRouter } from "next/router";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import keyring from "@polkadot/ui-keyring";
+import NextNProgress from "nextjs-progressbar";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -15,6 +16,7 @@ import { useUserDataFetch } from "../hooks/useUserDataFetch";
 import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
   {
@@ -32,20 +34,19 @@ const Notifications = dynamic(
 function App({ Component, pageProps }: AppProps) {
   useInit();
   useUserDataFetch();
-  const router = useRouter();
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      (window as any).gtag("config", process.env.GOOGLE_ANALYTICS, {
-        page_path: url,
-      });
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]);
+
   return (
     <ThemeWrapper>
+      <GoogleAnalytics trackPageViews />
+      <NextNProgress
+        color="#E6007A"
+        startPosition={0.3}
+        height={2}
+        showOnShallow={true}
+        options={{
+          showSpinner: false,
+        }}
+      />
       <GlobalStyles />
       <Component {...pageProps} />
       <Analytics />

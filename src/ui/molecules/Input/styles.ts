@@ -119,7 +119,7 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
 `;
 export const Error = styled.span<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin = true }) => css`
-    color: ${theme.colors.primary};
+    color: ${theme.colors.primary} !important;
     font-size: 1.2rem;
     margin-left: ${hasMargin ? "1.3rem" : "none"};
   `}
