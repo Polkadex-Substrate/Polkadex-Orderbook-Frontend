@@ -1,7 +1,7 @@
 // TODO: Refactor history
 
 import Head from "next/head";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -92,35 +92,28 @@ export const WithdrawTemplate = () => {
     },
   });
 
-  const pendingWithdraws = useMemo(() => {
-    const result = withdrawals
-      ?.map((value) => value?.items.filter((v) => v.status === "PENDING"))
-      .filter((a) => a.length);
+  const selectedWithdraw = useCallback(
+    (status: "PENDING" | "CONFIRMED") => {
+      const result = withdrawals
+        ?.map((value) => value?.items.filter((v) => v.status === status))
+        .filter((a) => a);
 
-    // eslint-disable-next-line prefer-spread
-    return [].concat.apply([], result);
-  }, [withdrawals]);
+      // eslint-disable-next-line prefer-spread
+      return [].concat.apply([], result);
+    },
+    [withdrawals]
+  );
 
-  const claimedWithdraws = useMemo(() => {
-    const result = withdrawals
-      ?.map((value) => value?.items.filter((v) => v.status === "CONFIRMED"))
-      .filter((a) => a.length);
-
-    // eslint-disable-next-line prefer-spread
-    return [].concat.apply([], result);
-  }, [withdrawals]);
-
+  const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
+  const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
   const readyToClaim = useMemo(
     () =>
       withdrawals
-        // eslint-disable-next-line array-callback-return
-        ?.map((value) => {
-          const res = value?.items.filter((v) => v.status === "READY");
-          if (res.length) return value;
-        })
-        .filter((a) => a),
+        ?.map((value) => value?.items?.filter((v) => v.status === "READY").length && value)
+        ?.filter((a) => a),
     [withdrawals]
   );
+
   return (
     <>
       <Head>
