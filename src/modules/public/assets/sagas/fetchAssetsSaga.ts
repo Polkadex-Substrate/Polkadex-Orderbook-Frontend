@@ -12,15 +12,15 @@ export function* fetchAssetsSaga() {
     const api = yield select(selectRangerApi);
     if (api) {
       const assetsList: IPublicAsset[] = yield call(() => fetchAllAssetMetadata(api));
-      const whiteList = assetsList.filter((asset) =>
-        ALLOWED_ASSET_IDS.includes(asset.assetId)
-      );
+      // const whiteList = assetsList.filter((asset) =>
+      //   ALLOWED_ASSET_IDS.includes(asset.assetId)
+      // );
       const assetIdMap = assetsList.reduce((acc, asset) => {
         acc[asset.assetId] = asset;
         return acc;
       }, {});
-      whiteList.push(POLKADEX_ASSET);
-      yield put(assetsData({ list: whiteList, assetIdMap }));
+      assetsList.push(POLKADEX_ASSET);
+      yield put(assetsData({ list: assetsList, assetIdMap }));
     }
   } catch (error) {
     yield put(
