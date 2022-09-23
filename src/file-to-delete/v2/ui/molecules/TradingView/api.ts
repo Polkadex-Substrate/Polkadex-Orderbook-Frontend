@@ -2,14 +2,17 @@
 
 import axios from "axios";
 
-import { LibrarySymbolInfo } from "../../../../../public/charting_library/datafeed-api";
-
 import { TradingApiResponse } from "./types";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { Market } from "@polkadex/orderbook-modules";
-import { buildQueryString, getTimestampPeriod } from "@polkadex/web-helpers";
-import { resolutionForPayload, resolutionToSeconds } from "@polkadex/orderbook/v2/helpers";
+import {
+  buildQueryString,
+  getTimestampPeriod,
+  resolutionForPayload,
+  resolutionToSeconds,
+} from "@polkadex/web-helpers";
+import { LibrarySymbolInfo } from "public/charting_library/datafeed-api";
 
 export interface CurrentKlineSubscription {
   marketId?: string;
@@ -29,7 +32,7 @@ const makeHistoryUrl = (market: string, resolution: number, from: number, to: nu
     endPoint = `${endPoint}?${buildQueryString(payload)}`;
   }
 
-  return `${defaultConfig.polkadexHostUrl}${endPoint}`;
+  return `/trading/${endPoint}`;
 };
 const makeOHLCVPayload = (
   market: string,

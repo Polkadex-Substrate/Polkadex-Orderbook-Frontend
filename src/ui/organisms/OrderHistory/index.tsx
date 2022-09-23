@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";

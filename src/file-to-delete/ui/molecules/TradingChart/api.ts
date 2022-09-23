@@ -4,13 +4,11 @@ import { rejects } from "assert";
 import axios from "axios";
 import { Client } from "rpc-websockets";
 
-import { LibrarySymbolInfo } from "../../../../public/charting_library/datafeed-api";
-
 import { TradingChartComponent } from ".";
 
+import { LibrarySymbolInfo } from "public/charting_library/datafeed-api";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import {
-  klineArrayToObject,
   KlineState,
   klineUpdatePeriod,
   klineUpdateTimeRange,
