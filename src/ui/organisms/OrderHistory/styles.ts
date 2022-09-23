@@ -10,7 +10,7 @@ export const Table = styled.table`
 `;
 const Grid = styled.thead`
   tr {
-    grid-template-columns: 1fr 1.5fr repeat(4, 1fr) 0.5fr;
+    grid-template-columns: 1fr 1.5fr repeat(4, 1fr);
   }
 `;
 
@@ -30,7 +30,14 @@ export const Tbody = styled(Grid)`
   ${media.greaterThan("large")`
     height: 32rem;
     display: block;
-    overflow-y: auto;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    :hover {
+      overflow-y: auto;
+    }
   `}
   tr {
     display: grid;
@@ -49,9 +56,6 @@ export const Th = styled.th`
   ${media.lessThan("large")`
     display: none;
   `}
-  :last-child {
-    text-align: right;
-  }
 `;
 
 export const EmptyWrapper = styled.div`
