@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -16,6 +18,7 @@ export const OrderHistory = ({ filters }) => {
         <S.Table>
           <S.Thead>
             <S.Tr>
+              <S.Th>Id</S.Th>
               <S.Th>Pair</S.Th>
               <S.Th>Date</S.Th>
               <S.Th>Type</S.Th>
@@ -37,6 +40,7 @@ export const OrderHistory = ({ filters }) => {
                 return (
                   <OrderHistoryCard
                     key={i}
+                    id={order.id}
                     isSell={isSell}
                     orderSide={order.side}
                     orderType={order.order_type}
