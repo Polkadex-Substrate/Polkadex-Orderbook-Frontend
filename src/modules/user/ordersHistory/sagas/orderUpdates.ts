@@ -5,7 +5,6 @@ import { SetOrder } from "../types";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
-import { Utils } from "@polkadex/web-helpers";
 
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
@@ -25,12 +24,10 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
 }
 
 function processOrderData(eventData: SetOrder): OrderCommon {
-  const base =
-    eventData.pair.base_asset === "polkadex" ? "PDEX" : eventData.pair.base_asset.asset;
+  const base = eventData.pair.base_asset;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const quote =
-    eventData.pair.quote_asset === "polkadex" ? "PDEX" : eventData.pair.quote_asset.asset;
+  const quote = eventData.pair.quote_asset;
 
   return {
     main_account: eventData.user,

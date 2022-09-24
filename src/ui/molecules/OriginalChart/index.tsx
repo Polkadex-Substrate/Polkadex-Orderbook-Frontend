@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { init, dispose } from "klinecharts";
+import React, { useEffect, useRef } from "react";
+import { dispose, init } from "klinecharts";
 import { useDispatch } from "react-redux";
 import useResizeObserver from "@react-hook/resize-observer";
 
-import { tools, options } from "./options";
+import { options, tools } from "./options";
 import * as S from "./styles";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -13,10 +13,9 @@ import {
   selectCurrentDarkTheme,
   selectCurrentMarket,
   selectKline,
-  selectLastKline,
-  selectKlineLoading,
-  KlineEvent,
   selectKlineInterval,
+  selectKlineLoading,
+  selectLastKline,
 } from "@polkadex/orderbook-modules";
 import {
   Icon,
@@ -45,8 +44,8 @@ export const OriginalChart = ({ chart, resolution }) => {
         klineFetch({
           market: currentMarket.m,
           resolution: resolution,
-          from: new Date(27588600),
-          to: getTimeFromResolution(resolution, new Date()),
+          from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
+          to: new Date(),
         })
       );
       dispatch(klineSubscribe({ market: currentMarket.m, interval: resolution }));
@@ -89,7 +88,7 @@ export const OriginalChart = ({ chart, resolution }) => {
      * @param {boolean} more - tells the chart if there are more historical data, it can be defaulted, the default is true
      */
     if (lastKline?.kline) {
-      console.log("lastkline", lastKline?.kline);
+      // console.log("lastkline", lastKline?.kline);
       chart.current.updateData(lastKline.kline);
     }
   }, [chart, lastKline]);
@@ -142,42 +141,4 @@ export const OriginalChart = ({ chart, resolution }) => {
       )}
     </S.Wrapper>
   );
-};
-
-const getTimeFromResolution = (resolution: string, date: Date) => {
-  const resolutionMilliSeconds = getResolutionInMilliSeconds(resolution);
-  const bucketTime = Math.floor(date.getTime() / resolutionMilliSeconds);
-  const date_ = new Date(bucketTime * resolutionMilliSeconds);
-  return date_;
-};
-
-const getResolutionInMilliSeconds = (resolution: string): number => {
-  const msPerMin = 60000;
-  switch (resolution) {
-    case "1m":
-      return msPerMin;
-    case "5m":
-      return msPerMin * 5;
-    case "15m":
-      return msPerMin * 15;
-    case "30m":
-      return msPerMin * 30;
-    case "1h":
-    case "1H":
-      return msPerMin * 60;
-    case "2h":
-    case "2H":
-      return msPerMin * 2 * 60;
-    case "6h":
-    case "6H":
-      return msPerMin * 6 * 60;
-    case "1d":
-    case "1D":
-      return msPerMin * 24 * 60;
-    case "1w":
-    case "1W":
-      return msPerMin * 7 * 24 * 60;
-    default:
-      return 1;
-  }
 };

@@ -1,5 +1,4 @@
 import { call, put } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { sendError } from "../../../";
 import { klineData, klineError, KlineFetch } from "../actions";
@@ -25,10 +24,10 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     const data: KlineDbData[] = yield call(() =>
       fetchKlineAsync(market, resolution, from, to)
     );
-    console.log("klines data", data);
     const convertedData = processKlineData(data);
     yield put(klineData({ list: convertedData, market, interval: resolution }));
   } catch (error) {
+    console.log("got kline fetch error", error);
     yield put(
       sendError({
         error,
@@ -58,16 +57,15 @@ const fetchKlineAsync = async (
 
 const processKlineData = (data: any[]) => {
   const klinesData = data.map((x) => ({
-    timestamp: Number(x.t),
+    timestamp: Number(x.t.split(",")[0].split("=")[1]) * 1000,
     open: Number(x.o),
     high: Number(x.h),
     low: Number(x.l),
     close: Number(x.c),
     volume: Number(x.vb),
   }));
-  console.log("klines with unfilled", klinesData);
   // if volume is 0, take previous close as candle
-  klinesData.reverse().forEach((elem, idx) => {
+  klinesData.forEach((elem, idx) => {
     if (idx === 0) {
       return;
     }

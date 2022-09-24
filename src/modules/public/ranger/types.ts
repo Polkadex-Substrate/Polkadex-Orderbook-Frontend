@@ -23,7 +23,7 @@ export const orderbookTypes = {
     client_order_id: "H256",
     user: "AccountId",
     main_account: "AccountId",
-    pair: "TradingPair",
+    pair: "String",
     side: "OrderSide",
     order_type: "OrderType",
     quote_order_quantity: "String", // Quantity is defined in base asset
@@ -49,7 +49,7 @@ export const orderbookTypes = {
     },
   },
   WithdrawPayload: {
-    asset_id: "AssetId",
+    asset_id: "String",
     amount: "String",
     timestamp: "i64",
   },
