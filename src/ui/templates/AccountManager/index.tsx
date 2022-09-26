@@ -351,7 +351,6 @@ export const AccountManagerTemplate = () => {
                     </Table.Header>
                     <Table.Body striped>
                       {assets.map((item) => {
-                        console.log("balances table item:", item);
                         const balance = userBalances?.find(
                           (value) => value.assetId === item.assetId
                         );
