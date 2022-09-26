@@ -3,4 +3,5 @@ export interface PublicTrade {
   price: string;
   amount: string;
   timestamp: string;
+  side?: "sell" | "buy";
 }

@@ -121,7 +121,7 @@ const Card = ({ onChange, name, id }) => {
   return (
     <S.SelectCard onClick={onChange}>
       <span>{name}</span>
-      {onChainBalance > 0 && <small>{`Avlb: ${onChainBalance} ${name}`}</small>}
+      {onChainBalance > 0 && <small>{`Available: ${onChainBalance} ${name}`}</small>}
     </S.SelectCard>
   );
 };

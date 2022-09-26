@@ -1,9 +1,8 @@
 // TODO!: Verify and Clean code
 
-import { ThemeName } from "../../../../../public/charting_library/charting_library.min";
-
 import { DEFAULT_TRADING_VIEW_INTERVAL } from "@polkadex/web-constants";
 import { darkTheme, lightTheme } from "@polkadex/orderbook/styles/theme";
+import { ThemeName } from "public/charting_library/charting_library.min";
 export const customWidgetParams = {};
 
 export const customWidgetOptions = (colorTheme?: string) => {

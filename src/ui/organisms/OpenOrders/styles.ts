@@ -10,7 +10,8 @@ export const Table = styled.table`
 `;
 const Grid = styled.thead`
   tr {
-    grid-template-columns: 1fr 1.5fr repeat(4, 1fr) 0.5fr;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 0.6fr repeat(3, 1fr) 0.5fr;
   }
 `;
 
@@ -18,7 +19,6 @@ export const Thead = styled(Grid)`
   font-size: 1.2rem;
   color: #8ba1be;
   tr {
-    display: grid;
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
@@ -30,16 +30,23 @@ export const Tbody = styled(Grid)`
   ${media.greaterThan("large")`
     height: 32rem;
     display: block;
-    overflow-y: auto;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    :hover {
+      overflow-y: auto;
+    }
   `}
+
   tr {
-    display: grid;
     align-items: center;
-    ${media.lessThan("large")`
+    /* ${media.lessThan("large")`
       grid-template-columns: repeat(4,1fr);
       grid-row-gap: 2rem;
       grid-column-gap: 1rem;
-    `}
+    `} */
   }
 `;
 

@@ -39,32 +39,19 @@ export const Image = styled.div<{ isSell?: boolean }>`
 `;
 export const ContainerActions = styled.div`
   ${({ theme }) => css`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.2rem;
     button {
-      border: 1px solid ${theme.colors.primary};
-      color: ${theme.colors.primary};
+      background: ${theme.colors.primary};
+      color: ${theme.colors.white};
       font-size: 1.2rem;
       border-radius: 0.3rem;
       white-space: nowrap;
       padding: 0.3rem;
       transition: background 0.5s ease-in-out;
       :hover {
-        background: ${theme.colors.primary}22;
+        background: ${theme.colors.primary}99;
       }
     }
-    ${Icon} {
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 10rem;
-      transition: background 0.5s ease;
-      :hover {
-        background: ${theme.colors.secondaryBackground};
-      }
-    }
+
     ${media.lessThan("large")`
       justify-content:flex-start;
     `}

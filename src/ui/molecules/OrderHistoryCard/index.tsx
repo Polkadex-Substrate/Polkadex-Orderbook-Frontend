@@ -3,6 +3,7 @@ import * as S from "./styles";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const OrderHistoryCard = ({
+  id,
   isSell,
   orderSide,
   orderType,
@@ -11,6 +12,12 @@ export const OrderHistoryCard = ({
   data = [],
 }) => (
   <S.Tr>
+    <S.Td>
+      <S.Tag>Id</S.Tag>
+      <S.ContainerFlex>
+        <span>{id}</span>
+      </S.ContainerFlex>
+    </S.Td>
     <S.Td>
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
@@ -22,6 +29,7 @@ export const OrderHistoryCard = ({
         </span>
       </S.ContainerFlex>
     </S.Td>
+
     <S.Td>
       <S.Tag>Date</S.Tag>
       <S.ContainerFlex>{data[0].value}</S.ContainerFlex>
@@ -47,13 +55,6 @@ export const OrderHistoryCard = ({
     <S.Td>
       <S.Tag>Filled</S.Tag>
       <span>{data[5].value}</span>
-    </S.Td>
-
-    <S.Td>
-      <S.Tag>Actions</S.Tag>
-      <S.ContainerActions>
-        <Icon name="Options" size="medium" background="none" />
-      </S.ContainerActions>
     </S.Td>
   </S.Tr>
 );

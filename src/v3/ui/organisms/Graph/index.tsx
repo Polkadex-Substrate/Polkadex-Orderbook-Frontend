@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { subDays } from "date-fns";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
@@ -10,10 +9,13 @@ import { Dropdown } from "../../molecules";
 
 import * as S from "./styles";
 
+import { TradingChart } from "@polkadex/orderbook/file-to-delete/ui/molecules/TradingChart";
 import {
+  AvailableMessage,
   Dropdown as DropdownCustom,
   Icon,
   ListItemButton,
+  OriginalChart,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
@@ -23,9 +25,6 @@ import {
   subTechnicalIndicatorTypes,
 } from "@polkadex/orderbook-ui/molecules/OriginalChart/options";
 
-const OriginalChart = dynamic(() =>
-  import("../../../../ui/molecules/OriginalChart").then((mod) => mod.OriginalChart)
-);
 const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
 
 const Graph = () => {
@@ -33,6 +32,7 @@ const Graph = () => {
   const chart = useRef(null);
 
   const [state, setState] = useState(chartType[0]);
+  const [isOriginal, setIsOrigina] = useState(true);
   const [filter, setFilter] = useState("1m");
   const [space, setSpace] = useState(10);
   const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
@@ -266,13 +266,28 @@ const Graph = () => {
 
           <S.FlexWrapper>
             <S.List>
-              <ListItemButton title="Original" size="Small" isActive />
+              <ListItemButton
+                title="Original"
+                size="Small"
+                isActive={isOriginal}
+                onClick={() => setIsOrigina(true)}
+              />
+              <AvailableMessage message="Soon">
+                <ListItemButton
+                  title="TradingView"
+                  size="Small"
+                  isActive={!isOriginal}
+                  onClick={() => setIsOrigina(false)}
+                />
+              </AvailableMessage>
+
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
           </S.FlexWrapper>
         </S.Header>
+
         <S.ChartWrapper>
-          <OriginalChart chart={chart} resolution={filter} />
+          {isOriginal ? <OriginalChart chart={chart} resolution={filter} /> : <div />}
         </S.ChartWrapper>
       </S.WrapperGraph>
       <OrderBook />

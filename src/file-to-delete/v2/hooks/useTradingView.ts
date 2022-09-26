@@ -3,23 +3,25 @@ import { useCallback, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 
 import {
-  IChartingLibraryWidget,
-  LanguageCode,
-} from "../../../public/charting_library/charting_library.min";
-import { resolutionToSeconds } from "../helpers";
-
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { dataFeedObject, print } from "@polkadex/orderbook/v2/ui/molecules/TradingView/api";
-import {
   widgetOptions,
   widgetParams,
-} from "@polkadex/orderbook/v2/ui/molecules/TradingView/config";
-import { tradingFeautres } from "@polkadex/orderbook/v2/ui/molecules/TradingView/disableFeatures";
-import { getTradingChartTimezone } from "@polkadex/orderbook/v2/ui/molecules/TradingView/timezones";
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TradingView/config";
+import { tradingFeautres } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TradingView/disableFeatures";
+import { getTradingChartTimezone } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TradingView/timezones";
+import {
+  dataFeedObject,
+  print,
+} from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/TradingView/api";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  IChartingLibraryWidget,
+  LanguageCode,
+} from "public/charting_library/charting_library.min";
 import {
   stdTimezoneOffset,
   periodStringToMinutes,
   periodMinutesToString,
+  resolutionToSeconds,
 } from "@polkadex/web-helpers";
 import {
   Market,
@@ -106,7 +108,7 @@ export function useTradingView() {
    */
   const setChart = useCallback(
     async (selectedMarket = currentMarket, themeColor = colorTheme) => {
-      const { widget } = await import("../../../public/charting_library/charting_library.min");
+      const { widget } = await import("public/charting_library/charting_library.min");
 
       if (kline.period) {
         widgetParams.interval = String(periodStringToMinutes(kline.period));

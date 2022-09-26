@@ -58,11 +58,14 @@ const Transactions = () => {
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
 
-  const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
-    setFrom(startDate);
-    setTo(endDate);
-    dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
-  }, []);
+  const handleSelect = useCallback(
+    ({ selection: { startDate, endDate } }) => {
+      setFrom(startDate);
+      setTo(endDate);
+      dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
+    },
+    [dispatch]
+  );
 
   const ranges = useMemo(() => {
     return [
