@@ -20,7 +20,7 @@ export type InitialMarkets = {
   isFavourite?: boolean;
 } & Market;
 
-export function useMarkets() {
+export function useMarkets(onClose: () => void) {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
@@ -71,6 +71,7 @@ export function useMarkets() {
     if (marketToSet) {
       router.push(`${marketToSet.id}`, undefined, { shallow: true });
       dispatch(setCurrentMarket(marketToSet));
+      onClose();
     }
   };
 

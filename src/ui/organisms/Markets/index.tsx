@@ -9,7 +9,7 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
 import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 
-const Markets = ({ isFull = false, hasMargin = false }) => {
+const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
     marketTokens,
     marketTickers,
@@ -20,12 +20,17 @@ const Markets = ({ isFull = false, hasMargin = false }) => {
     currentTickerName,
     fieldValue,
     handleShowFavourite,
-  } = useMarkets();
+  } = useMarkets(onClose);
 
   return (
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
+        <S.Favorite>
+          <button type="button" onClick={onClose}>
+            <Icon name="Close" size="small" color="text" />
+          </button>
+        </S.Favorite>
       </S.HeaderWrapper>
       <Filters
         searchField={fieldValue.searchFieldValue}

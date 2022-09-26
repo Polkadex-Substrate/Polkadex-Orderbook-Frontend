@@ -4,7 +4,9 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const ResultFound = ({ children = "No result found" }) => (
   <S.Wrapper>
-    <Icons.SearchPixel />
-    <p>{children}</p>
+    <S.Container>
+      <Icons.SearchPixel />
+      <p>{children}</p>
+    </S.Container>
   </S.Wrapper>
 );

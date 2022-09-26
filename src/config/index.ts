@@ -19,7 +19,7 @@ export const defaultConfig: DefaultConfig = {
   defaultTradingViewInterval: 5,
   sessionCheckInterval: 15000,
   balancesFetchInterval: 3000,
-  minutesUntilAutoLogout: 5,
+  minutesUntilAutoLogout: 120,
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
   maintenanceMode: false,

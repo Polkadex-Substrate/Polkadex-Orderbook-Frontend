@@ -16,13 +16,13 @@ export const OrderHistory = ({ filters }) => {
         <S.Table>
           <S.Thead>
             <S.Tr>
+              <S.Th>Id</S.Th>
               <S.Th>Pair</S.Th>
               <S.Th>Date</S.Th>
               <S.Th>Type</S.Th>
               <S.Th>Price</S.Th>
               <S.Th>Total</S.Th>
               <S.Th>Filled</S.Th>
-              <S.Th>Actions</S.Th>
             </S.Tr>
           </S.Thead>
           <S.Tbody>
@@ -38,6 +38,7 @@ export const OrderHistory = ({ filters }) => {
                 return (
                   <OrderHistoryCard
                     key={i}
+                    id={order.id}
                     isSell={isSell}
                     orderSide={order.side}
                     orderType={order.order_type}

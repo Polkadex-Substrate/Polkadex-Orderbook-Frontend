@@ -66,7 +66,6 @@ export const OpenOrderCard = ({
             onClick={() => dispatch(orderCancelFetch({ orderId, base, quote }))}>
             Cancel Order
           </button>
-          <Icon name="Options" size="medium" background="none" />
         </S.ContainerActions>
       </S.Td>
     </S.Tr>

@@ -3,15 +3,14 @@
 import * as React from "react";
 import { connect, MapDispatchToPropsFunction, MapStateToProps } from "react-redux";
 
-import {
-  IChartingLibraryWidget,
-  LanguageCode,
-} from "../../../../public/charting_library/charting_library.min";
-
 import { CurrentKlineSubscription, dataFeedObject, print } from "./api";
 import { widgetOptions, widgetParams } from "./config";
 import { getTradingChartTimezone } from "./timezones";
 
+import {
+  IChartingLibraryWidget,
+  LanguageCode,
+} from "public/charting_library/charting_library.min";
 import { stdTimezoneOffset, periodStringToMinutes } from "@polkadex/web-helpers";
 import {
   KlineState,
@@ -122,9 +121,7 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     const isMobileDevice = false;
     this.datafeed = dataFeedObject(this, markets);
 
-    const { widget } = await import(
-      "../../../../public/charting_library/charting_library.min"
-    );
+    const { widget } = await import("public/charting_library//charting_library.min");
 
     const disabledFeatures = {
       disabled_features: isMobileDevice

@@ -170,7 +170,7 @@ export const WithdrawTemplate = () => {
                         </Dropdown>
                       </S.SelectInputContainer>
                       <S.Available>
-                        Avlb{" "}
+                        Available{" "}
                         <strong>
                           {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
                         </strong>

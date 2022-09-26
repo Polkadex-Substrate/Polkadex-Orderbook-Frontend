@@ -49,9 +49,6 @@ export const ClosePath = styled("path")(({ theme }) =>
 );
 
 export const Container = styled("div")<T.ModalStyleProps>(
-  {
-    minWidth: "40rem",
-  },
   variant({
     prop: "border",
     variants: {

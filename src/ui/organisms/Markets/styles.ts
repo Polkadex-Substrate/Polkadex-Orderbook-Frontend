@@ -11,12 +11,27 @@ export const Main = styled.section<{ hasMargin?: boolean }>`
     flex-flow: column nowrap;
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};
+    @media screen and (min-width: 440px) {
+      max-width: 36rem;
+    }
   `}
 `;
 
 // Header
 export const HeaderWrapper = styled.div`
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  ${() => css`
+    padding: 1.5rem 1.5rem 0 1.5rem;
+    position: relative;
+    ${Favorite} {
+      position: absolute;
+      right: 2rem;
+      top: 2rem;
+      display: none;
+      @media screen and (max-width: 440px) {
+        display: flex;
+      }
+    }
+  `}
 `;
 
 export const Header = styled.div`
@@ -131,6 +146,10 @@ export const TitleActionCard = styled.div`
 export const Favorite = styled(TitleActionCard)`
   min-width: 3rem;
   min-height: 3rem;
+  button {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const ContainerWrapper = styled.div`
@@ -143,7 +162,6 @@ export const ContainerTitle = styled.div``;
 export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 1fr 0.5fr auto;
     grid-gap: 1rem;
     align-items: center;
     padding: 1rem 0.9rem;
@@ -169,6 +187,9 @@ export const Card = styled.div`
     :hover {
       border-color: ${theme.colors.text};
       box-shadow: ${theme.shadows.quaternary};
+    }
+    @media screen and (min-width: 421px) {
+      grid-template-columns: 1fr 0.5fr auto;
     }
   `}
 `;
@@ -218,7 +239,13 @@ export const CardInfoWrapper = styled.div`
   }
 `;
 
-export const CardPricing = styled.div``;
+export const CardPricing = styled.div`
+  @media screen and (max-width: 420px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
 export const CardChange = styled.div<{ isNegative?: boolean }>`
   ${({ theme, isNegative }) => css`
     color: ${isNegative ? theme.colors.primary : theme.colors.green};
