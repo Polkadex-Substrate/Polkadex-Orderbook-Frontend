@@ -47,7 +47,7 @@ export const DepositTemplate = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { transactionHistory } = useHistory();
+  const { deposits } = useHistory();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
@@ -198,7 +198,7 @@ export const DepositTemplate = () => {
 
               <S.History>
                 <h2>History</h2>
-                {transactionHistory.length ? (
+                {deposits.length ? (
                   <S.HistoryContent>
                     <Table
                       aria-label="Polkadex Deposit History Table"
@@ -221,7 +221,7 @@ export const DepositTemplate = () => {
                         </Table.Column>
                       </Table.Header>
                       <Table.Body striped>
-                        {transactionHistory.map((item, i) => (
+                        {deposits.map((item, i) => (
                           <Table.Row key={i}>
                             <Table.Cell>
                               <S.CellName>

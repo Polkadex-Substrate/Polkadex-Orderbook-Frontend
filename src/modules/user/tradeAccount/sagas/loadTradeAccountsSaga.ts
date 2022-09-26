@@ -5,6 +5,7 @@ import { sendError } from "../../..";
 import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actions";
 
 import { getFromStorage } from "@polkadex/orderbook/helpers/storage";
+import { getIsTradeAccountPasswordProtected } from "@polkadex/orderbook/helpers/localStorageHelpers";
 
 export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
   try {
@@ -41,7 +42,7 @@ async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
       address: account.address,
       meta: account.meta,
       type: account.publicKey,
-      isPassworded: getFromStorage(`trading_acc_${account.address}`) === "true",
+      isPasswordProtected: getIsTradeAccountPasswordProtected(account.address),
     };
   });
 }

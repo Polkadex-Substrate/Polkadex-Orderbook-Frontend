@@ -12,7 +12,7 @@ import { TickerQueryResult } from "./marketTickersFetchSaga";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
+export function* marketTickersChannelSaga(_action: MarketsTickerChannelFetch) {
   try {
     const market: Market = yield select(selectCurrentMarket);
     if (market?.m) {
@@ -23,6 +23,7 @@ export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
       }
     }
   } catch (error) {
+    console.log("error in ticker update", error);
     yield put(
       alertPush({
         message: {
@@ -48,7 +49,7 @@ function createMarketTickersChannel(market: string) {
         const data_parsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
-        const ticker_data = convertToTicker(data_parsed);
+        const ticker_data = convertToTicker(data_parsed, market);
         emit(marketsTickersChannelData(ticker_data));
       },
       error: (err) => console.warn(err),
@@ -59,16 +60,18 @@ function createMarketTickersChannel(market: string) {
   });
 }
 
-const convertToTicker = (elem) => {
+const convertToTicker = (elem: TickerQueryResult, market: string) => {
+  const priceChange = Number(elem.c) - Number(elem.o);
+  const priceChangePercent = (priceChange / Number(elem.o)) * 100;
   return {
-    m: elem.m,
-    priceChange24Hr: elem.pc,
-    priceChangePercent24Hr: elem.pcp,
+    m: market,
+    priceChange24Hr: priceChange,
+    priceChangePercent24Hr: priceChangePercent,
     open: elem.o,
     close: elem.c,
     high: elem.h,
     low: elem.l,
-    volumeBase24hr: elem.v_base,
-    volumeQuote24Hr: elem.v_quote,
+    volumeBase24hr: elem.vb,
+    volumeQuote24Hr: elem.vq,
   };
 };

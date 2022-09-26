@@ -2,10 +2,11 @@ import { call, put, take } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { alertPush, klinePush, KlineSubscribe } from "../../..";
+import { alertPush, KlineEvent, klinePush, KlineSubscribe } from "../../..";
 import * as subscriptions from "../../../../graphql/subscriptions";
 
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 
 export function* fetchKlineChannelSaga(action: KlineSubscribe) {
   try {
@@ -15,16 +16,10 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       while (true) {
         const dataStr = yield take(channel);
         const data = JSON.parse(dataStr);
+        const kline = processKline(data, interval);
         yield put(
           klinePush({
-            kline: {
-              open: Number(data.o),
-              close: Number(data.c),
-              high: Number(data.h),
-              low: Number(data.l),
-              timestamp: data.timestamp,
-              volume: Number(data.v_base),
-            },
+            kline: kline,
             market: data.m,
             interval: data.interval,
           })
@@ -32,6 +27,7 @@ export function* fetchKlineChannelSaga(action: KlineSubscribe) {
       }
     }
   } catch (error) {
+    console.log("error in kline events", error);
     yield put(
       alertPush({
         message: {
@@ -66,3 +62,26 @@ async function fetchKlineChannel(market: string, interval: string) {
     };
   });
 }
+
+const processKline = (data: any, interval: string): KlineEvent => {
+  const kline = {
+    open: Number(data.o),
+    close: Number(data.c),
+    high: Number(data.h),
+    low: Number(data.l),
+    timestamp: Number(data.t.secs_since_epoch) * 1000,
+    volume: Number(data.v_base),
+  };
+  const close = kline.close;
+  const resolution = getResolutionInMilliSeconds(interval);
+
+  const currentBucket = Math.floor(new Date().getTime() / resolution) * resolution;
+  if (kline.timestamp < currentBucket) {
+    kline.open = close;
+    kline.low = close;
+    kline.high = close;
+    kline.volume = 0;
+    kline.timestamp = currentBucket;
+  }
+  return kline;
+};

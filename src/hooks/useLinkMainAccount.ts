@@ -28,7 +28,9 @@ export const useLinkMainAccount = () => {
     mnemoicString: string,
     passcode: string
   ) => {
-    const tradeAcc = keyring.addUri(mnemoicString, null, { name });
+    const tradeAcc = keyring.addUri(mnemoicString, passcode.length > 0 ? passcode : null, {
+      name,
+    });
     dispatch(
       registerMainAccountFetch({
         mainAccount: acc,

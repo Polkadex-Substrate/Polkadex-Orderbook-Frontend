@@ -1,14 +1,13 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
-import { getSymbolFromId, cleanPositiveFloatInput, precisionRegExp } from "../helpers";
+import { cleanPositiveFloatInput, precisionRegExp } from "../helpers";
 
 import {
   selectCurrentMarket,
   selectCurrentPrice,
   selectCurrentMarketTickers,
   setCurrentPrice,
-  selectUserBalance,
   selectBestAskPrice,
   selectBestBidPrice,
   orderExecuteFetch,
@@ -35,7 +34,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
-  const showProtectedPassword = false;
+  const showProtectedPassword = useReduxSelector(selectCurrentTradeAccountIsPassword);
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
@@ -50,7 +49,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   }>({
     orderType: isLimit ? "Limit" : "Market",
     price: "",
-    priceMarket: currentTicker?.last || 0,
+    priceMarket: currentTicker || 0,
     amountSell: "",
     amountBuy: "",
   });

@@ -42,10 +42,9 @@ export type CandleStick = {
   c: string,
   h: string,
   l: string,
-  v_base: string,
-  v_quote: string,
-  nt: string,
-  time: string,
+  vb: string,
+  vq: string,
+  t: string,
 };
 
 export type AssetsConnection = {
@@ -68,11 +67,11 @@ export type RecentTradesConnection = {
 
 export type RawTrade = {
   __typename: "RawTrade",
-  m: string,
+  m?: string | null,
   t: string,
   p: string,
   q: string,
-  sid: string,
+  sid: number,
   isReverted?: boolean | null,
 };
 
@@ -85,15 +84,12 @@ export type TickersConnection = {
 export type TickerStats = {
   __typename: "TickerStats",
   m: string,
-  pc: number,
-  pcp: number,
   o: number,
   c: number,
   h: number,
   l: number,
-  v_base: number,
-  v_quote: number,
-  nt: number,
+  vb: number,
+  vq: number,
 };
 
 export type MarketsConnection = {
@@ -294,10 +290,9 @@ export type GetKlinesbyMarketIntervalQuery = {
       c: string,
       h: string,
       l: string,
-      v_base: string,
-      v_quote: string,
-      nt: string,
-      time: string,
+      vb: string,
+      vq: string,
+      t: string,
     } | null > | null,
   } | null,
 };
@@ -332,11 +327,11 @@ export type GetRecentTradesQuery = {
     __typename: "RecentTradesConnection",
     items?:  Array< {
       __typename: "RawTrade",
-      m: string,
+      m?: string | null,
       t: string,
       p: string,
       q: string,
-      sid: string,
+      sid: number,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
@@ -350,15 +345,12 @@ export type GetAllMarketTickersQuery = {
     items?:  Array< {
       __typename: "TickerStats",
       m: string,
-      pc: number,
-      pcp: number,
       o: number,
       c: number,
       h: number,
       l: number,
-      v_base: number,
-      v_quote: number,
-      nt: number,
+      vb: number,
+      vq: number,
     } | null > | null,
     nextToken?: string | null,
   } | null,

@@ -44,7 +44,7 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
       event_id: data.event_id,
       status: data.status,
       sid: Number(data.sid) ?? 0,
-      txn_type: "WITHDRAW",
+      txn_type: "WITHDRAWAL",
       main_account: data.user,
       fee: data.fee.toString(),
       amount: data.amount.toString(),

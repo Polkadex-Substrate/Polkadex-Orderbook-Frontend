@@ -1,9 +1,8 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
 import { ProxyAccount, selectCurrentMainAccount } from "../../..";
-import { balancesData, BalancesFetch, BalanceBase } from "../actions";
+import { balancesData, BalancesFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 
 import {
@@ -12,7 +11,6 @@ import {
   isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
-import { Utils } from "@polkadex/web-helpers";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type BalanceQueryResult = {
@@ -22,7 +20,7 @@ type BalanceQueryResult = {
   p: string;
 };
 
-export function* balancesSaga(balancesFetch: BalancesFetch) {
+export function* balancesSaga(_balancesFetch: BalancesFetch) {
   try {
     const account: ProxyAccount = yield select(selectCurrentMainAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);

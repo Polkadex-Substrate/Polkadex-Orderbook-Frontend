@@ -139,7 +139,7 @@ export const AccountManagerTemplate = () => {
       <Modal open={remove.status} onClose={handleClose}>
         <Modal.Body>
           {remove.isRemoveDevice ? (
-            <RemoveFromDevice handleClose={removeFromDevice} />
+            <RemoveFromDevice handleClose={removeFromDevice} address={remove.id} />
           ) : (
             <RemoveFromBlockchain handleClose={handleClose} address={remove.id} />
           )}
@@ -351,7 +351,6 @@ export const AccountManagerTemplate = () => {
                     </Table.Header>
                     <Table.Body striped>
                       {assets.map((item) => {
-                        console.log("balances table item:", item);
                         const balance = userBalances?.find(
                           (value) => value.assetId === item.assetId
                         );
@@ -467,8 +466,8 @@ const Card = ({
               <Dropdown.Item key="removeBlockchain" onAction={onRemoveFromBlockchain}>
                 Remove from blockchain
               </Dropdown.Item>
-              <Dropdown.Item key="removeBrowser">
-                <AvailableMessage>Remove from my browser</AvailableMessage>
+              <Dropdown.Item key="removeBrowser" onAction={onRemoveFromDevice}>
+                Remove from my browser
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

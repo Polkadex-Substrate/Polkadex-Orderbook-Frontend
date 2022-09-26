@@ -1,7 +1,6 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
-import BigNumber from "bignumber.js";
 
 import {
   OrderSide,
@@ -12,8 +11,6 @@ import {
 } from "../modules/types";
 
 import { signPayload } from "./enclavePayloadSigner";
-
-import { UNIT_BN } from "@polkadex/web-constants";
 
 export const createOrderPayload = (
   api: ApiPromise,
@@ -28,8 +25,8 @@ export const createOrderPayload = (
   client_order_id: Uint8Array,
   mainAddress: string
 ): Codec => {
-  const baseAssetId = baseAsset !== "-1" ? { Asset: baseAsset } : { POLKADEX: null };
-  const quoteAssetId = quoteAsset !== "-1" ? { Asset: quoteAsset } : { POLKADEX: null };
+  const baseAssetId = baseAsset !== "-1" ? baseAsset : "PDEX";
+  const quoteAssetId = quoteAsset !== "-1" ? quoteAsset : "PDEX";
   const orderType = { [type.toUpperCase()]: null };
   const orderSide = {
     [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
@@ -38,10 +35,7 @@ export const createOrderPayload = (
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
-    pair: {
-      base_asset: baseAssetId,
-      quote_asset: quoteAssetId,
-    },
+    pair: baseAssetId + "-" + quoteAssetId,
     side: orderSide,
     order_type: orderType,
     qty: isMarketBid ? "0" : quantity.toString(),
@@ -50,25 +44,23 @@ export const createOrderPayload = (
     timestamp: timestamp,
     client_order_id,
   };
-  const orderPayload = api.createType("OrderPayload", jsonPayload);
-  return orderPayload;
+  return api.createType("OrderPayload", jsonPayload);
 };
 
 export const createCancelOrderPayloadSigned = (
   api: ApiPromise,
   userKeyring: KeyringPair,
   orderId: string,
-  base: Record<string, string>,
-  quote: Record<string, string>
+  base: string,
+  quote: string
 ) => {
   const orderIdCodec = api.createType("order_id", orderId);
-  const tradingPair = api.createType("TradingPair", { base_asset: base, quote_asset: quote });
+  const tradingPair = `${base}-${quote}`;
   const signature = signPayload(api, userKeyring, orderIdCodec);
-  const payload = {
+  return {
     order_id: orderIdCodec,
     account: userKeyring.address,
     pair: tradingPair,
     signature: signature,
   };
-  return payload;
 };

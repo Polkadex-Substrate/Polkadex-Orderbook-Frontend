@@ -1,12 +1,9 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 import keyring from "@polkadot/ui-keyring";
 
 import {
-  sendError,
   orderExecuteDataDelete,
   orderExecuteData,
-  orderExecuteError,
   OrderExecuteFetch,
   selectRangerApi,
   selectCurrentTradeAccount,
@@ -33,7 +30,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     const { address } = yield select(selectCurrentTradeAccount);
     const mainAddress = yield select(selectLinkedMainAddress);
     const keyringPair = keyring.getPair(address);
-    keyringPair.unlock("");
     const timestamp = getNonce();
     const api = yield select(selectRangerApi);
     const client_order_id = getNewClientId();
@@ -72,7 +68,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   } catch (error) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
-    const msg = error?.errors[0]?.message;
+    const msg = typeof error.message === "string" ? error.message : error?.errors[0]?.message;
     const errortext = parseError(msg);
     console.log("msg: ", msg);
     yield put(

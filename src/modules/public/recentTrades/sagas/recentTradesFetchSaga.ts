@@ -1,11 +1,10 @@
-import { API } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
 import { PublicTrade, recentTradesData, sendError } from "../../../";
 import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
-import { getIsDecreasingArray, Utils } from "@polkadex/web-helpers";
+import { getIsDecreasingArray } from "@polkadex/web-helpers";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type RawTrades = {
@@ -43,7 +42,7 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
   }
 }
 
-const fetchRecentTrade = async (market: string, limit = 50) => {
+const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
   const res: any = await sendQueryToAppSync(getRecentTrades, { m: market, limit });
   return res.data.getRecentTrades.items;
 };

@@ -18,18 +18,21 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { setToStorage } from "@polkadex/orderbook/helpers/storage";
+import { setIsTradeAccountPassworded } from "@polkadex/orderbook/helpers/localStorageHelpers";
 
 let tradeAddress: string;
+
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   try {
     const api = yield select(selectRangerApi);
     const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
     if (!mainAccount?.address) {
-      throw new Error("Pleaes select a main account!");
+      throw new Error("Please select a main account!");
     }
     const { mnemonic, password, name } = action.payload;
-    const { pair } = keyring.addUri(mnemonic, password, { name: name });
+    const { pair } = keyring.addUri(mnemonic, password.length > 0 ? password : null, {
+      name: name,
+    });
     tradeAddress = pair.address;
     if (api && mainAccount.address) {
       // TODO: change to notifications here
@@ -65,7 +68,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
           })
         );
         yield put(registerTradeAccountData());
-        yield call(setIsTradeAccountPassworded, tradeAddress, !!password);
+        yield call(setIsTradeAccountPassworded, tradeAddress, password.length > 0);
       } else {
         throw new Error(res.message);
       }
@@ -95,8 +98,4 @@ export const addProxyToAccount = async (
   const ext = api.tx.ocex.addProxyAccount(proxyAddress);
   const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
   return res;
-};
-
-export const setIsTradeAccountPassworded = (tradeAddress: string, isPassworded: boolean) => {
-  setToStorage(`trading_acc_${tradeAddress}`, isPassworded);
 };

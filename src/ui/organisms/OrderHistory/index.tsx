@@ -35,10 +35,13 @@ export const OrderHistory = ({ filters }) => {
                 const baseUnit = getAsset(base)?.symbol;
                 const quoteUnit = getAsset(quote)?.symbol;
                 const avgPrice = order.avg_filled_price;
+                const shortId =
+                  order.id.slice(0, 4) + "..." + order.id.slice(order.id.length - 4);
+
                 return (
                   <OrderHistoryCard
                     key={i}
-                    id={order.id}
+                    id={shortId}
                     isSell={isSell}
                     orderSide={order.side}
                     orderType={order.order_type}

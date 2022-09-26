@@ -14,17 +14,19 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_RESET,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+  USER_TRADE_ACCOUNT_UNLOCK,
 } from "./constants";
 
 export interface InjectedAccount {
   address: string;
-  isPassworded: boolean;
+  isPasswordProtected: boolean;
   meta: {
     name?: string;
     source?: any;
   };
   type: any;
 }
+
 export interface PolkadotWalletFetchPayload {
   allAccounts: InjectedAccount[];
 }
@@ -32,6 +34,7 @@ export interface PolkadotWalletFetchPayload {
 export interface TradeAccountsFetch {
   type: typeof USER_TRADE_ACCOUNTS_FETCH;
 }
+
 export interface TradeAccountsData {
   type: typeof USER_TRADE_ACCOUNTS_DATA;
   payload: PolkadotWalletFetchPayload;
@@ -51,6 +54,7 @@ export interface SetCurrentTradeAccountData {
   type: typeof SET_CURRENT_TRADE_ACCOUNT_DATA;
   payload: { tradeAccount: InjectedAccount; mainAddress?: string };
 }
+
 export interface RegisterTradeAccountFetch {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_FETCH;
   payload: {
@@ -59,9 +63,11 @@ export interface RegisterTradeAccountFetch {
     name?: string;
   };
 }
+
 export interface ResetCurrentTradeAccount {
   type: typeof RESET_CURRENT_TRADE_ACCOUNT;
 }
+
 export interface RegisterTradeAccountData {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_DATA;
 }
@@ -70,9 +76,11 @@ export interface RegisterTradeAccountError {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_ERROR;
   error: CommonError;
 }
+
 export interface RegisterTradeAccountReset {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_RESET;
 }
+
 export interface RemoveTradeAccountFromBrowser {
   type: typeof REMOVE_TRADE_ACCOUNT_FROM_BROWSER;
   payload: { address: string };
@@ -87,6 +95,14 @@ export interface RemoveProxyAccountFromChainData {
   type: typeof USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA;
 }
 
+export interface UnlockTradeAccount {
+  type: typeof USER_TRADE_ACCOUNT_UNLOCK;
+  payload: {
+    address: string;
+    password: string;
+  };
+}
+
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -99,7 +115,8 @@ export type TradeAccountsAction =
   | ResetCurrentTradeAccount
   | RegisterTradeAccountReset
   | RemoveProxyAccountFromChainFetch
-  | RemoveProxyAccountFromChainData;
+  | RemoveProxyAccountFromChainData
+  | UnlockTradeAccount;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -169,4 +186,11 @@ export const removeProxyAccountFromChainFetch = (
 
 export const removeProxyAccountFromChainData = (): RemoveProxyAccountFromChainData => ({
   type: USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+});
+
+export const unlockTradeAccount = (
+  payload: UnlockTradeAccount["payload"]
+): UnlockTradeAccount => ({
+  type: USER_TRADE_ACCOUNT_UNLOCK,
+  payload: payload,
 });

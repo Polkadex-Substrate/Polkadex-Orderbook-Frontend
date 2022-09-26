@@ -43,8 +43,8 @@ export interface Market {
 
 export interface Ticker {
   m: string; // eg "PDEX-1"
-  priceChange24Hr: string;
-  priceChangePercent24Hr: string;
+  priceChange24Hr: number;
+  priceChangePercent24Hr: number;
   open: string;
   close: string;
   high: string;

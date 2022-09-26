@@ -10,11 +10,13 @@ import {
 } from "../actions";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { setIsTradeAccountPassworded } from "@polkadex/orderbook/helpers/localStorageHelpers";
 
 let tradeAddr = "";
+
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
-    const { mainAccount, tradeAddress } = action.payload;
+    const { mainAccount, tradeAddress, password } = action.payload;
     tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
     yield select(selectExtensionWalletAccounts);
@@ -35,6 +37,9 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       );
       if (res.isSuccess) {
         yield put(registerMainAccountData());
+        setIsTradeAccountPassworded(tradeAddress, password.length > 0);
+      } else {
+        keyring.forgetAccount(tradeAddr);
       }
     }
   } catch (error) {

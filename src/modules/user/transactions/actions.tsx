@@ -17,7 +17,7 @@ export type TransactionUpdatePayload = {
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";
-  txn_type: "DEPOSIT" | "WITHDRAW";
+  txn_type: "DEPOSIT" | "WITHDRAWAL";
   t: number;
   sid: number; // snapshot id
 };

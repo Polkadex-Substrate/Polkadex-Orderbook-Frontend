@@ -1,5 +1,5 @@
 projects:
-  emmanuel-orderbook-api:
+  staging-orderbook-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,8 +10,8 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
-        region: ap-south-1
-        apiId: x2i3wkh75zf6jbnakg53mgdhjq
+        region: eu-central-1
+        apiId: xpl6eqs3t5amhgbkrxdl4pebe4
         maxDepth: 2
 extensions:
   amplify:

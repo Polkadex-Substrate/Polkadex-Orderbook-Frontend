@@ -8,7 +8,6 @@ import {
   isAssetPDEX,
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
-import { Utils } from "@polkadex/web-helpers";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {
   try {
@@ -32,7 +31,7 @@ const updateBalanceFromEvent = (
   msg: BalanceUpdatePayload,
   getAsset: (id: string) => IPublicAsset
 ): Balance => {
-  const assetId = isAssetPDEX(msg.asset) ? "-1" : msg.asset.asset;
+  const assetId = isAssetPDEX(msg.asset.asset) ? "-1" : msg.asset.asset;
   const newBalance = {
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,

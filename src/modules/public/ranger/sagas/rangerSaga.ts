@@ -10,6 +10,16 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 
 export function* rangerFetchSaga() {
   try {
+    const { web3Enable } = yield call(() => import("@polkadot/extension-dapp"));
+    const extensions = yield call(() => web3Enable("Polkadex Orderbook"));
+    if (extensions.length === 0) {
+      // TODO
+      // no extension installed, or the user did not accept the authorization
+      // in this case we should inform the use and give a link to the extension
+      throw new Error(
+        "Polkadot.js extension not detected. Please refresh if used for the first time."
+      );
+    }
     const channel = yield call(() => fetchRanger());
     while (true) {
       const action = yield take(channel);
@@ -29,9 +39,6 @@ export function* rangerFetchSaga() {
 }
 
 function* fetchRanger() {
-  const { web3Enable } = yield call(() => import("@polkadot/extension-dapp"));
-  yield call(() => web3Enable("PolkadexIdo"));
-
   return eventChannel((emitter) => {
     const provider = new WsProvider(defaultConfig.polkadexChain);
 
