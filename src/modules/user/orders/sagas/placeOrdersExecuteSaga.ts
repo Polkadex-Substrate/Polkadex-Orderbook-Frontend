@@ -71,7 +71,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   } catch (error) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
-    const msg = error?.errors[0]?.message;
+    const msg = typeof error.message === "string" ? error.message : error?.errors[0]?.message;
     const errortext = parseError(msg);
     console.log("msg: ", msg);
     yield put(
