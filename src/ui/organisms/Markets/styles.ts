@@ -11,8 +11,9 @@ export const Main = styled.section<{ hasMargin?: boolean }>`
     flex-flow: column nowrap;
     margin-left: ${hasMargin ? "1rem" : 0};
     margin-top: ${hasMargin ? "1rem" : 0};
+    min-width: 90vw;
     @media screen and (min-width: 440px) {
-      max-width: 36rem;
+      min-width: 36rem;
     }
   `}
 `;
