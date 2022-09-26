@@ -54,8 +54,7 @@ export const WithdrawTemplate = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { withdrawals, handleClaimWithdraws } = useHistory();
-
+  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
@@ -96,25 +95,16 @@ export const WithdrawTemplate = () => {
 
   const selectedWithdraw = useCallback(
     (status: "PENDING" | "CONFIRMED") => {
-      const result = withdrawals
-        ?.map((value) => value?.items.filter((v) => v.status === status))
-        .filter((a) => a);
-
+      const result = allWithdrawals.filter((txn) => txn.status === status);
       // eslint-disable-next-line prefer-spread
       return [].concat.apply([], result);
     },
-    [withdrawals]
+    [allWithdrawals]
   );
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
-  const readyToClaim = useMemo(
-    () =>
-      withdrawals
-        ?.map((value) => value?.items?.filter((v) => v.status === "READY").length && value)
-        ?.filter((a) => a),
-    [withdrawals]
-  );
+  const readyToClaim = readyWithdrawals;
 
   return (
     <>

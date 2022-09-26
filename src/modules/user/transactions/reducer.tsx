@@ -16,8 +16,8 @@ export interface Transaction {
   fee: string;
   main_account?: string;
   time: string;
-  status: "PENDING" | "CONFIRMED" | "FAILED";
-  txn_type: "DEPOSIT" | "WITHDRAW";
+  status: "PENDING" | "READY" | "CONFIRMED" | "FAILED";
+  txn_type: "DEPOSIT" | "WITHDRAWAL";
 }
 
 export interface TransactionsState {

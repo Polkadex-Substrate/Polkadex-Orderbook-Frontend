@@ -48,7 +48,7 @@ export function useHistory() {
   const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type !== "DEPOSIT");
   const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
 
-  const withdrawals = useMemo(
+  const readyWithdrawals = useMemo(
     () => groupWithdrawsBySnapShotIds(withdrawalsList),
     [withdrawalsList]
   );
@@ -68,7 +68,8 @@ export function useHistory() {
     onChangeSearch: (e: ChangeEvent<HTMLInputElement>) =>
       setFilterBy({ ...filterBy, fieldValue: e.target.value }),
     transactionHistory,
-    withdrawals,
+    allWithdrawals: withdrawalsList,
+    readyWithdrawals,
     deposits,
     handleClaimWithdraws,
   };
