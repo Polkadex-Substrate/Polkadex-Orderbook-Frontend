@@ -48,8 +48,14 @@ export const orderbookTypes = {
       MARKET: null,
     },
   },
+  AssetIdString: {
+    _enum: {
+      asset: "String",
+      polkadex: null,
+    },
+  },
   WithdrawPayload: {
-    asset_id: "String",
+    asset_id: "AssetIdString",
     amount: "String",
     timestamp: "i64",
   },

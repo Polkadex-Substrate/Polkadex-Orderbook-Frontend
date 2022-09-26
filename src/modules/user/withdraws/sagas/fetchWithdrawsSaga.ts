@@ -1,7 +1,5 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 import keyring from "@polkadot/ui-keyring";
-import BigNumber from "bignumber.js";
 
 import * as mutations from "../../../../graphql/mutations";
 import { userTradesError } from "../../trades";
@@ -16,10 +14,8 @@ import {
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
-import { UNIT_BN } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-// TOOD: CHANGE TO USE ENCLAVE WS
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
@@ -62,6 +58,5 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
 const executeWithdraw = async (withdrawPayload, address) => {
   const payload = JSON.stringify({ Withdraw: withdrawPayload });
-  const res = await sendQueryToAppSync(mutations.withdraw, { input: { payload } }, address);
-  return res;
+  return await sendQueryToAppSync(mutations.withdraw, { input: { payload } }, address);
 };
