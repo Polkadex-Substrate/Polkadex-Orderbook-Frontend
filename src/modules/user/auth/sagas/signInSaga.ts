@@ -1,10 +1,11 @@
 import { put, call } from "redux-saga/effects";
-import { API, Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import router from "next/router";
 
 import { signInData, signInError, SignInFetch } from "../actions";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
+import { userFetch } from "@polkadex/orderbook-modules";
 
 let userEmail = "";
 export function* signInSaga(action: SignInFetch) {
@@ -13,6 +14,7 @@ export function* signInSaga(action: SignInFetch) {
     userEmail = email;
     const res = yield call(signIn, email, password);
     yield put(signInData({ email, isConfirmed: true }));
+    yield put(userFetch());
   } catch (error) {
     console.error(error);
     if (error.name === "UserNotConfirmedException") {
