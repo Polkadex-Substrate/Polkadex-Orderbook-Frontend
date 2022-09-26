@@ -75,15 +75,12 @@ export const getAllMarketTickers = /* GraphQL */ `
     getAllMarketTickers {
       items {
         m
-        pc
-        pcp
         o
         c
         h
         l
-        v_base
-        v_quote
-        nt
+        vb
+        vq
       }
       nextToken
     }

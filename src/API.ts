@@ -84,15 +84,12 @@ export type TickersConnection = {
 export type TickerStats = {
   __typename: "TickerStats",
   m: string,
-  pc: number,
-  pcp: number,
   o: number,
   c: number,
   h: number,
   l: number,
-  v_base: number,
-  v_quote: number,
-  nt: number,
+  vb: number,
+  vq: number,
 };
 
 export type MarketsConnection = {
@@ -348,15 +345,12 @@ export type GetAllMarketTickersQuery = {
     items?:  Array< {
       __typename: "TickerStats",
       m: string,
-      pc: number,
-      pcp: number,
       o: number,
       c: number,
       h: number,
       l: number,
-      v_base: number,
-      v_quote: number,
-      nt: number,
+      vb: number,
+      vq: number,
     } | null > | null,
     nextToken?: string | null,
   } | null,

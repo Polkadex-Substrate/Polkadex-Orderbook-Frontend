@@ -12,7 +12,7 @@ import { TickerQueryResult } from "./marketTickersFetchSaga";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
+export function* marketTickersChannelSaga(_action: MarketsTickerChannelFetch) {
   try {
     const market: Market = yield select(selectCurrentMarket);
     if (market?.m) {
@@ -45,6 +45,7 @@ function createMarketTickersChannel(market: string) {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
+        console.log("recieved ticker data", market + "-ticker", data);
         const data_parsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );

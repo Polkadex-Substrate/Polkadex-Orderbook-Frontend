@@ -1,5 +1,4 @@
 import { call, put } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { sendError } from "../../..";
 import { marketsTickersError, marketsTickersData, MarketsTickersFetch } from "../actions";
@@ -20,10 +19,10 @@ export type TickerQueryResult = {
   v_quote;
 };
 
-export function* marketTickersSaga(action: MarketsTickersFetch) {
+export function* marketTickersSaga(_action: MarketsTickersFetch) {
   try {
-    // const tickers = yield call(fetchMarketTickers);
-    // yield put(marketsTickersData(tickers));
+    const tickers = yield call(fetchMarketTickers);
+    yield put(marketsTickersData(tickers));
   } catch (error) {
     console.error("marekt ticker fetch error", error);
     yield put(
