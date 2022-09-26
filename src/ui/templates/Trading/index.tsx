@@ -123,8 +123,7 @@ export function Trading() {
         onClose={() => setState(false)}
         onOpen={() => setState(true)}
         placement="start left"
-        isFullHeight
-        isFullWidth>
+        isFullHeight>
         <Markets onClose={() => setState(false)} />
       </Modal>
       <S.Container>
