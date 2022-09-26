@@ -1,5 +1,4 @@
 import { call, delay, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 import keyring from "@polkadot/ui-keyring";
 
 import {
@@ -23,8 +22,8 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {
     const { orderId, base, quote } = action.payload;
-    const baseAsset = isAssetPDEX(base) ? { polkadex: null } : { asset: base };
-    const quoteAsset = isAssetPDEX(quote) ? { polkadex: null } : { asset: quote };
+    const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
+    const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
     const api = yield select(selectRangerApi);
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
