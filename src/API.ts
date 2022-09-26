@@ -68,7 +68,7 @@ export type RecentTradesConnection = {
 export type RawTrade = {
   __typename: "RawTrade",
   m?: string | null,
-  t: number,
+  t: string,
   p: string,
   q: string,
   sid: number,
@@ -328,7 +328,7 @@ export type GetRecentTradesQuery = {
     items?:  Array< {
       __typename: "RawTrade",
       m?: string | null,
-      t: number,
+      t: string,
       p: string,
       q: string,
       sid: number,

@@ -23,6 +23,7 @@ export function* marketTickersChannelSaga(_action: MarketsTickerChannelFetch) {
       }
     }
   } catch (error) {
+    console.log("error in ticker update", error);
     yield put(
       alertPush({
         message: {
@@ -45,7 +46,6 @@ function createMarketTickersChannel(market: string) {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        console.log("recieved ticker data", market + "-ticker", data);
         const data_parsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
@@ -61,15 +61,17 @@ function createMarketTickersChannel(market: string) {
 }
 
 const convertToTicker = (elem: TickerQueryResult, market: string) => {
+  const priceChange = Number(elem.c) - Number(elem.o);
+  const priceChangePercent = (priceChange / Number(elem.o)) * 100;
   return {
     m: market,
-    priceChange24Hr: elem.pc,
-    priceChangePercent24Hr: elem.pcp,
+    priceChange24Hr: priceChange,
+    priceChangePercent24Hr: priceChangePercent,
     open: elem.o,
     close: elem.c,
     high: elem.h,
     low: elem.l,
-    volumeBase24hr: elem.v_base,
-    volumeQuote24Hr: elem.v_quote,
+    volumeBase24hr: elem.vb,
+    volumeQuote24Hr: elem.vq,
   };
 };
