@@ -16,7 +16,9 @@ export function* rangerFetchSaga() {
       // TODO
       // no extension installed, or the user did not accept the authorization
       // in this case we should inform the use and give a link to the extension
-      throw new Error("Polkadot.js extension not detected.");
+      throw new Error(
+        "Polkadot.js extension not detected. Please refresh if used for the first time."
+      );
     }
     const channel = yield call(() => fetchRanger());
     while (true) {
