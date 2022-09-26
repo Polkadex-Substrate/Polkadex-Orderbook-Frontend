@@ -1,12 +1,9 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 import keyring from "@polkadot/ui-keyring";
 
 import {
-  sendError,
   orderExecuteDataDelete,
   orderExecuteData,
-  orderExecuteError,
   OrderExecuteFetch,
   selectRangerApi,
   selectCurrentTradeAccount,
