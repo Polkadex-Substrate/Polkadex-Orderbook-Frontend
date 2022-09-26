@@ -28,7 +28,6 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const api = yield select(selectRangerApi);
     const { address } = yield select(selectCurrentTradeAccount);
     const keyringPair = keyring.getPair(address);
-    keyringPair.unlock();
     if (address !== "" && keyringPair) {
       const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
         api,

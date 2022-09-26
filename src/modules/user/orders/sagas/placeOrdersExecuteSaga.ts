@@ -33,7 +33,6 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     const { address } = yield select(selectCurrentTradeAccount);
     const mainAddress = yield select(selectLinkedMainAddress);
     const keyringPair = keyring.getPair(address);
-    keyringPair.unlock("");
     const timestamp = getNonce();
     const api = yield select(selectRangerApi);
     const client_order_id = getNewClientId();

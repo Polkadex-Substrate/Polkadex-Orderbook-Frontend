@@ -1,40 +1,39 @@
 import { keyring } from "@polkadot/ui-keyring";
 
-import { TradeAccountsAction, InjectedAccount } from "./actions";
+import { InjectedAccount, TradeAccountsAction } from "./actions";
 import {
-  USER_TRADE_ACCOUNTS_ERROR,
-  USER_TRADE_ACCOUNTS_FETCH,
-  USER_TRADE_ACCOUNTS_DATA,
-  SET_CURRENT_TRADE_ACCOUNT,
-  USER_REGISTER_TRADE_ACCOUNT_FETCH,
+  REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
+  RESET_CURRENT_TRADE_ACCOUNT,
+  SET_CURRENT_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
+  USER_REGISTER_TRADE_ACCOUNT_FETCH,
   USER_REGISTER_TRADE_ACCOUNT_RESET,
-  REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
-  SET_CURRENT_TRADE_ACCOUNT_DATA,
-  RESET_CURRENT_TRADE_ACCOUNT,
+  USER_TRADE_ACCOUNT_UNLOCK,
+  USER_TRADE_ACCOUNTS_DATA,
+  USER_TRADE_ACCOUNTS_ERROR,
+  USER_TRADE_ACCOUNTS_FETCH,
 } from "./constants";
 
 export interface TradeAccountsState {
   success?: boolean;
   isFetching: boolean;
-  allAccounts: string[];
   allBrowserAccounts: InjectedAccount[];
   selectedAccount: InjectedAccount;
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   mainAddress: string;
 }
+
 export const defaultAccount: InjectedAccount = {
   address: "",
   meta: {},
   type: "",
-  isPassworded: false,
+  isPasswordProtected: false,
 };
 const initialState: TradeAccountsState = {
   isFetching: false,
   success: false,
-  allAccounts: [],
   allBrowserAccounts: [],
   selectedAccount: defaultAccount,
   registerAccountLoading: false,
@@ -107,12 +106,44 @@ export const TradeAccountsReducer = (
         (account) => account.address !== address
       );
       keyring.forgetAddress(address);
+      keyring.forgetAccount(address);
       return {
         ...state,
         selectedAccount:
           state.selectedAccount.address === address ? defaultAccount : state.selectedAccount,
         allBrowserAccounts: newAccounts,
       };
+    }
+    case USER_TRADE_ACCOUNT_UNLOCK: {
+      const { address, password } = action.payload;
+      try {
+        const _allAccounts = [...state.allBrowserAccounts];
+        const keyringPair = keyring.getPair(address);
+        keyringPair.unlock(password.toString());
+        const account = _allAccounts.find((acc) => acc.address === address);
+        account.isPasswordProtected = false;
+        const accounts = _allAccounts.filter((acc) => acc.address !== address);
+        accounts.push(account);
+        if (state.selectedAccount.address === address) {
+          return {
+            ...state,
+            allBrowserAccounts: accounts,
+            selectedAccount: {
+              ...state.selectedAccount,
+              isPasswordProtected: false,
+            },
+          };
+        } else {
+          return {
+            ...state,
+            allBrowserAccounts: accounts,
+          };
+        }
+      } catch (e) {
+        console.log("password error", e);
+        alert("invalid password");
+        return state;
+      }
     }
     default:
       return state;

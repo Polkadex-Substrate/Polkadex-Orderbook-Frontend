@@ -40,7 +40,12 @@ export const LinkAccountTemplate = () => {
       },
       validationSchema: linkAccountValidations,
       onSubmit: (values) =>
-        registerMainAccount(currentMainAccount, values.name, mnemoicString, values.passcode),
+        registerMainAccount(
+          currentMainAccount,
+          values.name,
+          mnemoicString,
+          values.passcode.toString()
+        ),
     });
 
   useEffect(() => {

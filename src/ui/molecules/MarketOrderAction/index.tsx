@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -12,8 +13,9 @@ import {
   MarketInput,
   PassCode,
 } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder } from "@polkadex/orderbook/hooks";
+import { usePlaceOrder, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { selectCurrentTradeAccount, unlockTradeAccount } from "@polkadex/orderbook-modules";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -131,12 +133,17 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 };
 
 const ProtectPassword = () => {
+  const dispatch = useDispatch();
+  const currTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
       showPassword: false,
       password: "",
     },
-    onSubmit: (values) => isValidSize && console.log(values.password),
+    onSubmit: (values) => {
+      isValidSize &&
+        dispatch(unlockTradeAccount({ address: currTradeAddr, password: values.password }));
+    },
   });
 
   const isLoading = false;
