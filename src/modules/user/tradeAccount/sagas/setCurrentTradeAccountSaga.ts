@@ -1,5 +1,4 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { SetCurrentTradeAccount, setCurrentTradeAccountData } from "../actions";
 import * as queries from "../../../../graphql/queries";
@@ -8,6 +7,7 @@ import { notificationPush } from "../../notificationHandler";
 import { selectExtensionWalletAccounts, setMainAccountFetch } from "../../mainAccount";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { unlockAccountIfNotLocked } from "@polkadex/orderbook/helpers/unlockIfNotProtected";
 
 export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
   try {
@@ -19,6 +19,7 @@ export function* setCurrentTradeAccountSaga(action: SetCurrentTradeAccount) {
       yield put(
         setCurrentTradeAccountData({ tradeAccount: account, mainAddress: mainAccAddr })
       );
+      unlockAccountIfNotLocked(account.address);
     }
     let mainAcc = mainAccounts.find((acc) => acc.address === mainAccAddr);
     mainAcc = mainAcc || { address: mainAccAddr, meta: { name: "" } };

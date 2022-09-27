@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { generateUsername } from "friendly-username-generator";
 
 import * as S from "./styles";
 
@@ -29,7 +30,7 @@ export const CreateAccountTemplate = () => {
   const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
     useFormik({
       initialValues: {
-        name: "trade-account-2",
+        name: generateUsername({ useRandomNumber: false }),
         passcode: "",
       } as Record<string, string>,
       validationSchema: createAccountValidations,
@@ -97,15 +98,15 @@ export const CreateAccountTemplate = () => {
                     error={errors.name && touched.name && errors.name}
                     {...getFieldProps("name")}
                   />
-                  <PassCode
-                    numInputs={5}
-                    onChange={(e) => setFieldValue("passcode", e)}
-                    value={values.passcode}
-                    name="passcode"
-                    label="5-digit trading password (Optional)"
-                    error={errors.passcode}
-                    isDisabled={isLoading}
-                  />
+                  {/* <PassCode */}
+                  {/*  numInputs={5} */}
+                  {/*  onChange={(e) => setFieldValue("passcode", e)} */}
+                  {/*  value={values.passcode} */}
+                  {/*  name="passcode" */}
+                  {/*  label="5-digit trading password (Optional)" */}
+                  {/*  error={errors.passcode} */}
+                  {/*  isDisabled={isLoading} */}
+                  {/* /> */}
                   <Button
                     type="submit"
                     size="extraLarge"

@@ -44,7 +44,7 @@ export const LinkAccountTemplate = () => {
           currentMainAccount,
           values.name,
           mnemoicString,
-          values.passcode.toString()
+          values.passcode.toString().length > 0 ? values.passcode.toString() : null
         ),
     });
 
@@ -109,16 +109,15 @@ export const LinkAccountTemplate = () => {
                     disabled={loading}
                     {...getFieldProps("name")}
                   />
-                  <PassCode
-                    numInputs={5}
-                    onChange={(e) => setFieldValue("passcode", e)}
-                    value={values.passcode}
-                    name="passcode"
-                    label="5-digit trading password (Optional)"
-                    error={errors.passcode}
-                    isDisabled={loading}
-                  />
-
+                  {/* <PassCode */}
+                  {/*  numInputs={5} */}
+                  {/*  onChange={(e) => setFieldValue("passcode", e)} */}
+                  {/*  value={values.passcode} */}
+                  {/*  name="passcode" */}
+                  {/*  label="5-digit trading password (Optional)" */}
+                  {/*  error={errors.passcode} */}
+                  {/*  isDisabled={loading} */}
+                  {/* /> */}
                   <Button
                     type="submit"
                     size="extraLarge"
