@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { generateUsername } from "friendly-username-generator";
 
 import * as S from "./styles";
 
@@ -29,7 +30,7 @@ export const CreateAccountTemplate = () => {
   const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
     useFormik({
       initialValues: {
-        name: "trade-account-2",
+        name: generateUsername({ useRandomNumber: false }),
         passcode: "",
       } as Record<string, string>,
       validationSchema: createAccountValidations,

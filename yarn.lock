@@ -8060,6 +8060,11 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
+friendly-username-generator@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/friendly-username-generator/-/friendly-username-generator-2.0.4.tgz#67778be83a9879b935be224f948ac933d5ad7b94"
+  integrity sha512-718y2+j8A28eEsR3AOK4Tp0U/69svwnE6CMtXAvleXHubDim/CsOc2EU4MGBkShB1WzMTO4iO/10JrKaiCc2Sw==
+
 from@~0:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/from/-/from-0.1.7.tgz#83c60afc58b9c56997007ed1a768b3ab303a44fe"
