@@ -24,6 +24,7 @@ import {
   TabContent,
   Checkbox,
   Icon,
+  Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -42,10 +43,12 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
+  const [unlockAccount, setUnlockAccount] = useState(false);
 
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
@@ -106,8 +109,20 @@ export const WithdrawTemplate = () => {
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
   const readyToClaim = readyWithdrawals;
 
+  const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
+
   return (
     <>
+      <Modal open={unlockAccount} onClose={handleUnlockClose}>
+        <Modal.Body>
+          <UnlockAccount
+            onSubmit={() => {
+              // Add action..
+              setUnlockAccount(false);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Deposit | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />

@@ -149,8 +149,7 @@ export const AccountManagerTemplate = () => {
         <Modal.Body>
           <UnlockAccount
             handleClose={handleUnlockClose}
-            handleSelectTradeAccount={handleSelectTradeAccount}
-            address={unlockAccount.address}
+            onSubmit={() => handleSelectTradeAccount(unlockAccount.address)}
           />
         </Modal.Body>
       </Modal>

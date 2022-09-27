@@ -30,7 +30,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       throw new Error("Please select a main account!");
     }
     const { mnemonic, password, name } = action.payload;
-    const { pair } = keyring.addUri(mnemonic, password.length > 0 ? password : null, {
+    const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
     tradeAddress = pair.address;
