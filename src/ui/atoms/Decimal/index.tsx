@@ -22,6 +22,7 @@ export interface DecimalProps {
    * If undefined, only integer part of the number is highlighted
    */
   prevValue?: string | number;
+  hasStyle?: boolean;
 }
 
 const handleRemoveExponent = (value: DecimalProps["children"]) => {
@@ -150,14 +151,14 @@ class Decimal extends React.Component<DecimalProps> {
   }
 
   public render() {
-    const { children, fixed, prevValue, thousSep, floatSep } = this.props;
+    const { children, fixed, prevValue, thousSep, floatSep, hasStyle = true } = this.props;
 
     if (prevValue) {
       return this.highlightNumbers(children, prevValue, fixed, thousSep, floatSep);
     } else {
       return (
         <React.Fragment>
-          <span style={{ opacity: 0.6 }}>
+          <span style={{ opacity: hasStyle ? 0.6 : 1 }}>
             {Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)}
           </span>
           <span>{Decimal.getNumberAfterDot(children, fixed)}</span>
