@@ -106,8 +106,18 @@ export const WithdrawTemplate = () => {
   );
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
+
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
   const readyToClaim = readyWithdrawals;
+
+  const hasPendingClaims = useMemo(
+    () =>
+      readyToClaim.reduce(
+        (acc, value) => acc + value.items.filter((v) => v.status === "READY").length,
+        0
+      ),
+    [readyToClaim]
+  );
 
   const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
 
@@ -220,7 +230,10 @@ export const WithdrawTemplate = () => {
                         <S.HistoryTab>Pending</S.HistoryTab>
                       </TabHeader>
                       <TabHeader>
-                        <S.HistoryTab>Ready to Claim</S.HistoryTab>
+                        <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
+                          Ready to Claim
+                          <span>{hasPendingClaims}</span>
+                        </S.HistoryTab>
                       </TabHeader>
                       <TabHeader>
                         <S.HistoryTab>Claimed</S.HistoryTab>

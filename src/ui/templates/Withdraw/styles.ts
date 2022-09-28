@@ -343,14 +343,28 @@ export const HistoryHeader = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
-export const HistoryTab = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+export const HistoryTab = styled.div<{ isActive?: boolean; hasPendingClaims?: boolean }>`
+  ${({ theme, isActive, hasPendingClaims }) => css`
+    display: flex;
+    gap: 0.2rem;
     border-bottom: 2px solid;
     border-bottom-color: ${isActive ? theme.colors.primary : "transparent"};
     padding-bottom: 1.5rem;
-    opacity: ${isActive ? 1 : 0.5};
+    opacity: ${isActive || hasPendingClaims ? 1 : 0.5};
+    font-weight: ${hasPendingClaims ? "bold" : "normal"};
     cursor: pointer;
     user-select: none;
+    span {
+      display: ${hasPendingClaims ? "flex" : "none"};
+      font-size: 1rem;
+      background: ${theme.colors.primary};
+      width: 1.3rem;
+      height: 1.3rem;
+      border-radius: 2rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: -0.3rem;
+    }
   `}
 `;
 export const HistoryHeaderAside = styled.div`
