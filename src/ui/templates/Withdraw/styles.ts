@@ -244,20 +244,18 @@ export const History = styled.div`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 1rem;
     margin-top: 4rem;
-    flex: 1;
     h2 {
       padding: 2rem 2rem 0 2rem;
-
       font-size: 1.8rem;
       font-weight: 500;
     }
   `}
 `;
 export const HistoryWrapper = styled.div`
-  max-height: 35rem;
+  max-height: 26rem;
   overflow-y: hidden;
   padding: 2rem;
-  height: 100%;
+  height: fit-content;
   :hover {
     overflow-y: auto;
   }
