@@ -13,6 +13,8 @@ import {
   USER_TRADE_ACCOUNTS_DATA,
   USER_TRADE_ACCOUNTS_ERROR,
   USER_TRADE_ACCOUNTS_FETCH,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
 } from "./constants";
 
 export interface TradeAccountsState {
@@ -23,6 +25,7 @@ export interface TradeAccountsState {
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   mainAddress: string;
+  removesInLoading: Array<string>;
 }
 
 export const defaultAccount: InjectedAccount = {
@@ -38,6 +41,7 @@ const initialState: TradeAccountsState = {
   selectedAccount: defaultAccount,
   registerAccountLoading: false,
   registerAccountSuccess: false,
+  removesInLoading: [],
   mainAddress: "",
 };
 
@@ -114,6 +118,16 @@ export const TradeAccountsReducer = (
         allBrowserAccounts: newAccounts,
       };
     }
+    case USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH:
+      return {
+        ...state,
+        removesInLoading: [...state.removesInLoading, action.payload.address],
+      };
+    case USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA:
+      return {
+        ...state,
+        removesInLoading: state.removesInLoading.filter((v) => v !== action.payload.address),
+      };
     case USER_TRADE_ACCOUNT_UNLOCK: {
       const { address, password } = action.payload;
       try {
