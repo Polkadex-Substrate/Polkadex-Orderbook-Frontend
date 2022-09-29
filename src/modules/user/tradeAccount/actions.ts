@@ -93,6 +93,7 @@ export interface RemoveProxyAccountFromChainFetch {
 
 export interface RemoveProxyAccountFromChainData {
   type: typeof USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA;
+  payload: { address: string };
 }
 
 export interface UnlockTradeAccount {
@@ -184,8 +185,11 @@ export const removeProxyAccountFromChainFetch = (
   payload,
 });
 
-export const removeProxyAccountFromChainData = (): RemoveProxyAccountFromChainData => ({
+export const removeProxyAccountFromChainData = (
+  payload: RemoveProxyAccountFromChainData["payload"]
+): RemoveProxyAccountFromChainData => ({
   type: USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+  payload,
 });
 
 export const unlockTradeAccount = (

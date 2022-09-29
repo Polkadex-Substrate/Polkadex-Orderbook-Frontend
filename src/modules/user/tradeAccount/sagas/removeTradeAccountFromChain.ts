@@ -51,15 +51,14 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
             time: new Date().getTime(),
           })
         );
-        yield put(removeProxyAccountFromChainData());
+        yield put(removeProxyAccountFromChainData({ address: action.payload.address }));
         yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
       } else {
         throw new Error(res.message);
       }
     }
   } catch (error) {
-    yield put(removeProxyAccountFromChainData());
-
+    yield put(removeProxyAccountFromChainData({ address: action.payload.address }));
     yield put(
       sendError({
         error,

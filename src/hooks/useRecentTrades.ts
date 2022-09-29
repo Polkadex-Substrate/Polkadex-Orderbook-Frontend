@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import { getIsDecreasingArray } from "../helpers/getIsDecreasingArray";
+
 import {
   selectCurrentMarket,
   selectRecentTradesOfCurrentMarket,
@@ -18,25 +20,19 @@ export function useRecentTrades() {
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
   const allRecentTrades = useMemo(
     () =>
-      recentTrades
-        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-        .filter((v) => {
-          switch (fieldValue.filterBy) {
-            case "buy":
-              return v.side === "buy";
-            case "sell":
-              return v.side === "sell";
-            default:
-              return v;
-          }
-        }),
-    [recentTrades, fieldValue.filterBy]
+      recentTrades.sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      ),
+    [recentTrades]
   );
+
   useEffect(() => {
     if (currentMarket?.m) dispatch(recentTradesChannelFetch(currentMarket));
   }, [dispatch, currentMarket]);
 
+  const isDecreasing = getIsDecreasingArray(recentTrades);
   return {
+    isDecreasing,
     recentTrades: allRecentTrades,
     quoteUnit: currentMarket?.quote_ticker,
     baseUnit: currentMarket?.base_ticker,

@@ -18,13 +18,11 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
     const market = action.payload?.m;
     if (market) {
       const res: any = yield call(() => fetchRecentTrade(market));
-      const isDecreasing = getIsDecreasingArray(res, "p");
       const trades: PublicTrade[] = res.map((x, i) => ({
         market_id: x.m,
         price: x.p,
         amount: x.q,
         timestamp: new Date(Number(x.t)).toISOString(),
-        side: isDecreasing[i] ? "sell" : "buy",
       }));
       yield put(recentTradesData(trades));
     }
