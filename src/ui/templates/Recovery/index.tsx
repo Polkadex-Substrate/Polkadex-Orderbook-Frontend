@@ -1,34 +1,21 @@
 // TODO: Move mnemonic state to Formik
 import Link from "next/link";
 import { Formik, Form } from "formik";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import Head from "next/head";
 
 import * as S from "./styles";
-import { importValiations } from "./validations";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
-import { Button, Icon, InputPrimary } from "@polkadex/orderbook-ui/molecules";
-import { MnemonicImport } from "@polkadex/orderbook-ui/molecules/Mnemonic";
-import { importAccountFetch, selectImportAccountSuccess } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Button, Icon, InputPrimary, MnemonicImport } from "@polkadex/orderbook-ui/molecules";
+import { importValiations } from "@polkadex/orderbook/validations";
 
 const defaultValues = {
-  password: "",
   accountName: "Main Account",
 };
 
 export const RecoveryTemplate = () => {
-  const dispatch = useDispatch();
-  const signUpSuccess = useReduxSelector(selectImportAccountSuccess);
-  const router = useRouter();
-
   const [state, setState] = useState({ tags: [] });
-  useEffect(() => {
-    if (signUpSuccess) router.push("/login");
-  }, [signUpSuccess, router]);
 
   return (
     <>
@@ -43,9 +30,9 @@ export const RecoveryTemplate = () => {
             <S.Container>
               <S.AsideLeft>
                 <S.Title>
-                  <h1>Import an account</h1>
+                  <h1>Import proxy account</h1>
                   <p>
-                    Do you have an account? <Link href="/login"> Sign in </Link>
+                    Do you have a proxy account? <Link href="/login"> Sign in </Link>
                   </p>
                 </S.Title>
                 <S.Form>
@@ -54,15 +41,8 @@ export const RecoveryTemplate = () => {
                     validationSchema={importValiations}
                     onSubmit={async (values) => {
                       if (state.tags.length === 12) {
-                        const { password, accountName } = values;
+                        const { accountName } = values;
                         const mnemoicString = state.tags.join(" ");
-                        dispatch(
-                          importAccountFetch({
-                            accountName,
-                            mnemonic: mnemoicString,
-                            password,
-                          })
-                        );
                       }
                     }}>
                     {({ errors, touched, values }) => (
@@ -80,13 +60,6 @@ export const RecoveryTemplate = () => {
                           error={
                             errors.accountName && touched.accountName && errors.accountName
                           }
-                        />
-                        <InputPrimary
-                          label="Password"
-                          placeholder="Enter your password for this account"
-                          type="password"
-                          name="password"
-                          error={errors.password && touched.password && errors.password}
                         />
                         <Button
                           size="extraLarge"

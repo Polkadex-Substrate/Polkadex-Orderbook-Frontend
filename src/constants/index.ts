@@ -28,3 +28,6 @@ export const POLKADEX_ASSET = {
   symbol: "PDEX",
   assetId: POLKADEX_ASSSET_ID,
 };
+
+export const ALLOWED_ASSET_IDS = ["1", "2", "3", "4", "5"];
+export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";

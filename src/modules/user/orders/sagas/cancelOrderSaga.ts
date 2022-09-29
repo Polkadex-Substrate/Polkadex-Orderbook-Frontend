@@ -1,4 +1,5 @@
 import { call, delay, put, select } from "redux-saga/effects";
+import keyring from "@polkadot/ui-keyring";
 
 import {
   orderCancelData,
@@ -6,23 +7,26 @@ import {
   orderCancelError,
   OrderCancelFetch,
 } from "..";
+import * as mutation from "../../../../graphql/mutations";
 
-import { selectRangerApi, selectUserInfo, sendError } from "@polkadex/orderbook-modules";
 import {
-  createCancelOrderPayloadSigned,
-  placeCancelOrderToEnclave,
-} from "@polkadex/orderbook/helpers/createOrdersHelpers";
+  notificationPush,
+  selectCurrentTradeAccount,
+  selectRangerApi,
+  sendError,
+} from "@polkadex/orderbook-modules";
+import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
-import { selectEnclaveRpcClient } from "@polkadex/orderbook/modules/public/enclaveRpcClient";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {
     const { orderId, base, quote } = action.payload;
-    const baseAsset = isAssetPDEX(base) ? { polkadex: null } : { asset: base };
-    const quoteAsset = isAssetPDEX(quote) ? { polkadex: null } : { asset: quote };
-    const client = yield select(selectEnclaveRpcClient);
+    const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
+    const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
     const api = yield select(selectRangerApi);
-    const { address, keyringPair } = yield select(selectUserInfo);
+    const { address } = yield select(selectCurrentTradeAccount);
+    const keyringPair = keyring.getPair(address);
     if (address !== "" && keyringPair) {
       const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
         api,
@@ -32,13 +36,25 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
         quoteAsset
       );
       const res = yield call(() =>
-        placeCancelOrderToEnclave(client, order_id, account, pair, signature)
+        executeCancelOrder([order_id, account, pair, signature], address)
       );
+      console.info("cancelled order: ", res);
       yield put(orderCancelData());
+      yield put(
+        notificationPush({
+          type: "SuccessAlert",
+          message: {
+            title: "Order cancelled",
+            description: `OrderId: ${orderId}`,
+          },
+          time: new Date().getTime(),
+        })
+      );
       yield delay(1000);
       yield put(orderCancelDataDelete());
     }
   } catch (error) {
+    console.error("cancel order error: ", error);
     yield put(
       sendError({
         error,
@@ -50,3 +66,12 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     );
   }
 }
+const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
+  const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
+  const res = await sendQueryToAppSync(
+    mutation.cancel_order,
+    { input: { payload } },
+    proxyAddress
+  );
+  return res;
+};

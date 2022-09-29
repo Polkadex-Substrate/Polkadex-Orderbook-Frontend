@@ -1,12 +1,23 @@
 import { call, put } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { sendError } from "../../..";
 import { marketsTickersError, marketsTickersData, MarketsTickersFetch } from "../actions";
 import { Ticker } from "..";
 import * as queries from "../../../../graphql/queries";
 
-export function* marketTickersSaga(action: MarketsTickersFetch) {
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+export type TickerQueryResult = {
+  m?: string;
+  o: string;
+  c: string;
+  h: string;
+  l: string;
+  vb: string;
+  vq: string;
+};
+
+export function* marketTickersSaga(_action: MarketsTickersFetch) {
   try {
     const tickers = yield call(fetchMarketTickers);
     yield put(marketsTickersData(tickers));
@@ -25,7 +36,22 @@ export function* marketTickersSaga(action: MarketsTickersFetch) {
 }
 
 const fetchMarketTickers = async (): Promise<Ticker[]> => {
-  const res: any = await API.graphql({ query: queries.getAllMarketTickers });
-  const tickers = res.data.getAllMarketTickers.items;
+  const res: any = await sendQueryToAppSync(queries.getAllMarketTickers);
+  const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
+  const tickers: Ticker[] = tickersRaw.map((elem) => {
+    const priceChange = Number(elem.c) - Number(elem.o);
+    const priceChangePercent = (priceChange / Number(elem.o)) * 100;
+    return {
+      m: elem.m,
+      priceChange24Hr: priceChange,
+      priceChangePercent24Hr: priceChangePercent,
+      open: elem.o,
+      close: elem.c,
+      high: elem.h,
+      low: elem.l,
+      volumeBase24hr: elem.vb,
+      volumeQuote24Hr: elem.vq,
+    };
+  });
   return tickers;
 };

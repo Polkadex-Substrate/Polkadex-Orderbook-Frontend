@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import * as S from "./styles";
@@ -11,37 +10,24 @@ import {
   Button,
   Dropdown,
   Icon,
-  Loading,
+  LoadingSection,
   MyAccountLoading,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  connectPhoneFetch,
-  selectConnectPhoneSuccess,
   selectExtensionWalletAccounts,
-  selectMainAccount,
+  selectCurrentMainAccount,
   setMainAccountFetch,
 } from "@polkadex/orderbook-modules";
-const HeaderBack = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.HeaderBack),
-  {
-    ssr: false,
-  }
-);
-
-const QrCode = dynamic(() => import("@polkadex/orderbook-ui/organisms/QrCode"), {
-  ssr: false,
-});
-const PaperWallet = dynamic(() => import("@polkadex/orderbook-ui/templates/PaperWallet"), {
-  ssr: false,
-});
+import { QrCode, PaperWallet, HeaderBack } from "@polkadex/orderbook-ui/organisms";
 
 export const ConnectToPhone = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const componentRef = useRef();
+
   // Change to Saga
   const isLoading = false;
   const isSuccess = true;
@@ -51,11 +37,8 @@ export const ConnectToPhone = () => {
     router?.query?.mnemonic as string
   );
 
-  const selectedAccount = useReduxSelector(selectMainAccount);
+  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const connectPhoneSuccess = useReduxSelector(selectConnectPhoneSuccess);
-  const showQrCode = connectPhoneSuccess || isMnemonicFromSignUp;
-  const showUnlockQr = !connectPhoneSuccess && !isMnemonicFromSignUp;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -64,11 +47,7 @@ export const ConnectToPhone = () => {
     <S.Main>
       {!!mnemonic?.length && (
         <div style={{ display: "none" }}>
-          <PaperWallet
-            mnemonic={mnemonic}
-            mnemoicString={mnemoicString}
-            forwardedRef={componentRef}
-          />
+          <PaperWallet mnemonic={mnemonic} mnemoicString={mnemoicString} ref={componentRef} />
         </div>
       )}
       <S.Wrapper>
@@ -80,7 +59,7 @@ export const ConnectToPhone = () => {
                 <h1>Connect to Phone</h1>
                 <p>Trade Anywhere Anytime</p>
               </S.Title>
-              <Loading isActive={!isSuccess} color="primaryBackgroundOpacity">
+              <LoadingSection isActive={true} color="primaryBackgroundOpacity">
                 <S.Step>
                   <S.StepTitle>
                     <h3>Download Polkadex App</h3>
@@ -129,11 +108,7 @@ export const ConnectToPhone = () => {
                                 key={index}
                                 accountName={item.meta.name || `Account ${index}`}
                                 address={item.address}
-                                onClick={() =>
-                                  connectPhoneSuccess
-                                    ? undefined
-                                    : dispatch(setMainAccountFetch(accounts[index]))
-                                }
+                                onClick={() => dispatch(setMainAccountFetch(accounts[index]))}
                               />
                             ))
                           ) : (
@@ -150,21 +125,15 @@ export const ConnectToPhone = () => {
                         I am aware that Polkadex does not store any information related to
                         Wallet or Mnemonic.
                       </p>
-                      {showUnlockQr && (
-                        <Button
-                          background="secondaryBackground"
-                          color="black"
-                          type="button"
-                          onClick={() => {
-                            dispatch(connectPhoneFetch({ mnemonic: mnemoicString }));
-                          }}>
+                      {!isMnemonicFromSignUp && (
+                        <Button background="secondaryBackground" color="black" type="button">
                           Unlock QR Code
                         </Button>
                       )}
                     </S.SelectAccount>
                   </S.StepContent>
                 </S.Step>
-                {showQrCode && (
+                {isMnemonicFromSignUp && (
                   <>
                     <S.Step>
                       <S.StepTitle>
@@ -207,7 +176,7 @@ export const ConnectToPhone = () => {
                     </S.Step>
                   </>
                 )}
-              </Loading>
+              </LoadingSection>
             </S.AsideLeft>
             <S.AsideRight></S.AsideRight>
           </S.Container>
@@ -227,6 +196,13 @@ export const ConnectToPhone = () => {
           </S.Card>
         </S.Box>
       </S.Wrapper>
+      <style jsx global>
+        {`
+          body {
+            overflow-y: scroll;
+          }
+        `}
+      </style>
     </S.Main>
   );
 };

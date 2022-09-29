@@ -5,33 +5,27 @@ import {
   PROFILE_USER_DATA,
   PROFILE_USER_ERROR,
   PROFILE_USER_FETCH,
-  PROFILE_USER_LIST_DATA,
-  PROFILE_USER_LIST_FETCH,
+  PROFILE_USER_CHANGE_INIT_BANNER,
 } from "./constants";
-
-import { UserSkeleton } from "./";
-
-import { ProxyAccount } from "@polkadex/orderbook-modules";
 
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
 }
-
+export interface UserChangeInitBanner {
+  type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
+  payload: boolean;
+}
 export interface UserInfo {
   type: typeof PROFILE_USER_DATA;
   payload: {
-    user: Partial<ProxyAccount>;
+    email: string;
+    isConfirmed: boolean;
+    isAuthenticated: boolean;
+    userExists: boolean;
+    session?: any;
+    jwt?: string;
+    shouldShowInitialBanner?: boolean;
   };
-}
-
-export interface UserListData {
-  type: typeof PROFILE_USER_LIST_DATA;
-  payload: {
-    userList: Array<UserSkeleton>;
-  };
-}
-export interface UserListFetch {
-  type: typeof PROFILE_USER_LIST_FETCH;
 }
 
 export interface UserError {
@@ -48,24 +42,19 @@ export type ProfileAction =
   | UserInfo
   | UserError
   | UserReset
-  | UserListFetch
-  | UserListData;
+  | UserChangeInitBanner;
 
 export const userFetch = (): UserFetch => ({
   type: PROFILE_USER_FETCH,
 });
 
-export const userData = (payload: UserInfo["payload"]): UserInfo => ({
-  type: PROFILE_USER_DATA,
+export const userChangeInitBanner = (payload = false): UserChangeInitBanner => ({
+  type: PROFILE_USER_CHANGE_INIT_BANNER,
   payload,
 });
 
-export const userListFetch = (): UserListFetch => ({
-  type: PROFILE_USER_LIST_FETCH,
-});
-
-export const userListData = (payload: UserListData["payload"]): UserListData => ({
-  type: PROFILE_USER_LIST_DATA,
+export const userData = (payload: UserInfo["payload"]): UserInfo => ({
+  type: PROFILE_USER_DATA,
   payload,
 });
 

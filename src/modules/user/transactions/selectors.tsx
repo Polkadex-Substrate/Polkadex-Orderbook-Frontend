@@ -11,5 +11,8 @@ export const selectTransactionError = (state: RootState): string =>
 export const selectTransactionLoading = (state: RootState): boolean =>
   state.user.transactions.loading;
 
-export const selectTransactionData = (state: RootState): Transaction[] =>
+export const selectTransactions = (state: RootState): Transaction[] =>
   state.user.transactions.transactions;
+
+export const selectTransactionDepositData = (state: RootState): Transaction[] =>
+  state.user.transactions.transactions?.filter((value) => value.txn_type === "DEPOSIT");

@@ -1,21 +1,18 @@
 import styled, { css } from "styled-components";
-import media, { generateMedia } from "styled-media-query";
+import media from "styled-media-query";
 
-import { LogoText } from "../../molecules/Logo/styles";
+import { LogoText } from "../../../../ui/molecules/Logo/styles";
 
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
-const customMedia = generateMedia({
-  custom: "1060px",
-});
-
 export const Wrapper = styled.section`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  margin-bottom: 1rem;
-  gap: 1rem;
+  ${({ theme }) => css`
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  `}
 `;
 
 export const ContainerPair = styled.div`
@@ -23,6 +20,9 @@ export const ContainerPair = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 780px) {
+    padding-top: 1rem;
+  }
 `;
 
 export const ContainerInfo = styled.div`
@@ -46,10 +46,8 @@ export const WrapperInfo = styled.div`
   display: flex;
   flex: 1;
   gap: 1rem;
-  @media screen and (max-width: 1100px) {
-    margin-top: 7rem;
-  }
-  @media screen and (max-width: 850px) {
+
+  @media screen and (max-width: 780px) {
     flex-direction: column;
   }
 `;
@@ -72,7 +70,7 @@ export const Box = styled.div`
       top: 0;
       right: 0;
       width: 100%;
-      z-index: 27;
+      z-index: 32;
       background: ${theme.colors.primaryBackground};
       box-shadow: ${theme.shadows.tertiary};
     }
@@ -99,22 +97,17 @@ export const BoxWrapper = styled.div`
 `;
 
 export const VolumeHigh = styled.div`
-  ${({ theme }) => css`
-    align-items: center;
-
-    p {
-      color: inherit;
-    }
-  `}
+  align-items: center;
+  p {
+    color: inherit;
+  }
 `;
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
-  ${({ theme, isNegative }) => css`
-    align-items: baseline;
-    p {
-      color: inherit;
-    }
-  `}
+  align-items: baseline;
+  p {
+    color: inherit;
+  }
 `;
 
 export const WrapperVolume = styled.div`

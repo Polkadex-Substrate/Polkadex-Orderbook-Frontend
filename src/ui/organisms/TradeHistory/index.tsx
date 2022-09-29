@@ -1,86 +1,52 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import * as S from "./styles";
 
-import {
-  selectCurrentMarket,
-  selectUserLoggedIn,
-  selectUserTrades,
-  userTradesFetch,
-  selectTradesLoading,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  TradeHistoryCard,
-  TradeHistoryCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
-import { localeDate } from "@polkadex/web-helpers";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
+import { EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
 
-export const TradeHistory = () => {
-  const dispatch = useDispatch();
-
-  const list = useReduxSelector(selectUserTrades);
-
-  const fetching = useReduxSelector(selectTradesLoading);
-  const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const { width } = useWindowSize();
-
-  useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
-  }, [userLoggedIn, currentMarket, dispatch]);
+export const TradeHistory = ({ filters }) => {
+  const { priceFixed, amountFixed, trades } = useTradeHistory(filters);
+  const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Wrapper>
-      {width > 1110 && (
-        <S.Header>
-          <span>Date</span>
-          <span>Symbol</span>
-          <span>Side</span>
-          <span>Price</span>
-          <span>Quantity</span>
-        </S.Header>
-      )}
-      {!fetching ? (
-        <S.Content>
-          {list?.length &&
-            list.map((trade, idx) => {
-              const {
-                order_id,
-                timestamp,
-                price,
-                amount,
-                order_side,
-                fee,
-                base_asset,
-                quote_asset,
-              } = trade;
-              const date = localeDate(new Date(Number(timestamp)), "fullDate");
-              const symbol = `${getSymbolFromAssetId(base_asset)} / ${getSymbolFromAssetId(
-                quote_asset
-              )}`;
-              const CardComponent =
-                width > 1130 ? TradeHistoryCard : TradeHistoryCardReponsive;
+      {trades.length ? (
+        <S.Table>
+          <S.Thead>
+            <S.Tr>
+              <S.Th>Pair</S.Th>
+              <S.Th>Date</S.Th>
+              <S.Th>Price</S.Th>
+              <S.Th>Quantity</S.Th>
+            </S.Tr>
+          </S.Thead>
+          <S.Tbody>
+            {trades.map((trade, i) => {
+              const date = new Date(trade.timestamp).toLocaleString();
+              const baseUnit = getAsset(trade.baseAsset).symbol;
+              const quoteUnit = getAsset(trade.quoteAsset).symbol;
               return (
-                <CardComponent
-                  key={idx}
-                  date={date}
-                  symbol={symbol}
-                  fee={fee.cost}
-                  profit="0.00000"
-                  side={order_side}
-                  price={price}
-                  quantity={amount}
+                <TradeHistoryCard
+                  key={i}
+                  isSell={trade.side === "Ask"}
+                  baseUnit={baseUnit}
+                  quoteUnit={quoteUnit}
+                  data={[
+                    { value: date },
+                    { value: Decimal.format(trade.price, priceFixed, ",") },
+                    { value: Decimal.format(trade.qty, amountFixed, ",") },
+                  ]}
                 />
               );
             })}
-        </S.Content>
+          </S.Tbody>
+        </S.Table>
       ) : (
-        <LoadingTransactions />
+        <S.EmptyWrapper>
+          <EmptyData />
+        </S.EmptyWrapper>
       )}
     </S.Wrapper>
   );

@@ -1,30 +1,38 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
-import { ProxyAccount } from "../../..";
-import { balancesData, BalancesFetch, BalanceBase } from "../actions";
+import { ProxyAccount, selectCurrentMainAccount } from "../../..";
+import { balancesData, BalancesFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
-import { selectUserInfo } from "../../profile";
 
 import {
   selectAssetsFetchSuccess,
   selectAssetIdMap,
+  isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-export function* balancesSaga(balancesFetch: BalancesFetch) {
+type BalanceQueryResult = {
+  a: string;
+  f: string;
+  r: string;
+  p: string;
+};
+
+export function* balancesSaga(_balancesFetch: BalancesFetch) {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentMainAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (account.address && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(account.main_addr));
+      const balances = yield call(() => fetchbalancesAsync(account.address));
       const list = balances.map((balance: IBalanceFromDb) => {
-        const asset =
-          balance.asset_type === "PDEX" ? POLKADEX_ASSET : assetMap[balance.asset_type];
+        const asset = isAssetPDEX(balance.asset_type)
+          ? POLKADEX_ASSET
+          : assetMap[balance.asset_type];
         return {
-          assetId: asset.assetId,
+          assetId: asset.assetId.toString(),
           name: asset.name,
           symbol: asset.symbol,
           reserved_balance: balance.reserved_balance,
@@ -34,7 +42,7 @@ export function* balancesSaga(balancesFetch: BalancesFetch) {
       yield put(balancesData({ balances: list, timestamp: new Date().getTime() }));
     }
   } catch (error) {
-    console.warn(error);
+    console.error(error);
     yield put(
       alertPush({
         message: {
@@ -55,16 +63,16 @@ type IBalanceFromDb = {
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
-  const res: any = await API.graphql({
-    query: queries.getAllBalancesByMainAccount,
-    variables: { main_account: account },
+  const res: any = await sendQueryToAppSync(queries.getAllBalancesByMainAccount, {
+    main_account: account,
   });
-  const balances = res.data.getAllBalancesByMainAccount.items.map((val) => {
+  const balancesRaw: BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
+  const balances = balancesRaw.map((val) => {
     return {
-      asset_type: val.asset,
-      reserved_balance: val.reserved,
-      free_balance: val.free,
-      pending_withdrawal: val.pending_withdrawal,
+      asset_type: val.a,
+      reserved_balance: val.r,
+      free_balance: val.f,
+      pending_withdrawal: val.p,
     };
   });
   return balances;

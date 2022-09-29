@@ -36,11 +36,7 @@ export interface OrderBookChannelFetch {
 type IncData = { price: string; qty: string; side: "Bid" | "Ask" };
 export interface DepthDataIncrement {
   type: typeof DEPTH_DATA_INCREMENT;
-  payload: {
-    puts: IncData[];
-    dels: IncData[];
-    m: string; // marketid
-  };
+  payload: IncData[];
 }
 
 export type OrderBookActions = OrderBookFetch | OrderBookData | OrderBookError;

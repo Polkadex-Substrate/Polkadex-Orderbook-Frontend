@@ -5,28 +5,30 @@ import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
 import {
-  selectUserInfo,
+  selectCurrentTradeAccount,
   selectUserSession,
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
+import { Utils } from "@polkadex/web-helpers";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+type TradesQueryResult = {
+  m: string;
+  p: string;
+  q: string;
+  s: string;
+  t: string;
+};
 
 export function* fetchTradesSaga() {
   try {
-    const { address } = yield select(selectUserInfo);
+    const { address } = yield select(selectCurrentTradeAccount);
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
-      const tradesRaw = yield call(fetchUserTrades, address, dateFrom, dateTo);
-      const trades: UserTrade[] = tradesRaw.map((trade) => ({
-        market_id: trade.m,
-        price: trade.p,
-        qty: trade.q,
-        side: trade.s,
-        timestamp: new Date(trade.time).getTime(),
-        baseAsset: trade.m.split("-")[0],
-        quoteAsset: trade.m.split("-")[1],
-      }));
+      const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }
   } catch (error) {
@@ -42,27 +44,27 @@ export function* fetchTradesSaga() {
   }
 }
 
-type TradesDb = {
-  main_account: string;
-  m: string;
-  p: string;
-  q: string;
-  time: string;
-};
-
 const fetchUserTrades = async (
   proxy_account: string,
-  dateFrom: string,
-  dateTo: string
-): Promise<TradesDb> => {
-  const res: any = await API.graphql({
-    query: queries.listTradesByMainAccount,
-    variables: {
-      main_account: proxy_account,
-      from: dateFrom,
-      to: dateTo,
-    },
+  dateFrom: Date,
+  dateTo: Date
+): Promise<UserTrade[]> => {
+  // TODO: make limit resonable by utilizing nextToken
+  const res: any = await sendQueryToAppSync(queries.listTradesByMainAccount, {
+    main_account: proxy_account,
+    from: dateFrom.toISOString(),
+    to: dateTo.toISOString(),
+    limit: 1000,
   });
-
-  return res.data.listTradesByMainAccount.items;
+  const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
+  const trades: UserTrade[] = tradesRaw.map((trade) => ({
+    market_id: trade.m,
+    price: trade.p,
+    qty: trade.q,
+    side: trade.s,
+    timestamp: Number(trade.t),
+    baseAsset: trade.m.split("-")[0],
+    quoteAsset: trade.m.split("-")[1],
+  }));
+  return trades;
 };

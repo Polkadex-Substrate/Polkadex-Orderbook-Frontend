@@ -17,8 +17,8 @@ import { Market, Ticker } from "./types";
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
 export const defaultTickers: Ticker = {
   m: "0-0",
-  priceChange24Hr: "0",
-  priceChangePercent24Hr: "0",
+  priceChange24Hr: 0,
+  priceChangePercent24Hr: 0,
   open: "0",
   close: "0",
   high: "0",
@@ -141,7 +141,6 @@ export const marketsReducer = (
         tickerLoading: false,
         tickers: action.payload,
       };
-
     case MARKET_TICKER_CHANNEL_DATA: {
       const update = action.payload;
       const tickers = [...state.tickers];

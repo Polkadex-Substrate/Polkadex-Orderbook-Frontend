@@ -6,12 +6,11 @@ import {
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
-  ORDER_CHANNEL_UPDATE_DATA,
+  ORDER_UPDATE_EVENT_DATA,
 } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { OpenOrders } from "@polkadex/orderbook-ui/organisms/OpenOrders";
 
 const { defaultStorageLimit } = defaultConfig;
 export interface OrdersHistoryState {
@@ -50,36 +49,44 @@ export const ordersHistoryReducer = (
     case OPEN_ORDERS_HISTORY_DATA:
       return { ...state, openOrders: sliceArray(action.payload.list, defaultStorageLimit) };
 
-    case ORDER_CHANNEL_UPDATE_DATA: {
+    case ORDER_UPDATE_EVENT_DATA: {
       const openOrders = [...state.openOrders];
       const allOrders = [...state.list];
       const newOrder = action.payload;
-      // check if orderId is preseent in open Orders
-      let idx = openOrders.findIndex((order) => order.id === newOrder.id);
-      if (idx >= 0 && newOrder.status === "OPEN") {
-        // order present in open_order list, got partially filled
-        openOrders[idx] = newOrder;
-      } else if (idx >= 0 && newOrder.status !== "OPEN") {
-        // order present in open_order list, got fully filled or cancelled, remove from list
-        openOrders.splice(idx, 1);
-      } else if (idx < 0 && newOrder.status === "OPEN") {
-        // not present in open_orders list , ie order just created
-        openOrders.push(newOrder);
-      }
-      // check if orderId is preseent in all Orders
-      idx = allOrders.findIndex((order) => order.id === newOrder.id);
-      if (idx >= 0) {
-        allOrders[idx] = newOrder;
+      // add to orderhistory for all cases
+      const updatedOrderHistory = replaceOrPushOrder(allOrders, newOrder);
+      let updatedOpenOrders = [];
+      if (newOrder.status === "OPEN") {
+        updatedOpenOrders = replaceOrPushOrder(openOrders, newOrder);
       } else {
-        allOrders.push(newOrder);
+        // remove from open orders if it is closed
+        updatedOpenOrders = removeOrderFromList(openOrders, newOrder);
       }
       return {
         ...state,
-        list: allOrders,
-        openOrders,
+        list: updatedOrderHistory,
+        openOrders: updatedOpenOrders,
       };
     }
     default:
       return state;
   }
+};
+
+// TODO: add test cases for this
+const replaceOrPushOrder = (orders: OrderCommon[], newOrder: OrderCommon): OrderCommon[] => {
+  const index = orders.findIndex((order) => order.id === newOrder.id);
+  if (index === -1) {
+    return [...orders, newOrder];
+  }
+  return [...orders.slice(0, index), newOrder, ...orders.slice(index + 1)];
+};
+
+// TODO: add test cases for this
+const removeOrderFromList = (orders: OrderCommon[], newOrder: OrderCommon): OrderCommon[] => {
+  const index = orders.findIndex((order) => order.id === newOrder.id);
+  if (index === -1) {
+    return orders;
+  }
+  return [...orders.slice(0, index), ...orders.slice(index + 1)];
 };

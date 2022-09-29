@@ -1,121 +1,72 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import * as S from "./styles";
 
-import {
-  selectCurrentMarket,
-  selectUserLoggedIn,
-  selectOrdersHistory,
-  selectUserInfo,
-  selectOrdersHistoryLoading,
-  userOrdersHistoryFetch,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  OrderHistoryCard,
-  OrderHistoryCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { localeDate } from "@polkadex/web-helpers";
-import { DEFAULT_MARKET } from "@polkadex/web-constants";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { OrderHistoryCard, EmptyData } from "@polkadex/orderbook-ui/molecules";
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
-const timeFrom = String(Math.floor((Date.now() - 1000 * 60 * 60 * 24) / 1000));
-const handleHighlightValue = (prevValue: string, curValue: string) => {
-  let highlighted = "";
-  let val = curValue;
-  let prev = prevValue;
-
-  while (val !== prev && val.length > 0) {
-    highlighted = val[val.length - 1] + highlighted;
-    val = val.slice(0, -1);
-    prev = prev.slice(0, -1);
-  }
-
-  return (
-    <>
-      {val}
-      {highlighted}
-    </>
-  );
-};
-
-export const OrderHistory = () => {
-  const dispatch = useDispatch();
-
-  const list = useReduxSelector(selectOrdersHistory);
-  const userAccount = useReduxSelector(selectUserInfo);
-
-  const fetching = useReduxSelector(selectOrdersHistoryLoading);
-  const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const { width } = useWindowSize();
-
-  useEffect(() => {
-    if (userLoggedIn && currentMarket) {
-      dispatch(userOrdersHistoryFetch());
-    }
-  }, [userLoggedIn, currentMarket, dispatch, userAccount]);
+export const OrderHistory = ({ filters }) => {
+  const { priceFixed, amountFixed, orders } = useOrderHistory(filters);
+  const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Wrapper>
-      {width > 1110 && (
-        <S.Header>
-          <span>Date</span>
-          <span>Pair</span>
-          <span>Type</span>
-          <span>Side</span>
-          <span>Price</span>
-          <span>Executed</span>
-          <span>Amount</span>
-          <span>Status</span>
-        </S.Header>
-      )}
-      {!fetching ? (
-        <S.Content>
-          {list?.map((item, i) => {
-            const {
-              order_id,
-              timestamp,
-              base_asset,
-              quote_asset,
-              order_side,
-              price,
-              amount,
-              filled_qty,
-              status,
-              order_type,
-            } = item;
-            const priceFixed = currentMarket ? currentMarket.price_precision : 0;
-            const amountFixed = currentMarket ? currentMarket.amount_precision : 0;
-            const isSell = order_side === "Sell";
-            const orderPrice = price;
-            // TODO: Check  average object
-            // const orderPrice = order_type === "Limit" ? price : average;
-            const date = localeDate(new Date(Number(timestamp)), "fullDate");
-            const CardComponent = width > 1130 ? OrderHistoryCard : OrderHistoryCardReponsive;
-            return (
-              <CardComponent
-                key={order_id}
-                date={date}
-                baseUnit={getSymbolFromAssetId(base_asset)}
-                quoteUnit={getSymbolFromAssetId(quote_asset)}
-                side={order_side.toUpperCase()}
-                isSell={isSell}
-                price={Decimal.format(orderPrice, priceFixed, ",")}
-                amount={Decimal.format(amount, amountFixed, ",")}
-                total={Number(price) * Number(amount)}
-                executed={filled_qty}
-                type={order_type}
-                transactionType={status}
-              />
-            );
-          })}
-        </S.Content>
+      {orders?.length ? (
+        <S.Table>
+          <S.Thead>
+            <S.Tr>
+              <S.Th>Id</S.Th>
+              <S.Th>Pair</S.Th>
+              <S.Th>Date</S.Th>
+              <S.Th>Type</S.Th>
+              <S.Th>Price</S.Th>
+              <S.Th>Total</S.Th>
+              <S.Th>Filled</S.Th>
+            </S.Tr>
+          </S.Thead>
+          <S.Tbody>
+            {orders &&
+              orders.map((order: OrderCommon, i) => {
+                const [base, quote] = order.m.split("-");
+                const date = new Date(order.time).toLocaleString();
+                const isSell = order.side === "Ask";
+                const isMarket = order.order_type === "MARKET";
+                const baseUnit = getAsset(base)?.symbol;
+                const quoteUnit = getAsset(quote)?.symbol;
+                const avgPrice = order.avg_filled_price;
+                const shortId =
+                  order.id.slice(0, 4) + "..." + order.id.slice(order.id.length - 4);
+
+                return (
+                  <OrderHistoryCard
+                    key={i}
+                    id={shortId}
+                    isSell={isSell}
+                    orderSide={order.side}
+                    orderType={order.order_type}
+                    baseUnit={baseUnit}
+                    quoteUnit={quoteUnit}
+                    data={[
+                      { value: date },
+                      { value: order.order_type },
+                      { value: order.status },
+                      { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
+                      { value: Decimal.format(order.qty, amountFixed, ",") },
+                      { value: Decimal.format(order.filled_quantity, amountFixed, ",") },
+                      {
+                        value: Decimal.format(avgPrice, priceFixed, ","),
+                      },
+                    ]}
+                  />
+                );
+              })}
+          </S.Tbody>
+        </S.Table>
       ) : (
-        <LoadingTransactions />
+        <S.EmptyWrapper>
+          <EmptyData />
+        </S.EmptyWrapper>
       )}
     </S.Wrapper>
   );

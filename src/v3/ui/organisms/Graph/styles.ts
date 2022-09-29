@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-import { Content as Dropdown } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -10,7 +9,7 @@ export const Wrapper = styled.div`
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
     min-height: 30rem;
-    @media screen and (min-width: 980px) {
+    @media screen and (min-width: 780px) {
       grid-template-columns: 1fr auto;
     }
   `}
@@ -20,6 +19,12 @@ export const WrapperGraph = styled.section`
   flex-direction: column;
   width: 100%;
   padding: 2rem;
+  @media screen and (min-width: 1240px) {
+    min-width: 58rem;
+  }
+  @media screen and (min-width: 1080px) and (max-width: 1240px) {
+    min-width: 36rem;
+  }
 `;
 // Header
 export const Header = styled.div`
@@ -36,6 +41,7 @@ export const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  max-height: 38rem;
 `;
 
 export const FlexWrapper = styled.div`
@@ -102,17 +108,14 @@ export const FilterIcon = styled.div<{ isActive?: boolean }>`
     gap: 0.5rem;
     align-items: center;
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    background: ${isActive ? theme.colors.primary : "none"};
     svg {
       width: 1.5rem;
-      stroke: ${isActive ? theme.colors.white : theme.colors.text};
-      fill: ${isActive ? theme.colors.white : theme.colors.text};
+      stroke: ${theme.colors.text};
+      fill: ${theme.colors.text};
       margin: 0;
     }
     span {
       white-space: nowrap;
-      color: ${isActive ? theme.colors.white : theme.colors.text};
     }
   `}
 `;
@@ -126,7 +129,6 @@ export const Indicator = styled.div`
     border: 1px solid ${theme.colors.secondaryBackground};
     max-height: 60vh;
     overflow-x: hidden;
-
     overflow-y: auto;
   `}
 `;
@@ -158,5 +160,23 @@ export const Button = styled.button<{ isActive?: boolean }>`
     white-space: nowrap;
     background: ${isActive ? theme.colors.primary : "none"};
     padding: 0.5rem 1rem;
+  `}
+`;
+
+export const IconComponent = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.colors.primaryBackgroundOpacity};
+    border-radius: 20%;
+    width: 2.3rem;
+    height: 2.3rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
   `}
 `;

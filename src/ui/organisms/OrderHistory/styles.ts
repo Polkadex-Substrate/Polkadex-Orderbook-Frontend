@@ -1,30 +1,63 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import media from "styled-media-query";
 
-export const Wrapper = styled.section``;
+export const Wrapper = styled.div``;
 
-export const Template = styled.div`
-  display: grid;
-  grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 4rem;
-  grid-gap: 0.5rem;
+// Table Styles
+export const Table = styled.table`
+  width: 100%;
   text-align: left;
 `;
+const Grid = styled.thead`
+  tr {
+    grid-template-columns: 1fr 1fr 1.5fr repeat(4, 1fr);
+  }
+`;
 
-export const Header = styled(Template)`
-  ${({ theme }) => css`
+export const Thead = styled(Grid)`
+  font-size: 1.2rem;
+  color: #8ba1be;
+  tr {
+    display: grid;
     margin-bottom: 1rem;
     padding: 0 1rem;
-    span {
-      font-size: ${theme.font.sizes.xxsmall};
-      font-weight: 500;
-      opacity: 0.5;
+  }
+`;
+
+export const Tbody = styled(Grid)`
+  font-size: 1.3rem;
+
+  ${media.greaterThan("large")`
+    height: 32rem;
+    display: block;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      display: none;
     }
+    :hover {
+      overflow-y: auto;
+    }
+  `}
+  tr {
+    display: grid;
+    align-items: center;
+    ${media.lessThan("large")`
+      grid-template-columns: repeat(4,1fr);
+      grid-row-gap: 2rem;
+      grid-column-gap: 1rem;
+    `}
+  }
+`;
+
+export const Tr = styled.tr``;
+export const Th = styled.th`
+  font-weight: 500;
+  ${media.lessThan("large")`
+    display: none;
   `}
 `;
 
-export const Content = styled.div`
-  display: grid;
-  overflow-x: hidden;
-  @media screen and (min-width: 500px) and (max-width: 1110px) {
-    grid-template-columns: 1fr 1fr;
-  }
+export const EmptyWrapper = styled.div`
+  padding: 10rem 0;
 `;

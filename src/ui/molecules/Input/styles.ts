@@ -22,6 +22,34 @@ export const Wrapper = styled.div`
 
 export const Primary = styled.div``;
 
+export const LineContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    input {
+      width: 100%;
+      display: block;
+      margin-top: 1rem;
+      color: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const LineBox = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    border-bottom: 1px solid
+      ${error ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    span {
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
 export const Box = styled.div`
   ${({ theme }) => css`
     padding: 1.2rem;
@@ -45,12 +73,55 @@ export const Box = styled.div`
     }
   `}
 `;
-
-export const Error = styled.span`
+export const PassCodeWrapper = styled.div`
   ${({ theme }) => css`
-    color: ${theme.colors.primary};
+    span {
+      margin-bottom: 1rem;
+      display: block;
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const PassCode = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+  gap: 1rem;
+`;
+export const LinePassCode = styled.div<{ error?: boolean }>`
+  ${({ theme, error }) => css`
+    display: flex;
+
+    input {
+      width: 100%;
+      text-align: center;
+      color: ${theme.colors.text};
+      border-bottom: 1px solid;
+      border-bottom-color: ${error ? theme.colors.primary : theme.colors.text}66;
+      padding-bottom: 1rem;
+      :-webkit-outer-spin-button,
+      :-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      &[type="number"] {
+        -moz-appearance: textfield !important;
+      }
+      :disabled {
+        border-bottom-color: gray;
+        opacity: 0.6;
+      }
+      ::placeholder {
+        opacity: 0.1;
+      }
+    }
+  `}
+`;
+export const Error = styled.span<{ hasMargin?: boolean }>`
+  ${({ theme, hasMargin = true }) => css`
+    color: ${theme.colors.primary} !important;
     font-size: 1.2rem;
-    margin-left: 1.3rem;
+    margin-left: ${hasMargin ? "1.3rem" : "none"};
   `}
 `;
 

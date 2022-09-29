@@ -3,5 +3,10 @@
     "configLevel": "project",
     "useProfile": false,
     "awsConfigFilePath": "/home/emmanuel/.amplify/awscloudformation/bUx1rum4ue"
+  },
+  "orderbook": {
+    "configLevel": "project",
+    "useProfile": true,
+    "profileName": "default"
   }
 }

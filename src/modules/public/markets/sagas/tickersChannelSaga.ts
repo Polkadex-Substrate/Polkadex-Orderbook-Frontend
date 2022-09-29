@@ -7,9 +7,12 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../types";
 import { selectCurrentMarket } from "..";
 
-import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
+import { TickerQueryResult } from "./marketTickersFetchSaga";
 
-export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
+import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+
+export function* marketTickersChannelSaga(_action: MarketsTickerChannelFetch) {
   try {
     const market: Market = yield select(selectCurrentMarket);
     if (market?.m) {
@@ -20,6 +23,7 @@ export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
       }
     }
   } catch (error) {
+    console.log("error in ticker update", error);
     yield put(
       alertPush({
         message: {
@@ -35,11 +39,18 @@ export function* marketTickersChannelSaga(action: MarketsTickerChannelFetch) {
 function createMarketTickersChannel(market: string) {
   return eventChannel((emit) => {
     const subscription = API.graphql({
-      query: subscriptions.onNewTicker,
-      variables: { m: market },
+      query: subscriptions.websocket_streams,
+      variables: { name: market + "-ticker" },
+      authToken: READ_ONLY_TOKEN,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
       next: (data) => {
-        emit(marketsTickersChannelData(data.value.data.onNewTicker));
+        const data_parsed: TickerQueryResult = JSON.parse(
+          data.value.data.websocket_streams.data
+        );
+        const ticker_data = convertToTicker(data_parsed, market);
+        emit(marketsTickersChannelData(ticker_data));
       },
       error: (err) => console.warn(err),
     });
@@ -49,16 +60,18 @@ function createMarketTickersChannel(market: string) {
   });
 }
 
-/*
-{
-    "m": "PDEX-1",
-    "priceChange24Hr": "-0.19999999999999996",
-    "priceChangePercent24Hr": "-0.16666666666666663",
-    "open": "1.2",
-    "close": "1",
-    "high": "1.2",
-    "low": "1.2",
-    "volumeBase24hr": "3",
-    "volumeQuote24Hr": "3.2"
-}
-*/
+const convertToTicker = (elem: TickerQueryResult, market: string) => {
+  const priceChange = Number(elem.c) - Number(elem.o);
+  const priceChangePercent = (priceChange / Number(elem.o)) * 100;
+  return {
+    m: market,
+    priceChange24Hr: priceChange,
+    priceChangePercent24Hr: priceChangePercent,
+    open: elem.o,
+    close: elem.c,
+    high: elem.h,
+    low: elem.l,
+    volumeBase24hr: elem.vb,
+    volumeQuote24Hr: elem.vq,
+  };
+};

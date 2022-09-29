@@ -1,25 +1,35 @@
-import { API } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
 import { PublicTrade, recentTradesData, sendError } from "../../../";
 import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
+import { getIsDecreasingArray } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
+type RawTrades = {
+  m: string;
+  p: string;
+  q: string;
+  t: string;
+};
 export function* recentTradesFetchSaga(action: RecentTradesFetch) {
   try {
     const market = action.payload?.m;
     if (market) {
       const res: any = yield call(() => fetchRecentTrade(market));
-      const trades: PublicTrade[] = res.map((x) => ({
+      const isDecreasing = getIsDecreasingArray(res, "p");
+      const trades: PublicTrade[] = res.map((x, i) => ({
         market_id: x.m,
         price: x.p,
         amount: x.q,
-        timestamp: x.t,
+        timestamp: new Date(Number(x.t)).toISOString(),
+        side: isDecreasing[i] ? "sell" : "buy",
       }));
       yield put(recentTradesData(trades));
     }
   } catch (error) {
+    console.log("recent trades", error);
     yield put(
       sendError({
         error,
@@ -32,7 +42,7 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
   }
 }
 
-const fetchRecentTrade = async (market: string, limit = 50) => {
-  const res = await API.graphql({ query: getRecentTrades, variables: { m: market, limit } });
+const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
+  const res: any = await sendQueryToAppSync(getRecentTrades, { m: market, limit });
   return res.data.getRecentTrades.items;
 };

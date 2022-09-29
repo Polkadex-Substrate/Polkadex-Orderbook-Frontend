@@ -1,25 +1,52 @@
 import { AppProps } from "next/app";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Script from "next/script";
+import { OverlayProvider } from "@react-aria/overlays";
+import dynamic from "next/dynamic";
+import keyring from "@polkadot/ui-keyring";
+import NextNProgress from "nextjs-progressbar";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import { wrapper } from "../store";
-import { useAppDaemon } from "../hooks/useAppDaemon";
+import { useInit } from "../hooks/useInit";
+import { useUserDataFetch } from "../hooks/useUserDataFetch";
 
-import { Message } from "@polkadex/orderbook-ui/organisms";
-import {
-  alertDelete,
-  selectAlertState,
-  selectCurrentColorTheme,
-} from "@polkadex/orderbook-modules";
+import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
+const { cryptoWaitReady } = await import("@polkadot/util-crypto");
 
+const Message = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
+  {
+    ssr: false,
+  }
+);
+
+const Notifications = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/organisms/Notifications").then((mod) => mod.Notifications),
+  {
+    ssr: false,
+  }
+);
 function App({ Component, pageProps }: AppProps) {
-  useAppDaemon();
+  useInit();
+  useUserDataFetch();
 
   return (
     <ThemeWrapper>
+      <GoogleAnalytics trackPageViews />
+      <NextNProgress
+        color="#E6007A"
+        startPosition={0.3}
+        height={2}
+        showOnShallow={true}
+        options={{
+          showSpinner: false,
+        }}
+      />
       <GlobalStyles />
       <Component {...pageProps} />
       <Analytics />
@@ -28,32 +55,25 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const ThemeWrapper = ({ children }) => {
-  const [state, setState] = useState(false);
   const color = useSelector(selectCurrentColorTheme);
-  const alert = useSelector(selectAlertState);
 
-  const dispatch = useDispatch();
+  const cryptoWait = async () => {
+    await cryptoWaitReady();
+    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+  };
 
   useEffect(() => {
-    setState(true);
+    cryptoWait();
   }, []);
 
-  if (!state) return <div />;
-
   return (
-    <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-      {/* {!!notifications.length && <Notifications />} */}
-      {alert.status && (
-        <Message
-          isVisible={alert.status}
-          onClose={() => dispatch(alertDelete())}
-          type={alert.type}
-          title={alert.message.title}
-          description={alert.message.description}
-        />
-      )}
-      {children}
-    </ThemeProvider>
+    <OverlayProvider>
+      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        <Notifications />
+        <Message />
+        {children}
+      </ThemeProvider>
+    </OverlayProvider>
   );
 };
 

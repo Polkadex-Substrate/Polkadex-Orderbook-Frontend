@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
 import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
 export const Main = styled.div`
@@ -78,12 +77,6 @@ export const SelectContent = styled.div`
     max-height: 20rem;
     overflow-y: scroll;
     scrollbar-width: none;
-    ${Dropdown} {
-      cursor: pointer;
-      :not(:last-child) {
-        margin-bottom: 1rem;
-      }
-    }
   `}
 `;
 

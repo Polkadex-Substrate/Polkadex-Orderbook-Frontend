@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { Dropdown } from "../../molecules";
 
-import DropdownItem from "../../molecules/DropdownItem";
-import Heading from "../../molecules/Heading";
-import OrderBookIcon from "../../molecules/OrderBookIcon";
-import OrderBookTable from "../../molecules/OrderBookTable";
-import { DropdownContent, DropdownHeader } from "../../molecules";
-import { useOrderbook } from "@polkadex/orderbook/v2/hooks";
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook-ui/molecules";
+import { useOrderbook } from "@polkadex/orderbook/hooks";
+import {
+  DropdownHeader,
+  OrderBookTable,
+  OrderBookIcon,
+  Heading,
+} from "@polkadex/orderbook-ui/molecules";
 
 const OrderBook = () => {
   const {
@@ -46,19 +46,19 @@ const OrderBook = () => {
               handleChange={handleChange}
             />
           </S.ContainerActions>
-          <Dropdown
-            header={<DropdownHeader>{sizeState.size}</DropdownHeader>}
-            direction="bottom"
-            isClickable>
-            <DropdownContent>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <div>
+                <DropdownHeader>{sizeState.size}</DropdownHeader>
+              </div>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="tertiaryBackground">
               {initialState.map((item) => (
-                <DropdownItem
-                  key={item.size}
-                  title={item.size}
-                  handleAction={() => handleAction(item)}
-                />
+                <Dropdown.Item key={item.size} onAction={() => handleAction(item)}>
+                  {item.size}
+                </Dropdown.Item>
               ))}
-            </DropdownContent>
+            </Dropdown.Menu>
           </Dropdown>
         </S.ContainerTitle>
       </S.WrapperTitle>

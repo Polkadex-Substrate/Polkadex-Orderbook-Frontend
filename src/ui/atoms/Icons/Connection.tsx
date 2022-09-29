@@ -6,9 +6,11 @@ function SvgConnection(props: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
-      viewBox="0 0 14 19"
+      viewBox="0 0 13 14"
       {...props}>
-      <path d="M7 17L7 5.5M2 17L2 8M12 17L12 1.5" strokeWidth="3" strokeLinecap="round" />
+      <rect x="10" width="3" height="14" stroke="none" />
+      <rect x="5" y="4" width="3" height="10" stroke="none" />
+      <rect y="8" width="3" height="6" stroke="none" />
     </svg>
   );
 }

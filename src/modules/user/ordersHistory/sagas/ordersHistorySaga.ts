@@ -3,20 +3,39 @@ import { call, put, select } from "redux-saga/effects";
 import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
-import { alertPush } from "../../../";
-import { ProxyAccount, selectUserInfo } from "../../profile";
+import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
+import { ProxyAccount } from "../../profile";
+import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
-import { selectUserSession, UserSessionPayload } from "../../session";
+import { Utils } from "@polkadex/web-helpers";
+import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+type orderHistoryQueryResult = {
+  u: string;
+  cid: string;
+  id: string;
+  t: string;
+  m: string;
+  s: string;
+  ot: string;
+  st: string;
+  p: string;
+  q: string;
+  afp: string;
+  fq: string;
+  fee: string;
+};
 
 export function* ordersHistorySaga() {
   try {
-    const account: ProxyAccount = yield select(selectUserInfo);
+    const account: ProxyAccount = yield select(selectCurrentTradeAccount);
     if (account.address) {
-      const userSession: UserSessionPayload  = yield select(selectUserSession);
-      const {dateFrom, dateTo} = userSession;
+      const userSession: UserSessionPayload = yield select(selectUserSession);
+      const { dateFrom, dateTo } = userSession;
       const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
       yield put(userOrdersHistoryData({ list: orders }));
     }
@@ -34,18 +53,34 @@ export function* ordersHistorySaga() {
 }
 const fetchOrders = async (
   proxy_acc: string,
-  dateFrom: string,
-  dateTo: string,
+  dateFrom: Date,
+  dateTo: Date
 ): Promise<OrderCommon[]> => {
-
-  const res: any = await API.graphql({
-    query: queries.listOrderHistorybyMainAccount,
-    variables: {
-      main_account: proxy_acc,
-      from: dateFrom,
-      to: dateTo,
-    },
+  // TODO: make limit resonable by utilizing nextToken
+  const dateFromStr = Utils.date.formatDateToISO(dateFrom);
+  const dateToStr = Utils.date.formatDateToISO(dateTo);
+  const res: any = await sendQueryToAppSync(queries.listOrderHistorybyMainAccount, {
+    main_account: proxy_acc,
+    from: dateFromStr,
+    to: dateToStr,
+    limit: 1000,
   });
-  const orders = res.data.listOrderHistorybyMainAccount.items;
+  const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;
+  const orders: OrderCommon[] = ordersRaw.map((order: any) => ({
+    main_account: proxy_acc,
+    id: order.id,
+    client_order_id: order.cid,
+    time: new Date(Number(order.t)).toISOString(),
+    m: order.m, // marketid
+    side: order.s,
+    order_type: order.ot,
+    status: order.st,
+    price: Number(order.p),
+    qty: Number(order.q),
+    avg_filled_price: order.afp,
+    filled_quantity: order.fq,
+    fee: order.fee,
+  }));
+
   return orders;
 };

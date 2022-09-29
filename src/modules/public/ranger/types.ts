@@ -3,8 +3,8 @@ export const orderbookTypes = {
   LookupSource: "MultiAddress",
   AssetId: {
     _enum: {
-      POLKADEX: null,
       Asset: "u128",
+      POLKADEX: null,
     },
   },
   CurrencyId: "AssetId",
@@ -20,15 +20,18 @@ export const orderbookTypes = {
     data: "AccountData",
   },
   OrderPayload: {
+    client_order_id: "H256",
     user: "AccountId",
-    pair: "TradingPair",
+    main_account: "AccountId",
+    pair: "String",
     side: "OrderSide",
     order_type: "OrderType",
-    qty: "u128",
-    price: "u128",
-    nonce: "u32",
+    quote_order_quantity: "String", // Quantity is defined in base asset
+    qty: "String",
+    price: "String", // Price is defined in quote asset per unit base asset
+    timestamp: "i64",
   },
-  CancelOrderPayload: { id: "String" },
+  order_id: "H256",
   TradingPair: {
     base_asset: "AssetId",
     quote_asset: "AssetId",
@@ -45,11 +48,16 @@ export const orderbookTypes = {
       MARKET: null,
     },
   },
+  AssetIdString: {
+    _enum: {
+      asset: "String",
+      polkadex: null,
+    },
+  },
   WithdrawPayload: {
-    asset_id: "AssetId",
-    amount: "Balance",
-    account: "AccountId",
-    nonce: "u32",
+    asset_id: "AssetIdString",
+    amount: "String",
+    timestamp: "i64",
   },
 };
 

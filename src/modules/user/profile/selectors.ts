@@ -1,26 +1,26 @@
-import { RootState } from "../../";
+import { ProfileState, RootState } from "../../";
 
-import { ProxyAccount } from "./types";
-
-import { UserSkeleton } from ".";
-
-export const selectUserLoggedIn = (state: RootState): boolean => {
-  return state.user.profile.userData.user.address !== "";
+export const selectUserSignedIn = (state: RootState): boolean => {
+  return state.user.polkadotWallet.selectedAccount?.address !== "";
 };
-export const selectHasUser = (state: RootState): boolean =>
-  !!state.user.profile.userData.user.address;
+export const selectUserIdentity = (state: RootState): string =>
+  state.user.profile.userData.email;
 
-export const selectUserInfo = (state: RootState): ProxyAccount =>
-  state.user.profile.userData.user;
+export const selectSignedInUserInfo = (state: RootState): ProfileState["userData"] =>
+  state.user.profile.userData;
 
-export const selectUserFetching = (state: RootState): boolean =>
-  state.user.profile.userData.isFetching;
+export const selectShouldShowInitialBanner = (state: RootState): boolean =>
+  state.user.profile.userData.shouldShowInitialBanner;
 
-export const selectUserDataChange = (state: RootState): boolean | undefined =>
-  state.user.profile.userData.success;
+export const selectIsUserSignedIn = (state: RootState): boolean => {
+  return state.user.profile.userData.isAuthenticated;
+};
 
-export const selectAllProxyAccounts = (state: RootState): UserSkeleton[] =>
-  state.user.profile.allUsers;
+export const selectIsUserVerified = (state: RootState): boolean => {
+  return state.user.profile.userData.isConfirmed;
+};
 
-export const selectProxyAddress = (state: RootState): string =>
-  state.user.profile.userData.user.address;
+export const selectUserFetching = (state: RootState): boolean => state.user.profile.isFetching;
+
+export const selectUserFetchSuccess = (state: RootState): boolean | undefined =>
+  state.user.profile.isSuccess;

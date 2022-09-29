@@ -1,70 +1,43 @@
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-
 import * as S from "./styles";
 
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  FundCard,
-  FundCardReponsive,
-  LoadingTransactions,
-} from "@polkadex/orderbook-ui/molecules";
-import {
-  selectUserBalance,
-  balancesFetch,
-  selectHasUser,
-  selectBalancesLoading,
-} from "@polkadex/orderbook-modules";
-import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
+import { useFunds } from "@polkadex/orderbook/hooks";
+import { EmptyData, FundsCard } from "@polkadex/orderbook-ui/molecules";
 
 export const Funds = () => {
-  const dispatch = useDispatch();
-  const { width } = useWindowSize();
-  const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasUser);
-  const isLoading = useReduxSelector(selectBalancesLoading);
+  const { balances } = useFunds();
 
-  useEffect(() => {
-    if (hasUser) dispatch(balancesFetch());
-  }, [hasUser, dispatch]);
   return (
     <S.Wrapper>
-      {width > 1110 && (
-        <S.Header>
-          <span>Token</span>
-          <span>Total</span>
-          <span>Available</span>
-          <span>Reserved</span>
-          <span>Actions</span>
-        </S.Header>
-      )}
-      {!isLoading ? (
-        <S.Content>
-          {balances?.length &&
-            balances?.map((token, i) => {
-              const CardComponent = width > 1130 ? FundCard : FundCardReponsive;
-              const assetid = Number(token.symbol);
-              const tokenName = getSymbolFromAssetId(assetid);
+      {balances.length ? (
+        <S.Table>
+          <S.Thead>
+            <S.Tr>
+              <S.Th>Token</S.Th>
+              <S.Th>Available</S.Th>
+              <S.Th>Locked</S.Th>
+              <S.Th>Reserved for withdraw</S.Th>
+              <S.Th>Actions</S.Th>
+            </S.Tr>
+          </S.Thead>
+          <S.Tbody>
+            {balances.map((balance, i) => {
               return (
-                <CardComponent
+                <FundsCard
                   key={i}
-                  tokenTicker={token.symbol}
-                  tokenTickerName={token.tickerName}
-                  tokenName={tokenName}
-                  totalAmount={parseFloat(token.total).toFixed(3)}
-                  totalAmountFiat="0.0000000"
-                  availableAmount={parseFloat(token.free).toFixed(3)}
-                  availableAmountFiat="0.0000000"
-                  reservedAmount={parseFloat(token.used).toFixed(3)}
-                  reservedAmountFiat="0.0000000"
-                  handleTransfer={undefined}
-                  handleTrade={undefined}
+                  name={balance.name}
+                  ticker={balance.symbol}
+                  amount={Number(balance.free_balance) || 0}
+                  lockedAmount={Number(balance.reserved_balance) || 0}
+                  id={balance.symbol}
                 />
               );
             })}
-        </S.Content>
+          </S.Tbody>
+        </S.Table>
       ) : (
-        <LoadingTransactions />
+        <S.EmptyWrapper>
+          <EmptyData />
+        </S.EmptyWrapper>
       )}
     </S.Wrapper>
   );

@@ -1,131 +1,68 @@
 import styled, { css } from "styled-components";
+import media from "styled-media-query";
 
-export const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 12rem 8rem 3.5rem 3rem 1fr 1fr 1fr 1fr 1rem;
-  grid-gap: 0.5rem;
-  text-align: left;
-  font-size: 1.3rem;
-  padding: 0 1rem;
-  :not(:last-child) {
-    margin-bottom: 1rem;
-  }
-  span {
-    display: block;
-    font-weight: 500;
-    font-size: 1.1rem;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-  }
-  }
-`;
+import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Container = styled.div`
+export const Tr = styled.tr`
   ${({ theme }) => css`
-    position: relative;
-    align-self: baseline;
-    span {
-      display: block;
-      font-weight: 500;
-      font-size: ${theme.font.sizes.xxxsmall};
-    }
-    button {
-      color: #0090e1;
-      font-size: ${theme.font.sizes.xxxsmall};
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border-radius: 0 1rem 1rem 1rem;
+    :nth-child(even) {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
     }
   `}
 `;
-
-export const Side = styled.span<{ isSell?: boolean }>`
-  ${({ theme, isSell }) => css`
-    color: ${isSell ? theme.colors.primary : theme.colors.green};
-    text-transform: capitalize;
-    font-size: ${theme.font.sizes.xxxsmall};
-  `}
-`;
-
-export const Flex = styled.div`
+export const Td = styled.td``;
+export const ContainerFlex = styled.div`
   display: flex;
   align-items: center;
 `;
 
-export const FlexJustify = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-`;
-
-export const Box = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.primaryBackgroundOpacity};
-    box-shadow: ${theme.shadows.tertiary};
-    border-radius: 0.5rem;
-    margin: 0 0.5rem;
-    margin: 0 0.5rem 1.5rem 0.5rem;
-  `}
-`;
-
-export const Header = styled.div<{ isSell?: boolean }>`
+export const Image = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
-    justify-content: space-between;
-    display: center;
-    padding: 1.5rem;
-
-    p {
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-    span {
-      display: block;
-      padding: 0.1rem 0.2rem;
-      background: ${isSell ? theme.colors.primary : theme.colors.green};
-      width: fit-content;
-      border-radius: 0.4rem;
-      text-transform: capitalize;
-      font-weight: 500;
-      margin-top: 0.4rem;
-    }
-    button {
-      opacity: 0.7;
-    }
-  `}
-`;
-
-export const Footer = styled.div`
-  padding: 1.5rem;
-`;
-
-export const Content = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackground};
-    padding: 1.5rem;
-    p,
-    span {
-      font-size: ${theme.font.sizes.xxxsmall};
-    }
-  `}
-`;
-
-export const Info = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    :not(:last-child) {
-      margin-bottom: 1rem;
+    justify-content: center;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    border-radius: 30rem;
+    margin-right: 0.5rem;
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: ${isSell ? theme.colors.primary : theme.colors.green};
     }
-    p,
-    span {
-      font-size: ${theme.font.sizes.xxxsmall};
+  `}
+`;
+export const ContainerActions = styled.div`
+  ${({ theme }) => css`
+    button {
+      background: ${theme.colors.primary};
+      color: ${theme.colors.white};
+      font-size: 1.2rem;
+      border-radius: 0.3rem;
+      white-space: nowrap;
+      padding: 0.3rem;
+      transition: background 0.5s ease-in-out;
+      :hover {
+        background: ${theme.colors.primary}99;
+      }
     }
-    span {
-      opacity: 0.7;
-    }
-    p {
-      font-weight: 500;
-    }
+
+    ${media.lessThan("large")`
+      justify-content:flex-start;
+    `}
+  `}
+`;
+export const Tag = styled.span`
+  display: block;
+  margin-bottom: 1rem;
+  display: none;
+  opacity: 0.5;
+  ${media.lessThan("large")`
+    display: block;
   `}
 `;

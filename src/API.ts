@@ -2,80 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type RawTradeInput = {
-  m: string,
-  t: string,
-  p: string,
-  q: string,
-};
-
-export type RawTrade = {
-  __typename: "RawTrade",
-  m: string,
-  t: string,
-  p: string,
-  q: string,
-};
-
-export type SetOrderbookInput = {
-  m: string,
-  seq: string,
-  levels?: Array< SetPriceLevelInput | null > | null,
-};
-
-export type SetPriceLevelInput = {
-  price: string,
-  qty: string,
-  side?: OrderSide | null,
-};
-
-export enum OrderSide {
-  Bid = "Bid",
-  Ask = "Ask",
-}
-
-
-export type SetPriceLevel = {
-  __typename: "SetPriceLevel",
-  price: string,
-  qty: string,
-  side?: OrderSide | null,
-};
-
-export type TickerStatInput = {
-  m: string,
-  priceChange24Hr: string,
-  priceChangePercent24Hr: string,
-  open: string,
-  close: string,
-  high: string,
-  low: string,
-  volumeBase24hr: string,
-  volumeQuote24Hr: string,
-};
-
-export type TickerStats = {
-  __typename: "TickerStats",
-  m: string,
-  priceChange24Hr: string,
-  priceChangePercent24Hr: string,
-  open: string,
-  close: string,
-  high: string,
-  low: string,
-  volumeBase24hr: string,
-  volumeQuote24Hr: string,
-};
-
-export type AddNewAssetInput = {
-  ticker: string,
-  withdrawal_fee: string,
-};
-
-export type Asset = {
-  __typename: "Asset",
-  ticker: string,
-  withdrawal_fee: string,
+export type UserActionInput = {
+  payload: string,
 };
 
 export type Channel = {
@@ -84,161 +12,39 @@ export type Channel = {
   data: string,
 };
 
-export type User = {
-  __typename: "User",
-  main_account: string,
-  proxy_accounts?: string | null,
-};
-
-export type BalanceUpdateInput = {
-  main_account: string,
-  asset: string,
-  free: string,
-  reserved: string,
-  pending_withdrawal: string,
-};
-
-export type Balance = {
-  __typename: "Balance",
-  main_account: string,
-  asset: string,
-  free: string,
-  reserved: string,
-  pending_withdrawal: string,
-};
-
-export type OrderUpdateInput = {
-  main_account: string,
-  id: string,
-  time: string,
-  m: string,
-  side: OrderSide,
-  order_type: OrderType,
-  status: OrderStatus,
-  price: string,
-  qty: string,
-  avg_filled_price: string,
-  filled_quantity: string,
-  fee: string,
-};
-
-export enum OrderType {
-  LIMIT = "LIMIT",
-  MARKET = "MARKET",
-}
-
-
-export enum OrderStatus {
-  OPEN = "OPEN",
-  PARTIAL = "PARTIAL",
-  CLOSED = "CLOSED",
-  CANCELLED = "CANCELLED",
-}
-
-
-export type Order = {
-  __typename: "Order",
-  main_account: string,
-  id: string,
-  time: string,
-  m: string,
-  side: OrderSide,
-  order_type: OrderType,
-  status: OrderStatus,
-  price: string,
-  qty: string,
-  avg_filled_price: string,
-  filled_quantity: string,
-  fee: string,
-};
-
-export type AddNewTradeInput = {
-  main_account: string,
-  m: string,
-  p: string,
-  q: string,
-  s: string,
-  time: string,
-};
-
-export type Trade = {
-  __typename: "Trade",
-  main_account: string,
-  m: string,
-  p: string,
-  q: string,
-  s: string,
-  time: string,
-};
-
-export type TransactionUpdateInput = {
-  main_account: string,
-  txn_type: TransactionType,
-  asset: string,
-  amount: string,
-  fee: string,
-  status: TransactionStatus,
-  time: string,
-};
-
-export enum TransactionType {
-  DEPOSIT = "DEPOSIT",
-  WITHDRAW = "WITHDRAW",
-}
-
-
-export enum TransactionStatus {
-  PENDING = "PENDING",
-  CONFIRMED = "CONFIRMED",
-  FAILED = "FAILED",
-}
-
-
-export type Transaction = {
-  __typename: "Transaction",
-  main_account: string,
-  txn_type: TransactionType,
-  asset: string,
-  amount: string,
-  fee: string,
-  status: TransactionStatus,
-  time: string,
-};
-
-export type CandleStickInput = {
-  m: string,
-  interval: string,
-  o: string,
-  c: string,
-  h: string,
-  l: string,
-  v_base: string,
-  v_quote: string,
-  t: string,
-};
-
-export type CandleStick = {
-  __typename: "CandleStick",
-  m: string,
-  interval: string,
-  o: string,
-  c: string,
-  h: string,
-  l: string,
-  v_base: string,
-  v_quote: string,
-  t: string,
-};
-
 export type Orderbook = {
   __typename: "Orderbook",
   items?:  Array<SetPriceLevel | null > | null,
   nextToken?: string | null,
 };
 
+export type SetPriceLevel = {
+  __typename: "SetPriceLevel",
+  p: string,
+  q: string,
+  s?: OrderSide | null,
+};
+
+export enum OrderSide {
+  Bid = "Bid",
+  Ask = "Ask",
+}
+
+
 export type KlinesConnection = {
   __typename: "KlinesConnection",
   items?:  Array<CandleStick | null > | null,
+};
+
+export type CandleStick = {
+  __typename: "CandleStick",
+  o: string,
+  c: string,
+  h: string,
+  l: string,
+  vb: string,
+  vq: string,
+  t: string,
 };
 
 export type AssetsConnection = {
@@ -247,10 +53,26 @@ export type AssetsConnection = {
   nextToken?: string | null,
 };
 
+export type Asset = {
+  __typename: "Asset",
+  ticker: string,
+  withdrawal_fee: string,
+};
+
 export type RecentTradesConnection = {
   __typename: "RecentTradesConnection",
   items?:  Array<RawTrade | null > | null,
   nextToken?: string | null,
+};
+
+export type RawTrade = {
+  __typename: "RawTrade",
+  m?: string | null,
+  t: string,
+  p: string,
+  q: string,
+  sid: number,
+  isReverted?: boolean | null,
 };
 
 export type TickersConnection = {
@@ -259,16 +81,77 @@ export type TickersConnection = {
   nextToken?: string | null,
 };
 
+export type TickerStats = {
+  __typename: "TickerStats",
+  m: string,
+  o: number,
+  c: number,
+  h: number,
+  l: number,
+  vb: number,
+  vq: number,
+};
+
+export type MarketsConnection = {
+  __typename: "MarketsConnection",
+  items?:  Array<Market | null > | null,
+};
+
+export type Market = {
+  __typename: "Market",
+  market: string,
+  max_order_price: string,
+  min_order_price: string,
+  min_order_qty: string,
+  max_order_qty: string,
+  price_tick_size: string,
+  qty_step_size: string,
+  base_asset_precision: string,
+  quote_asset_precision: string,
+};
+
 export type ProxyConnection = {
   __typename: "ProxyConnection",
   items?: Array< string | null > | null,
   nextToken?: string | null,
 };
 
+export type User = {
+  __typename: "User",
+  proxies?: Array< string | null > | null,
+};
+
+export type Balance = {
+  __typename: "Balance",
+  a: string,
+  f: string,
+  r: string,
+  p: string,
+};
+
 export type BalanceConnection = {
   __typename: "BalanceConnection",
   items?:  Array<Balance | null > | null,
   nextToken?: string | null,
+};
+
+export type Order = {
+  __typename: "Order",
+  u: string,
+  cid: string,
+  id: string,
+  t: string,
+  m: string,
+  s: string,
+  ot: string,
+  st: string,
+  p: string,
+  q: string,
+  afp: string,
+  fq: string,
+  fee: string,
+  sid: string,
+  isReverted?: boolean | null,
 };
 
 export type OrdersConnection = {
@@ -283,81 +166,73 @@ export type TransactionsConnection = {
   nextToken?: string | null,
 };
 
+export type Transaction = {
+  __typename: "Transaction",
+  tt: string,
+  a: string,
+  q: string,
+  fee: string,
+  st: string,
+  t: string,
+  eid: string,
+  sid: string,
+  isReverted?: boolean | null,
+};
+
 export type TradesConnection = {
   __typename: "TradesConnection",
   items?:  Array<Trade | null > | null,
   nextToken?: string | null,
 };
 
-export type AddRawTradeMutationVariables = {
-  input: RawTradeInput,
+export type Trade = {
+  __typename: "Trade",
+  m: string,
+  p: string,
+  q: string,
+  s: string,
+  t: string,
+  sid: string,
+  isReverted?: boolean | null,
 };
 
-export type AddRawTradeMutation = {
-  addRawTrade?:  {
-    __typename: "RawTrade",
-    m: string,
-    t: string,
-    p: string,
-    q: string,
-  } | null,
+export type MainAddressConnection = {
+  __typename: "MainAddressConnection",
+  hash_key?: string | null,
+  range_key?: string | null,
+  accounts?: Array< string | null > | null,
 };
 
-export type SetOrderbookPutsMutationVariables = {
-  input: SetOrderbookInput,
+export type Register_userMutationVariables = {
+  input: UserActionInput,
 };
 
-export type SetOrderbookPutsMutation = {
-  setOrderbookPuts?:  Array< {
-    __typename: "SetPriceLevel",
-    price: string,
-    qty: string,
-    side?: OrderSide | null,
-  } | null > | null,
+export type Register_userMutation = {
+  register_user?: string | null,
 };
 
-export type SetOrderbookDelsMutationVariables = {
-  input: SetOrderbookInput,
+export type Place_orderMutationVariables = {
+  input: UserActionInput,
 };
 
-export type SetOrderbookDelsMutation = {
-  setOrderbookDels?:  Array< {
-    __typename: "SetPriceLevel",
-    price: string,
-    qty: string,
-    side?: OrderSide | null,
-  } | null > | null,
+export type Place_orderMutation = {
+  place_order?: string | null,
 };
 
-export type SetTickerStatsMutationVariables = {
-  input: TickerStatInput,
+export type Cancel_orderMutationVariables = {
+  input: UserActionInput,
 };
 
-export type SetTickerStatsMutation = {
-  setTickerStats?:  {
-    __typename: "TickerStats",
-    m: string,
-    priceChange24Hr: string,
-    priceChangePercent24Hr: string,
-    open: string,
-    close: string,
-    high: string,
-    low: string,
-    volumeBase24hr: string,
-    volumeQuote24Hr: string,
-  } | null,
+export type Cancel_orderMutation = {
+  cancel_order?: string | null,
 };
 
-export type AddNewAssetMutationVariables = {
-  input: AddNewAssetInput,
+export type WithdrawMutationVariables = {
+  input: UserActionInput,
 };
 
-export type AddNewAssetMutation = {
-  addNewAsset?:  {
-    __typename: "Asset",
-    ticker: string,
-    withdrawal_fee: string,
-  } | null,
+export type WithdrawMutation = {
+  withdraw?: string | null,
 };
 
 export type PublishMutationVariables = {
@@ -373,128 +248,9 @@ export type PublishMutation = {
   } | null,
 };
 
-export type AddProxyMutationVariables = {
-  main_account: string,
-  proxy_account: string,
-};
-
-export type AddProxyMutation = {
-  addProxy?:  {
-    __typename: "User",
-    main_account: string,
-    proxy_accounts?: string | null,
-  } | null,
-};
-
-export type RemoveProxyMutationVariables = {
-  main_account: string,
-  proxy_account: string,
-};
-
-export type RemoveProxyMutation = {
-  removeProxy?:  {
-    __typename: "User",
-    main_account: string,
-    proxy_accounts?: string | null,
-  } | null,
-};
-
-export type SetBalanceMutationVariables = {
-  input: BalanceUpdateInput,
-};
-
-export type SetBalanceMutation = {
-  setBalance?:  {
-    __typename: "Balance",
-    main_account: string,
-    asset: string,
-    free: string,
-    reserved: string,
-    pending_withdrawal: string,
-  } | null,
-};
-
-export type SetOrderMutationVariables = {
-  input: OrderUpdateInput,
-};
-
-export type SetOrderMutation = {
-  setOrder?:  {
-    __typename: "Order",
-    main_account: string,
-    id: string,
-    time: string,
-    m: string,
-    side: OrderSide,
-    order_type: OrderType,
-    status: OrderStatus,
-    price: string,
-    qty: string,
-    avg_filled_price: string,
-    filled_quantity: string,
-    fee: string,
-  } | null,
-};
-
-export type AddNewTradeMutationVariables = {
-  input: AddNewTradeInput,
-};
-
-export type AddNewTradeMutation = {
-  addNewTrade?:  {
-    __typename: "Trade",
-    main_account: string,
-    m: string,
-    p: string,
-    q: string,
-    s: string,
-    time: string,
-  } | null,
-};
-
-export type SetTransactionMutationVariables = {
-  input: TransactionUpdateInput,
-};
-
-export type SetTransactionMutation = {
-  setTransaction?:  {
-    __typename: "Transaction",
-    main_account: string,
-    txn_type: TransactionType,
-    asset: string,
-    amount: string,
-    fee: string,
-    status: TransactionStatus,
-    time: string,
-  } | null,
-};
-
-export type SetCandleStickMutationVariables = {
-  input: CandleStickInput,
-};
-
-export type SetCandleStickMutation = {
-  setCandleStick?:  {
-    __typename: "CandleStick",
-    m: string,
-    interval: string,
-    o: string,
-    c: string,
-    h: string,
-    l: string,
-    v_base: string,
-    v_quote: string,
-    t: string,
-  } | null,
-};
-
-export type GetChannelQuery = {
-  // Get WSS streams
-  getChannel?:  {
-    __typename: "Channel",
-    name: string,
-    data: string,
-  } | null,
+export type GetTimeQuery = {
+  // Get Enclave time
+  getTime: string,
 };
 
 export type GetOrderbookQueryVariables = {
@@ -509,9 +265,9 @@ export type GetOrderbookQuery = {
     __typename: "Orderbook",
     items?:  Array< {
       __typename: "SetPriceLevel",
-      price: string,
-      qty: string,
-      side?: OrderSide | null,
+      p: string,
+      q: string,
+      s?: OrderSide | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -530,14 +286,12 @@ export type GetKlinesbyMarketIntervalQuery = {
     __typename: "KlinesConnection",
     items?:  Array< {
       __typename: "CandleStick",
-      m: string,
-      interval: string,
       o: string,
       c: string,
       h: string,
       l: string,
-      v_base: string,
-      v_quote: string,
+      vb: string,
+      vq: string,
       t: string,
     } | null > | null,
   } | null,
@@ -573,10 +327,12 @@ export type GetRecentTradesQuery = {
     __typename: "RecentTradesConnection",
     items?:  Array< {
       __typename: "RawTrade",
-      m: string,
+      m?: string | null,
       t: string,
       p: string,
       q: string,
+      sid: number,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -589,16 +345,33 @@ export type GetAllMarketTickersQuery = {
     items?:  Array< {
       __typename: "TickerStats",
       m: string,
-      priceChange24Hr: string,
-      priceChangePercent24Hr: string,
-      open: string,
-      close: string,
-      high: string,
-      low: string,
-      volumeBase24hr: string,
-      volumeQuote24Hr: string,
+      o: number,
+      c: number,
+      h: number,
+      l: number,
+      vb: number,
+      vq: number,
     } | null > | null,
     nextToken?: string | null,
+  } | null,
+};
+
+export type GetAllMarketsQuery = {
+  // Get all active market configs
+  getAllMarkets?:  {
+    __typename: "MarketsConnection",
+    items?:  Array< {
+      __typename: "Market",
+      market: string,
+      max_order_price: string,
+      min_order_price: string,
+      min_order_qty: string,
+      max_order_qty: string,
+      price_tick_size: string,
+      qty_step_size: string,
+      base_asset_precision: string,
+      quote_asset_precision: string,
+    } | null > | null,
   } | null,
 };
 
@@ -623,8 +396,7 @@ export type FindUserByMainAccountQuery = {
   // Finds User by main account
   findUserByMainAccount?:  {
     __typename: "User",
-    main_account: string,
-    proxy_accounts?: string | null,
+    proxies?: Array< string | null > | null,
   } | null,
 };
 
@@ -637,11 +409,10 @@ export type FindBalanceByMainAccountQuery = {
   // Find Asset Balance by Main Account
   findBalanceByMainAccount?:  {
     __typename: "Balance",
-    main_account: string,
-    asset: string,
-    free: string,
-    reserved: string,
-    pending_withdrawal: string,
+    a: string,
+    f: string,
+    r: string,
+    p: string,
   } | null,
 };
 
@@ -655,11 +426,10 @@ export type GetAllBalancesByMainAccountQuery = {
     __typename: "BalanceConnection",
     items?:  Array< {
       __typename: "Balance",
-      main_account: string,
-      asset: string,
-      free: string,
-      reserved: string,
-      pending_withdrawal: string,
+      a: string,
+      f: string,
+      r: string,
+      p: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -675,18 +445,21 @@ export type FindOrderByMainAccountQuery = {
   // Find Order by Main Account
   findOrderByMainAccount?:  {
     __typename: "Order",
-    main_account: string,
+    u: string,
+    cid: string,
     id: string,
-    time: string,
+    t: string,
     m: string,
-    side: OrderSide,
-    order_type: OrderType,
-    status: OrderStatus,
-    price: string,
-    qty: string,
-    avg_filled_price: string,
-    filled_quantity: string,
+    s: string,
+    ot: string,
+    st: string,
+    p: string,
+    q: string,
+    afp: string,
+    fq: string,
     fee: string,
+    sid: string,
+    isReverted?: boolean | null,
   } | null,
 };
 
@@ -704,18 +477,21 @@ export type ListOrderHistorybyMainAccountQuery = {
     __typename: "OrdersConnection",
     items?:  Array< {
       __typename: "Order",
-      main_account: string,
+      u: string,
+      cid: string,
       id: string,
-      time: string,
+      t: string,
       m: string,
-      side: OrderSide,
-      order_type: OrderType,
-      status: OrderStatus,
-      price: string,
-      qty: string,
-      avg_filled_price: string,
-      filled_quantity: string,
+      s: string,
+      ot: string,
+      st: string,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
       fee: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -733,18 +509,21 @@ export type ListOpenOrdersByMainAccountQuery = {
     __typename: "OrdersConnection",
     items?:  Array< {
       __typename: "Order",
-      main_account: string,
+      u: string,
+      cid: string,
       id: string,
-      time: string,
+      t: string,
       m: string,
-      side: OrderSide,
-      order_type: OrderType,
-      status: OrderStatus,
-      price: string,
-      qty: string,
-      avg_filled_price: string,
-      filled_quantity: string,
+      s: string,
+      ot: string,
+      st: string,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
       fee: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -764,13 +543,15 @@ export type ListTransactionsByMainAccountQuery = {
     __typename: "TransactionsConnection",
     items?:  Array< {
       __typename: "Transaction",
-      main_account: string,
-      txn_type: TransactionType,
-      asset: string,
-      amount: string,
+      tt: string,
+      a: string,
+      q: string,
       fee: string,
-      status: TransactionStatus,
-      time: string,
+      st: string,
+      t: string,
+      eid: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -790,109 +571,28 @@ export type ListTradesByMainAccountQuery = {
     __typename: "TradesConnection",
     items?:  Array< {
       __typename: "Trade",
-      main_account: string,
       m: string,
       p: string,
       q: string,
       s: string,
-      time: string,
+      t: string,
+      sid: string,
+      isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
 };
 
-export type OnBalanceUpdateSubscriptionVariables = {
-  main_account: string,
+export type ListMainAccountsByEmailQueryVariables = {
+  email: string,
 };
 
-export type OnBalanceUpdateSubscription = {
-  // Balance updates
-  onBalanceUpdate?:  {
-    __typename: "Balance",
-    main_account: string,
-    asset: string,
-    free: string,
-    reserved: string,
-    pending_withdrawal: string,
-  } | null,
-};
-
-export type OnOrderUpdateSubscriptionVariables = {
-  main_account: string,
-};
-
-export type OnOrderUpdateSubscription = {
-  // Order History and updates
-  onOrderUpdate?:  {
-    __typename: "Order",
-    main_account: string,
-    id: string,
-    time: string,
-    m: string,
-    side: OrderSide,
-    order_type: OrderType,
-    status: OrderStatus,
-    price: string,
-    qty: string,
-    avg_filled_price: string,
-    filled_quantity: string,
-    fee: string,
-  } | null,
-};
-
-export type OnCreateTradeSubscriptionVariables = {
-  main_account: string,
-};
-
-export type OnCreateTradeSubscription = {
-  // Trade History updates
-  onCreateTrade?:  {
-    __typename: "Trade",
-    main_account: string,
-    m: string,
-    p: string,
-    q: string,
-    s: string,
-    time: string,
-  } | null,
-};
-
-export type OnUpdateTransactionSubscriptionVariables = {
-  main_account: string,
-};
-
-export type OnUpdateTransactionSubscription = {
-  // Deposit and Withdrawal Events
-  onUpdateTransaction?:  {
-    __typename: "Transaction",
-    main_account: string,
-    txn_type: TransactionType,
-    asset: string,
-    amount: string,
-    fee: string,
-    status: TransactionStatus,
-    time: string,
-  } | null,
-};
-
-export type OnCandleStickEventsSubscriptionVariables = {
-  m: string,
-  interval: string,
-};
-
-export type OnCandleStickEventsSubscription = {
-  // Candle Stick Events
-  onCandleStickEvents?:  {
-    __typename: "CandleStick",
-    m: string,
-    interval: string,
-    o: string,
-    c: string,
-    h: string,
-    l: string,
-    v_base: string,
-    v_quote: string,
-    t: string,
+export type ListMainAccountsByEmailQuery = {
+  listMainAccountsByEmail?:  {
+    __typename: "MainAddressConnection",
+    hash_key?: string | null,
+    range_key?: string | null,
+    accounts?: Array< string | null > | null,
   } | null,
 };
 
@@ -906,25 +606,5 @@ export type Websocket_streamsSubscription = {
     __typename: "Channel",
     name: string,
     data: string,
-  } | null,
-};
-
-export type OnNewTickerSubscriptionVariables = {
-  m: string,
-};
-
-export type OnNewTickerSubscription = {
-  // Ticker Streams
-  onNewTicker?:  {
-    __typename: "TickerStats",
-    m: string,
-    priceChange24Hr: string,
-    priceChangePercent24Hr: string,
-    open: string,
-    close: string,
-    high: string,
-    low: string,
-    volumeBase24hr: string,
-    volumeQuote24Hr: string,
   } | null,
 };

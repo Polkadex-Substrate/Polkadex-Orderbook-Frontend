@@ -1,65 +1,79 @@
 import styled, { css } from "styled-components";
 
-import Props from "./types";
+import * as T from "./types";
 
-export const Wrapper = styled.div<Partial<Props>>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
+  css({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    "& label": {
+      width: " fit-content",
+      marginLeft: "0.5rem",
+      userSelect: "none",
+      opacity: disabled ? 0.5 : 1,
+      cursor: disabled ? "not-allowed" : "pointer",
+    },
+    "& input": {
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      appearance: "none",
+      width: "2rem",
+      height: "2rem",
+      background: theme.colors[fill],
+      borderRadius: "0.5rem",
+      outline: "none",
+      cursor: disabled ? "not-allowed" : "pointer",
+    },
+    "& input:disabled, & input:checked:disabled ": {
+      background: "gray",
+    },
 
-  ${({ theme }) => css`
-    & label {
-      width: fit-content;
-      cursor: pointer;
-      line-height: 1.8rem;
-      margin-left: 0.6rem;
-    }
-
-    & input {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      appearance: none;
-      width: 2rem;
-      height: 2rem;
-      background: ${theme.colors.secondaryBackground};
-      border-radius: 0.5rem;
-      transition: ${theme.transition.fast};
-      position: relative;
-      outline: none;
-
-      &:before {
-        content: "";
-        width: 0.5rem;
-        height: 0.9rem;
-        border: 0.2rem solid ${theme.colors.text};
-        border-top: 0;
-        border-left: 0;
-        transform: rotate(45deg);
-        position: absolute;
-        top: 0.1rem;
-        opacity: 0;
-        transition: ${theme.transition.fast};
-      }
-      &:focus {
-        box-shadow: 0 0 0.5rem ${theme.colors.white};
-      }
-      &:hover {
-        border-color: ${theme.colors.secondaryBackground};
-        transition: ${theme.transition.fast};
-      }
-      &:checked {
-        border-color: ${theme.colors.primary};
-        background: ${theme.colors.primary};
-        &:before {
-          opacity: 1;
-        }
-      }
-    }
-
-    & p {
-      font-size: 1.3rem;
-    }
-  `}
-`;
+    "& input:after": {
+      position: "absolute",
+      content: "' '",
+      transform: "scale3d(1, 1, 1)",
+      transitionProperty: "all",
+      transitionDuration: "350ms",
+      transitionTimingFunction: "cubic-bezier(0.53, -0.67, 0.73, 0.74)",
+      width: "1.8rem",
+      height: "1.8rem",
+      borderRadius: "0.5rem",
+      border: "1px solid",
+      borderColor: theme.colors.secondaryBackground,
+      zIndex: -1,
+    },
+    "& input:before": {
+      content: "' '",
+      width: "0.5rem",
+      height: "1.1rem",
+      border: `2px solid ${theme.colors.white}`,
+      borderTop: "0",
+      borderLeft: "0",
+      transform: "rotate(45deg)",
+      position: "absolute",
+      top: "0.2rem",
+      opacity: "0",
+    },
+    // "& input:focus": {
+    //   boxShadow: `0 0 0.5rem ${theme.colors.primary}33`,
+    // },
+    "& input:hover:after": {
+      transform: "scale3d(1.3, 1.3, 1.2)",
+      transitionTimingFunction: "cubic-bezier(0.37, 0.74, 0.15, 1.65)",
+    },
+    "& input:checked": {
+      borderColor: theme.colors.primary,
+      background: theme.colors.primary,
+      animation: "shrink-bounce 200ms cubic-bezier(.4,.0,.23,1)",
+    },
+    "& input:checked:before": {
+      opacity: 1,
+    },
+  })
+);
+Wrapper.defaultProps = {
+  fill: "secondaryBackground",
+};

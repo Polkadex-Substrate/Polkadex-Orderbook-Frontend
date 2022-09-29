@@ -1,28 +1,43 @@
-import { put } from "redux-saga/effects";
+import { Auth } from "aws-amplify";
+import { call, put } from "redux-saga/effects";
 
-import { sendError } from "../../../";
-import { resetHistory } from "../../history";
-import { userReset } from "../../profile";
-import { logoutError, LogoutFetch } from "../actions";
+import { notificationPush, sendError } from "../../../";
+import { userData, userFetch } from "../../profile";
+import { logOutData, logOutError, LogoutFetch } from "../actions";
 
 export function* logoutSaga(action: LogoutFetch) {
   try {
-    yield put(userReset());
-    process.browser && localStorage.removeItem("csrfToken");
-    yield put(resetHistory());
+    yield call(logOut);
+    yield put(logOutData());
+    yield put(
+      notificationPush({
+        type: "SuccessAlert",
+        message: {
+          title: "Logged out",
+          description: "You have been logged out.",
+        },
+        time: new Date().getTime(),
+      })
+    );
+    yield put(userFetch());
   } catch (error) {
     yield put(
       sendError({
         error,
         processingType: "alert",
         extraOptions: {
-          actionError: logoutError,
+          actionError: logOutError,
         },
       })
     );
 
     if (error.message.indexOf("identity.session.not_found") > -1) {
-      yield put(userReset());
+      yield put(userFetch());
     }
   }
+}
+
+async function logOut() {
+  const res = await Auth.signOut();
+  return res;
 }

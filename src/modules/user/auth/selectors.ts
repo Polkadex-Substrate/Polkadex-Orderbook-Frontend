@@ -9,6 +9,9 @@ export const selectSignUpError = (state: RootState): CommonError | undefined =>
 export const selectSignInLoading = (state: RootState): AuthState["signInLoading"] =>
   state.user.auth.signInLoading;
 
+export const selectSignInSuccess = (state: RootState): AuthState["signInSuccess"] =>
+  state.user.auth.signInSuccess;
+
 export const selectSignInError = (state: RootState): AuthState["authError"] =>
   state.user.auth.authError;
 
@@ -18,22 +21,8 @@ export const selectSignUpLoading = (state: RootState): AuthState["signUpLoading"
 export const selectSignUpSuccess = (state: RootState): AuthState["signUpSuccess"] =>
   state.user.auth.signUpSuccess;
 
-export const selectConnectPhoneError = (state: RootState): AuthState["authError"] =>
-  state.user.auth.connectPhoneError;
+export const selectUserConfirmed = (state: RootState): AuthState["userConfirmed"] =>
+  state.user.auth.userConfirmed;
 
-export const selectConnectPhoneLoading = (state: RootState): AuthState["signUpLoading"] =>
-  state.user.auth.connectPhoneLoading;
-
-export const selectConnectPhoneSuccess = (state: RootState): AuthState["signUpSuccess"] =>
-  state.user.auth.connectPhoneSuccess;
-
-export const selectImportAccountLoading = (
-  state: RootState
-): AuthState["importAccountLoading"] => state.user.auth.importAccountLoading;
-
-export const selectImportAccountError = (state: RootState): AuthState["importAccountError"] =>
-  state.user.auth.importAccountError;
-
-export const selectImportAccountSuccess = (
-  state: RootState
-): AuthState["importAccountSuccess"] => state.user.auth.importAccountSuccess;
+export const selectUserAuthEmail = (state: RootState): AuthState["email"] =>
+  state.user.auth.email;

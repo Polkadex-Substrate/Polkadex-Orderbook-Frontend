@@ -1,240 +1,205 @@
-import { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import * as cryptoIcons from "@styled-icons/crypto";
+import { Sparklines, SparklinesLine } from "react-sparklines";
+import { FC } from "react";
 
 import * as S from "./styles";
-import { Props } from "./types";
+import * as F from "./fakeData";
 
-import {
-  Icon,
-  Skeleton,
-  Tabs,
-  TabContent,
-  TabHeader,
-  Tag,
-} from "@polkadex/orderbook-ui/molecules";
-import {
-  Market,
-  selectMarkets,
-  selectCurrentMarketTickers,
-  setCurrentMarket,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { Icon, Skeleton, ResultFound, Search } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { isNegative } from "@polkadex/orderbook/helpers";
+import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 
-const defaultTickers = {
-  last: 0,
-  volume: 0,
-  price_change_percent: "+0.00",
-};
-
-const isNegative = (value: string) => {
-  const result = /\+/.test(value || defaultTickers.price_change_percent);
-  return result;
-};
-
-type initialMarkets = {
-  last: string | number;
-  volume: string | number;
-  price_change_percent: string;
-  price_change_percent_num: number;
-} & Market;
-
-export const Markets = ({ marketActive = false }) => {
-  const [fieldValue, setFieldValue] = useState({
-    searchFieldValue: "",
-    marketsTabsSelected: "",
-  });
-
-  const marketTickets = useReduxSelector(selectCurrentMarketTickers);
-  const markets = useReduxSelector(selectMarkets);
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  // Filters
-  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
-
-  const handleMarketsTabsSelected = (value: string) =>
-    setFieldValue({ ...fieldValue, marketsTabsSelected: value });
-
-  const handleChangeMarket = (e: string) => {
-    const marketToSet = markets.find((el) => el.name === e);
-    if (marketToSet) {
-      router.push(`${marketToSet.id}`, undefined, { shallow: true });
-      dispatch(setCurrentMarket(marketToSet));
-    }
-  };
-
-  const getTickers = () => {
-    const initialMarkets: initialMarkets[] = [];
-
-    const allTickets = markets.map((item) => {
-      return {
-        ...item,
-        last: (marketTickets[item.id] || defaultTickers).last,
-        volume: (marketTickets[item.id] || defaultTickers).volume,
-        price_change_percent: (marketTickets[item.id] || defaultTickers).price_change_percent,
-        price_change_percent_num: Number.parseFloat(
-          (marketTickets[item.id] || defaultTickers).price_change_percent
-        ),
-      };
-    });
-
-    // Filtered Tickets
-    const allTicketsFilters = allTickets.reduce((pv, cv) => {
-      const [, quote] = cv.name.toLowerCase().split("/");
-      if (
-        cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
-        (fieldValue.marketsTabsSelected === "" ||
-          fieldValue.marketsTabsSelected.toLowerCase() === quote ||
-          fieldValue.marketsTabsSelected.toLowerCase() === "all")
-      ) {
-        pv.push(cv);
-      }
-      return pv;
-    }, initialMarkets);
-    return allTicketsFilters;
-  };
-
-  const getPairsName = (pv: string[], cv: Market) => {
-    const [, quote] = cv.name.split("/");
-    if (pv.indexOf(quote) === -1) {
-      pv.push(quote);
-    }
-    return pv;
-  };
-
-  const allPairs = markets.reduce(getPairsName, ["All"]);
+const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
+  const {
+    marketTokens,
+    marketTickers,
+    handleChangeMarket,
+    handleFieldChange,
+    handleMarketsTabsSelected,
+    currentTickerImg,
+    currentTickerName,
+    fieldValue,
+    handleShowFavourite,
+  } = useMarkets(onClose);
 
   return (
-    <S.Section marketActive={true}>
-      <Tabs>
-        <S.Header>
-          <S.HeaderContainer>
-            <h3>Market</h3>
-            <input
-              type="text"
-              placeholder="Search.."
-              style={{ maxWidth: "5rem" }}
-              value={fieldValue.searchFieldValue}
-              onChange={handleFieldChange}
+    <S.Main hasMargin={hasMargin}>
+      <S.HeaderWrapper>
+        <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
+        <S.Favorite>
+          <button type="button" onClick={onClose}>
+            <Icon name="Close" size="small" color="text" />
+          </button>
+        </S.Favorite>
+      </S.HeaderWrapper>
+      <Filters
+        searchField={fieldValue.searchFieldValue}
+        handleChange={handleFieldChange}
+        handleShowFavourite={handleShowFavourite}
+        showFavourite={fieldValue.showFavourite}
+      />
+      <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
+      <Footer
+        tickers={marketTickers}
+        changeMarket={handleMarketsTabsSelected}
+        tabField={fieldValue.marketsTabsSelected}
+      />
+    </S.Main>
+  );
+};
+
+export const HeaderMarket = ({
+  pair = "Empty  Token",
+  pairSymbol = "Polkadex",
+  pairTicker,
+  onOpenMarkets = undefined,
+}) => {
+  return (
+    <S.Header onClick={onOpenMarkets}>
+      <S.HeaderAsideLeft>
+        <S.HeaderToken>
+          <Icon isToken name={pairTicker} size="extraMedium" color="text" />
+        </S.HeaderToken>
+        <S.HeaderInfo>
+          <S.HeaderInfoContainer>
+            <span>{pair}</span>
+          </S.HeaderInfoContainer>
+          <p>{pairSymbol}</p>
+        </S.HeaderInfo>
+      </S.HeaderAsideLeft>
+      <S.HeaderAsideCenter>
+        <Sparklines data={F.fakeChartData}>
+          <SparklinesLine color="#E6007A" />
+        </Sparklines>
+      </S.HeaderAsideCenter>
+    </S.Header>
+  );
+};
+
+const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite }) => {
+  return (
+    <S.Title>
+      <h2>Markets</h2>
+      <S.TitleActions>
+        <Search
+          type="text"
+          placeholder="Search Menu.."
+          value={searchField}
+          onChange={handleChange}
+        />
+        <S.Favorite>
+          <button type="button" onClick={handleShowFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={showFavourite ? "orange" : "text"}
+              color={showFavourite ? "orange" : "secondaryBackground"}
             />
-          </S.HeaderContainer>
-          <S.Pairs>
-            <ul>
-              {allPairs.length > 1 ? (
-                allPairs.map((item, i) => (
-                  <TabHeader key={i}>
-                    <S.PairListItem>
-                      <a
-                        role="button"
-                        onClick={() => handleMarketsTabsSelected(item.toLowerCase())}>
-                        {item}
-                      </a>
-                    </S.PairListItem>
-                  </TabHeader>
-                ))
-              ) : (
-                <PairsLoading />
-              )}
-            </ul>
-            <button type="button">
-              <Icon size="medium" name="Star" background="none" />
-            </button>
-          </S.Pairs>
-        </S.Header>
-        <S.Content>
-          <S.TableHeader>
-            <span>Pair</span>
-            <span>Price</span>
-            <span>Change</span>
-          </S.TableHeader>
-          <S.TableContent>
-            {allPairs &&
-              allPairs.map((item, i) => (
-                <TabContent key={i}>
-                  {markets.length > 0 ? (
-                    getTickers().map((item, index) => (
-                      <ContentItem
-                        key={item.id}
-                        tokenIcon={item.tokenTickerName}
-                        pair={item.name}
-                        vol={Decimal.format(Number(item.volume), item.price_precision, ",")}
-                        priceFiat={Decimal.format(
-                          Number(item.last),
-                          item.price_precision,
-                          ","
-                        )}
-                        price="0"
-                        change={item.price_change_percent}
-                        onClick={() => handleChangeMarket(item.name)}
-                      />
-                    ))
-                  ) : (
-                    <ContentLoading />
-                  )}
-                </TabContent>
-              ))}
-          </S.TableContent>
-        </S.Content>
-      </Tabs>
-    </S.Section>
+          </button>
+        </S.Favorite>
+      </S.TitleActions>
+    </S.Title>
   );
 };
 
-const ContentItem = ({ tokenIcon, pair, vol, priceFiat, price, change, onClick }: Props) => {
-  const IconComponent = cryptoIcons[tokenIcon];
-  return (
-    <S.ContentItemWrapper onClick={onClick}>
-      <S.ContentItemToken>
-        {tokenIcon ? (
-          <S.TokenWrapper>
-            <IconComponent />
-          </S.TokenWrapper>
-        ) : (
-          <Skeleton width="4rem" height="4rem" style={{ marginRight: 10 }} />
-        )}
-        <div>
-          {pair ? <p>{pair}</p> : <Skeleton width="10rem" style={{ marginBottom: 10 }} />}
-          {vol ? <span>VOL $ {vol}</span> : <Skeleton width="6rem" />}
-        </div>
-      </S.ContentItemToken>
-      <S.ContentItemPrice>
-        {priceFiat ? (
-          <p>$ {priceFiat}</p>
-        ) : (
-          <Skeleton width="6rem" style={{ marginBottom: 10 }} />
-        )}
-        {price ? <span>{price} BTC</span> : <Skeleton width="4rem" />}
-      </S.ContentItemPrice>
-      {change ? (
-        <Tag title={change} isPositive={isNegative(change.toString())} />
+const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
+  tokens = [],
+  changeMarket,
+}) => (
+  <S.Content>
+    <S.ContainerWrapper>
+      {tokens.length ? (
+        tokens.map((token) => (
+          <Card
+            key={token.id}
+            id={token.id}
+            pair={token.name}
+            tokenTicker={token.tokenTickerName}
+            vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
+            price={Decimal.format(Number(token.last), token.quote_precision, ",")}
+            fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
+            change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
+            changeMarket={() => changeMarket(token.name)}
+            isFavourite={token.isFavourite}
+          />
+        ))
       ) : (
-        <Skeleton width="4rem" />
+        <ResultFound />
       )}
-    </S.ContentItemWrapper>
+    </S.ContainerWrapper>
+  </S.Content>
+);
+
+const Card = ({
+  id,
+  pair,
+  tokenTicker,
+  vol,
+  price,
+  fiat,
+  change,
+  changeMarket,
+  isFavourite,
+}) => {
+  const { handleChangeFavourite } = useCookieHook(id);
+  return (
+    <S.Card onClick={changeMarket}>
+      <S.CardInfo>
+        <S.CardInfoActions>
+          <button type="button" onClick={handleChangeFavourite}>
+            <Icon
+              name="Star"
+              size="extraSmall"
+              stroke={isFavourite ? "orange" : "text"}
+              color={isFavourite ? "orange" : "secondaryBackground"}
+            />
+          </button>
+        </S.CardInfoActions>
+        <S.CardInfoContainer>
+          <S.CardToken>
+            <Icon isToken name={tokenTicker} size="medium" color="text" />
+          </S.CardToken>
+          <S.CardInfoWrapper>
+            <span>{pair}</span>
+            <p>Vol:{vol}</p>
+          </S.CardInfoWrapper>
+        </S.CardInfoContainer>
+      </S.CardInfo>
+      <S.CardPricing>
+        <span>{price}</span>
+        <p>{fiat}</p>
+      </S.CardPricing>
+      <S.CardChange isNegative={isNegative(change.toString())}>
+        <span>{change}</span>
+      </S.CardChange>
+    </S.Card>
   );
 };
 
-const ContentLoading = () => (
-  <>
-    <ContentItem />
-    <ContentItem />
-    <ContentItem />
-  </>
+const Footer: FC<{
+  tickers: string[];
+  changeMarket: (value: string) => void;
+  tabField: string;
+}> = ({ tickers, changeMarket, tabField }) => (
+  <S.Footer>
+    {!!tickers.length &&
+      tickers.map((ticker) => (
+        <S.FooterCard
+          isActive={tabField === ticker}
+          onClick={() => changeMarket(ticker)}
+          key={ticker}>
+          {ticker}
+        </S.FooterCard>
+      ))}
+    {/* <S.FooterCard>
+      <Dropdown header="ALTS">
+        <p>ETH</p>
+        <p>SOL</p>
+        <p>DOGE</p>
+      </Dropdown>
+    </S.FooterCard> */}
+  </S.Footer>
 );
+export const MarketsSkeleton = () => <Skeleton height="100%" width="100%" />;
 
-const PairsLoading = () => (
-  <>
-    <PairsLoadingCard />
-    <PairsLoadingCard />
-    <PairsLoadingCard />
-    <PairsLoadingCard />
-  </>
-);
-
-const PairsLoadingCard = () => (
-  <Skeleton width="2.5rem" style={{ display: "inline-block", marginLeft: "1rem" }} />
-);
+export default Markets;

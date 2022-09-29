@@ -57,6 +57,7 @@ const defaultTheme = {
     gradientPrimary: "linear-gradient(180deg, #E6007A13 0%, rgba(230, 0, 122, 0) 100%);",
     transparent: "transparent",
     secondaryText: "#8BA1BE",
+    tertiaryText: "#A8ADB7",
     none: "none",
     green: "#0CA564",
     white: "#ffffff",
@@ -110,7 +111,7 @@ const light = {
     secondaryBackgroundSolid: "#FBFBFB",
     quaternaryBackground: "#272934",
     text: "#000000",
-    inverse: "#ffffff",
+    inverse: "#F9FBFC",
   },
   shadows: {
     primary: "rgba(50, 50, 93, 0.25) 0px 0 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 0 -30px",

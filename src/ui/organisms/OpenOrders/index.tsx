@@ -1,100 +1,71 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import * as S from "./styles";
 
-import {
-  notificationPush,
-  selectCurrentMarket,
-  selectOpenOrdersHistory,
-  selectOrdersHistoryLoading,
-  selectUserLoggedIn,
-  userOrdersHistoryFetch,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
-import {
-  LoadingTransactions,
-  OpenOrderCard,
-  OpenOrderCardReponsive,
-} from "@polkadex/orderbook-ui/molecules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
+import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 
-export const OpenOrders = () => {
-  const dispatch = useDispatch();
-
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const openOrders = useReduxSelector(selectOpenOrdersHistory);
-  const fetching = useReduxSelector(selectOrdersHistoryLoading);
-
-  const userLoggedIn = useReduxSelector(selectUserLoggedIn);
-  const { width } = useWindowSize();
-
-  const handleCancel = (id: string) =>
-    dispatch(
-      notificationPush({
-        type: "Error",
-        message: {
-          title: "Not Available in Beta",
-          description: "Polkadex team is currently working on this functionality.",
-        },
-      })
-    );
-
-  // const handleCancel = (id: string) => dispatch(openOrdersCancelFetch({ id }));
-
-  useEffect(() => {
-    if (userLoggedIn) dispatch(userOrdersHistoryFetch());
-  }, [userLoggedIn, dispatch]);
+export const OpenOrders = ({ filters }) => {
+  const { priceFixed, amountFixed, openOrders } = useOrderHistory(filters);
+  const getAsset = useReduxSelector(selectGetAsset);
 
   return (
     <S.Wrapper>
-      {width > 1110 && (
-        <S.Header>
-          <span>Date</span>
-          <span>Pair</span>
-          <span>Type</span>
-          <span>Side</span>
-          <span>Price</span>
-          <span>Amount</span>
-          <span>Filled</span>
-          <span>Total</span>
-          <span></span>
-        </S.Header>
-      )}
-      {!fetching ? (
-        <S.Content>
-          {openOrders?.map((item) => {
-            const {
-              order_id,
-              timestamp,
-              base_asset,
-              quote_asset,
-              order_side,
-              price,
-              amount,
-              filled_qty,
-              order_type,
-            } = item;
-
-            const CardComponent = width > 1110 ? OpenOrderCard : OpenOrderCardReponsive;
-            return (
-              <CardComponent
-                key={order_id}
-                order_id={order_id}
-                timestamp={timestamp}
-                base_asset={base_asset}
-                quote_asset={quote_asset}
-                order_side={order_side}
-                price={price}
-                filled_qty={filled_qty}
-                amount={amount}
-                order_type={order_type}
-                onCancel={() => handleCancel(order_id)}
-              />
-            );
-          })}
-        </S.Content>
+      {openOrders?.length ? (
+        <S.Table>
+          <S.Thead>
+            <S.Tr>
+              <S.Th>Pair</S.Th>
+              <S.Th>Date</S.Th>
+              <S.Th>Type</S.Th>
+              <S.Th>Price</S.Th>
+              <S.Th>Total</S.Th>
+              <S.Th>Filled</S.Th>
+              <S.Th />
+            </S.Tr>
+          </S.Thead>
+          <S.Tbody>
+            {openOrders &&
+              openOrders.map((order: OrderCommon, i) => {
+                const [base, quote] = order.m.split("-");
+                const date = new Date(order.time).toLocaleString();
+                const isSell = order.side === "Ask";
+                const isMarket = order.order_type === "MARKET";
+                const baseUnit = getAsset(base)?.symbol;
+                const quoteUnit = getAsset(quote)?.symbol;
+                const avgPrice = order.avg_filled_price;
+                return (
+                  <OpenOrderCard
+                    key={i}
+                    isSell={isSell}
+                    orderId={order.id}
+                    base={base}
+                    quote={quote}
+                    orderSide={order.side}
+                    orderType={order.order_type}
+                    baseUnit={baseUnit}
+                    quoteUnit={quoteUnit}
+                    data={[
+                      { value: date },
+                      { value: order.order_type },
+                      { value: order.status },
+                      { value: isMarket ? "-" : Decimal.format(order.price, priceFixed, ",") },
+                      { value: Decimal.format(order.qty, amountFixed, ",") },
+                      { value: Decimal.format(order.filled_quantity, amountFixed, ",") },
+                      {
+                        value: Decimal.format(avgPrice, priceFixed, ","),
+                      },
+                    ]}
+                  />
+                );
+              })}
+          </S.Tbody>
+        </S.Table>
       ) : (
-        <LoadingTransactions />
+        <S.EmptyWrapper>
+          <EmptyData />
+        </S.EmptyWrapper>
       )}
     </S.Wrapper>
   );

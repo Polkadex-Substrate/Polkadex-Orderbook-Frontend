@@ -7,11 +7,15 @@ import * as queries from "../../../../graphql/queries";
 
 import { getDepthFromOrderbook } from "./helper";
 
+import { Utils } from "@polkadex/web-helpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
 export function* orderBookSaga(action: OrderBookFetch) {
   try {
     const market = action.payload;
     if (market?.m) {
-      const data = yield call(fetchOrderbook, market.m);
+      const dataRaw = yield call(fetchOrderbook, market.m);
+      const data = formatOrderBookData(dataRaw);
       const { asks, bids } = getDepthFromOrderbook(data);
       yield put(depthData({ asks, bids }));
     }
@@ -28,10 +32,15 @@ export function* orderBookSaga(action: OrderBookFetch) {
   }
 }
 const fetchOrderbook = async (market: string): Promise<OrderBookDbState[]> => {
-  const res: any = await API.graphql({
-    query: queries.getOrderbook,
-    variables: { market: market },
-  });
+  const res: any = await sendQueryToAppSync(queries.getOrderbook, { market: market });
   const data = res.data.getOrderbook.items;
   return data;
+};
+
+const formatOrderBookData = (data: OrderBookDbState[]): OrderBookDbState[] => {
+  return data.map((item) => ({
+    ...item,
+    p: item.p,
+    q: item.q,
+  }));
 };

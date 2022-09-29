@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { LogoText } from "../../molecules/Logo/styles";
+import { LogoText } from "../../../../ui/molecules/Logo/styles";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 export const Logo = styled.div`
@@ -26,6 +26,7 @@ export const Span = styled.span`
   margin-left: 0.8rem;
   font-size: 1.3rem;
   display: none;
+  white-space: nowrap;
 `;
 
 export const WrapperLinks = styled.div`
@@ -43,6 +44,7 @@ export const WrapperLinks = styled.div`
     transition-property: initial;
     @media screen and (min-width: 590px) {
       padding: 2rem 1rem 1rem 0.9rem;
+      min-height: 42rem;
     }
   `}
 `;
@@ -58,7 +60,7 @@ export const Wrapper = styled.nav`
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
     transition-delay: initial;
     transition-property: initial;
-    z-index: 28;
+    z-index: 33;
 
     @media screen and (min-width: 590px) {
       position: sticky;
@@ -102,18 +104,49 @@ export const Container = styled.div`
 `;
 
 export const WrapperProfile = styled.div`
+  ${({ theme }) => css`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-left: 1rem;
+    padding-bottom: 1.5rem;
+    @media screen and (max-width: 590px) {
+      display: none;
+    }
+  `}
+`;
+export const ContainerProfile = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-left: 1rem;
-  @media screen and (max-width: 590px) {
-    display: none;
-  }
+  align-items: center;
+  gap: 1rem;
 `;
 
-export const Profile = styled.img`
-  border-radius: 55rem;
-  margin: 1.5rem 0;
-  width: 2.5rem;
-  height: 2.5rem;
+export const Notifications = styled.div`
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+`;
+export const NotificationsWrapper = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
+    ${isActive &&
+    css`
+      div {
+        position: absolute;
+        top: 0.2rem;
+        right: 0.1rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 5rem;
+        background: ${theme.colors.primary};
+      }
+    `}
+  `}
+`;
+
+export const Profile = styled.div`
+  cursor: pointer;
 `;

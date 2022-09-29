@@ -26,22 +26,25 @@ export interface Market {
   name: string;
   base_unit: string;
   quote_unit: string;
-  min_price: BigNumber;
-  max_price: BigNumber;
-  min_amount: BigNumber;
-  amount_precision: number;
-  price_precision: number;
+  min_price: number;
+  max_price: number;
+  min_amount: number;
+  max_amount: number;
+  base_precision: number;
+  quote_precision: number;
   state?: string;
   filters?: MarketFilter[];
   tokenTickerName?: string;
   base_ticker: string;
   quote_ticker: string;
+  price_tick_size: number;
+  qty_step_size: number;
 }
 
 export interface Ticker {
   m: string; // eg "PDEX-1"
-  priceChange24Hr: string;
-  priceChangePercent24Hr: string;
+  priceChange24Hr: number;
+  priceChangePercent24Hr: number;
   open: string;
   close: string;
   high: string;
@@ -68,4 +71,15 @@ export interface MarketPriceInterface {
   price: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface MarketQueryResult {
+  market: string;
+  max_order_qty: number;
+  max_order_price: number;
+  min_order_qty: number;
+  min_order_price: number;
+  price_tick_size: number;
+  qty_step_size: number;
+  quote_asset_precision: number;
 }

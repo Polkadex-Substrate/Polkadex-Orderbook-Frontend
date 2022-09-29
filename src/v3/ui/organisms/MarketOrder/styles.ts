@@ -1,12 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
 export const Section = styled.section`
-  @media screen and (min-width: 1290px) {
-    min-width: 29rem;
-    max-width: 29rem;
-  }
+  flex: 1;
 `;
 // Header
 export const Header = styled.div`
@@ -14,41 +9,53 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem;
+  margin: 1rem 0;
 `;
 export const HeaderWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  gap: 0.5rem;
+`;
+export const DropdownTrigger = styled.div`
+  ${({ theme }) => css`
+    cursor: pointer;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.7rem;
+    padding: 0.6rem 0.8rem;
+    user-select: none;
+    transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+  `}
 `;
 
 export const ActionItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    border-radius: 1rem;
+    border-radius: 0.7rem;
     width: 100%;
     text-align: center;
     cursor: pointer;
-    transition: background 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    transition: background 0.4s ease-in-out;
     font-weight: 500;
-    ${Icon} {
-      display: inline-block;
-      margin-right: 0.2rem;
-    }
+    padding: 0.6rem 1.5rem;
+    color: ${isActive ? theme.colors.white : theme.colors.text};
+    user-select: none;
     :first-child {
-      margin-right: 2rem;
-      color: ${isActive ? theme.colors.green : theme.colors.text};
-      svg {
-        fill: ${isActive ? theme.colors.green : theme.colors.text};
-      }
+      background: ${isActive ? theme.colors.green : theme.colors.secondaryBackgroundOpacity};
     }
     :last-child {
-      color: ${isActive ? theme.colors.primary : theme.colors.text};
-      svg {
-        fill: ${isActive ? theme.colors.primary : theme.colors.text};
-      }
+      background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
     }
     :hover {
-      opacity: ${isActive ? 1 : 0.6};
+      background: ${isActive ? "auto" : theme.colors.secondaryBackground};
     }
   `}
 `;

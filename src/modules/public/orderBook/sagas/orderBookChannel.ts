@@ -7,15 +7,25 @@ import { alertPush } from "../../alertHandler";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../../markets";
 
+import { Utils } from "@polkadex/web-helpers";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+
+type OrderbookRawUpdate = {
+  side: "Bid" | "Ask";
+  price: string;
+  qty: string;
+  seq: number;
+};
+
 export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
   try {
     const market: Market = action.payload;
-
     if (market?.m) {
       const channel = fetchOrderBookChannel(market.m);
       while (true) {
         const msg = yield take(channel);
-        const data = JSON.parse(msg);
+        console.log("ob-update event: ", msg);
+        const data: OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
         yield put(depthDataIncrement(data));
       }
     }
@@ -36,8 +46,13 @@ function fetchOrderBookChannel(market: string) {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market}-ob-inc` },
+      authToken: READ_ONLY_TOKEN,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
     }).subscribe({
-      next: (data) => emitter(data.value.data.websocket_streams.data),
+      next: (data) => {
+        emitter(data.value.data.websocket_streams.data);
+      },
       error: (err) => console.log(err),
     });
     return () => {
@@ -45,3 +60,13 @@ function fetchOrderBookChannel(market: string) {
     };
   });
 }
+
+const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
+  const data = JSON.parse(dataStr);
+  return data.changes.map((item) => ({
+    side: item[0],
+    price: item[1],
+    qty: item[2],
+    seq: item[3],
+  }));
+};
