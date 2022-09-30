@@ -18,16 +18,15 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
     const market = action.payload?.m;
     if (market) {
       const res: any = yield call(() => fetchRecentTrade(market));
-      const trades: PublicTrade[] = res.map((x, i) => ({
+      const trades: PublicTrade[] = res.map((x) => ({
         market_id: x.m,
         price: x.p,
         amount: x.q,
-        timestamp: new Date(Number(x.t)).toISOString(),
+        timestamp: x.t,
       }));
       yield put(recentTradesData(trades));
     }
   } catch (error) {
-    console.log("recent trades", error);
     yield put(
       sendError({
         error,
