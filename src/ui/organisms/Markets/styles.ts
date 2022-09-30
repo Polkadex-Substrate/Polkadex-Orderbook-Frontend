@@ -14,6 +14,7 @@ export const Main = styled.section<{ hasMargin?: boolean }>`
     min-width: 90vw;
     @media screen and (min-width: 440px) {
       min-width: 36rem;
+      max-width: 36rem;
     }
   `}
 `;
@@ -238,6 +239,16 @@ export const CardInfoWrapper = styled.div`
   p {
     opacity: 0.6;
   }
+  span,
+  p {
+    white-space: nowrap;
+    max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  span {
+    display: block;
+  }
 `;
 
 export const CardPricing = styled.div`
@@ -282,6 +293,8 @@ export const Footer = styled.div`
     padding: 1rem;
     border-radius: 1rem;
     gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
   `}
 `;
 
@@ -296,6 +309,8 @@ export const FooterCard = styled.div<{ isActive?: boolean }>`
     font-size: 1.1rem;
     transition: background 0.4s ease-in-out;
     cursor: pointer;
+    user-select: none;
+
     :hover {
       background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
     }
