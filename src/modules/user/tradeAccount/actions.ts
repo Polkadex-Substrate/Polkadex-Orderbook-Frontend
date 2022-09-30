@@ -15,6 +15,9 @@ import {
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
   USER_TRADE_ACCOUNT_UNLOCK,
+  USER_TRADE_ACCOUNT_IMPORT_ERROR,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
+  USER_TRADE_ACCOUNT_IMPORT_FETCH,
 } from "./constants";
 
 export interface InjectedAccount {
@@ -104,6 +107,24 @@ export interface UnlockTradeAccount {
   };
 }
 
+export interface ImportTradeAccount {
+  type: typeof USER_TRADE_ACCOUNT_IMPORT_FETCH;
+  payload: {
+    mnemonic: string;
+    name: string;
+    password?: string;
+  };
+}
+
+export interface ImportTradeAccountError {
+  type: typeof USER_TRADE_ACCOUNT_IMPORT_ERROR;
+  error: CommonError;
+}
+
+export interface ImportTradeAccountData {
+  type: typeof USER_TRADE_ACCOUNT_IMPORT_DATA;
+}
+
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -117,7 +138,10 @@ export type TradeAccountsAction =
   | RegisterTradeAccountReset
   | RemoveProxyAccountFromChainFetch
   | RemoveProxyAccountFromChainData
-  | UnlockTradeAccount;
+  | UnlockTradeAccount
+  | ImportTradeAccount
+  | ImportTradeAccountError
+  | ImportTradeAccountData;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -197,4 +221,20 @@ export const unlockTradeAccount = (
 ): UnlockTradeAccount => ({
   type: USER_TRADE_ACCOUNT_UNLOCK,
   payload: payload,
+});
+
+export const importTradeAccountFetch = (
+  payload: ImportTradeAccount["payload"]
+): ImportTradeAccount => ({
+  type: USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  payload: payload,
+});
+
+export const importTradeAccountData = (): ImportTradeAccountData => ({
+  type: USER_TRADE_ACCOUNT_IMPORT_DATA,
+});
+
+export const importTradeAccountError = (error: CommonError): ImportTradeAccountError => ({
+  type: USER_TRADE_ACCOUNT_IMPORT_ERROR,
+  error: error,
 });
