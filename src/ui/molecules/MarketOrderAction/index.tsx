@@ -14,7 +14,7 @@ import {
   PassCode,
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { selectCurrentTradeAccount, unlockTradeAccount } from "@polkadex/orderbook-modules";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
@@ -51,9 +51,12 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
               stroke="text"
             />
             <S.WrapperBalance>
-              <span>Available</span>
+              <small>Available</small>
               <S.Span>
-                {availableAmount} {isSell ? baseTicker : quoteTicker}
+                <Decimal fixed={8} hasStyle={false}>
+                  {availableAmount}
+                </Decimal>
+                {isSell ? baseTicker : quoteTicker}
               </S.Span>
             </S.WrapperBalance>
           </S.ContainerWallet>

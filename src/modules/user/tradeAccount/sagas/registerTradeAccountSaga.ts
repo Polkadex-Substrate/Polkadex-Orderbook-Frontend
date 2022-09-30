@@ -68,7 +68,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
           })
         );
         yield put(registerTradeAccountData());
-        yield call(setIsTradeAccountPassworded, tradeAddress, password?.length > 0);
+        yield call(setIsTradeAccountPassworded, tradeAddress, password.length > 0);
       } else {
         throw new Error(res.message);
       }

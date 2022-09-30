@@ -21,7 +21,7 @@ export const WrapperBalance = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
-  span:first-child {
+  small {
     font-size: 1.2rem;
     color: #8ba1be;
   }

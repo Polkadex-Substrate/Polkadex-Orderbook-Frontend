@@ -36,6 +36,7 @@ import {
   selectHasExtension,
   selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
+  selectRegisterTradeAccountRemoving,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
@@ -149,8 +150,7 @@ export const AccountManagerTemplate = () => {
         <Modal.Body>
           <UnlockAccount
             handleClose={handleUnlockClose}
-            handleSelectTradeAccount={handleSelectTradeAccount}
-            address={unlockAccount.address}
+            onSubmit={() => handleSelectTradeAccount(unlockAccount.address)}
           />
         </Modal.Body>
       </Modal>
@@ -427,12 +427,15 @@ const Card = ({
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
-
+  const tradeAccountsInLoading = useReduxSelector(selectRegisterTradeAccountRemoving);
+  const isLoading = useMemo(
+    () => !!tradeAccountsInLoading.filter((v) => v === address)?.length,
+    [tradeAccountsInLoading, address]
+  );
   const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
-  // TODO!: Create removing sagas
-  const isRemoving = false;
+
   return (
-    <Loading message="Loading..." isVisible={isRemoving}>
+    <Loading message="Loading..." isVisible={isLoading}>
       <S.Card isActive={isUsing}>
         <S.CardHeader>
           <S.CardHeaderContent>

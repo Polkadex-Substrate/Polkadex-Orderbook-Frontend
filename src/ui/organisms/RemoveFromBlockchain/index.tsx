@@ -17,6 +17,7 @@ export const RemoveFromBlockchain = ({ handleClose, address }) => {
     validationSchema: typeValidations,
     onSubmit: () => {
       dispatch(removeProxyAccountFromChainFetch({ address }));
+      handleClose();
     },
   });
   const phrase = "delete account";

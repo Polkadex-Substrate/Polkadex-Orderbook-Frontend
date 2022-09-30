@@ -1,22 +1,24 @@
 // TODO: Move mnemonic state to Formik
-import Link from "next/link";
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import Head from "next/head";
+import { generateUsername } from "friendly-username-generator";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary, MnemonicImport } from "@polkadex/orderbook-ui/molecules";
 import { importValiations } from "@polkadex/orderbook/validations";
+import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
 
 const defaultValues = {
-  accountName: "Main Account",
+  accountName: generateUsername({ useRandomNumber: false }),
 };
 
 export const RecoveryTemplate = () => {
   const [state, setState] = useState({ tags: [] });
-
+  const dispatch = useDispatch();
   return (
     <>
       <Head>
@@ -30,10 +32,8 @@ export const RecoveryTemplate = () => {
             <S.Container>
               <S.AsideLeft>
                 <S.Title>
-                  <h1>Import proxy account</h1>
-                  <p>
-                    Do you have a proxy account? <Link href="/login"> Sign in </Link>
-                  </p>
+                  <h1>Import trade account</h1>
+                  <p>Do you have a trade account? Import it here and start trading</p>
                 </S.Title>
                 <S.Form>
                   <Formik
@@ -42,7 +42,14 @@ export const RecoveryTemplate = () => {
                     onSubmit={async (values) => {
                       if (state.tags.length === 12) {
                         const { accountName } = values;
-                        const mnemoicString = state.tags.join(" ");
+                        const mnemonicString = state.tags.join(" ");
+                        dispatch(
+                          importTradeAccountFetch({
+                            mnemonic: mnemonicString,
+                            name: accountName,
+                            password: "",
+                          })
+                        );
                       }
                     }}>
                     {({ errors, touched, values }) => (

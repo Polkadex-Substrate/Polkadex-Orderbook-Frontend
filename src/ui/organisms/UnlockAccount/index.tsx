@@ -5,7 +5,7 @@ import * as S from "./styles";
 import { Button, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { unLockAccountValidations } from "@polkadex/orderbook/validations";
 
-export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }) => {
+export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
   const { setFieldValue, values, handleSubmit, errors, isValid } = useFormik({
     initialValues: {
       password: "",
@@ -13,7 +13,7 @@ export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }
     validationSchema: unLockAccountValidations,
     onSubmit: (values) => {
       // Add password values.password
-      handleSelectTradeAccount(address);
+      onSubmit();
     },
   });
 
@@ -33,14 +33,17 @@ export const UnlockAccount = ({ address, handleClose, handleSelectTradeAccount }
           error={errors.password}
         />
         <S.Actions>
-          <Button
-            size="large"
-            background="transparent"
-            color="tertiraryText"
-            type="button"
-            onClick={handleClose}>
-            Cancel
-          </Button>
+          {handleClose && (
+            <Button
+              size="large"
+              background="transparent"
+              color="tertiraryText"
+              type="button"
+              onClick={handleClose}>
+              Cancel
+            </Button>
+          )}
+
           <Button
             size="large"
             background="primary"
