@@ -2,8 +2,8 @@ import { takeLeading } from "redux-saga/effects";
 
 import { PROFILE_USER_FETCH } from "../constants";
 
-import { userSaga } from "./userSaga";
+import { userAuthSaga } from "./userAuthSaga";
 
 export function* rootProfileSaga() {
-  yield takeLeading(PROFILE_USER_FETCH, userSaga);
+  yield takeLeading(PROFILE_USER_FETCH, userAuthSaga);
 }

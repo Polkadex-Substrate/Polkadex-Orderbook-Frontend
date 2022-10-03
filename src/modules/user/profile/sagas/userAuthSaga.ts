@@ -1,17 +1,16 @@
 // TODO : Fix saga
-import { API, Auth } from "aws-amplify";
-import router from "next/router";
+import { Auth } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
-import { notificationPush, sendError } from "../../../";
-import { userData, userError, UserFetch } from "../actions";
+import { notificationPush, sendError, userAuthData, UserAuthFetch } from "../../../";
+import { userError } from "../actions";
 
-export function* userSaga(action: UserFetch) {
+export function* userAuthSaga(_action: UserAuthFetch) {
   try {
     const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
-      getUserInfo()
+      getUserAuthInfo()
     );
-    yield put(userData({ email, isAuthenticated, userExists, isConfirmed }));
+    yield put(userAuthData({ email, isAuthenticated, userExists, isConfirmed }));
     if (!isConfirmed && userExists) {
       yield put(
         notificationPush({
@@ -37,7 +36,7 @@ export function* userSaga(action: UserFetch) {
   }
 }
 
-const getUserInfo = async () => {
+const getUserAuthInfo = async () => {
   try {
     const user = await Auth.currentAuthenticatedUser();
     return {
@@ -50,7 +49,6 @@ const getUserInfo = async () => {
     };
   } catch (e) {
     console.log(e);
-    const error = e;
     if (e === "The user is not authenticated") {
       return {
         email: "",
