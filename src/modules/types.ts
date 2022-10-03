@@ -1,3 +1,7 @@
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import { Signer } from "@polkadot/types/types";
+import { KeyringPair } from "@polkadot/keyring/types";
+
 export type CommonError = {
   code: number;
   message: string[];
@@ -10,23 +14,21 @@ export type CommonState = {
 export type OrderStatus = "OPEN" | "CLOSED" | "Expired" | "CANCELLED" | "Failed";
 export type OrderSide = "Sell" | "Buy";
 export type OrderType = "LIMIT" | "MARKET";
-export type OrderKind = "bid" | "ask";
 
-export enum OrderTypeEnum  {
+export enum OrderTypeEnum {
   LIMIT = "LIMIT",
-  MARKET = "MARKET"
+  MARKET = "MARKET",
 }
 
-export enum OrderSideEnum  {
+export enum OrderSideEnum {
   Sell = "Sell",
-  Buy = "Buy"
+  Buy = "Buy",
 }
 
-export enum OrderKindEnum  {
+export enum OrderKindEnum {
   Bid = "Bid",
-  Ask = "Ask"
+  Ask = "Ask",
 }
-
 
 // TODO: Integrate new Types.
 export interface OrderCommon {
@@ -44,3 +46,10 @@ export interface OrderCommon {
   filled_quantity: string;
   fee: string;
 }
+
+export interface ExtensionAccount {
+  account: InjectedAccountWithMeta;
+  signer: Signer;
+}
+
+export type TradeAccount = KeyringPair;
