@@ -1,7 +1,4 @@
 import { RootState } from "../..";
-import { InjectedAccount, selectLinkedMainAddress } from "../tradeAccount";
-
-import { MainAccount } from "./actions";
 
 export const selectExtensionWalletLoading = (state: RootState): boolean =>
   state.user.extensionWallet.isFetching;

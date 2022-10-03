@@ -1,54 +1,30 @@
-import { InjectedAccount } from "../tradeAccount";
-
-import { GetExtensionWalletAction, MainAccount } from "./actions";
+import { GetExtensionWalletAction } from "./actions";
 import {
   POLKADOT_EXTENSION_WALLET_FETCH,
   POLKADOT_EXTENSION_WALLET_ERROR,
   POLKADOT_EXTENSION_WALLET_DATA,
-  MAIN_ACCOUNT_SET_FETCH,
   EXTENSION_WALLET_RESET,
-  MAIN_ACCOUNT_SET_DATA,
   REGISTER_MAIN_ACCOUNT_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
-  SET_ASSOCIATED_ACCOUNTS_FETCH,
-  SET_ASSOCIATED_ACCOUNTS_DATA,
-  SET_ASSOCIATED_ACCOUNTS_ERROR,
   REGISTER_MAIN_ACCOUNT_ERROR,
 } from "./constants";
+
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export interface MainAccountState {
   success?: boolean;
   isFetching: boolean;
-  allBrowserAccounts: InjectedAccount[];
-  allAccounts: string[];
-  selectedAccount: MainAccount;
+  allAccounts: ExtensionAccount[];
   registerMainAccountLoading: boolean;
   registerMainAccountSuccess: boolean;
-  setMainAccountLoading: boolean;
-  associatedTradeAccounts: string[];
-  associatedAccountsLoading: boolean;
-  associatedAccountsSuccess: boolean;
 }
-
-const defaultAccount: MainAccount = {
-  address: "",
-  account: null,
-  injector: null,
-  name: "",
-};
 
 const initialState: MainAccountState = {
   isFetching: false,
   success: false,
-  allBrowserAccounts: [],
   allAccounts: [],
-  associatedTradeAccounts: [],
-  selectedAccount: defaultAccount,
   registerMainAccountLoading: false,
   registerMainAccountSuccess: false,
-  associatedAccountsLoading: false,
-  associatedAccountsSuccess: false,
-  setMainAccountLoading: false,
 };
 
 export const mainAccountReducer = (
@@ -61,7 +37,7 @@ export const mainAccountReducer = (
         ...state,
         isFetching: false,
         success: true,
-        allBrowserAccounts: action.payload.allAccounts,
+        allAccounts: action.payload.allAccounts,
       };
     case POLKADOT_EXTENSION_WALLET_ERROR:
       return {
@@ -74,36 +50,6 @@ export const mainAccountReducer = (
         ...state,
         success: false,
         isFetching: true,
-      };
-    case MAIN_ACCOUNT_SET_FETCH:
-      return {
-        ...state,
-        setMainAccountLoading: true,
-      };
-    case MAIN_ACCOUNT_SET_DATA:
-      return {
-        ...state,
-        selectedAccount: action.payload.user,
-        setMainAccountLoading: false,
-        associatedAccountsLoading: true,
-      };
-    case SET_ASSOCIATED_ACCOUNTS_FETCH:
-      return {
-        ...state,
-        associatedAccountsLoading: true,
-      };
-    case SET_ASSOCIATED_ACCOUNTS_DATA:
-      return {
-        ...state,
-        associatedTradeAccounts: action.payload,
-        associatedAccountsSuccess: true,
-        associatedAccountsLoading: false,
-      };
-    case SET_ASSOCIATED_ACCOUNTS_ERROR:
-      return {
-        ...state,
-        associatedAccountsLoading: false,
-        associatedAccountsSuccess: false,
       };
     case EXTENSION_WALLET_RESET:
       return {
