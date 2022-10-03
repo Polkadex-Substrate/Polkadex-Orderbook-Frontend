@@ -74,6 +74,15 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     // ignore market liquidity error as there will always be a small qty which cannot be filled
     // due to the step size of the configuration. Its expected even-though order-book throws error
     if (errorText.includes("MarketLiquidityError")) {
+      yield put(
+        notificationPush({
+          type: "SuccessAlert",
+          message: {
+            title: "Market order placed",
+          },
+          time: new Date().getTime(),
+        })
+      );
       return;
     }
     yield put(
