@@ -1,5 +1,4 @@
-import { call, delay, put, select } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
+import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 
 import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
@@ -20,7 +19,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
     const api = yield select(selectRangerApi);
     const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
     if (!mainAccount?.address) {
-      throw new Error("Pleaes select a main account!");
+      throw new Error("Please select a main account!");
     }
     const { address: tradeAddress } = action.payload;
     if (api && mainAccount.address) {

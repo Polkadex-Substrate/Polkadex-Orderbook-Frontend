@@ -1,10 +1,8 @@
 import { keyring } from "@polkadot/ui-keyring";
 
-import { InjectedAccount, TradeAccountsAction } from "./actions";
+import { TradeAccountsAction } from "./actions";
 import {
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
-  RESET_CURRENT_TRADE_ACCOUNT,
-  SET_CURRENT_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   USER_REGISTER_TRADE_ACCOUNT_FETCH,
@@ -15,34 +13,27 @@ import {
   USER_TRADE_ACCOUNTS_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
 } from "./constants";
+
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export interface TradeAccountsState {
   success?: boolean;
   isFetching: boolean;
-  allBrowserAccounts: InjectedAccount[];
-  selectedAccount: InjectedAccount;
+  allBrowserAccounts: TradeAccount[];
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
-  mainAddress: string;
   removesInLoading: Array<string>;
 }
 
-export const defaultAccount: InjectedAccount = {
-  address: "",
-  meta: {},
-  type: "",
-  isPasswordProtected: false,
-};
 const initialState: TradeAccountsState = {
   isFetching: false,
   success: false,
   allBrowserAccounts: [],
-  selectedAccount: defaultAccount,
   registerAccountLoading: false,
   registerAccountSuccess: false,
   removesInLoading: [],
-  mainAddress: "",
 };
 
 export const TradeAccountsReducer = (
@@ -70,20 +61,6 @@ export const TradeAccountsReducer = (
         success: false,
         isFetching: true,
       };
-    case SET_CURRENT_TRADE_ACCOUNT_DATA:
-      return {
-        ...state,
-        selectedAccount: action.payload.tradeAccount,
-        mainAddress: action.payload?.mainAddress,
-      };
-
-    case RESET_CURRENT_TRADE_ACCOUNT:
-      return {
-        ...state,
-        selectedAccount: defaultAccount,
-        mainAddress: "",
-      };
-
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
       return {
         ...state,
@@ -109,12 +86,9 @@ export const TradeAccountsReducer = (
       const newAccounts = state.allBrowserAccounts.filter(
         (account) => account.address !== address
       );
-      keyring.forgetAddress(address);
       keyring.forgetAccount(address);
       return {
         ...state,
-        selectedAccount:
-          state.selectedAccount.address === address ? defaultAccount : state.selectedAccount,
         allBrowserAccounts: newAccounts,
       };
     }
@@ -132,32 +106,29 @@ export const TradeAccountsReducer = (
       const { address, password } = action.payload;
       try {
         const _allAccounts = [...state.allBrowserAccounts];
-        const keyringPair = keyring.getPair(address);
-        keyringPair.unlock(password.toString());
-        const account = _allAccounts.find((acc) => acc.address === address);
-        account.isPasswordProtected = false;
-        const accounts = _allAccounts.filter((acc) => acc.address !== address);
-        accounts.push(account);
-        if (state.selectedAccount.address === address) {
-          return {
-            ...state,
-            allBrowserAccounts: accounts,
-            selectedAccount: {
-              ...state.selectedAccount,
-              isPasswordProtected: false,
-            },
-          };
-        } else {
-          return {
-            ...state,
-            allBrowserAccounts: accounts,
-          };
+        const pair = _allAccounts.find((account) => account.address === address);
+        if (!pair) {
+          return state;
         }
+        pair.unlock(password.toString());
+        return {
+          ...state,
+          allBrowserAccounts: _allAccounts,
+        };
       } catch (e) {
         console.log("password error", e);
         alert("invalid password");
         return state;
       }
+    }
+    case USER_TRADE_ACCOUNT_IMPORT_DATA: {
+      const { pair } = action.payload;
+      const _allAccounts = [...state.allBrowserAccounts];
+      _allAccounts.push(pair);
+      return {
+        ...state,
+        allBrowserAccounts: _allAccounts,
+      };
     }
     default:
       return state;

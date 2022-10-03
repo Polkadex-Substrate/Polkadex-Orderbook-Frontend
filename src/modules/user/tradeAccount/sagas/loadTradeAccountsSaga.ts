@@ -1,19 +1,16 @@
 import { call, put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
+import { isReady } from "@polkadot/wasm-crypto";
 
 import { sendError } from "../../..";
-import { tradeAccountsData, InjectedAccount, TradeAccountsFetch } from "../actions";
+import { tradeAccountsData, TradeAccountsFetch } from "../actions";
 
-import { getFromStorage } from "@polkadex/orderbook/helpers/storage";
-import { getIsTradeAccountPasswordProtected } from "@polkadex/orderbook/helpers/localStorageHelpers";
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
-export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
+export function* loadTradeAccountsSaga(_action: TradeAccountsFetch) {
   try {
     // yield call(loadKeyring);
-    const allBrowserAccounts: InjectedAccount[] = yield call(getAllTradeAccountsInBrowser);
-    console.log(allBrowserAccounts);
-    // TODO:
-    // get all trade accounts from the blockchain and merge them with the browser accounts
+    const allBrowserAccounts: TradeAccount[] = yield call(getAllTradeAccountsInBrowser);
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
   } catch (error) {
     yield put(
@@ -26,23 +23,12 @@ export function* loadTradeAccountsSaga(action: TradeAccountsFetch) {
 }
 
 async function loadKeyring() {
-  try {
-    const { cryptoWaitReady } = await import("@polkadot/util-crypto");
-    await cryptoWaitReady();
-    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
-  } catch (error) {
-    console.log(error.message);
-  }
+  const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+  if (!isReady()) await cryptoWaitReady();
 }
 
-async function getAllTradeAccountsInBrowser(): Promise<InjectedAccount[]> {
-  const allAccounts = keyring.getAccounts();
-  return allAccounts.map((account) => {
-    return {
-      address: account.address,
-      meta: account.meta,
-      type: account.publicKey,
-      isPasswordProtected: getIsTradeAccountPasswordProtected(account.address),
-    };
-  });
+async function getAllTradeAccountsInBrowser(): Promise<TradeAccount[]> {
+  await loadKeyring();
+  const allAccounts = keyring.getPairs();
+  return allAccounts;
 }

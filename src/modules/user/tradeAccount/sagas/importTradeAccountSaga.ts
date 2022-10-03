@@ -1,7 +1,11 @@
 import { put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 
-import { ImportTradeAccount, notificationPush } from "@polkadex/orderbook-modules";
+import {
+  ImportTradeAccount,
+  importTradeAccountData,
+  notificationPush,
+} from "@polkadex/orderbook-modules";
 
 export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
   const { mnemonic, name, password } = action.payload;
@@ -9,6 +13,7 @@ export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
+    yield put(importTradeAccountData({ pair }));
     yield put(
       notificationPush({
         type: "SuccessAlert",
