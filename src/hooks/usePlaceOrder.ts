@@ -17,6 +17,7 @@ import {
   selectGetFreeProxyBalance,
   selectIsUserSignedIn,
   selectCurrentTradeAccountIsPassword,
+  alertPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -124,7 +125,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      if (convertedValue?.match(precisionRegExp(currentMarket?.base_precision || 0))) {
+      if (convertedValue?.match(precisionRegExp(currentMarket?.price_tick_size || 0))) {
         setForm({
           ...form,
           price: convertedValue,
@@ -180,16 +181,38 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   // TODO: Type form
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
-    dispatch(
-      orderExecuteFetch({
-        order_type: isLimit ? "LIMIT" : "MARKET",
-        symbol: currentMarket.assetIdArray,
-        side: isSell ? "Sell" : "Buy",
-        price: isLimit ? form.price : "",
-        market: currentMarket.id,
-        amount: isSell ? form.amountSell : form.amountBuy,
-      })
-    );
+    if (isLimit && +form.price < currentMarket.min_price) {
+      dispatch(
+        alertPush({
+          message: {
+            title: "Something has gone wrong...",
+            description: "Selected price cannot be less than market price",
+          },
+          type: "Error",
+        })
+      );
+    } else if (isLimit && +form.price > currentMarket.max_price) {
+      dispatch(
+        alertPush({
+          message: {
+            title: "Something has gone wrong...",
+            description: "Selected price cannot be greater than market price",
+          },
+          type: "Error",
+        })
+      );
+    } else {
+      dispatch(
+        orderExecuteFetch({
+          order_type: isLimit ? "LIMIT" : "MARKET",
+          symbol: currentMarket.assetIdArray,
+          side: isSell ? "Sell" : "Buy",
+          price: isLimit ? form.price : "",
+          market: currentMarket.id,
+          amount: isSell ? form.amountSell : form.amountBuy,
+        })
+      );
+    }
   };
 
   /**
