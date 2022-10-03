@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-import { Auth } from "aws-amplify";
 import { useEffect } from "react";
 
 import { useReduxSelector } from "./useReduxSelector";
@@ -9,7 +8,7 @@ import {
   selectIsUserSignedIn,
   selectIsUserVerified,
   selectUserIdentity,
-  userFetch,
+  userAuthFetch,
 } from "@polkadex/orderbook-modules";
 
 export function useAccount() {
@@ -19,7 +18,7 @@ export function useAccount() {
   const isVerified = useReduxSelector(selectIsUserVerified);
 
   useEffect(() => {
-    if (!isSignedIn) dispatch(userFetch());
+    if (!isSignedIn) dispatch(userAuthFetch());
   }, [dispatch, isSignedIn]);
 
   return {

@@ -10,7 +10,7 @@ import {
   rangerConnectFetch,
   selectRangerIsReady,
   tradeAccountsFetch,
-  userFetch,
+  userAuthFetch,
 } from "@polkadex/orderbook-modules";
 
 export const useInit = () => {
@@ -20,7 +20,7 @@ export const useInit = () => {
   useEffect(() => {
     dispatch(rangerConnectFetch());
     dispatch(tradeAccountsFetch());
-    dispatch(userFetch());
+    dispatch(userAuthFetch());
     dispatch(extensionWalletFetch());
   }, [dispatch]);
 

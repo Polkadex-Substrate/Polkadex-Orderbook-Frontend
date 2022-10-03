@@ -1,26 +1,20 @@
-import { ProfileState, RootState } from "../../";
+import { RootState } from "../../";
 
-export const selectUserSignedIn = (state: RootState): boolean => {
-  return state.user.polkadotWallet.selectedAccount?.address !== "";
-};
 export const selectUserIdentity = (state: RootState): string =>
-  state.user.profile.userData.email;
-
-export const selectSignedInUserInfo = (state: RootState): ProfileState["userData"] =>
-  state.user.profile.userData;
+  state.user.profile.authInfo.email;
 
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
-  state.user.profile.userData.shouldShowInitialBanner;
+  state.user.profile.authInfo.shouldShowInitialBanner;
 
 export const selectIsUserSignedIn = (state: RootState): boolean => {
-  return state.user.profile.userData.isAuthenticated;
+  return state.user.profile.authInfo.isAuthenticated;
 };
-
 export const selectIsUserVerified = (state: RootState): boolean => {
-  return state.user.profile.userData.isConfirmed;
+  return state.user.profile.authInfo.isConfirmed;
 };
 
-export const selectUserFetching = (state: RootState): boolean => state.user.profile.isFetching;
+export const selectUserAuthFetching = (state: RootState): boolean =>
+  state.user.profile.isAuthFetching;
 
-export const selectUserFetchSuccess = (state: RootState): boolean | undefined =>
-  state.user.profile.isSuccess;
+export const selectUserAuthFetchSuccess = (state: RootState): boolean | undefined =>
+  state.user.profile.isAuthSuccess;

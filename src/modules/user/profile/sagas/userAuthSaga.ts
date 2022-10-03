@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
 import { notificationPush, sendError, userAuthData, UserAuthFetch } from "../../../";
-import { userError } from "../actions";
+import { userAuthError } from "../actions";
 
 export function* userAuthSaga(_action: UserAuthFetch) {
   try {
@@ -29,7 +29,7 @@ export function* userAuthSaga(_action: UserAuthFetch) {
         error,
         processingType: "alert",
         extraOptions: {
-          actionError: userError,
+          actionError: userAuthError,
         },
       })
     );

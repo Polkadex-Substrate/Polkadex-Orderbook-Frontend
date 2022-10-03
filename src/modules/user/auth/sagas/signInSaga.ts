@@ -5,16 +5,16 @@ import router from "next/router";
 import { signInData, signInError, SignInFetch } from "../actions";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
-import { userFetch } from "@polkadex/orderbook-modules";
+import { userAuthFetch } from "@polkadex/orderbook-modules";
 
 let userEmail = "";
 export function* signInSaga(action: SignInFetch) {
   try {
     const { email, password } = action.payload;
     userEmail = email;
-    const res = yield call(signIn, email, password);
+    yield call(signIn, email, password);
     yield put(signInData({ email, isConfirmed: true }));
-    yield put(userFetch());
+    yield put(userAuthFetch());
   } catch (error) {
     console.error(error);
     if (error.name === "UserNotConfirmedException") {
