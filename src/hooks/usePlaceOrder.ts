@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
-import { cleanPositiveFloatInput, precisionRegExp } from "../helpers";
+import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 
 import {
   selectCurrentMarket,
@@ -17,7 +17,7 @@ import {
   selectGetFreeProxyBalance,
   selectIsUserSignedIn,
   selectCurrentTradeAccountIsPassword,
-  alertPush,
+  notificationPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -70,6 +70,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
+
+  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
+  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
+
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
     currentMarket?.quote_precision || 0
@@ -125,17 +129,17 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      if (convertedValue?.match(precisionRegExp(currentMarket?.price_tick_size || 0))) {
+      if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         setForm({
           ...form,
           price: convertedValue,
         });
       }
       setChangeType(false);
-      handleCleanPrice && handleCleanPrice();
+      // handleCleanPrice && handleCleanPrice();
     },
 
-    [currentMarket?.base_precision, form, handleCleanPrice]
+    [pricePrecision, form, handleCleanPrice]
   );
 
   /**
@@ -147,7 +151,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-      if (convertedValue.match(precisionRegExp(currentMarket?.quote_precision || 0))) {
+      if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         if (isSell) {
           setForm({
             ...form,
@@ -169,7 +173,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         };
       });
     },
-    [currentMarket?.quote_precision, form, isSell, bestBidPrice, bestAskPrice]
+    [qtyPrecision, form, isSell, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -181,27 +185,30 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   // TODO: Type form
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
+    const amount = isSell ? form.amountSell : form.amountBuy;
+    const notify = (description: string) => {
+      dispatch(
+        notificationPush({
+          type: "ErrorAlert",
+          message: {
+            title: "Order failed",
+            description,
+          },
+          time: new Date().getTime(),
+        })
+      );
+    };
+
     if (isLimit && +form.price < currentMarket.min_price) {
-      dispatch(
-        alertPush({
-          message: {
-            title: "Something has gone wrong...",
-            description: "Selected price cannot be less than market price",
-          },
-          type: "Error",
-        })
-      );
+      notify("price cannot be less than min market price");
     } else if (isLimit && +form.price > currentMarket.max_price) {
-      dispatch(
-        alertPush({
-          message: {
-            title: "Something has gone wrong...",
-            description: "Selected price cannot be greater than market price",
-          },
-          type: "Error",
-        })
-      );
+      notify("price cannot be greater than max market price");
+    } else if (+amount < currentMarket.min_amount) {
+      notify("Amount cannot be less than min market amount");
+    } else if (+amount > currentMarket.max_amount) {
+      notify("Amount cannot be greater than max market amount");
     } else {
+      // VALID TRANSACTION
       dispatch(
         orderExecuteFetch({
           order_type: isLimit ? "LIMIT" : "MARKET",
@@ -209,7 +216,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
           side: isSell ? "Sell" : "Buy",
           price: isLimit ? form.price : "",
           market: currentMarket.id,
-          amount: isSell ? form.amountSell : form.amountBuy,
+          amount,
         })
       );
     }
@@ -325,34 +332,50 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       // limit and sell
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
-          form.amountSell = `${
+          const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
           }`;
+          setForm({
+            ...form,
+            amountSell: Decimal.format(amount, qtyPrecision),
+          });
         }
       }
       // limit and buy
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
-          form.amountBuy = `${
+          const amount = `${
             (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
             Number(form.price)
           }`;
+          setForm({
+            ...form,
+            amountBuy: Decimal.format(amount, qtyPrecision),
+          });
         }
       }
       // market and sell
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
-          form.amountSell = `${
+          const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
           }`;
+          setForm({
+            ...form,
+            amountSell: Decimal.format(amount, qtyPrecision),
+          });
         }
       }
       // market and buy
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
-          form.amountBuy = `${
+          const amount = `${
             Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
           }`;
+          setForm({
+            ...form,
+            amountBuy: Decimal.format(amount, qtyPrecision),
+          });
         }
       }
     },
