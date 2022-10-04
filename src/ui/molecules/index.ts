@@ -25,7 +25,7 @@ export * from "./Appearance";
 export * from "./EmptyData";
 export * from "./Logged";
 export * from "./Range";
-export * from "./MyAccount";
+export * from "./Profile";
 export * from "./DropdownContent";
 export * from "./DropdownHeader";
 export * from "./DropdownItem";
@@ -47,5 +47,7 @@ export * from "./NavbarItem";
 export * from "./Loading";
 export * from "./MarketInput";
 export * from "./Footer";
+export * from "./EmptyAccount";
+export * from "./MyAccount";
 
 export * as LoadingIcons from "./LoadingIcons";

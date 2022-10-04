@@ -9,7 +9,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
-  WalletContent,
+  Profile,
   Popover,
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
@@ -155,7 +155,7 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </S.Profile>
             </Popover.Trigger>
             <Popover.Content>
-              <WalletContent />
+              <Profile />
             </Popover.Content>
           </Popover>
         </S.ContainerProfile>

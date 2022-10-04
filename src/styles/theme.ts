@@ -106,6 +106,7 @@ const light = {
   colors: {
     primaryBackground: "#F9FBFC",
     primaryBackgroundOpacity: "#F9FBFC99",
+    primaryBackgroundSolid: "#F9FBFC",
     gradientBackground: "linear-gradient(62.3deg, #FFFFFF 13.21%, #F9FBFC99 98.01%)",
     tertiaryBackground: "#EEF0F6",
     secondaryBackgroundSolid: "#FBFBFB",
@@ -147,6 +148,7 @@ const dark = {
   colors: {
     primaryBackground: "#1C1C26",
     primaryBackgroundOpacity: "#1C1C2699",
+    primaryBackgroundSolid: "#22232E",
     gradientBackground: "#1F2029",
     tertiaryBackground: "#2E303C",
     secondaryBackgroundSolid: "#2F3340",

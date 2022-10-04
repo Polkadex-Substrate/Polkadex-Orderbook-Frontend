@@ -52,7 +52,7 @@ export type Colors =
   | "secondaryBackgroundDark"
   | "quaternaryBackground"
   | "secondaryText"
-  | "tertiraryText"
+  | "tertiaryText"
   | "popupBackground"
   | "gradientBackground"
   | "gradientGreen"
