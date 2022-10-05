@@ -1,9 +1,13 @@
 import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
-import keyring from "@polkadot/ui-keyring";
 import { Signer } from "@polkadot/types/types";
 
-import { notificationPush, selectExtensionWalletAccounts, selectRangerApi } from "../../..";
+import {
+  notificationPush,
+  removeTradeAccountFromBrowser,
+  selectExtensionWalletAccounts,
+  selectRangerApi,
+} from "../../..";
 import {
   registerMainAccountData,
   registerMainAccountError,
@@ -11,13 +15,12 @@ import {
 } from "../actions";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { setIsTradeAccountPassworded } from "@polkadex/orderbook/helpers/localStorageHelpers";
 
 let tradeAddr = "";
 
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
-    const { mainAccount, tradeAddress, password } = action.payload;
+    const { mainAccount, tradeAddress } = action.payload;
     tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
     yield select(selectExtensionWalletAccounts);
@@ -38,13 +41,12 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       );
       if (res.isSuccess) {
         yield put(registerMainAccountData());
-        setIsTradeAccountPassworded(tradeAddress, password.length > 0);
       } else {
-        keyring.forgetAccount(tradeAddr);
+        removeTradeAccountFromBrowser({ address: tradeAddress });
       }
     }
   } catch (error) {
-    keyring.forgetAccount(tradeAddr);
+    removeTradeAccountFromBrowser({ address: tradeAddr });
     yield put(registerMainAccountError());
     yield put(
       notificationPush({

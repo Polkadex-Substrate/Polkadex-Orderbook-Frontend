@@ -9,6 +9,7 @@ import {
   registerTradeAccountError,
   RegisterTradeAccountFetch,
   registerTradeAccountReset,
+  removeTradeAccountFromBrowser,
   tradeAccountPush,
 } from "../actions";
 import { notificationPush } from "../../notificationHandler";
@@ -36,7 +37,6 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
     });
     tradeAddress = pair.address;
     if (api && account.address) {
-      // TODO: change to notifications here
       yield put(
         notificationPush({
           type: "LoadingAlert",
@@ -51,7 +51,6 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       const res = yield call(() =>
         addProxyToAccount(api, tradeAddress, signer, account.address)
       );
-      // TODO: change to notifications here
       if (res.isSuccess) {
         yield put(tradeAccountPush({ pair }));
         yield delay(2000);
@@ -74,9 +73,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       }
     }
   } catch (error) {
-    if (tradeAddress) {
-      keyring.forgetAccount(tradeAddress);
-    }
+    yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
     yield put(
       sendError({
         error,

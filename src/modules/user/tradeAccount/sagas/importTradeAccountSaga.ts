@@ -4,8 +4,11 @@ import keyring from "@polkadot/ui-keyring";
 import {
   ImportTradeAccount,
   notificationPush,
+  removeTradeAccountFromBrowser,
   tradeAccountPush,
 } from "@polkadex/orderbook-modules";
+
+let tradeAddress = "";
 
 export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
   const { mnemonic, name, password } = action.payload;
@@ -13,6 +16,7 @@ export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
+    tradeAddress = pair.address;
     yield put(tradeAccountPush({ pair }));
     yield put(
       notificationPush({
@@ -26,6 +30,7 @@ export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
     );
   } catch (error) {
     console.log(error);
+    yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
     yield put(
       notificationPush({
         type: "ErrorAlert",

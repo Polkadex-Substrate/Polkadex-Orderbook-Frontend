@@ -97,6 +97,7 @@ export interface TradeAccountPush {
   type: typeof USER_TRADE_ACCOUNT_PUSH;
   payload: { pair: TradeAccount };
 }
+
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -112,7 +113,6 @@ export type TradeAccountsAction =
   | ImportTradeAccount
   | ImportTradeAccountError
   | TradeAccountPush;
-
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
 });

@@ -13,6 +13,7 @@ import { useReduxSelector } from "./useReduxSelector";
 import {
   selectIsMainAddressRegistered,
   selectUsingAccount,
+  tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
@@ -30,16 +31,17 @@ export const useLinkMainAccount = () => {
   const registerMainAccount = (
     acc: ExtensionAccount,
     name = "trade-account",
-    mnemoicString: string,
+    mnemonicString: string,
     passcode: string | null
   ) => {
-    const tradeAcc = keyring.addUri(mnemoicString, passcode, {
+    const { pair } = keyring.addUri(mnemonicString, passcode, {
       name,
     });
+    dispatch(tradeAccountPush({ pair }));
     dispatch(
       registerMainAccountFetch({
         mainAccount: acc,
-        tradeAddress: tradeAcc.pair.address,
+        tradeAddress: pair.address,
         password: passcode,
       })
     );
