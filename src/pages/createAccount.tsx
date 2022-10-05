@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsAddressInExtension } from "../modules/user/mainAccount";
+import { selectIsAddressInExtension } from "../modules/user/extensionWallet";
 import {
   selectIsMainAddressRegistered,
   selectIsUserSignedIn,
   selectUsingAccount,
 } from "../modules/user/profile";
-import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeAccount";
+import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeWallet";
 
 const CreateAccountTemplate = dynamic(
   () =>

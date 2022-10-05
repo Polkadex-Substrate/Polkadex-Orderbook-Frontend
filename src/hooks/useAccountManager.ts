@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
-import {} from "../modules/user/mainAccount";
+import {} from "../modules/user/extensionWallet";
 import { notificationPush } from "../modules/user/notificationHandler";
 import {
   removeTradeAccountFromBrowser,
   selectBrowserTradeAccounts,
-} from "../modules/user/tradeAccount";
+} from "../modules/user/tradeWallet";
 
 import { useReduxSelector } from "./useReduxSelector";
 

@@ -3,7 +3,7 @@ import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 
-import { selectMainAccount } from "../../mainAccount";
+import { selectMainAccount } from "../../extensionWallet";
 import {
   registerTradeAccountData,
   registerTradeAccountError,

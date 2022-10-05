@@ -7,7 +7,7 @@ import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
-import { registerMainAccountUpdateEvent } from "../../mainAccount";
+import { registerMainAccountUpdateEvent } from "../../extensionWallet";
 import { notificationPush } from "../../notificationHandler";
 import { userTradesUpdateEvent } from "../../trades";
 

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsAddressInExtension } from "../modules/user/mainAccount";
+import { selectIsAddressInExtension } from "../modules/user/extensionWallet";
 import {
   selectIsMainAddressRegistered,
   selectIsUserSignedIn,

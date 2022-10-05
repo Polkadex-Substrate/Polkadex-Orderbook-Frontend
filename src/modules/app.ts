@@ -13,13 +13,13 @@ import { ordersReducer } from "./user/orders";
 import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
 import { profileReducer } from "./user/profile";
-import { TradeAccountsReducer } from "./user/tradeAccount";
+import { TradeAccountsReducer } from "./user/tradeWallet";
 import { depositsReducer } from "./user/deposit";
 import { tradesReducer } from "./user/trades";
 import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
-import { mainAccountReducer } from "./user/mainAccount";
+import { extensionWalletReducer } from "./user/extensionWallet";
 import { sessionReducer } from "./user/session";
 import { assetsReducer } from "./public/assets";
 
@@ -38,8 +38,8 @@ export const publicReducer = combineReducers({
 
 export const userReducer = combineReducers({
   auth: authReducer,
-  polkadotWallet: TradeAccountsReducer,
-  extensionWallet: mainAccountReducer,
+  tradeWallet: TradeAccountsReducer,
+  extensionWallet: extensionWalletReducer,
   balances: balancesReducer,
   orders: ordersReducer,
   ordersHistory: ordersHistoryReducer,

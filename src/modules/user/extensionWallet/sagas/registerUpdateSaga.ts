@@ -1,7 +1,7 @@
 import { call, put, select } from "redux-saga/effects";
 
 import { notificationPush } from "../../notificationHandler";
-import { tradeAccountsFetch } from "../../tradeAccount";
+import { tradeAccountsFetch } from "../../tradeWallet";
 import { RegisterMainAccountUpdateEvent } from "../actions";
 
 import { sendError } from "@polkadex/orderbook-modules";

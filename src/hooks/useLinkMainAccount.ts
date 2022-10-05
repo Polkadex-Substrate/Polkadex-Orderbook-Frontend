@@ -6,7 +6,7 @@ import {
   selectExtensionWalletAccounts,
   selectIsRegisterMainAccountLoading,
   selectMainAccount,
-} from "../modules/user/mainAccount";
+} from "../modules/user/extensionWallet";
 
 import { useReduxSelector } from "./useReduxSelector";
 

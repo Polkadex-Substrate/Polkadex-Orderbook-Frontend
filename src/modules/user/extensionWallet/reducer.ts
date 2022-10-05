@@ -27,7 +27,7 @@ const initialState: MainAccountState = {
   registerMainAccountSuccess: false,
 };
 
-export const mainAccountReducer = (
+export const extensionWalletReducer = (
   state = initialState,
   action: GetExtensionWalletAction
 ): MainAccountState => {
