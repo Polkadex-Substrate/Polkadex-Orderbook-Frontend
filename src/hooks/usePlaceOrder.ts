@@ -17,7 +17,7 @@ import {
   selectGetFreeProxyBalance,
   selectIsUserSignedIn,
   selectCurrentTradeAccountIsPassword,
-  notificationPush,
+  alertPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -188,13 +188,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     const amount = isSell ? form.amountSell : form.amountBuy;
     const notify = (description: string) => {
       dispatch(
-        notificationPush({
-          type: "ErrorAlert",
+        alertPush({
           message: {
-            title: "Order failed",
+            title: "Order Failed",
             description,
           },
-          time: new Date().getTime(),
+          type: "Alert",
         })
       );
     };
