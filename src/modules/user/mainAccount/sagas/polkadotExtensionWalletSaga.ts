@@ -2,11 +2,12 @@ import { call, put } from "redux-saga/effects";
 
 import { sendError } from "../../..";
 import { extensionWalletData } from "../actions";
-import { InjectedAccount } from "../../tradeAccount";
+
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export function* polkadotExtensionWalletSaga() {
   try {
-    const allAccounts: InjectedAccount[] = yield call(getAllExtensionWalletAccounts);
+    const allAccounts: ExtensionAccount[] = yield call(getAllExtensionWalletAccounts);
     yield put(extensionWalletData({ allAccounts }));
   } catch (error) {
     yield put(
@@ -18,21 +19,23 @@ export function* polkadotExtensionWalletSaga() {
   }
 }
 
-async function getAllExtensionWalletAccounts(): Promise<InjectedAccount[]> {
+async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
   try {
-    const { web3Accounts, web3Enable } = await import("@polkadot/extension-dapp");
-    const extensions = await web3Enable("polkadot");
+    const { web3Accounts, web3Enable, web3FromAddress } = await import(
+      "@polkadot/extension-dapp"
+    );
+    const extensions = await web3Enable("polkadex");
     if (extensions.length === 0) {
       throw new Error("no extensions installed");
     }
     const allAccounts: any = await web3Accounts({ ss58Format: 88 });
-    return allAccounts.map((account) => {
+    const promises = allAccounts.map(async (account): Promise<ExtensionAccount> => {
       return {
-        address: account.address,
-        meta: account.meta,
-        type: account.publicKey,
+        account,
+        signer: (await web3FromAddress(account.address)).signer,
       };
     });
+    return Promise.all(promises);
   } catch (error) {
     console.log(error.message);
   }

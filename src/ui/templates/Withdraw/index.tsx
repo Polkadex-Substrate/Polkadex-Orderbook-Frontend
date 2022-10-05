@@ -61,9 +61,9 @@ export const WithdrawTemplate = () => {
   const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.account.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.account.address?.slice(currMainAcc?.account.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
     () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),

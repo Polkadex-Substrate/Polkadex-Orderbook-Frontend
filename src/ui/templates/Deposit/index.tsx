@@ -53,9 +53,9 @@ export const DepositTemplate = () => {
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.account.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.account.address?.slice(currMainAcc?.account.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
     const initialAsset = assets.find(

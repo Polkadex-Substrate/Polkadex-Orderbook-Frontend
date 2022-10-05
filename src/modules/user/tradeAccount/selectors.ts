@@ -14,7 +14,7 @@ export const selectBrowserTradeAccounts = (state: RootState): TradeAccount[] =>
 export const selectTradeAccount =
   (address: string) =>
   (state: RootState): TradeAccount =>
-    selectBrowserTradeAccounts(state).find((account) => account.address === address);
+    selectBrowserTradeAccounts(state).find((account) => account?.address === address);
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.registerAccountLoading;

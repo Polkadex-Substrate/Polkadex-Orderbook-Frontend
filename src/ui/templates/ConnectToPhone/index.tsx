@@ -100,7 +100,7 @@ export const ConnectToPhone = () => {
                               "Select your main account"
                             }
                             address={
-                              extensionAccount?.account.address ||
+                              extensionAccount?.account?.address ||
                               "Polkadex is completely free"
                             }
                           />
@@ -112,11 +112,11 @@ export const ConnectToPhone = () => {
                             accounts.map((item, index) => (
                               <SelectAccount
                                 isActive={
-                                  item?.account.address === extensionAccount?.account.address
+                                  item?.account?.address === extensionAccount?.account?.address
                                 }
                                 key={index}
                                 accountName={item?.account?.meta?.name || `Account ${index}`}
-                                address={item?.account.address}
+                                address={item?.account?.address}
                                 onClick={() => console.log("not implemented")}
                               />
                             ))

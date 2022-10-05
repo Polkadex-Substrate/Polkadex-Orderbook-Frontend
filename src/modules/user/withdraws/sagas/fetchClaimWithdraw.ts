@@ -29,7 +29,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
       selectMainAccount(currentAccount.linkedMainAddress)
     );
     const isApiReady = yield select(selectRangerIsReady);
-    if (isApiReady && account.address !== "") {
+    if (isApiReady && account?.address !== "") {
       yield put(
         notificationPush({
           type: "InformationAlert",
@@ -41,7 +41,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
           time: new Date().getTime(),
         })
       );
-      const res = yield call(claimWithdrawal, api, signer, account.address, sid);
+      const res = yield call(claimWithdrawal, api, signer, account?.address, sid);
       if (res.isSuccess) {
         yield put(withdrawsClaimData({ sid }));
         // TODO?: Check delay

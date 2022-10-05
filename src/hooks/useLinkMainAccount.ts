@@ -55,11 +55,11 @@ export const useLinkMainAccount = () => {
     loading,
     selectedTradeAddress,
     isRegistered,
-    shortWallet: currentMainAccount?.account.address
-      ? currentMainAccount?.account.address?.slice(0, 10) +
+    shortWallet: currentMainAccount?.account?.address
+      ? currentMainAccount?.account?.address?.slice(0, 10) +
         "..." +
-        currentMainAccount?.account.address?.slice(
-          currentMainAccount?.account.address?.length - 10
+        currentMainAccount?.account?.address?.slice(
+          currentMainAccount?.account?.address?.length - 10
         )
       : "",
   };

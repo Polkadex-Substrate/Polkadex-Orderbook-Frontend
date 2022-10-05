@@ -70,7 +70,6 @@ export function Trading() {
 
   const currentMainAddr = useReduxSelector(selectUsingAccount).linkedMainAddress;
   const currentTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
-
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",

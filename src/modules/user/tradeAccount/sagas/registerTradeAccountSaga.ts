@@ -36,7 +36,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       name: name,
     });
     tradeAddress = pair.address;
-    if (api && account.address) {
+    if (api && account?.address) {
       yield put(
         notificationPush({
           type: "LoadingAlert",
@@ -49,7 +49,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
         })
       );
       const res = yield call(() =>
-        addProxyToAccount(api, tradeAddress, signer, account.address)
+        addProxyToAccount(api, tradeAddress, signer, account?.address)
       );
       if (res.isSuccess) {
         yield put(tradeAccountPush({ pair }));

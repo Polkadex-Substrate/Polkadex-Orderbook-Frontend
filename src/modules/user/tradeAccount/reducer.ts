@@ -84,7 +84,7 @@ export const TradeAccountsReducer = (
     case REMOVE_TRADE_ACCOUNT_FROM_BROWSER: {
       const { address } = action.payload;
       const newAccounts = state.allBrowserAccounts.filter(
-        (account) => account.address !== address
+        (account) => account?.address !== address
       );
       keyring.forgetAccount(address);
       return {
@@ -106,7 +106,7 @@ export const TradeAccountsReducer = (
       const { address, password } = action.payload;
       try {
         const _allAccounts = [...state.allBrowserAccounts];
-        const pair = _allAccounts.find((account) => account.address === address);
+        const pair = _allAccounts.find((account) => account?.address === address);
         if (!pair) {
           return state;
         }

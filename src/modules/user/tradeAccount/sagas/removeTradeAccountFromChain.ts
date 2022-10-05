@@ -24,7 +24,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
       throw new Error("Please select a main account!");
     }
     const { address: tradeAddress } = action.payload;
-    if (api && account.address) {
+    if (api && account?.address) {
       yield put(
         notificationPush({
           type: "LoadingAlert",
@@ -37,7 +37,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
         })
       );
       const res = yield call(() =>
-        removeProxyFromAccount(api, tradeAddress, signer, account.address)
+        removeProxyFromAccount(api, tradeAddress, signer, account?.address)
       );
       if (res.isSuccess) {
         yield put(

@@ -154,7 +154,7 @@ export const AccountManagerTemplate = () => {
         <Modal.Body>
           <UnlockAccount
             handleClose={handleUnlockClose}
-            onSubmit={() => handleSelectTradeAccount(unlockAccount.address)}
+            onSubmit={() => handleSelectTradeAccount(unlockAccount?.address)}
           />
         </Modal.Body>
       </Modal>
@@ -203,7 +203,7 @@ export const AccountManagerTemplate = () => {
                                 <S.SelectAccountContainer>
                                   <div>
                                     <strong>
-                                      {currentMainAccount?.account.meta.name ||
+                                      {currentMainAccount?.account?.meta?.name ||
                                         (loading ? "Loading..." : "Select your main account")}
                                     </strong>
                                     {shortWallet.length ? <span>{shortWallet}</span> : ""}
@@ -226,12 +226,12 @@ export const AccountManagerTemplate = () => {
 
                                   return (
                                     <Dropdown.Item
-                                      key={account.address}
+                                      key={account?.address}
                                       onAction={() =>
-                                        handleSelectMainAccount(account.address)
+                                        handleSelectMainAccount(account?.address)
                                       }>
                                       <S.MyDropdownContentCard>
-                                        {account.meta.name}
+                                        {account?.meta?.name}
                                         <span>{shortAddress}</span>
                                       </S.MyDropdownContentCard>
                                     </Dropdown.Item>

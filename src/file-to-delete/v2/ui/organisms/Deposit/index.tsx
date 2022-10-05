@@ -56,21 +56,23 @@ const Deposit = () => {
                   <SelectAccount
                     isHeader
                     accountName={
-                      selectedAccount?.account.meta.name || "Select your main account"
+                      selectedAccount?.account?.meta?.name || "Select your main account"
                     }
-                    address={selectedAccount?.account.address || "Polkadex is completely free"}
+                    address={
+                      selectedAccount?.account?.address || "Polkadex is completely free"
+                    }
                   />
                 }>
                 <S.SelectContent isOverflow={accounts?.length > 2}>
                   {accounts?.length ? (
                     accounts.map((item, index) => (
                       <SelectAccount
-                        isActive={item.account.address === selectedAccount?.account.address}
+                        isActive={item.account?.address === selectedAccount?.account?.address}
                         key={index}
-                        accountName={item.account.meta.name || `Account ${index}`}
-                        address={item.account.address}
+                        accountName={item.account?.meta?.name || `Account ${index}`}
+                        address={item.account?.address}
                         onClick={() => {
-                          setFieldValue("address", item.account.address);
+                          setFieldValue("address", item.account?.address);
                         }}
                       />
                     ))

@@ -15,7 +15,6 @@ export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
-
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",

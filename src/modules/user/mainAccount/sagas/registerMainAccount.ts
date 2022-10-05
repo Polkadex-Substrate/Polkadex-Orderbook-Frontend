@@ -24,7 +24,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
     yield select(selectExtensionWalletAccounts);
-    if (mainAccount.account.address) {
+    if (mainAccount.account?.address) {
       yield put(
         notificationPush({
           message: {
@@ -37,7 +37,12 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         })
       );
       const res = yield call(() =>
-        registerMainAccount(api, tradeAddress, mainAccount.signer, mainAccount.account.address)
+        registerMainAccount(
+          api,
+          tradeAddress,
+          mainAccount.signer,
+          mainAccount.account?.address
+        )
       );
       if (res.isSuccess) {
         yield put(registerMainAccountData());
