@@ -6,10 +6,7 @@ import * as S from "./styles";
 
 import { Tabs, TabContent, TabHeader, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectHasCurrentTradeAccount,
-  selectUserAuthFetching,
-} from "@polkadex/orderbook-modules";
+import { selectHasSelectedAccount, selectUserAuthFetching } from "@polkadex/orderbook-modules";
 import History from "@polkadex/orderbook/file-to-delete/v2/ui/organisms/History";
 import { WalletContent } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/MyAccount";
 
@@ -28,7 +25,7 @@ const Withdraw = dynamic(
 
 export const WalletTemplate = () => {
   const router = useRouter();
-  const user = useReduxSelector(selectHasCurrentTradeAccount);
+  const user = useReduxSelector(selectHasSelectedAccount);
   const isLoading = useReduxSelector(selectUserAuthFetching);
 
   useEffect(() => {

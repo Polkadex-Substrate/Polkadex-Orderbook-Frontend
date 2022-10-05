@@ -1,17 +1,14 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { UserTrade, userTradesData, userTradesError } from "..";
 import * as queries from "../../../../graphql/queries";
 
 import {
-  selectCurrentTradeAccount,
   selectUserSession,
+  selectUsingAccount,
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
-import { Utils } from "@polkadex/web-helpers";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type TradesQueryResult = {
@@ -24,7 +21,8 @@ type TradesQueryResult = {
 
 export function* fetchTradesSaga() {
   try {
-    const { address } = yield select(selectCurrentTradeAccount);
+    const currAccount = yield select(selectUsingAccount);
+    const address = currAccount.selectedTradeAddress;
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;

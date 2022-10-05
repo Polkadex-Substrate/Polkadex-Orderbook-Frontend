@@ -9,7 +9,10 @@ import {
   PROFILE_USER_AUTH_FETCH,
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_AUTH_ERROR,
+  PROFILE_USER_SELECT_ACCOUNT_FETCH,
 } from "./constants";
+
+import { SelectedAccount } from "@polkadex/orderbook/modules";
 
 export interface UserChangeInitBanner {
   type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
@@ -63,6 +66,15 @@ export interface UserAuthError {
   type: typeof PROFILE_USER_AUTH_ERROR;
   error: CommonError;
 }
+export interface UserAccountSelectFetch {
+  type: typeof PROFILE_USER_SELECT_ACCOUNT_FETCH;
+  payload: { tradeAddress: string };
+}
+
+export interface UserAccountSelectData {
+  type: typeof PROFILE_USER_SELECT_ACCOUNT_FETCH;
+  payload: { account: SelectedAccount };
+}
 export type ProfileAction =
   | UserFetch
   | UserError
@@ -70,7 +82,9 @@ export type ProfileAction =
   | UserChangeInitBanner
   | UserAuthFetch
   | UserAuthData
-  | UserAuthError;
+  | UserAuthError
+  | UserAccountSelectFetch
+  | UserAccountSelectData;
 
 export const userFetch = (): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -107,4 +121,18 @@ export const userAuthData = (payload: UserAuthData["payload"]): UserAuthData => 
 export const userAuthError = (error: CommonError): UserAuthError => ({
   type: PROFILE_USER_AUTH_ERROR,
   error,
+});
+
+export const userAccountSelectFetch = (
+  payload: UserAccountSelectFetch["payload"]
+): UserAccountSelectFetch => ({
+  type: PROFILE_USER_SELECT_ACCOUNT_FETCH,
+  payload,
+});
+
+export const userAccountSelectData = (
+  payload: UserAccountSelectData["payload"]
+): UserAccountSelectData => ({
+  type: PROFILE_USER_SELECT_ACCOUNT_FETCH,
+  payload,
 });

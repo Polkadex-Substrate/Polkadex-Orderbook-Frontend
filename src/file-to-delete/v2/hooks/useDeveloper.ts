@@ -6,12 +6,12 @@ import {
   balancesFetch,
   logOutFetch,
   notificationPush,
-  selectHasCurrentTradeAccount,
   selectNotifications,
   selectBrowserTradeAccounts,
   selectSignInError,
   selectSignInLoading,
   signInFetch,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { signMessage } from "@polkadex/web-helpers";
 
@@ -28,7 +28,7 @@ type Notifications = { repeatNumber: number; repeatTime: number };
 // TODO: REMOVED IN PRODUCTION
 export function useDeveloper() {
   const dispatch = useDispatch();
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   const notifications = useReduxSelector(selectNotifications);
   const accounts = useReduxSelector(selectBrowserTradeAccounts);
 

@@ -2,11 +2,9 @@ import keyring from "@polkadot/ui-keyring";
 import { useDispatch } from "react-redux";
 
 import {
-  MainAccount,
   registerMainAccountFetch,
   selectExtensionWalletAccounts,
   selectCurrentMainAccount,
-  setMainAccountFetch,
   selectIsCurrentAccountRegistered,
   selectIsRegisterMainAccountLoading,
 } from "../modules/user/mainAccount";

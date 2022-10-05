@@ -7,12 +7,18 @@ import {
   PROFILE_USER_AUTH_FETCH,
 } from "./constants";
 
+export interface SelectedAccount {
+  selectedTradeAddress: "";
+  linkedMainAddress: "";
+}
+
 export interface ProfileState {
   authInfo: AuthInfo;
   userData: {
-    userAccounts: UserAccount[];
+    userAccount: UserAccount[];
     mainAccounts: string[];
   };
+  selectedAccount: SelectedAccount;
   isAuthFetching: boolean;
   isAuthSuccess: boolean;
 }
@@ -30,8 +36,12 @@ const defaultAuth: AuthInfo = {
 export const initialStateProfile: ProfileState = {
   authInfo: defaultAuth,
   userData: {
-    userAccounts: [],
+    userAccount: [],
     mainAccounts: [],
+  },
+  selectedAccount: {
+    selectedTradeAddress: "",
+    linkedMainAddress: "",
   },
   isAuthFetching: false,
   isAuthSuccess: false,

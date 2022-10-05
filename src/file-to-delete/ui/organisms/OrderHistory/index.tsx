@@ -8,7 +8,7 @@ import {
   selectOrdersHistory,
   selectOrdersHistoryLoading,
   userOrdersHistoryFetch,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useWindowSize } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -47,7 +47,7 @@ export const OrderHistory = () => {
 
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket) || DEFAULT_MARKET;
-  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
+  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const { width } = useWindowSize();
 
   useEffect(() => {

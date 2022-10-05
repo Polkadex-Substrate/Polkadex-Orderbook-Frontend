@@ -63,12 +63,12 @@ const Deposit = () => {
                   {accounts?.length ? (
                     accounts.map((item, index) => (
                       <SelectAccount
-                        isActive={item.address === selectedAccount?.address}
+                        isActive={item.account.address === selectedAccount?.address}
                         key={index}
-                        accountName={item.meta.name || `Account ${index}`}
-                        address={item.address}
+                        accountName={item.account.meta.name || `Account ${index}`}
+                        address={item.account.address}
                         onClick={() => {
-                          setFieldValue("address", item.address);
+                          setFieldValue("address", item.account.address);
                         }}
                       />
                     ))

@@ -32,8 +32,8 @@ import {
 } from "@polkadex/orderbook-hooks";
 import {
   selectAssociatedTradeAccountsLoading,
-  selectHasCurrentTradeAccount,
   selectHasExtension,
+  selectHasSelectedAccount,
   selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
   selectRegisterTradeAccountRemoving,
@@ -62,7 +62,7 @@ export const AccountManagerTemplate = () => {
   const loading = useReduxSelector(selectIsSetMainAccountLoading);
   const loadingTradeAccounts = useReduxSelector(selectAssociatedTradeAccountsLoading);
   const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
-  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasSelectedAccount);
 
   const assets = useReduxSelector(selectAllAssets);
   const balances = useReduxSelector(selectUserBalance);
@@ -214,7 +214,7 @@ export const AccountManagerTemplate = () => {
                               fill="secondaryBackgroundSolid"
                               disabledKeys={["empty"]}>
                               {mainAccounts?.length ? (
-                                mainAccounts.map((account) => {
+                                mainAccounts.map(({ account }) => {
                                   const shortAddress =
                                     account?.address?.slice(0, 10) +
                                     "..." +

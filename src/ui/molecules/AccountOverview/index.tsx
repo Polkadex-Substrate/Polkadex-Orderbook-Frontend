@@ -6,12 +6,12 @@ import * as T from "./types";
 
 import { AvailableMessage, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
+import { selectHasSelectedAccount } from "@polkadex/orderbook-modules";
 
 export const AccountOverview = ({ address, onNavigate, logout }: T.Props) => {
   const router = useRouter();
   const buttonRef = useRef(null);
-  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasSelectedAccount);
 
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy");
   const { userEmail } = useAccount();

@@ -1,13 +1,9 @@
 import { RootState } from "../..";
 
-export const selectExtensionWalletLoading = (state: RootState): boolean =>
-  state.user.extensionWallet.isFetching;
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
-export const selectExtensionWalletSuccess = (state: RootState): boolean =>
-  state.user.extensionWallet.success;
-
-export const selectExtensionWalletAccounts = (state: RootState): InjectedAccount[] =>
-  state.user.extensionWallet.allBrowserAccounts;
+export const selectExtensionWalletAccounts = (state: RootState): ExtensionAccount[] =>
+  state.user.extensionWallet.allAccounts;
 
 export const selectCurrentMainAccount = (state: RootState): MainAccount =>
   state.user.extensionWallet.selectedAccount;

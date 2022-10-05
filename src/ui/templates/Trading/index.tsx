@@ -17,13 +17,13 @@ import {
   selectAssociatedTradeAccounts,
   selectCurrentMainAccount,
   selectCurrentMarket,
-  selectCurrentTradeAccount,
   selectCurrentTradePrice,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
   selectIsCurrentMainAccountInWallet,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
   selectUserIdentity,
+  selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -61,12 +61,12 @@ export function Trading() {
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
-  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
   const email = useReduxSelector(selectUserIdentity);
   const hasMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
   const currentMainAccount = useReduxSelector(selectCurrentMainAccount).address;
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
 
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {

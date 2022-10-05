@@ -8,7 +8,6 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_DATA,
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
-  RESET_CURRENT_TRADE_ACCOUNT,
   USER_REGISTER_TRADE_ACCOUNT_RESET,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
@@ -42,10 +41,6 @@ export interface RegisterTradeAccountFetch {
     password?: string;
     name?: string;
   };
-}
-
-export interface ResetCurrentTradeAccount {
-  type: typeof RESET_CURRENT_TRADE_ACCOUNT;
 }
 
 export interface RegisterTradeAccountData {
@@ -113,7 +108,6 @@ export type TradeAccountsAction =
   | RegisterTradeAccountData
   | RegisterTradeAccountError
   | RemoveTradeAccountFromBrowser
-  | ResetCurrentTradeAccount
   | RegisterTradeAccountReset
   | RemoveProxyAccountFromChainFetch
   | RemoveProxyAccountFromChainData

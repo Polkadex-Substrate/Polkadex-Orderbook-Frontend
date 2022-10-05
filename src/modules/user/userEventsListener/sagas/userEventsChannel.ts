@@ -1,26 +1,26 @@
 import { call, put, select, take, fork } from "redux-saga/effects";
-import { EventChannel, eventChannel } from "redux-saga";
+import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { UserEventsFetch, userUnknownEvent } from "../actions";
+import { UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
-import { registerMainAccountUpdateEvent, selectCurrentMainAccount } from "../../mainAccount";
+import { registerMainAccountUpdateEvent } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
-import { selectCurrentTradeAccount } from "../../tradeAccount";
 import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
-import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+import { SelectedAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
 
-export function* userEventsChannelSaga(action: UserEventsFetch) {
-  const mainAcc = yield select(selectCurrentMainAccount);
-  const tradeAcc = yield select(selectCurrentTradeAccount);
-  yield fork(userEventsChannelHandler, tradeAcc.address);
-  yield fork(userEventsChannelHandler, mainAcc.address);
+export function* userEventsChannelSaga(_action: UserEventsFetch) {
+  const currentAccount: SelectedAccount = yield select(selectUsingAccount);
+  const mainAddr = currentAccount.linkedMainAddress;
+  const tradeAddr = currentAccount.selectedTradeAddress;
+  yield fork(userEventsChannelHandler, mainAddr);
+  yield fork(userEventsChannelHandler, tradeAddr);
 }
 
 export function* userEventsChannelHandler(address) {

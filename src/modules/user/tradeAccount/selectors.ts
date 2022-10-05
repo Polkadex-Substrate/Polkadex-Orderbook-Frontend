@@ -1,11 +1,6 @@
-import { state } from "@polkadot/types/interfaces/definitions";
-
 import { RootState } from "../..";
 
-import { InjectedAccount } from ".";
-
-import { getFromStorage } from "@polkadex/orderbook/helpers/storage";
-import { getIsTradeAccountPasswordProtected } from "@polkadex/orderbook/helpers/localStorageHelpers";
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export const selectTradeAccountsLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.isFetching;
@@ -13,21 +8,13 @@ export const selectTradeAccountsLoading = (state: RootState): boolean =>
 export const selectTradeAccountsSuccess = (state: RootState): boolean =>
   state.user.polkadotWallet.success;
 
-export const selectBrowserTradeAccounts = (state: RootState): InjectedAccount[] =>
+export const selectBrowserTradeAccounts = (state: RootState): TradeAccount[] =>
   state.user.polkadotWallet.allBrowserAccounts;
 
-export const selectCurrentTradeAccount = (state: RootState): InjectedAccount =>
-  state.user.polkadotWallet.selectedAccount;
-
-export const selectCurrentTradeAccountIsPassword = (state: RootState): boolean =>
-  state.user.polkadotWallet.selectedAccount.isPasswordProtected;
-
-export const selectHasCurrentTradeAccount = (state: RootState): boolean =>
-  state.user.polkadotWallet.selectedAccount.address !== "";
-
-export const selectLinkedMainAddress = (state: RootState): string => {
-  return state.user.polkadotWallet.mainAddress;
-};
+export const selectTradeAccount =
+  (address: string) =>
+  (state: RootState): TradeAccount =>
+    selectBrowserTradeAccounts(state).find((account) => account.address === address);
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.polkadotWallet.registerAccountLoading;

@@ -12,11 +12,12 @@ import {
   selectBestBidPrice,
   orderExecuteFetch,
   selectOrderExecuteLoading,
-  selectHasCurrentTradeAccount,
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
   selectIsUserSignedIn,
-  selectCurrentTradeAccountIsPassword,
+  selectUsingAccount,
+  selectTradeAccount,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -31,10 +32,13 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const bestBidPrice = useReduxSelector(selectBestBidPrice);
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
-  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
-  const showProtectedPassword = useReduxSelector(selectCurrentTradeAccountIsPassword);
+  const usingTradeAddress = useReduxSelector(selectUsingAccount).selectedTradeAddress;
+  const showProtectedPassword = useReduxSelector(
+    selectTradeAccount(usingTradeAddress)
+  ).isLocked;
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
