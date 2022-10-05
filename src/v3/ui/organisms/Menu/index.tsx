@@ -59,29 +59,43 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
                   <Icon name="Wallet" background="none" stroke="text" size="large" />
                 </div>
                 <div>
-                  <S.Span>Account Manager</S.Span>
+                  <S.Span>Balances</S.Span>
                 </div>
               </S.WrapperIcon>
             </Link>
           )}
         </S.Container>
         <S.Container>
-          <AvailableMessage message="Soon">
-            <S.WrapperIcon href="#">
+          <Link href="/accountManager">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Wallet" background="none" stroke="text" size="large" />
+              </div>
+              <div>
+                <S.Span>Balances</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </Link>
+          <Link href="/accountManager">
+            <S.WrapperIcon>
               <div>
                 <Icon name="History" background="none" stroke="text" size="large" />
               </div>
-              <S.Span>My History</S.Span>
-            </S.WrapperIcon>
-          </AvailableMessage>
-          <AvailableMessage message="Soon">
-            <S.WrapperIcon href="#">
               <div>
-                <Icon name="Transactions" background="none" stroke="text" size="large" />
+                <S.Span>My History</S.Span>
               </div>
-              <S.Span>Transactions</S.Span>
             </S.WrapperIcon>
-          </AvailableMessage>
+          </Link>
+          <Link href="/accountManager">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Settings" background="none" stroke="text" size="large" />
+              </div>
+              <div>
+                <S.Span>Settings</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </Link>
         </S.Container>
         <S.Container>
           <AvailableMessage message="Soon">

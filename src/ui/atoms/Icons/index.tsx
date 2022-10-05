@@ -147,3 +147,4 @@ export * from "./ErrorAlert";
 export * from "./AttentionAlert";
 export * from "./SuccessAlert";
 export * from "./LoadingAlert";
+export * from "./Info";
