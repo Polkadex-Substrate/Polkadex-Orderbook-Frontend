@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Polkadex-Orderbook-Frontend.iml" filepath="$PROJECT_DIR$/.idea/Polkadex-Orderbook-Frontend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Polkadex-PolkaIDO-Frontend/.idea/Polkadex-PolkaIDO-Frontend.iml" filepath="$PROJECT_DIR$/../Polkadex-PolkaIDO-Frontend/.idea/Polkadex-PolkaIDO-Frontend.iml" />
     </modules>
   </component>
 </project>

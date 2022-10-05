@@ -32,7 +32,7 @@ export const OrderbookTable = ({
           <S.Head lightMode={lightMode}>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
             <S.CellHead>Amount({baseUnit})</S.CellHead>
-            <S.CellHead>Cum({quoteUnit})</S.CellHead>
+            <S.CellHead>Sum({quoteUnit})</S.CellHead>
           </S.Head>
           <S.Body isSell={isSell}>
             {orders.map((order, i) => {
