@@ -9,7 +9,7 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export function* loadTradeAccountsSaga(_action: TradeAccountsFetch) {
   try {
-    // yield call(loadKeyring);
+    yield call(loadKeyring);
     const allBrowserAccounts: TradeAccount[] = yield call(getAllTradeAccountsInBrowser);
     yield put(tradeAccountsData({ allAccounts: allBrowserAccounts }));
   } catch (error) {

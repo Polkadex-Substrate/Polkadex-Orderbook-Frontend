@@ -3,8 +3,8 @@ import keyring from "@polkadot/ui-keyring";
 
 import {
   ImportTradeAccount,
-  importTradeAccountData,
   notificationPush,
+  tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 
 export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
@@ -13,7 +13,7 @@ export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
-    yield put(importTradeAccountData({ pair }));
+    yield put(tradeAccountPush({ pair }));
     yield put(
       notificationPush({
         type: "SuccessAlert",

@@ -77,6 +77,7 @@ export interface UserAccountSelectData {
 }
 export type ProfileAction =
   | UserFetch
+  | UserData
   | UserError
   | UserReset
   | UserChangeInitBanner

@@ -4,24 +4,31 @@ import { useDispatch } from "react-redux";
 import {
   registerMainAccountFetch,
   selectExtensionWalletAccounts,
-  selectCurrentMainAccount,
-  selectIsCurrentAccountRegistered,
   selectIsRegisterMainAccountLoading,
+  selectMainAccount,
 } from "../modules/user/mainAccount";
 
 import { useReduxSelector } from "./useReduxSelector";
 
+import {
+  selectIsMainAddressRegistered,
+  selectUsingAccount,
+} from "@polkadex/orderbook-modules";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+
 export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const currentMainAccount = useReduxSelector(selectCurrentMainAccount);
-  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
+  const { linkedMainAddress, selectedTradeAddress } = useReduxSelector(selectUsingAccount);
+  const currentMainAccount = useReduxSelector(selectMainAccount(linkedMainAddress));
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
   const loading = useReduxSelector(selectIsRegisterMainAccountLoading);
+
   const handleSelectMainAccount = (address: string) =>
-    dispatch(setMainAccountFetch(mainAccounts.find((acc) => acc.address === address)));
+    console.log("not implemented yet", address);
 
   const registerMainAccount = (
-    acc: MainAccount,
+    acc: ExtensionAccount,
     name = "trade-account",
     mnemoicString: string,
     passcode: string | null
@@ -44,11 +51,14 @@ export const useLinkMainAccount = () => {
     currentMainAccount,
     registerMainAccount,
     loading,
+    selectedTradeAddress,
     isRegistered,
-    shortWallet: currentMainAccount?.address
-      ? currentMainAccount?.address?.slice(0, 10) +
+    shortWallet: currentMainAccount?.account.address
+      ? currentMainAccount?.account.address?.slice(0, 10) +
         "..." +
-        currentMainAccount?.address?.slice(currentMainAccount?.address?.length - 10)
+        currentMainAccount?.account.address?.slice(
+          currentMainAccount?.account.address?.length - 10
+        )
       : "",
   };
 };

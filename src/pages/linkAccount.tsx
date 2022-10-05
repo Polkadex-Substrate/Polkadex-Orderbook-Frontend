@@ -3,11 +3,12 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
+import { selectIsAddressInExtension } from "../modules/user/mainAccount";
 import {
-  selectIsCurrentAccountRegistered,
-  selectIsCurrentMainAccountInWallet,
-} from "../modules/user/mainAccount";
-import { selectIsUserSignedIn } from "../modules/user/profile";
+  selectIsMainAddressRegistered,
+  selectIsUserSignedIn,
+  selectUsingAccount,
+} from "../modules/user/profile";
 
 const LinkAccountTemplate = dynamic(
   () =>
@@ -20,9 +21,10 @@ const LinkAccountTemplate = dynamic(
 );
 const LinkAccount = () => {
   const router = useRouter();
-  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
   const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
+  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
 
   const shouldRedirect = useMemo(
     () => !hasUser || isRegistered || !hasSelectedAccount,

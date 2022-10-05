@@ -1,7 +1,7 @@
 import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
+import { Signer } from "@polkadot/types/types";
 
-import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
 import {
   registerTradeAccountError,
   removeProxyAccountFromChainData,
@@ -13,17 +13,18 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { selectMainAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
     const api = yield select(selectRangerApi);
-    const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
-    if (!mainAccount?.address) {
+    const { linkedMainAddress } = yield select(selectUsingAccount);
+    const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
+    if (!account?.address) {
       throw new Error("Please select a main account!");
     }
     const { address: tradeAddress } = action.payload;
-    if (api && mainAccount.address) {
-      // TODO: change to notifications here
+    if (api && account.address) {
       yield put(
         notificationPush({
           type: "LoadingAlert",
@@ -36,9 +37,8 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
         })
       );
       const res = yield call(() =>
-        removeProxyFromAccount(api, tradeAddress, mainAccount.injector, mainAccount.address)
+        removeProxyFromAccount(api, tradeAddress, signer, account.address)
       );
-      // TODO: change to notifications here
       if (res.isSuccess) {
         yield put(
           notificationPush({
@@ -73,10 +73,10 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
 export const removeProxyFromAccount = async (
   api: ApiPromise,
   proxyAddress: string,
-  injector: any,
+  signer: Signer,
   mainAddress: string
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.removeProxyAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
+  const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
   return res;
 };

@@ -31,13 +31,13 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  selectAssociatedTradeAccountsLoading,
   selectHasExtension,
   selectHasSelectedAccount,
-  selectIsCurrentMainAccountInWallet,
-  selectIsSetMainAccountLoading,
+  selectIsAddressInExtension,
+  selectIsUserDataLoading,
   selectRegisterTradeAccountRemoving,
   selectUserBalance,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
@@ -59,9 +59,12 @@ export const AccountManagerTemplate = () => {
     status: false,
   });
   const hasExtension = useReduxSelector(selectHasExtension);
-  const loading = useReduxSelector(selectIsSetMainAccountLoading);
-  const loadingTradeAccounts = useReduxSelector(selectAssociatedTradeAccountsLoading);
-  const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const loading = useReduxSelector(selectIsUserDataLoading);
+  const loadingTradeAccounts = useReduxSelector(selectIsUserDataLoading);
+  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
+  const userHasSelectedMainAccount = useReduxSelector(
+    selectIsAddressInExtension(linkedMainAddress)
+  );
   const userHasSelectedProxyAccount = useReduxSelector(selectHasSelectedAccount);
 
   const assets = useReduxSelector(selectAllAssets);
@@ -90,6 +93,7 @@ export const AccountManagerTemplate = () => {
     handleSelectMainAccount,
     shortWallet,
     currentMainAccount,
+    selectedTradeAddress,
     isRegistered,
   } = useLinkMainAccount();
 
@@ -199,7 +203,7 @@ export const AccountManagerTemplate = () => {
                                 <S.SelectAccountContainer>
                                   <div>
                                     <strong>
-                                      {currentMainAccount?.name ||
+                                      {currentMainAccount?.account.meta.name ||
                                         (loading ? "Loading..." : "Select your main account")}
                                     </strong>
                                     {shortWallet.length ? <span>{shortWallet}</span> : ""}
@@ -297,12 +301,12 @@ export const AccountManagerTemplate = () => {
                     </S.CreateAccount>
                     {allTradingAccounts?.map((value) => (
                       <Card
-                        key={value.id}
-                        title={value.name}
+                        key={value.address}
+                        title={value.meta.name}
                         address={value.address}
-                        isUsing={value.isActive}
+                        isUsing={value.address === selectedTradeAddress}
                         onRemoveFromBlockchain={() => handleOpenRemove(false, value.address)}
-                        onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                        onRemoveFromDevice={() => handleOpenRemove(true, value.address)}
                         onUse={() => {
                           handleSelectTradeAccount(value.address);
                           // handleUnlockOpen(value.address);

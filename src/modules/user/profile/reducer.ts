@@ -5,6 +5,7 @@ import {
   PROFILE_USER_CHANGE_INIT_BANNER,
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_AUTH_FETCH,
+  PROFILE_USER_DATA,
 } from "./constants";
 
 export interface SelectedAccount {
@@ -21,6 +22,8 @@ export interface ProfileState {
   selectedAccount: SelectedAccount;
   isAuthFetching: boolean;
   isAuthSuccess: boolean;
+  isDataLoading: boolean;
+  isDataSuccess: boolean;
 }
 
 const defaultAuth: AuthInfo = {
@@ -45,6 +48,8 @@ export const initialStateProfile: ProfileState = {
   },
   isAuthFetching: false,
   isAuthSuccess: false,
+  isDataLoading: false,
+  isDataSuccess: false,
 };
 
 export const profileReducer = (state = initialStateProfile, action: ProfileAction) => {
@@ -62,12 +67,25 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         isAuthSuccess: true,
       };
     }
-    case PROFILE_USER_ERROR:
+    case PROFILE_USER_FETCH: {
       return {
         ...state,
-        isFetching: false,
-        error: action.error,
+        isDataLoading: true,
       };
+    }
+    case PROFILE_USER_ERROR: {
+      return {
+        ...state,
+        isDataLoading: false,
+      };
+    }
+    case PROFILE_USER_DATA: {
+      return {
+        ...state,
+        isDataLoading: false,
+        userData: action.payload,
+      };
+    }
     case PROFILE_USER_CHANGE_INIT_BANNER:
       return {
         ...state,

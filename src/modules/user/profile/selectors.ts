@@ -24,3 +24,23 @@ export const selectUsingAccount = (state: RootState): SelectedAccount =>
 
 export const selectHasSelectedAccount = (state: RootState): boolean =>
   state.user.profile.selectedAccount.selectedTradeAddress !== "";
+
+export const selectLinkedMainAddresses = (state: RootState): string[] =>
+  state.user.profile.userData.mainAccounts;
+
+export const selectIsMainAddressRegistered =
+  (address: string) =>
+  (state: RootState): boolean =>
+    state.user.profile.userData.mainAccounts.includes(address);
+
+// gives back all the linked trade addresses for a given main address
+export const selectAssociatedTradeAddresses = (mainAddress: string) => {
+  return (state: RootState): string[] => {
+    const userAccounts = state.user.profile.userData.userAccount;
+    const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
+    return accounts.map((account) => account.tradeAddress);
+  };
+};
+
+export const selectIsUserDataLoading = (state: RootState): boolean =>
+  state.user.profile.isDataLoading;

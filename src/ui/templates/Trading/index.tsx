@@ -14,12 +14,11 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
-  selectAssociatedTradeAccounts,
-  selectCurrentMainAccount,
+  selectAssociatedTradeAddresses,
   selectCurrentMarket,
   selectCurrentTradePrice,
   selectHasSelectedAccount,
-  selectIsCurrentMainAccountInWallet,
+  selectIsAddressInExtension,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
   selectUserIdentity,
@@ -60,12 +59,16 @@ export function Trading() {
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
   const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
   const email = useReduxSelector(selectUserIdentity);
-  const hasMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
-  const currentMainAccount = useReduxSelector(selectCurrentMainAccount).address;
+  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
+  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
+  const hasAssociatedAccounts = useReduxSelector(
+    selectAssociatedTradeAddresses(linkedMainAddress)
+  )?.length;
+
+  const currentMainAddr = useReduxSelector(selectUsingAccount).linkedMainAddress;
   const currentTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
 
   const hasSelectedAccount = isSignedIn &&
@@ -154,7 +157,7 @@ export function Trading() {
                   <Profile
                     hasTradeAccount={hasTradeAccount}
                     hasMainAccount={hasMainAccount}
-                    currentMainAccount={currentMainAccount}
+                    currentMainAccount={currentMainAddr}
                     currentTradeAccount={currentTradeAddr}
                     email={email}
                   />
@@ -191,7 +194,7 @@ export function Trading() {
                       <Profile
                         hasTradeAccount={hasTradeAccount}
                         hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAccount}
+                        currentMainAccount={currentMainAddr}
                         currentTradeAccount={currentTradeAddr}
                         email={email}
                       />

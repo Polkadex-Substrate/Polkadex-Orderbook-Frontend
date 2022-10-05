@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { Form, Formik } from "formik";
 
 import * as S from "./styles";
@@ -11,9 +10,9 @@ import {
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
 import {
-  depositsFetch,
   selectExtensionWalletAccounts,
-  selectCurrentMainAccount,
+  selectMainAccount,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
@@ -29,10 +28,11 @@ const defaultValues = {
 
 const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
-  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const selectedAccount = useReduxSelector(
+    selectMainAccount(currentAccount.linkedMainAddress)
+  );
   const assets: IPublicAsset[] = useReduxSelector(selectAllAssets);
-
-  const dispatch = useDispatch();
 
   return (
     <S.Wrapper>
@@ -55,15 +55,17 @@ const Deposit = () => {
                 header={
                   <SelectAccount
                     isHeader
-                    accountName={selectedAccount?.name || "Select your main account"}
-                    address={selectedAccount?.address || "Polkadex is completely free"}
+                    accountName={
+                      selectedAccount?.account.meta.name || "Select your main account"
+                    }
+                    address={selectedAccount?.account.address || "Polkadex is completely free"}
                   />
                 }>
                 <S.SelectContent isOverflow={accounts?.length > 2}>
                   {accounts?.length ? (
                     accounts.map((item, index) => (
                       <SelectAccount
-                        isActive={item.account.address === selectedAccount?.address}
+                        isActive={item.account.address === selectedAccount?.account.address}
                         key={index}
                         accountName={item.account.meta.name || `Account ${index}`}
                         address={item.account.address}

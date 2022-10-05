@@ -10,18 +10,24 @@ import {
   InputPrimary,
   SelectAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { depositsFetch, selectLinkedMainAccount } from "@polkadex/orderbook-modules";
+import {
+  depositsFetch,
+  selectMainAccount,
+  selectUsingAccount,
+} from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const Deposit = () => {
-  const linkedMainAccount = useReduxSelector(selectLinkedMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const linkedMainAddress = currentAccount.linkedMainAddress;
+  const { account } = useReduxSelector(selectMainAccount(linkedMainAddress));
   const defaultValues = {
     amount: 0.0,
     asset: null,
-    address: linkedMainAccount.address,
+    address: linkedMainAddress,
   };
   const assets = useReduxSelector(selectAllAssets);
   const dispatch = useDispatch();
@@ -39,7 +45,7 @@ const Deposit = () => {
             depositsFetch({
               asset: asset,
               amount: values.amount,
-              mainAccount: linkedMainAccount,
+              mainAccount: account,
             })
           );
         }}>
@@ -51,8 +57,8 @@ const Deposit = () => {
                 locked
                 withButton={false}
                 isHoverable={false}
-                accountName={linkedMainAccount?.meta.name || "My Main account"}
-                address={linkedMainAccount?.address || "Polkadex is completely free"}
+                accountName={account?.meta.name || "My Main account"}
+                address={account?.address || "Polkadex is completely free"}
               />
               {errors.address && <S.Error>{errors.address}</S.Error>}
             </S.SelectAccountContainer>

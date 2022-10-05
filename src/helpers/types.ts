@@ -138,7 +138,6 @@ export const icons = [
   "ExchangeSell",
   "DoubleExchange",
   "Deposit",
-  "Withdraw",
   "News",
   "Clean",
   "Notifications",

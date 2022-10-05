@@ -1,32 +1,33 @@
 import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
+import { Signer } from "@polkadot/types/types";
 
-import {
-  MainAccount,
-  selectCurrentMainAccount,
-  setAssociatedAccountsFetch,
-} from "../../mainAccount";
+import { selectMainAccount } from "../../mainAccount";
 import {
   registerTradeAccountData,
   registerTradeAccountError,
   RegisterTradeAccountFetch,
   registerTradeAccountReset,
+  tradeAccountPush,
 } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { setIsTradeAccountPassworded } from "@polkadex/orderbook/helpers/localStorageHelpers";
+import { selectUsingAccount } from "@polkadex/orderbook-modules";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 let tradeAddress: string;
-
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   try {
     const api = yield select(selectRangerApi);
-    const mainAccount: MainAccount = yield select(selectCurrentMainAccount);
-    if (!mainAccount?.address) {
+    const { linkedMainAddress } = yield select(selectUsingAccount);
+    const { account, signer }: ExtensionAccount = yield select(
+      selectMainAccount(linkedMainAddress)
+    );
+    if (!account?.address) {
       throw new Error("Please select a main account!");
     }
     const { mnemonic, password, name } = action.payload;
@@ -34,7 +35,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       name: name,
     });
     tradeAddress = pair.address;
-    if (api && mainAccount.address) {
+    if (api && account.address) {
       // TODO: change to notifications here
       yield put(
         notificationPush({
@@ -48,11 +49,11 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
         })
       );
       const res = yield call(() =>
-        addProxyToAccount(api, tradeAddress, mainAccount.injector, mainAccount.address)
+        addProxyToAccount(api, tradeAddress, signer, account.address)
       );
       // TODO: change to notifications here
       if (res.isSuccess) {
-        yield put(setAssociatedAccountsFetch());
+        yield put(tradeAccountPush({ pair }));
         yield delay(2000);
         yield put(registerTradeAccountData());
         yield put(registerTradeAccountReset());
@@ -68,7 +69,6 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
           })
         );
         yield put(registerTradeAccountData());
-        yield call(setIsTradeAccountPassworded, tradeAddress, password.length > 0);
       } else {
         throw new Error(res.message);
       }
@@ -92,10 +92,10 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
 export const addProxyToAccount = async (
   api: ApiPromise,
   proxyAddress: string,
-  injector: any,
+  signer: Signer,
   mainAddress: string
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-  const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
+  const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
   return res;
 };

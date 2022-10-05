@@ -13,8 +13,8 @@ import {
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
   USER_TRADE_ACCOUNT_UNLOCK,
   USER_TRADE_ACCOUNT_IMPORT_ERROR,
-  USER_TRADE_ACCOUNT_IMPORT_DATA,
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  USER_TRADE_ACCOUNT_PUSH,
 } from "./constants";
 
 export interface PolkadotWalletFetchPayload {
@@ -93,13 +93,10 @@ export interface ImportTradeAccountError {
   error: CommonError;
 }
 
-export interface ImportTradeAccountData {
-  type: typeof USER_TRADE_ACCOUNT_IMPORT_DATA;
-  payload: {
-    pair: TradeAccount;
-  };
+export interface TradeAccountPush {
+  type: typeof USER_TRADE_ACCOUNT_PUSH;
+  payload: { pair: TradeAccount };
 }
-
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -114,7 +111,7 @@ export type TradeAccountsAction =
   | UnlockTradeAccount
   | ImportTradeAccount
   | ImportTradeAccountError
-  | ImportTradeAccountData;
+  | TradeAccountPush;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -184,14 +181,12 @@ export const importTradeAccountFetch = (
   payload: payload,
 });
 
-export const importTradeAccountData = (
-  payload: ImportTradeAccountData["payload"]
-): ImportTradeAccountData => ({
-  type: USER_TRADE_ACCOUNT_IMPORT_DATA,
-  payload,
-});
-
 export const importTradeAccountError = (error: CommonError): ImportTradeAccountError => ({
   type: USER_TRADE_ACCOUNT_IMPORT_ERROR,
   error: error,
+});
+
+export const tradeAccountPush = (payload: TradeAccountPush["payload"]): TradeAccountPush => ({
+  type: USER_TRADE_ACCOUNT_PUSH,
+  payload,
 });

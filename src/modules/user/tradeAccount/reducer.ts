@@ -7,13 +7,14 @@ import {
   USER_REGISTER_TRADE_ACCOUNT_ERROR,
   USER_REGISTER_TRADE_ACCOUNT_FETCH,
   USER_REGISTER_TRADE_ACCOUNT_RESET,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
+  USER_TRADE_ACCOUNT_PUSH,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_UNLOCK,
   USER_TRADE_ACCOUNTS_DATA,
   USER_TRADE_ACCOUNTS_ERROR,
   USER_TRADE_ACCOUNTS_FETCH,
-  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
-  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
-  USER_TRADE_ACCOUNT_IMPORT_DATA,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
@@ -121,7 +122,7 @@ export const TradeAccountsReducer = (
         return state;
       }
     }
-    case USER_TRADE_ACCOUNT_IMPORT_DATA: {
+    case USER_TRADE_ACCOUNT_PUSH: {
       const { pair } = action.payload;
       const _allAccounts = [...state.allBrowserAccounts];
       _allAccounts.push(pair);

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
-import { selectAssociatedTradeAccounts } from "../modules/user/mainAccount";
+import {} from "../modules/user/mainAccount";
 import { notificationPush } from "../modules/user/notificationHandler";
 import {
   removeTradeAccountFromBrowser,
@@ -10,20 +10,24 @@ import {
 
 import { useReduxSelector } from "./useReduxSelector";
 
-import { selectUsingAccount, userAccountSelectFetch } from "@polkadex/orderbook-modules";
+import {
+  selectAssociatedTradeAddresses,
+  selectUsingAccount,
+  userAccountSelectFetch,
+} from "@polkadex/orderbook-modules";
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export const useAccountManager = () => {
   const dispatch = useDispatch();
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
   const selectedAccount = useReduxSelector(selectUsingAccount);
   const currentTradeAddr = selectedAccount.selectedTradeAddress;
-  const associatedTradeAccounts = useReduxSelector(selectAssociatedTradeAccounts);
-  const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts)?.map((acc) => ({
-    id: acc.address,
-    address: acc.address,
-    name: acc.meta.name,
-    isActive: acc.address === currentTradeAddr,
-  }));
+  const associatedTradeAccounts = useReduxSelector(
+    selectAssociatedTradeAddresses(currentTradeAddr)
+  );
+  const tradingAccounts: TradeAccount[] = useReduxSelector(selectBrowserTradeAccounts).filter(
+    (acc) => associatedTradeAccounts.some((associatedAddr) => associatedAddr === acc.address)
+  );
 
   const removeFromDevice = (address: string) => {
     dispatch(removeTradeAccountFromBrowser({ address }));

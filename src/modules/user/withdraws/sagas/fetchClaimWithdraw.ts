@@ -1,7 +1,6 @@
 import { call, delay, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
-
-import { MainAccount, selectCurrentMainAccount } from "../../mainAccount";
+import { Signer } from "@polkadot/types/types";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import {
@@ -12,6 +11,9 @@ import {
   WithdrawsClaimFetch,
   withdrawsError,
   withdrawClaimCancel,
+  selectUsingAccount,
+  selectMainAccount,
+  SelectedAccount,
 } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
@@ -22,9 +24,12 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
   try {
     const { sid } = action.payload;
     const api = yield select(selectRangerApi);
-    const curreMainAcc = yield select(selectCurrentMainAccount);
+    const currentAccount: SelectedAccount = yield select(selectUsingAccount);
+    const { account, signer } = yield select(
+      selectMainAccount(currentAccount.linkedMainAddress)
+    );
     const isApiReady = yield select(selectRangerIsReady);
-    if (isApiReady && curreMainAcc.address !== "") {
+    if (isApiReady && account.address !== "") {
       yield put(
         notificationPush({
           type: "InformationAlert",
@@ -36,7 +41,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
           time: new Date().getTime(),
         })
       );
-      const res = yield call(claimWithdrawal, api, curreMainAcc, sid);
+      const res = yield call(claimWithdrawal, api, signer, account.address, sid);
       if (res.isSuccess) {
         yield put(withdrawsClaimData({ sid }));
         // TODO?: Check delay
@@ -74,10 +79,11 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
 
 async function claimWithdrawal(
   api: ApiPromise,
-  account: MainAccount,
+  signer: Signer,
+  account: string,
   sid: number
 ): Promise<ExtrinsicResult> {
-  const ext = api.tx.ocex.claimWithdraw(sid, account.address);
-  const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
+  const ext = api.tx.ocex.claimWithdraw(sid, account);
+  const res = await signAndSendExtrinsic(api, ext, { signer }, account, true);
   return res;
 }

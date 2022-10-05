@@ -38,7 +38,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const usingTradeAddress = useReduxSelector(selectUsingAccount).selectedTradeAddress;
   const showProtectedPassword = useReduxSelector(
     selectTradeAccount(usingTradeAddress)
-  ).isLocked;
+  )?.isLocked;
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
