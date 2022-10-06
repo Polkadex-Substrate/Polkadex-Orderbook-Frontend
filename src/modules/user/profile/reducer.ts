@@ -16,7 +16,7 @@ export interface SelectedAccount {
 export interface ProfileState {
   authInfo: AuthInfo;
   userData: {
-    userAccount: UserAccount[];
+    userAccounts: UserAccount[];
     mainAccounts: string[];
   };
   selectedAccount: SelectedAccount;
@@ -39,7 +39,7 @@ const defaultAuth: AuthInfo = {
 export const initialStateProfile: ProfileState = {
   authInfo: defaultAuth,
   userData: {
-    userAccount: [],
+    userAccounts: [],
     mainAccounts: [],
   },
   selectedAccount: {

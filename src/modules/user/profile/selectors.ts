@@ -1,8 +1,5 @@
 import { RootState, SelectedAccount } from "../../";
 
-export const selectUserIdentity = (state: RootState): string =>
-  state.user.profile.authInfo.email;
-
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
   state.user.profile.authInfo.shouldShowInitialBanner;
 
@@ -38,7 +35,7 @@ export const selectIsMainAddressRegistered =
 // gives back all the linked trade addresses for a given main address
 export const selectAssociatedTradeAddresses = (mainAddress: string) => {
   return (state: RootState): string[] => {
-    const userAccounts = state.user.profile.userData.userAccount;
+    const userAccounts = state.user.profile.userData.userAccounts;
     const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
     return accounts.map((account) => account.tradeAddress);
   };

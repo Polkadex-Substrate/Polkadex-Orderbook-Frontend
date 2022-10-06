@@ -30,18 +30,19 @@ export interface AuthInfo {
 export interface UserAccount {
   mainAddress: string; // the main address linked to the trade address
   tradeAddress: string;
-  isMainAddressInExtension: boolean;
-  isTradeAddressInBrowser: boolean;
 }
 export interface UserFetch {
   type: typeof PROFILE_USER_FETCH;
+  payload: {
+    email;
+  };
 }
 
 export interface UserData {
   type: typeof PROFILE_USER_DATA;
   payload: {
     mainAccounts: string[];
-    useAccounts: UserAccount[];
+    userAccounts: UserAccount[];
   };
 }
 export interface UserError {
@@ -87,8 +88,9 @@ export type ProfileAction =
   | UserAccountSelectFetch
   | UserAccountSelectData;
 
-export const userFetch = (): UserFetch => ({
+export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
+  payload,
 });
 
 export const userChangeInitBanner = (payload = false): UserChangeInitBanner => ({

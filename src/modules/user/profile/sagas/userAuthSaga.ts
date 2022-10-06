@@ -2,7 +2,13 @@
 import { Auth } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
-import { notificationPush, sendError, userAuthData, UserAuthFetch } from "../../../";
+import {
+  notificationPush,
+  sendError,
+  userAuthData,
+  UserAuthFetch,
+  userFetch,
+} from "../../../";
 import { userAuthError } from "../actions";
 
 export function* userAuthSaga(_action: UserAuthFetch) {
@@ -10,6 +16,9 @@ export function* userAuthSaga(_action: UserAuthFetch) {
     const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
       getUserAuthInfo()
     );
+    if (email) {
+      yield put(userFetch({ email }));
+    }
     yield put(userAuthData({ email, isAuthenticated, userExists, isConfirmed }));
     if (!isConfirmed && userExists) {
       yield put(

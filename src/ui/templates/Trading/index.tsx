@@ -21,7 +21,7 @@ import {
   selectIsAddressInExtension,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
-  selectUserIdentity,
+  selectUserEmail,
   selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
@@ -61,7 +61,7 @@ export function Trading() {
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
-  const email = useReduxSelector(selectUserIdentity);
+  const email = useReduxSelector(selectUserEmail);
   const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
   const hasMainAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
   const hasAssociatedAccounts = useReduxSelector(

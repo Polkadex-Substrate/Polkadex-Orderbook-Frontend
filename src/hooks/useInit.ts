@@ -9,6 +9,7 @@ import {
   extensionWalletFetch,
   rangerConnectFetch,
   selectRangerIsReady,
+  selectUserEmail,
   tradeAccountsFetch,
   userAuthFetch,
 } from "@polkadex/orderbook-modules";
