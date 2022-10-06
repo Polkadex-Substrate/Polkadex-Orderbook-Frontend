@@ -62,14 +62,14 @@ export function Trading() {
   const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
   const email = useReduxSelector(selectUserEmail);
-  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
-  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
   const hasAssociatedAccounts = useReduxSelector(
-    selectAssociatedTradeAddresses(linkedMainAddress)
+    selectAssociatedTradeAddresses(mainAddress)
   )?.length;
 
-  const currentMainAddr = useReduxSelector(selectUsingAccount).linkedMainAddress;
-  const currentTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
+  const currentMainAddr = useReduxSelector(selectUsingAccount).mainAddress;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",

@@ -8,7 +8,7 @@ import {
   notificationPush,
   selectUsingAccount,
   selectTradeAccount,
-  SelectedAccount,
+  UserAccount,
 } from "../../..";
 
 import * as mutation from "./../../../../graphql/mutations";
@@ -22,9 +22,9 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const { side, price, order_type, amount, symbol } = action.payload;
-    const account: SelectedAccount = yield select(selectUsingAccount);
-    const address = account.selectedTradeAddress;
-    const mainAddress = account.linkedMainAddress;
+    const account: UserAccount = yield select(selectUsingAccount);
+    const address = account.tradeAddress;
+    const mainAddress = account.mainAddress;
     const keyringPair: TradeAccount = yield select(selectTradeAccount(address));
     const timestamp = getNonce();
     const api = yield select(selectRangerApi);

@@ -22,8 +22,8 @@ const LinkAccountTemplate = dynamic(
 const LinkAccount = () => {
   const router = useRouter();
   const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
   const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
 
   const shouldRedirect = useMemo(

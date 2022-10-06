@@ -1,4 +1,4 @@
-import { RootState, SelectedAccount } from "../../";
+import { RootState, UserAccount } from "../../";
 
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
   state.user.profile.authInfo.shouldShowInitialBanner;
@@ -18,11 +18,11 @@ export const selectUserAuthFetchSuccess = (state: RootState): boolean | undefine
 
 export const selectUserEmail = (state: RootState): string => state.user.profile.authInfo.email;
 
-export const selectUsingAccount = (state: RootState): SelectedAccount =>
+export const selectUsingAccount = (state: RootState): UserAccount =>
   state.user.profile.selectedAccount;
 
 export const selectHasSelectedAccount = (state: RootState): boolean =>
-  state.user.profile.selectedAccount.selectedTradeAddress !== "";
+  state.user.profile.selectedAccount.tradeAddress !== "";
 
 export const selectLinkedMainAddresses = (state: RootState): string[] =>
   state.user.profile.userData.mainAccounts;
@@ -40,6 +40,12 @@ export const selectAssociatedTradeAddresses = (mainAddress: string) => {
     return accounts.map((account) => account.tradeAddress);
   };
 };
+
+export const selectLinkedMainAddress = (trade_address: string) => (state: RootState) =>
+  trade_address &&
+  state.user.profile.userData.userAccounts.find(
+    ({ tradeAddress }) => tradeAddress === trade_address
+  );
 
 export const selectIsUserDataLoading = (state: RootState): boolean =>
   state.user.profile.isDataLoading;

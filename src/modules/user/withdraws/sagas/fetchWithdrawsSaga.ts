@@ -6,7 +6,7 @@ import { withdrawsData, WithdrawsFetch } from "..";
 
 import {
   notificationPush,
-  SelectedAccount,
+  UserAccount,
   selectRangerApi,
   selectTradeAccount,
   selectUsingAccount,
@@ -20,8 +20,8 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
-    const currentAccount: SelectedAccount = yield select(selectUsingAccount);
-    const address = currentAccount.selectedTradeAddress;
+    const currentAccount: UserAccount = yield select(selectUsingAccount);
+    const address = currentAccount.tradeAddress;
     const keyringPair = yield select(selectTradeAccount(address));
     keyringPair.unlock("");
     const nonce = getNonce();

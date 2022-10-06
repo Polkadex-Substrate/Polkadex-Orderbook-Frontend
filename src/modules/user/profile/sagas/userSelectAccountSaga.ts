@@ -1,10 +1,31 @@
-import { UserAccountSelectFetch } from "@polkadex/orderbook-modules";
+import { put, select } from "redux-saga/effects";
+
+import {
+  notificationPush,
+  selectLinkedMainAddress,
+  userAccountSelectData,
+  UserAccountSelectFetch,
+} from "@polkadex/orderbook-modules";
 
 export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
   const { tradeAddress } = action.payload;
-
-  console.log(tradeAddress);
-  // TODO: fetch linked main account from the trade address.
-  // TODO: check if account exists in the extension
-  // TODO: push data to reducer
+  try {
+    const mainAddress = yield select(selectLinkedMainAddress(tradeAddress));
+    if (mainAddress) {
+      yield put(userAccountSelectData({ account: { tradeAddress, mainAddress } }));
+    } else {
+      throw new Error("invalid main account");
+    }
+  } catch (e) {
+    console.log("error: ", e);
+    yield put(
+      notificationPush({
+        message: {
+          title: "Invalid MainAccount",
+          description: "The selected main account is invalid",
+        },
+        time: new Date().getTime(),
+      })
+    );
+  }
 }

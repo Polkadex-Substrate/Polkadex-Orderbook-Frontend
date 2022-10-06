@@ -20,9 +20,9 @@ const DepositTemplate = dynamic(
 const Deposit = () => {
   const router = useRouter();
   const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
-  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
+  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,

@@ -21,7 +21,7 @@ export const useAccountManager = () => {
   const dispatch = useDispatch();
   const allTradeAccInDevice = useReduxSelector(selectBrowserTradeAccounts);
   const selectedAccount = useReduxSelector(selectUsingAccount);
-  const currentTradeAddr = selectedAccount.selectedTradeAddress;
+  const currentTradeAddr = selectedAccount.tradeAddress;
   const associatedTradeAccounts = useReduxSelector(
     selectAssociatedTradeAddresses(currentTradeAddr)
   );

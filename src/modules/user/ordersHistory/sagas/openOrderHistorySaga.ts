@@ -2,7 +2,7 @@
 import { call, put, select } from "redux-saga/effects";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
-import { alertPush, SelectedAccount, selectUsingAccount } from "../../../";
+import { alertPush, UserAccount, selectUsingAccount } from "../../../";
 
 import * as queries from "./../../../../graphql/queries";
 
@@ -27,12 +27,9 @@ type orderHistoryQueryResult = {
 
 export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
   try {
-    const account: SelectedAccount = yield select(selectUsingAccount);
-    if (account.selectedTradeAddress) {
-      const transactions: OrderCommon[] = yield call(
-        fetchOpenOrders,
-        account.selectedTradeAddress
-      );
+    const account: UserAccount = yield select(selectUsingAccount);
+    if (account.tradeAddress) {
+      const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.tradeAddress);
       yield put(userOpenOrderHistoryData({ list: transactions }));
     }
   } catch (error) {

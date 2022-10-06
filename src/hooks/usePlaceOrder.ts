@@ -35,7 +35,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
-  const usingTradeAddress = useReduxSelector(selectUsingAccount).selectedTradeAddress;
+  const usingTradeAddress = useReduxSelector(selectUsingAccount).tradeAddress;
   const showProtectedPassword = useReduxSelector(
     selectTradeAccount(usingTradeAddress)
   )?.isLocked;

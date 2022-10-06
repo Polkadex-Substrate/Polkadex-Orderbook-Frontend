@@ -137,7 +137,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 
 const ProtectPassword = () => {
   const dispatch = useDispatch();
-  const currTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
+  const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
       showPassword: false,

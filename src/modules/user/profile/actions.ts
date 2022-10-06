@@ -12,8 +12,6 @@ import {
   PROFILE_USER_SELECT_ACCOUNT_FETCH,
 } from "./constants";
 
-import { SelectedAccount } from "@polkadex/orderbook/modules";
-
 export interface UserChangeInitBanner {
   type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
   payload: boolean;
@@ -74,7 +72,7 @@ export interface UserAccountSelectFetch {
 
 export interface UserAccountSelectData {
   type: typeof PROFILE_USER_SELECT_ACCOUNT_FETCH;
-  payload: { account: SelectedAccount };
+  payload: { account: UserAccount };
 }
 export type ProfileAction =
   | UserFetch

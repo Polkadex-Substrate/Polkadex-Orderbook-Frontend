@@ -36,9 +36,7 @@ export const ConnectToPhone = () => {
     router?.query?.mnemonic as string
   );
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const extensionAccount = useReduxSelector(
-    selectMainAccount(currentAccount.linkedMainAddress)
-  );
+  const extensionAccount = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,

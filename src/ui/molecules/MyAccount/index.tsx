@@ -86,7 +86,7 @@ const MyAccountLoadingContent = () => (
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
-  const currentTradeAddr = useReduxSelector(selectUsingAccount).selectedTradeAddress;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
 
   const { isSignedIn } = useAccount();
   const dispatch = useDispatch();

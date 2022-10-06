@@ -13,7 +13,7 @@ export const useOnChainBalance = (assetId: string) => {
   const isApiConnected = useReduxSelector(selectRangerIsReady);
   const balances = useReduxSelector(selectUserBalance);
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const mainAddress = currentAccount.linkedMainAddress;
+  const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 

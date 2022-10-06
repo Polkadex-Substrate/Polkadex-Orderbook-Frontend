@@ -25,10 +25,10 @@ const CreateAccount = () => {
   const hasUser = useReduxSelector(selectIsUserSignedIn);
   const currentAccount = useReduxSelector(selectUsingAccount);
   const hasSelectedAccount = useReduxSelector(
-    selectIsAddressInExtension(currentAccount.linkedMainAddress)
+    selectIsAddressInExtension(currentAccount.mainAddress)
   );
   const isRegistered = useReduxSelector(
-    selectIsMainAddressRegistered(currentAccount.linkedMainAddress)
+    selectIsMainAddressRegistered(currentAccount.mainAddress)
   );
   const success = useReduxSelector(selectRegisterTradeAccountSuccess);
 

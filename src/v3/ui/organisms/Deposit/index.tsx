@@ -22,7 +22,7 @@ import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 
 const Deposit = () => {
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const linkedMainAddress = currentAccount.linkedMainAddress;
+  const linkedMainAddress = currentAccount.mainAddress;
   const { account } = useReduxSelector(selectMainAccount(linkedMainAddress));
   const defaultValues = {
     amount: 0.0,

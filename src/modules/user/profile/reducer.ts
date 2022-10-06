@@ -8,18 +8,13 @@ import {
   PROFILE_USER_DATA,
 } from "./constants";
 
-export interface SelectedAccount {
-  selectedTradeAddress: "";
-  linkedMainAddress: "";
-}
-
 export interface ProfileState {
   authInfo: AuthInfo;
   userData: {
     userAccounts: UserAccount[];
     mainAccounts: string[];
   };
-  selectedAccount: SelectedAccount;
+  selectedAccount: UserAccount;
   isAuthFetching: boolean;
   isAuthSuccess: boolean;
   isDataLoading: boolean;
@@ -43,8 +38,8 @@ export const initialStateProfile: ProfileState = {
     mainAccounts: [],
   },
   selectedAccount: {
-    selectedTradeAddress: "",
-    linkedMainAddress: "",
+    tradeAddress: "",
+    mainAddress: "",
   },
   isAuthFetching: false,
   isAuthSuccess: false,

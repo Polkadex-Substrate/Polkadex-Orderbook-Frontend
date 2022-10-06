@@ -13,12 +13,12 @@ import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { SelectedAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
+import { UserAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
 
 export function* userEventsChannelSaga(_action: UserEventsFetch) {
-  const currentAccount: SelectedAccount = yield select(selectUsingAccount);
-  const mainAddr = currentAccount.linkedMainAddress;
-  const tradeAddr = currentAccount.selectedTradeAddress;
+  const currentAccount: UserAccount = yield select(selectUsingAccount);
+  const mainAddr = currentAccount.mainAddress;
+  const tradeAddr = currentAccount.tradeAddress;
   yield fork(userEventsChannelHandler, mainAddr);
   yield fork(userEventsChannelHandler, tradeAddr);
 }

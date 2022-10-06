@@ -21,7 +21,7 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
   const accountsInExtension = useReduxSelector(selectExtensionWalletAccounts);
-  const { selectedTradeAddress } = useReduxSelector(selectUsingAccount);
+  const { tradeAddress } = useReduxSelector(selectUsingAccount);
   const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
   const isRegistered = useReduxSelector(
     selectIsMainAddressRegistered(selectedExtensionAccount?.account?.address)
@@ -60,7 +60,7 @@ export const useLinkMainAccount = () => {
     currentMainAccount: selectedExtensionAccount,
     registerMainAccount,
     loading,
-    selectedTradeAddress,
+    tradeAddress: tradeAddress,
     isRegistered,
     shortWallet: selectedExtensionAccount?.account?.address
       ? selectedExtensionAccount?.account?.address?.slice(0, 10) +

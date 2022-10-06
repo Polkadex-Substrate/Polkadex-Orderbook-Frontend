@@ -11,7 +11,7 @@ import { useReduxSelector } from "./useReduxSelector";
 import { selectUsingAccount } from "@polkadex/orderbook-modules";
 
 export const useUserDataFetch = () => {
-  const address = useReduxSelector(selectUsingAccount).linkedMainAddress;
+  const address = useReduxSelector(selectUsingAccount).mainAddress;
   const dispatch = useDispatch();
   const isAssetsFetched = useReduxSelector(selectAssetsFetchSuccess);
   // use user address here instead of hasUser as we need to refetch these on user change

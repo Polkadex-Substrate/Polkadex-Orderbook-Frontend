@@ -29,9 +29,7 @@ const defaultValues = {
 const Deposit = () => {
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const selectedAccount = useReduxSelector(
-    selectMainAccount(currentAccount.linkedMainAddress)
-  );
+  const selectedAccount = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets: IPublicAsset[] = useReduxSelector(selectAllAssets);
 
   return (

@@ -13,7 +13,7 @@ import {
   withdrawClaimCancel,
   selectUsingAccount,
   selectMainAccount,
-  SelectedAccount,
+  UserAccount,
 } from "@polkadex/orderbook-modules";
 import {
   selectRangerApi,
@@ -24,10 +24,8 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
   try {
     const { sid } = action.payload;
     const api = yield select(selectRangerApi);
-    const currentAccount: SelectedAccount = yield select(selectUsingAccount);
-    const { account, signer } = yield select(
-      selectMainAccount(currentAccount.linkedMainAddress)
-    );
+    const currentAccount: UserAccount = yield select(selectUsingAccount);
+    const { account, signer } = yield select(selectMainAccount(currentAccount.mainAddress));
     const isApiReady = yield select(selectRangerIsReady);
     if (isApiReady && account?.address !== "") {
       yield put(

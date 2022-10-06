@@ -51,7 +51,7 @@ export const WithdrawTemplate = () => {
   const [unlockAccount, setUnlockAccount] = useState(false);
 
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.linkedMainAddress));
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);

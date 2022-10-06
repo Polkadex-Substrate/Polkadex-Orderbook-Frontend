@@ -41,7 +41,7 @@ export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const currentAccount = useReduxSelector(selectUsingAccount);
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.linkedMainAddress));
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);
