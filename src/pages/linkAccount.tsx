@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsAddressInExtension } from "../modules/user/extensionWallet";
+import { selectExtensionAccountSelected } from "../modules/user/extensionWallet";
 import {
   selectIsMainAddressRegistered,
   selectIsUserSignedIn,
@@ -24,11 +24,11 @@ const LinkAccount = () => {
   const hasUser = useReduxSelector(selectIsUserSignedIn);
   const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
-  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(linkedMainAddress));
+  const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
 
   const shouldRedirect = useMemo(
-    () => !hasUser || isRegistered || !hasSelectedAccount,
-    [hasUser, isRegistered, hasSelectedAccount]
+    () => !hasUser || isRegistered || !selectedExtensionAccount,
+    [hasUser, isRegistered, selectedExtensionAccount]
   );
 
   useEffect(() => {

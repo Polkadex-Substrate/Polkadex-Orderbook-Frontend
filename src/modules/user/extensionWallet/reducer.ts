@@ -1,12 +1,13 @@
 import { GetExtensionWalletAction } from "./actions";
 import {
-  POLKADOT_EXTENSION_WALLET_FETCH,
-  POLKADOT_EXTENSION_WALLET_ERROR,
-  POLKADOT_EXTENSION_WALLET_DATA,
+  EXTENSION_WALLET_ACCOUNT_SELECT,
   EXTENSION_WALLET_RESET,
-  REGISTER_MAIN_ACCOUNT_FETCH,
+  POLKADOT_EXTENSION_WALLET_DATA,
+  POLKADOT_EXTENSION_WALLET_ERROR,
+  POLKADOT_EXTENSION_WALLET_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
   REGISTER_MAIN_ACCOUNT_ERROR,
+  REGISTER_MAIN_ACCOUNT_FETCH,
 } from "./constants";
 
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
@@ -15,6 +16,7 @@ export interface MainAccountState {
   success?: boolean;
   isFetching: boolean;
   allAccounts: ExtensionAccount[];
+  accountSelected: ExtensionAccount | null;
   registerMainAccountLoading: boolean;
   registerMainAccountSuccess: boolean;
 }
@@ -23,6 +25,7 @@ const initialState: MainAccountState = {
   isFetching: false,
   success: false,
   allAccounts: [],
+  accountSelected: null,
   registerMainAccountLoading: false,
   registerMainAccountSuccess: false,
 };
@@ -72,6 +75,11 @@ export const extensionWalletReducer = (
         ...state,
         registerMainAccountLoading: false,
         registerMainAccountSuccess: false,
+      };
+    case EXTENSION_WALLET_ACCOUNT_SELECT:
+      return {
+        ...state,
+        accountSelected: action.payload,
       };
     default:
       return state;

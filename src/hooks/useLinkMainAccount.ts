@@ -2,10 +2,11 @@ import keyring from "@polkadot/ui-keyring";
 import { useDispatch } from "react-redux";
 
 import {
+  extensionWalletAccountSelect,
   registerMainAccountFetch,
+  selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
   selectIsRegisterMainAccountLoading,
-  selectMainAccount,
 } from "../modules/user/extensionWallet";
 
 import { useReduxSelector } from "./useReduxSelector";
@@ -19,14 +20,20 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const useLinkMainAccount = () => {
   const dispatch = useDispatch();
-  const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const { linkedMainAddress, selectedTradeAddress } = useReduxSelector(selectUsingAccount);
-  const currentMainAccount = useReduxSelector(selectMainAccount(linkedMainAddress));
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(linkedMainAddress));
+  const accountsInExtension = useReduxSelector(selectExtensionWalletAccounts);
+  const { selectedTradeAddress } = useReduxSelector(selectUsingAccount);
+  const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
+  const isRegistered = useReduxSelector(
+    selectIsMainAddressRegistered(selectedExtensionAccount?.account?.address)
+  );
   const loading = useReduxSelector(selectIsRegisterMainAccountLoading);
 
-  const handleSelectMainAccount = (address: string) =>
-    console.log("not implemented yet", address);
+  const handleSelectMainAccount = (address: string) => {
+    const mainAccount = accountsInExtension.find(({ account }) => account.address === address);
+    if (mainAccount) {
+      dispatch(extensionWalletAccountSelect(mainAccount));
+    }
+  };
 
   const registerMainAccount = (
     acc: ExtensionAccount,
@@ -48,18 +55,18 @@ export const useLinkMainAccount = () => {
   };
 
   return {
-    mainAccounts,
+    mainAccounts: accountsInExtension,
     handleSelectMainAccount,
-    currentMainAccount,
+    currentMainAccount: selectedExtensionAccount,
     registerMainAccount,
     loading,
     selectedTradeAddress,
     isRegistered,
-    shortWallet: currentMainAccount?.account?.address
-      ? currentMainAccount?.account?.address?.slice(0, 10) +
+    shortWallet: selectedExtensionAccount?.account?.address
+      ? selectedExtensionAccount?.account?.address?.slice(0, 10) +
         "..." +
-        currentMainAccount?.account?.address?.slice(
-          currentMainAccount?.account?.address?.length - 10
+        selectedExtensionAccount?.account?.address?.slice(
+          selectedExtensionAccount?.account?.address?.length - 10
         )
       : "",
   };

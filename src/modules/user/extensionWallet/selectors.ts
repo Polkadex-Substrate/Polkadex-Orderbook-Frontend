@@ -25,3 +25,6 @@ export const selectIsRegisterMainAccountLoading = (state: RootState): boolean =>
 
 export const selectIsRegisterMainAccountSuccess = (state: RootState): boolean =>
   state.user.extensionWallet.registerMainAccountSuccess;
+
+export const selectExtensionAccountSelected = (state: RootState): ExtensionAccount =>
+  state.user.extensionWallet.accountSelected;

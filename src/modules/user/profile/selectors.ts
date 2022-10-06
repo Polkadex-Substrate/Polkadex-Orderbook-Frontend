@@ -19,6 +19,8 @@ export const selectUserAuthFetching = (state: RootState): boolean =>
 export const selectUserAuthFetchSuccess = (state: RootState): boolean | undefined =>
   state.user.profile.isAuthSuccess;
 
+export const selectUserEmail = (state: RootState): string => state.user.profile.authInfo.email;
+
 export const selectUsingAccount = (state: RootState): SelectedAccount =>
   state.user.profile.selectedAccount;
 
@@ -31,7 +33,7 @@ export const selectLinkedMainAddresses = (state: RootState): string[] =>
 export const selectIsMainAddressRegistered =
   (address: string) =>
   (state: RootState): boolean =>
-    state.user.profile.userData.mainAccounts.includes(address);
+    address && state.user.profile.userData.mainAccounts.includes(address);
 
 // gives back all the linked trade addresses for a given main address
 export const selectAssociatedTradeAddresses = (mainAddress: string) => {

@@ -31,13 +31,12 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
+  selectExtensionAccountSelected,
   selectHasExtension,
   selectHasSelectedAccount,
-  selectIsAddressInExtension,
   selectIsUserDataLoading,
   selectRegisterTradeAccountRemoving,
   selectUserBalance,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 
@@ -61,10 +60,7 @@ export const AccountManagerTemplate = () => {
   const hasExtension = useReduxSelector(selectHasExtension);
   const loading = useReduxSelector(selectIsUserDataLoading);
   const loadingTradeAccounts = useReduxSelector(selectIsUserDataLoading);
-  const { linkedMainAddress } = useReduxSelector(selectUsingAccount);
-  const userHasSelectedMainAccount = useReduxSelector(
-    selectIsAddressInExtension(linkedMainAddress)
-  );
+  const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
   const userHasSelectedProxyAccount = useReduxSelector(selectHasSelectedAccount);
 
   const assets = useReduxSelector(selectAllAssets);
@@ -107,12 +103,12 @@ export const AccountManagerTemplate = () => {
 
   const shouldSelectDefaultTradeAccount = useMemo(
     () =>
-      userHasSelectedMainAccount &&
+      selectedExtensionAccount &&
       isRegistered &&
       !!associatedTradeAccounts?.length &&
       !userHasSelectedProxyAccount,
     [
-      userHasSelectedMainAccount,
+      selectedExtensionAccount,
       isRegistered,
       associatedTradeAccounts,
       userHasSelectedProxyAccount,
@@ -188,7 +184,7 @@ export const AccountManagerTemplate = () => {
               ) : (
                 <S.TitleWrapper>
                   <S.TitleBalance>
-                    {!userHasSelectedMainAccount && (
+                    {!selectedExtensionAccount && (
                       <S.TitleText>Select Your Polkadex Account</S.TitleText>
                     )}
                     <S.SelectInputContainer>
@@ -243,7 +239,7 @@ export const AccountManagerTemplate = () => {
                             </Dropdown.Menu>
                           </Dropdown>
                         </S.SelectInputWrapper>
-                        {userHasSelectedMainAccount && isRegistered && (
+                        {selectedExtensionAccount && isRegistered && (
                           <S.Verified>
                             <Icons.Verified /> Registered
                           </S.Verified>
@@ -251,7 +247,7 @@ export const AccountManagerTemplate = () => {
                       </S.SelectInputFlex>
                     </S.SelectInputContainer>
                   </S.TitleBalance>
-                  {userHasSelectedMainAccount &&
+                  {selectedExtensionAccount &&
                     !isRegistered &&
                     !loading &&
                     !loadingTradeAccounts && (
@@ -259,7 +255,7 @@ export const AccountManagerTemplate = () => {
                         <S.UnVerified>Register Now</S.UnVerified>
                       </Link>
                     )}
-                  {userHasSelectedMainAccount && isRegistered && (
+                  {selectedExtensionAccount && isRegistered && (
                     <S.TitleActions>
                       <AvailableMessage message="Soon">
                         <Link href="/history">
@@ -271,7 +267,7 @@ export const AccountManagerTemplate = () => {
                 </S.TitleWrapper>
               )}
             </S.Title>
-            {userHasSelectedMainAccount && isRegistered ? (
+            {selectedExtensionAccount && isRegistered ? (
               <Loading message="Loading..." isVisible={loadingTradeAccounts}>
                 <S.Content>
                   <S.ContentTitle>
