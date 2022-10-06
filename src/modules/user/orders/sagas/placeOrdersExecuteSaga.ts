@@ -65,14 +65,28 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
     console.error("order error: ", error);
     yield put(orderExecuteDataDelete());
     const msg = typeof error.message === "string" ? error.message : error?.errors[0]?.message;
-    const errortext = parseError(msg);
+    const errorText = parseError(msg);
     console.log("msg: ", msg);
+    // ignore market liquidity error as there will always be a small qty which cannot be filled
+    // due to the step size of the configuration. Its expected even-though order-book throws error
+    if (errorText.includes("MarketLiquidityError")) {
+      yield put(
+        notificationPush({
+          type: "SuccessAlert",
+          message: {
+            title: "Market order placed",
+          },
+          time: new Date().getTime(),
+        })
+      );
+      return;
+    }
     yield put(
       notificationPush({
         type: "ErrorAlert",
         message: {
           title: "Order failed",
-          description: errortext,
+          description: errorText,
         },
         time: new Date().getTime(),
       })
