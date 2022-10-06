@@ -16,16 +16,20 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
-import { PreviewAccount } from "@polkadex/orderbook-ui/organisms";
+import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [newAccount, setNewAccount] = useState(true);
 
   return (
     <>
       <Modal open={preview} onClose={() => setPreview(false)} placement="start right">
         <PreviewAccount onClose={() => setPreview(false)} />
+      </Modal>
+      <Modal open={newAccount} onClose={() => setNewAccount(false)} placement="start right">
+        <NewAccount onClose={() => setPreview(false)} />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -55,7 +59,11 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {false && <ButtonWallet>New Account</ButtonWallet>}
+                  {true && (
+                    <ButtonWallet type="button" onClick={() => setNewAccount(true)}>
+                      New Account
+                    </ButtonWallet>
+                  )}
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {false ? (

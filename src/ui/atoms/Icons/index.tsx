@@ -148,3 +148,5 @@ export * from "./AttentionAlert";
 export * from "./SuccessAlert";
 export * from "./LoadingAlert";
 export * from "./Info";
+export * from "./AddMore";
+export * from "./AddWallet";
