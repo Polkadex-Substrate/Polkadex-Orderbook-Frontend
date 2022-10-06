@@ -29,9 +29,9 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     const { mainAccount, tradeAddress } = action.payload;
     tradeAddr = tradeAddress;
     const email = yield select(selectUserAuthEmail);
-    const api = yield select(selectRangerApi);
+    const api: ApiPromise = yield select(selectRangerApi);
     yield select(selectExtensionWalletAccounts);
-    if (mainAccount.account?.address) {
+    if (mainAccount.account?.address && email) {
       yield put(
         notificationPush({
           message: {
