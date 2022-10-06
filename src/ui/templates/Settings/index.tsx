@@ -24,7 +24,7 @@ export const SettingsTemplate = () => {
 
   return (
     <>
-      <Modal open={preview} onClose={() => setPreview(false)} placement="bottom right">
+      <Modal open={preview} onClose={() => setPreview(false)} placement="start right">
         <PreviewAccount onClose={() => setPreview(false)} />
       </Modal>
       <Head>
@@ -58,7 +58,7 @@ export const SettingsTemplate = () => {
                   {false && <ButtonWallet>New Account</ButtonWallet>}
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {true ? (
+                  {false ? (
                     <Empty
                       title="No tradding accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
@@ -106,15 +106,19 @@ export const SettingsTemplate = () => {
                           defaultTitle="Default trade account"
                           name="Occasional-chamois"
                           address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(Linked to Ordebrook testing)"
-                          onClick={() => console.log("Open Modal")}
-                        />
+                          aditionalInfo="(Linked to Ordebrook testing)">
+                          <S.Button type="button" onClick={() => setPreview(true)}>
+                            Preview
+                          </S.Button>
+                        </WalletCard>
                         <WalletCard
                           name="Occasional-chamois"
                           address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(Linked to Ordebrook testing)"
-                          onClick={() => console.log("Open Modal")}
-                        />
+                          aditionalInfo="(Linked to Ordebrook testing)">
+                          <S.Button type="button" onClick={() => setPreview(true)}>
+                            Preview
+                          </S.Button>
+                        </WalletCard>
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -165,12 +169,27 @@ export const SettingsTemplate = () => {
                         <WalletCard
                           isUsing={true}
                           isDefault={true}
-                          isRegistered
                           defaultTitle="Default controller account"
                           name="Polkadex testing"
                           address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(1 trading account)"
-                        />
+                          aditionalInfo="(1 trading account)">
+                          {true ? (
+                            <Badge isRegistered={true}>Registered</Badge>
+                          ) : (
+                            <S.Button type="button">Register Now</S.Button>
+                          )}
+                        </WalletCard>
+                        <WalletCard
+                          defaultTitle="Default controller account"
+                          name="Polkadex testing"
+                          address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
+                          aditionalInfo="(1 trading account)">
+                          {false ? (
+                            <Badge isRegistered={true}>Registered</Badge>
+                          ) : (
+                            <S.Button type="button">Register Now</S.Button>
+                          )}
+                        </WalletCard>
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -289,12 +308,11 @@ const AccountHeader = ({ children }) => (
 const WalletCard = ({
   isUsing = false,
   isDefault = false,
-  isRegistered = false,
   defaultTitle = "",
   name = "",
   address = "",
   aditionalInfo = "",
-  onClick = undefined,
+  children,
 }) => (
   <S.WalletCard>
     <S.WalletCardWrapper>
@@ -317,20 +335,11 @@ const WalletCard = ({
           <span>{defaultTitle}</span>
         </S.WalletCardBadge>
       )}
-      {!onClick ? (
-        <>
-          {isRegistered ? (
-            <Badge isRegistered={isRegistered}>Registered</Badge>
-          ) : (
-            <S.Button type="button">Register Now</S.Button>
-          )}
-        </>
-      ) : (
-        <S.Button type="button">Preview</S.Button>
-      )}
+      {children}
     </S.WalletCardAside>
   </S.WalletCard>
 );
+
 const Badge = ({ isRegistered = false, children }) => (
   <S.Badge isRegistered={isRegistered}>
     {isRegistered && (
