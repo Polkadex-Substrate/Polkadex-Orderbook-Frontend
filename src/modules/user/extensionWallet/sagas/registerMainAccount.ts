@@ -7,9 +7,8 @@ import * as mutations from "../../../../graphql/mutations";
 import {
   notificationPush,
   removeTradeAccountFromBrowser,
-  selectExtensionWalletAccounts,
   selectRangerApi,
-  selectUserAuthEmail,
+  selectUserEmail,
 } from "../../..";
 import {
   registerMainAccountData,
@@ -28,9 +27,9 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
     const { mainAccount, tradeAddress } = action.payload;
     tradeAddr = tradeAddress;
-    const email = yield select(selectUserAuthEmail);
+    const email = yield select(selectUserEmail);
+    console.log({ mainAccount, email });
     const api: ApiPromise = yield select(selectRangerApi);
-    yield select(selectExtensionWalletAccounts);
     if (mainAccount.account?.address && email) {
       yield put(
         notificationPush({
@@ -56,11 +55,14 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         yield put(registerMainAccountData());
         yield call(executeRegisterEmail, data, signature);
       } else {
-        removeTradeAccountFromBrowser({ address: tradeAddress });
+        throw new Error("Extrinsic failed");
       }
+    } else {
+      throw new Error("Email or address no valid");
     }
   } catch (error) {
-    removeTradeAccountFromBrowser({ address: tradeAddr });
+    console.log("error:", error);
+    yield put(removeTradeAccountFromBrowser({ address: tradeAddr }));
     yield put(registerMainAccountError());
     yield put(
       notificationPush({
@@ -103,8 +105,13 @@ const createSignedData = async (
 
 const executeRegisterEmail = async (data: RegisterEmailData, signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
-  const res = await sendQueryToAppSync(mutations.register_user, {
-    input: { payload: payloadStr },
-  });
+  const res = await sendQueryToAppSync(
+    mutations.register_user,
+    {
+      input: { payload: payloadStr },
+    },
+    null,
+    "AMAZON_COGNITO_USER_POOLS"
+  );
   return res;
 };
