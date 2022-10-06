@@ -49,5 +49,7 @@ export * from "./MarketInput";
 export * from "./Footer";
 export * from "./EmptyAccount";
 export * from "./MyAccount";
+export * from "./ImportAccountForm";
+export * from "./CreateAccountForm";
 
 export * as LoadingIcons from "./LoadingIcons";

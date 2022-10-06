@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { CreateAccountForm } from "@polkadex/orderbook-ui/molecules/CreateAccountForm";
+import { CreateAccountForm, ImportAccountForm } from "@polkadex/orderbook-ui/molecules";
 
 export const NewAccount = ({ onClose = undefined }) => {
   const [state, setState] = useState(false);
@@ -14,7 +14,7 @@ export const NewAccount = ({ onClose = undefined }) => {
       </S.Header>
       <S.Content>
         <S.Title>
-          <h2>Import Wallet</h2>
+          <h2>Add Account</h2>
           <p>
             <strong>
               Polkadex does not store any data, all data is stored in your browser
@@ -30,7 +30,7 @@ export const NewAccount = ({ onClose = undefined }) => {
               description="Quickly create a trading account."
               icon="AddWallet"
               isActive={state}
-              handleChange={() => setState(!state)}>
+              handleChange={() => setState(true)}>
               {state && <CreateAccountForm />}
             </Card>
             <Card
@@ -38,8 +38,8 @@ export const NewAccount = ({ onClose = undefined }) => {
               description="Import wallet using your mnemonic phrases. "
               icon="AddMore"
               isActive={!state}
-              handleChange={() => setState(!state)}>
-              {!state && <p>Import</p>}
+              handleChange={() => setState(false)}>
+              {!state && <ImportAccountForm />}
             </Card>
           </S.Box>
         </S.Container>
@@ -59,8 +59,8 @@ const Card = ({
 }) => {
   const IconComponent = Icons[icon];
   return (
-    <S.Card isActive={isActive} onClick={handleChange}>
-      <S.CardWrapper>
+    <S.Card isActive={isActive}>
+      <S.CardWrapper onClick={handleChange}>
         <S.CardContent>
           <S.CardIcon>
             <IconComponent />

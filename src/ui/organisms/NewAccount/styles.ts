@@ -95,6 +95,7 @@ export const Card = styled.div<{ isActive?: boolean }>`
     border-radius: 0.4rem;
     opacity: ${isActive ? 1 : 0.7};
     cursor: pointer;
+    user-select: none;
   `}
 `;
 export const CardWrapper = styled.div`
