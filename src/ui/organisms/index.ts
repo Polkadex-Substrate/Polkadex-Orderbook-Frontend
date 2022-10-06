@@ -16,3 +16,4 @@ export * from "./Funds";
 export * from "./TradeHistory";
 export * from "./OpenOrders";
 export * from "./OrderHistory";
+export * from "./PreviewAccount";

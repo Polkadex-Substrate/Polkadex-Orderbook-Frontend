@@ -8,6 +8,7 @@ import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
   Checkbox,
   Footer,
+  Modal,
   Search,
   Tooltip,
   TooltipContent,
@@ -15,12 +16,17 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { PreviewAccount } from "@polkadex/orderbook-ui/organisms";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
+  const [preview, setPreview] = useState(false);
 
   return (
     <>
+      <Modal open={preview} onClose={() => setPreview(false)} placement="bottom right">
+        <PreviewAccount onClose={() => setPreview(false)} />
+      </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
