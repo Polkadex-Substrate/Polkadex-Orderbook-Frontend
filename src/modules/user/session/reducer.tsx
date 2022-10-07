@@ -4,13 +4,13 @@ import { SESSION_DATA, SESSION_ERROR, SESSION_FETCH } from "./constants";
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export interface SessionState {
-  dateTo: string;
-  dateFrom: string;
+  dateTo: Date;
+  dateFrom: Date;
 }
 
 const initialState: SessionState = {
-  dateTo: new Date().toISOString(),
-  dateFrom: subtractMonths(1).toISOString(),
+  dateTo: new Date(),
+  dateFrom: subtractMonths(1),
 };
 
 export const sessionReducer = (state = initialState, action: SessionAction) => {

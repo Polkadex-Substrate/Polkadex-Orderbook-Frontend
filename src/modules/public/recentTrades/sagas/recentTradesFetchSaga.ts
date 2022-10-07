@@ -4,7 +4,6 @@ import { PublicTrade, recentTradesData, sendError } from "../../../";
 import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
-import { getIsDecreasingArray } from "@polkadex/web-helpers";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type RawTrades = {
@@ -22,7 +21,7 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
         market_id: x.m,
         price: x.p,
         amount: x.q,
-        timestamp: x.t,
+        timestamp: Number(x.t),
       }));
       yield put(recentTradesData(trades));
     }
