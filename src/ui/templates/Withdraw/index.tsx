@@ -23,7 +23,6 @@ import {
   TabHeader,
   TabContent,
   Checkbox,
-  Icon,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
@@ -32,8 +31,9 @@ import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectClaimWithdrawsInLoading,
-  selectCurrentMainAccount,
+  selectMainAccount,
   selectUserBalance,
+  selectUsingAccount,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -50,7 +50,8 @@ export const WithdrawTemplate = () => {
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [unlockAccount, setUnlockAccount] = useState(false);
 
-  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
@@ -60,9 +61,9 @@ export const WithdrawTemplate = () => {
   const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
     () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
@@ -163,7 +164,9 @@ export const WithdrawTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                    <strong>
+                      {currMainAcc?.account?.meta?.name || "Wallet not selected"}
+                    </strong>
                     <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>

@@ -31,11 +31,10 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  selectAssociatedTradeAccountsLoading,
-  selectHasCurrentTradeAccount,
+  selectExtensionAccountSelected,
   selectHasExtension,
-  selectIsCurrentMainAccountInWallet,
-  selectIsSetMainAccountLoading,
+  selectHasSelectedAccount,
+  selectIsUserDataLoading,
   selectRegisterTradeAccountRemoving,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
@@ -59,10 +58,10 @@ export const AccountManagerTemplate = () => {
     status: false,
   });
   const hasExtension = useReduxSelector(selectHasExtension);
-  const loading = useReduxSelector(selectIsSetMainAccountLoading);
-  const loadingTradeAccounts = useReduxSelector(selectAssociatedTradeAccountsLoading);
-  const userHasSelectedMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
-  const userHasSelectedProxyAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const loading = useReduxSelector(selectIsUserDataLoading);
+  const loadingTradeAccounts = useReduxSelector(selectIsUserDataLoading);
+  const selectedExtensionAccount = useReduxSelector(selectExtensionAccountSelected);
+  const userHasSelectedProxyAccount = useReduxSelector(selectHasSelectedAccount);
 
   const assets = useReduxSelector(selectAllAssets);
   const balances = useReduxSelector(selectUserBalance);
@@ -90,6 +89,7 @@ export const AccountManagerTemplate = () => {
     handleSelectMainAccount,
     shortWallet,
     currentMainAccount,
+    selectedTradeAddress,
     isRegistered,
   } = useLinkMainAccount();
 
@@ -103,12 +103,12 @@ export const AccountManagerTemplate = () => {
 
   const shouldSelectDefaultTradeAccount = useMemo(
     () =>
-      userHasSelectedMainAccount &&
+      selectedExtensionAccount &&
       isRegistered &&
       !!associatedTradeAccounts?.length &&
       !userHasSelectedProxyAccount,
     [
-      userHasSelectedMainAccount,
+      selectedExtensionAccount,
       isRegistered,
       associatedTradeAccounts,
       userHasSelectedProxyAccount,
@@ -150,7 +150,7 @@ export const AccountManagerTemplate = () => {
         <Modal.Body>
           <UnlockAccount
             handleClose={handleUnlockClose}
-            onSubmit={() => handleSelectTradeAccount(unlockAccount.address)}
+            onSubmit={() => handleSelectTradeAccount(unlockAccount?.address)}
           />
         </Modal.Body>
       </Modal>
@@ -184,7 +184,7 @@ export const AccountManagerTemplate = () => {
               ) : (
                 <S.TitleWrapper>
                   <S.TitleBalance>
-                    {!userHasSelectedMainAccount && (
+                    {!selectedExtensionAccount && (
                       <S.TitleText>Select Your Polkadex Account</S.TitleText>
                     )}
                     <S.SelectInputContainer>
@@ -199,7 +199,7 @@ export const AccountManagerTemplate = () => {
                                 <S.SelectAccountContainer>
                                   <div>
                                     <strong>
-                                      {currentMainAccount?.name ||
+                                      {currentMainAccount?.account?.meta?.name ||
                                         (loading ? "Loading..." : "Select your main account")}
                                     </strong>
                                     {shortWallet.length ? <span>{shortWallet}</span> : ""}
@@ -214,7 +214,7 @@ export const AccountManagerTemplate = () => {
                               fill="secondaryBackgroundSolid"
                               disabledKeys={["empty"]}>
                               {mainAccounts?.length ? (
-                                mainAccounts.map((account) => {
+                                mainAccounts.map(({ account }) => {
                                   const shortAddress =
                                     account?.address?.slice(0, 10) +
                                     "..." +
@@ -222,12 +222,12 @@ export const AccountManagerTemplate = () => {
 
                                   return (
                                     <Dropdown.Item
-                                      key={account.address}
+                                      key={account?.address}
                                       onAction={() =>
-                                        handleSelectMainAccount(account.address)
+                                        handleSelectMainAccount(account?.address)
                                       }>
                                       <S.MyDropdownContentCard>
-                                        {account.meta.name}
+                                        {account?.meta?.name}
                                         <span>{shortAddress}</span>
                                       </S.MyDropdownContentCard>
                                     </Dropdown.Item>
@@ -239,7 +239,7 @@ export const AccountManagerTemplate = () => {
                             </Dropdown.Menu>
                           </Dropdown>
                         </S.SelectInputWrapper>
-                        {userHasSelectedMainAccount && isRegistered && (
+                        {selectedExtensionAccount && isRegistered && (
                           <S.Verified>
                             <Icons.Verified /> Registered
                           </S.Verified>
@@ -247,7 +247,7 @@ export const AccountManagerTemplate = () => {
                       </S.SelectInputFlex>
                     </S.SelectInputContainer>
                   </S.TitleBalance>
-                  {userHasSelectedMainAccount &&
+                  {selectedExtensionAccount &&
                     !isRegistered &&
                     !loading &&
                     !loadingTradeAccounts && (
@@ -255,7 +255,7 @@ export const AccountManagerTemplate = () => {
                         <S.UnVerified>Register Now</S.UnVerified>
                       </Link>
                     )}
-                  {userHasSelectedMainAccount && isRegistered && (
+                  {selectedExtensionAccount && isRegistered && (
                     <S.TitleActions>
                       <AvailableMessage message="Soon">
                         <Link href="/history">
@@ -267,7 +267,7 @@ export const AccountManagerTemplate = () => {
                 </S.TitleWrapper>
               )}
             </S.Title>
-            {userHasSelectedMainAccount && isRegistered ? (
+            {selectedExtensionAccount && isRegistered ? (
               <Loading message="Loading..." isVisible={loadingTradeAccounts}>
                 <S.Content>
                   <S.ContentTitle>
@@ -297,12 +297,12 @@ export const AccountManagerTemplate = () => {
                     </S.CreateAccount>
                     {allTradingAccounts?.map((value) => (
                       <Card
-                        key={value.id}
-                        title={value.name}
+                        key={value.address}
+                        title={value.meta.name}
                         address={value.address}
-                        isUsing={value.isActive}
+                        isUsing={value.address === selectedTradeAddress}
                         onRemoveFromBlockchain={() => handleOpenRemove(false, value.address)}
-                        onRemoveFromDevice={() => handleOpenRemove(true, value.id)}
+                        onRemoveFromDevice={() => handleOpenRemove(true, value.address)}
                         onUse={() => {
                           handleSelectTradeAccount(value.address);
                           // handleUnlockOpen(value.address);

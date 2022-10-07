@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { OrderHistory, OrderHistoryTable } from "@orderbook/v2/ui/molecules";
 
 import { Flex } from "../../atoms";
 import { TradeHistoryTable } from "../TradeHistoryTable";
@@ -15,10 +16,9 @@ import {
   EmptyData,
   Logged,
 } from "@polkadex/orderbook-ui/molecules";
-import { OrderHistory, OrderHistoryTable } from "@orderbook/v2/ui/molecules";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
+import { selectHasSelectedAccount } from "@polkadex/orderbook-modules";
 
 const MyOrders = () => {
   const [state, setState] = useState(true);
@@ -33,7 +33,7 @@ const MyOrders = () => {
 };
 
 const Header = ({ showList, changeToList }) => {
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   return (
     <S.Header>
       <S.HeaderWrapper>

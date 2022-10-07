@@ -3,12 +3,11 @@ import { useDispatch } from "react-redux";
 
 import {
   selectCurrentMarket,
-  selectUserLoggedIn,
   selectUserTrades,
   userTradesFetch,
   selectTradesLoading,
   selectUserSession,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
@@ -24,7 +23,7 @@ export function useTradeHistory(filters: Ifilters) {
   }, [list]);
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
+  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const userSession = useReduxSelector(selectUserSession);
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);

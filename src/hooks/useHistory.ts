@@ -1,14 +1,11 @@
-import { useState, useEffect, useMemo, ChangeEvent, useCallback } from "react";
+import { useState, useEffect, useMemo, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 
 import { groupWithdrawsBySnapShotIds } from "../helpers/groupWithdrawsBySnapshotIds";
 
-import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectHasCurrentTradeAccount,
   selectTransactions,
-  selectTransactionDepositData,
   Transaction,
   transactionsFetch,
   withdrawsClaimFetch,
@@ -21,7 +18,6 @@ export function useHistory() {
   });
 
   const dispatch = useDispatch();
-  const getAsset = useReduxSelector(selectGetAsset);
   const transactionsHistory = useReduxSelector(selectTransactions);
 
   useEffect(() => {

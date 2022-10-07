@@ -1,7 +1,7 @@
 import { call, put, select } from "redux-saga/effects";
 
 import * as queries from "../../../../graphql/queries";
-import { ProxyAccount, selectCurrentMainAccount } from "../../..";
+import { selectUsingAccount } from "../../..";
 import { balancesData, BalancesFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 
@@ -22,11 +22,11 @@ type BalanceQueryResult = {
 
 export function* balancesSaga(_balancesFetch: BalancesFetch) {
   try {
-    const account: ProxyAccount = yield select(selectCurrentMainAccount);
+    const { linkedMainAddress } = yield select(selectUsingAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);
-    if (account.address && isAssetData) {
+    if (linkedMainAddress && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(account.address));
+      const balances = yield call(() => fetchbalancesAsync(linkedMainAddress));
       const list = balances.map((balance: IBalanceFromDb) => {
         const asset = isAssetPDEX(balance.asset_type)
           ? POLKADEX_ASSET

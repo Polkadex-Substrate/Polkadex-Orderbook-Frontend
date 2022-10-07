@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { sortOrdersDescendingTime } from "../helpers/sortOrderDescendingTime";
@@ -10,7 +10,7 @@ import {
   selectOpenOrders,
   userOpenOrdersHistoryFetch,
   selectUserSession,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
@@ -23,7 +23,7 @@ export function useOrderHistory(filters: Ifilters) {
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
+  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const userSession = useReduxSelector(selectUserSession);
 
   const [updatedList, setUpdatedList] = useState(list);

@@ -1,16 +1,14 @@
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { transactionsData, TransactionsFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
-import { selectCurrentMainAccount } from "../../mainAccount";
 import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
-import { Utils } from "@polkadex/web-helpers";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { selectUsingAccount } from "@polkadex/orderbook-modules";
 
 type TransactionQueryResult = {
   tt: string;
@@ -23,11 +21,11 @@ type TransactionQueryResult = {
   sid: number;
 };
 
-export function* transactionsSaga(action: TransactionsFetch) {
+export function* transactionsSaga(_action: TransactionsFetch) {
   try {
-    const { address } = yield select(selectCurrentMainAccount);
-    if (address) {
-      const transactions = yield call(fetchTransactions, address, 3, 10);
+    const { linkedMainAddress } = yield select(selectUsingAccount);
+    if (linkedMainAddress) {
+      const transactions = yield call(fetchTransactions, linkedMainAddress, 3, 10);
       yield put(transactionsData(transactions));
     } else {
       yield put(

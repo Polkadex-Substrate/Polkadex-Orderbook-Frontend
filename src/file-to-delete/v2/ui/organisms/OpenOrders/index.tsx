@@ -6,10 +6,8 @@ import { OpenOrderCard, OpenOrderCardReponsive } from "../../molecules/OpenOrder
 import * as S from "./styles";
 
 import {
-  notificationPush,
   selectCurrentMarket,
-  selectHasCurrentTradeAccount,
-  selectOpenOrdersHistory,
+  selectHasSelectedAccount,
   selectOrdersHistoryLoading,
   userOrdersHistoryFetch,
 } from "@polkadex/orderbook-modules";
@@ -22,7 +20,7 @@ export const OpenOrders = () => {
   const openOrders = [];
   const fetching = useReduxSelector(selectOrdersHistoryLoading);
 
-  const userLoggedIn = useReduxSelector(selectHasCurrentTradeAccount);
+  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -63,7 +61,7 @@ export const OpenOrders = () => {
             return (
               <CardComponent
                 key={order_id}
-                order_id={""}
+                order_id={order_id}
                 timestamp={timestamp}
                 base_asset={base_asset}
                 quote_asset={quote_asset}

@@ -11,7 +11,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
   selectBalancesLoading,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { FlexCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
@@ -23,7 +23,7 @@ export const Tokens = () => {
   });
 
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {
