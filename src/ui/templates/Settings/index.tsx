@@ -19,31 +19,25 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectAssociatedTradeAccounts,
   selectBrowserTradeAccounts,
-  selectCurrentMainAccount,
-  selectCurrentTradeAccount,
+  selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
-  selectSignedInUserInfo,
+  selectIsMainAddressRegistered,
+  selectUserInfo,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
-  const [preview, setPreview] = useState({ status: false, selected: "" });
+  const [preview, setPreview] = useState({ status: false, selected: {} });
   const [newAccount, setNewAccount] = useState(false);
 
-  const currentControllerWallet = useReduxSelector(selectCurrentMainAccount);
-  const currentTradeAccount = useReduxSelector(selectCurrentTradeAccount);
+  const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
+  const currentTradeAccount = useReduxSelector(selectUsingAccount);
 
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-  const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts)?.map((acc) => ({
-    id: acc.address,
-    address: acc.address,
-    name: acc.meta.name,
-    isActive: acc.address === currentControllerWallet.address,
-  }));
-
-  const user = useReduxSelector(selectSignedInUserInfo);
+  const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
+  const user = useReduxSelector(selectUserInfo);
 
   return (
     <>
@@ -60,7 +54,7 @@ export const SettingsTemplate = () => {
           onClose={() =>
             setPreview({
               status: false,
-              selected: "",
+              selected: {},
             })
           }
         />
@@ -146,16 +140,16 @@ export const SettingsTemplate = () => {
                       </AccountHeader>
                       <S.WalletContent>
                         {tradeAccounts
-                          .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
+                          // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((v, i) => {
-                            const isUsing = currentTradeAccount.address === v.address;
+                            // const isUsing = currentTradeAccount.address === v.address;
                             return (
                               <WalletCard
                                 key={i}
-                                isUsing={isUsing}
-                                isDefault={isUsing}
+                                isUsing={false}
+                                isDefault={false}
                                 defaultTitle="Default trade account"
-                                name={v.name}
+                                name={String(v.meta.name)}
                                 address={v.address}
                                 aditionalInfo="(Linked to Ordebrook testing)">
                                 <S.Button
@@ -163,7 +157,10 @@ export const SettingsTemplate = () => {
                                   onClick={() =>
                                     setPreview({
                                       status: true,
-                                      selected: v.address,
+                                      selected: {
+                                        address: v.address,
+                                        meta: v.meta,
+                                      },
                                     })
                                   }>
                                   Preview
@@ -219,28 +216,21 @@ export const SettingsTemplate = () => {
                       </AccountHeader>
                       <S.WalletContent>
                         {controllerWallets
-                          .sort((a) =>
-                            a.address !== currentControllerWallet.address ? 1 : -1
+                          .sort(({ account }) =>
+                            account.address !== currentControllerWallet?.account?.address
+                              ? 1
+                              : -1
                           )
-                          .map((v, i) => {
-                            const isUsing = currentControllerWallet.address === v.address;
-                            return (
-                              <WalletCard
-                                key={i}
-                                isUsing={isUsing}
-                                isDefault={isUsing}
-                                defaultTitle="Default controller account"
-                                name={v.meta.name}
-                                address={v.address}
-                                aditionalInfo="(1 trading account)">
-                                {true ? (
-                                  <Badge isRegistered={true}>Registered</Badge>
-                                ) : (
-                                  <S.Button type="button">Register Now</S.Button>
-                                )}
-                              </WalletCard>
-                            );
-                          })}
+                          .map(({ account }, i) => (
+                            <ControllerWallets
+                              key={i}
+                              address={account.address}
+                              name={account.meta.name}
+                              isUsing={
+                                account.address === currentControllerWallet?.account?.address
+                              }
+                            />
+                          ))}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -278,6 +268,26 @@ export const SettingsTemplate = () => {
         </S.Wrapper>
       </S.Main>
     </>
+  );
+};
+
+const ControllerWallets = ({ address, name, isUsing }) => {
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
+
+  return (
+    <WalletCard
+      isUsing={isUsing}
+      isDefault={isUsing}
+      defaultTitle="Default controller account"
+      name={name}
+      address={address}
+      aditionalInfo="(1 trading account)">
+      {isRegistered ? (
+        <Badge isRegistered={true}>Registered</Badge>
+      ) : (
+        <S.Button type="button">Register Now</S.Button>
+      )}
+    </WalletCard>
   );
 };
 

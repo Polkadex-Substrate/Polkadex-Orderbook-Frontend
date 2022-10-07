@@ -1,4 +1,4 @@
-import { RootState, UserAccount } from "../../";
+import { RootState, UserAccount, AuthInfo } from "../../";
 
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
   state.user.profile.authInfo.shouldShowInitialBanner;
@@ -9,7 +9,9 @@ export const selectIsUserSignedIn = (state: RootState): boolean => {
 export const selectIsUserVerified = (state: RootState): boolean => {
   return state.user.profile.authInfo.isConfirmed;
 };
-
+export const selectUserInfo = (state: RootState): AuthInfo => {
+  return state.user.profile.authInfo;
+};
 export const selectUserAuthFetching = (state: RootState): boolean =>
   state.user.profile.isAuthFetching;
 
