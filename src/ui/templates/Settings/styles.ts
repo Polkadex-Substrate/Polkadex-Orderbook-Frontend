@@ -75,6 +75,11 @@ export const WalletContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  max-height: 40rem;
+  overflow-y: hidden;
+  :hover {
+    overflow-y: auto;
+  }
 `;
 
 export const WalletWrapper = styled.div``;

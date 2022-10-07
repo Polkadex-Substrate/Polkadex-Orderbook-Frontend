@@ -17,16 +17,53 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  selectAssociatedTradeAccounts,
+  selectBrowserTradeAccounts,
+  selectCurrentMainAccount,
+  selectCurrentTradeAccount,
+  selectExtensionWalletAccounts,
+  selectSignedInUserInfo,
+} from "@polkadex/orderbook-modules";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
-  const [preview, setPreview] = useState(false);
-  const [newAccount, setNewAccount] = useState(true);
+  const [preview, setPreview] = useState({ status: false, selected: "" });
+  const [newAccount, setNewAccount] = useState(false);
+
+  const currentControllerWallet = useReduxSelector(selectCurrentMainAccount);
+  const currentTradeAccount = useReduxSelector(selectCurrentTradeAccount);
+
+  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts)?.map((acc) => ({
+    id: acc.address,
+    address: acc.address,
+    name: acc.meta.name,
+    isActive: acc.address === currentControllerWallet.address,
+  }));
+
+  const user = useReduxSelector(selectSignedInUserInfo);
 
   return (
     <>
-      <Modal open={preview} onClose={() => setPreview(false)} placement="start right">
-        <PreviewAccount onClose={() => setPreview(false)} />
+      <Modal
+        open={preview.status}
+        onClose={() =>
+          setPreview({
+            status: false,
+            selected: "",
+          })
+        }
+        placement="start right">
+        <PreviewAccount
+          onClose={() =>
+            setPreview({
+              status: false,
+              selected: "",
+            })
+          }
+        />
       </Modal>
       <Modal open={newAccount} onClose={() => setNewAccount(false)} placement="start right">
         <NewAccount onClose={() => setNewAccount(false)} />
@@ -66,7 +103,7 @@ export const SettingsTemplate = () => {
                   )}
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {false ? (
+                  {!tradeAccounts.length ? (
                     <Empty
                       title="No tradding accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
@@ -108,25 +145,32 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        <WalletCard
-                          isUsing={true}
-                          isDefault={true}
-                          defaultTitle="Default trade account"
-                          name="Occasional-chamois"
-                          address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(Linked to Ordebrook testing)">
-                          <S.Button type="button" onClick={() => setPreview(true)}>
-                            Preview
-                          </S.Button>
-                        </WalletCard>
-                        <WalletCard
-                          name="Occasional-chamois"
-                          address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(Linked to Ordebrook testing)">
-                          <S.Button type="button" onClick={() => setPreview(true)}>
-                            Preview
-                          </S.Button>
-                        </WalletCard>
+                        {tradeAccounts
+                          .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
+                          .map((v, i) => {
+                            const isUsing = currentTradeAccount.address === v.address;
+                            return (
+                              <WalletCard
+                                key={i}
+                                isUsing={isUsing}
+                                isDefault={isUsing}
+                                defaultTitle="Default trade account"
+                                name={v.name}
+                                address={v.address}
+                                aditionalInfo="(Linked to Ordebrook testing)">
+                                <S.Button
+                                  type="button"
+                                  onClick={() =>
+                                    setPreview({
+                                      status: true,
+                                      selected: v.address,
+                                    })
+                                  }>
+                                  Preview
+                                </S.Button>
+                              </WalletCard>
+                            );
+                          })}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -149,7 +193,7 @@ export const SettingsTemplate = () => {
                   </S.WalletTitleWrapper>
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {false ? (
+                  {!controllerWallets.length ? (
                     <Empty
                       title="No wallet found"
                       description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
@@ -174,30 +218,29 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        <WalletCard
-                          isUsing={true}
-                          isDefault={true}
-                          defaultTitle="Default controller account"
-                          name="Polkadex testing"
-                          address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(1 trading account)">
-                          {true ? (
-                            <Badge isRegistered={true}>Registered</Badge>
-                          ) : (
-                            <S.Button type="button">Register Now</S.Button>
-                          )}
-                        </WalletCard>
-                        <WalletCard
-                          defaultTitle="Default controller account"
-                          name="Polkadex testing"
-                          address="5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8"
-                          aditionalInfo="(1 trading account)">
-                          {false ? (
-                            <Badge isRegistered={true}>Registered</Badge>
-                          ) : (
-                            <S.Button type="button">Register Now</S.Button>
-                          )}
-                        </WalletCard>
+                        {controllerWallets
+                          .sort((a) =>
+                            a.address !== currentControllerWallet.address ? 1 : -1
+                          )
+                          .map((v, i) => {
+                            const isUsing = currentControllerWallet.address === v.address;
+                            return (
+                              <WalletCard
+                                key={i}
+                                isUsing={isUsing}
+                                isDefault={isUsing}
+                                defaultTitle="Default controller account"
+                                name={v.meta.name}
+                                address={v.address}
+                                aditionalInfo="(1 trading account)">
+                                {true ? (
+                                  <Badge isRegistered={true}>Registered</Badge>
+                                ) : (
+                                  <S.Button type="button">Register Now</S.Button>
+                                )}
+                              </WalletCard>
+                            );
+                          })}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -208,10 +251,10 @@ export const SettingsTemplate = () => {
                 <S.AccountContainer>
                   <Card
                     label="Email"
-                    description="rodolfo@polkadex.trade"
+                    description={user.email}
                     isLocked
                     hasBadge
-                    isVerified
+                    isVerified={user.isConfirmed}
                   />
                   <Card
                     label="Avatar"
