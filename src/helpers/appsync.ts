@@ -16,13 +16,14 @@ export const sendQueryToAppSync = async (
       variables,
       authToken: token ?? READ_ONLY_TOKEN,
     });
-  }
-  if (authMode === "AMAZON_COGNITO_USER_POOLS") {
+  } else if (authMode === "AMAZON_COGNITO_USER_POOLS") {
     res = await API.graphql({
       query,
       variables,
       authMode,
     });
+  } else {
+    throw new Error("Invalid authentication type.");
   }
   return res;
 };
