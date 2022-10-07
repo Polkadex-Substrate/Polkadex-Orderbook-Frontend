@@ -3,26 +3,34 @@ import { Switch } from "../Switcher";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const CreateAccountForm = () => (
   <S.Wrapper>
     <S.WalletSelect>
-      <S.WalletSelectWrapper>
-        <S.WalletSelectContainer>
-          <S.WalletSelectContent>
-            <div>
-              <Icons.Info />
-            </div>
-            <span>Controller account</span>
-          </S.WalletSelectContent>
-          <p>
-            Orderbook testing <strong> • 5E1hRUGF5rCs...juU4NKGrX5P8</strong>{" "}
-          </p>
-        </S.WalletSelectContainer>
-        <S.WalletSelectArrow>
-          <Icons.ArrowBottom />
-        </S.WalletSelectArrow>
-      </S.WalletSelectWrapper>
+      <Dropdown>
+        <Dropdown.Trigger>
+          <S.WalletSelectWrapper>
+            <S.WalletSelectContainer>
+              <S.WalletSelectContent>
+                <div>
+                  <Icons.Info />
+                </div>
+                <span>Controller account</span>
+              </S.WalletSelectContent>
+              <p>
+                Orderbook testing <strong> • 5E1hRUGF5rCs...juU4NKGrX5P8</strong>{" "}
+              </p>
+            </S.WalletSelectContainer>
+            <S.WalletSelectArrow>
+              <Icons.ArrowBottom />
+            </S.WalletSelectArrow>
+          </S.WalletSelectWrapper>
+        </Dropdown.Trigger>
+        <Dropdown.Menu fill="secondaryBackgroundSolid">
+          <Dropdown.Item>Test</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
       <small>18/30</small>
     </S.WalletSelect>
     <S.WalletName>

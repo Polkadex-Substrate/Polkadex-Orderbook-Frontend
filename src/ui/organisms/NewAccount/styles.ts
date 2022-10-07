@@ -93,7 +93,7 @@ export const Card = styled.div<{ isActive?: boolean }>`
     padding: 1.5rem;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 0.4rem;
-    opacity: ${isActive ? 1 : 0.7};
+    opacity: ${isActive ? 1 : 0.3};
     cursor: pointer;
     user-select: none;
   `}

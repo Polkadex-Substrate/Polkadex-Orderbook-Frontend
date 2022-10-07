@@ -51,5 +51,7 @@ export * from "./EmptyAccount";
 export * from "./MyAccount";
 export * from "./ImportAccountForm";
 export * from "./CreateAccountForm";
+export * from "./SuccessCreateAccount";
+export * from "./SuccessImport";
 
 export * as LoadingIcons from "./LoadingIcons";

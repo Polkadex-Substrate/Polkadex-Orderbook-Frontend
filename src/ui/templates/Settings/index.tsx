@@ -29,7 +29,7 @@ export const SettingsTemplate = () => {
         <PreviewAccount onClose={() => setPreview(false)} />
       </Modal>
       <Modal open={newAccount} onClose={() => setNewAccount(false)} placement="start right">
-        <NewAccount onClose={() => setPreview(false)} />
+        <NewAccount onClose={() => setNewAccount(false)} />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
