@@ -25,7 +25,7 @@ export function* userAuthSaga(_action: UserAuthFetch) {
         notificationPush({
           type: "AttentionAlert",
           message: {
-            title: "Please confirm your email",
+            title: "Please confirm your email.",
             description: "Sign in again and confirm your email.",
           },
           time: new Date().getTime(),

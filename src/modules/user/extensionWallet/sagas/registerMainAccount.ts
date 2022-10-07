@@ -36,7 +36,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           message: {
             title: "Registering account...",
             description:
-              "Please sign the transaction and wait for block finalization. This may take a few minutes",
+              "Please sign the transaction and wait for block finalization. This may take a few minutes.",
           },
           type: "LoadingAlert",
           time: new Date().getTime(),

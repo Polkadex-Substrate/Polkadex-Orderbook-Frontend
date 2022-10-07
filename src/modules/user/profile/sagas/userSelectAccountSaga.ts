@@ -21,8 +21,8 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
     yield put(
       notificationPush({
         message: {
-          title: "Invalid MainAccount",
-          description: "The selected main account is invalid",
+          title: "Invalid main account!",
+          description: "The selected main account is invalid.",
         },
         time: new Date().getTime(),
       })

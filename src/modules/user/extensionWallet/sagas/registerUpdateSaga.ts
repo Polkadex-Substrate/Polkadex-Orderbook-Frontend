@@ -2,7 +2,7 @@ import { call, put, select } from "redux-saga/effects";
 
 import { notificationPush } from "../../notificationHandler";
 import { tradeAccountsFetch } from "../../tradeWallet";
-import { RegisterMainAccountUpdateEvent } from "../actions";
+import { registerMainAccountError, RegisterMainAccountUpdateEvent } from "../actions";
 
 import { sendError } from "@polkadex/orderbook-modules";
 
@@ -18,13 +18,14 @@ export function* registerMainAccountUpdateSaga(_action: RegisterMainAccountUpdat
       })
     );
   } catch (error) {
+    console.log("error:", error);
     yield put(
       sendError({
         error: error,
         processingType: "alert",
-        // extraOptions: {
-        //   actionError: userError,
-        // },
+        extraOptions: {
+          actionError: registerMainAccountError,
+        },
       })
     );
   }
