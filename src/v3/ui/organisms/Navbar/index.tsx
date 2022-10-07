@@ -13,7 +13,7 @@ const Navbar = ({ onOpenMarkets }) => {
   const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
   const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
-  const isPriceChangeNegative = Number(currentTickers?.priceChange24Hr) < 0;
+  const isPriceChangeNegative = currentTickers?.priceChange24Hr < 0;
   const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
   const high = Number(currentTickers?.high).toFixed(2);
   const low = Number(currentTickers?.low).toFixed(2);
@@ -33,30 +33,26 @@ const Navbar = ({ onOpenMarkets }) => {
             info={currPrice}
           />
 
-          <AvailableMessage message="Soon">
-            <NavbarItem
-              label="Price % 24h"
-              info={price_change_percent}
-              color={isPriceChangeNegative ? "primary" : "green"}
-            />
-          </AvailableMessage>
+          <NavbarItem
+            label="Price % 24h"
+            info={price_change_percent}
+            color={isPriceChangeNegative ? "primary" : "green"}
+          />
           <NavbarItem
             label={`Volume 24h ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
             info={volume}
           />
 
-          <AvailableMessage message="Soon">
-            <S.WrapperVolume>
-              <S.VolumeHigh>
-                <span>24h High</span>
-                <p>{high}</p>
-              </S.VolumeHigh>
-              <S.VolumeLow>
-                <span>24h Low</span>
-                <p>{low}</p>
-              </S.VolumeLow>
-            </S.WrapperVolume>
-          </AvailableMessage>
+          <S.WrapperVolume>
+            <S.VolumeHigh>
+              <span>24h High</span>
+              <p>{high}</p>
+            </S.VolumeHigh>
+            <S.VolumeLow>
+              <span>24h Low</span>
+              <p>{low}</p>
+            </S.VolumeLow>
+          </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>
     </S.Wrapper>
