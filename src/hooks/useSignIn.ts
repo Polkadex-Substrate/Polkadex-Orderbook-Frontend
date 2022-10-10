@@ -40,7 +40,7 @@ export const useSignIn = () => {
   }, [isAuthenticated, isSuccess, router, dispatch]);
 
   const signIn = (email: string, password: string) => {
-    dispatch(signInFetch({ email, password }));
+    dispatch(signInFetch({ email: email.toLowerCase(), password }));
   };
 
   return { signIn, loading };
