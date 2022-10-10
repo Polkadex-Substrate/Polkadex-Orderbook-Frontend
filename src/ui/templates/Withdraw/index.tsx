@@ -44,6 +44,7 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { cleanPositiveFloatInput } from "@polkadex/web-helpers";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -77,12 +78,25 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
+  const validate = values => {
+    const errors = {} as any;
+    if (values.amount.includes("e")){
+      errors.amount = 'use a valid amount instead';
+    }
+
+    if(+values.amount > +availableAmount?.free_balance) {
+      errors.amount = 'Amount cannot be greater than balance';
+    }
+    return errors;
+  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
       asset: null,
     },
     validationSchema: withdrawValidations,
+    validate,
     onSubmit: (values) => {
       const asset = isAssetPDEX(selectedAsset.assetId)
         ? { polkadex: null }
