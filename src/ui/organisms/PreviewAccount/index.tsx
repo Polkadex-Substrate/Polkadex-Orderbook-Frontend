@@ -8,7 +8,11 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Switch } from "@polkadex/orderbook-ui/molecules";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
-import { userAccountSelectFetch } from "@polkadex/orderbook-modules";
+import {
+  removeProxyAccountFromChainFetch,
+  removeTradeAccountFromBrowser,
+  userAccountSelectFetch,
+} from "@polkadex/orderbook-modules";
 
 type Props = {
   onClose: () => void;
@@ -62,8 +66,18 @@ export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
             </S.DropdownButton>
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item>Remove from blockchain</Dropdown.Item>
-            <Dropdown.Item>Remove from device</Dropdown.Item>
+            <Dropdown.Item
+              onAction={() =>
+                dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+              }>
+              Remove from blockchain
+            </Dropdown.Item>
+            <Dropdown.Item
+              onAction={() =>
+                dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
+              }>
+              Remove from device
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </S.Footer>
