@@ -29,6 +29,8 @@ export const selectGetAsset =
       return null;
     }
     if (isKeyPresentInObject(assetId, "asset")) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       assetId = assetId.asset;
     }
     return isAssetPDEX(assetId)
