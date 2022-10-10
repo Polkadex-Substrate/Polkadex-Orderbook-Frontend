@@ -59,7 +59,6 @@
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.0.2",
     "react-sparklines": "^1.7.0",
-    "react-stockcharts": "^0.7.8",
     "react-tabs": "^5.1.0",
     "react-to-print": "^2.14.1",
     "react-transition-group": "^4.4.2",
