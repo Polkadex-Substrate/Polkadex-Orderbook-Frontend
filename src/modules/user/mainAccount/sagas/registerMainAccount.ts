@@ -50,12 +50,13 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       if (res.isSuccess) {
         yield put(registerMainAccountData());
         yield call(executeRegisterEmail, data, signature);
-        setIsTradeAccountPassworded(tradeAddress, password.length > 0);
+        setIsTradeAccountPassworded(tradeAddress, password?.length > 0);
       } else {
         keyring.forgetAccount(tradeAddr);
       }
     }
   } catch (error) {
+    console.log("error:", error);
     keyring.forgetAccount(tradeAddr);
     yield put(registerMainAccountError());
     yield put(
