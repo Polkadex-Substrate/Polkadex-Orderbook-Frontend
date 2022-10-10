@@ -19,12 +19,6 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false,
-      "output": {
-        "UserPoolId": "ap-south-1_G7xhCI6s5",
-        "UserPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
-        "AppClientID": "4cmd6mbm93vb7u87v72911n279",
-        "AppClientIDWeb": "6ccnjqn0ik28hf8v0603pq3m81"
-      },
       "frontendAuthConfig": {
         "socialProviders": [],
         "usernameAttributes": [
@@ -69,7 +63,7 @@
         "name": "staging-orderbook-api",
         "region": "eu-central-1"
       },
-      "lastPushTimeStamp": "2022-10-07T06:10:14.368Z"
+      "lastPushTimeStamp": "2022-10-10T03:24:28.850Z"
     }
   }
 }

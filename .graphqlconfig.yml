@@ -13,6 +13,3 @@ projects:
         region: eu-central-1
         apiId: xpl6eqs3t5amhgbkrxdl4pebe4
         maxDepth: 2
-extensions:
-  amplify:
-    version: 3
