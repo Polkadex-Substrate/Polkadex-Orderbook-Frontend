@@ -24,7 +24,6 @@ export const WalletSelect = styled.div`
   gap: 0.5rem;
   small {
     align-self: flex-end;
-    opacity: 0.5;
   }
 `;
 
@@ -38,7 +37,7 @@ export const WalletSelectArrow = styled.div`
   width: 0.8rem;
 `;
 
-export const DropdownHeader = styled.span`
+export const DropdownHeader = styled.p`
   ${({ theme }) => css`
     small {
       color: ${theme.colors.tertiaryText};
@@ -48,17 +47,9 @@ export const DropdownHeader = styled.span`
 `;
 
 export const WalletSelectContainer = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    p {
-      strong {
-        font-weight: normal;
-        color: ${theme.colors.tertiaryText};
-      }
-    }
-  `}
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 `;
 
 export const WalletSelectContent = styled.div`

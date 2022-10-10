@@ -42,7 +42,6 @@ export const CreateAccountForm = ({ onCancel = undefined }) => {
     });
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
 
-  console.log(values);
   return (
     <S.Wrapper>
       <S.WalletSelect>
@@ -56,12 +55,10 @@ export const CreateAccountForm = ({ onCancel = undefined }) => {
                   </div>
                   <span>Controller account</span>
                 </S.WalletSelectContent>
-                <p>
-                  {values.controllerWallet.name || "Select your controller wallet"}
-                  {values.controllerWallet.address && (
-                    <strong> • {values.controllerWallet.address}</strong>
-                  )}
-                </p>
+                <WalletShortName
+                  address={values.controllerWallet.address}
+                  name={values.controllerWallet.name || "Select your controller wallet"}
+                />
               </S.WalletSelectContainer>
               <S.WalletSelectArrow>
                 <Icons.ArrowBottom />
@@ -69,20 +66,18 @@ export const CreateAccountForm = ({ onCancel = undefined }) => {
             </S.WalletSelectWrapper>
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
-            {controllerWallets.map((v, i) => {
-              const shortAddress =
-                v?.account?.address?.slice(0, 12) +
-                "..." +
-                v?.account?.address?.slice(v?.account?.address?.length - 12);
-              return (
-                <Dropdown.Item key={i}>
-                  <S.DropdownHeader>
-                    {v.account.meta.name}
-                    <small> • {shortAddress}</small>
-                  </S.DropdownHeader>
-                </Dropdown.Item>
-              );
-            })}
+            {controllerWallets.map((v, i) => (
+              <Dropdown.Item
+                key={i}
+                onAction={() =>
+                  setFieldValue("controllerWallet", {
+                    name: v.account.meta.name,
+                    address: v.account.address,
+                  })
+                }>
+                <WalletShortName address={v?.account?.address} name={v.account.meta.name} />
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
         <small>18/30</small>
@@ -136,5 +131,15 @@ export const CreateAccountForm = ({ onCancel = undefined }) => {
         <button type="submit">Create Account</button>
       </S.Footer>
     </S.Wrapper>
+  );
+};
+
+const WalletShortName = ({ name = "", address = "" }) => {
+  const shortAddress = address?.slice(0, 12) + "..." + address?.slice(address?.length - 12);
+  return (
+    <S.DropdownHeader>
+      {name}
+      {!!address.length && <small> • {shortAddress}</small>}
+    </S.DropdownHeader>
   );
 };
