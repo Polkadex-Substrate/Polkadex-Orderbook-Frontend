@@ -19,12 +19,6 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false,
-      "output": {
-        "UserPoolId": "ap-south-1_G7xhCI6s5",
-        "UserPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
-        "AppClientID": "4cmd6mbm93vb7u87v72911n279",
-        "AppClientIDWeb": "6ccnjqn0ik28hf8v0603pq3m81"
-      },
       "frontendAuthConfig": {
         "socialProviders": [],
         "usernameAttributes": [
@@ -46,81 +40,6 @@
     }
   },
   "api": {
-    "emmanuel-orderbook-api": {
-      "service": "AppSync",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "AWS_LAMBDA"
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "ap-south-1_QTi29vXb2",
-                "awsRegion": "ap-south-1",
-                "appIdClientRegex": null
-              }
-            }
-          ]
-        },
-        "GraphQLAPIIdOutput": "x2i3wkh75zf6jbnakg53mgdhjq",
-        "GraphQLAPIEndpointOutput": "https://6d7lnart6rhbpkteiosj4ptsk4.appsync-api.ap-south-1.amazonaws.com/graphql",
-        "name": "emmanuel-orderbook-api",
-        "region": "ap-south-1"
-      },
-      "lastPushTimeStamp": "2022-09-07T08:22:38.140Z"
-    },
-    "nueltest3-orderbook-api": {
-      "service": "AppSync",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "AWS_LAMBDA"
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "eu-central-1_vLHGSDpjK",
-                "awsRegion": "eu-central-1",
-                "appIdClientRegex": null
-              }
-            }
-          ]
-        },
-        "GraphQLAPIIdOutput": "lp2nc7jbu5bzhi5afc2iwk5fhu",
-        "GraphQLAPIEndpointOutput": "https://ohy7hoopy5ejhily2bppx4n42a.appsync-api.eu-central-1.amazonaws.com/graphql",
-        "name": "nueltest3-orderbook-api",
-        "region": "eu-central-1"
-      },
-      "lastPushTimeStamp": "2022-09-22T05:47:38.920Z"
-    },
-    "internal-orderbook-api": {
-      "service": "AppSync",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "AWS_LAMBDA"
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "eu-central-1_CgOTmkIOR",
-                "awsRegion": "eu-central-1",
-                "appIdClientRegex": null
-              }
-            }
-          ]
-        },
-        "GraphQLAPIIdOutput": "lz2nw3zapvcnthkywzbagsv3ta",
-        "GraphQLAPIEndpointOutput": "https://jqegzm6ijfdl3lbo5fxhdyu2pu.appsync-api.eu-central-1.amazonaws.com/graphql",
-        "name": "internal-orderbook-api",
-        "region": "eu-central-1"
-      },
-      "lastPushTimeStamp": "2022-09-24T11:26:34.190Z"
-    },
     "staging-orderbook-api": {
       "service": "AppSync",
       "output": {
@@ -144,7 +63,7 @@
         "name": "staging-orderbook-api",
         "region": "eu-central-1"
       },
-      "lastPushTimeStamp": "2022-09-26T12:58:32.809Z"
+      "lastPushTimeStamp": "2022-10-10T03:24:28.850Z"
     }
   }
 }

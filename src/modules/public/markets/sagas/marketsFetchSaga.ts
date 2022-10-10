@@ -1,23 +1,19 @@
 import { call, put, select } from "redux-saga/effects";
-import { ApiPromise } from "@polkadot/api";
-import BigNumber from "bignumber.js";
 
 import { sendError } from "../../../";
 import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from "../actions";
 import { Market, MarketQueryResult } from "..";
-import { selectRangerApi, selectRangerIsReady } from "../../ranger";
-import { isAssetPDEX } from "../../assets";
+import { IPublicAsset, isAssetPDEX, selectAllAssets } from "../../assets";
 
-import { UNIT_BN } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-export function* marketsFetchSaga(action: MarketsFetch) {
+export function* marketsFetchSaga(_action: MarketsFetch) {
   try {
-    const api = yield select(selectRangerApi);
-    const isApi = yield select(selectRangerIsReady);
-    if (isApi) {
-      const markets = yield call(fetchMarkets, api);
+    const allAssets: IPublicAsset[] = yield select(selectAllAssets);
+    if (allAssets.length > 0) {
+      const markets = yield call(fetchMarkets, allAssets);
       console.log("markets fetched", markets);
       yield put(marketsData(markets));
       yield put(setCurrentMarketIfUnset(markets[0]));
@@ -35,14 +31,13 @@ export function* marketsFetchSaga(action: MarketsFetch) {
     );
   }
 }
-const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
+const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
   const res: any = await sendQueryToAppSync(getAllMarkets);
   const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
-
   const markets = pairs.map(async (pair: MarketQueryResult): Promise<Market> => {
     const [baseAsset, quoteAsset] = pair.market.split("-");
-    const [baseName, baseSymbol, baseAssetId] = await fetchAssetData(api, baseAsset);
-    const [quoteName, quoteSymbol, quoteAssetId] = await fetchAssetData(api, quoteAsset);
+    const [baseName, baseSymbol, baseAssetId] = findAsset(assets, baseAsset);
+    const [quoteName, quoteSymbol, quoteAssetId] = findAsset(assets, quoteAsset);
 
     return {
       id: pair.market,
@@ -67,10 +62,12 @@ const fetchMarkets = async (api: ApiPromise): Promise<Market[]> => {
   return Promise.all(markets);
 };
 
-const fetchAssetData = async (api: ApiPromise, asset: string): Promise<string[]> => {
-  if (isAssetPDEX(asset)) {
-    return ["POLKADEX", "PDEX", "-1"];
+const findAsset = (assets: IPublicAsset[], id: string) => {
+  if (isAssetPDEX(id)) {
+    const { name, symbol, asset_id } = POLKADEX_ASSET;
+    return [name, symbol, asset_id];
   }
-  const assetMetadata: any = await (await api.query.assets.metadata(asset)).toHuman();
-  return [assetMetadata.name, assetMetadata.symbol, asset.toString()];
+  const asset = assets.find(({ asset_id }) => asset_id === id);
+  if (asset) return [asset.name, asset.symbol, asset.asset_id];
+  else return ["", "", ""];
 };

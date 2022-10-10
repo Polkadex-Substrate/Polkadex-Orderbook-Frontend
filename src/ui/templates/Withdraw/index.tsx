@@ -65,7 +65,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.asset_id),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -84,9 +84,9 @@ export const WithdrawTemplate = () => {
     },
     validationSchema: withdrawValidations,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.assetId)
+      const asset = isAssetPDEX(selectedAsset.asset_id)
         ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+        : { asset: selectedAsset.asset_id };
       dispatch(
         withdrawsFetch({
           asset: asset,
@@ -186,7 +186,7 @@ export const WithdrawTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.assetId}
+                                key={asset.asset_id}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>

@@ -11,11 +11,10 @@ import {
   MARKETS_TICKERS_DATA,
   MARKETS_TICKERS_ERROR,
   MARKETS_TICKERS_FETCH,
-  MARKETS_TICKERS_PUSH,
   MARKET_TICKER_CHANNEL_DATA,
   MARKET_TICKER_CHANNEL_FETCH,
 } from "./constants";
-import { Market, Ticker, TickerEvent } from "./types";
+import { Market, Ticker } from "./types";
 
 export interface MarketsFetch {
   type: typeof MARKETS_FETCH;

@@ -76,7 +76,7 @@ const Deposit = () => {
                     {assets.map((asset, idx) => (
                       <Card
                         key={idx}
-                        id={asset.assetId}
+                        id={asset.asset_id}
                         onChange={() => setFieldValue("asset", asset)}
                         name={asset?.name}
                       />

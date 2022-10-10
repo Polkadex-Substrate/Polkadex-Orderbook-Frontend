@@ -49,7 +49,7 @@ export const DepositTemplate = () => {
   const router = useRouter();
   const { deposits } = useHistory();
 
-  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.address?.slice(0, 15) +
@@ -73,9 +73,9 @@ export const DepositTemplate = () => {
     // TODO: re-add the validations
     validationSchema: withdrawValidations,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.assetId)
+      const asset = isAssetPDEX(selectedAsset.asset_id)
         ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+        : { asset: selectedAsset.asset_id };
       dispatch(
         depositsFetch({
           asset: asset,
@@ -159,7 +159,7 @@ export const DepositTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.assetId}
+                                key={asset.asset_id}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
