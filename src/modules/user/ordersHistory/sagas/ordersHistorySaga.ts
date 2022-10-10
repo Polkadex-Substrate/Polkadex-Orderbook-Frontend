@@ -1,9 +1,8 @@
 // TODO: Create User middleware
 import { call, put, select } from "redux-saga/effects";
-import { API } from "aws-amplify";
 
 import { userOrdersHistoryData } from "../actions";
-import { alertPush, selectCurrentMainAccount, selectCurrentTradeAccount } from "../../../";
+import { alertPush, selectCurrentTradeAccount } from "../../../";
 import { ProxyAccount } from "../../profile";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
@@ -11,7 +10,6 @@ import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 import { Utils } from "@polkadex/web-helpers";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type orderHistoryQueryResult = {

@@ -1,6 +1,6 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import subDays from "date-fns/subDays";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import Checkbox from "../../molecules/Checkbox";
@@ -48,11 +48,12 @@ const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 const Transactions = () => {
   const dispatch = useDispatch();
-  const now = useRef(new Date());
+  const now = new Date();
 
   const [filters, setFilters] = useState(initialFilters);
-  const [to, setTo] = useState(now.current);
-  const [from, setFrom] = useState(subDays(now.current, 7));
+  const [to, setTo] = useState(now);
+  const [from, setFrom] = useState(subDays(now, 7));
+  const [trigger, setTrigger] = useState(false);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
@@ -67,6 +68,12 @@ const Transactions = () => {
     [dispatch]
   );
 
+  // GET CURRENT DATA WHEN TAB IS SWITCHED
+  useEffect(() => {
+    const now = new Date();
+    dispatch(userSessionData({ dateFrom: subDays(now, 7), dateTo: now }));
+  }, [trigger]);
+
   const ranges = useMemo(() => {
     return [
       {
@@ -80,7 +87,10 @@ const Transactions = () => {
     <S.Section>
       <Tabs>
         <S.Header>
-          <S.HeaderContent>
+          <S.HeaderContent
+            onClick={() => {
+              setTrigger(!trigger);
+            }}>
             <TabHeader>
               <S.TabHeader>Open Orders</S.TabHeader>
             </TabHeader>

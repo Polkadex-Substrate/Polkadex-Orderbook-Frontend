@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 
 import {
   selectCurrentMarket,
-  selectUserLoggedIn,
   selectUserTrades,
   userTradesFetch,
   selectTradesLoading,
