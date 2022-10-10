@@ -83,7 +83,7 @@ const createSignedData = async (
   mainAccount: MainAccount,
   email: string
 ): Promise<{ data: RegisterEmailData; signature: string }> => {
-  const signRaw = mainAccount.injector?.signRaw;
+  const signRaw = mainAccount.injector?.signer?.signRaw;
   const main_address = mainAccount.address;
   if (signRaw) {
     const data: RegisterEmailData = { email, main_address };
