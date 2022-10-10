@@ -70,7 +70,18 @@ export const WalletSelectContent = styled.div`
     }
   `}
 `;
-export const WalletName = styled(Container)`
+
+export const WalletName = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  small {
+    align-self: flex-end;
+    font-size: 1.2rem;
+  }
+`;
+
+export const WalletNameWrapper = styled(Container)`
   ${({ theme }) => css`
     display: flex;
     align-items: flex-end;
@@ -97,6 +108,7 @@ export const WalletName = styled(Container)`
     }
   `}
 `;
+
 export const Password = styled(Container)`
   display: flex;
   flex-direction: column;

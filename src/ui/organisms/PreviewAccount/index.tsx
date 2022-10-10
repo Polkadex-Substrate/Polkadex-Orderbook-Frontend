@@ -117,7 +117,7 @@ const WalletName = ({ label = "", information = "" }) => {
               />
             </S.CardInfo>
           </S.CardContent>
-          <S.Actions>
+          <S.Actions isActive={state}>
             <button type="submit">Save</button>
           </S.Actions>
         </S.CardWrapper>

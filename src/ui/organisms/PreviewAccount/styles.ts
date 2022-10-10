@@ -94,6 +94,7 @@ export const CardContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    flex: 1;
     span {
       font-size: 1.2rem;
       color: ${theme.colors.tertiaryText};
@@ -117,10 +118,10 @@ export const Verified = styled.div<{ isActive?: boolean }>`
   `}
 `;
 
-export const Actions = styled.div`
-  ${({ theme }) => css`
+export const Actions = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
     button {
-      background: ${theme.colors.secondaryBackgroundOpacity};
+      background: ${isActive ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
       border-radius: 0.3rem;
       padding: 0.5rem;
       font-weight: 500;
@@ -164,6 +165,7 @@ export const CardInfo = styled.div`
     }
     input {
       color: ${theme.colors.text};
+      width: 100%;
     }
   `}
 `;

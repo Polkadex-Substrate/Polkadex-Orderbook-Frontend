@@ -34,12 +34,14 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
   const [preview, setPreview] = useState({ status: false, selected: null });
-  const [newAccount, setNewAccount] = useState(false);
+  const [newAccount, setNewAccount] = useState({ status: false, selected: null });
 
   const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
   const currentTradeAccount = useReduxSelector(selectUsingAccount);
 
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts).sort(
+    ({ account }) => (account.address !== currentControllerWallet?.account?.address ? 1 : -1)
+  );
   const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const user = useReduxSelector(selectUserInfo);
 
@@ -50,7 +52,7 @@ export const SettingsTemplate = () => {
         onClose={() =>
           setPreview({
             status: false,
-            selected: "",
+            selected: {},
           })
         }
         placement="start right">
@@ -64,8 +66,14 @@ export const SettingsTemplate = () => {
           selected={preview.selected}
         />
       </Modal>
-      <Modal open={newAccount} onClose={() => setNewAccount(false)} placement="start right">
-        <NewAccount onClose={() => setNewAccount(false)} />
+      <Modal
+        open={newAccount.status}
+        onClose={() => setNewAccount({ selected: {}, status: false })}
+        placement="start right">
+        <NewAccount
+          onClose={() => setNewAccount({ selected: {}, status: false })}
+          selected={newAccount.selected}
+        />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -96,7 +104,9 @@ export const SettingsTemplate = () => {
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
                   {true && (
-                    <ButtonWallet type="button" onClick={() => setNewAccount(true)}>
+                    <ButtonWallet
+                      type="button"
+                      onClick={() => setNewAccount({ ...newAccount, status: true })}>
                       New Account
                     </ButtonWallet>
                   )}
@@ -217,25 +227,22 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {controllerWallets
-                          .sort(({ account }) =>
-                            account.address !== currentControllerWallet?.account?.address
-                              ? 1
-                              : -1
-                          )
-                          .map(({ account }, i) => (
-                            <ControllerWallets
-                              key={i}
-                              address={account.address}
-                              name={account.meta.name}
-                              mainAccount={controllerWallets.find(
-                                (v) => v.account.address === account.address
-                              )}
-                              isUsing={
-                                account.address === currentControllerWallet?.account?.address
-                              }
-                            />
-                          ))}
+                        {controllerWallets.map(({ account }, i) => (
+                          <ControllerWallets
+                            key={i}
+                            address={account.address}
+                            name={account.meta.name}
+                            mainAccount={controllerWallets.find(
+                              (v) => v.account.address === account.address
+                            )}
+                            isUsing={
+                              account.address === currentControllerWallet?.account?.address
+                            }
+                            handleRegister={() =>
+                              setNewAccount({ selected: account, status: true })
+                            }
+                          />
+                        ))}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -281,8 +288,15 @@ type ControllerWaletsPRops = {
   name: string;
   isUsing: boolean;
   mainAccount: ExtensionAccount;
+  handleRegister?: () => void;
 };
-const ControllerWallets = ({ address, name, isUsing, mainAccount }: ControllerWaletsPRops) => {
+const ControllerWallets = ({
+  address,
+  name,
+  isUsing,
+  mainAccount,
+  handleRegister = undefined,
+}: ControllerWaletsPRops) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
   const dispatch = useDispatch();
   return (
@@ -305,7 +319,9 @@ const ControllerWallets = ({ address, name, isUsing, mainAccount }: ControllerWa
           <Badge isRegistered={true}>Registered</Badge>
         </>
       ) : (
-        <S.Button type="button">Register Now</S.Button>
+        <S.Button type="button" onClick={handleRegister}>
+          Register Now
+        </S.Button>
       )}
     </WalletCard>
   );

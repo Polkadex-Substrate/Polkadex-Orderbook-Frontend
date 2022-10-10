@@ -131,5 +131,9 @@ export const Close = styled.button`
     :hover {
       background-color: ${theme.colors.secondaryBackgroundOpacity};
     }
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
   `}
 `;

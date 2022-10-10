@@ -7,12 +7,12 @@ import { Appearance, AccountOverview, EmptyMyAccount } from "..";
 import * as S from "./styles";
 
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
+import { logOutFetch } from "@polkadex/orderbook-modules";
 
 export const Profile = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const currentTradeAddr = "";
 
   const { isSignedIn } = useAccount();
   const dispatch = useDispatch();
