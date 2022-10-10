@@ -136,7 +136,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         });
       }
       setChangeType(false);
-      // handleCleanPrice && handleCleanPrice();
+      handleCleanPrice && handleCleanPrice();
     },
 
     [pricePrecision, form, handleCleanPrice]
