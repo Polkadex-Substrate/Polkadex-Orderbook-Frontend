@@ -13,6 +13,7 @@ import {
   selectExtensionWalletAccounts,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { createAccountValidations } from "@polkadex/orderbook/validations";
 
 export const CreateAccountForm = ({
   onCancel = undefined,
@@ -22,28 +23,38 @@ export const CreateAccountForm = ({
   const dispatch = useDispatch();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
 
-  const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
-    useFormik({
-      initialValues: {
-        name: "",
-        hasPasscode: false,
-        passcode: "",
-        isPasscodeVisible: false,
-        controllerWallet: {
-          name: selectedAccountName || "",
-          address: selectedAccountAddress || "Select your controller wallet",
-        },
+  const {
+    errors,
+    values,
+    setFieldValue,
+    touched,
+    handleSubmit,
+    getFieldProps,
+    isValid,
+    dirty,
+  } = useFormik({
+    initialValues: {
+      name: "",
+      hasPasscode: false,
+      passcode: "",
+      isPasscodeVisible: false,
+      controllerWallet: {
+        name: selectedAccountName || "",
+        address: selectedAccountAddress || "Select your controller wallet",
       },
-      onSubmit: (values) => {
-        // dispatch(
-        //   registerTradeAccountFetch({
-        //     name: values.name,
-        //     password: String(values.passcode),
-        //     mnemonic: [""],
-        //   })
-        // );
-      },
-    });
+    },
+    validationSchema: createAccountValidations,
+    onSubmit: (values) => {
+      // dispatch(
+      //   registerTradeAccountFetch({
+      //     name: values.name,
+      //     password: String(values.passcode),
+      //     mnemonic: [""],
+      //   })
+      // );
+    },
+  });
+
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
@@ -51,7 +62,12 @@ export const CreateAccountForm = ({
         <S.WalletSelect>
           <Dropdown>
             <Dropdown.Trigger>
-              <S.WalletSelectWrapper>
+              <S.WalletSelectWrapper
+                hasError={
+                  !!errors.controllerWallet?.name &&
+                  !!touched.controllerWallet?.name &&
+                  !!errors.controllerWallet?.name
+                }>
                 <S.WalletSelectContainer>
                   <S.WalletSelectContent>
                     <div>
@@ -112,39 +128,51 @@ export const CreateAccountForm = ({
               Random
             </button>
           </S.WalletNameWrapper>
-          <small>18/30</small>
+          <S.WalletError isNegative={values.name.length >= 31}>
+            {errors.name && touched.name && errors.name ? <p>{errors.name}</p> : <div />}
+            <small>
+              <strong>{values.name.length}</strong>/30
+            </small>
+          </S.WalletError>
         </S.WalletName>
         <S.Password>
-          <S.PasswordHeader>
-            <span>Protect by password</span>
-            <Switch
-              isActive={values.hasPasscode}
-              onChange={() => {
-                setFieldValue("hasPasscode", !values.hasPasscode);
-                setFieldValue("passcode", "");
-              }}
-            />
-          </S.PasswordHeader>
-          {values.hasPasscode && (
-            <S.PasswordFooter>
-              <input
-                {...getFieldProps("passcode")}
-                type={values.isPasscodeVisible ? "password" : "text"}
-                placeholder="(Optional) Enter a password"
+          <S.PasswordWrapper>
+            <S.PasswordHeader>
+              <span>Protect by password</span>
+              <Switch
+                isActive={values.hasPasscode}
+                onChange={() => {
+                  setFieldValue("hasPasscode", !values.hasPasscode);
+                  setFieldValue("passcode", "");
+                }}
               />
-              <button
-                type="button"
-                onClick={() => setFieldValue("isPasscodeVisible", !values.isPasscodeVisible)}>
-                <IconComponent />
-              </button>
-            </S.PasswordFooter>
-          )}
+            </S.PasswordHeader>
+            {values.hasPasscode && (
+              <S.PasswordFooter>
+                <input
+                  {...getFieldProps("passcode")}
+                  type={values.isPasscodeVisible ? "password" : "text"}
+                  placeholder="(Optional) Enter a password"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFieldValue("isPasscodeVisible", !values.isPasscodeVisible)
+                  }>
+                  <IconComponent />
+                </button>
+              </S.PasswordFooter>
+            )}
+          </S.PasswordWrapper>
+          <S.Error> {errors.passcode && touched.passcode && errors.passcode}</S.Error>
         </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
             Cancel
           </button>
-          <button type="submit">Create Account</button>
+          <button type="submit" disabled={!(isValid && dirty)}>
+            Create Account
+          </button>
         </S.Footer>
       </S.Wrapper>
     </form>

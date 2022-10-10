@@ -27,10 +27,13 @@ export const WalletSelect = styled.div`
   }
 `;
 
-export const WalletSelectWrapper = styled(Container)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+export const WalletSelectWrapper = styled(Container)<{ hasError?: boolean }>`
+  ${({ theme, hasError }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid ${hasError ? theme.colors.red : "inherit"};
+  `}
 `;
 
 export const WalletSelectArrow = styled.div`
@@ -75,10 +78,6 @@ export const WalletName = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  small {
-    align-self: flex-end;
-    font-size: 1.2rem;
-  }
 `;
 
 export const WalletNameWrapper = styled(Container)`
@@ -109,7 +108,39 @@ export const WalletNameWrapper = styled(Container)`
   `}
 `;
 
-export const Password = styled(Container)`
+export const WalletError = styled.div<{ isNegative?: boolean }>`
+  ${({ theme, isNegative }) => css`
+    display: flex;
+    justify-content: space-between;
+    small,
+    strong {
+      font-size: 1.2rem;
+    }
+    small {
+      align-self: flex-end;
+    }
+    strong {
+      font-weight: normal;
+      color: ${isNegative ? theme.colors.red : "inherit"};
+    }
+    p {
+      color: ${theme.colors.red};
+    }
+  `}
+`;
+
+export const Password = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+export const Error = styled.p`
+  ${({ theme }) => css`
+    color: ${theme.colors.red};
+  `}
+`;
+export const PasswordWrapper = styled(Container)`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -154,6 +185,9 @@ export const Footer = styled.div`
       :last-child {
         flex: 1;
         background: ${theme.colors.primary};
+      }
+      :disabled {
+        background: gray;
       }
     }
   `}
