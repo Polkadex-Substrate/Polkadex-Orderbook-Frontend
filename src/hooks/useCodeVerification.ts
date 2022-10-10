@@ -15,12 +15,16 @@ export const useCodeVerification = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isVerficationSuccess = useReduxSelector(selectUserConfirmed);
+  const isVerificationSuccess = useReduxSelector(selectUserConfirmed);
   const email = useReduxSelector(selectUserAuthEmail);
 
   useEffect(() => {
-    if (isVerficationSuccess) router.push("/signIn");
-  }, [isVerficationSuccess, router]);
+    if (isVerificationSuccess) router.push("/signIn");
+  }, [isVerificationSuccess, router]);
+
+  useEffect(() => {
+    if (!email) router.push("/sign");
+  }, [email, router]);
 
   const verifyCode = (code: string) => dispatch(codeVerifyFetch({ email, code }));
 
