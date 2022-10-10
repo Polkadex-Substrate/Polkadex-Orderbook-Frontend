@@ -18,6 +18,7 @@ import {
   AUTH_CHANGE_PASSWORD_FETCH,
   AUTH_CHANGE_PASSWORD_DATA,
   AUTH_CHANGE_PASSWORD_ERROR,
+  AUTH_CODE_VERIFY_ERROR,
 } from "./constants";
 
 export interface AuthState {
@@ -83,6 +84,8 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
     }
     case AUTH_CODE_VERIFY_DATA:
       return { ...state, userConfirmed: true };
+    case AUTH_CODE_VERIFY_ERROR:
+      return { ...state, userConfirmed: false };
     case AUTH_SIGN_UP_ERROR:
       return { ...state, signUpError: action.error, signUpLoading: false };
     case AUTH_LOGOUT_FETCH:
