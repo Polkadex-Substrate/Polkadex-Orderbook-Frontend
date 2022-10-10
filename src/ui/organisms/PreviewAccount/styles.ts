@@ -62,7 +62,9 @@ export const Button = styled.button`
     width: 100%;
     border-radius: 0.3rem;
     font-weight: 500;
+    background: ${theme.colors.primary};
     :disabled {
+      background: none;
       border: 2px solid ${theme.colors.secondaryBackground};
     }
   `}
@@ -98,16 +100,20 @@ export const CardContent = styled.div`
     }
   `}
 `;
-export const Verified = styled.div`
-  ${({ theme }) => css`
+export const Verified = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.colors.green};
+    background: ${isActive ? theme.colors.green : theme.colors.red};
     width: 1.5rem;
     height: 1.5rem;
-    padding: 0.3rem;
+    padding: ${isActive ? "0.3rem" : "0.4rem"};
     border-radius: 10rem;
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
   `}
 `;
 
@@ -155,6 +161,9 @@ export const CardInfo = styled.div`
     }
     small {
       color: ${theme.colors.tertiaryText};
+    }
+    input {
+      color: ${theme.colors.text};
     }
   `}
 `;

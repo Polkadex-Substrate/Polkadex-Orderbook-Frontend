@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -19,17 +20,20 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  extensionWalletAccountSelect,
   selectBrowserTradeAccounts,
   selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
   selectIsMainAddressRegistered,
   selectUserInfo,
   selectUsingAccount,
+  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
-  const [preview, setPreview] = useState({ status: false, selected: {} });
+  const [preview, setPreview] = useState({ status: false, selected: null });
   const [newAccount, setNewAccount] = useState(false);
 
   const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
@@ -57,6 +61,7 @@ export const SettingsTemplate = () => {
               selected: {},
             })
           }
+          selected={preview.selected}
         />
       </Modal>
       <Modal open={newAccount} onClose={() => setNewAccount(false)} placement="start right">
@@ -157,10 +162,7 @@ export const SettingsTemplate = () => {
                                   onClick={() =>
                                     setPreview({
                                       status: true,
-                                      selected: {
-                                        address: v.address,
-                                        meta: v.meta,
-                                      },
+                                      selected: v,
                                     })
                                   }>
                                   Preview
@@ -226,6 +228,9 @@ export const SettingsTemplate = () => {
                               key={i}
                               address={account.address}
                               name={account.meta.name}
+                              mainAccount={controllerWallets.find(
+                                (v) => v.account.address === account.address
+                              )}
                               isUsing={
                                 account.address === currentControllerWallet?.account?.address
                               }
@@ -271,9 +276,15 @@ export const SettingsTemplate = () => {
   );
 };
 
-const ControllerWallets = ({ address, name, isUsing }) => {
+type ControllerWaletsPRops = {
+  address: string;
+  name: string;
+  isUsing: boolean;
+  mainAccount: ExtensionAccount;
+};
+const ControllerWallets = ({ address, name, isUsing, mainAccount }: ControllerWaletsPRops) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
-
+  const dispatch = useDispatch();
   return (
     <WalletCard
       isUsing={isUsing}
@@ -283,7 +294,16 @@ const ControllerWallets = ({ address, name, isUsing }) => {
       address={address}
       aditionalInfo="(1 trading account)">
       {isRegistered ? (
-        <Badge isRegistered={true}>Registered</Badge>
+        <>
+          {!isUsing && (
+            <S.Button
+              type="button"
+              onClick={() => dispatch(extensionWalletAccountSelect(mainAccount))}>
+              Use
+            </S.Button>
+          )}
+          <Badge isRegistered={true}>Registered</Badge>
+        </>
       ) : (
         <S.Button type="button">Register Now</S.Button>
       )}

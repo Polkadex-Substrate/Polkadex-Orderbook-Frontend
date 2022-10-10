@@ -1,10 +1,23 @@
+import { useState } from "react";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Switch } from "@polkadex/orderbook-ui/molecules";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { userAccountSelectFetch } from "@polkadex/orderbook-modules";
 
-export const PreviewAccount = ({ onClose = undefined }) => {
+type Props = {
+  onClose: () => void;
+  selected: TradeAccount;
+};
+
+export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
+  const using = false;
+  const dispatch = useDispatch();
   return (
     <S.Main>
       <S.Header type="button" onClick={onClose}>
@@ -14,11 +27,8 @@ export const PreviewAccount = ({ onClose = undefined }) => {
         <h2>Preview Wallet</h2>
         <S.Container>
           <S.Box>
-            <WalletName label="Wallet name" information="Occasional-chamois" />
-            <WalletAddress
-              label="Trade wallet"
-              information="5HmuAcVry1VWoK9...cVuVfAur1gDAa7kaF8"
-            />
+            <WalletName label="Wallet name" information={String(selected?.meta?.name)} />
+            <WalletAddress label="Trade wallet" information={selected?.address} />
             <WalletAddress
               label="Controller wallet"
               information="Orderbook testing"
@@ -28,7 +38,16 @@ export const PreviewAccount = ({ onClose = undefined }) => {
             <ProtectedByPassword label="Protected by password" />
             <DefaultAccount label="Default trade account" />
           </S.Box>
-          <S.Button disabled>Using</S.Button>
+          <S.Button
+            disabled={using}
+            onClick={
+              using
+                ? undefined
+                : () => dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
+            }
+            type="button">
+            {using ? "Using" : "Use"}
+          </S.Button>
         </S.Container>
       </S.Content>
       <S.Footer>
@@ -52,22 +71,59 @@ export const PreviewAccount = ({ onClose = undefined }) => {
   );
 };
 
-const WalletName = ({ label = "", information = "" }) => (
-  <S.Card>
-    <S.CardWrapper>
-      <S.CardContent>
-        <span>{label}</span>
-        <S.CardInfo>
-          <p>{information}</p>
-        </S.CardInfo>
-      </S.CardContent>
-      <S.Actions>
-        <button type="button">Edit</button>
-      </S.Actions>
-    </S.CardWrapper>
-    <strong>18/30</strong>
-  </S.Card>
-);
+const WalletName = ({ label = "", information = "" }) => {
+  const [state, setState] = useState(false);
+
+  const { values, touched, errors, handleSubmit } = useFormik({
+    initialValues: {
+      name: information,
+    },
+    onSubmit: (values) => {
+      console.log(values);
+      setState(!state);
+    },
+  });
+  console.log(errors, values);
+  return state ? (
+    <form onSubmit={handleSubmit}>
+      <S.Card>
+        <S.CardWrapper>
+          <S.CardContent>
+            <span>{label}</span>
+            <S.CardInfo>
+              <input
+                name="name"
+                type="text"
+                placeholder="Enter a wallet name"
+                defaultValue={values.name}
+              />
+            </S.CardInfo>
+          </S.CardContent>
+          <S.Actions>
+            <button type="submit">Save</button>
+          </S.Actions>
+        </S.CardWrapper>
+        <strong>{errors.name && touched.name && errors.name} 18/30</strong>
+      </S.Card>
+    </form>
+  ) : (
+    <S.Card>
+      <S.CardWrapper>
+        <S.CardContent>
+          <span>{label}</span>
+          <S.CardInfo>
+            <p>{information}</p>
+          </S.CardInfo>
+        </S.CardContent>
+        <S.Actions>
+          <button type="button" onClick={() => setState(!state)}>
+            Edit
+          </button>
+        </S.Actions>
+      </S.CardWrapper>
+    </S.Card>
+  );
+};
 
 const WalletAddress = ({
   label = "",
@@ -98,21 +154,24 @@ const WalletAddress = ({
   </S.CardWrapper>
 );
 
-const ProtectedByPassword = ({ label = "" }) => (
-  <S.CardWrapper>
-    <S.CardContent>
-      <S.CardBox>
-        <span>{label}</span>
-        <div>
-          <Icons.Lock />
-        </div>
-      </S.CardBox>
-    </S.CardContent>
-    <S.Verified>
-      <Icons.Verified />
-    </S.Verified>
-  </S.CardWrapper>
-);
+const ProtectedByPassword = ({ label = "", isActive = false }) => {
+  const IconComponent = Icons[isActive ? "Verified" : "Close"];
+  return (
+    <S.CardWrapper>
+      <S.CardContent>
+        <S.CardBox>
+          <span>{label}</span>
+          <div>
+            <Icons.Lock />
+          </div>
+        </S.CardBox>
+      </S.CardContent>
+      <S.Verified isActive={isActive}>
+        <IconComponent />
+      </S.Verified>
+    </S.CardWrapper>
+  );
+};
 
 const DefaultAccount = ({ label = "" }) => (
   <S.CardWrapper>
