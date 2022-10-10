@@ -44,14 +44,13 @@ export const CreateAccountForm = ({
       },
     },
     validationSchema: createAccountValidations,
-    onSubmit: (values) => {
-      // dispatch(
-      //   registerTradeAccountFetch({
-      //     name: values.name,
-      //     password: String(values.passcode),
-      //     mnemonic: [""],
-      //   })
-      // );
+    onSubmit: ({ name, passcode }) => {
+      dispatch(
+        registerTradeAccountFetch({
+          name,
+          password: String(passcode),
+        })
+      );
     },
   });
 

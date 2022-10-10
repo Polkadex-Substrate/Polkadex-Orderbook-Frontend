@@ -2,6 +2,7 @@ import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 import { selectMainAccount } from "../../extensionWallet";
 import {
@@ -31,10 +32,13 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
     if (!account?.address) {
       throw new Error("Please select a main account!");
     }
-    const { mnemonic, password, name } = action.payload;
+    const { password, name } = action.payload;
+    const mnemonic = mnemonicGenerate();
+
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
+
     tradeAddress = pair.address;
     if (api && account?.address) {
       yield put(

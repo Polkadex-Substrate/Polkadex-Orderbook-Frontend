@@ -37,7 +37,6 @@ export interface TradeAccountsError {
 export interface RegisterTradeAccountFetch {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_FETCH;
   payload: {
-    mnemonic: string;
     password?: string;
     name?: string;
   };
