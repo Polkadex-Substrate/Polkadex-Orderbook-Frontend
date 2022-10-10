@@ -4,6 +4,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { orderCancelFetch } from "@polkadex/orderbook-modules";
+import { useState } from "react";
 
 export const OpenOrderCard = ({
   isSell,
@@ -17,6 +18,15 @@ export const OpenOrderCard = ({
   data = [],
 }) => {
   const dispatch = useDispatch();
+  const [isCancelClicked, setIsCancleClicked] = useState(false);
+
+  const handleCancelClick = () => {
+    if (!isCancelClicked) {
+      setIsCancleClicked(true);
+      dispatch(orderCancelFetch({ orderId, base, quote }));
+    }
+  };
+
   return (
     <S.Tr>
       <S.Td>
@@ -61,9 +71,7 @@ export const OpenOrderCard = ({
         <S.Tag>Actions</S.Tag>
 
         <S.ContainerActions>
-          <button
-            type="button"
-            onClick={() => dispatch(orderCancelFetch({ orderId, base, quote }))}>
+          <button type="button" onClick={handleCancelClick}>
             Cancel Order
           </button>
         </S.ContainerActions>
