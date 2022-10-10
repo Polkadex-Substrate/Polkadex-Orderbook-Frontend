@@ -55,8 +55,10 @@ export type AssetsConnection = {
 
 export type Asset = {
   __typename: "Asset",
-  ticker: string,
+  symbol: string,
+  name: string,
   withdrawal_fee: string,
+  asset_id: string,
 };
 
 export type RecentTradesConnection = {
@@ -308,8 +310,10 @@ export type GetAllAssetsQuery = {
     __typename: "AssetsConnection",
     items?:  Array< {
       __typename: "Asset",
-      ticker: string,
+      symbol: string,
+      name: string,
       withdrawal_fee: string,
+      asset_id: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,

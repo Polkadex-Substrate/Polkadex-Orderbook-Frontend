@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { assetsFetch } from "../modules/public/assets";
-
-import { useReduxSelector } from "./useReduxSelector";
+import { assetsFetch, selectAssetsFetchSuccess } from "../modules/public/assets";
 
 import {
   extensionWalletFetch,
+  marketsFetch,
   rangerConnectFetch,
-  selectRangerIsReady,
   tradeAccountsFetch,
   userFetch,
 } from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
 
 export const useInit = () => {
   const dispatch = useDispatch();
-  const isApi = useReduxSelector(selectRangerIsReady);
+  const isAssets = useReduxSelector(selectAssetsFetchSuccess);
   // basic initialization
   useEffect(() => {
     dispatch(rangerConnectFetch());
@@ -26,6 +25,10 @@ export const useInit = () => {
 
   // fetch assets
   useEffect(() => {
-    if (isApi) dispatch(assetsFetch());
-  }, [isApi, dispatch]);
+    dispatch(assetsFetch());
+  }, []);
+
+  useEffect(() => {
+    if (isAssets) dispatch(marketsFetch());
+  }, [isAssets]);
 };

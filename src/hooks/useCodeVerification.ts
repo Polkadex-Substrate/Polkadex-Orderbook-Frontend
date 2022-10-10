@@ -11,6 +11,8 @@ import {
 
 import { useReduxSelector } from "./useReduxSelector";
 
+import { notificationPush } from "@polkadex/orderbook-modules";
+
 export const useCodeVerification = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -19,13 +21,22 @@ export const useCodeVerification = () => {
   const email = useReduxSelector(selectUserAuthEmail);
 
   useEffect(() => {
-    if (isVerificationSuccess) router.push("/signIn");
+    if (isVerificationSuccess) {
+      dispatch(
+        notificationPush({
+          message: {
+            title: "Successfully created a new account!",
+            description: "Please sign in with your new acccount.",
+          },
+          time: new Date().getTime(),
+        })
+      );
+      router.push("/signIn");
+    }
   }, [isVerificationSuccess, router]);
-
   useEffect(() => {
     if (!email) router.push("/sign");
   }, [email, router]);
-
   const verifyCode = (code: string) => dispatch(codeVerifyFetch({ email, code }));
 
   const resendVerificationCode = () => dispatch(resendCodeFetch({ email }));

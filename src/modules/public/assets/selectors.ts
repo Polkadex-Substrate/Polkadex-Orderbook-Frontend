@@ -17,7 +17,7 @@ export const selectAssetFetchLoading = (state: RootState): boolean =>
 export const selectAllAssets = (state: RootState): IPublicAsset[] => state.public.assets.list;
 
 export const selectAllAssetIds = (state: RootState): string[] =>
-  state.public.assets.list.map((asset) => asset.assetId);
+  state.public.assets.list.map((asset) => asset.asset_id);
 
 export const selectAssetIdMap = (state: RootState): Record<string, IPublicAsset> =>
   state.public.assets.assetIdMap;
@@ -29,11 +29,13 @@ export const selectGetAsset =
       return null;
     }
     if (isKeyPresentInObject(assetId, "asset")) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       assetId = assetId.asset;
     }
     return isAssetPDEX(assetId)
       ? POLKADEX_ASSET
-      : state.public.assets.list.find((asset) => asset.assetId === assetId.toString());
+      : state.public.assets.list.find((asset) => asset.asset_id === assetId.toString());
   };
 
 export const isAssetPDEX = (assetId): boolean =>

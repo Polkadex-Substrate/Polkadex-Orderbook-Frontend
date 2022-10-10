@@ -26,7 +26,7 @@ export const POLKADEX_ASSSET_ID = "-1";
 export const POLKADEX_ASSET = {
   name: "TEST PDEX",
   symbol: "PDEX",
-  assetId: POLKADEX_ASSSET_ID,
+  asset_id: POLKADEX_ASSSET_ID,
 };
 
 export const ALLOWED_ASSET_IDS = ["1", "2", "3", "4", "5"];

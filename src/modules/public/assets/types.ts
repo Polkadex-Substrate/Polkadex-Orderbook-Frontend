@@ -1,7 +1,5 @@
 export type IPublicAsset = {
-  assetId: string;
+  asset_id: string;
   name: string;
   symbol: string;
-  decimals?: string;
-  isFrozen?: boolean;
 };
