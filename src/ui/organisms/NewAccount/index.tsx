@@ -15,6 +15,10 @@ export const NewAccount = ({ onClose = undefined }) => {
     status: false,
     isImport: false,
   });
+
+  const handleCancel = (value: boolean, isImport: boolean) =>
+    setState({ status: value, isImport: isImport });
+
   return (
     <S.Main>
       <S.Header type="button" onClick={onClose}>
@@ -42,16 +46,20 @@ export const NewAccount = ({ onClose = undefined }) => {
                   description="Quickly create a trading account."
                   icon="AddWallet"
                   isActive={!state.status || state.isImport}
-                  handleChange={() => setState({ status: !state.status, isImport: true })}>
-                  {state.status && state.isImport && <CreateAccountForm />}
+                  handleChange={() => handleCancel(!state.status, true)}>
+                  {state.status && state.isImport && (
+                    <CreateAccountForm onCancel={() => handleCancel(!state.status, true)} />
+                  )}
                 </Card>
                 <Card
                   label="Import existing account"
                   description="Import wallet using your mnemonic phrases. "
                   icon="AddMore"
                   isActive={!state.status || !state.isImport}
-                  handleChange={() => setState({ status: !state.status, isImport: false })}>
-                  {state.status && !state.isImport && <ImportAccountForm />}
+                  handleChange={() => handleCancel(!state.status, false)}>
+                  {state.status && !state.isImport && (
+                    <ImportAccountForm onCancel={() => handleCancel(!state.status, true)} />
+                  )}
                 </Card>
               </S.Box>
             </S.Container>

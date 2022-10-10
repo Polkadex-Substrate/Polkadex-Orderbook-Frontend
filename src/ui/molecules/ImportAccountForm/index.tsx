@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const ImportAccountForm = () => (
+export const ImportAccountForm = ({ onCancel = undefined }) => (
   <S.Wrapper>
     <S.Method>
       <span>Import wallet method</span>
@@ -62,7 +62,9 @@ export const ImportAccountForm = () => (
       </S.PasswordFooter>
     </S.Password>
     <S.Footer>
-      <button type="button">Cancel</button>
+      <button type="button" onClick={onCancel}>
+        Cancel
+      </button>
       <button type="submit">Import account</button>
     </S.Footer>
   </S.Wrapper>

@@ -38,6 +38,15 @@ export const WalletSelectArrow = styled.div`
   width: 0.8rem;
 `;
 
+export const DropdownHeader = styled.span`
+  ${({ theme }) => css`
+    small {
+      color: ${theme.colors.tertiaryText};
+      font-size: 1.3rem;
+    }
+  `}
+`;
+
 export const WalletSelectContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -79,6 +88,7 @@ export const WalletName = styled(Container)`
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
+      flex: 1;
     }
     input {
       color: ${theme.colors.text};
@@ -115,6 +125,7 @@ export const PasswordFooter = styled.div`
     align-items: center;
     input {
       color: ${theme.colors.text};
+      width: 100%;
     }
     button {
       width: 1.5rem;

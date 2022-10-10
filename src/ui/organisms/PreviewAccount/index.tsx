@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Switch } from "@polkadex/orderbook-ui/molecules";
+import { Loading, Switch } from "@polkadex/orderbook-ui/molecules";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import {
@@ -22,66 +22,70 @@ type Props = {
 export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
   const using = false;
   const dispatch = useDispatch();
+  const isRemoving = false;
+
   return (
-    <S.Main>
-      <S.Header type="button" onClick={onClose}>
-        <Icons.SingleArrowLeft />
-      </S.Header>
-      <S.Content>
-        <h2>Preview Wallet</h2>
-        <S.Container>
-          <S.Box>
-            <WalletName label="Wallet name" information={String(selected?.meta?.name)} />
-            <WalletAddress label="Trade wallet" information={selected?.address} />
-            <WalletAddress
-              label="Controller wallet"
-              information="Orderbook testing"
-              additionalInformation="5E1hRUGF5rCs...juU4NKGrX5P8"
-              isLocked
-            />
-            <ProtectedByPassword label="Protected by password" />
-            <DefaultAccount label="Default trade account" />
-          </S.Box>
-          <S.Button
-            disabled={using}
-            onClick={
-              using
-                ? undefined
-                : () => dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
-            }
-            type="button">
-            {using ? "Using" : "Use"}
-          </S.Button>
-        </S.Container>
-      </S.Content>
-      <S.Footer>
-        <S.ExportButton type="button">Export</S.ExportButton>
-        <Dropdown>
-          <Dropdown.Trigger>
-            <S.DropdownButton type="button">
-              Remove acccount
-              <div>
-                <Icons.ArrowBottom />
-              </div>
-            </S.DropdownButton>
-          </Dropdown.Trigger>
-          <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item
-              onAction={() =>
-                dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
-              }>
-              Remove from blockchain
-            </Dropdown.Item>
-            <Dropdown.Item
-              onAction={() =>
-                dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
-              }>
-              Remove from device
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </S.Footer>
-    </S.Main>
+    <Loading isVisible={isRemoving}>
+      <S.Main>
+        <S.Header type="button" onClick={onClose}>
+          <Icons.SingleArrowLeft />
+        </S.Header>
+        <S.Content>
+          <h2>Preview Wallet</h2>
+          <S.Container>
+            <S.Box>
+              <WalletName label="Wallet name" information={String(selected?.meta?.name)} />
+              <WalletAddress label="Trade wallet" information={selected?.address} />
+              <WalletAddress
+                label="Controller wallet"
+                information="Orderbook testing"
+                additionalInformation="5E1hRUGF5rCs...juU4NKGrX5P8"
+                isLocked
+              />
+              <ProtectedByPassword label="Protected by password" />
+              <DefaultAccount label="Default trade account" />
+            </S.Box>
+            <S.Button
+              disabled={using}
+              onClick={
+                using
+                  ? undefined
+                  : () => dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
+              }
+              type="button">
+              {using ? "Using" : "Use"}
+            </S.Button>
+          </S.Container>
+        </S.Content>
+        <S.Footer>
+          <S.ExportButton type="button">Export</S.ExportButton>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <S.DropdownButton type="button">
+                Remove acccount
+                <div>
+                  <Icons.ArrowBottom />
+                </div>
+              </S.DropdownButton>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="secondaryBackgroundSolid">
+              <Dropdown.Item
+                onAction={() =>
+                  dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+                }>
+                Remove from blockchain
+              </Dropdown.Item>
+              <Dropdown.Item
+                onAction={() =>
+                  dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
+                }>
+                Remove from device
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </S.Footer>
+      </S.Main>
+    </Loading>
   );
 };
 
