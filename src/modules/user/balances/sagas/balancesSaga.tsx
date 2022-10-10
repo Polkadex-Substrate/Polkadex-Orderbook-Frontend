@@ -32,7 +32,7 @@ export function* balancesSaga(_balancesFetch: BalancesFetch) {
           ? POLKADEX_ASSET
           : assetMap[balance.asset_type];
         return {
-          assetId: asset.assetId.toString(),
+          asset_id: asset.assetId.toString(),
           name: asset.name,
           symbol: asset.symbol,
           reserved_balance: balance.reserved_balance,
