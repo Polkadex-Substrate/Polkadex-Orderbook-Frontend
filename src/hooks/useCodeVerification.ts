@@ -26,14 +26,18 @@ export const useCodeVerification = () => {
         notificationPush({
           message: {
             title: "Successfully created a new account!",
-            description: "Please sign in with your new acccount.",
+            description: "Please sign in with your new account.",
           },
           time: new Date().getTime(),
         })
       );
       router.push("/signIn");
     }
-  }, [isVerificationSuccess, router]);
+  }, [isVerificationSuccess, router, dispatch]);
+
+  useEffect(() => {
+    if (!email) router.push("/sign");
+  }, [email, router]);
 
   const verifyCode = (code: string) => dispatch(codeVerifyFetch({ email, code }));
 

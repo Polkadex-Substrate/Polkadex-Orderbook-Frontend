@@ -29,7 +29,7 @@ export function* signUpSaga(action: SignUpFetch) {
 
 async function signUp(email: string, password: string) {
   const { user, userConfirmed } = await Auth.signUp({
-    username: email,
+    username: email.toLowerCase(),
     password,
     attributes: {
       email,
