@@ -67,7 +67,7 @@ module.exports = withPlugins([
       POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "wss://blockchain.polkadex.trade",
       GOOGLE_ANALYTICS: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PWZK8JEFLX",
       ANALYZE: process.env.NEXT_PUBLIC_ANALYZE || "false",
-      AWS_REGION: process.env.AWS_REGION,
+      API_REGION: process.env.API_REGION,
       GRAPHQL_URL: process.env.GRAPHQL_URL,
       IDENTITY_POOL_ID: process.env.IDENTITY_POOL_ID,
       USER_POOL_ID: process.env.USER_POOL_ID,
