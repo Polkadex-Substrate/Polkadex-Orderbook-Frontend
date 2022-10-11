@@ -75,6 +75,7 @@ export const CreateAccountForm = ({
       }
     },
   });
+  console.log(errors, "errors");
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
@@ -135,7 +136,6 @@ export const CreateAccountForm = ({
               <span>Wallet Name</span>
               <input
                 {...getFieldProps("name")}
-                name="name"
                 type="text"
                 placeholder="Enter a wallet name"
               />
