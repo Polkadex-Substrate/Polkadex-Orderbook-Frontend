@@ -1,22 +1,13 @@
-import { call, put, select } from "redux-saga/effects";
+import { put } from "redux-saga/effects";
 
-import { notificationPush } from "../../notificationHandler";
 import { tradeAccountsFetch } from "../../tradeWallet";
-import { registerMainAccountError, RegisterMainAccountUpdateEvent } from "../actions";
+import { registerMainAccountError } from "../actions";
 
 import { sendError } from "@polkadex/orderbook-modules";
 
-export function* registerMainAccountUpdateSaga(_action: RegisterMainAccountUpdateEvent) {
+export function* registerMainAccountUpdateSaga() {
   try {
     yield put(tradeAccountsFetch());
-    yield put(
-      notificationPush({
-        message: { title: "Successfully Registered!" },
-        type: "SuccessAlert",
-        time: new Date().getTime(),
-        hasConfetti: true,
-      })
-    );
   } catch (error) {
     console.log("error:", error);
     yield put(

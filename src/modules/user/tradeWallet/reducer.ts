@@ -19,17 +19,28 @@ import {
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export interface TradeAccountsState {
-  success?: boolean;
   isFetching: boolean;
   allBrowserAccounts: TradeAccount[];
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   removesInLoading: Array<string>;
+  successData: SuccessTradeWalletData;
 }
+
+export type SuccessTradeWalletData = {
+  success: boolean;
+  mnemonic?: string;
+  account?: {
+    name: string;
+    address: string;
+  };
+};
 
 const initialState: TradeAccountsState = {
   isFetching: false,
-  success: false,
+  successData: {
+    success: false,
+  },
   allBrowserAccounts: [],
   registerAccountLoading: false,
   registerAccountSuccess: false,
@@ -45,7 +56,6 @@ export const TradeAccountsReducer = (
       return {
         ...state,
         isFetching: false,
-        success: true,
         allBrowserAccounts: action.payload.allAccounts,
       };
 
@@ -53,12 +63,13 @@ export const TradeAccountsReducer = (
       return {
         ...state,
         isFetching: false,
-        success: false,
       };
     case USER_TRADE_ACCOUNTS_ERROR:
       return {
         ...state,
-        success: false,
+        successData: {
+          success: false,
+        },
         isFetching: true,
       };
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
@@ -71,6 +82,10 @@ export const TradeAccountsReducer = (
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,
+        successData: {
+          success: true,
+          ...action.payload,
+        },
         registerAccountLoading: false,
         registerAccountSuccess: true,
       };
@@ -78,6 +93,9 @@ export const TradeAccountsReducer = (
     case USER_REGISTER_TRADE_ACCOUNT_ERROR:
       return {
         ...state,
+        successData: {
+          success: false,
+        },
         registerAccountLoading: false,
         registerAccountSuccess: false,
       };

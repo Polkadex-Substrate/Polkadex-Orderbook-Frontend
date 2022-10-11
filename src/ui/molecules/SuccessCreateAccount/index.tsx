@@ -7,7 +7,21 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const SuccessCreateAccount = ({ title = "", description = "" }) => {
+type Props = {
+  title: string;
+  description: string;
+  mnemonic?: string[];
+  account?: {
+    name: string;
+    address: string;
+  };
+};
+export const SuccessCreateAccount = ({
+  title = "",
+  description = "",
+  mnemonic,
+  account,
+}: Props) => {
   const [state, setState] = useState(false);
   useEffect(() => {
     confetti({
@@ -28,13 +42,13 @@ export const SuccessCreateAccount = ({ title = "", description = "" }) => {
       <S.Content>
         <S.Wallet>
           <p>
-            Orderbook testing <strong>(Linked to Ordebrook testing)</strong>
+            {account?.name} <strong>(Linked to Ordebrook testing)</strong>
           </p>
           <S.WalletContent>
             <button type="button">
               <Icons.Copy />
             </button>
-            <span>5HmuAcVry1VWoK9vYvQ4zkGBHrXCcFYVuVfAur1gDAa7kaF8</span>
+            <span>{account?.address}</span>
           </S.WalletContent>
         </S.Wallet>
         <S.Words>
@@ -53,22 +67,7 @@ export const SuccessCreateAccount = ({ title = "", description = "" }) => {
           {state && (
             <>
               <S.WordsContainer>
-                {[
-                  "witch",
-                  "collapse",
-                  "practive",
-                  "feed",
-                  "shame",
-                  "tower",
-                  "despair",
-                  "road",
-                  "again",
-                  "ice",
-                  "least",
-                  "coffee",
-                  "shame",
-                  "open",
-                ].map((value, i) => (
+                {mnemonic.map((value, i) => (
                   <div key={i}>{value}</div>
                 ))}
               </S.WordsContainer>

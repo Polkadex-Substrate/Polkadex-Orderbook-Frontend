@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -14,9 +15,9 @@ import {
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectIsRegisterMainAccountLoading,
+  registerTradeAccountReset,
   selectIsRegisterMainAccountSuccess,
-  selectRegisterTradeAccountLoading,
+  selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
 } from "@polkadex/orderbook-modules";
 
@@ -47,9 +48,10 @@ const successData = [
 type Props = {
   onClose: () => void;
   selected: InjectedAccountWithMeta;
+  isLoading?: boolean;
 };
 
-export const NewAccount = ({ onClose = undefined, selected }: Props) => {
+export const NewAccount = ({ onClose = undefined, selected, isLoading = false }: Props) => {
   const [state, setState] = useState({
     status: false,
     isImport: false,
@@ -58,32 +60,36 @@ export const NewAccount = ({ onClose = undefined, selected }: Props) => {
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
-  const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
-  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
+  const dispatch = useDispatch();
+  const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const handleClose = isLoading ? undefined : onClose;
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
+
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isTradeAccountSuccess ? 0 : 1];
 
   return (
     <S.Main>
-      <S.Header type="button" onClick={onClose}>
+      <S.Header
+        type="button"
+        onClick={
+          isTradeAccountSuccess ? () => dispatch(registerTradeAccountReset()) : handleClose
+        }>
         <Icons.SingleArrowLeft />
       </S.Header>
-      <Loading
-        isVisible={isTradeAccountLoading || isControllerAccountLoading}
-        hasBg={false}
-        message=""
-        spinner="Keyboard">
+      <Loading isVisible={isLoading} hasBg={false} message="" spinner="Keyboard">
         <S.Content>
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
               title={successInformation.title}
               description={successInformation.description}
+              mnemonic={tradeInfo?.mnemonic?.split(" ")}
+              account={tradeInfo.account}
             />
           ) : (
             <>
@@ -103,7 +109,9 @@ export const NewAccount = ({ onClose = undefined, selected }: Props) => {
                     }>
                     {shouldShowCreateAccount && (
                       <CreateAccountForm
-                        onCancel={hasData ? onClose : () => handleCancel(!state.status, true)}
+                        onCancel={
+                          hasData ? handleClose : () => handleCancel(!state.status, true)
+                        }
                         selectedAccountName={selected?.meta?.name}
                         selectedAccountAddress={selected?.address}
                         buttonTitle={information.button}

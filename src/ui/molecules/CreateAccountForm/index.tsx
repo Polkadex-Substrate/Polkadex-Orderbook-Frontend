@@ -75,7 +75,6 @@ export const CreateAccountForm = ({
       }
     },
   });
-  console.log(errors, "errors");
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
@@ -111,7 +110,7 @@ export const CreateAccountForm = ({
             </Dropdown.Trigger>
             {!selectedAccountAddress.length && (
               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                {controllerWallets.map((v, i) => (
+                {controllerWallets?.map((v, i) => (
                   <Dropdown.Item
                     key={i}
                     onAction={() =>

@@ -45,6 +45,13 @@ export interface RegisterTradeAccountFetch {
 
 export interface RegisterTradeAccountData {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_DATA;
+  payload: {
+    mnemonic: string;
+    account: {
+      name: string;
+      address: string;
+    };
+  };
 }
 
 export interface RegisterTradeAccountError {
@@ -133,8 +140,11 @@ export const registerTradeAccountFetch = (
   payload,
 });
 
-export const registerTradeAccountData = (): RegisterTradeAccountData => ({
+export const registerTradeAccountData = (
+  payload: RegisterTradeAccountData["payload"]
+): RegisterTradeAccountData => ({
   type: USER_REGISTER_TRADE_ACCOUNT_DATA,
+  payload,
 });
 
 export const registerTradeAccountReset = (): RegisterTradeAccountReset => ({

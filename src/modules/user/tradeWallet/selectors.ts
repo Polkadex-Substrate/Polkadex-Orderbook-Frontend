@@ -1,4 +1,4 @@
-import { RootState } from "../..";
+import { RootState, SuccessTradeWalletData } from "../..";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
@@ -6,7 +6,7 @@ export const selectTradeAccountsLoading = (state: RootState): boolean =>
   state.user.tradeWallet.isFetching;
 
 export const selectTradeAccountsSuccess = (state: RootState): boolean =>
-  state.user.tradeWallet.success;
+  state.user.tradeWallet.successData.success;
 
 export const selectBrowserTradeAccounts = (state: RootState): TradeAccount[] =>
   state.user.tradeWallet.allBrowserAccounts;
@@ -24,3 +24,6 @@ export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
 
 export const selectRegisterTradeAccountRemoving = (state: RootState): Array<string> =>
   state.user.tradeWallet.removesInLoading;
+
+export const selectRegisterTradeAccountInfo = (state: RootState): SuccessTradeWalletData =>
+  state.user.tradeWallet.successData;

@@ -35,17 +35,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
     if (selectedControllerAccount.account?.address && email) {
-      yield put(
-        notificationPush({
-          message: {
-            title: "Registering account...",
-            description:
-              "Please sign the transaction and wait for block finalization. This may take a few minutes.",
-          },
-          type: "LoadingAlert",
-          time: new Date().getTime(),
-        })
-      );
       const { data, signature } = yield call(
         createSignedData,
         selectedControllerAccount,

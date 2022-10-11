@@ -25,6 +25,8 @@ import {
   selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
   selectIsMainAddressRegistered,
+  selectIsRegisterMainAccountLoading,
+  selectRegisterTradeAccountLoading,
   selectUserInfo,
   selectUsingAccount,
   userAccountSelectFetch,
@@ -39,9 +41,12 @@ export const SettingsTemplate = () => {
   const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
   const currentTradeAccount = useReduxSelector(selectUsingAccount);
 
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts).sort(
-    ({ account }) => (account.address !== currentControllerWallet?.account?.address ? 1 : -1)
-  );
+  const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
+  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
+  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  // .sort(
+  //   ({ account }) => (account.address !== currentControllerWallet?.account?.address ? 1 : -1)
+  // );
   const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const user = useReduxSelector(selectUserInfo);
 
@@ -73,6 +78,7 @@ export const SettingsTemplate = () => {
         <NewAccount
           onClose={() => setNewAccount({ selected: {}, status: false })}
           selected={newAccount.selected}
+          isLoading={isTradeAccountLoading || isControllerAccountLoading}
         />
       </Modal>
       <Head>
@@ -202,7 +208,7 @@ export const SettingsTemplate = () => {
                   </S.WalletTitleWrapper>
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {!controllerWallets.length ? (
+                  {!controllerWallets?.length ? (
                     <Empty
                       title="No wallet found"
                       description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
@@ -227,7 +233,7 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {controllerWallets.map(({ account }, i) => (
+                        {controllerWallets?.map(({ account }, i) => (
                           <ControllerWallets
                             key={i}
                             address={account.address}
