@@ -1,3 +1,5 @@
+import { CognitoUser } from "amazon-cognito-identity-js";
+
 import { CommonError } from "../../types";
 
 import { AuthAction } from "./actions";
@@ -22,6 +24,7 @@ import {
 } from "./constants";
 
 export interface AuthState {
+  user?: CognitoUser;
   email: string;
   require2FA?: boolean;
   requireVerification?: boolean;
@@ -41,6 +44,7 @@ export interface AuthState {
 }
 
 export const initialStateAuth: AuthState = {
+  user: null,
   email: "",
   require2FA: false,
   requireVerification: false,
@@ -64,8 +68,9 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return {
         ...state,
         signInLoading: false,
-        signInSuccess: true,
+        signInSuccess: action.payload.isConfirmed,
         email: action.payload.email,
+        user: action.payload.user,
         userConfirmed: action.payload.isConfirmed,
       };
     case AUTH_SIGN_IN_ERROR:

@@ -1,3 +1,5 @@
+import { CognitoUser } from "amazon-cognito-identity-js";
+
 import { CommonError } from "../../types";
 
 import {
@@ -62,6 +64,7 @@ export interface SignInData {
   payload: {
     email: string;
     isConfirmed: boolean;
+    user?: CognitoUser;
   };
 }
 
