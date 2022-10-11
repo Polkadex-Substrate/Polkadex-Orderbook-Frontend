@@ -1,8 +1,17 @@
 import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 import keyring from "@polkadot/ui-keyring";
+import { stringToHex } from "@polkadot/util";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 
-import { notificationPush, selectExtensionWalletAccounts, selectRangerApi } from "../../..";
+import * as mutations from "../../../../graphql/mutations";
+import {
+  MainAccount,
+  notificationPush,
+  selectExtensionWalletAccounts,
+  selectRangerApi,
+  selectUserIdentity,
+} from "../../..";
 import {
   registerMainAccountData,
   registerMainAccountError,
@@ -11,8 +20,10 @@ import {
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { setIsTradeAccountPassworded } from "@polkadex/orderbook/helpers/localStorageHelpers";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 let tradeAddr = "";
+type RegisterEmailData = { email: string; main_address: string };
 
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
@@ -20,7 +31,8 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     tradeAddr = tradeAddress;
     const api = yield select(selectRangerApi);
     yield select(selectExtensionWalletAccounts);
-    if (mainAccount.address) {
+    const email = yield select(selectUserIdentity);
+    if (mainAccount.address && email) {
       yield put(
         notificationPush({
           message: {
@@ -32,17 +44,20 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           time: new Date().getTime(),
         })
       );
+      const { data, signature } = yield call(createSignedData, mainAccount, email);
       const res = yield call(() =>
         registerMainAccount(api, tradeAddress, mainAccount.injector, mainAccount.address)
       );
       if (res.isSuccess) {
         yield put(registerMainAccountData());
-        setIsTradeAccountPassworded(tradeAddress, password.length > 0);
+        yield call(executeRegisterEmail, data, signature);
+        setIsTradeAccountPassworded(tradeAddress, password?.length > 0);
       } else {
         keyring.forgetAccount(tradeAddr);
       }
     }
   } catch (error) {
+    console.log("error:", error);
     keyring.forgetAccount(tradeAddr);
     yield put(registerMainAccountError());
     yield put(
@@ -63,5 +78,35 @@ export const registerMainAccount = async (
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.registerMainAccount(proxyAddress);
   const res = await signAndSendExtrinsic(api, ext, injector, mainAddress, true);
+  return res;
+};
+
+const createSignedData = async (
+  mainAccount: MainAccount,
+  email: string
+): Promise<{ data: RegisterEmailData; signature: string }> => {
+  const signRaw = mainAccount.injector?.signer?.signRaw;
+  const main_address = mainAccount.address;
+  if (signRaw) {
+    const data: RegisterEmailData = { email, main_address };
+    const { signature } = await signRaw({
+      address: main_address,
+      data: stringToHex(JSON.stringify(data)),
+      type: "bytes",
+    });
+    return { data, signature };
+  } else throw new Error("Cannot get Signer");
+};
+
+const executeRegisterEmail = async (data: RegisterEmailData, signature: string) => {
+  const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
+  const res = await sendQueryToAppSync(
+    mutations.register_user,
+    {
+      input: { payload: payloadStr },
+    },
+    null,
+    GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS
+  );
   return res;
 };
