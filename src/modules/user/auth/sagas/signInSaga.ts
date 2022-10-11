@@ -40,7 +40,6 @@ export function* signInSaga(action: SignInFetch) {
 
 async function signIn(email: string, password: string): Promise<{ user: CognitoUser }> {
   const user: CognitoUser = await Auth.signIn(email, password);
-  console.log("sign in user", user, user);
   return { user };
 }
 
