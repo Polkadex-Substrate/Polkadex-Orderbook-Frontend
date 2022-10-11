@@ -9,6 +9,7 @@ import {
   removeTradeAccountFromBrowser,
   selectRangerApi,
   selectUserEmail,
+  selectExtensionWalletAccounts,
 } from "../../..";
 import {
   registerMainAccountData,
@@ -25,12 +26,15 @@ type RegisterEmailData = { email: string; main_address: string };
 
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
+    const controllerWallets = yield select(selectExtensionWalletAccounts);
     const { mainAccount, tradeAddress } = action.payload;
+    const selectedControllerAccount = controllerWallets.find(
+      ({ account }) => account.address === mainAccount
+    );
     tradeAddr = tradeAddress;
     const email = yield select(selectUserEmail);
-    console.log({ mainAccount, email });
     const api: ApiPromise = yield select(selectRangerApi);
-    if (mainAccount.account?.address && email) {
+    if (selectedControllerAccount.account?.address && email) {
       yield put(
         notificationPush({
           message: {
@@ -42,13 +46,17 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           time: new Date().getTime(),
         })
       );
-      const { data, signature } = yield call(createSignedData, mainAccount, email);
+      const { data, signature } = yield call(
+        createSignedData,
+        selectedControllerAccount,
+        email
+      );
       const res = yield call(() =>
         registerMainAccount(
           api,
           tradeAddress,
-          mainAccount.signer,
-          mainAccount.account?.address
+          selectedControllerAccount.signer,
+          selectedControllerAccount.account?.address
         )
       );
       if (res.isSuccess) {

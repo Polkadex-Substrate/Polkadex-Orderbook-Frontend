@@ -1,6 +1,8 @@
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { generateUsername } from "friendly-username-generator";
+import keyring from "@polkadot/ui-keyring";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 import { Switch } from "../Switcher";
 
@@ -9,8 +11,10 @@ import * as S from "./styles";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
+  registerMainAccountFetch,
   registerTradeAccountFetch,
   selectExtensionWalletAccounts,
+  tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
@@ -19,10 +23,11 @@ export const CreateAccountForm = ({
   onCancel = undefined,
   selectedAccountName = "",
   selectedAccountAddress = "",
+  buttonTitle = "",
 }) => {
   const dispatch = useDispatch();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-
+  const hasData = !!selectedAccountAddress?.length;
   const {
     errors,
     values,
@@ -44,16 +49,32 @@ export const CreateAccountForm = ({
       },
     },
     validationSchema: createAccountValidations,
-    onSubmit: ({ name, passcode }) => {
-      dispatch(
-        registerTradeAccountFetch({
+    onSubmit: ({ name, passcode, controllerWallet }) => {
+      // TODO: Move to sagas
+      if (hasData) {
+        const mnemonic = mnemonicGenerate();
+        const { pair } = keyring.addUri(mnemonic, passcode, {
           name,
-          password: String(passcode),
-        })
-      );
+        });
+        dispatch(tradeAccountPush({ pair }));
+        dispatch(
+          registerMainAccountFetch({
+            mainAccount: selectedAccountAddress,
+            tradeAddress: pair.address,
+            password: passcode,
+          })
+        );
+      } else {
+        dispatch(
+          registerTradeAccountFetch({
+            address: controllerWallet.address,
+            name,
+            password: String(passcode),
+          })
+        );
+      }
     },
   });
-
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
@@ -170,7 +191,7 @@ export const CreateAccountForm = ({
             Cancel
           </button>
           <button type="submit" disabled={!(isValid && dirty)}>
-            Create Account
+            {buttonTitle}
           </button>
         </S.Footer>
       </S.Wrapper>

@@ -1,10 +1,11 @@
+// TODO: Create Mnemonic state
 import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 
-import { selectMainAccount } from "../../extensionWallet";
+import { selectExtensionWalletAccounts } from "../../extensionWallet";
 import {
   registerTradeAccountData,
   registerTradeAccountError,
@@ -18,27 +19,21 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectUsingAccount } from "@polkadex/orderbook-modules";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   try {
     const api = yield select(selectRangerApi);
-    const { linkedMainAddress } = yield select(selectUsingAccount);
-    const { account, signer }: ExtensionAccount = yield select(
-      selectMainAccount(linkedMainAddress)
-    );
-    if (!account?.address) {
-      throw new Error("Please select a main account!");
-    }
-    const { password, name } = action.payload;
-    const mnemonic = mnemonicGenerate();
+    const controllerWallets = yield select(selectExtensionWalletAccounts);
 
+    const { password, name, address } = action.payload;
+    const mnemonic = mnemonicGenerate();
+    const { account, signer } = controllerWallets.find(
+      ({ account }) => account.address === address
+    );
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
-
     tradeAddress = pair.address;
     if (api && account?.address) {
       yield put(

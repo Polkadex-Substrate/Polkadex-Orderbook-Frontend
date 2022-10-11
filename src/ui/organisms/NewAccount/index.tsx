@@ -12,17 +12,36 @@ import {
   SuccessImport,
 } from "@polkadex/orderbook-ui/molecules";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  selectIsRegisterMainAccountLoading,
+  selectIsRegisterMainAccountSuccess,
+  selectRegisterTradeAccountLoading,
+  selectRegisterTradeAccountSuccess,
+} from "@polkadex/orderbook-modules";
 
 const data = [
   {
     title: "Add account",
     description:
       "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control. Any data is stored, all data is stored in your browser.",
+    button: "Create account",
   },
   {
     title: "Register account",
     description:
       "Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet.",
+    button: "Register and create account",
+  },
+];
+const successData = [
+  {
+    title: "Trade account created",
+    description: "Now you can operate in orderbook, receive deposits and make withdrawals.",
+  },
+  {
+    title: "Wallet registered",
+    description: "Now you can create trading account and start to trading.",
   },
 ];
 type Props = {
@@ -39,22 +58,33 @@ export const NewAccount = ({ onClose = undefined, selected }: Props) => {
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
-  const isLoading = false;
-  const isSuccess = false;
+  const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
+  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
+
+  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+  const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
-
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
+  const successInformation = successData[isTradeAccountSuccess ? 0 : 1];
+
   return (
     <S.Main>
       <S.Header type="button" onClick={onClose}>
         <Icons.SingleArrowLeft />
       </S.Header>
-      <Loading isVisible={isLoading} hasBg={false} message="" spinner="Keyboard">
+      <Loading
+        isVisible={isTradeAccountLoading || isControllerAccountLoading}
+        hasBg={false}
+        message=""
+        spinner="Keyboard">
         <S.Content>
-          {isSuccess ? (
-            <SuccessCreateAccount />
+          {isTradeAccountSuccess || isControllerAccountSuccess ? (
+            <SuccessCreateAccount
+              title={successInformation.title}
+              description={successInformation.description}
+            />
           ) : (
             <>
               <S.Title>
@@ -76,6 +106,7 @@ export const NewAccount = ({ onClose = undefined, selected }: Props) => {
                         onCancel={hasData ? onClose : () => handleCancel(!state.status, true)}
                         selectedAccountName={selected?.meta?.name}
                         selectedAccountAddress={selected?.address}
+                        buttonTitle={information.button}
                       />
                     )}
                   </Card>

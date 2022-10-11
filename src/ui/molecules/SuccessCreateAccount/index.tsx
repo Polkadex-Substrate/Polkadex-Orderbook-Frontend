@@ -7,7 +7,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const SuccessCreateAccount = () => {
+export const SuccessCreateAccount = ({ title = "", description = "" }) => {
   const [state, setState] = useState(false);
   useEffect(() => {
     confetti({
@@ -22,8 +22,8 @@ export const SuccessCreateAccount = () => {
   return (
     <S.Wrapper>
       <S.Title>
-        <h3>Congratulations!</h3>
-        <p>Now you can operate in orderbook, receive deposits and make withdrawals.</p>
+        <h3>{title}</h3>
+        <p>{description}</p>
       </S.Title>
       <S.Content>
         <S.Wallet>
