@@ -64,10 +64,14 @@ module.exports = withPlugins([
       ignoreBuildErrors: true,
     },
     env: {
-      ENCLAVE_URL: process.env.ENCLAVE_URL || "wss://sgx.polkadex.trade:443",
       POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "wss://blockchain.polkadex.trade",
       GOOGLE_ANALYTICS: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PWZK8JEFLX",
       ANALYZE: process.env.NEXT_PUBLIC_ANALYZE || "false",
+      API_REGION: process.env.API_REGION,
+      GRAPHQL_URL: process.env.GRAPHQL_URL,
+      IDENTITY_POOL_ID: process.env.IDENTITY_POOL_ID,
+      USER_POOL_ID: process.env.USER_POOL_ID,
+      USER_WEB_CLIENT_ID: process.env.USER_WEB_CLIENT_ID,
     },
   },
 ]);
