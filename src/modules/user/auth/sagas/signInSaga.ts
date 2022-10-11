@@ -65,7 +65,7 @@ function* alreadyRegisteredNotify() {
           "It looks like you have not confirmed your email. Please confirm your email and try again.",
       },
       time: new Date().getTime(),
-      type: "InformationAlert",
+      type: "AttentionAlert",
     })
   );
 }
