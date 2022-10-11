@@ -2,6 +2,7 @@ import { call, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 import keyring from "@polkadot/ui-keyring";
 import { stringToHex } from "@polkadot/util";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 
 import * as mutations from "../../../../graphql/mutations";
 import {
@@ -105,7 +106,7 @@ const executeRegisterEmail = async (data: RegisterEmailData, signature: string) 
       input: { payload: payloadStr },
     },
     null,
-    "AMAZON_COGNITO_USER_POOLS"
+    GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS
   );
   return res;
 };
