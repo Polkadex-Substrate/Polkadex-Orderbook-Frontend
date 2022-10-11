@@ -21,12 +21,17 @@ import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   extensionWalletAccountSelect,
+  registerAccountModalActive,
+  registerAccountModalCancel,
+  registerTradeAccountReset,
   selectBrowserTradeAccounts,
   selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
   selectIsMainAddressRegistered,
   selectIsRegisterMainAccountLoading,
+  selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
+  selectRegisterTradeAccountSuccess,
   selectUserInfo,
   selectUsingAccount,
   userAccountSelectFetch,
@@ -36,13 +41,20 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
   const [preview, setPreview] = useState({ status: false, selected: null });
-  const [newAccount, setNewAccount] = useState({ status: false, selected: null });
-
+  const dispatch = useDispatch();
   const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
   const currentTradeAccount = useReduxSelector(selectUsingAccount);
 
+  const { isActive, selectedAddres } = useReduxSelector(selectRegisterTradeAccountInfo);
+
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
   const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
+  const isLoading = isTradeAccountLoading || isControllerAccountLoading;
+  const isRegisterControllerAccountSuccess = useReduxSelector(
+    selectRegisterTradeAccountSuccess
+  );
+  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
   // .sort(
   //   ({ account }) => (account.address !== currentControllerWallet?.account?.address ? 1 : -1)
@@ -50,6 +62,13 @@ export const SettingsTemplate = () => {
   const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const user = useReduxSelector(selectUserInfo);
 
+  const handleClose = () => {
+    if (isTradeAccountSuccess || !isLoading) {
+      if (isTradeAccountSuccess) dispatch(registerTradeAccountReset());
+      else if (isRegisterControllerAccountSuccess) dispatch(registerTradeAccountReset());
+      dispatch(registerAccountModalCancel());
+    }
+  };
   return (
     <>
       <Modal
@@ -71,15 +90,8 @@ export const SettingsTemplate = () => {
           selected={preview.selected}
         />
       </Modal>
-      <Modal
-        open={newAccount.status}
-        onClose={() => setNewAccount({ selected: {}, status: false })}
-        placement="start right">
-        <NewAccount
-          onClose={() => setNewAccount({ selected: {}, status: false })}
-          selected={newAccount.selected}
-          isLoading={isTradeAccountLoading || isControllerAccountLoading}
-        />
+      <Modal open={isActive} onClose={handleClose} placement="start right">
+        <NewAccount onClose={handleClose} selected={selectedAddres} isLoading={isLoading} />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -112,7 +124,7 @@ export const SettingsTemplate = () => {
                   {true && (
                     <ButtonWallet
                       type="button"
-                      onClick={() => setNewAccount({ ...newAccount, status: true })}>
+                      onClick={() => dispatch(registerAccountModalActive())}>
                       New Account
                     </ButtonWallet>
                   )}
@@ -245,7 +257,12 @@ export const SettingsTemplate = () => {
                               account.address === currentControllerWallet?.account?.address
                             }
                             handleRegister={() =>
-                              setNewAccount({ selected: account, status: true })
+                              dispatch(
+                                registerAccountModalActive({
+                                  name: account.meta.name,
+                                  address: account.address,
+                                })
+                              )
                             }
                           />
                         ))}

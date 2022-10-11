@@ -14,6 +14,8 @@ import {
   USER_TRADE_ACCOUNTS_DATA,
   USER_TRADE_ACCOUNTS_ERROR,
   USER_TRADE_ACCOUNTS_FETCH,
+  USER_TRADE_ACCOUNT_MODAL_ACTIVE,
+  USER_TRADE_ACCOUNT_MODAL_CANCEL,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
@@ -24,11 +26,15 @@ export interface TradeAccountsState {
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   removesInLoading: Array<string>;
-  successData: SuccessTradeWalletData;
+  registerAccountData: RegisterTradeAccount;
 }
 
-export type SuccessTradeWalletData = {
-  success: boolean;
+export type RegisterTradeAccount = {
+  isActive?: boolean;
+  selectedAddres?: {
+    name: string;
+    address: string;
+  };
   mnemonic?: string;
   account?: {
     name: string;
@@ -38,13 +44,13 @@ export type SuccessTradeWalletData = {
 
 const initialState: TradeAccountsState = {
   isFetching: false,
-  successData: {
-    success: false,
-  },
   allBrowserAccounts: [],
   registerAccountLoading: false,
   registerAccountSuccess: false,
   removesInLoading: [],
+  registerAccountData: {
+    isActive: false,
+  },
 };
 
 export const TradeAccountsReducer = (
@@ -67,9 +73,7 @@ export const TradeAccountsReducer = (
     case USER_TRADE_ACCOUNTS_ERROR:
       return {
         ...state,
-        successData: {
-          success: false,
-        },
+        registerAccountLoading: false,
         isFetching: true,
       };
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
@@ -82,20 +86,41 @@ export const TradeAccountsReducer = (
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,
-        successData: {
-          success: true,
+        registerAccountData: {
+          ...state.registerAccountData,
           ...action.payload,
         },
         registerAccountLoading: false,
         registerAccountSuccess: true,
       };
+    case USER_TRADE_ACCOUNT_MODAL_ACTIVE:
+      return {
+        ...state,
+        registerAccountData: {
+          ...state.registerAccountData,
+          isActive: true,
+          selectedAddres: action?.payload,
+        },
+      };
+    case USER_TRADE_ACCOUNT_MODAL_CANCEL:
+      return {
+        ...state,
+        registerAccountData: {
+          isActive: false,
+        },
+      };
     case USER_REGISTER_TRADE_ACCOUNT_RESET:
+      return {
+        ...state,
+        registerAccountData: {
+          isActive: false,
+        },
+        registerAccountLoading: false,
+        registerAccountSuccess: false,
+      };
     case USER_REGISTER_TRADE_ACCOUNT_ERROR:
       return {
         ...state,
-        successData: {
-          success: false,
-        },
         registerAccountLoading: false,
         registerAccountSuccess: false,
       };

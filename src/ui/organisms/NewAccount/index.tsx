@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -15,7 +13,6 @@ import {
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  registerTradeAccountReset,
   selectIsRegisterMainAccountSuccess,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
@@ -47,7 +44,10 @@ const successData = [
 ];
 type Props = {
   onClose: () => void;
-  selected: InjectedAccountWithMeta;
+  selected?: {
+    name: string;
+    address: string;
+  };
   isLoading?: boolean;
 };
 
@@ -60,12 +60,11 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
-  const dispatch = useDispatch();
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
-  const handleClose = isLoading ? undefined : onClose;
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
@@ -75,11 +74,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
 
   return (
     <S.Main>
-      <S.Header
-        type="button"
-        onClick={
-          isTradeAccountSuccess ? () => dispatch(registerTradeAccountReset()) : handleClose
-        }>
+      <S.Header type="button" onClick={onClose}>
         <Icons.SingleArrowLeft />
       </S.Header>
       <Loading isVisible={isLoading} hasBg={false} message="" spinner="Keyboard">
@@ -109,10 +104,8 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
                     }>
                     {shouldShowCreateAccount && (
                       <CreateAccountForm
-                        onCancel={
-                          hasData ? handleClose : () => handleCancel(!state.status, true)
-                        }
-                        selectedAccountName={selected?.meta?.name}
+                        onCancel={hasData ? onClose : () => handleCancel(!state.status, true)}
+                        selectedAccountName={selected?.name}
                         selectedAccountAddress={selected?.address}
                         buttonTitle={information.button}
                       />

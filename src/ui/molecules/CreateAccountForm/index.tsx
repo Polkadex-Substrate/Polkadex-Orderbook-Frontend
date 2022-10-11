@@ -62,6 +62,7 @@ export const CreateAccountForm = ({
             mainAccount: selectedAccountAddress,
             tradeAddress: pair.address,
             password: passcode,
+            mnemonic,
           })
         );
       } else {
