@@ -28,7 +28,7 @@ function* handleAlertError(error) {
     alertPush({
       message: {
         title: "Error",
-        description: error.message,
+        description: transFormErrorMessage(error.message),
       },
       type: "Alert",
     })
