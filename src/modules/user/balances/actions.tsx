@@ -9,7 +9,7 @@ import {
 } from "./constants";
 
 export interface BalanceBase {
-  assetId: string;
+  asset_id: string;
   reserved_balance: string;
   free_balance: string;
 }
