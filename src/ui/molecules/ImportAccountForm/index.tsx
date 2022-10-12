@@ -34,6 +34,14 @@ export const ImportAccountForm = ({ onCancel = undefined }) => {
       case "mnemonic":
         return <ImportAccountMnemonic onCancel={onCancel} />;
 
+      case "json":
+        return (
+          <S.Maintenance>
+            <img src="/img/maintenance.svg" alt="Website under maintenance" />
+            <p>In progress </p>
+          </S.Maintenance>
+        );
+
       default:
         return <div />;
     }
@@ -44,7 +52,7 @@ export const ImportAccountForm = ({ onCancel = undefined }) => {
         <span>Import wallet method</span>
         <div>
           {informationData.map(({ id, title }) => (
-            <label key={id} htmlFor="mnemonic">
+            <label key={id} htmlFor={id}>
               <input
                 type="radio"
                 id={id}
@@ -52,6 +60,7 @@ export const ImportAccountForm = ({ onCancel = undefined }) => {
                 value={id}
                 checked={id === state}
                 onChange={() => setState(id)}
+                disabled={id === "ledger"}
               />
               {title}
             </label>

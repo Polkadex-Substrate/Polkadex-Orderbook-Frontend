@@ -215,3 +215,20 @@ export const Menmonic = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+export const Maintenance = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+    img {
+      max-width: 25rem;
+      width: 100%;
+    }
+    p {
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
