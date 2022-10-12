@@ -23,4 +23,4 @@ export const selectRegisterTradeAccountRemoving = (state: RootState): Array<stri
   state.user.tradeWallet.removesInLoading;
 
 export const selectRegisterTradeAccountInfo = (state: RootState): RegisterTradeAccount =>
-  state.user.tradeWallet.registerAccountData;
+  state.user.tradeWallet.registerAccountModal;

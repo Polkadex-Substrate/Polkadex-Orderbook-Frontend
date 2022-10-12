@@ -23,6 +23,7 @@ import {
   extensionWalletAccountSelect,
   registerAccountModalActive,
   registerAccountModalCancel,
+  registerMainAccountReset,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
   selectExtensionAccountSelected,
@@ -63,10 +64,11 @@ export const SettingsTemplate = () => {
   const user = useReduxSelector(selectUserInfo);
 
   const handleClose = () => {
-    if (isTradeAccountSuccess || !isLoading) {
-      if (isTradeAccountSuccess) dispatch(registerTradeAccountReset());
-      else if (isRegisterControllerAccountSuccess) dispatch(registerTradeAccountReset());
-      dispatch(registerAccountModalCancel());
+    if (isTradeAccountSuccess || !isLoading || isRegisterControllerAccountSuccess) {
+      if (isRegisterControllerAccountSuccess) dispatch(registerMainAccountReset());
+      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+        dispatch(registerTradeAccountReset());
+      else dispatch(registerAccountModalCancel());
     }
   };
   return (
@@ -176,25 +178,40 @@ export const SettingsTemplate = () => {
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((v, i) => {
                             // const isUsing = currentTradeAccount.address === v.address;
+                            const isUsing = false;
                             return (
                               <WalletCard
                                 key={i}
-                                isUsing={false}
+                                isUsing={isUsing}
                                 isDefault={false}
                                 defaultTitle="Default trade account"
                                 name={String(v.meta.name)}
                                 address={v.address}
                                 aditionalInfo="(Linked to Ordebrook testing)">
-                                <S.Button
-                                  type="button"
-                                  onClick={() =>
-                                    setPreview({
-                                      status: true,
-                                      selected: v,
-                                    })
-                                  }>
-                                  Preview
-                                </S.Button>
+                                <S.WalletActions>
+                                  {!isUsing && (
+                                    <S.Button
+                                      type="button"
+                                      onClick={() =>
+                                        dispatch(
+                                          userAccountSelectFetch({ tradeAddress: v.address })
+                                        )
+                                      }>
+                                      Use
+                                    </S.Button>
+                                  )}
+                                  <S.Preview
+                                    type="button"
+                                    onClick={() =>
+                                      setPreview({
+                                        status: true,
+                                        selected: v,
+                                      })
+                                    }>
+                                    <Icons.Show />
+                                    <span>Preview</span>
+                                  </S.Preview>
+                                </S.WalletActions>
                               </WalletCard>
                             );
                           })}
@@ -250,9 +267,6 @@ export const SettingsTemplate = () => {
                             key={i}
                             address={account.address}
                             name={account.meta.name}
-                            mainAccount={controllerWallets.find(
-                              (v) => v.account.address === account.address
-                            )}
                             isUsing={
                               account.address === currentControllerWallet?.account?.address
                             }
@@ -306,22 +320,19 @@ export const SettingsTemplate = () => {
   );
 };
 
-type ControllerWaletsPRops = {
+type ControllerWaletsProps = {
   address: string;
   name: string;
   isUsing: boolean;
-  mainAccount: ExtensionAccount;
   handleRegister?: () => void;
 };
 const ControllerWallets = ({
   address,
   name,
   isUsing,
-  mainAccount,
   handleRegister = undefined,
-}: ControllerWaletsPRops) => {
+}: ControllerWaletsProps) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
-  const dispatch = useDispatch();
   return (
     <WalletCard
       isUsing={isUsing}
@@ -331,16 +342,7 @@ const ControllerWallets = ({
       address={address}
       aditionalInfo="(1 trading account)">
       {isRegistered ? (
-        <>
-          {!isUsing && (
-            <S.Button
-              type="button"
-              onClick={() => dispatch(extensionWalletAccountSelect(mainAccount))}>
-              Use
-            </S.Button>
-          )}
-          <Badge isRegistered={true}>Registered</Badge>
-        </>
+        <Badge isRegistered={true}>Registered</Badge>
       ) : (
         <S.Button type="button" onClick={handleRegister}>
           Register Now

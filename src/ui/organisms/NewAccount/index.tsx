@@ -63,14 +63,13 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
-
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
 
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
-  const successInformation = successData[isTradeAccountSuccess ? 0 : 1];
+  const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
   return (
     <S.Main>

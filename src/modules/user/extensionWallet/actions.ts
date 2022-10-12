@@ -4,7 +4,7 @@ import {
   POLKADOT_EXTENSION_WALLET_FETCH,
   POLKADOT_EXTENSION_WALLET_ERROR,
   POLKADOT_EXTENSION_WALLET_DATA,
-  EXTENSION_WALLET_RESET,
+  REGISTER_MAIN_ACCOUNT_RESET,
   REGISTER_MAIN_ACCOUNT_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
   REGISTER_MAIN_ACCOUNT_ERROR,
@@ -30,7 +30,7 @@ export interface ExtensionWalletData {
 }
 
 export interface ResetExtensionWallet {
-  type: typeof EXTENSION_WALLET_RESET;
+  type: typeof REGISTER_MAIN_ACCOUNT_RESET;
 }
 
 export interface RegisterMainAccountFetch {
@@ -113,6 +113,10 @@ export const registerMainAccountUpdateData = (
 ) => ({
   type: REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   payload,
+});
+
+export const registerMainAccountReset = () => ({
+  type: REGISTER_MAIN_ACCOUNT_RESET,
 });
 
 export const extensionWalletAccountSelect = (

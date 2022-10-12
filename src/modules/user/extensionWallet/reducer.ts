@@ -1,7 +1,7 @@
 import { GetExtensionWalletAction } from "./actions";
 import {
   EXTENSION_WALLET_ACCOUNT_SELECT,
-  EXTENSION_WALLET_RESET,
+  REGISTER_MAIN_ACCOUNT_RESET,
   POLKADOT_EXTENSION_WALLET_DATA,
   POLKADOT_EXTENSION_WALLET_ERROR,
   POLKADOT_EXTENSION_WALLET_FETCH,
@@ -54,9 +54,11 @@ export const extensionWalletReducer = (
         success: false,
         isFetching: true,
       };
-    case EXTENSION_WALLET_RESET:
+    case REGISTER_MAIN_ACCOUNT_RESET:
       return {
-        ...initialState,
+        ...state,
+        registerMainAccountLoading: false,
+        registerMainAccountSuccess: false,
       };
     case REGISTER_MAIN_ACCOUNT_FETCH:
       return {

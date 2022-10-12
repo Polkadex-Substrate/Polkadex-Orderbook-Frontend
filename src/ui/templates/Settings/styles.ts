@@ -72,14 +72,19 @@ export const WalletContainer = styled.div`
   `}
 `;
 export const WalletContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  max-height: 40rem;
-  overflow-y: hidden;
-  :hover {
-    overflow-y: auto;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 40rem;
+    overflow-y: hidden;
+    :hover {
+      overflow-y: auto;
+      ${WalletActions} {
+        padding-right: 2rem;
+      }
+    }
+  `}
 `;
 
 export const WalletWrapper = styled.div``;
@@ -419,9 +424,9 @@ export const WalletCardBadge = styled.div`
   `}
 `;
 
-export const Button = styled.button`
-  ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackground};
+export const Button = styled.button<{ fill?: string }>`
+  ${({ theme, fill = "secondaryBackground" }) => css`
+    background: ${theme.colors[fill]};
     border-radius: 0.3rem;
     padding: 0.5rem;
     font-weight: 500;
@@ -431,4 +436,38 @@ export const Button = styled.button`
       background: ${theme.colors.secondaryBackgroundOpacity};
     }
   `}
+`;
+export const Preview = styled.button`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    height: 2.6rem;
+    padding: 0.5rem;
+    border-radius: 10rem;
+    transition: 0.2s background-color ease;
+    width: auto;
+    span {
+      display: none;
+      width: 0;
+    }
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+      span {
+        display: block;
+        width: auto;
+      }
+    }
+  `}
+`;
+
+export const WalletActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: 0.2s ease;
 `;

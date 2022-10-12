@@ -26,7 +26,7 @@ export interface TradeAccountsState {
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   removesInLoading: Array<string>;
-  registerAccountData: RegisterTradeAccount;
+  registerAccountModal: RegisterTradeAccount;
 }
 
 export type RegisterTradeAccount = {
@@ -48,7 +48,7 @@ const initialState: TradeAccountsState = {
   registerAccountLoading: false,
   registerAccountSuccess: false,
   removesInLoading: [],
-  registerAccountData: {
+  registerAccountModal: {
     isActive: false,
   },
 };
@@ -86,8 +86,8 @@ export const TradeAccountsReducer = (
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,
-        registerAccountData: {
-          ...state.registerAccountData,
+        registerAccountModal: {
+          ...state.registerAccountModal,
           ...action.payload,
         },
         registerAccountLoading: false,
@@ -96,8 +96,8 @@ export const TradeAccountsReducer = (
     case USER_TRADE_ACCOUNT_MODAL_ACTIVE:
       return {
         ...state,
-        registerAccountData: {
-          ...state.registerAccountData,
+        registerAccountModal: {
+          ...state.registerAccountModal,
           isActive: true,
           selectedAddres: action?.payload,
         },
@@ -105,14 +105,14 @@ export const TradeAccountsReducer = (
     case USER_TRADE_ACCOUNT_MODAL_CANCEL:
       return {
         ...state,
-        registerAccountData: {
+        registerAccountModal: {
           isActive: false,
         },
       };
     case USER_REGISTER_TRADE_ACCOUNT_RESET:
       return {
         ...state,
-        registerAccountData: {
+        registerAccountModal: {
           isActive: false,
         },
         registerAccountLoading: false,
