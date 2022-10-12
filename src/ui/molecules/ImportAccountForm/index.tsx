@@ -83,7 +83,6 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
     isValid,
     dirty,
   } = formik;
-
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   const { name } = detect();
   const isBrowserSupported = ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
@@ -153,11 +152,13 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                       }}
                     />
                   </S.WordsContainer>
-                  <S.WorrdsFooter
-                    type="button"
-                    onClick={isBrowserSupported ? handleOnMouseOut : undefined}>
-                    Click to paste
-                  </S.WorrdsFooter>
+                  {isBrowserSupported && (
+                    <S.WorrdsFooter
+                      type="button"
+                      onClick={isBrowserSupported ? handleOnMouseOut : undefined}>
+                      Click to paste
+                    </S.WorrdsFooter>
+                  )}
                 </S.Words>
               );
             }}
