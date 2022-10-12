@@ -10,6 +10,7 @@ import {
   selectRangerApi,
   selectUserEmail,
   selectExtensionWalletAccounts,
+  registerTradeAccountData,
 } from "../../..";
 import {
   registerMainAccountData,
@@ -27,7 +28,7 @@ type RegisterEmailData = { email: string; main_address: string };
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   try {
     const controllerWallets = yield select(selectExtensionWalletAccounts);
-    const { mainAccount, tradeAddress } = action.payload;
+    const { mainAccount, tradeAddress, mnemonic } = action.payload;
     const selectedControllerAccount = controllerWallets.find(
       ({ account }) => account.address === mainAccount
     );
@@ -49,6 +50,15 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         )
       );
       if (res.isSuccess) {
+        yield put(
+          registerTradeAccountData({
+            mnemonic,
+            account: {
+              name: selectedControllerAccount.account.meta.name,
+              address: selectedControllerAccount.account.address,
+            },
+          })
+        );
         yield put(registerMainAccountData());
         yield call(executeRegisterEmail, data, signature);
       } else {

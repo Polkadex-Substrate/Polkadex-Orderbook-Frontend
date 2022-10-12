@@ -14,6 +14,10 @@ import {
   USER_TRADE_ACCOUNTS_DATA,
   USER_TRADE_ACCOUNTS_ERROR,
   USER_TRADE_ACCOUNTS_FETCH,
+  USER_TRADE_ACCOUNT_MODAL_ACTIVE,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
+  USER_TRADE_ACCOUNT_MODAL_CANCEL,
+  USER_TRADE_ACCOUNT_IMPORT_FETCH,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
@@ -24,11 +28,16 @@ export interface TradeAccountsState {
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
   removesInLoading: Array<string>;
-  successData: SuccessTradeWalletData;
+  registerAccountModal: RegisterTradeAccount;
+  importAccountSuccess: boolean;
 }
 
-export type SuccessTradeWalletData = {
-  success: boolean;
+export type RegisterTradeAccount = {
+  isActive?: boolean;
+  selectedAddres?: {
+    name: string;
+    address: string;
+  };
   mnemonic?: string;
   account?: {
     name: string;
@@ -38,13 +47,14 @@ export type SuccessTradeWalletData = {
 
 const initialState: TradeAccountsState = {
   isFetching: false,
-  successData: {
-    success: false,
-  },
   allBrowserAccounts: [],
   registerAccountLoading: false,
   registerAccountSuccess: false,
   removesInLoading: [],
+  registerAccountModal: {
+    isActive: false,
+  },
+  importAccountSuccess: false,
 };
 
 export const TradeAccountsReducer = (
@@ -52,6 +62,12 @@ export const TradeAccountsReducer = (
   action: TradeAccountsAction
 ): TradeAccountsState => {
   switch (action.type) {
+    case USER_TRADE_ACCOUNT_IMPORT_DATA:
+      return {
+        ...state,
+        importAccountSuccess: true,
+        registerAccountLoading: false,
+      };
     case USER_TRADE_ACCOUNTS_DATA:
       return {
         ...state,
@@ -67,11 +83,10 @@ export const TradeAccountsReducer = (
     case USER_TRADE_ACCOUNTS_ERROR:
       return {
         ...state,
-        successData: {
-          success: false,
-        },
+        registerAccountLoading: false,
         isFetching: true,
       };
+    case USER_TRADE_ACCOUNT_IMPORT_FETCH:
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
       return {
         ...state,
@@ -82,20 +97,42 @@ export const TradeAccountsReducer = (
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,
-        successData: {
-          success: true,
+        registerAccountModal: {
+          ...state.registerAccountModal,
           ...action.payload,
         },
         registerAccountLoading: false,
         registerAccountSuccess: true,
       };
+    case USER_TRADE_ACCOUNT_MODAL_ACTIVE:
+      return {
+        ...state,
+        registerAccountModal: {
+          ...state.registerAccountModal,
+          isActive: true,
+          selectedAddres: action?.payload,
+        },
+      };
+    case USER_TRADE_ACCOUNT_MODAL_CANCEL:
+      return {
+        ...state,
+        registerAccountModal: {
+          isActive: false,
+        },
+      };
     case USER_REGISTER_TRADE_ACCOUNT_RESET:
+      return {
+        ...state,
+        registerAccountModal: {
+          isActive: false,
+        },
+        registerAccountLoading: false,
+        registerAccountSuccess: false,
+        importAccountSuccess: false,
+      };
     case USER_REGISTER_TRADE_ACCOUNT_ERROR:
       return {
         ...state,
-        successData: {
-          success: false,
-        },
         registerAccountLoading: false,
         registerAccountSuccess: false,
       };

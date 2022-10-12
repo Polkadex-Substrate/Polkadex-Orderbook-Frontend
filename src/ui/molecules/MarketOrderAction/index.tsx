@@ -123,7 +123,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
                   disabled={!hasUser || !isSignedIn}
                 />
               ) : (
-                <Link href="/accountManager">
+                <Link href="/settings">
                   <S.Connect>Connect Trading Account</S.Connect>
                 </Link>
               )}

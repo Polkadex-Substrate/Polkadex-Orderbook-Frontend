@@ -1,5 +1,5 @@
 import { put, call } from "redux-saga/effects";
-import { API, Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 
 import { sendError } from "../../../";
 import { signUpData, signUpError, SignUpFetch } from "../actions";
@@ -10,11 +10,7 @@ export function* signUpSaga(action: SignUpFetch) {
     const { user, userConfirmed } = yield call(signUp, email, password);
     yield put(signUpData({ userConfirmed, email }));
   } catch (error) {
-    console.error(error);
-    if (error.name === "UsernameExistsException") {
-      // TODO:
-      // nofify that the user is already registered and resend the confirmation code.
-    }
+    console.log("error: ", error);
     yield put(
       sendError({
         error,
@@ -29,7 +25,7 @@ export function* signUpSaga(action: SignUpFetch) {
 
 async function signUp(email: string, password: string) {
   const { user, userConfirmed } = await Auth.signUp({
-    username: email,
+    username: email.toLowerCase(),
     password,
     attributes: {
       email,

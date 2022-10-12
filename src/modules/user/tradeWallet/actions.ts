@@ -14,7 +14,10 @@ import {
   USER_TRADE_ACCOUNT_UNLOCK,
   USER_TRADE_ACCOUNT_IMPORT_ERROR,
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
   USER_TRADE_ACCOUNT_PUSH,
+  USER_TRADE_ACCOUNT_MODAL_ACTIVE,
+  USER_TRADE_ACCOUNT_MODAL_CANCEL,
 } from "./constants";
 
 export interface PolkadotWalletFetchPayload {
@@ -53,7 +56,16 @@ export interface RegisterTradeAccountData {
     };
   };
 }
-
+export interface RegisterTradeAccountModalActive {
+  type: typeof USER_TRADE_ACCOUNT_MODAL_ACTIVE;
+  payload?: {
+    name: string;
+    address: string;
+  };
+}
+export interface RegisterTradeAccountModalCancel {
+  type: typeof USER_TRADE_ACCOUNT_MODAL_CANCEL;
+}
 export interface RegisterTradeAccountError {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_ERROR;
   error: CommonError;
@@ -86,7 +98,7 @@ export interface UnlockTradeAccount {
   };
 }
 
-export interface ImportTradeAccount {
+export interface ImportTradeAccountFetch {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_FETCH;
   payload: {
     mnemonic: string;
@@ -94,7 +106,9 @@ export interface ImportTradeAccount {
     password?: string;
   };
 }
-
+export interface ImportTradeAccountData {
+  type: typeof USER_TRADE_ACCOUNT_IMPORT_DATA;
+}
 export interface ImportTradeAccountError {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_ERROR;
   error: CommonError;
@@ -117,9 +131,13 @@ export type TradeAccountsAction =
   | RemoveProxyAccountFromChainFetch
   | RemoveProxyAccountFromChainData
   | UnlockTradeAccount
-  | ImportTradeAccount
+  | ImportTradeAccountFetch
+  | ImportTradeAccountData
   | ImportTradeAccountError
-  | TradeAccountPush;
+  | TradeAccountPush
+  | RegisterTradeAccountModalActive
+  | RegisterTradeAccountModalCancel;
+
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
 });
@@ -185,10 +203,14 @@ export const unlockTradeAccount = (
 });
 
 export const importTradeAccountFetch = (
-  payload: ImportTradeAccount["payload"]
-): ImportTradeAccount => ({
+  payload: ImportTradeAccountFetch["payload"]
+): ImportTradeAccountFetch => ({
   type: USER_TRADE_ACCOUNT_IMPORT_FETCH,
   payload: payload,
+});
+
+export const importTradeAccountData = (): ImportTradeAccountData => ({
+  type: USER_TRADE_ACCOUNT_IMPORT_DATA,
 });
 
 export const importTradeAccountError = (error: CommonError): ImportTradeAccountError => ({
@@ -199,4 +221,15 @@ export const importTradeAccountError = (error: CommonError): ImportTradeAccountE
 export const tradeAccountPush = (payload: TradeAccountPush["payload"]): TradeAccountPush => ({
   type: USER_TRADE_ACCOUNT_PUSH,
   payload,
+});
+
+export const registerAccountModalActive = (
+  payload?: RegisterTradeAccountModalActive["payload"]
+): RegisterTradeAccountModalActive => ({
+  type: USER_TRADE_ACCOUNT_MODAL_ACTIVE,
+  payload,
+});
+
+export const registerAccountModalCancel = (): RegisterTradeAccountModalCancel => ({
+  type: USER_TRADE_ACCOUNT_MODAL_CANCEL,
 });

@@ -31,8 +31,8 @@ export function useOrderHistory(filters: Ifilters) {
 
   useEffect(() => {
     if (userLoggedIn) {
-      dispatch(userOrdersHistoryFetch());
       dispatch(userOpenOrdersHistoryFetch());
+      dispatch(userOrdersHistoryFetch());
     }
   }, [userLoggedIn, dispatch, userSession]);
 

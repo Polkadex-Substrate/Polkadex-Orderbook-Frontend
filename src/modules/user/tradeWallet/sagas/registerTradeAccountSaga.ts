@@ -1,4 +1,3 @@
-// TODO: Create Mnemonic state
 import { call, delay, put, select } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 import { ApiPromise } from "@polkadot/api";
@@ -29,10 +28,11 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
       ({ account }) => account.address === address
     );
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
-      name: name,
+      name,
     });
+    tradeAddress = pair.address;
     const res = yield call(() =>
-      addProxyToAccount(api, pair.address, signer, account?.address)
+      addProxyToAccount(api, tradeAddress, signer, account?.address)
     );
     if (res.isSuccess) {
       yield put(tradeAccountPush({ pair }));

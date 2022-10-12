@@ -1,36 +1,40 @@
-import { put } from "redux-saga/effects";
+import { delay, put } from "redux-saga/effects";
 import keyring from "@polkadot/ui-keyring";
 
 import {
-  ImportTradeAccount,
+  importTradeAccountData,
   notificationPush,
   removeTradeAccountFromBrowser,
   tradeAccountPush,
+  registerTradeAccountData,
+  ImportTradeAccountFetch,
 } from "@polkadex/orderbook-modules";
 
 let tradeAddress = "";
 
-export function* importTradeAccountFetchSaga(action: ImportTradeAccount) {
+export function* importTradeAccountFetchSaga(action: ImportTradeAccountFetch) {
   const { mnemonic, name, password } = action.payload;
+  console.log(mnemonic, name, password);
   try {
     const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
       name: name,
     });
-    tradeAddress = pair.address;
+    tradeAddress = pair?.address;
     yield put(tradeAccountPush({ pair }));
+    yield delay(2000);
     yield put(
-      notificationPush({
-        type: "SuccessAlert",
-        message: {
-          title: "Congratulations!",
-          description: "Your trade account has been imported!",
+      registerTradeAccountData({
+        mnemonic,
+        account: {
+          name,
+          address: tradeAddress,
         },
-        time: new Date().getTime(),
       })
     );
+    yield put(importTradeAccountData());
   } catch (error) {
-    console.log(error);
-    yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+    if (tradeAddress?.length)
+      yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
     yield put(
       notificationPush({
         type: "ErrorAlert",

@@ -67,7 +67,7 @@ export const SuccessCreateAccount = ({
           {state && (
             <>
               <S.WordsContainer>
-                {mnemonic.map((value, i) => (
+                {mnemonic?.map((value, i) => (
                   <div key={i}>{value}</div>
                 ))}
               </S.WordsContainer>

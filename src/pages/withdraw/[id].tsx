@@ -30,7 +30,7 @@ const Withdraw = () => {
   );
 
   useEffect(() => {
-    if (shouldRedirect) router.push("/accountManager");
+    if (shouldRedirect) router.push("/settings");
   }, [router, shouldRedirect]);
 
   if (shouldRedirect) return <div />;

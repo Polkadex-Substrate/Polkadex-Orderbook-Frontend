@@ -129,17 +129,18 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
   `}
 `;
 
+export const Error = styled.p`
+  ${({ theme }) => css`
+    color: ${theme.colors.red};
+  `}
+`;
+
 export const Password = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `;
 
-export const Error = styled.p`
-  ${({ theme }) => css`
-    color: ${theme.colors.red};
-  `}
-`;
 export const PasswordWrapper = styled(Container)`
   display: flex;
   flex-direction: column;

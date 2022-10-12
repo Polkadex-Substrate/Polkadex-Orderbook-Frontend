@@ -19,32 +19,52 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
-  extensionWalletAccountSelect,
+  registerAccountModalActive,
+  registerAccountModalCancel,
+  registerMainAccountReset,
+  registerTradeAccountReset,
   selectIsMainAddressRegistered,
+  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modules/user/profile/helpers";
 
 export const SettingsTemplate = () => {
   const {
     state,
     preview,
-    newAccount,
     currentControllerWallet,
-    isTradeAccountLoading,
-    isControllerAccountLoading,
     controllerWallets,
     tradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,
+    isTradeAccountSuccess,
+    isImportAccountSuccess,
+    isActive,
+    selectedAddres,
+    isLoading,
+    isRegisterControllerAccountSuccess,
     setState,
     setPreview,
-    setNewAccount,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
   } = useSettings();
 
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    if (
+      isTradeAccountSuccess ||
+      !isLoading ||
+      isRegisterControllerAccountSuccess ||
+      isImportAccountSuccess
+    ) {
+      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
+        dispatch(registerMainAccountReset());
+      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+        dispatch(registerTradeAccountReset());
+      else dispatch(registerAccountModalCancel());
+    }
+  };
   return (
     <>
       <Modal
@@ -70,15 +90,8 @@ export const SettingsTemplate = () => {
           )}
         />
       </Modal>
-      <Modal
-        open={newAccount.status}
-        onClose={() => setNewAccount({ selected: {}, status: false })}
-        placement="start right">
-        <NewAccount
-          onClose={() => setNewAccount({ selected: {}, status: false })}
-          selected={newAccount.selected}
-          isLoading={isTradeAccountLoading || isControllerAccountLoading}
-        />
+      <Modal open={isActive} onClose={handleClose} placement="start right">
+        <NewAccount onClose={handleClose} selected={selectedAddres} isLoading={isLoading} />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -111,7 +124,7 @@ export const SettingsTemplate = () => {
                   {true && (
                     <ButtonWallet
                       type="button"
-                      onClick={() => setNewAccount({ ...newAccount, status: true })}>
+                      onClick={() => dispatch(registerAccountModalActive())}>
                       New Account
                     </ButtonWallet>
                   )}
@@ -173,10 +186,11 @@ export const SettingsTemplate = () => {
                               v.address,
                               userAccounts
                             );
+                            const isUsing = false;
                             return (
                               <WalletCard
                                 key={i}
-                                isUsing={false}
+                                isUsing={isUsing}
                                 isDefault={false}
                                 defaultTitle="Default trade account"
                                 name={String(v.meta.name)}
@@ -194,6 +208,30 @@ export const SettingsTemplate = () => {
                                   }>
                                   Preview
                                 </S.Button>
+                                <S.WalletActions>
+                                  {!isUsing && (
+                                    <S.Button
+                                      type="button"
+                                      onClick={() =>
+                                        dispatch(
+                                          userAccountSelectFetch({ tradeAddress: v.address })
+                                        )
+                                      }>
+                                      Use
+                                    </S.Button>
+                                  )}
+                                  <S.Preview
+                                    type="button"
+                                    onClick={() =>
+                                      setPreview({
+                                        status: true,
+                                        selected: v,
+                                      })
+                                    }>
+                                    <Icons.Show />
+                                    <span>Preview</span>
+                                  </S.Preview>
+                                </S.WalletActions>
                               </WalletCard>
                             );
                           })}
@@ -250,14 +288,16 @@ export const SettingsTemplate = () => {
                             key={i}
                             address={account.address}
                             name={account.meta.name}
-                            mainAccount={controllerWallets.find(
-                              (v) => v.account.address === account.address
-                            )}
                             isUsing={
                               account.address === currentControllerWallet?.account?.address
                             }
                             handleRegister={() =>
-                              setNewAccount({ selected: account, status: true })
+                              dispatch(
+                                registerAccountModalActive({
+                                  name: account.meta.name,
+                                  address: account.address,
+                                })
+                              )
                             }
                           />
                         ))}
@@ -301,22 +341,19 @@ export const SettingsTemplate = () => {
   );
 };
 
-type ControllerWaletsPRops = {
+type ControllerWaletsProps = {
   address: string;
   name: string;
   isUsing: boolean;
-  mainAccount: ExtensionAccount;
   handleRegister?: () => void;
 };
 const ControllerWallets = ({
   address,
   name,
   isUsing,
-  mainAccount,
   handleRegister = undefined,
-}: ControllerWaletsPRops) => {
+}: ControllerWaletsProps) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
-  const dispatch = useDispatch();
   return (
     <WalletCard
       isUsing={isUsing}
@@ -326,16 +363,7 @@ const ControllerWallets = ({
       address={address}
       aditionalInfo="(1 trading account)">
       {isRegistered ? (
-        <>
-          {!isUsing && (
-            <S.Button
-              type="button"
-              onClick={() => dispatch(extensionWalletAccountSelect(mainAccount))}>
-              Use
-            </S.Button>
-          )}
-          <Badge isRegistered={true}>Registered</Badge>
-        </>
+        <Badge isRegistered={true}>Registered</Badge>
       ) : (
         <S.Button type="button" onClick={handleRegister}>
           Register Now

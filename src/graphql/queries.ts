@@ -48,8 +48,10 @@ export const getAllAssets = /* GraphQL */ `
   query GetAllAssets($limit: Int, $nextToken: String) {
     getAllAssets(limit: $limit, nextToken: $nextToken) {
       items {
-        ticker
+        symbol
+        name
         withdrawal_fee
+        asset_id
       }
       nextToken
     }

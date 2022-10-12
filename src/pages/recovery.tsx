@@ -18,7 +18,7 @@ const Recovery = () => {
   const hasUser = useReduxSelector(selectIsUserSignedIn);
 
   useEffect(() => {
-    if (!hasUser) router.push("/accountManager");
+    if (!hasUser) router.push("/settings");
   }, [router, hasUser]);
 
   if (!hasUser) return <div />;

@@ -52,18 +52,6 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-          {isSignedIn && (
-            <Link href="/accountManager">
-              <S.WrapperIcon>
-                <div>
-                  <Icon name="Calendar" background="none" stroke="text" size="large" />
-                </div>
-                <div>
-                  <S.Span>Balances</S.Span>
-                </div>
-              </S.WrapperIcon>
-            </Link>
-          )}
         </S.Container>
         <S.Container>
           <Link href="/balances">

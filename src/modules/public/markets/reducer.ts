@@ -8,7 +8,6 @@ import {
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
   MARKETS_TICKERS_DATA,
-  MARKETS_TICKERS_ERROR,
   MARKETS_TICKERS_FETCH,
   MARKET_TICKER_CHANNEL_DATA,
 } from "./constants";
@@ -147,7 +146,7 @@ export const marketsReducer = (
       const idx = tickers.findIndex((x) => x.m === update.m);
       if (idx < 0) tickers.push(update);
       else tickers[idx] = update;
-      if (state.currentTicker.m === update.m) {
+      if (state.currentTicker.m === defaultTickers.m || state.currentTicker.m === update.m) {
         return {
           ...state,
           currentTicker: update,

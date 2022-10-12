@@ -50,7 +50,7 @@ export const DepositTemplate = () => {
   const router = useRouter();
   const { deposits } = useHistory();
 
-  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -66,17 +66,32 @@ export const DepositTemplate = () => {
     }
   }, [assets, routedAsset]);
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+   // A custom validation function. This must return an object
+ // which keys are symmetrical to our values/initialValues
+ const validate = values => {
+  const errors = {} as any;
+  if (values.amount.includes("e")){
+    errors.amount = 'use a valid amount instead';
+  }
+  if (+values.amount > onChainBalance) {
+    errors.amount = 'Amount cannot be greater than balance';
+  }
+
+  return errors;
+};
+
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } = useFormik({
     initialValues: {
       amount: 0.0,
       asset: selectedAsset,
     },
     // TODO: re-add the validations
     validationSchema: withdrawValidations,
+    validate,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.assetId)
+      const asset = isAssetPDEX(selectedAsset.asset_id)
         ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+        : { asset: selectedAsset.asset_id };
       dispatch(
         depositsFetch({
           asset: asset,
@@ -86,6 +101,10 @@ export const DepositTemplate = () => {
       );
     },
   });
+
+  const handleInputChange = (e) => {
+    console.log({ e }, e.ta);
+  };
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -162,7 +181,7 @@ export const DepositTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.assetId}
+                                key={asset.asset_id}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
