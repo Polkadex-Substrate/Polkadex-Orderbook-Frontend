@@ -5,9 +5,12 @@ import {
   selectBrowserTradeAccounts,
   selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
+  selectImportTradeAccountSuccess,
   selectIsRegisterMainAccountLoading,
   selectLinkedMainAddresses,
+  selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
+  selectRegisterTradeAccountSuccess,
   selectUserAccounts,
   selectUserInfo,
   selectUsingAccount,
@@ -29,8 +32,16 @@ export const useSettings = () => {
   const user = useReduxSelector(selectUserInfo);
   const userAccounts = useReduxSelector(selectUserAccounts);
   const linkedMainAddress = useReduxSelector(selectLinkedMainAddresses);
+  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
   const [filterTradeAccounts, setFilterTradeAccounts] = useState(tradeAccounts);
   const [filterControllerWallets, setFilterControllerWallets] = useState(controllerWallets);
+  const { isActive, selectedAddres } = useReduxSelector(selectRegisterTradeAccountInfo);
+
+  const isLoading = isTradeAccountLoading || isControllerAccountLoading;
+  const isRegisterControllerAccountSuccess = useReduxSelector(
+    selectRegisterTradeAccountSuccess
+  );
 
   const handleFilterTradeAccounts = (filterParam: string) => {
     return tradeAccounts.every((data) =>
@@ -58,6 +69,12 @@ export const useSettings = () => {
     userAccounts,
     linkedMainAddress,
     filterTradeAccounts,
+    isTradeAccountSuccess,
+    isImportAccountSuccess,
+    isActive,
+    selectedAddres,
+    isRegisterControllerAccountSuccess,
+    isLoading,
     setState,
     setPreview,
     setNewAccount,
