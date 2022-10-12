@@ -44,15 +44,28 @@ export const useSettings = () => {
   );
 
   const handleFilterTradeAccounts = (filterParam: string) => {
-    return tradeAccounts.every((data) =>
-      data.address.toLowerCase().includes(filterParam.toLowerCase())
-    );
+    const res = tradeAccounts.filter((data) => {
+      const { address, meta } = data as any;
+      const checker = filterParam.toLowerCase();
+      return (
+        address.toLowerCase().includes(checker) || meta?.name?.toLowerCase().includes(checker)
+      );
+    });
+    setFilterTradeAccounts(res);
+    console.log({ res });
   };
 
   const handleFilterControllerWallets = (filterParam: string) => {
-    return controllerWallets.every((data) =>
-      data?.account?.address.toLowerCase().includes(filterParam.toLowerCase())
-    );
+    const res = controllerWallets.filter((data) => {
+      const {
+        account: { address, meta },
+      } = data;
+      const checker = filterParam.toLowerCase();
+      return (
+        address?.toLowerCase().includes(checker) || meta?.name?.toLowerCase().includes(checker)
+      );
+    });
+    setFilterControllerWallets(res);
   };
 
   return {
@@ -69,6 +82,7 @@ export const useSettings = () => {
     userAccounts,
     linkedMainAddress,
     filterTradeAccounts,
+    filterControllerWallets,
     isTradeAccountSuccess,
     isImportAccountSuccess,
     isActive,
@@ -79,6 +93,6 @@ export const useSettings = () => {
     setPreview,
     setNewAccount,
     handleFilterTradeAccounts,
-    handleFilterControllerWallets
+    handleFilterControllerWallets,
   };
 };
