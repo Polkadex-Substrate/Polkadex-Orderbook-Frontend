@@ -73,7 +73,15 @@ export const createAccountValidations = Yup.object().shape({
     address: Yup.string().required("Required"),
   }),
 });
-
+export const importAccountValidations = Yup.object().shape({
+  name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
+  passcode: Yup.string()
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(5, "Must be exactly 5 digits")
+    .max(5, "Must be exactly 5 digits")
+    .nullable(),
+  mnemonic: Yup.array().of(Yup.string()).required("Required"),
+});
 export const linkAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
   passcode: Yup.string()

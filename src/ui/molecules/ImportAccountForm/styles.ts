@@ -37,10 +37,13 @@ export const Method = styled(Container)`
   }
 `;
 
-export const Words = styled(Container)`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+export const Words = styled(Container)<{ hasError?: boolean }>`
+  ${({ theme, hasError }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid ${hasError ? theme.colors.red : "inherit"};
+  `}
 `;
 export const WordsWrapper = styled.div`
   ${({ theme }) => css`
@@ -77,7 +80,7 @@ export const WordsContainer = styled.div`
     }
   `}
 `;
-export const WorrdsFooter = styled.div`
+export const WorrdsFooter = styled.button`
   ${({ theme }) => css`
     margin-top: 1rem;
     font-size: 1.2rem;
@@ -86,7 +89,13 @@ export const WorrdsFooter = styled.div`
   `}
 `;
 
-export const WalletName = styled(Container)`
+export const WalletName = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const WalletNameWrapper = styled(Container)`
   ${({ theme }) => css`
     display: flex;
     align-items: flex-end;
@@ -95,6 +104,7 @@ export const WalletName = styled(Container)`
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
+      flex: 1;
     }
     input {
       color: ${theme.colors.text};
@@ -112,7 +122,35 @@ export const WalletName = styled(Container)`
     }
   `}
 `;
-export const Password = styled(Container)`
+
+export const WalletError = styled.div<{ isNegative?: boolean }>`
+  ${({ theme, isNegative }) => css`
+    display: flex;
+    justify-content: space-between;
+    small,
+    strong {
+      font-size: 1.2rem;
+    }
+    small {
+      align-self: flex-end;
+    }
+    strong {
+      font-weight: normal;
+      color: ${isNegative ? theme.colors.red : "inherit"};
+    }
+    p {
+      color: ${theme.colors.red};
+    }
+  `}
+`;
+
+export const Password = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+export const PasswordWrapper = styled(Container)`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -131,6 +169,7 @@ export const PasswordFooter = styled.div`
     align-items: center;
     input {
       color: ${theme.colors.text};
+      width: 100%;
     }
     button {
       width: 1.5rem;
@@ -142,6 +181,11 @@ export const PasswordFooter = styled.div`
   `}
 `;
 
+export const Error = styled.p`
+  ${({ theme }) => css`
+    color: ${theme.colors.red};
+  `}
+`;
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -157,6 +201,14 @@ export const Footer = styled.div`
         flex: 1;
         background: ${theme.colors.primary};
       }
+      :disabled {
+        background: gray;
+      }
     }
   `}
+`;
+export const Menmonic = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
