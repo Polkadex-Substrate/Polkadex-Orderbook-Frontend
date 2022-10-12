@@ -30,10 +30,17 @@ export const useSettings = () => {
   const userAccounts = useReduxSelector(selectUserAccounts);
   const linkedMainAddress = useReduxSelector(selectLinkedMainAddresses);
   const [filterTradeAccounts, setFilterTradeAccounts] = useState(tradeAccounts);
+  const [filterControllerWallets, setFilterControllerWallets] = useState(controllerWallets);
 
   const handleFilterTradeAccounts = (filterParam: string) => {
     return tradeAccounts.every((data) =>
       data.address.toLowerCase().includes(filterParam.toLowerCase())
+    );
+  };
+
+  const handleFilterControllerWallets = (filterParam: string) => {
+    return controllerWallets.every((data) =>
+      data?.account?.address.toLowerCase().includes(filterParam.toLowerCase())
     );
   };
 
@@ -55,5 +62,6 @@ export const useSettings = () => {
     setPreview,
     setNewAccount,
     handleFilterTradeAccounts,
+    handleFilterControllerWallets
   };
 };
