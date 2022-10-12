@@ -8,7 +8,7 @@ import {
   marketsFetch,
   rangerConnectFetch,
   tradeAccountsFetch,
-  userFetch,
+  userAuthFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
 
@@ -19,7 +19,7 @@ export const useInit = () => {
   useEffect(() => {
     dispatch(rangerConnectFetch());
     dispatch(tradeAccountsFetch());
-    dispatch(userFetch());
+    dispatch(userAuthFetch());
     dispatch(extensionWalletFetch());
   }, [dispatch]);
 
