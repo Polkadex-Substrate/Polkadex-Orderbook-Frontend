@@ -39,7 +39,7 @@ export const CreateAccountForm = ({
     dirty,
   } = useFormik({
     initialValues: {
-      name: "",
+      name: generateUsername(),
       hasPasscode: false,
       passcode: "",
       isPasscodeVisible: false,

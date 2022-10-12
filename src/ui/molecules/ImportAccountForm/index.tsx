@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react";
+import { KeyboardEvent, useMemo, useRef, useState } from "react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
+import { useDispatch } from "react-redux";
 
 import { Switch } from "../Switcher";
 
@@ -9,6 +10,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { importAccountValidations } from "@polkadex/orderbook/validations";
+import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
 
 const informationData = [
   {
@@ -62,16 +64,27 @@ export const ImportAccountForm = ({ onCancel = undefined }) => {
 };
 
 const ImportAccountMnemonic = ({ onCancel = undefined }) => {
+  const mnemonicInputRef = useRef(null);
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: generateUsername(),
       hasPasscode: false,
       passcode: "",
       isPasscodeVisible: false,
       mnemonic: [],
     },
     validationSchema: importAccountValidations,
-    onSubmit: (values) => console.log(values),
+    onSubmit: ({ mnemonic, name, passcode }) => {
+      // dispatch(
+      //   importTradeAccountFetch({
+      //     mnemonic: mnemonic.join(" "),
+      //     name: name,
+      //     password: passcode,
+      //   })
+      // );
+    },
   });
   const {
     errors,
@@ -83,10 +96,11 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
     isValid,
     dirty,
   } = formik;
-  const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
+
   const { name } = detect();
   const isBrowserSupported = ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
-  const mnemonicInputRef = useRef(null);
+
+  const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
       <S.Menmonic>
@@ -94,21 +108,23 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
           <FieldArray name="mnemonic">
             {({ remove, push }) => {
               const handleRemove = (i: number) => remove(i);
-              const onInputKeyDown = (e) => {
-                const val: string[] = e.target.value
+              const onInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+                const val: string[] = e.currentTarget.value
                   .split(" ")
                   .map((value) => value.trim())
                   .filter((e) => e);
 
-                if (
+                const shouldPush =
                   !!val.length &&
                   val.length <= 12 &&
                   val.length + values?.mnemonic?.length <= 12 &&
-                  e.key === "Enter"
-                ) {
+                  e.key === "Enter";
+
+                if (shouldPush) {
+                  e.preventDefault();
                   push(e.currentTarget.value);
                   mnemonicInputRef.current.value = null;
-                } else if (e.key === "Backspace" && e.target.value.length === 0) {
+                } else if (e.key === "Backspace" && e.currentTarget?.value?.length === 0) {
                   handleRemove(values?.mnemonic?.length - 1);
                 }
               };
@@ -138,7 +154,11 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                   </S.WordsWrapper>
                   <S.WordsContainer>
                     {!!values?.mnemonic?.length &&
-                      values.mnemonic.map((value, i) => <div key={i}>{value}</div>)}
+                      values.mnemonic.map((value, i) => (
+                        <div key={i} onClick={() => remove(i)}>
+                          {value}
+                        </div>
+                      ))}
                     <input
                       type="text"
                       placeholder="Enter your mnemonic"
