@@ -38,7 +38,7 @@ const CreateAccount = () => {
   );
 
   useEffect(() => {
-    if (shouldRedirect) router.push("/accountManager");
+    if (shouldRedirect) router.push("/settings");
   }, [shouldRedirect, router]);
 
   if (shouldRedirect) return <div />;

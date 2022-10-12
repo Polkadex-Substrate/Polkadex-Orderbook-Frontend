@@ -49,8 +49,7 @@ export const LinkAccountTemplate = () => {
     });
 
   useEffect(() => {
-    if (successRegisterMainAccount && successRegisterTradeAccount)
-      router.push("/accountManager");
+    if (successRegisterMainAccount && successRegisterTradeAccount) router.push("/settings");
   }, [successRegisterTradeAccount, router, successRegisterMainAccount]);
 
   return (

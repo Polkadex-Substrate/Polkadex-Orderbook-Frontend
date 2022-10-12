@@ -77,7 +77,7 @@ export function Trading() {
       description: "Import your existing wallet, or create a new wallet",
       primaryLink: "/createAccount",
       primaryLinkTitle: "Create Account",
-      secondaryLink: "/accountManager",
+      secondaryLink: "/settings",
       secondaryLinkTitle: "Select Account",
     };
 

@@ -24,7 +24,7 @@ export const AccountBanner = ({ onClose }) => (
           <button type="button" onClick={onClose}>
             Close
           </button>
-          <Link href="/accountManager">Create Account</Link>
+          <Link href="/settings">Create Account</Link>
         </div>
       </S.Content>
     </S.Container>
