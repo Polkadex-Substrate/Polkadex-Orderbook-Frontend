@@ -4,7 +4,6 @@ import { assetsData } from "../actions";
 import { IPublicAsset } from "../types";
 import { alertPush } from "../../../";
 
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 
@@ -18,7 +17,6 @@ export function* fetchAssetsSaga() {
       acc[asset.asset_id] = asset;
       return acc;
     }, {});
-    assetsList.push(POLKADEX_ASSET);
     yield put(assetsData({ list: assetsList, assetIdMap }));
   } catch (error) {
     yield put(
