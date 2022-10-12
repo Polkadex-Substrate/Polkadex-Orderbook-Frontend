@@ -31,6 +31,8 @@ import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modul
 export const SettingsTemplate = () => {
   const {
     state,
+    filterTradeAccounts,
+    filterControllerWallets,
     preview,
     currentControllerWallet,
     controllerWallets,
@@ -178,7 +180,8 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {tradeAccounts
+                        {
+                        filterTradeAccounts
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((v, i) => {
                             // const isUsing = currentTradeAccount.address === v.address;
@@ -234,7 +237,8 @@ export const SettingsTemplate = () => {
                                 </S.WalletActions>
                               </WalletCard>
                             );
-                          })}
+                          })
+                          }
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -283,7 +287,7 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {controllerWallets?.map(({ account }, i) => (
+                        {filterControllerWallets?.map(({ account }, i) => (
                           <ControllerWallets
                             key={i}
                             address={account.address}
