@@ -46,8 +46,14 @@ export function useMarkets(onClose: () => void) {
    *
    * @param {string} e -  Search field value
    */
-  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log({
+      searchFieldValue: e.target.value
+    });
+
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
+  }
+
 
   /**
    * Select Tab by pair name
@@ -101,7 +107,7 @@ export function useMarkets(onClose: () => void) {
     const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
       const [_, quote] = cv.name.toLowerCase().split("/");
       if (
-        cv.id.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
+        cv.name.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
           fieldValue.marketsTabsSelected.toLowerCase() === quote ||
           fieldValue.marketsTabsSelected.toLowerCase() === "all")

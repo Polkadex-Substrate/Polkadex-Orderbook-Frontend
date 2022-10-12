@@ -1,3 +1,5 @@
+import { CognitoUser } from "amazon-cognito-identity-js";
+
 import { CommonError } from "../../types";
 
 import { AuthAction } from "./actions";
@@ -18,9 +20,11 @@ import {
   AUTH_CHANGE_PASSWORD_FETCH,
   AUTH_CHANGE_PASSWORD_DATA,
   AUTH_CHANGE_PASSWORD_ERROR,
+  AUTH_CODE_VERIFY_ERROR,
 } from "./constants";
 
 export interface AuthState {
+  user?: CognitoUser;
   email: string;
   require2FA?: boolean;
   requireVerification?: boolean;
@@ -40,6 +44,7 @@ export interface AuthState {
 }
 
 export const initialStateAuth: AuthState = {
+  user: null,
   email: "",
   require2FA: false,
   requireVerification: false,
@@ -63,8 +68,9 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return {
         ...state,
         signInLoading: false,
-        signInSuccess: true,
+        signInSuccess: action.payload.isConfirmed,
         email: action.payload.email,
+        user: action.payload.user,
         userConfirmed: action.payload.isConfirmed,
       };
     case AUTH_SIGN_IN_ERROR:
@@ -83,6 +89,8 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
     }
     case AUTH_CODE_VERIFY_DATA:
       return { ...state, userConfirmed: true };
+    case AUTH_CODE_VERIFY_ERROR:
+      return { ...state, userConfirmed: false };
     case AUTH_SIGN_UP_ERROR:
       return { ...state, signUpError: action.error, signUpLoading: false };
     case AUTH_LOGOUT_FETCH:

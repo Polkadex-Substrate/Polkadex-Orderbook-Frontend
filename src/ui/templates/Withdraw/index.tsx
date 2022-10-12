@@ -44,6 +44,7 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { cleanPositiveFloatInput } from "@polkadex/web-helpers";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -66,7 +67,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.asset_id),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -78,16 +79,29 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
+  const validate = values => {
+    const errors = {} as any;
+    if (values.amount.includes("e")){
+      errors.amount = 'use a valid amount instead';
+    }
+
+    if(+values.amount > +availableAmount?.free_balance) {
+      errors.amount = 'Amount cannot be greater than balance';
+    }
+    return errors;
+  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
       asset: null,
     },
     validationSchema: withdrawValidations,
+    validate,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.assetId)
+      const asset = isAssetPDEX(selectedAsset.asset_id)
         ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+        : { asset: selectedAsset.asset_id };
       dispatch(
         withdrawsFetch({
           asset: asset,
@@ -189,7 +203,7 @@ export const WithdrawTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.assetId}
+                                key={asset.asset_id}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>

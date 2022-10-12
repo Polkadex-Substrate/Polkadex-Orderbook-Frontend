@@ -3,6 +3,8 @@ import { call, put } from "redux-saga/effects";
 import { alertPush } from "../../alertHandler";
 import { ErrorHandlerFetch, getErrorData } from "../actions";
 
+import { transFormErrorMessage } from "@polkadex/orderbook/modules/public/errorHandler/helper";
+
 export function* handleErrorSaga(action: ErrorHandlerFetch) {
   const { processingType, error, extraOptions } = action.payload;
 
@@ -28,7 +30,7 @@ function* handleAlertError(error) {
     alertPush({
       message: {
         title: "Error",
-        description: error.message,
+        description: transFormErrorMessage(error.message),
       },
       type: "Alert",
     })
