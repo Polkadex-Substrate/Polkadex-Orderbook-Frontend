@@ -23,3 +23,4 @@ export * from "./useInformation";
 export * from "./useAppearance";
 export * from "./useFunds";
 export * from "./useTimer";
+export * from "./useSettings";
