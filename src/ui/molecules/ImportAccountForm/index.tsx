@@ -144,12 +144,6 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                       placeholder="Enter your mnemonic"
                       ref={mnemonicInputRef}
                       onKeyDown={onInputKeyDown}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          push(e.currentTarget.value);
-                          mnemonicInputRef.current.value = null;
-                        }
-                      }}
                     />
                   </S.WordsContainer>
                   {isBrowserSupported && (
