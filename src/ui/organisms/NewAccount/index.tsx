@@ -8,11 +8,11 @@ import {
   ImportAccountForm,
   Loading,
   SuccessCreateAccount,
-  SuccessImport,
 } from "@polkadex/orderbook-ui/molecules";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  selectImportTradeAccountSuccess,
   selectIsRegisterMainAccountSuccess,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
@@ -64,12 +64,13 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
 
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
 
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
-  const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
+  const successInformation = successData[isControllerAccountSuccess ? 1 : 1];
 
   return (
     <S.Main>
@@ -80,7 +81,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
         <S.Content>
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
-              title={successInformation.title}
+              title={isImportAccountSuccess ? "Wallet imported" : successInformation.title}
               description={successInformation.description}
               mnemonic={tradeInfo?.mnemonic?.split(" ")}
               account={tradeInfo.account}

@@ -24,3 +24,6 @@ export const selectRegisterTradeAccountRemoving = (state: RootState): Array<stri
 
 export const selectRegisterTradeAccountInfo = (state: RootState): RegisterTradeAccount =>
   state.user.tradeWallet.registerAccountModal;
+
+export const selectImportTradeAccountSuccess = (state: RootState): boolean =>
+  state.user.tradeWallet.importAccountSuccess;

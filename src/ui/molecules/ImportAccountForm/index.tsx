@@ -77,13 +77,13 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
     },
     validationSchema: importAccountValidations,
     onSubmit: ({ mnemonic, name, passcode }) => {
-      // dispatch(
-      //   importTradeAccountFetch({
-      //     mnemonic: mnemonic.join(" "),
-      //     name: name,
-      //     password: passcode,
-      //   })
-      // );
+      dispatch(
+        importTradeAccountFetch({
+          mnemonic: mnemonic.join(" "),
+          name: name,
+          password: passcode,
+        })
+      );
     },
   });
   const {
@@ -122,7 +122,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
 
                 if (shouldPush) {
                   e.preventDefault();
-                  push(e.currentTarget.value);
+                  val.forEach((item) => push(item));
                   mnemonicInputRef.current.value = null;
                 } else if (e.key === "Backspace" && e.currentTarget?.value?.length === 0) {
                   handleRemove(values?.mnemonic?.length - 1);

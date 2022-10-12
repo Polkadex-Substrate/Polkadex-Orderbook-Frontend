@@ -28,6 +28,7 @@ import {
   selectBrowserTradeAccounts,
   selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
+  selectImportTradeAccountSuccess,
   selectIsMainAddressRegistered,
   selectIsRegisterMainAccountLoading,
   selectRegisterTradeAccountInfo,
@@ -55,6 +56,7 @@ export const SettingsTemplate = () => {
     selectRegisterTradeAccountSuccess
   );
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
 
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
   // .sort(
@@ -64,8 +66,14 @@ export const SettingsTemplate = () => {
   const user = useReduxSelector(selectUserInfo);
 
   const handleClose = () => {
-    if (isTradeAccountSuccess || !isLoading || isRegisterControllerAccountSuccess) {
-      if (isRegisterControllerAccountSuccess) dispatch(registerMainAccountReset());
+    if (
+      isTradeAccountSuccess ||
+      !isLoading ||
+      isRegisterControllerAccountSuccess ||
+      isImportAccountSuccess
+    ) {
+      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
+        dispatch(registerMainAccountReset());
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
         dispatch(registerTradeAccountReset());
       else dispatch(registerAccountModalCancel());

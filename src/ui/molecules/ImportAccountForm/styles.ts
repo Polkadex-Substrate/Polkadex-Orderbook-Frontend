@@ -77,6 +77,9 @@ export const WordsContainer = styled.div`
     }
     input {
       color: ${theme.colors.text};
+      :focus {
+        width: 100%;
+      }
     }
   `}
 `;
