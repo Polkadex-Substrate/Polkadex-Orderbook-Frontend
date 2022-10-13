@@ -115,7 +115,7 @@ export const AccountManagerTemplate = () => {
     ]
   );
   const userBalances = useMemo(
-    () => balances?.filter((value) => assets.some((item) => item.asset_id === value.assetId)),
+    () => balances?.filter((value) => assets.some((item) => item.asset_id === value.asset_id)),
     [assets, balances]
   );
 
@@ -352,7 +352,7 @@ export const AccountManagerTemplate = () => {
                     <Table.Body striped>
                       {assets.map((item) => {
                         const balance = userBalances?.find(
-                          (value) => value.assetId === item.asset_id
+                          (value) => value.asset_id === item.asset_id
                         );
                         return (
                           <Table.Row key={item.asset_id}>

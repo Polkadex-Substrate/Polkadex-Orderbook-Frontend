@@ -67,7 +67,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.assetId === selectedAsset?.asset_id),
+    () => userBalances?.find((item) => item.asset_id === selectedAsset?.asset_id),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -79,14 +79,14 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
-  const validate = values => {
+  const validate = (values) => {
     const errors = {} as any;
-    if (values.amount.includes("e")){
-      errors.amount = 'use a valid amount instead';
+    if (values.amount.includes("e")) {
+      errors.amount = "use a valid amount instead";
     }
 
-    if(+values.amount > +availableAmount?.free_balance) {
-      errors.amount = 'Amount cannot be greater than balance';
+    if (+values.amount > +availableAmount?.free_balance) {
+      errors.amount = "Amount cannot be greater than balance";
     }
     return errors;
   };
