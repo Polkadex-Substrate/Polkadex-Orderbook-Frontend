@@ -40,6 +40,18 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
 
+  const menuDisableKeys = () => {
+    const disableKeysList = [];
+    if (!Boolean(mainAccountDetails)) {
+      disableKeysList.push("1");
+    }
+    if (!Boolean(tradingAccountInBrowser)) {
+      disableKeysList.push("2");
+    }
+
+    return disableKeysList;
+  };
+
   return (
     <Loading isVisible={isRemoving}>
       <S.Main>
@@ -94,9 +106,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 </div>
               </S.DropdownButton>
             </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid" disabledKeys={[]}>
+            <Dropdown.Menu fill="secondaryBackgroundSolid" disabledKeys={menuDisableKeys()}>
               <Dropdown.Item
-                key={1}
+                key={"1"}
                 onAction={() =>
                   // The button should be disabled instead
                   Boolean(tradingAccountInBrowser)
@@ -106,7 +118,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 Remove from blockchain
               </Dropdown.Item>
               <Dropdown.Item
-                key={2}
+                key={"2"}
                 onAction={() =>
                   dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
                 }>
