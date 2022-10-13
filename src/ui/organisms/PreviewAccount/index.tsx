@@ -11,14 +11,13 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
-  selectBrowserTradeAccounts,
   selectExtensionWalletAccounts,
+  selectTradeAccount,
   selectUsingAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { userMainAccountDetails } from "@polkadex/orderbook/modules/user/extensionWallet/helpers";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { tradingAccountPresentInBrowser } from "@polkadex/orderbook/modules/user/tradeWallet/helpers";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 
 type Props = {
@@ -27,26 +26,27 @@ type Props = {
   mainAccAddress: string;
 };
 
+enum menuDisableKeysEnum {
+  REMOVE_FROM_BLOCKCHAIN = 1,
+  REMOVE_FROM_BROWSER
+}
+
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
   const isRemoving = false;
   const extensionWalletAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const mainAccountDetails = userMainAccountDetails(mainAccAddress, extensionWalletAccounts);
-  const tradingAccountInBrowser = tradingAccountPresentInBrowser(
-    selected.address,
-    tradingAccounts
-  );
+  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected.address));
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
     if (!Boolean(mainAccountDetails)) {
-      disableKeysList.push("1");
+      disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BLOCKCHAIN}`);
     }
     if (!Boolean(tradingAccountInBrowser)) {
-      disableKeysList.push("2");
+      disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BROWSER}`);
     }
 
     return disableKeysList;
