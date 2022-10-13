@@ -30,7 +30,7 @@ export const Message = ({ children }: Props) => {
             {children}
           </MessageCard>
           <S.Action onClick={handleClose}>
-            <Icon name="Close" size="extraSmall" color="black" />
+            <Icon name="Close" size="extraSmall" color="black" stroke="black" />
           </S.Action>
         </S.Container>
       </S.Wrapper>

@@ -1,10 +1,9 @@
-import { call, delay, put, select } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
 
 import { depositsData, DepositsFetch, depositsReset } from "../actions";
 import { depositsError } from "..";
-import { MainAccount } from "../../mainAccount";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { notificationPush, sendError } from "@polkadex/orderbook-modules";
@@ -13,13 +12,14 @@ import {
   selectRangerIsReady,
 } from "@polkadex/orderbook/modules/public/ranger";
 import { UNIT_BN } from "@polkadex/web-constants";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export function* fetchDepositSaga(action: DepositsFetch) {
   try {
     const { asset, amount, mainAccount } = action.payload;
     const api = yield select(selectRangerApi);
     const isApiReady = yield select(selectRangerIsReady);
-    if (isApiReady && mainAccount.address !== "") {
+    if (isApiReady && mainAccount?.account?.address !== "") {
       yield put(
         notificationPush({
           type: "InformationAlert",
@@ -66,12 +66,18 @@ export function* fetchDepositSaga(action: DepositsFetch) {
 
 async function depositToEnclave(
   api: ApiPromise,
-  account: MainAccount,
+  account: ExtensionAccount,
   asset: Record<string, string | null>,
   amount: string | number
 ): Promise<ExtrinsicResult> {
   const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
   const ext = api.tx.ocex.deposit(asset, amountStr);
-  const res = await signAndSendExtrinsic(api, ext, account.injector, account.address, true);
+  const res = await signAndSendExtrinsic(
+    api,
+    ext,
+    { signer: account.signer },
+    account?.account.address,
+    true
+  );
   return res;
 }

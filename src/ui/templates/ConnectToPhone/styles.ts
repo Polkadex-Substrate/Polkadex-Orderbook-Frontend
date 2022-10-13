@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/MyAccount/styles";
+import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook-ui/molecules/Profile/styles";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Main = styled.div`

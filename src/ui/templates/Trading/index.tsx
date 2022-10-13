@@ -14,16 +14,15 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
-  selectAssociatedTradeAccounts,
-  selectCurrentMainAccount,
+  selectAssociatedTradeAddresses,
   selectCurrentMarket,
-  selectCurrentTradeAccount,
   selectCurrentTradePrice,
-  selectHasCurrentTradeAccount,
-  selectIsCurrentMainAccountInWallet,
+  selectHasSelectedAccount,
+  selectIsAddressInExtension,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
-  selectUserIdentity,
+  selectUserEmail,
+  selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -60,14 +59,17 @@ export function Trading() {
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
-  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
-  const email = useReduxSelector(selectUserIdentity);
-  const hasMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
-  const currentMainAccount = useReduxSelector(selectCurrentMainAccount).address;
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const email = useReduxSelector(selectUserEmail);
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+  const hasAssociatedAccounts = useReduxSelector(
+    selectAssociatedTradeAddresses(mainAddress)
+  )?.length;
 
+  const currentMainAddr = useReduxSelector(selectUsingAccount).mainAddress;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
@@ -75,7 +77,7 @@ export function Trading() {
       description: "Import your existing wallet, or create a new wallet",
       primaryLink: "/createAccount",
       primaryLinkTitle: "Create Account",
-      secondaryLink: "/accountManager",
+      secondaryLink: "/settings",
       secondaryLinkTitle: "Select Account",
     };
 
@@ -154,7 +156,7 @@ export function Trading() {
                   <Profile
                     hasTradeAccount={hasTradeAccount}
                     hasMainAccount={hasMainAccount}
-                    currentMainAccount={currentMainAccount}
+                    currentMainAccount={currentMainAddr}
                     currentTradeAccount={currentTradeAddr}
                     email={email}
                   />
@@ -191,7 +193,7 @@ export function Trading() {
                       <Profile
                         hasTradeAccount={hasTradeAccount}
                         hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAccount}
+                        currentMainAccount={currentMainAddr}
                         currentTradeAccount={currentTradeAddr}
                         email={email}
                       />

@@ -14,11 +14,11 @@ import {
   Logo,
   MyAccountLoading,
 } from "@polkadex/orderbook-ui/molecules";
-import { selectHasCurrentTradeAccount } from "@polkadex/orderbook-modules";
+import { selectHasSelectedAccount } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const Header = () => {
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   const router = useRouter();
 
   return (

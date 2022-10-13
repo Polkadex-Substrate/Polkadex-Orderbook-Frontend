@@ -1,15 +1,14 @@
 import { HTMLAttributes, useState } from "react";
 import { useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
-import Link from "next/link";
 
-import { Skeleton, Icon, Appearance, AccountOverview } from "../";
+import { Skeleton, Icon, Appearance, AccountOverview, EmptyMyAccount } from "../";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch, selectCurrentTradeAccount } from "@polkadex/orderbook-modules";
+import { logOutFetch, selectUsingAccount } from "@polkadex/orderbook-modules";
 
 export const SelectAccount = ({
   address,
@@ -86,7 +85,7 @@ const MyAccountLoadingContent = () => (
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
 
   const { isSignedIn } = useAccount();
   const dispatch = useDispatch();
@@ -129,36 +128,3 @@ export const WalletContent = () => {
     </S.Content>
   );
 };
-
-export const EmptyMyAccount = ({
-  hasLimit = false,
-  image = "loginEmpty",
-  title = "Looks like you're not logged in",
-  description = "Explore a new way of trading with your own wallet!",
-  primaryLink = "/sign",
-  primaryLinkTitle = "Sign Up",
-  secondaryLink = "/signIn",
-  secondaryLinkTitle = "Login",
-}) => (
-  <S.Empty hasLimit={hasLimit}>
-    <S.EmptyContainer>
-      <S.EmptyHeader>
-        <figure>
-          <img
-            src={`/img/${image}.svg`}
-            alt="Hand coming out of a smartphone with a pen in hand"
-          />
-        </figure>
-      </S.EmptyHeader>
-      <S.EmptyContent>
-        <h2>{title}</h2>
-        <p>{description}</p>
-        <S.EmptyActions hasLimit={hasLimit}>
-          <Link href={primaryLink}>{primaryLinkTitle}</Link>
-          <Link href={secondaryLink}>{secondaryLinkTitle}</Link>
-          <div />
-        </S.EmptyActions>
-      </S.EmptyContent>
-    </S.EmptyContainer>
-  </S.Empty>
-);

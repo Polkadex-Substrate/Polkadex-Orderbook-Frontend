@@ -8,8 +8,8 @@ import { FundCard, FundCardReponsive } from "@polkadex/orderbook-ui/molecules";
 import {
   selectUserBalance,
   balancesFetch,
-  selectHasCurrentTradeAccount,
   selectBalancesLoading,
+  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { getSymbolFromAssetId } from "@polkadex/orderbook/helpers/assetIdHelpers";
 
@@ -17,7 +17,7 @@ export const Funds = () => {
   const dispatch = useDispatch();
   const { width } = useWindowSize();
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {

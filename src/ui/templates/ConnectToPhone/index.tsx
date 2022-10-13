@@ -18,8 +18,8 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectExtensionWalletAccounts,
-  selectCurrentMainAccount,
-  setMainAccountFetch,
+  selectMainAccount,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { QrCode, PaperWallet, HeaderBack } from "@polkadex/orderbook-ui/organisms";
 
@@ -30,14 +30,13 @@ export const ConnectToPhone = () => {
 
   // Change to Saga
   const isLoading = false;
-  const isSuccess = true;
 
   // Change to Saga
   const { mnemonic, mnemoicString, isMnemonicFromSignUp } = useMnemonic(
     router?.query?.mnemonic as string
   );
-
-  const selectedAccount = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const extensionAccount = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const accounts = useReduxSelector(selectExtensionWalletAccounts);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -94,8 +93,14 @@ export const ConnectToPhone = () => {
                         header={
                           <SelectAccount
                             isHeader
-                            accountName={selectedAccount?.name || "Select your main account"}
-                            address={selectedAccount?.address || "Polkadex is completely free"}
+                            accountName={
+                              extensionAccount?.account.meta?.name ||
+                              "Select your main account"
+                            }
+                            address={
+                              extensionAccount?.account?.address ||
+                              "Polkadex is completely free"
+                            }
                           />
                         }>
                         <S.SelectContent isOverflow={accounts?.length > 2}>
@@ -104,11 +109,13 @@ export const ConnectToPhone = () => {
                           ) : accounts?.length ? (
                             accounts.map((item, index) => (
                               <SelectAccount
-                                isActive={item.address === selectedAccount?.address}
+                                isActive={
+                                  item?.account?.address === extensionAccount?.account?.address
+                                }
                                 key={index}
-                                accountName={item.meta.name || `Account ${index}`}
-                                address={item.address}
-                                onClick={() => dispatch(setMainAccountFetch(accounts[index]))}
+                                accountName={item?.account?.meta?.name || `Account ${index}`}
+                                address={item?.account?.address}
+                                onClick={() => console.log("not implemented")}
                               />
                             ))
                           ) : (

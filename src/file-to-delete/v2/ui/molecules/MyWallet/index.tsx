@@ -45,7 +45,7 @@ export const MyWalletContent = ({
     <S.Content hasMargin={hasMargin} isWallet={isWallet}>
       <S.Title {...props}>
         <h3>{title}</h3>
-        {hasLink && <Link href="/accountManager">Deposit/Withdraw</Link>}
+        {hasLink && <Link href="/settings">Deposit/Withdraw</Link>}
         {isWallet && <Icon name="ArrowBottom" stroke="text" />}
       </S.Title>
       <S.Box isVisible={state || !isWallet}>

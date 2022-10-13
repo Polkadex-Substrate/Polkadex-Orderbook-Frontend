@@ -206,9 +206,6 @@ export const Overlay = styled("div")<{
       "start right": {
         justifyContent: "flex-end",
         alignItems: "center",
-        [Container]: {
-          marginRight: "2rem",
-        },
       },
       "start left": {
         alignItems: "center",

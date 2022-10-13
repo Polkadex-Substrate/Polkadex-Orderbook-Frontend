@@ -22,8 +22,9 @@ import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
   depositsFetch,
-  selectCurrentMainAccount,
   selectDepositsLoading,
+  selectMainAccount,
+  selectUsingAccount,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -39,8 +40,8 @@ import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-
-  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);
@@ -52,9 +53,9 @@ export const DepositTemplate = () => {
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
     const initialAsset = assets.find(
@@ -151,7 +152,9 @@ export const DepositTemplate = () => {
                       <Icons.Avatar />
                     </div>
                     <div>
-                      <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                      <strong>
+                        {currMainAcc?.account.meta?.name || "Wallet not selected"}
+                      </strong>
                       <span>{shortAddress}</span>
                     </div>
                   </S.SelectAccount>

@@ -3,9 +3,10 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import {
-  selectIsCurrentAccountRegistered,
-  selectIsCurrentMainAccountInWallet,
+  selectIsAddressInExtension,
+  selectIsMainAddressRegistered,
   selectIsUserSignedIn,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
@@ -18,9 +19,10 @@ const WithdrawTemplate = dynamic(
 );
 const Withdraw = () => {
   const router = useRouter();
-  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
   const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
+  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
@@ -28,7 +30,7 @@ const Withdraw = () => {
   );
 
   useEffect(() => {
-    if (shouldRedirect) router.push("/accountManager");
+    if (shouldRedirect) router.push("/settings");
   }, [router, shouldRedirect]);
 
   if (shouldRedirect) return <div />;

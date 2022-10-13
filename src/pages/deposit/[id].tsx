@@ -4,9 +4,10 @@ import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectIsCurrentAccountRegistered,
-  selectIsCurrentMainAccountInWallet,
+  selectIsMainAddressRegistered,
+  selectIsAddressInExtension,
   selectIsUserSignedIn,
+  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 
 const DepositTemplate = dynamic(
@@ -18,9 +19,10 @@ const DepositTemplate = dynamic(
 
 const Deposit = () => {
   const router = useRouter();
-  const isRegistered = useReduxSelector(selectIsCurrentAccountRegistered);
   const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const hasSelectedAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
+  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
