@@ -9,7 +9,6 @@ import {
   Loading,
   SuccessCreateAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectImportTradeAccountSuccess,

@@ -38,7 +38,6 @@ import {
   selectUsingAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
   const [state, setState] = useState(false);
