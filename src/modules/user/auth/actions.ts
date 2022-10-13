@@ -1,9 +1,17 @@
+import { CognitoUser } from "amazon-cognito-identity-js";
+
 import { CommonError } from "../../types";
 
 import {
+  AUTH_CHANGE_PASSWORD_DATA,
+  AUTH_CHANGE_PASSWORD_ERROR,
+  AUTH_CHANGE_PASSWORD_FETCH,
   AUTH_CODE_VERIFY_DATA,
   AUTH_CODE_VERIFY_ERROR,
   AUTH_CODE_VERIFY_FETCH,
+  AUTH_FORGOT_PASSWORD_DATA,
+  AUTH_FORGOT_PASSWORD_ERROR,
+  AUTH_FORGOT_PASSWORD_FETCH,
   AUTH_LOGOUT_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
@@ -56,6 +64,7 @@ export interface SignInData {
   payload: {
     email: string;
     isConfirmed: boolean;
+    user?: CognitoUser;
   };
 }
 
@@ -123,6 +132,36 @@ export interface ResendCodeError {
   type: typeof AUTH_RESEND_CODE_ERROR;
   error: CommonError;
 }
+export interface ChangePasswordFetch {
+  type: typeof AUTH_CHANGE_PASSWORD_FETCH;
+  payload: {
+    oldPassword: string;
+    newPassword: string;
+  };
+}
+export interface ChangePasswordData {
+  type: typeof AUTH_CHANGE_PASSWORD_DATA;
+}
+export interface ChangePasswordError {
+  type: typeof AUTH_CHANGE_PASSWORD_ERROR;
+  error: CommonError;
+}
+export interface ForgotPasswordFetch {
+  type: typeof AUTH_FORGOT_PASSWORD_FETCH;
+  payload: {
+    username: string;
+    code: string;
+    newPassword: string;
+  };
+}
+export interface ForgotPasswordData {
+  type: typeof AUTH_FORGOT_PASSWORD_DATA;
+}
+export interface ForgotPasswordError {
+  type: typeof AUTH_FORGOT_PASSWORD_ERROR;
+  payload: CommonError;
+}
+
 export type AuthAction =
   | SignInFetch
   | SignInData
@@ -138,7 +177,13 @@ export type AuthAction =
   | CodeVerifyError
   | ResendCodeFetch
   | ResendCodeData
-  | ResendCodeError;
+  | ResendCodeError
+  | ChangePasswordFetch
+  | ChangePasswordData
+  | ChangePasswordError
+  | ForgotPasswordFetch
+  | ForgotPasswordData
+  | ForgotPasswordError;
 
 export const signInFetch = (payload: SignInFetch["payload"]): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,
@@ -209,4 +254,36 @@ export const resendCodeData = (): ResendCodeData => ({
 export const resendCodeError = (error: CommonError): ResendCodeError => ({
   type: AUTH_RESEND_CODE_ERROR,
   error,
+});
+
+export const changePasswordFetch = (
+  payload: ChangePasswordFetch["payload"]
+): ChangePasswordFetch => ({
+  type: AUTH_CHANGE_PASSWORD_FETCH,
+  payload,
+});
+
+export const changePasswordData = (): ChangePasswordData => ({
+  type: AUTH_CHANGE_PASSWORD_DATA,
+});
+
+export const changePasswordError = (error: CommonError): ChangePasswordError => ({
+  type: AUTH_CHANGE_PASSWORD_ERROR,
+  error,
+});
+
+export const forgotPasswordFetch = (
+  payload: ForgotPasswordFetch["payload"]
+): ForgotPasswordFetch => ({
+  type: AUTH_FORGOT_PASSWORD_FETCH,
+  payload,
+});
+
+export const forgotPasswordData = (): ForgotPasswordData => ({
+  type: AUTH_FORGOT_PASSWORD_DATA,
+});
+
+export const forgotPasswordError = (error: CommonError): ForgotPasswordError => ({
+  type: AUTH_FORGOT_PASSWORD_ERROR,
+  payload: error,
 });

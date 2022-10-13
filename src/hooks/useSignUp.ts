@@ -17,7 +17,7 @@ export const useSignUp = () => {
   }, [isSuccess, router]);
 
   const signUp = (email: string, password: string) =>
-    dispatch(signUpFetch({ email, password }));
+    dispatch(signUpFetch({ email: email.toLowerCase(), password }));
 
   return { signUp, loading };
 };

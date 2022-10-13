@@ -120,6 +120,12 @@ export const Assets = styled.div`
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 2rem;
     border-radius: 1rem;
+    max-height: 36.4rem;
+    overflow-y: hidden;
+    height: 100%;
+    :hover {
+      overflow-y: auto;
+    }
   `}
 `;
 

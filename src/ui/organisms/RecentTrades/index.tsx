@@ -1,6 +1,6 @@
 import * as S from "./styles";
 
-import { ResultFound, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import { AvailableMessage, ResultFound, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
@@ -9,6 +9,7 @@ export const filters = ["all", "buy", "sell"];
 
 export const RecentTrades = () => {
   const {
+    isDecreasing,
     recentTrades,
     quoteUnit,
     baseUnit,
@@ -23,22 +24,24 @@ export const RecentTrades = () => {
       <S.Main>
         <S.Header>
           <h2>Recent Trades</h2>
-          <Dropdown>
-            <Dropdown.Trigger>
-              <S.DropdownTrigger>
-                {filter} <Icons.ArrowBottom />
-              </S.DropdownTrigger>
-            </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid">
-              {filters.map((value) => (
-                <Dropdown.Item
-                  key={value}
-                  onAction={() => handleChangeFilter({ filterBy: value })}>
-                  <S.DropdownMenuItem>{value}</S.DropdownMenuItem>
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+          <AvailableMessage message="Soon">
+            <Dropdown>
+              <Dropdown.Trigger>
+                <S.DropdownTrigger>
+                  {filter} <Icons.ArrowBottom />
+                </S.DropdownTrigger>
+              </Dropdown.Trigger>
+              <Dropdown.Menu fill="secondaryBackgroundSolid">
+                {filters.map((value) => (
+                  <Dropdown.Item
+                    key={value}
+                    onAction={() => handleChangeFilter({ filterBy: value })}>
+                    <S.DropdownMenuItem>{value}</S.DropdownMenuItem>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </AvailableMessage>
         </S.Header>
         {recentTrades.length ? (
           <>
@@ -56,7 +59,7 @@ export const RecentTrades = () => {
                     price={Decimal.format(order.price, pricePrecision || 7, ",")}
                     amount={Decimal.format(order.amount, amountPrecision || 7, ",")}
                     date={date}
-                    isSell={order.side === "sell"}
+                    isSell={isDecreasing[i]}
                   />
                 );
               })}

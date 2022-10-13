@@ -24,6 +24,7 @@ import {
   TabContent,
   Checkbox,
   Icon,
+  Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -42,10 +43,13 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { cleanPositiveFloatInput } from "@polkadex/web-helpers";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
+  const [unlockAccount, setUnlockAccount] = useState(false);
 
   const currMainAcc = useReduxSelector(selectCurrentMainAccount);
   const assets = useReduxSelector(selectAllAssets);
@@ -62,7 +66,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.asset_id),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -74,16 +78,29 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
+  const validate = values => {
+    const errors = {} as any;
+    if (values.amount.includes("e")){
+      errors.amount = 'use a valid amount instead';
+    }
+
+    if(+values.amount > +availableAmount?.free_balance) {
+      errors.amount = 'Amount cannot be greater than balance';
+    }
+    return errors;
+  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
       asset: null,
     },
     validationSchema: withdrawValidations,
+    validate,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.assetId)
+      const asset = isAssetPDEX(selectedAsset.asset_id)
         ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+        : { asset: selectedAsset.asset_id };
       dispatch(
         withdrawsFetch({
           asset: asset,
@@ -103,11 +120,33 @@ export const WithdrawTemplate = () => {
   );
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
+
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
   const readyToClaim = readyWithdrawals;
 
+  const hasPendingClaims = useMemo(
+    () =>
+      readyToClaim.reduce(
+        (acc, value) => acc + value.items.filter((v) => v.status === "READY").length,
+        0
+      ),
+    [readyToClaim]
+  );
+
+  const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
+
   return (
     <>
+      <Modal open={unlockAccount} onClose={handleUnlockClose}>
+        <Modal.Body>
+          <UnlockAccount
+            onSubmit={() => {
+              // Add action..
+              setUnlockAccount(false);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Deposit | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -161,7 +200,7 @@ export const WithdrawTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.assetId}
+                                key={asset.asset_id}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -205,7 +244,10 @@ export const WithdrawTemplate = () => {
                         <S.HistoryTab>Pending</S.HistoryTab>
                       </TabHeader>
                       <TabHeader>
-                        <S.HistoryTab>Ready to Claim</S.HistoryTab>
+                        <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
+                          Ready to Claim
+                          <span>{hasPendingClaims}</span>
+                        </S.HistoryTab>
                       </TabHeader>
                       <TabHeader>
                         <S.HistoryTab>Claimed</S.HistoryTab>

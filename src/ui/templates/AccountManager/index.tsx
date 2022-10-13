@@ -36,6 +36,7 @@ import {
   selectHasExtension,
   selectIsCurrentMainAccountInWallet,
   selectIsSetMainAccountLoading,
+  selectRegisterTradeAccountRemoving,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
 import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
@@ -114,7 +115,7 @@ export const AccountManagerTemplate = () => {
     ]
   );
   const userBalances = useMemo(
-    () => balances?.filter((value) => assets.some((item) => item.assetId === value.assetId)),
+    () => balances?.filter((value) => assets.some((item) => item.asset_id === value.assetId)),
     [assets, balances]
   );
 
@@ -149,8 +150,7 @@ export const AccountManagerTemplate = () => {
         <Modal.Body>
           <UnlockAccount
             handleClose={handleUnlockClose}
-            handleSelectTradeAccount={handleSelectTradeAccount}
-            address={unlockAccount.address}
+            onSubmit={() => handleSelectTradeAccount(unlockAccount.address)}
           />
         </Modal.Body>
       </Modal>
@@ -352,10 +352,10 @@ export const AccountManagerTemplate = () => {
                     <Table.Body striped>
                       {assets.map((item) => {
                         const balance = userBalances?.find(
-                          (value) => value.assetId === item.assetId
+                          (value) => value.assetId === item.asset_id
                         );
                         return (
-                          <Table.Row key={item.assetId}>
+                          <Table.Row key={item.asset_id}>
                             <Table.Cell>
                               <S.CellFlex>
                                 <S.TokenIcon>
@@ -427,12 +427,15 @@ const Card = ({
     await navigator.clipboard.writeText(address);
     buttonRef.current.innerHTML = "Copied";
   };
-
+  const tradeAccountsInLoading = useReduxSelector(selectRegisterTradeAccountRemoving);
+  const isLoading = useMemo(
+    () => !!tradeAccountsInLoading.filter((v) => v === address)?.length,
+    [tradeAccountsInLoading, address]
+  );
   const shortAddress = address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
-  // TODO!: Create removing sagas
-  const isRemoving = false;
+
   return (
-    <Loading message="Loading..." isVisible={isRemoving}>
+    <Loading message="Loading..." isVisible={isLoading}>
       <S.Card isActive={isUsing}>
         <S.CardHeader>
           <S.CardHeaderContent>

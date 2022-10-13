@@ -14,6 +14,22 @@ export const AUTH_RESEND_CODE_FETCH = "auth/RESEND_CODE_FETCH";
 export const AUTH_RESEND_CODE_DATA = "auth/RESEND_CODE_DATA";
 export const AUTH_RESEND_CODE_ERROR = "auth/RESEND_CODE_ERROR";
 
+export const AUTH_CHANGE_PASSWORD_FETCH = "auth/AUTH_CHANGE_PASSWORD_FETCH";
+export const AUTH_CHANGE_PASSWORD_DATA = "auth/AUTH_CHANGE_PASSWORD_DATA";
+export const AUTH_CHANGE_PASSWORD_ERROR = "auth/AUTH_CHANGE_PASSWORD_ERROR";
+
+export const AUTH_FORGOT_PASSWORD_FETCH = "auth/AUTH_FORGOT_PASSWORD_FETCH";
+export const AUTH_FORGOT_PASSWORD_DATA = "auth/AUTH_FORGOT_PASSWORD_DATA";
+export const AUTH_FORGOT_PASSWORD_ERROR = "auth/AUTH_FORGOT_PASSWORD_ERROR";
+
 export const AUTH_LOGOUT_FETCH = "auth/LOGOUT_FETCH";
 export const AUTH_LOGOUT_DATA = "auth/LOGOUT_DATA";
 export const AUTH_LOGOUT_FAILURE = "auth/LOGOUT_FAILURE";
+
+export const AUTH_ERROR_CODES = {
+  USER_ALREADY_EXIST: "UsernameExistsException", // email account already exists
+  USER_NOT_CONFIRMED: "UserNotConfirmedException", // resend code verification
+  PASSWORD_RESET_REQUIRED: "PasswordResetRequiredException", // Reset Password Required
+  NOT_AUTHORIZED: "NotAuthorizedException", // Not Authorised (Incorrect Password)
+  RESOURCE_NOT_FOUND: "ResourceNotFoundException", // User Not found
+};

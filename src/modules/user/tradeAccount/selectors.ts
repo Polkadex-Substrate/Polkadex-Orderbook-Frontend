@@ -34,3 +34,6 @@ export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
 
 export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
   state.user.polkadotWallet.registerAccountSuccess;
+
+export const selectRegisterTradeAccountRemoving = (state: RootState): Array<string> =>
+  state.user.polkadotWallet.removesInLoading;
