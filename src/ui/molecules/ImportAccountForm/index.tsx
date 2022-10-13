@@ -288,7 +288,6 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
       reader.onload = () => {
         if (reader.result) {
           const decodedFile = JSON.parse(String(reader.result));
-          console.log(decodedFile);
           setFieldValue("file", decodedFile?.address?.length ? decodedFile : "");
         }
       };
