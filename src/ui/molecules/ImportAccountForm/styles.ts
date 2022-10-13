@@ -210,6 +210,7 @@ export const Footer = styled.div`
     }
   `}
 `;
+
 export const Menmonic = styled.div`
   display: flex;
   flex-direction: column;
@@ -229,6 +230,62 @@ export const Maintenance = styled.div`
     }
     p {
       color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const Upload = styled(Container)<{ isDragReject?: boolean; isDragAccept?: boolean }>`
+  ${({ theme, isDragReject, isDragAccept }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+    border: 2px dashed ${theme.colors.secondaryBackground};
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    div {
+      width: 2.5rem;
+      margin-bottom: 1rem;
+      svg {
+        fill: ${theme.colors.tertiaryText};
+        stroke: ${theme.colors.tertiaryText};
+      }
+    }
+    small {
+      color: ${theme.colors.red};
+      font-size: 1.3rem;
+    }
+
+    ${isDragAccept &&
+    css`
+      border-color: ${theme.colors.green};
+    `}
+    ${isDragReject &&
+    css`
+      border-color: ${theme.colors.red};
+    `}
+  `}
+`;
+
+export const File = styled(Container)`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    button {
+      width: 2.5rem;
+      padding: 0.1rem;
+      border-radius: 10rem;
+      transition: background-color 0.4s ease;
+      svg {
+        fill: ${theme.colors.text};
+        stroke: ${theme.colors.text};
+      }
+      :hover {
+        background: ${theme.colors.secondaryBackground};
+      }
     }
   `}
 `;

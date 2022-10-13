@@ -150,3 +150,4 @@ export * from "./LoadingAlert";
 export * from "./Info";
 export * from "./AddMore";
 export * from "./AddWallet";
+export * from "./Upload";
