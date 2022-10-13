@@ -35,7 +35,11 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     tradeAddr = tradeAddress;
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
-    if (selectedControllerAccount.account?.address && email) {
+
+    const hasAddressAndEmail =
+      !!selectedControllerAccount.account?.address?.length && !!email?.length;
+
+    if (hasAddressAndEmail) {
       const { data, signature } = yield call(
         createSignedData,
         selectedControllerAccount,
@@ -65,7 +69,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         throw new Error("Extrinsic failed");
       }
     } else {
-      throw new Error("Email or address no valid");
+      throw new Error("Email or address is not valid");
     }
   } catch (error) {
     console.log("error:", error);
