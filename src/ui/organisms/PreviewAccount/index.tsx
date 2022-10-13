@@ -110,10 +110,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               <Dropdown.Item
                 key={"1"}
                 onAction={() =>
-                  // The button should be disabled instead
-                  Boolean(tradingAccountInBrowser)
-                    ? dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
-                    : undefined
+                 dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
                 }>
                 Remove from blockchain
               </Dropdown.Item>
