@@ -18,6 +18,7 @@ import {
   USER_TRADE_ACCOUNT_IMPORT_DATA,
   USER_TRADE_ACCOUNT_MODAL_CANCEL,
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  USER_TRADE_ACCOUNT_IMPORT_JSON,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
@@ -68,6 +69,7 @@ export const TradeAccountsReducer = (
         importAccountSuccess: true,
         registerAccountLoading: false,
       };
+
     case USER_TRADE_ACCOUNTS_DATA:
       return {
         ...state,
@@ -84,8 +86,9 @@ export const TradeAccountsReducer = (
       return {
         ...state,
         registerAccountLoading: false,
-        isFetching: true,
+        isFetching: false,
       };
+    case USER_TRADE_ACCOUNT_IMPORT_JSON:
     case USER_TRADE_ACCOUNT_IMPORT_FETCH:
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
       return {

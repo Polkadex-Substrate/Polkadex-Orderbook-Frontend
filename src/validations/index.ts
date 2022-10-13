@@ -86,13 +86,9 @@ export const importAccountValidations = Yup.object().shape({
     .min(12, "Must be exactly 12 digits")
     .max(12, "Must be exactly 12 digits"),
 });
+
 export const importAccountJsonValidations = Yup.object().shape({
-  name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
-  passcode: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits")
-    .nullable(),
+  passcode: Yup.string().nullable(),
   file: Yup.mixed().required("Required"),
 });
 export const linkAccountValidations = Yup.object().shape({

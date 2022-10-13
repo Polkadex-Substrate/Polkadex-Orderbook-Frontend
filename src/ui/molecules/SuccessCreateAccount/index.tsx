@@ -51,38 +51,40 @@ export const SuccessCreateAccount = ({
             <span>{account?.address}</span>
           </S.WalletContent>
         </S.Wallet>
-        <S.Words>
-          <S.WordsWrapper>
-            <S.WordsInfo>
-              <p>Mnemonic</p>
-              <span>Never share your mnemonic seed with anyone.</span>
-            </S.WordsInfo>
-            <S.WordsTitle type="button" onClick={() => setState(!state)}>
-              <div>
-                <IconComponent />
-              </div>
-              <span>Hide</span>
-            </S.WordsTitle>
-          </S.WordsWrapper>
-          {state && (
-            <>
-              <S.WordsContainer>
-                {mnemonic?.map((value, i) => (
-                  <div key={i}>{value}</div>
-                ))}
-              </S.WordsContainer>
-              <S.WordsFooter>
-                <span>Paper wallet</span>
-                <button type="button">
-                  <div>
-                    <Icons.Print />
-                  </div>
-                  Print
-                </button>
-              </S.WordsFooter>
-            </>
-          )}
-        </S.Words>
+        {!!mnemonic?.length && (
+          <S.Words>
+            <S.WordsWrapper>
+              <S.WordsInfo>
+                <p>Mnemonic</p>
+                <span>Never share your mnemonic seed with anyone.</span>
+              </S.WordsInfo>
+              <S.WordsTitle type="button" onClick={() => setState(!state)}>
+                <div>
+                  <IconComponent />
+                </div>
+                <span>Hide</span>
+              </S.WordsTitle>
+            </S.WordsWrapper>
+            {state && (
+              <>
+                <S.WordsContainer>
+                  {mnemonic?.map((value, i) => (
+                    <div key={i}>{value}</div>
+                  ))}
+                </S.WordsContainer>
+                <S.WordsFooter>
+                  <span>Paper wallet</span>
+                  <button type="button">
+                    <div>
+                      <Icons.Print />
+                    </div>
+                    Print
+                  </button>
+                </S.WordsFooter>
+              </>
+            )}
+          </S.Words>
+        )}
 
         <S.DefaultAccount>
           <span>Default trade account</span>
