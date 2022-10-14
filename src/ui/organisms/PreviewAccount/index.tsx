@@ -11,12 +11,11 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
-  selectExtensionWalletAccounts,
+  selectMainAccount,
   selectTradeAccount,
   selectUsingAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { userMainAccountDetails } from "@polkadex/orderbook/modules/user/extensionWallet/helpers";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 
@@ -34,8 +33,7 @@ enum menuDisableKeysEnum {
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
   const isRemoving = false;
-  const extensionWalletAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const mainAccountDetails = userMainAccountDetails(mainAccAddress, extensionWalletAccounts);
+  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress))
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected.address));
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
