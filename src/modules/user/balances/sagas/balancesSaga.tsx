@@ -28,9 +28,7 @@ export function* balancesSaga(_balancesFetch: BalancesFetch) {
       const assetMap = yield select(selectAssetIdMap);
       const balances = yield call(() => fetchbalancesAsync(account.address));
       const list = balances.map((balance: IBalanceFromDb) => {
-        const asset = isAssetPDEX(balance.asset_type)
-          ? POLKADEX_ASSET
-          : assetMap[balance.asset_type];
+        const asset = assetMap[balance.asset_type];
         return {
           asset_id: asset.asset_id.toString(),
           name: asset.name,

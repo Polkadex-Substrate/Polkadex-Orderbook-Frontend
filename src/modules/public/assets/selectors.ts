@@ -33,12 +33,12 @@ export const selectGetAsset =
       // @ts-ignore
       assetId = assetId.asset;
     }
-    return isAssetPDEX(assetId)
+    return isAssetPDEX(assetId.toString())
       ? POLKADEX_ASSET
       : state.public.assets.list.find((asset) => asset.asset_id === assetId.toString());
   };
 
-export const isAssetPDEX = (assetId): boolean =>
+export const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>
   assetId === "-1" ||
   assetId === null ||
   assetId === -1 ||

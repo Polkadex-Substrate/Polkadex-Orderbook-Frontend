@@ -12,6 +12,8 @@ import {
 
 import { signPayload } from "./enclavePayloadSigner";
 
+import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
+
 export const createOrderPayload = (
   api: ApiPromise,
   proxyAddress: string,
@@ -25,8 +27,8 @@ export const createOrderPayload = (
   client_order_id: Uint8Array,
   mainAddress: string
 ): Codec => {
-  const baseAssetId = baseAsset !== "-1" ? baseAsset : "PDEX";
-  const quoteAssetId = quoteAsset !== "-1" ? quoteAsset : "PDEX";
+  const baseAssetId = !isAssetPDEX(baseAsset) ? baseAsset : "PDEX";
+  const quoteAssetId = !isAssetPDEX(quoteAsset) ? quoteAsset : "PDEX";
   const orderType = { [type.toUpperCase()]: null };
   const orderSide = {
     [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
