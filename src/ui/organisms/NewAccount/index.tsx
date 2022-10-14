@@ -9,7 +9,6 @@ import {
   Loading,
   SuccessCreateAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectImportTradeAccountSuccess,
@@ -22,7 +21,7 @@ const data = [
   {
     title: "Add account",
     description:
-      "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control. Any data is stored, all data is stored in your browser.",
+      "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control. All data is stored in your browser.",
     button: "Create account",
   },
   {

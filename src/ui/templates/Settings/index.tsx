@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
