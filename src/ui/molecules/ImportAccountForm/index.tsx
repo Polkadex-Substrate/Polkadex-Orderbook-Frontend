@@ -268,13 +268,15 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
       passcode: "",
       isPasscodeVisible: false,
       file: null,
+      name: "",
     },
     validationSchema: importAccountJsonValidations,
-    onSubmit: ({ passcode, file }) => {
+    onSubmit: ({ passcode, file, name }) => {
       dispatch(
         importTradeAccountJsonFetch({
           file,
           password: passcode,
+          name,
         })
       );
     },
@@ -349,6 +351,31 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
             </button>
           </S.File>
         )}
+        <S.WalletName>
+          <S.WalletNameWrapper>
+            <div>
+              <span>Wallet Name</span>
+              <input
+                {...getFieldProps("name")}
+                type="text"
+                placeholder="Enter a wallet name"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                setFieldValue("name", generateUsername({ useRandomNumber: false }))
+              }>
+              Random
+            </button>
+          </S.WalletNameWrapper>
+          <S.WalletError isNegative={values.name.length >= 31}>
+            {errors.name && touched.name && errors.name ? <p>{errors.name}</p> : <div />}
+            <small>
+              <strong>{values.name.length}</strong>/30
+            </small>
+          </S.WalletError>
+        </S.WalletName>
         <AvailableMessage>
           <S.Password>
             <S.PasswordWrapper>

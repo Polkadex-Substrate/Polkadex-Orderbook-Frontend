@@ -14,10 +14,13 @@ import {
 let tradeAddress = "";
 
 export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch) {
-  const { file } = action.payload;
+  const { file, name } = action.payload;
   try {
-    const pair = keyring.keyring.addFromJson(file);
+    const modifiedFile = file;
+    if (name?.length) modifiedFile.meta.name = name;
+    const pair = keyring.keyring.addFromJson(modifiedFile);
     tradeAddress = pair?.address;
+
     yield put(tradeAccountPush({ pair }));
     yield put(
       registerTradeAccountData({

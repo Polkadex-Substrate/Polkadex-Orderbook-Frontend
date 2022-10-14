@@ -90,6 +90,7 @@ export const importAccountValidations = Yup.object().shape({
 export const importAccountJsonValidations = Yup.object().shape({
   passcode: Yup.string().nullable(),
   file: Yup.mixed().required("Required"),
+  name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
 });
 export const linkAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
