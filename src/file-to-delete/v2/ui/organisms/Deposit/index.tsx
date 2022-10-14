@@ -17,7 +17,11 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { depositValidations } from "@polkadex/orderbook/validations";
-import { IPublicAsset, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import {
+  IPublicAsset,
+  isAssetPDEX,
+  selectAllAssets,
+} from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 const defaultValues = {
@@ -40,10 +44,9 @@ const Deposit = () => {
         initialValues={defaultValues}
         validationSchema={depositValidations}
         onSubmit={async (values) => {
-          const asset =
-            values.asset.assetId === "-1"
-              ? { polkadex: null }
-              : { asset: values.asset.assetId };
+          const asset = isAssetPDEX(values?.asset?.asset_id)
+            ? { polkadex: null }
+            : { asset: values.asset.asset_id };
         }}>
         {({ values, errors, touched, setFieldValue }) => (
           <Form>
