@@ -18,7 +18,7 @@ export const selectMainAccount =
   (address: string) =>
   (state: RootState): ExtensionAccount =>
     address &&
-    selectExtensionWalletAccounts(state).find(({ account }) => account?.address.toLowerCase() === address.toLowerCase());
+    selectExtensionWalletAccounts(state).find(({ account }) => account?.address?.toLowerCase() === address?.toLowerCase());
 
 export const selectIsRegisterMainAccountLoading = (state: RootState): boolean =>
   state.user.extensionWallet.registerMainAccountLoading;

@@ -5,5 +5,5 @@ export const userMainAccountDetails = (
   extensionMainAccount: ExtensionAccount[]
 ) =>
   extensionMainAccount.find(
-    ({ account }) => account.address.toLowerCase() === userMainAccount.toLowerCase()
+    ({ account }) => account.address?.toLowerCase() === userMainAccount?.toLowerCase()
   );
