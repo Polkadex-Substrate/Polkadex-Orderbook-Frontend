@@ -6,9 +6,24 @@ import * as T from "./types";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectBrowserTradeAccounts, selectTradeAccount } from "@polkadex/orderbook-modules";
+import { useState } from "react";
+import { KeyringPair } from "@polkadot/keyring/types";
+import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 
 export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const router = useRouter();
+  const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts);
+  const [selectedAccount, setSelectedAccount] = useState<KeyringPair | null>(null);
+
+  const handleClick = (addr: string) => {
+    const acc = tradingAccounts.find(
+      (tradeAcc) => tradeAcc.address?.toLowerCase() === addr?.toLowerCase()
+    );
+    setSelectedAccount(acc);
+  };
+
   return (
     <S.Wrapper>
       <S.Profile>
@@ -28,7 +43,10 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                     <Icons.Copy />
                   </button>
                   <p>
-                    Occasional-chamois • <small>5Hmu...aaF8</small>
+                    {selectedAccount ? selectedAccount.meta.name : "Choose trade account"} •{" "}
+                    <small>
+                      {selectedAccount ? transformAddress(selectedAccount.address) : ""}
+                    </small>
                   </p>
                 </S.SwitchCardInfo>
               </S.SwitchCardContent>
@@ -38,7 +56,11 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
             </S.SwitchCard>
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item>Testing</Dropdown.Item>
+            {tradingAccounts.slice(0, 4).map((acc, i) => (
+              <Dropdown.Item onAction={handleClick} key={acc.address}>
+                {acc.address}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
         <S.SwitchCard>

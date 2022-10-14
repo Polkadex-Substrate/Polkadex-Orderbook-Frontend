@@ -11,18 +11,44 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
+  selectMainAccount,
+  selectTradeAccount,
+  selectUsingAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 
 type Props = {
   onClose: () => void;
   selected: TradeAccount;
+  mainAccAddress: string;
 };
 
-export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
-  const using = false;
+enum menuDisableKeysEnum {
+  REMOVE_FROM_BLOCKCHAIN = 1,
+  REMOVE_FROM_BROWSER
+}
+
+export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
   const isRemoving = false;
+  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress))
+  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected.address));
+  const usingAccount = useReduxSelector(selectUsingAccount);
+  const using = usingAccount.tradeAddress === selected?.address;
+
+  const menuDisableKeys = () => {
+    const disableKeysList = [];
+    if (!Boolean(mainAccountDetails)) {
+      disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BLOCKCHAIN}`);
+    }
+    if (!Boolean(tradingAccountInBrowser)) {
+      disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BROWSER}`);
+    }
+
+    return disableKeysList;
+  };
 
   return (
     <Loading isVisible={isRemoving}>
@@ -38,15 +64,21 @@ export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
               <WalletAddress label="Trade wallet" information={selected?.address} />
               <WalletAddress
                 label="Controller wallet"
-                information="Orderbook testing"
-                additionalInformation="5E1hRUGF5rCs...juU4NKGrX5P8"
+                information={
+                  mainAccountDetails
+                    ? mainAccountDetails?.account?.meta?.name
+                    : "Main Account not present in browser"
+                }
+                additionalInformation={
+                  mainAccountDetails ? transformAddress(mainAccAddress) : ""
+                }
                 isLocked
               />
               <ProtectedByPassword label="Protected by password" />
               <DefaultAccount label="Default trade account" />
             </S.Box>
             <S.Button
-              disabled={using}
+              disabled={!Boolean(tradingAccountInBrowser) || !Boolean(mainAccountDetails)}
               onClick={
                 using
                   ? undefined
@@ -58,7 +90,11 @@ export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
           </S.Container>
         </S.Content>
         <S.Footer>
-          <S.ExportButton type="button">Export</S.ExportButton>
+          <S.ExportButton
+            disabled={!Boolean(tradingAccountInBrowser) || !Boolean(mainAccountDetails)}
+            type="button">
+            Export
+          </S.ExportButton>
           <Dropdown>
             <Dropdown.Trigger>
               <S.DropdownButton type="button">
@@ -68,14 +104,16 @@ export const PreviewAccount = ({ onClose = undefined, selected }: Props) => {
                 </div>
               </S.DropdownButton>
             </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid">
+            <Dropdown.Menu fill="secondaryBackgroundSolid" disabledKeys={menuDisableKeys()}>
               <Dropdown.Item
+                key={"1"}
                 onAction={() =>
-                  dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+                 dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
                 }>
                 Remove from blockchain
               </Dropdown.Item>
               <Dropdown.Item
+                key={"2"}
                 onAction={() =>
                   dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
                 }>
@@ -101,7 +139,6 @@ const WalletName = ({ label = "", information = "" }) => {
       setState(!state);
     },
   });
-  console.log(errors, values);
   return state ? (
     <form onSubmit={handleSubmit}>
       <S.Card>

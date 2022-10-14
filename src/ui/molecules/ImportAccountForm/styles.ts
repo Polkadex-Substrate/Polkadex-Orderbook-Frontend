@@ -210,7 +210,6 @@ export const Footer = styled.div`
     }
   `}
 `;
-
 export const Menmonic = styled.div`
   display: flex;
   flex-direction: column;
