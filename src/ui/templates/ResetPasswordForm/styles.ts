@@ -110,3 +110,33 @@ export const Show = styled.button`
     }
   `}
 `;
+export const Success = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 8rem 2rem 9rem 2rem;
+    border-radius: 2rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    margin: 2rem;
+    @media screen and (min-width: 880px) {
+      min-height: 40rem;
+    }
+    div {
+      width: 4rem;
+      img {
+        width: 100%;
+      }
+    }
+    p {
+      max-width: 50rem;
+      line-height: 1.5;
+    }
+    small {
+      opacity: 0.5;
+    }
+  `}
+`;

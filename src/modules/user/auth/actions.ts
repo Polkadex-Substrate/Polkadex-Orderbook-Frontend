@@ -12,6 +12,7 @@ import {
   AUTH_FORGOT_PASSWORD_DATA,
   AUTH_FORGOT_PASSWORD_ERROR,
   AUTH_FORGOT_PASSWORD_FETCH,
+  AUTH_FORGOT_PASSWORD_CODE,
   AUTH_LOGOUT_DATA,
   AUTH_LOGOUT_FAILURE,
   AUTH_LOGOUT_FETCH,
@@ -24,6 +25,7 @@ import {
   AUTH_SIGN_UP_DATA,
   AUTH_SIGN_UP_ERROR,
   AUTH_SIGN_UP_FETCH,
+  AUTH_FORGOT_PASSWORD_RESET,
 } from "./constants";
 
 export interface SignUpKeyRingData {
@@ -149,13 +151,21 @@ export interface ChangePasswordError {
 export interface ForgotPasswordFetch {
   type: typeof AUTH_FORGOT_PASSWORD_FETCH;
   payload: {
-    username: string;
     code: string;
     newPassword: string;
   };
 }
 export interface ForgotPasswordData {
   type: typeof AUTH_FORGOT_PASSWORD_DATA;
+  payload?: string;
+}
+export interface ForgotPasswordCode {
+  type: typeof AUTH_FORGOT_PASSWORD_CODE;
+  payload: string;
+}
+export interface ForgotPasswordReset {
+  type: typeof AUTH_FORGOT_PASSWORD_RESET;
+  payload?: boolean;
 }
 export interface ForgotPasswordError {
   type: typeof AUTH_FORGOT_PASSWORD_ERROR;
@@ -183,7 +193,9 @@ export type AuthAction =
   | ChangePasswordError
   | ForgotPasswordFetch
   | ForgotPasswordData
-  | ForgotPasswordError;
+  | ForgotPasswordError
+  | ForgotPasswordCode
+  | ForgotPasswordReset;
 
 export const signInFetch = (payload: SignInFetch["payload"]): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,
@@ -272,6 +284,18 @@ export const changePasswordError = (error: CommonError): ChangePasswordError => 
   error,
 });
 
+export const forgotPasswordCode = (
+  payload: ForgotPasswordCode["payload"]
+): ForgotPasswordCode => ({
+  type: AUTH_FORGOT_PASSWORD_CODE,
+  payload,
+});
+
+export const forgotPasswordReset = (payload = false): ForgotPasswordReset => ({
+  type: AUTH_FORGOT_PASSWORD_RESET,
+  payload,
+});
+
 export const forgotPasswordFetch = (
   payload: ForgotPasswordFetch["payload"]
 ): ForgotPasswordFetch => ({
@@ -279,8 +303,11 @@ export const forgotPasswordFetch = (
   payload,
 });
 
-export const forgotPasswordData = (): ForgotPasswordData => ({
+export const forgotPasswordData = (
+  payload?: ForgotPasswordData["payload"]
+): ForgotPasswordData => ({
   type: AUTH_FORGOT_PASSWORD_DATA,
+  payload,
 });
 
 export const forgotPasswordError = (error: CommonError): ForgotPasswordError => ({

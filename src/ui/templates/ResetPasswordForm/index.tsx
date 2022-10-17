@@ -1,6 +1,8 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import confetti from "canvas-confetti";
 
 import * as S from "./styles";
 
@@ -8,6 +10,12 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { newPasswordValidations } from "@polkadex/orderbook/validations";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import {
+  forgotPasswordFetch,
+  selectForgotPasswordLoading,
+  selectForgotPasswordSuccess,
+} from "@polkadex/orderbook-modules";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export const ResetPasswordFormTemplate = () => {
   const [state, setState] = useState(false);
@@ -15,14 +23,19 @@ export const ResetPasswordFormTemplate = () => {
     password: false,
     repeatPassword: false,
   });
-
+  const isLoading = useReduxSelector(selectForgotPasswordLoading);
+  const isSuccess = useReduxSelector(selectForgotPasswordSuccess);
+  const dispatch = useDispatch();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
+      code: "",
     },
     validationSchema: newPasswordValidations,
-    onSubmit: (values) => console.log(values),
+    onSubmit: ({ code, password }) => {
+      dispatch(forgotPasswordFetch({ code, newPassword: password }));
+    },
   });
 
   return (
@@ -40,59 +53,98 @@ export const ResetPasswordFormTemplate = () => {
                 <OrderbookLogo />
               </div>
             </S.Title>
-            <S.Card>
-              <S.Column />
-              <S.Box>
-                <S.BoxTitle>
-                  <h1>New password</h1>
-                  <p>For safety of your account, please use strong password.</p>
-                </S.BoxTitle>
-                <form onSubmit={handleSubmit}>
-                  <InputLine
-                    name="password"
-                    type={view.password ? "text" : "password"}
-                    label="Password"
-                    placeholder="Enter your password"
-                    error={errors.password && touched.password && errors.password}
-                    {...getFieldProps("password")}>
-                    <S.Show
-                      type="button"
-                      onClick={() => setView({ ...view, password: !view.password })}>
-                      {view.password ? <Icons.Hidden /> : <Icons.Show />}
-                    </S.Show>
-                  </InputLine>
-                  <InputLine
-                    name="repeatPassword"
-                    type={view.repeatPassword ? "text" : "password"}
-                    label="Repeat password"
-                    placeholder="Repeat your password"
-                    error={
-                      errors.repeatPassword && touched.repeatPassword && errors.repeatPassword
-                    }
-                    {...getFieldProps("repeatPassword")}>
-                    <S.Show
-                      type="button"
-                      onClick={() =>
-                        setView({ ...view, repeatPassword: !view.repeatPassword })
-                      }>
-                      {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
-                    </S.Show>
-                  </InputLine>
-                  <Button
-                    disabled={!(isValid && dirty)}
-                    type="submit"
-                    size="extraLarge"
-                    background="primary"
-                    color="white"
-                    isFull>
-                    Continue
-                  </Button>
-                </form>
-              </S.Box>
-            </S.Card>
+            {isSuccess ? (
+              <Success />
+            ) : (
+              <S.Card>
+                <S.Column />
+                <S.Box>
+                  <S.BoxTitle>
+                    <h1>New password</h1>
+                    <p>For safety of your account, please use strong password.</p>
+                  </S.BoxTitle>
+                  <form onSubmit={handleSubmit}>
+                    <InputLine
+                      name="code"
+                      label="Email code verification"
+                      placeholder="000000"
+                      error={errors.code && touched.code && errors.code}
+                      disabled={isLoading}
+                      {...getFieldProps("code")}
+                    />
+                    <InputLine
+                      name="password"
+                      type={view.password ? "text" : "password"}
+                      label="Password"
+                      placeholder="Enter your password"
+                      disabled={isLoading}
+                      error={errors.password && touched.password && errors.password}
+                      {...getFieldProps("password")}>
+                      <S.Show
+                        type="button"
+                        onClick={() => setView({ ...view, password: !view.password })}>
+                        {view.password ? <Icons.Hidden /> : <Icons.Show />}
+                      </S.Show>
+                    </InputLine>
+                    <InputLine
+                      name="repeatPassword"
+                      type={view.repeatPassword ? "text" : "password"}
+                      label="Repeat password"
+                      placeholder="Repeat your password"
+                      disabled={isLoading}
+                      error={
+                        errors.repeatPassword &&
+                        touched.repeatPassword &&
+                        errors.repeatPassword
+                      }
+                      {...getFieldProps("repeatPassword")}>
+                      <S.Show
+                        type="button"
+                        onClick={() =>
+                          setView({ ...view, repeatPassword: !view.repeatPassword })
+                        }>
+                        {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
+                      </S.Show>
+                    </InputLine>
+                    <Button
+                      disabled={!(isValid && dirty)}
+                      type="submit"
+                      size="extraLarge"
+                      background="primary"
+                      color="white"
+                      isLoading={isLoading}
+                      isFull>
+                      Continue
+                    </Button>
+                  </form>
+                </S.Box>
+              </S.Card>
+            )}
           </S.Container>
         </S.Wrapper>
       </S.Main>
     </>
+  );
+};
+
+const Success = () => {
+  useEffect(() => {
+    confetti({
+      zIndex: 9999,
+      origin: {
+        x: 0.53,
+        y: 0.5,
+      },
+    });
+  }, []);
+  return (
+    <S.Success>
+      <div>
+        <img src="/img/success.svg" alt="email sent" />
+      </div>
+      <h2>Password changed!</h2>
+      <p>Awesome, your password has been changed successfully.</p>
+      <small>You will be automatically redirected in 5 seconds. </small>
+    </S.Success>
   );
 };

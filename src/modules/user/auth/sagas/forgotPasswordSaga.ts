@@ -1,19 +1,25 @@
 import { Auth } from "aws-amplify";
-import { call, put } from "redux-saga/effects";
+import { call, delay, put, select } from "redux-saga/effects";
+import Router from "next/router";
 
 import {
   forgotPasswordData,
   forgotPasswordError,
   ForgotPasswordFetch,
   sendError,
+  selectForgotPasswordEmail,
+  forgotPasswordReset,
 } from "@polkadex/orderbook-modules";
 
 export function* forgotPasswordSaga(action: ForgotPasswordFetch) {
-  const { username, code, newPassword } = action.payload;
+  const { code, newPassword } = action.payload;
+  const email = yield select(selectForgotPasswordEmail);
   try {
-    const data = yield call(forgotPassword, username, code, newPassword);
-    console.log(data);
+    yield call(forgotPassword, email, code, newPassword);
     yield put(forgotPasswordData());
+    yield delay(5000);
+    Router.push("/signIn");
+    yield put(forgotPasswordReset(true));
   } catch (error) {
     console.log(error);
     yield put(

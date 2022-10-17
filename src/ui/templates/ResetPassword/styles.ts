@@ -94,3 +94,33 @@ export const Box = styled.div`
 `;
 
 export const BoxTitle = styled.div``;
+export const Success = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 2rem 2rem 5rem 2rem;
+    border-radius: 2rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    margin: 2rem;
+    @media screen and (min-width: 880px) {
+      min-height: 40rem;
+    }
+    div {
+      width: 20rem;
+      img {
+        width: 100%;
+      }
+    }
+    p {
+      max-width: 50rem;
+      line-height: 1.5;
+    }
+    small {
+      opacity: 0.5;
+    }
+  `}
+`;

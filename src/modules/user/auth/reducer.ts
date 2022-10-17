@@ -17,6 +17,8 @@ import {
   AUTH_FORGOT_PASSWORD_FETCH,
   AUTH_FORGOT_PASSWORD_DATA,
   AUTH_FORGOT_PASSWORD_ERROR,
+  AUTH_FORGOT_PASSWORD_CODE,
+  AUTH_FORGOT_PASSWORD_RESET,
   AUTH_CHANGE_PASSWORD_FETCH,
   AUTH_CHANGE_PASSWORD_DATA,
   AUTH_CHANGE_PASSWORD_ERROR,
@@ -39,6 +41,7 @@ export interface AuthState {
   signUpSuccess: boolean;
   forgotPasswordLoading: boolean;
   forgotPasswordSuccess: boolean;
+  forgotPasswordEmail?: string;
   changePasswordLoading: boolean;
   changePasswordSuccess: boolean;
 }
@@ -56,6 +59,7 @@ export const initialStateAuth: AuthState = {
   signUpSuccess: false,
   forgotPasswordLoading: false,
   forgotPasswordSuccess: false,
+  forgotPasswordEmail: "",
   changePasswordLoading: false,
   changePasswordSuccess: false,
 };
@@ -106,6 +110,15 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
       return { ...state, forgotPasswordLoading: false, forgotPasswordSuccess: true };
     case AUTH_FORGOT_PASSWORD_ERROR:
       return { ...state, forgotPasswordLoading: false, forgotPasswordSuccess: false };
+    case AUTH_FORGOT_PASSWORD_CODE:
+      return { ...state, forgotPasswordLoading: true, forgotPasswordEmail: action.payload };
+    case AUTH_FORGOT_PASSWORD_RESET:
+      return {
+        ...state,
+        forgotPasswordEmail: action.payload ? "" : state.forgotPasswordEmail,
+        forgotPasswordLoading: false,
+        forgotPasswordSuccess: false,
+      };
     case AUTH_CHANGE_PASSWORD_FETCH:
       return { ...state, changePasswordLoading: true };
     case AUTH_CHANGE_PASSWORD_DATA:
