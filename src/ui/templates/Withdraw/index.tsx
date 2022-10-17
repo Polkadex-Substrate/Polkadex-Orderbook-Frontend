@@ -44,7 +44,6 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { cleanPositiveFloatInput } from "@polkadex/web-helpers";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);

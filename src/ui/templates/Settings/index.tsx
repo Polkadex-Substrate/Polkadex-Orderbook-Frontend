@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
@@ -96,7 +95,10 @@ export const SettingsTemplate = () => {
       <Modal open={isActive} onClose={handleClose} placement="start right">
         <NewAccount
           onClose={handleClose}
-          selected={{ address: usingAccount.tradeAddress, name: usingAccount.tradeAddress }}
+          selected={{
+            address: currentControllerWallet?.account.address,
+            name: currentControllerWallet?.account?.meta?.name,
+          }}
           isLoading={isLoading}
         />
       </Modal>
@@ -128,13 +130,13 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {true && (
+                  {
                     <ButtonWallet
                       type="button"
                       onClick={() => dispatch(registerAccountModalActive())}>
                       New Account
                     </ButtonWallet>
-                  )}
+                  }
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
