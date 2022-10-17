@@ -79,10 +79,8 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             </S.Box>
             <S.Button
               disabled={!tradingAccountInBrowser || !mainAccountDetails}
-              onClick={
-                using
-                  ? undefined
-                  : () => dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
+              onClick={() =>
+                dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
               }
               type="button">
               {using ? "Using" : "Use"}

@@ -12,7 +12,7 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
   try {
     const mainAddress = yield select(selectLinkedMainAddress(tradeAddress));
     if (mainAddress) {
-      yield put(userAccountSelectData({ account: { tradeAddress, mainAddress } }));
+      yield put(userAccountSelectData({ tradeAddress, mainAddress }));
     } else {
       throw new Error("invalid main account");
     }

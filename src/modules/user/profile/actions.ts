@@ -73,7 +73,7 @@ export interface UserAccountSelectFetch {
 
 export interface UserAccountSelectData {
   type: typeof PROFILE_USER_SELECT_ACCOUNT_DATA;
-  payload: { account: UserAccount };
+  payload: UserAccount;
 }
 export type ProfileAction =
   | UserFetch
