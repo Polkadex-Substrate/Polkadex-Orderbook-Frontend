@@ -7,7 +7,6 @@ const fileReader = new FileReader();
 const createBlob = (fileBytes: Uint8Array): Blob =>
   new Blob([fileBytes], { type: "text/plain;charset=utf-8" });
 
-const expectedJsonProperties: Array<string> = ["address", "encoding", "meta"];
 
 export const downloadAccount = (pair: KeyringPair, password: string, address: string) => {
   try {
@@ -19,7 +18,7 @@ export const downloadAccount = (pair: KeyringPair, password: string, address: st
   }
 };
 
-export const uploadAccount = (fileBytes: Uint8Array) => {
+export const uploadAccount = (fileBytes: Uint8Array, password: string = null) => {
   if (!fileBytes || !fileBytes.length) {
     console.error("Error retrieving file list");
     return;
@@ -33,13 +32,8 @@ export const uploadAccount = (fileBytes: Uint8Array) => {
         // Cast to type 'any' since property 'result' does exist on type 'EventTarget'
         // Reference: https://stackoverflow.com/a/45017155/3208553
         const uploadedFileKeyringPair = JSON.parse((event.target as any).result);
-        const actualJsonProperties: Array<string> = Object.keys(uploadedFileKeyringPair);
-
-        // if (arrayContainsArray(actualJsonProperties, expectedJsonProperties)) {
-        //   keyring.loadAll();
-        // } else {
-        //   throw Error("Unable to load account with invalid JSON property names");
-        // }
+        const pair = keyring.restoreAccount(uploadedFileKeyringPair, password);
+        return pair;
       }
     } catch (error) {
       console.error("Error uploading file: ", error);
