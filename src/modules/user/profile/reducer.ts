@@ -6,6 +6,7 @@ import {
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_AUTH_FETCH,
   PROFILE_USER_DATA,
+  PROFILE_USER_SELECT_ACCOUNT_DATA,
 } from "./constants";
 
 export interface ProfileState {
@@ -79,6 +80,12 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         ...state,
         isDataLoading: false,
         userData: action.payload,
+      };
+    }
+    case PROFILE_USER_SELECT_ACCOUNT_DATA: {
+      return {
+        ...state,
+        selectedAccount: action.payload,
       };
     }
     case PROFILE_USER_CHANGE_INIT_BANNER:
