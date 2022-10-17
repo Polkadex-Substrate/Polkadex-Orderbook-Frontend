@@ -14,7 +14,7 @@ import {
   selectOrderExecuteLoading,
   selectHasCurrentTradeAccount,
   selectOrderExecuteSucess,
-  selectGetFreeProxyBalance,
+  selectGetFreeTradeBalance,
   selectIsUserSignedIn,
   selectCurrentTradeAccountIsPassword,
   alertPush,
@@ -34,7 +34,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
+  const getFreeProxyBalance = useReduxSelector(selectGetFreeTradeBalance);
   const showProtectedPassword = useReduxSelector(selectCurrentTradeAccountIsPassword);
 
   const [tab, setTab] = useState({
