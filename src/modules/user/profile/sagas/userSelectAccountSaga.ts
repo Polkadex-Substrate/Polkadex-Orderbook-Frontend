@@ -6,13 +6,16 @@ import {
   userAccountSelectData,
   UserAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
+import { saveTradeAccountsToLocalCache } from "../helpers";
 
 export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
   const { tradeAddress } = action.payload;
   try {
     const mainAddress = yield select(selectLinkedMainAddress(tradeAddress));
     if (mainAddress) {
-      yield put(userAccountSelectData({ tradeAddress, mainAddress }));
+      const data = { tradeAddress, mainAddress };
+      yield put(userAccountSelectData(data));
+      saveTradeAccountsToLocalCache(data);
     } else {
       throw new Error("invalid main account");
     }
