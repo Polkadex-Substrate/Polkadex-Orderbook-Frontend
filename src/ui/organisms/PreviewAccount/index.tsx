@@ -27,23 +27,23 @@ type Props = {
 
 enum menuDisableKeysEnum {
   REMOVE_FROM_BLOCKCHAIN = 1,
-  REMOVE_FROM_BROWSER
+  REMOVE_FROM_BROWSER,
 }
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
   const isRemoving = false;
-  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress))
+  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected.address));
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
-    if (!Boolean(mainAccountDetails)) {
+    if (!mainAccountDetails) {
       disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BLOCKCHAIN}`);
     }
-    if (!Boolean(tradingAccountInBrowser)) {
+    if (!tradingAccountInBrowser) {
       disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BROWSER}`);
     }
 
@@ -78,7 +78,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               <DefaultAccount label="Default trade account" />
             </S.Box>
             <S.Button
-              disabled={!Boolean(tradingAccountInBrowser) || !Boolean(mainAccountDetails)}
+              disabled={!tradingAccountInBrowser || !mainAccountDetails}
               onClick={
                 using
                   ? undefined
@@ -91,7 +91,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
         </S.Content>
         <S.Footer>
           <S.ExportButton
-            disabled={!Boolean(tradingAccountInBrowser) || !Boolean(mainAccountDetails)}
+            disabled={!tradingAccountInBrowser || !mainAccountDetails}
             type="button">
             Export
           </S.ExportButton>
@@ -108,7 +108,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               <Dropdown.Item
                 key={"1"}
                 onAction={() =>
-                 dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+                  dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
                 }>
                 Remove from blockchain
               </Dropdown.Item>

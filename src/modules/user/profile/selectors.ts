@@ -23,7 +23,8 @@ export const selectUserEmail = (state: RootState): string => state.user.profile.
 export const selectUsingAccount = (state: RootState): UserAccount =>
   state.user.profile.selectedAccount;
 
-export const selectUserAccounts = (state: RootState): UserAccount[] => state.user.profile.userData.userAccounts
+export const selectUserAccounts = (state: RootState): UserAccount[] =>
+  state.user.profile.userData.userAccounts;
 
 export const selectHasSelectedAccount = (state: RootState): boolean =>
   state.user.profile.selectedAccount.tradeAddress !== "";
@@ -49,7 +50,7 @@ export const selectLinkedMainAddress = (trade_address: string) => (state: RootSt
   trade_address &&
   state.user.profile.userData.userAccounts.find(
     ({ tradeAddress }) => tradeAddress === trade_address
-  );
+  ).mainAddress;
 
 export const selectIsUserDataLoading = (state: RootState): boolean =>
   state.user.profile.isDataLoading;

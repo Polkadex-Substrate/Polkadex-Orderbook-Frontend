@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
@@ -36,8 +37,8 @@ export const useSettings = () => {
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
   const [filterTradeAccounts, setFilterTradeAccounts] = useState(tradeAccounts);
   const [filterControllerWallets, setFilterControllerWallets] = useState(controllerWallets);
-  const { isActive, selectedAddres } = useReduxSelector(selectRegisterTradeAccountInfo);
-
+  const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
+  const usingAccount = useReduxSelector(selectUsingAccount);
   const isLoading = isTradeAccountLoading || isControllerAccountLoading;
   const isRegisterControllerAccountSuccess = useReduxSelector(
     selectRegisterTradeAccountSuccess
@@ -85,7 +86,7 @@ export const useSettings = () => {
     isTradeAccountSuccess,
     isImportAccountSuccess,
     isActive,
-    selectedAddres,
+    usingAccount,
     isRegisterControllerAccountSuccess,
     isLoading,
     setState,

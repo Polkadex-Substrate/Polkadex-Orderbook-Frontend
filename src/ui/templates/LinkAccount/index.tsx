@@ -92,7 +92,8 @@ export const LinkAccountTemplate = () => {
                         <S.SelectAccountContainer>
                           <div>
                             <strong>
-                              {currentMainAccount?.name || "Select your main account"}
+                              {currentMainAccount?.account?.meta?.name ||
+                                "Select your main account"}
                             </strong>
                             <span>{shortWallet}</span>
                           </div>

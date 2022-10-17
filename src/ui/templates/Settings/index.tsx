@@ -44,13 +44,13 @@ export const SettingsTemplate = () => {
     isTradeAccountSuccess,
     isImportAccountSuccess,
     isActive,
-    selectedAddres,
     isLoading,
     isRegisterControllerAccountSuccess,
     setState,
     setPreview,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
+    usingAccount,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -94,7 +94,11 @@ export const SettingsTemplate = () => {
         />
       </Modal>
       <Modal open={isActive} onClose={handleClose} placement="start right">
-        <NewAccount onClose={handleClose} selected={selectedAddres} isLoading={isLoading} />
+        <NewAccount
+          onClose={handleClose}
+          selected={{ address: usingAccount.tradeAddress, name: usingAccount.tradeAddress }}
+          isLoading={isLoading}
+        />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -181,8 +185,7 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {
-                        filterTradeAccounts
+                        {filterTradeAccounts
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((v, i) => {
                             // const isUsing = currentTradeAccount.address === v.address;
@@ -190,7 +193,7 @@ export const SettingsTemplate = () => {
                               v.address,
                               userAccounts
                             );
-                            const isUsing = false;
+                            const isUsing = v.address === usingAccount.tradeAddress;
                             return (
                               <WalletCard
                                 key={i}
@@ -216,11 +219,11 @@ export const SettingsTemplate = () => {
                                   {!isUsing && (
                                     <S.Button
                                       type="button"
-                                      onClick={() =>
+                                      onClick={() => {
                                         dispatch(
                                           userAccountSelectFetch({ tradeAddress: v.address })
-                                        )
-                                      }>
+                                        );
+                                      }}>
                                       Use
                                     </S.Button>
                                   )}
@@ -238,8 +241,7 @@ export const SettingsTemplate = () => {
                                 </S.WalletActions>
                               </WalletCard>
                             );
-                          })
-                          }
+                          })}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}

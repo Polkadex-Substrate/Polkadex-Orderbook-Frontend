@@ -10,6 +10,7 @@ import {
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_AUTH_ERROR,
   PROFILE_USER_SELECT_ACCOUNT_FETCH,
+  PROFILE_USER_SELECT_ACCOUNT_DATA,
 } from "./constants";
 
 export interface UserChangeInitBanner {
@@ -71,7 +72,7 @@ export interface UserAccountSelectFetch {
 }
 
 export interface UserAccountSelectData {
-  type: typeof PROFILE_USER_SELECT_ACCOUNT_FETCH;
+  type: typeof PROFILE_USER_SELECT_ACCOUNT_DATA;
   payload: { account: UserAccount };
 }
 export type ProfileAction =
@@ -134,6 +135,6 @@ export const userAccountSelectFetch = (
 export const userAccountSelectData = (
   payload: UserAccountSelectData["payload"]
 ): UserAccountSelectData => ({
-  type: PROFILE_USER_SELECT_ACCOUNT_FETCH,
+  type: PROFILE_USER_SELECT_ACCOUNT_DATA,
   payload,
 });
