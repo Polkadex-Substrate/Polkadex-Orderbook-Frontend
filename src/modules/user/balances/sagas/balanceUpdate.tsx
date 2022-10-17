@@ -31,7 +31,9 @@ const updateBalanceFromEvent = (
   msg: BalanceUpdatePayload,
   getAsset: (id: string) => IPublicAsset
 ): Balance => {
+  console.log("balance update saga: ", msg);
   const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
+  console.log("balance update:", assetId);
   const newBalance = {
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,
@@ -40,5 +42,6 @@ const updateBalanceFromEvent = (
     reserved_balance: msg.reserved,
     pending_withdrawal: msg.pending_withdrawal,
   };
+  console.log("balance update: ", newBalance);
   return newBalance;
 };
