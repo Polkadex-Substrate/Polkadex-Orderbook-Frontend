@@ -4,6 +4,7 @@ export type Props = {
   label?: string | JSX.Element;
   error?: string;
   children?: ReactNode;
+  labelRight?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export type SecondaryInputProps = {

@@ -12,3 +12,6 @@ export * from "./Trading";
 export * from "./Error";
 export * from "./Settings";
 export * from "./Balances";
+export * from "./ResetPassword";
+export * from "./ResetPasswordCode";
+export * from "./ResetPasswordForm";

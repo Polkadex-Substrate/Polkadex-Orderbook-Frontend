@@ -38,6 +38,12 @@ export const signUpValidations = Yup.object().shape({
   email: Yup.string().email("Must be a valid email").required("Required"),
 });
 
+export const newPasswordValidations = Yup.object().shape({
+  password: Yup.string().required("Required").min(2, "Too Short!").max(20, "Too Long!"),
+  repeatPassword: Yup.string()
+    .required()
+    .oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
 export const signValidations = Yup.object().shape({
   password: Yup.string().required("Required"),
   email: Yup.string().email("Must be a valid email").required("Required"),
@@ -45,6 +51,10 @@ export const signValidations = Yup.object().shape({
 
 export const codeValidations = Yup.object().shape({
   code: Yup.string().required("Required"),
+});
+
+export const resetPasswordValidations = Yup.object().shape({
+  email: Yup.string().email("Must be a valid email").required("Required"),
 });
 
 export const withdrawValidations = Yup.object().shape({
@@ -68,32 +78,6 @@ export const createAccountValidations = Yup.object().shape({
     .min(5, "Must be exactly 5 digits")
     .max(5, "Must be exactly 5 digits")
     .nullable(),
-  controllerWallet: Yup.object({
-    name: Yup.string().required("Required"),
-    address: Yup.string().required("Required"),
-  }),
-});
-export const importAccountValidations = Yup.object().shape({
-  name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
-  passcode: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits")
-    .nullable(),
-  mnemonic: Yup.array()
-    .of(Yup.string())
-    .required("Required")
-    .min(12, "Must be exactly 12 digits")
-    .max(12, "Must be exactly 12 digits"),
-});
-export const importAccountJsonValidations = Yup.object().shape({
-  name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
-  passcode: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits")
-    .nullable(),
-  file: Yup.mixed().required("Required"),
 });
 export const linkAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
