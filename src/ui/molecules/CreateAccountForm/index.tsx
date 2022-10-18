@@ -14,7 +14,6 @@ import {
   registerMainAccountFetch,
   registerTradeAccountFetch,
   selectExtensionWalletAccounts,
-  selectLinkedMainAddress,
   selectLinkedMainAddresses,
   tradeAccountPush,
 } from "@polkadex/orderbook-modules";
@@ -31,7 +30,7 @@ export const CreateAccountForm = ({
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
   const linkedMainAddresses = useReduxSelector(selectLinkedMainAddresses);
   const registeredAccounts = controllerWallets.filter(({ account }) =>
-    registeredAccounts?.includes(account.address)
+    linkedMainAddresses?.includes(account.address)
   );
   const hasData = !!selectedAccountAddress?.length;
   const {
@@ -52,7 +51,7 @@ export const CreateAccountForm = ({
       controllerWallet: {
         name: selectedAccountName || "",
         address:
-          selectedAccountAddress || linkedMainAddresses?.length > 0
+          selectedAccountAddress || registeredAccounts?.length > 0
             ? "Select your main account"
             : "Please register an account first",
       },

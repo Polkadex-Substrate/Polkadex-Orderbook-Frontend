@@ -6,7 +6,6 @@ import {
   userAccountSelectData,
   UserAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { saveTradeAccountsToLocalCache } from "../helpers";
 
 export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
   const { tradeAddress } = action.payload;
@@ -15,7 +14,6 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
     if (mainAddress) {
       const data = { tradeAddress, mainAddress };
       yield put(userAccountSelectData(data));
-      saveTradeAccountsToLocalCache(data);
     } else {
       throw new Error("invalid main account");
     }
@@ -25,7 +23,7 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
       notificationPush({
         message: {
           title: "Invalid main account!",
-          description: "The selected main account is invalid.",
+          description: e?.message,
         },
         time: new Date().getTime(),
       })

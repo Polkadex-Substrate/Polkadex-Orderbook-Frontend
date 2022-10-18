@@ -39,7 +39,7 @@ export const SettingsTemplate = () => {
     preview,
     currentControllerWallet,
     controllerWallets,
-    tradeAccounts,
+    browserTradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,
@@ -146,9 +146,9 @@ export const SettingsTemplate = () => {
                   }
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {!tradeAccounts.length ? (
+                  {!browserTradeAccounts.length ? (
                     <Empty
-                      title="No tradding accounts"
+                      title="No trading accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
                       // actionTitle="Import trading account"
                       onClick={() => console.log("Open Modal")}></Empty>

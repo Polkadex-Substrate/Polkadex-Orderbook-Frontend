@@ -11,6 +11,8 @@ import {
   PROFILE_USER_AUTH_ERROR,
   PROFILE_USER_SELECT_ACCOUNT_FETCH,
   PROFILE_USER_SELECT_ACCOUNT_DATA,
+  PROFILE_USER_ACCOUNT_PUSH,
+  PROFILE_USER_MAIN_ACCOUNT_PUSH,
 } from "./constants";
 
 export interface UserChangeInitBanner {
@@ -75,6 +77,16 @@ export interface UserAccountSelectData {
   type: typeof PROFILE_USER_SELECT_ACCOUNT_DATA;
   payload: UserAccount;
 }
+
+export interface UserProfileAccountPush {
+  type: typeof PROFILE_USER_ACCOUNT_PUSH;
+  payload: UserAccount;
+}
+export interface UserProfileMainAccountPush {
+  type: typeof PROFILE_USER_MAIN_ACCOUNT_PUSH;
+  payload: string;
+}
+
 export type ProfileAction =
   | UserFetch
   | UserData
@@ -85,7 +97,9 @@ export type ProfileAction =
   | UserAuthData
   | UserAuthError
   | UserAccountSelectFetch
-  | UserAccountSelectData;
+  | UserAccountSelectData
+  | UserProfileAccountPush
+  | UserProfileMainAccountPush;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -136,5 +150,17 @@ export const userAccountSelectData = (
   payload: UserAccountSelectData["payload"]
 ): UserAccountSelectData => ({
   type: PROFILE_USER_SELECT_ACCOUNT_DATA,
+  payload,
+});
+
+export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"]) => ({
+  type: PROFILE_USER_ACCOUNT_PUSH,
+  payload,
+});
+
+export const userProfileMainAccountPush = (
+  payload: UserProfileMainAccountPush["payload"]
+) => ({
+  type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
   payload,
 });

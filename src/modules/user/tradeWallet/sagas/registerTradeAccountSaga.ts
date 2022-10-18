@@ -16,6 +16,7 @@ import {
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { userProfileAccountPush } from "@polkadex/orderbook-modules";
 
 let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
@@ -36,6 +37,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
     );
     if (res.isSuccess) {
       yield put(tradeAccountPush({ pair }));
+      yield put(userProfileAccountPush({ tradeAddress, mainAddress: address }));
       yield delay(2000);
       yield put(
         registerTradeAccountData({

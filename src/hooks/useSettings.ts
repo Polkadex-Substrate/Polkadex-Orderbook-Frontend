@@ -18,7 +18,6 @@ import {
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const useSettings = () => {
-  const dispatch = useDispatch();
   const [state, setState] = useState(false);
   const [preview, setPreview] = useState({ status: false, selected: null });
   const [newAccount, setNewAccount] = useState({ status: false, selected: null });
@@ -34,13 +33,13 @@ export const useSettings = () => {
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
   const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-  const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
+  const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const user = useReduxSelector(selectUserInfo);
   const userAccounts = useReduxSelector(selectUserAccounts);
   const linkedMainAddress = useReduxSelector(selectLinkedMainAddresses);
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
-  const [filterTradeAccounts, setFilterTradeAccounts] = useState(tradeAccounts);
+  const [filterTradeAccounts, setFilterTradeAccounts] = useState(browserTradeAccounts);
   const [filterControllerWallets, setFilterControllerWallets] = useState(controllerWallets);
   const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
   const usingAccount = useReduxSelector(selectUsingAccount);
@@ -50,7 +49,7 @@ export const useSettings = () => {
   );
 
   const handleFilterTradeAccounts = (filterParam: string) => {
-    const res = tradeAccounts.filter((data) => {
+    const res = browserTradeAccounts.filter((data) => {
       const { address, meta } = data as any;
       const checker = filterParam?.toLowerCase();
       return (
@@ -82,7 +81,7 @@ export const useSettings = () => {
     isTradeAccountLoading,
     isControllerAccountLoading,
     controllerWallets,
-    tradeAccounts,
+    browserTradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,

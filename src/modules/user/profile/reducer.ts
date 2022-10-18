@@ -7,6 +7,8 @@ import {
   PROFILE_USER_AUTH_FETCH,
   PROFILE_USER_DATA,
   PROFILE_USER_SELECT_ACCOUNT_DATA,
+  PROFILE_USER_ACCOUNT_PUSH,
+  PROFILE_USER_MAIN_ACCOUNT_PUSH,
 } from "./constants";
 
 export interface ProfileState {
@@ -96,6 +98,38 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
           shouldShowInitialBanner: action.payload,
         },
       };
+    case PROFILE_USER_ACCOUNT_PUSH: {
+      const newAccount = action.payload;
+      const userAccounts = [...state.userData.userAccounts];
+      const isPresent = userAccounts.find(
+        ({ tradeAddress }) => tradeAddress === newAccount.tradeAddress
+      );
+      if (!isPresent) {
+        return {
+          ...state,
+          userData: {
+            ...state.userData,
+            userAccounts: [...userAccounts, newAccount],
+          },
+        };
+      }
+      return state;
+    }
+    case PROFILE_USER_MAIN_ACCOUNT_PUSH: {
+      const newMainAddress = action.payload;
+      const mainAddresses = [...state.userData.mainAccounts];
+      const isPresent = mainAddresses.find((address) => address === newMainAddress);
+      if (!isPresent) {
+        return {
+          ...state,
+          userData: {
+            ...state.userData,
+            mainAccounts: [...mainAddresses, newMainAddress],
+          },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

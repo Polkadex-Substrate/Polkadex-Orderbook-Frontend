@@ -45,7 +45,6 @@ export const DepositTemplate = () => {
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);
-
   const dispatch = useDispatch();
   const router = useRouter();
   const { deposits } = useHistory();
@@ -66,41 +65,42 @@ export const DepositTemplate = () => {
     }
   }, [assets, routedAsset]);
 
-   // A custom validation function. This must return an object
- // which keys are symmetrical to our values/initialValues
- const validate = values => {
-  const errors = {} as any;
-  if (values.amount.includes("e")){
-    errors.amount = 'use a valid amount instead';
-  }
-  if (+values.amount > onChainBalance) {
-    errors.amount = 'Amount cannot be greater than balance';
-  }
+  // A custom validation function. This must return an object
+  // which keys are symmetrical to our values/initialValues
+  const validate = (values) => {
+    const errors = {} as any;
+    if (values.amount.includes("e")) {
+      errors.amount = "use a valid amount instead";
+    }
+    if (+values.amount > onChainBalance) {
+      errors.amount = "Amount cannot be greater than balance";
+    }
 
-  return errors;
-};
+    return errors;
+  };
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } = useFormik({
-    initialValues: {
-      amount: 0.0,
-      asset: selectedAsset,
-    },
-    // TODO: re-add the validations
-    validationSchema: withdrawValidations,
-    validate,
-    onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.asset_id)
-        ? { polkadex: null }
-        : { asset: selectedAsset.asset_id };
-      dispatch(
-        depositsFetch({
-          asset: asset,
-          amount: values.amount,
-          mainAccount: currMainAcc,
-        })
-      );
-    },
-  });
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } =
+    useFormik({
+      initialValues: {
+        amount: 0.0,
+        asset: selectedAsset,
+      },
+      // TODO: re-add the validations
+      validationSchema: withdrawValidations,
+      validate,
+      onSubmit: (values) => {
+        const asset = isAssetPDEX(selectedAsset.asset_id)
+          ? { polkadex: null }
+          : { asset: selectedAsset.asset_id };
+        dispatch(
+          depositsFetch({
+            asset: asset,
+            amount: values.amount,
+            mainAccount: currMainAcc,
+          })
+        );
+      },
+    });
 
   const handleInputChange = (e) => {
     console.log({ e }, e.ta);
