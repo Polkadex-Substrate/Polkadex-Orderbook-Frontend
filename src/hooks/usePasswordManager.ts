@@ -18,7 +18,7 @@ export const usePasswordManager = () => {
   };
 
   const resetPassword = async (code: string, newPassword: string) => {
-    dispatch(forgotPasswordFetch({ username: email, code, newPassword }));
+    dispatch(forgotPasswordFetch({ code, newPassword }));
   };
   const updatePassword = async (oldPassword: string, newPassword: string) => {
     dispatch(changePasswordFetch({ oldPassword, newPassword }));

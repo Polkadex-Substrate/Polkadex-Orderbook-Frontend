@@ -15,6 +15,7 @@ export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
@@ -65,6 +66,11 @@ export const SignInTemplate = () => {
                     name="password"
                     type={view ? "text" : "password"}
                     label="Password"
+                    labelRight={
+                      <S.InputLineLink>
+                        <Link href="/resetPassword">Forgot password?</Link>
+                      </S.InputLineLink>
+                    }
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
                     disabled={loading}
