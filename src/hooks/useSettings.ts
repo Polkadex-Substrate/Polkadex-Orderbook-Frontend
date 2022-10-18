@@ -79,7 +79,7 @@ export const useSettings = () => {
         const address = account?.address?.toLowerCase();
         const name = String(account?.meta?.name)?.toLowerCase();
 
-        if (address.includes(checker) || name.includes(checker)) {
+        if (address?.includes(checker) || name?.includes(checker)) {
           pv.push(cv);
         }
         return pv;
@@ -101,7 +101,7 @@ export const useSettings = () => {
           const address = account?.address?.toLowerCase();
           const name = account?.meta?.name?.toLowerCase();
 
-          if (address.includes(checker) || name.includes(checker)) {
+          if (address?.includes(checker) || name?.includes(checker)) {
             pv.push(cv);
           }
           return pv;
