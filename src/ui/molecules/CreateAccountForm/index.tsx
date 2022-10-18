@@ -29,7 +29,7 @@ export const CreateAccountForm = ({
   const dispatch = useDispatch();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
   const linkedMainAddresses = useReduxSelector(selectLinkedMainAddresses);
-  const registeredAccounts = controllerWallets.filter(({ account }) =>
+  const registeredAccounts = controllerWallets?.filter(({ account }) =>
     linkedMainAddresses?.includes(account.address)
   );
   const hasData = !!selectedAccountAddress?.length;
