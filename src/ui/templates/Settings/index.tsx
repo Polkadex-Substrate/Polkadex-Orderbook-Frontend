@@ -137,7 +137,10 @@ export const SettingsTemplate = () => {
                   {
                     <ButtonWallet
                       type="button"
-                      onClick={() => dispatch(registerAccountModalActive())}>
+                      onClick={() => {
+                        handleChangeCurrentControllerWallet(null);
+                        dispatch(registerAccountModalActive());
+                      }}>
                       New Account
                     </ButtonWallet>
                   }
@@ -287,9 +290,7 @@ export const SettingsTemplate = () => {
                             key={i}
                             address={account.address}
                             name={account.meta.name}
-                            isUsing={
-                              account.address === currentControllerWallet?.account?.address
-                            }
+                            isUsing={false}
                             handleRegister={(account: ExtensionAccount) => {
                               handleChangeCurrentControllerWallet(account);
                               dispatch(

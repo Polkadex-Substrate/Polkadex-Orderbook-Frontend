@@ -26,7 +26,7 @@ export const useSettings = () => {
   const [currentControllerWallet, setCurrentControllerWallet] =
     useState<ExtensionAccount | null>(null);
 
-  const handleChangeCurrentControllerWallet = (account: ExtensionAccount) =>
+  const handleChangeCurrentControllerWallet = (account: ExtensionAccount | null) =>
     setCurrentControllerWallet(account);
 
   const currentTradeAccount = useReduxSelector(selectUsingAccount);
