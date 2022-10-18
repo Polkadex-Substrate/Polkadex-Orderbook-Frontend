@@ -13,18 +13,21 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectMainAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
+import { selectLinkedMainAddress, selectMainAccount } from "@polkadex/orderbook-modules";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
-    const api = yield select(selectRangerApi);
-    const { linkedMainAddress } = yield select(selectUsingAccount);
+    const api: ApiPromise = yield select(selectRangerApi);
+    const { address: tradeAddress } = action.payload;
+    const linkedMainAddress = yield select(selectLinkedMainAddress(tradeAddress));
+    if (!linkedMainAddress) {
+      throw new Error("Invalid trade address.");
+    }
     const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
     if (!account?.address) {
       throw new Error("Please select a main account!");
     }
-    const { address: tradeAddress } = action.payload;
-    if (api && account?.address) {
+    if (api.isConnected && account?.address) {
       yield put(
         notificationPush({
           type: "LoadingAlert",
@@ -37,7 +40,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
         })
       );
       const res = yield call(() =>
-        removeProxyFromAccount(api, tradeAddress, signer, account?.address)
+        removeProxyFromAccount(api, tradeAddress, signer, account.address)
       );
       if (res.isSuccess) {
         yield put(
