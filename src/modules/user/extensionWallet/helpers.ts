@@ -4,6 +4,6 @@ export const userMainAccountDetails = (
   userMainAccount: string,
   extensionMainAccount: ExtensionAccount[]
 ) =>
-  extensionMainAccount.find(
+  extensionMainAccount?.find(
     ({ account }) => account.address?.toLowerCase() === userMainAccount?.toLowerCase()
   );

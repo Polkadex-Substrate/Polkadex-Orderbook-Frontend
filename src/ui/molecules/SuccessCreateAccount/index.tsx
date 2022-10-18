@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 import { Switch } from "../Switcher";
 
 import * as S from "./styles";
-
-import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 type Props = {
   title: string;
@@ -68,7 +67,7 @@ export const SuccessCreateAccount = ({
             <>
               <S.WordsContainer>
                 {mnemonic?.map((value, i) => (
-                  <div key={i}>{value}</div>
+                  <div key={i}>{`${i + 1}. ${value}`}</div>
                 ))}
               </S.WordsContainer>
               <S.WordsFooter>
@@ -83,7 +82,6 @@ export const SuccessCreateAccount = ({
             </>
           )}
         </S.Words>
-
         <S.DefaultAccount>
           <span>Default trade account</span>
           <Switch />

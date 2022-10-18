@@ -199,16 +199,6 @@ export const SettingsTemplate = () => {
                                 additionalInfo={
                                   linkedMainAddress ? `(Linked to ${linkedMainAddress})` : null
                                 }>
-                                <S.Button
-                                  type="button"
-                                  onClick={() =>
-                                    setPreview({
-                                      status: true,
-                                      selected: account,
-                                    })
-                                  }>
-                                  Preview
-                                </S.Button>
                                 <S.WalletActions>
                                   {!isUsing && account.isPresentInBrowser && (
                                     <S.Button

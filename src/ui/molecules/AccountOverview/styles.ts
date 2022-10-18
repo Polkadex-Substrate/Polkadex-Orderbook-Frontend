@@ -6,6 +6,9 @@ export const Wrapper = styled.div`
     background: ${theme.colors.primaryBackground};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 1.5rem;
+    @media screen and (min-width: 400px) {
+      min-width: 35rem;
+    }
   `}
 `;
 
@@ -41,6 +44,39 @@ export const SwitchCard = styled.div`
     :last-child {
       border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       opacity: 0.5;
+    }
+  `}
+`;
+
+export const DropdownHeader = styled.div`
+  ${({ theme }) => css`
+    small {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const DropdownEmpty = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    padding: 2rem;
+    border-radius: 0.8rem;
+    width: 100%;
+    @media screen and (min-width: 400px) {
+      min-width: 31.5rem;
+    }
+    a {
+      display: block;
+      margin-top: 1.5rem;
+      text-align: center;
+      padding: 1.5rem;
+      background-color: ${theme.colors.secondaryBackgroundOpacity};
+      border-radius: 0.7rem;
+      transition: background-color 0.3s ease-out;
+      :hover {
+        background-color: ${theme.colors.secondaryBackground};
+      }
     }
   `}
 `;
