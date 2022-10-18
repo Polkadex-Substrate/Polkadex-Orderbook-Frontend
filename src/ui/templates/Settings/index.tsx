@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useDispatch } from "react-redux";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -9,6 +10,7 @@ import {
   Checkbox,
   Footer,
   Modal,
+  ResultFound,
   Search,
   Tooltip,
   TooltipContent,
@@ -57,6 +59,8 @@ export const SettingsTemplate = () => {
     handleFilterControllerWallets,
     handleChangeCurrentControllerWallet,
     usingAccount,
+    showRegistered,
+    handleChangeShowRegistered,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -273,40 +277,38 @@ export const SettingsTemplate = () => {
                       <AccountHeader
                         handleFilter={(e) => handleFilterControllerWallets(e.target.value)}>
                         <S.AccountHeaderContent>
-                          <Dropdown>
-                            <Dropdown.Trigger>
-                              <S.AccountHeaderTrigger>
-                                <span>All Accounts</span>
-                                <div>
-                                  <Icons.ArrowBottom />
-                                </div>
-                              </S.AccountHeaderTrigger>
-                            </Dropdown.Trigger>
-                            <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              <Dropdown.Item>All Accounts</Dropdown.Item>
-                              <Dropdown.Item>Registered Accounts</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          <Checkbox
+                            checked={showRegistered}
+                            onChange={handleChangeShowRegistered}>
+                            Only registered accounts
+                          </Checkbox>
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {filterControllerWallets?.map(({ account }, i) => (
-                          <ControllerWallets
-                            key={i}
-                            address={account.address}
-                            name={account.meta.name}
-                            isUsing={false}
-                            handleRegister={(account: ExtensionAccount) => {
-                              handleChangeCurrentControllerWallet(account);
-                              dispatch(
-                                registerAccountModalActive({
-                                  name: account.account.meta.name,
-                                  address: account.account.address,
-                                })
-                              );
-                            }}
-                          />
-                        ))}
+                        {filterControllerWallets?.length ? (
+                          filterControllerWallets.map(({ account }, i) => {
+                            const isUsing = usingAccount?.mainAddress === account?.address;
+                            return (
+                              <ControllerWallets
+                                key={i}
+                                address={account.address}
+                                name={account.meta.name}
+                                isUsing={isUsing}
+                                handleRegister={(account: ExtensionAccount) => {
+                                  handleChangeCurrentControllerWallet(account);
+                                  dispatch(
+                                    registerAccountModalActive({
+                                      name: account.account.meta.name,
+                                      address: account.account.address,
+                                    })
+                                  );
+                                }}
+                              />
+                            );
+                          })
+                        ) : (
+                          <ResultFound />
+                        )}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -372,17 +374,19 @@ const ControllerWallets = ({
       additionalInfo={
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
-      {isRegistered ? (
-        <Badge isRegistered={true}>Registered</Badge>
-      ) : (
-        <S.Button
-          type="button"
-          onClick={() => {
-            handleRegister(extensionAccount);
-          }}>
-          Register Now
-        </S.Button>
-      )}
+      <S.WalletActions>
+        {isRegistered ? (
+          <Badge isRegistered={true}>Registered</Badge>
+        ) : (
+          <S.Button
+            type="button"
+            onClick={() => {
+              handleRegister(extensionAccount);
+            }}>
+            Register Now
+          </S.Button>
+        )}
+      </S.WalletActions>
     </WalletCard>
   );
 };
@@ -470,32 +474,51 @@ const WalletCard = ({
   address = "",
   additionalInfo = "",
   children,
-}) => (
-  <S.WalletCard>
-    <S.WalletCardWrapper>
-      {isUsing && <S.Using>USING</S.Using>}
-      <S.WalletCardContent>
-        <span>
-          {name} <small>{additionalInfo}</small>
-        </span>
-        <S.WalletCardCopy>
-          <div>
-            <Icons.Copy />
-          </div>
-          <p>{address}</p>
-        </S.WalletCardCopy>
-      </S.WalletCardContent>
-    </S.WalletCardWrapper>
-    <S.WalletCardAside>
-      {isDefault && (
-        <S.WalletCardBadge>
-          <span>{defaultTitle}</span>
-        </S.WalletCardBadge>
-      )}
-      {children}
-    </S.WalletCardAside>
-  </S.WalletCard>
-);
+}) => {
+  const buttonRef = useRef(null);
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(address);
+    buttonRef.current.innerHTML = "Copied";
+  };
+
+  return (
+    <S.WalletCard>
+      <S.WalletCardWrapper>
+        {isUsing && <S.Using>USING</S.Using>}
+        <S.WalletCardContent>
+          <span>
+            {name} <small>{additionalInfo}</small>
+          </span>
+          <S.WalletCardCopy>
+            <Tooltip>
+              <TooltipHeader>
+                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                  <Icons.Copy />
+                </button>
+              </TooltipHeader>
+              <TooltipContent>
+                <span ref={buttonRef} style={{ whiteSpace: "nowrap" }}>
+                  Copy to clipboard
+                </span>
+              </TooltipContent>
+            </Tooltip>
+            <p>{address}</p>
+          </S.WalletCardCopy>
+        </S.WalletCardContent>
+      </S.WalletCardWrapper>
+      <S.WalletCardAside>
+        {isDefault && (
+          <S.WalletCardBadge>
+            <span>{defaultTitle}</span>
+          </S.WalletCardBadge>
+        )}
+        {children}
+      </S.WalletCardAside>
+    </S.WalletCard>
+  );
+};
 
 const Badge = ({ isRegistered = false, children }) => (
   <S.Badge isRegistered={isRegistered}>

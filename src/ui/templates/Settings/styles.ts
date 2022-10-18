@@ -354,6 +354,7 @@ export const WalletCard = styled.div`
     justify-content: space-between;
     gap: 0.5rem;
     flex-wrap: wrap;
+    min-height: 6rem;
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding-bottom: 1.5rem;
@@ -398,7 +399,7 @@ export const WalletCardCopy = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    div {
+    button {
       width: 1rem;
       svg {
         fill: ${theme.colors.tertiaryText};

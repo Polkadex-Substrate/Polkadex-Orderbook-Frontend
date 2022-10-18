@@ -24,6 +24,7 @@ export const useSettings = () => {
     selected: null,
   });
   const [newAccount, setNewAccount] = useState({ status: false, selected: null });
+  const [showRegistered, setShowRegistered] = useState(false);
 
   const [currentControllerWallet, setCurrentControllerWallet] =
     useState<ExtensionAccount | null>(null);
@@ -43,7 +44,7 @@ export const useSettings = () => {
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
 
-  const [filterControllerWallets, setFilterControllerWallets] = useState(controllerWallets);
+  const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
   const usingAccount = useReduxSelector(selectUsingAccount);
   const isLoading = isTradeAccountLoading || isControllerAccountLoading;
@@ -69,6 +70,28 @@ export const useSettings = () => {
     });
   }, [allAccounts, browserTradeAccounts]);
 
+  /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
+  const allFilteredAccounts = useMemo(
+    () =>
+      controllerWallets
+        .sort((a) => (linkedMainAddress.includes(a.account.address) ? -1 : 1))
+        .filter((value) =>
+          showRegistered ? linkedMainAddress.includes(value.account.address) : value
+        )
+        .reduce((pv, cv) => {
+          const { account } = cv;
+          const checker = filterControllerWallets?.toLowerCase();
+          const address = account?.address?.toLowerCase();
+          const name = account?.meta?.name?.toLowerCase();
+
+          if (address.includes(checker) || name.includes(checker)) {
+            pv.push(cv);
+          }
+          return pv;
+        }, []),
+    [filterControllerWallets, controllerWallets, showRegistered, linkedMainAddress]
+  );
+
   const [filterTradeAccounts, setFilterTradeAccounts] =
     useState<IUserTradeAccount[]>(tradeAccounts);
 
@@ -81,19 +104,6 @@ export const useSettings = () => {
       );
     });
     setFilterTradeAccounts(res);
-  };
-
-  const handleFilterControllerWallets = (filterParam: string) => {
-    const res = controllerWallets.filter((data) => {
-      const {
-        account: { address, meta },
-      } = data;
-      const checker = filterParam?.toLowerCase();
-      return (
-        address?.toLowerCase().includes(checker) || meta?.name?.toLowerCase().includes(checker)
-      );
-    });
-    setFilterControllerWallets(res);
   };
 
   return {
@@ -110,7 +120,7 @@ export const useSettings = () => {
     userAccounts,
     linkedMainAddress,
     filterTradeAccounts,
-    filterControllerWallets,
+    filterControllerWallets: allFilteredAccounts,
     isTradeAccountSuccess,
     isImportAccountSuccess,
     isActive,
@@ -121,7 +131,9 @@ export const useSettings = () => {
     setPreview,
     setNewAccount,
     handleFilterTradeAccounts,
-    handleFilterControllerWallets,
+    handleFilterControllerWallets: setFilterControllerWallets,
     handleChangeCurrentControllerWallet,
+    showRegistered,
+    handleChangeShowRegistered: () => setShowRegistered(!showRegistered),
   };
 };
