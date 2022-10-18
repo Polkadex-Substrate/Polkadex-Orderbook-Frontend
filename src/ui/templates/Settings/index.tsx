@@ -39,7 +39,7 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 export const SettingsTemplate = () => {
   const {
     state,
-    filterTradeAccounts,
+    allFilteredTradeAccounts,
     filterControllerWallets,
     preview,
     currentControllerWallet,
@@ -187,9 +187,8 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {filterTradeAccounts
-                          // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
-                          .map((account, i) => {
+                        {allFilteredTradeAccounts?.length ? (
+                          allFilteredTradeAccounts?.map((account, i) => {
                             const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
                               account.address,
                               userAccounts
@@ -244,7 +243,10 @@ export const SettingsTemplate = () => {
                                 </S.WalletActions>
                               </WalletCard>
                             );
-                          })}
+                          })
+                        ) : (
+                          <ResultFound />
+                        )}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
