@@ -7,7 +7,6 @@ import * as S from "./styles";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Loading, Switch } from "@polkadex/orderbook-ui/molecules";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
@@ -18,10 +17,11 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 type Props = {
   onClose: () => void;
-  selected: TradeAccount;
+  selected: IUserTradeAccount;
   mainAccAddress: string;
 };
 
@@ -60,7 +60,10 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
           <h2>Preview Wallet</h2>
           <S.Container>
             <S.Box>
-              <WalletName label="Wallet name" information={String(selected?.meta?.name)} />
+              <WalletName
+                label="Wallet name"
+                information={String(selected?.account?.meta?.name || "--")}
+              />
               <WalletAddress label="Trade wallet" information={selected?.address} />
               <WalletAddress
                 label="Controller wallet"

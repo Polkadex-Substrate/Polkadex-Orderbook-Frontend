@@ -39,7 +39,7 @@ export const SettingsTemplate = () => {
     preview,
     currentControllerWallet,
     controllerWallets,
-    browserTradeAccounts,
+    tradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,
@@ -146,7 +146,7 @@ export const SettingsTemplate = () => {
                   }
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {!browserTradeAccounts.length ? (
+                  {!tradeAccounts.length ? (
                     <Empty
                       title="No trading accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
@@ -181,22 +181,22 @@ export const SettingsTemplate = () => {
                       <S.WalletContent>
                         {filterTradeAccounts
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
-                          .map((v, i) => {
+                          .map((account, i) => {
                             // const isUsing = currentTradeAccount.address === v.address;
                             const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
-                              v.address,
+                              account.address,
                               userAccounts
                             );
-                            const isUsing = v.address === usingAccount.tradeAddress;
+                            const isUsing = account.address === usingAccount.tradeAddress;
                             return (
                               <WalletCard
                                 key={i}
                                 isUsing={isUsing}
                                 isDefault={false}
                                 defaultTitle="Default trade account"
-                                name={String(v.meta.name)}
-                                address={v.address}
-                                aditionalInfo={
+                                name={String(account?.account?.meta.name || "unknown")}
+                                address={account.address}
+                                additionalInfo={
                                   linkedMainAddress ? `(Linked to ${linkedMainAddress})` : null
                                 }>
                                 <S.Button
@@ -204,18 +204,20 @@ export const SettingsTemplate = () => {
                                   onClick={() =>
                                     setPreview({
                                       status: true,
-                                      selected: v,
+                                      selected: account,
                                     })
                                   }>
                                   Preview
                                 </S.Button>
                                 <S.WalletActions>
-                                  {!isUsing && (
+                                  {!isUsing && account.isPresentInBrowser && (
                                     <S.Button
                                       type="button"
                                       onClick={() => {
                                         dispatch(
-                                          userAccountSelectFetch({ tradeAddress: v.address })
+                                          userAccountSelectFetch({
+                                            tradeAddress: account.address,
+                                          })
                                         );
                                       }}>
                                       Use
@@ -226,7 +228,7 @@ export const SettingsTemplate = () => {
                                     onClick={() =>
                                       setPreview({
                                         status: true,
-                                        selected: v,
+                                        selected: account,
                                       })
                                     }>
                                     <Icons.Show />
@@ -362,9 +364,11 @@ const ControllerWallets = ({
       isUsing={isUsing}
       isDefault={isUsing}
       defaultTitle="Default controller account"
-      name={name}
+      name={name || "--"}
       address={address}
-      aditionalInfo={isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`}>
+      additionalInfo={
+        isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
+      }>
       {isRegistered ? (
         <Badge isRegistered={true}>Registered</Badge>
       ) : (
@@ -461,7 +465,7 @@ const WalletCard = ({
   defaultTitle = "",
   name = "",
   address = "",
-  aditionalInfo = "",
+  additionalInfo = "",
   children,
 }) => (
   <S.WalletCard>
@@ -469,7 +473,7 @@ const WalletCard = ({
       {isUsing && <S.Using>USING</S.Using>}
       <S.WalletCardContent>
         <span>
-          {name} <small>{aditionalInfo}</small>
+          {name} <small>{additionalInfo}</small>
         </span>
         <S.WalletCardCopy>
           <div>
