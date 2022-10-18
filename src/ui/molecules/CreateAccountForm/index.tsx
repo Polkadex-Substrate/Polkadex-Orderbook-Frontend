@@ -3,20 +3,23 @@ import { useDispatch } from "react-redux";
 import { generateUsername } from "friendly-username-generator";
 import keyring from "@polkadot/ui-keyring";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
+
+import { Switch } from "../Switcher";
+
+import * as S from "./styles";
+
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   registerMainAccountFetch,
   registerTradeAccountFetch,
   selectExtensionWalletAccounts,
+  selectLinkedMainAddress,
+  selectLinkedMainAddresses,
   tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
-
-import { Switch } from "../Switcher";
-
-import * as S from "./styles";
 
 export const CreateAccountForm = ({
   onCancel = undefined,
@@ -26,6 +29,10 @@ export const CreateAccountForm = ({
 }) => {
   const dispatch = useDispatch();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const linkedMainAddresses = useReduxSelector(selectLinkedMainAddresses);
+  const registeredAccounts = controllerWallets.filter(({ account }) =>
+    registeredAccounts?.includes(account.address)
+  );
   const hasData = !!selectedAccountAddress?.length;
   const {
     errors,
@@ -44,13 +51,17 @@ export const CreateAccountForm = ({
       isPasscodeVisible: false,
       controllerWallet: {
         name: selectedAccountName || "",
-        address: selectedAccountAddress || "Select your controller wallet",
+        address:
+          selectedAccountAddress || linkedMainAddresses?.length > 0
+            ? "Select your main account"
+            : "Please register an account first",
       },
     },
     validationSchema: createAccountValidations,
     onSubmit: ({ name, passcode, controllerWallet }) => {
-      // TODO: Move to sagas
+      // TODO: Move to hook
       if (hasData) {
+        // if controller account is already selected then register main account called.
         const mnemonic = mnemonicGenerate();
         const { pair } = keyring.addUri(mnemonic, passcode.length > 0 ? passcode : null, {
           name,
@@ -93,7 +104,7 @@ export const CreateAccountForm = ({
                     <div>
                       <Icons.Info />
                     </div>
-                    <span>Controller account</span>
+                    <span>Main account</span>
                   </S.WalletSelectContent>
                   <WalletShortName
                     address={values.controllerWallet.address}
@@ -108,9 +119,9 @@ export const CreateAccountForm = ({
                 )}
               </S.WalletSelectWrapper>
             </Dropdown.Trigger>
-            {!selectedAccountAddress.length && (
+            {!selectedAccountAddress.length && registeredAccounts?.length > 0 && (
               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                {controllerWallets?.map((v, i) => (
+                {registeredAccounts?.map((v, i) => (
                   <Dropdown.Item
                     key={i}
                     onAction={() =>
