@@ -10,9 +10,9 @@ export const getMainAddresssLinkedToTradingAccount = (
   return account ? account.mainAddress : "";
 };
 
-export const transformAddress = (address: string) => {
-  const firstPart = address.substring(0, 12);
-  const lastPart = address.substring(37, address.length);
+export const transformAddress = (address: string, size = 8) => {
+  const firstPart = address.slice(0, size);
+  const lastPart = address.slice(address?.length - size);
 
   return `${firstPart}...${lastPart}`;
 };

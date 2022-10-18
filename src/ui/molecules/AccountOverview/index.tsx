@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
@@ -7,7 +7,12 @@ import Link from "next/link";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import {
+  Icon,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -73,6 +78,17 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     selectedTradeAccount &&
     ` • ${selectedTradeAccount ? transformAddress(selectedTradeAccount.address) : ""}`;
 
+  const handleOnMouseOut = (ref: MutableRefObject<HTMLElement>) =>
+    (ref.current.innerHTML = "Copy to clipboard");
+
+  const handleCopy = async (data: string, ref: MutableRefObject<HTMLElement>) => {
+    await navigator.clipboard.writeText(data);
+    ref.current.innerHTML = "Copied";
+  };
+
+  const tradeButton = useRef(null);
+  const controllerButton = useRef(null);
+
   return (
     <S.Wrapper>
       <S.Profile>
@@ -90,9 +106,20 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                   {selectedTradeAccount && <span>Trading account</span>}
                   <S.SwitchCardInfo>
                     {selectedTradeAccount && (
-                      <button type="button">
-                        <Icons.Copy />
-                      </button>
+                      <Tooltip>
+                        <TooltipHeader>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleCopy(selectedTradeAccount.address, tradeButton)
+                            }>
+                            <Icons.Copy />
+                          </button>
+                        </TooltipHeader>
+                        <TooltipContent>
+                          <span ref={tradeButton}>Testing </span>
+                        </TooltipContent>
+                      </Tooltip>
                     )}
                     <p>
                       <>
@@ -110,8 +137,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
             {accountList?.length && (
               <Dropdown.Menu fill="secondaryBackgroundSolid">
                 {accountList.map(({ address, meta }) => {
-                  const shortAddress =
-                    address?.slice(0, 10) + "..." + address?.slice(address?.length - 10);
+                  const shortAddress = transformAddress(address, 10);
                   return (
                     <Dropdown.Item onAction={handleClick} key={address}>
                       <S.DropdownHeader>
@@ -132,7 +158,6 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
             <Link href="/settings">Import or Create a new one</Link>
           </S.DropdownEmpty>
         )}
-
         {selectedTradeAccount && (
           <S.SwitchCard>
             <S.SwitchCardContent>
@@ -143,9 +168,20 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                 </div>
               </span>
               <S.SwitchCardInfo>
-                <button type="button">
-                  <Icons.Copy />
-                </button>
+                <Tooltip>
+                  <TooltipHeader>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopy(selectedMainAccount.account.address, controllerButton)
+                      }>
+                      <Icons.Copy />
+                    </button>
+                  </TooltipHeader>
+                  <TooltipContent>
+                    <span ref={controllerButton}>Testing</span>
+                  </TooltipContent>
+                </Tooltip>
                 <p>
                   {selectedMainAccount?.account?.meta?.name} •{" "}
                   <small>
@@ -159,7 +195,6 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
       </S.Switch>
       <S.Links>
         <Card title="Balances" icon="Wallet" onClick={() => router.push("/balances")} />
-        <Card title="History" icon="History" onClick={() => router.push("/history")} />
         <Card title="Settings" icon="Settings" onClick={() => router.push("/settings")} />
         <Card title="Appearance" icon="Appearance" onClick={() => onNavigate("Appearance")} />
         <Card title="Log Out" icon="Logout" onClick={logout} />
