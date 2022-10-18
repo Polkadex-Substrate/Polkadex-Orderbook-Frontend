@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Loading, Switch } from "@polkadex/orderbook-ui/molecules";
+import {
+  Loading,
+  Switch,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
+  selectIsTradeAccountRemoveLoading,
   selectMainAccount,
   selectTradeAccount,
   selectUsingAccount,
@@ -32,11 +39,13 @@ enum menuDisableKeysEnum {
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
-  const isRemoving = false;
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
-  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected.address));
+  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
+  const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
+    selectIsTradeAccountRemoveLoading(state, selected?.address)
+  );
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
@@ -51,9 +60,13 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   };
 
   return (
-    <Loading isVisible={isRemoving}>
+    <Loading
+      isVisible={isRemoveFromBlockchainLoading}
+      hasBg={false}
+      message=""
+      spinner="Keyboard">
       <S.Main>
-        <S.Header type="button" onClick={onClose}>
+        <S.Header type="button" onClick={isRemoveFromBlockchainLoading ? undefined : onClose}>
           <Icons.SingleArrowLeft />
         </S.Header>
         <S.Content>
@@ -62,7 +75,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.Box>
               <WalletName
                 label="Wallet name"
-                information={String(selected?.account?.meta?.name || "--")}
+                information={String(selected?.account?.meta?.name || "Unknown")}
               />
               <WalletAddress label="Trade wallet" information={selected?.address} />
               <WalletAddress
@@ -72,6 +85,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                     ? mainAccountDetails?.account?.meta?.name
                     : "Main Account not present in browser"
                 }
+                informationDisabled
                 additionalInformation={
                   mainAccountDetails ? transformAddress(mainAccAddress) : ""
                 }
@@ -83,7 +97,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.Button
               disabled={!tradingAccountInBrowser || !mainAccountDetails}
               onClick={() =>
-                dispatch(userAccountSelectFetch({ tradeAddress: selected.address }))
+                dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
               }
               type="button">
               {using ? "Using" : "Use"}
@@ -99,7 +113,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
           <Dropdown>
             <Dropdown.Trigger>
               <S.DropdownButton type="button">
-                Remove acccount
+                Remove account
                 <div>
                   <Icons.ArrowBottom />
                 </div>
@@ -186,29 +200,51 @@ const WalletAddress = ({
   information = "",
   additionalInformation = "",
   isLocked = false,
-}) => (
-  <S.CardWrapper>
-    <S.CardContent>
-      <S.CardBox>
-        <span>{label}</span>
-        {isLocked && (
-          <div>
-            <Icons.Lock />
-          </div>
-        )}
-      </S.CardBox>
-      <S.CardInfo>
-        <div>
-          <Icons.Copy />
-        </div>
-        <p>
-          {information}
-          {!!additionalInformation.length && <small> • {additionalInformation}</small>}
-        </p>
-      </S.CardInfo>
-    </S.CardContent>
-  </S.CardWrapper>
-);
+  informationDisabled = false,
+}) => {
+  const buttonRef = useRef(null);
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(information);
+    buttonRef.current.innerHTML = "Copied";
+  };
+
+  return (
+    <S.CardWrapper>
+      <S.CardContent>
+        <S.CardBox>
+          <span>{label}</span>
+          {isLocked && (
+            <S.Icon>
+              <Icons.Lock />
+            </S.Icon>
+          )}
+        </S.CardBox>
+        <S.CardInfo>
+          {!informationDisabled && (
+            <Tooltip>
+              <TooltipHeader>
+                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                  <Icons.Copy />
+                </button>
+              </TooltipHeader>
+              <TooltipContent>
+                <span ref={buttonRef} style={{ whiteSpace: "nowrap" }}>
+                  Copy to clipboard
+                </span>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          <p>
+            {information}
+            {!!additionalInformation.length && <small> • {additionalInformation}</small>}
+          </p>
+        </S.CardInfo>
+      </S.CardContent>
+    </S.CardWrapper>
+  );
+};
 
 const ProtectedByPassword = ({ label = "", isActive = false }) => {
   const IconComponent = Icons[isActive ? "Verified" : "Close"];

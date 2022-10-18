@@ -18,7 +18,10 @@ import {
   USER_TRADE_ACCOUNT_PUSH,
   USER_TRADE_ACCOUNT_MODAL_ACTIVE,
   USER_TRADE_ACCOUNT_MODAL_CANCEL,
+  USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
+  USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
 } from "./constants";
+import { PreviewAccountModal } from "./reducer";
 
 export interface PolkadotWalletFetchPayload {
   allAccounts: TradeAccount[];
@@ -62,6 +65,13 @@ export interface RegisterTradeAccountModalActive {
     name: string;
     address: string;
   };
+}
+export interface PreviewTradeAccountModalCancel {
+  type: typeof USER_PREVIEW_ACCOUNT_MODAL_CANCEL;
+}
+export interface PreviewTradeAccountModalActive {
+  type: typeof USER_PREVIEW_ACCOUNT_MODAL_ACTIVE;
+  payload?: PreviewAccountModal["selected"];
 }
 export interface RegisterTradeAccountModalCancel {
   type: typeof USER_TRADE_ACCOUNT_MODAL_CANCEL;
@@ -136,7 +146,9 @@ export type TradeAccountsAction =
   | ImportTradeAccountError
   | TradeAccountPush
   | RegisterTradeAccountModalActive
-  | RegisterTradeAccountModalCancel;
+  | RegisterTradeAccountModalCancel
+  | PreviewTradeAccountModalCancel
+  | PreviewTradeAccountModalActive;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -232,4 +244,15 @@ export const registerAccountModalActive = (
 
 export const registerAccountModalCancel = (): RegisterTradeAccountModalCancel => ({
   type: USER_TRADE_ACCOUNT_MODAL_CANCEL,
+});
+
+export const previewAccountModalActive = (
+  payload?: PreviewTradeAccountModalActive["payload"]
+): PreviewTradeAccountModalActive => ({
+  type: USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
+  payload,
+});
+
+export const previewAccountModalCancel = (): PreviewTradeAccountModalCancel => ({
+  type: USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
 });

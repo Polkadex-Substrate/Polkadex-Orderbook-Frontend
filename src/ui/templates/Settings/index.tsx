@@ -21,10 +21,8 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
+  previewAccountModalActive,
   registerAccountModalActive,
-  registerAccountModalCancel,
-  registerMainAccountReset,
-  registerTradeAccountReset,
   selectAssociatedTradeAddresses,
   selectIsMainAddressRegistered,
   selectMainAccount,
@@ -41,72 +39,43 @@ export const SettingsTemplate = () => {
     state,
     allFilteredTradeAccounts,
     filterControllerWallets,
-    preview,
+    isPreviewActive,
+    previewAccountSelected,
     currentControllerWallet,
     controllerWallets,
     tradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,
-    isTradeAccountSuccess,
-    isImportAccountSuccess,
     isActive,
     isLoading,
-    isRegisterControllerAccountSuccess,
     setState,
-    setPreview,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
     handleChangeCurrentControllerWallet,
     usingAccount,
     showRegistered,
     handleChangeShowRegistered,
+    handleCloseNewAccount,
+    handleClosePreviewModal,
   } = useSettings();
 
   const dispatch = useDispatch();
-  const handleClose = () => {
-    const hasAction =
-      isTradeAccountSuccess ||
-      !isLoading ||
-      isRegisterControllerAccountSuccess ||
-      isImportAccountSuccess;
-
-    if (hasAction) {
-      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
-        dispatch(registerMainAccountReset());
-      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
-        dispatch(registerTradeAccountReset());
-      else dispatch(registerAccountModalCancel());
-    }
-  };
   return (
     <>
-      <Modal
-        open={preview.status}
-        onClose={() =>
-          setPreview({
-            status: false,
-            selected: {},
-          })
-        }
-        placement="start right">
+      <Modal open={isPreviewActive} onClose={handleClosePreviewModal} placement="start right">
         <PreviewAccount
-          onClose={() =>
-            setPreview({
-              status: false,
-              selected: {},
-            })
-          }
-          selected={preview.selected}
+          onClose={handleClosePreviewModal}
+          selected={previewAccountSelected}
           mainAccAddress={getMainAddresssLinkedToTradingAccount(
-            preview.selected?.address,
+            previewAccountSelected?.address,
             userAccounts
           )}
         />
       </Modal>
-      <Modal open={isActive} onClose={handleClose} placement="start right">
+      <Modal open={isActive} onClose={handleCloseNewAccount} placement="start right">
         <NewAccount
-          onClose={handleClose}
+          onClose={handleCloseNewAccount}
           selected={{
             address: currentControllerWallet?.account.address,
             name: currentControllerWallet?.account?.meta?.name,
@@ -232,10 +201,7 @@ export const SettingsTemplate = () => {
                                   <S.Preview
                                     type="button"
                                     onClick={() =>
-                                      setPreview({
-                                        status: true,
-                                        selected: account,
-                                      })
+                                      dispatch(previewAccountModalActive(account))
                                     }>
                                     <Icons.Show />
                                     <span>Preview</span>

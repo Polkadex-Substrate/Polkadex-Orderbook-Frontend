@@ -18,7 +18,7 @@ export const selectMainAccount =
   (address: string) =>
   (state: RootState): ExtensionAccount =>
     address &&
-    selectExtensionWalletAccounts(state).find(
+    selectExtensionWalletAccounts(state)?.find(
       ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
     );
 

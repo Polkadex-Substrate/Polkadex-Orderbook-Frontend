@@ -1,4 +1,4 @@
-import { RootState, RegisterTradeAccount } from "../..";
+import { RootState, RegisterTradeAccount, PreviewAccountModal } from "../..";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
@@ -18,6 +18,11 @@ export const selectTradeAccount =
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.tradeWallet.registerAccountLoading;
 
+export const selectIsTradeAccountRemoveLoading = (
+  state: RootState,
+  address: string
+): boolean => selectRegisterTradeAccountRemoving(state).includes(address);
+
 export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
   state.user.tradeWallet.registerAccountSuccess;
 
@@ -29,3 +34,10 @@ export const selectRegisterTradeAccountInfo = (state: RootState): RegisterTradeA
 
 export const selectImportTradeAccountSuccess = (state: RootState): boolean =>
   state.user.tradeWallet.importAccountSuccess;
+
+export const selectPreviewTradeAccountSelect = (
+  state: RootState
+): PreviewAccountModal["selected"] => state.user.tradeWallet.previewAccountModal.selected;
+
+export const selectIsPreviewTradeAccountActive = (state: RootState): boolean =>
+  state.user.tradeWallet.previewAccountModal.isActive;

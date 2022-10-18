@@ -18,9 +18,12 @@ import {
   USER_TRADE_ACCOUNT_IMPORT_DATA,
   USER_TRADE_ACCOUNT_MODAL_CANCEL,
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
+  USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export interface TradeAccountsState {
   isFetching: boolean;
@@ -30,6 +33,7 @@ export interface TradeAccountsState {
   removesInLoading: Array<string>;
   registerAccountModal: RegisterTradeAccount;
   importAccountSuccess: boolean;
+  previewAccountModal: PreviewAccountModal;
 }
 
 export type RegisterTradeAccount = {
@@ -44,6 +48,10 @@ export type RegisterTradeAccount = {
     address: string;
   };
 };
+export type PreviewAccountModal = {
+  isActive?: boolean;
+  selected?: IUserTradeAccount;
+};
 
 const initialState: TradeAccountsState = {
   isFetching: false,
@@ -55,6 +63,9 @@ const initialState: TradeAccountsState = {
     isActive: false,
   },
   importAccountSuccess: false,
+  previewAccountModal: {
+    isActive: false,
+  },
 };
 
 export const TradeAccountsReducer = (
@@ -118,6 +129,23 @@ export const TradeAccountsReducer = (
         ...state,
         registerAccountModal: {
           isActive: false,
+        },
+      };
+    case USER_PREVIEW_ACCOUNT_MODAL_ACTIVE:
+      return {
+        ...state,
+        previewAccountModal: {
+          ...state.registerAccountModal,
+          isActive: true,
+          selected: action.payload,
+        },
+      };
+    case USER_PREVIEW_ACCOUNT_MODAL_CANCEL:
+      return {
+        ...state,
+        previewAccountModal: {
+          isActive: false,
+          selected: null,
         },
       };
     case USER_REGISTER_TRADE_ACCOUNT_RESET:

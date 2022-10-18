@@ -1,12 +1,19 @@
 import { useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  previewAccountModalCancel,
+  registerAccountModalCancel,
+  registerMainAccountReset,
+  registerTradeAccountReset,
   selectBrowserTradeAccounts,
   selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
+  selectIsPreviewTradeAccountActive,
   selectIsRegisterMainAccountLoading,
   selectLinkedMainAddresses,
+  selectPreviewTradeAccountSelect,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
   selectRegisterTradeAccountSuccess,
@@ -19,15 +26,11 @@ import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
-  const [preview, setPreview] = useState<{ status: boolean; selected: IUserTradeAccount }>({
-    status: false,
-    selected: null,
-  });
-  const [newAccount, setNewAccount] = useState({ status: false, selected: null });
   const [showRegistered, setShowRegistered] = useState(false);
   const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
 
+  const dispatch = useDispatch();
   const [currentControllerWallet, setCurrentControllerWallet] =
     useState<ExtensionAccount | null>(null);
 
@@ -51,6 +54,8 @@ export const useSettings = () => {
   const isRegisterControllerAccountSuccess = useReduxSelector(
     selectRegisterTradeAccountSuccess
   );
+  const isPreviewActive = useReduxSelector(selectIsPreviewTradeAccountActive);
+  const previewAccountSelected = useReduxSelector(selectPreviewTradeAccountSelect);
 
   const tradeAccounts = useMemo(
     () =>
@@ -71,6 +76,7 @@ export const useSettings = () => {
       }),
     [allAccounts, browserTradeAccounts]
   );
+
   const allFilteredTradeAccounts = useMemo(
     () =>
       tradeAccounts?.reduce((pv, cv) => {
@@ -109,10 +115,27 @@ export const useSettings = () => {
     [filterControllerWallets, controllerWallets, showRegistered, linkedMainAddress]
   );
 
+  const handleCloseNewAccount = () => {
+    const hasAction =
+      isTradeAccountSuccess ||
+      !isLoading ||
+      isRegisterControllerAccountSuccess ||
+      isImportAccountSuccess;
+
+    if (hasAction) {
+      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
+        dispatch(registerMainAccountReset());
+      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+        dispatch(registerTradeAccountReset());
+      else dispatch(registerAccountModalCancel());
+    }
+  };
+  const handleClosePreviewModal = () => dispatch(previewAccountModalCancel());
+
   return {
+    handleClosePreviewModal,
+    handleCloseNewAccount,
     state,
-    preview,
-    newAccount,
     currentControllerWallet,
     currentTradeAccount,
     isTradeAccountLoading,
@@ -131,8 +154,8 @@ export const useSettings = () => {
     isRegisterControllerAccountSuccess,
     isLoading,
     setState,
-    setPreview,
-    setNewAccount,
+    isPreviewActive,
+    previewAccountSelected,
     handleFilterTradeAccounts: setFilterTradeAccounts,
     handleFilterControllerWallets: setFilterControllerWallets,
     handleChangeCurrentControllerWallet,

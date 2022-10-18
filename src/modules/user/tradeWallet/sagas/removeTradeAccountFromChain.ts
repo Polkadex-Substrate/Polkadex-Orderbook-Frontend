@@ -3,6 +3,7 @@ import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 
 import {
+  previewAccountModalCancel,
   registerTradeAccountError,
   removeProxyAccountFromChainData,
   RemoveProxyAccountFromChainFetch,
@@ -28,17 +29,6 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
       throw new Error("Please select a main account!");
     }
     if (api.isConnected && account?.address) {
-      yield put(
-        notificationPush({
-          type: "LoadingAlert",
-          message: {
-            title: "Processing your transaction...",
-            description:
-              "Please sign the transaction and wait for block finalization. This may take a few minutes",
-          },
-          time: new Date().getTime(),
-        })
-      );
       const res = yield call(() =>
         removeProxyFromAccount(api, tradeAddress, signer, account.address)
       );
@@ -53,6 +43,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
             time: new Date().getTime(),
           })
         );
+        yield put(previewAccountModalCancel());
         yield put(removeProxyAccountFromChainData({ address: action.payload.address }));
         yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
       } else {
