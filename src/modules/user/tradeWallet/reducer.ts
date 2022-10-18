@@ -34,7 +34,7 @@ export interface TradeAccountsState {
 
 export type RegisterTradeAccount = {
   isActive?: boolean;
-  selectedAddres?: {
+  selectedAddress?: {
     name: string;
     address: string;
   };
@@ -110,7 +110,7 @@ export const TradeAccountsReducer = (
         registerAccountModal: {
           ...state.registerAccountModal,
           isActive: true,
-          selectedAddres: action?.payload,
+          selectedAddress: action?.payload,
         },
       };
     case USER_TRADE_ACCOUNT_MODAL_CANCEL:

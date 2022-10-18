@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
-  selectExtensionAccountSelected,
   selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsRegisterMainAccountLoading,
@@ -16,6 +15,7 @@ import {
   selectUserInfo,
   selectUsingAccount,
 } from "@polkadex/orderbook-modules";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const useSettings = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,12 @@ export const useSettings = () => {
   const [preview, setPreview] = useState({ status: false, selected: null });
   const [newAccount, setNewAccount] = useState({ status: false, selected: null });
 
-  const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
+  const [currentControllerWallet, setCurrentControllerWallet] =
+    useState<ExtensionAccount | null>(null);
+
+  const handleChangeCurrentControllerWallet = (account: ExtensionAccount) =>
+    setCurrentControllerWallet(account);
+
   const currentTradeAccount = useReduxSelector(selectUsingAccount);
 
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
@@ -94,5 +99,6 @@ export const useSettings = () => {
     setNewAccount,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
+    handleChangeCurrentControllerWallet,
   };
 };

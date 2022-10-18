@@ -23,10 +23,13 @@ import {
   registerAccountModalCancel,
   registerMainAccountReset,
   registerTradeAccountReset,
+  selectAssociatedTradeAddresses,
   selectIsMainAddressRegistered,
+  selectMainAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
   const {
@@ -49,6 +52,7 @@ export const SettingsTemplate = () => {
     setPreview,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
+    handleChangeCurrentControllerWallet,
     usingAccount,
   } = useSettings();
 
@@ -144,22 +148,7 @@ export const SettingsTemplate = () => {
                       title="No tradding accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
                       // actionTitle="Import trading account"
-                      onClick={() => console.log("Open Modal")}>
-                      {false && (
-                        <S.Registered>
-                          <div>
-                            <Icons.Info />
-                          </div>
-                          <div>
-                            <span>Wallet found, but not registered</span>
-                            <p>
-                              Ops, it seems that you have one or several wallets, it is
-                              necessary to register a wallet to create a trading account.
-                            </p>
-                          </div>
-                        </S.Registered>
-                      )}
-                    </Empty>
+                      onClick={() => console.log("Open Modal")}></Empty>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
@@ -279,14 +268,15 @@ export const SettingsTemplate = () => {
                           <Dropdown>
                             <Dropdown.Trigger>
                               <S.AccountHeaderTrigger>
-                                <span>All wallets types</span>
+                                <span>All Accounts</span>
                                 <div>
                                   <Icons.ArrowBottom />
                                 </div>
                               </S.AccountHeaderTrigger>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              <Dropdown.Item>Test</Dropdown.Item>
+                              <Dropdown.Item>All Accounts</Dropdown.Item>
+                              <Dropdown.Item>Registered Accounts</Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
                         </S.AccountHeaderContent>
@@ -300,14 +290,15 @@ export const SettingsTemplate = () => {
                             isUsing={
                               account.address === currentControllerWallet?.account?.address
                             }
-                            handleRegister={() =>
+                            handleRegister={(account: ExtensionAccount) => {
+                              handleChangeCurrentControllerWallet(account);
                               dispatch(
                                 registerAccountModalActive({
-                                  name: account.meta.name,
-                                  address: account.address,
+                                  name: account.account.meta.name,
+                                  address: account.account.address,
                                 })
-                              )
-                            }
+                              );
+                            }}
                           />
                         ))}
                       </S.WalletContent>
@@ -354,7 +345,7 @@ type ControllerWaletsProps = {
   address: string;
   name: string;
   isUsing: boolean;
-  handleRegister?: () => void;
+  handleRegister?: (account: ExtensionAccount) => void;
 };
 const ControllerWallets = ({
   address,
@@ -363,6 +354,8 @@ const ControllerWallets = ({
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
+  const linkedTradeAccounts = useReduxSelector(selectAssociatedTradeAddresses(address));
+  const extensionAccount = useReduxSelector(selectMainAccount(address));
   return (
     <WalletCard
       isUsing={isUsing}
@@ -370,11 +363,15 @@ const ControllerWallets = ({
       defaultTitle="Default controller account"
       name={name}
       address={address}
-      aditionalInfo="(1 trading account)">
+      aditionalInfo={isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`}>
       {isRegistered ? (
         <Badge isRegistered={true}>Registered</Badge>
       ) : (
-        <S.Button type="button" onClick={handleRegister}>
+        <S.Button
+          type="button"
+          onClick={() => {
+            handleRegister(extensionAccount);
+          }}>
           Register Now
         </S.Button>
       )}
