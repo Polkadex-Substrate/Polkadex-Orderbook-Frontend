@@ -112,12 +112,15 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                             type="button"
                             onClick={() =>
                               handleCopy(selectedTradeAccount.address, tradeButton)
-                            }>
+                            }
+                            onMouseOut={() => handleOnMouseOut(tradeButton)}>
                             <Icons.Copy />
                           </button>
                         </TooltipHeader>
                         <TooltipContent>
-                          <span ref={tradeButton}>Testing </span>
+                          <span ref={tradeButton} style={{ whiteSpace: "nowrap" }}>
+                            Copy to clipboard
+                          </span>
                         </TooltipContent>
                       </Tooltip>
                     )}
@@ -174,12 +177,15 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                       type="button"
                       onClick={() =>
                         handleCopy(selectedMainAccount.account.address, controllerButton)
-                      }>
+                      }
+                      onMouseOut={() => handleOnMouseOut(controllerButton)}>
                       <Icons.Copy />
                     </button>
                   </TooltipHeader>
                   <TooltipContent>
-                    <span ref={controllerButton}>Testing</span>
+                    <span ref={controllerButton} style={{ whiteSpace: "nowrap" }}>
+                      Copy to clipboard
+                    </span>
                   </TooltipContent>
                 </Tooltip>
                 <p>

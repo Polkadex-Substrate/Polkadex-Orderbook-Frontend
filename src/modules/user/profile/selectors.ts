@@ -23,6 +23,9 @@ export const selectUserEmail = (state: RootState): string => state.user.profile.
 export const selectUsingAccount = (state: RootState): UserAccount =>
   state.user.profile.selectedAccount;
 
+export const selectHasUsingAccount = (state: RootState): boolean =>
+  !!Object?.keys(selectUsingAccount(state)?.mainAddress)?.length;
+
 export const selectUserAccounts = (state: RootState): UserAccount[] =>
   state.user.profile.userData.userAccounts;
 

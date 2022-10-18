@@ -28,7 +28,10 @@ import {
   selectMainAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modules/user/profile/helpers";
+import {
+  getMainAddresssLinkedToTradingAccount,
+  transformAddress,
+} from "@polkadex/orderbook/modules/user/profile/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
@@ -58,12 +61,13 @@ export const SettingsTemplate = () => {
 
   const dispatch = useDispatch();
   const handleClose = () => {
-    if (
+    const hasAction =
       isTradeAccountSuccess ||
       !isLoading ||
       isRegisterControllerAccountSuccess ||
-      isImportAccountSuccess
-    ) {
+      isImportAccountSuccess;
+
+    if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
         dispatch(registerMainAccountReset());
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
@@ -182,11 +186,16 @@ export const SettingsTemplate = () => {
                         {filterTradeAccounts
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((account, i) => {
-                            // const isUsing = currentTradeAccount.address === v.address;
                             const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
                               account.address,
                               userAccounts
                             );
+                            const acc = controllerWallets?.find(
+                              ({ account }) => account?.address === linkedMainAddress
+                            );
+                            const hasLinkedAccount =
+                              !!linkedMainAddress?.length ||
+                              !!acc?.account?.meta?.name?.length;
                             const isUsing = account.address === usingAccount.tradeAddress;
                             return (
                               <WalletCard
@@ -194,10 +203,14 @@ export const SettingsTemplate = () => {
                                 isUsing={isUsing}
                                 isDefault={false}
                                 defaultTitle="Default trade account"
-                                name={String(account?.account?.meta.name || "unknown")}
+                                name={String(account?.account?.meta?.name || "Unknown")}
                                 address={account.address}
                                 additionalInfo={
-                                  linkedMainAddress ? `(Linked to ${linkedMainAddress})` : null
+                                  hasLinkedAccount &&
+                                  `(Linked to ${
+                                    acc?.account?.meta?.name ||
+                                    transformAddress(linkedMainAddress)
+                                  })`
                                 }>
                                 <S.WalletActions>
                                   {!isUsing && account.isPresentInBrowser && (

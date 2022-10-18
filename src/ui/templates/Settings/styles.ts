@@ -446,7 +446,7 @@ export const Preview = styled.button`
     padding: 0.5rem;
     border-radius: 10rem;
     transition: 0.2s background-color ease;
-    width: auto;
+    width: fit-content;
     span {
       display: none;
       width: 0;
@@ -454,6 +454,7 @@ export const Preview = styled.button`
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
+      width: auto;
     }
     :hover {
       background: ${theme.colors.secondaryBackground};
