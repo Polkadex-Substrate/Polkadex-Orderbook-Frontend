@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -15,7 +15,13 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder, useReduxSelector } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import { selectUsingAccount, unlockTradeAccount } from "@polkadex/orderbook-modules";
+import {
+  selectBrowserTradeAccounts,
+  selectTradeAccount,
+  selectUsingAccount,
+  unlockTradeAccount,
+} from "@polkadex/orderbook-modules";
+import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -138,6 +144,13 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 const ProtectPassword = () => {
   const dispatch = useDispatch();
   const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
+
+  useEffect(() => {
+    // if account is not protected by password use default password to unlock account.
+    tryUnlockTradeAccount(tradeAccount);
+  }, [currTradeAddr]);
+
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
       showPassword: false,
@@ -145,6 +158,7 @@ const ProtectPassword = () => {
     },
     onSubmit: (values) => {
       isValidSize &&
+        tradeAccount.isLocked &&
         dispatch(unlockTradeAccount({ address: currTradeAddr, password: values.password }));
     },
   });
