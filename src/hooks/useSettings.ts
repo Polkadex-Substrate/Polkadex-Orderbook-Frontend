@@ -74,11 +74,11 @@ export const useSettings = () => {
   const allFilteredAccounts = useMemo(
     () =>
       controllerWallets
-        .sort((a) => (linkedMainAddress.includes(a.account.address) ? -1 : 1))
-        .filter((value) =>
+        ?.sort((a) => (linkedMainAddress.includes(a.account.address) ? -1 : 1))
+        ?.filter((value) =>
           showRegistered ? linkedMainAddress.includes(value.account.address) : value
         )
-        .reduce((pv, cv) => {
+        ?.reduce((pv, cv) => {
           const { account } = cv;
           const checker = filterControllerWallets?.toLowerCase();
           const address = account?.address?.toLowerCase();
