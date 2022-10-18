@@ -54,11 +54,11 @@ export const Title = styled.div`
 export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
+    grid-template-columns: auto 1fr;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: 2rem;
     @media screen and (min-width: 880px) {
-      grid-template-columns: 0.6fr 1fr;
       min-height: 40rem;
     }
   `}
@@ -68,49 +68,15 @@ export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 2rem;
-    @media screen and (min-width: 880px) {
-      background-image: url("/img/signInHero.svg");
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: bottom;
-    }
-    div {
-      padding: 3rem 2.5rem;
-      max-width: calc(90%);
-    }
-    h2 {
-      font-size: 2.2rem;
-      font-weight: 550;
-      margin-bottom: 1.5rem;
-    }
-    p {
-      line-height: 1.4;
-    }
-  `}
-`;
-export const Terms = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
-    a {
-      color: ${theme.colors.primary};
-      text-decoration: underline;
-    }
-  `}
-`;
-
-export const InputLineLink = styled.div`
-  ${({ theme }) => css`
-    color: ${theme.colors.primary};
-    font-size: 1.2rem;
+    width: 3rem;
   `}
 `;
 
 export const Box = styled.div`
   padding: 2rem;
+  width: 100%;
   @media screen and (min-width: 880px) {
-    min-width: 40rem;
+    max-width: 40rem;
     padding: 4rem;
     justify-self: center;
     align-self: center;
@@ -127,6 +93,8 @@ export const Box = styled.div`
   }
 `;
 
+export const BoxTitle = styled.div``;
+
 export const Show = styled.button`
   ${({ theme }) => css`
     width: 2.2rem;
@@ -139,6 +107,36 @@ export const Show = styled.button`
     }
     svg {
       stroke: ${theme.colors.text};
+    }
+  `}
+`;
+export const Success = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 8rem 2rem 9rem 2rem;
+    border-radius: 2rem;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    margin: 2rem;
+    @media screen and (min-width: 880px) {
+      min-height: 40rem;
+    }
+    div {
+      width: 4rem;
+      img {
+        width: 100%;
+      }
+    }
+    p {
+      max-width: 50rem;
+      line-height: 1.5;
+    }
+    small {
+      opacity: 0.5;
     }
   `}
 `;

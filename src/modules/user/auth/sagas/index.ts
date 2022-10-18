@@ -3,6 +3,7 @@ import { takeLatest } from "redux-saga/effects";
 import {
   AUTH_CHANGE_PASSWORD_FETCH,
   AUTH_CODE_VERIFY_FETCH,
+  AUTH_FORGOT_PASSWORD_CODE,
   AUTH_FORGOT_PASSWORD_FETCH,
   AUTH_LOGOUT_FETCH,
   AUTH_RESEND_CODE_FETCH,
@@ -17,6 +18,7 @@ import { signInSaga } from "./signInSaga";
 import { signUpSaga } from "./signUpSaga";
 import { changePasswordSaga } from "./changePassword";
 import { forgotPasswordSaga } from "./forgotPasswordSaga";
+import { forgotPasswordCodeSaga } from "./forgotPasswordCodeSaga";
 
 export function* rootAuthSaga() {
   yield takeLatest(AUTH_SIGN_IN_FETCH, signInSaga);
@@ -26,4 +28,5 @@ export function* rootAuthSaga() {
   yield takeLatest(AUTH_RESEND_CODE_FETCH, resendCodeSaga);
   yield takeLatest(AUTH_CHANGE_PASSWORD_FETCH, changePasswordSaga);
   yield takeLatest(AUTH_FORGOT_PASSWORD_FETCH, forgotPasswordSaga);
+  yield takeLatest(AUTH_FORGOT_PASSWORD_CODE, forgotPasswordCodeSaga);
 }

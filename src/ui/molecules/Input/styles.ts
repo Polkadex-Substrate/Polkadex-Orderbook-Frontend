@@ -43,11 +43,15 @@ export const LineBox = styled.div<{ error?: boolean }>`
     padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
-
     span {
       color: ${theme.colors.tertiaryText};
     }
   `}
+`;
+export const LabelBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Box = styled.div`
@@ -91,7 +95,6 @@ export const PassCode = styled.div`
 export const LinePassCode = styled.div<{ error?: boolean }>`
   ${({ theme, error }) => css`
     display: flex;
-
     input {
       width: 100%;
       text-align: center;
@@ -141,7 +144,6 @@ export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
       font-weight: 500;
       white-space: nowrap;
     }
-
     div {
       display: flex;
       justify-content: ${hasLabel ? "flex-end" : "space-between"};

@@ -151,3 +151,4 @@ export * from "./Info";
 export * from "./AddMore";
 export * from "./AddWallet";
 export * from "./Upload";
+export * from "./EmailSent";

@@ -26,3 +26,15 @@ export const selectUserConfirmed = (state: RootState): AuthState["userConfirmed"
 
 export const selectUserAuthEmail = (state: RootState): AuthState["email"] =>
   state.user.auth.email;
+
+export const selectForgotPasswordLoading = (
+  state: RootState
+): AuthState["forgotPasswordLoading"] => state.user.auth.forgotPasswordLoading;
+
+export const selectForgotPasswordSuccess = (
+  state: RootState
+): AuthState["forgotPasswordSuccess"] => state.user.auth.forgotPasswordSuccess;
+
+export const selectForgotPasswordEmail = (
+  state: RootState
+): AuthState["forgotPasswordEmail"] => state.user.auth.forgotPasswordEmail;

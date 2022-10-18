@@ -51,14 +51,20 @@ export const SecondaryInput = ({ label, children, ...props }: T.SecondaryInputPr
 };
 
 export const InputLine = forwardRef(
-  ({ label, error, children, ...props }: T.Props, ref: T.ReactRef<HTMLInputElement>) => {
+  (
+    { label, error, labelRight, children, ...props }: T.Props,
+    ref: T.ReactRef<HTMLInputElement>
+  ) => {
     const inputRef = useRef(null);
 
     return (
       <div>
         <S.LineBox error={!!error?.length}>
           <label htmlFor={props.name}>
-            {label && <span>{label}</span>}
+            <S.LabelBox>
+              {label && <span>{label}</span>}
+              {labelRight}
+            </S.LabelBox>
             <S.LineContainer>
               <input ref={ref || inputRef} {...props} />
               {children}
