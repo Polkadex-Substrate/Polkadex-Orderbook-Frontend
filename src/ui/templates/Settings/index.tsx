@@ -18,52 +18,42 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
-  extensionWalletAccountSelect,
   registerAccountModalActive,
   registerAccountModalCancel,
   registerMainAccountReset,
   registerTradeAccountReset,
-  selectBrowserTradeAccounts,
-  selectExtensionAccountSelected,
-  selectExtensionWalletAccounts,
-  selectImportTradeAccountSuccess,
   selectIsMainAddressRegistered,
-  selectIsRegisterMainAccountLoading,
-  selectRegisterTradeAccountInfo,
-  selectRegisterTradeAccountLoading,
-  selectRegisterTradeAccountSuccess,
-  selectUserInfo,
-  selectUsingAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
+import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modules/user/profile/helpers";
 
 export const SettingsTemplate = () => {
-  const [state, setState] = useState(false);
-  const [preview, setPreview] = useState({ status: false, selected: null });
+  const {
+    state,
+    filterTradeAccounts,
+    filterControllerWallets,
+    preview,
+    currentControllerWallet,
+    controllerWallets,
+    tradeAccounts,
+    user,
+    userAccounts,
+    linkedMainAddress,
+    isTradeAccountSuccess,
+    isImportAccountSuccess,
+    isActive,
+    selectedAddres,
+    isLoading,
+    isRegisterControllerAccountSuccess,
+    setState,
+    setPreview,
+    handleFilterTradeAccounts,
+    handleFilterControllerWallets,
+  } = useSettings();
+
   const dispatch = useDispatch();
-  const currentControllerWallet = useReduxSelector(selectExtensionAccountSelected);
-  const currentTradeAccount = useReduxSelector(selectUsingAccount);
-
-  const { isActive, selectedAddres } = useReduxSelector(selectRegisterTradeAccountInfo);
-
-  const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
-  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
-  const isLoading = isTradeAccountLoading || isControllerAccountLoading;
-  const isRegisterControllerAccountSuccess = useReduxSelector(
-    selectRegisterTradeAccountSuccess
-  );
-  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
-  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
-
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-  // .sort(
-  //   ({ account }) => (account.address !== currentControllerWallet?.account?.address ? 1 : -1)
-  // );
-  const tradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
-  const user = useReduxSelector(selectUserInfo);
-
   const handleClose = () => {
     if (
       isTradeAccountSuccess ||
@@ -97,6 +87,10 @@ export const SettingsTemplate = () => {
             })
           }
           selected={preview.selected}
+          mainAccAddress={getMainAddresssLinkedToTradingAccount(
+            preview.selected?.address,
+            userAccounts
+          )}
         />
       </Modal>
       <Modal open={isActive} onClose={handleClose} placement="start right">
@@ -162,29 +156,40 @@ export const SettingsTemplate = () => {
                     </Empty>
                   ) : (
                     <S.WalletWrapper>
-                      <AccountHeader>
+                      <AccountHeader
+                        handleFilter={(e) => handleFilterTradeAccounts(e.target.value)}>
                         <S.AccountHeaderContent>
                           <Checkbox>Show only linked accounts</Checkbox>
-                          <Dropdown>
-                            <Dropdown.Trigger>
-                              <S.AccountHeaderTrigger>
-                                <span>All</span>
-                                <div>
-                                  <Icons.ArrowBottom />
-                                </div>
-                              </S.AccountHeaderTrigger>
-                            </Dropdown.Trigger>
-                            <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              <Dropdown.Item>Test</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          {/* don't show all section if no linked address */}
+                          {linkedMainAddress.length ? (
+                            <Dropdown>
+                              <Dropdown.Trigger>
+                                <S.AccountHeaderTrigger>
+                                  <span>All</span>
+                                  <div>
+                                    <Icons.ArrowBottom />
+                                  </div>
+                                </S.AccountHeaderTrigger>
+                              </Dropdown.Trigger>
+                              <Dropdown.Menu fill="secondaryBackgroundSolid">
+                                {linkedMainAddress?.map((addr, i) => (
+                                  <Dropdown.Item key={i}>{addr}</Dropdown.Item>
+                                ))}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          ) : null}
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {tradeAccounts
+                        {
+                        filterTradeAccounts
                           // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
                           .map((v, i) => {
                             // const isUsing = currentTradeAccount.address === v.address;
+                            const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
+                              v.address,
+                              userAccounts
+                            );
                             const isUsing = false;
                             return (
                               <WalletCard
@@ -194,7 +199,19 @@ export const SettingsTemplate = () => {
                                 defaultTitle="Default trade account"
                                 name={String(v.meta.name)}
                                 address={v.address}
-                                aditionalInfo="(Linked to Ordebrook testing)">
+                                aditionalInfo={
+                                  linkedMainAddress ? `(Linked to ${linkedMainAddress})` : null
+                                }>
+                                <S.Button
+                                  type="button"
+                                  onClick={() =>
+                                    setPreview({
+                                      status: true,
+                                      selected: v,
+                                    })
+                                  }>
+                                  Preview
+                                </S.Button>
                                 <S.WalletActions>
                                   {!isUsing && (
                                     <S.Button
@@ -221,7 +238,8 @@ export const SettingsTemplate = () => {
                                 </S.WalletActions>
                               </WalletCard>
                             );
-                          })}
+                          })
+                          }
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -251,7 +269,8 @@ export const SettingsTemplate = () => {
                     />
                   ) : (
                     <S.WalletWrapper>
-                      <AccountHeader>
+                      <AccountHeader
+                        handleFilter={(e) => handleFilterControllerWallets(e.target.value)}>
                         <S.AccountHeaderContent>
                           <Dropdown>
                             <Dropdown.Trigger>
@@ -269,7 +288,7 @@ export const SettingsTemplate = () => {
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {controllerWallets?.map(({ account }, i) => (
+                        {filterControllerWallets?.map(({ account }, i) => (
                           <ControllerWallets
                             key={i}
                             address={account.address}
@@ -427,9 +446,9 @@ const Empty = ({
   </S.Empty>
 );
 
-const AccountHeader = ({ children }) => (
+const AccountHeader = ({ handleFilter = undefined, children }) => (
   <S.Header>
-    <Search isFull placeholder="Search" />
+    <Search onInput={handleFilter} isFull placeholder="Search" />
     <S.Filters>{children}</S.Filters>
   </S.Header>
 );

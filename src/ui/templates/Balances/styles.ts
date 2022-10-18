@@ -17,7 +17,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 1rem;
-  max-width: 120rem;
 `;
 
 export const ContainerMain = styled.div`
@@ -25,6 +24,7 @@ export const ContainerMain = styled.div`
   flex-direction: column;
   flex: 1;
   padding: 2rem;
+  max-width: 100rem;
   @media screen and (min-width: 590px) {
     padding: 4rem;
   }

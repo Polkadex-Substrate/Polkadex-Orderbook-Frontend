@@ -22,6 +22,7 @@ export const useInit = () => {
   useEffect(() => {
     dispatch(rangerConnectFetch());
     dispatch(tradeAccountsFetch());
+    dispatch(userAuthFetch());
     dispatch(extensionWalletFetch());
     dispatch(assetsFetch());
   }, [dispatch]);
