@@ -45,18 +45,19 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-  const [unlockAccount, setUnlockAccount] = useState(true);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [amount, setAmount] = useState(0);
   const currentAccount = useReduxSelector(selectUsingAccount);
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const tradingAccountInBrowser = useReduxSelector(
     selectTradeAccount(currentAccount?.tradeAddress)
   );
-
+  tryUnlockTradeAccount(tradingAccountInBrowser);
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
@@ -96,6 +97,17 @@ export const WithdrawTemplate = () => {
     return errors;
   };
 
+  const handleSubmitWithdraw = (amount: string | number) => {
+    const asset = isAssetPDEX(selectedAsset.asset_id)
+      ? { polkadex: null }
+      : { asset: selectedAsset.asset_id };
+    dispatch(
+      withdrawsFetch({
+        asset,
+        amount,
+      })
+    );
+  };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
@@ -104,16 +116,11 @@ export const WithdrawTemplate = () => {
     validationSchema: withdrawValidations,
     validate,
     onSubmit: (values) => {
-      if (!tradingAccountInBrowser?.isLocked) {
-        const asset = isAssetPDEX(selectedAsset.asset_id)
-          ? { polkadex: null }
-          : { asset: selectedAsset.asset_id };
-        dispatch(
-          withdrawsFetch({
-            asset: asset,
-            amount: values.amount,
-          })
-        );
+      setAmount(values.amount);
+      if (tradingAccountInBrowser.isLocked) {
+        setShowPassword(true);
+      } else {
+        handleSubmitWithdraw(values.amount);
       }
     },
   });
@@ -141,33 +148,32 @@ export const WithdrawTemplate = () => {
     [readyToClaim]
   );
 
-  const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
-
-  const shouldShowProtectedPassword = useMemo(
-    () => tradingAccountInBrowser?.isLocked && unlockAccount,
-    [tradingAccountInBrowser, unlockAccount]
-  );
-
-  console.log();
+  const handleUnlockClose = () => !showPassword && setShowPassword(false);
 
   return (
     <>
-      <Modal open={shouldShowProtectedPassword} onClose={handleUnlockClose}>
-        <Modal.Body>
-          <S.UnlockAccount>
-            <UnlockAccount
-              onSubmit={({ password }) => {
-                try {
-                  tradingAccountInBrowser.unlock(password);
-                  setUnlockAccount(false);
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
-            />
-          </S.UnlockAccount>
-        </Modal.Body>
-      </Modal>
+      {showPassword && (
+        <Modal open={showPassword} onClose={handleUnlockClose}>
+          <Modal.Body>
+            <S.UnlockAccount>
+              <UnlockAccount
+                onSubmit={({ password }) => {
+                  try {
+                    tradingAccountInBrowser.unlock(password);
+                    if (!tradingAccountInBrowser.isLocked) {
+                      handleSubmitWithdraw(amount);
+                    }
+                  } catch (error) {
+                    alert(error);
+                  } finally {
+                    setShowPassword(false);
+                  }
+                }}
+              />
+            </S.UnlockAccount>
+          </Modal.Body>
+        </Modal>
+      )}
       <Head>
         <title>Deposit | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
