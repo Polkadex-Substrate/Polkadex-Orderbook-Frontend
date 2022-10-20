@@ -6,7 +6,6 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
   css({
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     "& label": {
       width: " fit-content",
       marginLeft: "0.5rem",

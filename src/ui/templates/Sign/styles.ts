@@ -116,6 +116,9 @@ export const Terms = styled.div`
       color: ${theme.colors.primary};
       text-decoration: underline;
     }
+    span {
+      line-height: 1.3;
+    }
   `}
 `;
 

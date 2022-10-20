@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
+import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignUp } from "@polkadex/orderbook-hooks";
@@ -22,12 +22,21 @@ export const SignTemplate = () => {
     repeatPassword: false,
   });
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+  const {
+    touched,
+    handleSubmit,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    setFieldValue,
+    values,
+  } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
       email: "",
-      terms: false,
+      termsAccepted: false,
     },
     validationSchema: signUpValidations,
     onSubmit: (values) => {
@@ -108,15 +117,26 @@ export const SignTemplate = () => {
                     </S.Show>
                   </InputLine>
                   <S.Terms>
-                    <span>
-                      By clicking the submit button below, I hereby agree with Polkadex{" "}
-                      <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
-                        target="_blank"
-                        rel="noreferrer">
-                        Terms of Service and Privacy Policy
-                      </a>
-                    </span>
+                    <Checkbox
+                      checked={values.termsAccepted}
+                      onChange={() => setFieldValue("termsAccepted", !values.termsAccepted)}>
+                      <span>
+                        By clicking the submit button below,I hereby agree with Polkadex{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Terms of Service
+                        </a>{" "}
+                        and{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Privacy Policy
+                        </a>
+                      </span>
+                    </Checkbox>
                   </S.Terms>
                   <Button
                     type="submit"
