@@ -1,4 +1,9 @@
-import { RootState, RegisterTradeAccount, PreviewAccountModal } from "../..";
+import {
+  RootState,
+  RegisterTradeAccount,
+  PreviewAccountModal,
+  selectUsingAccount,
+} from "../..";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
@@ -14,6 +19,13 @@ export const selectTradeAccount =
     selectBrowserTradeAccounts(state).find(
       (account) => account?.address?.toLowerCase() === address?.toLowerCase()
     );
+
+export const selectShouldShowProtectedPassword = (state: RootState): boolean =>
+  state.user.tradeWallet?.allBrowserAccounts?.some(
+    (account) =>
+      account?.address?.toLowerCase() ===
+      state.user.profile?.selectedAccount?.tradeAddress?.toLowerCase()
+  );
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.tradeWallet.registerAccountLoading;

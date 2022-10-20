@@ -33,6 +33,10 @@ export const CreateAccountForm = ({
     linkedMainAddresses?.includes(account.address)
   );
   const hasData = !!selectedAccountAddress?.length;
+  const initialMessage = registeredAccounts?.length
+    ? "Select your main account"
+    : "Please register an account first";
+
   const {
     errors,
     values,
@@ -50,10 +54,7 @@ export const CreateAccountForm = ({
       isPasscodeVisible: false,
       controllerWallet: {
         name: selectedAccountName || "",
-        address:
-          selectedAccountAddress || registeredAccounts?.length > 0
-            ? "Select your main account"
-            : "Please register an account first",
+        address: hasData ? selectedAccountAddress : initialMessage,
       },
     },
     validationSchema: createAccountValidations,

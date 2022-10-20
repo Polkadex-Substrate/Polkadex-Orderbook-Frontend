@@ -58,6 +58,8 @@ export const SettingsTemplate = () => {
     handleChangeShowRegistered,
     handleCloseNewAccount,
     handleClosePreviewModal,
+    filterTradeAccountsByControllerAccount,
+    handleFilterTradeAccountByController,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -134,22 +136,36 @@ export const SettingsTemplate = () => {
                       <AccountHeader
                         handleFilter={(e) => handleFilterTradeAccounts(e.target.value)}>
                         <S.AccountHeaderContent>
-                          <Checkbox>Show only linked accounts</Checkbox>
                           {/* don't show all section if no linked address */}
-                          {linkedMainAddress.length ? (
+                          {controllerWallets?.length ? (
                             <Dropdown>
                               <Dropdown.Trigger>
                                 <S.AccountHeaderTrigger>
-                                  <span>All</span>
+                                  <span>{filterTradeAccountsByControllerAccount}</span>
                                   <div>
                                     <Icons.ArrowBottom />
                                   </div>
                                 </S.AccountHeaderTrigger>
                               </Dropdown.Trigger>
                               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                {linkedMainAddress?.map((addr, i) => (
-                                  <Dropdown.Item key={i}>{addr}</Dropdown.Item>
-                                ))}
+                                {[
+                                  { account: { meta: { name: "All" }, address: "all" } },
+                                  ...controllerWallets,
+                                ]?.map(({ account }, i) => {
+                                  const name = account?.meta?.name?.length
+                                    ? account?.meta?.name
+                                    : transformAddress(account.address, 5);
+
+                                  return (
+                                    <Dropdown.Item
+                                      key={i}
+                                      onAction={() =>
+                                        handleFilterTradeAccountByController(account.address)
+                                      }>
+                                      <S.Dropdown>{name}</S.Dropdown>
+                                    </Dropdown.Item>
+                                  );
+                                })}
                               </Dropdown.Menu>
                             </Dropdown>
                           ) : null}
