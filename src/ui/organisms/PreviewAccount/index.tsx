@@ -81,10 +81,12 @@ export const PreviewAccount = ({
       spinner="Keyboard">
       <S.Main>
         {showProtectedPasswords && isProtectPasswordActive ? (
-          <UnlockAccount
-            onSubmit={({ password }) => console.log(password, "Submiting")}
-            handleClose={() => console.log("close")}
-          />
+          <S.UnlockAccount>
+            <UnlockAccount
+              onSubmit={({ password }) => console.log(password, "Submiting")}
+              handleClose={() => console.log("close")}
+            />
+          </S.UnlockAccount>
         ) : (
           <>
             <S.Header

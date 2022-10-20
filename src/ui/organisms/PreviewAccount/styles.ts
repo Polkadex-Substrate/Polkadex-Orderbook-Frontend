@@ -202,3 +202,10 @@ export const DropdownButton = styled(FooterButton)`
     }
   `}
 `;
+
+export const UnlockAccount = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+`;
