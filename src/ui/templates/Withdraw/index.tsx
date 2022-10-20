@@ -80,11 +80,11 @@ export const WithdrawTemplate = () => {
 
   const validate = (values) => {
     const errors = {} as any;
-    if (values.amount.includes("e")) {
+    if (values?.amount?.includes("e")) {
       errors.amount = "use a valid amount instead";
     }
 
-    if (+values.amount > +availableAmount?.free_balance) {
+    if (+values?.amount > +availableAmount?.free_balance) {
       errors.amount = "Amount cannot be greater than balance";
     }
     return errors;
