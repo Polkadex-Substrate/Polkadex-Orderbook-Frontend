@@ -20,6 +20,8 @@ import {
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
   USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
   USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
+  USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
+  USER_TRADE_ACCOUNT_EXPORT_DATA,
 } from "./constants";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
@@ -34,6 +36,7 @@ export interface TradeAccountsState {
   registerAccountModal: RegisterTradeAccount;
   importAccountSuccess: boolean;
   previewAccountModal: PreviewAccountModal;
+  exportAccountLoading: boolean;
 }
 
 export type RegisterTradeAccount = {
@@ -66,6 +69,7 @@ const initialState: TradeAccountsState = {
   previewAccountModal: {
     isActive: false,
   },
+  exportAccountLoading: false,
 };
 
 export const TradeAccountsReducer = (
@@ -104,7 +108,16 @@ export const TradeAccountsReducer = (
         registerAccountLoading: true,
         registerAccountSuccess: false,
       };
-
+    case USER_TRADE_ACCOUNT_EXPORT_ACTIVE:
+      return {
+        ...state,
+        exportAccountLoading: !state.exportAccountLoading,
+      };
+    case USER_TRADE_ACCOUNT_EXPORT_DATA:
+      return {
+        ...state,
+        exportAccountLoading: false,
+      };
     case USER_REGISTER_TRADE_ACCOUNT_DATA:
       return {
         ...state,

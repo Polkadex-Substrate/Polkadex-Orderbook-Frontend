@@ -5,12 +5,14 @@ import {
   USER_TRADE_ACCOUNTS_FETCH,
   USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
   USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  USER_TRADE_ACCOUNT_EXPORT_FETCH,
 } from "../constants";
 
 import { loadTradeAccountsSaga } from "./loadTradeAccountsSaga";
 import { registerTradeAccountSaga } from "./registerTradeAccountSaga";
 import { removeProxyAccountFromChainSaga } from "./removeTradeAccountFromChain";
 import { importTradeAccountFetchSaga } from "./importTradeAccountSaga";
+import { exportTradeAccountFetchSaga } from "./exportTradeAccountSaga";
 
 export function* rootTradeAccountsSaga() {
   yield takeLatest(USER_TRADE_ACCOUNTS_FETCH, loadTradeAccountsSaga);
@@ -20,4 +22,5 @@ export function* rootTradeAccountsSaga() {
     removeProxyAccountFromChainSaga
   );
   yield takeLeading(USER_TRADE_ACCOUNT_IMPORT_FETCH, importTradeAccountFetchSaga);
+  yield takeLatest(USER_TRADE_ACCOUNT_EXPORT_FETCH, exportTradeAccountFetchSaga);
 }
