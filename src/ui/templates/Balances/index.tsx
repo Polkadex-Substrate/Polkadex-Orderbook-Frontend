@@ -68,8 +68,6 @@ export const BalancesTemplate = () => {
                       </Table.Header>
                       <Table.Body striped>
                         {assets.map((item) => {
-                          console.log("item:", item);
-                          console.log("userBalances:", userBalances);
                           const balance = userBalances?.find(
                             (value) => value.asset_id === item.asset_id
                           );
