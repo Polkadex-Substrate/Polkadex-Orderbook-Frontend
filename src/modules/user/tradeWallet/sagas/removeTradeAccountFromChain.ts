@@ -14,7 +14,11 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectLinkedMainAddress, selectMainAccount } from "@polkadex/orderbook-modules";
+import {
+  selectLinkedMainAddress,
+  selectMainAccount,
+  userProfileTradeAccountDelete,
+} from "@polkadex/orderbook-modules";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
@@ -46,6 +50,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
         yield put(previewAccountModalCancel());
         yield put(removeProxyAccountFromChainData({ address: action.payload.address }));
         yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+        yield put(userProfileTradeAccountDelete(tradeAddress));
       } else {
         throw new Error(res.message);
       }

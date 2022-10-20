@@ -1,15 +1,18 @@
-import { ProfileAction, AuthInfo, UserAccount } from "./actions";
+import _ from "lodash";
+
+import { AuthInfo, ProfileAction, UserAccount } from "./actions";
 import {
-  PROFILE_USER_ERROR,
-  PROFILE_USER_FETCH,
-  PROFILE_USER_CHANGE_INIT_BANNER,
+  PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
+  PROFILE_USER_ACCOUNT_PUSH,
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_AUTH_FETCH,
+  PROFILE_USER_CHANGE_INIT_BANNER,
   PROFILE_USER_DATA,
-  PROFILE_USER_SELECT_ACCOUNT_DATA,
-  PROFILE_USER_ACCOUNT_PUSH,
+  PROFILE_USER_ERROR,
+  PROFILE_USER_FETCH,
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
-  PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
+  PROFILE_USER_SELECT_ACCOUNT_DATA,
+  PROFILE_USER_TRADE_ACCOUNT_DELETE,
 } from "./constants";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
@@ -142,6 +145,21 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         ...state,
         defaultTradeAccount: tradeAddress,
       };
+    }
+    case PROFILE_USER_TRADE_ACCOUNT_DELETE: {
+      const address = action.payload;
+      const userAccounts = [...state.userData.userAccounts];
+      const updateState = _.cloneDeep(state);
+      const filtered = userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
+      if (state.defaultTradeAccount === address) {
+        updateState.defaultTradeAccount = "";
+        window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, "");
+      }
+      if (state.selectedAccount.tradeAddress === address) {
+        updateState.selectedAccount = null;
+      }
+      updateState.userData.userAccounts = filtered;
+      return updateState;
     }
     default:
       return state;

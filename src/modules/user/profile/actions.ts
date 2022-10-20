@@ -14,6 +14,7 @@ import {
   PROFILE_USER_ACCOUNT_PUSH,
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
   PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
+  PROFILE_USER_TRADE_ACCOUNT_DELETE,
 } from "./constants";
 
 export interface UserChangeInitBanner {
@@ -87,7 +88,10 @@ export interface UserProfileMainAccountPush {
   type: typeof PROFILE_USER_MAIN_ACCOUNT_PUSH;
   payload: string;
 }
-
+export interface UserProfileTradeAccountDelete {
+  type: typeof PROFILE_USER_TRADE_ACCOUNT_DELETE;
+  payload: string;
+}
 export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
   payload: string | null;
@@ -106,7 +110,8 @@ export type ProfileAction =
   | UserAccountSelectData
   | UserProfileAccountPush
   | UserProfileMainAccountPush
-  | UserSetDefaultTradeAccount;
+  | UserSetDefaultTradeAccount
+  | UserProfileTradeAccountDelete;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -169,6 +174,13 @@ export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
 ) => ({
   type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
+  payload,
+});
+
+export const userProfileTradeAccountDelete = (
+  payload: UserProfileTradeAccountDelete["payload"]
+) => ({
+  type: PROFILE_USER_TRADE_ACCOUNT_DELETE,
   payload,
 });
 
