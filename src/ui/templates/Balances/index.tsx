@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 import * as S from "./styles";
@@ -21,12 +21,7 @@ import { toCapitalize } from "@polkadex/web-helpers";
 export const BalancesTemplate = () => {
   const [state, setState] = useState(false);
   const assets = useReduxSelector(selectAllAssets);
-  const balances = useReduxSelector(selectUserBalance);
-
-  const userBalances = useMemo(
-    () => balances?.filter((value) => assets.some((item) => item.asset_id === value.asset_id)),
-    [assets, balances]
-  );
+  const userBalances = useReduxSelector(selectUserBalance);
   const userHasSelectedAccount = useReduxSelector(selectHasUsingAccount);
 
   return (
@@ -73,6 +68,8 @@ export const BalancesTemplate = () => {
                       </Table.Header>
                       <Table.Body striped>
                         {assets.map((item) => {
+                          console.log("item:", item);
+                          console.log("userBalances:", userBalances);
                           const balance = userBalances?.find(
                             (value) => value.asset_id === item.asset_id
                           );

@@ -31,11 +31,11 @@ const updateBalanceFromEvent = (
   msg: BalanceUpdatePayload,
   getAsset: (id: string) => IPublicAsset
 ): Balance => {
-  const assetId = isAssetPDEX(msg.asset.asset) ? "-1" : msg.asset.asset;
+  const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
   const newBalance = {
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,
-    assetId: assetId.toString(),
+    asset_id: assetId.toString(),
     free_balance: msg.free,
     reserved_balance: msg.reserved,
     pending_withdrawal: msg.pending_withdrawal,
