@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -26,6 +26,9 @@ import {
   selectUsingAccount,
   userAccountSelectFetch,
   userSetDefaultTradeAccount,
+  selectExportingTradeAccount,
+  exportTradeAccountActive,
+  exportTradeAccountFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
@@ -45,27 +48,43 @@ enum menuDisableKeysEnum {
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
+
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   tryUnlockTradeAccount(tradingAccountInBrowser);
   const usingAccount = useReduxSelector(selectUsingAccount);
-  const using = usingAccount.tradeAddress === selected?.address;
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)
   );
-  const showProtectedPasswords = useReduxSelector(selectShouldShowProtectedPassword);
-  const isProtectPasswordActive = false; // Test
+  const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
+  const using = usingAccount.tradeAddress === selected?.address;
+
   const menuDisableKeys = () => {
     const disableKeysList = [];
-    if (!mainAccountDetails) {
+    if (!mainAccountDetails)
       disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BLOCKCHAIN}`);
-    }
-    if (!tradingAccountInBrowser) {
+
+    if (!tradingAccountInBrowser)
       disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BROWSER}`);
-    }
 
     return disableKeysList;
   };
+
+  const shouldShowProtectedPassword = useMemo(
+    () => tradingAccountInBrowser?.isLocked && showProtectedPassword,
+    [tradingAccountInBrowser, showProtectedPassword]
+  );
+
+  const handleExportAccount = useCallback(
+    () =>
+      dispatch(
+        tradingAccountInBrowser?.isLocked
+          ? exportTradeAccountActive()
+          : exportTradeAccountFetch({ address: selected?.address })
+      ),
+    [selected, tradingAccountInBrowser, dispatch]
+  );
+
   return (
     <Loading
       isVisible={isRemoveFromBlockchainLoading}
@@ -73,11 +92,13 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       message=""
       spinner="Keyboard">
       <S.Main>
-        {showProtectedPasswords && isProtectPasswordActive ? (
+        {shouldShowProtectedPassword ? (
           <S.UnlockAccount>
             <UnlockAccount
-              onSubmit={({ password }) => console.log(password, "Submiting")}
-              handleClose={() => console.log("close")}
+              onSubmit={({ password }) =>
+                dispatch(exportTradeAccountFetch({ address: selected.address, password }))
+              }
+              handleClose={() => dispatch(exportTradeAccountActive())}
             />
           </S.UnlockAccount>
         ) : (
@@ -111,11 +132,11 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   />
                   <ProtectedByPassword
                     label="Protected by password"
-                    isActive={tradingAccountInBrowser.isLocked}
+                    isActive={tradingAccountInBrowser?.isLocked}
                   />
                   <DefaultAccount
                     label="Default trade account"
-                    tradeAddress={selected.address}
+                    tradeAddress={selected?.address}
                   />
                 </S.Box>
                 <S.Button
@@ -132,7 +153,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               <S.ExportButton
                 disabled={!tradingAccountInBrowser || !mainAccountDetails}
                 type="button"
-                onClick={() => console.log("Exporting")}>
+                onClick={handleExportAccount}>
                 Export
               </S.ExportButton>
               <Dropdown>
@@ -150,14 +171,16 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   <Dropdown.Item
                     key={"1"}
                     onAction={() =>
-                      dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+                      dispatch(
+                        removeProxyAccountFromChainFetch({ address: selected?.address })
+                      )
                     }>
                     Remove from blockchain
                   </Dropdown.Item>
                   <Dropdown.Item
                     key={"2"}
                     onAction={() =>
-                      dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
+                      dispatch(removeTradeAccountFromBrowser({ address: selected?.address }))
                     }>
                     Remove from device
                   </Dropdown.Item>
@@ -179,7 +202,7 @@ const WalletName = ({ label = "", information = "" }) => {
       name: information,
     },
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       setState(!state);
     },
   });

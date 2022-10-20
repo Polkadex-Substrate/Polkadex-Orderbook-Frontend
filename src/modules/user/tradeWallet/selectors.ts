@@ -1,9 +1,4 @@
-import {
-  RootState,
-  RegisterTradeAccount,
-  PreviewAccountModal,
-  selectUsingAccount,
-} from "../..";
+import { RootState, RegisterTradeAccount, PreviewAccountModal } from "../..";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
@@ -53,3 +48,6 @@ export const selectPreviewTradeAccountSelect = (
 
 export const selectIsPreviewTradeAccountActive = (state: RootState): boolean =>
   state.user.tradeWallet.previewAccountModal.isActive;
+
+export const selectExportingTradeAccount = (state: RootState): boolean =>
+  state.user.tradeWallet.exportAccountLoading;
