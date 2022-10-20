@@ -32,6 +32,7 @@ import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectClaimWithdrawsInLoading,
   selectMainAccount,
+  selectTradeAccount,
   selectUserBalance,
   selectUsingAccount,
   selectWithdrawsLoading,
@@ -48,16 +49,21 @@ import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-  const [unlockAccount, setUnlockAccount] = useState(false);
+  const [unlockAccount, setUnlockAccount] = useState(true);
 
   const currentAccount = useReduxSelector(selectUsingAccount);
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
+  const tradingAccountInBrowser = useReduxSelector(
+    selectTradeAccount(currentAccount?.tradeAddress)
+  );
+
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
 
   const dispatch = useDispatch();
   const router = useRouter();
+
   const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
@@ -98,15 +104,17 @@ export const WithdrawTemplate = () => {
     validationSchema: withdrawValidations,
     validate,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.asset_id)
-        ? { polkadex: null }
-        : { asset: selectedAsset.asset_id };
-      dispatch(
-        withdrawsFetch({
-          asset: asset,
-          amount: values.amount,
-        })
-      );
+      if (!tradingAccountInBrowser?.isLocked) {
+        const asset = isAssetPDEX(selectedAsset.asset_id)
+          ? { polkadex: null }
+          : { asset: selectedAsset.asset_id };
+        dispatch(
+          withdrawsFetch({
+            asset: asset,
+            amount: values.amount,
+          })
+        );
+      }
     },
   });
 
@@ -135,16 +143,29 @@ export const WithdrawTemplate = () => {
 
   const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
 
+  const shouldShowProtectedPassword = useMemo(
+    () => tradingAccountInBrowser?.isLocked && unlockAccount,
+    [tradingAccountInBrowser, unlockAccount]
+  );
+
+  console.log();
+
   return (
     <>
-      <Modal open={unlockAccount} onClose={handleUnlockClose}>
+      <Modal open={shouldShowProtectedPassword} onClose={handleUnlockClose}>
         <Modal.Body>
-          <UnlockAccount
-            onSubmit={() => {
-              // Add action..
-              setUnlockAccount(false);
-            }}
-          />
+          <S.UnlockAccount>
+            <UnlockAccount
+              onSubmit={({ password }) => {
+                try {
+                  tradingAccountInBrowser.unlock(password);
+                  setUnlockAccount(false);
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+            />
+          </S.UnlockAccount>
         </Modal.Body>
       </Modal>
       <Head>
