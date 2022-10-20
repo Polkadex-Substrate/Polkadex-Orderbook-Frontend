@@ -34,7 +34,7 @@ export const CreateAccountForm = ({
   );
   const hasData = !!selectedAccountAddress?.length;
   const initialMessage = registeredAccounts?.length
-    ? "Select your main account"
+    ? "Select your funding account"
     : "Please register an account first";
 
   const {
@@ -104,7 +104,7 @@ export const CreateAccountForm = ({
                     <div>
                       <Icons.Info />
                     </div>
-                    <span>Main account</span>
+                    <span>Funding account</span>
                   </S.WalletSelectContent>
                   <WalletShortName
                     address={values.controllerWallet.address}

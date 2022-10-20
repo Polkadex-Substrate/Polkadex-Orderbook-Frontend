@@ -26,7 +26,7 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
     }
     const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
     if (!account?.address) {
-      throw new Error("Please select a main account!");
+      throw new Error("Please select a funding account!");
     }
     if (api.isConnected && account?.address) {
       const res = yield call(() =>

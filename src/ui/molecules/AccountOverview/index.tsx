@@ -50,7 +50,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   useEffect(() => {
     const accountList: KeyringPair[] = [];
-    allUserAccounts.map((data) => {
+    allUserAccounts.forEach((data) => {
       const res = getTradeAccount(data.tradeAddress, tradingAccounts);
       if (res && accountList.length < 5) {
         accountList.push(res);
@@ -165,7 +165,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           <S.SwitchCard>
             <S.SwitchCardContent>
               <span>
-                Controller account
+                Funding account
                 <div>
                   <Icons.Verified />
                 </div>

@@ -50,7 +50,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
             message: {
               title: "Claim Withdraw Successful",
               description:
-                "Congratulations! You have successfully withdrawn your assets to your main account.",
+                "Congratulations! You have successfully withdrawn your assets to your funding account.",
             },
             time: new Date().getTime(),
             hasConfetti: true,

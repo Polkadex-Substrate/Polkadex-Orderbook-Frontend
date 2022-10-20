@@ -212,7 +212,9 @@ export const DepositTemplate = () => {
                       disabled={!(isValid && dirty) || loading || !currMainAcc}
                       isFull
                       isLoading={loading}>
-                      {currMainAcc ? "Deposit" : "Main account not found"}
+                      {currMainAcc
+                        ? "Deposit"
+                        : "Funding account not found in polkadot.js extension"}
                     </Button>
                   </form>
                 </Loading>

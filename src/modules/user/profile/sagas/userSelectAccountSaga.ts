@@ -15,14 +15,14 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
       const data = { tradeAddress, mainAddress };
       yield put(userAccountSelectData(data));
     } else {
-      throw new Error("invalid main account");
+      throw new Error("invalid Funding account");
     }
   } catch (e) {
     console.log("error: ", e);
     yield put(
       notificationPush({
         message: {
-          title: "Invalid main account!",
+          title: "Invalid funding account!",
           description: e?.message,
         },
         time: new Date().getTime(),

@@ -244,10 +244,10 @@ export const SettingsTemplate = () => {
                         </S.TooltipHeader>
                       </TooltipHeader>
                       <TooltipContent>
-                        <span>Controller account info</span>
+                        <span>Funding account info</span>
                       </TooltipContent>
                     </Tooltip>
-                    <h2>Wallets</h2>
+                    <h2>Funding Accounts</h2>
                   </S.WalletTitleWrapper>
                 </S.WalletTitle>
                 <S.WalletContainer>
@@ -352,7 +352,7 @@ const ControllerWallets = ({
     <WalletCard
       isUsing={isUsing}
       isDefault={isUsing}
-      defaultTitle="Default controller account"
+      defaultTitle="Default Funding account"
       name={name || "--"}
       address={address}
       additionalInfo={

@@ -104,7 +104,7 @@ export const PreviewAccount = ({
                     information={
                       mainAccountDetails
                         ? mainAccountDetails?.account?.meta?.name
-                        : "Main Account not present in browser"
+                        : "Funding Account not present in polkadot.js extension"
                     }
                     informationDisabled
                     additionalInformation={
@@ -113,7 +113,10 @@ export const PreviewAccount = ({
                     isLocked
                   />
                   <ProtectedByPassword label="Protected by password" />
-                  <DefaultAccount label="Default trade account" tradeAddress={selected.address} />
+                  <DefaultAccount
+                    label="Default trade account"
+                    tradeAddress={selected.address}
+                  />
                 </S.Box>
                 <S.Button
                   disabled={!tradingAccountInBrowser || !mainAccountDetails}
