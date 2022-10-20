@@ -95,12 +95,12 @@ export const PreviewAccount = ({
               <S.Container>
                 <S.Box>
                   <WalletName
-                    label="Wallet name"
+                    label="Trading account name"
                     information={String(selected?.meta?.name || "Unknown")}
                   />
                   <WalletAddress label="Trade wallet" information={selected?.address} />
                   <WalletAddress
-                    label="Controller wallet"
+                    label="Funding account"
                     information={
                       mainAccountDetails
                         ? mainAccountDetails?.account?.meta?.name
@@ -193,7 +193,7 @@ const WalletName = ({ label = "", information = "" }) => {
               <input
                 name="name"
                 type="text"
-                placeholder="Enter a wallet name"
+                placeholder="Enter a name for your trading account"
                 defaultValue={values.name}
               />
             </S.CardInfo>

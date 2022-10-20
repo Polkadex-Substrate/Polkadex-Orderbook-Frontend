@@ -143,11 +143,11 @@ export const CreateAccountForm = ({
         <S.WalletName>
           <S.WalletNameWrapper>
             <div>
-              <span>Wallet Name</span>
+              <span>Trade account Name</span>
               <input
                 {...getFieldProps("name")}
                 type="text"
-                placeholder="Enter a wallet name"
+                placeholder="Enter a name for your trading account"
               />
             </div>
             <button
