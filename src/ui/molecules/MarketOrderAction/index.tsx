@@ -145,11 +145,8 @@ const ProtectPassword = () => {
   const dispatch = useDispatch();
   const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
-
-  useEffect(() => {
-    // if account is not protected by password use default password to unlock account.
-    tryUnlockTradeAccount(tradeAccount);
-  }, [currTradeAddr]);
+  // if account is not protected by password use default password to unlock account.
+  tryUnlockTradeAccount(tradeAccount);
 
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
