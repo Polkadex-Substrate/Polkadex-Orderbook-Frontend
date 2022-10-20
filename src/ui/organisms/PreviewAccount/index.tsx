@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -31,6 +31,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 type Props = {
   onClose: () => void;
@@ -52,6 +53,7 @@ export const PreviewAccount = ({
   const dispatch = useDispatch();
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
+  tryUnlockTradeAccount(tradingAccountInBrowser);
   const usingAccount = useReduxSelector(selectUsingAccount);
   const using = usingAccount.tradeAddress === selected?.address;
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
@@ -112,7 +114,10 @@ export const PreviewAccount = ({
                     }
                     isLocked
                   />
-                  <ProtectedByPassword label="Protected by password" />
+                  <ProtectedByPassword
+                    label="Protected by password"
+                    isActive={tradingAccountInBrowser.isLocked}
+                  />
                   <DefaultAccount
                     label="Default trade account"
                     tradeAddress={selected.address}
@@ -214,11 +219,6 @@ const WalletName = ({ label = "", information = "" }) => {
             <p>{information}</p>
           </S.CardInfo>
         </S.CardContent>
-        <S.Actions>
-          <button type="button" onClick={() => setState(!state)}>
-            Edit
-          </button>
-        </S.Actions>
       </S.CardWrapper>
     </S.Card>
   );
