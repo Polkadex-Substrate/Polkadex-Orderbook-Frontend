@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 import { Switch } from "../Switcher";
 
 import * as S from "./styles";
+
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 type Props = {
   title: string;
@@ -41,7 +42,7 @@ export const SuccessCreateAccount = ({
       <S.Content>
         <S.Wallet>
           <p>
-            {account?.name} <strong>(Linked to Ordebrook testing)</strong>
+            {account?.name} <strong>(Linked to Orderbook testing)</strong>
           </p>
           <S.WalletContent>
             <button type="button">

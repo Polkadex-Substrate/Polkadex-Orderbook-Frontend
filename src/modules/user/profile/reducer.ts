@@ -9,7 +9,10 @@ import {
   PROFILE_USER_SELECT_ACCOUNT_DATA,
   PROFILE_USER_ACCOUNT_PUSH,
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
+  PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
 } from "./constants";
+
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export interface ProfileState {
   authInfo: AuthInfo;
@@ -18,6 +21,7 @@ export interface ProfileState {
     mainAccounts: string[];
   };
   selectedAccount: UserAccount;
+  defaultTradeAccount: string;
   isAuthFetching: boolean;
   isAuthSuccess: boolean;
   isDataLoading: boolean;
@@ -44,6 +48,7 @@ export const initialStateProfile: ProfileState = {
     tradeAddress: "",
     mainAddress: "",
   },
+  defaultTradeAccount: "",
   isAuthFetching: false,
   isAuthSuccess: false,
   isDataLoading: false,
@@ -129,6 +134,14 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         };
       }
       return state;
+    }
+    case PROFILE_SET_DEFAULT_TRADE_ACCOUNT: {
+      const tradeAddress = action.payload;
+      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, tradeAddress);
+      return {
+        ...state,
+        defaultTradeAccount: tradeAddress,
+      };
     }
     default:
       return state;

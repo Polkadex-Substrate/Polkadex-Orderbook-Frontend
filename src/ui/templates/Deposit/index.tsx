@@ -153,7 +153,7 @@ export const DepositTemplate = () => {
                     </div>
                     <div>
                       <strong>
-                        {currMainAcc?.account.meta?.name || "Wallet not selected"}
+                        {currMainAcc?.account?.meta?.name || "Wallet not present"}
                       </strong>
                       <span>{shortAddress}</span>
                     </div>
@@ -209,10 +209,10 @@ export const DepositTemplate = () => {
                       background="green"
                       hoverColor="green"
                       color="white"
-                      disabled={!(isValid && dirty) || loading}
+                      disabled={!(isValid && dirty) || loading || !currMainAcc}
                       isFull
                       isLoading={loading}>
-                      Deposit
+                      {currMainAcc ? "Deposit" : "Main account not found"}
                     </Button>
                   </form>
                 </Loading>

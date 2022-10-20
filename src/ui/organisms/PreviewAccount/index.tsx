@@ -17,10 +17,12 @@ import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
   selectIsTradeAccountRemoveLoading,
+  selectDefaultTradeAccount,
   selectMainAccount,
   selectTradeAccount,
   selectUsingAccount,
   userAccountSelectFetch,
+  userSetDefaultTradeAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
@@ -92,7 +94,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 isLocked
               />
               <ProtectedByPassword label="Protected by password" />
-              <DefaultAccount label="Default trade account" />
+              <DefaultAccount label="Default trade account" tradeAddress={selected.address} />
             </S.Box>
             <S.Button
               disabled={!tradingAccountInBrowser || !mainAccountDetails}
@@ -265,11 +267,23 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
   );
 };
 
-const DefaultAccount = ({ label = "" }) => (
-  <S.CardWrapper>
-    <S.CardContent>
-      <span>{label}</span>
-    </S.CardContent>
-    <Switch />
-  </S.CardWrapper>
-);
+const DefaultAccount = ({ label = "", tradeAddress }) => {
+  const dispatch = useDispatch();
+  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
+  const isActive = tradeAddress === defaultTradeAddress;
+  const handleChange = () => {
+    if (!isActive) {
+      dispatch(userSetDefaultTradeAccount(tradeAddress));
+    } else {
+      dispatch(userSetDefaultTradeAccount(null));
+    }
+  };
+  return (
+    <S.CardWrapper>
+      <S.CardContent>
+        <span>{label}</span>
+      </S.CardContent>
+      <Switch isActive={isActive} onChange={handleChange} />
+    </S.CardWrapper>
+  );
+};

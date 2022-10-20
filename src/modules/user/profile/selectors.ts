@@ -57,3 +57,6 @@ export const selectLinkedMainAddress = (trade_address: string) => (state: RootSt
 
 export const selectIsUserDataLoading = (state: RootState): boolean =>
   state.user.profile.isDataLoading;
+
+export const selectDefaultTradeAccount = (state: RootState): string =>
+  state.user.profile.defaultTradeAccount;

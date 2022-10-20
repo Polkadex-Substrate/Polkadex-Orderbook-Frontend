@@ -13,6 +13,7 @@ import {
   PROFILE_USER_SELECT_ACCOUNT_DATA,
   PROFILE_USER_ACCOUNT_PUSH,
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
+  PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
 } from "./constants";
 
 export interface UserChangeInitBanner {
@@ -87,6 +88,11 @@ export interface UserProfileMainAccountPush {
   payload: string;
 }
 
+export interface UserSetDefaultTradeAccount {
+  type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
+  payload: string | null;
+}
+
 export type ProfileAction =
   | UserFetch
   | UserData
@@ -99,7 +105,8 @@ export type ProfileAction =
   | UserAccountSelectFetch
   | UserAccountSelectData
   | UserProfileAccountPush
-  | UserProfileMainAccountPush;
+  | UserProfileMainAccountPush
+  | UserSetDefaultTradeAccount;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -162,5 +169,12 @@ export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
 ) => ({
   type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
+  payload,
+});
+
+export const userSetDefaultTradeAccount = (
+  payload: UserSetDefaultTradeAccount["payload"]
+) => ({
+  type: PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   payload,
 });
