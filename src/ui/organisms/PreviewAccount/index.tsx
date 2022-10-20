@@ -18,7 +18,6 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
-  selectBrowserTradeAccounts,
   selectIsTradeAccountRemoveLoading,
   selectDefaultTradeAccount,
   selectMainAccount,
@@ -44,12 +43,7 @@ enum menuDisableKeysEnum {
   REMOVE_FROM_BROWSER,
 }
 
-export const PreviewAccount = ({
-  onClose = undefined,
-  //  selected,
-  mainAccAddress,
-}: Props) => {
-  const selected = useReduxSelector(selectBrowserTradeAccounts)[0];
+export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
@@ -72,7 +66,6 @@ export const PreviewAccount = ({
 
     return disableKeysList;
   };
-
   return (
     <Loading
       isVisible={isRemoveFromBlockchainLoading}
@@ -100,7 +93,7 @@ export const PreviewAccount = ({
                 <S.Box>
                   <WalletName
                     label="Trading account name"
-                    information={String(selected?.meta?.name || "Unknown")}
+                    information={String(selected?.account?.meta?.name || "Unknown")}
                   />
                   <WalletAddress label="Trade wallet" information={selected?.address} />
                   <WalletAddress
@@ -137,7 +130,7 @@ export const PreviewAccount = ({
             </S.Content>
             <S.Footer>
               <S.ExportButton
-                // disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                disabled={!tradingAccountInBrowser || !mainAccountDetails}
                 type="button"
                 onClick={() => console.log("Exporting")}>
                 Export
