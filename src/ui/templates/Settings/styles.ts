@@ -473,3 +473,8 @@ export const WalletActions = styled.div`
   gap: 1rem;
   transition: 0.2s ease;
 `;
+export const Dropdown = styled.div`
+  small {
+    font-size: 1.3rem;
+  }
+`;

@@ -55,7 +55,10 @@ export const SuccessCreateAccount = ({
           <S.WordsWrapper>
             <S.WordsInfo>
               <p>Mnemonic</p>
-              <span>Never share your mnemonic seed with anyone.</span>
+              <span>
+                Save your account&apos;s mnemonic seed in a safe place. Do not share it with
+                anyone.
+              </span>
             </S.WordsInfo>
             <S.WordsTitle type="button" onClick={() => setState(!state)}>
               <div>

@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
+import { UnlockAccount } from "../UnlockAccount";
+
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -16,9 +18,11 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
+  selectBrowserTradeAccounts,
   selectIsTradeAccountRemoveLoading,
   selectDefaultTradeAccount,
   selectMainAccount,
+  selectShouldShowProtectedPassword,
   selectTradeAccount,
   selectUsingAccount,
   userAccountSelectFetch,
@@ -39,7 +43,12 @@ enum menuDisableKeysEnum {
   REMOVE_FROM_BROWSER,
 }
 
-export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
+export const PreviewAccount = ({
+  onClose = undefined,
+  //  selected,
+  mainAccAddress,
+}: Props) => {
+  const selected = useReduxSelector(selectBrowserTradeAccounts)[0];
   const dispatch = useDispatch();
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
@@ -48,7 +57,8 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)
   );
-
+  const showProtectedPasswords = useReduxSelector(selectShouldShowProtectedPassword);
+  const isProtectPasswordActive = false; // Test
   const menuDisableKeys = () => {
     const disableKeysList = [];
     if (!mainAccountDetails) {
@@ -68,77 +78,91 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       message=""
       spinner="Keyboard">
       <S.Main>
-        <S.Header type="button" onClick={isRemoveFromBlockchainLoading ? undefined : onClose}>
-          <Icons.SingleArrowLeft />
-        </S.Header>
-        <S.Content>
-          <h2>Preview Wallet</h2>
-          <S.Container>
-            <S.Box>
-              <WalletName
-                label="Wallet name"
-                information={String(selected?.account?.meta?.name || "Unknown")}
-              />
-              <WalletAddress label="Trade wallet" information={selected?.address} />
-              <WalletAddress
-                label="Controller wallet"
-                information={
-                  mainAccountDetails
-                    ? mainAccountDetails?.account?.meta?.name
-                    : "Main Account not present in browser"
-                }
-                informationDisabled
-                additionalInformation={
-                  mainAccountDetails ? transformAddress(mainAccAddress) : ""
-                }
-                isLocked
-              />
-              <ProtectedByPassword label="Protected by password" />
-              <DefaultAccount label="Default trade account" tradeAddress={selected.address} />
-            </S.Box>
-            <S.Button
-              disabled={!tradingAccountInBrowser || !mainAccountDetails}
-              onClick={() =>
-                dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-              }
-              type="button">
-              {using ? "Using" : "Use"}
-            </S.Button>
-          </S.Container>
-        </S.Content>
-        <S.Footer>
-          <S.ExportButton
-            disabled={!tradingAccountInBrowser || !mainAccountDetails}
-            type="button">
-            Export
-          </S.ExportButton>
-          <Dropdown>
-            <Dropdown.Trigger>
-              <S.DropdownButton type="button">
-                Remove account
-                <div>
-                  <Icons.ArrowBottom />
-                </div>
-              </S.DropdownButton>
-            </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid" disabledKeys={menuDisableKeys()}>
-              <Dropdown.Item
-                key={"1"}
-                onAction={() =>
-                  dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
-                }>
-                Remove from blockchain
-              </Dropdown.Item>
-              <Dropdown.Item
-                key={"2"}
-                onAction={() =>
-                  dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
-                }>
-                Remove from device
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </S.Footer>
+        {showProtectedPasswords && isProtectPasswordActive ? (
+          <UnlockAccount
+            onSubmit={({ password }) => console.log(password, "Submiting")}
+            handleClose={() => console.log("close")}
+          />
+        ) : (
+          <>
+            <S.Header
+              type="button"
+              onClick={isRemoveFromBlockchainLoading ? undefined : onClose}>
+              <Icons.SingleArrowLeft />
+            </S.Header>
+            <S.Content>
+              <h2>Preview Wallet</h2>
+              <S.Container>
+                <S.Box>
+                  <WalletName
+                    label="Wallet name"
+                    information={String(selected?.meta?.name || "Unknown")}
+                  />
+                  <WalletAddress label="Trade wallet" information={selected?.address} />
+                  <WalletAddress
+                    label="Controller wallet"
+                    information={
+                      mainAccountDetails
+                        ? mainAccountDetails?.account?.meta?.name
+                        : "Main Account not present in browser"
+                    }
+                    informationDisabled
+                    additionalInformation={
+                      mainAccountDetails ? transformAddress(mainAccAddress) : ""
+                    }
+                    isLocked
+                  />
+                  <ProtectedByPassword label="Protected by password" />
+                  <DefaultAccount label="Default trade account" tradeAddress={selected.address} />
+                </S.Box>
+                <S.Button
+                  disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                  onClick={() =>
+                    dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
+                  }
+                  type="button">
+                  {using ? "Using" : "Use"}
+                </S.Button>
+              </S.Container>
+            </S.Content>
+            <S.Footer>
+              <S.ExportButton
+                // disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                type="button"
+                onClick={() => console.log("Exporting")}>
+                Export
+              </S.ExportButton>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <S.DropdownButton type="button">
+                    Remove account
+                    <div>
+                      <Icons.ArrowBottom />
+                    </div>
+                  </S.DropdownButton>
+                </Dropdown.Trigger>
+                <Dropdown.Menu
+                  fill="secondaryBackgroundSolid"
+                  disabledKeys={menuDisableKeys()}>
+                  <Dropdown.Item
+                    key={"1"}
+                    onAction={() =>
+                      dispatch(removeProxyAccountFromChainFetch({ address: selected.address }))
+                    }>
+                    Remove from blockchain
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key={"2"}
+                    onAction={() =>
+                      dispatch(removeTradeAccountFromBrowser({ address: selected.address }))
+                    }>
+                    Remove from device
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </S.Footer>
+          </>
+        )}
       </S.Main>
     </Loading>
   );

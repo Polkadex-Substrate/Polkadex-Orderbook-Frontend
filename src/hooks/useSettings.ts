@@ -29,6 +29,8 @@ export const useSettings = () => {
   const [showRegistered, setShowRegistered] = useState(false);
   const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
+  const [filterTradeAccountsByControllerAccount, setFilterTradeAccountsByControllerAccount] =
+    useState("All");
 
   const dispatch = useDispatch();
   const [currentControllerWallet, setCurrentControllerWallet] =
@@ -84,13 +86,21 @@ export const useSettings = () => {
         const checker = filterTradeAccounts?.toLowerCase();
         const address = account?.address?.toLowerCase();
         const name = String(account?.meta?.name)?.toLowerCase();
-
-        if (address?.includes(checker) || name?.includes(checker)) {
+        const filterByController = filterTradeAccountsByControllerAccount?.toLowerCase();
+        const isLinkedAccount = !!userAccounts.some(
+          (v) =>
+            v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
+            filterByController === v.mainAddress.toLowerCase()
+        );
+        if (
+          (isLinkedAccount || filterByController.includes("all")) &&
+          (address?.includes(checker) || name?.includes(checker))
+        ) {
           pv.push(cv);
         }
         return pv;
       }, []),
-    [filterTradeAccounts, tradeAccounts]
+    [filterTradeAccounts, tradeAccounts, userAccounts, filterTradeAccountsByControllerAccount]
   );
 
   /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
@@ -132,6 +142,16 @@ export const useSettings = () => {
   };
   const handleClosePreviewModal = () => dispatch(previewAccountModalCancel());
 
+  const filterTradeAccountsByControllerAccountHeader = useMemo(
+    () =>
+      controllerWallets?.find(
+        (value) =>
+          value?.account?.address?.toLowerCase() ===
+          filterTradeAccountsByControllerAccount?.toLowerCase()
+      )?.account?.meta?.name || "All",
+    [controllerWallets, filterTradeAccountsByControllerAccount]
+  );
+
   return {
     handleClosePreviewModal,
     handleCloseNewAccount,
@@ -161,5 +181,7 @@ export const useSettings = () => {
     handleChangeCurrentControllerWallet,
     showRegistered,
     handleChangeShowRegistered: () => setShowRegistered(!showRegistered),
+    filterTradeAccountsByControllerAccount: filterTradeAccountsByControllerAccountHeader,
+    handleFilterTradeAccountByController: setFilterTradeAccountsByControllerAccount,
   };
 };
