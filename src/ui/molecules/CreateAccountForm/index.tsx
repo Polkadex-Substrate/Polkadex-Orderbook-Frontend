@@ -86,7 +86,6 @@ export const CreateAccountForm = ({
       }
     },
   });
-  console.log(values.controllerWallet);
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
