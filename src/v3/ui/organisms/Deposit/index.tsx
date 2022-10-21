@@ -57,7 +57,7 @@ const Deposit = () => {
                 locked
                 withButton={false}
                 isHoverable={false}
-                accountName={account?.meta.name || "My Main account"}
+                accountName={account?.meta.name || "My Funding account"}
                 address={account?.address || "Polkadex is completely free"}
               />
               {errors.address && <S.Error>{errors.address}</S.Error>}

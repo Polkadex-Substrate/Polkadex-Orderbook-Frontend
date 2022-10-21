@@ -54,7 +54,7 @@ const Deposit = () => {
                   <SelectAccount
                     isHeader
                     accountName={
-                      selectedAccount?.account?.meta?.name || "Select your main account"
+                      selectedAccount?.account?.meta?.name || "Select your funding account"
                     }
                     address={
                       selectedAccount?.account?.address || "Polkadex is completely free"

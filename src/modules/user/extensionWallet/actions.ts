@@ -10,7 +10,6 @@ import {
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
-  EXTENSION_WALLET_ACCOUNT_SELECT,
 } from "./constants";
 
 export interface ExtensionWalletFetch {
@@ -56,10 +55,6 @@ export interface RegisterMainAccountUpdateData {
   payload: any;
 }
 
-export interface ExtensionWalletAccountSelect {
-  type: typeof EXTENSION_WALLET_ACCOUNT_SELECT;
-  payload: ExtensionAccount;
-}
 export type GetExtensionWalletAction =
   | ExtensionWalletFetch
   | ExtensionWalletError
@@ -69,8 +64,7 @@ export type GetExtensionWalletAction =
   | RegisterMainAccountData
   | RegisterMainAccountError
   | RegisterMainAccountUpdateEvent
-  | RegisterMainAccountUpdateData
-  | ExtensionWalletAccountSelect;
+  | RegisterMainAccountUpdateData;
 
 export const extensionWalletData = (
   payload: ExtensionWalletData["payload"]
@@ -117,11 +111,4 @@ export const registerMainAccountUpdateData = (
 
 export const registerMainAccountReset = () => ({
   type: REGISTER_MAIN_ACCOUNT_RESET,
-});
-
-export const extensionWalletAccountSelect = (
-  payload: ExtensionWalletAccountSelect["payload"]
-) => ({
-  type: EXTENSION_WALLET_ACCOUNT_SELECT,
-  payload,
 });

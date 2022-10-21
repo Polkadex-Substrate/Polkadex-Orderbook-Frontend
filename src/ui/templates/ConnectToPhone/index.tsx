@@ -95,7 +95,7 @@ export const ConnectToPhone = () => {
                             isHeader
                             accountName={
                               extensionAccount?.account.meta?.name ||
-                              "Select your main account"
+                              "Select your funding account"
                             }
                             address={
                               extensionAccount?.account?.address ||

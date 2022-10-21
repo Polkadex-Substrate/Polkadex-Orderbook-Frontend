@@ -27,7 +27,7 @@ const data = [
   {
     title: "Register account",
     description:
-      "Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet.",
+      "Trading accounts allow you to operate within the orderbook and make withdrawals. You can only have 3 trading accounts for each funding account",
     button: "Register and create account",
   },
 ];
@@ -37,7 +37,7 @@ const successData = [
     description: "Now you can operate in orderbook, receive deposits and make withdrawals.",
   },
   {
-    title: "Wallet registered",
+    title: "Funding account registered",
     description: "Now you can create trading account and start to trading.",
   },
 ];

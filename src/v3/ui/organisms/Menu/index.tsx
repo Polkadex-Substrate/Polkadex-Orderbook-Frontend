@@ -52,8 +52,6 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-        </S.Container>
-        <S.Container>
           <Link href="/balances">
             <S.WrapperIcon>
               <div>
@@ -61,16 +59,6 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </div>
               <div>
                 <S.Span>Balances</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </Link>
-          <Link href="/history">
-            <S.WrapperIcon>
-              <div>
-                <Icon name="History" background="none" stroke="text" size="large" />
-              </div>
-              <div>
-                <S.Span>My History</S.Span>
               </div>
             </S.WrapperIcon>
           </Link>
@@ -84,24 +72,6 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
-        </S.Container>
-        <S.Container>
-          <AvailableMessage message="Soon">
-            <S.WrapperIcon href="#">
-              <div>
-                <Icon name="News" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Affiliates</S.Span>
-            </S.WrapperIcon>
-          </AvailableMessage>
-          <AvailableMessage message="Soon">
-            <S.WrapperIcon href="#">
-              <div>
-                <Icon name="Help" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Support</S.Span>
-            </S.WrapperIcon>
-          </AvailableMessage>
         </S.Container>
         <S.WrapperIcon onClick={changeTheme} as="div">
           <Tooltip>

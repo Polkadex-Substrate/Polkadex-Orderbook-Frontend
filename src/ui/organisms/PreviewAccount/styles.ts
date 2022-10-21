@@ -135,16 +135,17 @@ export const Actions = styled.div<{ isActive?: boolean }>`
 `;
 
 export const CardBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const Icon = styled.div`
   ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    div {
-      width: 0.8rem;
-      svg {
-        fill: ${theme.colors.tertiaryText};
-        stroke: ${theme.colors.tertiaryText};
-      }
+    width: 0.8rem;
+    svg {
+      fill: ${theme.colors.tertiaryText};
+      stroke: ${theme.colors.tertiaryText};
     }
   `}
 `;
@@ -153,15 +154,15 @@ export const CardInfo = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    div {
-      width: 1rem;
-      svg {
-        fill: ${theme.colors.tertiaryText};
-        stroke: ${theme.colors.tertiaryText};
-      }
+
+    svg {
+      fill: ${theme.colors.tertiaryText};
+      stroke: ${theme.colors.tertiaryText};
     }
+
     small {
       color: ${theme.colors.tertiaryText};
+      font-size: 1.3rem;
     }
     input {
       color: ${theme.colors.text};
@@ -169,6 +170,7 @@ export const CardInfo = styled.div`
     }
   `}
 `;
+
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -192,10 +194,18 @@ export const ExportButton = styled(FooterButton)`
 export const DropdownButton = styled(FooterButton)`
   ${({ theme }) => css`
     background: ${theme.colors.red};
+    cursor: pointer;
     div {
       display: inline-block;
       margin-left: 0.5rem;
       width: 0.7rem;
     }
   `}
+`;
+
+export const UnlockAccount = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 `;

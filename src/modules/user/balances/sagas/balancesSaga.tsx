@@ -22,11 +22,11 @@ type BalanceQueryResult = {
 
 export function* balancesSaga(_balancesFetch: BalancesFetch) {
   try {
-    const { linkedMainAddress } = yield select(selectUsingAccount);
+    const { mainAddress } = yield select(selectUsingAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);
-    if (linkedMainAddress && isAssetData) {
+    if (mainAddress && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(linkedMainAddress));
+      const balances = yield call(() => fetchbalancesAsync(mainAddress));
       const list = balances.map((balance: IBalanceFromDb) => {
         const asset = isAssetPDEX(balance.asset_type)
           ? POLKADEX_ASSET
@@ -75,5 +75,6 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
       pending_withdrawal: val.p,
     };
   });
+  console.log("res from balances query", res);
   return balances;
 }

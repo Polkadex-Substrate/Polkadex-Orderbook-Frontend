@@ -8,7 +8,7 @@ import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { selectUsingAccount } from "@polkadex/orderbook-modules";
+import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
 
 type TransactionQueryResult = {
   tt: string;
@@ -23,16 +23,17 @@ type TransactionQueryResult = {
 
 export function* transactionsSaga(_action: TransactionsFetch) {
   try {
-    const { linkedMainAddress } = yield select(selectUsingAccount);
-    if (linkedMainAddress) {
-      const transactions = yield call(fetchTransactions, linkedMainAddress, 3, 10);
+    const selectedAccount: UserAccount = yield select(selectUsingAccount);
+    const mainAddress = selectedAccount.mainAddress;
+    if (mainAddress) {
+      const transactions = yield call(fetchTransactions, mainAddress, 3, 10);
       yield put(transactionsData(transactions));
     } else {
       yield put(
         notificationPush({
           message: {
-            title: "Main account not selected",
-            description: "Please select the main account from account manager page",
+            title: "No account selected",
+            description: "Please select a trading account",
           },
           type: "ErrorAlert",
           time: new Date().getTime(),
@@ -56,14 +57,14 @@ export function* transactionsSaga(_action: TransactionsFetch) {
 const fetchTransactions = async (
   address: string,
   monthsBefore: number,
-  limit = 10
+  limit = 100000
 ): Promise<Transaction[]> => {
   const fromDate = subtractMonths(monthsBefore);
   const res: any = await sendQueryToAppSync(queries.listTransactionsByMainAccount, {
     main_account: address,
     from: fromDate.toISOString(),
     to: new Date().toISOString(),
-    limit: 10000,
+    limit,
   });
 
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;

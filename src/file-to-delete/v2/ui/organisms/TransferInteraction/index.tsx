@@ -41,7 +41,7 @@ export const TransferInteraction = ({ isActive = false, onClose }) => {
                     <S.CardTitle>From</S.CardTitle>
                     <SelectAccount
                       withButton={false}
-                      accountName="Main Account"
+                      accountName="Funding Account"
                       address="Balance: 0"
                     />
                   </S.Card>

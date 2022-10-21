@@ -18,7 +18,13 @@ import {
   USER_TRADE_ACCOUNT_PUSH,
   USER_TRADE_ACCOUNT_MODAL_ACTIVE,
   USER_TRADE_ACCOUNT_MODAL_CANCEL,
+  USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
+  USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
+  USER_TRADE_ACCOUNT_EXPORT_FETCH,
+  USER_TRADE_ACCOUNT_EXPORT_DATA,
+  USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
 } from "./constants";
+import { PreviewAccountModal } from "./reducer";
 
 export interface PolkadotWalletFetchPayload {
   allAccounts: TradeAccount[];
@@ -62,6 +68,13 @@ export interface RegisterTradeAccountModalActive {
     name: string;
     address: string;
   };
+}
+export interface PreviewTradeAccountModalCancel {
+  type: typeof USER_PREVIEW_ACCOUNT_MODAL_CANCEL;
+}
+export interface PreviewTradeAccountModalActive {
+  type: typeof USER_PREVIEW_ACCOUNT_MODAL_ACTIVE;
+  payload?: PreviewAccountModal["selected"];
 }
 export interface RegisterTradeAccountModalCancel {
   type: typeof USER_TRADE_ACCOUNT_MODAL_CANCEL;
@@ -113,7 +126,20 @@ export interface ImportTradeAccountError {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_ERROR;
   error: CommonError;
 }
+export interface ExportTradeAccountFetch {
+  type: typeof USER_TRADE_ACCOUNT_EXPORT_FETCH;
+  payload: {
+    address: string;
+    password?: string;
+  };
+}
 
+export interface ExportTradeAccountActive {
+  type: typeof USER_TRADE_ACCOUNT_EXPORT_ACTIVE;
+}
+export interface ExportTradeAccountData {
+  type: typeof USER_TRADE_ACCOUNT_EXPORT_DATA;
+}
 export interface TradeAccountPush {
   type: typeof USER_TRADE_ACCOUNT_PUSH;
   payload: { pair: TradeAccount };
@@ -136,7 +162,12 @@ export type TradeAccountsAction =
   | ImportTradeAccountError
   | TradeAccountPush
   | RegisterTradeAccountModalActive
-  | RegisterTradeAccountModalCancel;
+  | RegisterTradeAccountModalCancel
+  | PreviewTradeAccountModalCancel
+  | PreviewTradeAccountModalActive
+  | ExportTradeAccountFetch
+  | ExportTradeAccountData
+  | ExportTradeAccountActive;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -232,4 +263,29 @@ export const registerAccountModalActive = (
 
 export const registerAccountModalCancel = (): RegisterTradeAccountModalCancel => ({
   type: USER_TRADE_ACCOUNT_MODAL_CANCEL,
+});
+
+export const previewAccountModalActive = (
+  payload?: PreviewTradeAccountModalActive["payload"]
+): PreviewTradeAccountModalActive => ({
+  type: USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
+  payload,
+});
+
+export const previewAccountModalCancel = (): PreviewTradeAccountModalCancel => ({
+  type: USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
+});
+
+export const exportTradeAccountFetch = (
+  payload?: ExportTradeAccountFetch["payload"]
+): ExportTradeAccountFetch => ({
+  type: USER_TRADE_ACCOUNT_EXPORT_FETCH,
+  payload,
+});
+
+export const exportTradeAccountData = (): ExportTradeAccountData => ({
+  type: USER_TRADE_ACCOUNT_EXPORT_DATA,
+});
+export const exportTradeAccountActive = (): ExportTradeAccountActive => ({
+  type: USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
 });

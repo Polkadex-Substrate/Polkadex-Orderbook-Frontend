@@ -3,6 +3,7 @@ import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 
 import {
+  previewAccountModalCancel,
   registerTradeAccountError,
   removeProxyAccountFromChainData,
   RemoveProxyAccountFromChainFetch,
@@ -13,31 +14,27 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectMainAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
+import {
+  selectLinkedMainAddress,
+  selectMainAccount,
+  userProfileTradeAccountDelete,
+} from "@polkadex/orderbook-modules";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
-    const api = yield select(selectRangerApi);
-    const { linkedMainAddress } = yield select(selectUsingAccount);
+    const api: ApiPromise = yield select(selectRangerApi);
+    const { address: tradeAddress } = action.payload;
+    const linkedMainAddress = yield select(selectLinkedMainAddress(tradeAddress));
+    if (!linkedMainAddress) {
+      throw new Error("Invalid trade address.");
+    }
     const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
     if (!account?.address) {
-      throw new Error("Please select a main account!");
+      throw new Error("Please select a funding account!");
     }
-    const { address: tradeAddress } = action.payload;
-    if (api && account?.address) {
-      yield put(
-        notificationPush({
-          type: "LoadingAlert",
-          message: {
-            title: "Processing your transaction...",
-            description:
-              "Please sign the transaction and wait for block finalization. This may take a few minutes",
-          },
-          time: new Date().getTime(),
-        })
-      );
+    if (api.isConnected && account?.address) {
       const res = yield call(() =>
-        removeProxyFromAccount(api, tradeAddress, signer, account?.address)
+        removeProxyFromAccount(api, tradeAddress, signer, account.address)
       );
       if (res.isSuccess) {
         yield put(
@@ -50,8 +47,10 @@ export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromC
             time: new Date().getTime(),
           })
         );
+        yield put(previewAccountModalCancel());
         yield put(removeProxyAccountFromChainData({ address: action.payload.address }));
         yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+        yield put(userProfileTradeAccountDelete(tradeAddress));
       } else {
         throw new Error(res.message);
       }

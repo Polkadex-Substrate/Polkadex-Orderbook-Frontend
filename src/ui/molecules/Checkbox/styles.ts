@@ -6,7 +6,6 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
   css({
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     "& label": {
       width: " fit-content",
       marginLeft: "0.5rem",
@@ -20,8 +19,8 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       alignItems: "center",
       justifyContent: "center",
       appearance: "none",
-      width: "2rem",
-      height: "2rem",
+      width: "1.7rem",
+      height: "1.7rem",
       background: theme.colors[fill],
       borderRadius: "0.5rem",
       outline: "none",
@@ -47,8 +46,8 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
     },
     "& input:before": {
       content: "' '",
-      width: "0.5rem",
-      height: "1.1rem",
+      width: "0.35rem",
+      height: "0.9rem",
       border: `2px solid ${theme.colors.white}`,
       borderTop: "0",
       borderLeft: "0",

@@ -46,7 +46,7 @@ const getAllMainLinkedAccounts = async (email: string) => {
     "AMAZON_COGNITO_USER_POOLS"
   );
   console.log("res", res);
-  return res.data.listMainAccountsByEmail;
+  return res.data.listMainAccountsByEmail ?? { accounts: [] };
 };
 
 const getAllProxyAccounts = async (mainAccounts: [string]): Promise<UserAccount[]> => {

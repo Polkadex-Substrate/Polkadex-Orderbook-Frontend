@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -10,6 +10,7 @@ import {
   Checkbox,
   Footer,
   Modal,
+  ResultFound,
   Search,
   Tooltip,
   TooltipContent,
@@ -20,81 +21,69 @@ import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
+  previewAccountModalActive,
   registerAccountModalActive,
-  registerAccountModalCancel,
-  registerMainAccountReset,
-  registerTradeAccountReset,
+  selectAssociatedTradeAddresses,
   selectIsMainAddressRegistered,
+  selectMainAccount,
   userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
-import { getMainAddresssLinkedToTradingAccount } from "@polkadex/orderbook/modules/user/profile/helpers";
+import {
+  getMainAddresssLinkedToTradingAccount,
+  transformAddress,
+} from "@polkadex/orderbook/modules/user/profile/helpers";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
   const {
     state,
-    filterTradeAccounts,
+    allFilteredTradeAccounts,
     filterControllerWallets,
-    preview,
+    isPreviewActive,
+    previewAccountSelected,
     currentControllerWallet,
     controllerWallets,
     tradeAccounts,
     user,
     userAccounts,
     linkedMainAddress,
-    isTradeAccountSuccess,
-    isImportAccountSuccess,
     isActive,
-    selectedAddres,
     isLoading,
-    isRegisterControllerAccountSuccess,
     setState,
-    setPreview,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
+    handleChangeCurrentControllerWallet,
+    usingAccount,
+    showRegistered,
+    handleChangeShowRegistered,
+    handleCloseNewAccount,
+    handleClosePreviewModal,
+    filterTradeAccountsByControllerAccount,
+    handleFilterTradeAccountByController,
   } = useSettings();
 
   const dispatch = useDispatch();
-  const handleClose = () => {
-    if (
-      isTradeAccountSuccess ||
-      !isLoading ||
-      isRegisterControllerAccountSuccess ||
-      isImportAccountSuccess
-    ) {
-      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
-        dispatch(registerMainAccountReset());
-      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
-        dispatch(registerTradeAccountReset());
-      else dispatch(registerAccountModalCancel());
-    }
-  };
   return (
     <>
-      <Modal
-        open={preview.status}
-        onClose={() =>
-          setPreview({
-            status: false,
-            selected: {},
-          })
-        }
-        placement="start right">
+      <Modal open={isPreviewActive} onClose={handleClosePreviewModal} placement="start right">
         <PreviewAccount
-          onClose={() =>
-            setPreview({
-              status: false,
-              selected: {},
-            })
-          }
-          selected={preview.selected}
+          onClose={handleClosePreviewModal}
+          selected={previewAccountSelected}
           mainAccAddress={getMainAddresssLinkedToTradingAccount(
-            preview.selected?.address,
+            previewAccountSelected?.address,
             userAccounts
           )}
         />
       </Modal>
-      <Modal open={isActive} onClose={handleClose} placement="start right">
-        <NewAccount onClose={handleClose} selected={selectedAddres} isLoading={isLoading} />
+      <Modal open={isActive} onClose={handleCloseNewAccount} placement="start right">
+        <NewAccount
+          onClose={handleCloseNewAccount}
+          selected={{
+            address: currentControllerWallet?.account.address,
+            name: currentControllerWallet?.account?.meta?.name,
+          }}
+          isLoading={isLoading}
+        />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -124,113 +113,111 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {true && (
+                  {
                     <ButtonWallet
                       type="button"
-                      onClick={() => dispatch(registerAccountModalActive())}>
+                      onClick={() => {
+                        handleChangeCurrentControllerWallet(null);
+                        dispatch(registerAccountModalActive());
+                      }}>
                       New Account
                     </ButtonWallet>
-                  )}
+                  }
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
                     <Empty
-                      title="No tradding accounts"
+                      title="No trading accounts"
                       description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
                       // actionTitle="Import trading account"
-                      onClick={() => console.log("Open Modal")}>
-                      {false && (
-                        <S.Registered>
-                          <div>
-                            <Icons.Info />
-                          </div>
-                          <div>
-                            <span>Wallet found, but not registered</span>
-                            <p>
-                              Ops, it seems that you have one or several wallets, it is
-                              necessary to register a wallet to create a trading account.
-                            </p>
-                          </div>
-                        </S.Registered>
-                      )}
-                    </Empty>
+                      onClick={() => console.log("Open Modal")}></Empty>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
                         handleFilter={(e) => handleFilterTradeAccounts(e.target.value)}>
                         <S.AccountHeaderContent>
-                          <Checkbox>Show only linked accounts</Checkbox>
                           {/* don't show all section if no linked address */}
-                          {linkedMainAddress.length ? (
+                          {controllerWallets?.length ? (
                             <Dropdown>
                               <Dropdown.Trigger>
                                 <S.AccountHeaderTrigger>
-                                  <span>All</span>
+                                  <span>{filterTradeAccountsByControllerAccount}</span>
                                   <div>
                                     <Icons.ArrowBottom />
                                   </div>
                                 </S.AccountHeaderTrigger>
                               </Dropdown.Trigger>
                               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                {linkedMainAddress?.map((addr, i) => (
-                                  <Dropdown.Item key={i}>{addr}</Dropdown.Item>
-                                ))}
+                                {[
+                                  { account: { meta: { name: "All" }, address: "all" } },
+                                  ...controllerWallets,
+                                ]?.map(({ account }, i) => {
+                                  const name = account?.meta?.name?.length
+                                    ? account?.meta?.name
+                                    : transformAddress(account.address, 5);
+
+                                  return (
+                                    <Dropdown.Item
+                                      key={i}
+                                      onAction={() =>
+                                        handleFilterTradeAccountByController(account.address)
+                                      }>
+                                      <S.Dropdown>{name}</S.Dropdown>
+                                    </Dropdown.Item>
+                                  );
+                                })}
                               </Dropdown.Menu>
                             </Dropdown>
                           ) : null}
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {
-                        filterTradeAccounts
-                          // .sort((a) => (a.address !== currentTradeAccount.address ? 1 : -1))
-                          .map((v, i) => {
-                            // const isUsing = currentTradeAccount.address === v.address;
+                        {allFilteredTradeAccounts?.length ? (
+                          allFilteredTradeAccounts?.map((account, i) => {
                             const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
-                              v.address,
+                              account.address,
                               userAccounts
                             );
-                            const isUsing = false;
+                            const acc = controllerWallets?.find(
+                              ({ account }) => account?.address === linkedMainAddress
+                            );
+                            const hasLinkedAccount =
+                              !!linkedMainAddress?.length ||
+                              !!acc?.account?.meta?.name?.length;
+                            const isUsing = account.address === usingAccount.tradeAddress;
                             return (
                               <WalletCard
                                 key={i}
                                 isUsing={isUsing}
                                 isDefault={false}
                                 defaultTitle="Default trade account"
-                                name={String(v.meta.name)}
-                                address={v.address}
-                                aditionalInfo={
-                                  linkedMainAddress ? `(Linked to ${linkedMainAddress})` : null
+                                name={String(account?.account?.meta?.name || "Unknown")}
+                                address={account.address}
+                                additionalInfo={
+                                  hasLinkedAccount &&
+                                  `(Linked to ${
+                                    acc?.account?.meta?.name ||
+                                    transformAddress(linkedMainAddress)
+                                  })`
                                 }>
-                                <S.Button
-                                  type="button"
-                                  onClick={() =>
-                                    setPreview({
-                                      status: true,
-                                      selected: v,
-                                    })
-                                  }>
-                                  Preview
-                                </S.Button>
                                 <S.WalletActions>
-                                  {!isUsing && (
+                                  {!isUsing && account.isPresentInBrowser && (
                                     <S.Button
                                       type="button"
-                                      onClick={() =>
+                                      onClick={() => {
                                         dispatch(
-                                          userAccountSelectFetch({ tradeAddress: v.address })
-                                        )
-                                      }>
+                                          userAccountSelectFetch({
+                                            tradeAddress: account.address,
+                                          })
+                                        );
+                                      }}>
                                       Use
                                     </S.Button>
                                   )}
                                   <S.Preview
                                     type="button"
                                     onClick={() =>
-                                      setPreview({
-                                        status: true,
-                                        selected: v,
-                                      })
+                                      dispatch(previewAccountModalActive(account))
                                     }>
                                     <Icons.Show />
                                     <span>Preview</span>
@@ -239,7 +226,9 @@ export const SettingsTemplate = () => {
                               </WalletCard>
                             );
                           })
-                          }
+                        ) : (
+                          <ResultFound />
+                        )}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -255,10 +244,10 @@ export const SettingsTemplate = () => {
                         </S.TooltipHeader>
                       </TooltipHeader>
                       <TooltipContent>
-                        <span>Controller account info</span>
+                        <span>Funding account info</span>
                       </TooltipContent>
                     </Tooltip>
-                    <h2>Wallets</h2>
+                    <h2>Funding Accounts</h2>
                   </S.WalletTitleWrapper>
                 </S.WalletTitle>
                 <S.WalletContainer>
@@ -272,40 +261,38 @@ export const SettingsTemplate = () => {
                       <AccountHeader
                         handleFilter={(e) => handleFilterControllerWallets(e.target.value)}>
                         <S.AccountHeaderContent>
-                          <Dropdown>
-                            <Dropdown.Trigger>
-                              <S.AccountHeaderTrigger>
-                                <span>All wallets types</span>
-                                <div>
-                                  <Icons.ArrowBottom />
-                                </div>
-                              </S.AccountHeaderTrigger>
-                            </Dropdown.Trigger>
-                            <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              <Dropdown.Item>Test</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          <Checkbox
+                            checked={showRegistered}
+                            onChange={handleChangeShowRegistered}>
+                            Only registered accounts
+                          </Checkbox>
                         </S.AccountHeaderContent>
                       </AccountHeader>
                       <S.WalletContent>
-                        {filterControllerWallets?.map(({ account }, i) => (
-                          <ControllerWallets
-                            key={i}
-                            address={account.address}
-                            name={account.meta.name}
-                            isUsing={
-                              account.address === currentControllerWallet?.account?.address
-                            }
-                            handleRegister={() =>
-                              dispatch(
-                                registerAccountModalActive({
-                                  name: account.meta.name,
-                                  address: account.address,
-                                })
-                              )
-                            }
-                          />
-                        ))}
+                        {filterControllerWallets?.length ? (
+                          filterControllerWallets.map(({ account }, i) => {
+                            const isUsing = usingAccount?.mainAddress === account?.address;
+                            return (
+                              <ControllerWallets
+                                key={i}
+                                address={account.address}
+                                name={account.meta.name}
+                                isUsing={isUsing}
+                                handleRegister={(account: ExtensionAccount) => {
+                                  handleChangeCurrentControllerWallet(account);
+                                  dispatch(
+                                    registerAccountModalActive({
+                                      name: account.account.meta.name,
+                                      address: account.account.address,
+                                    })
+                                  );
+                                }}
+                              />
+                            );
+                          })
+                        ) : (
+                          <ResultFound />
+                        )}
                       </S.WalletContent>
                     </S.WalletWrapper>
                   )}
@@ -350,7 +337,7 @@ type ControllerWaletsProps = {
   address: string;
   name: string;
   isUsing: boolean;
-  handleRegister?: () => void;
+  handleRegister?: (account: ExtensionAccount) => void;
 };
 const ControllerWallets = ({
   address,
@@ -359,21 +346,31 @@ const ControllerWallets = ({
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
+  const linkedTradeAccounts = useReduxSelector(selectAssociatedTradeAddresses(address));
+  const extensionAccount = useReduxSelector(selectMainAccount(address));
   return (
     <WalletCard
       isUsing={isUsing}
       isDefault={isUsing}
-      defaultTitle="Default controller account"
-      name={name}
+      defaultTitle="Default Funding account"
+      name={name || "--"}
       address={address}
-      aditionalInfo="(1 trading account)">
-      {isRegistered ? (
-        <Badge isRegistered={true}>Registered</Badge>
-      ) : (
-        <S.Button type="button" onClick={handleRegister}>
-          Register Now
-        </S.Button>
-      )}
+      additionalInfo={
+        isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
+      }>
+      <S.WalletActions>
+        {isRegistered ? (
+          <Badge isRegistered={true}>Registered</Badge>
+        ) : (
+          <S.Button
+            type="button"
+            onClick={() => {
+              handleRegister(extensionAccount);
+            }}>
+            Register Now
+          </S.Button>
+        )}
+      </S.WalletActions>
     </WalletCard>
   );
 };
@@ -459,34 +456,53 @@ const WalletCard = ({
   defaultTitle = "",
   name = "",
   address = "",
-  aditionalInfo = "",
+  additionalInfo = "",
   children,
-}) => (
-  <S.WalletCard>
-    <S.WalletCardWrapper>
-      {isUsing && <S.Using>USING</S.Using>}
-      <S.WalletCardContent>
-        <span>
-          {name} <small>{aditionalInfo}</small>
-        </span>
-        <S.WalletCardCopy>
-          <div>
-            <Icons.Copy />
-          </div>
-          <p>{address}</p>
-        </S.WalletCardCopy>
-      </S.WalletCardContent>
-    </S.WalletCardWrapper>
-    <S.WalletCardAside>
-      {isDefault && (
-        <S.WalletCardBadge>
-          <span>{defaultTitle}</span>
-        </S.WalletCardBadge>
-      )}
-      {children}
-    </S.WalletCardAside>
-  </S.WalletCard>
-);
+}) => {
+  const buttonRef = useRef(null);
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(address);
+    buttonRef.current.innerHTML = "Copied";
+  };
+
+  return (
+    <S.WalletCard>
+      <S.WalletCardWrapper>
+        {isUsing && <S.Using>USING</S.Using>}
+        <S.WalletCardContent>
+          <span>
+            {name} <small>{additionalInfo}</small>
+          </span>
+          <S.WalletCardCopy>
+            <Tooltip>
+              <TooltipHeader>
+                <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
+                  <Icons.Copy />
+                </button>
+              </TooltipHeader>
+              <TooltipContent>
+                <span ref={buttonRef} style={{ whiteSpace: "nowrap" }}>
+                  Copy to clipboard
+                </span>
+              </TooltipContent>
+            </Tooltip>
+            <p>{address}</p>
+          </S.WalletCardCopy>
+        </S.WalletCardContent>
+      </S.WalletCardWrapper>
+      <S.WalletCardAside>
+        {isDefault && (
+          <S.WalletCardBadge>
+            <span>{defaultTitle}</span>
+          </S.WalletCardBadge>
+        )}
+        {children}
+      </S.WalletCardAside>
+    </S.WalletCard>
+  );
+};
 
 const Badge = ({ isRegistered = false, children }) => (
   <S.Badge isRegistered={isRegistered}>

@@ -42,7 +42,7 @@ export const SuccessCreateAccount = ({
       <S.Content>
         <S.Wallet>
           <p>
-            {account?.name} <strong>(Linked to Ordebrook testing)</strong>
+            {account?.name} <strong>(Linked to Orderbook testing)</strong>
           </p>
           <S.WalletContent>
             <button type="button">
@@ -55,7 +55,10 @@ export const SuccessCreateAccount = ({
           <S.WordsWrapper>
             <S.WordsInfo>
               <p>Mnemonic</p>
-              <span>Never share your mnemonic seed with anyone.</span>
+              <span>
+                Save your account&apos;s mnemonic seed in a safe place. Do not share it with
+                anyone.
+              </span>
             </S.WordsInfo>
             <S.WordsTitle type="button" onClick={() => setState(!state)}>
               <div>
@@ -68,7 +71,7 @@ export const SuccessCreateAccount = ({
             <>
               <S.WordsContainer>
                 {mnemonic?.map((value, i) => (
-                  <div key={i}>{value}</div>
+                  <div key={i}>{`${i + 1}. ${value}`}</div>
                 ))}
               </S.WordsContainer>
               <S.WordsFooter>
@@ -83,7 +86,6 @@ export const SuccessCreateAccount = ({
             </>
           )}
         </S.Words>
-
         <S.DefaultAccount>
           <span>Default trade account</span>
           <Switch />
