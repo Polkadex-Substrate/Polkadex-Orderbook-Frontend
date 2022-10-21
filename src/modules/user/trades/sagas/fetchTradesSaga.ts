@@ -22,7 +22,7 @@ type TradesQueryResult = {
 export function* fetchTradesSaga() {
   try {
     const currAccount = yield select(selectUsingAccount);
-    const address = currAccount.selectedTradeAddress;
+    const address = currAccount.tradeAddress;
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
