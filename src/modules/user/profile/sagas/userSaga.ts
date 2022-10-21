@@ -76,12 +76,9 @@ function* dispatchUseDefaultTradeAccount(allAccount: UserAccount[]) {
     LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
   );
   if (defaultTradeAddress.length === 0) return;
-  console.log(allAccount);
-  console.log(defaultTradeAddress);
   const account = allAccount.find(({ tradeAddress }) => {
     return tradeAddress === defaultTradeAddress;
   });
-  console.log(account);
   if (account) {
     yield put(userAccountSelectFetch(account));
   }
