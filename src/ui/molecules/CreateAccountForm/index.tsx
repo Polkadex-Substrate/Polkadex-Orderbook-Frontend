@@ -54,7 +54,7 @@ export const CreateAccountForm = ({
       isPasscodeVisible: false,
       controllerWallet: {
         name: selectedAccountName || "",
-        address: hasData ? selectedAccountAddress : initialMessage,
+        address: hasData ? selectedAccountAddress : "",
       },
     },
     validationSchema: createAccountValidations,
@@ -86,6 +86,7 @@ export const CreateAccountForm = ({
       }
     },
   });
+  console.log(values.controllerWallet);
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
   return (
     <form onSubmit={handleSubmit}>
@@ -107,8 +108,8 @@ export const CreateAccountForm = ({
                     <span>Funding account</span>
                   </S.WalletSelectContent>
                   <WalletShortName
-                    address={values.controllerWallet.address}
-                    name={values.controllerWallet.name}
+                    address={values.controllerWallet?.address}
+                    name={values.controllerWallet?.name || initialMessage}
                     isFull={!values.controllerWallet.name}
                   />
                 </S.WalletSelectContainer>
