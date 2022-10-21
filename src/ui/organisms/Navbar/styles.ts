@@ -1,8 +1,7 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
-import { LogoText } from "../../../../ui/molecules/Logo/styles";
-
+import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Wrapper = styled.section`

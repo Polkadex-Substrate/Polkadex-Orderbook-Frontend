@@ -3,19 +3,18 @@ import { subDays } from "date-fns";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import { tz } from "moment-timezone";
 
-import OrderBook from "../OrderBook";
-import Checkbox from "../../molecules/Checkbox";
-import { Dropdown } from "../../molecules";
-
 import * as S from "./styles";
 
-import { TradingChart } from "@polkadex/orderbook/file-to-delete/ui/molecules/TradingChart";
+import { OrderBook } from "@polkadex/orderbook-ui/organisms";
+import { TradingChart } from "@polkadex/orderbook-ui/organisms/TradingChart";
 import {
   AvailableMessage,
-  Dropdown as DropdownCustom,
   Icon,
   ListItemButton,
   OriginalChart,
+  Checkbox,
+  Popover,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
@@ -27,7 +26,7 @@ import {
 
 const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
 
-const Graph = () => {
+export const Graph = () => {
   const now = useRef(new Date());
   const chart = useRef(null);
 
@@ -77,26 +76,23 @@ const Graph = () => {
         <S.Header>
           <S.FlexWrapper>
             <S.List>
-              <DropdownCustom
-                direction="bottom"
-                priority="low"
-                header={
-                  <Icon
-                    name="Settings"
-                    stroke="text"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                  />
-                }>
-                <S.Indicator>
-                  <S.MainIndicator>
-                    <strong>Main Indicator</strong>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <div>
+                    <Icon
+                      name="Settings"
+                      stroke="text"
+                      size="extraMedium"
+                      background="primaryBackgroundOpacity"
+                    />
+                  </div>
+                </Dropdown.Trigger>
+                <Dropdown.Menu fill="tertiaryBackground">
+                  <Dropdown.Section title="Main Indicator">
                     {mainTechnicalIndicator.map(({ key, name, isActive }) => (
-                      <Checkbox
+                      <Dropdown.Item
                         key={key}
-                        title={name}
-                        checked={isActive}
-                        action={() => {
+                        onAction={() => {
                           isActive
                             ? chart.current.removeTechnicalIndicator("candle_pane", key)
                             : chart.current.createTechnicalIndicator(key, false, {
@@ -114,18 +110,16 @@ const Graph = () => {
                             });
                             return newState;
                           });
-                        }}
-                      />
+                        }}>
+                        <Checkbox checked={isActive}>{name}</Checkbox>
+                      </Dropdown.Item>
                     ))}
-                  </S.MainIndicator>
-                  <S.MainIndicator>
-                    <strong>Sub Indicator</strong>
+                  </Dropdown.Section>
+                  <Dropdown.Section title="Sub Indicator">
                     {subTechnicalIndicator.map(({ key, name, isActive }) => (
-                      <Checkbox
+                      <Dropdown.Item
                         key={key}
-                        title={name}
-                        checked={isActive}
-                        action={() => {
+                        onAction={() => {
                           isActive
                             ? chart.current.removeTechnicalIndicator(key, key)
                             : chart.current.createTechnicalIndicator(key, false, {
@@ -143,28 +137,29 @@ const Graph = () => {
                             });
                             return newState;
                           });
-                        }}
-                      />
+                        }}>
+                        <Checkbox checked={isActive}>{name}</Checkbox>
+                      </Dropdown.Item>
                     ))}
-                  </S.MainIndicator>
-                </S.Indicator>
-              </DropdownCustom>
+                  </Dropdown.Section>
+                </Dropdown.Menu>
+              </Dropdown>
+
               {width <= 1240 ? (
-                <DropdownCustom
-                  isClickable
-                  direction="bottom"
-                  header={<S.Li isActive>{filter}</S.Li>}>
-                  <S.Ul isColumn>
+                <Dropdown>
+                  <Dropdown.Trigger>
+                    <S.Li isActive>{filter}</S.Li>
+                  </Dropdown.Trigger>
+                  <Dropdown.Menu fill="tertiaryBackground">
                     {filters.map((item) => (
-                      <S.Li
-                        key={item}
-                        isActive={item === filter}
-                        onClick={() => setFilter(item)}>
-                        {item}
-                      </S.Li>
+                      <Dropdown.Item key={item}>
+                        <S.Li isActive={item === filter} onClick={() => setFilter(item)}>
+                          {item}
+                        </S.Li>
+                      </Dropdown.Item>
                     ))}
-                  </S.Ul>
-                </DropdownCustom>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <S.Ul>
                   {filters.map((item) => (
@@ -177,26 +172,27 @@ const Graph = () => {
                   ))}
                 </S.Ul>
               )}
-
-              <DropdownCustom
-                direction="bottom"
-                priority="low"
-                header={
-                  <Icon
-                    name="Calendar"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                    stroke="text"
+              <Popover>
+                <Popover.Trigger>
+                  <div>
+                    <Icon
+                      name="Calendar"
+                      size="extraMedium"
+                      background="primaryBackgroundOpacity"
+                      stroke="text"
+                    />
+                  </div>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <DateRangePicker
+                    ranges={ranges}
+                    onChange={handleSelect}
+                    rangeColors={["#E6007A"]}
+                    staticRanges={defaultStaticRanges}
+                    inputRanges={[]}
                   />
-                }>
-                <DateRangePicker
-                  ranges={ranges}
-                  onChange={handleSelect}
-                  rangeColors={["#E6007A"]}
-                  staticRanges={defaultStaticRanges}
-                  inputRanges={[]}
-                />
-              </DropdownCustom>
+                </Popover.Content>
+              </Popover>
               <Dropdown>
                 <Dropdown.Trigger>
                   <div>
@@ -222,29 +218,28 @@ const Graph = () => {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
-
-              <DropdownCustom
-                header={
-                  <Icon
-                    name="Timezone"
-                    size="extraMedium"
-                    background="primaryBackgroundOpacity"
-                    stroke="text"
-                  />
-                }
-                direction="bottom"
-                isClickable>
-                <S.TimezoneContent>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <div>
+                    <Icon
+                      name="Timezone"
+                      size="extraMedium"
+                      background="primaryBackgroundOpacity"
+                      stroke="text"
+                    />
+                  </div>
+                </Dropdown.Trigger>
+                <Dropdown.Menu fill="tertiaryBackground">
                   {tz.names().map((item) => (
-                    <S.Button
-                      key={item}
-                      isActive={timezone === item}
-                      onClick={() => setTimezone(item)}>{`${item.replace("_", " ")} (${tz(
-                      item
-                    ).format("z Z")})`}</S.Button>
+                    <Dropdown.Item key={item} onAction={() => setTimezone(item)}>
+                      <S.Button isActive={timezone === item}>{`${item.replace("_", " ")} (${tz(
+                        item
+                      ).format("z Z")})`}</S.Button>
+                    </Dropdown.Item>
                   ))}
-                </S.TimezoneContent>
-              </DropdownCustom>
+                </Dropdown.Menu>
+              </Dropdown>
+
               <button type="button" onClick={() => setSpace(space + 1)}>
                 <Icon
                   name="ZoomOut"
@@ -294,8 +289,6 @@ const Graph = () => {
     </S.Wrapper>
   );
 };
-
-export default Graph;
 
 const FilterIcon = ({ icon, isActive, children, ...props }) => {
   const IconComponent = Icons[icon];

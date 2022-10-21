@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 import { SecondaryWrapper as FormInput } from "@polkadex/orderbook-ui/molecules/Input/styles";
-import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
+import { Wrapper as DropdownWrapper } from "@polkadex/orderbook/file-to-delete/ui/molecules/Dropdown/styles";
 
 export const Wrapper = styled.div`
   display: flex;

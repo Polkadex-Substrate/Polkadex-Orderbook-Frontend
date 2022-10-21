@@ -1,12 +1,12 @@
 import * as S from "./styles";
 
-import { AvailableMessage, NavbarItem } from "@polkadex/orderbook-ui/molecules";
+import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 
-const Navbar = ({ onOpenMarkets }) => {
+export const Navbar = ({ onOpenMarkets }) => {
   const getAsset = useReduxSelector(selectGetAsset);
   const currMarket = useReduxSelector(selectCurrentMarket);
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
@@ -58,5 +58,3 @@ const Navbar = ({ onOpenMarkets }) => {
     </S.Wrapper>
   );
 };
-
-export default Navbar;

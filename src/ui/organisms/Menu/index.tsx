@@ -3,7 +3,6 @@ import Link from "next/link";
 import * as S from "./styles";
 
 import {
-  AvailableMessage,
   Icon,
   Logo,
   Tooltip,
@@ -22,7 +21,7 @@ export type MenuProps = {
   isWallet?: boolean;
 };
 
-const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
+export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
@@ -135,5 +134,3 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
     </S.Wrapper>
   );
 };
-
-export default Menu;

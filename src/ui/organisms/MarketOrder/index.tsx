@@ -1,11 +1,9 @@
 import { useState } from "react";
 
-import { Dropdown } from "../../molecules";
-
 import * as S from "./styles";
 
 import {
-  Icon,
+  Dropdown,
   Skeleton,
   TabContent,
   TabHeader,
@@ -14,7 +12,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-const MarketOrder = () => {
+export const MarketOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
   const handleChangeType = (value: boolean) => setIsLimit(value);
 
@@ -57,5 +55,3 @@ const MarketOrder = () => {
   );
 };
 export const MarketSkeleton = () => <Skeleton height="100%" width="100%" minWidth="350px" />;
-
-export default MarketOrder;

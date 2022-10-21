@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as S from "./styles";
 
 import { Dropdown, Icon } from "@polkadex/orderbook-ui/molecules";
-import DropdownItem from "@polkadex/orderbook-ui/molecules/DropdownItem";
+import DropdownItem from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/DropdownItem";
 
 type IPairs = {
   id: number;

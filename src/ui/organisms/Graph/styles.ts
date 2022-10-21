@@ -130,6 +130,9 @@ export const Indicator = styled.div`
     max-height: 60vh;
     overflow-x: hidden;
     overflow-y: auto;
+    @media screen and (min-width: 450px) {
+      min-width: 30rem;
+    }
   `}
 `;
 export const MainIndicator = styled.div`
@@ -154,12 +157,11 @@ export const TimezoneContent = styled.div`
     overflow-y: auto;
   `}
 `;
-export const Button = styled.button<{ isActive?: boolean }>`
+export const Button = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    text-align: left;
-    white-space: nowrap;
     background: ${isActive ? theme.colors.primary : "none"};
     padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
   `}
 `;
 

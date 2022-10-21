@@ -3,32 +3,30 @@ import subDays from "date-fns/subDays";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import Checkbox from "../../molecules/Checkbox";
-
 import * as S from "./styles";
 
 import {
-  Dropdown,
   Icon,
   Skeleton,
   TabContent,
   TabHeader,
   Tabs,
-  DropdownHeader,
-  DropdownContent,
+  Checkbox,
+  Popover,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
 import { userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import DropdownItem from "@polkadex/orderbook-ui/molecules/DropdownItem";
 import {
   Funds,
   OpenOrders,
   OrderHistory,
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -46,7 +44,7 @@ const initialFilters: Ifilters = {
 
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
-const Transactions = () => {
+export const Transactions = () => {
   const dispatch = useDispatch();
   const now = new Date();
 
@@ -106,38 +104,42 @@ const Transactions = () => {
           </S.HeaderContent>
           <S.WrapperActions>
             <Checkbox
-              title="Hide Other Pairs"
               checked={filters.hiddenPairs}
-              action={() => handleChangeHidden("hiddenPairs")}
-            />
+              onChange={() => handleChangeHidden("hiddenPairs")}>
+              Hide Other Pairs
+            </Checkbox>
             <S.Flex>
               <S.ContainerActions>
                 <Checkbox
-                  title="Buy"
                   checked={filters.onlyBuy}
-                  action={() => handleChangeHidden("onlyBuy")}
-                />
+                  onChange={() => handleChangeHidden("onlyBuy")}>
+                  Buy
+                </Checkbox>
                 <Checkbox
-                  title="Sell"
                   checked={filters.onlySell}
-                  action={() => handleChangeHidden("onlySell")}
-                />
+                  onChange={() => handleChangeHidden("onlySell")}>
+                  Sell
+                </Checkbox>
               </S.ContainerActions>
               <S.ContainerTransactions>
-                <Dropdown
-                  header={<DropdownHeader>{filters.status} </DropdownHeader>}
-                  direction="bottom"
-                  isClickable>
-                  <DropdownContent>
+                <Dropdown>
+                  <Dropdown.Trigger>
+                    <S.Icon>
+                      {filters.status}
+                      <div>
+                        <Icons.ArrowBottom />
+                      </div>
+                    </S.Icon>
+                  </Dropdown.Trigger>
+                  <Dropdown.Menu>
                     {initialState.map((status) => (
-                      <DropdownItem key={status} title={status} handleAction={undefined} />
+                      <Dropdown.Item key={status}>{status}</Dropdown.Item>
                     ))}
-                  </DropdownContent>
+                  </Dropdown.Menu>
                 </Dropdown>
-                <S.Calendar>
-                  <Dropdown
-                    direction="bottomRight"
-                    header={
+                <Popover>
+                  <Popover.Trigger>
+                    <div>
                       <Icon
                         name="Calendar"
                         stroke="text"
@@ -145,7 +147,9 @@ const Transactions = () => {
                         size="extraMedium"
                         style={{ marginLeft: 10 }}
                       />
-                    }>
+                    </div>
+                  </Popover.Trigger>
+                  <Popover.Content>
                     <DateRangePicker
                       ranges={ranges}
                       onChange={handleSelect}
@@ -153,8 +157,10 @@ const Transactions = () => {
                       staticRanges={defaultStaticRanges}
                       inputRanges={[]}
                     />
-                  </Dropdown>
-                </S.Calendar>
+                  </Popover.Content>
+                </Popover>
+
+                <S.Calendar></S.Calendar>
               </S.ContainerTransactions>
             </S.Flex>
           </S.WrapperActions>
@@ -180,5 +186,3 @@ const Transactions = () => {
 export const TransactionsSkeleton = () => (
   <Skeleton height="100%" width="100%" minWidth="350px" />
 );
-
-export default Transactions;

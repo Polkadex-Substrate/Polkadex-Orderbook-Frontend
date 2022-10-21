@@ -5,7 +5,7 @@ import { useRef } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu, PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
   Footer,
@@ -15,10 +15,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
-import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
   previewAccountModalActive,

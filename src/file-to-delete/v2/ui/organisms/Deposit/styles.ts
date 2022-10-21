@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { SelectAccountWrapper as Dropdown } from "@polkadex/orderbook/file-to-delete/v2/ui/molecules/MyAccount/styles";
-import { Wrapper as DropdownWrapper } from "@polkadex/orderbook-ui/molecules/Dropdown/styles";
+import { Wrapper as DropdownWrapper } from "@polkadex/orderbook/file-to-delete/ui/molecules/Dropdown/styles";
 import { Box as InputPrimary } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
 export const Wrapper = styled.div`
@@ -74,12 +73,6 @@ export const Select = styled.div`
 export const SelectContent = styled(Select)<{ isOverflow?: boolean }>`
   ${({ theme, isOverflow = false }) => css`
     overflow: scroll;
-    ${Dropdown} {
-      cursor: pointer;
-      :not(:last-child) {
-        margin-bottom: 1rem;
-      }
-    }
   `}
 `;
 

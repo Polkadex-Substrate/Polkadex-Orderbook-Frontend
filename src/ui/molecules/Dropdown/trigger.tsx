@@ -1,7 +1,7 @@
 import { mergeRefs } from "@react-aria/utils";
 import { forwardRef } from "react";
 
-import { Popover } from "../../../../ui/molecules/Popover";
+import { Popover } from "../Popover";
 
 import { useDropdownContext } from "./context";
 import * as T from "./types";

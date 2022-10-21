@@ -3,6 +3,58 @@ import styled, { css } from "styled-components";
 import { Wrapper as EmptyData } from "@polkadex/orderbook-ui/molecules/EmptyData/styles";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+export const Wrapper = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 30rem;
+    max-height: 43rem;
+    @media screen and (min-width: 780px) {
+      border-left: 1px solid ${theme.colors.secondaryBackground};
+      max-width: 30rem;
+    }
+  `}
+`;
+
+export const WrapperTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 1rem 1rem 1rem;
+`;
+
+export const DropdownContent = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.primaryBackground};
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  `}
+`;
+export const ContainerActions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 0.5rem;
+  margin-right: 1rem;
+`;
+export const ContainerTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const SizeHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  div {
+    width: 0.8rem;
+  }
+`;
+
 export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: Orderbook;

@@ -1,8 +1,7 @@
 import styled, { css } from "styled-components";
 
-import { LogoText } from "../../../../ui/molecules/Logo/styles";
-
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
+import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 export const Logo = styled.div`
   @media screen and (max-width: 590px) {
     display: none;
