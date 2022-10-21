@@ -27,7 +27,7 @@ const data = [
   {
     title: "Register account",
     description:
-      "Trading accounts allow you to operate within the orderbook and make withdrawals. you can only have 3 trading accounts for each funding account",
+      "Trading accounts allow you to operate within the orderbook and make withdrawals. You can only have 3 trading accounts for each funding account",
     button: "Register and create account",
   },
 ];
