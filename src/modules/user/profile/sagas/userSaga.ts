@@ -1,23 +1,27 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
 import * as queries from "../../../../graphql/queries";
 
 import {
   notificationPush,
+  selectUsingAccount,
   UserAccount,
+  userAccountSelectFetch,
   userData,
   userError,
   UserFetch,
 } from "@polkadex/orderbook-modules";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function* userSaga(action: UserFetch) {
   try {
     const { email } = action.payload;
     if (email) {
       const { accounts } = yield call(getAllMainLinkedAccounts, email);
-      const userAccounts = yield call(getAllProxyAccounts, accounts);
+      const userAccounts: UserAccount[] = yield call(getAllProxyAccounts, accounts);
       yield put(userData({ mainAccounts: accounts, userAccounts }));
+      yield call(dispatchUseDefaultTradeAccount, userAccounts);
     } else {
       throw new Error("no email specified");
     }
@@ -64,3 +68,18 @@ const getAllProxyAccounts = async (mainAccounts: [string]): Promise<UserAccount[
   });
   return accounts;
 };
+
+function* dispatchUseDefaultTradeAccount(allAccount: UserAccount[]) {
+  const selectedAccount = yield select(selectUsingAccount);
+  if (selectedAccount?.tradeAddress) return;
+  const defaultTradeAddress = window.localStorage.getItem(
+    LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+  );
+  if (defaultTradeAddress.length === 0) return;
+  const account = allAccount.find(({ tradeAddress }) => {
+    return tradeAddress === defaultTradeAddress;
+  });
+  if (account) {
+    yield put(userAccountSelectFetch(account));
+  }
+}
