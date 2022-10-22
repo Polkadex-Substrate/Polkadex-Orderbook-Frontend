@@ -15,3 +15,9 @@ export const selectAmount = (state: RootState): string => selectOrdersState(stat
 
 export const selectOrderType = (state: RootState): string =>
   selectOrdersState(state).orderType;
+
+export const selectCancelLoading = (state: RootState): boolean =>
+  selectOrdersState(state).cancelLoading;
+
+export const selectCancelSucess = (state: RootState): boolean =>
+  selectOrdersState(state).cancelSuccess;

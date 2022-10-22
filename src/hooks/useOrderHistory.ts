@@ -21,7 +21,6 @@ export function useOrderHistory(filters: Ifilters) {
   const openOrders = useReduxSelector(selectOpenOrders);
   const list = sortOrdersDescendingTime(orderlist);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const userSession = useReduxSelector(selectUserSession);
