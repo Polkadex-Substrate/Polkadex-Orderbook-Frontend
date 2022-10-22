@@ -36,6 +36,7 @@ export const signUpValidations = Yup.object().shape({
     .required()
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
   email: Yup.string().email("Must be a valid email").required("Required"),
+  termsAccepted: Yup.boolean().oneOf([true]).required("Required"),
 });
 
 export const newPasswordValidations = Yup.object().shape({
@@ -49,6 +50,7 @@ export const newPasswordValidations = Yup.object().shape({
 export const signValidations = Yup.object().shape({
   password: Yup.string().required("Required"),
   email: Yup.string().email("Must be a valid email").required("Required"),
+  termsAccepted: Yup.boolean().oneOf([true]).required("Required"),
 });
 
 export const codeValidations = Yup.object().shape({
@@ -71,7 +73,9 @@ export const typeValidations = Yup.object().shape({
 export const unLockAccountValidations = Yup.object().shape({
   password: Yup.string()
     .required("Required")
-    .matches(/^[0-9]+$/, "Must be only digits"),
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(4, "Must be exactly 5 digits")
+    .max(4, "Must be exactly 5 digits"),
 });
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),

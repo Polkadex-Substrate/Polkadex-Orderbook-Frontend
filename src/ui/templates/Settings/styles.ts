@@ -354,6 +354,7 @@ export const WalletCard = styled.div`
     justify-content: space-between;
     gap: 0.5rem;
     flex-wrap: wrap;
+    min-height: 6rem;
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding-bottom: 1.5rem;
@@ -398,7 +399,7 @@ export const WalletCardCopy = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    div {
+    button {
       width: 1rem;
       svg {
         fill: ${theme.colors.tertiaryText};
@@ -446,7 +447,7 @@ export const Preview = styled.button`
     padding: 0.5rem;
     border-radius: 10rem;
     transition: 0.2s background-color ease;
-    width: auto;
+    width: fit-content;
     span {
       display: none;
       width: 0;
@@ -454,6 +455,7 @@ export const Preview = styled.button`
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
+      width: auto;
     }
     :hover {
       background: ${theme.colors.secondaryBackground};
@@ -470,4 +472,9 @@ export const WalletActions = styled.div`
   align-items: center;
   gap: 1rem;
   transition: 0.2s ease;
+`;
+export const Dropdown = styled.div`
+  small {
+    font-size: 1.3rem;
+  }
 `;

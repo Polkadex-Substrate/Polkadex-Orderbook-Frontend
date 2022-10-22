@@ -11,6 +11,8 @@ import {
   selectUserEmail,
   selectExtensionWalletAccounts,
   registerTradeAccountData,
+  userProfileAccountPush,
+  userProfileMainAccountPush,
 } from "../../..";
 import {
   registerMainAccountData,
@@ -65,6 +67,13 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         );
         yield put(registerMainAccountData());
         yield call(executeRegisterEmail, data, signature);
+        yield put(
+          userProfileAccountPush({
+            tradeAddress,
+            mainAddress: selectedControllerAccount.account.address,
+          })
+        );
+        yield put(userProfileMainAccountPush(selectedControllerAccount.account.address));
       } else {
         throw new Error("Extrinsic failed");
       }

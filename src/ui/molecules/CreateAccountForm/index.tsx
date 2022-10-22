@@ -14,6 +14,7 @@ import {
   registerMainAccountFetch,
   registerTradeAccountFetch,
   selectExtensionWalletAccounts,
+  selectLinkedMainAddresses,
   tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -27,7 +28,15 @@ export const CreateAccountForm = ({
 }) => {
   const dispatch = useDispatch();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const linkedMainAddresses = useReduxSelector(selectLinkedMainAddresses);
+  const registeredAccounts = controllerWallets?.filter(({ account }) =>
+    linkedMainAddresses?.includes(account.address)
+  );
   const hasData = !!selectedAccountAddress?.length;
+  const initialMessage = registeredAccounts?.length
+    ? "Select your funding account"
+    : "Please register an account first";
+
   const {
     errors,
     values,
@@ -45,15 +54,16 @@ export const CreateAccountForm = ({
       isPasscodeVisible: false,
       controllerWallet: {
         name: selectedAccountName || "",
-        address: selectedAccountAddress || "Select your controller wallet",
+        address: hasData ? selectedAccountAddress : "",
       },
     },
     validationSchema: createAccountValidations,
     onSubmit: ({ name, passcode, controllerWallet }) => {
-      // TODO: Move to sagas
+      // TODO: Move to hook
       if (hasData) {
+        // if controller account is already selected then register main account called.
         const mnemonic = mnemonicGenerate();
-        const { pair } = keyring.addUri(mnemonic, passcode, {
+        const { pair } = keyring.addUri(mnemonic, passcode.length > 0 ? passcode : null, {
           name,
         });
         dispatch(tradeAccountPush({ pair }));
@@ -94,11 +104,11 @@ export const CreateAccountForm = ({
                     <div>
                       <Icons.Info />
                     </div>
-                    <span>Controller account</span>
+                    <span>Funding account</span>
                   </S.WalletSelectContent>
                   <WalletShortName
-                    address={values.controllerWallet.address}
-                    name={values.controllerWallet.name}
+                    address={values.controllerWallet?.address}
+                    name={values.controllerWallet?.name || initialMessage}
                     isFull={!values.controllerWallet.name}
                   />
                 </S.WalletSelectContainer>
@@ -109,9 +119,9 @@ export const CreateAccountForm = ({
                 )}
               </S.WalletSelectWrapper>
             </Dropdown.Trigger>
-            {!selectedAccountAddress.length && (
+            {!selectedAccountAddress.length && registeredAccounts?.length > 0 && (
               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                {controllerWallets?.map((v, i) => (
+                {registeredAccounts?.map((v, i) => (
                   <Dropdown.Item
                     key={i}
                     onAction={() =>
@@ -133,11 +143,11 @@ export const CreateAccountForm = ({
         <S.WalletName>
           <S.WalletNameWrapper>
             <div>
-              <span>Wallet Name</span>
+              <span>Trade account Name</span>
               <input
                 {...getFieldProps("name")}
                 type="text"
-                placeholder="Enter a wallet name"
+                placeholder="Enter a name for your trading account"
               />
             </div>
             <button

@@ -8,14 +8,21 @@ import {
   userAuthData,
   UserAuthFetch,
   userFetch,
+  userSetDefaultTradeAccount,
 } from "../../../";
 import { userAuthError } from "../actions";
+
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function* userAuthSaga(_action: UserAuthFetch) {
   try {
     const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
       getUserAuthInfo()
     );
+    const defaultTradeAddress = window.localStorage.getItem(
+      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+    );
+    yield put(userSetDefaultTradeAccount(defaultTradeAddress));
     if (email) {
       yield put(userFetch({ email }));
     }

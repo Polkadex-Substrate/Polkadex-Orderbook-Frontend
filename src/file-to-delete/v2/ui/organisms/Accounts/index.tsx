@@ -14,7 +14,7 @@ export const Accounts = () => {
       <h3>Accounts</h3>
       <S.Container>
         <AccountCard
-          accountName="Main Account"
+          accountName="Funding Account"
           ticket="PDEX"
           amount="0"
           ticketInFiat="USD"

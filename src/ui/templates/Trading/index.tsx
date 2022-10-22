@@ -74,7 +74,7 @@ export function Trading() {
     !hasTradeAccount && {
       image: "emptyWallet",
       title: "Connect your Trading Account",
-      description: "Import your existing wallet, or create a new wallet",
+      description: "Import your existing account, or create a new account",
       primaryLink: "/createAccount",
       primaryLinkTitle: "Create Account",
       secondaryLink: "/settings",

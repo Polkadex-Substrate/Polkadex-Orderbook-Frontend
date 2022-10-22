@@ -88,10 +88,10 @@ export const PassCodeWrapper = styled.div`
 `;
 
 export const PassCode = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+  display: flex;
   gap: 1rem;
 `;
+
 export const LinePassCode = styled.div<{ error?: boolean }>`
   ${({ theme, error }) => css`
     display: flex;
@@ -99,9 +99,11 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
       width: 100%;
       text-align: center;
       color: ${theme.colors.text};
-      border-bottom: 1px solid;
-      border-bottom-color: ${error ? theme.colors.primary : theme.colors.text}66;
-      padding-bottom: 1rem;
+      border-radius: 0.4rem;
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      width: 4rem;
+      height: 5rem;
+      border-width: 1px !important;
       :-webkit-outer-spin-button,
       :-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -111,11 +113,14 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
         -moz-appearance: textfield !important;
       }
       :disabled {
-        border-bottom-color: gray;
+        background: gray;
         opacity: 0.6;
       }
       ::placeholder {
         opacity: 0.1;
+      }
+      :focus {
+        border: solid ${theme.colors.text}33;
       }
     }
   `}

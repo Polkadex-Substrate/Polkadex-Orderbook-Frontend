@@ -1,4 +1,4 @@
-import { RootState, RegisterTradeAccount } from "../..";
+import { RootState, RegisterTradeAccount, PreviewAccountModal } from "../..";
 
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
@@ -11,10 +11,24 @@ export const selectBrowserTradeAccounts = (state: RootState): TradeAccount[] =>
 export const selectTradeAccount =
   (address: string) =>
   (state: RootState): TradeAccount =>
-    selectBrowserTradeAccounts(state).find((account) => account?.address?.toLowerCase() === address?.toLowerCase());
+    selectBrowserTradeAccounts(state).find(
+      (account) => account?.address?.toLowerCase() === address?.toLowerCase()
+    );
+
+export const selectShouldShowProtectedPassword = (state: RootState): boolean =>
+  state.user.tradeWallet?.allBrowserAccounts?.some(
+    (account) =>
+      account?.address?.toLowerCase() ===
+      state.user.profile?.selectedAccount?.tradeAddress?.toLowerCase()
+  );
 
 export const selectRegisterTradeAccountLoading = (state: RootState): boolean =>
   state.user.tradeWallet.registerAccountLoading;
+
+export const selectIsTradeAccountRemoveLoading = (
+  state: RootState,
+  address: string
+): boolean => selectRegisterTradeAccountRemoving(state).includes(address);
 
 export const selectRegisterTradeAccountSuccess = (state: RootState): boolean =>
   state.user.tradeWallet.registerAccountSuccess;
@@ -27,3 +41,13 @@ export const selectRegisterTradeAccountInfo = (state: RootState): RegisterTradeA
 
 export const selectImportTradeAccountSuccess = (state: RootState): boolean =>
   state.user.tradeWallet.importAccountSuccess;
+
+export const selectPreviewTradeAccountSelect = (
+  state: RootState
+): PreviewAccountModal["selected"] => state.user.tradeWallet.previewAccountModal.selected;
+
+export const selectIsPreviewTradeAccountActive = (state: RootState): boolean =>
+  state.user.tradeWallet.previewAccountModal.isActive;
+
+export const selectExportingTradeAccount = (state: RootState): boolean =>
+  state.user.tradeWallet.exportAccountLoading;

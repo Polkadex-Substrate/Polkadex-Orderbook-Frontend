@@ -11,7 +11,11 @@ export const Main = styled.main`
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
   `}
 `;
-
+export const UnlockAccount = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.primaryBackground};
+  `}
+`;
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
