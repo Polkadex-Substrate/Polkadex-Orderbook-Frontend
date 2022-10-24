@@ -1,5 +1,5 @@
 import { put } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
+import { keyring } from "@polkadot/ui-keyring";
 
 import {
   importTradeAccountData,
@@ -14,13 +14,11 @@ import {
 let tradeAddress = "";
 
 export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch) {
-  const { file, name } = action.payload;
+  const { file, password } = action.payload;
   try {
     const modifiedFile = file;
-    if (name?.length) modifiedFile.meta.name = name;
-    const pair = keyring.keyring.addFromJson(modifiedFile);
+    const pair = keyring.restoreAccount(modifiedFile, password);
     tradeAddress = pair?.address;
-
     yield put(tradeAccountPush({ pair }));
     yield put(
       registerTradeAccountData({
@@ -40,7 +38,7 @@ export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch)
         type: "ErrorAlert",
         message: {
           title: "Cannot import account",
-          description: "Please check your json file",
+          description: "Invalid password or file",
         },
         time: new Date().getTime(),
       })

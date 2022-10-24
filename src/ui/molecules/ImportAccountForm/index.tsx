@@ -268,15 +268,13 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
       passcode: "",
       isPasscodeVisible: false,
       file: null,
-      name: "",
     },
     validationSchema: importAccountJsonValidations,
-    onSubmit: ({ passcode, file, name }) => {
+    onSubmit: ({ passcode, file }) => {
       dispatch(
         importTradeAccountJsonFetch({
           file,
           password: passcode,
-          name,
         })
       );
     },
@@ -285,8 +283,9 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
     maxFiles: 1,
     accept: { "application/json": [".json"] },
     onDrop: (acceptedFiles) => {
+      const blob = new Blob([acceptedFiles[0]], { type: "text/plain;charset=utf-8" });
       const reader = new FileReader();
-      reader.readAsText(acceptedFiles[0]);
+      reader.readAsText(blob);
       reader.onload = () => {
         if (reader.result) {
           const decodedFile = JSON.parse(String(reader.result));
@@ -351,65 +350,37 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
             </button>
           </S.File>
         )}
-        <S.WalletName>
-          <S.WalletNameWrapper>
-            <div>
-              <span>Wallet Name</span>
-              <input
-                {...getFieldProps("name")}
-                type="text"
-                placeholder="Enter a wallet name"
+        <S.Password>
+          <S.PasswordWrapper>
+            <S.PasswordHeader>
+              <span>Is this wallet protected by password?</span>
+              <Switch
+                isActive={values.hasPasscode}
+                onChange={() => {
+                  setFieldValue("hasPasscode", !values.hasPasscode);
+                  setFieldValue("passcode", "");
+                }}
               />
-            </div>
-            <button
-              type="button"
-              onClick={() =>
-                setFieldValue("name", generateUsername({ useRandomNumber: false }))
-              }>
-              Random
-            </button>
-          </S.WalletNameWrapper>
-          <S.WalletError isNegative={values.name.length >= 31}>
-            {errors.name && touched.name && errors.name ? <p>{errors.name}</p> : <div />}
-            <small>
-              <strong>{values.name.length}</strong>/30
-            </small>
-          </S.WalletError>
-        </S.WalletName>
-        <AvailableMessage>
-          <S.Password>
-            <S.PasswordWrapper>
-              <S.PasswordHeader>
-                <span>Protect by password</span>
-                <Switch
-                  isActive={values.hasPasscode}
-                  onChange={() => {
-                    setFieldValue("hasPasscode", !values.hasPasscode);
-                    setFieldValue("passcode", "");
-                  }}
+            </S.PasswordHeader>
+            {values.hasPasscode && (
+              <S.PasswordFooter>
+                <input
+                  {...getFieldProps("passcode")}
+                  type={values.isPasscodeVisible ? "password" : "text"}
+                  placeholder="(Optional) Enter a password"
                 />
-              </S.PasswordHeader>
-              {values.hasPasscode && (
-                <S.PasswordFooter>
-                  <input
-                    {...getFieldProps("passcode")}
-                    type={values.isPasscodeVisible ? "password" : "text"}
-                    placeholder="(Optional) Enter a password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFieldValue("isPasscodeVisible", !values.isPasscodeVisible)
-                    }>
-                    <IconComponent />
-                  </button>
-                </S.PasswordFooter>
-              )}
-            </S.PasswordWrapper>
-            <S.Error> {errors.passcode && touched.passcode && errors.passcode}</S.Error>
-          </S.Password>
-        </AvailableMessage>
-
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFieldValue("isPasscodeVisible", !values.isPasscodeVisible)
+                  }>
+                  <IconComponent />
+                </button>
+              </S.PasswordFooter>
+            )}
+          </S.PasswordWrapper>
+          <S.Error> {errors.passcode && touched.passcode && errors.passcode}</S.Error>
+        </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
             Cancel

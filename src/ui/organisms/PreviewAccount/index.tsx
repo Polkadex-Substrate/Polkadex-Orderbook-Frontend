@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -75,15 +75,13 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     [tradingAccountInBrowser, showProtectedPassword]
   );
 
-  const handleExportAccount = useCallback(
-    () =>
-      dispatch(
-        tradingAccountInBrowser?.isLocked
-          ? exportTradeAccountActive()
-          : exportTradeAccountFetch({ address: selected?.address })
-      ),
-    [selected, tradingAccountInBrowser, dispatch]
-  );
+  const handleExportAccount = useCallback(() => {
+    dispatch(
+      tradingAccountInBrowser?.isLocked
+        ? exportTradeAccountActive()
+        : exportTradeAccountFetch({ address: selected?.address })
+    );
+  }, [selected, tradingAccountInBrowser, dispatch]);
 
   return (
     <Loading

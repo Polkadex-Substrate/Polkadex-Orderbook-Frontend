@@ -188,6 +188,10 @@ export const FooterButton = styled.button`
 export const ExportButton = styled(FooterButton)`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackground};
+    :disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
   `}
 `;
 

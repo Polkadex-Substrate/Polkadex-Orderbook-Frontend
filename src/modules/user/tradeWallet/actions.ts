@@ -124,7 +124,6 @@ export interface ImportTradeAccountJsonFetch {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_JSON;
   payload: {
     file: any;
-    name?: string;
     password?: string;
   };
 }
