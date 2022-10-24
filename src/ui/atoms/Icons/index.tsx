@@ -135,6 +135,7 @@ export * from "./OriginalChartSingleLineSpaceBetween";
 export * from "./OriginalChartSingleLineSpaceBetweenInclined";
 export * from "./OriginalChartSingleLineSpaceBetweenVertical";
 export * from "./OriginalChartDoubleLine";
+export * from "./Coins";
 export * from "./OriginalChartTripleLine";
 export * from "./OriginalChartQuaternaryLine";
 export * from "./Timezone";
