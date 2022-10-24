@@ -7,6 +7,7 @@ import * as T from "./types";
 
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
 import {
+  AvailableMessage,
   Checkbox,
   Footer,
   Modal,
@@ -221,7 +222,7 @@ export const SettingsTemplate = () => {
                                       dispatch(previewAccountModalActive(account))
                                     }>
                                     <Icons.Show />
-                                    <span>Preview</span>
+                                    <span>Actions</span>
                                   </S.Preview>
                                 </S.WalletActions>
                               </WalletCard>
@@ -309,20 +310,23 @@ export const SettingsTemplate = () => {
                     hasBadge
                     isVerified={user.isConfirmed}
                   />
-                  <Card
-                    label="Avatar"
-                    isAvatar
-                    description="Select an avatar to personalize your account."
-                    actionTitle="Change"
-                    onClick={() => console.log("Open Modal")}
-                  />
-                  <Card label="Creation date" description="September 29, 2022." isLocked />
-                  <Card
-                    label="Delete Account"
-                    description="This action is irreversible, please make sure you`re certain of it."
-                    onClick={() => console.log("Open Modal")}
-                    actionTitle="Delete account"
-                  />
+                  <AvailableMessage>
+                    <Card
+                      label="Avatar"
+                      isAvatar
+                      description="Select an avatar to personalize your account."
+                      actionTitle="Change"
+                      onClick={() => console.log("Open Modal")}
+                    />
+                  </AvailableMessage>
+                  <AvailableMessage>
+                    <Card
+                      label="Delete Account"
+                      description="This action is irreversible, please make sure you`re certain of it."
+                      onClick={() => console.log("Open Modal")}
+                      actionTitle="Delete account"
+                    />
+                  </AvailableMessage>
                 </S.AccountContainer>
               </S.Account>
             </S.Content>

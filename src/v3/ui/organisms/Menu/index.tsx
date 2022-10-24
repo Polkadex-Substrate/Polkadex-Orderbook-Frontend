@@ -72,6 +72,36 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               </div>
             </S.WrapperIcon>
           </Link>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Book" background="none" stroke="text" size="large" />
+              </div>
+              <div>
+                <S.Span>Terms of Use</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Document" background="none" stroke="text" size="large" />
+              </div>
+              <div>
+                <S.Span>Privacy Policy</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf">
+            <S.WrapperIcon>
+              <div>
+                <Icon name="Attention" background="none" stroke="text" size="large" />
+              </div>
+              <div>
+                <S.Span>Disclaimer</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
         </S.Container>
         <S.WrapperIcon onClick={changeTheme} as="div">
           <Tooltip>
