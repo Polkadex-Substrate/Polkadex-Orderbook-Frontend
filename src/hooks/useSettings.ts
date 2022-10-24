@@ -125,6 +125,12 @@ export const useSettings = () => {
     [filterControllerWallets, controllerWallets, showRegistered, linkedMainAddress]
   );
 
+  const hasRegisteredMainAccount = useMemo(
+    () =>
+      controllerWallets?.some((value) => linkedMainAddress?.includes(value.account.address)),
+    [controllerWallets, linkedMainAddress]
+  );
+
   const handleCloseNewAccount = () => {
     const hasAction =
       isTradeAccountSuccess ||
@@ -152,6 +158,7 @@ export const useSettings = () => {
     [controllerWallets, filterTradeAccountsByControllerAccount]
   );
 
+  console.log("hasRegisteredMainAccount", hasRegisteredMainAccount);
   return {
     handleClosePreviewModal,
     handleCloseNewAccount,
@@ -183,5 +190,6 @@ export const useSettings = () => {
     handleChangeShowRegistered: () => setShowRegistered(!showRegistered),
     filterTradeAccountsByControllerAccount: filterTradeAccountsByControllerAccountHeader,
     handleFilterTradeAccountByController: setFilterTradeAccountsByControllerAccount,
+    hasRegisteredMainAccount,
   };
 };

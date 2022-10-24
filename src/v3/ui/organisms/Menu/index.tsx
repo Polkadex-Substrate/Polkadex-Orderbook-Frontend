@@ -68,7 +68,7 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
                 <Icon name="Settings" background="none" stroke="text" size="large" />
               </div>
               <div>
-                <S.Span>Settings</S.Span>
+                <S.Span>Accounts</S.Span>
               </div>
             </S.WrapperIcon>
           </Link>

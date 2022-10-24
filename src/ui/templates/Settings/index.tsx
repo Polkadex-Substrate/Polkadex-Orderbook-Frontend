@@ -60,6 +60,7 @@ export const SettingsTemplate = () => {
     handleClosePreviewModal,
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
+    hasRegisteredMainAccount,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ export const SettingsTemplate = () => {
         />
       </Modal>
       <Head>
-        <title>Settings | Polkadex Orderbook</title>
+        <title>Accounts | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -94,7 +95,7 @@ export const SettingsTemplate = () => {
         <S.Wrapper>
           <S.ContainerMain>
             <S.Title>
-              <h1>Settings.</h1>
+              <h1>Accounts.</h1>
               <p>General account settings.</p>
             </S.Title>
             <S.Content>
@@ -113,7 +114,7 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {
+                  {!!controllerWallets?.length && hasRegisteredMainAccount && (
                     <ButtonWallet
                       type="button"
                       onClick={() => {
@@ -122,7 +123,7 @@ export const SettingsTemplate = () => {
                       }}>
                       New Account
                     </ButtonWallet>
-                  }
+                  )}
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
