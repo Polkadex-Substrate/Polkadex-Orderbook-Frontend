@@ -221,7 +221,9 @@ export const SettingsTemplate = () => {
                                     onClick={() =>
                                       dispatch(previewAccountModalActive(account))
                                     }>
-                                    <Icons.Show />
+                                    <div>
+                                      <Icons.OptionsHorizontal />
+                                    </div>
                                     <span>Actions</span>
                                   </S.Preview>
                                 </S.WalletActions>
@@ -475,7 +477,7 @@ const WalletCard = ({
   return (
     <S.WalletCard>
       <S.WalletCardWrapper>
-        {isUsing && <S.Using>USING</S.Using>}
+        {isUsing && <S.Using>IN USE</S.Using>}
         <S.WalletCardContent>
           <span>
             {name} <small>{additionalInfo}</small>

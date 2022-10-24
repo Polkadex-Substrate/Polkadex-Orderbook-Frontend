@@ -442,7 +442,7 @@ export const Preview = styled.button`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.4rem;
     height: 2.6rem;
     padding: 0.5rem;
     border-radius: 10rem;
@@ -452,11 +452,15 @@ export const Preview = styled.button`
       display: none;
       width: 0;
     }
-    svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-      width: auto;
+    div {
+      height: 1.2rem;
+      svg {
+        fill: ${theme.colors.text};
+        stroke: ${theme.colors.text};
+        width: auto;
+      }
     }
+
     :hover {
       background: ${theme.colors.secondaryBackground};
       span {

@@ -158,7 +158,6 @@ export const useSettings = () => {
     [controllerWallets, filterTradeAccountsByControllerAccount]
   );
 
-  console.log("hasRegisteredMainAccount", hasRegisteredMainAccount);
   return {
     handleClosePreviewModal,
     handleCloseNewAccount,

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { useReactToPrint } from "react-to-print";
+import Link from "next/link";
 
 import { Switch } from "../Switcher";
 
@@ -106,6 +107,9 @@ export const SuccessCreateAccount = ({
           <span>Default trade account</span>
           <Switch />
         </S.DefaultAccount>
+        <S.Actions>
+          <Link href="/balances">Add funds</Link>
+        </S.Actions>
       </S.Content>
     </S.Wrapper>
   );
