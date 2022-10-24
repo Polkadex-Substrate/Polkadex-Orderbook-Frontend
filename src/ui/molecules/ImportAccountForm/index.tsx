@@ -233,7 +233,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                 <input
                   {...getFieldProps("passcode")}
                   type={values.isPasscodeVisible ? "password" : "text"}
-                  placeholder="(Optional) Enter a password"
+                  placeholder="(Optional) Input 5-digit trading password"
                 />
                 <button
                   type="button"

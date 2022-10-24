@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
+import { useReactToPrint } from "react-to-print";
 
 import { Switch } from "../Switcher";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { PaperWallet } from "@polkadex/orderbook-ui/organisms";
 
 type Props = {
   title: string;
   description: string;
-  mnemonic?: string[];
+  mnemonic?: string;
   account?: {
     name: string;
     address: string;
@@ -33,8 +35,19 @@ export const SuccessCreateAccount = ({
     });
   }, []);
   const IconComponent = Icons[state ? "Hidden" : "Show"];
+  const componentRef = useRef();
+  const mnemonicArr = useMemo(() => mnemonic?.split(" "), [mnemonic]);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   return (
     <S.Wrapper>
+      {!!mnemonic?.length && (
+        <div style={{ display: "none" }}>
+          <PaperWallet mnemonic={mnemonicArr} mnemoicString={mnemonic} ref={componentRef} />
+        </div>
+      )}
       <S.Title>
         <h3>{title}</h3>
         <p>{description}</p>
@@ -51,7 +64,7 @@ export const SuccessCreateAccount = ({
             <span>{account?.address}</span>
           </S.WalletContent>
         </S.Wallet>
-        {!!mnemonic?.length && (
+        {!!mnemonicArr?.length && (
           <S.Words>
             <S.WordsWrapper>
               <S.WordsInfo>
@@ -65,19 +78,19 @@ export const SuccessCreateAccount = ({
                 <div>
                   <IconComponent />
                 </div>
-                <span>Hide</span>
+                <span>{state ? "Hide" : "Show"}</span>
               </S.WordsTitle>
             </S.WordsWrapper>
             {state && (
               <>
                 <S.WordsContainer>
-                  {mnemonic?.map((value, i) => (
+                  {mnemonicArr?.map((value, i) => (
                     <div key={i}>{`${i + 1}. ${value}`}</div>
                   ))}
                 </S.WordsContainer>
                 <S.WordsFooter>
                   <span>Paper wallet</span>
-                  <button type="button">
+                  <button type="button" onClick={handlePrint}>
                     <div>
                       <Icons.Print />
                     </div>
