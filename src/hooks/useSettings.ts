@@ -33,6 +33,7 @@ export const useSettings = () => {
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
   const [filterTradeAccountsByControllerAccount, setFilterTradeAccountsByControllerAccount] =
     useState("All");
+  const [avatarModal, setAvatarModal] = useState(false);
 
   const dispatch = useDispatch();
   const [currentControllerWallet, setCurrentControllerWallet] =
@@ -187,5 +188,8 @@ export const useSettings = () => {
     filterTradeAccountsByControllerAccount: filterTradeAccountsByControllerAccountHeader,
     handleFilterTradeAccountByController: setFilterTradeAccountsByControllerAccount,
     defaultTradeAddress,
+    avatarModal,
+    handleCloseAvatarModal: () => setAvatarModal(false),
+    handleOpenAvatarModal: () => setAvatarModal(true),
   };
 };

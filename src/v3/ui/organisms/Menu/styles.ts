@@ -150,3 +150,8 @@ export const NotificationsWrapper = styled.div<{ isActive?: boolean }>`
 export const Profile = styled.div`
   cursor: pointer;
 `;
+
+export const Avatar = styled.div`
+  width: 3.5rem;
+  height: 3.5rem;
+`;

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
+import { BigHead } from "@bigheads/core";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -18,12 +19,13 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
-import { PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
+import { PreviewAccount, NewAccount, ChangeAvatar } from "@polkadex/orderbook-ui/organisms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
   previewAccountModalActive,
   registerAccountModalActive,
   selectAssociatedTradeAddresses,
+  selectDefaultAvatarOptions,
   selectIsMainAddressRegistered,
   selectMainAccount,
   userAccountSelectFetch,
@@ -61,6 +63,9 @@ export const SettingsTemplate = () => {
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
     defaultTradeAddress,
+    avatarModal,
+    handleCloseAvatarModal,
+    handleOpenAvatarModal,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -85,6 +90,9 @@ export const SettingsTemplate = () => {
           }}
           isLoading={isLoading}
         />
+      </Modal>
+      <Modal open={avatarModal} onClose={handleCloseAvatarModal} placement="start right">
+        <ChangeAvatar onClose={handleCloseAvatarModal} />
       </Modal>
       <Head>
         <title>Settings | Polkadex Orderbook</title>
@@ -315,7 +323,7 @@ export const SettingsTemplate = () => {
                     isAvatar
                     description="Select an avatar to personalize your account."
                     actionTitle="Change"
-                    onClick={() => console.log("Open Modal")}
+                    onClick={handleOpenAvatarModal}
                   />
                   <Card label="Creation date" description="September 29, 2022." isLocked />
                   <Card
@@ -386,44 +394,47 @@ const Card = ({
   isAvatar = false,
   isVerified = false,
   onClick,
-}: T.Props) => (
-  <S.AccountCard>
-    <S.AccountCardWrapper>
-      {isAvatar && (
-        <S.AccountCardAvatar>
-          <Icons.Profile />
-        </S.AccountCardAvatar>
-      )}
-      <S.AccountCardContent>
-        <S.AccountCardFlex>
-          {isLocked && (
-            <div>
-              <Icons.Lock />
-            </div>
-          )}
-          <span>{label}</span>
-        </S.AccountCardFlex>
-        <p>{description}</p>
-      </S.AccountCardContent>
-    </S.AccountCardWrapper>
-    <S.AccountCardActions>
-      {hasBadge && (
-        <>
-          {isVerified ? (
-            <Badge isRegistered={isVerified}>Verified</Badge>
-          ) : (
-            <S.Button type="button">Verify Now</S.Button>
-          )}
-        </>
-      )}
-      {!!actionTitle?.length && (
-        <S.Button type="button" onClick={onClick}>
-          {actionTitle}
-        </S.Button>
-      )}
-    </S.AccountCardActions>
-  </S.AccountCard>
-);
+}: T.Props) => {
+  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  return (
+    <S.AccountCard>
+      <S.AccountCardWrapper>
+        {isAvatar && (
+          <S.AccountCardAvatar>
+            <BigHead {...avatarOptions} />
+          </S.AccountCardAvatar>
+        )}
+        <S.AccountCardContent>
+          <S.AccountCardFlex>
+            {isLocked && (
+              <div>
+                <Icons.Lock />
+              </div>
+            )}
+            <span>{label}</span>
+          </S.AccountCardFlex>
+          <p>{description}</p>
+        </S.AccountCardContent>
+      </S.AccountCardWrapper>
+      <S.AccountCardActions>
+        {hasBadge && (
+          <>
+            {isVerified ? (
+              <Badge isRegistered={isVerified}>Verified</Badge>
+            ) : (
+              <S.Button type="button">Verify Now</S.Button>
+            )}
+          </>
+        )}
+        {!!actionTitle?.length && (
+          <S.Button type="button" onClick={onClick}>
+            {actionTitle}
+          </S.Button>
+        )}
+      </S.AccountCardActions>
+    </S.AccountCard>
+  );
+};
 
 const Empty = ({
   title = "",

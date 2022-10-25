@@ -1,4 +1,8 @@
+import { AvatarProps } from "@bigheads/core";
+
 import { RootState, UserAccount, AuthInfo } from "../../";
+
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
   state.user.profile.authInfo.shouldShowInitialBanner;
@@ -59,3 +63,9 @@ export const selectIsUserDataLoading = (state: RootState): boolean =>
 
 export const selectDefaultTradeAccount = (state: RootState): string =>
   state.user.profile.defaultTradeAccount;
+
+export const selectDefaultAvatarId = (state: RootState): number =>
+  Number(state.user.profile.userProfile?.avatar);
+
+export const selectDefaultAvatarOptions = (state: RootState): AvatarProps =>
+  randomAvatars?.find((v) => v.id === selectDefaultAvatarId(state)) as AvatarProps;

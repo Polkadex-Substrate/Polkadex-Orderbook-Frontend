@@ -6,6 +6,7 @@ import {
   userAccountSelectFetch,
   userAuthError,
   userData,
+  userSetAvatar,
   userSetDefaultTradeAccount,
 } from "../actions";
 
@@ -31,6 +32,7 @@ export function* userAuthSaga() {
       yield all([
         put(userSetDefaultTradeAccount(defaultTradeAddress)),
         put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress })),
+        put(userSetAvatar()),
       ]);
     }
 

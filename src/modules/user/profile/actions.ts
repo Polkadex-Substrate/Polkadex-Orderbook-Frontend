@@ -17,8 +17,10 @@ import {
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
   PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
+  PROFILE_SET_PROFILE_AVATAR,
 } from "./constants";
 
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { RootState } from "@polkadex/orderbook-modules";
 
 export interface UserChangeInitBanner {
@@ -100,6 +102,10 @@ export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
   payload: string | null;
 }
+export interface UserSetAvatar {
+  type: typeof PROFILE_SET_PROFILE_AVATAR;
+  payload?: string;
+}
 export interface Hydrate {
   type: typeof HYDRATE;
   payload: RootState;
@@ -120,6 +126,7 @@ export type ProfileAction =
   | UserProfileMainAccountPush
   | UserSetDefaultTradeAccount
   | UserProfileTradeAccountDelete
+  | UserSetAvatar
   | Hydrate;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
@@ -197,5 +204,10 @@ export const userSetDefaultTradeAccount = (
   payload: UserSetDefaultTradeAccount["payload"]
 ) => ({
   type: PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
+  payload,
+});
+
+export const userSetAvatar = (payload?: UserSetAvatar["payload"]) => ({
+  type: PROFILE_SET_PROFILE_AVATAR,
   payload,
 });

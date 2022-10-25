@@ -13,6 +13,7 @@
     "checkTypes": "tsc --noEmit"
   },
   "dependencies": {
+    "@bigheads/core": "^0.3.3",
     "@next/bundle-analyzer": "^12.2.4",
     "@polkadot/api": "^8.0.2",
     "@polkadot/extension-dapp": "^0.43.2",

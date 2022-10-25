@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BigHead } from "@bigheads/core";
 
 import * as S from "./styles";
 
@@ -14,7 +15,7 @@ import {
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectNotifications } from "@polkadex/orderbook-modules";
+import { selectDefaultAvatarOptions, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type MenuProps = {
@@ -25,6 +26,7 @@ export type MenuProps = {
 const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
+  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
 
   return (
     <S.Wrapper>
@@ -117,7 +119,9 @@ const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
               <S.Profile>
                 <Tooltip>
                   <TooltipHeader>
-                    <Icon name="Avatar" color="text" size="large" />
+                    <S.Avatar>
+                      <BigHead {...avatarOptions} />
+                    </S.Avatar>
                   </TooltipHeader>
                   <TooltipContent position="left">
                     <p style={{ whiteSpace: "nowrap" }}>My Profile</p>

@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { HYDRATE } from "next-redux-wrapper";
-import cookie from "cookie";
 
 import { AuthInfo, ProfileAction, UserAccount } from "./actions";
 import {
@@ -16,15 +15,20 @@ import {
   PROFILE_USER_SELECT_ACCOUNT_DATA,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
   PROFILE_RESET_USER,
+  PROFILE_SET_PROFILE_AVATAR,
 } from "./constants";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+const defaultAvatar = randomAvatars[1].id;
 export interface ProfileState {
   authInfo: AuthInfo;
   userData: {
     userAccounts: UserAccount[];
     mainAccounts: string[];
+  };
+  userProfile?: {
+    avatar?: string;
   };
   selectedAccount: UserAccount;
   defaultTradeAccount: string;
@@ -49,6 +53,9 @@ export const initialStateProfile: ProfileState = {
   userData: {
     userAccounts: [],
     mainAccounts: [],
+  },
+  userProfile: {
+    avatar: defaultAvatar.toString(),
   },
   selectedAccount: {
     tradeAddress: "",
@@ -165,6 +172,24 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         defaultTradeAccount: tradeAddress,
       };
     }
+    case PROFILE_SET_PROFILE_AVATAR: {
+      const userAvatar = window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_AVATAR);
+      const hasAvatar = !!action?.payload?.length;
+      if (hasAvatar)
+        window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_AVATAR, action.payload);
+
+      if (!userAvatar)
+        window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_AVATAR, defaultAvatar.toString());
+
+      return {
+        ...state,
+        userProfile: {
+          avatar:
+            hasAvatar || userAvatar ? action?.payload || userAvatar : defaultAvatar.toString(),
+        },
+      };
+    }
+
     case PROFILE_USER_TRADE_ACCOUNT_DELETE: {
       const address = action.payload;
       const userAccounts = [...state.userData.userAccounts];
