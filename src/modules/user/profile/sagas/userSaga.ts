@@ -1,11 +1,11 @@
-import { APIClass } from "aws-amplify";
+import { APIClass, API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
 
 import { UserAccount } from "@polkadex/orderbook-modules";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-export const getAllMainLinkedAccounts = async (email: string, API: APIClass) => {
+export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
   try {
     const res: any = await sendQueryToAppSync({
       query: queries.listMainAccountsByEmail,
@@ -14,7 +14,7 @@ export const getAllMainLinkedAccounts = async (email: string, API: APIClass) => 
       },
       token: null,
       authMode: "AMAZON_COGNITO_USER_POOLS",
-      API,
+      API: Api,
     });
     return res.data.listMainAccountsByEmail ?? { accounts: [] };
   } catch (error) {
@@ -24,13 +24,13 @@ export const getAllMainLinkedAccounts = async (email: string, API: APIClass) => 
 
 export const getAllProxyAccounts = async (
   mainAccounts: [string],
-  API: APIClass
+  Api = API
 ): Promise<UserAccount[]> => {
   const promises = mainAccounts.map(async (main_account) => {
     const res: any = await sendQueryToAppSync({
       query: queries.findUserByMainAccount,
       variables: { main_account },
-      API,
+      API: Api,
     });
     const proxies = res.data.findUserByMainAccount.proxies;
     return { main_account, proxies };

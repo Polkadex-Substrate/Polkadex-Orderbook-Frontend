@@ -1,17 +1,27 @@
 // TODO : Fix saga
-import { put, select } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
-import { notificationPush, sendError, selectUserInfo } from "../../../";
-import { userAccountSelectFetch, userAuthError } from "../actions";
+import { notificationPush, sendError, selectUserInfo, selectUserAccounts } from "../../../";
+import { userAccountSelectFetch, userAuthError, userData } from "../actions";
+
+import { getAllMainLinkedAccounts, getAllProxyAccounts } from "./userSaga";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function* userAuthSaga() {
-  const { userExists, isConfirmed } = yield select(selectUserInfo);
+  const { userExists, isConfirmed, email } = yield select(selectUserInfo);
+  const userAccounts = yield select(selectUserAccounts);
+  const defaultTradeAddress = window.localStorage.getItem(
+    LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+  );
+
   try {
-    const defaultTradeAddress = window.localStorage.getItem(
-      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-    );
+    if (!userAccounts?.length) {
+      const { accounts } = yield call(() => getAllMainLinkedAccounts(email));
+      const userAccounts = yield call(() => getAllProxyAccounts(accounts));
+      yield put(userData({ mainAccounts: accounts, userAccounts }));
+    }
+
     if (defaultTradeAddress?.length)
       yield put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
 
