@@ -18,12 +18,10 @@ import {
 } from "../modules/user/profile/sagas/userSaga";
 
 import {
-  alertPush,
   selectCurrentColorTheme,
   sendError,
   userAuthData,
   userData,
-  userSetDefaultTradeAccount,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 const { cryptoWaitReady } = await import("@polkadot/util-crypto");
@@ -105,18 +103,6 @@ App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
     } catch (error) {
       console.log("User error", error);
       switch (error) {
-        // case "The user is not authenticated": {
-        //   dispatch(
-        //     alertPush({
-        //       message: {
-        //         title: "User fetch error",
-        //         description: error,
-        //       },
-        //       type: "Error",
-        //     })
-        //   );
-        //   break;
-        // }
         case "User is not confirmed.": {
           dispatch(
             userAuthData({

@@ -1,14 +1,8 @@
 // TODO : Fix saga
-import { Auth } from "aws-amplify";
 import { put, select } from "redux-saga/effects";
 
-import {
-  notificationPush,
-  sendError,
-  selectUserInfo,
-  userSetDefaultTradeAccount,
-} from "../../../";
-import { userAuthError } from "../actions";
+import { notificationPush, sendError, selectUserInfo } from "../../../";
+import { userAccountSelectFetch, userAuthError } from "../actions";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
@@ -18,7 +12,8 @@ export function* userAuthSaga() {
     const defaultTradeAddress = window.localStorage.getItem(
       LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
     );
-    yield put(userSetDefaultTradeAccount(defaultTradeAddress));
+    if (defaultTradeAddress?.length)
+      yield put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
 
     if (!isConfirmed && userExists) {
       yield put(
@@ -44,35 +39,3 @@ export function* userAuthSaga() {
     );
   }
 }
-
-const getUserAuthInfo = async () => {
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    return {
-      isAuthenticated: true,
-      email: user.attributes.email,
-      userExists: true,
-      isConfirmed: user.attributes.email_verified,
-      signInUserSession: user.signInUserSession,
-      jwt: user.signInUserSession.accessToken.jwtToken,
-    };
-  } catch (e) {
-    console.log(e);
-    if (e === "The user is not authenticated") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: false,
-      };
-    }
-    if (e === "User is not confirmed.") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: true,
-        isConfirmed: false,
-      };
-    }
-    throw new Error(e);
-  }
-};
