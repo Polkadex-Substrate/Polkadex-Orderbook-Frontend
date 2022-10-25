@@ -13,10 +13,7 @@ export const Footer = () => {
 
   return (
     <S.Wrapper>
-      <p>
-        📰 Under development. Expect frequent restarts of the testnet and wipe offs leading to
-        loss of your test balances and trade history.
-      </p>
+      <div />
       <S.Container color={isConnecting ? "orange" : color}>
         <Icons.Connection />
         <span>{isConnecting ? "Connecting" : message}</span>

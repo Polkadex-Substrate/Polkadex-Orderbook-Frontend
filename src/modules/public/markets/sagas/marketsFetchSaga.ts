@@ -14,7 +14,6 @@ export function* marketsFetchSaga(_action: MarketsFetch) {
     const allAssets: IPublicAsset[] = yield select(selectAllAssets);
     if (allAssets.length > 0) {
       const markets = yield call(fetchMarkets, allAssets);
-      console.log("markets fetched", markets);
       yield put(marketsData(markets));
       yield put(setCurrentMarketIfUnset(markets[0]));
     }
