@@ -29,10 +29,7 @@ export const useInit = () => {
   }, [dispatch, shouldRangerConnect]);
 
   useEffect(() => {
-    console.log("isSignedIn", isSignedIn);
-    if (isSignedIn) {
-      dispatch(userAuthFetch());
-    }
+    if (isSignedIn) dispatch(userAuthFetch());
   }, [dispatch, isSignedIn]);
 
   useEffect(() => {

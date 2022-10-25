@@ -15,6 +15,7 @@ import {
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
   PROFILE_USER_SELECT_ACCOUNT_DATA,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
+  PROFILE_RESET_USER,
 } from "./constants";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
@@ -87,6 +88,10 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
         isAuthSuccess: true,
       };
     }
+    case PROFILE_RESET_USER:
+      return {
+        ...initialStateProfile,
+      };
     case PROFILE_USER_FETCH: {
       return {
         ...state,
