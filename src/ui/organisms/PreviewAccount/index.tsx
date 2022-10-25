@@ -30,10 +30,9 @@ import {
   exportTradeAccountActive,
   exportTradeAccountFetch,
 } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
-import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 type Props = {
   onClose: () => void;
@@ -51,7 +50,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
-  tryUnlockTradeAccount(tradingAccountInBrowser);
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
   const usingAccount = useReduxSelector(selectUsingAccount);
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)

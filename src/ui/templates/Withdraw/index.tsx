@@ -28,7 +28,11 @@ import {
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  useHistory,
+  useReduxSelector,
+  useTryUnlockTradeAccount,
+} from "@polkadex/orderbook-hooks";
 import {
   selectClaimWithdrawsInLoading,
   selectMainAccount,
@@ -45,7 +49,6 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -57,7 +60,7 @@ export const WithdrawTemplate = () => {
   const tradingAccountInBrowser = useReduxSelector(
     selectTradeAccount(currentAccount?.tradeAddress)
   );
-  tryUnlockTradeAccount(tradingAccountInBrowser);
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
