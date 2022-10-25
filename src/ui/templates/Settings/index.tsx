@@ -60,6 +60,7 @@ export const SettingsTemplate = () => {
     handleClosePreviewModal,
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
+    defaultTradeAddress,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -185,11 +186,12 @@ export const SettingsTemplate = () => {
                               !!linkedMainAddress?.length ||
                               !!acc?.account?.meta?.name?.length;
                             const isUsing = account.address === usingAccount.tradeAddress;
+                            const isDefault = defaultTradeAddress === account.address;
                             return (
                               <WalletCard
                                 key={i}
                                 isUsing={isUsing}
-                                isDefault={false}
+                                isDefault={isDefault}
                                 defaultTitle="Default trade account"
                                 name={String(account?.account?.meta?.name || "Unknown")}
                                 address={account.address}

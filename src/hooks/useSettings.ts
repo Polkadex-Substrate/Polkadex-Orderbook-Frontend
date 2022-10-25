@@ -1,3 +1,4 @@
+// TODO: Refactor hook
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -8,6 +9,7 @@ import {
   registerMainAccountReset,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
+  selectDefaultTradeAccount,
   selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
@@ -52,12 +54,13 @@ export const useSettings = () => {
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
   const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
   const usingAccount = useReduxSelector(selectUsingAccount);
-  const isLoading = isTradeAccountLoading || isControllerAccountLoading;
   const isRegisterControllerAccountSuccess = useReduxSelector(
     selectRegisterTradeAccountSuccess
   );
+  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
   const isPreviewActive = useReduxSelector(selectIsPreviewTradeAccountActive);
   const previewAccountSelected = useReduxSelector(selectPreviewTradeAccountSelect);
+  const isLoading = isTradeAccountLoading || isControllerAccountLoading;
 
   const tradeAccounts = useMemo(
     () =>
@@ -183,5 +186,6 @@ export const useSettings = () => {
     handleChangeShowRegistered: () => setShowRegistered(!showRegistered),
     filterTradeAccountsByControllerAccount: filterTradeAccountsByControllerAccountHeader,
     handleFilterTradeAccountByController: setFilterTradeAccountsByControllerAccount,
+    defaultTradeAddress,
   };
 };

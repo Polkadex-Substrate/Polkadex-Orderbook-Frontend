@@ -1,8 +1,13 @@
 // TODO : Fix saga
-import { call, put, select } from "redux-saga/effects";
+import { all, call, put, select } from "redux-saga/effects";
 
 import { notificationPush, sendError, selectUserInfo, selectUserAccounts } from "../../../";
-import { userAccountSelectFetch, userAuthError, userData } from "../actions";
+import {
+  userAccountSelectFetch,
+  userAuthError,
+  userData,
+  userSetDefaultTradeAccount,
+} from "../actions";
 
 import { getAllMainLinkedAccounts, getAllProxyAccounts } from "./userSaga";
 
@@ -22,8 +27,12 @@ export function* userAuthSaga() {
       yield put(userData({ mainAccounts: accounts, userAccounts }));
     }
 
-    if (defaultTradeAddress?.length)
-      yield put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
+    if (defaultTradeAddress?.length) {
+      yield all([
+        put(userSetDefaultTradeAccount(defaultTradeAddress)),
+        put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress })),
+      ]);
+    }
 
     if (!isConfirmed && userExists) {
       yield put(
