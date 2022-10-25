@@ -9,7 +9,7 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignIn } from "@polkadex/orderbook-hooks";
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
 
 export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
@@ -83,7 +83,7 @@ export const SignInTemplate = () => {
                     <span>
                       By clicking the submit button below,I hereby agree with Polkadex{" "}
                       <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Terms of Service
