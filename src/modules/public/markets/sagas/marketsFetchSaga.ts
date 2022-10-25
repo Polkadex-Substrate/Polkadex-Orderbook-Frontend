@@ -32,7 +32,7 @@ export function* marketsFetchSaga(_action: MarketsFetch) {
   }
 }
 const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
-  const res: any = await sendQueryToAppSync(getAllMarkets);
+  const res: any = await sendQueryToAppSync({ query: getAllMarkets });
   const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
   const markets = pairs.map(async (pair: MarketQueryResult): Promise<Market> => {
     const [baseAsset, quoteAsset] = pair.market.split("-");

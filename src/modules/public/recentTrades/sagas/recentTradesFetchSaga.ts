@@ -39,6 +39,9 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
 }
 
 const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
-  const res: any = await sendQueryToAppSync(getRecentTrades, { m: market, limit });
+  const res: any = await sendQueryToAppSync({
+    query: getRecentTrades,
+    variables: { m: market, limit },
+  });
   return res.data.getRecentTrades.items;
 };

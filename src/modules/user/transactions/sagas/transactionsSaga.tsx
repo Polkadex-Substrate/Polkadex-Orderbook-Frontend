@@ -60,11 +60,14 @@ const fetchTransactions = async (
   limit = 100000
 ): Promise<Transaction[]> => {
   const fromDate = subtractMonths(monthsBefore);
-  const res: any = await sendQueryToAppSync(queries.listTransactionsByMainAccount, {
-    main_account: address,
-    from: fromDate.toISOString(),
-    to: new Date().toISOString(),
-    limit,
+  const res: any = await sendQueryToAppSync({
+    query: queries.listTransactionsByMainAccount,
+    variables: {
+      main_account: address,
+      from: fromDate.toISOString(),
+      to: new Date().toISOString(),
+      limit,
+    },
   });
 
   const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;

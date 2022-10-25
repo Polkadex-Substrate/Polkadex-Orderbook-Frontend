@@ -14,7 +14,7 @@ import {
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
+import { selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type MenuProps = {
@@ -25,7 +25,6 @@ export type MenuProps = {
 const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
 
   return (
     <S.Wrapper>

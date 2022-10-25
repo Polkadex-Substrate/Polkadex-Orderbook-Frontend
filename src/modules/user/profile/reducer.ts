@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { HYDRATE } from "next-redux-wrapper";
+import cookie from "cookie";
 
 import { AuthInfo, ProfileAction, UserAccount } from "./actions";
 import {
@@ -60,6 +62,18 @@ export const initialStateProfile: ProfileState = {
 
 export const profileReducer = (state = initialStateProfile, action: ProfileAction) => {
   switch (action.type) {
+    case HYDRATE: {
+      const { profile } = action.payload.user;
+      return {
+        ...state,
+        authInfo: {
+          ...profile.authInfo,
+        },
+        userData: {
+          ...profile.userData,
+        },
+      };
+    }
     case PROFILE_USER_AUTH_FETCH:
       return {
         ...state,

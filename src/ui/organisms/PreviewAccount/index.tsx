@@ -316,13 +316,12 @@ const DefaultAccount = ({ label = "", tradeAddress }) => {
   const dispatch = useDispatch();
   const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
   const isActive = tradeAddress === defaultTradeAddress;
-  const handleChange = () => {
-    if (!isActive) {
-      dispatch(userSetDefaultTradeAccount(tradeAddress));
-    } else {
-      dispatch(userSetDefaultTradeAccount(null));
-    }
-  };
+
+  const handleChange = () =>
+    !isActive
+      ? dispatch(userSetDefaultTradeAccount(tradeAddress))
+      : dispatch(userSetDefaultTradeAccount(null));
+
   return (
     <S.CardWrapper>
       <S.CardContent>

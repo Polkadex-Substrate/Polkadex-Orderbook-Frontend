@@ -59,5 +59,9 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
 const executeWithdraw = async (withdrawPayload, address) => {
   const payload = JSON.stringify({ Withdraw: withdrawPayload });
-  return await sendQueryToAppSync(mutations.withdraw, { input: { payload } }, address);
+  return await sendQueryToAppSync({
+    query: mutations.withdraw,
+    variables: { input: { payload } },
+    token: address,
+  });
 };

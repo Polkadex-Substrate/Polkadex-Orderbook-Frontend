@@ -1,32 +1,25 @@
 // TODO : Fix saga
 import { Auth } from "aws-amplify";
-import { call, put } from "redux-saga/effects";
+import { put, select } from "redux-saga/effects";
 
 import {
   notificationPush,
   sendError,
-  userAuthData,
-  UserAuthFetch,
-  userFetch,
+  selectUserInfo,
   userSetDefaultTradeAccount,
 } from "../../../";
 import { userAuthError } from "../actions";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
-export function* userAuthSaga(_action: UserAuthFetch) {
+export function* userAuthSaga() {
+  const { userExists, isConfirmed } = yield select(selectUserInfo);
   try {
-    const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
-      getUserAuthInfo()
-    );
     const defaultTradeAddress = window.localStorage.getItem(
       LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
     );
     yield put(userSetDefaultTradeAccount(defaultTradeAddress));
-    if (email) {
-      yield put(userFetch({ email }));
-    }
-    yield put(userAuthData({ email, isAuthenticated, userExists, isConfirmed }));
+
     if (!isConfirmed && userExists) {
       yield put(
         notificationPush({

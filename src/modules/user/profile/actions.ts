@@ -1,3 +1,5 @@
+import { HYDRATE } from "next-redux-wrapper";
+
 import { CommonError } from "../../types";
 
 import {
@@ -16,6 +18,8 @@ import {
   PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
 } from "./constants";
+
+import { RootState } from "@polkadex/orderbook-modules";
 
 export interface UserChangeInitBanner {
   type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
@@ -96,6 +100,10 @@ export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
   payload: string | null;
 }
+export interface Hydrate {
+  type: typeof HYDRATE;
+  payload: RootState;
+}
 
 export type ProfileAction =
   | UserFetch
@@ -111,7 +119,8 @@ export type ProfileAction =
   | UserProfileAccountPush
   | UserProfileMainAccountPush
   | UserSetDefaultTradeAccount
-  | UserProfileTradeAccountDelete;
+  | UserProfileTradeAccountDelete
+  | Hydrate;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
