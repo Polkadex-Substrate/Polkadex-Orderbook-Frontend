@@ -40,7 +40,7 @@ export function* userAuthSaga() {
   } catch (error) {
     yield put(
       sendError({
-        error,
+        error: `User auth error:${error.message}`,
         processingType: "alert",
         extraOptions: {
           actionError: userAuthError,

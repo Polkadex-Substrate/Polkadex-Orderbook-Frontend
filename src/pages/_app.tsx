@@ -114,6 +114,9 @@ App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
           );
           break;
         }
+        case "The user is not authenticated": {
+          break;
+        }
         default: {
           dispatch(
             sendError({
