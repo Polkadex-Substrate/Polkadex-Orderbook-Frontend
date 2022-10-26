@@ -472,10 +472,23 @@ export const Preview = styled.button`
 `;
 
 export const WalletActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: 0.2s ease;
+  ${({ theme, fill = "secondaryBackground" }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: 0.2s ease;
+    a {
+      background: ${theme.colors[fill]};
+      border-radius: 0.3rem;
+      padding: 0.3rem 0.5rem;
+      font-weight: 500;
+      font-size: 1.3rem;
+      transition: background-color 0.4s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 export const Dropdown = styled.div`
   small {

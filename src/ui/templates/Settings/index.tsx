@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { BigHead } from "@bigheads/core";
+import Link from "next/link";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -217,6 +218,7 @@ export const SettingsTemplate = () => {
                                   })`
                                 }>
                                 <S.WalletActions>
+                                  <Link href="/balances">Add funds</Link>
                                   {!isUsing && account.isPresentInBrowser && (
                                     <S.Button
                                       type="button"
