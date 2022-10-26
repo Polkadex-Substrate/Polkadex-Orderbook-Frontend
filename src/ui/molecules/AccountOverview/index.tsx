@@ -12,9 +12,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
@@ -142,7 +142,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                 {accountList.map(({ address, meta }) => {
                   const shortAddress = transformAddress(address, 10);
                   return (
-                    <Dropdown.Item onAction={handleClick} key={address}>
+                    <Dropdown.Item onAction={() => handleClick(address)} key={address}>
                       <S.DropdownHeader>
                         <>
                           {meta.name}

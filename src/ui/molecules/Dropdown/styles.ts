@@ -1,131 +1,163 @@
 import styled, { css } from "styled-components";
+import { color, variant } from "styled-system";
 
-const directionModifier = {
-  top: () => css`
-    bottom: calc(100%);
-    left: 0;
+import * as T from "./types";
+
+import { bgStyleVariants } from "@polkadex/orderbook/helpers/variants";
+
+export const Item = styled("li")<{
+  isCloseOnSelect?: boolean;
+  isFlex?: boolean;
+  isFocused?: boolean;
+  isDisabled?: boolean;
+  withDivider?: boolean;
+}>(
+  {
+    padding: "0.8rem 1rem",
+    outline: "none",
+    border: "1px solid transparent",
+  },
+  variant({
+    prop: "isCloseOnSelect",
+    variants: {
+      true: {
+        cursor: "pointer",
+      },
+    },
+  }),
+  variant({
+    prop: "isFlex",
+    variants: {
+      true: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      },
+    },
+  }),
+  variant({
+    prop: "isDisabled",
+    variants: {
+      true: {
+        cursor: "not-allowed",
+        opacity: 0.5,
+      },
+    },
+  }),
+  ({ theme }) =>
+    variant({
+      prop: "isFocused",
+      variants: {
+        true: {
+          // borderColor: theme.colors.primary,
+        },
+      },
+    }),
+  ({ theme }) =>
+    variant({
+      prop: "withDivider",
+      variants: {
+        true: {
+          "&:not(:last-child)": {
+            borderBottom: `1px solid ${theme.colors.text}33`,
+          },
+        },
+      },
+    })
+);
+
+export const Section = styled("li")({});
+
+export const SectionTitle = styled("div")({
+  padding: "0.8rem 1rem 0.4rem 1rem",
+  fontSize: "1.2rem",
+  opacity: 0.5,
+});
+
+export const ItemContainer = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  gap: "0.8rem",
+});
+
+export const Icon = styled("div")({
+  display: "flex",
+  alignItems: "center",
+});
+
+export const Command = styled("div")(({ theme }) =>
+  css({
+    padding: "0.4rem",
+    border: "1px solid",
+    borderColor: `${theme.colors.text}44`,
+    fontSize: "1rem",
+    textTransform: "uppercase",
+    opacity: 0.5,
+  })
+);
+
+export const SectionContainer = styled("ul")(({ theme }) => css({}));
+
+export const Menu = styled("ul")<T.DropdownMenuProps>(
+  ({ theme, fill, itemFill }) => css`
+    background: ${theme.colors[fill]};
+    min-width: 20rem;
+    border: 1px solid ${theme.colors.text}11;
+    ${Item} {
+      transition: background-color 0.2s ease-in-out;
+      &:hover {
+        background-color: ${theme.colors[itemFill]}11;
+      }
+    }
   `,
-  topRight: () => css`
-    top: calc(100%);
-    right: 0;
-  `,
-  bottom: () => css`
-    top: calc(100%);
-    margin-top: 1rem;
-    left: 0;
-  `,
-  bottomRight: () => css`
-    top: calc(100%);
-    right: 0;
-    margin-top: 0.5rem;
-  `,
-  right: () => css`
-    bottom: 50%;
-    transform: translateY(50%);
-    right: calc(100%);
-  `,
-  left: () => css`
-    top: 50%;
-    transform: translateY(-50%);
-    left: calc(100%);
-  `,
-  centerLeft: () => css`
-    top: 0;
-    left: 0;
-  `,
-  centerRight: () => css`
-    top: 0;
-    right: 0;
-  `,
+  variant({
+    prop: "border",
+    variants: {
+      semiRounded: {
+        borderRadius: "1rem",
+        padding: "0.8rem 0.7rem",
+        [Item]: {
+          borderRadius: "0.7rem",
+        },
+        [Command]: {
+          borderRadius: "0.2rem",
+        },
+      },
+      rounded: {
+        borderRadius: "1.3rem",
+        padding: "0.8rem 0.7rem",
+        [Item]: {
+          borderRadius: "1rem",
+        },
+        [Command]: {
+          borderRadius: "0.5rem",
+        },
+      },
+      squared: {
+        borderRadius: "none",
+      },
+    },
+  }),
+  color,
+  bgStyleVariants
+);
+
+export const Selected = styled("path")(({ theme }) =>
+  css({
+    stroke: theme.colors.text,
+  })
+);
+
+export const Divider = styled("div")(({ theme }) =>
+  css({
+    borderTop: "1px solid",
+    borderTopColor: `${theme.colors.text}11`,
+    margin: "0.8rem 0",
+  })
+);
+
+Menu.defaultProps = {
+  fill: "secondaryBackground",
+  border: "rounded",
+  itemFill: "text",
 };
-
-const wrapperModifiers = {
-  open: () => css`
-    opacity: 1;
-    pointer-events: auto;
-  `,
-  close: () => css`
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  `,
-};
-
-const priorityModifiers = {
-  low: () => css`
-    ${Header} {
-      z-index: 31;
-    }
-    ${Content} {
-      z-index: 31;
-    }
-    ${Overlay} {
-      z-index: 30;
-    }
-  `,
-  medium: () => css`
-    ${Header} {
-      z-index: 32;
-    }
-    ${Content} {
-      z-index: 32;
-    }
-    ${Overlay} {
-      z-index: 31;
-    }
-  `,
-  high: () => css`
-    ${Header} {
-      z-index: 33;
-    }
-    ${Content} {
-      z-index: 33;
-    }
-    ${Overlay} {
-      z-index: 32;
-    }
-  `,
-};
-
-export const Header = styled.div`
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
-export const Content = styled.div<{ direction?: string; isFull?: boolean }>`
-  ${({ isFull = true, direction = "bottom" }) => css`
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    min-width: ${isFull ? "100%" : "max-content"};
-    ${directionModifier[direction]()};
-  `}
-`;
-
-export const Overlay = styled.div<{ isOpacity: boolean }>`
-  ${({ theme, isOpacity }) => css`
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: ${isOpacity ? theme.colors.overlayOpacity : "none"};
-    transition: opacity 0.5s ease-in-out;
-  `}
-`;
-
-export const Wrapper = styled.div<{ isOpen: boolean; priority: string }>`
-  ${({ isOpen, priority = "low" }) => css`
-    position: relative;
-
-    ${priorityModifiers[priority]()};
-    ${Content},
-    ${Overlay} {
-      transition: opacity 0.2s ease-in;
-      ${isOpen && wrapperModifiers.open()}
-      ${!isOpen && wrapperModifiers.close()}
-    }
-  `}
-`;

@@ -8,7 +8,7 @@ import * as S from "./styles";
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
 import { useTimer, useCodeVerification } from "@polkadex/orderbook/hooks";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 
 export const CodeVerificationTemplate = () => {
   const [state, setState] = useState(false);

@@ -3,24 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Props } from "./types";
 import * as S from "./styles";
 
-import { MessageCard, Icon } from "@polkadex/orderbook-ui/molecules";
+import { MessageCard, Icon, Modal } from "@polkadex/orderbook-ui/molecules";
 import { alertDelete, selectAlertState } from "@polkadex/orderbook-modules";
-import { Popup } from "@polkadex/orderbook/file-to-delete/ui/molecules/Popup";
 
 export const Message = ({ children }: Props) => {
   const dispatch = useDispatch();
 
   const alert = useSelector(selectAlertState);
 
-  const handleClose = () => dispatch(alertDelete());
+  const handleClose = () => (alert.type === "Loading" ? undefined : dispatch(alertDelete()));
   return (
-    <Popup
-      isMessage
-      isVisible={alert.status}
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onClose={alert.type === "Loading" ? () => {} : handleClose}
-      isBottomPosition
-      size="full">
+    <Modal open={alert.status} onClose={handleClose} placement="bottom left" isFullWidth>
       <S.Wrapper>
         <S.Container>
           <MessageCard
@@ -34,6 +27,6 @@ export const Message = ({ children }: Props) => {
           </S.Action>
         </S.Container>
       </S.Wrapper>
-    </Popup>
+    </Modal>
   );
 };

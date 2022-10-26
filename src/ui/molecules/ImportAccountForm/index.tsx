@@ -88,7 +88,6 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
       isPasscodeVisible: false,
       mnemonic: [],
     },
-    validationSchema: importAccountValidations,
     onSubmit: ({ mnemonic, name, passcode }) => {
       dispatch(
         importTradeAccountFetch({

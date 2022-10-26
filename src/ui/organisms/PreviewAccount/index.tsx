@@ -13,8 +13,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,

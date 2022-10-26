@@ -23,6 +23,10 @@ export const Title = styled.div`
     }
   `}
 `;
+export const FlexCenter = styled.div`
+  align-items: center;
+  display: flex;
+`;
 
 export const Content = styled.div`
   padding: 1rem;
