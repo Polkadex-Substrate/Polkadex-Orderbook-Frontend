@@ -129,6 +129,12 @@ export const useSettings = () => {
     [filterControllerWallets, controllerWallets, showRegistered, linkedMainAddress]
   );
 
+  const hasRegisteredMainAccount = useMemo(
+    () =>
+      controllerWallets?.some((value) => linkedMainAddress?.includes(value.account.address)),
+    [controllerWallets, linkedMainAddress]
+  );
+
   const handleCloseNewAccount = () => {
     const hasAction =
       isTradeAccountSuccess ||
@@ -191,5 +197,6 @@ export const useSettings = () => {
     avatarModal,
     handleCloseAvatarModal: () => setAvatarModal(false),
     handleOpenAvatarModal: () => setAvatarModal(true),
+    hasRegisteredMainAccount,
   };
 };

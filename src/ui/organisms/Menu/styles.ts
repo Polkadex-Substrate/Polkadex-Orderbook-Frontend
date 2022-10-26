@@ -21,6 +21,7 @@ export const WrapperIcon = styled.a`
     border-radius: 10rem;
   }
 `;
+
 export const Span = styled.span`
   margin-left: 0.8rem;
   font-size: 1.3rem;
@@ -153,4 +154,12 @@ export const Profile = styled.div`
 export const Avatar = styled.div`
   width: 3.5rem;
   height: 3.5rem;
+`;
+export const Terms = styled.div``;
+export const TermsLinks = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-left: 3rem;
 `;

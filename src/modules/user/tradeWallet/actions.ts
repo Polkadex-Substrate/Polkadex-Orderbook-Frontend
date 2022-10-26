@@ -23,6 +23,7 @@ import {
   USER_TRADE_ACCOUNT_EXPORT_FETCH,
   USER_TRADE_ACCOUNT_EXPORT_DATA,
   USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
+  USER_TRADE_ACCOUNT_IMPORT_JSON,
 } from "./constants";
 import { PreviewAccountModal } from "./reducer";
 
@@ -55,7 +56,7 @@ export interface RegisterTradeAccountFetch {
 export interface RegisterTradeAccountData {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_DATA;
   payload: {
-    mnemonic: string;
+    mnemonic?: string;
     account: {
       name: string;
       address: string;
@@ -119,6 +120,13 @@ export interface ImportTradeAccountFetch {
     password?: string;
   };
 }
+export interface ImportTradeAccountJsonFetch {
+  type: typeof USER_TRADE_ACCOUNT_IMPORT_JSON;
+  payload: {
+    file: any;
+    password?: string;
+  };
+}
 export interface ImportTradeAccountData {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_DATA;
 }
@@ -167,7 +175,8 @@ export type TradeAccountsAction =
   | PreviewTradeAccountModalActive
   | ExportTradeAccountFetch
   | ExportTradeAccountData
-  | ExportTradeAccountActive;
+  | ExportTradeAccountActive
+  | ImportTradeAccountJsonFetch;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -237,6 +246,13 @@ export const importTradeAccountFetch = (
   payload: ImportTradeAccountFetch["payload"]
 ): ImportTradeAccountFetch => ({
   type: USER_TRADE_ACCOUNT_IMPORT_FETCH,
+  payload: payload,
+});
+
+export const importTradeAccountJsonFetch = (
+  payload: ImportTradeAccountJsonFetch["payload"]
+): ImportTradeAccountJsonFetch => ({
+  type: USER_TRADE_ACCOUNT_IMPORT_JSON,
   payload: payload,
 });
 

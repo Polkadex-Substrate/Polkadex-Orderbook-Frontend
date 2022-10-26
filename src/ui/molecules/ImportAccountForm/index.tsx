@@ -4,13 +4,22 @@ import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
 import { useDispatch } from "react-redux";
 import { useDropzone } from "react-dropzone";
+import { intlFormat } from "date-fns";
 
 import { Switch } from "../Switcher";
+import { AvailableMessage } from "../AvailableMessage";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
+import {
+  importAccountJsonValidations,
+  importAccountValidations,
+} from "@polkadex/orderbook/validations";
+import {
+  importTradeAccountFetch,
+  importTradeAccountJsonFetch,
+} from "@polkadex/orderbook-modules";
 
 const informationData = [
   {
@@ -223,7 +232,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                 <input
                   {...getFieldProps("passcode")}
                   type={values.isPasscodeVisible ? "password" : "text"}
-                  placeholder="(Optional) Enter a password"
+                  placeholder="(Optional) Input 5-digit trading password"
                 />
                 <button
                   type="button"
@@ -251,32 +260,38 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
 };
 
 const ImportAccountJson = ({ onCancel = undefined }) => {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      name: generateUsername(),
       hasPasscode: false,
       passcode: "",
       isPasscodeVisible: false,
       file: null,
     },
-    onSubmit: () => {
-      console.log(values);
-      // dispatch(
-      //   importTradeAccountFetch({
-      //     mnemonic: mnemonic.join(" "),
-      //     name: name,
-      //     password: passcode,
-      //   })
-      // );
+    validationSchema: importAccountJsonValidations,
+    onSubmit: ({ passcode, file }) => {
+      dispatch(
+        importTradeAccountJsonFetch({
+          file,
+          password: passcode,
+        })
+      );
     },
   });
   const { getRootProps, getInputProps, isDragReject, isDragAccept } = useDropzone({
     maxFiles: 1,
-    accept: {
-      "application/json": [".json"],
-      "application/ld+json": [".jsonld"],
+    accept: { "application/json": [".json"] },
+    onDrop: (acceptedFiles) => {
+      const blob = new Blob([acceptedFiles[0]], { type: "text/plain;charset=utf-8" });
+      const reader = new FileReader();
+      reader.readAsText(blob);
+      reader.onload = () => {
+        if (reader.result) {
+          const decodedFile = JSON.parse(String(reader.result));
+          setFieldValue("file", decodedFile?.address?.length ? decodedFile : "");
+        }
+      };
     },
-    onDrop: (acceptedFiles) => setFieldValue("file", acceptedFiles[0]),
   });
   const {
     errors,
@@ -291,11 +306,14 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
 
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
 
-  console.log(values.file);
+  const hasDataFile = useMemo(
+    () => !!values.file?.address?.length,
+    [values.file?.address?.length]
+  );
   return (
     <form onSubmit={handleSubmit}>
       <S.Menmonic>
-        {!values?.file?.name?.length && (
+        {!hasDataFile && (
           <S.Upload
             isDragReject={isDragReject}
             isDragAccept={isDragAccept}
@@ -309,50 +327,32 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
             {isDragReject && <small>Invalid</small>}
           </S.Upload>
         )}
-
-        {!!values?.file?.name?.length && (
+        {hasDataFile && (
           <S.File>
             <div>
-              <p>
-                {values.file.name.slice(0, 20) +
-                  values.file.name.slice(values.file.name.length - 5)}
-              </p>
-              <span>{values.file.size}</span>
+              <p>{values.file?.meta.name}</p>
+              <span>
+                Created on{" "}
+                {intlFormat(
+                  new Date(values.file?.meta?.whenCreated),
+                  {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  },
+                  { locale: "EN" }
+                )}
+              </span>
             </div>
             <button type="button" onClick={() => setFieldValue("file", null)}>
               <Icons.Trash />
             </button>
           </S.File>
         )}
-        <S.WalletName>
-          <S.WalletNameWrapper>
-            <div>
-              <span>Wallet Name</span>
-              <input
-                {...getFieldProps("name")}
-                type="text"
-                placeholder="Enter a wallet name"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() =>
-                setFieldValue("name", generateUsername({ useRandomNumber: false }))
-              }>
-              Random
-            </button>
-          </S.WalletNameWrapper>
-          <S.WalletError isNegative={values.name.length >= 31}>
-            {errors.name && touched.name && errors.name ? <p>{errors.name}</p> : <div />}
-            <small>
-              <strong>{values.name.length}</strong>/30
-            </small>
-          </S.WalletError>
-        </S.WalletName>
         <S.Password>
           <S.PasswordWrapper>
             <S.PasswordHeader>
-              <span>Protect by password</span>
+              <span>Is this wallet protected by password?</span>
               <Switch
                 isActive={values.hasPasscode}
                 onChange={() => {

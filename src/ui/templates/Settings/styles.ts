@@ -91,18 +91,18 @@ export const WalletWrapper = styled.div``;
 
 export const ButtonWallet = styled.button`
   ${({ theme }) => css`
-    border: 2px dashed ${theme.colors.secondaryBackground};
     border-radius: 0.8rem;
     padding: 0.8rem;
     font-weight: 550;
-    color: ${theme.colors.tertiaryText};
-    transition: color 0.5s ease-in;
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+    transition: background-color 0.5s ease-in;
     :hover {
-      color: ${theme.colors.text};
+      background: ${theme.colors.primary}33;
     }
     div {
       display: inline-block;
-      border: 2px solid ${theme.colors.tertiaryText};
+      border: 1.8px solid ${theme.colors.white};
       border-radius: 0.4rem;
       vertical-align: middle;
       margin-right: 0.5rem;
@@ -442,7 +442,7 @@ export const Preview = styled.button`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.4rem;
     height: 2.6rem;
     padding: 0.5rem;
     border-radius: 10rem;
@@ -452,11 +452,15 @@ export const Preview = styled.button`
       display: none;
       width: 0;
     }
-    svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-      width: auto;
+    div {
+      height: 1.2rem;
+      svg {
+        fill: ${theme.colors.text};
+        stroke: ${theme.colors.text};
+        width: auto;
+      }
     }
+
     :hover {
       background: ${theme.colors.secondaryBackground};
       span {
