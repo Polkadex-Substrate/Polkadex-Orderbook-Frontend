@@ -356,12 +356,14 @@ export const SettingsTemplate = () => {
                     onClick={handleOpenAvatarModal}
                   />
                   <Card label="Creation date" description="September 29, 2022." isLocked />
-                  <Card
-                    label="Delete Account"
-                    description="This action is irreversible, please make sure you`re certain of it."
-                    onClick={() => console.log("Open Modal")}
-                    actionTitle="Delete account"
-                  />
+                  <AvailableMessage message="Soon">
+                    <Card
+                      label="Delete Account"
+                      description="This action is irreversible, please make sure you`re certain of it."
+                      onClick={() => console.log("Open Modal")}
+                      actionTitle="Delete account"
+                    />
+                  </AvailableMessage>
                 </S.AccountContainer>
               </S.Account>
             </S.Content>

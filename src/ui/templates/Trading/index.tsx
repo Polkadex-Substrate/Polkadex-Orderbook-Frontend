@@ -137,7 +137,7 @@ export function Trading() {
         open={isSignedIn && disclaimer}
         onClose={handleAcceptDisclaimer}
         placement="start">
-        <Disclaimer />
+        <Disclaimer onClose={handleAcceptDisclaimer} />
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner onClose={closeBanner} />
