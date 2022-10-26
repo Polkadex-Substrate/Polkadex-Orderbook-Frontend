@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -43,6 +44,7 @@ import {
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
+  const router = useRouter();
   const {
     state,
     allFilteredTradeAccounts,
@@ -202,6 +204,7 @@ export const SettingsTemplate = () => {
                               !!acc?.account?.meta?.name?.length;
                             const isUsing = account.address === usingAccount.tradeAddress;
                             const isDefault = defaultTradeAddress === account.address;
+                            const isPresentInBrowser = !!account?.account?.meta?.name;
                             return (
                               <WalletCard
                                 key={i}
@@ -218,7 +221,20 @@ export const SettingsTemplate = () => {
                                   })`
                                 }>
                                 <S.WalletActions>
-                                  <Link href="/balances">Add funds</Link>
+                                  {isPresentInBrowser && (
+                                    <S.Button
+                                      type="button"
+                                      onClick={() => {
+                                        dispatch(
+                                          userAccountSelectFetch({
+                                            tradeAddress: account.address,
+                                          })
+                                        );
+                                        router.push("/balances");
+                                      }}>
+                                      Add funds
+                                    </S.Button>
+                                  )}
                                   {!isUsing && account.isPresentInBrowser && (
                                     <S.Button
                                       type="button"
@@ -480,6 +496,7 @@ const WalletCard = ({
   name = "",
   address = "",
   additionalInfo = "",
+  isPresentInBrowser = false,
   children,
 }) => {
   const buttonRef = useRef(null);
