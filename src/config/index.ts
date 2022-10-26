@@ -11,7 +11,7 @@ export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
-  landingPageMarket: process.env.LANDING_PAGE || "PDEXDOT",
+  landingPageMarket: process.env.LANDING_PAGE || "PDEXTDOT",
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,
