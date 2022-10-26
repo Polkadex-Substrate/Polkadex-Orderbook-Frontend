@@ -1,61 +1,37 @@
-import { call, put, select } from "redux-saga/effects";
+import { APIClass, API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
 
-import {
-  notificationPush,
-  selectUsingAccount,
-  UserAccount,
-  userAccountSelectFetch,
-  userData,
-  userError,
-  UserFetch,
-} from "@polkadex/orderbook-modules";
+import { UserAccount } from "@polkadex/orderbook-modules";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
-export function* userSaga(action: UserFetch) {
+export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
   try {
-    const { email } = action.payload;
-    if (email) {
-      const { accounts } = yield call(getAllMainLinkedAccounts, email);
-      const userAccounts: UserAccount[] = yield call(getAllProxyAccounts, accounts);
-      yield put(userData({ mainAccounts: accounts, userAccounts }));
-      yield call(dispatchUseDefaultTradeAccount, userAccounts);
-    } else {
-      throw new Error("no email specified");
-    }
+    const res: any = await sendQueryToAppSync({
+      query: queries.listMainAccountsByEmail,
+      variables: {
+        email,
+      },
+      token: null,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+      API: Api,
+    });
+    return res.data.listMainAccountsByEmail ?? { accounts: [] };
   } catch (error) {
-    console.log(error);
-    yield put(userError(error));
-    yield put(
-      notificationPush({
-        message: {
-          title: "Error",
-          description: "Cannot fetch user Accounts",
-        },
-        time: new Date().getTime(),
-      })
-    );
+    console.log("Error: getAllMainLinkedAccounts", error.message);
   }
-}
-
-const getAllMainLinkedAccounts = async (email: string) => {
-  const res: any = await sendQueryToAppSync(
-    queries.listMainAccountsByEmail,
-    {
-      email,
-    },
-    null,
-    "AMAZON_COGNITO_USER_POOLS"
-  );
-  console.log("res", res);
-  return res.data.listMainAccountsByEmail ?? { accounts: [] };
 };
 
-const getAllProxyAccounts = async (mainAccounts: [string]): Promise<UserAccount[]> => {
+export const getAllProxyAccounts = async (
+  mainAccounts: [string],
+  Api = API
+): Promise<UserAccount[]> => {
   const promises = mainAccounts.map(async (main_account) => {
-    const res: any = await sendQueryToAppSync(queries.findUserByMainAccount, { main_account });
+    const res: any = await sendQueryToAppSync({
+      query: queries.findUserByMainAccount,
+      variables: { main_account },
+      API: Api,
+    });
     const proxies = res.data.findUserByMainAccount.proxies;
     return { main_account, proxies };
   });
@@ -68,18 +44,3 @@ const getAllProxyAccounts = async (mainAccounts: [string]): Promise<UserAccount[
   });
   return accounts;
 };
-
-function* dispatchUseDefaultTradeAccount(allAccount: UserAccount[]) {
-  const selectedAccount = yield select(selectUsingAccount);
-  if (selectedAccount?.tradeAddress) return;
-  const defaultTradeAddress = window.localStorage.getItem(
-    LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-  );
-  if (defaultTradeAddress.length === 0) return;
-  const account = allAccount.find(({ tradeAddress }) => {
-    return tradeAddress === defaultTradeAddress;
-  });
-  if (account) {
-    yield put(userAccountSelectFetch(account));
-  }
-}

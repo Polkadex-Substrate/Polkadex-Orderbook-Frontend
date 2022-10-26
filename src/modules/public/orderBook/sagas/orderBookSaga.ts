@@ -32,7 +32,10 @@ export function* orderBookSaga(action: OrderBookFetch) {
   }
 }
 const fetchOrderbook = async (market: string): Promise<OrderBookDbState[]> => {
-  const res: any = await sendQueryToAppSync(queries.getOrderbook, { market: market });
+  const res: any = await sendQueryToAppSync({
+    query: queries.getOrderbook,
+    variables: { market: market },
+  });
   const data = res.data.getOrderbook.items;
   return data;
 };

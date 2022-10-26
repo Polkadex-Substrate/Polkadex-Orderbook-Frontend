@@ -107,11 +107,11 @@ const getNewClientId = () => {
 const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
   const payloadStr = JSON.stringify({ PlaceOrder: orderPayload });
   console.log("payload: ", payloadStr);
-  const res = await sendQueryToAppSync(
-    mutation.place_order,
-    { input: { payload: payloadStr } },
-    proxyAddress
-  );
+  const res = await sendQueryToAppSync({
+    query: mutation.place_order,
+    variables: { input: { payload: payloadStr } },
+    token: proxyAddress,
+  });
 
   return res;
 };

@@ -46,9 +46,12 @@ export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
   }
 }
 const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
-  const res: any = await sendQueryToAppSync(queries.listOpenOrdersByMainAccount, {
-    main_account: proxy_acc,
-    limit: 1000,
+  const res: any = await sendQueryToAppSync({
+    query: queries.listOpenOrdersByMainAccount,
+    variables: {
+      main_account: proxy_acc,
+      limit: 1000,
+    },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOpenOrdersByMainAccount.items;
   const orders = ordersRaw.map((order) => ({

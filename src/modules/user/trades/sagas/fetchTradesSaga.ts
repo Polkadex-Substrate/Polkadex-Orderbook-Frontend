@@ -48,11 +48,14 @@ const fetchUserTrades = async (
   dateTo: Date
 ): Promise<UserTrade[]> => {
   // TODO: make limit resonable by utilizing nextToken
-  const res: any = await sendQueryToAppSync(queries.listTradesByMainAccount, {
-    main_account: proxy_account,
-    from: dateFrom.toISOString(),
-    to: dateTo.toISOString(),
-    limit: 1000,
+  const res: any = await sendQueryToAppSync({
+    query: queries.listTradesByMainAccount,
+    variables: {
+      main_account: proxy_account,
+      from: dateFrom.toISOString(),
+      to: dateTo.toISOString(),
+      limit: 1000,
+    },
   });
   const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
   const trades: UserTrade[] = tradesRaw.map((trade) => ({

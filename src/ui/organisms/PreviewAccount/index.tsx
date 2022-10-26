@@ -30,10 +30,9 @@ import {
   exportTradeAccountActive,
   exportTradeAccountFetch,
 } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
-import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 type Props = {
   onClose: () => void;
@@ -51,7 +50,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
-  tryUnlockTradeAccount(tradingAccountInBrowser);
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
   const usingAccount = useReduxSelector(selectUsingAccount);
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)
@@ -112,7 +111,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 <S.Box>
                   <WalletName
                     label="Trading account name"
-                    information={String(selected?.account?.meta?.name || "Unknown")}
+                    information={String(
+                      selected?.account?.meta?.name || "Account not present in the browser"
+                    )}
                   />
                   <WalletAddress label="Trade wallet" information={selected?.address} />
                   <WalletAddress
@@ -137,14 +138,16 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                     tradeAddress={selected?.address}
                   />
                 </S.Box>
-                <S.Button
-                  disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                  onClick={() =>
-                    dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-                  }
-                  type="button">
-                  {using ? "Using" : "Use"}
-                </S.Button>
+                {tradingAccountInBrowser && (
+                  <S.Button
+                    disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                    onClick={() =>
+                      dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
+                    }
+                    type="button">
+                    {using ? "Using" : "Use"}
+                  </S.Button>
+                )}
               </S.Container>
             </S.Content>
             <S.Footer>
@@ -314,13 +317,12 @@ const DefaultAccount = ({ label = "", tradeAddress }) => {
   const dispatch = useDispatch();
   const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
   const isActive = tradeAddress === defaultTradeAddress;
-  const handleChange = () => {
-    if (!isActive) {
-      dispatch(userSetDefaultTradeAccount(tradeAddress));
-    } else {
-      dispatch(userSetDefaultTradeAccount(null));
-    }
-  };
+
+  const handleChange = () =>
+    !isActive
+      ? dispatch(userSetDefaultTradeAccount(tradeAddress))
+      : dispatch(userSetDefaultTradeAccount(null));
+
   return (
     <S.CardWrapper>
       <S.CardContent>

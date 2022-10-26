@@ -1,32 +1,41 @@
 // TODO : Fix saga
-import { Auth } from "aws-amplify";
-import { call, put } from "redux-saga/effects";
+import { all, call, put, select } from "redux-saga/effects";
 
+import { notificationPush, sendError, selectUserInfo, selectUserAccounts } from "../../../";
 import {
-  notificationPush,
-  sendError,
-  userAuthData,
-  UserAuthFetch,
-  userFetch,
+  userAccountSelectFetch,
+  userAuthError,
+  userData,
+  userSetAvatar,
   userSetDefaultTradeAccount,
-} from "../../../";
-import { userAuthError } from "../actions";
+} from "../actions";
+
+import { getAllMainLinkedAccounts, getAllProxyAccounts } from "./userSaga";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
-export function* userAuthSaga(_action: UserAuthFetch) {
+export function* userAuthSaga() {
+  const { userExists, isConfirmed, email } = yield select(selectUserInfo);
+  const userAccounts = yield select(selectUserAccounts);
+  const defaultTradeAddress = window.localStorage.getItem(
+    LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+  );
+
   try {
-    const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
-      getUserAuthInfo()
-    );
-    const defaultTradeAddress = window.localStorage.getItem(
-      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-    );
-    yield put(userSetDefaultTradeAccount(defaultTradeAddress));
-    if (email) {
-      yield put(userFetch({ email }));
+    if (!userAccounts?.length) {
+      const { accounts } = yield call(() => getAllMainLinkedAccounts(email));
+      const userAccounts = yield call(() => getAllProxyAccounts(accounts));
+      yield put(userData({ mainAccounts: accounts, userAccounts }));
     }
-    yield put(userAuthData({ email, isAuthenticated, userExists, isConfirmed }));
+
+    if (defaultTradeAddress?.length) {
+      yield all([
+        put(userSetDefaultTradeAccount(defaultTradeAddress)),
+        put(userAccountSelectFetch({ tradeAddress: defaultTradeAddress })),
+        put(userSetAvatar()),
+      ]);
+    }
+
     if (!isConfirmed && userExists) {
       yield put(
         notificationPush({
@@ -42,7 +51,7 @@ export function* userAuthSaga(_action: UserAuthFetch) {
   } catch (error) {
     yield put(
       sendError({
-        error,
+        error: `User auth error:${error.message}`,
         processingType: "alert",
         extraOptions: {
           actionError: userAuthError,
@@ -51,35 +60,3 @@ export function* userAuthSaga(_action: UserAuthFetch) {
     );
   }
 }
-
-const getUserAuthInfo = async () => {
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    return {
-      isAuthenticated: true,
-      email: user.attributes.email,
-      userExists: true,
-      isConfirmed: user.attributes.email_verified,
-      signInUserSession: user.signInUserSession,
-      jwt: user.signInUserSession.accessToken.jwtToken,
-    };
-  } catch (e) {
-    console.log(e);
-    if (e === "The user is not authenticated") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: false,
-      };
-    }
-    if (e === "User is not confirmed.") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: true,
-        isConfirmed: false,
-      };
-    }
-    throw new Error(e);
-  }
-};

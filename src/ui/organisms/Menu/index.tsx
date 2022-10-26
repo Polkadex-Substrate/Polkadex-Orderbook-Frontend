@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BigHead } from "@bigheads/core";
 import { useState } from "react";
 
 import * as S from "./styles";
@@ -14,7 +15,7 @@ import {
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectIsUserSignedIn, selectNotifications } from "@polkadex/orderbook-modules";
+import { selectDefaultAvatarOptions, selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export type MenuProps = {
@@ -25,7 +26,7 @@ export type MenuProps = {
 export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
+  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
 
   return (
     <S.Wrapper>
@@ -119,7 +120,9 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
               <S.Profile>
                 <Tooltip>
                   <TooltipHeader>
-                    <Icon name="Avatar" color="text" size="large" />
+                    <S.Avatar>
+                      <BigHead {...avatarOptions} />
+                    </S.Avatar>
                   </TooltipHeader>
                   <TooltipContent position="left">
                     <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
@@ -171,6 +174,20 @@ const Terms = () => {
             <S.WrapperIcon>
               <div>
                 <S.Span>Disclaimer</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Excluded Jurisdictions</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Data Retention Policy</S.Span>
               </div>
             </S.WrapperIcon>
           </a>

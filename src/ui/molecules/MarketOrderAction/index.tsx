@@ -13,7 +13,11 @@ import {
   MarketInput,
   PassCode,
 } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder, useReduxSelector } from "@polkadex/orderbook/hooks";
+import {
+  usePlaceOrder,
+  useReduxSelector,
+  useTryUnlockTradeAccount,
+} from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   selectBrowserTradeAccounts,
@@ -21,7 +25,6 @@ import {
   selectUsingAccount,
   unlockTradeAccount,
 } from "@polkadex/orderbook-modules";
-import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -146,7 +149,7 @@ const ProtectPassword = () => {
   const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
   // if account is not protected by password use default password to unlock account.
-  tryUnlockTradeAccount(tradeAccount);
+  useTryUnlockTradeAccount(tradeAccount);
 
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {

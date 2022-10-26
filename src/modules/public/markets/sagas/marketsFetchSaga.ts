@@ -14,7 +14,6 @@ export function* marketsFetchSaga(_action: MarketsFetch) {
     const allAssets: IPublicAsset[] = yield select(selectAllAssets);
     if (allAssets.length > 0) {
       const markets = yield call(fetchMarkets, allAssets);
-      console.log("markets fetched", markets);
       yield put(marketsData(markets));
       yield put(setCurrentMarketIfUnset(markets[0]));
     }
@@ -32,7 +31,7 @@ export function* marketsFetchSaga(_action: MarketsFetch) {
   }
 }
 const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
-  const res: any = await sendQueryToAppSync(getAllMarkets);
+  const res: any = await sendQueryToAppSync({ query: getAllMarkets });
   const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
   const markets = pairs.map(async (pair: MarketQueryResult): Promise<Market> => {
     const [baseAsset, quoteAsset] = pair.market.split("-");

@@ -86,8 +86,8 @@ export const Wrapper = styled.nav`
       }
       & :hover,
       :hover ${WrapperLinks} {
-        min-width: 17rem;
-        max-width: 17rem;
+        min-width: 21rem;
+        max-width: 21rem;
       }
       & :hover ${LogoText} {
         display: block;
@@ -151,6 +151,10 @@ export const Profile = styled.div`
   cursor: pointer;
 `;
 
+export const Avatar = styled.div`
+  width: 3.5rem;
+  height: 3.5rem;
+`;
 export const Terms = styled.div``;
 export const TermsLinks = styled.div`
   margin-top: 1rem;

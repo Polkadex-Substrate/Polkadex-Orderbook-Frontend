@@ -14,6 +14,7 @@ import {
 import { Market, Ticker } from "./types";
 
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 export const defaultTickers: Ticker = {
   m: "0-0",
   priceChange24Hr: 0,
@@ -102,6 +103,7 @@ export const marketsReducer = (
           currentMarket: action.payload,
         };
       }
+      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {
         ...state,
         currentMarket: action.payload,

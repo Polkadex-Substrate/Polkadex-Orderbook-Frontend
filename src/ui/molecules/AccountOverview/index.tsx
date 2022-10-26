@@ -3,6 +3,7 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import { BigHead } from "@bigheads/core";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -18,6 +19,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
+  selectDefaultAvatarOptions,
   selectExtensionWalletAccounts,
   selectUserAccounts,
   selectUsingAccount,
@@ -35,6 +37,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
   const currentUsingAccount = useReduxSelector(selectUsingAccount);
   const allUserAccounts = useReduxSelector(selectUserAccounts);
+  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<KeyringPair>(null);
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
@@ -93,7 +96,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     <S.Wrapper>
       <S.Profile>
         <div>
-          <Icons.Profile />
+          <BigHead {...avatarOptions} />
         </div>
         <span>Profile</span>
       </S.Profile>

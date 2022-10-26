@@ -46,11 +46,14 @@ const fetchKlineAsync = async (
   from: Date,
   to: Date
 ): Promise<KlineDbData[]> => {
-  const res: any = await sendQueryToAppSync(getKlinesbyMarketInterval, {
-    market,
-    interval,
-    from: from.toISOString(),
-    to: to.toISOString(),
+  const res: any = await sendQueryToAppSync({
+    query: getKlinesbyMarketInterval,
+    variables: {
+      market,
+      interval,
+      from: from.toISOString(),
+      to: to.toISOString(),
+    },
   });
   return res.data.getKlinesbyMarketInterval.items;
 };

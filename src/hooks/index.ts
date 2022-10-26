@@ -22,3 +22,4 @@ export * from "./useAppearance";
 export * from "./useFunds";
 export * from "./useTimer";
 export * from "./useSettings";
+export * from "./useTryUnlockTradeAccount";

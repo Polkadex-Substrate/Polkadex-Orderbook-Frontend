@@ -36,7 +36,7 @@ export function* marketTickersSaga(_action: MarketsTickersFetch) {
 }
 
 const fetchMarketTickers = async (): Promise<Ticker[]> => {
-  const res: any = await sendQueryToAppSync(queries.getAllMarketTickers);
+  const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
   const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
   const tickers: Ticker[] = tickersRaw.map((elem) => {
     const priceChange = Number(elem.c) - Number(elem.o);

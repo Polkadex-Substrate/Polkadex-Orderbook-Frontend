@@ -1,4 +1,8 @@
+import { AvatarProps } from "@bigheads/core";
+
 import { RootState, UserAccount, AuthInfo } from "../../";
+
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const selectShouldShowInitialBanner = (state: RootState): boolean =>
   state.user.profile.authInfo.shouldShowInitialBanner;
@@ -27,7 +31,7 @@ export const selectHasUsingAccount = (state: RootState): boolean =>
   !!Object?.keys(selectUsingAccount(state)?.mainAddress)?.length;
 
 export const selectUserAccounts = (state: RootState): UserAccount[] =>
-  state.user.profile.userData.userAccounts;
+  state.user.profile.userData?.userAccounts;
 
 export const selectHasSelectedAccount = (state: RootState): boolean =>
   state.user.profile.selectedAccount.tradeAddress !== "";
@@ -51,12 +55,17 @@ export const selectAssociatedTradeAddresses = (mainAddress: string) => {
 
 export const selectLinkedMainAddress = (trade_address: string) => (state: RootState) =>
   trade_address &&
-  state.user.profile.userData.userAccounts.find(
-    ({ tradeAddress }) => tradeAddress === trade_address
-  ).mainAddress;
+  selectUserAccounts(state)?.find(({ tradeAddress }) => tradeAddress === trade_address)
+    ?.mainAddress;
 
 export const selectIsUserDataLoading = (state: RootState): boolean =>
   state.user.profile.isDataLoading;
 
 export const selectDefaultTradeAccount = (state: RootState): string =>
   state.user.profile.defaultTradeAccount;
+
+export const selectDefaultAvatarId = (state: RootState): number =>
+  Number(state.user.profile.userProfile?.avatar);
+
+export const selectDefaultAvatarOptions = (state: RootState): AvatarProps =>
+  randomAvatars?.find((v) => v.id === selectDefaultAvatarId(state)) as AvatarProps;

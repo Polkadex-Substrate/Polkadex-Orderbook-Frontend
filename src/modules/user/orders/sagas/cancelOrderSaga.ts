@@ -72,10 +72,10 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
 }
 const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
-  const res = await sendQueryToAppSync(
-    mutation.cancel_order,
-    { input: { payload } },
-    proxyAddress
-  );
+  const res = await sendQueryToAppSync({
+    query: mutation.cancel_order,
+    variables: { input: { payload } },
+    token: proxyAddress,
+  });
   return res;
 };

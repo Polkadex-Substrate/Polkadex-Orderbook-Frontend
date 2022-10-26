@@ -1,4 +1,5 @@
 import { call, put } from "redux-saga/effects";
+import { API } from "aws-amplify";
 
 import { assetsData } from "../actions";
 import { IPublicAsset } from "../types";
@@ -32,7 +33,7 @@ export function* fetchAssetsSaga() {
 }
 
 async function fetchAllAssetMetadata(): Promise<IPublicAsset[]> {
-  const assetEntries: any = await sendQueryToAppSync(getAllAssets);
+  const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
   const assets = assetEntries.data.getAllAssets.items;
   return assets;
 }

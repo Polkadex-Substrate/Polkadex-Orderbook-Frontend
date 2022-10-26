@@ -1,3 +1,5 @@
+import { HYDRATE } from "next-redux-wrapper";
+
 import { CommonError } from "../../types";
 
 import {
@@ -15,7 +17,11 @@ import {
   PROFILE_USER_MAIN_ACCOUNT_PUSH,
   PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
+  PROFILE_SET_PROFILE_AVATAR,
 } from "./constants";
+
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+import { RootState } from "@polkadex/orderbook-modules";
 
 export interface UserChangeInitBanner {
   type: typeof PROFILE_USER_CHANGE_INIT_BANNER;
@@ -96,6 +102,14 @@ export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
   payload: string | null;
 }
+export interface UserSetAvatar {
+  type: typeof PROFILE_SET_PROFILE_AVATAR;
+  payload?: string;
+}
+export interface Hydrate {
+  type: typeof HYDRATE;
+  payload: RootState;
+}
 
 export type ProfileAction =
   | UserFetch
@@ -111,7 +125,9 @@ export type ProfileAction =
   | UserProfileAccountPush
   | UserProfileMainAccountPush
   | UserSetDefaultTradeAccount
-  | UserProfileTradeAccountDelete;
+  | UserProfileTradeAccountDelete
+  | UserSetAvatar
+  | Hydrate;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -188,5 +204,10 @@ export const userSetDefaultTradeAccount = (
   payload: UserSetDefaultTradeAccount["payload"]
 ) => ({
   type: PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
+  payload,
+});
+
+export const userSetAvatar = (payload?: UserSetAvatar["payload"]) => ({
+  type: PROFILE_SET_PROFILE_AVATAR,
   payload,
 });

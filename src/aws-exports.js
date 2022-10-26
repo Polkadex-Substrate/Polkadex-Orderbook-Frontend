@@ -6,6 +6,7 @@ const awsmobile = {
     "aws_appsync_graphqlEndpoint": process.env.GRAPHQL_URL,
     "aws_appsync_region": process.env.API_REGION,
     "aws_appsync_authenticationType": "AWS_LAMBDA",
+    ssr: true,
     "Auth": {
         "identityPoolId": process.env.IDENTITY_POOL_ID,
         "region": process.env.API_REGION,

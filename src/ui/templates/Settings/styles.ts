@@ -347,8 +347,8 @@ export const Using = styled.div`
   `}
 `;
 
-export const WalletCard = styled.div`
-  ${({ theme }) => css`
+export const WalletCard = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -359,6 +359,14 @@ export const WalletCard = styled.div`
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding-bottom: 1.5rem;
     }
+    ${!isActive &&
+    css`
+      opacity: 0.5;
+      transition: opacity 0.2s ease-in;
+      :hover {
+        opacity: 1;
+      }
+    `}
   `}
 `;
 
@@ -472,10 +480,23 @@ export const Preview = styled.button`
 `;
 
 export const WalletActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: 0.2s ease;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: 0.2s ease;
+    a {
+      background: ${theme.colors.secondaryBackground};
+      border-radius: 0.3rem;
+      padding: 0.3rem 0.5rem;
+      font-weight: 500;
+      font-size: 1.3rem;
+      transition: background-color 0.4s ease-in-out;
+      :hover {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
 `;
 export const Dropdown = styled.div`
   small {

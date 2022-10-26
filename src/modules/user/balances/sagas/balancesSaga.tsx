@@ -63,8 +63,11 @@ type IBalanceFromDb = {
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
-  const res: any = await sendQueryToAppSync(queries.getAllBalancesByMainAccount, {
-    main_account: account,
+  const res: any = await sendQueryToAppSync({
+    query: queries.getAllBalancesByMainAccount,
+    variables: {
+      main_account: account,
+    },
   });
   const balancesRaw: BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
   const balances = balancesRaw.map((val) => {

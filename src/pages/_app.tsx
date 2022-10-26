@@ -2,18 +2,27 @@ import { AppProps } from "next/app";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import Script from "next/script";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import keyring from "@polkadot/ui-keyring";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
+import { withSSRContext } from "aws-amplify";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
 import { useUserDataFetch } from "../hooks/useUserDataFetch";
+import {
+  getAllMainLinkedAccounts,
+  getAllProxyAccounts,
+} from "../modules/user/profile/sagas/userSaga";
 
-import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
+import {
+  selectCurrentColorTheme,
+  sendError,
+  userAuthData,
+  userData,
+} from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 const { cryptoWaitReady } = await import("@polkadot/util-crypto");
 
@@ -34,27 +43,6 @@ const Notifications = dynamic(
 function App({ Component, pageProps }: AppProps) {
   useInit();
   useUserDataFetch();
-
-  return (
-    <ThemeWrapper>
-      <GoogleAnalytics trackPageViews />
-      <NextNProgress
-        color="#E6007A"
-        startPosition={0.3}
-        height={2}
-        showOnShallow={true}
-        options={{
-          showSpinner: false,
-        }}
-      />
-      <GlobalStyles />
-      <Component {...pageProps} />
-      <Analytics />
-    </ThemeWrapper>
-  );
-}
-
-const ThemeWrapper = ({ children }) => {
   const color = useSelector(selectCurrentColorTheme);
 
   const cryptoWait = async () => {
@@ -65,37 +53,85 @@ const ThemeWrapper = ({ children }) => {
   useEffect(() => {
     cryptoWait();
   }, []);
-
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
         <Notifications />
         <Message />
-        {children}
+        <GoogleAnalytics trackPageViews />
+        <NextNProgress
+          color="#E6007A"
+          startPosition={0.3}
+          height={2}
+          showOnShallow={true}
+          options={{
+            showSpinner: false,
+          }}
+        />
+        <GlobalStyles />
+        <Component {...pageProps} />
       </ThemeProvider>
     </OverlayProvider>
   );
-};
+}
 
-const Analytics = () => (
-  <>
-    <Script
-      strategy="afterInteractive"
-      src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS}`}
-    />
-    <Script
-      strategy="afterInteractive"
-      dangerouslySetInnerHTML={{
-        __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.GOOGLE_ANALYTICS}', {
-              page_path: window.location.pathname,
-            });
-          `,
-      }}
-    />
-  </>
+// TODO: Move to sagas || Improve
+App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async ({ Component, ctx }: any) => {
+    const { Auth, API } = withSSRContext(ctx);
+    let pageProps = {};
+    if (Component.getInitialProps) pageProps = await Component.getInitialProps(ctx);
+    try {
+      /* Getting the current user's attributes and signInUserSession from Amazon Cognito auth API. */
+      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
+
+      dispatch(
+        userAuthData({
+          email: attributes?.email,
+          isAuthenticated: true,
+          userExists: true,
+          isConfirmed: attributes?.email_verified,
+          jwt: signInUserSession?.accessToken?.jwtToken,
+        })
+      );
+      if (attributes?.email?.length) {
+        const { accounts } = await getAllMainLinkedAccounts(attributes.email, API);
+        const userAccounts = await getAllProxyAccounts(accounts, API);
+        dispatch(userData({ mainAccounts: accounts, userAccounts }));
+      }
+    } catch (error) {
+      console.log("User error", error);
+      switch (error) {
+        case "User is not confirmed.": {
+          dispatch(
+            userAuthData({
+              email: "",
+              isAuthenticated: false,
+              userExists: true,
+              isConfirmed: false,
+            })
+          );
+          break;
+        }
+        case "The user is not authenticated": {
+          break;
+        }
+        default: {
+          dispatch(
+            sendError({
+              error: `User data fetch error: ${error.message}`,
+              processingType: "alert",
+            })
+          );
+          break;
+        }
+      }
+    }
+    return {
+      pageProps,
+    };
+  }
 );
+
 export default wrapper.withRedux(App);

@@ -125,13 +125,13 @@ const createSignedData = async (
 
 const executeRegisterEmail = async (data: RegisterEmailData, signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
-  const res = await sendQueryToAppSync(
-    mutations.register_user,
-    {
+  const res = await sendQueryToAppSync({
+    query: mutations.register_user,
+    variables: {
       input: { payload: payloadStr },
     },
-    null,
-    "AMAZON_COGNITO_USER_POOLS"
-  );
+    token: null,
+    authMode: "AMAZON_COGNITO_USER_POOLS",
+  });
   return res;
 };

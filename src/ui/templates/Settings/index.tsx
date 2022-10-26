@@ -1,11 +1,19 @@
 import Head from "next/head";
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
+import { BigHead } from "@bigheads/core";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Menu, PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
+import {
+  Menu,
+  PreviewAccount,
+  NewAccount,
+  ChangeAvatar,
+} from "@polkadex/orderbook-ui/organisms";
 import {
   AvailableMessage,
   Checkbox,
@@ -24,6 +32,7 @@ import {
   previewAccountModalActive,
   registerAccountModalActive,
   selectAssociatedTradeAddresses,
+  selectDefaultAvatarOptions,
   selectIsMainAddressRegistered,
   selectMainAccount,
   userAccountSelectFetch,
@@ -35,6 +44,7 @@ import {
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 
 export const SettingsTemplate = () => {
+  const router = useRouter();
   const {
     state,
     allFilteredTradeAccounts,
@@ -60,6 +70,10 @@ export const SettingsTemplate = () => {
     handleClosePreviewModal,
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
+    defaultTradeAddress,
+    avatarModal,
+    handleCloseAvatarModal,
+    handleOpenAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
 
@@ -85,6 +99,9 @@ export const SettingsTemplate = () => {
           }}
           isLoading={isLoading}
         />
+      </Modal>
+      <Modal open={avatarModal} onClose={handleCloseAvatarModal} placement="start right">
+        <ChangeAvatar onClose={handleCloseAvatarModal} />
       </Modal>
       <Head>
         <title>Accounts | Polkadex Orderbook</title>
@@ -186,13 +203,19 @@ export const SettingsTemplate = () => {
                               !!linkedMainAddress?.length ||
                               !!acc?.account?.meta?.name?.length;
                             const isUsing = account.address === usingAccount.tradeAddress;
+                            const isDefault = defaultTradeAddress === account.address;
+                            const isPresentInBrowser = !!account?.account?.meta?.name;
                             return (
                               <WalletCard
                                 key={i}
                                 isUsing={isUsing}
-                                isDefault={false}
+                                isDefault={isDefault}
                                 defaultTitle="Default trade account"
-                                name={String(account?.account?.meta?.name || "Unknown")}
+                                isPresentInBrowser={isPresentInBrowser}
+                                name={String(
+                                  account?.account?.meta?.name ||
+                                    "Account not present in the browser"
+                                )}
                                 address={account.address}
                                 additionalInfo={
                                   hasLinkedAccount &&
@@ -202,6 +225,20 @@ export const SettingsTemplate = () => {
                                   })`
                                 }>
                                 <S.WalletActions>
+                                  {isPresentInBrowser && (
+                                    <S.Button
+                                      type="button"
+                                      onClick={() => {
+                                        dispatch(
+                                          userAccountSelectFetch({
+                                            tradeAddress: account.address,
+                                          })
+                                        );
+                                        router.push("/balances");
+                                      }}>
+                                      Add funds
+                                    </S.Button>
+                                  )}
                                   {!isUsing && account.isPresentInBrowser && (
                                     <S.Button
                                       type="button"
@@ -311,16 +348,15 @@ export const SettingsTemplate = () => {
                     hasBadge
                     isVerified={user.isConfirmed}
                   />
-                  <AvailableMessage>
-                    <Card
-                      label="Avatar"
-                      isAvatar
-                      description="Select an avatar to personalize your account."
-                      actionTitle="Change"
-                      onClick={() => console.log("Open Modal")}
-                    />
-                  </AvailableMessage>
-                  <AvailableMessage>
+                  <Card
+                    label="Avatar"
+                    isAvatar
+                    description="Select an avatar to personalize your account."
+                    actionTitle="Change"
+                    onClick={handleOpenAvatarModal}
+                  />
+                  <Card label="Creation date" description="September 29, 2022." isLocked />
+                  <AvailableMessage message="Soon">
                     <Card
                       label="Delete Account"
                       description="This action is irreversible, please make sure you`re certain of it."
@@ -390,44 +426,47 @@ const Card = ({
   isAvatar = false,
   isVerified = false,
   onClick,
-}: T.Props) => (
-  <S.AccountCard>
-    <S.AccountCardWrapper>
-      {isAvatar && (
-        <S.AccountCardAvatar>
-          <Icons.Profile />
-        </S.AccountCardAvatar>
-      )}
-      <S.AccountCardContent>
-        <S.AccountCardFlex>
-          {isLocked && (
-            <div>
-              <Icons.Lock />
-            </div>
-          )}
-          <span>{label}</span>
-        </S.AccountCardFlex>
-        <p>{description}</p>
-      </S.AccountCardContent>
-    </S.AccountCardWrapper>
-    <S.AccountCardActions>
-      {hasBadge && (
-        <>
-          {isVerified ? (
-            <Badge isRegistered={isVerified}>Verified</Badge>
-          ) : (
-            <S.Button type="button">Verify Now</S.Button>
-          )}
-        </>
-      )}
-      {!!actionTitle?.length && (
-        <S.Button type="button" onClick={onClick}>
-          {actionTitle}
-        </S.Button>
-      )}
-    </S.AccountCardActions>
-  </S.AccountCard>
-);
+}: T.Props) => {
+  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  return (
+    <S.AccountCard>
+      <S.AccountCardWrapper>
+        {isAvatar && (
+          <S.AccountCardAvatar>
+            <BigHead {...avatarOptions} />
+          </S.AccountCardAvatar>
+        )}
+        <S.AccountCardContent>
+          <S.AccountCardFlex>
+            {isLocked && (
+              <div>
+                <Icons.Lock />
+              </div>
+            )}
+            <span>{label}</span>
+          </S.AccountCardFlex>
+          <p>{description}</p>
+        </S.AccountCardContent>
+      </S.AccountCardWrapper>
+      <S.AccountCardActions>
+        {hasBadge && (
+          <>
+            {isVerified ? (
+              <Badge isRegistered={isVerified}>Verified</Badge>
+            ) : (
+              <S.Button type="button">Verify Now</S.Button>
+            )}
+          </>
+        )}
+        {!!actionTitle?.length && (
+          <S.Button type="button" onClick={onClick}>
+            {actionTitle}
+          </S.Button>
+        )}
+      </S.AccountCardActions>
+    </S.AccountCard>
+  );
+};
 
 const Empty = ({
   title = "",
@@ -463,6 +502,7 @@ const WalletCard = ({
   name = "",
   address = "",
   additionalInfo = "",
+  isPresentInBrowser = true,
   children,
 }) => {
   const buttonRef = useRef(null);
@@ -473,8 +513,9 @@ const WalletCard = ({
     buttonRef.current.innerHTML = "Copied";
   };
 
+  const shortAddress = transformAddress(address, 18);
   return (
-    <S.WalletCard>
+    <S.WalletCard isActive={isPresentInBrowser}>
       <S.WalletCardWrapper>
         {isUsing && <S.Using>IN USE</S.Using>}
         <S.WalletCardContent>
@@ -494,7 +535,7 @@ const WalletCard = ({
                 </span>
               </TooltipContent>
             </Tooltip>
-            <p>{address}</p>
+            <p>{shortAddress}</p>
           </S.WalletCardCopy>
         </S.WalletCardContent>
       </S.WalletCardWrapper>

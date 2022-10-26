@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -43,11 +43,25 @@ import {
   Menu,
   Navbar,
   RecentTrades,
+  Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function Trading() {
+  const shouldShowDisclaimer = useMemo(
+    () => process.browser && window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER),
+    []
+  );
+
+  const handleAcceptDisclaimer = () => {
+    process.browser &&
+      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER, "true");
+    setDisclaimer(false);
+  };
+
   const [state, setState] = useState(false);
   const [banner, setBanner] = useState(false);
+  const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -119,6 +133,12 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <Modal
+        open={isSignedIn && disclaimer}
+        onClose={handleAcceptDisclaimer}
+        placement="start">
+        <Disclaimer onClose={handleAcceptDisclaimer} />
+      </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner onClose={closeBanner} />
       </Modal>
