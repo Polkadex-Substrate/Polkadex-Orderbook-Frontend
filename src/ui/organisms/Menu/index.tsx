@@ -177,6 +177,20 @@ const Terms = () => {
               </div>
             </S.WrapperIcon>
           </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Excluded Jurisdictions</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Data Retention Policy</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
         </S.TermsLinks>
       )}
     </S.Terms>
