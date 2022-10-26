@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
   EmptyMyAccount,

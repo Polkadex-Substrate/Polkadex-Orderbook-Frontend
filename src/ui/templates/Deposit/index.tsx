@@ -7,8 +7,8 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
+  Dropdown,
   Button,
   InputLine,
   Table,
@@ -35,7 +35,7 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);

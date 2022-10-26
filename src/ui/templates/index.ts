@@ -1,5 +1,4 @@
 export * from "./Recovery";
-export * from "./ConnectToPhone";
 export * from "./Sign";
 export * from "./SignIn";
 export * from "./CodeVerification";

@@ -13,9 +13,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,

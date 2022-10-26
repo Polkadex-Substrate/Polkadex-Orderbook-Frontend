@@ -76,7 +76,7 @@ export const Container = styled("div")<T.ModalStyleProps>(
     prop: "isFullWidth",
     variants: {
       true: {
-        background: "red",
+        width: "100%",
       },
     },
   }),

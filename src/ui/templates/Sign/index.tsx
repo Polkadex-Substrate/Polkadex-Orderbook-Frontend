@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
@@ -10,9 +9,7 @@ import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignUp } from "@polkadex/orderbook-hooks";
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 
 export const SignTemplate = () => {
   const { signUp, loading } = useSignUp();
@@ -123,7 +120,7 @@ export const SignTemplate = () => {
                       <span>
                         By clicking the submit button below,I hereby agree with Polkadex{" "}
                         <a
-                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
                           target="_blank"
                           rel="noreferrer">
                           Terms of Service

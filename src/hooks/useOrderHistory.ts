@@ -13,7 +13,7 @@ import {
   selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { Ifilters } from "@polkadex/orderbook/v3/ui/organisms/Transactions";
+import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
 export function useOrderHistory(filters: Ifilters) {
   const dispatch = useDispatch();
