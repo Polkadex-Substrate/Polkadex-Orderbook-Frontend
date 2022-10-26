@@ -133,7 +133,10 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
-      <Modal open={disclaimer} onClose={handleAcceptDisclaimer} placement="start">
+      <Modal
+        open={isSignedIn && disclaimer}
+        onClose={handleAcceptDisclaimer}
+        placement="start">
         <Disclaimer />
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
