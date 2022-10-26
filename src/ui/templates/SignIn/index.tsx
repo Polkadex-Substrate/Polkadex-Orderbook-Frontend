@@ -87,19 +87,20 @@ export const SignInTemplate = () => {
                         target="_blank"
                         rel="noreferrer">
                         Terms of Service
-                      </a>{" "}
+                      </a>
+                      ,{" "}
                       <a
                         href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Privacy Policy
-                      </a>{" "}
-                      and{" "}
+                      </a>
+                      ,{" "}
                       <a
                         href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
                         target="_blank"
                         rel="noreferrer">
-                        Disclaimer
+                        Disclaimer and Legal Notice
                       </a>
                     </span>
                   </S.Terms>
