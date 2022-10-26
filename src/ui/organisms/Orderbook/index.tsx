@@ -3,9 +3,85 @@ import { useRef } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon, EmptyData } from "@polkadex/orderbook-ui/molecules";
-import { useOrderbookTable } from "@polkadex/orderbook/hooks";
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import {
+  Icon,
+  EmptyData,
+  OrderBookTable,
+  OrderBookIcon,
+  Heading,
+  Dropdown,
+} from "@polkadex/orderbook-ui/molecules";
+import { useOrderbookTable, useOrderbook } from "@polkadex/orderbook/hooks";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
+
+export const OrderBook = () => {
+  const {
+    isPriceUp,
+    hasMarket,
+    asks,
+    bids,
+    lastPriceValue,
+    sizeState,
+    filterState,
+    initialState,
+    handleChange,
+    handleAction,
+  } = useOrderbook();
+
+  return (
+    <S.Wrapper>
+      <S.WrapperTitle>
+        <Heading title="Order Book" />
+        <S.ContainerTitle>
+          <S.ContainerActions>
+            <OrderBookIcon
+              icon="OrderAsc"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+            <OrderBookIcon
+              icon="Order"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+            <OrderBookIcon
+              icon="OrderDesc"
+              filterState={filterState}
+              handleChange={handleChange}
+            />
+          </S.ContainerActions>
+          <Dropdown>
+            <Dropdown.Trigger>
+              <S.SizeHeader>
+                {sizeState.size}
+                <div>
+                  <Icons.ArrowBottom />
+                </div>
+              </S.SizeHeader>
+            </Dropdown.Trigger>
+            <Dropdown.Menu fill="tertiaryBackground">
+              {initialState.map((item) => (
+                <Dropdown.Item key={item.size} onAction={() => handleAction(item)}>
+                  {item.size}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </S.ContainerTitle>
+      </S.WrapperTitle>
+      <OrderBookTable
+        lightMode
+        filterBy={filterState}
+        isPriceUp={isPriceUp}
+        hasMarket={hasMarket}
+        asks={asks}
+        bids={bids}
+        lastPriceValue={lastPriceValue}
+        precision={sizeState.length}
+      />
+    </S.Wrapper>
+  );
+};
 
 export const OrderbookTable = ({
   isSell = false,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -13,8 +13,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
+  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,

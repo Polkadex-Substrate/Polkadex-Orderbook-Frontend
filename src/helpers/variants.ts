@@ -33,6 +33,7 @@ export const bgStyleVariants = ({ theme, fill }: Props) =>
       },
       transparent: {
         backgroundColor: "transparent",
+        borderColor: "transparent",
       },
     },
   });

@@ -9,9 +9,9 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
+  Dropdown,
   InputLine,
   Table,
   Tooltip,
@@ -27,7 +27,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectClaimWithdrawsInLoading,
@@ -44,7 +44,6 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
-import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import { tryUnlockTradeAccount } from "@polkadex/orderbook/helpers/tryUnlockTradeAccount";
 
 export const WithdrawTemplate = () => {

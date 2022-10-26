@@ -10,10 +10,6 @@ import { Switch } from "../Switcher";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  importAccountJsonValidations,
-  importAccountValidations,
-} from "@polkadex/orderbook/validations";
 import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
 
 const informationData = [
@@ -83,7 +79,6 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
       isPasscodeVisible: false,
       mnemonic: [],
     },
-    validationSchema: importAccountValidations,
     onSubmit: ({ mnemonic, name, passcode }) => {
       dispatch(
         importTradeAccountFetch({
@@ -264,7 +259,6 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
       isPasscodeVisible: false,
       file: null,
     },
-    validationSchema: importAccountJsonValidations,
     onSubmit: () => {
       console.log(values);
       // dispatch(

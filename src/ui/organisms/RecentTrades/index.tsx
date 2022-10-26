@@ -1,9 +1,13 @@
 import * as S from "./styles";
 
-import { AvailableMessage, ResultFound, Skeleton } from "@polkadex/orderbook-ui/molecules";
+import {
+  AvailableMessage,
+  ResultFound,
+  Skeleton,
+  Dropdown,
+} from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 
 export const filters = ["all", "buy", "sell"];
 

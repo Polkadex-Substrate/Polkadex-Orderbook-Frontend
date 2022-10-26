@@ -9,7 +9,7 @@ import { Switch } from "../Switcher";
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
+import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 import {
   registerMainAccountFetch,
   registerTradeAccountFetch,

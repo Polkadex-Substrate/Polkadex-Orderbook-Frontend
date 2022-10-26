@@ -9,7 +9,7 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
 import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 
-const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
+export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
     marketTokens,
     marketTickers,
@@ -191,15 +191,6 @@ const Footer: FC<{
           {ticker}
         </S.FooterCard>
       ))}
-    {/* <S.FooterCard>
-      <Dropdown header="ALTS">
-        <p>ETH</p>
-        <p>SOL</p>
-        <p>DOGE</p>
-      </Dropdown>
-    </S.FooterCard> */}
   </S.Footer>
 );
 export const MarketsSkeleton = () => <Skeleton height="100%" width="100%" />;
-
-export default Markets;

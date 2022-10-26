@@ -1,6 +1,5 @@
 export * from "./WalletInput";
 export * from "./ThemeSwitch";
-export * from "./Dropdown";
 export * from "./Mnemonic";
 export * from "./Spinner";
 export * from "./Tabs";
@@ -26,9 +25,6 @@ export * from "./EmptyData";
 export * from "./Logged";
 export * from "./Range";
 export * from "./Profile";
-export * from "./DropdownContent";
-export * from "./DropdownHeader";
-export * from "./DropdownItem";
 export * from "./Popover";
 export * from "./OriginalChart";
 export * from "./OpenOrderCard";
@@ -53,5 +49,6 @@ export * from "./ImportAccountForm";
 export * from "./CreateAccountForm";
 export * from "./SuccessCreateAccount";
 export * from "./SuccessImport";
+export * from "./Dropdown";
 
 export * as LoadingIcons from "./LoadingIcons";
