@@ -118,7 +118,7 @@ export const SignTemplate = () => {
                       checked={values.termsAccepted}
                       onChange={() => setFieldValue("termsAccepted", !values.termsAccepted)}>
                       <span>
-                        By clicking the submit button below,I hereby agree with Polkadex{" "}
+                        By clicking the submit button below, I hereby agree with Polkadex{" "}
                         <a
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
                           target="_blank"
@@ -130,7 +130,7 @@ export const SignTemplate = () => {
                           target="_blank"
                           rel="noreferrer">
                           Privacy Policy
-                        </a>
+                        </a>{" "}
                         and{" "}
                         <a
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
