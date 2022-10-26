@@ -211,7 +211,11 @@ export const SettingsTemplate = () => {
                                 isUsing={isUsing}
                                 isDefault={isDefault}
                                 defaultTitle="Default trade account"
-                                name={String(account?.account?.meta?.name || "Unknown")}
+                                isPresentInBrowser={isPresentInBrowser}
+                                name={String(
+                                  account?.account?.meta?.name ||
+                                    "Account not present in the browser"
+                                )}
                                 address={account.address}
                                 additionalInfo={
                                   hasLinkedAccount &&
@@ -496,7 +500,7 @@ const WalletCard = ({
   name = "",
   address = "",
   additionalInfo = "",
-  isPresentInBrowser = false,
+  isPresentInBrowser = true,
   children,
 }) => {
   const buttonRef = useRef(null);
@@ -507,8 +511,9 @@ const WalletCard = ({
     buttonRef.current.innerHTML = "Copied";
   };
 
+  const shortAddress = transformAddress(address, 18);
   return (
-    <S.WalletCard>
+    <S.WalletCard isActive={isPresentInBrowser}>
       <S.WalletCardWrapper>
         {isUsing && <S.Using>IN USE</S.Using>}
         <S.WalletCardContent>
@@ -528,7 +533,7 @@ const WalletCard = ({
                 </span>
               </TooltipContent>
             </Tooltip>
-            <p>{address}</p>
+            <p>{shortAddress}</p>
           </S.WalletCardCopy>
         </S.WalletCardContent>
       </S.WalletCardWrapper>

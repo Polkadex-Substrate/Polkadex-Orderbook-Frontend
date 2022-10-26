@@ -347,8 +347,8 @@ export const Using = styled.div`
   `}
 `;
 
-export const WalletCard = styled.div`
-  ${({ theme }) => css`
+export const WalletCard = styled.div<{ isActive?: boolean }>`
+  ${({ theme, isActive }) => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -359,6 +359,14 @@ export const WalletCard = styled.div`
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       padding-bottom: 1.5rem;
     }
+    ${!isActive &&
+    css`
+      opacity: 0.5;
+      transition: opacity 0.2s ease-in;
+      :hover {
+        opacity: 1;
+      }
+    `}
   `}
 `;
 

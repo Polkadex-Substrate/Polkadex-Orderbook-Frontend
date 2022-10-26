@@ -111,7 +111,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 <S.Box>
                   <WalletName
                     label="Trading account name"
-                    information={String(selected?.account?.meta?.name || "Unknown")}
+                    information={String(
+                      selected?.account?.meta?.name || "Account not present in the browser"
+                    )}
                   />
                   <WalletAddress label="Trade wallet" information={selected?.address} />
                   <WalletAddress
