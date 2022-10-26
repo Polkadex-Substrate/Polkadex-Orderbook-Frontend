@@ -90,7 +90,7 @@ export const SignInTemplate = () => {
                       </a>
                       ,{" "}
                       <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Privacy Policy

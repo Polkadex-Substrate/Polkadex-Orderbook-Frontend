@@ -1,6 +1,6 @@
 import { RootState } from "../../";
 
-import { Balance, BalanceBase } from ".";
+import { Balance } from ".";
 
 export const selectBalancesSuccess = (state: RootState): boolean =>
   state.user.balances.success;
@@ -12,13 +12,11 @@ export const selectBalancesLoading = (state: RootState): boolean =>
 
 export const selectUserBalance = (state: RootState): Balance[] => state.user.balances.balances;
 
-export const selectGetFreeProxyBalance =
+export const selectGetFreeTradeBalance =
   (state: RootState): ((assetId: string) => string) =>
   (assetId: string) => {
     const balance = state?.user?.balances?.balances?.find(
-      (balance) =>
-        balance?.asset_id?.toString() === assetId ||
-        (balance?.asset_id?.toString() === "PDEX" && assetId === "-1")
+      (balance) => balance?.asset_id?.toString() === assetId
     );
     if (!balance?.asset_id) return "0";
     return balance.free_balance;
