@@ -35,4 +35,5 @@ export const LOCAL_STORAGE_ID = {
   DEFAULT_TRADE_ACCOUNT: "default_trade_account",
   DEFAULT_MARKET: "default_market",
   DEFAULT_AVATAR: "default_avatar",
+  DEFAULT_DISCLAIMER: "default_disclaimer",
 };
