@@ -472,13 +472,13 @@ export const Preview = styled.button`
 `;
 
 export const WalletActions = styled.div`
-  ${({ theme, fill = "secondaryBackground" }) => css`
+  ${({ theme }) => css`
     display: flex;
     align-items: center;
     gap: 1rem;
     transition: 0.2s ease;
     a {
-      background: ${theme.colors[fill]};
+      background: ${theme.colors.secondaryBackground};
       border-radius: 0.3rem;
       padding: 0.3rem 0.5rem;
       font-weight: 500;
