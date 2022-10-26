@@ -1,13 +1,12 @@
 import { Auth } from "aws-amplify";
 import { call, put } from "redux-saga/effects";
 
-import { notificationPush, sendError } from "../../../";
-import { userData, userFetch } from "../../profile";
-import { logOutData, logOutError, LogoutFetch } from "../actions";
+import { notificationPush, sendError, userAuthFetch, userReset } from "../../../";
+import { logOutData, logOutError } from "../actions";
 
-export function* logoutSaga(action: LogoutFetch) {
+export function* logoutSaga() {
   try {
-    yield call(logOut);
+    yield call(() => Auth.signOut());
     yield put(logOutData());
     yield put(
       notificationPush({
@@ -19,7 +18,7 @@ export function* logoutSaga(action: LogoutFetch) {
         time: new Date().getTime(),
       })
     );
-    yield put(userFetch());
+    yield put(userReset());
   } catch (error) {
     yield put(
       sendError({
@@ -32,12 +31,7 @@ export function* logoutSaga(action: LogoutFetch) {
     );
 
     if (error.message.indexOf("identity.session.not_found") > -1) {
-      yield put(userFetch());
+      yield put(userAuthFetch());
     }
   }
-}
-
-async function logOut() {
-  const res = await Auth.signOut();
-  return res;
 }

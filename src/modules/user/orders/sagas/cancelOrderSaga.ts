@@ -1,5 +1,4 @@
 import { call, delay, put, select } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
 
 import {
   orderCancelData,
@@ -11,13 +10,16 @@ import * as mutation from "../../../../graphql/mutations";
 
 import {
   notificationPush,
-  selectCurrentTradeAccount,
   selectRangerApi,
+  selectTradeAccount,
+  selectUsingAccount,
   sendError,
+  UserAccount,
 } from "@polkadex/orderbook-modules";
 import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { TradeAccount } from "@polkadex/orderbook/modules/types";
 
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {
@@ -25,8 +27,10 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
     const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
     const api = yield select(selectRangerApi);
-    const { address } = yield select(selectCurrentTradeAccount);
-    const keyringPair = keyring.getPair(address);
+    const account: UserAccount = yield select(selectUsingAccount);
+    const address = account.tradeAddress;
+    const keyringPair: TradeAccount = yield select(selectTradeAccount(address));
+    if (keyringPair.isLocked) throw new Error("Please unlock your account with password");
     if (address !== "" && keyringPair) {
       const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
         api,
@@ -68,10 +72,10 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
 }
 const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
-  const res = await sendQueryToAppSync(
-    mutation.cancel_order,
-    { input: { payload } },
-    proxyAddress
-  );
+  const res = await sendQueryToAppSync({
+    query: mutation.cancel_order,
+    variables: { input: { payload } },
+    token: proxyAddress,
+  });
   return res;
 };

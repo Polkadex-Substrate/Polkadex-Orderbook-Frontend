@@ -76,7 +76,7 @@ export const Container = styled("div")<T.ModalStyleProps>(
     prop: "isFullWidth",
     variants: {
       true: {
-        background: "red",
+        width: "100%",
       },
     },
   }),
@@ -206,9 +206,6 @@ export const Overlay = styled("div")<{
       "start right": {
         justifyContent: "flex-end",
         alignItems: "center",
-        [Container]: {
-          marginRight: "2rem",
-        },
       },
       "start left": {
         alignItems: "center",

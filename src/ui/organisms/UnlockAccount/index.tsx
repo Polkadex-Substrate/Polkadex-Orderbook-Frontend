@@ -1,57 +1,56 @@
 import { useFormik } from "formik";
+import { useMemo } from "react";
 
 import * as S from "./styles";
 
 import { Button, PassCode } from "@polkadex/orderbook-ui/molecules";
 import { unLockAccountValidations } from "@polkadex/orderbook/validations";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
-  const { setFieldValue, values, handleSubmit, errors, isValid } = useFormik({
+  const { setFieldValue, values, handleSubmit, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
     },
     validationSchema: unLockAccountValidations,
-    onSubmit: (values) => {
-      // Add password values.password
-      onSubmit();
-    },
+    onSubmit: onSubmit,
   });
+  const digitsLeft = useMemo(
+    () => 5 - Array.from(String(values.password), (v) => Number(v)).length,
+    [values]
+  );
+
+  const message =
+    isValid && dirty ? "Lets go" : `${digitsLeft} digit${digitsLeft > 1 ? "s" : ""} left`;
 
   return (
     <S.Wrapper>
       <S.Title>
+        <S.Icon>
+          <Icons.Lock />
+        </S.Icon>
         <h2>Unlock account</h2>
-        <p>Input 5-digit trading password to unlock your account</p>
+        <p>Enter 5-digit password to unlock your account</p>
       </S.Title>
-      <form onSubmit={handleSubmit}>
+      <form onChange={() => handleSubmit()}>
         <PassCode
           numInputs={5}
           onChange={(e) => setFieldValue("password", e)}
           value={values.password}
           name="password"
-          label="Enter your password"
-          error={errors.password}
         />
         <S.Actions>
           {handleClose && (
             <Button
               size="large"
               background="transparent"
-              color="tertiraryText"
+              color="tertiaryText"
               type="button"
               onClick={handleClose}>
               Cancel
             </Button>
           )}
-
-          <Button
-            size="large"
-            background="primary"
-            color="white"
-            type="submit"
-            disabled={!isValid}>
-            Unlock
-          </Button>
+          <S.Span color={isValid && dirty ? "green" : "secondaryBackground"}>{message}</S.Span>
         </S.Actions>
       </form>
     </S.Wrapper>

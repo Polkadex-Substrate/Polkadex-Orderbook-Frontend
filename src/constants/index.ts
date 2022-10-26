@@ -21,7 +21,7 @@ export const marketIdMap = {
   1: { name: "SHIBADEX", symbol: "SDX" },
 };
 
-export const POLKADEX_ASSSET_ID = "-1";
+export const POLKADEX_ASSSET_ID = "PDEX";
 
 export const POLKADEX_ASSET = {
   name: "POLKADEX",
@@ -29,5 +29,11 @@ export const POLKADEX_ASSET = {
   asset_id: "PDEX",
 };
 
-export const ALLOWED_ASSET_IDS = ["1", "2", "3", "4", "5"];
 export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";
+
+export const LOCAL_STORAGE_ID = {
+  DEFAULT_TRADE_ACCOUNT: "default_trade_account",
+  DEFAULT_MARKET: "default_market",
+  DEFAULT_AVATAR: "default_avatar",
+  DEFAULT_DISCLAIMER: "default_disclaimer",
+};

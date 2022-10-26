@@ -1,5 +1,4 @@
 import { call, put, select } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
 
 import * as mutations from "../../../../graphql/mutations";
 import { userTradesError } from "../../trades";
@@ -7,8 +6,10 @@ import { withdrawsData, WithdrawsFetch } from "..";
 
 import {
   notificationPush,
-  selectCurrentTradeAccount,
+  UserAccount,
   selectRangerApi,
+  selectTradeAccount,
+  selectUsingAccount,
   sendError,
 } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
@@ -19,9 +20,9 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
     const { asset, amount } = action.payload;
-    const { address } = yield select(selectCurrentTradeAccount);
-    const keyringPair = keyring.getPair(address);
-    keyringPair.unlock("");
+    const currentAccount: UserAccount = yield select(selectUsingAccount);
+    const address = currentAccount.tradeAddress;
+    const keyringPair = yield select(selectTradeAccount(address));
     const nonce = getNonce();
     const api = yield select(selectRangerApi);
     if (address !== "" && keyringPair && api) {
@@ -58,5 +59,9 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
 
 const executeWithdraw = async (withdrawPayload, address) => {
   const payload = JSON.stringify({ Withdraw: withdrawPayload });
-  return await sendQueryToAppSync(mutations.withdraw, { input: { payload } }, address);
+  return await sendQueryToAppSync({
+    query: mutations.withdraw,
+    variables: { input: { payload } },
+    token: address,
+  });
 };

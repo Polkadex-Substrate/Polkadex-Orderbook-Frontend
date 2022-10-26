@@ -2,8 +2,7 @@
 import { call, put, select } from "redux-saga/effects";
 
 import { userOrdersHistoryData } from "../actions";
-import { alertPush, selectCurrentTradeAccount } from "../../../";
-import { ProxyAccount } from "../../profile";
+import { alertPush, UserAccount, selectUsingAccount } from "../../../";
 import { selectUserSession, UserSessionPayload } from "../../session";
 
 import * as queries from "./../../../../graphql/queries";
@@ -30,11 +29,16 @@ type orderHistoryQueryResult = {
 
 export function* ordersHistorySaga() {
   try {
-    const account: ProxyAccount = yield select(selectCurrentTradeAccount);
-    if (account.address) {
+    const account: UserAccount = yield select(selectUsingAccount);
+    if (account.tradeAddress) {
       const userSession: UserSessionPayload = yield select(selectUserSession);
       const { dateFrom, dateTo } = userSession;
-      const orders: OrderCommon[] = yield call(fetchOrders, account.address, dateFrom, dateTo);
+      const orders: OrderCommon[] = yield call(
+        fetchOrders,
+        account.tradeAddress,
+        dateFrom,
+        dateTo
+      );
       yield put(userOrdersHistoryData({ list: orders }));
     }
   } catch (error) {
@@ -57,11 +61,14 @@ const fetchOrders = async (
   // TODO: make limit resonable by utilizing nextToken
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
   const dateToStr = Utils.date.formatDateToISO(dateTo);
-  const res: any = await sendQueryToAppSync(queries.listOrderHistorybyMainAccount, {
-    main_account: proxy_acc,
-    from: dateFromStr,
-    to: dateToStr,
-    limit: 1000,
+  const res: any = await sendQueryToAppSync({
+    query: queries.listOrderHistorybyMainAccount,
+    variables: {
+      main_account: proxy_acc,
+      from: dateFromStr,
+      to: dateToStr,
+      limit: 1000,
+    },
   });
   const ordersRaw: orderHistoryQueryResult[] = res.data.listOrderHistorybyMainAccount.items;
   const orders: OrderCommon[] = ordersRaw.map((order: any) => ({

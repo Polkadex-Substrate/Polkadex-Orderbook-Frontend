@@ -7,11 +7,10 @@ import { generateUsername } from "friendly-username-generator";
 
 import * as S from "./styles";
 
-import { Button, InputLine, Loading, PassCode } from "@polkadex/orderbook-ui/molecules";
+import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { Mnemonic } from "@polkadex/orderbook-ui/organisms";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Mnemonic, Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   registerTradeAccountFetch,
   selectRegisterTradeAccountLoading,

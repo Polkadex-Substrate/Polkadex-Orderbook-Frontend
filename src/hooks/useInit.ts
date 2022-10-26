@@ -7,28 +7,32 @@ import {
   extensionWalletFetch,
   marketsFetch,
   rangerConnectFetch,
+  selectIsUserSignedIn,
+  selectShouldRangerConnect,
   tradeAccountsFetch,
-  userFetch,
+  userAuthFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
 
 export const useInit = () => {
   const dispatch = useDispatch();
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
+  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
+  const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
+
   // basic initialization
   useEffect(() => {
-    dispatch(rangerConnectFetch());
+    if (shouldRangerConnect) dispatch(rangerConnectFetch());
     dispatch(tradeAccountsFetch());
-    dispatch(userFetch());
     dispatch(extensionWalletFetch());
-  }, [dispatch]);
-
-  // fetch assets
-  useEffect(() => {
     dispatch(assetsFetch());
-  }, []);
+  }, [dispatch, shouldRangerConnect]);
+
+  useEffect(() => {
+    if (isSignedIn) dispatch(userAuthFetch());
+  }, [dispatch, isSignedIn]);
 
   useEffect(() => {
     if (isAssets) dispatch(marketsFetch());
-  }, [isAssets]);
+  }, [isAssets, dispatch]);
 };

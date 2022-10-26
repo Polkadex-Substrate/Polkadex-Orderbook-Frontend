@@ -2,17 +2,14 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
+import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignUp } from "@polkadex/orderbook-hooks";
-const Menu = dynamic(() => import("@polkadex/orderbook/v3/ui/organisms/Menu"), {
-  ssr: false,
-});
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 
 export const SignTemplate = () => {
   const { signUp, loading } = useSignUp();
@@ -22,12 +19,21 @@ export const SignTemplate = () => {
     repeatPassword: false,
   });
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+  const {
+    touched,
+    handleSubmit,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    setFieldValue,
+    values,
+  } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
       email: "",
-      terms: false,
+      termsAccepted: false,
     },
     validationSchema: signUpValidations,
     onSubmit: (values) => {
@@ -108,15 +114,34 @@ export const SignTemplate = () => {
                     </S.Show>
                   </InputLine>
                   <S.Terms>
-                    <span>
-                      By clicking the submit button below, I hereby agree with Polkadex{" "}
-                      <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
-                        target="_blank"
-                        rel="noreferrer">
-                        Terms of Service and Privacy Policy
-                      </a>
-                    </span>
+                    <Checkbox
+                      checked={values.termsAccepted}
+                      onChange={() => setFieldValue("termsAccepted", !values.termsAccepted)}>
+                      <span>
+                        By clicking the Create Account button below, I hereby agree with
+                        Polkadex{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Terms of Service
+                        </a>
+                        ,{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Privacy Policy
+                        </a>
+                        ,{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Disclaimer and Legal Notice
+                        </a>{" "}
+                      </span>
+                    </Checkbox>
                   </S.Terms>
                   <Button
                     type="submit"

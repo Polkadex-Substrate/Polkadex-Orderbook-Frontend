@@ -11,10 +11,9 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
   selectBalancesLoading,
-  selectHasCurrentTradeAccount,
+  selectHasSelectedAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
-import { FlexCenter } from "@polkadex/orderbook/file-to-delete/v2/ui/atoms";
 
 export const Tokens = () => {
   const dispatch = useDispatch();
@@ -23,7 +22,7 @@ export const Tokens = () => {
   });
 
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasUser = useReduxSelector(selectHasSelectedAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {
@@ -80,7 +79,7 @@ const Card = ({ tokenName, tokenTicker, amount, amountInFiat = 0.0 }: T.TokenPro
     <Link href={tokenTicker}>
       <a>
         <S.Card isActive={router.query.id === tokenTicker}>
-          <FlexCenter>
+          <S.FlexCenter>
             <Icon
               isToken
               name={tokenTicker}
@@ -92,7 +91,7 @@ const Card = ({ tokenName, tokenTicker, amount, amountInFiat = 0.0 }: T.TokenPro
               <span>{tokenName}</span>
               <p>{tokenTicker}</p>
             </div>
-          </FlexCenter>
+          </S.FlexCenter>
           <S.Aside>
             <span>{amount}</span>
             <p>~{amountInFiat} USD</p>

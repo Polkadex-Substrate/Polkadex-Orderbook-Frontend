@@ -1,5 +1,4 @@
-import { CommonError } from "../../types";
-import { MainAccount } from "../mainAccount";
+import { CommonError, ExtensionAccount } from "../../types";
 
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_RESET } from "./constants";
 
@@ -11,7 +10,7 @@ export interface DepositsFetch {
   payload: {
     asset: Record<string, string | null>;
     amount: string | number;
-    mainAccount: MainAccount;
+    mainAccount: ExtensionAccount;
   };
 }
 

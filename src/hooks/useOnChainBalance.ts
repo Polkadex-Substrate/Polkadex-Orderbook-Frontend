@@ -1,24 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { selectRangerApi, selectRangerIsReady } from "../modules/public/ranger";
 import { fetchOnChainBalance } from "../helpers/fetchOnChainBalance";
 import { selectUserBalance } from "../modules/user/balances";
-import { selectCurrentMainAccount } from "../modules/user/mainAccount";
 
 import { useReduxSelector } from "./useReduxSelector";
 
+import { selectUsingAccount } from "@polkadex/orderbook-modules";
+
 export const useOnChainBalance = (assetId: string) => {
   const api = useReduxSelector(selectRangerApi);
-  const isApiConnectd = useReduxSelector(selectRangerIsReady);
+  const isApiConnected = useReduxSelector(selectRangerIsReady);
   const balances = useReduxSelector(selectUserBalance);
-  const user = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   // only update if the user balance changes
   useEffect(() => {
-    if (isApiConnectd && user.address) {
-      fetchOnChainBalance(api, assetId, user.address)
+    if (isApiConnected && mainAddress) {
+      fetchOnChainBalance(api, assetId, mainAddress)
         .then((balance) => {
           setBalance(balance);
           setLoading(false);
@@ -28,7 +30,7 @@ export const useOnChainBalance = (assetId: string) => {
           setLoading(false);
         });
     }
-  }, [balances, api, assetId, user.address, isApiConnectd]);
+  }, [balances, api, assetId, mainAddress, isApiConnected]);
 
   return { onChainBalance: balance, onChainBalanceLoading: loading };
 };

@@ -1,14 +1,23 @@
-import { API } from "aws-amplify";
+import { APIClass, withSSRContext, API as ampliyfyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
+import { AmplifyClass } from "@aws-amplify/core";
 
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export const sendQueryToAppSync = async (
-  query: string,
-  variables?: Record<string, any>,
-  token?: string,
-  authMode: keyof typeof GRAPHQL_AUTH_MODE = GRAPHQL_AUTH_MODE.AWS_LAMBDA
-) => {
+type Props = {
+  query: string;
+  variables?: Record<string, any>;
+  token?: string;
+  authMode?: keyof typeof GRAPHQL_AUTH_MODE;
+  API?: APIClass;
+};
+export const sendQueryToAppSync = async ({
+  query,
+  variables,
+  token,
+  authMode = GRAPHQL_AUTH_MODE.AWS_LAMBDA,
+  API = ampliyfyApi,
+}: Props) => {
   let res: any;
   if (authMode === "AWS_LAMBDA") {
     res = await API.graphql({

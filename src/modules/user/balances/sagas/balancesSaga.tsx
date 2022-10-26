@@ -1,7 +1,7 @@
 import { call, put, select } from "redux-saga/effects";
 
 import * as queries from "../../../../graphql/queries";
-import { ProxyAccount, selectCurrentMainAccount } from "../../..";
+import { selectUsingAccount } from "../../..";
 import { balancesData, BalancesFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 
@@ -22,11 +22,11 @@ type BalanceQueryResult = {
 
 export function* balancesSaga(_balancesFetch: BalancesFetch) {
   try {
-    const account: ProxyAccount = yield select(selectCurrentMainAccount);
+    const { mainAddress } = yield select(selectUsingAccount);
     const isAssetData = yield select(selectAssetsFetchSuccess);
-    if (account.address && isAssetData) {
+    if (mainAddress && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      const balances = yield call(() => fetchbalancesAsync(account.address));
+      const balances = yield call(() => fetchbalancesAsync(mainAddress));
       const list = balances.map((balance: IBalanceFromDb) => {
         const asset = assetMap[balance.asset_type];
         return {
@@ -61,8 +61,11 @@ type IBalanceFromDb = {
 };
 
 async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
-  const res: any = await sendQueryToAppSync(queries.getAllBalancesByMainAccount, {
-    main_account: account,
+  const res: any = await sendQueryToAppSync({
+    query: queries.getAllBalancesByMainAccount,
+    variables: {
+      main_account: account,
+    },
   });
   const balancesRaw: BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
   const balances = balancesRaw.map((val) => {
@@ -73,5 +76,6 @@ async function fetchbalancesAsync(account: string): Promise<IBalanceFromDb[]> {
       pending_withdrawal: val.p,
     };
   });
+  console.log("res from balances query", res);
   return balances;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -14,16 +14,15 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
-  selectAssociatedTradeAccounts,
-  selectCurrentMainAccount,
+  selectAssociatedTradeAddresses,
   selectCurrentMarket,
-  selectCurrentTradeAccount,
   selectCurrentTradePrice,
-  selectHasCurrentTradeAccount,
-  selectIsCurrentMainAccountInWallet,
+  selectHasSelectedAccount,
+  selectIsAddressInExtension,
   selectIsUserSignedIn,
   selectShouldShowInitialBanner,
-  selectUserIdentity,
+  selectUserEmail,
+  selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -36,17 +35,33 @@ import {
   Logo,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
-import Markets from "@polkadex/orderbook-ui/organisms/Markets";
-import Transactions from "@polkadex/orderbook/v3/ui/organisms/Transactions";
-import Graph from "@polkadex/orderbook/v3/ui/organisms/Graph";
-import MarketOrder from "@polkadex/orderbook/v3/ui/organisms/MarketOrder";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import Navbar from "@polkadex/orderbook/v3/ui/organisms/Navbar";
-import { RecentTrades } from "@polkadex/orderbook-ui/organisms";
+import {
+  Markets,
+  Transactions,
+  Graph,
+  MarketOrder,
+  Menu,
+  Navbar,
+  RecentTrades,
+  Disclaimer,
+} from "@polkadex/orderbook-ui/organisms";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function Trading() {
+  const shouldShowDisclaimer = useMemo(
+    () => process.browser && window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER),
+    []
+  );
+
+  const handleAcceptDisclaimer = () => {
+    process.browser &&
+      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER, "true");
+    setDisclaimer(false);
+  };
+
   const [state, setState] = useState(false);
   const [banner, setBanner] = useState(false);
+  const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -60,22 +75,25 @@ export function Trading() {
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const hasAssociatedAccounts = useReduxSelector(selectAssociatedTradeAccounts)?.length;
-  const hasTradeAccount = useReduxSelector(selectHasCurrentTradeAccount);
+  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
-  const email = useReduxSelector(selectUserIdentity);
-  const hasMainAccount = useReduxSelector(selectIsCurrentMainAccountInWallet);
-  const currentMainAccount = useReduxSelector(selectCurrentMainAccount).address;
-  const currentTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const email = useReduxSelector(selectUserEmail);
+  const { mainAddress } = useReduxSelector(selectUsingAccount);
+  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+  const hasAssociatedAccounts = useReduxSelector(
+    selectAssociatedTradeAddresses(mainAddress)
+  )?.length;
 
+  const currentMainAddr = useReduxSelector(selectUsingAccount).mainAddress;
+  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
       title: "Connect your Trading Account",
-      description: "Import your existing wallet, or create a new wallet",
+      description: "Import your existing account, or create a new account",
       primaryLink: "/createAccount",
       primaryLinkTitle: "Create Account",
-      secondaryLink: "/accountManager",
+      secondaryLink: "/settings",
       secondaryLinkTitle: "Select Account",
     };
 
@@ -115,6 +133,12 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <Modal
+        open={isSignedIn && disclaimer}
+        onClose={handleAcceptDisclaimer}
+        placement="start">
+        <Disclaimer onClose={handleAcceptDisclaimer} />
+      </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner onClose={closeBanner} />
       </Modal>
@@ -154,7 +178,7 @@ export function Trading() {
                   <Profile
                     hasTradeAccount={hasTradeAccount}
                     hasMainAccount={hasMainAccount}
-                    currentMainAccount={currentMainAccount}
+                    currentMainAccount={currentMainAddr}
                     currentTradeAccount={currentTradeAddr}
                     email={email}
                   />
@@ -191,7 +215,7 @@ export function Trading() {
                       <Profile
                         hasTradeAccount={hasTradeAccount}
                         hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAccount}
+                        currentMainAccount={currentMainAddr}
                         currentTradeAccount={currentTradeAddr}
                         email={email}
                       />

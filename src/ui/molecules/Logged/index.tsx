@@ -19,7 +19,7 @@ const data = [
     description: "Connect your existing trading account, or create a new one",
     linkOne: "/createAccount",
     linkOneText: "Create Account",
-    linkTwo: "/accountManager",
+    linkTwo: "/settings",
     linkTwoText: "Connect Account",
   },
 ];

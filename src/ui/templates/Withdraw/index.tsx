@@ -9,9 +9,9 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
   Button,
+  Dropdown,
   InputLine,
   Table,
   Tooltip,
@@ -23,17 +23,22 @@ import {
   TabHeader,
   TabContent,
   Checkbox,
-  Icon,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
-import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import {
+  useHistory,
+  useReduxSelector,
+  useTryUnlockTradeAccount,
+} from "@polkadex/orderbook-hooks";
+import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
-  selectCurrentMainAccount,
+  selectMainAccount,
+  selectTradeAccount,
   selectUserBalance,
+  selectUsingAccount,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -43,27 +48,31 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
-import { UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { cleanPositiveFloatInput } from "@polkadex/web-helpers";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-  const [unlockAccount, setUnlockAccount] = useState(false);
-
-  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const [showPassword, setShowPassword] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
+  const tradingAccountInBrowser = useReduxSelector(
+    selectTradeAccount(currentAccount?.tradeAddress)
+  );
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
 
   const dispatch = useDispatch();
   const router = useRouter();
+
   const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
     () => userBalances?.find((item) => item.asset_id === selectedAsset?.asset_id),
@@ -80,16 +89,27 @@ export const WithdrawTemplate = () => {
 
   const validate = (values) => {
     const errors = {} as any;
-    if (values.amount.includes("e")) {
+    if (values?.amount?.includes("e")) {
       errors.amount = "use a valid amount instead";
     }
 
-    if (+values.amount > +availableAmount?.free_balance) {
+    if (+values?.amount > +availableAmount?.free_balance) {
       errors.amount = "Amount cannot be greater than balance";
     }
     return errors;
   };
 
+  const handleSubmitWithdraw = (amount: string | number) => {
+    const asset = isAssetPDEX(selectedAsset.asset_id)
+      ? { polkadex: null }
+      : { asset: selectedAsset.asset_id };
+    dispatch(
+      withdrawsFetch({
+        asset,
+        amount,
+      })
+    );
+  };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       amount: 0.0,
@@ -98,15 +118,12 @@ export const WithdrawTemplate = () => {
     validationSchema: withdrawValidations,
     validate,
     onSubmit: (values) => {
-      const asset = isAssetPDEX(selectedAsset.asset_id)
-        ? { polkadex: null }
-        : { asset: selectedAsset.asset_id };
-      dispatch(
-        withdrawsFetch({
-          asset: asset,
-          amount: values.amount,
-        })
-      );
+      setAmount(values.amount);
+      if (tradingAccountInBrowser.isLocked) {
+        setShowPassword(true);
+      } else {
+        handleSubmitWithdraw(values.amount);
+      }
     },
   });
 
@@ -133,20 +150,32 @@ export const WithdrawTemplate = () => {
     [readyToClaim]
   );
 
-  const handleUnlockClose = () => !unlockAccount && setUnlockAccount(false);
+  const handleUnlockClose = () => !showPassword && setShowPassword(false);
 
   return (
     <>
-      <Modal open={unlockAccount} onClose={handleUnlockClose}>
-        <Modal.Body>
-          <UnlockAccount
-            onSubmit={() => {
-              // Add action..
-              setUnlockAccount(false);
-            }}
-          />
-        </Modal.Body>
-      </Modal>
+      {showPassword && (
+        <Modal open={showPassword} onClose={handleUnlockClose}>
+          <Modal.Body>
+            <S.UnlockAccount>
+              <UnlockAccount
+                onSubmit={({ password }) => {
+                  try {
+                    tradingAccountInBrowser.unlock(password);
+                    if (!tradingAccountInBrowser.isLocked) {
+                      handleSubmitWithdraw(amount);
+                    }
+                  } catch (error) {
+                    alert(error);
+                  } finally {
+                    setShowPassword(false);
+                  }
+                }}
+              />
+            </S.UnlockAccount>
+          </Modal.Body>
+        </Modal>
+      )}
       <Head>
         <title>Deposit | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -177,7 +206,9 @@ export const WithdrawTemplate = () => {
                     <Icons.Avatar />
                   </div>
                   <div>
-                    <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                    <strong>
+                      {currMainAcc?.account?.meta?.name || "Wallet not selected"}
+                    </strong>
                     <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>

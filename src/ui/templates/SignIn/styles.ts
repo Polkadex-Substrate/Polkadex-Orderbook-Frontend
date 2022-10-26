@@ -68,7 +68,6 @@ export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 2rem;
-
     @media screen and (min-width: 880px) {
       background-image: url("/img/signInHero.svg");
       background-repeat: no-repeat;
@@ -98,8 +97,19 @@ export const Terms = styled.div`
       color: ${theme.colors.primary};
       text-decoration: underline;
     }
+    span {
+      line-height: 1.3;
+    }
   `}
 `;
+
+export const InputLineLink = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-size: 1.2rem;
+  `}
+`;
+
 export const Box = styled.div`
   padding: 2rem;
   @media screen and (min-width: 880px) {

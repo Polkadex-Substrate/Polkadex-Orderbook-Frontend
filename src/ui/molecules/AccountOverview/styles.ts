@@ -1,74 +1,129 @@
 import styled, { css } from "styled-components";
 
-export const ContentWrapper = styled.div`
+export const Wrapper = styled.div`
   ${({ theme }) => css`
     width: 100%;
-    background: ${theme.colors.secondaryBackgroundSolid};
+    background: ${theme.colors.primaryBackground};
+    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 1.5rem;
-  `}
-`;
-
-export const ContentHeader = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.text};
-    color: ${theme.colors.inverse};
-    padding: 1.5rem;
-    border-radius: 1.5rem;
-    small {
-      font-size: 1.2rem;
-      font-weight: 500;
+    @media screen and (min-width: 400px) {
+      min-width: 35rem;
     }
   `}
 `;
-export const ContentEmail = styled.div`
+
+export const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  div {
+    max-width: 4rem;
+    width: 100%;
+  }
+  span {
+    font-size: 1.4rem;
+  }
+`;
+export const Switch = styled.div`
+  ${({ theme }) => css`
+    margin: 0 1.5rem 1rem 1.5rem;
+    border: 2px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 1rem;
+  `}
+`;
+export const SwitchCard = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid ${theme.colors.secondaryBackground};
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    gap: 2rem;
+    padding: 1.5rem;
+    :first-child {
+      cursor: pointer;
+    }
+    :last-child {
+      border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      opacity: 0.5;
+    }
   `}
 `;
 
-export const Input = styled.div`
+export const DropdownHeader = styled.div`
+  ${({ theme }) => css`
+    small {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const DropdownEmpty = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundSolid};
+    padding: 2rem;
+    border-radius: 0.8rem;
+    width: 100%;
+    @media screen and (min-width: 400px) {
+      min-width: 31.5rem;
+    }
+    a {
+      display: block;
+      margin-top: 1.5rem;
+      text-align: center;
+      padding: 1.5rem;
+      background-color: ${theme.colors.secondaryBackgroundOpacity};
+      border-radius: 0.7rem;
+      transition: background-color 0.3s ease-out;
+      :hover {
+        background-color: ${theme.colors.secondaryBackground};
+      }
+    }
+  `}
+`;
+export const SwitchCardContent = styled.div`
   ${({ theme }) => css`
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: ${theme.colors.inverse};
-    padding: 1.2rem;
-    margin-top: 0.5rem;
-    border-radius: 0.8rem;
-    input {
-      width: 100%;
-      color: ${theme.colors.text};
+    flex-direction: column;
+    gap: 0.8rem;
+    span {
+      font-size: 1.3rem;
+      div {
+        display: inline-block;
+        max-width: 1rem;
+        border-radius: 10rem;
+        margin-left: 0.5rem;
+        background: ${theme.colors.green};
+        padding: 0.2rem;
+        svg {
+          fill: ${theme.colors.white};
+        }
+      }
+    }
+  `}
+`;
+export const SwitchCardInfo = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 0.5rem;
+    small {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
     }
     button {
-      margin-left: 0.5rem;
-      cursor: pointer;
-      transition: opacity 0.3s ease-in-out;
-      background: ${theme.colors.text};
-      padding: 0.2rem;
-      border-radius: 0.4rem;
-      :hover {
-        opacity: 0.7;
+      max-width: 1rem;
+      svg {
+        stroke: ${theme.colors.tertiaryText};
+        fill: ${theme.colors.tertiaryText};
       }
     }
   `}
 `;
 
-export const ContentFeedback = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackground};
-  `}
+export const SwitchCardArrow = styled.div`
+  max-width: 0.8rem;
 `;
 
-export const ContentContainer = styled.div``;
-export const ContentBox = styled.div``;
+export const Links = styled.div``;
 export const Card = styled.div<{ isHoverable?: boolean }>`
   ${({ isHoverable = true }) => css`
     display: flex;
@@ -92,39 +147,14 @@ export const CardContent = styled.div`
 `;
 
 export const CardTitle = styled.div`
-  margin-left: 1rem;
-  span {
-    font-size: 1.3rem;
-    font-weight: 500;
-  }
-  p {
-    opacity: 0.6;
-  }
-`;
-
-export const ContentFooter = styled.div`
   ${({ theme }) => css`
-    padding: 1.5rem 2rem;
-    margin-top: 1rem;
-    border-top: 1px solid ${theme.colors.secondaryBackground};
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1rem;
-    a {
-      position: relative;
-      font-size: 1.2rem;
-      opacity: 0.5;
-      transition: opacity 0.3s ease-in-out;
-      color: ${theme.colors.text};
-
-      :hover {
-        opacity: 1;
-      }
+    margin-left: 1rem;
+    span {
+      font-size: 1.3rem;
+      color: ${theme.colors.tertiaryText};
     }
-    a,
     p {
-      white-space: nowrap;
+      opacity: 0.6;
     }
   `}
 `;

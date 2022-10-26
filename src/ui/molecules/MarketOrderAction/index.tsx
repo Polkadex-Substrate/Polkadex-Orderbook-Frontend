@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -13,9 +13,18 @@ import {
   MarketInput,
   PassCode,
 } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder, useReduxSelector } from "@polkadex/orderbook/hooks";
+import {
+  usePlaceOrder,
+  useReduxSelector,
+  useTryUnlockTradeAccount,
+} from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import { selectCurrentTradeAccount, unlockTradeAccount } from "@polkadex/orderbook-modules";
+import {
+  selectBrowserTradeAccounts,
+  selectTradeAccount,
+  selectUsingAccount,
+  unlockTradeAccount,
+} from "@polkadex/orderbook-modules";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -123,7 +132,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
                   disabled={!hasUser || !isSignedIn}
                 />
               ) : (
-                <Link href="/accountManager">
+                <Link href="/settings">
                   <S.Connect>Connect Trading Account</S.Connect>
                 </Link>
               )}
@@ -137,7 +146,11 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 
 const ProtectPassword = () => {
   const dispatch = useDispatch();
-  const currTradeAddr = useReduxSelector(selectCurrentTradeAccount).address;
+  const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
+  // if account is not protected by password use default password to unlock account.
+  useTryUnlockTradeAccount(tradeAccount);
+
   const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
       showPassword: false,
@@ -145,6 +158,7 @@ const ProtectPassword = () => {
     },
     onSubmit: (values) => {
       isValidSize &&
+        tradeAccount.isLocked &&
         dispatch(unlockTradeAccount({ address: currTradeAddr, password: values.password }));
     },
   });

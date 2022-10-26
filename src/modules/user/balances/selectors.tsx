@@ -12,7 +12,7 @@ export const selectBalancesLoading = (state: RootState): boolean =>
 
 export const selectUserBalance = (state: RootState): Balance[] => state.user.balances.balances;
 
-export const selectGetFreeTradeBalance =
+export const selectGetFreeProxyBalance =
   (state: RootState): ((assetId: string) => string) =>
   (assetId: string) => {
     const balance = state?.user?.balances?.balances?.find(

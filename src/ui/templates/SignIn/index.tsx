@@ -9,7 +9,7 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignIn } from "@polkadex/orderbook-hooks";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
 
 export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
@@ -66,6 +66,11 @@ export const SignInTemplate = () => {
                     name="password"
                     type={view ? "text" : "password"}
                     label="Password"
+                    labelRight={
+                      <S.InputLineLink>
+                        <Link href="/resetPassword">Forgot password?</Link>
+                      </S.InputLineLink>
+                    }
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
                     disabled={loading}
@@ -76,12 +81,26 @@ export const SignInTemplate = () => {
                   </InputLine>
                   <S.Terms>
                     <span>
-                      By clicking the submit button below,I hereby agree with Polkadex{" "}
+                      By clicking the Log In button below, I hereby agree with Polkadex{" "}
                       <a
                         href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
                         target="_blank"
                         rel="noreferrer">
-                        Terms of Service and Privacy Policy
+                        Terms of Service
+                      </a>
+                      ,{" "}
+                      <a
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
+                        target="_blank"
+                        rel="noreferrer">
+                        Privacy Policy
+                      </a>
+                      ,{" "}
+                      <a
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+                        target="_blank"
+                        rel="noreferrer">
+                        Disclaimer and Legal Notice
                       </a>
                     </span>
                   </S.Terms>

@@ -1,71 +1,46 @@
-// TODO : Fix saga
-import { API, Auth } from "aws-amplify";
-import router from "next/router";
-import { call, put } from "redux-saga/effects";
+import { APIClass, API } from "aws-amplify";
 
-import { notificationPush, sendError } from "../../../";
-import { userData, userError, UserFetch } from "../actions";
+import * as queries from "../../../../graphql/queries";
 
-export function* userSaga(action: UserFetch) {
+import { UserAccount } from "@polkadex/orderbook-modules";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
   try {
-    const { email, isAuthenticated, userExists, isConfirmed } = yield call(() =>
-      getUserInfo()
-    );
-    yield put(userData({ email, isAuthenticated, userExists, isConfirmed }));
-    if (!isConfirmed && userExists) {
-      yield put(
-        notificationPush({
-          type: "AttentionAlert",
-          message: {
-            title: "Please confirm your email",
-            description: "Sign in again and confirm your email.",
-          },
-          time: new Date().getTime(),
-        })
-      );
-    }
+    const res: any = await sendQueryToAppSync({
+      query: queries.listMainAccountsByEmail,
+      variables: {
+        email,
+      },
+      token: null,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+      API: Api,
+    });
+    return res.data.listMainAccountsByEmail ?? { accounts: [] };
   } catch (error) {
-    yield put(
-      sendError({
-        error,
-        processingType: "alert",
-        extraOptions: {
-          actionError: userError,
-        },
-      })
-    );
+    console.log("Error: getAllMainLinkedAccounts", error.message);
   }
-}
+};
 
-const getUserInfo = async () => {
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    return {
-      isAuthenticated: true,
-      email: user.attributes.email,
-      userExists: true,
-      isConfirmed: user.attributes.email_verified,
-      signInUserSession: user.signInUserSession,
-      jwt: user.signInUserSession.accessToken.jwtToken,
-    };
-  } catch (e) {
-    console.log(e);
-    const error = e;
-    if (e === "The user is not authenticated") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: false,
-      };
-    }
-    if (e === "User is not confirmed.") {
-      return {
-        email: "",
-        isAuthenticated: false,
-        userExists: true,
-        isConfirmed: false,
-      };
-    }
-    throw new Error(e);
-  }
+export const getAllProxyAccounts = async (
+  mainAccounts: [string],
+  Api = API
+): Promise<UserAccount[]> => {
+  const promises = mainAccounts.map(async (main_account) => {
+    const res: any = await sendQueryToAppSync({
+      query: queries.findUserByMainAccount,
+      variables: { main_account },
+      API: Api,
+    });
+    const proxies = res.data.findUserByMainAccount.proxies;
+    return { main_account, proxies };
+  });
+  const list = await Promise.all(promises);
+  const accounts: UserAccount[] = [];
+  list.forEach((item) => {
+    item.proxies.forEach((proxy) => {
+      accounts.push({ mainAddress: item.main_account, tradeAddress: proxy });
+    });
+  });
+  return accounts;
 };

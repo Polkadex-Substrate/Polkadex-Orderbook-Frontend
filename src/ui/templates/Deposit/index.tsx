@@ -7,8 +7,8 @@ import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
 
-import { Dropdown } from "@polkadex/orderbook/v3/ui/molecules";
 import {
+  Dropdown,
   Button,
   InputLine,
   Table,
@@ -22,8 +22,9 @@ import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
   depositsFetch,
-  selectCurrentMainAccount,
   selectDepositsLoading,
+  selectMainAccount,
+  selectUsingAccount,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -34,17 +35,16 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
-import Menu from "@polkadex/orderbook/v3/ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-
-  const currMainAcc = useReduxSelector(selectCurrentMainAccount);
+  const currentAccount = useReduxSelector(selectUsingAccount);
+  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);
-
   const dispatch = useDispatch();
   const router = useRouter();
   const { deposits } = useHistory();
@@ -52,9 +52,9 @@ export const DepositTemplate = () => {
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
   const routedAsset = router.query.id as string;
   const shortAddress =
-    currMainAcc?.address?.slice(0, 15) +
+    currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
-    currMainAcc?.address?.slice(currMainAcc?.address?.length - 15);
+    currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
     const initialAsset = assets.find(
@@ -152,7 +152,9 @@ export const DepositTemplate = () => {
                       <Icons.Avatar />
                     </div>
                     <div>
-                      <strong>{currMainAcc?.name || "Wallet not selected"}</strong>
+                      <strong>
+                        {currMainAcc?.account?.meta?.name || "Wallet not present"}
+                      </strong>
                       <span>{shortAddress}</span>
                     </div>
                   </S.SelectAccount>
@@ -207,10 +209,12 @@ export const DepositTemplate = () => {
                       background="green"
                       hoverColor="green"
                       color="white"
-                      disabled={!(isValid && dirty) || loading}
+                      disabled={!(isValid && dirty) || loading || !currMainAcc}
                       isFull
                       isLoading={loading}>
-                      Deposit
+                      {currMainAcc
+                        ? "Deposit"
+                        : "Funding account not found in polkadot.js extension"}
                     </Button>
                   </form>
                 </Loading>

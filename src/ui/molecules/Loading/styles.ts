@@ -6,11 +6,12 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div<{
   isVisible: boolean;
+  hasBg?: boolean;
 }>`
-  ${({ theme, isVisible }) => css`
+  ${({ theme, isVisible, hasBg }) => css`
     position: absolute;
     top: 0;
-    background-color: ${theme.colors.primaryBackground}99;
+    background-color: ${theme.colors.primaryBackground}BF;
     padding: 1rem;
     color: ${theme.colors.text};
     width: 100%;
@@ -24,8 +25,8 @@ export const Container = styled.div<{
     justify-content: center;
     z-index: 99;
     div {
-      background: ${theme.colors.secondaryBackgroundSolid};
-      border: 1px solid ${theme.colors.secondaryBackground};
+      background: ${hasBg ? theme.colors.secondaryBackgroundSolid : "none"};
+      border: 1px solid ${hasBg ? theme.colors.secondaryBackground : "none"};
       padding: 2rem;
       border-radius: 1.5rem;
 

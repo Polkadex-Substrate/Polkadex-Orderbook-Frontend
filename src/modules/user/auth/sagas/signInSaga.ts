@@ -6,7 +6,7 @@ import { CognitoUser } from "amazon-cognito-identity-js";
 import { signInData, signInError, SignInFetch } from "../actions";
 
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
-import { notificationPush, userFetch } from "@polkadex/orderbook-modules";
+import { notificationPush, userAuthFetch } from "@polkadex/orderbook-modules";
 import { AUTH_ERROR_CODES } from "@polkadex/orderbook/modules/user/auth/constants";
 
 let userEmail = "";
@@ -16,7 +16,7 @@ export function* signInSaga(action: SignInFetch) {
     userEmail = email;
     const { user } = yield call(signIn, email, password);
     yield put(signInData({ user, email, isConfirmed: true }));
-    yield put(userFetch());
+    yield put(userAuthFetch());
   } catch (error) {
     console.log("error:", error);
     const errorCode = error?.name;

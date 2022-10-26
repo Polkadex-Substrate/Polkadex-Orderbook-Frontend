@@ -25,8 +25,11 @@ export const checkIfMainAccountExists = async (api: ApiPromise, address: string)
 };
 
 export const checkIfProxyAccountRegistered = async (address: string) => {
-  const res: any = await sendQueryToAppSync(findUserByProxyAccount, {
-    proxy_account: address,
+  const res: any = await sendQueryToAppSync({
+    query: findUserByProxyAccount,
+    variables: {
+      proxy_account: address,
+    },
   });
   if (res.data?.findUserByProxyAccount.items.length === 0) {
     throw new Error("This proxy account has not been registered yet!");
