@@ -136,14 +136,16 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                     tradeAddress={selected?.address}
                   />
                 </S.Box>
-                <S.Button
-                  disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                  onClick={() =>
-                    dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-                  }
-                  type="button">
-                  {using ? "Using" : "Use"}
-                </S.Button>
+                {tradingAccountInBrowser && (
+                  <S.Button
+                    disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                    onClick={() =>
+                      dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
+                    }
+                    type="button">
+                    {using ? "Using" : "Use"}
+                  </S.Button>
+                )}
               </S.Container>
             </S.Content>
             <S.Footer>
