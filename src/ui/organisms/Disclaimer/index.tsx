@@ -10,7 +10,13 @@ export const Disclaimer = () => {
       </div>
       <S.DisclaimerMessage>
         <strong>DISCLAIMER:</strong>Polkadex Orderbook is currently in its beta phase. Please
-        observe caution while using it.
+        observe caution while using it.{" "}
+        <a
+          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+          target="_blank"
+          rel="noreferrer">
+          Disclaimer and legal notice
+        </a>
       </S.DisclaimerMessage>
     </S.Disclaimer>
   );

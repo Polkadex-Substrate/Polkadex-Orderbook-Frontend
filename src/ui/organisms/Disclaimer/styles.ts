@@ -21,7 +21,14 @@ export const Disclaimer = styled.div`
   `}
 `;
 export const DisclaimerMessage = styled.p`
-  strong {
-    margin-right: 0.3rem;
-  }
+  ${({ theme }) => css`
+    strong {
+      margin-right: 0.3rem;
+    }
+    a {
+      margin-top: 0.4rem;
+      display: block;
+      color: ${theme.colors.white}99;
+    }
+  `}
 `;
