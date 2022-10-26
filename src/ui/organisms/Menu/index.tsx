@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 
 import * as S from "./styles";
 
@@ -54,7 +55,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
           <Link href="/balances">
             <S.WrapperIcon>
               <div>
-                <Icon name="Wallet" background="none" stroke="text" size="large" />
+                <Icon name="Coins" background="none" stroke="text" size="large" />
               </div>
               <div>
                 <S.Span>Balances</S.Span>
@@ -64,13 +65,14 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
           <Link href="/settings">
             <S.WrapperIcon>
               <div>
-                <Icon name="Settings" background="none" stroke="text" size="large" />
+                <Icon name="Wallet" background="none" stroke="text" size="large" />
               </div>
               <div>
-                <S.Span>Settings</S.Span>
+                <S.Span>Accounts</S.Span>
               </div>
             </S.WrapperIcon>
           </Link>
+          <Terms />
         </S.Container>
         <S.WrapperIcon onClick={changeTheme} as="div">
           <Tooltip>
@@ -134,3 +136,47 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
     </S.Wrapper>
   );
 };
+
+const Terms = () => {
+  const [state, setState] = useState(false);
+  return (
+    <S.Terms>
+      <span role="button" onClick={() => setState(!state)}>
+        <S.WrapperIcon>
+          <div>
+            <Icon name="Book" background="none" stroke="text" size="large" />
+          </div>
+          <div>
+            <S.Span>Legal links</S.Span>
+          </div>
+        </S.WrapperIcon>
+      </span>
+      {state && (
+        <S.TermsLinks>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Terms of Use</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Privacy Policy</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Disclaimer</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+        </S.TermsLinks>
+      )}
+    </S.Terms>
+  );
+};
+export default Menu;

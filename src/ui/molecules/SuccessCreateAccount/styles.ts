@@ -154,3 +154,17 @@ export const WalletContent = styled.div`
     }
   `}
 `;
+export const Actions = styled.div`
+  ${({ theme }) => css`
+    text-align: center;
+    padding: 1.2rem 1rem;
+    background: ${theme.colors.primary};
+    border-radius: 0.4rem;
+    transition: background-color 0.4s ease-in;
+    cursor: pointer;
+    font-weight: 500;
+    :hover {
+      background: ${theme.colors.primary}99;
+    }
+  `}
+`;

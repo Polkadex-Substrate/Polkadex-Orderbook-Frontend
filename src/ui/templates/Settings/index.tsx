@@ -7,6 +7,7 @@ import * as T from "./types";
 
 import { Menu, PreviewAccount, NewAccount } from "@polkadex/orderbook-ui/organisms";
 import {
+  AvailableMessage,
   Checkbox,
   Footer,
   Modal,
@@ -59,6 +60,7 @@ export const SettingsTemplate = () => {
     handleClosePreviewModal,
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
+    hasRegisteredMainAccount,
   } = useSettings();
 
   const dispatch = useDispatch();
@@ -85,7 +87,7 @@ export const SettingsTemplate = () => {
         />
       </Modal>
       <Head>
-        <title>Settings | Polkadex Orderbook</title>
+        <title>Accounts | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -93,7 +95,7 @@ export const SettingsTemplate = () => {
         <S.Wrapper>
           <S.ContainerMain>
             <S.Title>
-              <h1>Settings.</h1>
+              <h1>Accounts.</h1>
               <p>General account settings.</p>
             </S.Title>
             <S.Content>
@@ -112,7 +114,7 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {
+                  {!!controllerWallets?.length && hasRegisteredMainAccount && (
                     <ButtonWallet
                       type="button"
                       onClick={() => {
@@ -121,7 +123,7 @@ export const SettingsTemplate = () => {
                       }}>
                       New Account
                     </ButtonWallet>
-                  }
+                  )}
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
@@ -218,8 +220,10 @@ export const SettingsTemplate = () => {
                                     onClick={() =>
                                       dispatch(previewAccountModalActive(account))
                                     }>
-                                    <Icons.Show />
-                                    <span>Preview</span>
+                                    <div>
+                                      <Icons.OptionsHorizontal />
+                                    </div>
+                                    <span>Actions</span>
                                   </S.Preview>
                                 </S.WalletActions>
                               </WalletCard>
@@ -307,20 +311,23 @@ export const SettingsTemplate = () => {
                     hasBadge
                     isVerified={user.isConfirmed}
                   />
-                  <Card
-                    label="Avatar"
-                    isAvatar
-                    description="Select an avatar to personalize your account."
-                    actionTitle="Change"
-                    onClick={() => console.log("Open Modal")}
-                  />
-                  <Card label="Creation date" description="September 29, 2022." isLocked />
-                  <Card
-                    label="Delete Account"
-                    description="This action is irreversible, please make sure you`re certain of it."
-                    onClick={() => console.log("Open Modal")}
-                    actionTitle="Delete account"
-                  />
+                  <AvailableMessage>
+                    <Card
+                      label="Avatar"
+                      isAvatar
+                      description="Select an avatar to personalize your account."
+                      actionTitle="Change"
+                      onClick={() => console.log("Open Modal")}
+                    />
+                  </AvailableMessage>
+                  <AvailableMessage>
+                    <Card
+                      label="Delete Account"
+                      description="This action is irreversible, please make sure you`re certain of it."
+                      onClick={() => console.log("Open Modal")}
+                      actionTitle="Delete account"
+                    />
+                  </AvailableMessage>
                 </S.AccountContainer>
               </S.Account>
             </S.Content>
@@ -469,7 +476,7 @@ const WalletCard = ({
   return (
     <S.WalletCard>
       <S.WalletCardWrapper>
-        {isUsing && <S.Using>USING</S.Using>}
+        {isUsing && <S.Using>IN USE</S.Using>}
         <S.WalletCardContent>
           <span>
             {name} <small>{additionalInfo}</small>

@@ -1,33 +1,29 @@
-import { delay, put } from "redux-saga/effects";
-import keyring from "@polkadot/ui-keyring";
+import { put } from "redux-saga/effects";
+import { keyring } from "@polkadot/ui-keyring";
 
 import {
   importTradeAccountData,
-  notificationPush,
-  removeTradeAccountFromBrowser,
   tradeAccountPush,
   registerTradeAccountData,
-  ImportTradeAccountFetch,
-  tradeAccountsError,
+  ImportTradeAccountJsonFetch,
+  removeTradeAccountFromBrowser,
+  notificationPush,
+  registerTradeAccountError,
 } from "@polkadex/orderbook-modules";
 
 let tradeAddress = "";
 
-export function* importTradeAccountFetchSaga(action: ImportTradeAccountFetch) {
-  const { mnemonic, name, password } = action.payload;
-  console.log(mnemonic, name, password);
+export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch) {
+  const { file, password } = action.payload;
   try {
-    const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
-      name: name,
-    });
+    const modifiedFile = file;
+    const pair = keyring.restoreAccount(modifiedFile, password);
     tradeAddress = pair?.address;
     yield put(tradeAccountPush({ pair }));
-    yield delay(2000);
     yield put(
       registerTradeAccountData({
-        mnemonic,
         account: {
-          name,
+          name: String(pair.meta?.name),
           address: tradeAddress,
         },
       })
@@ -36,16 +32,16 @@ export function* importTradeAccountFetchSaga(action: ImportTradeAccountFetch) {
   } catch (error) {
     if (tradeAddress?.length)
       yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+    yield put(registerTradeAccountError(error));
     yield put(
       notificationPush({
         type: "ErrorAlert",
         message: {
           title: "Cannot import account",
-          description: "Please check your mnemonic",
+          description: "Invalid password or file",
         },
         time: new Date().getTime(),
       })
     );
-    yield put(tradeAccountsError(error));
   }
 }
