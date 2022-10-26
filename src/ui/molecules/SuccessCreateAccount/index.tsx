@@ -107,9 +107,6 @@ export const SuccessCreateAccount = ({
           <span>Default trade account</span>
           <Switch />
         </S.DefaultAccount>
-        <S.Actions>
-          <Link href="/balances">Add funds</Link>
-        </S.Actions>
       </S.Content>
     </S.Wrapper>
   );
