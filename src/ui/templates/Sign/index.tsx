@@ -125,12 +125,18 @@ export const SignTemplate = () => {
                           rel="noreferrer">
                           Terms of Service
                         </a>{" "}
-                        and{" "}
                         <a
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                           target="_blank"
                           rel="noreferrer">
                           Privacy Policy
+                        </a>
+                        and{" "}
+                        <a
+                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+                          target="_blank"
+                          rel="noreferrer">
+                          Disclaimer
                         </a>
                       </span>
                     </Checkbox>
