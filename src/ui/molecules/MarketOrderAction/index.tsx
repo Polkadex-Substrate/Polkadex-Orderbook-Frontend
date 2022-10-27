@@ -48,7 +48,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   } = usePlaceOrder(isSell, isLimit);
   return (
     <S.WrapperOrder>
-      {showProtectedPassword ? (
+      {!showProtectedPassword ? (
         <ProtectPassword />
       ) : (
         <>
@@ -166,11 +166,7 @@ const ProtectPassword = () => {
   const isLoading = false;
   const error = "";
 
-  const isValidSize = useMemo(
-    () => values?.password?.toString().length === 5,
-    [values.password]
-  );
-
+  const isValidSize = useMemo(() => values?.password?.length === 5, [values.password]);
   return (
     <LoadingSection isActive={isLoading} color="transparent">
       <form onChange={handleSubmit}>
