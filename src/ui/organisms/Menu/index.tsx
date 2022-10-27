@@ -156,35 +156,50 @@ const Terms = () => {
       </span>
       {state && (
         <S.TermsLinks>
-          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf">
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
+            target="_blank"
+            rel="noreferrer">
             <S.WrapperIcon>
               <div>
                 <S.Span>Terms of Use</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
-          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf">
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+            target="_blank"
+            rel="noreferrer">
             <S.WrapperIcon>
               <div>
                 <S.Span>Privacy Policy</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
-          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf">
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+            target="_blank"
+            rel="noreferrer">
             <S.WrapperIcon>
               <div>
                 <S.Span>Disclaimer</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
-          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf">
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
+            target="_blank"
+            rel="noreferrer">
             <S.WrapperIcon>
               <div>
                 <S.Span>Excluded Jurisdictions</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
-          <a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf">
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf"
+            target="_blank"
+            rel="noreferrer">
             <S.WrapperIcon>
               <div>
                 <S.Span>Data Retention Policy</S.Span>
