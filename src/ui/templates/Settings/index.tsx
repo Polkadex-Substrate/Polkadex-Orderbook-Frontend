@@ -355,7 +355,6 @@ export const SettingsTemplate = () => {
                     actionTitle="Change"
                     onClick={handleOpenAvatarModal}
                   />
-                  <Card label="Creation date" description="September 29, 2022." isLocked />
                   <AvailableMessage message="Soon">
                     <Card
                       label="Delete Account"
