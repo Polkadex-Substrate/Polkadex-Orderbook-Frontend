@@ -38,7 +38,8 @@ const successData = [
   },
   {
     title: "Funding account registered",
-    description: "Now you can create trading account and start to trading.",
+    description:
+      "You have successfully registered a Funding account and created a Trading account. Use your Trading account and start trading. You can add up to three trading accounts linked to a funding account.",
   },
 ];
 type Props = {
