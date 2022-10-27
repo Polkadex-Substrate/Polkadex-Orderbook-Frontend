@@ -48,7 +48,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   } = usePlaceOrder(isSell, isLimit);
   return (
     <S.WrapperOrder>
-      {!showProtectedPassword ? (
+      {showProtectedPassword ? (
         <ProtectPassword />
       ) : (
         <>
