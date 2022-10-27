@@ -339,7 +339,7 @@ export const SettingsTemplate = () => {
                 </S.WalletContainer>
               </S.Wallet>
               <S.Account>
-                <h2>Account details</h2>
+                <h2>Profile</h2>
                 <S.AccountContainer>
                   <Card
                     label="Email"
