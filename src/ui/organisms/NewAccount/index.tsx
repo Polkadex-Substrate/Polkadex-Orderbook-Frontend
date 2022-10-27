@@ -27,7 +27,7 @@ const data = [
   {
     title: "Register account",
     description:
-      "Trading accounts allow you to operate within the orderbook and make withdrawals. You can only have 3 trading accounts for each funding account",
+      "Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account.",
     button: "Register and create account",
   },
 ];
