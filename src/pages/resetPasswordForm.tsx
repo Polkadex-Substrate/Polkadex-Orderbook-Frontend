@@ -16,7 +16,7 @@ const ResetPasswordFormTemplate = dynamic(
 );
 const ResetPasswordForm = () => {
   const router = useRouter();
-  const hasEmail = !!useReduxSelector(selectForgotPasswordEmail)?.length;
+  const hasEmail = !!useReduxSelector(selectForgotPasswordEmail);
 
   useEffect(() => {
     if (!hasEmail) router.push("/signIn");
