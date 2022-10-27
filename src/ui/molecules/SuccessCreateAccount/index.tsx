@@ -102,11 +102,6 @@ export const SuccessCreateAccount = ({
             )}
           </S.Words>
         )}
-
-        <S.DefaultAccount>
-          <span>Default trade account</span>
-          <Switch />
-        </S.DefaultAccount>
       </S.Content>
     </S.Wrapper>
   );
