@@ -53,7 +53,6 @@ export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
-  const [amount, setAmount] = useState(0);
   const currentAccount = useReduxSelector(selectUsingAccount);
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const tradingAccountInBrowser = useReduxSelector(
@@ -117,12 +116,11 @@ export const WithdrawTemplate = () => {
     },
     validationSchema: withdrawValidations,
     validate,
-    onSubmit: (values) => {
-      setAmount(values.amount);
-      if (tradingAccountInBrowser.isLocked) {
-        setShowPassword(true);
-      } else {
-        handleSubmitWithdraw(values.amount);
+    onSubmit: ({ amount }) => {
+      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+      else {
+        /* Calling the handleSubmitWithdraw function with the amount parameter. */
+        handleSubmitWithdraw(amount);
       }
     },
   });
@@ -150,32 +148,36 @@ export const WithdrawTemplate = () => {
     [readyToClaim]
   );
 
-  const handleUnlockClose = () => !showPassword && setShowPassword(false);
-
+  const handleUnlockClose = () => setShowPassword(false);
+  const formRef = useRef(null);
   return (
     <>
-      {showPassword && (
-        <Modal open={showPassword} onClose={handleUnlockClose}>
-          <Modal.Body>
-            <S.UnlockAccount>
-              <UnlockAccount
-                onSubmit={({ password }) => {
-                  try {
-                    tradingAccountInBrowser.unlock(password);
-                    if (!tradingAccountInBrowser.isLocked) {
-                      handleSubmitWithdraw(amount);
-                    }
-                  } catch (error) {
-                    alert(error);
-                  } finally {
-                    setShowPassword(false);
-                  }
-                }}
-              />
-            </S.UnlockAccount>
-          </Modal.Body>
-        </Modal>
-      )}
+      <Modal
+        open={tradingAccountInBrowser?.isLocked && showPassword}
+        onClose={handleUnlockClose}>
+        <Modal.Body>
+          <S.UnlockAccount>
+            <S.UnlockButton type="button" onClick={handleUnlockClose}>
+              <Icons.Close />
+            </S.UnlockButton>
+            <UnlockAccount
+              onSubmit={({ password }) => {
+                try {
+                  tradingAccountInBrowser.unlock(password);
+                  if (!tradingAccountInBrowser?.isLocked)
+                    formRef?.current?.dispatchEvent(
+                      new Event("submit", { cancelable: true, bubbles: true })
+                    );
+                } catch (error) {
+                  alert(error);
+                } finally {
+                  setShowPassword(false);
+                }
+              }}
+            />
+          </S.UnlockAccount>
+        </Modal.Body>
+      </Modal>
       <Head>
         <title>Deposit | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
@@ -212,7 +214,7 @@ export const WithdrawTemplate = () => {
                     <span>{shortAddress}</span>
                   </div>
                 </S.SelectAccount>
-                <form onSubmit={handleSubmit}>
+                <form ref={formRef} onSubmit={handleSubmit}>
                   <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
                     <S.SelectInput>
                       <span>Select a coin</span>
