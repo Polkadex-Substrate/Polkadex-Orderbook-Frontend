@@ -75,7 +75,7 @@ export function useMarkets(onClose: () => void) {
   const handleChangeMarket = (e: string): void => {
     const marketToSet = markets.find((el) => el.name === e);
     if (marketToSet) {
-      router.push(`${marketToSet.id}`, undefined, { shallow: true });
+      router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, { shallow: true });
       dispatch(setCurrentMarket(marketToSet));
       onClose();
     }
