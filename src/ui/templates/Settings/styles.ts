@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 
+import { Wrapper as Checkbox } from "@polkadex/orderbook-ui/molecules/Checkbox/styles";
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -68,9 +69,15 @@ export const WalletContainer = styled.div`
     gap: 2rem;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 0.5rem;
+  `}
+`;
+export const Disclaimer = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 2rem;
   `}
 `;
+
 export const WalletContent = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -78,6 +85,7 @@ export const WalletContent = styled.div`
     gap: 1.5rem;
     max-height: 40rem;
     overflow-y: hidden;
+    padding: 0 2rem;
     :hover {
       overflow-y: auto;
       ${WalletActions} {
@@ -302,7 +310,7 @@ export const Header = styled.div`
     align-items: center;
     gap: 2rem;
     margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
@@ -312,6 +320,7 @@ export const AccountHeaderTrigger = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
     div {
       width: 0.8rem;
     }
@@ -326,6 +335,9 @@ export const AccountHeaderContent = styled.div`
   span {
     white-space: nowrap;
     font-size: 1.2rem;
+  }
+  ${Checkbox} {
+    align-items: center;
   }
 `;
 
@@ -355,9 +367,10 @@ export const WalletCard = styled.div<{ isActive?: boolean }>`
     gap: 0.5rem;
     flex-wrap: wrap;
     min-height: 6rem;
+    padding-bottom: 2rem;
+
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-      padding-bottom: 1.5rem;
     }
     ${!isActive &&
     css`

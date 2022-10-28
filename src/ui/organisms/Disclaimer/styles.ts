@@ -29,16 +29,16 @@ export const Close = styled.button`
   `}
 `;
 
-export const DisclaimerContainer = styled.div`
-  ${({ theme }) => css`
+export const DisclaimerContainer = styled.div<{ isSmall?: boolean }>`
+  ${({ theme, isSmall }) => css`
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: min-content auto;
     align-items: center;
     gap: 1rem;
     div {
-      padding: 0.8rem;
-      width: 3rem;
-      height: 3rem;
+      padding: ${isSmall ? "0.3rem" : "0.8rem"};
+      width: ${isSmall ? "1.6rem" : "3rem"};
+      height: ${isSmall ? "1.6rem" : "rem"};
       background: ${theme.colors.orange};
       border-radius: 20rem;
     }
