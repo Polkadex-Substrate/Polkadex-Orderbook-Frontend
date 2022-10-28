@@ -64,7 +64,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
               <S.Span>
                 <Decimal fixed={8} hasStyle={false}>
                   {availableAmount}
-                </Decimal>
+                </Decimal>{" "}
                 {isSell ? baseTicker : quoteTicker}
               </S.Span>
             </S.WrapperBalance>
