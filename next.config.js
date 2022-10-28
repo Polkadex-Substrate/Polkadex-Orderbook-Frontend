@@ -72,6 +72,7 @@ module.exports = withPlugins([
       IDENTITY_POOL_ID: process.env.IDENTITY_POOL_ID,
       USER_POOL_ID: process.env.USER_POOL_ID,
       USER_WEB_CLIENT_ID: process.env.USER_WEB_CLIENT_ID,
+      LANDING_PAGE: process.env.LANDING_PAGE,
     },
   },
 ]);
