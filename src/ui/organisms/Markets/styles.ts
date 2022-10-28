@@ -224,7 +224,6 @@ export const CardInfo = styled.button`
   margin-left: 0.5rem;
   :hover {
     svg {
-      transition: all 0.4s ease-in-out;
       stroke: orange;
     }
   }
