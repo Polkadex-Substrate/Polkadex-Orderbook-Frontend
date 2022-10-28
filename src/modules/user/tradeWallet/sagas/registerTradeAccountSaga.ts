@@ -44,7 +44,7 @@ export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
           mnemonic,
           account: {
             name,
-            address,
+            address: tradeAddress,
           },
         })
       );
