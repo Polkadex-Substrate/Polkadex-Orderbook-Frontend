@@ -231,7 +231,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
               <S.PasswordFooter>
                 <input
                   {...getFieldProps("passcode")}
-                  type={values.isPasscodeVisible ? "password" : "text"}
+                  type={values.isPasscodeVisible ? "text" : "password"}
                   placeholder="(Optional) Input 5-digit trading password"
                 />
                 <button
@@ -365,7 +365,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
               <S.PasswordFooter>
                 <input
                   {...getFieldProps("passcode")}
-                  type={values.isPasscodeVisible ? "password" : "text"}
+                  type={values.isPasscodeVisible ? "text" : "password"}
                   placeholder="(Optional) Enter a password"
                 />
                 <button
