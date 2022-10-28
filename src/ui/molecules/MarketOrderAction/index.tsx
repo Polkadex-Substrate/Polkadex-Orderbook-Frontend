@@ -64,7 +64,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
               <S.Span>
                 <Decimal fixed={8} hasStyle={false}>
                   {availableAmount}
-                </Decimal>
+                </Decimal>{" "}
                 {isSell ? baseTicker : quoteTicker}
               </S.Span>
             </S.WrapperBalance>
@@ -166,11 +166,7 @@ const ProtectPassword = () => {
   const isLoading = false;
   const error = "";
 
-  const isValidSize = useMemo(
-    () => values?.password?.toString().length === 5,
-    [values.password]
-  );
-
+  const isValidSize = useMemo(() => values?.password?.length === 5, [values.password]);
   return (
     <LoadingSection isActive={isLoading} color="transparent">
       <form onChange={handleSubmit}>

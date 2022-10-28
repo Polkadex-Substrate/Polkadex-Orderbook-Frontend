@@ -27,7 +27,7 @@ const data = [
   {
     title: "Register account",
     description:
-      "Trading accounts allow you to operate within the orderbook and make withdrawals. You can only have 3 trading accounts for each funding account",
+      "Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account.",
     button: "Register and create account",
   },
 ];
@@ -38,7 +38,8 @@ const successData = [
   },
   {
     title: "Funding account registered",
-    description: "Now you can create trading account and start to trading.",
+    description:
+      "You have successfully registered a Funding account and created a Trading account. Use your Trading account and start trading. You can add up to three trading accounts linked to a funding account.",
   },
 ];
 type Props = {

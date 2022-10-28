@@ -8,7 +8,7 @@ export const Logo = styled.div`
   }
 `;
 
-export const WrapperIcon = styled.a`
+export const WrapperIcon = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;

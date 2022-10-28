@@ -83,14 +83,14 @@ export const SignInTemplate = () => {
                     <span>
                       By clicking the Log In button below, I hereby agree with Polkadex{" "}
                       <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Terms of Service
                       </a>
                       ,{" "}
                       <a
-                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_Terms_of_Use.pdf"
+                        href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                         target="_blank"
                         rel="noreferrer">
                         Privacy Policy

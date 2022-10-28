@@ -85,8 +85,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   return (
     <Loading
       isVisible={isRemoveFromBlockchainLoading}
-      hasBg={false}
-      message=""
+      message="Block finalization will take a few mins."
       spinner="Keyboard">
       <S.Main>
         {shouldShowProtectedPassword ? (

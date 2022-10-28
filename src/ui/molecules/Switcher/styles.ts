@@ -47,10 +47,10 @@ export const Switch = styled.div<{ isActive?: boolean }>`
       transform: translate(0, 50%);
       ${isActive
         ? css`
-            left: 0;
+            right: 0;
           `
         : css`
-            right: 0;
+            left: 0;
           `}
 
       margin: 0 0.3rem;

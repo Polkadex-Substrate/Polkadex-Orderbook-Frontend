@@ -11,8 +11,8 @@ export const getMainAddresssLinkedToTradingAccount = (
 };
 
 export const transformAddress = (address: string, size = 8) => {
-  const firstPart = address.slice(0, size);
-  const lastPart = address.slice(address?.length - size);
+  const firstPart = address?.slice(0, size);
+  const lastPart = address?.slice(address?.length - size);
 
-  return `${firstPart}...${lastPart}`;
+  return `${firstPart ?? ""}...${lastPart ?? ""}`;
 };

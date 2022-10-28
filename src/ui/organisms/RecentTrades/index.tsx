@@ -12,40 +12,14 @@ import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 export const filters = ["all", "buy", "sell"];
 
 export const RecentTrades = () => {
-  const {
-    isDecreasing,
-    recentTrades,
-    quoteUnit,
-    baseUnit,
-    pricePrecision,
-    amountPrecision,
-    filter,
-    handleChangeFilter,
-  } = useRecentTrades();
+  const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+    useRecentTrades();
 
   return (
     <S.MainContainer>
       <S.Main>
         <S.Header>
           <h2>Recent Trades</h2>
-          <AvailableMessage message="Soon">
-            <Dropdown>
-              <Dropdown.Trigger>
-                <S.DropdownTrigger>
-                  {filter} <Icons.ArrowBottom />
-                </S.DropdownTrigger>
-              </Dropdown.Trigger>
-              <Dropdown.Menu fill="secondaryBackgroundSolid">
-                {filters.map((value) => (
-                  <Dropdown.Item
-                    key={value}
-                    onAction={() => handleChangeFilter({ filterBy: value })}>
-                    <S.DropdownMenuItem>{value}</S.DropdownMenuItem>
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </AvailableMessage>
         </S.Header>
         {recentTrades.length ? (
           <>

@@ -146,7 +146,7 @@ export const SettingsTemplate = () => {
                   {!tradeAccounts.length ? (
                     <Empty
                       title="No trading accounts"
-                      description="Trading accounts allow you to operate within the orderbook and make withdrawals. They are created from a wallet, it is only possible to have 3 per wallet."
+                      description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
                       // actionTitle="Import trading account"
                       onClick={() => console.log("Open Modal")}></Empty>
                   ) : (
@@ -339,7 +339,7 @@ export const SettingsTemplate = () => {
                 </S.WalletContainer>
               </S.Wallet>
               <S.Account>
-                <h2>Account details</h2>
+                <h2>Profile</h2>
                 <S.AccountContainer>
                   <Card
                     label="Email"
@@ -355,7 +355,6 @@ export const SettingsTemplate = () => {
                     actionTitle="Change"
                     onClick={handleOpenAvatarModal}
                   />
-                  <Card label="Creation date" description="September 29, 2022." isLocked />
                   <AvailableMessage message="Soon">
                     <Card
                       label="Delete Account"
