@@ -34,7 +34,7 @@ export const SuccessCreateAccount = ({
       },
     });
   }, []);
-  const IconComponent = Icons[state ? "Hidden" : "Show"];
+  const IconComponent = Icons[state ? "Show" : "Hidden"];
   const componentRef = useRef();
   const mnemonicArr = useMemo(() => mnemonic?.split(" "), [mnemonic]);
   const userAccounts = useReduxSelector(selectUserAccounts);
