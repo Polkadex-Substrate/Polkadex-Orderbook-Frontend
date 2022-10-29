@@ -27,6 +27,7 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useOrderHistory } from "@polkadex/orderbook-hooks";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -53,6 +54,7 @@ export const Transactions = () => {
   const [from, setFrom] = useState(subDays(now, 7));
   const [trigger, setTrigger] = useState(false);
 
+  const orderHistory = useOrderHistory(filters);
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
@@ -71,6 +73,10 @@ export const Transactions = () => {
     const now = new Date();
     dispatch(userSessionData({ dateFrom: subDays(now, 7), dateTo: now }));
   }, [trigger]);
+
+  useEffect(() => {
+
+  })
 
   const ranges = useMemo(() => {
     return [
@@ -167,10 +173,10 @@ export const Transactions = () => {
         </S.Header>
         <S.Content>
           <TabContent>
-            <OpenOrders filters={filters} />
+            <OpenOrders orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
-            <OrderHistory filters={filters} />
+            <OrderHistory orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
             <TradeHistory filters={filters} />
