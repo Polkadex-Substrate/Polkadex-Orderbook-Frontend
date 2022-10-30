@@ -202,7 +202,11 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       );
     };
 
-    if (isLimit && +form.price < currentMarket.min_price) {
+    const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
+
+    if (isLimit && +form.price > +userAvailableBalance) {
+      notify("balance not enough");
+    } else if (isLimit && +form.price < currentMarket.min_price) {
       notify("price cannot be less than min market price");
     } else if (isLimit && +form.price > currentMarket.max_price) {
       notify("price cannot be greater than max market price");
