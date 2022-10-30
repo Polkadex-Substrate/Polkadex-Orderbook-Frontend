@@ -82,7 +82,11 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
               title={isImportAccountSuccess ? "Wallet imported" : successInformation.title}
-              description={successInformation.description}
+              description={
+                isImportAccountSuccess
+                  ? successData[0].description
+                  : successInformation.description
+              }
               mnemonic={tradeInfo?.mnemonic}
               account={tradeInfo.account}
             />
