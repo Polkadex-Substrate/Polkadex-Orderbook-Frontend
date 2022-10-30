@@ -76,7 +76,7 @@ export const SignInTemplate = () => {
                     disabled={loading}
                     {...getFieldProps("password")}>
                     <S.Show type="button" onClick={() => setView(!view)}>
-                      {view ? <Icons.Hidden /> : <Icons.Show />}
+                      {view ? <Icons.Show /> : <Icons.Hidden />}
                     </S.Show>
                   </InputLine>
                   <S.Terms>

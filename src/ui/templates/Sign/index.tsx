@@ -92,7 +92,7 @@ export const SignTemplate = () => {
                     <S.Show
                       type="button"
                       onClick={() => setView({ ...view, password: !view.password })}>
-                      {view.password ? <Icons.Hidden /> : <Icons.Show />}
+                      {view.password ? <Icons.Show /> : <Icons.Hidden />}
                     </S.Show>
                   </InputLine>
                   <InputLine
@@ -110,7 +110,7 @@ export const SignTemplate = () => {
                       onClick={() =>
                         setView({ ...view, repeatPassword: !view.repeatPassword })
                       }>
-                      {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
+                      {view.repeatPassword ? <Icons.Show /> : <Icons.Hidden />}
                     </S.Show>
                   </InputLine>
                   <S.Terms>

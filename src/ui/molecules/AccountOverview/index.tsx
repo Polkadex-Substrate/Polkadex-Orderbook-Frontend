@@ -203,8 +203,8 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
         )}
       </S.Switch>
       <S.Links>
-        <Card title="Balances" icon="Wallet" onClick={() => router.push("/balances")} />
-        <Card title="Settings" icon="Settings" onClick={() => router.push("/settings")} />
+        <Card title="Balances" icon="Coins" onClick={() => router.push("/balances")} />
+        <Card title="Accounts" icon="Wallet" onClick={() => router.push("/settings")} />
         <Card title="Appearance" icon="Appearance" onClick={() => onNavigate("Appearance")} />
         <Card title="Log Out" icon="Logout" onClick={logout} />
       </S.Links>
