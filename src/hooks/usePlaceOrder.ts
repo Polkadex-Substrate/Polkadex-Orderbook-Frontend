@@ -204,7 +204,10 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
-    if (isLimit && +form.price > +userAvailableBalance) {
+    if (
+      (isLimit && !isSell && +total > +userAvailableBalance) ||
+      (isLimit && isSell && +form.amountSell > +userAvailableBalance)
+    ) {
       notify("balance not enough");
     } else if (isLimit && +form.price < currentMarket.min_price) {
       notify("price cannot be less than min market price");
