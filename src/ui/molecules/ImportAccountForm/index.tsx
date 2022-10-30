@@ -173,7 +173,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                       ))}
                     <input
                       type="text"
-                      placeholder="Enter your mnemonic"
+                      placeholder="Press enter after each word"
                       ref={mnemonicInputRef}
                       onKeyDown={onInputKeyDown}
                     />
