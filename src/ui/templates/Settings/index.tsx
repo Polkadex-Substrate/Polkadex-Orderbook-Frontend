@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { BigHead } from "@bigheads/core";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import * as S from "./styles";
