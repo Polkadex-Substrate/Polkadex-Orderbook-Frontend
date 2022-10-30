@@ -70,7 +70,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const information = data[hasData ? 1 : 0];
 
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
-  const successInformation = successData[isControllerAccountSuccess ? 1 : 1];
+  const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
   return (
     <S.Main>
