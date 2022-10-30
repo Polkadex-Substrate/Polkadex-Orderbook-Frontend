@@ -1,10 +1,17 @@
+import { useEffect } from "react";
+
 import * as S from "./styles";
 
 import { useFunds } from "@polkadex/orderbook/hooks";
 import { EmptyData, FundsCard } from "@polkadex/orderbook-ui/molecules";
 
-export const Funds = () => {
+export const Funds = ({ onHideFilters }) => {
   const { balances } = useFunds();
+
+  useEffect(() => {
+    onHideFilters(false);
+    return () => onHideFilters(true);
+  }, [onHideFilters]);
 
   return (
     <S.Wrapper>

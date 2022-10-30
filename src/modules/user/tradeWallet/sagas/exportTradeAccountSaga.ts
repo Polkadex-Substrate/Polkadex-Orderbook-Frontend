@@ -30,7 +30,7 @@ export function* exportTradeAccountFetchSaga(action: ExportTradeAccountFetch) {
         type: "ErrorAlert",
         message: {
           title: "Cannot export this account",
-          description: error.message,
+          description: "Incorrect Password",
         },
         time: new Date().getTime(),
       })

@@ -18,7 +18,7 @@ export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
     });
     return res.data.listMainAccountsByEmail ?? { accounts: [] };
   } catch (error) {
-    console.log("Error: getAllMainLinkedAccounts", error.message);
+    console.log("Error: getAllMainLinkedAccounts", error.errors);
   }
 };
 

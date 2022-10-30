@@ -152,6 +152,9 @@ export const Favorite = styled(TitleActionCard)`
     width: 100%;
     height: 100%;
   }
+  @media screen and (max-width: 430px) {
+    display: none;
+  }
 `;
 
 export const ContainerWrapper = styled.div`
@@ -163,10 +166,8 @@ export const ContainerTitle = styled.div``;
 // Card
 export const Card = styled.div`
   ${({ theme }) => css`
-    display: grid;
-    grid-gap: 1rem;
-    align-items: center;
-    padding: 1rem 0.9rem;
+    display: flex;
+    gap: 0.5rem;
     border-radius: 1.2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: 0 1.5rem;
@@ -190,33 +191,45 @@ export const Card = styled.div`
       border-color: ${theme.colors.text};
       box-shadow: ${theme.shadows.quaternary};
     }
-    @media screen and (min-width: 421px) {
-      grid-template-columns: 1fr 0.5fr auto;
-    }
   `}
 `;
 
 export const CardInfoContainer = styled.div`
+  flex: 1;
+  display: grid;
+  align-items: center;
+  padding: 1rem 0.9rem 1rem 0;
+  gap: 1rem;
+  @media screen and (max-width: 430px) {
+    padding-left: 0.9rem;
+  }
+  @media screen and (min-width: 430px) {
+    grid-template-columns: repeat(3, auto);
+  }
+`;
+export const CardInfoContent = styled.div`
   display: flex;
   align-items: center;
+  gap: 0.3rem;
 `;
 
-export const CardInfoActions = styled.div`
+export const CardInfo = styled.button`
+  display: flex;
+  align-items: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 0.4rem;
+  border-radius: 10rem;
+  width: 2.4rem;
+  margin-left: 0.5rem;
   :hover {
     svg {
-      transition: all 0.4s ease-in-out;
       stroke: orange;
     }
   }
-`;
-
-export const CardInfo = styled.div`
-  display: flex;
-  align-items: center;
+  @media screen and (max-width: 430px) {
+    display: none;
+  }
 `;
 
 export const CardToken = styled.div`
@@ -252,10 +265,9 @@ export const CardInfoWrapper = styled.div`
 `;
 
 export const CardPricing = styled.div`
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 430px) {
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 `;
 export const CardChange = styled.div<{ isNegative?: boolean }>`

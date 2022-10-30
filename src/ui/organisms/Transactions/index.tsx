@@ -14,6 +14,8 @@ import {
   Checkbox,
   Popover,
   Dropdown,
+  usePanelState,
+  useTabState,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
 import { userSessionData } from "@polkadex/orderbook-modules";
@@ -27,6 +29,7 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useOrderHistory } from "@polkadex/orderbook-hooks";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -52,7 +55,9 @@ export const Transactions = () => {
   const [to, setTo] = useState(now);
   const [from, setFrom] = useState(subDays(now, 7));
   const [trigger, setTrigger] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
+  const orderHistory = useOrderHistory(filters);
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
@@ -71,6 +76,10 @@ export const Transactions = () => {
     const now = new Date();
     dispatch(userSessionData({ dateFrom: subDays(now, 7), dateTo: now }));
   }, [trigger]);
+
+  useEffect(() => {
+
+  })
 
   const ranges = useMemo(() => {
     return [
@@ -102,81 +111,83 @@ export const Transactions = () => {
               <S.TabHeader>Funds</S.TabHeader>
             </TabHeader>
           </S.HeaderContent>
-          <S.WrapperActions>
-            <Checkbox
-              checked={filters.hiddenPairs}
-              onChange={() => handleChangeHidden("hiddenPairs")}>
-              Hide Other Pairs
-            </Checkbox>
-            <S.Flex>
-              <S.ContainerActions>
-                <Checkbox
-                  checked={filters.onlyBuy}
-                  onChange={() => handleChangeHidden("onlyBuy")}>
-                  Buy
-                </Checkbox>
-                <Checkbox
-                  checked={filters.onlySell}
-                  onChange={() => handleChangeHidden("onlySell")}>
-                  Sell
-                </Checkbox>
-              </S.ContainerActions>
-              <S.ContainerTransactions>
-                <Dropdown>
-                  <Dropdown.Trigger>
-                    <S.Icon>
-                      {filters.status}
+          {isVisible && (
+            <S.WrapperActions>
+              <Checkbox
+                checked={filters.hiddenPairs}
+                onChange={() => handleChangeHidden("hiddenPairs")}>
+                Hide Other Pairs
+              </Checkbox>
+              <S.Flex>
+                <S.ContainerActions>
+                  <Checkbox
+                    checked={filters.onlyBuy}
+                    onChange={() => handleChangeHidden("onlyBuy")}>
+                    Buy
+                  </Checkbox>
+                  <Checkbox
+                    checked={filters.onlySell}
+                    onChange={() => handleChangeHidden("onlySell")}>
+                    Sell
+                  </Checkbox>
+                </S.ContainerActions>
+                <S.ContainerTransactions>
+                  <Dropdown>
+                    <Dropdown.Trigger>
+                      <S.Icon>
+                        {filters.status}
+                        <div>
+                          <Icons.ArrowBottom />
+                        </div>
+                      </S.Icon>
+                    </Dropdown.Trigger>
+                    <Dropdown.Menu>
+                      {initialState.map((status) => (
+                        <Dropdown.Item key={status}>{status}</Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Popover>
+                    <Popover.Trigger>
                       <div>
-                        <Icons.ArrowBottom />
+                        <Icon
+                          name="Calendar"
+                          stroke="text"
+                          background="secondaryBackground"
+                          size="extraMedium"
+                          style={{ marginLeft: 10 }}
+                        />
                       </div>
-                    </S.Icon>
-                  </Dropdown.Trigger>
-                  <Dropdown.Menu>
-                    {initialState.map((status) => (
-                      <Dropdown.Item key={status}>{status}</Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Popover>
-                  <Popover.Trigger>
-                    <div>
-                      <Icon
-                        name="Calendar"
-                        stroke="text"
-                        background="secondaryBackground"
-                        size="extraMedium"
-                        style={{ marginLeft: 10 }}
+                    </Popover.Trigger>
+                    <Popover.Content>
+                      <DateRangePicker
+                        ranges={ranges}
+                        onChange={handleSelect}
+                        rangeColors={["#E6007A"]}
+                        staticRanges={defaultStaticRanges}
+                        inputRanges={[]}
                       />
-                    </div>
-                  </Popover.Trigger>
-                  <Popover.Content>
-                    <DateRangePicker
-                      ranges={ranges}
-                      onChange={handleSelect}
-                      rangeColors={["#E6007A"]}
-                      staticRanges={defaultStaticRanges}
-                      inputRanges={[]}
-                    />
-                  </Popover.Content>
-                </Popover>
+                    </Popover.Content>
+                  </Popover>
 
-                <S.Calendar></S.Calendar>
-              </S.ContainerTransactions>
-            </S.Flex>
-          </S.WrapperActions>
+                  <S.Calendar></S.Calendar>
+                </S.ContainerTransactions>
+              </S.Flex>
+            </S.WrapperActions>
+          )}
         </S.Header>
         <S.Content>
           <TabContent>
-            <OpenOrders filters={filters} />
+            <OpenOrders orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
-            <OrderHistory filters={filters} />
+            <OrderHistory orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
             <TradeHistory filters={filters} />
           </TabContent>
           <TabContent>
-            <Funds />
+            <Funds onHideFilters={(v: boolean) => setIsVisible(v)} />
           </TabContent>
         </S.Content>
       </Tabs>

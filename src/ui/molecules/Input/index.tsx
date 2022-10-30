@@ -115,7 +115,7 @@ export const PassCode = ({
   // Helper to return value from input
   const handleChange = (e: string[]) => {
     const inputValue = e.join("");
-    onChange(inputValue.length ? Number(inputValue) : "");
+    onChange(inputValue.length ? inputValue : "");
   };
 
   // Focus on input by index

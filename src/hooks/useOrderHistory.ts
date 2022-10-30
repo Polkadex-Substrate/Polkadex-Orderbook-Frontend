@@ -17,9 +17,9 @@ import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
 export function useOrderHistory(filters: Ifilters) {
   const dispatch = useDispatch();
-  const orderlist = useReduxSelector(selectOrdersHistory);
+  const orderList = useReduxSelector(selectOrdersHistory);
   const openOrders = useReduxSelector(selectOpenOrders);
-  const list = sortOrdersDescendingTime(orderlist);
+  const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasSelectedAccount);

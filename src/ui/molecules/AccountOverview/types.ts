@@ -1,6 +1,5 @@
 import { AllHTMLAttributes } from "react";
 
-import { IIcons } from "@polkadex/orderbook/utils/types";
 export type Props = {
   address: string;
   onNavigate: (value: string) => void;
@@ -10,5 +9,5 @@ export type Props = {
 export type Card = {
   title: string;
   description?: string;
-  icon: IIcons;
+  icon: string;
 } & Pick<AllHTMLAttributes<HTMLDivElement>, "onClick">;

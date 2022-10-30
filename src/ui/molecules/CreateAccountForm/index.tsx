@@ -181,7 +181,7 @@ export const CreateAccountForm = ({
               <S.PasswordFooter>
                 <input
                   {...getFieldProps("passcode")}
-                  type={values.isPasscodeVisible ? "password" : "text"}
+                  type={values.isPasscodeVisible ? "text" : "password"}
                   placeholder="(Optional) Input 5-digit trading password"
                 />
                 <button

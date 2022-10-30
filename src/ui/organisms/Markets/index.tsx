@@ -28,7 +28,7 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
         <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
         <S.Favorite>
           <button type="button" onClick={onClose}>
-            <Icon name="Close" size="small" color="text" />
+            <Icon name="Close" size="small" color="text" stroke="text" />
           </button>
         </S.Favorite>
       </S.HeaderWrapper>
@@ -143,19 +143,17 @@ const Card = ({
 }) => {
   const { handleChangeFavourite } = useCookieHook(id);
   return (
-    <S.Card onClick={changeMarket}>
-      <S.CardInfo>
-        <S.CardInfoActions>
-          <button type="button" onClick={handleChangeFavourite}>
-            <Icon
-              name="Star"
-              size="extraSmall"
-              stroke={isFavourite ? "orange" : "text"}
-              color={isFavourite ? "orange" : "secondaryBackground"}
-            />
-          </button>
-        </S.CardInfoActions>
-        <S.CardInfoContainer>
+    <S.Card>
+      <S.CardInfo type="button" onClick={handleChangeFavourite}>
+        <Icon
+          name="Star"
+          size="extraSmall"
+          stroke={isFavourite ? "orange" : "text"}
+          color={isFavourite ? "orange" : "secondaryBackground"}
+        />
+      </S.CardInfo>
+      <S.CardInfoContainer role="button" onClick={changeMarket}>
+        <S.CardInfoContent>
           <S.CardToken>
             <Icon isToken name={tokenTicker} size="medium" color="text" />
           </S.CardToken>
@@ -163,15 +161,15 @@ const Card = ({
             <span>{pair}</span>
             <p>Vol:{vol}</p>
           </S.CardInfoWrapper>
-        </S.CardInfoContainer>
-      </S.CardInfo>
-      <S.CardPricing>
-        <span>{price}</span>
-        <p>{fiat}</p>
-      </S.CardPricing>
-      <S.CardChange isNegative={isNegative(change.toString())}>
-        <span>{change}</span>
-      </S.CardChange>
+        </S.CardInfoContent>
+        <S.CardPricing>
+          <span>{price}</span>
+          <p>{fiat}</p>
+        </S.CardPricing>
+        <S.CardChange isNegative={isNegative(change.toString())}>
+          <span>{change}</span>
+        </S.CardChange>
+      </S.CardInfoContainer>
     </S.Card>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import { getIsDecreasingArray } from "../helpers/getIsDecreasingArray";
@@ -11,10 +11,6 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
 export function useRecentTrades() {
-  const [fieldValue, setFieldValue] = useState({
-    filterBy: "all",
-  });
-
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
@@ -38,7 +34,5 @@ export function useRecentTrades() {
     baseUnit: currentMarket?.base_ticker,
     pricePrecision: currentMarket?.quote_precision,
     amountPrecision: currentMarket?.base_precision,
-    filter: fieldValue.filterBy,
-    handleChangeFilter: setFieldValue,
   };
 }
