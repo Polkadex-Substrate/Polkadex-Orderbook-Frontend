@@ -80,7 +80,11 @@ export const SettingsTemplate = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <Modal open={isPreviewActive} onClose={handleClosePreviewModal} placement="start right">
+      <Modal
+        open={isPreviewActive}
+        onClose={handleClosePreviewModal}
+        placement="start right"
+        isFullHeight>
         <PreviewAccount
           onClose={handleClosePreviewModal}
           selected={previewAccountSelected}
@@ -90,7 +94,11 @@ export const SettingsTemplate = () => {
           )}
         />
       </Modal>
-      <Modal open={isActive} onClose={handleCloseNewAccount} placement="start right">
+      <Modal
+        open={isActive}
+        onClose={handleCloseNewAccount}
+        placement="start right"
+        isFullHeight>
         <NewAccount
           onClose={handleCloseNewAccount}
           selected={{

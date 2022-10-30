@@ -17,6 +17,7 @@ export const Main = styled.section`
       min-width: 50rem;
       max-width: 50rem;
     }
+    overflow-y: auto;
   `}
 `;
 export const Header = styled.button`
