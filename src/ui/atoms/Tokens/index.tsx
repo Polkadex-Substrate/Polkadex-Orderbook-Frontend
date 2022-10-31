@@ -13,6 +13,7 @@ export { default as PDEX } from "./Pdex";
 export { default as UNI } from "./Uni";
 export { default as USD } from "./Usd";
 export { default as USDT } from "./Usdt";
+export { default as CUSDT } from "./Usdt";
 export { default as ZAR } from "./Zar";
 export { default as TRST } from "./Trst";
 export { default as UNKN } from "./Unkn";
