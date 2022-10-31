@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 
 import * as S from "./styles";
 
+import { defaultConfig } from "@polkadex/orderbook-config";
 import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -41,7 +42,6 @@ export const SignTemplate = () => {
       signUp(email, password);
     },
   });
-
   return (
     <>
       <Head>
@@ -72,88 +72,97 @@ export const SignTemplate = () => {
               </S.Column>
               <S.Box>
                 <h1>Sign up to Orderbook</h1>
-                <form onSubmit={handleSubmit}>
-                  <InputLine
-                    name="email"
-                    label="Email"
-                    placeholder="Enter your email"
-                    error={errors.email && touched.email && errors.email}
-                    disabled={loading}
-                    {...getFieldProps("email")}
-                  />
-                  <InputLine
-                    name="password"
-                    type={view.password ? "text" : "password"}
-                    label="Password"
-                    placeholder="Enter your password"
-                    disabled={loading}
-                    error={errors.password && touched.password && errors.password}
-                    {...getFieldProps("password")}>
-                    <S.Show
-                      type="button"
-                      onClick={() => setView({ ...view, password: !view.password })}>
-                      {view.password ? <Icons.Show /> : <Icons.Hidden />}
-                    </S.Show>
-                  </InputLine>
-                  <InputLine
-                    name="repeatPassword"
-                    type={view.repeatPassword ? "text" : "password"}
-                    label="Repeat password"
-                    placeholder="Repeat your password"
-                    disabled={loading}
-                    error={
-                      errors.repeatPassword && touched.repeatPassword && errors.repeatPassword
-                    }
-                    {...getFieldProps("repeatPassword")}>
-                    <S.Show
-                      type="button"
-                      onClick={() =>
-                        setView({ ...view, repeatPassword: !view.repeatPassword })
-                      }>
-                      {view.repeatPassword ? <Icons.Show /> : <Icons.Hidden />}
-                    </S.Show>
-                  </InputLine>
-                  <S.Terms>
-                    <Checkbox
-                      checked={values.termsAccepted}
-                      onChange={() => setFieldValue("termsAccepted", !values.termsAccepted)}>
-                      <span>
-                        By clicking the Create Account button below, I hereby agree with
-                        Polkadex{" "}
-                        <a
-                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
-                          target="_blank"
-                          rel="noreferrer">
-                          Terms of Service
-                        </a>
-                        ,{" "}
-                        <a
-                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
-                          target="_blank"
-                          rel="noreferrer">
-                          Privacy Policy
-                        </a>
-                        ,{" "}
-                        <a
-                          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
-                          target="_blank"
-                          rel="noreferrer">
-                          Disclaimer and Legal Notice
-                        </a>{" "}
-                      </span>
-                    </Checkbox>
-                  </S.Terms>
-                  <Button
-                    type="submit"
-                    size="extraLarge"
-                    background="primary"
-                    color="white"
-                    disabled={!(isValid && dirty) || loading}
-                    isFull
-                    isLoading={loading}>
-                    Create Account
-                  </Button>
-                </form>
+                {!defaultConfig.signUpDisabled ? (
+                  <form onSubmit={handleSubmit}>
+                    <InputLine
+                      name="email"
+                      label="Email"
+                      placeholder="Enter your email"
+                      error={errors.email && touched.email && errors.email}
+                      disabled={loading}
+                      {...getFieldProps("email")}
+                    />
+                    <InputLine
+                      name="password"
+                      type={view.password ? "text" : "password"}
+                      label="Password"
+                      placeholder="Enter your password"
+                      disabled={loading}
+                      error={errors.password && touched.password && errors.password}
+                      {...getFieldProps("password")}>
+                      <S.Show
+                        type="button"
+                        onClick={() => setView({ ...view, password: !view.password })}>
+                        {view.password ? <Icons.Show /> : <Icons.Hidden />}
+                      </S.Show>
+                    </InputLine>
+                    <InputLine
+                      name="repeatPassword"
+                      type={view.repeatPassword ? "text" : "password"}
+                      label="Repeat password"
+                      placeholder="Repeat your password"
+                      disabled={loading}
+                      error={
+                        errors.repeatPassword &&
+                        touched.repeatPassword &&
+                        errors.repeatPassword
+                      }
+                      {...getFieldProps("repeatPassword")}>
+                      <S.Show
+                        type="button"
+                        onClick={() =>
+                          setView({ ...view, repeatPassword: !view.repeatPassword })
+                        }>
+                        {view.repeatPassword ? <Icons.Show /> : <Icons.Hidden />}
+                      </S.Show>
+                    </InputLine>
+                    <S.Terms>
+                      <Checkbox
+                        checked={values.termsAccepted}
+                        onChange={() => setFieldValue("termsAccepted", !values.termsAccepted)}>
+                        <span>
+                          By clicking the Create Account button below, I hereby agree with
+                          Polkadex{" "}
+                          <a
+                            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
+                            target="_blank"
+                            rel="noreferrer">
+                            Terms of Service
+                          </a>
+                          ,{" "}
+                          <a
+                            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                            target="_blank"
+                            rel="noreferrer">
+                            Privacy Policy
+                          </a>
+                          ,{" "}
+                          <a
+                            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
+                            target="_blank"
+                            rel="noreferrer">
+                            Disclaimer and Legal Notice
+                          </a>{" "}
+                        </span>
+                      </Checkbox>
+                    </S.Terms>
+                    <Button
+                      type="submit"
+                      size="extraLarge"
+                      background="primary"
+                      color="white"
+                      disabled={!(isValid && dirty) || loading}
+                      isFull
+                      isLoading={loading}>
+                      Create Account
+                    </Button>
+                  </form>
+                ) : (
+                  <S.Disabled>
+                    We are only onboarding 50 users per week at the moment. The limit has
+                    reached for this week. Check back soon.
+                  </S.Disabled>
+                )}
               </S.Box>
             </S.Card>
           </S.Container>

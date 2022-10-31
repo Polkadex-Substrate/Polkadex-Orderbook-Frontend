@@ -88,6 +88,14 @@ export const Column = styled.div`
   `}
 `;
 
+export const Disabled = styled.div`
+  padding: 2rem 0;
+  line-height: 1.5;
+  @media screen and (min-width: 880px) {
+    padding: 15rem 0;
+  }
+`;
+
 export const Box = styled.div`
   padding: 2rem;
   @media screen and (min-width: 880px) {

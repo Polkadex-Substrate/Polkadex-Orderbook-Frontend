@@ -23,4 +23,5 @@ export const defaultConfig: DefaultConfig = {
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
   maintenanceMode: false,
+  signUpDisabled: process.env.SIGNUP_DISABLED === "true",
 };
