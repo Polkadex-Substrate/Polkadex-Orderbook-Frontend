@@ -5,7 +5,7 @@ import { Button } from "@polkadex/orderbook-ui/molecules";
 export const RemoveFromDevice = ({ onAction, onClose }) => (
   <S.Wrapper>
     <S.Title>
-      <h2>Remove account from the your browser</h2>
+      <h2>Remove this account from your browser?</h2>
       <p>Don’t worry your funds are safe in your funding account</p>
     </S.Title>
     <S.Content>
