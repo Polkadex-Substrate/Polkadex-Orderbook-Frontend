@@ -70,7 +70,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const information = data[hasData ? 1 : 0];
 
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
-  const successInformation = successData[isControllerAccountSuccess ? 1 : 1];
+  const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
   return (
     <S.Main>
@@ -82,7 +82,11 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
               title={isImportAccountSuccess ? "Wallet imported" : successInformation.title}
-              description={successInformation.description}
+              description={
+                isImportAccountSuccess
+                  ? successData[0].description
+                  : successInformation.description
+              }
               mnemonic={tradeInfo?.mnemonic}
               account={tradeInfo.account}
             />
