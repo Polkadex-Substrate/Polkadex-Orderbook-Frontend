@@ -1,4 +1,4 @@
-// TODO : Fix saga
+// TODO : Fix saga - check if has mainAccount in userAccountSelectFetch
 import { all, call, put, select } from "redux-saga/effects";
 
 import { notificationPush, sendError, selectUserInfo, selectUserAccounts } from "../../../";
