@@ -44,14 +44,16 @@ export const Navbar = ({ onOpenMarkets }) => {
           />
 
           <S.WrapperVolume>
-            <S.VolumeHigh>
-              <span>24h High</span>
-              <p>{high}</p>
-            </S.VolumeHigh>
-            <S.VolumeLow>
-              <span>24h Low</span>
-              <p>{low}</p>
-            </S.VolumeLow>
+            <S.ContainerVolume>
+              <S.VolumeHigh>
+                <span>24h High</span>
+                <p>{high}</p>
+              </S.VolumeHigh>
+              <S.VolumeLow>
+                <span>24h Low</span>
+                <p>{low}</p>
+              </S.VolumeLow>
+            </S.ContainerVolume>
           </S.WrapperVolume>
         </S.ContainerInfo>
       </S.WrapperInfo>

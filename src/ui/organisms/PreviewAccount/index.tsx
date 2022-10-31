@@ -14,6 +14,9 @@ import {
   TooltipContent,
   TooltipHeader,
   Dropdown,
+  Modal,
+  RemoveFromDevice,
+  RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
 import {
   removeProxyAccountFromChainFetch,
@@ -21,7 +24,6 @@ import {
   selectIsTradeAccountRemoveLoading,
   selectDefaultTradeAccount,
   selectMainAccount,
-  selectShouldShowProtectedPassword,
   selectTradeAccount,
   selectUsingAccount,
   userAccountSelectFetch,
@@ -47,7 +49,14 @@ enum menuDisableKeysEnum {
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
   const dispatch = useDispatch();
-
+  const [remove, setRemove] = useState<{
+    isRemoveDevice: boolean;
+    status: boolean;
+    name?: string;
+  }>({
+    isRemoveDevice: false,
+    status: false,
+  });
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   useTryUnlockTradeAccount(tradingAccountInBrowser);
@@ -81,116 +90,144 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
         : exportTradeAccountFetch({ address: selected?.address })
     );
   }, [selected, tradingAccountInBrowser, dispatch]);
-
+  const handleClose = () =>
+    setRemove({
+      ...remove,
+      status: false,
+    });
+  const handleOpenRemove = (isDevice = true, name = "") =>
+    setRemove({
+      isRemoveDevice: !!isDevice,
+      status: true,
+      name,
+    });
   return (
-    <Loading
-      isVisible={isRemoveFromBlockchainLoading}
-      message="Block finalization will take a few mins."
-      spinner="Keyboard">
-      <S.Main>
-        {shouldShowProtectedPassword ? (
-          <S.UnlockAccount>
-            <UnlockAccount
-              onSubmit={({ password }) =>
-                dispatch(exportTradeAccountFetch({ address: selected.address, password }))
-              }
-              handleClose={() => dispatch(exportTradeAccountActive())}
+    <>
+      <Modal open={remove.status} onClose={handleClose}>
+        <Modal.Body>
+          {remove.isRemoveDevice ? (
+            <RemoveFromDevice
+              onAction={() => {
+                dispatch(removeTradeAccountFromBrowser({ address: selected?.address }));
+                handleClose();
+              }}
+              onClose={handleClose}
             />
-          </S.UnlockAccount>
-        ) : (
-          <>
-            <S.Header
-              type="button"
-              onClick={isRemoveFromBlockchainLoading ? undefined : onClose}>
-              <Icons.SingleArrowLeft />
-            </S.Header>
-            <S.Content>
-              <h2>Preview Wallet</h2>
-              <S.Container>
-                <S.Box>
-                  <WalletName
-                    label="Trading account name"
-                    information={String(
-                      selected?.account?.meta?.name || "Account not present in the browser"
-                    )}
-                  />
-                  <WalletAddress label="Trade wallet" information={selected?.address} />
-                  <WalletAddress
-                    label="Funding account"
-                    information={
-                      mainAccountDetails
-                        ? mainAccountDetails?.account?.meta?.name
-                        : "Funding Account not present in polkadot.js extension"
-                    }
-                    informationDisabled
-                    additionalInformation={
-                      mainAccountDetails ? transformAddress(mainAccAddress) : ""
-                    }
-                    isLocked
-                  />
-                  <ProtectedByPassword
-                    label="Protected by password"
-                    isActive={tradingAccountInBrowser?.isLocked}
-                  />
-                  <DefaultAccount
-                    label="Default trade account"
-                    tradeAddress={selected?.address}
-                  />
-                </S.Box>
-                {tradingAccountInBrowser && (
-                  <S.Button
-                    disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                    onClick={() =>
-                      dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-                    }
-                    type="button">
-                    {using ? "Using" : "Use"}
-                  </S.Button>
-                )}
-              </S.Container>
-            </S.Content>
-            <S.Footer>
-              <S.ExportButton
-                disabled={!tradingAccountInBrowser || !mainAccountDetails}
+          ) : (
+            <RemoveFromBlockchain
+              name={remove?.name}
+              onClose={handleClose}
+              onAction={() => {
+                dispatch(removeProxyAccountFromChainFetch({ address: selected?.address }));
+                handleClose();
+              }}
+            />
+          )}
+        </Modal.Body>
+      </Modal>
+      <Loading
+        isVisible={isRemoveFromBlockchainLoading}
+        message="Block finalization will take a few mins."
+        spinner="Keyboard">
+        <S.Main>
+          {shouldShowProtectedPassword ? (
+            <S.UnlockAccount>
+              <UnlockAccount
+                onSubmit={({ password }) =>
+                  dispatch(exportTradeAccountFetch({ address: selected.address, password }))
+                }
+                handleClose={() => dispatch(exportTradeAccountActive())}
+              />
+            </S.UnlockAccount>
+          ) : (
+            <>
+              <S.Header
                 type="button"
-                onClick={handleExportAccount}>
-                Export
-              </S.ExportButton>
-              <Dropdown>
-                <Dropdown.Trigger>
-                  <S.DropdownButton type="button">
-                    Remove account
-                    <div>
-                      <Icons.ArrowBottom />
-                    </div>
-                  </S.DropdownButton>
-                </Dropdown.Trigger>
-                <Dropdown.Menu
-                  fill="secondaryBackgroundSolid"
-                  disabledKeys={menuDisableKeys()}>
-                  <Dropdown.Item
-                    key={"1"}
-                    onAction={() =>
-                      dispatch(
-                        removeProxyAccountFromChainFetch({ address: selected?.address })
-                      )
-                    }>
-                    Remove from blockchain
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    key={"2"}
-                    onAction={() =>
-                      dispatch(removeTradeAccountFromBrowser({ address: selected?.address }))
-                    }>
-                    Remove from device
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </S.Footer>
-          </>
-        )}
-      </S.Main>
-    </Loading>
+                onClick={isRemoveFromBlockchainLoading ? undefined : onClose}>
+                <Icons.SingleArrowLeft />
+              </S.Header>
+              <S.Content>
+                <h2>Preview Wallet</h2>
+                <S.Container>
+                  <S.Box>
+                    <WalletName
+                      label="Trading account name"
+                      information={String(
+                        selected?.account?.meta?.name || "Account not present in the browser"
+                      )}
+                    />
+                    <WalletAddress label="Trade wallet" information={selected?.address} />
+                    <WalletAddress
+                      label="Funding account"
+                      information={
+                        mainAccountDetails
+                          ? mainAccountDetails?.account?.meta?.name
+                          : "Funding Account not present in polkadot.js extension"
+                      }
+                      informationDisabled
+                      additionalInformation={
+                        mainAccountDetails ? transformAddress(mainAccAddress) : ""
+                      }
+                      isLocked
+                    />
+                    <ProtectedByPassword
+                      label="Protected by password"
+                      isActive={tradingAccountInBrowser?.isLocked}
+                    />
+                    <DefaultAccount
+                      label="Default trade account"
+                      tradeAddress={selected?.address}
+                    />
+                  </S.Box>
+                  {tradingAccountInBrowser && (
+                    <S.Button
+                      disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                      onClick={() =>
+                        dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
+                      }
+                      type="button">
+                      {using ? "Using" : "Use"}
+                    </S.Button>
+                  )}
+                </S.Container>
+              </S.Content>
+              <S.Footer>
+                <S.ExportButton
+                  disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                  type="button"
+                  onClick={handleExportAccount}>
+                  Export
+                </S.ExportButton>
+                <Dropdown>
+                  <Dropdown.Trigger>
+                    <S.DropdownButton type="button">
+                      Remove account
+                      <div>
+                        <Icons.ArrowBottom />
+                      </div>
+                    </S.DropdownButton>
+                  </Dropdown.Trigger>
+                  <Dropdown.Menu
+                    fill="secondaryBackgroundSolid"
+                    disabledKeys={menuDisableKeys()}>
+                    <Dropdown.Item
+                      key={"1"}
+                      onAction={() =>
+                        handleOpenRemove(false, selected?.account?.meta?.name as string)
+                      }>
+                      Remove from blockchain
+                    </Dropdown.Item>
+                    <Dropdown.Item key={"2"} onAction={() => handleOpenRemove()}>
+                      Remove from device
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </S.Footer>
+            </>
+          )}
+        </S.Main>
+      </Loading>
+    </>
   );
 };
 

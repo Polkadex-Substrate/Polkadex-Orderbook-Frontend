@@ -14,8 +14,6 @@ export function* userSelectAccountSaga(action: UserAccountSelectFetch) {
     if (mainAddress) {
       const data = { tradeAddress, mainAddress };
       yield put(userAccountSelectData(data));
-    } else {
-      throw new Error("invalid Funding account");
     }
   } catch (e) {
     console.log("error: ", e);

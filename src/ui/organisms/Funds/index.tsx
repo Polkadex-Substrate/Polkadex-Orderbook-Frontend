@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import Link from "next/link";
 
 import * as S from "./styles";
 
 import { useFunds } from "@polkadex/orderbook/hooks";
-import { EmptyData, FundsCard } from "@polkadex/orderbook-ui/molecules";
+import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
+import { toCapitalize } from "@polkadex/web-helpers";
 
 export const Funds = ({ onHideFilters }) => {
   const { balances } = useFunds();
@@ -16,31 +18,68 @@ export const Funds = ({ onHideFilters }) => {
   return (
     <S.Wrapper>
       {balances.length ? (
-        <S.Table>
-          <S.Thead>
-            <S.Tr>
-              <S.Th>Token</S.Th>
-              <S.Th>Available</S.Th>
-              <S.Th>Locked</S.Th>
-              <S.Th>Reserved for withdraw</S.Th>
-              <S.Th>Actions</S.Th>
-            </S.Tr>
-          </S.Thead>
-          <S.Tbody>
-            {balances.map((balance, i) => {
-              return (
-                <FundsCard
-                  key={i}
-                  name={balance.name}
-                  ticker={balance.symbol}
-                  amount={Number(balance.free_balance) || 0}
-                  lockedAmount={Number(balance.reserved_balance) || 0}
-                  id={balance.symbol}
-                />
-              );
-            })}
-          </S.Tbody>
-        </S.Table>
+        <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
+          <Table.Header fill="none">
+            <Table.Column>
+              <S.Column style={{ paddingLeft: 10 }}>Token</S.Column>
+            </Table.Column>
+            <Table.Column>
+              <S.Column>Available</S.Column>
+            </Table.Column>
+            <Table.Column>
+              <S.Column>Locked</S.Column>
+            </Table.Column>
+            <Table.Column>
+              <S.Column>Reserved</S.Column>
+            </Table.Column>
+            <Table.Column>
+              <S.Column>Actions</S.Column>
+            </Table.Column>
+          </Table.Header>
+          <Table.Body striped>
+            {balances.map((item) => (
+              <Table.Row key={item.asset_id}>
+                <Table.Cell>
+                  <S.CellFlex>
+                    <S.TokenIcon>
+                      <Icon isToken name={item.symbol} size="extraSmall" />
+                    </S.TokenIcon>
+                    <S.Cell>
+                      <span>
+                        {toCapitalize(item.name)} <small> {item.symbol}</small>
+                      </span>
+                    </S.Cell>
+                  </S.CellFlex>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{Number(item?.free_balance || 0).toFixed(8)} </span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{Number(item?.reserved_balance || 0).toFixed(8)} </span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Cell>
+                    <span>{Number(item?.reserved_balance || 0).toFixed(8)} </span>
+                  </S.Cell>
+                </Table.Cell>
+                <Table.Cell>
+                  <S.Actions>
+                    <Link href={`/deposit/${item.symbol}`}>
+                      <S.DepositLink>Deposit</S.DepositLink>
+                    </Link>
+                    <Link href={`/withdraw/${item.symbol}`}>
+                      <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                    </Link>
+                  </S.Actions>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
       ) : (
         <S.EmptyWrapper>
           <EmptyData />

@@ -108,8 +108,11 @@ export const VolumeLow = styled.div<{ isNegative?: boolean }>`
     color: inherit;
   }
 `;
-
 export const WrapperVolume = styled.div`
+  display: flex;
+`;
+
+export const ContainerVolume = styled.div`
   span {
     display: block;
     margin-right: 1rem;
@@ -120,8 +123,9 @@ export const WrapperVolume = styled.div`
     white-space: nowrap;
   }
   div {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-content: flex-end;
   }
   p {
     font-weight: 500;

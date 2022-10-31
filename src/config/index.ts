@@ -11,7 +11,7 @@ export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
-  landingPageMarket: process.env.LANDING_PAGE || "PDEXTDOT",
+  landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,
@@ -23,4 +23,5 @@ export const defaultConfig: DefaultConfig = {
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
   maintenanceMode: false,
+  signUpDisabled: process.env.SIGNUP_DISABLED === "true",
 };

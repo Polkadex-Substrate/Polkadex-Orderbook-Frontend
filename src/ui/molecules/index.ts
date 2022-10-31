@@ -50,5 +50,7 @@ export * from "./CreateAccountForm";
 export * from "./SuccessCreateAccount";
 export * from "./SuccessImport";
 export * from "./Dropdown";
+export * from "./RemoveFromBlockchain";
+export * from "./RemoveFromDevice";
 
 export * as LoadingIcons from "./LoadingIcons";
