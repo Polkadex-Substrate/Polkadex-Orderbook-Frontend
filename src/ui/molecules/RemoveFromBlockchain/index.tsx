@@ -7,7 +7,6 @@ import { Button, InputLine } from "@polkadex/orderbook-ui/molecules";
 import { typeValidations } from "@polkadex/orderbook/validations";
 
 export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
-  console.log(name);
   const { values, touched, handleSubmit, errors, getFieldProps } = useFormik({
     initialValues: {
       account: "",
