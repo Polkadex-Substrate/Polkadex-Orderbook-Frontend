@@ -137,3 +137,11 @@ export const Show = styled.button`
     }
   `}
 `;
+
+export const Disabled = styled.div`
+  padding: 2rem 0;
+  line-height: 1.5;
+  @media screen and (min-width: 880px) {
+    padding: 15rem 0;
+  }
+`;

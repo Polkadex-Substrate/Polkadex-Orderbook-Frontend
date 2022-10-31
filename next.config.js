@@ -73,6 +73,7 @@ module.exports = withPlugins([
       USER_POOL_ID: process.env.USER_POOL_ID,
       USER_WEB_CLIENT_ID: process.env.USER_WEB_CLIENT_ID,
       LANDING_PAGE: process.env.LANDING_PAGE,
+      SIGNUP_DISABLED: process.env.SIGNUP_DISABLED,
     },
   },
 ]);
