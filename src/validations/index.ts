@@ -44,7 +44,6 @@ export const newPasswordValidations = Yup.object().shape({
   repeatPassword: Yup.string()
     .required()
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  code: Yup.string().required("Required"),
 });
 
 export const signValidations = Yup.object().shape({

@@ -153,6 +153,7 @@ export interface ForgotPasswordFetch {
   payload: {
     code: string;
     newPassword: string;
+    email: string;
   };
 }
 export interface ForgotPasswordData {

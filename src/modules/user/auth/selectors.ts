@@ -34,7 +34,3 @@ export const selectForgotPasswordLoading = (
 export const selectForgotPasswordSuccess = (
   state: RootState
 ): AuthState["forgotPasswordSuccess"] => state.user.auth.forgotPasswordSuccess;
-
-export const selectForgotPasswordEmail = (
-  state: RootState
-): AuthState["forgotPasswordEmail"] => state.user.auth.forgotPasswordEmail;

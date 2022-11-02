@@ -98,7 +98,7 @@ const Success = () => {
       </div>
       <h2>Email has been sent!</h2>
       <p>
-        If this email address was used to create an account, a code will arrive in your email.
+        If this email address was used to create an account, a link will arrive in your email.
         Please check your email.
       </p>
       <small>You will be automatically redirected in 5 seconds. </small>

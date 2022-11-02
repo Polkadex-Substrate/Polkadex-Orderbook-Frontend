@@ -13,9 +13,9 @@ import {
 export function* forgotPasswordCodeSaga({ payload }: ForgotPasswordCode) {
   try {
     yield call(() => Auth.forgotPassword(payload.toLowerCase()));
-    yield put(forgotPasswordData(payload));
+    yield put(forgotPasswordData());
     yield delay(5000);
-    Router.push("/resetPasswordForm");
+    Router.push("/signIn");
     yield put(forgotPasswordReset());
   } catch (error) {
     console.log(error);

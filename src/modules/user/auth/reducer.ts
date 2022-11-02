@@ -41,7 +41,6 @@ export interface AuthState {
   signUpSuccess: boolean;
   forgotPasswordLoading: boolean;
   forgotPasswordSuccess: boolean;
-  forgotPasswordEmail?: string;
   changePasswordLoading: boolean;
   changePasswordSuccess: boolean;
 }
@@ -59,7 +58,6 @@ export const initialStateAuth: AuthState = {
   signUpSuccess: false,
   forgotPasswordLoading: false,
   forgotPasswordSuccess: false,
-  forgotPasswordEmail: "",
   changePasswordLoading: false,
   changePasswordSuccess: false,
 };
@@ -104,18 +102,15 @@ export const authReducer = (state = initialStateAuth, action: AuthAction) => {
     }
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logoutError: action.error };
+    case AUTH_FORGOT_PASSWORD_CODE:
     case AUTH_FORGOT_PASSWORD_FETCH:
       return { ...state, forgotPasswordLoading: true };
     case AUTH_FORGOT_PASSWORD_DATA:
       return { ...state, forgotPasswordLoading: false, forgotPasswordSuccess: true };
     case AUTH_FORGOT_PASSWORD_ERROR:
-      return { ...state, forgotPasswordLoading: false, forgotPasswordSuccess: false };
-    case AUTH_FORGOT_PASSWORD_CODE:
-      return { ...state, forgotPasswordLoading: true, forgotPasswordEmail: action.payload };
     case AUTH_FORGOT_PASSWORD_RESET:
       return {
         ...state,
-        forgotPasswordEmail: action.payload ? "" : state.forgotPasswordEmail,
         forgotPasswordLoading: false,
         forgotPasswordSuccess: false,
       };

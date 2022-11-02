@@ -17,7 +17,13 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 
-export const ResetPasswordFormTemplate = () => {
+export const ResetPasswordFormTemplate = ({
+  email,
+  code,
+}: {
+  email: string;
+  code: string;
+}) => {
   const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,
@@ -26,15 +32,15 @@ export const ResetPasswordFormTemplate = () => {
   const isLoading = useReduxSelector(selectForgotPasswordLoading);
   const isSuccess = useReduxSelector(selectForgotPasswordSuccess);
   const dispatch = useDispatch();
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
       repeatPassword: "",
-      code: "",
     },
     validationSchema: newPasswordValidations,
-    onSubmit: ({ code, password }) => {
-      dispatch(forgotPasswordFetch({ code, newPassword: password }));
+    onSubmit: ({ password }) => {
+      dispatch(forgotPasswordFetch({ code, email, newPassword: password }));
     },
   });
 
@@ -64,14 +70,6 @@ export const ResetPasswordFormTemplate = () => {
                     <p>For safety of your account, please use strong password.</p>
                   </S.BoxTitle>
                   <form onSubmit={handleSubmit}>
-                    <InputLine
-                      name="code"
-                      label="Email code verification"
-                      placeholder="000000"
-                      error={errors.code && touched.code && errors.code}
-                      disabled={isLoading}
-                      {...getFieldProps("code")}
-                    />
                     <InputLine
                       name="password"
                       type={view.password ? "text" : "password"}
