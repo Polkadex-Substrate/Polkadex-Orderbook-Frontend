@@ -74,6 +74,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
             </S.WrapperIcon>
           </Link>
           <Terms />
+          <Help />
         </S.Container>
         <S.WrapperIcon onClick={changeTheme} as="div">
           <Tooltip>
@@ -203,6 +204,59 @@ const Terms = () => {
             <S.WrapperIcon>
               <div>
                 <S.Span>Data Retention Policy</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+        </S.TermsLinks>
+      )}
+    </S.Terms>
+  );
+};
+
+const Help = () => {
+  const [state, setState] = useState(false);
+  return (
+    <S.Terms>
+      <span role="button" onClick={() => setState(!state)}>
+        <S.WrapperIcon>
+          <div>
+            <Icon name="Question" background="none" stroke="text" size="large" />
+          </div>
+          <div>
+            <S.Span>Help</S.Span>
+          </div>
+        </S.WrapperIcon>
+      </span>
+      {state && (
+        <S.TermsLinks>
+          <a
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_FAQ.pdf"
+            target="_blank"
+            rel="noreferrer">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>FAQ</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://discord.gg/G4KMw2sGGe" target="_blank" rel="noreferrer">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Discord</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://t.me/Polkadex" target="_blank" rel="noreferrer">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Telegram</S.Span>
+              </div>
+            </S.WrapperIcon>
+          </a>
+          <a href="https://twitter.com/polkadex" target="_blank" rel="noreferrer">
+            <S.WrapperIcon>
+              <div>
+                <S.Span>Twitter</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
