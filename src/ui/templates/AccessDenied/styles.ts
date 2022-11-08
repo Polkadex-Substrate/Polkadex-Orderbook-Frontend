@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
-import { motion } from "framer-motion";
 
-export const Wrapper = styled(motion.section)`
+export const Wrapper = styled.section`
   ${({ theme }) => css`
     min-height: 100vh;
     display: flex;
