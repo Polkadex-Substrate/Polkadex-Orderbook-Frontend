@@ -25,8 +25,7 @@ export const AccessDeniedTemplate = () => {
             <span>403</span>
             <h1>Access denied</h1>
             <p>
-              Your IP address indicates indicates that you are attempting to access our
-              services from a{" "}
+              Your IP address indicates that you are attempting to access our services from a{" "}
               <a
                 href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
                 target="_blank"
