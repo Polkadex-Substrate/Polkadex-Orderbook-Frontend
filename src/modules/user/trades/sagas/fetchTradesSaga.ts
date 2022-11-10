@@ -9,7 +9,7 @@ import {
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type TradesQueryResult = {
   m: string;
@@ -48,16 +48,16 @@ const fetchUserTrades = async (
   dateTo: Date
 ): Promise<UserTrade[]> => {
   // TODO: make limit resonable by utilizing nextToken
-  const res: any = await sendQueryToAppSync({
-    query: queries.listTradesByMainAccount,
-    variables: {
+  const tradesRaw: TradesQueryResult[] = await fetchAllFromAppSync(
+    queries.listTradesByMainAccount,
+    {
       main_account: proxy_account,
       from: dateFrom.toISOString(),
       to: dateTo.toISOString(),
-      limit: 1000,
+      limit: 100,
     },
-  });
-  const tradesRaw: TradesQueryResult[] = res.data.listTradesByMainAccount.items;
+    "listTradesByMainAccount"
+  );
   const trades: UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
     price: trade.p,

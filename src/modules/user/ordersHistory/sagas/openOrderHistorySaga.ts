@@ -7,7 +7,7 @@ import { alertPush, UserAccount, selectUsingAccount } from "../../../";
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -46,14 +46,14 @@ export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
   }
 }
 const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
-  const res: any = await sendQueryToAppSync({
-    query: queries.listOpenOrdersByMainAccount,
-    variables: {
+  const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
+    queries.listOpenOrdersByMainAccount,
+    {
       main_account: proxy_acc,
-      limit: 1000,
+      limit: 100,
     },
-  });
-  const ordersRaw: orderHistoryQueryResult[] = res.data.listOpenOrdersByMainAccount.items;
+    "listOpenOrdersByMainAccount"
+  );
   const orders = ordersRaw.map((order) => ({
     main_account: proxy_acc,
     id: order.id,

@@ -7,7 +7,7 @@ import { Transaction } from "../reducer";
 import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
 
 type TransactionQueryResult = {
@@ -60,17 +60,16 @@ const fetchTransactions = async (
   limit = 100000
 ): Promise<Transaction[]> => {
   const fromDate = subtractMonths(monthsBefore);
-  const res: any = await sendQueryToAppSync({
-    query: queries.listTransactionsByMainAccount,
-    variables: {
+  const txs: TransactionQueryResult[] = await fetchAllFromAppSync(
+    queries.listTransactionsByMainAccount,
+    {
       main_account: address,
       from: fromDate.toISOString(),
       to: new Date().toISOString(),
       limit,
     },
-  });
-
-  const txs: TransactionQueryResult[] = res.data.listTransactionsByMainAccount.items;
+    "listTransactionsByMainAccount"
+  );
   const transactions: Transaction[] = txs.map((item) => ({
     amount: item.q,
     asset: item.a,
