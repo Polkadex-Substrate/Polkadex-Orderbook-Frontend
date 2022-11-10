@@ -1,10 +1,8 @@
 import { AppProps } from "next/app";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
-import keyring from "@polkadot/ui-keyring";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { withSSRContext } from "aws-amplify";
@@ -24,7 +22,6 @@ import {
   userData,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
-const { cryptoWaitReady } = await import("@polkadot/util-crypto");
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -45,14 +42,6 @@ function App({ Component, pageProps }: AppProps) {
   useUserDataFetch();
   const color = useSelector(selectCurrentColorTheme);
 
-  const cryptoWait = async () => {
-    await cryptoWaitReady();
-    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
-  };
-
-  useEffect(() => {
-    cryptoWait();
-  }, []);
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
