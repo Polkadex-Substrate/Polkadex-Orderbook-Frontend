@@ -11,3 +11,4 @@ export * from "./Settings";
 export * from "./Balances";
 export * from "./ResetPassword";
 export * from "./ResetPasswordForm";
+export * from "./AccessDenied";
