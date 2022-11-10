@@ -15,10 +15,10 @@
   "dependencies": {
     "@bigheads/core": "^0.3.3",
     "@next/bundle-analyzer": "^13.0.2",
-    "@polkadot/api": "^8.0.2",
-    "@polkadot/extension-dapp": "^0.43.2",
+    "@polkadot/api": "^9.7.1",
+    "@polkadot/extension-dapp": "^0.44.6",
     "@polkadot/ui-keyring": "^2.2.1",
-    "@polkadot/util-crypto": "^9.0.1",
+    "@polkadot/util-crypto": "^10.1.11",
     "@prisma/client": "^3.13.0",
     "@react-aria/focus": "^3.7.0",
     "@react-aria/menu": "^3.6.0",
