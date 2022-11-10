@@ -8,7 +8,6 @@ import {
   marketsFetch,
   rangerConnectFetch,
   selectIsUserSignedIn,
-  selectRangerIsReady,
   selectShouldRangerConnect,
   tradeAccountsFetch,
   userAuthFetch,
@@ -20,17 +19,14 @@ export const useInit = () => {
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
   const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
-  const isRangerConnected = useReduxSelector(selectRangerIsReady);
 
   // basic initialization
   useEffect(() => {
     if (shouldRangerConnect) dispatch(rangerConnectFetch());
-    else if (isRangerConnected) {
-      dispatch(tradeAccountsFetch());
-      dispatch(extensionWalletFetch());
-      dispatch(assetsFetch());
-    }
-  }, [dispatch, shouldRangerConnect, isRangerConnected]);
+    dispatch(tradeAccountsFetch());
+    dispatch(extensionWalletFetch());
+    dispatch(assetsFetch());
+  }, [dispatch, shouldRangerConnect]);
 
   useEffect(() => {
     if (isSignedIn) dispatch(userAuthFetch());

@@ -3,15 +3,8 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { eventChannel, END } from "@redux-saga/core";
 
 import { alertPush, sendError } from "../../..";
-import {
-  rangerConnectError,
-  rangerConnectData,
-  rangerNoExtension,
-  rangerInitKeyring,
-  rangerConnectFetch,
-} from "../actions";
+import { rangerConnectError, rangerConnectData, rangerNoExtension } from "../actions";
 import { orderbookTypes as types } from "../types";
-import { RANGER_CONNECT_DATA } from "../constants";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 export function* rangerFetchSaga() {
@@ -26,7 +19,6 @@ export function* rangerFetchSaga() {
     while (true) {
       const action = yield take(channel);
       yield put(action);
-      if (action.type === RANGER_CONNECT_DATA) yield all([put(rangerInitKeyring())]);
     }
   } catch (error) {
     yield put(

@@ -6,6 +6,9 @@ import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { withSSRContext } from "aws-amplify";
+import { ReactNode, useEffect } from "react";
+import { cryptoWaitReady } from "@polkadot/util-crypto";
+import keyring from "@polkadot/ui-keyring";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -40,6 +43,23 @@ const Notifications = dynamic(
 function App({ Component, pageProps }: AppProps) {
   useInit();
   useUserDataFetch();
+
+  return (
+    <ThemeWrapper>
+      <Component {...pageProps} />;
+    </ThemeWrapper>
+  );
+}
+
+const ThemeWrapper = ({ children }: { children: ReactNode }) => {
+  const cryptoWait = async () => {
+    await cryptoWaitReady();
+    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+  };
+
+  useEffect(() => {
+    cryptoWait();
+  }, []);
   const color = useSelector(selectCurrentColorTheme);
 
   return (
@@ -57,13 +77,12 @@ function App({ Component, pageProps }: AppProps) {
             showSpinner: false,
           }}
         />
+        {children}
         <GlobalStyles />
-        <Component {...pageProps} />
       </ThemeProvider>
     </OverlayProvider>
   );
-}
-
+};
 // TODO: Move to sagas || Improve
 App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
