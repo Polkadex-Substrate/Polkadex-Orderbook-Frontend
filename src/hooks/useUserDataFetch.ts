@@ -8,23 +8,24 @@ import { userEventsFetch } from "../modules/user/userEventsListener";
 
 import { useReduxSelector } from "./useReduxSelector";
 
-import { selectUsingAccount } from "@polkadex/orderbook-modules";
+import { selectRangerIsReady, selectUsingAccount } from "@polkadex/orderbook-modules";
 
 export const useUserDataFetch = () => {
   const address = useReduxSelector(selectUsingAccount).mainAddress;
   const dispatch = useDispatch();
   const isAssetsFetched = useReduxSelector(selectAssetsFetchSuccess);
+  const isRangerConnected = useReduxSelector(selectRangerIsReady);
+
   // use user address here instead of hasUser as we need to refetch these on user change
   useEffect(() => {
-    if (address) {
+    if (address && isRangerConnected) {
       dispatch(balancesFetch());
     }
-  }, [isAssetsFetched, address, dispatch]);
+  }, [isAssetsFetched, address, dispatch, isRangerConnected]);
 
   useEffect(() => {
     if (address) {
       dispatch(userSessionFetch());
-      dispatch(userEventsFetch());
-    }
-  }, [dispatch, address]);
+    } else if (!!address && isRangerConnected) dispatch(userEventsFetch());
+  }, [dispatch, address, isRangerConnected]);
 };
