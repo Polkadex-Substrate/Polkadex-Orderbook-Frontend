@@ -36,4 +36,5 @@ export const defaultConfig: DefaultConfig = {
   msPricesUpdates: 1000,
   maintenanceMode: false,
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
+  reconnectRangerTime: 30000,
 };

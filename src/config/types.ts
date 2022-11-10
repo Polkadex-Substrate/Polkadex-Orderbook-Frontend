@@ -15,4 +15,5 @@ export type DefaultConfig = {
   msPricesUpdates: number;
   maintenanceMode: boolean;
   signUpDisabled: boolean;
+  reconnectRangerTime: number;
 };

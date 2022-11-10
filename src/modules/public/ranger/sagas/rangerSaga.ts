@@ -8,6 +8,7 @@ import {
   rangerConnectData,
   rangerNoExtension,
   rangerInitKeyring,
+  rangerConnectFetch,
 } from "../actions";
 import { orderbookTypes as types } from "../types";
 import { RANGER_CONNECT_DATA } from "../constants";
@@ -40,25 +41,34 @@ export function* rangerFetchSaga() {
   }
 }
 
+let api: ApiPromise;
+
 /* Connecting to the Polkadex Chain. */
 function* fetchRanger() {
   return eventChannel((emitter) => {
-    const provider = new WsProvider(defaultConfig.polkadexChain);
-    const api = new ApiPromise({ provider, types });
-
-    api.on("ready", () => emitter(rangerConnectData(api)));
-    api.on("disconnected", () => emitter(END));
-    api.on("error", () =>
-      emitter(
-        sendError({
-          error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
-          processingType: "alert",
-          extraOptions: {
-            actionError: rangerConnectError,
-          },
-        })
-      )
-    );
+    const createWs = () => {
+      const provider = new WsProvider(defaultConfig.polkadexChain);
+      api = new ApiPromise({ provider, types });
+      api.on("ready", () => emitter(rangerConnectData(api)));
+      api.on("disconnected", () =>
+        setTimeout(() => {
+          console.log(`Reconnecting to ${defaultConfig.polkadexChain}`);
+          createWs();
+        }, defaultConfig.reconnectRangerTime)
+      );
+      api.on("error", () =>
+        emitter(
+          sendError({
+            error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
+            processingType: "alert",
+            extraOptions: {
+              actionError: rangerConnectError,
+            },
+          })
+        )
+      );
+    };
+    createWs();
     return () => {
       api.disconnect();
     };
