@@ -33,7 +33,7 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
           price: data.p,
           amount: data.q,
           market_id: data.m,
-          timestamp: new Date(data.t).toISOString(),
+          timestamp: Number(data.t),
         };
         yield put(recentTradesPush(trade));
       }

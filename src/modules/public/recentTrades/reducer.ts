@@ -30,11 +30,13 @@ const initialState: RecentTradesState = {
 export const recentTradesReducer = (state = initialState, action: RecentTradesActions) => {
   switch (action.type) {
     case RECENT_TRADES_DATA: {
+      const trades = action.payload;
+      trades.sort((a, b) => b.timestamp - a.timestamp);
       return {
-        list: sliceArray(action.payload, defaultStorageLimit),
+        list: sliceArray(trades, defaultStorageLimit),
         loading: false,
-        currentTrade: action.payload[0],
-        lastTrade: action.payload[1],
+        currentTrade: trades[0],
+        lastTrade: trades[1],
       };
     }
     case RECENT_TRADES_ERROR: {
@@ -54,7 +56,7 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
     case RECENT_TRADES_PUSH: {
       return {
         ...state,
-        list: sliceArray([...state.list, action.payload], defaultStorageLimit),
+        list: sliceArray([action.payload, ...state.list], defaultStorageLimit),
       };
     }
 

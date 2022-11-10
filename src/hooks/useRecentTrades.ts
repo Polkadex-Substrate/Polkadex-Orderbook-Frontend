@@ -13,14 +13,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export function useRecentTrades() {
   const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket);
-  const allRecentTrades = useMemo(
-    () =>
-      recentTrades.sort(
-        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      ),
-    [recentTrades]
-  );
+  const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket); // already sorted
 
   useEffect(() => {
     if (currentMarket?.m) dispatch(recentTradesChannelFetch(currentMarket));
@@ -29,7 +22,7 @@ export function useRecentTrades() {
   const isDecreasing = getIsDecreasingArray(recentTrades);
   return {
     isDecreasing,
-    recentTrades: allRecentTrades,
+    recentTrades,
     quoteUnit: currentMarket?.quote_ticker,
     baseUnit: currentMarket?.base_ticker,
     pricePrecision: currentMarket?.quote_precision,
