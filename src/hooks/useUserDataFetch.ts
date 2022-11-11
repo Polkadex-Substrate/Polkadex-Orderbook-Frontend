@@ -21,7 +21,6 @@ export const useUserDataFetch = () => {
       dispatch(balancesFetch());
     }
   }, [isAssetsFetched, address, dispatch]);
-
   useEffect(() => {
     if (address) {
       dispatch(userSessionFetch());
