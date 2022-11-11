@@ -6,7 +6,6 @@ import {
   RANGER_CONNECT_FETCH,
   RANGER_DISCONNECT_DATA,
   RANGER_DISCONNECT_FETCH,
-  RANGER_INIT_KEYRING,
   RANGER_NO_EXTENSION,
 } from "./constants";
 
@@ -37,16 +36,12 @@ export interface RangerConnectError {
 export interface RangerNoExtension {
   type: typeof RANGER_NO_EXTENSION;
 }
-export interface RangerInitKeyring {
-  type: typeof RANGER_INIT_KEYRING;
-}
 export type RangerAction =
   | RangerConnectFetch
   | RangerConnectData
   | RangerConnectError
   | RangerDisconnectData
-  | RangerNoExtension
-  | RangerInitKeyring;
+  | RangerNoExtension;
 
 export type RangerErrorType = typeof RANGER_CONNECT_ERROR;
 
@@ -73,7 +68,4 @@ export const rangerDisconnectFetch = (): RangerDisconnectFetch => ({
 
 export const rangerNoExtension = (): RangerNoExtension => ({
   type: RANGER_NO_EXTENSION,
-});
-export const rangerInitKeyring = (): RangerInitKeyring => ({
-  type: RANGER_INIT_KEYRING,
 });
