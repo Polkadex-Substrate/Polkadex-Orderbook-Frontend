@@ -19,11 +19,13 @@ export const useUserDataFetch = () => {
   useEffect(() => {
     if (address) {
       dispatch(balancesFetch());
-      dispatch(userEventsFetch());
     }
   }, [isAssetsFetched, address, dispatch]);
 
   useEffect(() => {
-    if (address) dispatch(userSessionFetch());
+    if (address) {
+      dispatch(userSessionFetch());
+      dispatch(userEventsFetch());
+    }
   }, [dispatch, address]);
 };
