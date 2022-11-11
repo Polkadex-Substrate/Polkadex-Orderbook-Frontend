@@ -1,6 +1,5 @@
-import { APIClass, withSSRContext, API as ampliyfyApi } from "aws-amplify";
+import { APIClass, API as ampliyfyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
-import { AmplifyClass } from "@aws-amplify/core";
 
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
@@ -35,4 +34,22 @@ export const sendQueryToAppSync = async ({
     throw new Error("Invalid authentication type.");
   }
   return res;
+};
+
+export const fetchAllFromAppSync = async (
+  query: string,
+  variables: Record<string, any>,
+  key: string
+) => {
+  let fullResponse = [];
+  let nextToken = null;
+  do {
+    const res = await sendQueryToAppSync({
+      query,
+      variables: nextToken ? { ...variables, nextToken } : variables,
+    });
+    fullResponse = [...fullResponse, ...res.data[key].items];
+    nextToken = res.data[key].nextToken;
+  } while (nextToken);
+  return fullResponse;
 };
