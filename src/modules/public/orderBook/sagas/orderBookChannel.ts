@@ -7,7 +7,6 @@ import { alertPush } from "../../alertHandler";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { Market } from "../../markets";
 
-import { Utils } from "@polkadex/web-helpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 type OrderbookRawUpdate = {
