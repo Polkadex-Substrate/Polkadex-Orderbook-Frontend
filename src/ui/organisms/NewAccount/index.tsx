@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import * as S from "./styles";
 
@@ -52,16 +52,15 @@ type Props = {
 };
 
 export const NewAccount = ({ onClose = undefined, selected, isLoading = false }: Props) => {
-  const [state, setState] = useState({
-    status: false,
-    isImport: false,
-  });
-
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
+  const [state, setState] = useState({
+    status: tradeInfo.defaultImportActive,
+    isImport: false,
+  });
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
@@ -125,6 +124,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
                       {state.status && !state.isImport && (
                         <ImportAccountForm
                           onCancel={() => handleCancel(!state.status, true)}
+                          defaultImportJson={tradeInfo.defaultImportActive}
                         />
                       )}
                     </Card>
