@@ -30,7 +30,7 @@ function* handleAlertError(error) {
     alertPush({
       message: {
         title: "Error",
-        description: transFormErrorMessage(error.message),
+        description: transFormErrorMessage(error?.message ?? error),
       },
       type: "Alert",
     })
@@ -38,5 +38,5 @@ function* handleAlertError(error) {
 }
 
 function* handleConsoleError(error) {
-  yield call(() => process.browser && window.console.log(error.message));
+  yield call(() => process.browser && window.console.log(error?.message ?? error));
 }

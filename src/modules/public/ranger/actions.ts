@@ -36,7 +36,6 @@ export interface RangerConnectError {
 export interface RangerNoExtension {
   type: typeof RANGER_NO_EXTENSION;
 }
-
 export type RangerAction =
   | RangerConnectFetch
   | RangerConnectData

@@ -10,7 +10,6 @@ import {
   selectAssetIdMap,
   isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type BalanceQueryResult = {

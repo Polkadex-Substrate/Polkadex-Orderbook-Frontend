@@ -2,7 +2,7 @@
 /** @type {import('next').NextConfig} */
 const withPlugins = require("next-compose-plugins");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
+  enabled: process.env.ANALYZE === "false",
 });
 
 module.exports = withPlugins([
@@ -74,6 +74,7 @@ module.exports = withPlugins([
       USER_WEB_CLIENT_ID: process.env.USER_WEB_CLIENT_ID,
       LANDING_PAGE: process.env.LANDING_PAGE,
       SIGNUP_DISABLED: process.env.SIGNUP_DISABLED,
+      PIN_POINT_CLIENT_ID: process.env.PIN_POINT_CLIENT_ID,
     },
   },
 ]);
