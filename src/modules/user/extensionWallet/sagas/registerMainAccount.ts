@@ -51,6 +51,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         )
       );
       if (res.isSuccess) {
+        yield call(executeRegisterEmail, data, signature);
         yield put(
           registerTradeAccountData({
             mnemonic,
@@ -61,7 +62,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           })
         );
         yield put(registerMainAccountData());
-        yield call(executeRegisterEmail, data, signature);
         yield put(
           userProfileAccountPush({
             tradeAddress,
