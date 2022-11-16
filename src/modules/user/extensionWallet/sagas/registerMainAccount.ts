@@ -9,10 +9,10 @@ import {
   removeTradeAccountFromBrowser,
   selectRangerApi,
   selectUserEmail,
-  selectExtensionWalletAccounts,
   registerTradeAccountData,
   userProfileAccountPush,
   userProfileMainAccountPush,
+  selectMainAccount,
 } from "../../..";
 import {
   registerMainAccountData,
@@ -23,18 +23,15 @@ import {
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { ErrorMessages } from "@polkadex/web-constants";
 
-let tradeAddr = "";
 type RegisterEmailData = { email: string; main_address: string };
 
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
+  let data: RegisterEmailData, signature: string;
+  const { mainAccount, tradeAddress, mnemonic } = action.payload;
   try {
-    const controllerWallets = yield select(selectExtensionWalletAccounts);
-    const { mainAccount, tradeAddress, mnemonic } = action.payload;
-    const selectedControllerAccount = controllerWallets.find(
-      ({ account }) => account.address === mainAccount
-    );
-    tradeAddr = tradeAddress;
+    const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
 
@@ -42,11 +39,9 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
     if (hasAddressAndEmail) {
-      const { data, signature } = yield call(
-        createSignedData,
-        selectedControllerAccount,
-        email
-      );
+      const signedData = yield call(createSignedData, selectedControllerAccount, email);
+      data = signedData.data;
+      signature = signedData.signature;
       const res = yield call(() =>
         registerMainAccount(
           api,
@@ -82,7 +77,16 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     }
   } catch (error) {
     console.log("error:", error);
-    yield put(removeTradeAccountFromBrowser({ address: tradeAddr }));
+
+    // if account is already registered , it means that that sending data to aws failed on a previous attempt
+    // but it was successfully on the blockchain, since the transaction was submitted and signed by the wallet
+    // it is assumed that the wallet belongs to the user, so we do a retry of sending to aws.
+
+    if (error.message === ErrorMessages.OCEX_ALREADY_REGISTERED) {
+      yield call(retryRegisterToAppsync, data, signature, tradeAddress, mainAccount);
+      return;
+    }
+    yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
     yield put(registerMainAccountError());
     yield put(
       notificationPush({
@@ -135,3 +139,31 @@ const executeRegisterEmail = async (data: RegisterEmailData, signature: string) 
   });
   return res;
 };
+
+function* retryRegisterToAppsync(
+  data: RegisterEmailData,
+  signature: string,
+  tradeAddress,
+  mainAddress
+) {
+  try {
+    yield call(executeRegisterEmail, data, signature);
+    yield put(
+      userProfileAccountPush({
+        tradeAddress,
+        mainAddress,
+      })
+    );
+    yield put(userProfileMainAccountPush(mainAddress));
+  } catch (error) {
+    console.log("error");
+    yield put(registerMainAccountError());
+    yield put(
+      notificationPush({
+        message: { title: "Cannot Register Account to Server!", description: error.message },
+        type: "ErrorAlert",
+        time: new Date().getTime(),
+      })
+    );
+  }
+}
