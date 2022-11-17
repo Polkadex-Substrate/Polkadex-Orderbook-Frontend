@@ -56,7 +56,6 @@ export const SettingsTemplate = () => {
     tradeAccounts,
     user,
     userAccounts,
-    linkedMainAddress,
     isActive,
     isLoading,
     setState,
@@ -71,6 +70,7 @@ export const SettingsTemplate = () => {
     filterTradeAccountsByControllerAccount,
     handleFilterTradeAccountByController,
     defaultTradeAddress,
+    defaultFundingAddress,
     avatarModal,
     handleCloseAvatarModal,
     handleOpenAvatarModal,
@@ -346,6 +346,7 @@ export const SettingsTemplate = () => {
                                 address={account.address}
                                 name={account.meta.name}
                                 isUsing={isUsing}
+                                isDefault={defaultFundingAddress === account.address}
                                 handleRegister={(account: ExtensionAccount) => {
                                   handleChangeCurrentControllerWallet(account);
                                   dispatch(
@@ -409,11 +410,13 @@ type ControllerWaletsProps = {
   name: string;
   isUsing: boolean;
   handleRegister?: (account: ExtensionAccount) => void;
+  isDefault: boolean;
 };
 const ControllerWallets = ({
   address,
   name,
   isUsing,
+  isDefault,
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
@@ -422,8 +425,8 @@ const ControllerWallets = ({
   return (
     <WalletCard
       isUsing={isUsing}
-      isDefault={isUsing}
-      defaultTitle="Default Funding account"
+      isDefault={isDefault}
+      defaultTitle="Linked to default trading account"
       name={name || "--"}
       address={address}
       additionalInfo={

@@ -69,13 +69,16 @@ export const DepositTemplate = () => {
   // which keys are symmetrical to our values/initialValues
   const validate = (values) => {
     const errors = {} as any;
-    if (values.amount.includes("e")) {
+    if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
       errors.amount = "use a valid amount instead";
     }
     if (+values.amount > onChainBalance) {
       errors.amount = "Amount cannot be greater than balance";
     }
-
+    const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
+    if (balanceAfterDeposit < 1) {
+      errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
+    }
     return errors;
   };
 

@@ -1,4 +1,4 @@
-import { APIClass, API } from "aws-amplify";
+import { API } from "aws-amplify";
 
 import * as queries from "../../../../graphql/queries";
 
