@@ -63,7 +63,7 @@ export const resetPasswordValidations = Yup.object().shape({
 export const withdrawValidations = Yup.object().shape({
   amount: Yup.number()
     .required("Required")
-    .min(0.01, "Too Short!")
+    .min(0.0001, "Too Small!")
     .typeError("Must be a number"),
 });
 export const typeValidations = Yup.object().shape({

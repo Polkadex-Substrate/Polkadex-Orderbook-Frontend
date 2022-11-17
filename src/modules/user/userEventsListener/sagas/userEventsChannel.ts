@@ -82,18 +82,18 @@ function createActionFromUserEvent(eventData: any) {
     case "RegisterAccount":
       return registerMainAccountUpdateEvent(data);
     case "AddProxy":
-      return registerSuccessNofiication("Trade account added", "New Trade account created");
+      return registerSuccessNotification("Trade account added", "New Trade account created");
     case "TradeFormat":
       return userTradesUpdateEvent(data);
     case "RemoveProxy":
-      return registerSuccessNofiication(
+      return registerSuccessNotification(
         "Trade account removed",
         "Trade account removal Confirmed"
       );
   }
 }
 
-const registerSuccessNofiication = (title: string, description: string) =>
+const registerSuccessNotification = (title: string, description: string) =>
   notificationPush({
     type: "SuccessAlert",
     message: {
