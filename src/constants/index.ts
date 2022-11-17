@@ -39,5 +39,5 @@ export const LOCAL_STORAGE_ID = {
 };
 
 export const ErrorMessages = {
-  OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered",
+  OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered: ",
 };

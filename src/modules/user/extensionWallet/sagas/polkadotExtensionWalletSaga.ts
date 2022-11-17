@@ -68,7 +68,8 @@ function* extensionAccountsSubscription() {
         );
         const allAccounts = await Promise.all(extensionAccountPromises);
         emit(extensionWalletData({ allAccounts }));
-      }
+      },
+      { ss58Format: 42 }
     );
     return () => unsubscribe.then((fn) => fn());
   });
