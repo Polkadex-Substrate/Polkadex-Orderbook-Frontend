@@ -139,7 +139,7 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {!!controllerWallets?.length && hasRegisteredMainAccount && (
+                  {hasRegisteredMainAccount && (
                     <ButtonWallet
                       type="button"
                       onClick={() => {
