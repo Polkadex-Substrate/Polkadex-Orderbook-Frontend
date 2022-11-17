@@ -37,3 +37,7 @@ export const LOCAL_STORAGE_ID = {
   DEFAULT_AVATAR: "default_avatar",
   DEFAULT_DISCLAIMER: "default_disclaimer",
 };
+
+export const ErrorMessages = {
+  OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered",
+};

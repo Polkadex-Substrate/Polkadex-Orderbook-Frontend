@@ -46,15 +46,19 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeWrapper>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </ThemeWrapper>
   );
 }
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   const cryptoWait = async () => {
-    await cryptoWaitReady();
-    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+    try {
+      await cryptoWaitReady();
+      keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   useEffect(() => {

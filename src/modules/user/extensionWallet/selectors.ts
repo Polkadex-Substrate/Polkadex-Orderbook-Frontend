@@ -10,7 +10,7 @@ export const selectIsAddressInExtension =
   (state: RootState): boolean => {
     return (
       address &&
-      selectExtensionWalletAccounts(state).some(({ account }) => account?.address === address)
+      selectExtensionWalletAccounts(state)?.some(({ account }) => account?.address === address)
     );
   };
 
