@@ -146,7 +146,7 @@ export const SettingsTemplate = () => {
                         handleChangeCurrentControllerWallet(null);
                         dispatch(registerAccountModalActive());
                       }}>
-                      New Account
+                      {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
                     </ButtonWallet>
                   )}
                 </S.WalletTitle>
