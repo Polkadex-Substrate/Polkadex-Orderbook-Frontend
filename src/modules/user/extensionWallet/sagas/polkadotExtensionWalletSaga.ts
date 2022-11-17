@@ -28,9 +28,10 @@ export function* polkadotExtensionWalletSaga() {
 
 async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
   try {
-    const { web3Accounts, web3Enable, web3FromAddress } = await import(
+    const { web3Accounts, web3Enable, web3FromAddress, web3EnablePromise } = await import(
       "@polkadot/extension-dapp"
     );
+    await web3EnablePromise;
     const extensions = await web3Enable("polkadex");
     if (extensions.length === 0) {
       throw new Error("no extensions installed");
