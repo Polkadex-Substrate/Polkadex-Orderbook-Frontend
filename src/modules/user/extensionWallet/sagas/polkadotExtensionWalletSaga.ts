@@ -31,7 +31,10 @@ async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
     const { web3Accounts, web3Enable, web3FromAddress, web3EnablePromise } = await import(
       "@polkadot/extension-dapp"
     );
-    await web3EnablePromise;
+    const isAuthGiven = await web3EnablePromise;
+    if (!isAuthGiven) {
+      throw new Error("Please give authorization in polkadot.js wallet");
+    }
     const extensions = await web3Enable("polkadex");
     if (extensions.length === 0) {
       throw new Error("no extensions installed");
