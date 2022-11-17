@@ -261,6 +261,19 @@ export const SettingsTemplate = () => {
                                       Use
                                     </S.Button>
                                   )}
+                                  {!isPresentInBrowser && (
+                                    <S.Button
+                                      type="button"
+                                      onClick={() =>
+                                        dispatch(
+                                          registerAccountModalActive({
+                                            defaultImportActive: true,
+                                          })
+                                        )
+                                      }>
+                                      Import Account
+                                    </S.Button>
+                                  )}
                                   <S.Preview
                                     type="button"
                                     onClick={() =>
@@ -338,8 +351,10 @@ export const SettingsTemplate = () => {
                                   handleChangeCurrentControllerWallet(account);
                                   dispatch(
                                     registerAccountModalActive({
-                                      name: account.account.meta.name,
-                                      address: account.account.address,
+                                      data: {
+                                        name: account.account.meta.name,
+                                        address: account.account.address,
+                                      },
                                     })
                                   );
                                 }}

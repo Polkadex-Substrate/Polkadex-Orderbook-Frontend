@@ -46,7 +46,7 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeWrapper>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </ThemeWrapper>
   );
 }

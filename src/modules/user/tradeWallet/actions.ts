@@ -66,8 +66,11 @@ export interface RegisterTradeAccountData {
 export interface RegisterTradeAccountModalActive {
   type: typeof USER_TRADE_ACCOUNT_MODAL_ACTIVE;
   payload?: {
-    name: string;
-    address: string;
+    data?: {
+      name: string;
+      address: string;
+    };
+    defaultImportActive?: boolean;
   };
 }
 export interface PreviewTradeAccountModalCancel {
