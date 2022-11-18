@@ -271,7 +271,7 @@ export const SettingsTemplate = () => {
                                           })
                                         )
                                       }>
-                                      Import Account
+                                      Import
                                     </S.Button>
                                   )}
                                   <S.Preview
