@@ -69,3 +69,7 @@ export const selectDefaultAvatarId = (state: RootState): number =>
 
 export const selectDefaultAvatarOptions = (state: RootState): AvatarProps =>
   randomAvatars?.find((v) => v.id === selectDefaultAvatarId(state)) as AvatarProps;
+
+  export const selectUserFavoriteMarkets = (state: RootState): string[] => {
+    return state.user.profile.userMarket.favoriteMarkets;
+  };
