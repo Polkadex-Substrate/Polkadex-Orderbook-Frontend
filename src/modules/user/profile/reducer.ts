@@ -16,6 +16,7 @@ import {
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
   PROFILE_RESET_USER,
   PROFILE_SET_PROFILE_AVATAR,
+  PROFILE_USER_FAVORITE_MARKET_PUSH,
 } from "./constants";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
@@ -29,6 +30,9 @@ export interface ProfileState {
   };
   userProfile?: {
     avatar?: string;
+  };
+  userMarket: {
+    favoriteMarkets: string[];
   };
   selectedAccount: UserAccount;
   defaultTradeAccount: string;
@@ -62,6 +66,9 @@ export const initialStateProfile: ProfileState = {
     mainAddress: "",
   },
   defaultTradeAccount: "",
+  userMarket: {
+    favoriteMarkets: [],
+  },
   isAuthFetching: false,
   isAuthSuccess: false,
   isDataLoading: false,
@@ -122,6 +129,22 @@ export const profileReducer = (state = initialStateProfile, action: ProfileActio
       return {
         ...state,
         selectedAccount: action.payload,
+      };
+    }
+    case PROFILE_USER_FAVORITE_MARKET_PUSH: {
+      const currentFavorites = [...state.userMarket.favoriteMarkets];
+      const favoriteMarketId = action.payload;
+      const isPresent = currentFavorites.includes(favoriteMarketId);
+      if (isPresent) {
+        currentFavorites.splice(currentFavorites.indexOf(favoriteMarketId), 1);
+      } else {
+        currentFavorites.push(favoriteMarketId);
+      }
+      return {
+        ...state,
+        userMarket: {
+          favoriteMarkets: currentFavorites,
+        },
       };
     }
     case PROFILE_USER_CHANGE_INIT_BANNER:
