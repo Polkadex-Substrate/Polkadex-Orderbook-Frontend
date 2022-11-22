@@ -46,6 +46,7 @@ export type RegisterTradeAccount = {
     name: string;
     address: string;
   };
+  defaultImportActive?: boolean;
   mnemonic?: string;
   account?: {
     name: string;
@@ -65,6 +66,7 @@ const initialState: TradeAccountsState = {
   removesInLoading: [],
   registerAccountModal: {
     isActive: false,
+    defaultImportActive: false,
   },
   importAccountSuccess: false,
   previewAccountModal: {
@@ -137,7 +139,8 @@ export const TradeAccountsReducer = (
         registerAccountModal: {
           ...state.registerAccountModal,
           isActive: true,
-          selectedAddress: action?.payload,
+          selectedAddress: action?.payload?.data,
+          defaultImportActive: action.payload?.defaultImportActive,
         },
       };
     case USER_TRADE_ACCOUNT_MODAL_CANCEL:
@@ -169,6 +172,7 @@ export const TradeAccountsReducer = (
         ...state,
         registerAccountModal: {
           isActive: false,
+          defaultImportActive: false,
         },
         registerAccountLoading: false,
         registerAccountSuccess: false,

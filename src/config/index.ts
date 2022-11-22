@@ -1,4 +1,4 @@
-import { Amplify } from "aws-amplify";
+import { Amplify, Analytics, Auth } from "aws-amplify";
 
 import awsconfig from "../aws-exports";
 
@@ -6,6 +6,18 @@ import { DefaultConfig } from ".";
 export * from "./types";
 
 Amplify.configure(awsconfig);
+
+const analyticsConfig = {
+  AWSPinpoint: {
+    // Amazon Pinpoint App Client ID
+    appId: process.env.PIN_POINT_CLIENT_ID,
+    // Amazon service region
+    region: process.env.API_REGION,
+    mandatorySignIn: false,
+  },
+};
+
+Analytics.configure(analyticsConfig);
 
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
@@ -24,4 +36,5 @@ export const defaultConfig: DefaultConfig = {
   msPricesUpdates: 1000,
   maintenanceMode: false,
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
+  reconnectRangerTime: 30000,
 };

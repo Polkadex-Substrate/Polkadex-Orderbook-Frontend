@@ -37,9 +37,8 @@ export function useOrderbook() {
 
   const currentPrice = Number(currentTrade);
   const lastPrice = Number(lastTrade);
-
   const isPriceUpValue =
-    currentPrice > lastPrice ? true : lastPrice === prevTradePrice && isPriceUp;
+    currentPrice > lastPrice ? true : lastPrice === prevTradePrice ? isPriceUp : false;
 
   useEffect(() => {
     setIsPriceUp(isPriceUpValue);

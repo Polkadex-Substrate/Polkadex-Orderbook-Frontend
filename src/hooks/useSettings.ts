@@ -14,6 +14,7 @@ import {
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
   selectIsRegisterMainAccountLoading,
+  selectLinkedMainAddress,
   selectLinkedMainAddresses,
   selectPreviewTradeAccountSelect,
   selectRegisterTradeAccountInfo,
@@ -59,6 +60,7 @@ export const useSettings = () => {
     selectRegisterTradeAccountSuccess
   );
   const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
+  const defaultFundingAddress = useReduxSelector(selectLinkedMainAddress(defaultTradeAddress));
   const isPreviewActive = useReduxSelector(selectIsPreviewTradeAccountActive);
   const previewAccountSelected = useReduxSelector(selectPreviewTradeAccountSelect);
   const isLoading = isTradeAccountLoading || isControllerAccountLoading;
@@ -130,9 +132,8 @@ export const useSettings = () => {
   );
 
   const hasRegisteredMainAccount = useMemo(
-    () =>
-      controllerWallets?.some((value) => linkedMainAddress?.includes(value.account.address)),
-    [controllerWallets, linkedMainAddress]
+    () => linkedMainAddress?.length > 0,
+    [linkedMainAddress]
   );
 
   const handleCloseNewAccount = () => {
@@ -194,6 +195,7 @@ export const useSettings = () => {
     filterTradeAccountsByControllerAccount: filterTradeAccountsByControllerAccountHeader,
     handleFilterTradeAccountByController: setFilterTradeAccountsByControllerAccount,
     defaultTradeAddress,
+    defaultFundingAddress,
     avatarModal,
     handleCloseAvatarModal: () => setAvatarModal(false),
     handleOpenAvatarModal: () => setAvatarModal(true),

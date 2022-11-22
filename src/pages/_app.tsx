@@ -1,13 +1,14 @@
 import { AppProps } from "next/app";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
-import keyring from "@polkadot/ui-keyring";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { withSSRContext } from "aws-amplify";
+import { ReactNode, useEffect } from "react";
+import { cryptoWaitReady } from "@polkadot/util-crypto";
+import keyring from "@polkadot/ui-keyring";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -24,7 +25,6 @@ import {
   userData,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
-const { cryptoWaitReady } = await import("@polkadot/util-crypto");
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -43,16 +43,29 @@ const Notifications = dynamic(
 function App({ Component, pageProps }: AppProps) {
   useInit();
   useUserDataFetch();
-  const color = useSelector(selectCurrentColorTheme);
 
+  return (
+    <ThemeWrapper>
+      <Component {...pageProps} />
+    </ThemeWrapper>
+  );
+}
+
+const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   const cryptoWait = async () => {
-    await cryptoWaitReady();
-    keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+    try {
+      await cryptoWaitReady();
+      keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   useEffect(() => {
     cryptoWait();
   }, []);
+  const color = useSelector(selectCurrentColorTheme);
+
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
@@ -68,13 +81,12 @@ function App({ Component, pageProps }: AppProps) {
             showSpinner: false,
           }}
         />
+        {children}
         <GlobalStyles />
-        <Component {...pageProps} />
       </ThemeProvider>
     </OverlayProvider>
   );
-}
-
+};
 // TODO: Move to sagas || Improve
 App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -51,8 +51,7 @@ export function* ordersExecuteSaga(action: OrderExecuteFetch) {
           notificationPush({
             type: "SuccessAlert",
             message: {
-              title: "Order placed",
-              description: `OrderId: ${res.data.place_order}`,
+              title: "Order Placed",
             },
             time: new Date().getTime(),
           })

@@ -1,4 +1,4 @@
-import { call, put, take } from "redux-saga/effects";
+import { all, call, put, take } from "redux-saga/effects";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { eventChannel, END } from "@redux-saga/core";
 
@@ -7,7 +7,6 @@ import { rangerConnectError, rangerConnectData, rangerNoExtension } from "../act
 import { orderbookTypes as types } from "../types";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
-
 export function* rangerFetchSaga() {
   try {
     /* Checking if the extension is installed. */
@@ -34,25 +33,34 @@ export function* rangerFetchSaga() {
   }
 }
 
+let api: ApiPromise;
+
 /* Connecting to the Polkadex Chain. */
 function* fetchRanger() {
   return eventChannel((emitter) => {
-    const provider = new WsProvider(defaultConfig.polkadexChain);
-    const api = new ApiPromise({ provider, types });
-
-    api.on("ready", () => emitter(rangerConnectData(api)));
-    api.on("disconnected", () => emitter(END));
-    api.on("error", () =>
-      emitter(
-        sendError({
-          error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
-          processingType: "alert",
-          extraOptions: {
-            actionError: rangerConnectError,
-          },
-        })
-      )
-    );
+    const createWs = () => {
+      const provider = new WsProvider(defaultConfig.polkadexChain);
+      api = new ApiPromise({ provider, types });
+      api.on("ready", () => emitter(rangerConnectData(api)));
+      api.on("disconnected", () =>
+        setTimeout(() => {
+          console.log(`Reconnecting to ${defaultConfig.polkadexChain}`);
+          createWs();
+        }, defaultConfig.reconnectRangerTime)
+      );
+      api.on("error", () =>
+        emitter(
+          sendError({
+            error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
+            processingType: "alert",
+            extraOptions: {
+              actionError: rangerConnectError,
+            },
+          })
+        )
+      );
+    };
+    createWs();
     return () => {
       api.disconnect();
     };

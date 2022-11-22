@@ -80,7 +80,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
-    currentMarket?.quote_precision || 0
+    pricePrecision || 0
   );
 
   /**

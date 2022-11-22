@@ -35,8 +35,8 @@ const informationData = [
     title: "Ledger device",
   },
 ];
-export const ImportAccountForm = ({ onCancel = undefined }) => {
-  const [state, setState] = useState("");
+export const ImportAccountForm = ({ onCancel = undefined, defaultImportJson = false }) => {
+  const [state, setState] = useState(defaultImportJson ? "json" : "");
 
   const SelectedComponent = useMemo(() => {
     switch (state) {

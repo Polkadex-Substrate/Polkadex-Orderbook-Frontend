@@ -4,7 +4,7 @@ import { PublicTrade, recentTradesData, sendError } from "../../../";
 import { recentTradesError, RecentTradesFetch } from "../actions";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type RawTrades = {
   m: string;
@@ -18,7 +18,7 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
     if (market) {
       const res: any = yield call(() => fetchRecentTrade(market));
       const trades: PublicTrade[] = res.map((x) => ({
-        market_id: x.m,
+        market_id: market,
         price: x.p,
         amount: x.q,
         timestamp: Number(x.t),
@@ -39,9 +39,10 @@ export function* recentTradesFetchSaga(action: RecentTradesFetch) {
 }
 
 const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
-  const res: any = await sendQueryToAppSync({
-    query: getRecentTrades,
-    variables: { m: market, limit },
-  });
-  return res.data.getRecentTrades.items;
+  const res = await fetchAllFromAppSync(
+    getRecentTrades,
+    { m: market, limit },
+    "getRecentTrades"
+  );
+  return res;
 };

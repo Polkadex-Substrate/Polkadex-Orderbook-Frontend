@@ -11,15 +11,17 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
+  selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsRegisterMainAccountSuccess,
+  selectLinkedMainAddresses,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
 } from "@polkadex/orderbook-modules";
 
 const data = [
   {
-    title: "Add account",
+    title: "Add trading account",
     description:
       "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control. All data is stored in your browser.",
     button: "Create account",
@@ -52,23 +54,23 @@ type Props = {
 };
 
 export const NewAccount = ({ onClose = undefined, selected, isLoading = false }: Props) => {
-  const [state, setState] = useState({
-    status: false,
-    isImport: false,
-  });
-
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
+  const [state, setState] = useState({
+    status: tradeInfo.defaultImportActive,
+    isImport: false,
+  });
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
-
+  const hasExtensionAccounts = useReduxSelector(selectExtensionWalletAccounts)?.length > 0;
+  const hasLinkedAccounts = useReduxSelector(selectLinkedMainAddresses)?.length > 0;
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
@@ -81,7 +83,9 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
         <S.Content>
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
-              title={isImportAccountSuccess ? "Wallet imported" : successInformation.title}
+              title={
+                isImportAccountSuccess ? "trading account imported" : successInformation.title
+              }
               description={
                 isImportAccountSuccess
                   ? successData[0].description
@@ -99,10 +103,10 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
               <S.Container>
                 <S.Box>
                   <Card
-                    label="Create new account"
+                    label="Create new trading account"
                     description="Quickly create a trading account."
                     icon="AddWallet"
-                    isActive={!state.status || state.isImport}
+                    isActive={hasExtensionAccounts && (!state.status || state.isImport)}
                     handleChange={
                       hasData ? undefined : () => handleCancel(!state.status, true)
                     }>
@@ -117,14 +121,15 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
                   </Card>
                   {!hasData && (
                     <Card
-                      label="Import existing account"
-                      description="Import wallet using your mnemonic phrases. "
+                      label="Import existing trading account"
+                      description="Import existing trading account using your mnemonic phrases. "
                       icon="AddMore"
-                      isActive={!state.status || !state.isImport}
+                      isActive={hasLinkedAccounts && (!state.status || !state.isImport)}
                       handleChange={() => handleCancel(!state.status, false)}>
                       {state.status && !state.isImport && (
                         <ImportAccountForm
                           onCancel={() => handleCancel(!state.status, true)}
+                          defaultImportJson={tradeInfo.defaultImportActive}
                         />
                       )}
                     </Card>
