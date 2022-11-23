@@ -139,14 +139,14 @@ export const SettingsTemplate = () => {
                     </Tooltip>
                     <h2>Trading accounts</h2>
                   </S.WalletTitleWrapper>
-                  {!!controllerWallets?.length && hasRegisteredMainAccount && (
+                  {hasRegisteredMainAccount && (
                     <ButtonWallet
                       type="button"
                       onClick={() => {
                         handleChangeCurrentControllerWallet(null);
                         dispatch(registerAccountModalActive());
                       }}>
-                      New Account
+                      {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
                     </ButtonWallet>
                   )}
                 </S.WalletTitle>
@@ -271,7 +271,7 @@ export const SettingsTemplate = () => {
                                           })
                                         )
                                       }>
-                                      Import Account
+                                      Import
                                     </S.Button>
                                   )}
                                   <S.Preview
