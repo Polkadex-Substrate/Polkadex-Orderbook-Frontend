@@ -52,5 +52,6 @@ export * from "./SuccessImport";
 export * from "./Dropdown";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
+export * from "./SliderPercentage"
 
 export * as LoadingIcons from "./LoadingIcons";
