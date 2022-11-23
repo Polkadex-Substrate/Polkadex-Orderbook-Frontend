@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -12,6 +12,7 @@ import {
   LoadingSection,
   MarketInput,
   PassCode,
+  SliderPercentage,
 } from "@polkadex/orderbook-ui/molecules";
 import {
   usePlaceOrder,
@@ -20,7 +21,6 @@ import {
 } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import {
-  selectBrowserTradeAccounts,
   selectTradeAccount,
   selectUsingAccount,
   unlockTradeAccount,
@@ -31,6 +31,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
     changeAmount,
     changePrice,
     updateRange,
+    handleSliderClick,
     rangeValue,
     price,
     total,
@@ -45,7 +46,9 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
     isSignedIn,
     isOrderExecuted,
     showProtectedPassword,
+    slider,
   } = usePlaceOrder(isSell, isLimit);
+
   return (
     <S.WrapperOrder>
       {showProtectedPassword ? (
@@ -99,9 +102,11 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
                 onChange={(e) => changeAmount(e.currentTarget.value)}
                 disabled={isOrderLoading}
               />
-              <S.RangeWrapper>
-                <Range values={rangeValue} setValues={updateRange} />
-              </S.RangeWrapper>
+              <S.SliderWrapper>
+                {slider.map((data, index) => (
+                  <SliderPercentage {...data} key={index} handleOnClick={handleSliderClick} />
+                ))}
+              </S.SliderWrapper>
 
               {isLimit && (
                 <MarketInput
