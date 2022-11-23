@@ -10,6 +10,8 @@ import {
   setCurrentMarket,
   defaultTickers,
   selectMarketTickers,
+  userFavoriteMarketPush,
+  selectUserFavoriteMarkets,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 export type InitialMarkets = {
@@ -32,7 +34,7 @@ export function useMarkets(onClose: () => void) {
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const cookieData = cookie.parse(document.cookie);
+  const favorites = useReduxSelector(selectUserFavoriteMarkets)
 
   /**
    * @description Get the single market information for the current market
@@ -48,12 +50,16 @@ export function useMarkets(onClose: () => void) {
    */
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log({
-      searchFieldValue: e.target.value
+      searchFieldValue: e.target.value,
     });
 
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
-  }
+  };
 
+  const handleSelectedFavorite = (id: string) => {
+    // this should dispatch an action to make store favorites to the dynamo db
+    dispatch(userFavoriteMarketPush(id.trim()));
+  };
 
   /**
    * Select Tab by pair name
@@ -75,7 +81,9 @@ export function useMarkets(onClose: () => void) {
   const handleChangeMarket = (e: string): void => {
     const marketToSet = markets.find((el) => el.name === e);
     if (marketToSet) {
-      router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, { shallow: true });
+      router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, {
+        shallow: true,
+      });
       dispatch(setCurrentMarket(marketToSet));
       onClose();
     }
@@ -98,7 +106,7 @@ export function useMarkets(onClose: () => void) {
         price_change_percent_num: Number.parseFloat(
           (ticker || defaultTickers).priceChangePercent24Hr
         ),
-        isFavourite: cookieData?.favouriteMarkets?.includes(item.id),
+        isFavourite: favorites.includes(item.id),
       };
     });
     const allFavoriteFilters = allTickets.filter((value) =>
@@ -143,6 +151,7 @@ export function useMarkets(onClose: () => void) {
     handleChangeMarket,
     handleShowFavourite,
     marketTokens,
+    handleSelectedFavorite,
     marketTickers,
     fieldValue,
     currentTickerName: currentMarket?.name,
