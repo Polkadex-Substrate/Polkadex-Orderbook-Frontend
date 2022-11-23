@@ -5,7 +5,7 @@ export const Wrapper = styled.div<{isActive: boolean}>`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: 0.7rem;
     border-radius: 0.5rem;
     background-color: ${isActive? theme.colors.primary : theme.colors.tertiaryBackground};
     width: 100%;
