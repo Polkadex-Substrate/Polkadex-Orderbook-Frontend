@@ -76,7 +76,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       throw new Error("Email or address is not valid");
     }
   } catch (error) {
-    console.log("error:", error);
+    console.log("error in registration:", error.message);
 
     // if account is already registered , it means that that sending data to aws failed on a previous attempt
     // but it was successfully on the blockchain, since the transaction was submitted and signed by the wallet

@@ -132,9 +132,8 @@ export const useSettings = () => {
   );
 
   const hasRegisteredMainAccount = useMemo(
-    () =>
-      controllerWallets?.some((value) => linkedMainAddress?.includes(value.account.address)),
-    [controllerWallets, linkedMainAddress]
+    () => linkedMainAddress?.length > 0,
+    [linkedMainAddress]
   );
 
   const handleCloseNewAccount = () => {
