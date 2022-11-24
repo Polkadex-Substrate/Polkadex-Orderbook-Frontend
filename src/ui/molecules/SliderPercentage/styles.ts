@@ -7,6 +7,7 @@ export const Wrapper = styled.div<{isActive: boolean}>`
     align-items: center;
     padding: 0.7rem;
     border-radius: 0.5rem;
+    color: ${isActive && theme.colors.white};
     background-color: ${isActive? theme.colors.primary : theme.colors.tertiaryBackground};
     width: 100%;
     :hover {
