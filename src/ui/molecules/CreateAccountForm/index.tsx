@@ -16,6 +16,7 @@ import {
   selectExtensionWalletAccounts,
   selectLinkedMainAddresses,
   tradeAccountPush,
+  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
@@ -75,6 +76,13 @@ export const CreateAccountForm = ({
             mnemonic,
           })
         );
+
+        dispatch(
+          userAccountSelectFetch({
+            tradeAddress: pair.address,
+          })
+        );
+
       } else {
         dispatch(
           registerTradeAccountFetch({
