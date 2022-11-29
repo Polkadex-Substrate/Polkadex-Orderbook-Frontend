@@ -76,13 +76,6 @@ export const CreateAccountForm = ({
             mnemonic,
           })
         );
-
-        dispatch(
-          userAccountSelectFetch({
-            tradeAddress: pair.address,
-          })
-        );
-
       } else {
         dispatch(
           registerTradeAccountFetch({
