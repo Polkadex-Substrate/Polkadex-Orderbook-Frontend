@@ -162,26 +162,28 @@ export function Trading() {
                 {!isSignedIn ? (
                   <Button
                     onClick={() => router.push("/signIn")}
-                    color="inverse"
+                    color="white"
                     background="text"
                     isFull
                     icon={{
                       name: "Wallet",
                       background: "inverse",
-                      size: "extraMedium",
+                      size: "medium",
                       stroke: "text",
                       fill: "text",
                     }}>
                     Login/Sign Up
                   </Button>
                 ) : (
-                  <Profile
-                    hasTradeAccount={hasTradeAccount}
-                    hasMainAccount={hasMainAccount}
-                    currentMainAccount={currentMainAddr}
-                    currentTradeAccount={currentTradeAddr}
-                    email={email}
-                  />
+                  <S.Profile>
+                    <Profile
+                      hasTradeAccount={hasTradeAccount}
+                      hasMainAccount={hasMainAccount}
+                      currentMainAccount={currentMainAddr}
+                      currentTradeAccount={currentTradeAddr}
+                      email={email}
+                    />
+                  </S.Profile>
                 )}
               </S.Box>
               <S.Content>
@@ -199,26 +201,28 @@ export function Trading() {
                     {!isSignedIn ? (
                       <Button
                         onClick={() => router.push("/signIn")}
-                        color="inverse"
+                        color="white"
                         background="text"
                         style={{ alignSelf: "flex-end" }}
                         icon={{
                           name: "Wallet",
                           background: "inverse",
-                          size: "extraMedium",
+                          size: "medium",
                           stroke: "text",
                           fill: "text",
                         }}>
                         Login/Sign Up
                       </Button>
                     ) : (
-                      <Profile
-                        hasTradeAccount={hasTradeAccount}
-                        hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAddr}
-                        currentTradeAccount={currentTradeAddr}
-                        email={email}
-                      />
+                      <S.Profile>
+                        <Profile
+                          hasTradeAccount={hasTradeAccount}
+                          hasMainAccount={hasMainAccount}
+                          currentMainAccount={currentMainAddr}
+                          currentTradeAccount={currentTradeAddr}
+                          email={email}
+                        />
+                      </S.Profile>
                     )}
                   </S.Actions>
                   <MarketOrder />

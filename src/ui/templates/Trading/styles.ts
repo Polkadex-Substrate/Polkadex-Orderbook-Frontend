@@ -91,10 +91,16 @@ export const Box = styled.div`
       :hover {
         background: ${theme.colors.primary}D8;
       }
+      margin-left: 2rem
     }
     ${Logo} {
       margin: 1rem 0;
     }
+
+    ${Profile} {
+      margin: 1rem 0;
+    }
+
     @media screen and (max-width: 590px) {
       display: flex;
       position: sticky;
