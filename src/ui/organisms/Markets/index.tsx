@@ -7,7 +7,7 @@ import * as F from "./fakeData";
 import { Icon, Skeleton, ResultFound, Search } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
-import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
+import { InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 
 export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
@@ -16,6 +16,7 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
     handleChangeMarket,
     handleFieldChange,
     handleMarketsTabsSelected,
+    handleSelectedFavorite,
     currentTickerImg,
     currentTickerName,
     fieldValue,
@@ -38,7 +39,11 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
         handleShowFavourite={handleShowFavourite}
         showFavourite={fieldValue.showFavourite}
       />
-      <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
+      <Content
+        handleSelectedFavorite={handleSelectedFavorite}
+        tokens={marketTokens()}
+        changeMarket={handleChangeMarket}
+      />
       <Footer
         tickers={marketTickers}
         changeMarket={handleMarketsTabsSelected}
@@ -102,10 +107,11 @@ const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite
   );
 };
 
-const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
-  tokens = [],
-  changeMarket,
-}) => (
+const Content: FC<{
+  tokens?: InitialMarkets[];
+  handleSelectedFavorite: (id: string) => void;
+  changeMarket: (value: string) => void;
+}> = ({ tokens = [], changeMarket, handleSelectedFavorite }) => (
   <S.Content>
     <S.ContainerWrapper>
       {tokens.length ? (
@@ -120,6 +126,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
             fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
             change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
             changeMarket={() => changeMarket(token.name)}
+            handleSelectedFavorite={handleSelectedFavorite}
             isFavourite={token.isFavourite}
           />
         ))
@@ -140,11 +147,11 @@ const Card = ({
   change,
   changeMarket,
   isFavourite,
+  handleSelectedFavorite,
 }) => {
-  const { handleChangeFavourite } = useCookieHook(id);
   return (
     <S.Card>
-      <S.CardInfo type="button" onClick={handleChangeFavourite}>
+      <S.CardInfo type="button" onClick={() => handleSelectedFavorite(id)}>
         <Icon
           name="Star"
           size="extraSmall"
