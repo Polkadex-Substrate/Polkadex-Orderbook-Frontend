@@ -8,6 +8,9 @@ export const selectTradeAccountsLoading = (state: RootState): boolean =>
 export const selectBrowserTradeAccounts = (state: RootState): TradeAccount[] =>
   state.user.tradeWallet.allBrowserAccounts;
 
+export const selectNewlyAddedTradeAccounts = (state: RootState): TradeAccount =>
+  state.user.tradeWallet.newlyAddedTradeAccount;
+
 export const selectTradeAccount =
   (address: string) =>
   (state: RootState): TradeAccount =>
