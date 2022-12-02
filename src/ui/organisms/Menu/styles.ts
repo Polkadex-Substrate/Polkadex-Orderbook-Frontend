@@ -73,6 +73,7 @@ export const WrapperLinks = styled.div`
     }
     @media screen and (max-width: 690px) {
       gap: 2rem;
+      background: ${theme.colors.quaternaryBackground};
     }
   `}
 `;

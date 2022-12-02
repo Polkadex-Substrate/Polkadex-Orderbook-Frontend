@@ -87,11 +87,10 @@ export const Box = styled.div`
     padding: 0 1rem;
     ${Button} {
       transition: background 0.5s ease-in-out;
-      background: ${theme.colors.primary};
       :hover {
         background: ${theme.colors.primary}D8;
       }
-      margin-left: 2rem
+      margin-left: 2rem;
     }
     ${Logo} {
       margin: 1rem 0;
