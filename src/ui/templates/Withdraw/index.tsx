@@ -62,6 +62,8 @@ export const WithdrawTemplate = () => {
   const assets = useReduxSelector(selectAllAssets);
   const loading = useReduxSelector(selectWithdrawsLoading);
   const userBalances = useReduxSelector(selectUserBalance);
+  const [shouldShowOnlySelectedCoins, setShouldShowOnlySelectedCoins] = useState(false);
+  const getAsset = useReduxSelector(selectGetAsset);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -125,6 +127,11 @@ export const WithdrawTemplate = () => {
     },
   });
 
+  const handleSelectCoin = (e) => {
+    const isChecked = e.target.checked;
+    setShouldShowOnlySelectedCoins(isChecked);
+  };
+
   const selectedWithdraw = useCallback(
     (status: "PENDING" | "CONFIRMED") => {
       const result = allWithdrawals.filter((txn) => txn.status === status);
@@ -142,10 +149,16 @@ export const WithdrawTemplate = () => {
   const hasPendingClaims = useMemo(
     () =>
       readyToClaim.reduce(
-        (acc, value) => acc + value.items.filter((v) => v.status === "READY").length,
+        (acc, value) =>
+          acc +
+          value.items.filter((v) => {
+            return shouldShowOnlySelectedCoins
+              ? v.status === "READY" && getAsset(v.asset)?.symbol === selectedAsset.symbol
+              : v.status === "READY";
+          }).length,
         0
       ),
-    [readyToClaim]
+    [readyToClaim, shouldShowOnlySelectedCoins]
   );
 
   const handleUnlockClose = () => setShowPassword(false);
@@ -287,7 +300,9 @@ export const WithdrawTemplate = () => {
                       </TabHeader>
                     </S.HistoryTabs>
                     <S.HistoryHeaderAside>
-                      <Checkbox name="hide">Show only selected coin</Checkbox>
+                      <Checkbox onChange={handleSelectCoin} name="hide">
+                        Show only selected coin
+                      </Checkbox>
                     </S.HistoryHeaderAside>
                   </S.HistoryHeader>
                   <S.HistoryWrapper>
@@ -308,7 +323,12 @@ export const WithdrawTemplate = () => {
                               (v) => v.status === "READY"
                             )}
                             handleClaimWithdraws={() => handleClaimWithdraws(value.sid)}
-                            items={value.items.filter((v) => v.status === "READY")}
+                            items={value.items.filter((v) => {
+                              return shouldShowOnlySelectedCoins
+                                ? v.status === "READY" &&
+                                    getAsset(v.asset)?.symbol === selectedAsset.symbol
+                                : v.status === "READY";
+                            })}
                           />
                         ))
                       ) : (
