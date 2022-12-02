@@ -87,9 +87,6 @@ export const Box = styled.div`
     padding: 0 1rem;
     ${Button} {
       transition: background 0.5s ease-in-out;
-      :hover {
-        background: ${theme.colors.primary}D8;
-      }
       margin-left: 2rem;
     }
     ${Logo} {
@@ -100,7 +97,7 @@ export const Box = styled.div`
       margin: 1rem 0;
     }
 
-    @media screen and (max-width: 590px) {
+    @media screen and (max-width: 800px) {
       display: flex;
       position: sticky;
       top: 0;
