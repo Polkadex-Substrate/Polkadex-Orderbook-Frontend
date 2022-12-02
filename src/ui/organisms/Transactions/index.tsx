@@ -18,7 +18,11 @@ import {
   useTabState,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
-import { userSessionData } from "@polkadex/orderbook-modules";
+import {
+  selectBrowserTradeAccounts,
+  selectUserAccounts,
+  userSessionData,
+} from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -29,7 +33,8 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistory } from "@polkadex/orderbook-hooks";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -46,16 +51,37 @@ const initialFilters: Ifilters = {
 };
 
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
+const initialStateTradingAccounts = ["All Trading Accounts", "crazy geek", "baddest tester"];
 
 export const Transactions = () => {
   const dispatch = useDispatch();
+  const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
+  const allAccounts = useReduxSelector(selectUserAccounts);
   const now = new Date();
-
   const [filters, setFilters] = useState(initialFilters);
   const [to, setTo] = useState(now);
   const [from, setFrom] = useState(subDays(now, 7));
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const tradeAccounts = useMemo(
+    () =>
+      allAccounts?.map(({ tradeAddress }): IUserTradeAccount => {
+        const account = browserTradeAccounts.find(({ address }) => address === tradeAddress);
+        if (account) {
+          return {
+            address: tradeAddress,
+            isPresentInBrowser: true,
+            account: account,
+          };
+        } else {
+          return {
+            address: tradeAddress,
+            isPresentInBrowser: false,
+          };
+        }
+      }),
+    [allAccounts, browserTradeAccounts]
+  );
 
   const orderHistory = useOrderHistory(filters);
   // Filters Actions
@@ -76,10 +102,6 @@ export const Transactions = () => {
     const now = new Date();
     dispatch(userSessionData({ dateFrom: subDays(now, 7), dateTo: now }));
   }, [trigger]);
-
-  useEffect(() => {
-
-  })
 
   const ranges = useMemo(() => {
     return [
@@ -147,6 +169,27 @@ export const Transactions = () => {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  {tradeAccounts.length ? (
+                    <div style={{ marginLeft: 10 }}>
+                      <Dropdown>
+                        <Dropdown.Trigger>
+                          <S.Icon>
+                            {"Trading accounts"}
+                            <div>
+                              <Icons.ArrowBottom />
+                            </div>
+                          </S.Icon>
+                        </Dropdown.Trigger>
+                        <Dropdown.Menu>
+                          {tradeAccounts.map((tradeAcc) => (
+                            <Dropdown.Item key={tradeAcc.address}>
+                              {tradeAcc?.account?.meta?.name}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  ) : null}
                   <Popover>
                     <Popover.Trigger>
                       <div>
@@ -169,7 +212,6 @@ export const Transactions = () => {
                       />
                     </Popover.Content>
                   </Popover>
-
                   <S.Calendar></S.Calendar>
                 </S.ContainerTransactions>
               </S.Flex>
