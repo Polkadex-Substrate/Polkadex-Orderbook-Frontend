@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 export const Logo = styled.div`
   @media screen and (max-width: 590px) {
     display: none;
@@ -9,24 +8,47 @@ export const Logo = styled.div`
 `;
 
 export const WrapperIcon = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: fit-content;
-  cursor: pointer;
-  :hover {
-    opacity: 0.8;
-  }
-  ${Icon} {
-    border-radius: 10rem;
-  }
+  ${({ theme }) => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    cursor: pointer;
+    :hover {
+      ${Span},${TermsLinks} {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+    ${Icon} {
+      border-radius: 10rem;
+    }
+  `}
 `;
+export const SpanWrapper = styled.div``;
 
 export const Span = styled.span`
-  margin-left: 0.8rem;
-  font-size: 1.3rem;
-  display: none;
-  white-space: nowrap;
+  ${({ theme }) => css`
+    position: absolute;
+    background: ${theme.colors.text};
+    color: ${theme.colors.inverse};
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-left: 0.8rem;
+    font-size: 1.3rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem);
+    transition: transform 0.2s ease-out, visibility 0.2s ease-in, opacity 0.2s ease-in;
+    user-select: none;
+    top: -4rem;
+    @media screen and (min-width: 590px) {
+      left: 2.5rem;
+    }
+  `}
 `;
 
 export const WrapperLinks = styled.div`
@@ -45,6 +67,9 @@ export const WrapperLinks = styled.div`
     @media screen and (min-width: 590px) {
       padding: 2rem 1rem 1rem 0.9rem;
       min-height: 42rem;
+    }
+    @media screen and (max-width: 690px) {
+      gap: 2rem;
     }
   `}
 `;
@@ -65,7 +90,6 @@ export const Wrapper = styled.nav`
     @media screen and (min-width: 590px) {
       position: sticky;
       top: 0;
-      overflow: hidden;
       min-width: 4.5rem;
       height: 100vh;
       max-width: 4.5rem;
@@ -84,15 +108,6 @@ export const Wrapper = styled.nav`
       ${WrapperLinks} {
         flex-direction: column;
       }
-      & :hover,
-      :hover ${WrapperLinks} {
-        min-width: 21rem;
-        max-width: 21rem;
-      }
-      & :hover ${LogoText} {
-        display: block;
-        opacity: 1;
-      }
     }
   `}
 `;
@@ -101,6 +116,10 @@ export const Container = styled.div`
   display: flex;
   gap: 1rem;
   width: fit-content;
+  @media screen and (max-width: 690px) {
+    width: 100%;
+    justify-content: space-around;
+  }
 `;
 
 export const WrapperProfile = styled.div`
@@ -157,9 +176,39 @@ export const Avatar = styled.div`
 `;
 export const Terms = styled.div``;
 export const TermsLinks = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  margin-left: 3rem;
+  ${({ theme }) => css`
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 1rem;
+    margin-left: 0.8rem;
+    border-radius: 0.5rem;
+    background: ${theme.colors.text};
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem);
+    transition: transform 0.2s ease-out, visibility 0.2s ease-in, opacity 0.2s ease-in;
+    @media screen and (min-width: 590px) {
+      left: 2.5rem;
+      top: -1.5rem;
+    }
+    @media screen and (max-width: 590px) {
+      bottom: 4.5rem;
+      left: -5rem;
+    }
+    span {
+      font-size: 1.3rem;
+      white-space: nowrap;
+      color: ${theme.colors.inverse};
+    }
+    a {
+      padding: 0.5rem;
+      border-radius: 0.4rem;
+      transition: background-color 0.2s ease-in;
+      :hover {
+        background: ${theme.colors.secondaryBackground};
+      }
+    }
+  `}
 `;
