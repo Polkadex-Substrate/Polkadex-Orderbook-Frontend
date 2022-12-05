@@ -1,4 +1,4 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, fork, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import { stringToHex } from "@polkadot/util";
@@ -24,6 +24,7 @@ import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { ErrorMessages } from "@polkadex/web-constants";
+import { userEventsChannelHandler } from "@polkadex/orderbook/modules/user/userEventsListener/sagas/userEventsChannel";
 
 type RegisterEmailData = { email: string; main_address: string };
 
@@ -34,7 +35,8 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
-
+    // listen for events in this new registered main address
+    yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
     const hasAddressAndEmail =
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
@@ -62,13 +64,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           })
         );
         yield put(registerMainAccountData());
-        yield put(
-          userProfileAccountPush({
-            tradeAddress,
-            mainAddress: selectedControllerAccount.account.address,
-          })
-        );
-        yield put(userProfileMainAccountPush(selectedControllerAccount.account.address));
       } else {
         throw new Error("Extrinsic failed");
       }
@@ -155,6 +150,7 @@ function* retryRegisterToAppsync(
       })
     );
     yield put(userProfileMainAccountPush(mainAddress));
+    yield put(registerMainAccountData());
   } catch (error) {
     console.log("error");
     yield put(registerMainAccountError());

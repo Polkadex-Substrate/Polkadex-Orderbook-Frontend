@@ -30,7 +30,6 @@ import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export interface TradeAccountsState {
   isFetching: boolean;
-  newlyAddedTradeAccount: TradeAccount;
   allBrowserAccounts: TradeAccount[];
   registerAccountLoading: boolean;
   registerAccountSuccess: boolean;
@@ -61,7 +60,6 @@ export type PreviewAccountModal = {
 
 const initialState: TradeAccountsState = {
   isFetching: false,
-  newlyAddedTradeAccount: null,
   allBrowserAccounts: [],
   registerAccountLoading: false,
   registerAccountSuccess: false,
@@ -232,7 +230,6 @@ export const TradeAccountsReducer = (
       _allAccounts.push(pair);
       return {
         ...state,
-        newlyAddedTradeAccount: pair,
         allBrowserAccounts: _allAccounts,
       };
     }
