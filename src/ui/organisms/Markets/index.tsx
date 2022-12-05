@@ -64,9 +64,8 @@ export const HeaderMarket = ({
   const now = new Date();
   const from = subDays(now, 7);
   const to = endOfDay(now);
-  const { graphPoints } = useMiniGraph(id, from, to);
-  const len = graphPoints.length;
-  const isIncreasing = graphPoints[len - 2] < graphPoints[len - 1];
+  const { graphPoints, isIncreasing } = useMiniGraph(id, from, to);
+
   return (
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>

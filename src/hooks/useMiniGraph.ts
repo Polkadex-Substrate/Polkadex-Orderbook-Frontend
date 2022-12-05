@@ -6,6 +6,8 @@ import { KlineEvent } from "@polkadex/orderbook-modules";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const [points, setPoints] = useState([]);
+  const len = points.length;
+  const isIncreasing = points[len - 2] < points[len - 1];
   const dailyKline: UseQueryResult<KlineEvent[], Error> = useQuery(
     `mini-graph-${market}`,
     () => fetchKlineAsync(market, "1D", from, to)
@@ -16,7 +18,9 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
       setPoints(points);
     }
   }, [dailyKline.isFetched]);
+
   return {
     graphPoints: points,
+    isIncreasing,
   };
 };
