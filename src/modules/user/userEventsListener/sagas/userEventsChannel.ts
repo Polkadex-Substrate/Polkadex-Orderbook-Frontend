@@ -47,7 +47,6 @@ export function* userEventsChannelHandler(address) {
     );
   } finally {
     console.log("User Events Channel closed...");
-    yield put(userEventsFetch());
   }
 }
 
@@ -67,7 +66,7 @@ function createUserEventsChannel(address: string) {
         emit(createActionFromUserEvent(data));
       },
       error: (err) => {
-        console.warn(err);
+        console.log("subscription error", err);
       },
     });
     return subscription.unsubscribe;
