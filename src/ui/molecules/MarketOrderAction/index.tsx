@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
@@ -8,7 +8,6 @@ import * as S from "./styles";
 import {
   Icon,
   ButtonStatus,
-  Range,
   LoadingSection,
   MarketInput,
   PassCode,
@@ -104,7 +103,12 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
               />
               <S.SliderWrapper>
                 {slider.map((data, index) => (
-                  <SliderPercentage {...data} key={index} handleOnClick={handleSliderClick} />
+                  <SliderPercentage
+                    {...data}
+                    key={index}
+                    isDisabled={false}
+                    handleOnClick={handleSliderClick}
+                  />
                 ))}
               </S.SliderWrapper>
 

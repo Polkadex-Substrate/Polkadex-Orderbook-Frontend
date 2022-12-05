@@ -433,13 +433,15 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     percentageNum: number;
     isActive: boolean;
   }) => {
-    const newSlider = [...slider].map(slides => {
-      slides.percentageNum === data.percentageNum? slides.isActive = true : slides.isActive = false;
+    const newSlider = [...slider].map((slides) => {
+      slides.percentageNum === data.percentageNum
+        ? (slides.isActive = true)
+        : (slides.isActive = false);
       return slides;
     });
     setSlider(newSlider);
     const percentage = data.percentage.split("%")[0];
-    updateRange({values: [+percentage]})
+    updateRange({ values: [+percentage] });
   };
 
   return {
@@ -462,6 +464,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     hasUser: hasTradeAccount,
     showProtectedPassword: hasTradeAccount && showProtectedPassword,
     slider,
-    handleSliderClick
+    handleSliderClick,
   };
 }

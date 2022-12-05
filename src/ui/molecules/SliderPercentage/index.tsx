@@ -6,6 +6,7 @@ export const SliderPercentage = ({
   percentageNum = 1,
   isActive = false,
   handleOnClick,
+  isDisabled = false,
 }: T.Props) => {
   return (
     <S.Wrapper
@@ -16,7 +17,9 @@ export const SliderPercentage = ({
           percentageNum,
         })
       }>
-      <button type="button">{percentage}</button>
+      <button type="button" disabled={isDisabled}>
+        {percentage}
+      </button>
     </S.Wrapper>
   );
 };
