@@ -2,7 +2,7 @@ import { call, put, select, take, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { UserEventsFetch } from "../actions";
+import { userEventsFetch, UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
@@ -12,8 +12,12 @@ import { notificationPush } from "../../notificationHandler";
 import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
-import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { UserAccount, selectUsingAccount } from "@polkadex/orderbook-modules";
+import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import {
+  UserAccount,
+  selectUsingAccount,
+  tradeAccountUpdateEvent,
+} from "@polkadex/orderbook-modules";
 
 export function* userEventsChannelSaga(_action: UserEventsFetch) {
   const currentAccount: UserAccount = yield select(selectUsingAccount);
@@ -43,6 +47,7 @@ export function* userEventsChannelHandler(address) {
     );
   } finally {
     console.log("User Events Channel closed...");
+    yield put(userEventsFetch());
   }
 }
 
@@ -61,7 +66,9 @@ function createUserEventsChannel(address: string) {
       next: (data) => {
         emit(createActionFromUserEvent(data));
       },
-      error: (err) => console.warn(err),
+      error: (err) => {
+        console.warn(err);
+      },
     });
     return subscription.unsubscribe;
   });
@@ -73,19 +80,19 @@ function createActionFromUserEvent(eventData: any) {
   console.info("User Event: ", data);
   const eventType = data.type;
   switch (eventType) {
-    case "SetBalance":
+    case USER_EVENTS.SetBalance:
       return balanceUpdateEvent(data);
-    case "SetTransaction":
+    case USER_EVENTS.SetTransaction:
       return transactionsUpdateEvent(data);
-    case "Order":
+    case USER_EVENTS.Order:
       return orderUpdateEvent(data);
-    case "RegisterAccount":
+    case USER_EVENTS.RegisterAccount:
       return registerMainAccountUpdateEvent(data);
-    case "AddProxy":
-      return registerSuccessNotification("Trade account added", "New Trade account created");
-    case "TradeFormat":
+    case USER_EVENTS.AddProxy:
+      return tradeAccountUpdateEvent(data);
+    case USER_EVENTS.TradeFormat:
       return userTradesUpdateEvent(data);
-    case "RemoveProxy":
+    case USER_EVENTS.RemoveProxy:
       return registerSuccessNotification(
         "Trade account removed",
         "Trade account removal Confirmed"
