@@ -17,7 +17,6 @@ export * from "./useOrderbookTable";
 export * from "./useRecentTrades";
 export * from "./useOrderHistory";
 export * from "./usePlaceOrder";
-export * from "./useInformation";
 export * from "./useAppearance";
 export * from "./useFunds";
 export * from "./useTimer";

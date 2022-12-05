@@ -1,31 +1,34 @@
 import { CommonError, TradeAccount } from "../../types";
 
 import {
-  USER_TRADE_ACCOUNTS_ERROR,
-  USER_TRADE_ACCOUNTS_FETCH,
-  USER_TRADE_ACCOUNTS_DATA,
-  USER_REGISTER_TRADE_ACCOUNT_FETCH,
-  USER_REGISTER_TRADE_ACCOUNT_DATA,
-  USER_REGISTER_TRADE_ACCOUNT_ERROR,
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
-  USER_REGISTER_TRADE_ACCOUNT_RESET,
-  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
-  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
-  USER_TRADE_ACCOUNT_UNLOCK,
-  USER_TRADE_ACCOUNT_IMPORT_ERROR,
-  USER_TRADE_ACCOUNT_IMPORT_FETCH,
-  USER_TRADE_ACCOUNT_IMPORT_DATA,
-  USER_TRADE_ACCOUNT_PUSH,
-  USER_TRADE_ACCOUNT_MODAL_ACTIVE,
-  USER_TRADE_ACCOUNT_MODAL_CANCEL,
   USER_PREVIEW_ACCOUNT_MODAL_ACTIVE,
   USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
-  USER_TRADE_ACCOUNT_EXPORT_FETCH,
-  USER_TRADE_ACCOUNT_EXPORT_DATA,
+  USER_REGISTER_TRADE_ACCOUNT_DATA,
+  USER_REGISTER_TRADE_ACCOUNT_ERROR,
+  USER_REGISTER_TRADE_ACCOUNT_FETCH,
+  USER_REGISTER_TRADE_ACCOUNT_RESET,
   USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
+  USER_TRADE_ACCOUNT_EXPORT_DATA,
+  USER_TRADE_ACCOUNT_EXPORT_FETCH,
+  USER_TRADE_ACCOUNT_IMPORT_DATA,
+  USER_TRADE_ACCOUNT_IMPORT_ERROR,
+  USER_TRADE_ACCOUNT_IMPORT_FETCH,
   USER_TRADE_ACCOUNT_IMPORT_JSON,
+  USER_TRADE_ACCOUNT_MODAL_ACTIVE,
+  USER_TRADE_ACCOUNT_MODAL_CANCEL,
+  USER_TRADE_ACCOUNT_PUSH,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA,
+  USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH,
+  USER_TRADE_ACCOUNT_UNLOCK,
+  USER_TRADE_ACCOUNT_UPDATE,
+  USER_TRADE_ACCOUNTS_DATA,
+  USER_TRADE_ACCOUNTS_ERROR,
+  USER_TRADE_ACCOUNTS_FETCH,
 } from "./constants";
 import { PreviewAccountModal } from "./reducer";
+
+import { USER_EVENTS } from "@polkadex/web-constants";
 
 export interface PolkadotWalletFetchPayload {
   allAccounts: TradeAccount[];
@@ -156,6 +159,16 @@ export interface TradeAccountPush {
   payload: { pair: TradeAccount };
 }
 
+export interface TradeAccountUpdate {
+  type: typeof USER_TRADE_ACCOUNT_UPDATE;
+  payload: {
+    type: typeof USER_EVENTS.AddProxy;
+    event_id: number;
+    main: string;
+    proxy: string;
+  };
+}
+
 export type TradeAccountsAction =
   | TradeAccountsFetch
   | TradeAccountsError
@@ -179,7 +192,8 @@ export type TradeAccountsAction =
   | ExportTradeAccountFetch
   | ExportTradeAccountData
   | ExportTradeAccountActive
-  | ImportTradeAccountJsonFetch;
+  | ImportTradeAccountJsonFetch
+  | TradeAccountUpdate;
 
 export const tradeAccountsFetch = (): TradeAccountsFetch => ({
   type: USER_TRADE_ACCOUNTS_FETCH,
@@ -307,4 +321,11 @@ export const exportTradeAccountData = (): ExportTradeAccountData => ({
 });
 export const exportTradeAccountActive = (): ExportTradeAccountActive => ({
   type: USER_TRADE_ACCOUNT_EXPORT_ACTIVE,
+});
+
+export const tradeAccountUpdateEvent = (
+  payload: TradeAccountUpdate["payload"]
+): TradeAccountUpdate => ({
+  type: USER_TRADE_ACCOUNT_UPDATE,
+  payload,
 });
