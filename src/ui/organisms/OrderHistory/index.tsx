@@ -3,7 +3,7 @@ import * as S from "./styles";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { OrderHistoryCard, EmptyData } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
-import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
+import { useReduxSelector } from "@polkadex/orderbook/hooks";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 export const OrderHistory = ({ orderHistory }) => {

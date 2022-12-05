@@ -1,16 +1,17 @@
+import { endOfDay, startOfMonth } from "date-fns";
+
 import { SessionAction } from "./actions";
 import { SESSION_DATA, SESSION_ERROR, SESSION_FETCH } from "./constants";
-
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export interface SessionState {
   dateTo: Date;
   dateFrom: Date;
 }
 
+const now = new Date();
 const initialState: SessionState = {
-  dateTo: new Date(),
-  dateFrom: subtractMonths(1),
+  dateTo: startOfMonth(now),
+  dateFrom: endOfDay(now),
 };
 
 export const sessionReducer = (state = initialState, action: SessionAction) => {
