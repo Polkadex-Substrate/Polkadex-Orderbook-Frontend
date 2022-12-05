@@ -164,24 +164,25 @@ export function Trading() {
                     onClick={() => router.push("/signIn")}
                     color="inverse"
                     background="text"
-                    isFull
                     icon={{
                       name: "Wallet",
                       background: "inverse",
-                      size: "extraMedium",
+                      size: "medium",
                       stroke: "text",
                       fill: "text",
                     }}>
                     Login/Sign Up
                   </Button>
                 ) : (
-                  <Profile
-                    hasTradeAccount={hasTradeAccount}
-                    hasMainAccount={hasMainAccount}
-                    currentMainAccount={currentMainAddr}
-                    currentTradeAccount={currentTradeAddr}
-                    email={email}
-                  />
+                  <S.Profile>
+                    <Profile
+                      hasTradeAccount={hasTradeAccount}
+                      hasMainAccount={hasMainAccount}
+                      currentMainAccount={currentMainAddr}
+                      currentTradeAccount={currentTradeAddr}
+                      email={email}
+                    />
+                  </S.Profile>
                 )}
               </S.Box>
               <S.Content>
@@ -205,20 +206,22 @@ export function Trading() {
                         icon={{
                           name: "Wallet",
                           background: "inverse",
-                          size: "extraMedium",
+                          size: "medium",
                           stroke: "text",
                           fill: "text",
                         }}>
                         Login/Sign Up
                       </Button>
                     ) : (
-                      <Profile
-                        hasTradeAccount={hasTradeAccount}
-                        hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAddr}
-                        currentTradeAccount={currentTradeAddr}
-                        email={email}
-                      />
+                      <S.Profile>
+                        <Profile
+                          hasTradeAccount={hasTradeAccount}
+                          hasMainAccount={hasMainAccount}
+                          currentMainAccount={currentMainAddr}
+                          currentTradeAccount={currentTradeAddr}
+                          email={email}
+                        />
+                      </S.Profile>
                     )}
                   </S.Actions>
                   <MarketOrder />
