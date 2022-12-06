@@ -158,7 +158,7 @@ export const Transactions = () => {
                           {tradeAddresses.map((address) => (
                             <Dropdown.Item
                               key={address}
-                              onChange={() => handleTradeAddressUpdate(address)}>
+                              onClick={() => handleTradeAddressUpdate(address)}>
                               {address}
                             </Dropdown.Item>
                           ))}
