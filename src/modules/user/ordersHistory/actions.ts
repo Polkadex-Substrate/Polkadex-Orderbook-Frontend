@@ -30,6 +30,9 @@ export interface UserOrdersHistoryError {
 }
 export interface UserOpenOrdersHistoryFetch {
   type: typeof OPEN_ORDERS_HISTORY_FETCH;
+  payload: {
+    tradeAddress: string;
+  };
 }
 
 export interface UserOpenOrdersHistoryData {
@@ -72,8 +75,11 @@ export const userOrdersHistoryError = (error: CommonError): UserOrdersHistoryErr
   error,
 });
 
-export const userOpenOrdersHistoryFetch = (): UserOpenOrdersHistoryFetch => ({
+export const userOpenOrdersHistoryFetch = (
+  payload: UserOpenOrdersHistoryFetch["payload"]
+): UserOpenOrdersHistoryFetch => ({
   type: OPEN_ORDERS_HISTORY_FETCH,
+  payload,
 });
 
 export const userOpenOrderHistoryData = (

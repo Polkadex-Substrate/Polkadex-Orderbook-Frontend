@@ -17,8 +17,8 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
 import {
-  selectBrowserTradeAccounts,
-  selectUserAccounts,
+  selectAssociatedTradeAddresses,
+  selectUsingAccount,
   userSessionData,
 } from "@polkadex/orderbook-modules";
 
@@ -32,7 +32,6 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -49,39 +48,23 @@ const initialFilters: Ifilters = {
 };
 
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
-const initialStateTradingAccounts = ["All Trading Accounts", "crazy geek", "baddest tester"];
 
 export const Transactions = () => {
   const dispatch = useDispatch();
-  const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
-  const allAccounts = useReduxSelector(selectUserAccounts);
+  const usingAccount = useReduxSelector(selectUsingAccount);
+  const [localTradeAddress, setLocalTradeAddress] = useState(usingAccount?.tradeAddress);
   const now = new Date();
   const [filters, setFilters] = useState(initialFilters);
   const [to, setTo] = useState(now);
   const [from, setFrom] = useState(startOfMonth(now));
-  const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const tradeAccounts = useMemo(
-    () =>
-      allAccounts?.map(({ tradeAddress }): IUserTradeAccount => {
-        const account = browserTradeAccounts.find(({ address }) => address === tradeAddress);
-        if (account) {
-          return {
-            address: tradeAddress,
-            isPresentInBrowser: true,
-            account: account,
-          };
-        } else {
-          return {
-            address: tradeAddress,
-            isPresentInBrowser: false,
-          };
-        }
-      }),
-    [allAccounts, browserTradeAccounts]
+  const tradeAddresses = useReduxSelector(
+    selectAssociatedTradeAddresses(usingAccount.mainAddress)
   );
-
-  const orderHistory = useOrderHistory(filters);
+  const handleTradeAddressUpdate = (address: string) => {
+    setLocalTradeAddress(address);
+  };
+  const orderHistory = useOrderHistory(filters, localTradeAddress);
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
@@ -94,7 +77,7 @@ export const Transactions = () => {
     },
     [dispatch]
   );
-  
+
   const ranges = useMemo(() => {
     return [
       {
@@ -108,10 +91,7 @@ export const Transactions = () => {
     <S.Section>
       <Tabs>
         <S.Header>
-          <S.HeaderContent
-            onClick={() => {
-              setTrigger(!trigger);
-            }}>
+          <S.HeaderContent>
             <TabHeader>
               <S.TabHeader>Open Orders</S.TabHeader>
             </TabHeader>
@@ -161,7 +141,7 @@ export const Transactions = () => {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  {tradeAccounts.length ? (
+                  {tradeAddresses.length ? (
                     <div style={{ marginLeft: 10 }}>
                       <Dropdown>
                         <Dropdown.Trigger>
@@ -173,9 +153,11 @@ export const Transactions = () => {
                           </S.Icon>
                         </Dropdown.Trigger>
                         <Dropdown.Menu>
-                          {tradeAccounts.map((tradeAcc) => (
-                            <Dropdown.Item key={tradeAcc.address}>
-                              {tradeAcc?.account?.meta?.name}
+                          {tradeAddresses.map((address) => (
+                            <Dropdown.Item
+                              key={address}
+                              onChange={() => handleTradeAddressUpdate(address)}>
+                              {address}
                             </Dropdown.Item>
                           ))}
                         </Dropdown.Menu>

@@ -1,8 +1,8 @@
 // TODO: Create User middleware
-import { call, put, select } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
-import { alertPush, UserAccount, selectUsingAccount } from "../../../";
+import { alertPush } from "../../../";
 
 import * as queries from "./../../../../graphql/queries";
 
@@ -25,11 +25,11 @@ type orderHistoryQueryResult = {
   fee: string;
 };
 
-export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
+export function* openOrdersHistorySaga(action: UserOpenOrdersHistoryFetch) {
   try {
-    const account: UserAccount = yield select(selectUsingAccount);
-    if (account.tradeAddress) {
-      const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.tradeAddress);
+    const { tradeAddress } = action.payload;
+    if (tradeAddress) {
+      const transactions: OrderCommon[] = yield call(fetchOpenOrders, tradeAddress);
       yield put(userOpenOrderHistoryData({ list: transactions }));
     }
   } catch (error) {

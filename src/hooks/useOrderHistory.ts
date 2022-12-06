@@ -11,12 +11,11 @@ import {
   userOpenOrdersHistoryFetch,
   selectUserSession,
   selectHasSelectedAccount,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
-export function useOrderHistory(filters: Ifilters) {
+export function useOrderHistory(filters: Ifilters, tradeAddress: string | undefined) {
   const dispatch = useDispatch();
   const orderList = useReduxSelector(selectOrdersHistory);
   const openOrders = useReduxSelector(selectOpenOrders);
@@ -25,20 +24,17 @@ export function useOrderHistory(filters: Ifilters) {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const userSession = useReduxSelector(selectUserSession);
-  const usingAccount = useReduxSelector(selectUsingAccount);
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
 
   useEffect(() => {
     const { dateFrom, dateTo } = userSession;
     console.log("session change:", dateFrom.toLocaleString(), dateTo.toLocaleString());
-    if (userLoggedIn) {
-      dispatch(userOpenOrdersHistoryFetch());
-      dispatch(
-        userOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress })
-      );
+    if (userLoggedIn && tradeAddress) {
+      dispatch(userOpenOrdersHistoryFetch({ tradeAddress }));
+      dispatch(userOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: tradeAddress }));
     }
-  }, [userLoggedIn, dispatch, userSession, usingAccount]);
+  }, [userLoggedIn, dispatch, userSession, tradeAddress]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
