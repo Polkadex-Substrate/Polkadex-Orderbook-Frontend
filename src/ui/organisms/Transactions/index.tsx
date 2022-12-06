@@ -154,6 +154,7 @@ export const Transactions = () => {
                         rangeColors={["#E6007A"]}
                         staticRanges={defaultStaticRanges}
                         inputRanges={[]}
+                        maxDate={new Date()}
                       />
                     </Popover.Content>
                   </Popover>
