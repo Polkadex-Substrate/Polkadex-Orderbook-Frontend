@@ -3,11 +3,10 @@ import * as S from "./styles";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
-import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
 import { EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
 
-export const TradeHistory = ({ filters }) => {
-  const { priceFixed, amountFixed, trades } = useTradeHistory(filters);
+export const TradeHistory = ({ tradeHistory }) => {
+  const { priceFixed, amountFixed, trades } = tradeHistory;
   const getAsset = useReduxSelector(selectGetAsset);
 
   return (

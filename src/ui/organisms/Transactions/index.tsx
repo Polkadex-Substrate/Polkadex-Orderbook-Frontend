@@ -32,6 +32,7 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -65,6 +66,7 @@ export const Transactions = () => {
     setLocalTradeAddress(address);
   };
   const orderHistory = useOrderHistory(filters, localTradeAddress);
+  const tradeHistory = useTradeHistory(filters, localTradeAddress);
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
@@ -200,7 +202,7 @@ export const Transactions = () => {
             <OrderHistory orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
-            <TradeHistory filters={filters} />
+            <TradeHistory tradeHistory={tradeHistory} />
           </TabContent>
           <TabContent>
             <Funds onHideFilters={(v: boolean) => setIsVisible(v)} />

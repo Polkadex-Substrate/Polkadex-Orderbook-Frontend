@@ -28,6 +28,11 @@ export interface UserTradeEvent {
 
 export interface UserTradesFetch {
   type: typeof TRADES_FETCH;
+  payload: {
+    tradeAddress: string;
+    dateFrom: Date;
+    dateTo: Date;
+  };
 }
 export interface UserTradesData {
   type: typeof TRADES_DATA;
@@ -54,8 +59,9 @@ export type TradesAction =
   | UserTradesError
   | UserTradesUpdateData;
 
-export const userTradesFetch = (): UserTradesFetch => ({
+export const userTradesFetch = (payload: UserTradesFetch["payload"]): UserTradesFetch => ({
   type: TRADES_FETCH,
+  payload,
 });
 
 export const userTradesData = (payload: UserTrade[]): UserTradesData => ({

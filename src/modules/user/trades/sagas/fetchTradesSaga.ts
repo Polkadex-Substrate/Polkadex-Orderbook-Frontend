@@ -1,14 +1,9 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 
-import { UserTrade, userTradesData, userTradesError } from "..";
+import { UserTrade, userTradesData, userTradesError, UserTradesFetch } from "..";
 import * as queries from "../../../../graphql/queries";
 
-import {
-  selectUserSession,
-  selectUsingAccount,
-  sendError,
-  UserSessionPayload,
-} from "@polkadex/orderbook-modules";
+import { sendError } from "@polkadex/orderbook-modules";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 type TradesQueryResult = {
@@ -19,14 +14,11 @@ type TradesQueryResult = {
   t: string;
 };
 
-export function* fetchTradesSaga() {
+export function* fetchTradesSaga(action: UserTradesFetch) {
   try {
-    const currAccount = yield select(selectUsingAccount);
-    const address = currAccount.tradeAddress;
-    if (address) {
-      const userSession: UserSessionPayload = yield select(selectUserSession);
-      const { dateFrom, dateTo } = userSession;
-      const trades = yield call(fetchUserTrades, address, dateFrom, dateTo);
+    const { tradeAddress, dateFrom, dateTo } = action.payload;
+    if (tradeAddress) {
+      const trades = yield call(fetchUserTrades, tradeAddress, dateFrom, dateTo);
       yield put(userTradesData(trades));
     }
   } catch (error) {

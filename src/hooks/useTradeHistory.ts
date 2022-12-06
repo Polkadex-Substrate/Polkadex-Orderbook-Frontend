@@ -12,7 +12,7 @@ import {
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
-export function useTradeHistory(filters: Ifilters) {
+export function useTradeHistory(filters: Ifilters, tradeAddress: string | undefined) {
   const dispatch = useDispatch();
 
   const list = useReduxSelector(selectUserTrades);
@@ -25,12 +25,13 @@ export function useTradeHistory(filters: Ifilters) {
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const userSession = useReduxSelector(selectUserSession);
-
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
-  }, [userLoggedIn, currentMarket, dispatch, userSession]);
+    const { dateTo, dateFrom } = userSession;
+    if (userLoggedIn && tradeAddress)
+      dispatch(userTradesFetch({ tradeAddress, dateFrom, dateTo }));
+  }, [userLoggedIn, dispatch, userSession]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
