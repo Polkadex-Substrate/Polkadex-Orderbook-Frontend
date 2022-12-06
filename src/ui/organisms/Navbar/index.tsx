@@ -22,6 +22,7 @@ export const Navbar = ({ onOpenMarkets }) => {
       <S.WrapperInfo>
         <S.ContainerPair>
           <HeaderMarket
+            id={currMarket?.id}
             pair={currMarket?.name}
             pairTicker={currMarket?.base_ticker}
             onOpenMarkets={onOpenMarkets}
