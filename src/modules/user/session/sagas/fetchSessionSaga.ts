@@ -1,16 +1,17 @@
 import { put } from "redux-saga/effects";
+import { endOfDay, startOfMonth } from "date-fns";
 
 import { userSessionError } from "..";
 import { userSessionData } from "../actions";
 
 import { sendError } from "@polkadex/orderbook-modules";
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
 
 export function* fetchSessionSaga() {
   try {
     // add default user session values
-    const dateFrom = subtractMonths(1);
-    const dateTo = new Date();
+    const now = new Date();
+    const dateFrom = startOfMonth(now);
+    const dateTo = endOfDay(now); // adds 2 hours to current time
     yield put(userSessionData({ dateFrom, dateTo }));
   } catch (error) {
     console.log(error);

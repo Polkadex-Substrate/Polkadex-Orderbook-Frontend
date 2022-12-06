@@ -188,11 +188,13 @@ export const userAccountSelectData = (
   payload,
 });
 
+// adds a new UserAccount to users profile state
 export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"]) => ({
   type: PROFILE_USER_ACCOUNT_PUSH,
   payload,
 });
 
+// adds a new main address to users profile state
 export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
 ) => ({
@@ -219,7 +221,9 @@ export const userSetAvatar = (payload?: UserSetAvatar["payload"]) => ({
   payload,
 });
 
-export const userFavoriteMarketPush = (payload: UserFavoriteMarketPush["payload"]): UserFavoriteMarketPush => ({
+export const userFavoriteMarketPush = (
+  payload: UserFavoriteMarketPush["payload"]
+): UserFavoriteMarketPush => ({
   type: PROFILE_USER_FAVORITE_MARKET_PUSH,
   payload,
 });

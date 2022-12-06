@@ -1,12 +1,12 @@
 import { call, put } from "redux-saga/effects";
 
-import { sendError } from "../../../";
+import { KlineEvent, sendError } from "../../../";
 import { klineData, klineError, KlineFetch } from "../actions";
 
 import { getKlinesbyMarketInterval } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-type KlineDbData = {
+export type KlineDbData = {
   m: string;
   interval: string;
   o: string;
@@ -21,11 +21,8 @@ type KlineDbData = {
 export function* handleKlineFetchSaga(action: KlineFetch) {
   try {
     const { market, resolution, from, to } = action.payload;
-    const data: KlineDbData[] = yield call(() =>
-      fetchKlineAsync(market, resolution, from, to)
-    );
-    const convertedData = processKlineData(data);
-    yield put(klineData({ list: convertedData, market, interval: resolution }));
+    const data = yield call(() => fetchKlineAsync(market, resolution, from, to));
+    yield put(klineData({ list: data, market, interval: resolution }));
   } catch (error) {
     console.log("got kline fetch error", error);
     yield put(
@@ -40,13 +37,13 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
   }
 }
 
-const fetchKlineAsync = async (
+export const fetchKlineAsync = async (
   market: string,
   interval: string,
   from: Date,
   to: Date
-): Promise<KlineDbData[]> => {
-  const res: any = await sendQueryToAppSync({
+): Promise<KlineEvent[]> => {
+  const res = await sendQueryToAppSync({
     query: getKlinesbyMarketInterval,
     variables: {
       market,
@@ -55,7 +52,11 @@ const fetchKlineAsync = async (
       to: to.toISOString(),
     },
   });
-  return res.data.getKlinesbyMarketInterval.items;
+  const data: KlineDbData[] = res.data?.getKlinesbyMarketInterval?.items;
+  if (!data) {
+    return [];
+  }
+  return processKlineData(data);
 };
 
 const processKlineData = (data: any[]) => {

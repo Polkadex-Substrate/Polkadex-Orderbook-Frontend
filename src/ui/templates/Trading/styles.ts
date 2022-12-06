@@ -101,7 +101,7 @@ export const Box = styled.div`
       margin: 1rem 0;
     }
 
-    @media screen and (max-width: 590px) {
+@media screen and (max-width: 590px) {
       display: flex;
       position: sticky;
       top: 0;

@@ -9,6 +9,7 @@ import { withSSRContext } from "aws-amplify";
 import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -40,6 +41,8 @@ const Notifications = dynamic(
     ssr: false,
   }
 );
+const queryClient = new QueryClient();
+
 function App({ Component, pageProps }: AppProps) {
   useInit();
   useUserDataFetch();
@@ -69,20 +72,22 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        <Notifications />
-        <Message />
-        <GoogleAnalytics trackPageViews />
-        <NextNProgress
-          color="#E6007A"
-          startPosition={0.3}
-          height={2}
-          showOnShallow={true}
-          options={{
-            showSpinner: false,
-          }}
-        />
-        {children}
-        <GlobalStyles />
+        <QueryClientProvider client={queryClient}>
+          <Notifications />
+          <Message />
+          <GoogleAnalytics trackPageViews />
+          <NextNProgress
+            color="#E6007A"
+            startPosition={0.3}
+            height={2}
+            showOnShallow={true}
+            options={{
+              showSpinner: false,
+            }}
+          />
+          {children}
+          <GlobalStyles />
+        </QueryClientProvider>
       </ThemeProvider>
     </OverlayProvider>
   );

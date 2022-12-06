@@ -164,7 +164,6 @@ export function Trading() {
                     onClick={() => router.push("/signIn")}
                     color="inverse"
                     background="text"
-                    isFull
                     icon={{
                       name: "Wallet",
                       background: "inverse",

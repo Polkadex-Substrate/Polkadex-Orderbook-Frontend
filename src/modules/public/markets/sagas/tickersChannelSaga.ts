@@ -19,6 +19,7 @@ export function* marketTickersChannelSaga(_action: MarketsTickerChannelFetch) {
       const channel = createMarketTickersChannel(market.m);
       while (true) {
         const action = yield take(channel);
+        console.log("ticker update");
         yield put(action);
       }
     }

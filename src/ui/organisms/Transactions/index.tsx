@@ -1,7 +1,7 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
-import subDays from "date-fns/subDays";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { startOfMonth } from "date-fns";
 
 import * as S from "./styles";
 
@@ -14,8 +14,6 @@ import {
   Checkbox,
   Popover,
   Dropdown,
-  usePanelState,
-  useTabState,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
 import {
@@ -60,7 +58,7 @@ export const Transactions = () => {
   const now = new Date();
   const [filters, setFilters] = useState(initialFilters);
   const [to, setTo] = useState(now);
-  const [from, setFrom] = useState(subDays(now, 7));
+  const [from, setFrom] = useState(startOfMonth(now));
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const tradeAccounts = useMemo(
@@ -96,13 +94,7 @@ export const Transactions = () => {
     },
     [dispatch]
   );
-
-  // GET CURRENT DATA WHEN TAB IS SWITCHED
-  useEffect(() => {
-    const now = new Date();
-    dispatch(userSessionData({ dateFrom: subDays(now, 7), dateTo: now }));
-  }, [trigger]);
-
+  
   const ranges = useMemo(() => {
     return [
       {

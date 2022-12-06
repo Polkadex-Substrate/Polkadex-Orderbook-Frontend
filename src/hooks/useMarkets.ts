@@ -1,7 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import cookie from "cookie";
 
 import {
   Market,
@@ -34,7 +33,7 @@ export function useMarkets(onClose: () => void) {
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const favorites = useReduxSelector(selectUserFavoriteMarkets)
+  const favorites = useReduxSelector(selectUserFavoriteMarkets);
 
   /**
    * @description Get the single market information for the current market
@@ -156,5 +155,6 @@ export function useMarkets(onClose: () => void) {
     fieldValue,
     currentTickerName: currentMarket?.name,
     currentTickerImg: currentMarket?.tokenTickerName,
+    id: currentMarket?.id,
   };
 }
