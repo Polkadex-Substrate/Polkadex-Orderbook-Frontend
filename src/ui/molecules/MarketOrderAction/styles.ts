@@ -43,6 +43,18 @@ export const RangeWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
+export const SliderWrapper = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.tertiaryBackground};
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 0.2rem;
+    column-gap: 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  `}
+`;
+
 export const Connect = styled.a`
   ${({ theme }) => css`
     cursor: pointer;

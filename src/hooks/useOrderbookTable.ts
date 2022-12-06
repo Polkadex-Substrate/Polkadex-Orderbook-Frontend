@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { MutableRefObject, useEffect } from "react";
 
-import { getSymbolFromId, mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
+import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 
 import {
   DepthState,

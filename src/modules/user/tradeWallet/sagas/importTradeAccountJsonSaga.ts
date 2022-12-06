@@ -9,6 +9,7 @@ import {
   removeTradeAccountFromBrowser,
   notificationPush,
   registerTradeAccountError,
+  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 
 let tradeAddress = "";
@@ -29,6 +30,12 @@ export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch)
       })
     );
     yield put(importTradeAccountData());
+    // automatically set as in use.
+    yield put(
+      userAccountSelectFetch({
+        tradeAddress,
+      })
+    );
   } catch (error) {
     if (tradeAddress?.length)
       yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));

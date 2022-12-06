@@ -13,6 +13,11 @@ import { SetOrder } from "./types";
 
 export interface UserOrdersHistoryFetch {
   type: typeof ORDERS_HISTORY_FETCH;
+  payload: {
+    dateFrom: Date;
+    dateTo: Date;
+    tradeAddress: string;
+  };
 }
 export interface UserOrdersHistoryData {
   type: typeof ORDERS_HISTORY_DATA;
@@ -48,8 +53,11 @@ export type OrdersHistoryAction =
   | OrderUpdateEventData
   | UserOpenOrdersHistoryData;
 
-export const userOrdersHistoryFetch = (): UserOrdersHistoryFetch => ({
+export const userOrdersHistoryFetch = (
+  payload: UserOrdersHistoryFetch["payload"]
+): UserOrdersHistoryFetch => ({
   type: ORDERS_HISTORY_FETCH,
+  payload,
 });
 
 export const userOrdersHistoryData = (
