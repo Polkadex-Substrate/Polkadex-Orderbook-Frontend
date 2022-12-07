@@ -127,9 +127,8 @@ export const WithdrawTemplate = () => {
     },
   });
 
-  const handleSelectCoin = (e) => {
-    const isChecked = e.target.checked;
-    setShouldShowOnlySelectedCoins(isChecked);
+  const handleSelectCoin = (checked) => {
+    setShouldShowOnlySelectedCoins(checked);
   };
 
   const selectedWithdraw = useCallback(
