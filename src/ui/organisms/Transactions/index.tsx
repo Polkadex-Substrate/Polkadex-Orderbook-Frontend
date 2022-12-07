@@ -137,7 +137,7 @@ export const Transactions = () => {
                         </div>
                       </S.Icon>
                     </Dropdown.Trigger>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu fill="primaryBackground">
                       {initialState.map((status) => (
                         <Dropdown.Item key={status}>{status}</Dropdown.Item>
                       ))}
@@ -154,11 +154,11 @@ export const Transactions = () => {
                             </div>
                           </S.Icon>
                         </Dropdown.Trigger>
-                        <Dropdown.Menu>
+                        <Dropdown.Menu fill="primaryBackground">
                           {tradeAddresses.map((address) => (
                             <Dropdown.Item
                               key={address}
-                              onClick={() => handleTradeAddressUpdate(address)}>
+                              onAction={() => handleTradeAddressUpdate(address)}>
                               {address}
                             </Dropdown.Item>
                           ))}
