@@ -17,14 +17,19 @@ import {
   UserAccount,
   selectUsingAccount,
   tradeAccountUpdateEvent,
+  selectAssociatedTradeAddresses,
 } from "@polkadex/orderbook-modules";
 
 export function* userEventsChannelSaga(_action: UserEventsFetch) {
   const currentAccount: UserAccount = yield select(selectUsingAccount);
+  const tradeAddresses: string[] = yield select(
+    selectAssociatedTradeAddresses(currentAccount.mainAddress)
+  );
   const mainAddr = currentAccount.mainAddress;
-  const tradeAddr = currentAccount.tradeAddress;
   yield fork(userEventsChannelHandler, mainAddr);
-  yield fork(userEventsChannelHandler, tradeAddr);
+  for (const addr in tradeAddresses) {
+    yield fork(userEventsChannelHandler, addr);
+  }
 }
 
 export function* userEventsChannelHandler(address) {
