@@ -21,7 +21,7 @@ export interface UserOrdersHistoryFetch {
 }
 export interface UserOrdersHistoryData {
   type: typeof ORDERS_HISTORY_DATA;
-  payload: { list: OrderCommon[] };
+  payload: { list: OrderCommon[]; tradeAddress: string };
 }
 
 export interface UserOrdersHistoryError {
@@ -37,16 +37,16 @@ export interface UserOpenOrdersHistoryFetch {
 
 export interface UserOpenOrdersHistoryData {
   type: typeof OPEN_ORDERS_HISTORY_DATA;
-  payload: { list: OrderCommon[] };
+  payload: { list: OrderCommon[]; tradeAddress: string };
 }
 export interface OrderUpdateEvent {
   type: typeof ORDER_UPDATE_EVENT;
-  payload: SetOrder;
+  payload: { setOrder: SetOrder; tradeAddress: string };
 }
 
 export interface OrderUpdateEventData {
   type: typeof ORDER_UPDATE_EVENT_DATA;
-  payload: OrderCommon;
+  payload: { order: OrderCommon; tradeAddress: string };
 }
 
 export type OrdersHistoryAction =

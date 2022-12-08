@@ -8,12 +8,12 @@ import {
 } from "../actions";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
-import { Utils } from "@polkadex/web-helpers";
 
 export function* userTradeUpdateSaga(action: UserTradesUpdateEvent) {
   try {
-    const trade = processTradeData(action.payload);
-    yield put(userTradesUpdateData(trade));
+    const trade = processTradeData(action.payload.addTrade);
+    const tradeAddress = action.payload.tradeAddress;
+    yield put(userTradesUpdateData({ trade, tradeAddress }));
   } catch (error) {
     yield put(
       alertPush({

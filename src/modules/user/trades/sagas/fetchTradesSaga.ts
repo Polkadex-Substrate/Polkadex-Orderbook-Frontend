@@ -19,7 +19,7 @@ export function* fetchTradesSaga(action: UserTradesFetch) {
     const { tradeAddress, dateFrom, dateTo } = action.payload;
     if (tradeAddress) {
       const trades = yield call(fetchUserTrades, tradeAddress, dateFrom, dateTo);
-      yield put(userTradesData(trades));
+      yield put(userTradesData({ trades, tradeAddress }));
     }
   } catch (error) {
     yield put(

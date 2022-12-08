@@ -17,7 +17,7 @@ export const useUserDataFetch = () => {
   // use user address here instead of hasUser as we need to refetch these on user change
   useEffect(() => {
     if (address) {
-      dispatch(balancesFetch());
+      dispatch(balancesFetch({ mainAddress: address }));
     }
   }, [isAssetsFetched, address, dispatch]);
   useEffect(() => {

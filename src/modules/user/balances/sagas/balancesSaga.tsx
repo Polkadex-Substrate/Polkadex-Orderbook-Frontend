@@ -1,14 +1,12 @@
 import { call, put, select } from "redux-saga/effects";
 
 import * as queries from "../../../../graphql/queries";
-import { selectUsingAccount } from "../../..";
 import { balancesData, BalancesFetch } from "../actions";
 import { alertPush } from "../../../public/alertHandler";
 
 import {
   selectAssetsFetchSuccess,
   selectAssetIdMap,
-  isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
@@ -19,9 +17,9 @@ type BalanceQueryResult = {
   p: string;
 };
 
-export function* balancesSaga(_balancesFetch: BalancesFetch) {
+export function* balancesSaga(action: BalancesFetch) {
   try {
-    const { mainAddress } = yield select(selectUsingAccount);
+    const { mainAddress } = action.payload;
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (mainAddress && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);

@@ -14,6 +14,7 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 
 const { defaultStorageLimit } = defaultConfig;
 export interface OrdersHistoryState {
+  tradeAddress: string;
   list: OrderCommon[];
   openOrders: OrderCommon[];
   loading: boolean;
@@ -22,6 +23,7 @@ export interface OrdersHistoryState {
 }
 
 export const initialOrdersHistoryState: OrdersHistoryState = {
+  tradeAddress: "",
   list: [],
   openOrders: [],
   loading: false,
@@ -39,6 +41,7 @@ export const ordersHistoryReducer = (
     case ORDERS_HISTORY_DATA:
       return {
         ...state,
+        tradeAddress: action.payload.tradeAddress,
         list: sliceArray(action.payload.list, defaultStorageLimit),
         loading: false,
         success: true,
@@ -47,13 +50,21 @@ export const ordersHistoryReducer = (
       return { ...state, list: [], pageIndex: 0, loading: false };
 
     case OPEN_ORDERS_HISTORY_DATA:
-      return { ...state, openOrders: sliceArray(action.payload.list, defaultStorageLimit) };
+      return {
+        ...state,
+        tradeAddress: action.payload.tradeAddress,
+        openOrders: sliceArray(action.payload.list, defaultStorageLimit),
+      };
 
     case ORDER_UPDATE_EVENT_DATA: {
       const openOrders = [...state.openOrders];
       const allOrders = [...state.list];
-      const newOrder = action.payload;
-      // add to orderhistory for all cases
+      const newOrder = action.payload.order;
+      // check if event is for the current trading address
+      if (action.payload.tradeAddress !== state.tradeAddress) {
+        return state;
+      }
+      // add to order history for all cases
       const updatedOrderHistory = replaceOrPushOrder(allOrders, newOrder);
       let updatedOpenOrders = [];
       if (newOrder.status === "OPEN") {

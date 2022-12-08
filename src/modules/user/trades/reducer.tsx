@@ -6,9 +6,11 @@ export interface TradesState {
   loading: boolean;
   success: boolean;
   data: UserTrade[];
+  tradeAddress: string;
 }
 
 const initialState: TradesState = {
+  tradeAddress: "",
   loading: false,
   success: false,
   data: [],
@@ -27,10 +29,15 @@ export const tradesReducer = (state = initialState, action: TradesAction): Trade
         ...state,
         loading: false,
         success: true,
-        data: action.payload,
+        data: action.payload.trades,
+        tradeAddress: action.payload.tradeAddress,
       };
     case USER_TRADES_UPDATE_DATA: {
-      const trade = action.payload;
+      // check if event is for the current trade address
+      if (action.payload.tradeAddress !== state.tradeAddress) {
+        return state;
+      }
+      const trade = action.payload.trade;
       const trades = [...state.data];
       return {
         ...state,

@@ -36,7 +36,7 @@ export interface UserTradesFetch {
 }
 export interface UserTradesData {
   type: typeof TRADES_DATA;
-  payload: UserTrade[];
+  payload: { tradeAddress: string; trades: UserTrade[] };
 }
 
 export interface UserTradesError {
@@ -46,11 +46,11 @@ export interface UserTradesError {
 
 export interface UserTradesUpdateEvent {
   type: typeof USER_TRADES_UPDATE_EVENT;
-  payload: UserTradeEvent;
+  payload: { addTrade: UserTradeEvent; tradeAddress: string };
 }
 export interface UserTradesUpdateData {
   type: typeof USER_TRADES_UPDATE_DATA;
-  payload: UserTrade;
+  payload: { trade: UserTrade; tradeAddress: string };
 }
 
 export type TradesAction =
@@ -64,7 +64,7 @@ export const userTradesFetch = (payload: UserTradesFetch["payload"]): UserTrades
   payload,
 });
 
-export const userTradesData = (payload: UserTrade[]): UserTradesData => ({
+export const userTradesData = (payload: UserTradesData["payload"]): UserTradesData => ({
   type: TRADES_DATA,
   payload,
 });

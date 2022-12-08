@@ -30,6 +30,7 @@ export type BalanceUpdatePayload = {
 
 export interface BalancesFetch {
   type: typeof BALANCES_FETCH;
+  payload: { mainAddress: string };
 }
 
 export interface BalancesError {
@@ -56,8 +57,9 @@ export type BalancesAction =
   | BalancesError
   | BalanceUpdateEventData;
 
-export const balancesFetch = (): BalancesFetch => ({
+export const balancesFetch = (payload: BalancesFetch["payload"]): BalancesFetch => ({
   type: BALANCES_FETCH,
+  payload,
 });
 
 export const balancesData = (payload: BalancesData["payload"]): BalancesData => ({

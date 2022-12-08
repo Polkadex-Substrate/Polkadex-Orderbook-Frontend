@@ -2,7 +2,7 @@ import { call, put, select, take, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";
 
-import { userEventsFetch, UserEventsFetch } from "../actions";
+import { UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
 import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
@@ -66,7 +66,7 @@ function createUserEventsChannel(address: string) {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        emit(createActionFromUserEvent(data));
+        emit(createActionFromUserEvent(data, address));
       },
       error: (err) => {
         console.log("subscription error", err);
@@ -76,7 +76,7 @@ function createUserEventsChannel(address: string) {
   });
 }
 
-function createActionFromUserEvent(eventData: any) {
+function createActionFromUserEvent(eventData: any, address: string) {
   console.log("got raw event", eventData);
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
   console.info("User Event: ", data);
@@ -87,13 +87,13 @@ function createActionFromUserEvent(eventData: any) {
     case USER_EVENTS.SetTransaction:
       return transactionsUpdateEvent(data);
     case USER_EVENTS.Order:
-      return orderUpdateEvent(data);
+      return orderUpdateEvent({ setOrder: data, tradeAddress: address });
     case USER_EVENTS.RegisterAccount:
       return registerMainAccountUpdateEvent(data);
     case USER_EVENTS.AddProxy:
       return tradeAccountUpdateEvent(data);
     case USER_EVENTS.TradeFormat:
-      return userTradesUpdateEvent(data);
+      return userTradesUpdateEvent({ addTrade: data, tradeAddress: address });
     case USER_EVENTS.RemoveProxy:
       return registerSuccessNotification(
         "Trade account removed",

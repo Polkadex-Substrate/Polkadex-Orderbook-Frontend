@@ -31,7 +31,7 @@ export function* ordersHistorySaga(action: UserOrdersHistoryFetch) {
     const { dateFrom, dateTo, tradeAddress } = action.payload;
     if (tradeAddress) {
       const orders: OrderCommon[] = yield call(fetchOrders, tradeAddress, dateFrom, dateTo);
-      yield put(userOrdersHistoryData({ list: orders }));
+      yield put(userOrdersHistoryData({ list: orders, tradeAddress }));
     }
   } catch (error) {
     yield put(

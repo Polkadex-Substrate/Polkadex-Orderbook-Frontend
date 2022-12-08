@@ -8,8 +8,9 @@ import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 export function* orderUpdatesSaga(action: OrderUpdateEvent) {
   try {
-    const order = processOrderData(action.payload);
-    yield put(orderUpdateEventData(order));
+    const order = processOrderData(action.payload.setOrder);
+    const tradeAddress = action.payload.tradeAddress;
+    yield put(orderUpdateEventData({ order, tradeAddress }));
   } catch (error) {
     yield put(
       alertPush({

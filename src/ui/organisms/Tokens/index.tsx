@@ -9,7 +9,6 @@ import * as T from "./types";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  balancesFetch,
   selectBalancesLoading,
   selectHasSelectedAccount,
   selectUserBalance,
@@ -24,10 +23,6 @@ export const Tokens = () => {
   const balances = useReduxSelector(selectUserBalance);
   const hasUser = useReduxSelector(selectHasSelectedAccount);
   const isLoading = useReduxSelector(selectBalancesLoading);
-
-  useEffect(() => {
-    if (hasUser) dispatch(balancesFetch());
-  }, [hasUser, dispatch]);
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
