@@ -23,7 +23,7 @@ export const useUserDataFetch = () => {
   useEffect(() => {
     if (address) {
       dispatch(userSessionFetch());
-      dispatch(userEventsFetch());
+      dispatch(userEventsFetch({ mainAddress: address }));
     }
   }, [dispatch, address]);
 };

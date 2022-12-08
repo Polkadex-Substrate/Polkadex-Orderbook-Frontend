@@ -11,6 +11,9 @@ export type UserEvent = any;
 
 export interface UserEventsFetch {
   type: typeof USER_EVENTSCHANNEL_FETCH;
+  payload: {
+    mainAddress: string;
+  };
 }
 
 export interface UserEventsError {
@@ -25,8 +28,9 @@ export interface UserEventsData {
 
 export type UserEventsAction = UserEventsFetch | UserEventsError | UserEventsData;
 
-export const userEventsFetch = (): UserEventsFetch => ({
+export const userEventsFetch = (payload: UserEventsFetch["payload"]): UserEventsFetch => ({
   type: USER_EVENTSCHANNEL_FETCH,
+  payload,
 });
 
 export const userEventsData = (payload: UserEvent[]): UserEventsData => ({

@@ -14,21 +14,19 @@ import { userTradesUpdateEvent } from "../../trades";
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 import {
-  UserAccount,
-  selectUsingAccount,
   tradeAccountUpdateEvent,
   selectAssociatedTradeAddresses,
 } from "@polkadex/orderbook-modules";
 
-export function* userEventsChannelSaga(_action: UserEventsFetch) {
-  const currentAccount: UserAccount = yield select(selectUsingAccount);
-  const tradeAddresses: string[] = yield select(
-    selectAssociatedTradeAddresses(currentAccount.mainAddress)
-  );
-  const mainAddr = currentAccount.mainAddress;
-  yield fork(userEventsChannelHandler, mainAddr);
-  for (const addr in tradeAddresses) {
-    yield fork(userEventsChannelHandler, addr);
+export function* userEventsChannelSaga(action: UserEventsFetch) {
+  const { mainAddress } = action.payload;
+  if (mainAddress) {
+    const tradeAddresses: string[] = yield select(selectAssociatedTradeAddresses(mainAddress));
+    const mainAddr = mainAddress;
+    yield fork(userEventsChannelHandler, mainAddr);
+    for (const addr in tradeAddresses) {
+      yield fork(userEventsChannelHandler, addr);
+    }
   }
 }
 
