@@ -1,7 +1,8 @@
-import { call, fork, put, select } from "redux-saga/effects";
+import { call, delay, fork, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import { stringToHex } from "@polkadot/util";
+import { cancel } from "@redux-saga/core/effects";
 
 import * as mutations from "../../../../graphql/mutations";
 import {
@@ -36,7 +37,10 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
     // listen for events in this new registered main address
-    yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+    const eventsTask = yield fork(
+      userEventsChannelHandler,
+      selectedControllerAccount.account.address
+    );
     const hasAddressAndEmail =
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
@@ -64,6 +68,8 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
           })
         );
         yield put(registerMainAccountData());
+        yield delay(10000); // wait for 10s, so we get the registration event from backend.
+        yield cancel(eventsTask); // cancel events listener
       } else {
         throw new Error("Extrinsic failed");
       }
