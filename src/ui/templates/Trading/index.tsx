@@ -189,7 +189,7 @@ export function Trading() {
                 <S.WrapperGraph>
                   <Navbar onOpenMarkets={() => setState(!state)} />
                   <Graph />
-                  {true ? (
+                  {hasUser ? (
                     <Transactions />
                   ) : (
                     <EmptyMyAccount hasLimit {...hasSelectedAccount} />
