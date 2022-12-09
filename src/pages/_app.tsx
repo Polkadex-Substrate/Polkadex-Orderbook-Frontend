@@ -26,7 +26,6 @@ import {
   userData,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
-import { defaultConfig } from "@polkadex/orderbook-config";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
