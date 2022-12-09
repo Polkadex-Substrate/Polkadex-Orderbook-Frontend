@@ -23,7 +23,7 @@ export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
   gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
-  recaptchaV2: process.env.RECAPTCHA_KEY,
+  recaptchaV2: process.env.RECAPTCHA_KEY || "abcd123",
   landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
   withCredentials: false,
   incrementalOrderBook: false,
