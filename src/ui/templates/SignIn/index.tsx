@@ -1,8 +1,9 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-
+import ReCAPTCHA from "react-google-recaptcha";
+import { defaultConfig } from "@polkadex/orderbook-config";
 import * as S from "./styles";
 
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
@@ -15,6 +16,7 @@ export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
+  const reCaptchaRef = useRef();
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -23,9 +25,15 @@ export const SignInTemplate = () => {
     },
     validationSchema: signValidations,
     onSubmit: async (values) => {
-      return signIn(values.email, values.password);
+      const captcha = reCaptchaRef?.current as any;
+      const token = await captcha?.getValue();
+      if (token) return signIn(values.email, values.password);
     },
   });
+
+  const onCaptchaChange = (value) => {
+    reCaptchaRef.current = value
+  };
 
   return (
     <>
@@ -106,6 +114,11 @@ export const SignInTemplate = () => {
                       </a>
                     </span>
                   </S.Terms>
+                  <ReCAPTCHA
+                    ref={reCaptchaRef}
+                    sitekey={defaultConfig.recaptchaV2}
+                    onChange={onCaptchaChange}
+                  />
                   <Button
                     type="submit"
                     size="extraLarge"
