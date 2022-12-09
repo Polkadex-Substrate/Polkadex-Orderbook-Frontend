@@ -75,7 +75,7 @@ module.exports = withPlugins([
       LANDING_PAGE: process.env.LANDING_PAGE,
       SIGNUP_DISABLED: process.env.SIGNUP_DISABLED,
       PIN_POINT_CLIENT_ID: process.env.PIN_POINT_CLIENT_ID,
-      RECAPTCHA_KEY: process.env.RECAPTCHA_KEY,
+      RECAPTCHA_KEY: process.env.RECAPTCHA_KEY || "6LcBuGMjAAAAAMV6wuKvORp46VXZPN8Qt7n5AaPI",
     },
   },
 ]);
