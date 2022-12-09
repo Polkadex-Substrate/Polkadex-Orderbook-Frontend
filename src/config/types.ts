@@ -2,7 +2,7 @@ export type DefaultConfig = {
   polkadexFeature: string;
   polkadexChain: string;
   gaTrackerKey: string;
-  recaptchaV3: string;
+  recaptchaV2: string;
   landingPageMarket: string;
   withCredentials: boolean;
   incrementalOrderBook: boolean;
