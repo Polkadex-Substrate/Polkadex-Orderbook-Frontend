@@ -10,7 +10,6 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -73,9 +72,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <OverlayProvider>
-      <GoogleReCaptchaProvider
-        reCaptchaKey={defaultConfig.recaptchaV3}
-        scriptProps={{ async: true, defer: true, appendTo: "body" }}>
         <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
           <QueryClientProvider client={queryClient}>
             <Notifications />
@@ -94,7 +90,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             <GlobalStyles />
           </QueryClientProvider>
         </ThemeProvider>
-      </GoogleReCaptchaProvider>
     </OverlayProvider>
   );
 };

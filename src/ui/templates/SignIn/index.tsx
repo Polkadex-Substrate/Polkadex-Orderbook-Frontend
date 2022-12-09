@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 
@@ -10,27 +10,11 @@ import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSignIn } from "@polkadex/orderbook-hooks";
 import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export const SignInTemplate = () => {
   const { signIn, loading } = useSignIn();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
-  const { executeRecaptcha } = useGoogleReCaptcha();
-  const [token, setToken] = useState("");
-  const [dynamicAction, setDynamicAction] = useState("signinpage");
-
-  const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
-      return;
-    }
-    const result = await executeRecaptcha("signin");
-    setToken(result);
-  }, [dynamicAction, executeRecaptcha]);
-
-  useEffect(() => {
-    handleReCaptchaVerify();
-  }, [handleReCaptchaVerify]);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -39,8 +23,6 @@ export const SignInTemplate = () => {
     },
     validationSchema: signValidations,
     onSubmit: async (values) => {
-      setDynamicAction("signin");
-      // we need to pass the token to the backend.
       return signIn(values.email, values.password);
     },
   });
