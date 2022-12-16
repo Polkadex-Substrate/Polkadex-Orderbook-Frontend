@@ -9,7 +9,6 @@ import { withSSRContext } from "aws-amplify";
 import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
-import { QueryClientProvider, QueryClient } from "react-query";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -26,6 +25,7 @@ import {
   userData,
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -41,16 +41,31 @@ const Notifications = dynamic(
     ssr: false,
   }
 );
-const queryClient = new QueryClient();
+
+const Maintenance = dynamic(
+  () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
+  {
+    ssr: false,
+  }
+);
 
 function App({ Component, pageProps }: AppProps) {
-  useInit();
-  useUserDataFetch();
+  const color = useSelector(selectCurrentColorTheme);
 
   return (
-    <ThemeWrapper>
-      <Component {...pageProps} />
-    </ThemeWrapper>
+    <OverlayProvider>
+      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        {defaultConfig.maintenanceMode ? (
+          <Maintenance />
+        ) : (
+          <ThemeWrapper>
+            <Component {...pageProps} />
+          </ThemeWrapper>
+        )}
+
+        <GlobalStyles />
+      </ThemeProvider>
+    </OverlayProvider>
   );
 }
 
@@ -67,29 +82,26 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     cryptoWait();
   }, []);
-  const color = useSelector(selectCurrentColorTheme);
+
+  useInit();
+  useUserDataFetch();
 
   return (
-    <OverlayProvider>
-      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        <QueryClientProvider client={queryClient}>
-          <Notifications />
-          <Message />
-          <GoogleAnalytics trackPageViews />
-          <NextNProgress
-            color="#E6007A"
-            startPosition={0.3}
-            height={2}
-            showOnShallow={true}
-            options={{
-              showSpinner: false,
-            }}
-          />
-          {children}
-          <GlobalStyles />
-        </QueryClientProvider>
-      </ThemeProvider>
-    </OverlayProvider>
+    <>
+      <Notifications />
+      <Message />
+      <GoogleAnalytics trackPageViews />
+      <NextNProgress
+        color="#E6007A"
+        startPosition={0.3}
+        height={2}
+        showOnShallow={true}
+        options={{
+          showSpinner: false,
+        }}
+      />
+      {children}
+    </>
   );
 };
 // TODO: Move to sagas || Improve

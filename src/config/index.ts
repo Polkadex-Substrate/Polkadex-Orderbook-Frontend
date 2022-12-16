@@ -34,7 +34,7 @@ export const defaultConfig: DefaultConfig = {
   minutesUntilAutoLogout: 120,
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
-  maintenanceMode: false,
+  maintenanceMode: process.env.MAINTENACE_MODE === "true",
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
   reconnectRangerTime: 30000,
 };
