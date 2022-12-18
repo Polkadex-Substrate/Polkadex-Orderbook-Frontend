@@ -12,3 +12,4 @@ export * from "./Balances";
 export * from "./ResetPassword";
 export * from "./ResetPasswordForm";
 export * from "./AccessDenied";
+export * from "./Maintenance";
