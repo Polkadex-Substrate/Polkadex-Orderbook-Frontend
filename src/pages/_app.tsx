@@ -9,6 +9,7 @@ import { withSSRContext } from "aws-amplify";
 import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -48,6 +49,7 @@ const Maintenance = dynamic(
     ssr: false,
   }
 );
+const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
@@ -58,9 +60,11 @@ function App({ Component, pageProps }: AppProps) {
         {defaultConfig.maintenanceMode ? (
           <Maintenance />
         ) : (
-          <ThemeWrapper>
-            <Component {...pageProps} />
-          </ThemeWrapper>
+          <QueryClientProvider client={queryClient}>
+            <ThemeWrapper>
+              <Component {...pageProps} />
+            </ThemeWrapper>
+          </QueryClientProvider>
         )}
 
         <GlobalStyles />
