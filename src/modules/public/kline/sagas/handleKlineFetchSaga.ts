@@ -24,11 +24,11 @@ export function* handleKlineFetchSaga(action: KlineFetch) {
     const data = yield call(() => fetchKlineAsync(market, resolution, from, to));
     yield put(klineData({ list: data, market, interval: resolution }));
   } catch (error) {
-    console.log("got kline fetch error", error);
+    console.log("Kline fetch error", error);
     yield put(
       sendError({
-        error,
-        processingType: "alert",
+        error: "Kline fetch error",
+        processingType: "console",
         extraOptions: {
           actionError: klineError,
         },
