@@ -22,20 +22,18 @@ export function* marketTickersSaga(_action: MarketsTickersFetch) {
     const tickers = yield call(fetchMarketTickers);
     yield put(marketsTickersData(tickers));
   } catch (error) {
-    console.error("marekt ticker fetch error", error);
+    console.error("Market tickers fetch error", error);
     yield put(
       sendError({
-        error,
-        processingType: "alert",
-        extraOptions: {
-          actionError: marketsTickersError,
-        },
+        error: "Market tickers fetch error",
+        processingType: "console",
       })
     );
   }
 }
 
 const fetchMarketTickers = async (): Promise<Ticker[]> => {
+  // TODO: check sendQueryToAppSync market variable
   const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
   const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
   const tickers: Ticker[] = tickersRaw.map((elem) => {

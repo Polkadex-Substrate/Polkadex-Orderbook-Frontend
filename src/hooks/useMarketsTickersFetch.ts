@@ -16,12 +16,12 @@ export const useMarketsTickersFetch = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (shouldDispatch) {
-      dispatch(marketsTickersFetch());
-    }
-  }, [dispatch, shouldDispatch]);
-
-  useEffect(() => {
     if (currentMarket?.id) dispatch(marketsTickersChannelFetch());
   }, [dispatch, currentMarket]);
+
+  useEffect(() => {
+    if (!!currentMarket?.id && shouldDispatch) {
+      dispatch(marketsTickersFetch());
+    }
+  }, [dispatch, shouldDispatch, currentMarket]);
 };
