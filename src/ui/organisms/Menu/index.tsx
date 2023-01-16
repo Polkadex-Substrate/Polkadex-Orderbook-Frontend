@@ -188,34 +188,6 @@ const Terms = () => {
     </S.Terms>
   );
 };
-
-const Help = () => {
-  return (
-    <S.Terms>
-      <S.WrapperIcon>
-        <div>
-          <Icon name="Question" background="none" stroke="text" size="large" />
-        </div>
-        <S.TermsLinks>
-          <a
-            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_FAQ.pdf"
-            target="_blank"
-            rel="noreferrer">
-            <div>
-              <span>FAQ</span>
-            </div>
-          </a>
-          <a href="https://discord.gg/G4KMw2sGGe" target="_blank" rel="noreferrer">
-            <div>
-              <span>Discord</span>
-            </div>
-          </a>
-        </S.TermsLinks>
-      </S.WrapperIcon>
-    </S.Terms>
-  );
-};
-
 const Help = () => {
   const [state, setState] = useState(false);
   return (
