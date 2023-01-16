@@ -59,6 +59,13 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     amountBuy: "",
   });
 
+  const [slider, setSlider] = useState([
+    { percentage: "25%", percentageNum: 1, isActive: false },
+    { percentage: "50%", percentageNum: 2, isActive: false },
+    { percentage: "75%", percentageNum: 3, isActive: false },
+    { percentage: "100%", percentageNum: 4, isActive: false },
+  ]);
+
   // when type is changed reset form.
   useEffect(() => {
     setForm({
@@ -78,10 +85,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
   const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
 
-  const nextPriceLimitTruncated = Decimal.format(
-    tab.priceLimit,
-    pricePrecision || 0
-  );
+  const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
 
   /**
    * @description Get asset balance for the current market
@@ -424,6 +428,22 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     handlePriceChange,
   ]);
 
+  const handleSliderClick = (data: {
+    percentage: string;
+    percentageNum: number;
+    isActive: boolean;
+  }) => {
+    const newSlider = [...slider].map((slides) => {
+      slides.percentageNum === data.percentageNum
+        ? (slides.isActive = true)
+        : (slides.isActive = false);
+      return slides;
+    });
+    setSlider(newSlider);
+    const percentage = data.percentage.split("%")[0];
+    updateRange({ values: [+percentage] });
+  };
+
   return {
     availableAmount: isSell ? availableBaseAmount : availableQuoteAmount,
     changeAmount: handleAmountChange,
@@ -443,5 +463,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
     showProtectedPassword: hasTradeAccount && showProtectedPassword,
+    slider,
+    handleSliderClick,
   };
 }

@@ -18,6 +18,7 @@ import {
   PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   PROFILE_USER_TRADE_ACCOUNT_DELETE,
   PROFILE_SET_PROFILE_AVATAR,
+  PROFILE_USER_FAVORITE_MARKET_PUSH,
 } from "./constants";
 
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
@@ -61,6 +62,11 @@ export interface UserError {
 
 export interface UserReset {
   type: typeof PROFILE_RESET_USER;
+}
+
+export interface UserFavoriteMarketPush {
+  type: typeof PROFILE_USER_FAVORITE_MARKET_PUSH;
+  payload: string;
 }
 
 export interface UserAuthFetch {
@@ -127,7 +133,8 @@ export type ProfileAction =
   | UserSetDefaultTradeAccount
   | UserProfileTradeAccountDelete
   | UserSetAvatar
-  | Hydrate;
+  | Hydrate
+  | UserFavoriteMarketPush;
 
 export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
   type: PROFILE_USER_FETCH,
@@ -181,11 +188,13 @@ export const userAccountSelectData = (
   payload,
 });
 
+// adds a new UserAccount to users profile state
 export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"]) => ({
   type: PROFILE_USER_ACCOUNT_PUSH,
   payload,
 });
 
+// adds a new main address to users profile state
 export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
 ) => ({
@@ -209,5 +218,12 @@ export const userSetDefaultTradeAccount = (
 
 export const userSetAvatar = (payload?: UserSetAvatar["payload"]) => ({
   type: PROFILE_SET_PROFILE_AVATAR,
+  payload,
+});
+
+export const userFavoriteMarketPush = (
+  payload: UserFavoriteMarketPush["payload"]
+): UserFavoriteMarketPush => ({
+  type: PROFILE_USER_FAVORITE_MARKET_PUSH,
   payload,
 });

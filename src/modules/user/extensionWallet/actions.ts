@@ -12,6 +12,8 @@ import {
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
 } from "./constants";
 
+import { USER_EVENTS } from "@polkadex/web-constants";
+
 export interface ExtensionWalletFetch {
   type: typeof POLKADOT_EXTENSION_WALLET_FETCH;
 }
@@ -47,7 +49,12 @@ export interface RegisterMainAccountError {
 
 export interface RegisterMainAccountUpdateEvent {
   type: typeof REGISTER_MAIN_ACCOUNT_UPDATE_FETCH;
-  payload: any;
+  payload: {
+    type: typeof USER_EVENTS.RegisterAccount;
+    event_id: number;
+    main: string;
+    proxy: string;
+  };
 }
 
 export interface RegisterMainAccountUpdateData {

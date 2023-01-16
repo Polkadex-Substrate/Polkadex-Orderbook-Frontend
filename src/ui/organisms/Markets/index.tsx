@@ -1,13 +1,14 @@
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import { FC } from "react";
+import { endOfDay, subDays } from "date-fns";
 
 import * as S from "./styles";
-import * as F from "./fakeData";
 
 import { Icon, Skeleton, ResultFound, Search } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
-import { useCookieHook, InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
+import { InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
+import { useMiniGraph } from "@polkadex/orderbook/hooks/useMiniGraph";
 
 export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
@@ -16,16 +17,17 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
     handleChangeMarket,
     handleFieldChange,
     handleMarketsTabsSelected,
+    handleSelectedFavorite,
     currentTickerImg,
     currentTickerName,
     fieldValue,
     handleShowFavourite,
+    id,
   } = useMarkets(onClose);
-
   return (
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
-        <HeaderMarket pair={currentTickerName} pairTicker={currentTickerImg} />
+        <HeaderMarket id={id} pair={currentTickerName} pairTicker={currentTickerImg} />
         <S.Favorite>
           <button type="button" onClick={onClose}>
             <Icon name="Close" size="small" color="text" stroke="text" />
@@ -38,7 +40,11 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
         handleShowFavourite={handleShowFavourite}
         showFavourite={fieldValue.showFavourite}
       />
-      <Content tokens={marketTokens()} changeMarket={handleChangeMarket} />
+      <Content
+        handleSelectedFavorite={handleSelectedFavorite}
+        tokens={marketTokens()}
+        changeMarket={handleChangeMarket}
+      />
       <Footer
         tickers={marketTickers}
         changeMarket={handleMarketsTabsSelected}
@@ -49,11 +55,17 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
 };
 
 export const HeaderMarket = ({
+  id = "",
   pair = "Empty  Token",
   pairSymbol = "Polkadex",
   pairTicker,
   onOpenMarkets = undefined,
 }) => {
+  const now = new Date();
+  const from = subDays(now, 7);
+  const to = endOfDay(now);
+  const { graphPoints, isIncreasing } = useMiniGraph(id, from, to);
+
   return (
     <S.Header onClick={onOpenMarkets}>
       <S.HeaderAsideLeft>
@@ -68,8 +80,8 @@ export const HeaderMarket = ({
         </S.HeaderInfo>
       </S.HeaderAsideLeft>
       <S.HeaderAsideCenter>
-        <Sparklines data={F.fakeChartData}>
-          <SparklinesLine color="#E6007A" />
+        <Sparklines data={graphPoints}>
+          <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
         </Sparklines>
       </S.HeaderAsideCenter>
     </S.Header>
@@ -102,10 +114,11 @@ const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite
   );
 };
 
-const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => void }> = ({
-  tokens = [],
-  changeMarket,
-}) => (
+const Content: FC<{
+  tokens?: InitialMarkets[];
+  handleSelectedFavorite: (id: string) => void;
+  changeMarket: (value: string) => void;
+}> = ({ tokens = [], changeMarket, handleSelectedFavorite }) => (
   <S.Content>
     <S.ContainerWrapper>
       {tokens.length ? (
@@ -120,6 +133,7 @@ const Content: FC<{ tokens?: InitialMarkets[]; changeMarket: (value: string) => 
             fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
             change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
             changeMarket={() => changeMarket(token.name)}
+            handleSelectedFavorite={handleSelectedFavorite}
             isFavourite={token.isFavourite}
           />
         ))
@@ -140,11 +154,11 @@ const Card = ({
   change,
   changeMarket,
   isFavourite,
+  handleSelectedFavorite,
 }) => {
-  const { handleChangeFavourite } = useCookieHook(id);
   return (
     <S.Card>
-      <S.CardInfo type="button" onClick={handleChangeFavourite}>
+      <S.CardInfo type="button" onClick={() => handleSelectedFavorite(id)}>
         <Icon
           name="Star"
           size="extraSmall"

@@ -6,7 +6,7 @@ import * as queries from "../../../../graphql/queries";
 import { Transaction } from "../reducer";
 import { notificationPush } from "../../notificationHandler";
 
-import { subtractMonths } from "@polkadex/orderbook/helpers/substractMonths";
+import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
 
@@ -59,7 +59,7 @@ const fetchTransactions = async (
   monthsBefore: number,
   limit = 100000
 ): Promise<Transaction[]> => {
-  const fromDate = subtractMonths(monthsBefore);
+  const fromDate = subtractMonthsFromDateOrNow(monthsBefore);
   const txs: TransactionQueryResult[] = await fetchAllFromAppSync(
     queries.listTransactionsByMainAccount,
     {

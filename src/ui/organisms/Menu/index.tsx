@@ -48,9 +48,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
               <div>
                 <Icon name="Exchange" background="none" stroke="text" size="large" />
               </div>
-              <div>
-                <S.Span>Exchange</S.Span>
-              </div>
+              <S.Span>Exchange</S.Span>
             </S.WrapperIcon>
           </Link>
           <Link href="/balances">
@@ -58,9 +56,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
               <div>
                 <Icon name="Coins" background="none" stroke="text" size="large" />
               </div>
-              <div>
-                <S.Span>Balances</S.Span>
-              </div>
+              <S.Span>Balances</S.Span>
             </S.WrapperIcon>
           </Link>
           <Link href="/settings">
@@ -68,9 +64,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
               <div>
                 <Icon name="Wallet" background="none" stroke="text" size="large" />
               </div>
-              <div>
-                <S.Span>Accounts</S.Span>
-              </div>
+              <S.Span>Accounts</S.Span>
             </S.WrapperIcon>
           </Link>
           <Terms />
@@ -142,77 +136,58 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
 };
 
 const Terms = () => {
-  const [state, setState] = useState(false);
   return (
     <S.Terms>
-      <span role="button" onClick={() => setState(!state)}>
-        <S.WrapperIcon>
-          <div>
-            <Icon name="Book" background="none" stroke="text" size="large" />
-          </div>
-          <div>
-            <S.Span>Legal links</S.Span>
-          </div>
-        </S.WrapperIcon>
-      </span>
-      {state && (
+      <S.WrapperIcon>
+        <div>
+          <Icon name="Book" background="none" stroke="text" size="large" />
+        </div>
         <S.TermsLinks>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
             target="_blank"
             rel="noreferrer">
-            <S.WrapperIcon>
-              <div>
-                <S.Span>Terms of Use</S.Span>
-              </div>
-            </S.WrapperIcon>
+            <div>
+              <span>Terms of Use</span>
+            </div>
           </a>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
             target="_blank"
             rel="noreferrer">
-            <S.WrapperIcon>
-              <div>
-                <S.Span>Privacy Policy</S.Span>
-              </div>
-            </S.WrapperIcon>
+            <div>
+              <span>Privacy Policy</span>
+            </div>
           </a>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
             target="_blank"
             rel="noreferrer">
-            <S.WrapperIcon>
-              <div>
-                <S.Span>Disclaimer</S.Span>
-              </div>
-            </S.WrapperIcon>
+            <div>
+              <span>Disclaimer</span>
+            </div>
           </a>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
             target="_blank"
             rel="noreferrer">
-            <S.WrapperIcon>
-              <div>
-                <S.Span>Excluded Jurisdictions</S.Span>
-              </div>
-            </S.WrapperIcon>
+            <div>
+              <span>Excluded Jurisdictions</span>
+            </div>
           </a>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf"
             target="_blank"
             rel="noreferrer">
-            <S.WrapperIcon>
-              <div>
-                <S.Span>Data Retention Policy</S.Span>
-              </div>
-            </S.WrapperIcon>
+            <div>
+              <span>Data Retention Policy</span>
+            </div>
           </a>
         </S.TermsLinks>
-      )}
+      </S.WrapperIcon>
     </S.Terms>
   );
 };
-
 const Help = () => {
   const [state, setState] = useState(false);
   return (
