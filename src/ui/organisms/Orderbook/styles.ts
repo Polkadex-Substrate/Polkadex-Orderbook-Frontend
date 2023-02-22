@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
     /* width: 100%; */
     /* min-width: 30rem; */
     max-width: 41.8rem;
-    width: 35%;
+    width: 30%;
     max-height: 43rem;
     @media screen and (min-width: 780px) {
       border-left: 1px solid ${theme.colors.secondaryBackground};

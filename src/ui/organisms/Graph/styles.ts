@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
     min-height: 30rem;
     width:100%;
     display:flex;
+    align-self:baseline;
     /* @media screen and (min-width: 780px) {
       grid-template-columns: 1fr auto;
     } */
@@ -19,13 +20,16 @@ export const Wrapper = styled.div`
 export const WrapperGraph = styled.section`
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 70%;
   padding: 2rem;
   @media screen and (min-width: 1240px) {
     min-width: 58rem;
   }
   @media screen and (min-width: 1080px) and (max-width: 1240px) {
     min-width: 36rem;
+  }
+  @media screen and (min-width: 1688px)  {
+    height: 50rem;
   }
 `;
 // Header
@@ -43,7 +47,13 @@ export const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-height: 38rem;
+  /* min-height: 38rem; */
+  /* max-height: 38rem; */
+  height: 38rem;
+  @media screen and (min-width: 1688px)  {
+    height: 100%;
+  }
+  /* height: 100%; */
 `;
 
 export const FlexWrapper = styled.div`
