@@ -187,15 +187,8 @@ export function Trading() {
               </S.Box>
               <S.Content>
                 <S.WrapperGraph>
+                  <S.Header>
                   <Navbar onOpenMarkets={() => setState(!state)} />
-                  <Graph />
-                  {hasUser ? (
-                    <Transactions />
-                  ) : (
-                    <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                  )}
-                </S.WrapperGraph>
-                <S.WrapperRight>
                   <S.Actions isSignedIn={isSignedIn}>
                     {!isSignedIn ? (
                       <Button
@@ -224,6 +217,17 @@ export function Trading() {
                       </S.Profile>
                     )}
                   </S.Actions>
+                  </S.Header>
+                  
+                  {/* <Graph />
+                  {hasUser ? (
+                    <Transactions />
+                  ) : (
+                    <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                  )} */}
+                </S.WrapperGraph>
+                <S.WrapperRight>
+                 
                   <MarketOrder />
                   <RecentTrades />
                 </S.WrapperRight>

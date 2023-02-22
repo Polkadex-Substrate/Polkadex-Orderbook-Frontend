@@ -26,18 +26,20 @@ export const ContainerPair = styled.div`
 
 export const ContainerInfo = styled.div`
   ${({ theme }) => css`
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(4, auto);
-    grid-column-gap: 3rem;
+    grid-column-gap: 3rem; */
+    display: flex;
+    justify-content: space-between;
     border-radius: 0 0 3rem 3rem;
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
-    padding: 1.5rem 2.5rem;
-    width: 100%;
+    padding: 1.6rem 2.5rem 1.2rem 2.5rem;
+    width: 65rem ;
     ${media.lessThan("medium")`
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
-    grid-column-gap: 1rem;
+    grid-column-gap: 1rem; */
   `}
   `}
 `;
@@ -97,28 +99,33 @@ export const BoxWrapper = styled.div`
 
 export const VolumeHigh = styled.div`
   align-items: center;
-  p {
-    color: inherit;
+  ${({theme})=>css`
+  p{
+    color: ${theme.colors.green};
   }
+  `}
 `;
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   align-items: baseline;
-  p {
-    color: inherit;
+  ${({theme})=>css`
+  p{
+    color: ${theme.colors.primary};
   }
+  `}
 `;
 export const WrapperVolume = styled.div`
   display: flex;
 `;
 
 export const ContainerVolume = styled.div`
-  span {
+${({ theme }) => css`
+span {
     display: block;
     margin-right: 1rem;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     color: #8ba1be;
-    opacity: 0.7;
+    /* opacity: 0.7; */
     font-weight: 500;
     white-space: nowrap;
   }
@@ -128,8 +135,11 @@ export const ContainerVolume = styled.div`
     justify-content: flex-end;
   }
   p {
-    font-weight: 500;
+    font-weight: 800;
+    font-size: ${theme.font.sizes.xlarge};
   }
+  `}
+  
 `;
 
 // Dropdown
