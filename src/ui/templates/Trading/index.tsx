@@ -218,19 +218,20 @@ export function Trading() {
                     )}
                   </S.Actions>
                   </S.Header>
-                  
-                  {/* <Graph />
+                  <S.CenterWrapper>
+                  <Graph />
+                  <S.WrapperRight>
+                   <MarketOrder />
+                   <RecentTrades />
+                  </S.WrapperRight>
+                  </S.CenterWrapper>
                   {hasUser ? (
                     <Transactions />
                   ) : (
                     <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                  )} */}
+                  )}
                 </S.WrapperGraph>
-                <S.WrapperRight>
-                 
-                  <MarketOrder />
-                  <RecentTrades />
-                </S.WrapperRight>
+                
               </S.Content>
             </S.ContainerMain>
             <Footer />

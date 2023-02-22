@@ -11,6 +11,7 @@ export const Wrapper = styled.section`
     justify-content: space-between;
     flex-wrap: nowrap;
     gap: 1rem;
+    width: 100%;
   `}
 `;
 
@@ -35,7 +36,8 @@ export const ContainerInfo = styled.div`
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1.6rem 2.5rem 1.2rem 2.5rem;
-    width: 65rem ;
+    min-width: 65rem ;
+    width: 50%;
     ${media.lessThan("medium")`
     /* grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;

@@ -16,11 +16,15 @@ export const Wrapper = styled.main`
   overflow-x: hidden;
 `;
 
+
+
 export const WrapperMain = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 1rem;
+  max-width: 1920px;
+  margin: auto;
 `;
 
 export const ContainerMain = styled.div`
@@ -46,29 +50,38 @@ export const Content = styled.div`
 export const WrapperGraph = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.8rem;
   flex: 1;
   overflow: hidden;
+  width: 100%;
 `;
 
 export const Header = styled.div`
 display:flex;
 align-items: center;
+width: 100%;
+justify-content: space-between;
+`
+
+export const CenterWrapper = styled.div`
+display: flex;
+width: 100%;
+gap: 1.5rem;
 `
 
 export const WrapperRight = styled.div`
   ${({ theme }) => css`
-    float: 1;
-    display: flex;
-    gap: 1rem;
+    /* float: 1; */
+    /* display: flex;
+    gap: 1rem; */
     min-width: 29rem;
-
-    @media screen and (min-width: 1080px), (max-width: 780px) {
+   width: 25%;
+    /* @media screen and (min-width: 1080px), (max-width: 780px) {
       flex-direction: column;
     }
     @media screen and (min-width: 1080px) {
       max-width: 29rem;
-    }
+    } */
   `}
 `;
 export const Actions = styled.div<{ isSignedIn?: boolean }>`
@@ -76,7 +89,7 @@ export const Actions = styled.div<{ isSignedIn?: boolean }>`
     display: flex;
     flex-direction: column;
     /* padding-top: 1rem; */
-    width: 100%;
+    /* wisdth: 100%; */
     @media screen and (max-width: 1080px) {
       display: none;
     }

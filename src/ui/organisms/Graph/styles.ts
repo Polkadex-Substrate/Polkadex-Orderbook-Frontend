@@ -9,15 +9,17 @@ export const Wrapper = styled.div`
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
     min-height: 30rem;
-    @media screen and (min-width: 780px) {
+    width:100%;
+    display:flex;
+    /* @media screen and (min-width: 780px) {
       grid-template-columns: 1fr auto;
-    }
+    } */
   `}
 `;
 export const WrapperGraph = styled.section`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 75%;
   padding: 2rem;
   @media screen and (min-width: 1240px) {
     min-width: 58rem;

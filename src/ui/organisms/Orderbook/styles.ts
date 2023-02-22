@@ -7,12 +7,14 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    width: 100%;
-    min-width: 30rem;
+    /* width: 100%; */
+    /* min-width: 30rem; */
+    max-width: 41.8rem;
+    width: 35%;
     max-height: 43rem;
     @media screen and (min-width: 780px) {
       border-left: 1px solid ${theme.colors.secondaryBackground};
-      max-width: 30rem;
+      /* max-width: 30rem; */
     }
   `}
 `;
