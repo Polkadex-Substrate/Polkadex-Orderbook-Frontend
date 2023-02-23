@@ -12,6 +12,7 @@ export const Wrapper = styled.main`
   flex-direction: row;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
   height: 100vh;
+  max-height: 100rem;
   overflow: auto;
   overflow-x: hidden;
 `;
