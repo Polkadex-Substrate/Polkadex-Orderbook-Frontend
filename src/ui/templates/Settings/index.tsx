@@ -31,7 +31,7 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
-  linkEmail,
+  registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
   registerMainAccountFetch,
@@ -436,7 +436,7 @@ const ControllerWallets = ({
       name,
     });
     dispatch(
-      linkEmail({
+      registerMainAccountLinkEmail({
         mainAccount: accountAddress,
         tradeAddress: pair.address,
         mnemonic,

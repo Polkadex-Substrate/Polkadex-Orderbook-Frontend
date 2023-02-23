@@ -5,7 +5,7 @@ import {
   REGISTER_MAIN_ACCOUNT_FETCH,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
   REGISTER_MAIN_ACCOUNT_RESET,
-  LINK_EMAIL,
+  REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
 } from "../constants";
 
 import { polkadotExtensionWalletSaga } from "./polkadotExtensionWalletSaga";
@@ -19,5 +19,5 @@ export function* rootMainAccountsSaga() {
   yield takeLeading(REGISTER_MAIN_ACCOUNT_FETCH, registerMainAccountSaga);
   yield takeLeading(REGISTER_MAIN_ACCOUNT_UPDATE_FETCH, registerMainAccountUpdateSaga);
   yield takeLeading(REGISTER_MAIN_ACCOUNT_RESET, registerMainAccountResetSaga);
-  yield takeLeading(LINK_EMAIL, linkEmailSaga);
+  yield takeLeading(REGISTER_MAIN_ACCOUNT_LINK_EMAIL, linkEmailSaga);
 }

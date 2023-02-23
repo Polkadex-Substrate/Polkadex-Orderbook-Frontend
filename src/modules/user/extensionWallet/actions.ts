@@ -10,7 +10,7 @@ import {
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
-  LINK_EMAIL
+  REGISTER_MAIN_ACCOUNT_LINK_EMAIL
 } from "./constants";
 
 import { USER_EVENTS } from "@polkadex/web-constants";
@@ -40,8 +40,8 @@ export interface RegisterMainAccountFetch {
   payload: { mainAccount: string; tradeAddress: string; password: string; mnemonic: string };
 }
 
-export interface LinkEmail {
-  type: typeof LINK_EMAIL;
+export interface RegisterMainAccountLinkEmailFetch {
+  type: typeof REGISTER_MAIN_ACCOUNT_LINK_EMAIL;
   payload: { mainAccount: string; tradeAddress: string; mnemonic: string };
 }
 
@@ -100,8 +100,8 @@ export const registerMainAccountFetch = (payload: RegisterMainAccountFetch["payl
   payload,
 });
 
-export const linkEmail = (payload: LinkEmail["payload"]) => ({
-  type: LINK_EMAIL,
+export const registerMainAccountLinkEmail = (payload: RegisterMainAccountLinkEmailFetch["payload"]) => ({
+  type: REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
   payload,
 });
 

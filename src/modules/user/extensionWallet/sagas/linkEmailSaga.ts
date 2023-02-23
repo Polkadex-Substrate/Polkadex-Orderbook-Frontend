@@ -17,10 +17,10 @@ import {
   selectMainAccount,
 } from "../../..";
 import {
-    LinkEmail,
   registerMainAccountData,
   registerMainAccountError,
   RegisterMainAccountFetch,
+  RegisterMainAccountLinkEmailFetch,
 } from "../actions";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
@@ -31,7 +31,7 @@ import { userEventsChannelHandler } from "@polkadex/orderbook/modules/user/userE
 
 type LinkEmailData = { email: string; main_address: string };
 
-export function* linkEmailSaga(action: LinkEmail) {
+export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
   let data: LinkEmailData, signature: string;
   const { mainAccount, tradeAddress, mnemonic } = action.payload;
   try {
