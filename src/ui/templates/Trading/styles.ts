@@ -12,7 +12,7 @@ export const Wrapper = styled.main`
   flex-direction: row;
   box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
   height: 100vh;
-  max-height: 100rem;
+  /* max-height: 100rem; */
   overflow: auto;
   overflow-x: hidden;
 `;
@@ -69,6 +69,9 @@ export const CenterWrapper = styled.div`
 display: flex;
 width: 100%;
 gap: 1.5rem;
+@media screen and (max-width: 1180px) {
+      flex-direction: column;
+    }
 `
 export const GraphEpmty = styled.div`
 display: flex;
@@ -86,10 +89,11 @@ export const WrapperRight = styled.div`
    width: 25%;
     /* @media screen and (min-width: 1080px), (max-width: 780px) {
       flex-direction: column;
-    }
-    @media screen and (min-width: 1080px) {
-      max-width: 29rem;
     } */
+    @media screen and (max-width: 1180px) {
+     display: flex;
+     width: 100%;
+    }
   `}
 `;
 export const Actions = styled.div<{ isSignedIn?: boolean }>`

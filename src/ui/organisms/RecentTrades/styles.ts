@@ -5,6 +5,9 @@ export const MainContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-top: 1.5rem;
+  @media screen and (max-width: 1180px) {
+      width: 50%;
+    }
 `;
 
 export const Main = styled.div<{ hasData?: boolean }>`

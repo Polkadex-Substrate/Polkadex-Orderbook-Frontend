@@ -9,14 +9,16 @@ export const Wrapper = styled.div`
     flex-direction: column;
     /* width: 100%; */
     /* min-width: 30rem; */
-    max-width: 35rem;
+   
+    max-height: 43rem;
+    @media screen and (min-width: 900px) {
+      border-left: 1px solid ${theme.colors.secondaryBackground};
+      max-width: 35rem;
     width: 30%;
     min-width: 30rem;
-    max-height: 43rem;
-    @media screen and (min-width: 780px) {
-      border-left: 1px solid ${theme.colors.secondaryBackground};
       /* max-width: 30rem; */
     }
+   
     @media screen and (min-width: 1688px) {
       border-left: 1px solid ${theme.colors.secondaryBackground};
       max-width: 41.8rem;

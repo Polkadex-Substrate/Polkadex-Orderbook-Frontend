@@ -12,9 +12,10 @@ export const Wrapper = styled.div`
     width:100%;
     display:flex;
     align-self:baseline;
-    /* @media screen and (min-width: 780px) {
-      grid-template-columns: 1fr auto;
-    } */
+    @media screen and (max-width: 900px) {
+      /* grid-template-columns: 1fr auto; */
+      flex-direction: column;
+    }
   `}
 `;
 export const WrapperGraph = styled.section`
