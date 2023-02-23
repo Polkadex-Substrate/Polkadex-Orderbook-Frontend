@@ -24,7 +24,8 @@ export const WrapperMain = styled.div`
   flex: 1;
   gap: 1rem;
   max-width: 1920px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const ContainerMain = styled.div`
