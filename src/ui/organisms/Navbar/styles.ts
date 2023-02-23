@@ -34,13 +34,17 @@ export const ContainerInfo = styled.div`
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1.5rem 2.5rem;
-    width: 100%
-  
-    ${media.lessThan("medium")`
+    /* width: 100%;s */
+    @media screen and (max-width: 494px) {
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
     grid-column-gap: 1rem;
-  `}
+  }
+    /* ${media.lessThan("medium")`
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 0.5rem;
+    grid-column-gap: 1rem;
+  `} */
   `}
 `;
 export const WrapperInfo = styled.div`
