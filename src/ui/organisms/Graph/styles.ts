@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
 export const WrapperGraph = styled.section`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
   padding: 2rem;
   @media screen and (min-width: 1240px) {
     min-width: 58rem;
