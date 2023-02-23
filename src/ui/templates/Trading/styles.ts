@@ -87,12 +87,20 @@ export const WrapperRight = styled.div`
     gap: 1rem; */
     min-width: 29rem;
    width: 25%;
+   display: flex;
+   flex-direction: column;
     /* @media screen and (min-width: 1080px), (max-width: 780px) {
       flex-direction: column;
     } */
     @media screen and (max-width: 1180px) {
-     display: flex;
-     width: 100%;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    height: 41.4rem;
+    }
+    @media screen and (max-width: 750px) {
+    flex-direction: column;
+    height: max-content;
     }
   `}
 `;
