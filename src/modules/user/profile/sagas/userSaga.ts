@@ -27,13 +27,18 @@ export const getAllProxyAccounts = async (
   Api = API
 ): Promise<UserAccount[]> => {
   const promises = mainAccounts.map(async (main_account) => {
-    const res: any = await sendQueryToAppSync({
-      query: queries.findUserByMainAccount,
-      variables: { main_account },
-      API: Api,
-    });
-    const proxies = res.data.findUserByMainAccount.proxies;
-    return { main_account, proxies };
+    try {
+      const res: any = await sendQueryToAppSync({
+        query: queries.findUserByMainAccount,
+        variables: { main_account },
+        API: Api,
+      });
+      const proxies = res.data.findUserByMainAccount.proxies ?? [];
+      return { main_account, proxies };
+    } catch (error) {
+      console.log("Error: getAllProxyAccounts", error.errors);
+      return { main_account, proxies: [] };
+    }
   });
   const list = await Promise.all(promises);
   const accounts: UserAccount[] = [];

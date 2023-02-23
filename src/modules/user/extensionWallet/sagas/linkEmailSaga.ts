@@ -38,12 +38,9 @@ export function* linkEmailSaga(action: LinkEmail) {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
-    // listen for events in this new registered main address
-    yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+
     const hasAddressAndEmail =
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
-
-    console.log(hasAddressAndEmail,'here...')
 
     if (hasAddressAndEmail) {
       const signedData = yield call(createSignedData, selectedControllerAccount, email);
