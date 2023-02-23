@@ -429,7 +429,7 @@ const ControllerWallets = ({
 
   const dispatch = useDispatch();
 
-  const handleLinkEmail = (extensionAccount) => {
+  const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
     const accountAddress = extensionAccount.account.address;
     const mnemonic = mnemonicGenerate();
     const { pair } = keyring.addUri(mnemonic, null, {
@@ -455,17 +455,19 @@ const ControllerWallets = ({
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
       <S.WalletActions>
-        {isRegistered ? (
+        {isRegistered && linkedTradeAccounts?.length>0 ? (
           <Badge isRegistered={true}>Registered</Badge>
         ) : (
           <Fragment>
-            <S.Button
-              type="button"
-              onClick={() => {
-                handleLinkEmail(extensionAccount);
-              }}>
-              Link Email
-            </S.Button>
+            {!isRegistered && 
+              <S.Button
+                type="button"
+                onClick={() => {
+                  handleLinkEmail(extensionAccount);
+                }}>
+                Link Email
+              </S.Button>
+            }
             <S.Button
               type="button"
               onClick={() => {

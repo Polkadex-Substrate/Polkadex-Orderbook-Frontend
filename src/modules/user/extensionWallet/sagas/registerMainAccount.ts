@@ -41,9 +41,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
     if (hasAddressAndEmail) {
-      const signedData = yield call(createSignedData, selectedControllerAccount, email);
-      data = signedData.data;
-      signature = signedData.signature;
       const res = yield call(() =>
         registerMainAccount(
           api,
@@ -53,7 +50,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         )
       );
       if (res.isSuccess) {
-        yield call(executeRegisterEmail, data, signature);
         yield put(
           registerTradeAccountData({
             mnemonic,
