@@ -16,6 +16,9 @@ export const Wrapper = styled.div`
       /* grid-template-columns: 1fr auto; */
       flex-direction: column;
     }
+    @media screen and (min-height: 1200px) {
+     height: 50vh;
+    }
   `}
 `;
 export const WrapperGraph = styled.section`

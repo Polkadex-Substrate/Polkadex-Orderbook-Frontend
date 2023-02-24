@@ -113,6 +113,9 @@ export const Wrapper = styled.nav`
         flex-direction: column;
       }
     }
+    @media screen and (min-height:1200px){
+      max-height: 77vh;
+    }
   `}
 `;
 
