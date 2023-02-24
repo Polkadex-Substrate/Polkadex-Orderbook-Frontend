@@ -23,6 +23,9 @@ export const Wrapper = styled.div`
       border-left: 1px solid ${theme.colors.secondaryBackground};
       max-width: 41.8rem;
     }
+    @media screen and (min-height: 1200px) {
+     min-height: 50vh;
+    }
   `}
 `;
 
