@@ -3,6 +3,14 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  margin-top: 1.5rem;
+  @media screen and (max-width: 1180px) {
+      width: 50%;
+    }
+    @media screen and (max-width: 750px) {
+      width: 100%;
+    }
 `;
 
 export const Main = styled.div<{ hasData?: boolean }>`
@@ -13,17 +21,13 @@ export const Main = styled.div<{ hasData?: boolean }>`
     flex: 1;
     border-radius: 0 3rem 3rem 0rem;
     min-width: 29rem;
+    width: 100%;
     height: 100%;
     min-height: 33rem;
     max-height: 70rem;
-    @media screen and (min-width: 1290px) {
-      max-width: 29rem;
-    }
-    @media screen and (max-height: 800px) {
-      max-height: 35rem;
-    }
+   
     @media screen and (min-height: 1200px) {
-      max-height: 80rem;
+      max-height: 50vh;
     }
   `}
 `;

@@ -16,11 +16,16 @@ export const Wrapper = styled.main`
   overflow-x: hidden;
 `;
 
+
+
 export const WrapperMain = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 1rem;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const ContainerMain = styled.div`
@@ -36,33 +41,56 @@ export const ContainerMain = styled.div`
 `;
 
 export const Content = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex: 1;
-  @media screen and (max-width: 1080px) {
-    flex-direction: column;
-  }
+ 
 `;
 export const WrapperGraph = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.8rem;
   flex: 1;
   overflow: hidden;
+  width: 100%;
 `;
+
+export const Header = styled.div`
+display:flex;
+align-items: center;
+width: 100%;
+justify-content: space-between;
+`
+
+export const CenterWrapper = styled.div`
+display: flex;
+width: 100%;
+gap: 1.5rem;
+@media screen and (max-width: 1180px) {
+      flex-direction: column;
+    }
+`
+export const GraphEpmty = styled.div`
+display: flex;
+flex-direction: column;
+gap: 3rem;
+width: 100%;
+`
 
 export const WrapperRight = styled.div`
   ${({ theme }) => css`
-    float: 1;
-    display: flex;
-    gap: 1rem;
+    
     min-width: 29rem;
-
-    @media screen and (min-width: 1080px), (max-width: 780px) {
-      flex-direction: column;
+   width: 25%;
+   display: flex;
+   flex-direction: column;
+    
+    @media screen and (max-width: 1180px) {
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    height: 41.4rem;
     }
-    @media screen and (min-width: 1080px) {
-      max-width: 29rem;
+    @media screen and (max-width: 750px) {
+    flex-direction: column;
+    height: max-content;
     }
   `}
 `;
@@ -70,8 +98,7 @@ export const Actions = styled.div<{ isSignedIn?: boolean }>`
   ${({ isSignedIn }) => css`
     display: flex;
     flex-direction: column;
-    padding-top: 1rem;
-    width: 100%;
+   
     @media screen and (max-width: 1080px) {
       display: none;
     }
@@ -81,8 +108,7 @@ export const Box = styled.div`
   ${({ theme }) => css`
     justify-content: space-between;
     align-items: center;
-    /* Setting the padding for the Box component. */
-    /* padding: 0.4rem 1rem; */
+   
     display: none;
     padding: 0 1rem;
     ${Button} {

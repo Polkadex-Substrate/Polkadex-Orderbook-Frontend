@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export const Section = styled.section`
-  flex: 1;
+  width: 100%;
 `;
 // Header
 export const Header = styled.div`
