@@ -6,8 +6,6 @@ import { useRouter } from "next/router";
 
 import * as S from "./styles";
 import * as T from "./types";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
-import keyring from "@polkadot/ui-keyring";
 
 import {
   Menu,
@@ -431,15 +429,9 @@ const ControllerWallets = ({
 
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
     const accountAddress = extensionAccount.account.address;
-    const mnemonic = mnemonicGenerate();
-    const { pair } = keyring.addUri(mnemonic, null, {
-      name,
-    });
     dispatch(
       registerMainAccountLinkEmail({
-        mainAccount: accountAddress,
-        tradeAddress: pair.address,
-        mnemonic,
+        mainAccount: accountAddress
       })
     );
   }

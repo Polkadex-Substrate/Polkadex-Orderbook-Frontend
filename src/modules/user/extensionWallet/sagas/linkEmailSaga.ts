@@ -2,38 +2,27 @@
 
 import { call, fork, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
-import { Signer } from "@polkadot/types/types";
 import { stringToHex } from "@polkadot/util";
 
 import * as mutations from "../../../../graphql/mutations";
 import {
-  notificationPush,
-  removeTradeAccountFromBrowser,
   selectRangerApi,
   selectUserEmail,
-  registerTradeAccountData,
-  userProfileAccountPush,
   userProfileMainAccountPush,
   selectMainAccount,
 } from "../../..";
 import {
-  registerMainAccountData,
-  registerMainAccountError,
-  RegisterMainAccountFetch,
   RegisterMainAccountLinkEmailFetch,
 } from "../actions";
 
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { ErrorMessages } from "@polkadex/web-constants";
-import { userEventsChannelHandler } from "@polkadex/orderbook/modules/user/userEventsListener/sagas/userEventsChannel";
 
 type LinkEmailData = { email: string; main_address: string };
 
 export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
   let data: LinkEmailData, signature: string;
-  const { mainAccount, tradeAddress, mnemonic } = action.payload;
+  const { mainAccount } = action.payload;
   try {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const email = yield select(selectUserEmail);
@@ -48,67 +37,15 @@ export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
       signature = signedData.signature;
       yield call(executeRegisterEmail, data, signature);
 
-      // yield put(registerMainAccountData());
-
-      // const res = yield call(() =>
-      //   registerMainAccount(
-      //     api,
-      //     tradeAddress,
-      //     selectedControllerAccount.signer,
-      //     selectedControllerAccount.account?.address
-      //   )
-      // );
-      // if (res.isSuccess) {
-        // yield put(
-        //   registerTradeAccountData({
-        //     mnemonic,
-        //     account: {
-        //       name: selectedControllerAccount.account.meta.name,
-        //       address: selectedControllerAccount.account.address,
-        //     },
-        //   })
-        // );
-        // yield put(registerMainAccountData());
-      // } else {
-      //   throw new Error("Extrinsic failed");
-      // }
+      yield put(userProfileMainAccountPush(mainAccount));
 
     } else {
       throw new Error("Email or address is not valid");
     }
   } catch (error) {
     console.log("error in registration:", error.message);
-
-    // if account is already registered , it means that that sending data to aws failed on a previous attempt
-    // but it was successfully on the blockchain, since the transaction was submitted and signed by the wallet
-    // it is assumed that the wallet belongs to the user, so we do a retry of sending to aws.
-
-    if (error.message === ErrorMessages.OCEX_ALREADY_REGISTERED) {
-      yield call(retryRegisterToAppsync, data, signature, tradeAddress, mainAccount);
-      return;
-    }
-    yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
-    yield put(registerMainAccountError());
-    yield put(
-      notificationPush({
-        message: { title: "Cannot Register Account!", description: error.message },
-        type: "ErrorAlert",
-        time: new Date().getTime(),
-      })
-    );
   }
 }
-
-// export const registerMainAccount = async (
-//   api: ApiPromise,
-//   proxyAddress: string,
-//   signer: Signer,
-//   mainAddress: string
-// ): Promise<ExtrinsicResult> => {
-//   const ext = api.tx.ocex.registerMainAccount(proxyAddress);
-//   const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
-//   return res;
-// };
 
 const createSignedData = async (
   mainAccount: ExtensionAccount,
@@ -140,32 +77,3 @@ const executeRegisterEmail = async (data: LinkEmailData, signature: string) => {
   });
   return res;
 };
-
-function* retryRegisterToAppsync(
-  data: LinkEmailData,
-  signature: string,
-  tradeAddress,
-  mainAddress
-) {
-  try {
-    yield call(executeRegisterEmail, data, signature);
-    yield put(
-      userProfileAccountPush({
-        tradeAddress,
-        mainAddress,
-      })
-    );
-    yield put(userProfileMainAccountPush(mainAddress));
-    yield put(registerMainAccountData());
-  } catch (error) {
-    console.log("error");
-    yield put(registerMainAccountError());
-    yield put(
-      notificationPush({
-        message: { title: "Cannot Register Account to Server!", description: error.message },
-        type: "ErrorAlert",
-        time: new Date().getTime(),
-      })
-    );
-  }
-}

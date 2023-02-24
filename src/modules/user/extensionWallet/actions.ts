@@ -42,7 +42,7 @@ export interface RegisterMainAccountFetch {
 
 export interface RegisterMainAccountLinkEmailFetch {
   type: typeof REGISTER_MAIN_ACCOUNT_LINK_EMAIL;
-  payload: { mainAccount: string; tradeAddress: string; mnemonic: string };
+  payload: { mainAccount: string; };
 }
 
 export interface RegisterMainAccountData {
