@@ -10,6 +10,7 @@ import {
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
+  REGISTER_MAIN_ACCOUNT_LINK_EMAIL
 } from "./constants";
 
 import { USER_EVENTS } from "@polkadex/web-constants";
@@ -37,6 +38,11 @@ export interface ResetExtensionWallet {
 export interface RegisterMainAccountFetch {
   type: typeof REGISTER_MAIN_ACCOUNT_FETCH;
   payload: { mainAccount: string; tradeAddress: string; password: string; mnemonic: string };
+}
+
+export interface RegisterMainAccountLinkEmailFetch {
+  type: typeof REGISTER_MAIN_ACCOUNT_LINK_EMAIL;
+  payload: { mainAccount: string; };
 }
 
 export interface RegisterMainAccountData {
@@ -91,6 +97,11 @@ export const extensionWalletFetch = (): ExtensionWalletFetch => ({
 
 export const registerMainAccountFetch = (payload: RegisterMainAccountFetch["payload"]) => ({
   type: REGISTER_MAIN_ACCOUNT_FETCH,
+  payload,
+});
+
+export const registerMainAccountLinkEmail = (payload: RegisterMainAccountLinkEmailFetch["payload"]) => ({
+  type: REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
   payload,
 });
 
