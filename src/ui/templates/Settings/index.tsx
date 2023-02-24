@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useDispatch } from "react-redux";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
 
@@ -29,8 +29,10 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
+  registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
+  registerMainAccountFetch,
   selectAssociatedTradeAddresses,
   selectDefaultAvatarOptions,
   selectIsMainAddressRegistered,
@@ -422,6 +424,18 @@ const ControllerWallets = ({
   const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
   const linkedTradeAccounts = useReduxSelector(selectAssociatedTradeAddresses(address));
   const extensionAccount = useReduxSelector(selectMainAccount(address));
+
+  const dispatch = useDispatch();
+
+  const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
+    const accountAddress = extensionAccount.account.address;
+    dispatch(
+      registerMainAccountLinkEmail({
+        mainAccount: accountAddress
+      })
+    );
+  }
+
   return (
     <WalletCard
       isUsing={isUsing}
@@ -433,16 +447,27 @@ const ControllerWallets = ({
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
       <S.WalletActions>
-        {isRegistered ? (
+        {isRegistered && linkedTradeAccounts?.length>0 ? (
           <Badge isRegistered={true}>Registered</Badge>
         ) : (
-          <S.Button
-            type="button"
-            onClick={() => {
-              handleRegister(extensionAccount);
-            }}>
-            Register Now
-          </S.Button>
+          <Fragment>
+            {!isRegistered && 
+              <S.Button
+                type="button"
+                onClick={() => {
+                  handleLinkEmail(extensionAccount);
+                }}>
+                Link Email
+              </S.Button>
+            }
+            <S.Button
+              type="button"
+              onClick={() => {
+                handleRegister(extensionAccount);
+              }}>
+              Register Now
+            </S.Button>
+          </Fragment>
         )}
       </S.WalletActions>
     </WalletCard>

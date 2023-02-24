@@ -41,9 +41,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
     if (hasAddressAndEmail) {
-      const signedData = yield call(createSignedData, selectedControllerAccount, email);
-      data = signedData.data;
-      signature = signedData.signature;
       const res = yield call(() =>
         registerMainAccount(
           api,
@@ -53,7 +50,6 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
         )
       );
       if (res.isSuccess) {
-        yield call(executeRegisterEmail, data, signature);
         yield put(
           registerTradeAccountData({
             mnemonic,
@@ -104,23 +100,6 @@ export const registerMainAccount = async (
   return res;
 };
 
-const createSignedData = async (
-  mainAccount: ExtensionAccount,
-  email: string
-): Promise<{ data: RegisterEmailData; signature: string }> => {
-  const { signer, account } = mainAccount;
-  const signRaw = signer?.signRaw;
-  const main_address = account.address;
-  if (signRaw) {
-    const data: RegisterEmailData = { email, main_address };
-    const { signature } = await signRaw({
-      address: account.address,
-      data: stringToHex(JSON.stringify(data)),
-      type: "bytes",
-    });
-    return { data, signature };
-  } else throw new Error("Cannot get Signer");
-};
 
 const executeRegisterEmail = async (data: RegisterEmailData, signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
