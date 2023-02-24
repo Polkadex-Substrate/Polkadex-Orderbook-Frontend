@@ -11,6 +11,7 @@ export const Wrapper = styled.section`
     justify-content: space-between;
     flex-wrap: nowrap;
     gap: 1rem;
+    width: 100%;
   `}
 `;
 
@@ -33,12 +34,11 @@ export const ContainerInfo = styled.div`
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1.5rem 2.5rem;
-    width: 100%;
-    ${media.lessThan("medium")`
+    @media screen and (max-width: 494px) {
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
     grid-column-gap: 1rem;
-  `}
+  }
   `}
 `;
 export const WrapperInfo = styled.div`
@@ -97,23 +97,28 @@ export const BoxWrapper = styled.div`
 
 export const VolumeHigh = styled.div`
   align-items: center;
-  p {
-    color: inherit;
+  ${({theme})=>css`
+  p{
+    color: ${theme.colors.green};
   }
+  `}
 `;
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   align-items: baseline;
-  p {
-    color: inherit;
+  ${({theme})=>css`
+  p{
+    color: ${theme.colors.primary};
   }
+  `}
 `;
 export const WrapperVolume = styled.div`
   display: flex;
 `;
 
 export const ContainerVolume = styled.div`
-  span {
+${({ theme }) => css`
+span {
     display: block;
     margin-right: 1rem;
     font-size: 1.1rem;
@@ -129,7 +134,10 @@ export const ContainerVolume = styled.div`
   }
   p {
     font-weight: 500;
+    font-size: ${theme.font.sizes.medium};
   }
+  `}
+  
 `;
 
 // Dropdown

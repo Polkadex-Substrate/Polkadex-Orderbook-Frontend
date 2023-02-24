@@ -95,6 +95,7 @@ export const Wrapper = styled.nav`
       top: 0;
       min-width: 4.5rem;
       height: 100vh;
+      max-height: 100rem;
       max-width: 4.5rem;
       display: grid;
       grid-template-rows: 1.5fr 1fr;
@@ -111,6 +112,9 @@ export const Wrapper = styled.nav`
       ${WrapperLinks} {
         flex-direction: column;
       }
+    }
+    @media screen and (min-height:1200px){
+      max-height: 77vh;
     }
   `}
 `;

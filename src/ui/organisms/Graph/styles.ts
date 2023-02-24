@@ -9,8 +9,14 @@ export const Wrapper = styled.div`
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
     min-height: 30rem;
-    @media screen and (min-width: 780px) {
-      grid-template-columns: 1fr auto;
+    width:100%;
+    display:flex;
+    align-self:baseline;
+    @media screen and (max-width: 900px) {
+      flex-direction: column;
+    }
+    @media screen and (min-height: 1200px) {
+     height: 50vh;
     }
   `}
 `;
@@ -24,6 +30,9 @@ export const WrapperGraph = styled.section`
   }
   @media screen and (min-width: 1080px) and (max-width: 1240px) {
     min-width: 36rem;
+  }
+  @media screen and (min-width: 1688px)  {
+    height: 50rem;
   }
 `;
 // Header
@@ -41,7 +50,11 @@ export const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-height: 38rem;
+ 
+  height: 38rem;
+  @media screen and (min-width: 1688px)  {
+    height: 100%;
+  }
 `;
 
 export const FlexWrapper = styled.div`

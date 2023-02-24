@@ -23,11 +23,12 @@ export const ContainerMain = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 2rem;
-  max-width: 100rem;
-  @media screen and (min-width: 590px) {
-    padding: 4rem;
-  }
+  align-items: center;
+  width: 100%;
+  padding-top: 4rem;
+
+  /* justify-content: center; */
+  
 `;
 
 export const Title = styled.div`
@@ -36,6 +37,8 @@ export const Title = styled.div`
     p {
       color: ${theme.colors.tertiaryText};
     }
+    width:90%;
+    max-width: 140rem;
   `}
 `;
 
@@ -46,15 +49,18 @@ export const Container = styled.div`
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding: 1.5rem;
     border-radius: 1rem;
+    width: 90%;
+    max-width: 140rem;
+
   `}
 `;
 export const Content = styled.div`
-  max-height: 36.4rem;
-  overflow-y: hidden;
+  /* max-height: 36.4rem; */
+  /* overflow-y: hidden;
   height: 100%;
   :hover {
     overflow-y: auto;
-  }
+  } */
 `;
 
 export const Header = styled.div`
