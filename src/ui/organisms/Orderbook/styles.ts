@@ -7,8 +7,6 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    /* width: 100%; */
-    /* min-width: 30rem; */
    
     max-height: 43rem;
     @media screen and (min-width: 900px) {
@@ -16,7 +14,7 @@ export const Wrapper = styled.div`
       max-width: 35rem;
     width: 30%;
     min-width: 30rem;
-      /* max-width: 30rem; */
+    
     }
    
     @media screen and (min-width: 1688px) {

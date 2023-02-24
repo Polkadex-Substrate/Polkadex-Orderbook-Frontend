@@ -13,7 +13,6 @@ export const Wrapper = styled.div`
     display:flex;
     align-self:baseline;
     @media screen and (max-width: 900px) {
-      /* grid-template-columns: 1fr auto; */
       flex-direction: column;
     }
     @media screen and (min-height: 1200px) {
@@ -51,13 +50,11 @@ export const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  /* min-height: 38rem; */
-  /* max-height: 38rem; */
+ 
   height: 38rem;
   @media screen and (min-width: 1688px)  {
     height: 100%;
   }
-  /* height: 100%; */
 `;
 
 export const FlexWrapper = styled.div`
