@@ -25,7 +25,9 @@ export const Wrapper = styled.div`
   `}
 `;
 export const WrapperGraph = styled.section`
-  display: flex;
+  
+    ${({ theme }) => css`
+    display: flex;
   flex-direction: column;
   width: 100%;
   padding: 2rem;
@@ -38,7 +40,14 @@ export const WrapperGraph = styled.section`
   @media screen and (min-width: 1688px)  {
     min-height: 50rem;
   }
+  @media screen and (min-width: 900px) {
+      border-right: 1px solid ${theme.colors.secondaryBackground};
+   
+    
+    }
+  `}
 `;
+
 // Header
 export const Header = styled.div`
   display: flex;
