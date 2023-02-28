@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
    
-    max-height: 43rem;
+    /* max-height: 43rem; */
     @media screen and (min-width: 900px) {
       border-left: 1px solid ${theme.colors.secondaryBackground};
       max-width: 35rem;

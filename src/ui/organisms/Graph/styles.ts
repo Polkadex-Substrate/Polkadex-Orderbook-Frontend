@@ -18,6 +18,10 @@ export const Wrapper = styled.div`
     @media screen and (min-height: 1200px) {
      height: 50vh;
     }
+    @media screen and (min-width: 1688px)
+{
+    min-height: 50rem;
+}
   `}
 `;
 export const WrapperGraph = styled.section`
@@ -32,7 +36,7 @@ export const WrapperGraph = styled.section`
     min-width: 36rem;
   }
   @media screen and (min-width: 1688px)  {
-    height: 50rem;
+    min-height: 50rem;
   }
 `;
 // Header
