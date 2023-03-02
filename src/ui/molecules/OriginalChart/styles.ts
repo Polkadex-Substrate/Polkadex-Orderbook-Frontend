@@ -36,7 +36,7 @@ export const Container = styled.div`
   height: 36vh;
   min-height: 44rem;
   @media screen and (min-height:1200px) {
-    height: 45vh;
+    height: 42vh;
   }
 `;
 

@@ -29,11 +29,15 @@ export const ContainerInfo = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: repeat(4, auto);
-    grid-column-gap: 3rem;
+    grid-column-gap: 14rem;
     border-radius: 0 0 3rem 3rem;
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1.5rem 2.5rem;
+    @media screen and (max-width: 1268px) {
+      grid-column-gap: 4rem;
+    }
+
     @media screen and (max-width: 494px) {
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 0.5rem;
