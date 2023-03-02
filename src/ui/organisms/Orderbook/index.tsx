@@ -146,6 +146,7 @@ export const OrderbookTable = ({
                 </S.Card>
               );
             })}
+            
           </S.Body>
         </S.Table>
       ) : (

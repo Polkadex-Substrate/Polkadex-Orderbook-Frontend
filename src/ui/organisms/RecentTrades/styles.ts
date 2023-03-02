@@ -27,7 +27,9 @@ export const Main = styled.div<{ hasData?: boolean }>`
     max-height: 70rem;
    
     @media screen and (min-height: 1200px) {
-      max-height: 50vh;
+      /* max-height: 50vh; */
+      max-height: 879px;
+      height: 50vh;
     }
   `}
 `;
