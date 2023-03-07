@@ -1,10 +1,9 @@
 import { useReducer } from "react";
 
 import { Provider } from "./context";
-import { initialState, authReducer } from "./reducer";
-import * as T from "./types";
+import { authReducer, initialState } from "./reducer";
 
-export const AuthProvider: T.AuthComponent = ({ children }) => {
+export const AuthProvider = ({ children }: React.PropsWithChildren<unknown>) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   return (
@@ -14,5 +13,5 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
       }}>
       {children}
     </Provider>
-  )
+  );
 };

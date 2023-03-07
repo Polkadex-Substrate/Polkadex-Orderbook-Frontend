@@ -1,7 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 
-export interface CommonType {
+// keep this type in the root of the providers folder so it can be accesses by other providers
+export interface CommonActionState {
   isLoading: boolean;
   message: string;
   isError: boolean;
@@ -13,16 +14,10 @@ export interface AuthState {
   email: string;
   requireVerification?: boolean;
   current_password_entropy: number;
-  auth: CommonType;
-  logout: CommonType;
-  forgotPassword: {
-    isLoading: boolean;
-    message: string;
-    isError: boolean;
-    isSuccess: boolean;
-    email: string;
-  };
-  changePassword: CommonType;
+  auth: CommonActionState;
+  logout: CommonActionState;
+  forgotPassword: { email: string } & CommonActionState;
+  changePassword: CommonActionState;
 }
 
 export type AuthProps = {

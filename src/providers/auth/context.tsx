@@ -8,5 +8,5 @@ export const Context = createContext<AuthContextProps>({
 });
 
 export const Provider = ({ value, children }: AuthProviderProps) => {
-  return <Context.Provider value={value}>{children}</Context.Provider>
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 };
