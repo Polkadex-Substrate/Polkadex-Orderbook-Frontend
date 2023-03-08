@@ -5,6 +5,14 @@ import { AuthContextProps, AuthProviderProps } from "./types";
 
 export const Context = createContext<AuthContextProps>({
   ...initialState,
+  onSignIn: () => {},
+  onSignUp: () => {},
+  onLogout: () => {},
+  onForgotPassword: () => {},
+  onForgotPasswordCode: () => {},
+  onResendCode: () => {},
+  onCodeVerification: () => {},
+  onChangePassword: () => {},
 });
 
 export const Provider = ({ value, children }: AuthProviderProps) => {
