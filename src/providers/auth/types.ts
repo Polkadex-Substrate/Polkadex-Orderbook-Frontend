@@ -9,19 +9,21 @@ export interface CommonActionState {
   isSuccess: boolean;
 }
 
+export type CommonError = {
+  code: number;
+  message: string[];
+};
+
 export interface AuthState {
   user?: CognitoUser;
   email: string;
-  requireVerification?: boolean;
+  userConfirmed?: boolean;
+  current_password_entropy: number;
   auth: CommonActionState;
   logout: CommonActionState;
   forgotPassword: { email: string } & CommonActionState;
   changePassword: CommonActionState;
 }
-
-export type AuthProps = {
-  isDevelopment?: boolean;
-};
 
 export type AuthProviderProps = PropsWithChildren<{
   value: AuthContextProps;
