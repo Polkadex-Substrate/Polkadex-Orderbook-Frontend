@@ -1,6 +1,6 @@
 import { CognitoUser } from "amazon-cognito-identity-js";
 
-import { CommonError } from "./types";
+import { CommonError } from "../types";
 
 import {
   AUTH_CHANGE_PASSWORD_DATA,
@@ -27,26 +27,6 @@ import {
   AUTH_SIGN_UP_FETCH,
   AUTH_FORGOT_PASSWORD_RESET,
 } from "./constants";
-
-export interface SignUpKeyRingData {
-  type: string;
-  payload: {
-    mnemonic: string;
-    name: string;
-    password: string;
-  };
-}
-export interface SignInKeyRingData {
-  payload: {
-    name: string;
-    password: string;
-  };
-}
-export interface GeetestCaptchaResponse {
-  geetest_challenge: string;
-  geetest_validate: string;
-  geetest_seccode: string;
-}
 
 export interface SignInFetch {
   type: typeof AUTH_SIGN_IN_FETCH;
