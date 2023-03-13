@@ -7,19 +7,20 @@ import * as S from "./styles";
 
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { codeValidations } from "@polkadex/orderbook/validations";
-import { useTimer, useCodeVerification } from "@polkadex/orderbook/hooks";
+import { useTimer } from "@polkadex/orderbook/hooks";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { useCodeVerification } from "@polkadex/orderbook/providers/user/auth";
 
 export const CodeVerificationTemplate = () => {
   const [state, setState] = useState(false);
-  const { verifyCode, resendVerificationCode } = useCodeVerification();
+  const { onCodeVerification, onResendCode, email } = useCodeVerification();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       code: "",
     },
     validationSchema: codeValidations,
     onSubmit: (values) => {
-      verifyCode(values.code);
+      onCodeVerification({ email, code: values.code });
     },
   });
 
@@ -52,7 +53,7 @@ export const CodeVerificationTemplate = () => {
                     placeholder="000000"
                     error={errors.code && touched.code && errors.code}
                     {...getFieldProps("code")}>
-                    <Resend onResend={() => resendVerificationCode()} />
+                    <Resend onResend={() => onResendCode(email)} />
                   </InputLine>
                   <Button
                     disabled={!(isValid && dirty)}
