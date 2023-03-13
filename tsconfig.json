@@ -130,7 +130,7 @@
      "spec",
      "jest.config.js",
      "webpack",
-     "./src/*.test.*",
+     "./src/*.test.*"
   ],
   "files":[
      "src/styles/styled.d.ts"

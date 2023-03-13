@@ -7,9 +7,7 @@ import { Context } from "./context";
 
 export function useRecentTradesProvider() {
   const state = useContext(Context);
-  // const dispatch = useDispatch();
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  // const recentTrades = useReduxSelector(selectRecentTradesOfCurrentMarket); // already sorted
 
   const isDecreasing = getIsDecreasingArray(state.list);
   if (!Context) {

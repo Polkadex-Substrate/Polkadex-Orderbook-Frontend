@@ -23,6 +23,7 @@ export const recentTradesReducer = (state = initialState, action: RecentTradesAc
   switch (action.type) {
     case RECENT_TRADES_DATA: {
       const trades = action.payload;
+
       trades.sort((a, b) => b.timestamp - a.timestamp);
       return {
         list: sliceArray(trades, defaultStorageLimit),

@@ -234,9 +234,9 @@ export function Trading() {
                     </S.GraphEpmty>
                     <S.WrapperRight>
                       <MarketOrder />
-                      {/* <RecentTradesProvider> */}
-                      <RecentTrades />
-                      {/* </RecentTradesProvider> */}
+                      <RecentTradesProvider>
+                        <RecentTrades />
+                      </RecentTradesProvider>
                     </S.WrapperRight>
                   </S.CenterWrapper>
                 </S.WrapperGraph>

@@ -23,7 +23,12 @@ export const RecentTradesProvider = ({ children }) => {
     q: string;
     t: string;
   };
-
+  type RawTradeEvent = {
+    m: string;
+    p: string;
+    q: string;
+    t: number;
+  };
   const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
     const res = await fetchAllFromAppSync(
       getRecentTrades,
@@ -33,10 +38,6 @@ export const RecentTradesProvider = ({ children }) => {
     return res;
   };
 
-  // using a dummy value for market until market provider is created
-  // let market: string = "dummyValue";
-  // const market = us
-
   const market = useReduxSelector(selectCurrentMarket);
   console.log("market", market);
 
@@ -45,16 +46,21 @@ export const RecentTradesProvider = ({ children }) => {
 
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `${market.m}-recent-trades` },
+      variables: { name: `${market?.m}-recent-trades` },
       authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        // emit(data.value.data.websocket_streams.data);
         console.log("check", data.value.data.websocket_streams.data);
-
-        dispatch(A.recentTradesPush(data.value.data.websocket_streams.data));
+        const val: RawTradeEvent = JSON.parse(data.value.data.websocket_streams.data);
+        const trade: PublicTrade = {
+          price: val.p,
+          amount: val.q,
+          market_id: val.m,
+          timestamp: Number(val.t),
+        };
+        dispatch(A.recentTradesPush(trade));
       },
       error: (err) => console.warn(err),
     });
@@ -62,7 +68,7 @@ export const RecentTradesProvider = ({ children }) => {
     return () => {
       return subscription.unsubscribe;
     };
-  }, [market.m]);
+  }, [market?.m]);
 
   useEffect(() => {
     const recentTradesFetch = async (market: Market) => {
