@@ -52,6 +52,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
   const onSignUp = useCallback(
     async ({ email, password }: T.SignUp["fetch"]) => {
       try {
+        dispatch(A.signUpFetch({ email, password }));
         const { user, userConfirmed } = await Auth.signUp({
           username: email.toLowerCase(),
           password,

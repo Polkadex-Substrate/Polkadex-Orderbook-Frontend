@@ -26,7 +26,7 @@ export const SignInTemplate = () => {
       email: "",
     },
     validationSchema: signValidations,
-    onSubmit: (values) => onSignIn({ email: values.email, password: values.password }),
+    onSubmit: (values) => onSignIn({ email: values.email.toLowerCase(), password: values.password }),
   });
 
   return (

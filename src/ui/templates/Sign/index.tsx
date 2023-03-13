@@ -9,11 +9,15 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useSignUp } from "@polkadex/orderbook-hooks";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 
+import { useSignUp } from "@polkadex/orderbook/providers/user/auth";
+
 export const SignTemplate = () => {
-  const { signUp, loading } = useSignUp();
+  const {
+    auth: { isLoading: loading },
+    onSignUp,
+  } = useSignUp();
   const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,
@@ -39,7 +43,7 @@ export const SignTemplate = () => {
     validationSchema: signUpValidations,
     onSubmit: (values) => {
       const { password, email } = values;
-      signUp(email, password);
+      onSignUp({ email, password });
     },
   });
   return (
