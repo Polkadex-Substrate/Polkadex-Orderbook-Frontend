@@ -17,6 +17,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     async ({ email, password }: T.SignIn["fetch"]) => {
       let userEmail;
       try {
+        dispatch(A.signInFetch({ email, password }));
         userEmail = email;
         const user: CognitoUser = await Auth.signIn(email, password);
         dispatch(A.signInData({ user, email, isConfirmed: true }));

@@ -32,7 +32,6 @@ export const initialState: AuthState = {
   user: null,
   email: "",
   userConfirmed: false,
-  current_password_entropy: 0,
   auth: { ...initialTemplate },
   logout: { ...initialTemplate },
   forgotPassword: { ...initialTemplate, email: "" },
@@ -50,6 +49,7 @@ export const authReducer = (state: AuthState, action: any) => {
         auth: {
           ...state.auth,
           isLoading: false,
+          isSuccess: true,
         },
         userConfirmed: action.payload.isConfirmed,
         email: action.payload.email,

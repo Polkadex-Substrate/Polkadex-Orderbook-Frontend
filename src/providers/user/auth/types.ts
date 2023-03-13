@@ -35,7 +35,6 @@ export interface AuthState {
   user?: CognitoUser;
   email: string;
   userConfirmed?: boolean;
-  current_password_entropy: number;
   auth: CommonActionState;
   logout: CommonActionState;
   forgotPassword: { email: string } & CommonActionState;

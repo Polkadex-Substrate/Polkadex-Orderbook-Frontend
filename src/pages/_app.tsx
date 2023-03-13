@@ -27,6 +27,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { AuthProvider } from "@polkadex/orderbook/providers/user/auth";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -55,21 +56,23 @@ function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
 
   return (
-    <OverlayProvider>
-      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        {defaultConfig.maintenanceMode ? (
-          <Maintenance />
-        ) : (
-          <QueryClientProvider client={queryClient}>
-            <ThemeWrapper>
-              <Component {...pageProps} />
-            </ThemeWrapper>
-          </QueryClientProvider>
-        )}
+    <AuthProvider onError={(v) => console.log(v)}>
+      <OverlayProvider>
+        <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+          {defaultConfig.maintenanceMode ? (
+            <Maintenance />
+          ) : (
+            <QueryClientProvider client={queryClient}>
+              <ThemeWrapper>
+                <Component {...pageProps} />
+              </ThemeWrapper>
+            </QueryClientProvider>
+          )}
 
-        <GlobalStyles />
-      </ThemeProvider>
-    </OverlayProvider>
+          <GlobalStyles />
+        </ThemeProvider>
+      </OverlayProvider>
+    </AuthProvider>
   );
 }
 
