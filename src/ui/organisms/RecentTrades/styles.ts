@@ -6,11 +6,11 @@ export const MainContainer = styled.div`
   width: 100%;
   margin-top: 1.5rem;
   @media screen and (max-width: 1180px) {
-      width: 50%;
-    }
-    @media screen and (max-width: 750px) {
-      width: 100%;
-    }
+    width: 50%;
+  }
+  @media screen and (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 export const Main = styled.div<{ hasData?: boolean }>`
@@ -23,9 +23,11 @@ export const Main = styled.div<{ hasData?: boolean }>`
     min-width: 29rem;
     width: 100%;
     height: 100%;
-    min-height: 33rem;
-    max-height: 70rem;
-   
+    /* min-height: 33rem; */
+    min-height: 48rem;
+    /* max-height: 70rem; */
+    max-height: 54vh;
+
     @media screen and (min-height: 1200px) {
       /* max-height: 50vh; */
       max-height: 879px;
@@ -33,7 +35,12 @@ export const Main = styled.div<{ hasData?: boolean }>`
     }
   `}
 `;
-
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75%;
+`;
 export const Header = styled.div`
   display: flex;
   align-items: center;

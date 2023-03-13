@@ -39,11 +39,8 @@ export const RecentTradesProvider = ({ children }) => {
   };
 
   const market = useReduxSelector(selectCurrentMarket);
-  console.log("market", market);
 
   useEffect(() => {
-    console.log("from recent trades provider useffect ");
-
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market?.m}-recent-trades` },
@@ -52,7 +49,7 @@ export const RecentTradesProvider = ({ children }) => {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        console.log("check", data.value.data.websocket_streams.data);
+        console.log("check sdfghjk", data.value.data.websocket_streams.data);
         const val: RawTradeEvent = JSON.parse(data.value.data.websocket_streams.data);
         const trade: PublicTrade = {
           price: val.p,
@@ -71,6 +68,8 @@ export const RecentTradesProvider = ({ children }) => {
   }, [market?.m]);
 
   useEffect(() => {
+    console.log("log");
+
     const recentTradesFetch = async (market: Market) => {
       try {
         if (market) {
@@ -89,7 +88,7 @@ export const RecentTradesProvider = ({ children }) => {
     };
 
     recentTradesFetch(market);
-  }, [market]);
+  }, [market?.m]);
 
   return (
     <Provider

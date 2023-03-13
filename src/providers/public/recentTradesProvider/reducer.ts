@@ -16,7 +16,7 @@ const { defaultStorageLimit } = defaultConfig;
 
 export const initialState: RecentTradesState = {
   list: [],
-  loading: false,
+  loading: true,
 };
 
 export const recentTradesReducer = (state = initialState, action: RecentTradesActions) => {

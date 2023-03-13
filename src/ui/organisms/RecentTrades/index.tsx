@@ -5,6 +5,8 @@ import {
   ResultFound,
   Skeleton,
   Dropdown,
+  Loading,
+  Spinner,
 } from "@polkadex/orderbook-ui/molecules";
 import { useRecentTrades } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -15,7 +17,8 @@ export const filters = ["all", "buy", "sell"];
 export const RecentTrades = () => {
   const { state, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTradesProvider();
-  const { list } = state;
+  const { list, loading } = state;
+  console.log("state", state);
 
   return (
     <S.MainContainer>
@@ -23,7 +26,11 @@ export const RecentTrades = () => {
         <S.Header>
           <h2>Recent Trades</h2>
         </S.Header>
-        {list.length ? (
+        {loading ? (
+          <S.SpinnerWrapper>
+            <Spinner />
+          </S.SpinnerWrapper>
+        ) : list.length ? (
           <>
             <S.Head>
               <S.CellHead>Price({quoteUnit})</S.CellHead>
