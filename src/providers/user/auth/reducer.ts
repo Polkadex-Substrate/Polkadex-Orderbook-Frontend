@@ -89,7 +89,12 @@ export const authReducer = (state: AuthState, action: any) => {
     case AUTH_FORGOT_PASSWORD_DATA:
       return {
         ...state,
-        forgotPassword: { ...state.forgotPassword, isLoading: false, isSuccess: true },
+        forgotPassword: {
+          ...state.forgotPassword,
+          isLoading: false,
+          isSuccess: true,
+          email: action.payload,
+        },
       };
     case AUTH_FORGOT_PASSWORD_ERROR:
       return {
