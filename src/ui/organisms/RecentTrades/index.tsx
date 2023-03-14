@@ -18,7 +18,6 @@ export const RecentTrades = () => {
   const { state, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTradesProvider();
   const { list, loading } = state;
-  console.log("state", state);
 
   return (
     <S.MainContainer>

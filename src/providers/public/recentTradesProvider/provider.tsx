@@ -49,7 +49,6 @@ export const RecentTradesProvider = ({ children }) => {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        console.log("check sdfghjk", data.value.data.websocket_streams.data);
         const val: RawTradeEvent = JSON.parse(data.value.data.websocket_streams.data);
         const trade: PublicTrade = {
           price: val.p,
@@ -68,8 +67,6 @@ export const RecentTradesProvider = ({ children }) => {
   }, [market?.m]);
 
   useEffect(() => {
-    console.log("log");
-
     const recentTradesFetch = async (market: Market) => {
       try {
         if (market) {
