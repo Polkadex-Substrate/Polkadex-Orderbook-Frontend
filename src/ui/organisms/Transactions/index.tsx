@@ -56,6 +56,8 @@ export const Transactions = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const orderHistory = useOrderHistory(filters);
+  console.log(orderHistory);
+
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });

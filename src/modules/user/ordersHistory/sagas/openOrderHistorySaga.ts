@@ -28,6 +28,8 @@ type orderHistoryQueryResult = {
 export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
   try {
     const account: UserAccount = yield select(selectUsingAccount);
+    console.log("account from saga", account);
+
     if (account.tradeAddress) {
       const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.tradeAddress);
       yield put(userOpenOrderHistoryData({ list: transactions }));

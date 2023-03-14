@@ -1,4 +1,3 @@
-import { Market } from "@polkadex/orderbook-modules";
 import { createContext } from "react";
 
 import { initialState } from "./reducer";
