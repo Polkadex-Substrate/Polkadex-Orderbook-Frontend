@@ -1,5 +1,10 @@
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
+import {
+  selectUsingAccount,
+  UserAccount,
+  selectUserSession,
+  selectHasSelectedAccount,
+} from "@polkadex/orderbook-modules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { useCallback, useEffect, useReducer } from "react";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
@@ -10,6 +15,7 @@ import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
 import { Utils } from "@polkadex/web-helpers";
 import { SetOrder } from "./types";
+
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
   type orderHistoryQueryResult = {
@@ -27,12 +33,12 @@ export const OrderHistoryProvider = ({ children }) => {
     fq: string;
     fee: string;
   };
+  const account: UserAccount = useReduxSelector(selectUsingAccount);
 
-  const openOrdersHistory = async () => {
+  const openOrdersHistoryFetch = async () => {
+    console.log("open orders history fetch");
+
     try {
-      const account: UserAccount = useReduxSelector(selectUsingAccount);
-      console.log("account from saga", account);
-
       if (account.tradeAddress) {
         const transactions: OrderCommon[] = await fetchOpenOrders(account.tradeAddress);
         dispatch(A.userOpenOrderHistoryData({ list: transactions }));
@@ -43,43 +49,39 @@ export const OrderHistoryProvider = ({ children }) => {
     }
   };
 
-  const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
-    const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
-      queries.listOpenOrdersByMainAccount,
-      {
-        main_account: proxy_acc,
-        limit: 100,
-      },
-      "listOpenOrdersByMainAccount"
-    );
-    const orders = ordersRaw.map((order) => ({
-      main_account: proxy_acc,
-      id: order.id,
-      client_order_id: order.cid,
-      time: new Date(Number(order.t)).toISOString(),
-      m: order.m, // marketid
-      side: order.s,
-      order_type: order.ot,
-      status: order.st,
-      price: Number(order.p),
-      qty: Number(order.q),
-      avg_filled_price: order.afp,
-      filled_quantity: order.fq,
-      fee: order.fee,
-    }));
-    return orders;
-  };
+  const ordersHistoryFetch = async ({ dateFrom, dateTo, tradeAddress }) => {
+    console.log("orders history fetch", dateFrom, dateTo);
 
-  const ordersHistory = async ({ dateFrom, dateTo, tradeAddress }) => {
     try {
       if (tradeAddress) {
         const orders: OrderCommon[] = await fetchOrders(tradeAddress, dateFrom, dateTo);
+        console.log("if trade address");
+
         dispatch(A.userOrdersHistoryData({ list: orders }));
       }
     } catch (error) {
       dispatch(A.userOrdersHistoryError(error));
     }
   };
+  const userSession = useReduxSelector(selectUserSession);
+  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
+  const usingAccount = useReduxSelector(selectUsingAccount);
+
+  useEffect(() => {
+    const { dateFrom, dateTo } = userSession;
+    openOrdersHistoryFetch();
+    ordersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
+  }, [userSession, usingAccount]);
+
+  const orderUpdates = (setOrder: SetOrder) => {
+    try {
+      const order = processOrderData(setOrder);
+      dispatch(A.orderUpdateEventData(order));
+    } catch (error) {
+      console.log(error, "Something has gone wrong (order updates channel)...");
+    }
+  };
+
   const fetchOrders = async (
     proxy_acc: string,
     dateFrom: Date,
@@ -116,16 +118,6 @@ export const OrderHistoryProvider = ({ children }) => {
 
     return orders;
   };
-
-  const orderUpdates = (setOrder: SetOrder) => {
-    try {
-      const order = processOrderData(setOrder);
-      dispatch(A.orderUpdateEventData(order));
-    } catch (error) {
-      console.log(error, "Something has gone wrong (order updates channel)...");
-    }
-  };
-
   function processOrderData(eventData: SetOrder): OrderCommon {
     const base = eventData.pair.base_asset;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -148,6 +140,32 @@ export const OrderHistoryProvider = ({ children }) => {
       fee: eventData.fee.toString(),
     };
   }
+  const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
+    const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
+      queries.listOpenOrdersByMainAccount,
+      {
+        main_account: proxy_acc,
+        limit: 100,
+      },
+      "listOpenOrdersByMainAccount"
+    );
+    const orders = ordersRaw.map((order) => ({
+      main_account: proxy_acc,
+      id: order.id,
+      client_order_id: order.cid,
+      time: new Date(Number(order.t)).toISOString(),
+      m: order.m, // marketid
+      side: order.s,
+      order_type: order.ot,
+      status: order.st,
+      price: Number(order.p),
+      qty: Number(order.q),
+      avg_filled_price: order.afp,
+      filled_quantity: order.fq,
+      fee: order.fee,
+    }));
+    return orders;
+  };
 
   return (
     <Provider

@@ -32,6 +32,12 @@ export interface OrdersHistoryState {
   success: boolean;
 }
 
+interface orderHistoryFetchProps {
+  dateFrom: Date;
+  dateTo: Date;
+  tradeAddress: string;
+}
+
 export type OrderHistoryContextProps = OrdersHistoryState;
 
 export type OrderHistoryProviderProps = PropsWithChildren<{

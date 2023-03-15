@@ -34,7 +34,7 @@ export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
       yield put(userOpenOrderHistoryData({ list: transactions }));
     }
   } catch (error) {
-    console.error(error);
+    console.error("error from open order history saga", error);
     yield put(
       alertPush({
         message: {

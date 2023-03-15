@@ -28,6 +28,7 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useOrderHistory } from "@polkadex/orderbook-hooks";
+import { useOrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/useOrderHistroyProvider";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -55,7 +56,7 @@ export const Transactions = () => {
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const orderHistory = useOrderHistory(filters);
+  const orderHistory = useOrderHistoryProvider(filters);
   console.log(orderHistory);
 
   // Filters Actions

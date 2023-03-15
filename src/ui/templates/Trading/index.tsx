@@ -51,6 +51,7 @@ import {
   Provider,
 } from "@polkadex/orderbook/providers/public/RecentTradesProvider/context";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -227,7 +228,9 @@ export function Trading() {
                     <S.GraphEpmty>
                       <Graph />
                       {hasUser ? (
-                        <Transactions />
+                        <OrderHistoryProvider>
+                          <Transactions />
+                        </OrderHistoryProvider>
                       ) : (
                         <EmptyMyAccount hasLimit {...hasSelectedAccount} />
                       )}
