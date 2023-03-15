@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 
 import { Appearance, AccountOverview, EmptyMyAccount } from "..";
 
 import * as S from "./styles";
 
-import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useAccount } from "@polkadex/orderbook-hooks";
 import { useLogOut } from "@polkadex/orderbook/providers/user/auth";
 
 export const Profile = () => {
@@ -16,7 +15,6 @@ export const Profile = () => {
   const { onLogout } = useLogOut();
 
   const { isSignedIn } = useAccount();
-  const dispatch = useDispatch();
 
   const address = currentTradeAddr;
 
