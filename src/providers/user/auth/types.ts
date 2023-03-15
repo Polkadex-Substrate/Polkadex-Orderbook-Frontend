@@ -35,7 +35,8 @@ export interface AuthState {
   user?: CognitoUser;
   email: string;
   userConfirmed?: boolean;
-  auth: CommonActionState;
+  signin: CommonActionState;
+  signup: CommonActionState;
   logout: CommonActionState;
   forgotPassword: { email: string } & CommonActionState;
   changePassword: CommonActionState;

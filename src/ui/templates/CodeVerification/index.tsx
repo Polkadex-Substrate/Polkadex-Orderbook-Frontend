@@ -9,11 +9,11 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { codeValidations } from "@polkadex/orderbook/validations";
 import { useTimer } from "@polkadex/orderbook/hooks";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
-import { useCodeVerification } from "@polkadex/orderbook/providers/user/auth";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const CodeVerificationTemplate = () => {
   const [state, setState] = useState(false);
-  const { onCodeVerification, onResendCode, email } = useCodeVerification();
+  const { onCodeVerification, onResendCode, email } = useAuth();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       code: "",

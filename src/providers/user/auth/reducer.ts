@@ -32,7 +32,8 @@ export const initialState: AuthState = {
   user: null,
   email: "",
   userConfirmed: false,
-  auth: { ...initialTemplate },
+  signin: { ...initialTemplate },
+  signup: { ...initialTemplate },
   logout: { ...initialTemplate },
   forgotPassword: { ...initialTemplate, email: "" },
   changePassword: { ...initialTemplate },
@@ -41,13 +42,14 @@ export const initialState: AuthState = {
 export const authReducer = (state: AuthState, action: any) => {
   switch (action.type) {
     case AUTH_SIGN_IN_FETCH:
+      return { ...state, signin: { ...state.signin, isLoading: true } };
     case AUTH_SIGN_UP_FETCH:
-      return { ...state, auth: { ...state.auth, isLoading: true } };
+      return { ...state, signup: { ...state.signup, isLoading: true } };
     case AUTH_SIGN_IN_DATA:
       return {
         ...state,
-        auth: {
-          ...state.auth,
+        signin: {
+          ...state.signin,
           isLoading: false,
           isSuccess: true,
         },
@@ -58,13 +60,13 @@ export const authReducer = (state: AuthState, action: any) => {
     case AUTH_SIGN_IN_ERROR:
       return {
         ...state,
-        auth: { ...state.auth, isLoading: false, isError: true, message: action.error },
+        signin: { ...state.signin, isLoading: false, isError: true, message: action.error },
       };
     case AUTH_SIGN_UP_DATA: {
       const { email, userConfirmed } = action.payload;
       return {
         ...state,
-        auth: { ...state.auth, isLoading: false, isSuccess: true },
+        signup: { ...state.signup, isLoading: false, isSuccess: true },
         userConfirmed,
         email,
       };
@@ -76,12 +78,12 @@ export const authReducer = (state: AuthState, action: any) => {
     case AUTH_SIGN_UP_ERROR:
       return {
         ...state,
-        auth: { ...state.auth, isLoading: false, isError: true, message: action.error },
+        signup: { ...state.signup, isLoading: false, isError: true, message: action.error },
       };
     case AUTH_LOGOUT_FETCH:
       return { ...state };
     case AUTH_LOGOUT_DATA:
-      return { ...state, ...initialState };
+      return { ...state, ...initialState, logout: { ...state.logout, isSuccess: true } };
     case AUTH_LOGOUT_FAILURE:
       return { ...state, logout: { ...state.logout, isError: true, message: action.error } };
     case AUTH_FORGOT_PASSWORD_FETCH:

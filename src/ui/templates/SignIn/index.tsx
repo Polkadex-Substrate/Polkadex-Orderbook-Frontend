@@ -10,13 +10,13 @@ import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
 
-import { useSignIn } from "@polkadex/orderbook/providers/user/auth";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SignInTemplate = () => {
   const {
-    auth: { isLoading },
+    signin: { isLoading },
     onSignIn,
-  } = useSignIn();
+  } = useAuth();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
 

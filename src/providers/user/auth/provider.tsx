@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import router from "next/router";
@@ -8,6 +8,7 @@ import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -183,6 +184,77 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     },
     [onError]
   );
+
+  // For SignIn Purposes
+  const signinIsSuccess = state.signin.isSuccess;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const getIsAuthenticated = async () => {
+    try {
+      const { attributes } = await Auth.currentAuthenticatedUser();
+      if (attributes.email) {
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getIsAuthenticated();
+  }, []);
+
+  useEffect(() => {
+    if (signinIsSuccess || isAuthenticated) {
+      // Will be called when profile context will created
+      // dispatch(userChangeInitBanner(true));
+      router.push("/trading/" + defaultConfig.landingPageMarket);
+    }
+  }, [isAuthenticated, signinIsSuccess, router]);
+
+  // For SignUp Purposes
+  const signupIsSuccess = state.signup.isSuccess;
+  useEffect(() => {
+    if (signupIsSuccess) router.push("/codeVerification");
+  }, [signupIsSuccess, router]);
+
+  // For Code Verification Purposes
+  const isVerificationSuccess = state.userConfirmed;
+  const email = state.email;
+
+  useEffect(() => {
+    if (signupIsSuccess && isVerificationSuccess) {
+      alert("Successfully created a new account!");
+      //   Will be called when notification context will created
+      //   dispatch(
+      //     notificationPush({
+      //       message: {
+      //         title: "Successfully created a new account!",
+      //         description: "Please sign in with your new account.",
+      //       },
+      //       time: new Date().getTime(),
+      //     })
+      //   );
+      setTimeout(() => {
+        router.push("/signIn");
+      }, 2000);
+    }
+  }, [isVerificationSuccess, signupIsSuccess, router]);
+
+  useEffect(() => {
+    if (signupIsSuccess && !email) router.push("/sign");
+  }, [email, signupIsSuccess, router]);
+
+  // For Logout Purposes
+  const user = state.user;
+  const logoutIsSuccess = state.logout.isSuccess;
+  useEffect(() => {
+    if (logoutIsSuccess && !user) {
+      // We have to remove it when profile context created
+      router.reload();
+      // router.push("/trading/" + defaultConfig.landingPageMarket);
+    }
+  }, [logoutIsSuccess, user]);
 
   return (
     <Provider

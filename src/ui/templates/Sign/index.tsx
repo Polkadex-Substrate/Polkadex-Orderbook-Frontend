@@ -11,13 +11,13 @@ import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 
-import { useSignUp } from "@polkadex/orderbook/providers/user/auth";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SignTemplate = () => {
   const {
-    auth: { isLoading: loading },
+    signup: { isLoading: loading },
     onSignUp,
-  } = useSignUp();
+  } = useAuth();
   const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,

@@ -6,13 +6,13 @@ import { Appearance, AccountOverview, EmptyMyAccount } from "..";
 import * as S from "./styles";
 
 import { useAccount } from "@polkadex/orderbook-hooks";
-import { useLogOut } from "@polkadex/orderbook/providers/user/auth";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const Profile = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const currentTradeAddr = "";
-  const { onLogout } = useLogOut();
+  const { onLogout } = useAuth();
 
   const { isSignedIn } = useAccount();
 
