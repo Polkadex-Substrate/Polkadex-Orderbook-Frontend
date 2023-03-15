@@ -1,16 +1,16 @@
 import { CommonError, ExtensionAccount } from "../../types";
 
 import {
-  POLKADOT_EXTENSION_WALLET_FETCH,
-  POLKADOT_EXTENSION_WALLET_ERROR,
   POLKADOT_EXTENSION_WALLET_DATA,
-  REGISTER_MAIN_ACCOUNT_RESET,
-  REGISTER_MAIN_ACCOUNT_FETCH,
+  POLKADOT_EXTENSION_WALLET_ERROR,
+  POLKADOT_EXTENSION_WALLET_FETCH,
   REGISTER_MAIN_ACCOUNT_DATA,
   REGISTER_MAIN_ACCOUNT_ERROR,
+  REGISTER_MAIN_ACCOUNT_FETCH,
+  REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
+  REGISTER_MAIN_ACCOUNT_RESET,
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
-  REGISTER_MAIN_ACCOUNT_LINK_EMAIL
 } from "./constants";
 
 import { USER_EVENTS } from "@polkadex/web-constants";
@@ -42,7 +42,7 @@ export interface RegisterMainAccountFetch {
 
 export interface RegisterMainAccountLinkEmailFetch {
   type: typeof REGISTER_MAIN_ACCOUNT_LINK_EMAIL;
-  payload: { mainAccount: string; };
+  payload: { mainAccount: string };
 }
 
 export interface RegisterMainAccountData {
@@ -100,7 +100,9 @@ export const registerMainAccountFetch = (payload: RegisterMainAccountFetch["payl
   payload,
 });
 
-export const registerMainAccountLinkEmail = (payload: RegisterMainAccountLinkEmailFetch["payload"]) => ({
+export const registerMainAccountLinkEmail = (
+  payload: RegisterMainAccountLinkEmailFetch["payload"]
+) => ({
   type: REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
   payload,
 });

@@ -1,72 +1,97 @@
-// TODO - Code Cleaning 
+// TODO - Code Cleaning
 
-import { call, fork, put, select } from "redux-saga/effects";
-import { ApiPromise } from "@polkadot/api";
+import { call, put, select } from "redux-saga/effects";
 import { stringToHex } from "@polkadot/util";
 
 import * as mutations from "../../../../graphql/mutations";
-import {
-  selectRangerApi,
-  selectUserEmail,
-  userProfileMainAccountPush,
-  selectMainAccount,
-} from "../../..";
-import {
-  RegisterMainAccountLinkEmailFetch,
-} from "../actions";
+import { selectMainAccount, selectUserEmail, userProfileMainAccountPush } from "../../..";
+import { RegisterMainAccountLinkEmailFetch } from "../actions";
 
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-type LinkEmailData = { email: string; main_address: string };
+interface MultiSig {
+  Ed25519?: string;
+  Sr25519?: string;
+  Ecdsa?: string;
+}
 
 export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
-  let data: LinkEmailData, signature: string;
   const { mainAccount } = action.payload;
   try {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const email = yield select(selectUserEmail);
-    const api: ApiPromise = yield select(selectRangerApi);
-
     const hasAddressAndEmail =
       !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
     if (hasAddressAndEmail) {
-      const signedData = yield call(createSignedData, selectedControllerAccount, email);
-      data = signedData.data;
-      signature = signedData.signature;
-      yield call(executeRegisterEmail, data, signature);
+      const { signature } = yield call(createSignedData, selectedControllerAccount, email);
+      // console.log("sig length", signature.length);
+      // const multi_signature = api.createType("MultiSignature", signature);
+      console.log("multi_signature", signature);
+      yield call(
+        executeRegisterEmail,
+        email,
+        selectedControllerAccount.account.address,
+        signature
+      );
 
       yield put(userProfileMainAccountPush(mainAccount));
-
     } else {
       throw new Error("Email or address is not valid");
     }
   } catch (error) {
-    console.log("error in registration:", error.message);
+    console.log("error in registration:", error);
   }
 }
-
 const createSignedData = async (
   mainAccount: ExtensionAccount,
   email: string
-): Promise<{ data: LinkEmailData; signature: string }> => {
+): Promise<{ signature: MultiSig }> => {
   const { signer, account } = mainAccount;
   const signRaw = signer?.signRaw;
-  const main_address = account.address;
   if (signRaw) {
-    const data: LinkEmailData = { email, main_address };
     const { signature } = await signRaw({
       address: account.address,
-      data: stringToHex(JSON.stringify(data)),
+      data: stringToHex(email),
       type: "bytes",
     });
-    return { data, signature };
+    // remove 0x prefix
+    const trimmedSignature = signature.slice(2);
+    let multiSig: MultiSig;
+    console.log("raw signature", signature);
+    switch (account.type) {
+      case "ed25519": {
+        //   prepend number 0 to signify sr25519
+        multiSig = { Ed25519: trimmedSignature };
+        break;
+      }
+      case "sr25519": {
+        //   prepend number 1 to signify ed25519
+        multiSig = { Sr25519: trimmedSignature };
+        break;
+      }
+      case "ecdsa": {
+        //   prepend number 2 to signify ecdsa
+        multiSig = { Ecdsa: trimmedSignature };
+        break;
+      }
+      default: {
+        throw new Error("Invalid signature type");
+        break;
+      }
+    }
+    return { signature: multiSig };
   } else throw new Error("Cannot get Signer");
 };
 
-const executeRegisterEmail = async (data: LinkEmailData, signature: string) => {
-  const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
+const executeRegisterEmail = async (
+  email: string,
+  main_address: string,
+  multisignature: Map<string, string>
+) => {
+  const payloadStr = JSON.stringify({ RegisterUser: [email, main_address, multisignature] });
+  console.log("email register payload string:", payloadStr);
   const res = await sendQueryToAppSync({
     query: mutations.register_user,
     variables: {

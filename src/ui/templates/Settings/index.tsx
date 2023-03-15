@@ -8,15 +8,16 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import {
-  Menu,
-  PreviewAccount,
-  NewAccount,
   ChangeAvatar,
   DisclaimerMessage,
+  Menu,
+  NewAccount,
+  PreviewAccount,
 } from "@polkadex/orderbook-ui/organisms";
 import {
   AvailableMessage,
   Checkbox,
+  Dropdown,
   Footer,
   Modal,
   ResultFound,
@@ -24,15 +25,13 @@ import {
   Tooltip,
   TooltipContent,
   TooltipHeader,
-  Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
-  registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
-  registerMainAccountFetch,
+  registerMainAccountLinkEmail,
   selectAssociatedTradeAddresses,
   selectDefaultAvatarOptions,
   selectIsMainAddressRegistered,
@@ -431,10 +430,10 @@ const ControllerWallets = ({
     const accountAddress = extensionAccount.account.address;
     dispatch(
       registerMainAccountLinkEmail({
-        mainAccount: accountAddress
+        mainAccount: accountAddress,
       })
     );
-  }
+  };
 
   return (
     <WalletCard
@@ -447,11 +446,11 @@ const ControllerWallets = ({
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
       <S.WalletActions>
-        {isRegistered && linkedTradeAccounts?.length>0 ? (
+        {isRegistered && linkedTradeAccounts?.length > 0 ? (
           <Badge isRegistered={true}>Registered</Badge>
         ) : (
           <Fragment>
-            {!isRegistered && 
+            {!isRegistered && (
               <S.Button
                 type="button"
                 onClick={() => {
@@ -459,7 +458,7 @@ const ControllerWallets = ({
                 }}>
                 Link Email
               </S.Button>
-            }
+            )}
             <S.Button
               type="button"
               onClick={() => {
