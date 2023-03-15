@@ -42,6 +42,7 @@ export type ProfileProviderProps = PropsWithChildren<{
 
 export type ProfileContextProps = ProfileState & {
   onUserSelectAccount: (value: UserSelectAccount) => void;
+  onUserAuth: () => void;
 };
 
 export interface ProfileProps {
