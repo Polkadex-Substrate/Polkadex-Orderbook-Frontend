@@ -1,5 +1,5 @@
 projects:
-  staging-orderbook-api:
+  testobv2-orderbook-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,6 +10,9 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
-        region: eu-central-1
-        apiId: xpl6eqs3t5amhgbkrxdl4pebe4
+        region: eu-west-1
+        apiId: stbdllds6zaj7pakg625ugphge
         maxDepth: 2
+extensions:
+  amplify:
+    version: 3

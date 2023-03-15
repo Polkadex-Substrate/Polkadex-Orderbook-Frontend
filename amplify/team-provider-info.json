@@ -44,5 +44,28 @@
         }
       }
     }
+  },
+  "obvtwotest": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-orderbookfrontend-obvtwotest-153911-deployment",
+      "UnauthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
+      "StackName": "amplify-orderbookfrontend-obvtwotest-153911",
+      "StackId": "arn:aws:cloudformation:eu-west-1:876703040586:stack/amplify-orderbookfrontend-obvtwotest-153911/70d79a10-c319-11ed-a7ba-0694f977f5ad",
+      "AmplifyAppId": "d3h7jtye5lj0k8"
+    },
+    "categories": {
+      "auth": {
+        "orderbookfrontend80237148": {
+          "userPoolId": "eu-west-1_LUye3NHVf",
+          "userPoolName": "testobv2-user-pool",
+          "webClientId": "7f39329fs6tb90vq2uiartp9js",
+          "nativeClientId": "7f39329fs6tb90vq2uiartp9js"
+        }
+      }
+    }
   }
 }

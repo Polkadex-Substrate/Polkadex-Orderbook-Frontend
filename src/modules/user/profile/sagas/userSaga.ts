@@ -33,7 +33,7 @@ export const getAllProxyAccounts = async (
         variables: { main_account },
         API: Api,
       });
-      const proxies = res.data.findUserByMainAccount.proxies ?? [];
+      const proxies = res.data?.findUserByMainAccount?.proxies ?? [];
       return { main_account, proxies };
     } catch (error) {
       console.log("Error: getAllProxyAccounts", error.errors);

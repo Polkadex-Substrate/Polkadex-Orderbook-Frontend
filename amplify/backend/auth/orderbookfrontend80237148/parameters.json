@@ -2,7 +2,7 @@
   "authSelections": "userPoolOnly",
   "resourceName": "orderbookfrontend80237148",
   "serviceType": "imported",
-  "region": "ap-south-1",
+  "region": "eu-west-1",
   "usernameAttributes": [
     "email"
   ],

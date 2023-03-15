@@ -8,5 +8,10 @@
     "configLevel": "project",
     "useProfile": true,
     "profileName": "default"
+  },
+  "obvtwotest": {
+    "configLevel": "project",
+    "useProfile": false,
+    "awsConfigFilePath": "/Users/nuel/.amplify/awscloudformation/3ERV9DwqE2"
   }
 }

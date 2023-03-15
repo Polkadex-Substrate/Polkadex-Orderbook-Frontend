@@ -1,15 +1,15 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-orderbookfrontend-dev-213922-authRole",
-      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-authRole",
-      "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-orderbookfrontend-dev-213922-deployment",
-      "UnauthRoleName": "amplify-orderbookfrontend-dev-213922-unauthRole",
-      "StackName": "amplify-orderbookfrontend-dev-213922",
-      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-dev-213922/59f148c0-f0b3-11ec-93ea-0a1621de353a",
-      "AmplifyAppId": "djf6q4n044sil"
+      "AuthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-orderbookfrontend-obvtwotest-153911-deployment",
+      "UnauthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
+      "StackName": "amplify-orderbookfrontend-obvtwotest-153911",
+      "StackId": "arn:aws:cloudformation:eu-west-1:876703040586:stack/amplify-orderbookfrontend-obvtwotest-153911/70d79a10-c319-11ed-a7ba-0694f977f5ad",
+      "AmplifyAppId": "d3h7jtye5lj0k8"
     }
   },
   "auth": {
@@ -19,6 +19,12 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false,
+      "output": {
+        "UserPoolId": "eu-west-1_LUye3NHVf",
+        "UserPoolName": "testobv2-user-pool",
+        "AppClientID": "7f39329fs6tb90vq2uiartp9js",
+        "AppClientIDWeb": "7f39329fs6tb90vq2uiartp9js"
+      },
       "frontendAuthConfig": {
         "socialProviders": [],
         "usernameAttributes": [
@@ -40,7 +46,7 @@
     }
   },
   "api": {
-    "staging-orderbook-api": {
+    "testobv2-orderbook-api": {
       "service": "AppSync",
       "output": {
         "authConfig": {
@@ -51,19 +57,19 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "eu-central-1_Rllv5siDU",
-                "awsRegion": "eu-central-1",
+                "userPoolId": "eu-west-1_LUye3NHVf",
+                "awsRegion": "eu-west-1",
                 "appIdClientRegex": null
               }
             }
           ]
         },
-        "GraphQLAPIIdOutput": "xpl6eqs3t5amhgbkrxdl4pebe4",
-        "GraphQLAPIEndpointOutput": "https://szzsvapgkjdurfl7ijvc3vtbba.appsync-api.eu-central-1.amazonaws.com/graphql",
-        "name": "staging-orderbook-api",
-        "region": "eu-central-1"
+        "GraphQLAPIIdOutput": "stbdllds6zaj7pakg625ugphge",
+        "GraphQLAPIEndpointOutput": "https://5qy4l5nhfva3nn6pc3cm2i2vae.appsync-api.eu-west-1.amazonaws.com/graphql",
+        "name": "testobv2-orderbook-api",
+        "region": "eu-west-1"
       },
-      "lastPushTimeStamp": "2022-10-10T03:24:28.850Z"
+      "lastPushTimeStamp": "2023-03-15T10:11:32.733Z"
     }
   }
 }

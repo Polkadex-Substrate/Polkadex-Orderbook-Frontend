@@ -65,16 +65,20 @@ export const getRecentTrades = /* GraphQL */ `
         t
         p
         q
-        sid
+        stid
         isReverted
       }
       nextToken
     }
   }
 `;
-export const getAllMarketTickers = /* GraphQL */ `
-  query GetAllMarketTickers {
-    getAllMarketTickers {
+export const getMarketTickers = /* GraphQL */ `
+  query GetMarketTickers(
+    $market: String!
+    $from: AWSDateTime!
+    $to: AWSDateTime!
+  ) {
+    getMarketTickers(market: $market, from: $from, to: $to) {
       items {
         m
         o
@@ -167,7 +171,7 @@ export const findOrderByMainAccount = /* GraphQL */ `
       afp
       fq
       fee
-      sid
+      stid
       isReverted
     }
   }
@@ -201,7 +205,7 @@ export const listOrderHistorybyMainAccount = /* GraphQL */ `
         afp
         fq
         fee
-        sid
+        stid
         isReverted
       }
       nextToken
@@ -233,7 +237,7 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `
         afp
         fq
         fee
-        sid
+        stid
         isReverted
       }
       nextToken
@@ -262,8 +266,7 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
         fee
         st
         t
-        eid
-        sid
+        stid
         isReverted
       }
       nextToken
@@ -291,7 +294,7 @@ export const listTradesByMainAccount = /* GraphQL */ `
         q
         s
         t
-        sid
+        stid
         isReverted
       }
       nextToken
