@@ -54,6 +54,15 @@ const queryClient = new QueryClient();
 function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
 
+  // Removes all console from production environment
+  if (process.env.NODE_ENV === "production") {
+      console.log = () => {};
+      console.debug = () => {};
+      console.info = () => {};
+      console.warn = () => {};
+      console.error = () => {};
+  }
+
   return (
     <OverlayProvider>
       <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
