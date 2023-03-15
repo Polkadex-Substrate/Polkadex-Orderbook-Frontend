@@ -27,8 +27,8 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
     const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
     const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
     const api = yield select(selectRangerApi);
-    const account: UserAccount = yield select(selectUsingAccount);
-    const address = account.tradeAddress;
+    const usingAccount: UserAccount = yield select(selectUsingAccount);
+    const address = usingAccount.tradeAddress;
     const keyringPair: TradeAccount = yield select(selectTradeAccount(address));
     if (keyringPair.isLocked) throw new Error("Please unlock your account with password");
     if (address !== "" && keyringPair) {
@@ -40,7 +40,10 @@ export function* cancelOrderSaga(action: OrderCancelFetch) {
         quoteAsset
       );
       const res = yield call(() =>
-        executeCancelOrder([order_id, account, pair, signature], address)
+        executeCancelOrder(
+          [order_id, usingAccount.mainAddress, usingAccount.tradeAddress, pair, signature],
+          address
+        )
       );
       console.info("cancelled order: ", res);
       yield put(orderCancelData());
