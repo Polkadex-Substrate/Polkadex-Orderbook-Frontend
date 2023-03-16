@@ -3,11 +3,7 @@ import { put, select } from "redux-saga/effects";
 import { alertPush, BalanceUpdatePayload } from "../../..";
 import { Balance, BalancesUpdateEvent, balanceUpdateEventData } from "../actions";
 
-import {
-  IPublicAsset,
-  isAssetPDEX,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
+import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {
   try {
@@ -31,7 +27,7 @@ const updateBalanceFromEvent = (
   msg: BalanceUpdatePayload,
   getAsset: (id: string) => IPublicAsset
 ): Balance => {
-  const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
+  const assetId = msg.asset.asset;
   const newBalance = {
     name: getAsset(assetId).name,
     symbol: getAsset(assetId).symbol,

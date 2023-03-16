@@ -6,11 +6,11 @@ import { withdrawsData, WithdrawsFetch } from "..";
 
 import {
   notificationPush,
-  UserAccount,
   selectRangerApi,
   selectTradeAccount,
   selectUsingAccount,
   sendError,
+  UserAccount,
 } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
@@ -28,7 +28,12 @@ export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
     if (address !== "" && keyringPair && api) {
       const payload = createWithdrawPayload(api, asset, amount, nonce);
       const signature = signPayload(api, keyringPair, payload);
-      const res = yield call(() => executeWithdraw([address, payload, signature], address));
+      const res = yield call(() =>
+        executeWithdraw(
+          [currentAccount.mainAddress, currentAccount.tradeAddress, payload, signature],
+          address
+        )
+      );
       console.info("withdraw res: ", res);
       yield put(withdrawsData());
       yield put(

@@ -9,10 +9,9 @@ import {
 } from "./constants";
 
 export interface Transaction {
-  event_id: number;
-  sid: number;
+  stid: number;
   amount: string;
-  asset: "PDEX" | string;
+  asset: string;
   fee: string;
   main_account?: string;
   time: string;
@@ -60,7 +59,7 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       const transactions = _.cloneDeep(state.transactions);
       console.log("inside tx-update reducer", action, transactions);
       const index = transactions.findIndex(
-        ({ event_id }) => Number(event_id) === Number(payload.event_id)
+        ({ stid }) => Number(stid) === Number(payload.stid)
       );
       if (index !== -1) {
         transactions[index] = payload;

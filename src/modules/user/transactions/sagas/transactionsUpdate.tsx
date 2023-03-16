@@ -32,23 +32,22 @@ const formatTransactionData = (data: TransactionUpdatePayload): Transaction => {
   if (data.txn_type === "DEPOSIT") {
     return {
       ...data,
-      sid: data.sid ?? 0,
+      stid: Number(data.stid),
       main_account: data.user,
       fee: data.fee.toString(),
       amount: data.amount.toString(),
-      asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+      asset: data.asset.asset,
       time: new Date().toISOString(),
     };
   } else {
     return {
-      event_id: data.event_id,
+      stid: Number(data.stid),
       status: data.status,
-      sid: Number(data.sid) ?? 0,
       txn_type: "WITHDRAWAL",
       main_account: data.user,
       fee: data.fee.toString(),
       amount: data.amount.toString(),
-      asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+      asset: data.asset.asset,
       time: new Date().toISOString(),
     };
   }

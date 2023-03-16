@@ -11,9 +11,9 @@ import {
 import { Transaction } from ".";
 
 export type TransactionUpdatePayload = {
-  event_id: number;
+  stid: number;
   user: string;
-  asset: string & { asset: string };
+  asset: { asset: string };
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";
