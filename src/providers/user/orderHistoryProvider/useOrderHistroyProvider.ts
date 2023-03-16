@@ -15,6 +15,7 @@ import {
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
+  console.log(state);
 
   const orderList = state.list;
   const openOrders = state.openOrders;

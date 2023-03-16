@@ -1,4 +1,6 @@
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { endOfDay, startOfMonth } from "date-fns";
+
 import {
   selectUsingAccount,
   UserAccount,
@@ -51,11 +53,12 @@ export const OrderHistoryProvider = ({ children }) => {
 
   const ordersHistoryFetch = async ({ dateFrom, dateTo, tradeAddress }) => {
     console.log("orders history fetch", dateFrom, dateTo);
+    console.log("trade address", tradeAddress);
 
     try {
       if (tradeAddress) {
         const orders: OrderCommon[] = await fetchOrders(tradeAddress, dateFrom, dateTo);
-        console.log("if trade address");
+        console.log("if trade address", orders);
 
         dispatch(A.userOrdersHistoryData({ list: orders }));
       }
@@ -64,14 +67,15 @@ export const OrderHistoryProvider = ({ children }) => {
     }
   };
   const userSession = useReduxSelector(selectUserSession);
-  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
   const usingAccount = useReduxSelector(selectUsingAccount);
 
   useEffect(() => {
     const { dateFrom, dateTo } = userSession;
+    console.log("useeffect because of usersession and using account");
+
     openOrdersHistoryFetch();
     ordersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [userSession, usingAccount]);
+  }, [usingAccount, userSession]);
 
   const orderUpdates = (setOrder: SetOrder) => {
     try {
