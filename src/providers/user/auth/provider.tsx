@@ -8,7 +8,7 @@ import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
-import { userAuthFetch } from "../profile/actions";
+import { userAuthFetch, userChangeInitBanner } from "../profile/actions";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
@@ -205,8 +205,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
 
   useEffect(() => {
     if (signinIsSuccess || isAuthenticated) {
-      // Will be called when profile context will created
-      // dispatch(userChangeInitBanner(true));
+      dispatch(userChangeInitBanner(true));
       router.push("/trading/" + defaultConfig.landingPageMarket);
     }
   }, [isAuthenticated, signinIsSuccess, router]);

@@ -83,7 +83,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
     return accounts;
   };
 
-  const onUserAuth = useCallback(async () => {
+  const onUserAuth = useCallback(async (payload: T.AuthInfo) => {
     const { userExists, isConfirmed, email } = state.authInfo;
     const userAccounts = state.userData?.userAccounts;
     const defaultTradeAddress = window.localStorage.getItem(
@@ -123,12 +123,6 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       else dispatch(A.userAuthError(error));
     }
   }, []);
-
-  // For onUserAuth Purposes
-  const isSignedIn = state.authInfo.isAuthenticated;
-  useEffect(() => {
-    if (isSignedIn) dispatch(A.userAuthFetch());
-  }, [isSignedIn, dispatch]);
 
   return (
     <Provider

@@ -28,6 +28,7 @@ import {
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider } from "@polkadex/orderbook/providers/user/auth";
+import { ProfileProvider } from "@polkadex/orderbook/providers/user/profile";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -56,22 +57,24 @@ function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
 
   return (
-    <AuthProvider onError={(v) => console.log(v)}>
-      <OverlayProvider>
-        <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-          {defaultConfig.maintenanceMode ? (
-            <Maintenance />
-          ) : (
-            <QueryClientProvider client={queryClient}>
-              <ThemeWrapper>
-                <Component {...pageProps} />
-              </ThemeWrapper>
-            </QueryClientProvider>
-          )}
+    <AuthProvider onError={(v) => console.log("Error from Auth Provider", v)}>
+      <ProfileProvider onError={(v) => console.log("Error from Profile Provider", v)}>
+        <OverlayProvider>
+          <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+            {defaultConfig.maintenanceMode ? (
+              <Maintenance />
+            ) : (
+              <QueryClientProvider client={queryClient}>
+                <ThemeWrapper>
+                  <Component {...pageProps} />
+                </ThemeWrapper>
+              </QueryClientProvider>
+            )}
 
-          <GlobalStyles />
-        </ThemeProvider>
-      </OverlayProvider>
+            <GlobalStyles />
+          </ThemeProvider>
+        </OverlayProvider>
+      </ProfileProvider>
     </AuthProvider>
   );
 }

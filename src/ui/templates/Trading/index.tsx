@@ -19,9 +19,6 @@ import {
   selectCurrentTradePrice,
   selectHasSelectedAccount,
   selectIsAddressInExtension,
-  selectIsUserSignedIn,
-  selectShouldShowInitialBanner,
-  selectUserEmail,
   selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
@@ -46,6 +43,8 @@ import {
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth"
+import { useProfile } from "@polkadex/orderbook/providers/user/profile"
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -71,13 +70,13 @@ export function Trading() {
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
 
+  const { email } = useAuth();
+  const { authInfo:{isAuthenticated: isSignedIn, shouldShowInitialBanner} } = useProfile();
+
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
-  const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
   const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
   const hasUser = isSignedIn && hasTradeAccount;
-  const email = useReduxSelector(selectUserEmail);
   const { mainAddress } = useReduxSelector(selectUsingAccount);
   const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
   const hasAssociatedAccounts = useReduxSelector(
