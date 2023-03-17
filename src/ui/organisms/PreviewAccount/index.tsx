@@ -26,7 +26,6 @@ import {
   selectMainAccount,
   selectTradeAccount,
   selectUsingAccount,
-  userAccountSelectFetch,
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
   exportTradeAccountActive,
@@ -35,6 +34,7 @@ import {
 import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type Props = {
   onClose: () => void;
@@ -66,6 +66,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   );
   const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
   const using = usingAccount.tradeAddress === selected?.address;
+  const { onUserSelectAccount } = useProfile();
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
@@ -183,7 +184,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                     <S.Button
                       disabled={!tradingAccountInBrowser || !mainAccountDetails}
                       onClick={() =>
-                        dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
+                        onUserSelectAccount({ tradeAddress: selected?.address })
                       }
                       type="button">
                       {using ? "Using" : "Use"}

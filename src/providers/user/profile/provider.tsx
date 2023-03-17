@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
@@ -123,6 +123,12 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       else dispatch(A.userAuthError(error));
     }
   }, []);
+
+  // For onUserAuth Purposes
+  const isSignedIn = state.authInfo.isAuthenticated;
+  useEffect(() => {
+    if (isSignedIn) dispatch(A.userAuthFetch());
+  }, [isSignedIn, dispatch]);
 
   return (
     <Provider

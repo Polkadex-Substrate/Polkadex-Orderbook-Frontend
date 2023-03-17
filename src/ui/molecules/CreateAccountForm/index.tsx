@@ -16,7 +16,6 @@ import {
   selectExtensionWalletAccounts,
   selectLinkedMainAddresses,
   tradeAccountPush,
-  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";

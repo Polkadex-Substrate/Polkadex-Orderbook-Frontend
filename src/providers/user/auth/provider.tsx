@@ -8,6 +8,7 @@ import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
+import { userAuthFetch } from "../profile/actions";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
@@ -22,8 +23,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
         userEmail = email;
         const user: CognitoUser = await Auth.signIn(email, password);
         dispatch(A.signInData({ user, email, isConfirmed: true }));
-        // This will be called when profile context provider will created
-        // yield put(userAuthFetch());
+        dispatch(userAuthFetch());
       } catch (error) {
         console.log("error:", error);
         const errorCode = error?.name;
@@ -94,8 +94,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
       else dispatch(A.logOutError(error));
 
       if (error.message.indexOf("identity.session.not_found") > -1) {
-        // Will be called when profile context provider will be created
-        // yield put(userAuthFetch());
+        dispatch(userAuthFetch());
       }
     }
   }, [onError]);

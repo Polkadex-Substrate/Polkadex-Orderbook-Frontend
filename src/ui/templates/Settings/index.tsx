@@ -37,13 +37,13 @@ import {
   selectDefaultAvatarOptions,
   selectIsMainAddressRegistered,
   selectMainAccount,
-  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import {
   getMainAddresssLinkedToTradingAccount,
   transformAddress,
 } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const SettingsTemplate = () => {
   const router = useRouter();
@@ -78,6 +78,8 @@ export const SettingsTemplate = () => {
     handleOpenAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
+
+  const { onUserSelectAccount } = useProfile();
 
   const dispatch = useDispatch();
   return (
@@ -240,10 +242,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
+                                          onUserSelectAccount({
                                             tradeAddress: account.address,
-                                          })
+                                          }
                                         );
                                         router.push("/balances");
                                       }}>
@@ -254,10 +255,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
+                                          onUserSelectAccount({
                                             tradeAddress: account.address,
-                                          })
+                                          }
                                         );
                                       }}>
                                       Use
