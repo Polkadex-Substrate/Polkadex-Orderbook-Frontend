@@ -5,6 +5,8 @@ import { OrderHistoryContextProps, OrderHistoryProviderProps } from "./types";
 
 export const Context = createContext<OrderHistoryContextProps>({
   ...initialOrdersHistoryState,
+  onOpenOrdersHistoryFetch: () => {},
+  onOrdersHistoryFetch: () => {},
 });
 
 export const Provider = ({ value, children }: OrderHistoryProviderProps) => {

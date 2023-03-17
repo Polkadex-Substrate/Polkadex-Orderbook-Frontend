@@ -15,7 +15,8 @@ import {
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
-  console.log(state);
+  const userSession = useReduxSelector(selectUserSession);
+  const usingAccount = useReduxSelector(selectUsingAccount);
 
   const orderList = state.list;
   const openOrders = state.openOrders;
@@ -26,6 +27,12 @@ export function useOrderHistoryProvider(filters: Ifilters) {
 
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
+  useEffect(() => {
+    const { dateFrom, dateTo } = userSession;
+    console.log("useeffect because of usersession and using account");
+    state.onOpenOrdersHistoryFetch();
+    state.onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
+  }, [usingAccount, userSession]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
@@ -71,5 +78,6 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     priceFixed: currentMarket?.quote_precision,
     amountFixed: currentMarket?.base_precision,
     userLoggedIn,
+    state,
   };
 }

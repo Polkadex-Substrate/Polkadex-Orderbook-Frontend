@@ -38,7 +38,16 @@ interface orderHistoryFetchProps {
   tradeAddress: string;
 }
 
-export type OrderHistoryContextProps = OrdersHistoryState;
+export interface onOrdersHistoryFetch {
+  dateFrom: Date;
+  dateTo: Date;
+  tradeAddress: string;
+}
+
+export type OrderHistoryContextProps = OrdersHistoryState & {
+  onOpenOrdersHistoryFetch: () => void;
+  onOrdersHistoryFetch: (value: onOrdersHistoryFetch) => void;
+};
 
 export type OrderHistoryProviderProps = PropsWithChildren<{
   value: OrderHistoryContextProps;

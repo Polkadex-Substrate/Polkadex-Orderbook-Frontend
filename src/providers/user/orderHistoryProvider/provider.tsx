@@ -37,7 +37,7 @@ export const OrderHistoryProvider = ({ children }) => {
   };
   const account: UserAccount = useReduxSelector(selectUsingAccount);
 
-  const openOrdersHistoryFetch = async () => {
+  const onOpenOrdersHistoryFetch = async () => {
     console.log("open orders history fetch");
 
     try {
@@ -51,7 +51,7 @@ export const OrderHistoryProvider = ({ children }) => {
     }
   };
 
-  const ordersHistoryFetch = async ({ dateFrom, dateTo, tradeAddress }) => {
+  const onOrdersHistoryFetch = async ({ dateFrom, dateTo, tradeAddress }) => {
     console.log("orders history fetch", dateFrom, dateTo);
     console.log("trade address", tradeAddress);
 
@@ -66,18 +66,18 @@ export const OrderHistoryProvider = ({ children }) => {
       dispatch(A.userOrdersHistoryError(error));
     }
   };
-  const userSession = useReduxSelector(selectUserSession);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  // const userSession = useReduxSelector(selectUserSession);
+  // const usingAccount = useReduxSelector(selectUsingAccount);
 
-  useEffect(() => {
-    const { dateFrom, dateTo } = userSession;
-    console.log("useeffect because of usersession and using account");
+  // useEffect(() => {
+  //   const { dateFrom, dateTo } = userSession;
+  //   console.log("useeffect because of usersession and using account");
 
-    openOrdersHistoryFetch();
-    ordersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [usingAccount, userSession]);
+  //   openOrdersHistoryFetch();
+  //   ordersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
+  // }, [usingAccount, userSession]);
 
-  const orderUpdates = (setOrder: SetOrder) => {
+  const OnOrderUpdates = (setOrder: SetOrder) => {
     try {
       const order = processOrderData(setOrder);
       dispatch(A.orderUpdateEventData(order));
@@ -175,6 +175,8 @@ export const OrderHistoryProvider = ({ children }) => {
     <Provider
       value={{
         ...state,
+        onOpenOrdersHistoryFetch,
+        onOrdersHistoryFetch,
       }}>
       {children}
     </Provider>
