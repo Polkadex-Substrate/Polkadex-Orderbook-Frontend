@@ -6,7 +6,6 @@ import {
   OrderExecuteFetch,
   selectRangerApi,
   notificationPush,
-  selectUsingAccount,
   selectTradeAccount,
   UserAccount,
 } from "../../..";
@@ -18,11 +17,13 @@ import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
+    const profileState = useProfile();
     const { side, price, order_type, amount, symbol } = action.payload;
-    const account: UserAccount = yield select(selectUsingAccount);
+    const account: UserAccount = profileState.selectedAccount;
     const address = account.tradeAddress;
     const mainAddress = account.mainAddress;
     const keyringPair: TradeAccount = yield select(selectTradeAccount(address));

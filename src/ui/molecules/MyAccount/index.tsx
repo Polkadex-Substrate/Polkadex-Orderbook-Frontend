@@ -8,7 +8,8 @@ import * as S from "./styles";
 import * as T from "./types";
 
 import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch, selectUsingAccount } from "@polkadex/orderbook-modules";
+import { logOutFetch } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const SelectAccount = ({
   address,
@@ -85,7 +86,8 @@ const MyAccountLoadingContent = () => (
 export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
-  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const profileState = useProfile();
+  const currentTradeAddr = profileState.selectedAccount.tradeAddress;
 
   const { isSignedIn } = useAccount();
   const dispatch = useDispatch();

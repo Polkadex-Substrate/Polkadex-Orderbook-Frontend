@@ -10,22 +10,23 @@ import {
   selectOpenOrders,
   userOpenOrdersHistoryFetch,
   selectUserSession,
-  selectHasSelectedAccount,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function useOrderHistory(filters: Ifilters) {
+  const profileState = useProfile();
+
   const dispatch = useDispatch();
   const orderList = useReduxSelector(selectOrdersHistory);
   const openOrders = useReduxSelector(selectOpenOrders);
   const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
+  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
   const userSession = useReduxSelector(selectUserSession);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const usingAccount = profileState.selectedAccount;
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
 

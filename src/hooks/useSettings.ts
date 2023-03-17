@@ -9,23 +9,19 @@ import {
   registerMainAccountReset,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
-  selectDefaultTradeAccount,
   selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
   selectIsRegisterMainAccountLoading,
-  selectLinkedMainAddress,
-  selectLinkedMainAddresses,
   selectPreviewTradeAccountSelect,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
   selectRegisterTradeAccountSuccess,
-  selectUserAccounts,
-  selectUserInfo,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAuth } from "../providers/user/auth";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -43,24 +39,43 @@ export const useSettings = () => {
   const handleChangeCurrentControllerWallet = (account: ExtensionAccount | null) =>
     setCurrentControllerWallet(account);
 
-  const currentTradeAccount = useReduxSelector(selectUsingAccount);
+  const profileState = useProfile();
+  const authState = useAuth();
+
+  const currentTradeAccount = profileState.selectedAccount;
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
   const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
   const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
-  const allAccounts = useReduxSelector(selectUserAccounts);
-  const user = useReduxSelector(selectUserInfo);
-  const userAccounts = useReduxSelector(selectUserAccounts);
-  const linkedMainAddress = useReduxSelector(selectLinkedMainAddresses);
+  const {
+    userData: { userAccounts: allAccounts },
+  } = useProfile();
+  let authInfo = profileState.authInfo;
+  const user = {
+    ...authInfo,
+    email: authState.email,
+    isConfirmed: authState.userConfirmed,
+  };
+  const {
+    userData: { userAccounts },
+  } = useProfile();
+  const linkedMainAddress = profileState.userData.mainAccounts;
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
   const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const {
+    userData: { userAccounts: usingAccount },
+  } = useProfile();
   const isRegisterControllerAccountSuccess = useReduxSelector(
     selectRegisterTradeAccountSuccess
   );
-  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
-  const defaultFundingAddress = useReduxSelector(selectLinkedMainAddress(defaultTradeAddress));
+  const defaultTradeAddress = profileState.defaultTradeAccount;
+  const defaultFundingAddress =
+    defaultTradeAddress &&
+    profileState.userData?.userAccounts?.find(
+      ({ tradeAddress }) => tradeAddress === defaultTradeAddress
+    )?.mainAddress;
+
   const isPreviewActive = useReduxSelector(selectIsPreviewTradeAccountActive);
   const previewAccountSelected = useReduxSelector(selectPreviewTradeAccountSelect);
   const isLoading = isTradeAccountLoading || isControllerAccountLoading;

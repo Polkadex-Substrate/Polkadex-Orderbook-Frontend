@@ -22,10 +22,8 @@ import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
   selectIsTradeAccountRemoveLoading,
-  selectDefaultTradeAccount,
   selectMainAccount,
   selectTradeAccount,
-  selectUsingAccount,
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
   exportTradeAccountActive,
@@ -60,7 +58,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const { selectedAccount: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)
   );
@@ -183,9 +181,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   {tradingAccountInBrowser && (
                     <S.Button
                       disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                      onClick={() =>
-                        onUserSelectAccount({ tradeAddress: selected?.address })
-                      }
+                      onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
                       {using ? "Using" : "Use"}
                     </S.Button>
@@ -352,7 +348,8 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
   const dispatch = useDispatch();
-  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
+  const profileState = useProfile();
+  const defaultTradeAddress = profileState.defaultTradeAccount;
   const isActive = tradeAddress === defaultTradeAddress;
 
   const handleChange = () =>

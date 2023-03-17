@@ -14,12 +14,9 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
-  selectAssociatedTradeAddresses,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  selectHasSelectedAccount,
   selectIsAddressInExtension,
-  selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -43,8 +40,8 @@ import {
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { useAuth } from "@polkadex/orderbook/providers/user/auth"
-import { useProfile } from "@polkadex/orderbook/providers/user/profile"
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -71,20 +68,26 @@ export function Trading() {
   useOrderBookMarketsFetch();
 
   const { email } = useAuth();
-  const { authInfo:{isAuthenticated: isSignedIn, shouldShowInitialBanner} } = useProfile();
+  const {
+    authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
+    selectedAccount: { mainAddress },
+  } = useProfile();
 
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
-  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
+  const profileState = useProfile();
+  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const { mainAddress } = useReduxSelector(selectUsingAccount);
   const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
-  const hasAssociatedAccounts = useReduxSelector(
-    selectAssociatedTradeAddresses(mainAddress)
-  )?.length;
 
-  const currentMainAddr = useReduxSelector(selectUsingAccount).mainAddress;
-  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const userAccounts = profileState.userData.userAccounts;
+  const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
+  const hasAssociatedAccounts = accounts.map((account) => account.tradeAddress)?.length;
+
+  const { selectedAccount } = useProfile();
+
+  const currentMainAddr = selectedAccount.mainAddress;
+  const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
@@ -187,53 +190,51 @@ export function Trading() {
               <S.Content>
                 <S.WrapperGraph>
                   <S.Header>
-                  <Navbar onOpenMarkets={() => setState(!state)} />
-                  <S.Actions isSignedIn={isSignedIn}>
-                    {!isSignedIn ? (
-                      <Button
-                        onClick={() => router.push("/signIn")}
-                        color="inverse"
-                        background="text"
-                        style={{ alignSelf: "flex-end" }}
-                        icon={{
-                          name: "Wallet",
-                          background: "inverse",
-                          size: "medium",
-                          stroke: "text",
-                          fill: "text",
-                        }}>
-                        Login/Sign Up
-                      </Button>
-                    ) : (
-                      <S.Profile>
-                        <Profile
-                          hasTradeAccount={hasTradeAccount}
-                          hasMainAccount={hasMainAccount}
-                          currentMainAccount={currentMainAddr}
-                          currentTradeAccount={currentTradeAddr}
-                          email={email}
-                        />
-                      </S.Profile>
-                    )}
-                  </S.Actions>
+                    <Navbar onOpenMarkets={() => setState(!state)} />
+                    <S.Actions isSignedIn={isSignedIn}>
+                      {!isSignedIn ? (
+                        <Button
+                          onClick={() => router.push("/signIn")}
+                          color="inverse"
+                          background="text"
+                          style={{ alignSelf: "flex-end" }}
+                          icon={{
+                            name: "Wallet",
+                            background: "inverse",
+                            size: "medium",
+                            stroke: "text",
+                            fill: "text",
+                          }}>
+                          Login/Sign Up
+                        </Button>
+                      ) : (
+                        <S.Profile>
+                          <Profile
+                            hasTradeAccount={hasTradeAccount}
+                            hasMainAccount={hasMainAccount}
+                            currentMainAccount={currentMainAddr}
+                            currentTradeAccount={currentTradeAddr}
+                            email={email}
+                          />
+                        </S.Profile>
+                      )}
+                    </S.Actions>
                   </S.Header>
                   <S.CenterWrapper>
                     <S.GraphEpmty>
-                    <Graph />
-                    {hasUser ? (
-                    <Transactions />
-                  ) : (
-                    <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                  )}
+                      <Graph />
+                      {hasUser ? (
+                        <Transactions />
+                      ) : (
+                        <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                      )}
                     </S.GraphEpmty>
-                  <S.WrapperRight>
-                   <MarketOrder />
-                   <RecentTrades />
-                  </S.WrapperRight>
+                    <S.WrapperRight>
+                      <MarketOrder />
+                      <RecentTrades />
+                    </S.WrapperRight>
                   </S.CenterWrapper>
-                 
                 </S.WrapperGraph>
-                
               </S.Content>
             </S.ContainerMain>
             <Footer />

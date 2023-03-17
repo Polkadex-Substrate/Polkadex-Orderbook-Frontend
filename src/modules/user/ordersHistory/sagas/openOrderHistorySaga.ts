@@ -2,12 +2,13 @@
 import { call, put, select } from "redux-saga/effects";
 
 import { userOpenOrderHistoryData, UserOpenOrdersHistoryFetch } from "../actions";
-import { alertPush, UserAccount, selectUsingAccount } from "../../../";
+import { alertPush, UserAccount } from "../../../";
 
 import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type orderHistoryQueryResult = {
   u: string;
@@ -27,7 +28,8 @@ type orderHistoryQueryResult = {
 
 export function* openOrdersHistorySaga(_action: UserOpenOrdersHistoryFetch) {
   try {
-    const account: UserAccount = yield select(selectUsingAccount);
+    const profileState = useProfile();
+    const account: UserAccount = profileState.selectedAccount;
     if (account.tradeAddress) {
       const transactions: OrderCommon[] = yield call(fetchOpenOrders, account.tradeAddress);
       yield put(userOpenOrderHistoryData({ list: transactions }));

@@ -10,9 +10,9 @@ import {
   defaultTickers,
   selectMarketTickers,
   userFavoriteMarketPush,
-  selectUserFavoriteMarkets,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useProfile } from "../providers/user/profile";
 export type InitialMarkets = {
   last: string | number;
   volume: string | number;
@@ -29,11 +29,12 @@ export function useMarkets(onClose: () => void) {
   });
 
   const dispatch = useDispatch();
+  const profileState = useProfile();
   const router = useRouter();
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const markets = useReduxSelector(selectMarkets);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const favorites = useReduxSelector(selectUserFavoriteMarkets);
+  const favorites = profileState.userMarket.favoriteMarkets;
 
   /**
    * @description Get the single market information for the current market
