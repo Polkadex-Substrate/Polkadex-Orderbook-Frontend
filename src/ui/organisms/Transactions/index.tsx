@@ -16,7 +16,7 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
-import { userSessionData } from "@polkadex/orderbook-modules";
+import { selectUserSession, userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -27,7 +27,7 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistory } from "@polkadex/orderbook-hooks";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useOrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/useOrderHistroyProvider";
 
 export type Ifilters = {
@@ -57,6 +57,8 @@ export const Transactions = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const orderHistory = useOrderHistoryProvider(filters);
+  const userSession = useReduxSelector(selectUserSession);
+  // console.log(userSession);
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
@@ -64,8 +66,8 @@ export const Transactions = () => {
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }) => {
-      setFrom(startDate);
-      setTo(endDate);
+      // setFrom(startDate);
+      // setTo(endDate);
       dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
     },
     [dispatch]
@@ -74,12 +76,12 @@ export const Transactions = () => {
   const ranges = useMemo(() => {
     return [
       {
-        startDate: from,
-        endDate: to,
+        startDate: userSession.dateFrom,
+        endDate: userSession.dateTo,
         key: "selection",
       },
     ];
-  }, [from, to]);
+  }, [userSession.dateFrom, userSession.dateTo]);
   return (
     <S.Section>
       <Tabs>
