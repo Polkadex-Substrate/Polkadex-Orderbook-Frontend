@@ -40,6 +40,7 @@ export function* orderBookChannelSaga(action: OrderBookChannelFetch) {
     );
   }
 }
+
 function fetchOrderBookChannel(market: string) {
   return eventChannel((emitter) => {
     const subscription = API.graphql({
@@ -60,12 +61,30 @@ function fetchOrderBookChannel(market: string) {
   });
 }
 
+type OBIncData = {
+  i: number;
+  m: string;
+  b: Record<string, string>;
+  a: Record<string, string>;
+};
 const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
-  const data = JSON.parse(dataStr);
-  return data.changes.map((item) => ({
-    side: item[0],
-    price: item[1],
-    qty: item[2],
-    seq: item[3],
-  }));
+  const data = JSON.parse(dataStr) as OBIncData;
+  const { b, a } = data;
+  const bids = Object.entries(b).map(
+    ([price, qty]): OrderbookRawUpdate => ({
+      side: "Bid",
+      price,
+      qty,
+      seq: data.i,
+    })
+  );
+  const asks = Object.entries(a).map(
+    ([price, qty]): OrderbookRawUpdate => ({
+      side: "Ask",
+      price,
+      qty,
+      seq: data.i,
+    })
+  );
+  return [...bids, ...asks];
 };
