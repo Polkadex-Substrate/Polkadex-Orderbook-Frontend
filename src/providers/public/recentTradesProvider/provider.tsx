@@ -70,31 +70,27 @@ export const RecentTradesProvider = ({ children }) => {
     };
   }, [market?.m]);
 
-  useEffect(() => {
-    const recentTradesFetch = async (market: Market) => {
-      try {
-        if (market) {
-          const res = await fetchRecentTrade(market.m);
-          const trades: T.PublicTrade[] = res.map((x) => ({
-            market_id: market.m,
-            price: x.p,
-            amount: x.q,
-            timestamp: Number(x.t),
-          }));
-          dispatch(A.recentTradesData(trades));
-        }
-      } catch (error) {
-        dispatch(A.recentTradesError(error));
+  const recentTradesFetch = async (market: Market) => {
+    try {
+      if (market) {
+        const res = await fetchRecentTrade(market.m);
+        const trades: T.PublicTrade[] = res.map((x) => ({
+          market_id: market.m,
+          price: x.p,
+          amount: x.q,
+          timestamp: Number(x.t),
+        }));
+        dispatch(A.recentTradesData(trades));
       }
-    };
-
-    recentTradesFetch(market);
-  }, [market?.m]);
-
+    } catch (error) {
+      dispatch(A.recentTradesError(error));
+    }
+  };
   return (
     <Provider
       value={{
         ...state,
+        recentTradesFetch,
       }}>
       {children}
     </Provider>

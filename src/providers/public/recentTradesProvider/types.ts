@@ -20,7 +20,9 @@ export interface RecentTradesState {
 // export type RecentTradesContextProps = RecentTradesState & {
 //   recentTradesFetch: (market: Market) => Promise<void>;
 // };
-export type RecentTradesContextProps = RecentTradesState;
+export type RecentTradesContextProps = RecentTradesState & {
+  recentTradesFetch: (value: Market) => void;
+};
 
 export type RecentTradesProviderProps = PropsWithChildren<{
   value: RecentTradesContextProps;

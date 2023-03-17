@@ -1,15 +1,20 @@
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 import { getIsDecreasingArray } from "@polkadex/web-helpers";
-import { useContext } from "react";
+import { stat } from "fs";
+import { useContext, useEffect } from "react";
 
 import { Context } from "./context";
 
 export function useRecentTradesProvider() {
   const state = useContext(Context);
+  const { list, recentTradesFetch } = state;
   const currentMarket = useReduxSelector(selectCurrentMarket);
+  useEffect(() => {
+    recentTradesFetch(currentMarket);
+  }, [currentMarket?.m]);
 
-  const isDecreasing = getIsDecreasingArray(state.list);
+  const isDecreasing = getIsDecreasingArray(list);
   if (!Context) {
     const error = new Error("Recent trades context is undefined");
     error.name = "ContextError";
