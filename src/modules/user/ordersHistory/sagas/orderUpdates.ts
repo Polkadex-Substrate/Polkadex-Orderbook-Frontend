@@ -33,7 +33,7 @@ function processOrderData(eventData: SetOrder): OrderCommon {
     main_account: eventData.user,
     id: eventData.id.toString(),
     client_order_id: eventData.client_order_id,
-    time: new Date(Number(eventData.timestamp) * 1000).toISOString(),
+    time: new Date(Number(eventData.timestamp)).toISOString(),
     m: `${base}-${quote}`, // marketid
     side: eventData.side,
     order_type: eventData.order_type,
