@@ -8,7 +8,6 @@ import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
-import { userAuthFetch, userChangeInitBanner } from "../profile/actions";
 import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
@@ -23,7 +22,6 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
         userEmail = email;
         const user: CognitoUser = await Auth.signIn(email, password);
         dispatch(A.signInData({ user, email, isConfirmed: true }));
-        dispatch(userAuthFetch());
       } catch (error) {
         console.log("error:", error);
         const errorCode = error?.name;
@@ -76,6 +74,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     try {
       Auth.signOut();
       dispatch(A.logOutData());
+      alert("Logged out");
       // yield put(
       //   notificationPush({
       //     type: "SuccessAlert",
@@ -86,7 +85,6 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
       //     time: new Date().getTime(),
       //   })
       // );
-      // yield put(userReset());
     } catch (error) {
       console.log("error: ", error);
       const errorMessage = error instanceof Error ? error.message : (error as string);
@@ -94,7 +92,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
       else dispatch(A.logOutError(error));
 
       if (error.message.indexOf("identity.session.not_found") > -1) {
-        dispatch(userAuthFetch());
+        // dispatch(userAuthFetch());
       }
     }
   }, [onError]);
@@ -184,6 +182,17 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     [onError]
   );
 
+  const onUserAuth = useCallback(
+    async (payload: T.UserAuth) => {
+      try {
+        dispatch(A.authUserData(payload));
+      } catch (error) {
+        console.log("error:", error);
+      }
+    },
+    [onError]
+  );
+
   // For SignIn Purposes
   const signinIsSuccess = state.signin.isSuccess;
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -205,7 +214,6 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
 
   useEffect(() => {
     if (signinIsSuccess || isAuthenticated) {
-      dispatch(userChangeInitBanner(true));
       router.push("/trading/" + defaultConfig.landingPageMarket);
     }
   }, [isAuthenticated, signinIsSuccess, router]);
@@ -248,9 +256,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
   const logoutIsSuccess = state.logout.isSuccess;
   useEffect(() => {
     if (logoutIsSuccess && !user) {
-      // We have to remove it when profile context created
-      router.reload();
-      // router.push("/trading/" + defaultConfig.landingPageMarket);
+      router.push("/trading/" + defaultConfig.landingPageMarket);
     }
   }, [logoutIsSuccess, user]);
 
@@ -266,6 +272,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
         onResendCode,
         onCodeVerification,
         onChangePassword,
+        onUserAuth,
       }}>
       {children}
     </Provider>

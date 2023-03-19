@@ -66,7 +66,7 @@ export const profileReducer = (state: ProfileState, action: any) => {
       return {
         ...state,
         auth: { ...state.auth, isLoading: false, isSuccess: true },
-        authInfo: action.payload,
+        authInfo: { ...state.authInfo, ...action.payload },
       };
     }
     case PROFILE_RESET_USER:

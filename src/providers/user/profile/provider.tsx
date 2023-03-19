@@ -8,9 +8,11 @@ import * as queries from "@polkadex/orderbook/graphql/queries";
 
 import * as T from "./types";
 import * as A from "./actions";
+import { useAuth } from "../auth";
 
 export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
+  const authState = useAuth();
 
   const onUserSelectAccount = useCallback((payload: T.UserSelectAccount) => {
     const { tradeAddress } = payload;
@@ -83,8 +85,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
     return accounts;
   };
 
-  const onUserAuth = useCallback(async (payload: T.AuthInfo) => {
-    const { userExists, isConfirmed, email } = state.authInfo;
+  const onUserAuth = async (payload: T.UserAuth) => {
+    const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
+    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
+
     const userAccounts = state.userData?.userAccounts;
     const defaultTradeAddress = window.localStorage.getItem(
       LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
@@ -122,7 +126,21 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       if (typeof onError === "function") onError(errorMessage);
       else dispatch(A.userAuthError(error));
     }
-  }, []);
+  };
+
+  const onUserLogout = () => {
+    dispatch(A.userReset());
+  };
+
+  const onUserChangeInitBanner = (payload: boolean) => {
+    dispatch(A.userChangeInitBanner(payload));
+  };
+
+  const logoutIsSuccess = authState.logout.isSuccess;
+
+  useEffect(() => {
+    if (logoutIsSuccess) onUserLogout();
+  }, [logoutIsSuccess]);
 
   return (
     <Provider
@@ -130,6 +148,8 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
         ...state,
         onUserSelectAccount,
         onUserAuth,
+        onUserLogout,
+        onUserChangeInitBanner,
       }}>
       {children}
     </Provider>

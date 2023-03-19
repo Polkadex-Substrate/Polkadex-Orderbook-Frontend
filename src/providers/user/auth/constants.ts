@@ -28,6 +28,8 @@ export const AUTH_LOGOUT_FETCH = "auth/LOGOUT_FETCH";
 export const AUTH_LOGOUT_DATA = "auth/LOGOUT_DATA";
 export const AUTH_LOGOUT_FAILURE = "auth/LOGOUT_FAILURE";
 
+export const AUTH_USER_DATA = "auth/AUTH_USER_DATA";
+
 export const AUTH_ERROR_CODES = {
   USER_ALREADY_EXIST: "UsernameExistsException", // email account already exists
   USER_NOT_CONFIRMED: "UserNotConfirmedException", // resend code verification

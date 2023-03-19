@@ -10,6 +10,14 @@ export interface UserAccount {
   tradeAddress: string;
 }
 
+export interface UserAuth {
+  email: string;
+  isConfirmed: boolean;
+  isAuthenticated: boolean;
+  userExists: boolean;
+  jwt?: string;
+}
+
 export interface AuthInfo {
   isAuthenticated: boolean;
   userExists: boolean;
@@ -42,7 +50,9 @@ export type ProfileProviderProps = PropsWithChildren<{
 
 export type ProfileContextProps = ProfileState & {
   onUserSelectAccount: (value: UserSelectAccount) => void;
-  onUserAuth: (value: AuthInfo) => void;
+  onUserAuth: (value: UserAuth) => void;
+  onUserLogout: () => void;
+  onUserChangeInitBanner: (value: boolean) => void;
 };
 
 export interface ProfileProps {

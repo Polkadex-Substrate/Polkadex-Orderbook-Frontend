@@ -26,7 +26,16 @@ import {
   AUTH_SIGN_UP_ERROR,
   AUTH_SIGN_UP_FETCH,
   AUTH_FORGOT_PASSWORD_RESET,
+  AUTH_USER_DATA,
 } from "./constants";
+
+export interface AuthUserData {
+  type: typeof AUTH_USER_DATA;
+  payload: {
+    email: string;
+    userConfirmed: boolean;
+  };
+}
 
 export interface SignInFetch {
   type: typeof AUTH_SIGN_IN_FETCH;
@@ -153,6 +162,7 @@ export interface ForgotPasswordError {
 }
 
 export type AuthAction =
+  | AuthUserData
   | SignInFetch
   | SignInData
   | SignInError
@@ -176,6 +186,11 @@ export type AuthAction =
   | ForgotPasswordError
   | ForgotPasswordCode
   | ForgotPasswordReset;
+
+export const authUserData = (payload: AuthUserData["payload"]): AuthUserData => ({
+  type: AUTH_USER_DATA,
+  payload,
+});
 
 export const signInFetch = (payload: SignInFetch["payload"]): SignInFetch => ({
   type: AUTH_SIGN_IN_FETCH,

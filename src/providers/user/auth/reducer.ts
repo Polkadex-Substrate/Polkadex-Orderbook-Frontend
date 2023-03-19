@@ -19,6 +19,7 @@ import {
   AUTH_CHANGE_PASSWORD_DATA,
   AUTH_CHANGE_PASSWORD_ERROR,
   AUTH_CODE_VERIFY_ERROR,
+  AUTH_USER_DATA,
 } from "./constants";
 
 const initialTemplate = {
@@ -41,6 +42,9 @@ export const initialState: AuthState = {
 
 export const authReducer = (state: AuthState, action: any) => {
   switch (action.type) {
+    case AUTH_USER_DATA:
+      const { email, userConfirmed } = action.payload;
+      return { ...state, email, userConfirmed };
     case AUTH_SIGN_IN_FETCH:
       return { ...state, signin: { ...state.signin, isLoading: true } };
     case AUTH_SIGN_UP_FETCH:
@@ -53,6 +57,7 @@ export const authReducer = (state: AuthState, action: any) => {
           isLoading: false,
           isSuccess: true,
         },
+        logout: { ...initialTemplate },
         userConfirmed: action.payload.isConfirmed,
         email: action.payload.email,
         user: action.payload.user,

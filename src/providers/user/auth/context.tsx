@@ -13,6 +13,7 @@ export const Context = createContext<AuthContextProps>({
   onResendCode: () => {},
   onCodeVerification: () => {},
   onChangePassword: () => {},
+  onUserAuth: () => {},
 });
 
 export const Provider = ({ value, children }: AuthProviderProps) => {

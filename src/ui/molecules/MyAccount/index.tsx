@@ -7,9 +7,9 @@ import { Skeleton, Icon, Appearance, AccountOverview, EmptyMyAccount } from "../
 import * as S from "./styles";
 import * as T from "./types";
 
-import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch } from "@polkadex/orderbook-modules";
+import { useAccount } from "@polkadex/orderbook-hooks";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SelectAccount = ({
   address,
@@ -87,6 +87,7 @@ export const WalletContent = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const profileState = useProfile();
+  const { onLogout } = useAuth();
   const currentTradeAddr = profileState.selectedAccount.tradeAddress;
 
   const { isSignedIn } = useAccount();
@@ -112,7 +113,7 @@ export const WalletContent = () => {
         {isSignedIn ? (
           <AccountOverview
             address={address || "0x000000000"}
-            logout={() => dispatch(logOutFetch())}
+            logout={() => onLogout()}
             onNavigate={onNavigate}
           />
         ) : (

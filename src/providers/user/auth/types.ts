@@ -2,6 +2,10 @@ import { FC, PropsWithChildren } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { CommonActionState } from "../types";
 
+export interface UserAuth {
+  email: string;
+  userConfirmed: boolean;
+}
 export interface SignIn {
   fetch: {
     email: string;
@@ -55,6 +59,7 @@ export type AuthContextProps = AuthState & {
   onResendCode: (value: string) => void;
   onCodeVerification: (value: CodeVerification) => void;
   onChangePassword: (value: ChangePassword) => void;
+  onUserAuth: (value: UserAuth) => void;
 };
 
 export interface AuthProps {
