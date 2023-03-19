@@ -24,10 +24,10 @@ export function* orderUpdatesSaga(action: OrderUpdateEvent) {
 }
 
 function processOrderData(eventData: SetOrder): OrderCommon {
-  const base = eventData.pair.base_asset;
+  const base = eventData.pair.base.asset;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const quote = eventData.pair.quote_asset;
+  const quote = eventData.pair.quote.asset;
 
   return {
     main_account: eventData.user,

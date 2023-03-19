@@ -1,5 +1,5 @@
 export interface SetOrder {
-  event_id: number;
+  stid: number;
   client_order_id: string;
   avg_filled_price: number;
   fee: number;
@@ -14,10 +14,12 @@ export interface SetOrder {
   price: number;
   timestamp: number;
 }
+
 interface Pair {
-  base_asset: string & OtherAsset;
-  quote_asset: string & OtherAsset;
-}
-interface OtherAsset {
-  asset: number;
+  base: {
+    asset: number;
+  };
+  quote: {
+    asset: number;
+  };
 }
