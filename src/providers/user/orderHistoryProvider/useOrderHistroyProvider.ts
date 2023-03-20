@@ -15,6 +15,13 @@ import {
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
+
+  if (!Context) {
+    const error = new Error("Order history context is undefined");
+    error.name = "ContextError";
+    Error?.captureStackTrace?.(error, useContext);
+    throw error;
+  }
   const userSession = useReduxSelector(selectUserSession);
   const usingAccount = useReduxSelector(selectUsingAccount);
 
@@ -29,7 +36,6 @@ export function useOrderHistoryProvider(filters: Ifilters) {
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
   useEffect(() => {
     const { dateFrom, dateTo } = userSession;
-    console.log("useeffect because of usersession and using account");
     state.onOpenOrdersHistoryFetch();
     state.onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
   }, [usingAccount, userSession]);
@@ -64,13 +70,6 @@ export function useOrderHistoryProvider(filters: Ifilters) {
       setUpdatedOpenOrdersSorted(openOrdersSorted);
     }
   }, [filters, openOrdersSorted, list]);
-
-  if (!Context) {
-    const error = new Error("Order history context is undefined");
-    error.name = "ContextError";
-    Error?.captureStackTrace?.(error, useContext);
-    throw error;
-  }
 
   return {
     orders: updatedList,

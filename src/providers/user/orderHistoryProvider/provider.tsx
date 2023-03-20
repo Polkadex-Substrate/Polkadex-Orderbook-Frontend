@@ -38,8 +38,6 @@ export const OrderHistoryProvider = ({ children }) => {
   const account: UserAccount = useReduxSelector(selectUsingAccount);
 
   const onOpenOrdersHistoryFetch = async () => {
-    console.log("open orders history fetch");
-
     try {
       if (account.tradeAddress) {
         const transactions: OrderCommon[] = await fetchOpenOrders(account.tradeAddress);
@@ -47,18 +45,14 @@ export const OrderHistoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error(error);
-      dispatch(A.userOrdersHistoryError(error));
+      dispatch(A.userOpenOrdersHistoryError(error));
     }
   };
 
   const onOrdersHistoryFetch = async ({ dateFrom, dateTo, tradeAddress }) => {
-    console.log("orders history fetch", dateFrom, dateTo);
-    console.log("trade address", tradeAddress);
-
     try {
       if (tradeAddress) {
         const orders: OrderCommon[] = await fetchOrders(tradeAddress, dateFrom, dateTo);
-        console.log("if trade address", orders);
 
         dispatch(A.userOrdersHistoryData({ list: orders }));
       }
@@ -66,23 +60,14 @@ export const OrderHistoryProvider = ({ children }) => {
       dispatch(A.userOrdersHistoryError(error));
     }
   };
-  // const userSession = useReduxSelector(selectUserSession);
-  // const usingAccount = useReduxSelector(selectUsingAccount);
-
-  // useEffect(() => {
-  //   const { dateFrom, dateTo } = userSession;
-  //   console.log("useeffect because of usersession and using account");
-
-  //   openOrdersHistoryFetch();
-  //   ordersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  // }, [usingAccount, userSession]);
 
   const OnOrderUpdates = (setOrder: SetOrder) => {
     try {
       const order = processOrderData(setOrder);
       dispatch(A.orderUpdateEventData(order));
     } catch (error) {
-      console.log(error, "Something has gone wrong (order updates channel)...");
+      console.log(error, "Something has gone wrong (order updates channel)...", error);
+      dispatch(A.orderUpdateEventError(error));
     }
   };
 
@@ -122,6 +107,7 @@ export const OrderHistoryProvider = ({ children }) => {
 
     return orders;
   };
+
   function processOrderData(eventData: SetOrder): OrderCommon {
     const base = eventData.pair.base_asset;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -144,6 +130,7 @@ export const OrderHistoryProvider = ({ children }) => {
       fee: eventData.fee.toString(),
     };
   }
+
   const fetchOpenOrders = async (proxy_acc: string): Promise<OrderCommon[]> => {
     const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
       queries.listOpenOrdersByMainAccount,

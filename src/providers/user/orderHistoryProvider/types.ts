@@ -24,18 +24,13 @@ interface Pair {
 interface OtherAsset {
   asset: number;
 }
+
 export interface OrdersHistoryState {
   list: OrderCommon[];
   openOrders: OrderCommon[];
   loading: boolean;
   pageIndex: number;
   success: boolean;
-}
-
-interface orderHistoryFetchProps {
-  dateFrom: Date;
-  dateTo: Date;
-  tradeAddress: string;
 }
 
 export interface onOrdersHistoryFetch {

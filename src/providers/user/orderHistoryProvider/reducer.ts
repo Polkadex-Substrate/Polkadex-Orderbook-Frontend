@@ -3,10 +3,12 @@ import { OrderCommon } from "../../../modules/types";
 import { OrdersHistoryAction } from "./actions";
 import {
   OPEN_ORDERS_HISTORY_DATA,
+  OPEN_ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
   ORDER_UPDATE_EVENT_DATA,
+  ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
 
 import { sliceArray } from "@polkadex/web-helpers";
@@ -42,6 +44,8 @@ export const ordersHistoryReducer = (
 
     case OPEN_ORDERS_HISTORY_DATA:
       return { ...state, openOrders: sliceArray(action.payload.list, defaultStorageLimit) };
+    case OPEN_ORDERS_HISTORY_ERROR:
+      return { ...state, openOrders: [] };
 
     case ORDER_UPDATE_EVENT_DATA: {
       const openOrders = [...state.openOrders];
@@ -62,6 +66,9 @@ export const ordersHistoryReducer = (
         openOrders: updatedOpenOrders,
       };
     }
+    case ORDER_UPDATE_EVENT_ERROR:
+      return { ...state, list: [], openOrders: [] };
+
     default:
       return state;
   }

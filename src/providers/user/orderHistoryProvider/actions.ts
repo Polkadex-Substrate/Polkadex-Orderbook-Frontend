@@ -2,12 +2,14 @@ import { CommonError, OrderCommon } from "../../../modules/types";
 
 import {
   OPEN_ORDERS_HISTORY_DATA,
+  OPEN_ORDERS_HISTORY_ERROR,
   OPEN_ORDERS_HISTORY_FETCH,
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
   ORDER_UPDATE_EVENT,
   ORDER_UPDATE_EVENT_DATA,
+  ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
 import { SetOrder } from "./types";
 
@@ -36,6 +38,10 @@ export interface UserOpenOrdersHistoryData {
   type: typeof OPEN_ORDERS_HISTORY_DATA;
   payload: { list: OrderCommon[] };
 }
+export interface UserOpenOrdersHistoryError {
+  type: typeof OPEN_ORDERS_HISTORY_ERROR;
+  error: CommonError;
+}
 export interface OrderUpdateEvent {
   type: typeof ORDER_UPDATE_EVENT;
   payload: SetOrder;
@@ -45,13 +51,18 @@ export interface OrderUpdateEventData {
   type: typeof ORDER_UPDATE_EVENT_DATA;
   payload: OrderCommon;
 }
-
+export interface OrderUpdateEventError {
+  type: typeof ORDER_UPDATE_EVENT_ERROR;
+  error: CommonError;
+}
 export type OrdersHistoryAction =
   | UserOrdersHistoryFetch
   | UserOrdersHistoryData
   | UserOrdersHistoryError
   | OrderUpdateEventData
-  | UserOpenOrdersHistoryData;
+  | UserOpenOrdersHistoryData
+  | OrderUpdateEventError
+  | UserOpenOrdersHistoryError;
 
 export const userOrdersHistoryFetch = (
   payload: UserOrdersHistoryFetch["payload"]
@@ -83,6 +94,13 @@ export const userOpenOrderHistoryData = (
   payload,
 });
 
+export const userOpenOrdersHistoryError = (
+  error: CommonError
+): UserOpenOrdersHistoryError => ({
+  type: OPEN_ORDERS_HISTORY_ERROR,
+  error,
+});
+
 export const orderUpdateEvent = (payload: OrderUpdateEvent["payload"]): OrderUpdateEvent => ({
   type: ORDER_UPDATE_EVENT,
   payload,
@@ -93,4 +111,9 @@ export const orderUpdateEventData = (
 ): OrderUpdateEventData => ({
   type: ORDER_UPDATE_EVENT_DATA,
   payload,
+});
+
+export const orderUpdateEventError = (error: CommonError): OrderUpdateEventError => ({
+  type: ORDER_UPDATE_EVENT_ERROR,
+  error,
 });

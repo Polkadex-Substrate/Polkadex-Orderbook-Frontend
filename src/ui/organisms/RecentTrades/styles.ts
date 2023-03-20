@@ -23,13 +23,10 @@ export const Main = styled.div<{ hasData?: boolean }>`
     min-width: 29rem;
     width: 100%;
     height: 100%;
-    /* min-height: 33rem; */
     min-height: 48rem;
-    /* max-height: 70rem; */
     max-height: 54vh;
 
     @media screen and (min-height: 1200px) {
-      /* max-height: 50vh; */
       max-height: 879px;
       height: 50vh;
     }

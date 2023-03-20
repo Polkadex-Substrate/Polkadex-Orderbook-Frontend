@@ -41,8 +41,6 @@ export const RecentTradesProvider = ({ children }) => {
   const market = useReduxSelector(selectCurrentMarket);
 
   useEffect(() => {
-    console.log("the use effect for live changes");
-
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market?.m}-recent-trades` },
@@ -51,8 +49,6 @@ export const RecentTradesProvider = ({ children }) => {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        console.log("this is live stream");
-
         const val: RawTradeEvent = JSON.parse(data.value.data.websocket_streams.data);
         const trade: PublicTrade = {
           price: val.p,

@@ -17,9 +17,6 @@ export interface RecentTradesState {
   error?: CommonError;
 }
 
-// export type RecentTradesContextProps = RecentTradesState & {
-//   recentTradesFetch: (market: Market) => Promise<void>;
-// };
 export type RecentTradesContextProps = RecentTradesState & {
   recentTradesFetch: (value: Market) => void;
 };
