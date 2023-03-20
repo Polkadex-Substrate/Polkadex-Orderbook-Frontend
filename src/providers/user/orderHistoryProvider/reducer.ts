@@ -75,7 +75,10 @@ export const ordersHistoryReducer = (
 };
 
 // TODO: add test cases for this
-const replaceOrPushOrder = (orders: OrderCommon[], newOrder: OrderCommon): OrderCommon[] => {
+export const replaceOrPushOrder = (
+  orders: OrderCommon[],
+  newOrder: OrderCommon
+): OrderCommon[] => {
   const index = orders.findIndex((order) => order.id === newOrder.id);
   if (index === -1) {
     return [...orders, newOrder];
@@ -84,7 +87,10 @@ const replaceOrPushOrder = (orders: OrderCommon[], newOrder: OrderCommon): Order
 };
 
 // TODO: add test cases for this
-const removeOrderFromList = (orders: OrderCommon[], newOrder: OrderCommon): OrderCommon[] => {
+export const removeOrderFromList = (
+  orders: OrderCommon[],
+  newOrder: OrderCommon
+): OrderCommon[] => {
   const index = orders.findIndex((order) => order.id === newOrder.id);
   if (index === -1) {
     return orders;
