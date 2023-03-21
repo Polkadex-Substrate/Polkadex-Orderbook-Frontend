@@ -1,4 +1,3 @@
-import { testCases } from "../../../../src/providers/user/orderHistoryProvider/testCases";
 import { ordersHistoryReducer } from "../../../../src/providers/user/orderHistoryProvider/reducer";
 import { OrdersHistoryState } from "@polkadex/orderbook/providers/user/orderHistoryProvider/types";
 import { OrdersHistoryAction } from "@polkadex/orderbook/providers/user/orderHistoryProvider/actions";

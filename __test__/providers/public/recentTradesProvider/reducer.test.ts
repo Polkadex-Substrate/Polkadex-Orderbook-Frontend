@@ -1,6 +1,6 @@
 import { RecentTradesData } from "@polkadex/orderbook/modules/public/recentTrades/actions";
-import { RecentTradesPush } from "../../../src/providers/public/recentTradesProvider/actions";
-import { recentTradesReducer } from "../../../src/providers/public/recentTradesProvider/reducer";
+import { RecentTradesPush } from "../../../../src/providers/public/recentTradesProvider/actions";
+import { recentTradesReducer } from "../../../../src/providers/public/recentTradesProvider/reducer";
 
 const stateData = {
   list: [],
