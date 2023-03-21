@@ -3,6 +3,7 @@ import { Context } from "./context";
 
 export const useDepositProvider = () => {
   const state = useContext(Context);
+  console.log(state);
 
   if (!Context) {
     const error = new Error("Deposit context is undefined");

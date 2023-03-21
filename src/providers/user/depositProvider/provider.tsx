@@ -70,6 +70,7 @@ export const DepositProvider = ({ children }) => {
     <Provider
       value={{
         ...state,
+        onfetchDeposit,
       }}>
       {children}
     </Provider>

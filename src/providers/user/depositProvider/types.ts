@@ -1,4 +1,4 @@
-import { CommonError } from "@polkadex/orderbook/modules/types";
+import { CommonError, ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { PropsWithChildren } from "react";
 
 export interface DepositsState {
@@ -7,9 +7,14 @@ export interface DepositsState {
   success: boolean;
 }
 
+export interface onFetchDeposit {
+  asset: Record<string, string | null>;
+  amount: string | number;
+  mainAccount: ExtensionAccount;
+}
+
 export type DepositContextProps = DepositsState & {
-  // onOpenOrdersHistoryFetch: () => void;
-  // onOrdersHistoryFetch: (value: onOrdersHistoryFetch) => void;
+  onfetchDeposit: (value: onFetchDeposit) => void;
 };
 
 export type DepositProviderProps = PropsWithChildren<{
