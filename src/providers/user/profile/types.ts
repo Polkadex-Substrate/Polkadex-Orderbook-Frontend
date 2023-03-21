@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from "react";
-import { CommonActionState } from "../types";
+import { CommonActionState } from "../../types";
 
 export interface UserSelectAccount {
   tradeAddress: string;

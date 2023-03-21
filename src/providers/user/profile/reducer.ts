@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { ProfileState } from "./types";
+import { ProfileAction } from "./actions";
 import {
   PROFILE_RESET_USER,
   PROFILE_USER_DATA,
@@ -55,7 +56,7 @@ export const initialState: ProfileState = {
   auth: { ...initialTemplate },
 };
 
-export const profileReducer = (state: ProfileState, action: any) => {
+export const profileReducer = (state: ProfileState, action: ProfileAction) => {
   switch (action.type) {
     case PROFILE_USER_AUTH_FETCH:
       return {

@@ -1,4 +1,4 @@
-import { CommonError } from "../types";
+import { CommonError } from "../../types";
 import { AuthInfo, UserAccount } from "./types";
 
 import {

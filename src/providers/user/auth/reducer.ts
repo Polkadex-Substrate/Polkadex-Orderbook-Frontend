@@ -1,4 +1,5 @@
 import { AuthState } from "./types";
+import { AuthAction } from "./actions";
 import {
   AUTH_CODE_VERIFY_DATA,
   AUTH_LOGOUT_DATA,
@@ -40,7 +41,7 @@ export const initialState: AuthState = {
   changePassword: { ...initialTemplate },
 };
 
-export const authReducer = (state: AuthState, action: any) => {
+export const authReducer = (state: AuthState, action: AuthAction) => {
   switch (action.type) {
     case AUTH_USER_DATA:
       const { email, userConfirmed } = action.payload;

@@ -1,6 +1,6 @@
 import { CognitoUser } from "amazon-cognito-identity-js";
 
-import { CommonError } from "../types";
+import { CommonError } from "../../types";
 
 import {
   AUTH_CHANGE_PASSWORD_DATA,
