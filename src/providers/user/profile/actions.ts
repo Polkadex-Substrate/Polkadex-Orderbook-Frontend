@@ -190,12 +190,12 @@ export const userProfileTradeAccountDelete = (
 
 export const userSetDefaultTradeAccount = (
   payload: UserSetDefaultTradeAccount["payload"]
-) => ({
+): UserSetDefaultTradeAccount => ({
   type: PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   payload,
 });
 
-export const userSetAvatar = (payload?: UserSetAvatar["payload"]) => ({
+export const userSetAvatar = (payload?: UserSetAvatar["payload"]): UserSetAvatar => ({
   type: PROFILE_SET_PROFILE_AVATAR,
   payload,
 });
