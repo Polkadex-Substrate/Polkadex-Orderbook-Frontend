@@ -19,18 +19,24 @@ import { UNIT_BN } from "@polkadex/web-constants";
 
 export const DepositProvider = ({ children }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
-  const dispatchNotificationError = useDispatch();
-
+  const api = useReduxSelector(selectRangerApi);
+  const isApiReady = useReduxSelector(selectRangerIsReady);
   const onfetchDeposit = async ({ asset, amount, mainAccount }) => {
+    console.log("fetch deposit called");
+
     try {
-      const api = useReduxSelector(selectRangerApi);
-      const isApiReady = useReduxSelector(selectRangerIsReady);
+      console.log("inside try", asset, amount, mainAccount);
+
+      console.log(isApiReady, "isapiready", api);
+
       if (isApiReady && mainAccount?.account?.address !== "") {
         alert(
           "Processing Deposit, Please wait while the deposit is processed and the block is finalized. This may take a few mins."
         );
-
+        dispatch(A.depositsFetch({ asset, amount, mainAccount }));
         const res = await depositToEnclave(api, mainAccount, asset, amount);
+        console.log(res, "res");
+
         if (res.isSuccess) {
           dispatch(A.depositsData());
           alert(
@@ -43,7 +49,7 @@ export const DepositProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.log(error, "error");
       dispatch(A.depositsError(error));
     }
   };
