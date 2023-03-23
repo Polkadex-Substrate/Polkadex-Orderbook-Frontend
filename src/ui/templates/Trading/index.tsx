@@ -42,6 +42,8 @@ import {
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -224,14 +226,18 @@ export function Trading() {
                     <S.GraphEpmty>
                       <Graph />
                       {hasUser ? (
-                        <Transactions />
+                        <OrderHistoryProvider>
+                          <Transactions />
+                        </OrderHistoryProvider>
                       ) : (
                         <EmptyMyAccount hasLimit {...hasSelectedAccount} />
                       )}
                     </S.GraphEpmty>
                     <S.WrapperRight>
                       <MarketOrder />
-                      <RecentTrades />
+                      <RecentTradesProvider>
+                        <RecentTrades />
+                      </RecentTradesProvider>
                     </S.WrapperRight>
                   </S.CenterWrapper>
                 </S.WrapperGraph>
