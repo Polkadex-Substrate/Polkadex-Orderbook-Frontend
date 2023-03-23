@@ -25,6 +25,7 @@ export function* fetchTradeChannelSaga(action: RecentTradesChannelFetch) {
     const market: Market = action.payload;
     if (market?.m) {
       const channel = yield call(() => fetchTradesChannel(market.m));
+
       while (true) {
         const tradesMsg = yield take(channel);
         console.log("got trades messages: ", tradesMsg);
