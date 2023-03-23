@@ -10,7 +10,7 @@ import * as T from "./types";
 import * as A from "./actions";
 import { useAuth } from "../auth";
 
-export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
+export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const authState = useAuth();
 
@@ -26,17 +26,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       }
     } catch (e) {
       console.log("error: ", e);
-      alert(`Invalid funding account! ${e?.message}`);
-      // Notf push would be implemented later
-      //   yield put(
-      //     notificationPush({
-      //       message: {
-      //         title: "Invalid funding account!",
-      //         description: e?.message,
-      //       },
-      //       time: new Date().getTime(),
-      //     })
-      //   );
+      onNotification(`Invalid funding account! ${e?.message}`);
     }
   }, []);
 
@@ -54,6 +44,8 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      if (typeof onError === "function") onError(errorMessage);
     }
   };
 
@@ -108,18 +100,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
       }
 
       if (!isConfirmed && userExists) {
-        alert("Please confirm your email. Sign in again and confirm your email.");
-        // Notf push would be implemented later
-        // yield put(
-        //   notificationPush({
-        //     type: "AttentionAlert",
-        //     message: {
-        //       title: "Please confirm your email.",
-        //       description: "Sign in again and confirm your email.",
-        //     },
-        //     time: new Date().getTime(),
-        //   })
-        // );
+        onNotification("Please confirm your email. Sign in again and confirm your email.");
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : (error as string);
@@ -132,8 +113,12 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
     dispatch(A.userReset());
   };
 
-  const onUserChangeInitBanner = (payload: boolean) => {
+  const onUserChangeInitBanner = (payload: boolean = false) => {
     dispatch(A.userChangeInitBanner(payload));
+  };
+
+  const onUserAuthFetch = () => {
+    dispatch(A.userAuthFetch());
   };
 
   const logoutIsSuccess = authState.logout.isSuccess;
@@ -150,6 +135,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, children }) => {
         onUserAuth,
         onUserLogout,
         onUserChangeInitBanner,
+        onUserAuthFetch,
       }}>
       {children}
     </Provider>

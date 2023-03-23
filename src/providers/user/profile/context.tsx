@@ -9,6 +9,7 @@ export const Context = createContext<ProfileContextProps>({
   onUserAuth: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
+  onUserAuthFetch: () => {},
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

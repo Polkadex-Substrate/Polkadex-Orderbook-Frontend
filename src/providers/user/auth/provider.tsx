@@ -9,9 +9,11 @@ import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { useProfile } from "../profile";
 
-export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
+export const AuthProvider: T.AuthComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const profileState = useProfile();
 
   // Actions
   const onSignIn = useCallback(
@@ -29,18 +31,23 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
         switch (errorCode) {
           case AUTH_ERROR_CODES.NOT_AUTHORIZED: {
             if (typeof onError === "function") onError(errorMessage);
-            else dispatch(A.signInError(error));
+            dispatch(A.signInError(error));
             return;
           }
           case AUTH_ERROR_CODES.USER_NOT_CONFIRMED: {
             dispatch(A.signInData({ email: userEmail, isConfirmed: false }));
             router.push("/codeVerification");
-            // yield alreadyRegisteredNotify();
+            if (typeof onError === "function") {
+              onError(
+                "It looks like you have not confirmed your email. Please confirm your email and try again."
+              );
+            }
+            dispatch(A.signInError(error));
             return;
           }
           default: {
             if (typeof onError === "function") onError(errorMessage);
-            else dispatch(A.signInError(error));
+            dispatch(A.signInError(error));
           }
         }
       }
@@ -64,7 +71,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
         console.log("error: ", error);
         const errorMessage = error instanceof Error ? error.message : (error as string);
         if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.signUpError(error));
+        dispatch(A.signUpError(error));
       }
     },
     [onError]
@@ -74,17 +81,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     try {
       Auth.signOut();
       dispatch(A.logOutData());
-      alert("Logged out");
-      // yield put(
-      //   notificationPush({
-      //     type: "SuccessAlert",
-      //     message: {
-      //       title: "Logged out",
-      //       description: "You have been logged out.",
-      //     },
-      //     time: new Date().getTime(),
-      //   })
-      // );
+      onNotification("You have been logged out.");
     } catch (error) {
       console.log("error: ", error);
       const errorMessage = error instanceof Error ? error.message : (error as string);
@@ -92,7 +89,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
       else dispatch(A.logOutError(error));
 
       if (error.message.indexOf("identity.session.not_found") > -1) {
-        // dispatch(userAuthFetch());
+        profileState.onUserAuthFetch();
       }
     }
   }, [onError]);
@@ -182,16 +179,9 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
     [onError]
   );
 
-  const onUserAuth = useCallback(
-    async (payload: T.UserAuth) => {
-      try {
-        dispatch(A.authUserData(payload));
-      } catch (error) {
-        console.log("error:", error);
-      }
-    },
-    [onError]
-  );
+  const onUserAuth = async (payload: T.UserAuth) => {
+    dispatch(A.authUserData(payload));
+  };
 
   // For SignIn Purposes
   const signinIsSuccess = state.signin.isSuccess;
@@ -230,17 +220,9 @@ export const AuthProvider: T.AuthComponent = ({ onError, children }) => {
 
   useEffect(() => {
     if (signupIsSuccess && isVerificationSuccess) {
-      alert("Successfully created a new account!");
-      //   Will be called when notification context will created
-      //   dispatch(
-      //     notificationPush({
-      //       message: {
-      //         title: "Successfully created a new account!",
-      //         description: "Please sign in with your new account.",
-      //       },
-      //       time: new Date().getTime(),
-      //     })
-      //   );
+      onNotification(
+        "Successfully created a new account!. Please sign in with your new account."
+      );
       setTimeout(() => {
         router.push("/signIn");
       }, 2000);

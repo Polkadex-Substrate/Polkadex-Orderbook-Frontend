@@ -52,11 +52,13 @@ export type ProfileContextProps = ProfileState & {
   onUserSelectAccount: (value: UserSelectAccount) => void;
   onUserAuth: (value: UserAuth) => void;
   onUserLogout: () => void;
-  onUserChangeInitBanner: (value: boolean) => void;
+  onUserChangeInitBanner: (value?: boolean) => void;
+  onUserAuthFetch: () => void;
 };
 
 export interface ProfileProps {
   onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
 }
 
 export type ProfileComponent = FC<PropsWithChildren<ProfileProps>>;

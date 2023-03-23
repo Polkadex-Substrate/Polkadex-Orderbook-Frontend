@@ -20,6 +20,8 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -48,25 +50,29 @@ function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
 
   return (
-    <AuthProvider onError={(v) => console.log("Error from Auth Provider", v)}>
-      <ProfileProvider onError={(v) => console.log("Error from Profile Provider", v)}>
-        <OverlayProvider>
-          <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-            {defaultConfig.maintenanceMode ? (
-              <Maintenance />
-            ) : (
-              <QueryClientProvider client={queryClient}>
-                <ThemeWrapper>
-                  <Component {...pageProps} />
-                </ThemeWrapper>
-              </QueryClientProvider>
-            )}
+    <>
+      <ToastContainer />
+      <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+          <OverlayProvider>
+            <ThemeProvider
+              theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+              {defaultConfig.maintenanceMode ? (
+                <Maintenance />
+              ) : (
+                <QueryClientProvider client={queryClient}>
+                  <ThemeWrapper>
+                    <Component {...pageProps} />
+                  </ThemeWrapper>
+                </QueryClientProvider>
+              )}
 
-            <GlobalStyles />
-          </ThemeProvider>
-        </OverlayProvider>
-      </ProfileProvider>
-    </AuthProvider>
+              <GlobalStyles />
+            </ThemeProvider>
+          </OverlayProvider>
+        </ProfileProvider>
+      </AuthProvider>
+    </>
   );
 }
 
@@ -91,8 +97,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // When User logout, do not fetch the data
-    if (logoutSuccess) {
-    } else {
+    if (!logoutSuccess) {
       fetchDataOnUserAuth();
     }
   }, [signInSuccess, logoutSuccess]);
@@ -102,9 +107,8 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   const fetchDataOnUserAuth = async () => {
     try {
-      /* Getting the current user's attributes and signInUserSession from Amazon Cognito auth API. */
       const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
-      // profileState.onUserChangeInitBanner(true);
+      profileState.onUserChangeInitBanner();
       authState.onUserAuth({
         email: attributes?.email,
         userConfirmed: attributes?.email_verified,
@@ -137,13 +141,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         }
         default: {
           console.error("Error=>", `User data fetch error: ${error.message}`);
-          // This will be created when error context would be created
-          // dispatch(
-          //   sendError({
-          //     error: `User data fetch error: ${error.message}`,
-          //     processingType: "alert",
-          //   })
-          // );
+          toast.error(`User data fetch error: ${error.message}`);
           break;
         }
       }

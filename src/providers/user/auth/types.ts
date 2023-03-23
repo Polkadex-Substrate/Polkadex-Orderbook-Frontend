@@ -64,6 +64,7 @@ export type AuthContextProps = AuthState & {
 
 export interface AuthProps {
   onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
 }
 
 export type AuthComponent = FC<PropsWithChildren<AuthProps>>;
