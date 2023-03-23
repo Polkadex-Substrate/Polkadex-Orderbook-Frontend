@@ -18,10 +18,8 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
   // Actions
   const onSignIn = useCallback(
     async ({ email, password }: T.SignIn["fetch"]) => {
-      let userEmail;
       try {
         dispatch(A.signInFetch({ email, password }));
-        userEmail = email;
         const user: CognitoUser = await Auth.signIn(email, password);
         dispatch(A.signInData({ user, email, isConfirmed: true }));
       } catch (error) {
@@ -35,7 +33,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
             return;
           }
           case AUTH_ERROR_CODES.USER_NOT_CONFIRMED: {
-            dispatch(A.signInData({ email: userEmail, isConfirmed: false }));
+            dispatch(A.signInData({ email, isConfirmed: false }));
             router.push("/codeVerification");
             if (typeof onError === "function") {
               onError(
@@ -97,7 +95,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
   const onForgotPassword = useCallback(
     async ({ code, newPassword, email }: T.ForgotPassword) => {
       try {
-        const data = await Auth.forgotPasswordSubmit(email, code, newPassword);
+        await Auth.forgotPasswordSubmit(email, code, newPassword);
         dispatch(A.forgotPasswordData());
         setTimeout(() => {
           router.push("/signIn");
@@ -135,7 +133,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
   const onResendCode = useCallback(
     async (email: string) => {
       try {
-        const res = await Auth.resendSignUp(email);
+        await Auth.resendSignUp(email);
         dispatch(A.resendCodeData());
       } catch (error) {
         console.log("error:", error);
@@ -150,7 +148,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
   const onCodeVerification = useCallback(
     async ({ email, code }: T.CodeVerification) => {
       try {
-        const res = await Auth.confirmSignUp(email, code);
+        await Auth.confirmSignUp(email, code);
         dispatch(A.codeVerifyData());
       } catch (error) {
         console.log("error:", error);

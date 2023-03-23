@@ -1,6 +1,6 @@
 export interface CommonActionState {
   isLoading: boolean;
-  message: string;
+  message: string[];
   isError: boolean;
   isSuccess: boolean;
 }

@@ -15,13 +15,13 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   const authState = useAuth();
 
   const onUserSelectAccount = useCallback((payload: T.UserSelectAccount) => {
-    const { tradeAddress } = payload;
+    const { tradeAddress: trade_address } = payload;
     try {
       const mainAddress = state.userData?.userAccounts?.find(
-        ({ trade_address }) => trade_address === tradeAddress
+        ({ tradeAddress }) => trade_address === tradeAddress
       )?.mainAddress;
       if (mainAddress) {
-        const data = { tradeAddress, mainAddress };
+        const data = { tradeAddress: trade_address, mainAddress };
         dispatch(A.userAccountSelectData(data));
       }
     } catch (e) {
