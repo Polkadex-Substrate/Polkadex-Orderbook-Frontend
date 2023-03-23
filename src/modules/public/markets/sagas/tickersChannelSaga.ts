@@ -51,6 +51,8 @@ function createMarketTickersChannel(market: string) {
           data.value.data.websocket_streams.data
         );
         const ticker_data = convertToTicker(data_parsed, market);
+        console.log(ticker_data, "ticker data from event channel");
+
         emit(marketsTickersChannelData(ticker_data));
       },
       error: (err) => console.warn(err),
