@@ -52,6 +52,7 @@ import {
 } from "@polkadex/orderbook/providers/public/RecentTradesProvider/context";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -64,6 +65,8 @@ export function Trading() {
       window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER, "true");
     setDisclaimer(false);
   };
+
+  const stateFromMarketsProvider = useMarketsProvider();
 
   const [state, setState] = useState(false);
   const [banner, setBanner] = useState(false);

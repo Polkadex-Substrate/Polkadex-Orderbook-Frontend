@@ -1,4 +1,5 @@
 import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
+import { IPublicAsset } from "@polkadex/orderbook/modules/public/assets";
 import { CommonState } from "@polkadex/orderbook/modules/types";
 import BigNumber from "bignumber.js";
 import { PropsWithChildren } from "react";
@@ -113,7 +114,7 @@ export type TickerQueryResult = {
 };
 
 export type MarketsContextProps = MarketsState & {
-  marketsFetch: () => void;
+  marketsFetch: (allAssets: IPublicAsset[]) => void;
   marketTickersFetch: () => void;
 };
 

@@ -1,9 +1,5 @@
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { useCallback, useEffect, useReducer } from "react";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useEffect, useReducer } from "react";
 import * as queries from "../../../graphql/queries";
-import { API } from "aws-amplify";
-import * as subscriptions from "../../../graphql/subscriptions";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -17,14 +13,16 @@ import { Market, MarketQueryResult, Ticker, TickerQueryResult } from "./types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { selectCurrentMarket } from "@polkadex/orderbook/modules/public/markets";
-
-export const OrderHistoryProvider = ({ children }) => {
+import { API } from "aws-amplify";
+import * as subscriptions from "../../../graphql/subscriptions";
+import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
+export const MarketsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
 
-  const marketsFetch = async () => {
+  const marketsFetch = async (allAssets: IPublicAsset[]) => {
+    console.log("marketsFetch", allAssets);
+
     try {
-      const allAssets: IPublicAsset[] = useReduxSelector(selectAllAssets);
       if (allAssets.length > 0) {
         const markets = await fetchMarkets(allAssets);
         dispatch(A.marketsData(markets));
@@ -77,17 +75,26 @@ export const OrderHistoryProvider = ({ children }) => {
   };
 
   const marketTickersFetch = async () => {
+    console.log("ruchi");
+
     try {
       const tickers = await fetchMarketTickers();
+
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
+      console.log(error, "ruchi");
+
       console.error("Market tickers fetch error", error);
     }
   };
 
   const fetchMarketTickers = async (): Promise<Ticker[]> => {
+    console.log("call func");
+
     // TODO: check sendQueryToAppSync market variable
     const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
+    console.log(res, "res");
+
     const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
     const tickers: Ticker[] = tickersRaw.map((elem) => {
       const priceChange = Number(elem.c) - Number(elem.o);
@@ -107,28 +114,11 @@ export const OrderHistoryProvider = ({ children }) => {
     return tickers;
   };
 
-  const convertToTicker = (elem: TickerQueryResult, market: string) => {
-    const priceChange = Number(elem.c) - Number(elem.o);
-    const priceChangePercent = (priceChange / Number(elem.o)) * 100;
-    return {
-      m: market,
-      priceChange24Hr: priceChange,
-      priceChangePercent24Hr: priceChangePercent,
-      open: elem.o,
-      close: elem.c,
-      high: elem.h,
-      low: elem.l,
-      volumeBase24hr: elem.vb,
-      volumeQuote24Hr: elem.vq,
-    };
-  };
-
-  const market: Market = useReduxSelector(selectCurrentMarket);
-
+  const market = state.currentMarket;
   useEffect(() => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: market.m + "-ticker" },
+      variables: { name: market?.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -137,15 +127,18 @@ export const OrderHistoryProvider = ({ children }) => {
         const data_parsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
+
         const ticker_data: Ticker = convertToTicker(data_parsed, market.m);
         dispatch(A.marketsTickersChannelData(ticker_data));
       },
-      error: (err) => console.warn(err),
+      error: (err) => {
+        console.warn(err);
+      },
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [market.m]);
+  }, [market?.m]);
 
   return (
     <Provider
