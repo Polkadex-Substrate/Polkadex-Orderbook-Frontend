@@ -5,6 +5,8 @@ import { OrderBookContextProps, OrderBookProviderProps } from "./types";
 
 export const Context = createContext<OrderBookContextProps>({
   ...initialOrderBook,
+  onOrderBook: () => {},
+  onOrderBookChanel: () => {},
 });
 
 export const Provider = ({ value, children }: OrderBookProviderProps) => {

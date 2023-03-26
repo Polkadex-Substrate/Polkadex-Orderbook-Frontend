@@ -93,7 +93,9 @@ export const depthError = (error: DepthError["error"]): DepthError => ({
   error,
 });
 
-export const depthDataIncrement = (payload: DepthDataIncrement["payload"]) => ({
+export const depthDataIncrement = (
+  payload: DepthDataIncrement["payload"]
+): DepthDataIncrement => ({
   type: DEPTH_DATA_INCREMENT,
   payload,
 });
