@@ -12,7 +12,6 @@ import {
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  orderBookFetch,
   recentTradesFetch,
   selectAssociatedTradeAddresses,
   selectCurrentMarket,
@@ -45,6 +44,7 @@ import {
   RecentTrades,
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 
 export function Trading() {
@@ -97,11 +97,13 @@ export function Trading() {
       secondaryLinkTitle: "Select Account",
     };
 
+  const { onOrderBook } = useOrderBook()
+
   // intitialize market dependent events
   useEffect(() => {
     if (market) {
       // dispatch(rangerConnectFetch());
-      dispatch(orderBookFetch(market));
+      onOrderBook(market);
       dispatch(recentTradesFetch(market));
     }
   }, [dispatch, market]);
