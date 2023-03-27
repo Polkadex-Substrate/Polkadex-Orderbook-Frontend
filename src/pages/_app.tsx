@@ -27,6 +27,9 @@ import {
 } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -56,29 +59,34 @@ function App({ Component, pageProps }: AppProps) {
 
   // Removes all console from production environment
   if (process.env.NODE_ENV === "production") {
-      console.log = () => {};
-      console.debug = () => {};
-      console.info = () => {};
-      console.warn = () => {};
-      console.error = () => {};
+    console.log = () => {};
+    console.debug = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.error = () => {};
   }
 
   return (
-    <OverlayProvider>
-      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-        {defaultConfig.maintenanceMode ? (
-          <Maintenance />
-        ) : (
-          <QueryClientProvider client={queryClient}>
-            <ThemeWrapper>
-              <Component {...pageProps} />
-            </ThemeWrapper>
-          </QueryClientProvider>
-        )}
-
-        <GlobalStyles />
-      </ThemeProvider>
-    </OverlayProvider>
+    <>
+      <ToastContainer />
+      <OrderBookProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <OverlayProvider>
+          <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+            {defaultConfig.maintenanceMode ? (
+              <Maintenance />
+            ) : (
+              <QueryClientProvider client={queryClient}>
+                <ThemeWrapper>
+                  <Component {...pageProps} />
+                </ThemeWrapper>
+              </QueryClientProvider>
+            )}
+            
+            <GlobalStyles />
+          </ThemeProvider>
+        </OverlayProvider>
+      </OrderBookProvider>
+    </>
   );
 }
 
