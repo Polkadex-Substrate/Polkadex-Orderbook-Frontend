@@ -18,7 +18,7 @@ export const Navbar = ({ onOpenMarkets }) => {
   const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
   const high = Number(currentTickers?.high).toFixed(2);
   const low = Number(currentTickers?.low).toFixed(2);
-  console.log(state.list);
+
 
   return (
     <S.Wrapper>
