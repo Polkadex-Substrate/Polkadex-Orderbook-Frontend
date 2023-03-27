@@ -1,3 +1,4 @@
+import { AssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/provider";
 import dynamic from "next/dynamic";
 
 const TradingTemplate = dynamic(
@@ -7,5 +8,9 @@ const TradingTemplate = dynamic(
   }
 );
 
-const Trading = () => <TradingTemplate />;
+const Trading = () => (
+  <AssetsProvider>
+    <TradingTemplate />
+  </AssetsProvider>
+);
 export default Trading;

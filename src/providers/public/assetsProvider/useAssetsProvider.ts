@@ -6,7 +6,7 @@ import { useContext, useEffect } from "react";
 
 import { Context } from "./context";
 
-export function useRecentTradesProvider() {
+export function useAssetsProvider() {
   const state = useContext(Context);
 
   if (!Context) {
@@ -15,6 +15,10 @@ export function useRecentTradesProvider() {
     Error?.captureStackTrace?.(error, useContext);
     throw error;
   }
+
+  useEffect(() => {
+    state.fetchAssets();
+  }, []);
 
   return {
     state,

@@ -10,13 +10,15 @@ export type IPublicAsset = {
 export interface AssetsState {
   error?: CommonError;
   list: IPublicAsset[];
-  assetIdMap: Record<string, IPublicAsset>;
   loading: boolean;
   success: boolean;
 }
 
 export type AssetsContextProps = AssetsState & {
   fetchAssets: () => void;
+  selectAssetsFetchSuccess: () => boolean;
+  selectAllAssets: () => IPublicAsset[];
+  selectGetAsset: (assetId: string | number | Record<string, string>) => IPublicAsset;
 };
 
 export type AssetsProviderProps = PropsWithChildren<{

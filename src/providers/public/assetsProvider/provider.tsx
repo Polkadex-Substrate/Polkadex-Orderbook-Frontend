@@ -1,20 +1,15 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useReducer } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
-import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
 import { fetchAllFromAppSync, sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { Market } from "@polkadex/orderbook-modules";
-import { API } from "aws-amplify";
-import * as subscriptions from "../../../graphql/subscriptions";
-import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
+import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-export const RecentTradesProvider = ({ children }) => {
+export const AssetsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
   const fetchAssets = async () => {
     try {
@@ -38,11 +33,46 @@ export const RecentTradesProvider = ({ children }) => {
     return assets;
   }
 
+  const selectAssetsFetchSuccess = () => {
+    return state.success;
+  };
+
+  const selectAllAssets = () => {
+    return state.list;
+  };
+
+  const selectGetAsset = (
+    assetId: string | number | Record<string, string>
+  ): T.IPublicAsset | null => {
+    if (!assetId) {
+      return null;
+    }
+    if (isKeyPresentInObject(assetId, "asset")) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      assetId = assetId.asset;
+    }
+    return isAssetPDEX(assetId.toString())
+      ? POLKADEX_ASSET
+      : state.list.find((asset) => asset.asset_id === assetId.toString());
+  };
+
+  const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>
+    assetId === "-1" ||
+    assetId === null ||
+    assetId === -1 ||
+    assetId === "POLKADEX" ||
+    assetId === "PDEX" ||
+    assetId === "polkadex";
+
   return (
     <Provider
       value={{
         ...state,
         fetchAssets,
+        selectAssetsFetchSuccess,
+        selectAllAssets,
+        selectGetAsset,
       }}>
       {children}
     </Provider>

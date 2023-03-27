@@ -4,7 +4,6 @@ import { AssetsState } from "./types";
 
 export const initialState: AssetsState = {
   list: [],
-  assetIdMap: {},
   loading: false,
   success: false,
 };
