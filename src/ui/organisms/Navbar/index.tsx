@@ -9,11 +9,9 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 
 export const Navbar = ({ onOpenMarkets }) => {
   const { state } = useAssetsProvider();
-  const getAsset = useReduxSelector(selectGetAsset);
   const currMarket = useReduxSelector(selectCurrentMarket);
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
-  // const quoteAsset = state.selectGetAsset(currMarket?.assetIdArray[1]);
-  const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
+  const quoteAsset = state.selectGetAsset(currMarket?.assetIdArray[1]);
   const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = currentTickers?.priceChange24Hr < 0;
