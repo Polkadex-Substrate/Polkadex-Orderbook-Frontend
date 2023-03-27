@@ -20,7 +20,6 @@ export const assetsReducer = (state = initialState, action: AssetsAction) => {
       return {
         ...state,
         list: action.payload.list,
-        assetIdMap: action.payload.assetIdMap,
         loading: false,
         success: true,
       };

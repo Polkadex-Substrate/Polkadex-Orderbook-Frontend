@@ -14,14 +14,15 @@ export const AssetsProvider = ({ children }) => {
   const fetchAssets = async () => {
     try {
       const assetsList: T.IPublicAsset[] = await (() => fetchAllAssetMetadata())();
+
       // const allowedList = assetsList.filter((asset) =>
       //   ALLOWED_ASSET_IDS.includes(asset.assetId)
       // );
-      const assetIdMap = assetsList.reduce((acc, asset) => {
-        acc[asset.asset_id] = asset;
-        return acc;
-      }, {});
-      dispatch(A.assetsData({ list: assetsList, assetIdMap }));
+      // const assetIdMap = assetsList.reduce((acc, asset) => {
+      //   acc[asset.asset_id] = asset;
+      //   return acc;
+      // }, {});
+      dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
     }
@@ -29,6 +30,7 @@ export const AssetsProvider = ({ children }) => {
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
     const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
+
     const assets = assetEntries.data.getAllAssets.items;
     return assets;
   }

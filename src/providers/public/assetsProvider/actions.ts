@@ -9,7 +9,6 @@ export interface AssetsData {
   type: typeof PUBLIC_ASSETS_DATA;
   payload: {
     list: IPublicAsset[];
-    assetIdMap: Record<string, IPublicAsset>;
   };
 }
 
