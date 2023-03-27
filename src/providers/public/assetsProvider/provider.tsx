@@ -9,22 +9,16 @@ import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
-export const AssetsProvider = ({ children }) => {
+export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
   const fetchAssets = async () => {
     try {
-      const assetsList: T.IPublicAsset[] = await (() => fetchAllAssetMetadata())();
+      const assetsList = await (() => fetchAllAssetMetadata())();
 
-      // const allowedList = assetsList.filter((asset) =>
-      //   ALLOWED_ASSET_IDS.includes(asset.assetId)
-      // );
-      // const assetIdMap = assetsList.reduce((acc, asset) => {
-      //   acc[asset.asset_id] = asset;
-      //   return acc;
-      // }, {});
       dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
+      onError(`Something has gone wrong, could not fetch assets ${error}`);
     }
   };
 
@@ -32,7 +26,16 @@ export const AssetsProvider = ({ children }) => {
     const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
 
     const assets = assetEntries.data.getAllAssets.items;
-    return assets;
+    const newAssets = assets.map((asset) => {
+      return {
+        assetId: asset.asset_id,
+        name: asset.name,
+        symbol: asset.symbol,
+        withdrawal_fee: asset.withdrawal_fee,
+      };
+    });
+
+    return newAssets;
   }
 
   const selectAssetsFetchSuccess = () => {
@@ -56,7 +59,7 @@ export const AssetsProvider = ({ children }) => {
     }
     return isAssetPDEX(assetId.toString())
       ? POLKADEX_ASSET
-      : state.list.find((asset) => asset.asset_id === assetId.toString());
+      : state.list.find((asset) => asset.assetId === assetId.toString());
   };
 
   const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>

@@ -1,8 +1,8 @@
 import { CommonError } from "@polkadex/orderbook/modules/types";
-import { PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
 export type IPublicAsset = {
-  asset_id: string;
+  assetId: string;
   name: string;
   symbol: string;
 };
@@ -24,3 +24,10 @@ export type AssetsContextProps = AssetsState & {
 export type AssetsProviderProps = PropsWithChildren<{
   value: AssetsContextProps;
 }>;
+
+export interface AssetsProps {
+  onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
+}
+
+export type AssetsComponent = FC<PropsWithChildren<AssetsProps>>;

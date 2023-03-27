@@ -1,6 +1,6 @@
 import { AssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/provider";
 import dynamic from "next/dynamic";
-
+import { toast } from "react-toastify";
 const TradingTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Trading").then((mod) => mod.Trading),
   {
@@ -9,7 +9,7 @@ const TradingTemplate = dynamic(
 );
 
 const Trading = () => (
-  <AssetsProvider>
+  <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
     <TradingTemplate />
   </AssetsProvider>
 );
