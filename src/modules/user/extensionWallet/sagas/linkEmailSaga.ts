@@ -1,4 +1,4 @@
-// TODO - Code Cleaning 
+// TODO - Code Cleaning
 
 import { call, fork, put, select } from "redux-saga/effects";
 import { ApiPromise } from "@polkadot/api";
@@ -7,16 +7,14 @@ import { stringToHex } from "@polkadot/util";
 import * as mutations from "../../../../graphql/mutations";
 import {
   selectRangerApi,
-  selectUserEmail,
   userProfileMainAccountPush,
   selectMainAccount,
 } from "../../..";
-import {
-  RegisterMainAccountLinkEmailFetch,
-} from "../actions";
+import { RegisterMainAccountLinkEmailFetch } from "../actions";
 
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 type LinkEmailData = { email: string; main_address: string };
 
@@ -24,8 +22,8 @@ export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
   let data: LinkEmailData, signature: string;
   const { mainAccount } = action.payload;
   try {
+    const { email } = useAuth();
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
-    const email = yield select(selectUserEmail);
     const api: ApiPromise = yield select(selectRangerApi);
 
     const hasAddressAndEmail =
@@ -38,7 +36,6 @@ export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
       yield call(executeRegisterEmail, data, signature);
 
       yield put(userProfileMainAccountPush(mainAccount));
-
     } else {
       throw new Error("Email or address is not valid");
     }

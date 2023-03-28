@@ -38,7 +38,6 @@ import {
   selectMainAccount,
   selectTradeAccount,
   selectUserBalance,
-  selectUsingAccount,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -48,12 +47,13 @@ import {
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
-  const currentAccount = useReduxSelector(selectUsingAccount);
+  const { selectedAccount: currentAccount } = useProfile();
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const tradingAccountInBrowser = useReduxSelector(
     selectTradeAccount(currentAccount?.tradeAddress)
@@ -74,7 +74,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.asset_id === selectedAsset?.asset_id),
+    () => userBalances?.find((item) => item.asset_id === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -99,9 +99,9 @@ export const WithdrawTemplate = () => {
   };
 
   const handleSubmitWithdraw = (amount: string | number) => {
-    const asset = isAssetPDEX(selectedAsset.asset_id)
+    const asset = isAssetPDEX(selectedAsset.assetId)
       ? { polkadex: null }
-      : { asset: selectedAsset.asset_id };
+      : { asset: selectedAsset.assetId };
     dispatch(
       withdrawsFetch({
         asset,

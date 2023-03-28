@@ -5,11 +5,11 @@ import * as queries from "../../../../graphql/queries";
 
 import {
   selectUserSession,
-  selectUsingAccount,
   sendError,
   UserSessionPayload,
 } from "@polkadex/orderbook-modules";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type TradesQueryResult = {
   m: string;
@@ -21,7 +21,8 @@ type TradesQueryResult = {
 
 export function* fetchTradesSaga() {
   try {
-    const currAccount = yield select(selectUsingAccount);
+    const profileState = useProfile();
+    const currAccount = profileState.selectedAccount;
     const address = currAccount.tradeAddress;
     if (address) {
       const userSession: UserSessionPayload = yield select(selectUserSession);

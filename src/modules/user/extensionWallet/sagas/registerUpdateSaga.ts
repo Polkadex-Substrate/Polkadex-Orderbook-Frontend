@@ -24,6 +24,7 @@ export function* registerMainAccountUpdateSaga(action: RegisterMainAccountUpdate
       })
     );
     // make newly created trade account as in use
+    // When Extension wallet context will created, then update it to profile context userAccountSelectFetch
     yield put(
       userAccountSelectFetch({
         tradeAddress: proxy,

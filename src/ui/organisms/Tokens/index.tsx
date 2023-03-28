@@ -11,9 +11,9 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   balancesFetch,
   selectBalancesLoading,
-  selectHasSelectedAccount,
   selectUserBalance,
 } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const Tokens = () => {
   const dispatch = useDispatch();
@@ -21,8 +21,10 @@ export const Tokens = () => {
     searchFieldValue: "",
   });
 
+  const profileState = useProfile();
+
   const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasSelectedAccount);
+  const hasUser = profileState.selectedAccount.tradeAddress !== "";
   const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {
