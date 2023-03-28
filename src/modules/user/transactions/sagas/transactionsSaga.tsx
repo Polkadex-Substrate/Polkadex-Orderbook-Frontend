@@ -8,7 +8,8 @@ import { notificationPush } from "../../notificationHandler";
 
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
+import { UserAccount } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type TransactionQueryResult = {
   tt: string;
@@ -23,7 +24,8 @@ type TransactionQueryResult = {
 
 export function* transactionsSaga(_action: TransactionsFetch) {
   try {
-    const selectedAccount: UserAccount = yield select(selectUsingAccount);
+    const profileState = useProfile();
+    const selectedAccount: UserAccount = profileState.selectedAccount;
     const mainAddress = selectedAccount.mainAddress;
     if (mainAddress) {
       const transactions = yield call(fetchTransactions, mainAddress, 3, 10);

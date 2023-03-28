@@ -14,12 +14,11 @@ import {
   registerMainAccountFetch,
   registerTradeAccountFetch,
   selectExtensionWalletAccounts,
-  selectLinkedMainAddresses,
   tradeAccountPush,
-  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const CreateAccountForm = ({
   onCancel = undefined,
@@ -28,8 +27,9 @@ export const CreateAccountForm = ({
   buttonTitle = "",
 }) => {
   const dispatch = useDispatch();
+  const profileState = useProfile();
   const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-  const linkedMainAddresses = useReduxSelector(selectLinkedMainAddresses);
+  const linkedMainAddresses = profileState.userData.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(({ account }) =>
     linkedMainAddresses?.includes(account.address)
   );

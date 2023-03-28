@@ -9,18 +9,19 @@ import {
   UserAccount,
   selectRangerApi,
   selectTradeAccount,
-  selectUsingAccount,
   sendError,
 } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* fetchWithdrawsSaga(action: WithdrawsFetch) {
   try {
+    const profileState = useProfile();
     const { asset, amount } = action.payload;
-    const currentAccount: UserAccount = yield select(selectUsingAccount);
+    const currentAccount: UserAccount = profileState.selectedAccount;
     const address = currentAccount.tradeAddress;
     const keyringPair = yield select(selectTradeAccount(address));
     const nonce = getNonce();

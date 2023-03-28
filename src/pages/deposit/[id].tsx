@@ -4,13 +4,14 @@ import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectIsMainAddressRegistered,
   selectIsAddressInExtension,
-  selectIsUserSignedIn,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
+
 import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
 import { toast } from "react-toastify";
+
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -21,9 +22,12 @@ const DepositTemplate = dynamic(
 
 const Deposit = () => {
   const router = useRouter();
-  const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const { mainAddress } = useReduxSelector(selectUsingAccount);
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
+  const {
+    authInfo: { isAuthenticated: hasUser },
+    selectedAccount: { mainAddress },
+  } = useProfile();
+  const profileState = useProfile();
+  const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
   const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
 
   const shouldRedirect = useMemo(

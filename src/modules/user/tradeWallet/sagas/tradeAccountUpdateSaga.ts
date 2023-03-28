@@ -11,6 +11,7 @@ import {
 export function* tradeAccountUpdateSaga(action: TradeAccountUpdate) {
   try {
     const { proxy, main } = action.payload;
+    // When Trade wallet context will created, then update it to profile context userAccountSelectFetch
     yield put(
       userAccountSelectFetch({
         tradeAddress: proxy,

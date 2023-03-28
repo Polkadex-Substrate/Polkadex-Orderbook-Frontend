@@ -5,7 +5,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
-import { withSSRContext } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
@@ -14,22 +14,17 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
 import { useUserDataFetch } from "../hooks/useUserDataFetch";
-import {
-  getAllMainLinkedAccounts,
-  getAllProxyAccounts,
-} from "../modules/user/profile/sagas/userSaga";
 
-import {
-  selectCurrentColorTheme,
-  sendError,
-  userAuthData,
-  userData,
-} from "@polkadex/orderbook-modules";
+import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
+
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
   {
@@ -59,28 +54,39 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
-      <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-        <OverlayProvider>
-          <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-            {defaultConfig.maintenanceMode ? (
-              <Maintenance />
-            ) : (
-              <QueryClientProvider client={queryClient}>
-                <ThemeWrapper>
-                  <Component {...pageProps} />
-                </ThemeWrapper>
-              </QueryClientProvider>
-            )}
 
-            <GlobalStyles />
-          </ThemeProvider>
-        </OverlayProvider>
-      </AssetsProvider>
+      <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+           <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+          <OverlayProvider>
+            <ThemeProvider
+              theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+              {defaultConfig.maintenanceMode ? (
+                <Maintenance />
+              ) : (
+                <QueryClientProvider client={queryClient}>
+                  <ThemeWrapper>
+                    <Component {...pageProps} />
+                  </ThemeWrapper>
+                </QueryClientProvider>
+              )}
+
+              <GlobalStyles />
+            </ThemeProvider>
+          </OverlayProvider>
+        </ProfileProvider>
+      </AuthProvider>
+
     </>
   );
 }
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
+  const profileState = useProfile();
+  const authState = useAuth();
+  const signInSuccess = authState.signin.isSuccess;
+  const logoutSuccess = authState.logout.isSuccess;
+
   const cryptoWait = async () => {
     try {
       await cryptoWaitReady();
@@ -94,8 +100,58 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     cryptoWait();
   }, []);
 
+  useEffect(() => {
+    // When User logout, do not fetch the data
+    if (!logoutSuccess) {
+      fetchDataOnUserAuth();
+    }
+  }, [signInSuccess, logoutSuccess]);
+
   useInit();
   useUserDataFetch();
+
+  const fetchDataOnUserAuth = async () => {
+    try {
+      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
+      profileState.onUserChangeInitBanner();
+      authState.onUserAuth({
+        email: attributes?.email,
+        userConfirmed: attributes?.email_verified,
+      });
+      profileState.onUserAuth({
+        email: attributes?.email,
+        isAuthenticated: true,
+        userExists: true,
+        isConfirmed: attributes?.email_verified,
+        jwt: signInUserSession?.accessToken?.jwtToken,
+      });
+    } catch (error) {
+      console.log("User error", error);
+      switch (error) {
+        case "User is not confirmed.": {
+          authState.onUserAuth({
+            email: "",
+            userConfirmed: false,
+          });
+          profileState.onUserAuth({
+            email: "",
+            isAuthenticated: false,
+            userExists: true,
+            isConfirmed: false,
+          });
+          break;
+        }
+        case "The user is not authenticated": {
+          break;
+        }
+        default: {
+          console.error("Error=>", `User data fetch error: ${error.message}`);
+          toast.error(`User data fetch error: ${error.message}`);
+          break;
+        }
+      }
+    }
+  };
 
   return (
     <>
@@ -115,63 +171,5 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     </>
   );
 };
-// TODO: Move to sagas || Improve
-App.getInitialProps = wrapper.getInitialAppProps(({ dispatch }) =>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async ({ Component, ctx }: any) => {
-    const { Auth, API } = withSSRContext(ctx);
-    let pageProps = {};
-    if (Component.getInitialProps) pageProps = await Component.getInitialProps(ctx);
-    try {
-      /* Getting the current user's attributes and signInUserSession from Amazon Cognito auth API. */
-      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
-
-      dispatch(
-        userAuthData({
-          email: attributes?.email,
-          isAuthenticated: true,
-          userExists: true,
-          isConfirmed: attributes?.email_verified,
-          jwt: signInUserSession?.accessToken?.jwtToken,
-        })
-      );
-      if (attributes?.email?.length) {
-        const { accounts } = await getAllMainLinkedAccounts(attributes.email, API);
-        const userAccounts = await getAllProxyAccounts(accounts, API);
-        dispatch(userData({ mainAccounts: accounts, userAccounts }));
-      }
-    } catch (error) {
-      console.log("User error", error);
-      switch (error) {
-        case "User is not confirmed.": {
-          dispatch(
-            userAuthData({
-              email: "",
-              isAuthenticated: false,
-              userExists: true,
-              isConfirmed: false,
-            })
-          );
-          break;
-        }
-        case "The user is not authenticated": {
-          break;
-        }
-        default: {
-          dispatch(
-            sendError({
-              error: `User data fetch error: ${error.message}`,
-              processingType: "alert",
-            })
-          );
-          break;
-        }
-      }
-    }
-    return {
-      pageProps,
-    };
-  }
-);
 
 export default wrapper.withRedux(App);

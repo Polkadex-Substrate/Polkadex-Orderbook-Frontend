@@ -14,10 +14,10 @@ import {
   selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsRegisterMainAccountSuccess,
-  selectLinkedMainAddresses,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
 } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const data = [
   {
@@ -59,6 +59,8 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
 
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
+  const profileState = useProfile();
+
   const [state, setState] = useState({
     status: tradeInfo.defaultImportActive,
     isImport: false,
@@ -70,7 +72,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
   const hasExtensionAccounts = useReduxSelector(selectExtensionWalletAccounts)?.length > 0;
-  const hasLinkedAccounts = useReduxSelector(selectLinkedMainAddresses)?.length > 0;
+  const hasLinkedAccounts = profileState.userData.mainAccounts?.length > 0;
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
