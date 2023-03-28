@@ -26,7 +26,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({
       if (market?.m) {
         const dataRaw: T.OrderBookDbState[] = await fetchAllFromAppSync(
           queries.getOrderbook,
-          { market: market },
+          { market: market.m },
           "getOrderbook"
         );
 
@@ -40,7 +40,6 @@ export const OrderBookProvider: T.OrderBookComponent = ({
   };
 
   const onOrderBookChanel = (market: Market) => {
-    console.log("onOrderbook chanel");
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market.m}-ob-inc` },
