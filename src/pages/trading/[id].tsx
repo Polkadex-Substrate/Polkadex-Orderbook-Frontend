@@ -8,9 +8,5 @@ const TradingTemplate = dynamic(
   }
 );
 
-const Trading = () => (
-  <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-    <TradingTemplate />
-  </AssetsProvider>
-);
+const Trading = () => <TradingTemplate />;
 export default Trading;

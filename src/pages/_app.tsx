@@ -29,6 +29,7 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
   {
@@ -58,21 +59,23 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
-      <OverlayProvider>
-        <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-          {defaultConfig.maintenanceMode ? (
-            <Maintenance />
-          ) : (
-            <QueryClientProvider client={queryClient}>
-              <ThemeWrapper>
-                <Component {...pageProps} />
-              </ThemeWrapper>
-            </QueryClientProvider>
-          )}
+      <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <OverlayProvider>
+          <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+            {defaultConfig.maintenanceMode ? (
+              <Maintenance />
+            ) : (
+              <QueryClientProvider client={queryClient}>
+                <ThemeWrapper>
+                  <Component {...pageProps} />
+                </ThemeWrapper>
+              </QueryClientProvider>
+            )}
 
-          <GlobalStyles />
-        </ThemeProvider>
-      </OverlayProvider>
+            <GlobalStyles />
+          </ThemeProvider>
+        </OverlayProvider>
+      </AssetsProvider>
     </>
   );
 }

@@ -4,6 +4,7 @@ import * as queries from "../../../graphql/queries";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
 import * as A from "./actions";
+import * as T from "./types";
 import { Provider } from "./context";
 import { depositsReducer, initialState } from "./reducer";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -17,10 +18,15 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
 
-export const DepositProvider = ({ children }) => {
+export const DepositProvider: T.DepositsComponent = ({
+  onError,
+  onNotification,
+  children,
+}) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
   const api = useReduxSelector(selectRangerApi);
   const isApiReady = useReduxSelector(selectRangerIsReady);
+
   const onfetchDeposit = async ({ asset, amount, mainAccount }) => {
     console.log("fetch deposit called");
 
@@ -30,7 +36,7 @@ export const DepositProvider = ({ children }) => {
       console.log(isApiReady, "isapiready", api);
 
       if (isApiReady && mainAccount?.account?.address !== "") {
-        alert(
+        onNotification(
           "Processing Deposit, Please wait while the deposit is processed and the block is finalized. This may take a few mins."
         );
         dispatch(A.depositsFetch({ asset, amount, mainAccount }));
@@ -39,7 +45,7 @@ export const DepositProvider = ({ children }) => {
 
         if (res.isSuccess) {
           dispatch(A.depositsData());
-          alert(
+          onNotification(
             "Deposit Successful, Congratulations! You have successfully deposited assets to your trading account. "
           );
 
@@ -50,7 +56,7 @@ export const DepositProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error, "error");
-      dispatch(A.depositsError(error));
+      onerror(`Deposits failed ${error}`);
     }
   };
 
@@ -72,11 +78,16 @@ export const DepositProvider = ({ children }) => {
     return res;
   }
 
+  const depositsLoading = () => {
+    return state.loading;
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onfetchDeposit,
+        depositsLoading,
       }}>
       {children}
     </Provider>

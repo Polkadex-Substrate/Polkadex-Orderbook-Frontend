@@ -9,6 +9,7 @@ import {
   selectIsUserSignedIn,
   selectUsingAccount,
 } from "@polkadex/orderbook-modules";
+import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -34,7 +35,11 @@ const Deposit = () => {
   }, [hasUser, router]);
   if (shouldRedirect) return <div />;
 
-  return <DepositTemplate />;
+  return (
+    <DepositProvider>
+      <DepositTemplate />
+    </DepositProvider>
+  );
 };
 
 export default Deposit;

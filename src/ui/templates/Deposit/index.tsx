@@ -36,13 +36,19 @@ import {
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const currentAccount = useReduxSelector(selectUsingAccount);
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
-  const assets = useReduxSelector(selectAllAssets);
+  const assetsState = useAssetsProvider();
+
+  // const assets = useReduxSelector(selectAllAssets);
+  const assets = assetsState.state.selectAllAssets();
+  console.log(assets, "from deposit");
+
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);
   const dispatch = useDispatch();
