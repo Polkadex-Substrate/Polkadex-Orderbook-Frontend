@@ -38,7 +38,6 @@ import {
   RecentTrades,
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
-import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -101,13 +100,10 @@ export function Trading() {
       secondaryLinkTitle: "Select Account",
     };
 
-  const { onOrderBook } = useOrderBook()
-
   // intitialize market dependent events
   useEffect(() => {
     if (market) {
       // dispatch(rangerConnectFetch());
-      onOrderBook(market);
       dispatch(recentTradesFetch(market));
     }
   }, [dispatch, market]);
