@@ -22,11 +22,8 @@ import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
   selectIsTradeAccountRemoveLoading,
-  selectDefaultTradeAccount,
   selectMainAccount,
   selectTradeAccount,
-  selectUsingAccount,
-  userAccountSelectFetch,
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
   exportTradeAccountActive,
@@ -35,6 +32,7 @@ import {
 import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type Props = {
   onClose: () => void;
@@ -60,12 +58,13 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const { selectedAccount: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
     selectIsTradeAccountRemoveLoading(state, selected?.address)
   );
   const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
   const using = usingAccount.tradeAddress === selected?.address;
+  const { onUserSelectAccount } = useProfile();
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
@@ -182,9 +181,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   {tradingAccountInBrowser && (
                     <S.Button
                       disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                      onClick={() =>
-                        dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-                      }
+                      onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
                       {using ? "Using" : "Use"}
                     </S.Button>
@@ -351,7 +348,8 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
   const dispatch = useDispatch();
-  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
+  const profileState = useProfile();
+  const defaultTradeAddress = profileState.defaultTradeAccount;
   const isActive = tradeAddress === defaultTradeAddress;
 
   const handleChange = () =>

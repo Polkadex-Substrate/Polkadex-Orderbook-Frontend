@@ -11,7 +11,6 @@ import {
   WithdrawsClaimFetch,
   withdrawsError,
   withdrawClaimCancel,
-  selectUsingAccount,
   selectMainAccount,
   UserAccount,
 } from "@polkadex/orderbook-modules";
@@ -19,12 +18,14 @@ import {
   selectRangerApi,
   selectRangerIsReady,
 } from "@polkadex/orderbook/modules/public/ranger";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
   try {
+    const profileState = useProfile();
     const { sid } = action.payload;
     const api = yield select(selectRangerApi);
-    const currentAccount: UserAccount = yield select(selectUsingAccount);
+    const currentAccount: UserAccount = profileState.selectedAccount;
     const { account, signer } = yield select(selectMainAccount(currentAccount.mainAddress));
     const isApiReady = yield select(selectRangerIsReady);
     if (isApiReady && account?.address !== "") {

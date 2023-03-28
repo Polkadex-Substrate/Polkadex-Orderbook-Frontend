@@ -3,18 +3,18 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { selectSignInLoading, selectSignInSuccess, signInFetch } from "../modules/user/auth";
+import { signInFetch } from "../modules/user/auth";
 import { userChangeInitBanner } from "../modules/user/profile";
 
-import { useReduxSelector } from "./useReduxSelector";
-
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const useSignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loading = useReduxSelector(selectSignInLoading);
-  const isSuccess = useReduxSelector(selectSignInSuccess);
+  const {
+    signin: { isLoading: loading, isSuccess },
+  } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const getIsAuthenticated = async () => {

@@ -8,7 +8,6 @@ import {
   notificationPush,
   removeTradeAccountFromBrowser,
   selectRangerApi,
-  selectUserEmail,
   registerTradeAccountData,
   userProfileAccountPush,
   userProfileMainAccountPush,
@@ -25,6 +24,7 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { ErrorMessages } from "@polkadex/web-constants";
 import { userEventsChannelHandler } from "@polkadex/orderbook/modules/user/userEventsListener/sagas/userEventsChannel";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 type RegisterEmailData = { email: string; main_address: string };
 
@@ -33,7 +33,7 @@ export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   const { mainAccount, tradeAddress, mnemonic } = action.payload;
   try {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
-    const email = yield select(selectUserEmail);
+    const { email } = useAuth();
     const api: ApiPromise = yield select(selectRangerApi);
     // listen for events in this new registered main address
     yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
@@ -99,7 +99,6 @@ export const registerMainAccount = async (
   const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
   return res;
 };
-
 
 const executeRegisterEmail = async (data: RegisterEmailData, signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });

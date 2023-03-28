@@ -7,13 +7,14 @@ import {
   userTradesFetch,
   selectTradesLoading,
   selectUserSession,
-  selectHasSelectedAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function useTradeHistory(filters: Ifilters) {
   const dispatch = useDispatch();
+  const profileState = useProfile();
 
   const list = useReduxSelector(selectUserTrades);
   const listSorted = useMemo(() => {
@@ -23,7 +24,7 @@ export function useTradeHistory(filters: Ifilters) {
   }, [list]);
   const fetching = useReduxSelector(selectTradesLoading);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
+  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
   const userSession = useReduxSelector(selectUserSession);
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
