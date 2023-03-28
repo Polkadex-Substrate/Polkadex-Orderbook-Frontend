@@ -9,6 +9,7 @@ export const Context = createContext<TradeWalletContextProps>({
   onImportTradeAccountJson: () => {},
   onImportTradeAccount: () => {},
   onLoadTradeAccounts: () => {},
+  onTradeAccountUpdate: () => {},
 });
 
 export const Provider = ({ value, children }: TradeWalletProviderProps) => {

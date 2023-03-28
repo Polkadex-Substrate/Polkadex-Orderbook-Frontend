@@ -110,7 +110,7 @@ export const AuthProvider: T.TradeWalletComponent = ({
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : (error as string);
-      onError(errorMessage);
+      if (typeof onError === "function") onError(errorMessage);
     }
   };
 
@@ -125,6 +125,20 @@ export const AuthProvider: T.TradeWalletComponent = ({
     return allAccounts;
   }
 
+  const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
+    try {
+      const { proxy, main } = payload;
+      profileState.onUserSelectAccount({
+        tradeAddress: proxy,
+      });
+      onNotification("Trade account added");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      if (typeof onError === "function") onError(errorMessage);
+      dispatch(A.registerTradeAccountError(error));
+    }
+  };
+
   return (
     <Provider
       value={{
@@ -133,6 +147,7 @@ export const AuthProvider: T.TradeWalletComponent = ({
         onImportTradeAccountJson,
         onImportTradeAccount,
         onLoadTradeAccounts,
+        onTradeAccountUpdate,
       }}>
       {children}
     </Provider>
