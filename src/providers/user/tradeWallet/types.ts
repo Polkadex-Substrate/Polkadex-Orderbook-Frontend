@@ -42,6 +42,7 @@ export type TradeWalletContextProps = TradeWalletState & {
   onExportTradeAccount: (value: A.ExportTradeAccountFetch["payload"]) => void;
   onImportTradeAccountJson: (value: A.ImportTradeAccountJsonFetch["payload"]) => void;
   onImportTradeAccount: (value: A.ImportTradeAccountFetch["payload"]) => void;
+  onLoadTradeAccounts: () => void;
 };
 
 export interface TradeWalletProps {

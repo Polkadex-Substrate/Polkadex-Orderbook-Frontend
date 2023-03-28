@@ -5,6 +5,8 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
 import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
+import { isReady } from "@polkadot/wasm-crypto";
+import { TradeAccount } from "../../types";
 
 import * as T from "./types";
 import * as A from "./actions";
@@ -101,6 +103,28 @@ export const AuthProvider: T.TradeWalletComponent = ({
     }
   };
 
+  const onLoadTradeAccounts = async () => {
+    try {
+      await loadKeyring();
+      const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
+      dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      onError(errorMessage);
+    }
+  };
+
+  async function loadKeyring() {
+    const { cryptoWaitReady } = await import("@polkadot/util-crypto");
+    if (!isReady()) await cryptoWaitReady();
+  }
+
+  async function getAllTradeAccountsInBrowser(): Promise<TradeAccount[]> {
+    await loadKeyring();
+    const allAccounts = keyring.getPairs();
+    return allAccounts;
+  }
+
   return (
     <Provider
       value={{
@@ -108,6 +132,7 @@ export const AuthProvider: T.TradeWalletComponent = ({
         onExportTradeAccount,
         onImportTradeAccountJson,
         onImportTradeAccount,
+        onLoadTradeAccounts,
       }}>
       {children}
     </Provider>
