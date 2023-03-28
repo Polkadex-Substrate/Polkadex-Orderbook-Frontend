@@ -6,6 +6,7 @@ import { TradeWalletContextProps, TradeWalletProviderProps } from "./types";
 export const Context = createContext<TradeWalletContextProps>({
   ...initialState,
   onExportTradeAccount: () => {},
+  onImportTradeAccount: () => {},
 });
 
 export const Provider = ({ value, children }: TradeWalletProviderProps) => {

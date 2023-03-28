@@ -8,6 +8,7 @@ import FileSaver from "file-saver";
 
 import * as T from "./types";
 import * as A from "./actions";
+import { useProfile } from "../profile";
 
 export const AuthProvider: T.TradeWalletComponent = ({
   onError,
@@ -15,7 +16,9 @@ export const AuthProvider: T.TradeWalletComponent = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
+  const profileState = useProfile();
 
+  // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
     const { address, password = "" } = payload;
     const selectedAccount: KeyringPair = state.allBrowserAccounts.find(
@@ -40,11 +43,41 @@ export const AuthProvider: T.TradeWalletComponent = ({
     }
   };
 
+  const onImportTradeAccount = (payload: A.ImportTradeAccountJsonFetch["payload"]) => {
+    const { file, password } = payload;
+    let tradeAddress = "";
+    try {
+      const modifiedFile = file;
+      const pair = keyring.restoreAccount(modifiedFile, password);
+      tradeAddress = pair?.address;
+      dispatch(A.tradeAccountPush({ pair }));
+      dispatch(
+        A.registerTradeAccountData({
+          account: {
+            name: String(pair.meta?.name),
+            address: tradeAddress,
+          },
+        })
+      );
+      dispatch(A.importTradeAccountData());
+      // automatically set as in use.
+
+      // When Trade wallet context will created, then update it to profile context userAccountSelectFetch
+      profileState.onUserSelectAccount({ tradeAddress });
+    } catch (error) {
+      if (tradeAddress?.length)
+        dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+      dispatch(A.registerTradeAccountError(error));
+      onError("Cannot import account. Invalid password or file");
+    }
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onExportTradeAccount,
+        onImportTradeAccount,
       }}>
       {children}
     </Provider>
