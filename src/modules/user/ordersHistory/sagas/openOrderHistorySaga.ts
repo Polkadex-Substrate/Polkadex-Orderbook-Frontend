@@ -8,6 +8,7 @@ import * as queries from "./../../../../graphql/queries";
 
 import { OrderCommon } from "src/modules/types";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type orderHistoryQueryResult = {
   u: string;

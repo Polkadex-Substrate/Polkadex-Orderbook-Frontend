@@ -6,13 +6,15 @@ import { selectUserBalance } from "../modules/user/balances";
 
 import { useReduxSelector } from "./useReduxSelector";
 
-import { selectUsingAccount } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useOnChainBalance = (assetId: string) => {
+  const profileState = useProfile();
+
   const api = useReduxSelector(selectRangerApi);
   const isApiConnected = useReduxSelector(selectRangerIsReady);
   const balances = useReduxSelector(selectUserBalance);
-  const currentAccount = useReduxSelector(selectUsingAccount);
+  const currentAccount = profileState?.selectedAccount;
   const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);

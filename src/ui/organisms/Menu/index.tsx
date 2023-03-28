@@ -15,8 +15,10 @@ import {
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectDefaultAvatarOptions, selectNotifications } from "@polkadex/orderbook-modules";
+import { selectNotifications } from "@polkadex/orderbook-modules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export type MenuProps = {
   handleChange?: () => void;
@@ -24,9 +26,12 @@ export type MenuProps = {
 };
 
 export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
+  const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
   const notifications = useReduxSelector(selectNotifications);
-  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  const avatarOptions = randomAvatars?.find(
+    (v) => v.id === Number(profileState.userProfile?.avatar)
+  );
 
   return (
     <S.Wrapper>

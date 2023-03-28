@@ -14,17 +14,20 @@ import { notificationPush } from "../../notificationHandler";
 import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import {
-  selectLinkedMainAddress,
-  selectMainAccount,
-  userProfileTradeAccountDelete,
-} from "@polkadex/orderbook-modules";
+import { selectMainAccount, userProfileTradeAccountDelete } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
+    const profileState = useProfile();
     const api: ApiPromise = yield select(selectRangerApi);
     const { address: tradeAddress } = action.payload;
-    const linkedMainAddress = yield select(selectLinkedMainAddress(tradeAddress));
+    const linkedMainAddress =
+      tradeAddress &&
+      profileState.userData?.userAccounts?.find(
+        ({ tradeAddress }) => tradeAddress === tradeAddress
+      )?.mainAddress;
+
     if (!linkedMainAddress) {
       throw new Error("Invalid trade address.");
     }

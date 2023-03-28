@@ -2,8 +2,7 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectIsUserSignedIn } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const data = [
   {
@@ -25,7 +24,9 @@ const data = [
 ];
 
 export const Logged = () => {
-  const hasUser = useReduxSelector(selectIsUserSignedIn);
+  const {
+    authInfo: { isAuthenticated: hasUser },
+  } = useProfile();
   const selectedData = !hasUser ? data[0] : data[1];
 
   return (

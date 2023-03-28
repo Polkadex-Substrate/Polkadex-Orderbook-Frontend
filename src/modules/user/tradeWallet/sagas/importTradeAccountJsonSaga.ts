@@ -31,6 +31,8 @@ export function* importTradeAccountJsonSaga(action: ImportTradeAccountJsonFetch)
     );
     yield put(importTradeAccountData());
     // automatically set as in use.
+
+    // When Trade wallet context will created, then update it to profile context userAccountSelectFetch
     yield put(
       userAccountSelectFetch({
         tradeAddress,

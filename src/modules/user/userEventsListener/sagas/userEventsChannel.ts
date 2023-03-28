@@ -15,12 +15,13 @@ import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 import {
   UserAccount,
-  selectUsingAccount,
   tradeAccountUpdateEvent,
 } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* userEventsChannelSaga(_action: UserEventsFetch) {
-  const currentAccount: UserAccount = yield select(selectUsingAccount);
+  const profileState = useProfile();
+  const currentAccount: UserAccount = profileState.selectedAccount;
   const mainAddr = currentAccount.mainAddress;
   const tradeAddr = currentAccount.tradeAddress;
   yield fork(userEventsChannelHandler, mainAddr);

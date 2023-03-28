@@ -12,7 +12,6 @@ import {
   notificationPush,
   selectRangerApi,
   selectTradeAccount,
-  selectUsingAccount,
   sendError,
   UserAccount,
 } from "@polkadex/orderbook-modules";
@@ -20,14 +19,16 @@ import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/crea
 import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {
+    const profileState = useProfile();
     const { orderId, base, quote } = action.payload;
     const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
     const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
     const api = yield select(selectRangerApi);
-    const account: UserAccount = yield select(selectUsingAccount);
+    const account: UserAccount = profileState.selectedAccount;
     const address = account.tradeAddress;
     const keyringPair: TradeAccount = yield select(selectTradeAccount(address));
     if (keyringPair.isLocked) throw new Error("Please unlock your account with password");

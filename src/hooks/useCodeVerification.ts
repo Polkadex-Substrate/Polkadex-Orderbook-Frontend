@@ -2,23 +2,16 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import {
-  codeVerifyFetch,
-  resendCodeFetch,
-  selectUserAuthEmail,
-  selectUserConfirmed,
-} from "../modules/user/auth";
-
-import { useReduxSelector } from "./useReduxSelector";
+import { codeVerifyFetch, resendCodeFetch } from "../modules/user/auth";
 
 import { notificationPush } from "@polkadex/orderbook-modules";
+import { useAuth } from "../providers/user/auth";
 
 export const useCodeVerification = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isVerificationSuccess = useReduxSelector(selectUserConfirmed);
-  const email = useReduxSelector(selectUserAuthEmail);
+  const { userConfirmed: isVerificationSuccess, email } = useAuth();
 
   useEffect(() => {
     if (isVerificationSuccess) {
