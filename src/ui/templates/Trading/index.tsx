@@ -14,15 +14,9 @@ import {
 import {
   orderBookFetch,
   recentTradesFetch,
-  selectAssociatedTradeAddresses,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  selectHasSelectedAccount,
   selectIsAddressInExtension,
-  selectIsUserSignedIn,
-  selectShouldShowInitialBanner,
-  selectUserEmail,
-  selectUsingAccount,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -46,10 +40,8 @@ import {
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import {
-  Context,
-  Provider,
-} from "@polkadex/orderbook/providers/public/RecentTradesProvider/context";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
@@ -80,21 +72,27 @@ export function Trading() {
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
 
+  const { email } = useAuth();
+  const {
+    authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
+    selectedAccount: { mainAddress },
+  } = useProfile();
+
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
-  const shouldShowInitialBanner = useReduxSelector(selectShouldShowInitialBanner);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
+  const profileState = useProfile();
+  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const email = useReduxSelector(selectUserEmail);
-  const { mainAddress } = useReduxSelector(selectUsingAccount);
   const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
-  const hasAssociatedAccounts = useReduxSelector(
-    selectAssociatedTradeAddresses(mainAddress)
-  )?.length;
 
-  const currentMainAddr = useReduxSelector(selectUsingAccount).mainAddress;
-  const currentTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const userAccounts = profileState.userData.userAccounts;
+  const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
+  const hasAssociatedAccounts = accounts.map((account) => account.tradeAddress)?.length;
+
+  const { selectedAccount } = useProfile();
+
+  const currentMainAddr = selectedAccount.mainAddress;
+  const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",

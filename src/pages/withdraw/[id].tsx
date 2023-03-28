@@ -4,11 +4,9 @@ import { useEffect, useMemo } from "react";
 
 import {
   selectIsAddressInExtension,
-  selectIsMainAddressRegistered,
-  selectIsUserSignedIn,
-  selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -19,9 +17,12 @@ const WithdrawTemplate = dynamic(
 );
 const Withdraw = () => {
   const router = useRouter();
-  const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const { mainAddress } = useReduxSelector(selectUsingAccount);
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(mainAddress));
+  const {
+    authInfo: { isAuthenticated: hasUser },
+    selectedAccount: { mainAddress },
+  } = useProfile();
+  const profileState = useProfile();
+  const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
   const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
 
   const shouldRedirect = useMemo(

@@ -24,7 +24,6 @@ import {
   depositsFetch,
   selectDepositsLoading,
   selectMainAccount,
-  selectUsingAccount,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -36,11 +35,12 @@ import {
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
-  const currentAccount = useReduxSelector(selectUsingAccount);
+  const { selectedAccount: currentAccount } = useProfile();
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
@@ -49,7 +49,7 @@ export const DepositTemplate = () => {
   const router = useRouter();
   const { deposits } = useHistory();
 
-  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -92,9 +92,9 @@ export const DepositTemplate = () => {
       validationSchema: withdrawValidations,
       validate,
       onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.asset_id)
+        const asset = isAssetPDEX(selectedAsset.assetId)
           ? { polkadex: null }
-          : { asset: selectedAsset.asset_id };
+          : { asset: selectedAsset.assetId };
         dispatch(
           depositsFetch({
             asset: asset,

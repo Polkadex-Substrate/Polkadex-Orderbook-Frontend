@@ -19,11 +19,8 @@ import {
   useTryUnlockTradeAccount,
 } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  selectTradeAccount,
-  selectUsingAccount,
-  unlockTradeAccount,
-} from "@polkadex/orderbook-modules";
+import { selectTradeAccount, unlockTradeAccount } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -155,7 +152,8 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 
 const ProtectPassword = () => {
   const dispatch = useDispatch();
-  const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
+  const profileState = useProfile();
+  const currTradeAddr = profileState.selectedAccount.tradeAddress;
   const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);

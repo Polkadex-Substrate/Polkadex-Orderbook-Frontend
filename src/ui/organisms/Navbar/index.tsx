@@ -5,18 +5,21 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const Navbar = ({ onOpenMarkets }) => {
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { state } = useAssetsProvider();
   const currMarket = useReduxSelector(selectCurrentMarket);
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
-  const quoteAsset = getAsset(currMarket?.assetIdArray[1]);
+  const quoteAsset = state.selectGetAsset(currMarket?.assetIdArray[1]);
   const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = currentTickers?.priceChange24Hr < 0;
   const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
   const high = Number(currentTickers?.high).toFixed(2);
   const low = Number(currentTickers?.low).toFixed(2);
+
+
   return (
     <S.Wrapper>
       <S.WrapperInfo>

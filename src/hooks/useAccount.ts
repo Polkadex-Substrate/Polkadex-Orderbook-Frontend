@@ -1,24 +1,17 @@
-import { useDispatch } from "react-redux";
-
-import { useReduxSelector } from "./useReduxSelector";
-
-import {
-  logOutFetch,
-  selectIsUserSignedIn,
-  selectIsUserVerified,
-  selectUserEmail,
-} from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export function useAccount() {
-  const dispatch = useDispatch();
-  const email = useReduxSelector(selectUserEmail);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const isVerified = useReduxSelector(selectIsUserVerified);
+  const { email, userConfirmed, onLogout } = useAuth();
+  const {
+    authInfo: { isAuthenticated: isSignedIn },
+  } = useProfile();
+  const isVerified = userConfirmed;
 
   return {
     userEmail: email,
     isSignedIn,
     isVerified,
-    logout: () => dispatch(logOutFetch()),
+    logout: () => onLogout(),
   };
 }

@@ -19,28 +19,32 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
-  selectDefaultAvatarOptions,
   selectExtensionWalletAccounts,
-  selectUserAccounts,
-  selectUsingAccount,
-  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { getTradeAccount } from "@polkadex/orderbook/modules/user/tradeWallet/helper";
 import { userMainAccountDetails } from "@polkadex/orderbook/modules/user/extensionWallet/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
-  const currentUsingAccount = useReduxSelector(selectUsingAccount);
-  const allUserAccounts = useReduxSelector(selectUserAccounts);
-  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  const {
+    selectedAccount: currentUsingAccount,
+    userData: { userAccounts: allUserAccounts },
+  } = useProfile();
+  const profileState = useProfile();
+  const avatarOptions = randomAvatars?.find(
+    (v) => v.id === Number(profileState.userProfile?.avatar)
+  );
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<KeyringPair>(null);
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
+  const { onUserSelectAccount } = useProfile();
 
   useEffect(() => {
     if (currentUsingAccount) {
@@ -70,7 +74,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     const mainAcc = userMainAccountDetails(userAcc.mainAddress, mainAccounts);
     setSelectedTradeAccount(acc);
     setSelectedMainAccount(mainAcc);
-    dispatch(userAccountSelectFetch({ tradeAddress: addr }));
+    onUserSelectAccount({ tradeAddress: addr });
   };
 
   const headerMessage = !allUserAccounts?.length

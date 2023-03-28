@@ -32,18 +32,15 @@ import {
   registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
-  registerMainAccountFetch,
-  selectAssociatedTradeAddresses,
-  selectDefaultAvatarOptions,
-  selectIsMainAddressRegistered,
   selectMainAccount,
-  userAccountSelectFetch,
 } from "@polkadex/orderbook-modules";
 import {
   getMainAddresssLinkedToTradingAccount,
   transformAddress,
 } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const SettingsTemplate = () => {
   const router = useRouter();
@@ -78,6 +75,8 @@ export const SettingsTemplate = () => {
     handleOpenAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
+
+  const { onUserSelectAccount } = useProfile();
 
   const dispatch = useDispatch();
   return (
@@ -240,11 +239,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
-                                            tradeAddress: account.address,
-                                          })
-                                        );
+                                        onUserSelectAccount({
+                                          tradeAddress: account.address,
+                                        });
                                         router.push("/balances");
                                       }}>
                                       Add funds
@@ -254,11 +251,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
-                                            tradeAddress: account.address,
-                                          })
-                                        );
+                                        onUserSelectAccount({
+                                          tradeAddress: account.address,
+                                        });
                                       }}>
                                       Use
                                     </S.Button>
@@ -421,8 +416,13 @@ const ControllerWallets = ({
   isDefault,
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
-  const linkedTradeAccounts = useReduxSelector(selectAssociatedTradeAddresses(address));
+  const profileState = useProfile();
+  const isRegistered = address && profileState.userData.mainAccounts.includes(address);
+
+  const userAccounts = profileState.userData.userAccounts;
+  const accounts = userAccounts.filter((account) => account.mainAddress === address);
+  const linkedTradeAccounts = accounts.map((account) => account.tradeAddress);
+
   const extensionAccount = useReduxSelector(selectMainAccount(address));
 
   const dispatch = useDispatch();
@@ -431,10 +431,10 @@ const ControllerWallets = ({
     const accountAddress = extensionAccount.account.address;
     dispatch(
       registerMainAccountLinkEmail({
-        mainAccount: accountAddress
+        mainAccount: accountAddress,
       })
     );
-  }
+  };
 
   return (
     <WalletCard
@@ -447,11 +447,11 @@ const ControllerWallets = ({
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
       <S.WalletActions>
-        {isRegistered && linkedTradeAccounts?.length>0 ? (
+        {isRegistered && linkedTradeAccounts?.length > 0 ? (
           <Badge isRegistered={true}>Registered</Badge>
         ) : (
           <Fragment>
-            {!isRegistered && 
+            {!isRegistered && (
               <S.Button
                 type="button"
                 onClick={() => {
@@ -459,7 +459,7 @@ const ControllerWallets = ({
                 }}>
                 Link Email
               </S.Button>
-            }
+            )}
             <S.Button
               type="button"
               onClick={() => {
@@ -484,7 +484,10 @@ const Card = ({
   isVerified = false,
   onClick,
 }: T.Props) => {
-  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  const profileState = useProfile();
+  const avatarOptions = randomAvatars?.find(
+    (v) => v.id === Number(profileState.userProfile?.avatar)
+  );
   return (
     <S.AccountCard>
       <S.AccountCardWrapper>

@@ -7,7 +7,7 @@ export const DEFAULT_TRADING_VIEW_INTERVAL = "5";
 export const POLKADEX_ASSET = {
   name: "POLKADEX",
   symbol: "PDEX",
-  asset_id: "PDEX",
+  assetId: "PDEX",
 };
 
 export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";
