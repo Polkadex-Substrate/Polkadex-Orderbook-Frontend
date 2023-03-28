@@ -46,6 +46,12 @@ import {
   Disclaimer,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import {
+  Context,
+  Provider,
+} from "@polkadex/orderbook/providers/public/RecentTradesProvider/context";
+import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -188,53 +194,55 @@ export function Trading() {
               <S.Content>
                 <S.WrapperGraph>
                   <S.Header>
-                  <Navbar onOpenMarkets={() => setState(!state)} />
-                  <S.Actions isSignedIn={isSignedIn}>
-                    {!isSignedIn ? (
-                      <Button
-                        onClick={() => router.push("/signIn")}
-                        color="inverse"
-                        background="text"
-                        style={{ alignSelf: "flex-end" }}
-                        icon={{
-                          name: "Wallet",
-                          background: "inverse",
-                          size: "medium",
-                          stroke: "text",
-                          fill: "text",
-                        }}>
-                        Login/Sign Up
-                      </Button>
-                    ) : (
-                      <S.Profile>
-                        <Profile
-                          hasTradeAccount={hasTradeAccount}
-                          hasMainAccount={hasMainAccount}
-                          currentMainAccount={currentMainAddr}
-                          currentTradeAccount={currentTradeAddr}
-                          email={email}
-                        />
-                      </S.Profile>
-                    )}
-                  </S.Actions>
+                    <Navbar onOpenMarkets={() => setState(!state)} />
+                    <S.Actions isSignedIn={isSignedIn}>
+                      {!isSignedIn ? (
+                        <Button
+                          onClick={() => router.push("/signIn")}
+                          color="inverse"
+                          background="text"
+                          style={{ alignSelf: "flex-end" }}
+                          icon={{
+                            name: "Wallet",
+                            background: "inverse",
+                            size: "medium",
+                            stroke: "text",
+                            fill: "text",
+                          }}>
+                          Login/Sign Up
+                        </Button>
+                      ) : (
+                        <S.Profile>
+                          <Profile
+                            hasTradeAccount={hasTradeAccount}
+                            hasMainAccount={hasMainAccount}
+                            currentMainAccount={currentMainAddr}
+                            currentTradeAccount={currentTradeAddr}
+                            email={email}
+                          />
+                        </S.Profile>
+                      )}
+                    </S.Actions>
                   </S.Header>
                   <S.CenterWrapper>
                     <S.GraphEpmty>
-                    <Graph />
-                    {hasUser ? (
-                    <Transactions />
-                  ) : (
-                    <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                  )}
+                      <Graph />
+                      {hasUser ? (
+                        <OrderHistoryProvider>
+                          <Transactions />
+                        </OrderHistoryProvider>
+                      ) : (
+                        <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                      )}
                     </S.GraphEpmty>
-                  <S.WrapperRight>
-                   <MarketOrder />
-                   <RecentTrades />
-                  </S.WrapperRight>
+                    <S.WrapperRight>
+                      <MarketOrder />
+                      <RecentTradesProvider>
+                        <RecentTrades />
+                      </RecentTradesProvider>
+                    </S.WrapperRight>
                   </S.CenterWrapper>
-                 
                 </S.WrapperGraph>
-                
               </S.Content>
             </S.ContainerMain>
             <Footer />

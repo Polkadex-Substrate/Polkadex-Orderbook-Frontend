@@ -74,7 +74,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.asset_id === selectedAsset?.asset_id),
+    () => userBalances?.find((item) => item.asset_id === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -99,9 +99,9 @@ export const WithdrawTemplate = () => {
   };
 
   const handleSubmitWithdraw = (amount: string | number) => {
-    const asset = isAssetPDEX(selectedAsset.asset_id)
+    const asset = isAssetPDEX(selectedAsset.assetId)
       ? { polkadex: null }
-      : { asset: selectedAsset.asset_id };
+      : { asset: selectedAsset.assetId };
     dispatch(
       withdrawsFetch({
         asset,

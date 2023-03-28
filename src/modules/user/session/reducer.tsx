@@ -9,9 +9,10 @@ export interface SessionState {
 }
 
 const now = new Date();
+
 const initialState: SessionState = {
-  dateTo: startOfMonth(now),
-  dateFrom: endOfDay(now),
+  dateTo: endOfDay(now),
+  dateFrom: startOfMonth(now),
 };
 
 export const sessionReducer = (state = initialState, action: SessionAction) => {

@@ -1,5 +1,5 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { startOfMonth } from "date-fns";
 
@@ -16,7 +16,11 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
-import { userSessionData } from "@polkadex/orderbook-modules";
+import {
+  selectUserSession,
+  selectUsingAccount,
+  userSessionData,
+} from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -27,7 +31,8 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistory } from "@polkadex/orderbook-hooks";
+import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/useOrderHistroyProvider";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -50,20 +55,19 @@ export const Transactions = () => {
   const now = new Date();
 
   const [filters, setFilters] = useState(initialFilters);
-  const [to, setTo] = useState(now);
-  const [from, setFrom] = useState(startOfMonth(now));
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const orderHistory = useOrderHistory(filters);
+  const orderHistory = useOrderHistoryProvider(filters);
+
+  const userSession = useReduxSelector(selectUserSession);
+
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
     setFilters({ ...filters, [type]: !filters[type] });
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }) => {
-      setFrom(startDate);
-      setTo(endDate);
       dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
     },
     [dispatch]
@@ -72,12 +76,12 @@ export const Transactions = () => {
   const ranges = useMemo(() => {
     return [
       {
-        startDate: from,
-        endDate: to,
+        startDate: userSession.dateFrom,
+        endDate: userSession.dateTo,
         key: "selection",
       },
     ];
-  }, [from, to]);
+  }, [userSession.dateFrom, userSession.dateTo]);
   return (
     <S.Section>
       <Tabs>
