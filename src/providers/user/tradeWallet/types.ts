@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 import { TradeAccount } from "../../types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import * as A from "./actions";
 
 export interface TradeWalletState {
   isFetching: boolean;
@@ -37,7 +38,9 @@ export type TradeWalletProviderProps = PropsWithChildren<{
   value: TradeWalletContextProps;
 }>;
 
-export type TradeWalletContextProps = TradeWalletState & {};
+export type TradeWalletContextProps = TradeWalletState & {
+  onExportTradeAccount: (value: A.ExportTradeAccountFetch["payload"]) => void;
+};
 
 export interface TradeWalletProps {
   onError?: (value: string) => void;

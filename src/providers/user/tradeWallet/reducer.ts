@@ -44,7 +44,7 @@ export const initialState: TradeWalletState = {
   exportAccountLoading: false,
 };
 
-export const TradeAccountsReducer = (
+export const tradeWalletReducer = (
   state = initialState,
   action: TradeAccountsAction
 ): TradeWalletState => {

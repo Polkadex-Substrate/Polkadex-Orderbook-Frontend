@@ -34,12 +34,12 @@ import {
   registerAccountModalActive,
   selectMainAccount,
 } from "@polkadex/orderbook-modules";
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import {
   getMainAddresssLinkedToTradingAccount,
   transformAddress,
-} from "@polkadex/orderbook/modules/user/profile/helpers";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
-import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+} from "@polkadex/orderbook/providers/user/profile/helpers";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const SettingsTemplate = () => {
