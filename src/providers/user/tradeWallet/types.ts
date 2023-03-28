@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from "react";
-import { CommonActionState, TradeAccount } from "../../types";
+import { TradeAccount } from "../../types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export interface TradeWalletState {
