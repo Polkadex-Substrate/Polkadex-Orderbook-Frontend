@@ -33,7 +33,7 @@ export const DepositProvider: T.DepositsComponent = ({
         onNotification(
           "Processing Deposit, Please wait while the deposit is processed and the block is finalized. This may take a few mins."
         );
-        dispatch(A.depositsFetch({ asset, amount, mainAccount }));
+        dispatch(A.depositsFetch());
         console.log("dispatched fetch");
 
         const res = await depositToEnclave(api, mainAccount, asset, amount);

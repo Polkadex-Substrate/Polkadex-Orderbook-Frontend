@@ -6,11 +6,6 @@ export interface DepositsData {
 }
 export interface DepositsFetch {
   type: typeof DEPOSITS_FETCH;
-  payload: {
-    asset: Record<string, string | null>;
-    amount: string | number;
-    mainAccount: ExtensionAccount;
-  };
 }
 
 export interface DepositsError {
@@ -24,9 +19,8 @@ export interface DepositsReset {
 
 export type DepositsAction = DepositsFetch | DepositsData | DepositsError | DepositsReset;
 
-export const depositsFetch = (payload: DepositsFetch["payload"]): DepositsFetch => ({
+export const depositsFetch = (): DepositsFetch => ({
   type: DEPOSITS_FETCH,
-  payload,
 });
 
 export const depositsData = (): DepositsData => ({
