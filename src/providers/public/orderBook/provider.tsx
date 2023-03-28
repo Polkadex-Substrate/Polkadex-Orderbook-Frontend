@@ -49,7 +49,6 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
     }).subscribe({
       next: (resp) => {
         const msg = resp.value.data.websocket_streams.data;
-        console.log("ob-update event: ", msg, "here");
         const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
         dispatch(A.depthDataIncrement(data));
       },

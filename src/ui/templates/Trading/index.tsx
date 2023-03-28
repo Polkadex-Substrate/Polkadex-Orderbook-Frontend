@@ -8,7 +8,6 @@ import * as S from "./styles";
 import {
   useMarketsFetch,
   useMarketsTickersFetch,
-  useOrderBookMarketsFetch,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
@@ -66,7 +65,6 @@ export function Trading() {
 
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
-  useOrderBookMarketsFetch();
 
   const { email } = useAuth();
   const {
