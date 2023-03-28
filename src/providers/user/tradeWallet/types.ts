@@ -40,7 +40,8 @@ export type TradeWalletProviderProps = PropsWithChildren<{
 
 export type TradeWalletContextProps = TradeWalletState & {
   onExportTradeAccount: (value: A.ExportTradeAccountFetch["payload"]) => void;
-  onImportTradeAccount: (value: A.ImportTradeAccountJsonFetch["payload"]) => void;
+  onImportTradeAccountJson: (value: A.ImportTradeAccountJsonFetch["payload"]) => void;
+  onImportTradeAccount: (value: A.ImportTradeAccountFetch["payload"]) => void;
 };
 
 export interface TradeWalletProps {

@@ -43,7 +43,7 @@ export const AuthProvider: T.TradeWalletComponent = ({
     }
   };
 
-  const onImportTradeAccount = (payload: A.ImportTradeAccountJsonFetch["payload"]) => {
+  const onImportTradeAccountJson = (payload: A.ImportTradeAccountJsonFetch["payload"]) => {
     const { file, password } = payload;
     let tradeAddress = "";
     try {
@@ -62,7 +62,6 @@ export const AuthProvider: T.TradeWalletComponent = ({
       dispatch(A.importTradeAccountData());
       // automatically set as in use.
 
-      // When Trade wallet context will created, then update it to profile context userAccountSelectFetch
       profileState.onUserSelectAccount({ tradeAddress });
     } catch (error) {
       if (tradeAddress?.length)
@@ -72,11 +71,42 @@ export const AuthProvider: T.TradeWalletComponent = ({
     }
   };
 
+  const onImportTradeAccount = (payload: A.ImportTradeAccountFetch["payload"]) => {
+    const { mnemonic, name, password } = payload;
+    let tradeAddress = "";
+    try {
+      const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
+        name: name,
+      });
+      tradeAddress = pair?.address;
+      dispatch(A.tradeAccountPush({ pair }));
+      setTimeout(() => {
+        dispatch(
+          A.registerTradeAccountData({
+            mnemonic,
+            account: {
+              name,
+              address: tradeAddress,
+            },
+          })
+        );
+        dispatch(A.importTradeAccountData());
+      }, 2000);
+    } catch (error) {
+      if (tradeAddress?.length)
+        dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+      if (typeof onError === "function")
+        onError("Can not import account. Please check your mnemonic");
+      dispatch(A.tradeAccountsError(error));
+    }
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onExportTradeAccount,
+        onImportTradeAccountJson,
         onImportTradeAccount,
       }}>
       {children}
