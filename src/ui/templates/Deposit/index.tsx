@@ -49,7 +49,7 @@ export const DepositTemplate = () => {
   const router = useRouter();
   const { deposits } = useHistory();
 
-  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.asset_id);
+  const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -92,9 +92,9 @@ export const DepositTemplate = () => {
       validationSchema: withdrawValidations,
       validate,
       onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.asset_id)
+        const asset = isAssetPDEX(selectedAsset.assetId)
           ? { polkadex: null }
-          : { asset: selectedAsset.asset_id };
+          : { asset: selectedAsset.assetId };
         dispatch(
           depositsFetch({
             asset: asset,

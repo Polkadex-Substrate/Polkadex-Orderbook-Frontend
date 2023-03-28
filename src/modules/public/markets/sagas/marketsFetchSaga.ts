@@ -63,7 +63,7 @@ const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
 
 const findAsset = (assets: IPublicAsset[], id: string) => {
   if (isAssetPDEX(id)) {
-    const { name, symbol, asset_id } = POLKADEX_ASSET;
+    const { name, symbol, assetId: asset_id } = POLKADEX_ASSET;
     return [name, symbol, asset_id];
   }
   const asset = assets.find(({ asset_id }) => asset_id === id);
