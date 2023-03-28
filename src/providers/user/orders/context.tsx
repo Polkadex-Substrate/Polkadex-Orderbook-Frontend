@@ -6,6 +6,7 @@ import { OrdersContextProps, OrdersProviderProps } from "./types";
 export const Context = createContext<OrdersContextProps>({
   ...initialState,
   onPlaceOrders: () => {},
+  onCancelOrder: () => {},
 });
 
 export const Provider = ({ value, children }: OrdersProviderProps) => {

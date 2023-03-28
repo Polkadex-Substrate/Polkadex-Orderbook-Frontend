@@ -16,6 +16,7 @@ export type OrdersProviderProps = PropsWithChildren<{
 
 export type OrdersContextProps = OrdersState & {
   onPlaceOrders: (value: A.OrderExecuteFetch["payload"]) => void;
+  onCancelOrder: (value: A.OrderCancelFetch["payload"]) => void;
 };
 
 export interface OrdersProps {
