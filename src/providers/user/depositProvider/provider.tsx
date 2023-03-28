@@ -40,10 +40,13 @@ export const DepositProvider: T.DepositsComponent = ({
           "Processing Deposit, Please wait while the deposit is processed and the block is finalized. This may take a few mins."
         );
         dispatch(A.depositsFetch({ asset, amount, mainAccount }));
+        console.log("dispatched fetch");
+
         const res = await depositToEnclave(api, mainAccount, asset, amount);
-        console.log(res, "res");
 
         if (res.isSuccess) {
+          console.log("successfull");
+
           dispatch(A.depositsData());
           onNotification(
             "Deposit Successful, Congratulations! You have successfully deposited assets to your trading account. "
@@ -56,7 +59,7 @@ export const DepositProvider: T.DepositsComponent = ({
       }
     } catch (error) {
       console.log(error, "error");
-      onerror(`Deposits failed ${error}`);
+      onError(`Deposits failed ${error}`);
     }
   };
 

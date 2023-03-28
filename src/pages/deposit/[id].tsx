@@ -10,6 +10,7 @@ import {
   selectUsingAccount,
 } from "@polkadex/orderbook-modules";
 import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
+import { toast } from "react-toastify";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -36,7 +37,7 @@ const Deposit = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <DepositProvider>
+    <DepositProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
       <DepositTemplate />
     </DepositProvider>
   );

@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
@@ -21,22 +20,18 @@ import {
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
-  depositsFetch,
-  selectDepositsLoading,
   selectMainAccount,
   selectUsingAccount,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  isAssetPDEX,
-  selectAllAssets,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
+import { selectAllAssets, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
@@ -44,14 +39,12 @@ export const DepositTemplate = () => {
   const currentAccount = useReduxSelector(selectUsingAccount);
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const assetsState = useAssetsProvider();
-
-  // const assets = useReduxSelector(selectAllAssets);
+  const depositState = useDepositProvider();
   const assets = assetsState.state.selectAllAssets();
-  console.log(assets, "from deposit");
 
   const getAsset = useReduxSelector(selectGetAsset);
-  const loading = useReduxSelector(selectDepositsLoading);
-  const dispatch = useDispatch();
+  const loading = depositState.depositsLoading();
+
   const router = useRouter();
   const { deposits } = useHistory();
 
@@ -101,13 +94,12 @@ export const DepositTemplate = () => {
         const asset = isAssetPDEX(selectedAsset.assetId)
           ? { polkadex: null }
           : { asset: selectedAsset.assetId };
-        dispatch(
-          depositsFetch({
-            asset: asset,
-            amount: values.amount,
-            mainAccount: currMainAcc,
-          })
-        );
+
+        depositState.onfetchDeposit({
+          asset: asset,
+          amount: values.amount,
+          mainAccount: currMainAcc,
+        });
       },
     });
 
@@ -190,7 +182,7 @@ export const DepositTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.asset_id}
+                                key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -258,7 +250,9 @@ export const DepositTemplate = () => {
                           <Table.Row key={i}>
                             <Table.Cell>
                               <S.CellName>
-                                <span>{getAsset(item.asset)?.symbol}</span>
+                                <span>
+                                  {assetsState.state.selectGetAsset(item.asset)?.symbol}
+                                </span>
                               </S.CellName>
                             </Table.Cell>
                             <Table.Cell>
