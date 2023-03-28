@@ -16,7 +16,7 @@ export interface OrderBookDbState {
 
 export interface OrderBookState {
   orderbook: { asks: string[][]; bids: string[][]; loading: boolean };
-  depth: { asks: string[][]; bids: string[][]; loading?: boolean };
+  depth: { asks?: string[][]; bids?: string[][]; loading?: boolean };
 }
 
 export type OrderBookProviderProps = PropsWithChildren<{
