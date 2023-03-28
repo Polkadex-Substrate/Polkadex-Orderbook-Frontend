@@ -27,7 +27,7 @@ import { TradeAccount } from "@polkadex/orderbook/modules/types";
 export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
 
-  const onOrdersExecute = (payload: A.OrderExecuteFetch["payload"]) => {
+  const onPlaceOrders = (payload: A.OrderExecuteFetch["payload"]) => {
     try {
       const { side, price, order_type, amount, symbol } = payload;
       //   const account: UserAccount = yield select(selectUsingAccount);
@@ -69,7 +69,7 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
       //     yield put(orderExecuteDataDelete());
       //   }
     } catch (error) {
-        console.error("order error: ", error);
+      console.error("order error: ", error);
       //   yield put(orderExecuteDataDelete());
       //   const msg =
       //     typeof error.message === "string" ? error.message : error?.errors[0]?.message;
@@ -106,6 +106,7 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
     <Provider
       value={{
         ...state,
+        onPlaceOrders,
       }}>
       {children}
     </Provider>
