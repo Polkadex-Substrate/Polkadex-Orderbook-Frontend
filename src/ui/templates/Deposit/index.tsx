@@ -42,7 +42,6 @@ export const DepositTemplate = () => {
   const depositState = useDepositProvider();
   const assets = assetsState.state.selectAllAssets();
 
-  const getAsset = useReduxSelector(selectGetAsset);
   const loading = depositState.depositsLoading();
 
   const router = useRouter();
