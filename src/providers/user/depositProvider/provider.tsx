@@ -28,13 +28,7 @@ export const DepositProvider: T.DepositsComponent = ({
   const isApiReady = useReduxSelector(selectRangerIsReady);
 
   const onfetchDeposit = async ({ asset, amount, mainAccount }) => {
-    console.log("fetch deposit called");
-
     try {
-      console.log("inside try", asset, amount, mainAccount);
-
-      console.log(isApiReady, "isapiready", api);
-
       if (isApiReady && mainAccount?.account?.address !== "") {
         onNotification(
           "Processing Deposit, Please wait while the deposit is processed and the block is finalized. This may take a few mins."
@@ -45,8 +39,6 @@ export const DepositProvider: T.DepositsComponent = ({
         const res = await depositToEnclave(api, mainAccount, asset, amount);
 
         if (res.isSuccess) {
-          console.log("successfull");
-
           dispatch(A.depositsData());
           onNotification(
             "Deposit Successful, Congratulations! You have successfully deposited assets to your trading account. "
