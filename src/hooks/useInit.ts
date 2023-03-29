@@ -10,17 +10,17 @@ import {
   tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
-import { useRanger } from "@polkadex/orderbook/providers/public/ranger";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export const useInit = () => {
   const dispatch = useDispatch();
-  const { onConnectRanger } = useRanger();
+  const { onConnectNativeApi } = useNativeApi();
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
   const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
 
   // basic initialization
   useEffect(() => {
-    if (shouldRangerConnect) onConnectRanger();
+    if (shouldRangerConnect) onConnectNativeApi();
     dispatch(tradeAccountsFetch());
     dispatch(extensionWalletFetch());
     dispatch(assetsFetch());

@@ -66,7 +66,7 @@ export const orderbookTypes = {
 
 export type orderbookTypes = typeof orderbookTypes;
 
-export interface RangerState {
+export interface NativeApiState {
   connected: boolean;
   connecting: boolean;
   timestamp?: number;
@@ -74,17 +74,17 @@ export interface RangerState {
   api?: ApiPromise;
 }
 
-export type RangerProps = {
+export type NativeApiProps = {
   onError: (value: string) => void;
   onNotification: (value: string) => void;
 };
 
-export type RangerProviderProps = PropsWithChildren<{
-  value: RangerContextProps;
+export type NativeApiProviderProps = PropsWithChildren<{
+  value: NativeApiContextProps;
 }>;
 
-export type RangerContextProps = RangerState & {
-  onConnectRanger: () => void;
+export type NativeApiContextProps = NativeApiState & {
+  onConnectNativeApi: () => void;
 };
 
-export type RangerComponent = FC<PropsWithChildren<RangerProps>>;
+export type NativeApiComponent = FC<PropsWithChildren<NativeApiProps>>;

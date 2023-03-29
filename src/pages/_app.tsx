@@ -20,6 +20,7 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -54,7 +55,7 @@ function App({ Component, pageProps }: AppProps) {
       <ToastContainer />
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <RangerProvider
+          <NativeApiProvider
             onError={(v) => toast.error(v)}
             onNotification={(v) => toast.info(v)}>
             <OverlayProvider>
@@ -73,7 +74,7 @@ function App({ Component, pageProps }: AppProps) {
                 <GlobalStyles />
               </ThemeProvider>
             </OverlayProvider>
-          </RangerProvider>
+          </NativeApiProvider>
         </ProfileProvider>
       </AuthProvider>
     </>

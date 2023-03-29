@@ -1,26 +1,26 @@
-import { RangerAction } from "./actions";
+import { NativeApiAction } from "./actions";
 import {
-  RANGER_CONNECT_DATA,
-  RANGER_CONNECT_ERROR,
-  RANGER_CONNECT_FETCH,
-  RANGER_DISCONNECT_DATA,
-  RANGER_NO_EXTENSION,
+  NATIVEAPI_CONNECT_DATA,
+  NATIVEAPI_CONNECT_ERROR,
+  NATIVEAPI_CONNECT_FETCH,
+  NATIVEAPI_DISCONNECT_DATA,
+  NATIVEAPI_NO_EXTENSION,
 } from "./constants";
 
-import { RangerState } from "./types";
+import { NativeApiState } from "./types";
 
-export const initialRangerState: RangerState = {
+export const initialState: NativeApiState = {
   connected: false,
   connecting: false,
   hasExtension: true,
 };
 
-export const rangerReducer = (
-  state = initialRangerState,
-  action: RangerAction
-): RangerState => {
+export const nativeApiReducer = (
+  state = initialState,
+  action: NativeApiAction
+): NativeApiState => {
   switch (action.type) {
-    case RANGER_CONNECT_FETCH:
+    case NATIVEAPI_CONNECT_FETCH:
       return {
         ...state,
         connected: false,
@@ -28,7 +28,7 @@ export const rangerReducer = (
         timestamp: Math.floor(Date.now() / 1000),
       };
 
-    case RANGER_CONNECT_DATA:
+    case NATIVEAPI_CONNECT_DATA:
       return {
         ...state,
         connected: true,
@@ -36,8 +36,8 @@ export const rangerReducer = (
         api: action.payload,
       };
 
-    case RANGER_CONNECT_ERROR:
-    case RANGER_DISCONNECT_DATA:
+    case NATIVEAPI_CONNECT_ERROR:
+    case NATIVEAPI_DISCONNECT_DATA:
       return {
         ...state,
         connected: false,
