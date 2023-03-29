@@ -4,11 +4,7 @@ import * as queries from "../../../graphql/queries";
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialMarketsState, marketsReducer } from "./reducer";
-import {
-  IPublicAsset,
-  isAssetPDEX,
-  selectAllAssets,
-} from "@polkadex/orderbook/modules/public/assets";
+import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 import { Market, MarketQueryResult, Ticker, TickerQueryResult } from "./types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
@@ -16,6 +12,7 @@ import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { API } from "aws-amplify";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
+import { IPublicAsset } from "../assetsProvider";
 export const MarketsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
 
@@ -66,11 +63,11 @@ export const MarketsProvider = ({ children }) => {
 
   const findAsset = (assets: IPublicAsset[], id: string) => {
     if (isAssetPDEX(id)) {
-      const { name, symbol, asset_id } = POLKADEX_ASSET;
-      return [name, symbol, asset_id];
+      const { name, symbol, assetId } = POLKADEX_ASSET;
+      return [name, symbol, assetId];
     }
-    const asset = assets.find(({ asset_id }) => asset_id === id);
-    if (asset) return [asset.name, asset.symbol, asset.asset_id];
+    const asset = assets.find(({ assetId }) => assetId === id);
+    if (asset) return [asset.name, asset.symbol, asset.assetId];
     else return ["", "", ""];
   };
 

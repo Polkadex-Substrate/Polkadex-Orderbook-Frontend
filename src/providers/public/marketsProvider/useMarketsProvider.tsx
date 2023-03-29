@@ -1,11 +1,14 @@
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useContext, useEffect } from "react";
 import { Context } from "./context";
-import { IPublicAsset, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
+import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
+import { IPublicAsset } from "../assetsProvider";
 
 export function useMarketsProvider() {
   const state = useContext(Context);
-  const allAssets: IPublicAsset[] = useReduxSelector(selectAllAssets);
+  const assetsState = useAssetsProvider();
+  const allAssets: IPublicAsset[] = assetsState.state.selectAllAssets();
+  console.log(allAssets, "all assets");
 
   useEffect(() => {
     if (allAssets.length > 0) {

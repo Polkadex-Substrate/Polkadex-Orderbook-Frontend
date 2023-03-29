@@ -1,8 +1,8 @@
 import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
-import { IPublicAsset } from "@polkadex/orderbook/modules/public/assets";
 import { CommonState } from "@polkadex/orderbook/modules/types";
 import BigNumber from "bignumber.js";
 import { PropsWithChildren } from "react";
+import { IPublicAsset } from "../assetsProvider";
 
 export type MarketId = string;
 
