@@ -6,7 +6,6 @@ import { assetsFetch, selectAssetsFetchSuccess } from "../modules/public/assets"
 import {
   extensionWalletFetch,
   marketsFetch,
-  selectShouldRangerConnect,
   tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
@@ -14,9 +13,9 @@ import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export const useInit = () => {
   const dispatch = useDispatch();
-  const { onConnectNativeApi } = useNativeApi();
+  const { onConnectNativeApi, timestamp, connecting } = useNativeApi();
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
-  const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
+  const shouldRangerConnect = !timestamp && !connecting;
 
   // basic initialization
   useEffect(() => {
