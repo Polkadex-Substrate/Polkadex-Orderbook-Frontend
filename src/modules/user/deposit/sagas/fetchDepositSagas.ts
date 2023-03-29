@@ -7,17 +7,16 @@ import { depositsError } from "..";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { notificationPush, sendError } from "@polkadex/orderbook-modules";
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger";
+import { selectRangerIsReady } from "@polkadex/orderbook/modules/public/ranger";
 import { UNIT_BN } from "@polkadex/web-constants";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export function* fetchDepositSaga(action: DepositsFetch) {
+  const nativeApiState = useNativeApi();
   try {
     const { asset, amount, mainAccount } = action.payload;
-    const api = yield select(selectRangerApi);
+    const api = nativeApiState.api;
     const isApiReady = yield select(selectRangerIsReady);
     if (isApiReady && mainAccount?.account?.address !== "") {
       yield put(

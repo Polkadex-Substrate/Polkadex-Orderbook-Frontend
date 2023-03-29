@@ -14,17 +14,16 @@ import {
   selectMainAccount,
   UserAccount,
 } from "@polkadex/orderbook-modules";
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger";
+import { selectRangerIsReady } from "@polkadex/orderbook/modules/public/ranger";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
   try {
     const profileState = useProfile();
+    const nativeApiState = useNativeApi();
     const { sid } = action.payload;
-    const api = yield select(selectRangerApi);
+    const api = nativeApiState.api;
     const currentAccount: UserAccount = profileState.selectedAccount;
     const { account, signer } = yield select(selectMainAccount(currentAccount.mainAddress));
     const isApiReady = yield select(selectRangerIsReady);
