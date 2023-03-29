@@ -13,6 +13,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) =
   // Actions
   const onConnectNativeApi = useCallback(async () => {
     let api: ApiPromise;
+    dispatch(A.nativeApiConnectFetch());
     try {
       /* Checking if the extension is installed. */
       const { web3Enable } = await import("@polkadot/extension-dapp");
