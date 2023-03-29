@@ -6,20 +6,21 @@ import { assetsFetch, selectAssetsFetchSuccess } from "../modules/public/assets"
 import {
   extensionWalletFetch,
   marketsFetch,
-  rangerConnectFetch,
   selectShouldRangerConnect,
   tradeAccountsFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
+import { useRanger } from "@polkadex/orderbook/providers/public/ranger";
 
 export const useInit = () => {
   const dispatch = useDispatch();
+  const { onConnectRanger } = useRanger();
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
   const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
 
   // basic initialization
   useEffect(() => {
-    if (shouldRangerConnect) dispatch(rangerConnectFetch());
+    if (shouldRangerConnect) onConnectRanger();
     dispatch(tradeAccountsFetch());
     dispatch(extensionWalletFetch());
     dispatch(assetsFetch());
