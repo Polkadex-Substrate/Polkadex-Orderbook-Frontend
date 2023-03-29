@@ -57,6 +57,7 @@ export function Trading() {
       window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER, "true");
     setDisclaimer(false);
   };
+  console.log("trading page");
 
   const stateFromMarketsProvider = useMarketsProvider();
 

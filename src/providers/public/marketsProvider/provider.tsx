@@ -5,7 +5,13 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { initialMarketsState, marketsReducer } from "./reducer";
 import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
-import { Market, MarketQueryResult, Ticker, TickerQueryResult } from "./types";
+import {
+  Market,
+  MarketQueryResult,
+  MarketsComponent,
+  Ticker,
+  TickerQueryResult,
+} from "./types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
@@ -13,12 +19,10 @@ import { API } from "aws-amplify";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { IPublicAsset } from "../assetsProvider";
-export const MarketsProvider = ({ children }) => {
+export const MarketsProvider: MarketsComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
 
   const marketsFetch = async (allAssets: IPublicAsset[]) => {
-    console.log("marketsFetch", allAssets);
-
     try {
       if (allAssets.length > 0) {
         const markets = await fetchMarkets(allAssets);
@@ -27,6 +31,7 @@ export const MarketsProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error, "error in fetching markets");
+      onError(`error in fetching markets `);
     }
   };
 
@@ -72,25 +77,19 @@ export const MarketsProvider = ({ children }) => {
   };
 
   const marketTickersFetch = async () => {
-    console.log("ruchi");
-
     try {
       const tickers = await fetchMarketTickers();
 
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
-      console.log(error, "ruchi");
-
       console.error("Market tickers fetch error", error);
+      onError(`error in fetching tickers `);
     }
   };
 
   const fetchMarketTickers = async (): Promise<Ticker[]> => {
-    console.log("call func");
-
     // TODO: check sendQueryToAppSync market variable
     const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
-    console.log(res, "res");
 
     const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
     const tickers: Ticker[] = tickersRaw.map((elem) => {

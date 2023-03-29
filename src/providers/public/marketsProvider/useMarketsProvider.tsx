@@ -8,11 +8,9 @@ export function useMarketsProvider() {
   const state = useContext(Context);
   const assetsState = useAssetsProvider();
   const allAssets: IPublicAsset[] = assetsState.state.selectAllAssets();
-  console.log(allAssets, "all assets");
 
   useEffect(() => {
     if (allAssets.length > 0) {
-      console.log("use effect");
       state.marketsFetch(allAssets);
       state.marketTickersFetch();
     }

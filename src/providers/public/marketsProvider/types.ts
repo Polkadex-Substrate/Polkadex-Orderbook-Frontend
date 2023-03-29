@@ -1,7 +1,7 @@
 import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
 import { CommonState } from "@polkadex/orderbook/modules/types";
 import BigNumber from "bignumber.js";
-import { PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 import { IPublicAsset } from "../assetsProvider";
 
 export type MarketId = string;
@@ -121,3 +121,10 @@ export type MarketsContextProps = MarketsState & {
 export type MarketsProviderProps = PropsWithChildren<{
   value: MarketsContextProps;
 }>;
+
+export interface MarketsProps {
+  onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
+}
+
+export type MarketsComponent = FC<PropsWithChildren<MarketsProps>>;

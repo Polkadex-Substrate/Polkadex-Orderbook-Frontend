@@ -10,7 +10,7 @@ const TradingTemplate = dynamic(
 );
 
 const Trading = () => (
-  <MarketsProvider>
+  <MarketsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
     <TradingTemplate />
   </MarketsProvider>
 );
