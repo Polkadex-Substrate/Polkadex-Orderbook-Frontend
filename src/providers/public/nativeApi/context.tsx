@@ -11,4 +11,3 @@ export const Context = createContext<NativeApiContextProps>({
 export const Provider = ({ value, children }: NativeApiProviderProps) => (
   <Context.Provider value={value}>{children}</Context.Provider>
 );
-ranger

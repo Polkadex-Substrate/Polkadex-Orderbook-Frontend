@@ -14,7 +14,6 @@ import {
   selectMainAccount,
   UserAccount,
 } from "@polkadex/orderbook-modules";
-import { selectRangerIsReady } from "@polkadex/orderbook/modules/public/ranger";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
@@ -26,7 +25,7 @@ export function* fetchClaimWithdrawSaga(action: WithdrawsClaimFetch) {
     const api = nativeApiState.api;
     const currentAccount: UserAccount = profileState.selectedAccount;
     const { account, signer } = yield select(selectMainAccount(currentAccount.mainAddress));
-    const isApiReady = yield select(selectRangerIsReady);
+    const isApiReady = nativeApiState.connected;
     if (isApiReady && account?.address !== "") {
       yield put(
         notificationPush({

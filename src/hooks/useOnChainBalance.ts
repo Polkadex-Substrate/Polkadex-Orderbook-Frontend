@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { selectRangerIsReady } from "../modules/public/ranger";
 import { fetchOnChainBalance } from "../helpers/fetchOnChainBalance";
 import { selectUserBalance } from "../modules/user/balances";
 
@@ -14,7 +13,7 @@ export const useOnChainBalance = (assetId: string) => {
   const nativeApiState = useNativeApi();
 
   const api = nativeApiState.api;
-  const isApiConnected = useReduxSelector(selectRangerIsReady);
+  const isApiConnected = nativeApiState.connected;
   const balances = useReduxSelector(selectUserBalance);
   const currentAccount = profileState?.selectedAccount;
   const mainAddress = currentAccount.mainAddress;
