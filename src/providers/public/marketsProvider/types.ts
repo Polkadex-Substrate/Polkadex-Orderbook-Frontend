@@ -116,6 +116,12 @@ export type TickerQueryResult = {
 export type MarketsContextProps = MarketsState & {
   marketsFetch: (allAssets: IPublicAsset[]) => void;
   marketTickersFetch: () => void;
+  getMarkets: () => Market[];
+  getCurrentMarket: () => Market;
+  setCurrentMarket: (market: Market) => void;
+  dispatchMarketFetch: () => void;
+  isMarketLoading: () => boolean;
+  getMarketsTimestamp: () => number;
 };
 
 export type MarketsProviderProps = PropsWithChildren<{

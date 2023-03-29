@@ -1,4 +1,3 @@
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useContext, useEffect } from "react";
 import { Context } from "./context";
 import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
@@ -6,13 +5,24 @@ import { IPublicAsset } from "../assetsProvider";
 
 export function useMarketsProvider() {
   const state = useContext(Context);
-  const assetsState = useAssetsProvider();
-  const allAssets: IPublicAsset[] = assetsState.state.selectAllAssets();
+  const {
+    getMarkets,
+    getCurrentMarket,
+    setCurrentMarket,
+    dispatchMarketFetch,
+    isMarketLoading,
+    getMarketsTimestamp,
+  } = state;
+  const { marketsFetch, marketTickersFetch } = state;
+  const { selectAllAssets } = useAssetsProvider();
+  const allAssets: IPublicAsset[] = selectAllAssets();
+
+  console.log("use markets provider");
 
   useEffect(() => {
     if (allAssets.length > 0) {
-      state.marketsFetch(allAssets);
-      state.marketTickersFetch();
+      marketsFetch(allAssets);
+      marketTickersFetch();
     }
   }, [allAssets]);
 
@@ -25,5 +35,11 @@ export function useMarketsProvider() {
 
   return {
     state,
+    getMarkets,
+    getCurrentMarket,
+    setCurrentMarket,
+    dispatchMarketFetch,
+    isMarketLoading,
+    getMarketsTimestamp,
   };
 }

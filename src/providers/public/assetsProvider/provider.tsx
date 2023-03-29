@@ -8,6 +8,7 @@ import { fetchAllFromAppSync, sendQueryToAppSync } from "@polkadex/orderbook/hel
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
@@ -61,14 +62,6 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
       ? POLKADEX_ASSET
       : state.list.find((asset) => asset.assetId === assetId.toString());
   };
-
-  const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>
-    assetId === "-1" ||
-    assetId === null ||
-    assetId === -1 ||
-    assetId === "POLKADEX" ||
-    assetId === "PDEX" ||
-    assetId === "polkadex";
 
   return (
     <Provider

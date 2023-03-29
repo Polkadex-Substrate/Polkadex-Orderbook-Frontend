@@ -57,9 +57,6 @@ export function Trading() {
       window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER, "true");
     setDisclaimer(false);
   };
-  console.log("trading page");
-
-  const stateFromMarketsProvider = useMarketsProvider();
 
   const [state, setState] = useState(false);
   const [banner, setBanner] = useState(false);
@@ -69,7 +66,28 @@ export function Trading() {
   const dispatch = useDispatch();
   const { id } = useRouter().query;
 
-  useMarketsFetch(id as string);
+  const {
+    isMarketLoading,
+    getMarketsTimestamp,
+    dispatchMarketFetch,
+    getMarkets,
+    setCurrentMarket,
+    getCurrentMarket,
+  } = useMarketsProvider();
+  const shouldDispatchMarketsFetch = () => {
+    return !isMarketLoading() && !getMarketsTimestamp();
+  };
+
+  const markets = getMarkets();
+  const selectMarket = markets.find((item) => item.id === id);
+
+  useEffect(() => {
+    if (shouldDispatchMarketsFetch()) {
+      dispatchMarketFetch();
+    } else if (!shouldDispatchMarketsFetch && markets && selectMarket?.id)
+      setCurrentMarket(selectMarket);
+  }, [shouldDispatchMarketsFetch, markets, selectMarket]);
+
   useMarketsTickersFetch();
   useOrderBookMarketsFetch();
 
@@ -79,7 +97,8 @@ export function Trading() {
     selectedAccount: { mainAddress },
   } = useProfile();
 
-  const market = useReduxSelector(selectCurrentMarket);
+  // const market = useReduxSelector(selectCurrentMarket);
+  const market = getCurrentMarket();
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";

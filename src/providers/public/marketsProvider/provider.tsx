@@ -136,12 +136,42 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
     };
   }, [market?.m]);
 
+  const getMarkets = () => {
+    return state.list;
+  };
+
+  const getCurrentMarket = () => {
+    return state.currentMarket;
+  };
+
+  const setCurrentMarket = (market: Market) => {
+    dispatch(A.setCurrentMarket(market));
+  };
+
+  const dispatchMarketFetch = () => {
+    dispatch(A.marketsFetch());
+  };
+
+  const isMarketLoading = () => {
+    return state.loading;
+  };
+
+  const getMarketsTimestamp = () => {
+    return state.timestamp;
+  };
+
   return (
     <Provider
       value={{
         ...state,
         marketsFetch,
         marketTickersFetch,
+        getMarkets,
+        getCurrentMarket,
+        setCurrentMarket,
+        dispatchMarketFetch,
+        isMarketLoading,
+        getMarketsTimestamp,
       }}>
       {children}
     </Provider>
