@@ -13,6 +13,7 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useProfile } from "../providers/user/profile";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 export type InitialMarkets = {
   last: string | number;
   volume: string | number;
@@ -32,9 +33,13 @@ export function useMarkets(onClose: () => void) {
   const profileState = useProfile();
   const router = useRouter();
   const allMarketTickers = useReduxSelector(selectMarketTickers);
-  const markets = useReduxSelector(selectMarkets);
-  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const { getMarkets, getCurrentMarket, setCurrentMarket } = useMarketsProvider();
+  // const markets = useReduxSelector(selectMarkets);
+  const markets = getMarkets();
+  // const currentMarket = useReduxSelector(selectCurrentMarket);
+  const currentMarket = getCurrentMarket();
   const favorites = profileState.userMarket.favoriteMarkets;
+  console.log("use markets");
 
   /**
    * @description Get the single market information for the current market
@@ -84,7 +89,7 @@ export function useMarkets(onClose: () => void) {
       router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, {
         shallow: true,
       });
-      dispatch(setCurrentMarket(marketToSet));
+      setCurrentMarket(marketToSet);
       onClose();
     }
   };

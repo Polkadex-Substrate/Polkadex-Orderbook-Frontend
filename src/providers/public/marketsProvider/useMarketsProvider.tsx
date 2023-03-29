@@ -17,10 +17,8 @@ export function useMarketsProvider() {
   const { selectAllAssets } = useAssetsProvider();
   const allAssets: IPublicAsset[] = selectAllAssets();
 
-  console.log("use markets provider");
-
   useEffect(() => {
-    if (allAssets.length > 0) {
+    if (allAssets.length > 0 && state.list.length === 0) {
       marketsFetch(allAssets);
       marketTickersFetch();
     }
