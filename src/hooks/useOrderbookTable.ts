@@ -7,11 +7,10 @@ import {
   DepthState,
   selectCurrentMarket,
   selectCurrentPrice,
-  selectDepthAsks,
-  selectDepthBids,
   setCurrentPrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 
 export type Props = {
   isSell?: boolean;
@@ -21,9 +20,10 @@ export type Props = {
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const dispatch = useDispatch();
+  const orderBookState = useOrderBook();
 
-  const bids = useReduxSelector(selectDepthBids);
-  const asks = useReduxSelector(selectDepthAsks);
+  const bids = orderBookState.depth.bids;
+  const asks = orderBookState.depth.asks;
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentPrice = useReduxSelector(selectCurrentPrice);
 
