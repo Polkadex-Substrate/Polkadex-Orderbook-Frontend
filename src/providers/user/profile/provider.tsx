@@ -121,6 +121,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userAuthFetch());
   };
 
+  const onUserProfileAccountPush = (payload: T.UserAccount) => {
+    dispatch(A.userProfileAccountPush(payload));
+  };
+
   const logoutIsSuccess = authState.logout.isSuccess;
 
   useEffect(() => {
@@ -136,6 +140,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,
+        onUserProfileAccountPush,
       }}>
       {children}
     </Provider>

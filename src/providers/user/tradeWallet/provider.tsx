@@ -6,11 +6,16 @@ import keyring from "@polkadot/ui-keyring";
 import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
 import { isReady } from "@polkadot/wasm-crypto";
-import { TradeAccount } from "../../types";
+import { ApiPromise } from "@polkadot/api";
+import { Signer } from "@polkadot/types/types";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
 import * as T from "./types";
 import * as A from "./actions";
+import { TradeAccount } from "../../types";
 import { useProfile } from "../profile";
+import { useNativeApi } from "../../public/nativeApi";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({
   onError,
@@ -19,6 +24,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
 }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const profileState = useProfile();
+  const nativeApiState = useNativeApi();
 
   // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
@@ -139,6 +145,59 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     }
   };
 
+  const onRegisterTradeAccount = async (payload: A.RegisterTradeAccountFetch["payload"]) => {
+    let tradeAddress: string;
+    try {
+      const api = nativeApiState.api;
+      // const controllerWallets = yield select(selectExtensionWalletAccounts);
+      const { password, name, address } = payload;
+      const mnemonic = mnemonicGenerate();
+      const { account, signer } = controllerWallets.find(
+        ({ account }) => account.address === address
+      );
+      const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
+        name,
+      });
+      tradeAddress = pair.address;
+      const res = await addProxyToAccount(api, tradeAddress, signer, account?.address);
+
+      if (res.isSuccess) {
+        dispatch(A.tradeAccountPush({ pair }));
+
+        profileState.onUserProfileAccountPush({ tradeAddress, mainAddress: address });
+        setTimeout(() => {
+          dispatch(
+            A.registerTradeAccountData({
+              mnemonic,
+              account: {
+                name,
+                address: tradeAddress,
+              },
+            })
+          );
+        }, 2000);
+      } else {
+        throw new Error(res.message);
+      }
+    } catch (error) {
+      dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      if (typeof onError === "function") onError(errorMessage);
+      dispatch(A.registerTradeAccountError(error));
+    }
+  };
+
+  const addProxyToAccount = async (
+    api: ApiPromise,
+    proxyAddress: string,
+    signer: Signer,
+    mainAddress: string
+  ): Promise<ExtrinsicResult> => {
+    const ext = api.tx.ocex.addProxyAccount(proxyAddress);
+    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
+    return res;
+  };
+
   return (
     <Provider
       value={{
@@ -148,6 +207,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         onImportTradeAccount,
         onLoadTradeAccounts,
         onTradeAccountUpdate,
+        onRegisterTradeAccount,
       }}>
       {children}
     </Provider>
