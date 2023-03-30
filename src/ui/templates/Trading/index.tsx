@@ -8,11 +8,9 @@ import * as S from "./styles";
 import {
   useMarketsFetch,
   useMarketsTickersFetch,
-  useOrderBookMarketsFetch,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  orderBookFetch,
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
@@ -89,7 +87,6 @@ export function Trading() {
   }, [shouldDispatchMarketsFetch, markets, selectMarket]);
 
   useMarketsTickersFetch();
-  useOrderBookMarketsFetch();
 
   const { email } = useAuth();
   const {
@@ -127,7 +124,6 @@ export function Trading() {
   useEffect(() => {
     if (market) {
       // dispatch(rangerConnectFetch());
-      dispatch(orderBookFetch(market));
       dispatch(recentTradesFetch(market));
     }
   }, [dispatch, market]);

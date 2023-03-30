@@ -11,16 +11,17 @@ import {
 } from "../actions";
 import { notificationPush } from "../../notificationHandler";
 
-import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { selectMainAccount, userProfileTradeAccountDelete } from "@polkadex/orderbook-modules";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export function* removeProxyAccountFromChainSaga(action: RemoveProxyAccountFromChainFetch) {
   try {
     const profileState = useProfile();
-    const api: ApiPromise = yield select(selectRangerApi);
+    const nativeApiState = useNativeApi();
+    const api: ApiPromise = nativeApiState.api;
     const { address: tradeAddress } = action.payload;
     const linkedMainAddress =
       tradeAddress &&
