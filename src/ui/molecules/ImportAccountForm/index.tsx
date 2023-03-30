@@ -16,7 +16,6 @@ import {
   importAccountJsonValidations,
   importAccountValidations,
 } from "@polkadex/orderbook/validations";
-import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
 
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
@@ -76,6 +75,7 @@ export const ImportAccountForm = ({ onCancel = undefined, defaultImportJson = fa
 };
 
 const ImportAccountMnemonic = ({ onCancel = undefined }) => {
+  const { onImportTradeAccount } = useTradeWallet();
   const mnemonicInputRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -88,13 +88,11 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
       mnemonic: [],
     },
     onSubmit: ({ mnemonic, name, passcode }) => {
-      dispatch(
-        importTradeAccountFetch({
-          mnemonic: mnemonic.join(" "),
-          name: name,
-          password: passcode,
-        })
-      );
+      onImportTradeAccount({
+        mnemonic: mnemonic.join(" "),
+        name: name,
+        password: passcode,
+      });
     },
   });
   const {
