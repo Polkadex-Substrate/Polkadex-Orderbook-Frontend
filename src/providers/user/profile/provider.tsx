@@ -125,6 +125,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userProfileAccountPush(payload));
   };
 
+  const onUserProfileTradeAccountDelete = (payload: string) => {
+    dispatch(A.userProfileTradeAccountDelete(payload));
+  };
+
   const logoutIsSuccess = authState.logout.isSuccess;
 
   useEffect(() => {
@@ -141,6 +145,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
         onUserChangeInitBanner,
         onUserAuthFetch,
         onUserProfileAccountPush,
+        onUserProfileTradeAccountDelete,
       }}>
       {children}
     </Provider>

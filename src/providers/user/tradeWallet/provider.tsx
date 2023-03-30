@@ -149,7 +149,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     let tradeAddress: string;
     try {
       const api = nativeApiState.api;
-      // const controllerWallets = yield select(selectExtensionWalletAccounts);
+      const controllerWallets = yield select(selectExtensionWalletAccounts);
       const { password, name, address } = payload;
       const mnemonic = mnemonicGenerate();
       const { account, signer } = controllerWallets.find(
@@ -198,6 +198,60 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     return res;
   };
 
+  const onRemoveTradeAccountFromChain = async (
+    payload: A.RemoveProxyAccountFromChainFetch["payload"]
+  ) => {
+    try {
+      const profileState = useProfile();
+      const nativeApiState = useNativeApi();
+      const api: ApiPromise = nativeApiState.api;
+      const { address: tradeAddress } = payload;
+      const linkedMainAddress =
+        tradeAddress &&
+        profileState.userData?.userAccounts?.find(
+          ({ tradeAddress }) => tradeAddress === tradeAddress
+        )?.mainAddress;
+
+      if (!linkedMainAddress) {
+        throw new Error("Invalid trade address.");
+      }
+      const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
+      if (!account?.address) {
+        throw new Error("Please select a funding account!");
+      }
+      if (api.isConnected && account?.address) {
+        const res = await removeProxyFromAccount(api, tradeAddress, signer, account.address);
+        if (res.isSuccess) {
+          onNotification(
+            "Congratulations!Your trade account has been removed from the chain!"
+          );
+          dispatch(A.previewAccountModalCancel());
+          dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
+          dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+          profileState.onUserProfileTradeAccountDelete(tradeAddress);
+        } else {
+          throw new Error(res.message);
+        }
+      }
+    } catch (error) {
+      dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      if (typeof onError === "function") onError(errorMessage);
+      dispatch(A.registerTradeAccountError(error));
+    }
+  };
+
+  const removeProxyFromAccount = async (
+    api: ApiPromise,
+    proxyAddress: string,
+    signer: Signer,
+    mainAddress: string
+  ): Promise<ExtrinsicResult> => {
+    const ext = api.tx.ocex.removeProxyAccount(proxyAddress);
+    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
+    return res;
+  };
+
   return (
     <Provider
       value={{
@@ -208,6 +262,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         onLoadTradeAccounts,
         onTradeAccountUpdate,
         onRegisterTradeAccount,
+        onRemoveTradeAccountFromChain,
       }}>
       {children}
     </Provider>

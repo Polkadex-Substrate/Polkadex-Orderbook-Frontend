@@ -55,6 +55,7 @@ export type ProfileContextProps = ProfileState & {
   onUserChangeInitBanner: (value?: boolean) => void;
   onUserAuthFetch: () => void;
   onUserProfileAccountPush: (value: UserAccount) => void;
+  onUserProfileTradeAccountDelete: (value: string) => void;
 };
 
 export interface ProfileProps {
