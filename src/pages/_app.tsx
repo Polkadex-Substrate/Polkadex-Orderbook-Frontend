@@ -18,6 +18,7 @@ import { useUserDataFetch } from "../hooks/useUserDataFetch";
 import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
@@ -50,6 +51,15 @@ const queryClient = new QueryClient();
 function App({ Component, pageProps }: AppProps) {
   const color = useSelector(selectCurrentColorTheme);
 
+  // Removes all console from production environment
+  if (process.env.NODE_ENV === "production") {
+    console.log = () => {};
+    console.debug = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.error = () => {};
+  }
+
   return (
     <>
       <ToastContainer />
@@ -58,22 +68,26 @@ function App({ Component, pageProps }: AppProps) {
           <NativeApiProvider
             onError={(v) => toast.error(v)}
             onNotification={(v) => toast.info(v)}>
-            <OverlayProvider>
-              <ThemeProvider
-                theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-                {defaultConfig.maintenanceMode ? (
-                  <Maintenance />
-                ) : (
-                  <QueryClientProvider client={queryClient}>
-                    <ThemeWrapper>
-                      <Component {...pageProps} />
-                    </ThemeWrapper>
-                  </QueryClientProvider>
-                )}
+            <OrderBookProvider
+              onError={(v) => toast.error(v)}
+              onNotification={(v) => toast.info(v)}>
+              <OverlayProvider>
+                <ThemeProvider
+                  theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                  {defaultConfig.maintenanceMode ? (
+                    <Maintenance />
+                  ) : (
+                    <QueryClientProvider client={queryClient}>
+                      <ThemeWrapper>
+                        <Component {...pageProps} />
+                      </ThemeWrapper>
+                    </QueryClientProvider>
+                  )}
 
-                <GlobalStyles />
-              </ThemeProvider>
-            </OverlayProvider>
+                  <GlobalStyles />
+                </ThemeProvider>
+              </OverlayProvider>
+            </OrderBookProvider>
           </NativeApiProvider>
         </ProfileProvider>
       </AuthProvider>
