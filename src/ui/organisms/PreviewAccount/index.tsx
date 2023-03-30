@@ -27,12 +27,12 @@ import {
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
   exportTradeAccountActive,
-  exportTradeAccountFetch,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 type Props = {
   onClose: () => void;
@@ -46,6 +46,7 @@ enum menuDisableKeysEnum {
 }
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
+  const { onExportTradeAccount } = useTradeWallet();
   const dispatch = useDispatch();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -83,11 +84,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   );
 
   const handleExportAccount = useCallback(() => {
-    dispatch(
-      tradingAccountInBrowser?.isLocked
-        ? exportTradeAccountActive()
-        : exportTradeAccountFetch({ address: selected?.address })
-    );
+    tradingAccountInBrowser?.isLocked
+      ? dispatch(exportTradeAccountActive())
+      : onExportTradeAccount({ address: selected?.address });
   }, [selected, tradingAccountInBrowser, dispatch]);
   const handleClose = () =>
     setRemove({
@@ -133,7 +132,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  dispatch(exportTradeAccountFetch({ address: selected.address, password }))
+                  onExportTradeAccount({ address: selected.address, password })
                 }
                 handleClose={() => dispatch(exportTradeAccountActive())}
               />
