@@ -11,7 +11,6 @@ import { useMarketsProvider } from "@polkadex/orderbook/providers/public/markets
 
 export const Navbar = ({ onOpenMarkets }) => {
   const { selectGetAsset } = useAssetsProvider();
-  // const currMarket = useReduxSelector(selectCurrentMarket);
   const currMarket = useMarketsProvider().getCurrentMarket();
 
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);

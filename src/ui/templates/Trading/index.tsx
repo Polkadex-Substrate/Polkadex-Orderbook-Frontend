@@ -97,7 +97,6 @@ export function Trading() {
     selectedAccount: { mainAddress },
   } = useProfile();
 
-  // const market = useReduxSelector(selectCurrentMarket);
   const market = getCurrentMarket();
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const profileState = useProfile();

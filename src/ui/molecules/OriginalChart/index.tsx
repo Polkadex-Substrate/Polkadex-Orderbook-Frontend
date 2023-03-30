@@ -34,7 +34,6 @@ export const OriginalChart = ({ chart, resolution }) => {
   const target = useRef(null);
 
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
-  // const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentMarket = useMarketsProvider().getCurrentMarket();
 
   const klines = useReduxSelector(selectKline);
