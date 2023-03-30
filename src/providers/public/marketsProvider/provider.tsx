@@ -27,6 +27,8 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
     try {
       if (allAssets.length > 0) {
         const markets = await fetchMarkets(allAssets);
+        console.log(markets, "markets");
+
         dispatch(A.marketsData(markets));
         dispatch(A.setCurrentMarketIfUnset(markets[0]));
       }
