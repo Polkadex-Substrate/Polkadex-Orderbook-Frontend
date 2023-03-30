@@ -4,7 +4,6 @@ import {
   orderExecuteDataDelete,
   orderExecuteData,
   OrderExecuteFetch,
-  selectRangerApi,
   notificationPush,
   selectTradeAccount,
   UserAccount,
@@ -18,17 +17,19 @@ import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export function* ordersExecuteSaga(action: OrderExecuteFetch) {
   try {
     const profileState = useProfile();
+    const nativeApiState = useNativeApi();
     const { side, price, order_type, amount, symbol } = action.payload;
     const account: UserAccount = profileState.selectedAccount;
     const address = account.tradeAddress;
     const mainAddress = account.mainAddress;
     const keyringPair: TradeAccount = yield select(selectTradeAccount(address));
     const timestamp = getNonce();
-    const api = yield select(selectRangerApi);
+    const api = nativeApiState.api;
     const client_order_id = getNewClientId();
     if (address !== "" && keyringPair && api) {
       const order = createOrderPayload(
