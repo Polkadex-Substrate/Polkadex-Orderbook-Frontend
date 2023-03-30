@@ -16,10 +16,9 @@ import {
   importAccountJsonValidations,
   importAccountValidations,
 } from "@polkadex/orderbook/validations";
-import {
-  importTradeAccountFetch,
-  importTradeAccountJsonFetch,
-} from "@polkadex/orderbook-modules";
+import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
+
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const informationData = [
   {
@@ -260,7 +259,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
 };
 
 const ImportAccountJson = ({ onCancel = undefined }) => {
-  const dispatch = useDispatch();
+  const { onImportTradeAccountJson } = useTradeWallet();
   const formik = useFormik({
     initialValues: {
       hasPasscode: false,
@@ -270,12 +269,10 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
     },
     validationSchema: importAccountJsonValidations,
     onSubmit: ({ passcode, file }) => {
-      dispatch(
-        importTradeAccountJsonFetch({
-          file,
-          password: passcode,
-        })
-      );
+      onImportTradeAccountJson({
+        file,
+        password: passcode,
+      });
     },
   });
   const { getRootProps, getInputProps, isDragReject, isDragAccept } = useDropzone({
