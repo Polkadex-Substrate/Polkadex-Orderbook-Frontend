@@ -13,11 +13,10 @@ import { userTradesUpdateEvent } from "../../trades";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
-import {
-  UserAccount,
-  tradeAccountUpdateEvent,
-} from "@polkadex/orderbook-modules";
+import { UserAccount } from "@polkadex/orderbook-modules";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { tradeAccountUpdateEvent } from "@polkadex/orderbook/providers/user/tradeWallet/actions";
 
 export function* userEventsChannelSaga(_action: UserEventsFetch) {
   const profileState = useProfile();
@@ -79,6 +78,7 @@ function createActionFromUserEvent(eventData: any) {
   const data = JSON.parse(eventData.value.data.websocket_streams.data);
   console.info("User Event: ", data);
   const eventType = data.type;
+  const { onTradeAccountUpdate } = useTradeWallet();
   switch (eventType) {
     case USER_EVENTS.SetBalance:
       return balanceUpdateEvent(data);
@@ -88,8 +88,10 @@ function createActionFromUserEvent(eventData: any) {
       return orderUpdateEvent(data);
     case USER_EVENTS.RegisterAccount:
       return registerMainAccountUpdateEvent(data);
-    case USER_EVENTS.AddProxy:
+    case USER_EVENTS.AddProxy: {
+      onTradeAccountUpdate(data);
       return tradeAccountUpdateEvent(data);
+    }
     case USER_EVENTS.TradeFormat:
       return userTradesUpdateEvent(data);
     case USER_EVENTS.RemoveProxy:
