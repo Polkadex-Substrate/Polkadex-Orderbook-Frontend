@@ -12,7 +12,7 @@ import * as T from "./types";
 import * as A from "./actions";
 import { useProfile } from "../profile";
 
-export const AuthProvider: T.TradeWalletComponent = ({
+export const TradeWalletProvider: T.TradeWalletComponent = ({
   onError,
   onNotification,
   children,

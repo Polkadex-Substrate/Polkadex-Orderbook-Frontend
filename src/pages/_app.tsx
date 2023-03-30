@@ -20,6 +20,7 @@ import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -54,22 +55,26 @@ function App({ Component, pageProps }: AppProps) {
       <ToastContainer />
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <OverlayProvider>
-            <ThemeProvider
-              theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-              {defaultConfig.maintenanceMode ? (
-                <Maintenance />
-              ) : (
-                <QueryClientProvider client={queryClient}>
-                  <ThemeWrapper>
-                    <Component {...pageProps} />
-                  </ThemeWrapper>
-                </QueryClientProvider>
-              )}
+          <TradeWalletProvider
+            onError={(v) => toast.error(v)}
+            onNotification={(v) => toast.info(v)}>
+            <OverlayProvider>
+              <ThemeProvider
+                theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                {defaultConfig.maintenanceMode ? (
+                  <Maintenance />
+                ) : (
+                  <QueryClientProvider client={queryClient}>
+                    <ThemeWrapper>
+                      <Component {...pageProps} />
+                    </ThemeWrapper>
+                  </QueryClientProvider>
+                )}
 
-              <GlobalStyles />
-            </ThemeProvider>
-          </OverlayProvider>
+                <GlobalStyles />
+              </ThemeProvider>
+            </OverlayProvider>
+          </TradeWalletProvider>
         </ProfileProvider>
       </AuthProvider>
     </>
