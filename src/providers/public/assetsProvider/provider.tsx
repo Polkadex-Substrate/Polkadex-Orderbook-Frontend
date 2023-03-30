@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -62,6 +62,10 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
       ? POLKADEX_ASSET
       : state.list.find((asset) => asset.assetId === assetId.toString());
   };
+
+  useEffect(() => {
+    fetchAssets();
+  }, []);
 
   return (
     <Provider

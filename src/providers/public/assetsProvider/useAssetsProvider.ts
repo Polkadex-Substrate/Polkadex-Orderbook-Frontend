@@ -16,10 +16,6 @@ export function useAssetsProvider() {
     throw error;
   }
 
-  useEffect(() => {
-    state.fetchAssets();
-  }, []);
-
   return {
     state,
     fetchAssets,

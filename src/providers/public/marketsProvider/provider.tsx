@@ -19,6 +19,7 @@ import { API } from "aws-amplify";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { IPublicAsset } from "../assetsProvider";
+import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
 export const MarketsProvider: MarketsComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
 
@@ -159,6 +160,17 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
   const getMarketsTimestamp = () => {
     return state.timestamp;
   };
+
+  const { selectAllAssets } = useAssetsProvider();
+  const allAssets: IPublicAsset[] = selectAllAssets();
+
+  useEffect(() => {
+    console.log(state.list, "lenght");
+    if (allAssets.length > 0 && state.list.length === 0) {
+      marketsFetch(allAssets);
+      marketTickersFetch();
+    }
+  }, [allAssets]);
 
   return (
     <Provider

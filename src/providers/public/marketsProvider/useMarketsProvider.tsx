@@ -13,16 +13,6 @@ export function useMarketsProvider() {
     isMarketLoading,
     getMarketsTimestamp,
   } = state;
-  const { marketsFetch, marketTickersFetch } = state;
-  const { selectAllAssets } = useAssetsProvider();
-  const allAssets: IPublicAsset[] = selectAllAssets();
-
-  useEffect(() => {
-    if (allAssets.length > 0 && state.list.length === 0) {
-      marketsFetch(allAssets);
-      marketTickersFetch();
-    }
-  }, [allAssets]);
 
   if (!Context) {
     const error = new Error("Recent trades context is undefined");
