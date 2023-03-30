@@ -14,7 +14,7 @@ export interface onFetchDeposit {
 }
 
 export type DepositContextProps = DepositsState & {
-  onfetchDeposit: (value: onFetchDeposit) => void;
+  onFetchDeposit: (value: onFetchDeposit) => void;
   depositsLoading: () => boolean;
 };
 

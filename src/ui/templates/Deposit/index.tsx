@@ -19,10 +19,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import {
-  selectMainAccount,
-  Transaction,
-} from "@polkadex/orderbook-modules";
+import { selectMainAccount, Transaction } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
 import { selectAllAssets, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
@@ -34,7 +31,6 @@ import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositPr
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
@@ -97,7 +93,7 @@ export const DepositTemplate = () => {
           ? { polkadex: null }
           : { asset: selectedAsset.assetId };
 
-        depositState.onfetchDeposit({
+        depositState.onFetchDeposit({
           asset: asset,
           amount: values.amount,
           mainAccount: currMainAcc,
