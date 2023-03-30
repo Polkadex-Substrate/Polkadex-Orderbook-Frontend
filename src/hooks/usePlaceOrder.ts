@@ -8,8 +8,6 @@ import {
   selectCurrentPrice,
   selectCurrentMarketTickers,
   setCurrentPrice,
-  selectBestAskPrice,
-  selectBestBidPrice,
   orderExecuteFetch,
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
@@ -19,18 +17,25 @@ import {
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
+  const orderBookState = useOrderBook();
 
   const profileState = useProfile();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-  const bestAskPrice = useReduxSelector(selectBestAskPrice);
-  const bestBidPrice = useReduxSelector(selectBestBidPrice);
+
+  const asks = orderBookState.depth.asks;
+  const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
+
+  const bids = orderBookState.depth.bids;
+  const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
+
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
