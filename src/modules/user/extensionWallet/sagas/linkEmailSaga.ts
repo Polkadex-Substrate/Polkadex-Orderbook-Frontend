@@ -5,26 +5,24 @@ import { ApiPromise } from "@polkadot/api";
 import { stringToHex } from "@polkadot/util";
 
 import * as mutations from "../../../../graphql/mutations";
-import {
-  selectRangerApi,
-  userProfileMainAccountPush,
-  selectMainAccount,
-} from "../../..";
+import { userProfileMainAccountPush, selectMainAccount } from "../../..";
 import { RegisterMainAccountLinkEmailFetch } from "../actions";
 
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 type LinkEmailData = { email: string; main_address: string };
 
 export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
+  const nativeApiState = useNativeApi();
   let data: LinkEmailData, signature: string;
   const { mainAccount } = action.payload;
   try {
     const { email } = useAuth();
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
-    const api: ApiPromise = yield select(selectRangerApi);
+    const api: ApiPromise = nativeApiState.api;
 
     const hasAddressAndEmail =
       !!selectedControllerAccount.account?.address?.length && !!email?.length;

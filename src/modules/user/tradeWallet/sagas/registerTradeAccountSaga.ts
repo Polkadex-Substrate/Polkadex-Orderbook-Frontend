@@ -13,15 +13,16 @@ import {
   tradeAccountPush,
 } from "../actions";
 
-import { selectRangerApi } from "@polkadex/orderbook/modules/public/ranger";
 import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { userProfileAccountPush } from "@polkadex/orderbook-modules";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
+  const nativeApiState = useNativeApi();
   try {
-    const api = yield select(selectRangerApi);
+    const api = nativeApiState.api;
     const controllerWallets = yield select(selectExtensionWalletAccounts);
     const { password, name, address } = action.payload;
     const mnemonic = mnemonicGenerate();
