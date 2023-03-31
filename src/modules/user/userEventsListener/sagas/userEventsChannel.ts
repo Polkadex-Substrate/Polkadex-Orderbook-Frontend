@@ -1,6 +1,6 @@
 import { call, put, select, take, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { API } from "aws-amplify";
+import { API, JS } from "aws-amplify";
 
 import { userEventsFetch, UserEventsFetch } from "../actions";
 import * as subscriptions from "../../../../graphql/subscriptions";
@@ -91,6 +91,11 @@ function createActionFromUserEvent(eventData: any) {
       return tradeAccountUpdateEvent(data);
     case USER_EVENTS.TradeFormat:
       return userTradesUpdateEvent(data);
+    case USER_EVENTS.Error: {
+      const val = JSON.parse(data);
+      if ("message" in val) return errorNotification("Error", val.message);
+      else return errorNotification("Error", "an unknown server error occurred");
+    }
     case USER_EVENTS.RemoveProxy:
       return registerSuccessNotification(
         "Trade account removed",
@@ -102,6 +107,16 @@ function createActionFromUserEvent(eventData: any) {
 const registerSuccessNotification = (title: string, description: string) =>
   notificationPush({
     type: "SuccessAlert",
+    message: {
+      title,
+      description,
+    },
+    time: new Date().getTime(),
+  });
+
+const errorNotification = (title: string, description: string) =>
+  notificationPush({
+    type: "ErrorAlert",
     message: {
       title,
       description,

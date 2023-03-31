@@ -27,6 +27,7 @@ export const USER_EVENTS = {
   SetBalance: "SetBalance",
   TradeFormat: "TradeFormat",
   RemoveProxy: "RemoveProxy",
+  Error: "error",
 };
 
 export const ErrorMessages = {
