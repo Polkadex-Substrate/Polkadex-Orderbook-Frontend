@@ -55,6 +55,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     }
   };
 
+  const onRegisterMainAccountReset = () => {
+    // TODO: When tradeWallet Provider would merge, then it should be done.
+    // dispatch(A.registerTradeAccountReset());
+  };
+
   const createSignedData = async (
     mainAccount: ExtensionAccount,
     email: string
@@ -91,6 +96,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       value={{
         ...state,
         onLinkEmail,
+        onRegisterMainAccountReset,
       }}>
       {children}
     </Provider>
