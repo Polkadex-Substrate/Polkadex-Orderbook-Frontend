@@ -22,6 +22,7 @@ export type ExtensionWalletContextProps = ExtensionWalletState & {
   onRegisterMainAccountReset: () => void;
   onRegisterMainAccountUpdate: (value: A.RegisterMainAccountUpdateEvent["payload"]) => void;
   onRegisterMainAccount: (value: A.RegisterMainAccountFetch["payload"]) => void;
+  onPolkadotExtensionWallet: () => void;
 };
 
 export interface ExtensionWalletProps {

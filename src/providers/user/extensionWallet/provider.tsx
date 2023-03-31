@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { extensionWalletReducer, initialState } from "./reducer";
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "../../types";
@@ -8,6 +8,7 @@ import * as mutations from "@polkadex/orderbook/graphql/mutations";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { Signer } from "@polkadot/types/types";
 import { ErrorMessages } from "@polkadex/web-constants";
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
 import { Provider } from "./context";
 import * as T from "./types";
@@ -148,6 +149,64 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     }
   };
 
+  const onPolkadotExtensionWallet = useCallback(async () => {
+    try {
+      const allAccounts: ExtensionAccount[] = await getAllExtensionWalletAccounts();
+      dispatch(A.extensionWalletData({ allAccounts }));
+
+      console.log("extension subscription run");
+      const { web3AccountsSubscribe, web3FromAddress } = await import(
+        "@polkadot/extension-dapp"
+      );
+
+      const unsubscribe = web3AccountsSubscribe(
+        async (injectedAccounts: InjectedAccountWithMeta[]) => {
+          console.log("wallet subscription data len", injectedAccounts.length);
+          const extensionAccountPromises: Promise<ExtensionAccount>[] = injectedAccounts.map(
+            async (account): Promise<ExtensionAccount> => {
+              return {
+                account,
+                signer: (await web3FromAddress(account.address)).signer,
+              };
+            }
+          );
+          const allAccounts = await Promise.all(extensionAccountPromises);
+          dispatch(A.extensionWalletData({ allAccounts }));
+        },
+        { ss58Format: 88 }
+      );
+      return () => unsubscribe.then((fn) => fn());
+    } catch (error) {
+      onError(error.message);
+    }
+  }, []);
+
+  async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
+    try {
+      const { web3Accounts, web3Enable, web3FromAddress, web3EnablePromise } = await import(
+        "@polkadot/extension-dapp"
+      );
+      const isAuthGiven = await web3EnablePromise;
+      if (!isAuthGiven) {
+        throw new Error("Please give authorization in polkadot.js wallet");
+      }
+      const extensions = await web3Enable("polkadex");
+      if (extensions.length === 0) {
+        throw new Error("no extensions installed");
+      }
+      const allAccounts: InjectedAccountWithMeta[] = await web3Accounts({ ss58Format: 88 });
+      const promises = allAccounts.map(async (account): Promise<ExtensionAccount> => {
+        return {
+          account,
+          signer: (await web3FromAddress(account.address)).signer,
+        };
+      });
+      return Promise.all(promises);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const registerMainAccount = async (
     api: ApiPromise,
     proxyAddress: string,
@@ -219,6 +278,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         onRegisterMainAccountReset,
         onRegisterMainAccountUpdate,
         onRegisterMainAccount,
+        onPolkadotExtensionWallet,
       }}>
       {children}
     </Provider>
