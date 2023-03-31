@@ -68,39 +68,28 @@ function App({ Component, pageProps }: AppProps) {
 
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+          <AssetsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+            <NativeApiProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+              <OrderBookProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+                <OverlayProvider>
+                  <ThemeProvider
+                    theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                    {defaultConfig.maintenanceMode ? (
+                      <Maintenance />
+                    ) : (
+                      <QueryClientProvider client={queryClient}>
+                        <ThemeWrapper>
+                          <Component {...pageProps} />
+                        </ThemeWrapper>
+                      </QueryClientProvider>
+                    )}
 
-          <AssetsProvider  onError={(v) => toast.error(v)}
-            onNotification={(v) => toast.info(v)}>
-
-          <NativeApiProvider
-
-            onError={(v) => toast.error(v)}
-            onNotification={(v) => toast.info(v)}>
-            <OrderBookProvider
-              onError={(v) => toast.error(v)}
-              onNotification={(v) => toast.info(v)}>
-              <OverlayProvider>
-                <ThemeProvider
-                  theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-                  {defaultConfig.maintenanceMode ? (
-                    <Maintenance />
-                  ) : (
-                    <QueryClientProvider client={queryClient}>
-                      <ThemeWrapper>
-                        <Component {...pageProps} />
-                      </ThemeWrapper>
-                    </QueryClientProvider>
-                  )}
-
-                  <GlobalStyles />
-                </ThemeProvider>
-              </OverlayProvider>
-            </OrderBookProvider>
-
-         
-
-          </NativeApiProvider>
- </AssetsProvider>
+                    <GlobalStyles />
+                  </ThemeProvider>
+                </OverlayProvider>
+              </OrderBookProvider>
+            </NativeApiProvider>
+          </AssetsProvider>
         </ProfileProvider>
       </AuthProvider>
     </>
