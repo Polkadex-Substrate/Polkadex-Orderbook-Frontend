@@ -27,23 +27,20 @@ import {
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  isAssetPDEX,
-  selectAllAssets,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
+import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
-  const assets = useReduxSelector(selectAllAssets);
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { selectAllAssets, selectGetAsset } = useAssetsProvider();
+  const assets = selectAllAssets();
   const loading = useReduxSelector(selectDepositsLoading);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -184,7 +181,7 @@ export const DepositTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.asset_id}
+                                key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -252,7 +249,7 @@ export const DepositTemplate = () => {
                           <Table.Row key={i}>
                             <Table.Cell>
                               <S.CellName>
-                                <span>{getAsset(item.asset)?.symbol}</span>
+                                <span>{selectGetAsset(item.asset)?.symbol}</span>
                               </S.CellName>
                             </Table.Cell>
                             <Table.Cell>

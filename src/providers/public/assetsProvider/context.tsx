@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import { boolean } from "yup";
 
 import { initialState } from "./reducer";
 import { AssetsContextProps, AssetsProviderProps, IPublicAsset } from "./types";
