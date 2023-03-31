@@ -1,4 +1,5 @@
 import { CommonError, ExtensionAccount } from "@polkadex/orderbook/modules/types";
+// todo: replace when providers are ready
 import { FC, PropsWithChildren } from "react";
 
 export interface DepositsState {
@@ -15,7 +16,6 @@ export interface onFetchDeposit {
 
 export type DepositContextProps = DepositsState & {
   onFetchDeposit: (value: onFetchDeposit) => void;
-  depositsLoading: () => boolean;
 };
 
 export type DepositProviderProps = PropsWithChildren<{

@@ -6,7 +6,6 @@ import { DepositContextProps, DepositProviderProps } from "./types";
 export const Context = createContext<DepositContextProps>({
   ...initialState,
   onFetchDeposit: () => {},
-  depositsLoading: () => false,
 });
 
 export const Provider = ({ value, children }: DepositProviderProps) => {

@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "../../../graphql/queries";
+import { useReducer } from "react";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
 import * as A from "./actions";
@@ -12,8 +10,6 @@ import {
   selectRangerApi,
   selectRangerIsReady,
 } from "@polkadex/orderbook/modules/public/ranger/selectors";
-import { notificationPush, sendError } from "@polkadex/orderbook-modules";
-import { useDispatch } from "react-redux";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
@@ -24,6 +20,8 @@ export const DepositProvider: T.DepositsComponent = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
+
+  //TODO: Replace Redux selectors when providers have been created
   const api = useReduxSelector(selectRangerApi);
   const isApiReady = useReduxSelector(selectRangerIsReady);
 
@@ -72,16 +70,11 @@ export const DepositProvider: T.DepositsComponent = ({
     return res;
   }
 
-  const depositsLoading = () => {
-    return state.loading;
-  };
-
   return (
     <Provider
       value={{
         ...state,
         onFetchDeposit,
-        depositsLoading,
       }}>
       {children}
     </Provider>

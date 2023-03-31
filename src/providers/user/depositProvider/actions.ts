@@ -1,4 +1,4 @@
-import { CommonError, ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { CommonError } from "@polkadex/orderbook/modules/types";
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_RESET } from "./constants";
 
 export interface DepositsData {
