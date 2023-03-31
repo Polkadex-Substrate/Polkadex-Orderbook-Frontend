@@ -8,6 +8,7 @@ export const Context = createContext<ExtensionWalletContextProps>({
   onLinkEmail: () => {},
   onRegisterMainAccountReset: () => {},
   onRegisterMainAccountUpdate: () => {},
+  onRegisterMainAccount: () => {},
 });
 
 export const Provider = ({ value, children }: ExtensionWalletProviderProps) => {

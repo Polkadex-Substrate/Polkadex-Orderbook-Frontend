@@ -5,6 +5,9 @@ import { ExtensionAccount } from "../../types";
 import { stringToHex } from "@polkadot/util";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as mutations from "@polkadex/orderbook/graphql/mutations";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { Signer } from "@polkadot/types/types";
+import { ErrorMessages } from "@polkadex/web-constants";
 
 import { Provider } from "./context";
 import * as T from "./types";
@@ -83,6 +86,100 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     }
   };
 
+  const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
+    let data: T.RegisterEmailData, signature: string;
+    const { mainAccount, tradeAddress, mnemonic } = payload;
+    try {
+      const selectedControllerAccount = state.allAccounts?.find(
+        ({ account }) => account?.address?.toLowerCase() === mainAccount?.toLowerCase()
+      );
+      const email = authState.email;
+      const api: ApiPromise = nativeApiState.api;
+
+      // listen for events in this new registered main address
+
+      // TODO : When userEventsChanelHandler provider will be created
+      // yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+
+      const hasAddressAndEmail =
+        !!selectedControllerAccount.account?.address?.length && !!email?.length;
+
+      if (hasAddressAndEmail) {
+        const res = await registerMainAccount(
+          api,
+          tradeAddress,
+          selectedControllerAccount.signer,
+          selectedControllerAccount.account?.address
+        );
+
+        if (res.isSuccess) {
+          // TODO - When TradeWallet would be created
+          // dispatch(
+          //   A.registerTradeAccountData({
+          //     mnemonic,
+          //     account: {
+          //       name: selectedControllerAccount.account.meta.name,
+          //       address: selectedControllerAccount.account.address,
+          //     },
+          //   })
+          // );
+          dispatch(A.registerMainAccountData());
+        } else {
+          throw new Error("Extrinsic failed");
+        }
+      } else {
+        throw new Error("Email or address is not valid");
+      }
+    } catch (error) {
+      console.log("error in registration:", error.message);
+
+      // if account is already registered , it means that that sending data to aws failed on a previous attempt
+      // but it was successfully on the blockchain, since the transaction was submitted and signed by the wallet
+      // it is assumed that the wallet belongs to the user, so we do a retry of sending to aws.
+
+      if (error.message === ErrorMessages.OCEX_ALREADY_REGISTERED) {
+        await retryRegisterToAppsync(data, signature, tradeAddress, mainAccount);
+        return;
+      }
+      // TODO - When TradeWallet Would be created
+      // yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+      dispatch(A.registerMainAccountError());
+      onError(`Cannot Register Account! ${error.message}`);
+    }
+  };
+
+  const registerMainAccount = async (
+    api: ApiPromise,
+    proxyAddress: string,
+    signer: Signer,
+    mainAddress: string
+  ): Promise<ExtrinsicResult> => {
+    const ext = api.tx.ocex.registerMainAccount(proxyAddress);
+    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
+    return res;
+  };
+
+  const retryRegisterToAppsync = async (
+    data: T.RegisterEmailData,
+    signature: string,
+    tradeAddress,
+    mainAddress
+  ) => {
+    try {
+      await executeRegisterEmail(data, signature);
+      profileState.onUserProfileAccountPush({
+        tradeAddress,
+        mainAddress,
+      });
+      profileState.onUserProfileMainAccountPush(mainAddress);
+      dispatch(A.registerMainAccountData());
+    } catch (error) {
+      console.log("error", error);
+      dispatch(A.registerMainAccountError());
+      onError(`Cannot Register Account to Server! ${error.message}`);
+    }
+  };
+
   const createSignedData = async (
     mainAccount: ExtensionAccount,
     email: string
@@ -121,6 +218,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         onLinkEmail,
         onRegisterMainAccountReset,
         onRegisterMainAccountUpdate,
+        onRegisterMainAccount,
       }}>
       {children}
     </Provider>
