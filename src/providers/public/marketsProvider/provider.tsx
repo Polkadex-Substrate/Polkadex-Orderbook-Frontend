@@ -27,7 +27,6 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
     try {
       if (allAssets.length > 0) {
         const markets = await fetchMarkets(allAssets);
-        console.log(markets, "markets");
 
         dispatch(A.marketsData(markets));
         dispatch(A.setCurrentMarketIfUnset(markets[0]));
@@ -167,7 +166,6 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
   const allAssets: IPublicAsset[] = selectAllAssets();
 
   useEffect(() => {
-    console.log(state.list, "lenght");
     if (allAssets.length > 0 && state.list.length === 0) {
       marketsFetch(allAssets);
       marketTickersFetch();

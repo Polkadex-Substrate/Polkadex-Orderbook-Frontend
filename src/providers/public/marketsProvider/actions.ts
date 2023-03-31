@@ -89,6 +89,7 @@ export const marketsError = (error: CommonError): MarketsError => ({
   type: MARKETS_ERROR,
   error,
 });
+
 export const setCurrentMarket = (payload: SetCurrentMarket["payload"]): SetCurrentMarket => ({
   type: MARKETS_SET_CURRENT_MARKET,
   payload,
@@ -100,6 +101,7 @@ export const setCurrentMarketIfUnset = (
   type: MARKETS_SET_CURRENT_MARKET_IFUNSET,
   payload,
 });
+
 export const marketsTickersFetch = (): MarketsTickersFetch => ({
   type: MARKETS_TICKERS_FETCH,
 });

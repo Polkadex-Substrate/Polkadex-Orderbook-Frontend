@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 
 import {
   Market,
-  selectCurrentMarket,
-  selectMarkets,
-  setCurrentMarket,
   defaultTickers,
   selectMarketTickers,
   userFavoriteMarketPush,
@@ -34,12 +31,9 @@ export function useMarkets(onClose: () => void) {
   const router = useRouter();
   const allMarketTickers = useReduxSelector(selectMarketTickers);
   const { getMarkets, getCurrentMarket, setCurrentMarket } = useMarketsProvider();
-  // const markets = useReduxSelector(selectMarkets);
   const markets = getMarkets();
-  // const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentMarket = getCurrentMarket();
   const favorites = profileState.userMarket.favoriteMarkets;
-  console.log("use markets");
 
   /**
    * @description Get the single market information for the current market

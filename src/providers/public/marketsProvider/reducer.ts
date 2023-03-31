@@ -13,6 +13,7 @@ import { Market, MarketsState, Ticker } from "./types";
 
 import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import { setToStorage } from "@polkadex/orderbook/helpers/storage";
 export const defaultTickers: Ticker = {
   m: "0-0",
   priceChange24Hr: 0,
@@ -51,12 +52,9 @@ export const marketsReducer = (
       };
     case MARKETS_DATA: {
       let filters = {};
-      console.log(action.payload, "action payload");
 
       if (action.payload) {
         filters = action.payload.reduce((result, market: Market) => {
-          console.log(result, "result", market, "market");
-
           result[market.id] = result[market.id] || [];
 
           if (market.filters) {
@@ -89,7 +87,7 @@ export const marketsReducer = (
           currentMarket: action.payload,
         };
       }
-      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
+      setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {
         ...state,
         currentMarket: action.payload,

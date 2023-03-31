@@ -14,11 +14,8 @@ import {
 export const useMarketsFetch = (id: string) => {
   const dispatch = useDispatch();
   const shouldDispatch = useReduxSelector(selectShouldFetchMarkets);
-  console.log(shouldDispatch, "should dispatch");
 
   const markets = useReduxSelector(selectMarkets);
-  console.log(markets, " markets");
-
   const selectMarket = markets.find((item) => item.id === id);
 
   useEffect(() => {

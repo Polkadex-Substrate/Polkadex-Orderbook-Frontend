@@ -39,7 +39,6 @@ const cases: testCases[] = [
       marketPrice: "0",
     },
   },
-
   {
     state: {
       list: [],
@@ -93,12 +92,10 @@ const cases: testCases[] = [
           max_price: 10000,
           min_amount: 0.001,
           min_price: 0.0001,
-
           name: "PDEX/TDOT",
           price_tick_size: 0.000001,
           qty_step_size: 0.001,
           quote_precision: 8,
-
           quote_ticker: "TDOT",
           quote_unit: "1",
           tokenTickerName: "PDEX",
@@ -107,10 +104,8 @@ const cases: testCases[] = [
       loading: false,
       marketPrice: "0",
       tickers: [],
-
       tickersTimestamp: 0,
       timestamp: 0,
-
       tickerLoading: false,
     },
   },
