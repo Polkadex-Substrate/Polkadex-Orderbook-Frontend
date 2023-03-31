@@ -5,6 +5,7 @@ import { ExtensionWalletContextProps, ExtensionWalletProviderProps } from "./typ
 
 export const Context = createContext<ExtensionWalletContextProps>({
   ...initialState,
+  onLinkEmail: () => {},
 });
 
 export const Provider = ({ value, children }: ExtensionWalletProviderProps) => {

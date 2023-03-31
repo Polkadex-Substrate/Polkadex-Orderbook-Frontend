@@ -1,5 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
+import * as A from "./actions";
+
+export type LinkEmailData = { email: string; main_address: string };
 
 export interface ExtensionWalletState {
   success?: boolean;
@@ -13,7 +16,9 @@ export type ExtensionWalletProviderProps = PropsWithChildren<{
   value: ExtensionWalletContextProps;
 }>;
 
-export type ExtensionWalletContextProps = ExtensionWalletState & {};
+export type ExtensionWalletContextProps = ExtensionWalletState & {
+  onLinkEmail: (value: A.RegisterMainAccountLinkEmailFetch["payload"]) => void;
+};
 
 export interface ExtensionWalletProps {
   onError?: (value: string) => void;
