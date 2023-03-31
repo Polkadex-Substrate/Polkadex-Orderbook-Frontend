@@ -19,6 +19,7 @@ export type ExtensionWalletProviderProps = PropsWithChildren<{
 export type ExtensionWalletContextProps = ExtensionWalletState & {
   onLinkEmail: (value: A.RegisterMainAccountLinkEmailFetch["payload"]) => void;
   onRegisterMainAccountReset: () => void;
+  onRegisterMainAccountUpdate: (value: A.RegisterMainAccountUpdateEvent["payload"]) => void;
 };
 
 export interface ExtensionWalletProps {

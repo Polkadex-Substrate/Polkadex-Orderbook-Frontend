@@ -168,7 +168,9 @@ export const userAccountSelectData = (
 });
 
 // adds a new UserAccount to users profile state
-export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"]) => ({
+export const userProfileAccountPush = (
+  payload: UserProfileAccountPush["payload"]
+): UserProfileAccountPush => ({
   type: PROFILE_USER_ACCOUNT_PUSH,
   payload,
 });

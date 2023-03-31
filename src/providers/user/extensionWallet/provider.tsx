@@ -60,6 +60,29 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     // dispatch(A.registerTradeAccountReset());
   };
 
+  const onRegisterMainAccountUpdate = (
+    payload: A.RegisterMainAccountUpdateEvent["payload"]
+  ) => {
+    try {
+      const { proxy, main } = payload;
+      profileState.onUserProfileMainAccountPush(main);
+      profileState.onUserProfileAccountPush({
+        tradeAddress: proxy,
+        mainAddress: main,
+      });
+
+      profileState.onUserAccountSelectFetch({
+        tradeAddress: proxy,
+      });
+      onNotification("You have successfully registered a new controller account");
+    } catch (error) {
+      console.log("error:", error);
+      const errorMessage = error instanceof Error ? error.message : (error as string);
+      if (typeof onError === "function") onError(errorMessage);
+      dispatch(A.registerMainAccountError());
+    }
+  };
+
   const createSignedData = async (
     mainAccount: ExtensionAccount,
     email: string
@@ -97,6 +120,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         ...state,
         onLinkEmail,
         onRegisterMainAccountReset,
+        onRegisterMainAccountUpdate,
       }}>
       {children}
     </Provider>
