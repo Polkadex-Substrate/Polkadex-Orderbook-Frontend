@@ -29,7 +29,6 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
 import {
-  registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
   selectMainAccount,
@@ -40,6 +39,7 @@ import {
 } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const SettingsTemplate = () => {
@@ -426,14 +426,13 @@ const ControllerWallets = ({
   const extensionAccount = useReduxSelector(selectMainAccount(address));
 
   const dispatch = useDispatch();
+  const { onLinkEmail } = useExtensionWallet();
 
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
     const accountAddress = extensionAccount.account.address;
-    dispatch(
-      registerMainAccountLinkEmail({
-        mainAccount: accountAddress,
-      })
-    );
+    onLinkEmail({
+      mainAccount: accountAddress,
+    });
   };
 
   return (

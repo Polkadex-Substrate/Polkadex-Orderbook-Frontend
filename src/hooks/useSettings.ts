@@ -6,7 +6,6 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   previewAccountModalCancel,
   registerAccountModalCancel,
-  registerMainAccountReset,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
   selectExtensionWalletAccounts,
@@ -22,6 +21,7 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAuth } from "../providers/user/auth";
+import { useExtensionWallet } from "../providers/user/extensionWallet";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -151,6 +151,8 @@ export const useSettings = () => {
     [linkedMainAddress]
   );
 
+  const { onRegisterMainAccountReset } = useExtensionWallet();
+
   const handleCloseNewAccount = () => {
     const hasAction =
       isTradeAccountSuccess ||
@@ -160,7 +162,7 @@ export const useSettings = () => {
 
     if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
-        dispatch(registerMainAccountReset());
+        onRegisterMainAccountReset();
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
         dispatch(registerTradeAccountReset());
       else dispatch(registerAccountModalCancel());
