@@ -12,7 +12,6 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 import {
   registerTradeAccountFetch,
-  selectExtensionWalletAccounts,
   tradeAccountPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -28,7 +27,8 @@ export const CreateAccountForm = ({
 }) => {
   const dispatch = useDispatch();
   const profileState = useProfile();
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const extensionWalletState = useExtensionWallet();
+  const controllerWallets = extensionWalletState.allAccounts;
   const linkedMainAddresses = profileState.userData.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(({ account }) =>
     linkedMainAddresses?.includes(account.address)

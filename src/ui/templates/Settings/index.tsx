@@ -27,11 +27,10 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
+import { useSettings } from "@polkadex/orderbook-hooks";
 import {
   previewAccountModalActive,
   registerAccountModalActive,
-  selectMainAccount,
 } from "@polkadex/orderbook-modules";
 import {
   getMainAddresssLinkedToTradingAccount,
@@ -417,15 +416,20 @@ const ControllerWallets = ({
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
   const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
+
   const isRegistered = address && profileState.userData.mainAccounts.includes(address);
 
   const userAccounts = profileState.userData.userAccounts;
   const accounts = userAccounts.filter((account) => account.mainAddress === address);
   const linkedTradeAccounts = accounts.map((account) => account.tradeAddress);
 
-  const extensionAccount = useReduxSelector(selectMainAccount(address));
+  const extensionAccount =
+    address &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
+    );
 
-  const dispatch = useDispatch();
   const { onLinkEmail } = useExtensionWallet();
 
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {

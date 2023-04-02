@@ -23,7 +23,6 @@ import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import {
   depositsFetch,
   selectDepositsLoading,
-  selectMainAccount,
   Transaction,
 } from "@polkadex/orderbook-modules";
 import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
@@ -36,12 +35,21 @@ import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
+  const extensionWalletState = useExtensionWallet();
+
+  const currMainAcc =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
+    );
+
   const assets = useReduxSelector(selectAllAssets);
   const getAsset = useReduxSelector(selectGetAsset);
   const loading = useReduxSelector(selectDepositsLoading);

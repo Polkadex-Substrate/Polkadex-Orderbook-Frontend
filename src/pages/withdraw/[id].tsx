@@ -2,11 +2,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
-import {
-  selectIsAddressInExtension,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -22,8 +19,13 @@ const Withdraw = () => {
     selectedAccount: { mainAddress },
   } = useProfile();
   const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
+
   const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
-  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+
+  const hasSelectedAccount =
+    mainAddress &&
+    extensionWalletState.allAccounts?.some(({ account }) => account?.address === mainAddress);
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,

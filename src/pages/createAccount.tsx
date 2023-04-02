@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
 import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsAddressInExtension } from "../modules/user/extensionWallet";
 import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeWallet";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 const CreateAccountTemplate = dynamic(
   () =>
@@ -23,9 +23,14 @@ const CreateAccount = () => {
     selectedAccount: currentAccount,
   } = useProfile();
   const profileState = useProfile();
-  const hasSelectedAccount = useReduxSelector(
-    selectIsAddressInExtension(currentAccount.mainAddress)
-  );
+  const extensionWalletState = useExtensionWallet();
+
+  const hasSelectedAccount =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.some(
+      ({ account }) => account?.address === currentAccount.mainAddress
+    );
+
   const isRegistered =
     currentAccount.mainAddress &&
     profileState.userData.mainAccounts.includes(currentAccount.mainAddress);

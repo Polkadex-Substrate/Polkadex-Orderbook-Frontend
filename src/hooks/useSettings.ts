@@ -8,10 +8,8 @@ import {
   registerAccountModalCancel,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
-  selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
-  selectIsRegisterMainAccountLoading,
   selectPreviewTradeAccountSelect,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
@@ -41,11 +39,12 @@ export const useSettings = () => {
 
   const profileState = useProfile();
   const authState = useAuth();
+  const extensionWalletState = useExtensionWallet();
 
   const currentTradeAccount = profileState.selectedAccount;
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
-  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const isControllerAccountLoading = extensionWalletState.registerMainAccountLoading;
+  const controllerWallets = extensionWalletState.allAccounts;
   const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const {
     userData: { userAccounts: allAccounts },

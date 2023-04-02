@@ -19,7 +19,6 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   selectBrowserTradeAccounts,
-  selectExtensionWalletAccounts,
 } from "@polkadex/orderbook-modules";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { getTradeAccount } from "@polkadex/orderbook/modules/user/tradeWallet/helper";
@@ -27,12 +26,14 @@ import { userMainAccountDetails } from "@polkadex/orderbook/modules/user/extensi
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const router = useRouter();
+  const extensionWalletState = useExtensionWallet();
   const dispatch = useDispatch();
   const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts);
-  const mainAccounts = useReduxSelector(selectExtensionWalletAccounts);
+  const mainAccounts = extensionWalletState.allAccounts;
   const {
     selectedAccount: currentUsingAccount,
     userData: { userAccounts: allUserAccounts },
