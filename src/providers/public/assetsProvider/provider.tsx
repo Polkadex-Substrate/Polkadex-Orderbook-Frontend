@@ -40,14 +40,6 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
     return newAssets;
   }
 
-  const selectAssetsFetchSuccess = () => {
-    return state.success;
-  };
-
-  const selectAllAssets = () => {
-    return state.list;
-  };
-
   const selectGetAsset = (
     assetId: string | number | Record<string, string>
   ): T.IPublicAsset | null => {
@@ -73,8 +65,6 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
       value={{
         ...state,
         fetchAssets,
-        selectAssetsFetchSuccess,
-        selectAllAssets,
         selectGetAsset,
       }}>
       {children}

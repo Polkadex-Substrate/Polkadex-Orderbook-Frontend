@@ -36,8 +36,8 @@ export const DepositTemplate = () => {
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
-  const { selectAllAssets, selectGetAsset } = useAssetsProvider();
-  const assets = selectAllAssets();
+  const { list, selectGetAsset } = useAssetsProvider();
+  // const assets = selectAllAssets();
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
@@ -51,13 +51,13 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
-    const initialAsset = assets.find(
+    const initialAsset = list.find(
       (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
     );
     if (initialAsset) {
       setSelectedAsset(initialAsset);
     }
-  }, [assets, routedAsset]);
+  }, [list, routedAsset]);
 
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
@@ -175,7 +175,7 @@ export const DepositTemplate = () => {
                             </S.DropdownHeader>
                           </Dropdown.Trigger>
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {assets.map((asset) => (
+                            {list.map((asset) => (
                               <Dropdown.Item
                                 key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>

@@ -16,8 +16,6 @@ export interface AssetsState {
 
 export type AssetsContextProps = AssetsState & {
   fetchAssets: () => void;
-  selectAssetsFetchSuccess: () => boolean;
-  selectAllAssets: () => IPublicAsset[];
   selectGetAsset: (assetId: string | number | Record<string, string>) => IPublicAsset;
 };
 
