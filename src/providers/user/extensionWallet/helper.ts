@@ -3,6 +3,9 @@ import * as T from "./types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as mutations from "@polkadex/orderbook/graphql/mutations";
 import { stringToHex } from "@polkadot/util";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
+import { Signer } from "@polkadot/types/types";
+import { ApiPromise } from "@polkadot/api";
 
 export const userMainAccountDetails = (
   userMainAccount: string,
@@ -48,4 +51,15 @@ export const createSignedData = async (
     });
     return { data, signature };
   } else throw new Error("Cannot get Signer");
+};
+
+export const registerMainAccount = async (
+  api: ApiPromise,
+  proxyAddress: string,
+  signer: Signer,
+  mainAddress: string
+): Promise<ExtrinsicResult> => {
+  const ext = api.tx.ocex.registerMainAccount(proxyAddress);
+  const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
+  return res;
 };

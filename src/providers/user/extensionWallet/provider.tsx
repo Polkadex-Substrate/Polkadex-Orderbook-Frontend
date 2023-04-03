@@ -2,15 +2,13 @@ import { useCallback, useReducer } from "react";
 import { extensionWalletReducer, initialState } from "./reducer";
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "../../types";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { Signer } from "@polkadot/types/types";
 import { ErrorMessages } from "@polkadex/web-constants";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
-import { executeRegisterEmail, createSignedData } from "./helper";
+import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
 
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -200,17 +198,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       console.log(error.message);
     }
   }
-
-  const registerMainAccount = async (
-    api: ApiPromise,
-    proxyAddress: string,
-    signer: Signer,
-    mainAddress: string
-  ): Promise<ExtrinsicResult> => {
-    const ext = api.tx.ocex.registerMainAccount(proxyAddress);
-    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
-    return res;
-  };
 
   const retryRegisterToAppsync = async (
     data: T.RegisterEmailData,
