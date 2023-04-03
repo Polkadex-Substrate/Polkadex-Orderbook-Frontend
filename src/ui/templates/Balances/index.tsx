@@ -21,8 +21,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 
 export const BalancesTemplate = () => {
   const [state, setState] = useState(false);
-  const { selectAllAssets } = useAssetsProvider();
-  const assets = selectAllAssets();
+  const { list } = useAssetsProvider();
   const userBalances = useReduxSelector(selectUserBalance);
   const profileState = useProfile();
   const userHasSelectedAccount = !!Object?.keys(profileState.selectedAccount?.mainAddress)
@@ -71,7 +70,7 @@ export const BalancesTemplate = () => {
                         </Table.Column>
                       </Table.Header>
                       <Table.Body striped>
-                        {assets.map((item) => {
+                        {list.map((item) => {
                           const balance = userBalances?.find(
                             (value) => value.asset_id === item.assetId
                           );
