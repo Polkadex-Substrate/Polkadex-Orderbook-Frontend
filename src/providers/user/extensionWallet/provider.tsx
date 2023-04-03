@@ -2,9 +2,6 @@ import { useCallback, useReducer } from "react";
 import { extensionWalletReducer, initialState } from "./reducer";
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "../../types";
-import { stringToHex } from "@polkadot/util";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as mutations from "@polkadex/orderbook/graphql/mutations";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { Signer } from "@polkadot/types/types";
 import { ErrorMessages } from "@polkadex/web-constants";
@@ -13,6 +10,7 @@ import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
+import { executeRegisterEmail, createSignedData } from "./helper";
 
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -30,7 +28,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
-    let data: T.LinkEmailData, signature: string;
     const { mainAccount } = payload;
     try {
       const email = authState.email;
@@ -38,15 +35,14 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) => account?.address?.toLowerCase() === mainAccount?.toLowerCase()
       );
-      const api: ApiPromise = nativeApiState.api;
 
       const hasAddressAndEmail =
         !!selectedControllerAccount.account?.address?.length && !!email?.length;
 
       if (hasAddressAndEmail) {
         const signedData = await createSignedData(selectedControllerAccount, email);
-        data = signedData.data;
-        signature = signedData.signature;
+        const data: T.LinkEmailData = signedData.data;
+        const signature: string = signedData.signature;
         await executeRegisterEmail(data, signature);
 
         profileState.onUserProfileMainAccountPush(mainAccount);
@@ -177,7 +173,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     } catch (error) {
       onError(error.message);
     }
-  }, []);
+  }, [onError]);
 
   async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
     try {
@@ -219,8 +215,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   const retryRegisterToAppsync = async (
     data: T.RegisterEmailData,
     signature: string,
-    tradeAddress,
-    mainAddress
+    tradeAddress: string,
+    mainAddress: string
   ) => {
     try {
       await executeRegisterEmail(data, signature);
@@ -235,37 +231,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       dispatch(A.registerMainAccountError());
       onError(`Cannot Register Account to Server! ${error.message}`);
     }
-  };
-
-  const createSignedData = async (
-    mainAccount: ExtensionAccount,
-    email: string
-  ): Promise<{ data: T.LinkEmailData; signature: string }> => {
-    const { signer, account } = mainAccount;
-    const signRaw = signer?.signRaw;
-    const main_address = account.address;
-    if (signRaw) {
-      const data: T.LinkEmailData = { email, main_address };
-      const { signature } = await signRaw({
-        address: account.address,
-        data: stringToHex(JSON.stringify(data)),
-        type: "bytes",
-      });
-      return { data, signature };
-    } else throw new Error("Cannot get Signer");
-  };
-
-  const executeRegisterEmail = async (data: T.LinkEmailData, signature: string) => {
-    const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
-    const res = await sendQueryToAppSync({
-      query: mutations.register_user,
-      variables: {
-        input: { payload: payloadStr },
-      },
-      token: null,
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    });
-    return res;
   };
 
   return (
