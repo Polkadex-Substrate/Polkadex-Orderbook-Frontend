@@ -44,7 +44,9 @@ export interface BalancesState {
   timestamp?: number;
 }
 
-export type BalancesContextProps = BalancesState & {};
+export type BalancesContextProps = BalancesState & {
+  dispatchBalancesFetch: () => void;
+};
 
 export type BalancesProviderProps = PropsWithChildren<{
   value: BalancesContextProps;

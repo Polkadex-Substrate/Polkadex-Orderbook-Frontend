@@ -25,6 +25,7 @@ import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeAp
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
+import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -76,22 +77,26 @@ function App({ Component, pageProps }: AppProps) {
               <OrderBookProvider
                 onError={(v) => toast.error(v)}
                 onNotification={(v) => toast.info(v)}>
-                <OverlayProvider>
-                  <ThemeProvider
-                    theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-                    {defaultConfig.maintenanceMode ? (
-                      <Maintenance />
-                    ) : (
-                      <QueryClientProvider client={queryClient}>
-                        <ThemeWrapper>
-                          <Component {...pageProps} />
-                        </ThemeWrapper>
-                      </QueryClientProvider>
-                    )}
+                <BalancesProvider
+                  onError={(v) => toast.error(v)}
+                  onNotification={(v) => toast.info(v)}>
+                  <OverlayProvider>
+                    <ThemeProvider
+                      theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                      {defaultConfig.maintenanceMode ? (
+                        <Maintenance />
+                      ) : (
+                        <QueryClientProvider client={queryClient}>
+                          <ThemeWrapper>
+                            <Component {...pageProps} />
+                          </ThemeWrapper>
+                        </QueryClientProvider>
+                      )}
 
-                    <GlobalStyles />
-                  </ThemeProvider>
-                </OverlayProvider>
+                      <GlobalStyles />
+                    </ThemeProvider>
+                  </OverlayProvider>
+                </BalancesProvider>
               </OrderBookProvider>
             </NativeApiProvider>
           </AssetsProvider>

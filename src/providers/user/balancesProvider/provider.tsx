@@ -68,6 +68,10 @@ export const BalancesProvider: T.BalancesComponent = ({
     return balances;
   }
 
+  const dispatchBalancesFetch = () => {
+    dispatch(A.balancesFetch());
+  };
+
   useEffect(() => {
     onBalancesFetch();
   }, []);
@@ -76,6 +80,7 @@ export const BalancesProvider: T.BalancesComponent = ({
     <Provider
       value={{
         ...state,
+        dispatchBalancesFetch,
       }}>
       {children}
     </Provider>
