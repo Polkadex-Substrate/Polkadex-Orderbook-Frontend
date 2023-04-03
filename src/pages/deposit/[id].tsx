@@ -2,6 +2,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
+import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
+import { toast } from "react-toastify";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
@@ -39,7 +42,11 @@ const Deposit = () => {
   }, [hasUser, router]);
   if (shouldRedirect) return <div />;
 
-  return <DepositTemplate />;
+  return (
+    <DepositProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+      <DepositTemplate />
+    </DepositProvider>
+  );
 };
 
 export default Deposit;
