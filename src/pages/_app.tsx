@@ -64,6 +64,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
+
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
           <AssetsProvider
