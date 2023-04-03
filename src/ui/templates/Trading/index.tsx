@@ -42,6 +42,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -78,9 +79,10 @@ export function Trading() {
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount =
-    mainAddress &&
-    extensionWalletState.allAccounts?.some(({ account }) => account?.address === mainAddress);
+  const hasMainAccount = selectIsAddressInExtension(
+    mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const userAccounts = profileState.userData.userAccounts;
   const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);

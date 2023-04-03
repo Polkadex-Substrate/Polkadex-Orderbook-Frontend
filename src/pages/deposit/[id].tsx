@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -23,9 +24,10 @@ const Deposit = () => {
 
   const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
 
-  const hasSelectedAccount =
-    mainAddress &&
-    extensionWalletState.allAccounts?.some(({ account }) => account?.address === mainAddress);
+  const hasSelectedAccount = selectIsAddressInExtension(
+    mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,

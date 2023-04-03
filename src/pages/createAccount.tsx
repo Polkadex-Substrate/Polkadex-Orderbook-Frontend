@@ -6,6 +6,7 @@ import { useReduxSelector } from "../hooks/useReduxSelector";
 import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeWallet";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 const CreateAccountTemplate = dynamic(
   () =>
@@ -25,11 +26,10 @@ const CreateAccount = () => {
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  const hasSelectedAccount =
-    currentAccount.mainAddress &&
-    extensionWalletState.allAccounts?.some(
-      ({ account }) => account?.address === currentAccount.mainAddress
-    );
+  const hasSelectedAccount = selectIsAddressInExtension(
+    currentAccount.mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const isRegistered =
     currentAccount.mainAddress &&

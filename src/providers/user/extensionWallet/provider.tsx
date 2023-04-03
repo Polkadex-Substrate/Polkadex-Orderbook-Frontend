@@ -154,14 +154,12 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       const allAccounts: ExtensionAccount[] = await getAllExtensionWalletAccounts();
       dispatch(A.extensionWalletData({ allAccounts }));
 
-      console.log("extension subscription run");
       const { web3AccountsSubscribe, web3FromAddress } = await import(
         "@polkadot/extension-dapp"
       );
 
       const unsubscribe = web3AccountsSubscribe(
         async (injectedAccounts: InjectedAccountWithMeta[]) => {
-          console.log("wallet subscription data len", injectedAccounts.length);
           const extensionAccountPromises: Promise<ExtensionAccount>[] = injectedAccounts.map(
             async (account): Promise<ExtensionAccount> => {
               return {
