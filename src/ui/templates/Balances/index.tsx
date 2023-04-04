@@ -13,16 +13,15 @@ import {
   Search,
   Table,
 } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectUserBalance } from "@polkadex/orderbook-modules";
 import { toCapitalize } from "@polkadex/web-helpers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const BalancesTemplate = () => {
   const [state, setState] = useState(false);
   const { list } = useAssetsProvider();
-  const userBalances = useReduxSelector(selectUserBalance);
+  const { balances: userBalances } = useBalancesProvider();
   const profileState = useProfile();
   const userHasSelectedAccount = !!Object?.keys(profileState.selectedAccount?.mainAddress)
     ?.length;

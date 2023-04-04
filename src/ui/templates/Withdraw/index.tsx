@@ -37,7 +37,6 @@ import {
   selectClaimWithdrawsInLoading,
   selectMainAccount,
   selectTradeAccount,
-  selectUserBalance,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
@@ -45,6 +44,7 @@ import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -56,11 +56,9 @@ export const WithdrawTemplate = () => {
     selectTradeAccount(currentAccount?.tradeAddress)
   );
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  // const assets = useReduxSelector(selectAllAssets);
-  const { selectAllAssets } = useAssetsProvider();
-  const assets = selectAllAssets();
+  const { list: assets } = useAssetsProvider();
   const loading = useReduxSelector(selectWithdrawsLoading);
-  const userBalances = useReduxSelector(selectUserBalance);
+  const { balances: userBalances } = useBalancesProvider();
 
   const dispatch = useDispatch();
   const router = useRouter();
