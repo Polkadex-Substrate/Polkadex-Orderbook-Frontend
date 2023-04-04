@@ -18,7 +18,6 @@ export const BalancesProvider: T.BalancesComponent = ({
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
-  // const isAssetData = yield select(selectAssetsFetchSuccess);
   const { list: assetsList, success: isAssetData } = useAssetsProvider();
   const onBalancesFetch = async () => {
     try {
@@ -27,8 +26,6 @@ export const BalancesProvider: T.BalancesComponent = ({
           acc[asset.assetId] = asset;
           return acc;
         }, {});
-        // const assetMap = yield select(selectAssetIdMap);
-        // const balances =await(() => fetchbalancesAsync(mainAddress))();
         const balances = await fetchbalancesAsync(mainAddress);
         const list = balances.map((balance: T.IBalanceFromDb) => {
           const asset = assetMap[balance.asset_type];
@@ -72,6 +69,14 @@ export const BalancesProvider: T.BalancesComponent = ({
     dispatch(A.balancesFetch());
   };
 
+  const getFreeProxyBalance = (assetId: string) => {
+    const balance = state.balances?.find(
+      (balance) => balance?.asset_id?.toString() === assetId
+    );
+    if (!balance?.asset_id) return "0";
+    return balance.free_balance;
+  };
+
   useEffect(() => {
     onBalancesFetch();
   }, []);
@@ -81,6 +86,7 @@ export const BalancesProvider: T.BalancesComponent = ({
       value={{
         ...state,
         dispatchBalancesFetch,
+        getFreeProxyBalance,
       }}>
       {children}
     </Provider>

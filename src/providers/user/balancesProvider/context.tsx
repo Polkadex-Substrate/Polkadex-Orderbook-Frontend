@@ -6,6 +6,7 @@ import { BalancesContextProps, BalancesProviderProps } from "./types";
 export const Context = createContext<BalancesContextProps>({
   ...initialState,
   dispatchBalancesFetch: () => {},
+  getFreeProxyBalance: () => "",
 });
 
 export const Provider = ({ value, children }: BalancesProviderProps) => (

@@ -19,6 +19,7 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const isSignedIn = profileState.authInfo.isAuthenticated;
-  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
+  const { getFreeProxyBalance } = useBalancesProvider();
   const usingTradeAddress = profileState.selectedAccount.tradeAddress;
   const showProtectedPassword = useReduxSelector(
     selectTradeAccount(usingTradeAddress)
