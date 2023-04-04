@@ -62,9 +62,7 @@ export const useSettings = () => {
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
   const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
-  const {
-    userData: { userAccounts: usingAccount },
-  } = useProfile();
+  const { selectedAccount: usingAccount } = useProfile();
   const isRegisterControllerAccountSuccess = useReduxSelector(
     selectRegisterTradeAccountSuccess
   );
