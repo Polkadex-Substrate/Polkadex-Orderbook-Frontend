@@ -22,12 +22,12 @@ export const BalancesProvider: T.BalancesComponent = ({
   const onBalancesFetch = async () => {
     try {
       if (mainAddress && isAssetData) {
-        const assetMap = assetsList.reduce((acc, asset) => {
+        const assetMap = assetsList?.reduce((acc, asset) => {
           acc[asset.assetId] = asset;
           return acc;
         }, {});
         const balances = await fetchbalancesAsync(mainAddress);
-        const list = balances.map((balance: T.IBalanceFromDb) => {
+        const list = balances?.map((balance: T.IBalanceFromDb) => {
           const asset = assetMap[balance.asset_type];
           return {
             asset_id: asset.asset_id.toString(),
@@ -53,7 +53,7 @@ export const BalancesProvider: T.BalancesComponent = ({
       },
     });
     const balancesRaw: T.BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
-    const balances = balancesRaw.map((val) => {
+    const balances = balancesRaw?.map((val) => {
       return {
         asset_type: val.a,
         reserved_balance: val.r,
@@ -78,7 +78,7 @@ export const BalancesProvider: T.BalancesComponent = ({
 
   useEffect(() => {
     onBalancesFetch();
-  }, []);
+  }, [onBalancesFetch]);
 
   return (
     <Provider

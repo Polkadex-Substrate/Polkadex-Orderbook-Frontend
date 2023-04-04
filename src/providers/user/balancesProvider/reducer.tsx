@@ -42,7 +42,7 @@ export const balancesReducer = (
     case BALANCES_UPDATE_EVENT_DATA: {
       const update = action.payload;
       // filter out old balances from the balance state
-      const balanceFiltered = state.balances.filter(
+      const balanceFiltered = state.balances?.filter(
         (balance) => balance.asset_id.toString() !== update.asset_id.toString()
       );
       // apply updates to the balances in the state
