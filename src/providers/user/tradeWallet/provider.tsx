@@ -5,11 +5,14 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
 import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
-import { isReady } from "@polkadot/wasm-crypto";
 import { ApiPromise } from "@polkadot/api";
-import { Signer } from "@polkadot/types/types";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
+import {
+  loadKeyring,
+  getAllTradeAccountsInBrowser,
+  addProxyToAccount,
+  removeProxyFromAccount,
+} from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
 import { TradeAccount } from "../../types";
@@ -120,17 +123,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     }
   };
 
-  async function loadKeyring() {
-    const { cryptoWaitReady } = await import("@polkadot/util-crypto");
-    if (!isReady()) await cryptoWaitReady();
-  }
-
-  async function getAllTradeAccountsInBrowser(): Promise<TradeAccount[]> {
-    await loadKeyring();
-    const allAccounts = keyring.getPairs();
-    return allAccounts;
-  }
-
   const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
     try {
       const { proxy, main } = payload;
@@ -187,17 +179,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     }
   };
 
-  const addProxyToAccount = async (
-    api: ApiPromise,
-    proxyAddress: string,
-    signer: Signer,
-    mainAddress: string
-  ): Promise<ExtrinsicResult> => {
-    const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
-    return res;
-  };
-
   const onRemoveProxyAccountFromChain = async (
     payload: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => {
@@ -244,17 +225,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       if (typeof onError === "function") onError(errorMessage);
       dispatch(A.registerTradeAccountError(error));
     }
-  };
-
-  const removeProxyFromAccount = async (
-    api: ApiPromise,
-    proxyAddress: string,
-    signer: Signer,
-    mainAddress: string
-  ): Promise<ExtrinsicResult> => {
-    const ext = api.tx.ocex.removeProxyAccount(proxyAddress);
-    const res = await signAndSendExtrinsic(api, ext, { signer }, mainAddress, true);
-    return res;
   };
 
   const onRegisterTradeAccountReset = () => {
