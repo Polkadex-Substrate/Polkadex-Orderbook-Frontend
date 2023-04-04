@@ -12,6 +12,9 @@ export const Context = createContext<TradeWalletContextProps>({
   onTradeAccountUpdate: () => {},
   onRegisterTradeAccount: () => {},
   onRemoveTradeAccountFromChain: () => {},
+  onRegisterTradeAccountReset: () => {},
+  onRegisterTradeAccountData: () => {},
+  onRemoveTradeAccountFromBrowser: () => {},
 });
 
 export const Provider = ({ value, children }: TradeWalletProviderProps) => {

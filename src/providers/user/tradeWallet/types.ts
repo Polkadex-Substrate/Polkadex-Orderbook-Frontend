@@ -29,6 +29,14 @@ export type RegisterTradeAccount = {
   };
 };
 
+export type RegisterTradeAccountData = {
+  mnemonic?: string;
+  account: {
+    name: string;
+    address: string;
+  };
+};
+
 export type PreviewAccountModal = {
   isActive?: boolean;
   selected?: IUserTradeAccount;
@@ -48,6 +56,9 @@ export type TradeWalletContextProps = TradeWalletState & {
   onRemoveTradeAccountFromChain: (
     value: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => void;
+  onRegisterTradeAccountReset: () => void;
+  onRegisterTradeAccountData: (value: RegisterTradeAccountData) => void;
+  onRemoveTradeAccountFromBrowser: (value: string) => void;
 };
 
 export interface TradeWalletProps {

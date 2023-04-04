@@ -15,6 +15,7 @@ import * as A from "./actions";
 import { TradeAccount } from "../../types";
 import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
+import { useExtensionWallet } from "../extensionWallet";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({
@@ -25,6 +26,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
+  const extensionWalletState = useExtensionWallet();
 
   // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
@@ -68,8 +70,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         })
       );
       dispatch(A.importTradeAccountData());
-      // automatically set as in use.
-
       profileState.onUserSelectAccount({ tradeAddress });
     } catch (error) {
       if (tradeAddress?.length)
@@ -149,7 +149,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     let tradeAddress: string;
     try {
       const api = nativeApiState.api;
-      const controllerWallets = yield select(selectExtensionWalletAccounts);
+      const controllerWallets = extensionWalletState.allAccounts;
       const { password, name, address } = payload;
       const mnemonic = mnemonicGenerate();
       const { account, signer } = controllerWallets.find(
@@ -215,7 +215,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       if (!linkedMainAddress) {
         throw new Error("Invalid trade address.");
       }
-      const { account, signer } = yield select(selectMainAccount(linkedMainAddress));
+      const { account, signer } =
+        linkedMainAddress &&
+        extensionWalletState.allAccounts?.find(
+          ({ account }) => account?.address?.toLowerCase() === linkedMainAddress?.toLowerCase()
+        );
+
       if (!account?.address) {
         throw new Error("Please select a funding account!");
       }
@@ -252,6 +257,18 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     return res;
   };
 
+  const onRegisterTradeAccountReset = () => {
+    dispatch(A.registerTradeAccountReset());
+  };
+
+  const onRegisterTradeAccountData = (payload: T.RegisterTradeAccountData) => {
+    dispatch(A.registerTradeAccountData(payload));
+  };
+
+  const onRemoveTradeAccountFromBrowser = (address: string) => {
+    dispatch(A.removeTradeAccountFromBrowser({ address }));
+  };
+
   return (
     <Provider
       value={{
@@ -263,6 +280,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         onTradeAccountUpdate,
         onRegisterTradeAccount,
         onRemoveTradeAccountFromChain,
+        onRegisterTradeAccountReset,
+        onRegisterTradeAccountData,
+        onRemoveTradeAccountFromBrowser,
       }}>
       {children}
     </Provider>
