@@ -19,9 +19,7 @@ export const Tokens = () => {
 
   const profileState = useProfile();
   const { loading: isLoading, balances, dispatchBalancesFetch } = useBalancesProvider();
-  // const balances = useReduxSelector(selectUserBalance);
   const hasUser = profileState.selectedAccount.tradeAddress !== "";
-  // const isLoading = useReduxSelector(selectBalancesLoading);
 
   useEffect(() => {
     if (hasUser) dispatchBalancesFetch();

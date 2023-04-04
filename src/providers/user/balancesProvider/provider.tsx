@@ -61,7 +61,6 @@ export const BalancesProvider: T.BalancesComponent = ({
         pending_withdrawal: val.p,
       };
     });
-    console.log("res from balances query", res);
     return balances;
   }
 

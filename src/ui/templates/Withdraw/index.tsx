@@ -395,7 +395,6 @@ const Copy = ({ copyData }) => {
 };
 
 const HistoryTable = ({ items }) => {
-  // const getAsset = useReduxSelector(selectGetAsset);
   const { selectGetAsset } = useAssetsProvider();
 
   return (

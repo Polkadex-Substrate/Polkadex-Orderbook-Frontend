@@ -8,11 +8,9 @@ import { alertPush } from "../../../public/alertHandler";
 import {
   selectAssetsFetchSuccess,
   selectAssetIdMap,
-  isAssetPDEX,
 } from "@polkadex/orderbook/modules/public/assets";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { log } from "console";
 
 type BalanceQueryResult = {
   a: string;
@@ -29,7 +27,6 @@ export function* balancesSaga(_balancesFetch: BalancesFetch) {
     const isAssetData = yield select(selectAssetsFetchSuccess);
     if (mainAddress && isAssetData) {
       const assetMap = yield select(selectAssetIdMap);
-      console.log(assetMap, "asset map");
 
       const balances = yield call(() => fetchbalancesAsync(mainAddress));
       const list = balances.map((balance: IBalanceFromDb) => {
