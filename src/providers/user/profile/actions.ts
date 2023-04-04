@@ -178,7 +178,7 @@ export const userProfileAccountPush = (
 // adds a new main address to users profile state
 export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
-) => ({
+): UserProfileMainAccountPush => ({
   type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
   payload,
 });

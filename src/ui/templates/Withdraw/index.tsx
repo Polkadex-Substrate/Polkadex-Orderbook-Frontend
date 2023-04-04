@@ -35,7 +35,6 @@ import {
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
-  selectMainAccount,
   selectTradeAccount,
   selectUserBalance,
   selectWithdrawsLoading,
@@ -48,13 +47,22 @@ import {
 } from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
   const { selectedAccount: currentAccount } = useProfile();
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
+  const extensionWalletState = useExtensionWallet();
+
+  const currMainAcc =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
+    );
+
   const tradingAccountInBrowser = useReduxSelector(
     selectTradeAccount(currentAccount?.tradeAddress)
   );

@@ -6,13 +6,10 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   previewAccountModalCancel,
   registerAccountModalCancel,
-  registerMainAccountReset,
   registerTradeAccountReset,
   selectBrowserTradeAccounts,
-  selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
-  selectIsRegisterMainAccountLoading,
   selectPreviewTradeAccountSelect,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountLoading,
@@ -22,6 +19,7 @@ import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAuth } from "../providers/user/auth";
+import { useExtensionWallet } from "../providers/user/extensionWallet";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -41,11 +39,12 @@ export const useSettings = () => {
 
   const profileState = useProfile();
   const authState = useAuth();
+  const extensionWalletState = useExtensionWallet();
 
   const currentTradeAccount = profileState.selectedAccount;
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
-  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const isControllerAccountLoading = extensionWalletState.registerMainAccountLoading;
+  const controllerWallets = extensionWalletState.allAccounts;
   const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
   const {
     userData: { userAccounts: allAccounts },
@@ -151,6 +150,8 @@ export const useSettings = () => {
     [linkedMainAddress]
   );
 
+  const { onRegisterMainAccountReset } = useExtensionWallet();
+
   const handleCloseNewAccount = () => {
     const hasAction =
       isTradeAccountSuccess ||
@@ -160,7 +161,7 @@ export const useSettings = () => {
 
     if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
-        dispatch(registerMainAccountReset());
+        onRegisterMainAccountReset();
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
         dispatch(registerTradeAccountReset());
       else dispatch(registerAccountModalCancel());

@@ -12,6 +12,8 @@ export const Context = createContext<ProfileContextProps>({
   onUserAuthFetch: () => {},
   onUserProfileAccountPush: () => {},
   onUserProfileTradeAccountDelete: () => {},
+  onUserProfileMainAccountPush: () => {},
+  onUserAccountSelectFetch: () => {},
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

@@ -22,7 +22,6 @@ import {
   removeProxyAccountFromChainFetch,
   removeTradeAccountFromBrowser,
   selectIsTradeAccountRemoveLoading,
-  selectMainAccount,
   selectTradeAccount,
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
@@ -33,6 +32,7 @@ import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpe
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 type Props = {
   onClose: () => void;
@@ -56,7 +56,15 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     isRemoveDevice: false,
     status: false,
   });
-  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
+
+  const extensionWalletState = useExtensionWallet();
+
+  const mainAccountDetails =
+    mainAccAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) => account?.address?.toLowerCase() === mainAccAddress?.toLowerCase()
+    );
+
   const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
   useTryUnlockTradeAccount(tradingAccountInBrowser);
   const { selectedAccount: usingAccount } = useProfile();

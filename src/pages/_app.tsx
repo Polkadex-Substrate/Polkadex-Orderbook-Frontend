@@ -23,8 +23,11 @@ import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
+import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -64,36 +67,41 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
+
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <NativeApiProvider
+          <AssetsProvider
             onError={(v) => toast.error(v)}
             onNotification={(v) => toast.info(v)}>
-            <OrderBookProvider
+            <NativeApiProvider
               onError={(v) => toast.error(v)}
               onNotification={(v) => toast.info(v)}>
-              <TradeWalletProvider
+              <OrderBookProvider
                 onError={(v) => toast.error(v)}
                 onNotification={(v) => toast.info(v)}>
-                <OverlayProvider>
-                  <ThemeProvider
-                    theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-                    {defaultConfig.maintenanceMode ? (
-                      <Maintenance />
-                    ) : (
-                      <QueryClientProvider client={queryClient}>
-                        <ThemeWrapper>
-                          <Component {...pageProps} />
-                        </ThemeWrapper>
-                      </QueryClientProvider>
-                    )}
+                <ExtensionWalletProvider
+                  onError={(v) => toast.error(v)}
+                  onNotification={(v) => toast.info(v)}>
+                  <OverlayProvider>
+                    <ThemeProvider
+                      theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                      {defaultConfig.maintenanceMode ? (
+                        <Maintenance />
+                      ) : (
+                        <QueryClientProvider client={queryClient}>
+                          <ThemeWrapper>
+                            <Component {...pageProps} />
+                          </ThemeWrapper>
+                        </QueryClientProvider>
+                      )}
 
-                    <GlobalStyles />
-                  </ThemeProvider>
-                </OverlayProvider>
-              </TradeWalletProvider>
-            </OrderBookProvider>
-          </NativeApiProvider>
+                      <GlobalStyles />
+                    </ThemeProvider>
+                  </OverlayProvider>
+                </ExtensionWalletProvider>
+              </OrderBookProvider>
+            </NativeApiProvider>
+          </AssetsProvider>
         </ProfileProvider>
       </AuthProvider>
     </>
