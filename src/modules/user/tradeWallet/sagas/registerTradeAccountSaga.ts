@@ -4,7 +4,6 @@ import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 
-import { selectExtensionWalletAccounts } from "../../extensionWallet";
 import {
   registerTradeAccountData,
   registerTradeAccountError,
@@ -17,13 +16,15 @@ import { sendError } from "@polkadex/orderbook/modules/public/errorHandler";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { userProfileAccountPush } from "@polkadex/orderbook-modules";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 let tradeAddress: string;
 export function* registerTradeAccountSaga(action: RegisterTradeAccountFetch) {
   const nativeApiState = useNativeApi();
+  const extensionWalletState = useExtensionWallet();
   try {
     const api = nativeApiState.api;
-    const controllerWallets = yield select(selectExtensionWalletAccounts);
+    const controllerWallets = extensionWalletState.allAccounts;
     const { password, name, address } = action.payload;
     const mnemonic = mnemonicGenerate();
     const { account, signer } = controllerWallets.find(

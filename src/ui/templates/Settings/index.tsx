@@ -27,12 +27,10 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
+import { useSettings } from "@polkadex/orderbook-hooks";
 import {
-  registerMainAccountLinkEmail,
   previewAccountModalActive,
   registerAccountModalActive,
-  selectMainAccount,
 } from "@polkadex/orderbook-modules";
 import {
   getMainAddresssLinkedToTradingAccount,
@@ -40,6 +38,7 @@ import {
 } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 
 export const SettingsTemplate = () => {
@@ -417,23 +416,27 @@ const ControllerWallets = ({
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
   const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
+
   const isRegistered = address && profileState.userData.mainAccounts.includes(address);
 
   const userAccounts = profileState.userData.userAccounts;
   const accounts = userAccounts.filter((account) => account.mainAddress === address);
   const linkedTradeAccounts = accounts.map((account) => account.tradeAddress);
 
-  const extensionAccount = useReduxSelector(selectMainAccount(address));
+  const extensionAccount =
+    address &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
+    );
 
-  const dispatch = useDispatch();
+  const { onLinkEmail } = useExtensionWallet();
 
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
     const accountAddress = extensionAccount.account.address;
-    dispatch(
-      registerMainAccountLinkEmail({
-        mainAccount: accountAddress,
-      })
-    );
+    onLinkEmail({
+      mainAccount: accountAddress,
+    });
   };
 
   return (

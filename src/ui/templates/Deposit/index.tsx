@@ -19,8 +19,9 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { selectMainAccount, Transaction } from "@polkadex/orderbook-modules";
-import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+
+import { Transaction } from "@polkadex/orderbook-modules";
+import { useHistory } from "@polkadex/orderbook-hooks";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
@@ -29,15 +30,28 @@ import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositPr
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
+
   const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const { list, selectGetAsset } = useAssetsProvider();
-  // const assets = selectAllAssets();
+ 
+  const extensionWalletState = useExtensionWallet();
+
+  const currMainAcc =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
+    );
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
