@@ -35,15 +35,13 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
-
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
   const { list, selectGetAsset } = useAssetsProvider();
- 
+
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
