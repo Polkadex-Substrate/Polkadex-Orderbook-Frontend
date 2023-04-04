@@ -11,13 +11,12 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  selectExtensionWalletAccounts,
   selectImportTradeAccountSuccess,
-  selectIsRegisterMainAccountSuccess,
   selectRegisterTradeAccountInfo,
   selectRegisterTradeAccountSuccess,
 } from "@polkadex/orderbook-modules";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 const data = [
   {
@@ -60,18 +59,19 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
 
   const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
 
   const [state, setState] = useState({
     status: tradeInfo.defaultImportActive,
     isImport: false,
   });
   const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
-  const isControllerAccountSuccess = useReduxSelector(selectIsRegisterMainAccountSuccess);
+  const isControllerAccountSuccess = extensionWalletState.registerMainAccountSuccess;
   const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
-  const hasExtensionAccounts = useReduxSelector(selectExtensionWalletAccounts)?.length > 0;
+  const hasExtensionAccounts = extensionWalletState.allAccounts?.length > 0;
   const hasLinkedAccounts = profileState.userData.mainAccounts?.length > 0;
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
