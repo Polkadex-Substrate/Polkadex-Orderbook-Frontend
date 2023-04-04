@@ -18,13 +18,9 @@ import {
   RemoveFromDevice,
   RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  selectIsTradeAccountRemoveLoading,
-  selectTradeAccount,
-  userSetDefaultTradeAccount,
-  selectExportingTradeAccount,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
+import { userSetDefaultTradeAccount } from "@polkadex/orderbook-modules";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -48,6 +44,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     onRemoveProxyAccountFromChain,
     onRemoveTradeAccountFromBrowser,
     onExportTradeAccountActive,
+    allBrowserAccounts,
+    removesInLoading,
+    exportAccountLoading,
   } = useTradeWallet();
   const dispatch = useDispatch();
   const [remove, setRemove] = useState<{
@@ -67,13 +66,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       ({ account }) => account?.address?.toLowerCase() === mainAccAddress?.toLowerCase()
     );
 
-  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
+  const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
   const { selectedAccount: usingAccount } = useProfile();
-  const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
-    selectIsTradeAccountRemoveLoading(state, selected?.address)
-  );
-  const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
+  const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
+
+  const showProtectedPassword = exportAccountLoading;
   const using = usingAccount.tradeAddress === selected?.address;
   const { onUserSelectAccount } = useProfile();
 

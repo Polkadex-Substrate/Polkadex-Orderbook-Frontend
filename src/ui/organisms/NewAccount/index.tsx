@@ -9,14 +9,9 @@ import {
   Loading,
   SuccessCreateAccount,
 } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectImportTradeAccountSuccess,
-  selectRegisterTradeAccountInfo,
-  selectRegisterTradeAccountSuccess,
-} from "@polkadex/orderbook-modules";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const data = [
   {
@@ -56,7 +51,9 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
-  const tradeInfo = useReduxSelector(selectRegisterTradeAccountInfo);
+  const tradeWalletState = useTradeWallet();
+
+  const tradeInfo = tradeWalletState.registerAccountModal;
 
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
@@ -65,9 +62,9 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
     status: tradeInfo.defaultImportActive,
     isImport: false,
   });
-  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
+  const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isControllerAccountSuccess = extensionWalletState.registerMainAccountSuccess;
-  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
+  const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
