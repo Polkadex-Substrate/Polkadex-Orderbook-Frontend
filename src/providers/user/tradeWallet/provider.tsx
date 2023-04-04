@@ -209,7 +209,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         const res = await removeProxyFromAccount(api, tradeAddress, signer, account.address);
         if (res.isSuccess) {
           onNotification(
-            "Congratulations!Your trade account has been removed from the chain!"
+            "Congratulations! Your trade account has been removed from the chain!"
           );
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));

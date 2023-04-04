@@ -76,16 +76,20 @@ export interface RegisterTradeAccountModalActive {
     defaultImportActive?: boolean;
   };
 }
+
 export interface PreviewTradeAccountModalCancel {
   type: typeof USER_PREVIEW_ACCOUNT_MODAL_CANCEL;
 }
+
 export interface PreviewTradeAccountModalActive {
   type: typeof USER_PREVIEW_ACCOUNT_MODAL_ACTIVE;
   payload?: PreviewAccountModal["selected"];
 }
+
 export interface RegisterTradeAccountModalCancel {
   type: typeof USER_TRADE_ACCOUNT_MODAL_CANCEL;
 }
+
 export interface RegisterTradeAccountError {
   type: typeof USER_REGISTER_TRADE_ACCOUNT_ERROR;
   error: CommonError;
@@ -126,6 +130,7 @@ export interface ImportTradeAccountFetch {
     password?: string;
   };
 }
+
 export interface ImportTradeAccountJsonFetch {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_JSON;
   payload: {
@@ -133,13 +138,16 @@ export interface ImportTradeAccountJsonFetch {
     password?: string;
   };
 }
+
 export interface ImportTradeAccountData {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_DATA;
 }
+
 export interface ImportTradeAccountError {
   type: typeof USER_TRADE_ACCOUNT_IMPORT_ERROR;
   error: CommonError;
 }
+
 export interface ExportTradeAccountFetch {
   type: typeof USER_TRADE_ACCOUNT_EXPORT_FETCH;
   payload: {
@@ -151,9 +159,11 @@ export interface ExportTradeAccountFetch {
 export interface ExportTradeAccountActive {
   type: typeof USER_TRADE_ACCOUNT_EXPORT_ACTIVE;
 }
+
 export interface ExportTradeAccountData {
   type: typeof USER_TRADE_ACCOUNT_EXPORT_DATA;
 }
+
 export interface TradeAccountPush {
   type: typeof USER_TRADE_ACCOUNT_PUSH;
   payload: { pair: TradeAccount };
