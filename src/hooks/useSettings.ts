@@ -4,9 +4,6 @@ import { useDispatch } from "react-redux";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
-  previewAccountModalCancel,
-  registerAccountModalCancel,
-  registerTradeAccountReset,
   selectBrowserTradeAccounts,
   selectImportTradeAccountSuccess,
   selectIsPreviewTradeAccountActive,
@@ -20,6 +17,7 @@ import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAuth } from "../providers/user/auth";
 import { useExtensionWallet } from "../providers/user/extensionWallet";
+import { useTradeWallet } from "../providers/user/tradeWallet";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -40,6 +38,7 @@ export const useSettings = () => {
   const profileState = useProfile();
   const authState = useAuth();
   const extensionWalletState = useExtensionWallet();
+  const tradeWalletState = useTradeWallet();
 
   const currentTradeAccount = profileState.selectedAccount;
   const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
@@ -161,11 +160,11 @@ export const useSettings = () => {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
         onRegisterMainAccountReset();
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
-        dispatch(registerTradeAccountReset());
-      else dispatch(registerAccountModalCancel());
+        tradeWalletState.onRegisterTradeAccountReset();
+      else tradeWalletState.onRegisterAccountModalCancel();
     }
   };
-  const handleClosePreviewModal = () => dispatch(previewAccountModalCancel());
+  const handleClosePreviewModal = () => tradeWalletState.onPreviewAccountModalCancel();
 
   const filterTradeAccountsByControllerAccountHeader = useMemo(
     () =>

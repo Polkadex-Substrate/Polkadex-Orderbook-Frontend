@@ -11,10 +11,17 @@ export const Context = createContext<TradeWalletContextProps>({
   onLoadTradeAccounts: () => {},
   onTradeAccountUpdate: () => {},
   onRegisterTradeAccount: () => {},
-  onRemoveTradeAccountFromChain: () => {},
+  onRemoveProxyAccountFromChain: () => {},
   onRegisterTradeAccountReset: () => {},
   onRegisterTradeAccountData: () => {},
   onRemoveTradeAccountFromBrowser: () => {},
+  onUnlockTradeAccount: () => {},
+  onTradeAccountPush: () => {},
+  onRegisterAccountModalActive: () => {},
+  onRegisterAccountModalCancel: () => {},
+  onPreviewAccountModalActive: () => {},
+  onPreviewAccountModalCancel: () => {},
+  onExportTradeAccountActive: () => {},
 });
 
 export const Provider = ({ value, children }: TradeWalletProviderProps) => {

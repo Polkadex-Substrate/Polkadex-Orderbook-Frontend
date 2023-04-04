@@ -53,12 +53,19 @@ export type TradeWalletContextProps = TradeWalletState & {
   onLoadTradeAccounts: () => void;
   onTradeAccountUpdate: (value: A.TradeAccountUpdate["payload"]) => void;
   onRegisterTradeAccount: (value: A.RegisterTradeAccountFetch["payload"]) => void;
-  onRemoveTradeAccountFromChain: (
+  onRemoveProxyAccountFromChain: (
     value: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => void;
   onRegisterTradeAccountReset: () => void;
   onRegisterTradeAccountData: (value: RegisterTradeAccountData) => void;
   onRemoveTradeAccountFromBrowser: (value: string) => void;
+  onUnlockTradeAccount: (value: A.UnlockTradeAccount["payload"]) => void;
+  onTradeAccountPush: (value: A.TradeAccountPush["payload"]) => void;
+  onRegisterAccountModalActive: (value?: A.RegisterTradeAccountModalActive["payload"]) => void;
+  onRegisterAccountModalCancel: () => void;
+  onPreviewAccountModalActive: (value?: A.PreviewTradeAccountModalActive["payload"]) => void;
+  onPreviewAccountModalCancel: () => void;
+  onExportTradeAccountActive: () => void;
 };
 
 export interface TradeWalletProps {

@@ -198,7 +198,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     return res;
   };
 
-  const onRemoveTradeAccountFromChain = async (
+  const onRemoveProxyAccountFromChain = async (
     payload: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => {
     try {
@@ -269,6 +269,38 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     dispatch(A.removeTradeAccountFromBrowser({ address }));
   };
 
+  const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {
+    dispatch(A.unlockTradeAccount(payload));
+  };
+
+  const onTradeAccountPush = (payload: A.TradeAccountPush["payload"]) => {
+    dispatch(A.tradeAccountPush(payload));
+  };
+
+  const onRegisterAccountModalActive = (
+    payload?: A.RegisterTradeAccountModalActive["payload"]
+  ) => {
+    dispatch(A.registerAccountModalActive(payload));
+  };
+
+  const onRegisterAccountModalCancel = () => {
+    dispatch(A.registerAccountModalCancel());
+  };
+
+  const onPreviewAccountModalActive = (
+    payload?: A.PreviewTradeAccountModalActive["payload"]
+  ) => {
+    dispatch(A.previewAccountModalActive(payload));
+  };
+
+  const onPreviewAccountModalCancel = () => {
+    dispatch(A.previewAccountModalCancel());
+  };
+
+  const onExportTradeAccountActive = () => {
+    dispatch(A.exportTradeAccountActive());
+  };
+
   return (
     <Provider
       value={{
@@ -279,10 +311,17 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         onLoadTradeAccounts,
         onTradeAccountUpdate,
         onRegisterTradeAccount,
-        onRemoveTradeAccountFromChain,
+        onRemoveProxyAccountFromChain,
         onRegisterTradeAccountReset,
         onRegisterTradeAccountData,
         onRemoveTradeAccountFromBrowser,
+        onUnlockTradeAccount,
+        onTradeAccountPush,
+        onRegisterAccountModalActive,
+        onRegisterAccountModalCancel,
+        onPreviewAccountModalActive,
+        onPreviewAccountModalCancel,
+        onExportTradeAccountActive,
       }}>
       {children}
     </Provider>

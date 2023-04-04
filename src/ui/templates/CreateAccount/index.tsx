@@ -11,11 +11,9 @@ import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic, Menu } from "@polkadex/orderbook-ui/organisms";
-import {
-  registerTradeAccountFetch,
-  selectRegisterTradeAccountLoading,
-} from "@polkadex/orderbook-modules";
+import { selectRegisterTradeAccountLoading } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
@@ -25,6 +23,7 @@ export const CreateAccountTemplate = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const handleMnemonicUpdate = (value) => setMnemonicString(value);
+  const tradeWalletState = useTradeWallet();
 
   const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
     useFormik({
@@ -34,13 +33,11 @@ export const CreateAccountTemplate = () => {
       } as Record<string, string>,
       validationSchema: createAccountValidations,
       onSubmit: (values) => {
-        dispatch(
-          registerTradeAccountFetch({
-            name: values.name,
-            password: String(values.passcode),
-            mnemonic: mnemoicString,
-          })
-        );
+        tradeWalletState.onRegisterTradeAccount({
+          name: values.name,
+          password: String(values.passcode),
+          address: mnemoicString,
+        });
       },
     });
   return (

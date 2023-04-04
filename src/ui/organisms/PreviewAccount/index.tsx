@@ -19,13 +19,10 @@ import {
   RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
 import {
-  removeProxyAccountFromChainFetch,
-  removeTradeAccountFromBrowser,
   selectIsTradeAccountRemoveLoading,
   selectTradeAccount,
   userSetDefaultTradeAccount,
   selectExportingTradeAccount,
-  exportTradeAccountActive,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
@@ -46,7 +43,12 @@ enum menuDisableKeysEnum {
 }
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
-  const { onExportTradeAccount } = useTradeWallet();
+  const {
+    onExportTradeAccount,
+    onRemoveProxyAccountFromChain,
+    onRemoveTradeAccountFromBrowser,
+    onExportTradeAccountActive,
+  } = useTradeWallet();
   const dispatch = useDispatch();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -93,7 +95,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const handleExportAccount = useCallback(() => {
     tradingAccountInBrowser?.isLocked
-      ? dispatch(exportTradeAccountActive())
+      ? onExportTradeAccountActive()
       : onExportTradeAccount({ address: selected?.address });
   }, [selected, tradingAccountInBrowser, dispatch]);
   const handleClose = () =>
@@ -114,7 +116,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
           {remove.isRemoveDevice ? (
             <RemoveFromDevice
               onAction={() => {
-                dispatch(removeTradeAccountFromBrowser({ address: selected?.address }));
+                onRemoveTradeAccountFromBrowser(selected?.address);
                 handleClose();
               }}
               onClose={handleClose}
@@ -124,7 +126,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                dispatch(removeProxyAccountFromChainFetch({ address: selected?.address }));
+                onRemoveProxyAccountFromChain({ address: selected?.address });
                 handleClose();
               }}
             />
@@ -142,7 +144,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 onSubmit={({ password }) =>
                   onExportTradeAccount({ address: selected.address, password })
                 }
-                handleClose={() => dispatch(exportTradeAccountActive())}
+                handleClose={() => onExportTradeAccountActive()}
               />
             </S.UnlockAccount>
           ) : (

@@ -28,10 +28,6 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSettings } from "@polkadex/orderbook-hooks";
-import {
-  previewAccountModalActive,
-  registerAccountModalActive,
-} from "@polkadex/orderbook-modules";
 import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import {
@@ -40,6 +36,7 @@ import {
 } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const SettingsTemplate = () => {
   const router = useRouter();
@@ -76,6 +73,7 @@ export const SettingsTemplate = () => {
   } = useSettings();
 
   const { onUserSelectAccount } = useProfile();
+  const tradeWalletState = useTradeWallet();
 
   const dispatch = useDispatch();
   return (
@@ -144,7 +142,7 @@ export const SettingsTemplate = () => {
                       type="button"
                       onClick={() => {
                         handleChangeCurrentControllerWallet(null);
-                        dispatch(registerAccountModalActive());
+                        tradeWalletState.onRegisterAccountModalActive();
                       }}>
                       {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
                     </ButtonWallet>
@@ -261,20 +259,18 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() =>
-                                        dispatch(
-                                          registerAccountModalActive({
-                                            defaultImportActive: true,
-                                          })
-                                        )
+                                        tradeWalletState.onRegisterAccountModalActive({
+                                          defaultImportActive: true,
+                                        })
                                       }>
                                       Import
                                     </S.Button>
                                   )}
                                   <S.Preview
                                     type="button"
-                                    onClick={() =>
-                                      dispatch(previewAccountModalActive(account))
-                                    }>
+                                    onClick={() => {
+                                      tradeWalletState.onPreviewAccountModalActive(account);
+                                    }}>
                                     <div>
                                       <Icons.OptionsHorizontal />
                                     </div>
@@ -345,14 +341,12 @@ export const SettingsTemplate = () => {
                                 isDefault={defaultFundingAddress === account.address}
                                 handleRegister={(account: ExtensionAccount) => {
                                   handleChangeCurrentControllerWallet(account);
-                                  dispatch(
-                                    registerAccountModalActive({
-                                      data: {
-                                        name: account.account.meta.name,
-                                        address: account.account.address,
-                                      },
-                                    })
-                                  );
+                                  tradeWalletState.onRegisterAccountModalActive({
+                                    data: {
+                                      name: account.account.meta.name,
+                                      address: account.account.address,
+                                    },
+                                  });
                                 }}
                               />
                             );
