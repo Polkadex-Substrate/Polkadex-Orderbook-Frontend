@@ -16,7 +16,7 @@ export type IBalanceFromDb = {
 };
 
 export interface BalanceBase {
-  asset_id: string;
+  assetId: string;
   reserved_balance: string;
   free_balance: string;
 }
