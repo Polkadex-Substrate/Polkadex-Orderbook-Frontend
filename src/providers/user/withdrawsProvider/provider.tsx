@@ -23,6 +23,7 @@ import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useExtensionWallet } from "../extensionWallet";
 
 export const WithdrawsProvider: T.WithdrawsComponent = ({
   onError,
@@ -32,6 +33,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
+  const {selectMainAccount} = useExtensionWallet()
   const onFetchWithdraws = async (action: A.WithdrawsFetch) => {
     try {
       const { asset, amount } = action.payload;
@@ -71,7 +73,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       const { sid } = action.payload;
       const api = nativeApiState.api;
       const currentAccount: UserAccount = profileState.selectedAccount;
-      const { account, signer } = yield select(selectMainAccount(currentAccount.mainAddress));
+      const { account, signer } = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
         yield put(
