@@ -1,5 +1,4 @@
 import { useReducer } from "react";
-import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
 import * as A from "./actions";
 import * as T from "./types";
@@ -7,14 +6,9 @@ import { Provider } from "./context";
 import { initialState } from "./reducer";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import * as mutations from "../../../graphql/mutations";
+import { Signer } from "@polkadot/types/types";
 
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger/selectors";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { UNIT_BN } from "@polkadex/web-constants";
 import { selectTradeAccount, withdrawsReducer } from "@polkadex/orderbook-modules";
 import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
@@ -33,7 +27,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
-  const {selectMainAccount} = useExtensionWallet()
+  const { selectMainAccount } = useExtensionWallet();
   const onFetchWithdraws = async (action: A.WithdrawsFetch) => {
     try {
       const { asset, amount } = action.payload;
@@ -68,7 +62,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
     });
   };
 
-  const onFetchClaimWithdraw = (action: A.WithdrawsClaimFetch) {
+  const onFetchClaimWithdraw = async (action: A.WithdrawsClaimFetch) => {
     try {
       const { sid } = action.payload;
       const api = nativeApiState.api;
@@ -76,52 +70,29 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       const { account, signer } = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
-        yield put(
-          notificationPush({
-            type: "InformationAlert",
-            message: {
-              title: "Processing Claim Withdraw",
-              description:
-                "Please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-            },
-            time: new Date().getTime(),
-          })
+        onNotification(
+          "Processing Claim Withdraw----Please wait while the withdraw is processed and the block is finalized. This may take a few mins."
         );
-        const res = yield call(claimWithdrawal, api, signer, account?.address, sid);
+        const res = await claimWithdrawal(api, signer, account?.address, sid);
         if (res.isSuccess) {
-          yield put(withdrawsClaimData({ sid }));
+          dispatch(A.withdrawsClaimData({ sid }));
           // TODO?: Check delay
-          yield delay(3000);
-          yield put(
-            notificationPush({
-              type: "SuccessAlert",
-              message: {
-                title: "Claim Withdraw Successful",
-                description:
-                  "Congratulations! You have successfully withdrawn your assets to your funding account.",
-              },
-              time: new Date().getTime(),
-              hasConfetti: true,
-            })
-          );
-          yield put(withdrawClaimReset());
+          // for ux
+          setTimeout(() => {
+            onNotification(
+              "Claim Withdraw Successful-----Congratulations! You have successfully withdrawn your assets to your funding account."
+            );
+            dispatch(A.withdrawClaimReset());
+          }, 3000);
         } else {
           throw new Error("Claim Withdraw failed");
         }
       }
     } catch (error) {
-      yield put(withdrawClaimCancel(action.payload.sid));
-      yield put(
-        sendError({
-          error,
-          processingType: "alert",
-          extraOptions: {
-            actionError: withdrawsError,
-          },
-        })
-      );
+      dispatch(A.withdrawClaimCancel(action.payload.sid));
+      onError("Error in withdrawal");
     }
-  }
+  };
 
   async function claimWithdrawal(
     api: ApiPromise,
@@ -139,6 +110,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       value={{
         ...state,
         onFetchWithdraws,
+        onFetchClaimWithdraw,
       }}>
       {children}
     </Provider>

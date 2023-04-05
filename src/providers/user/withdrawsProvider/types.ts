@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from "react";
-import { WithdrawsFetch } from "./actions";
+import { WithdrawsClaimFetch, WithdrawsFetch } from "./actions";
 
 export interface WithdrawsState {
   error?: string;
@@ -17,6 +17,7 @@ export interface Fee {
 
 export type WithdrawsContextProps = WithdrawsState & {
   onFetchWithdraws: (value: WithdrawsFetch) => void;
+  onFetchClaimWithdraw: (value: WithdrawsClaimFetch) => void;
 };
 
 export type WithdrawsProviderProps = PropsWithChildren<{
