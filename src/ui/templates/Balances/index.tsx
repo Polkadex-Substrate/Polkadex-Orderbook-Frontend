@@ -71,7 +71,7 @@ export const BalancesTemplate = () => {
                       <Table.Body striped>
                         {list.map((item) => {
                           const balance = userBalances?.find(
-                            (value) => value.asset_id === item.assetId
+                            (value) => value.assetId === item.assetId
                           );
                           return (
                             <Table.Row key={item.assetId}>
