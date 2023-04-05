@@ -5,10 +5,7 @@ import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../help
 
 import {
   selectCurrentMarket,
-  selectCurrentPrice,
   selectCurrentMarketTickers,
-  selectOrderExecuteLoading,
-  selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
   alertPush,
 } from "@polkadex/orderbook-modules";
@@ -30,7 +27,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
-  const currentPrice = useReduxSelector(selectCurrentPrice);
+  const currentPrice = ordersState.currentPrice;
 
   const asks = orderBookState.depth.asks;
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
@@ -38,8 +35,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const bids = orderBookState.depth.bids;
   const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
 
-  const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
-  const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
+  const isOrderLoading = ordersState.execute.isLoading;
+  const isOrderExecuted = ordersState.execute.isSuccess;
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const isSignedIn = profileState.authInfo.isAuthenticated;
   const { getFreeProxyBalance } = useBalancesProvider();

@@ -6,7 +6,6 @@ import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 import {
   DepthState,
   selectCurrentMarket,
-  selectCurrentPrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
@@ -26,7 +25,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentPrice = useReduxSelector(selectCurrentPrice);
+  const currentPrice = ordersState.currentPrice;
 
   /**
    * @description Change market price
