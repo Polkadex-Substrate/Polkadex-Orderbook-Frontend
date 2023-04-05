@@ -26,17 +26,22 @@ import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 
-import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
+
+  const { list, selectGetAsset } = useAssetsProvider();
+
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
@@ -45,10 +50,7 @@ export const DepositTemplate = () => {
       ({ account }) =>
         account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
     );
-
-  const assetsState = useAssetsProvider();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const assets = assetsState.state.selectAllAssets();
 
   const router = useRouter();
   const { deposits } = useHistory();
@@ -61,13 +63,13 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
-    const initialAsset = assets.find(
+    const initialAsset = list.find(
       (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
     );
     if (initialAsset) {
       setSelectedAsset(initialAsset);
     }
-  }, [assets, routedAsset]);
+  }, [list, routedAsset]);
 
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
@@ -185,7 +187,7 @@ export const DepositTemplate = () => {
                             </S.DropdownHeader>
                           </Dropdown.Trigger>
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {assets.map((asset) => (
+                            {list.map((asset) => (
                               <Dropdown.Item
                                 key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
@@ -255,9 +257,7 @@ export const DepositTemplate = () => {
                           <Table.Row key={i}>
                             <Table.Cell>
                               <S.CellName>
-                                <span>
-                                  {assetsState.state.selectGetAsset(item.asset)?.symbol}
-                                </span>
+                                <span>{selectGetAsset(item.asset)?.symbol}</span>
                               </S.CellName>
                             </Table.Cell>
                             <Table.Cell>

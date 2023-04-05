@@ -36,17 +36,14 @@ import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
   selectTradeAccount,
-  selectUserBalance,
   selectWithdrawsLoading,
   withdrawsFetch,
 } from "@polkadex/orderbook-modules";
-import {
-  isAssetPDEX,
-  selectAllAssets,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const WithdrawTemplate = () => {
@@ -67,9 +64,9 @@ export const WithdrawTemplate = () => {
     selectTradeAccount(currentAccount?.tradeAddress)
   );
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const assets = useReduxSelector(selectAllAssets);
+  const { list: assets } = useAssetsProvider();
   const loading = useReduxSelector(selectWithdrawsLoading);
-  const userBalances = useReduxSelector(selectUserBalance);
+  const { balances: userBalances } = useBalancesProvider();
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -241,7 +238,7 @@ export const WithdrawTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.asset_id}
+                                key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -398,7 +395,7 @@ const Copy = ({ copyData }) => {
 };
 
 const HistoryTable = ({ items }) => {
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { selectGetAsset } = useAssetsProvider();
 
   return (
     <S.HistoryTable>
@@ -423,7 +420,8 @@ const HistoryTable = ({ items }) => {
               <Table.Cell>
                 <S.Cell>
                   <span>
-                    {getAsset(item.asset)?.name} <small>{getAsset(item.asset)?.symbol}</small>
+                    {selectGetAsset(item.asset)?.name}{" "}
+                    <small>{selectGetAsset(item.asset)?.symbol}</small>
                   </span>
                 </S.Cell>
               </Table.Cell>

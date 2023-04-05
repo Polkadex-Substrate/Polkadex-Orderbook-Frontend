@@ -13,16 +13,15 @@ import {
   Search,
   Table,
 } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
-import { selectUserBalance } from "@polkadex/orderbook-modules";
 import { toCapitalize } from "@polkadex/web-helpers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const BalancesTemplate = () => {
   const [state, setState] = useState(false);
-  const assets = useReduxSelector(selectAllAssets);
-  const userBalances = useReduxSelector(selectUserBalance);
+  const { list } = useAssetsProvider();
+  const { balances: userBalances } = useBalancesProvider();
   const profileState = useProfile();
   const userHasSelectedAccount = !!Object?.keys(profileState.selectedAccount?.mainAddress)
     ?.length;
@@ -70,12 +69,12 @@ export const BalancesTemplate = () => {
                         </Table.Column>
                       </Table.Header>
                       <Table.Body striped>
-                        {assets.map((item) => {
+                        {list.map((item) => {
                           const balance = userBalances?.find(
-                            (value) => value.asset_id === item.asset_id
+                            (value) => value.asset_id === item.assetId
                           );
                           return (
-                            <Table.Row key={item.asset_id}>
+                            <Table.Row key={item.assetId}>
                               <Table.Cell>
                                 <S.CellFlex>
                                   <S.TokenIcon>

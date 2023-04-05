@@ -1,16 +1,18 @@
-import { useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
-import { fetchAllFromAppSync, sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
+
   const fetchAssets = async () => {
     try {
       const assetsList = await (() => fetchAllAssetMetadata())();
@@ -38,14 +40,6 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
     return newAssets;
   }
 
-  const selectAssetsFetchSuccess = () => {
-    return state.success;
-  };
-
-  const selectAllAssets = () => {
-    return state.list;
-  };
-
   const selectGetAsset = (
     assetId: string | number | Record<string, string>
   ): T.IPublicAsset | null => {
@@ -62,21 +56,15 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
       : state.list.find((asset) => asset.assetId === assetId.toString());
   };
 
-  const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>
-    assetId === "-1" ||
-    assetId === null ||
-    assetId === -1 ||
-    assetId === "POLKADEX" ||
-    assetId === "PDEX" ||
-    assetId === "polkadex";
+  useEffect(() => {
+    fetchAssets();
+  }, []);
 
   return (
     <Provider
       value={{
         ...state,
         fetchAssets,
-        selectAssetsFetchSuccess,
-        selectAllAssets,
         selectGetAsset,
       }}>
       {children}
