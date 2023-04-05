@@ -4,7 +4,7 @@ export const getMainAddresssLinkedToTradingAccount = (
   trade_address: string,
   userAccounts: UserAccount[]
 ) => {
-  const account = userAccounts.find(
+  const account = userAccounts?.find(
     ({ tradeAddress }) => tradeAddress?.toLowerCase() === trade_address?.toLowerCase()
   );
   return account ? account.mainAddress : "";

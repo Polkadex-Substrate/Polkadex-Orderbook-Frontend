@@ -155,7 +155,7 @@ export const tradeWalletReducer = (
       };
     case REMOVE_TRADE_ACCOUNT_FROM_BROWSER: {
       const { address } = action.payload;
-      const newAccounts = state.allBrowserAccounts.filter(
+      const newAccounts = state.allBrowserAccounts?.filter(
         (account) => account?.address !== address
       );
       keyring.forgetAccount(address);
@@ -172,13 +172,13 @@ export const tradeWalletReducer = (
     case USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_DATA:
       return {
         ...state,
-        removesInLoading: state.removesInLoading.filter((v) => v !== action.payload.address),
+        removesInLoading: state.removesInLoading?.filter((v) => v !== action.payload.address),
       };
     case USER_TRADE_ACCOUNT_UNLOCK: {
       const { address, password } = action.payload;
       try {
         const _allAccounts = [...state.allBrowserAccounts];
-        const pair = _allAccounts.find((account) => account?.address === address);
+        const pair = _allAccounts?.find((account) => account?.address === address);
         if (!pair) {
           return state;
         }

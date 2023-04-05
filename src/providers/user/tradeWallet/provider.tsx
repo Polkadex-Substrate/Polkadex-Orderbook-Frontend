@@ -34,7 +34,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
   // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
     const { address, password = "" } = payload;
-    const selectedAccount: KeyringPair = state.allBrowserAccounts.find(
+    const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
       (account) => account?.address?.toLowerCase() === address?.toLowerCase()
     );
 
@@ -125,7 +125,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
 
   const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
     try {
-      const { proxy, main } = payload;
+      const { proxy } = payload;
       profileState.onUserSelectAccount({
         tradeAddress: proxy,
       });
@@ -144,7 +144,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       const controllerWallets = extensionWalletState.allAccounts;
       const { password, name, address } = payload;
       const mnemonic = mnemonicGenerate();
-      const { account, signer } = controllerWallets.find(
+      const { account, signer } = controllerWallets?.find(
         ({ account }) => account.address === address
       );
       const { pair } = keyring.addUri(mnemonic, password?.length > 0 ? password : null, {
@@ -183,14 +183,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     payload: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => {
     try {
-      const profileState = useProfile();
-      const nativeApiState = useNativeApi();
       const api: ApiPromise = nativeApiState.api;
-      const { address: tradeAddress } = payload;
+      const { address: trade_Address } = payload;
       const linkedMainAddress =
-        tradeAddress &&
+        trade_Address &&
         profileState.userData?.userAccounts?.find(
-          ({ tradeAddress }) => tradeAddress === tradeAddress
+          ({ tradeAddress }) => tradeAddress === trade_Address
         )?.mainAddress;
 
       if (!linkedMainAddress) {
@@ -206,15 +204,15 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         throw new Error("Please select a funding account!");
       }
       if (api.isConnected && account?.address) {
-        const res = await removeProxyFromAccount(api, tradeAddress, signer, account.address);
+        const res = await removeProxyFromAccount(api, trade_Address, signer, account.address);
         if (res.isSuccess) {
           onNotification(
             "Congratulations! Your trade account has been removed from the chain!"
           );
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-          dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          profileState.onUserProfileTradeAccountDelete(tradeAddress);
+          dispatch(A.removeTradeAccountFromBrowser({ address: trade_Address }));
+          profileState.onUserProfileTradeAccountDelete(trade_Address);
         } else {
           throw new Error(res.message);
         }

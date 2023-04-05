@@ -9,7 +9,7 @@ import keyring from "@polkadot/ui-keyring";
 
 // This is needed as the selector one can not be used inside a function.
 export const getTradeAccount = (addr: string, tradeAccounts: TradeAccount[]) => {
-  const acc = tradeAccounts.find(
+  const acc = tradeAccounts?.find(
     (tradeAcc) => tradeAcc.address?.toLowerCase() === addr?.toLowerCase()
   );
 
@@ -54,7 +54,7 @@ export const selectTradeAccount = (
   address: string,
   allBrowserAccounts: T.TradeWalletState["allBrowserAccounts"]
 ): TradeAccount =>
-  allBrowserAccounts.find(
+  allBrowserAccounts?.find(
     (account) => account?.address?.toLowerCase() === address?.toLowerCase()
   );
 
