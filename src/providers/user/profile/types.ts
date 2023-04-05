@@ -55,8 +55,9 @@ export type ProfileContextProps = ProfileState & {
   onUserLogout: () => void;
   onUserChangeInitBanner: (value?: boolean) => void;
   onUserAuthFetch: () => void;
-  onUserProfileMainAccountPush: (value: string) => void;
   onUserProfileAccountPush: (value: UserAccount) => void;
+  onUserProfileTradeAccountDelete: (value: string) => void;
+  onUserProfileMainAccountPush: (value: string) => void;
   onUserAccountSelectFetch: (value: A.UserAccountSelectFetch["payload"]) => void;
 };
 

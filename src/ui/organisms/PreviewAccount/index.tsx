@@ -18,20 +18,13 @@ import {
   RemoveFromDevice,
   RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  removeProxyAccountFromChainFetch,
-  removeTradeAccountFromBrowser,
-  selectIsTradeAccountRemoveLoading,
-  selectTradeAccount,
-  userSetDefaultTradeAccount,
-  selectExportingTradeAccount,
-  exportTradeAccountActive,
-  exportTradeAccountFetch,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
+import { userSetDefaultTradeAccount } from "@polkadex/orderbook-modules";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 type Props = {
@@ -46,6 +39,15 @@ enum menuDisableKeysEnum {
 }
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
+  const {
+    onExportTradeAccount,
+    onRemoveProxyAccountFromChain,
+    onRemoveTradeAccountFromBrowser,
+    onExportTradeAccountActive,
+    allBrowserAccounts,
+    removesInLoading,
+    exportAccountLoading,
+  } = useTradeWallet();
   const dispatch = useDispatch();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
@@ -64,13 +66,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       ({ account }) => account?.address?.toLowerCase() === mainAccAddress?.toLowerCase()
     );
 
-  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
+  const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
   const { selectedAccount: usingAccount } = useProfile();
-  const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
-    selectIsTradeAccountRemoveLoading(state, selected?.address)
-  );
-  const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
+  const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
+
+  const showProtectedPassword = exportAccountLoading;
   const using = usingAccount.tradeAddress === selected?.address;
   const { onUserSelectAccount } = useProfile();
 
@@ -91,11 +92,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   );
 
   const handleExportAccount = useCallback(() => {
-    dispatch(
-      tradingAccountInBrowser?.isLocked
-        ? exportTradeAccountActive()
-        : exportTradeAccountFetch({ address: selected?.address })
-    );
+    tradingAccountInBrowser?.isLocked
+      ? onExportTradeAccountActive()
+      : onExportTradeAccount({ address: selected?.address });
   }, [selected, tradingAccountInBrowser, dispatch]);
   const handleClose = () =>
     setRemove({
@@ -115,7 +114,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
           {remove.isRemoveDevice ? (
             <RemoveFromDevice
               onAction={() => {
-                dispatch(removeTradeAccountFromBrowser({ address: selected?.address }));
+                onRemoveTradeAccountFromBrowser(selected?.address);
                 handleClose();
               }}
               onClose={handleClose}
@@ -125,7 +124,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                dispatch(removeProxyAccountFromChainFetch({ address: selected?.address }));
+                onRemoveProxyAccountFromChain({ address: selected?.address });
                 handleClose();
               }}
             />
@@ -141,9 +140,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  dispatch(exportTradeAccountFetch({ address: selected.address, password }))
+                  onExportTradeAccount({ address: selected.address, password })
                 }
-                handleClose={() => dispatch(exportTradeAccountActive())}
+                handleClose={() => onExportTradeAccountActive()}
               />
             </S.UnlockAccount>
           ) : (

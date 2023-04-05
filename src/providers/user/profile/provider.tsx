@@ -129,6 +129,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userProfileAccountPush(payload));
   };
 
+  const onUserProfileTradeAccountDelete = (payload: string) => {
+    dispatch(A.userProfileTradeAccountDelete(payload));
+  };
+
   const onUserAccountSelectFetch = (payload: A.UserAccountSelectFetch["payload"]) => {
     dispatch(A.userAccountSelectFetch(payload));
   };
@@ -148,8 +152,9 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,
-        onUserProfileMainAccountPush,
         onUserProfileAccountPush,
+        onUserProfileTradeAccountDelete,
+        onUserProfileMainAccountPush,
         onUserAccountSelectFetch,
       }}>
       {children}

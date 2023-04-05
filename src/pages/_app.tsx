@@ -21,6 +21,7 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { ToastContainer, toast } from "react-toastify";
@@ -81,26 +82,30 @@ function App({ Component, pageProps }: AppProps) {
                 <ExtensionWalletProvider
                   onError={(v) => toast.error(v)}
                   onNotification={(v) => toast.info(v)}>
-                  <BalancesProvider
+                  <TradeWalletProvider
                     onError={(v) => toast.error(v)}
                     onNotification={(v) => toast.info(v)}>
-                    <OverlayProvider>
-                      <ThemeProvider
-                        theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-                        {defaultConfig.maintenanceMode ? (
-                          <Maintenance />
-                        ) : (
-                          <QueryClientProvider client={queryClient}>
-                            <ThemeWrapper>
-                              <Component {...pageProps} />
-                            </ThemeWrapper>
-                          </QueryClientProvider>
-                        )}
+                    <BalancesProvider
+                      onError={(v) => toast.error(v)}
+                      onNotification={(v) => toast.info(v)}>
+                      <OverlayProvider>
+                        <ThemeProvider
+                          theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                          {defaultConfig.maintenanceMode ? (
+                            <Maintenance />
+                          ) : (
+                            <QueryClientProvider client={queryClient}>
+                              <ThemeWrapper>
+                                <Component {...pageProps} />
+                              </ThemeWrapper>
+                            </QueryClientProvider>
+                          )}
 
-                        <GlobalStyles />
-                      </ThemeProvider>
-                    </OverlayProvider>
-                  </BalancesProvider>
+                          <GlobalStyles />
+                        </ThemeProvider>
+                      </OverlayProvider>
+                    </BalancesProvider>
+                  </TradeWalletProvider>
                 </ExtensionWalletProvider>
               </OrderBookProvider>
             </NativeApiProvider>
