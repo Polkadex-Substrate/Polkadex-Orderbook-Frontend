@@ -168,7 +168,9 @@ export const userAccountSelectData = (
 });
 
 // adds a new UserAccount to users profile state
-export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"]) => ({
+export const userProfileAccountPush = (
+  payload: UserProfileAccountPush["payload"]
+): UserProfileAccountPush => ({
   type: PROFILE_USER_ACCOUNT_PUSH,
   payload,
 });
@@ -176,14 +178,14 @@ export const userProfileAccountPush = (payload: UserProfileAccountPush["payload"
 // adds a new main address to users profile state
 export const userProfileMainAccountPush = (
   payload: UserProfileMainAccountPush["payload"]
-) => ({
+): UserProfileMainAccountPush => ({
   type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
   payload,
 });
 
 export const userProfileTradeAccountDelete = (
   payload: UserProfileTradeAccountDelete["payload"]
-) => ({
+): UserProfileTradeAccountDelete => ({
   type: PROFILE_USER_TRADE_ACCOUNT_DELETE,
   payload,
 });

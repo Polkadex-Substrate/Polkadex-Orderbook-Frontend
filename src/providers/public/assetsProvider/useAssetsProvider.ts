@@ -1,8 +1,4 @@
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectCurrentMarket } from "@polkadex/orderbook-modules";
-import { getIsDecreasingArray } from "@polkadex/web-helpers";
-import { stat } from "fs";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import { Context } from "./context";
 
@@ -16,11 +12,7 @@ export function useAssetsProvider() {
     throw error;
   }
 
-  useEffect(() => {
-    state.fetchAssets();
-  }, []);
-
   return {
-    state,
+    ...state,
   };
 }

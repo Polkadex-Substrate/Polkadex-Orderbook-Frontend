@@ -18,10 +18,16 @@ import { useUserDataFetch } from "../hooks/useUserDataFetch";
 import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
+import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
+import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AssetsProvider } from "../providers/public/assetsProvider/provider";
+import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -51,34 +57,59 @@ function App({ Component, pageProps }: AppProps) {
 
   // Removes all console from production environment
   if (process.env.NODE_ENV === "production") {
-      console.log = () => {};
-      console.debug = () => {};
-      console.info = () => {};
-      console.warn = () => {};
-      console.error = () => {};
+    console.log = () => {};
+    console.debug = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.error = () => {};
   }
 
   return (
     <>
       <ToastContainer />
+
       <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
         <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <OverlayProvider>
-            <ThemeProvider
-              theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
-              {defaultConfig.maintenanceMode ? (
-                <Maintenance />
-              ) : (
-                <QueryClientProvider client={queryClient}>
-                  <ThemeWrapper>
-                    <Component {...pageProps} />
-                  </ThemeWrapper>
-                </QueryClientProvider>
-              )}
+          <AssetsProvider
+            onError={(v) => toast.error(v)}
+            onNotification={(v) => toast.info(v)}>
+            <NativeApiProvider
+              onError={(v) => toast.error(v)}
+              onNotification={(v) => toast.info(v)}>
+              <OrderBookProvider
+                onError={(v) => toast.error(v)}
+                onNotification={(v) => toast.info(v)}>
+                <ExtensionWalletProvider
+                  onError={(v) => toast.error(v)}
+                  onNotification={(v) => toast.info(v)}>
+                  <TradeWalletProvider
+                    onError={(v) => toast.error(v)}
+                    onNotification={(v) => toast.info(v)}>
+                    <BalancesProvider
+                      onError={(v) => toast.error(v)}
+                      onNotification={(v) => toast.info(v)}>
+                      <OverlayProvider>
+                        <ThemeProvider
+                          theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+                          {defaultConfig.maintenanceMode ? (
+                            <Maintenance />
+                          ) : (
+                            <QueryClientProvider client={queryClient}>
+                              <ThemeWrapper>
+                                <Component {...pageProps} />
+                              </ThemeWrapper>
+                            </QueryClientProvider>
+                          )}
 
-              <GlobalStyles />
-            </ThemeProvider>
-          </OverlayProvider>
+                          <GlobalStyles />
+                        </ThemeProvider>
+                      </OverlayProvider>
+                    </BalancesProvider>
+                  </TradeWalletProvider>
+                </ExtensionWalletProvider>
+              </OrderBookProvider>
+            </NativeApiProvider>
+          </AssetsProvider>
         </ProfileProvider>
       </AuthProvider>
     </>

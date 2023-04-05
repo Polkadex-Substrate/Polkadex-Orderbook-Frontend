@@ -8,15 +8,12 @@ import * as S from "./styles";
 import {
   useMarketsFetch,
   useMarketsTickersFetch,
-  useOrderBookMarketsFetch,
   useReduxSelector,
 } from "@polkadex/orderbook-hooks";
 import {
-  orderBookFetch,
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  selectIsAddressInExtension,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -44,6 +41,8 @@ import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -67,20 +66,23 @@ export function Trading() {
 
   useMarketsFetch(id as string);
   useMarketsTickersFetch();
-  useOrderBookMarketsFetch();
 
   const { email } = useAuth();
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
   } = useProfile();
+  const extensionWalletState = useExtensionWallet();
 
   const market = useReduxSelector(selectCurrentMarket);
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+  const hasMainAccount = selectIsAddressInExtension(
+    mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const userAccounts = profileState.userData.userAccounts;
   const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
@@ -105,7 +107,6 @@ export function Trading() {
   useEffect(() => {
     if (market) {
       // dispatch(rangerConnectFetch());
-      dispatch(orderBookFetch(market));
       dispatch(recentTradesFetch(market));
     }
   }, [dispatch, market]);

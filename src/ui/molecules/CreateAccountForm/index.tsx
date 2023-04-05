@@ -10,15 +10,10 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
-import {
-  registerMainAccountFetch,
-  registerTradeAccountFetch,
-  selectExtensionWalletAccounts,
-  tradeAccountPush,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const CreateAccountForm = ({
   onCancel = undefined,
@@ -28,7 +23,9 @@ export const CreateAccountForm = ({
 }) => {
   const dispatch = useDispatch();
   const profileState = useProfile();
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
+  const extensionWalletState = useExtensionWallet();
+  const tradeWalletState = useTradeWallet();
+  const controllerWallets = extensionWalletState.allAccounts;
   const linkedMainAddresses = profileState.userData.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(({ account }) =>
     linkedMainAddresses?.includes(account.address)
@@ -37,6 +34,8 @@ export const CreateAccountForm = ({
   const initialMessage = registeredAccounts?.length
     ? "Select your funding account"
     : "Please register an account first";
+
+  const { onRegisterMainAccount } = useExtensionWallet();
 
   const {
     errors,
@@ -67,23 +66,19 @@ export const CreateAccountForm = ({
         const { pair } = keyring.addUri(mnemonic, passcode.length > 0 ? passcode : null, {
           name,
         });
-        dispatch(tradeAccountPush({ pair }));
-        dispatch(
-          registerMainAccountFetch({
-            mainAccount: selectedAccountAddress,
-            tradeAddress: pair.address,
-            password: passcode,
-            mnemonic,
-          })
-        );
+        tradeWalletState.onTradeAccountPush({ pair });
+        onRegisterMainAccount({
+          mainAccount: selectedAccountAddress,
+          tradeAddress: pair.address,
+          password: passcode,
+          mnemonic,
+        });
       } else {
-        dispatch(
-          registerTradeAccountFetch({
-            address: controllerWallet.address,
-            name,
-            password: String(passcode),
-          })
-        );
+        tradeWalletState.onRegisterTradeAccount({
+          address: controllerWallet.address,
+          name,
+          password: String(passcode),
+        });
       }
     },
   });

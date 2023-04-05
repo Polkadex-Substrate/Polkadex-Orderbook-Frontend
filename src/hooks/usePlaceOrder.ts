@@ -8,37 +8,46 @@ import {
   selectCurrentPrice,
   selectCurrentMarketTickers,
   setCurrentPrice,
-  selectBestAskPrice,
-  selectBestBidPrice,
   orderExecuteFetch,
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
-  selectTradeAccount,
   alertPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
-
+  const orderBookState = useOrderBook();
+  const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
   const currentPrice = useReduxSelector(selectCurrentPrice);
-  const bestAskPrice = useReduxSelector(selectBestAskPrice);
-  const bestBidPrice = useReduxSelector(selectBestBidPrice);
+
+  const asks = orderBookState.depth.asks;
+  const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
+
+  const bids = orderBookState.depth.bids;
+  const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
+
   const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const isSignedIn = profileState.authInfo.isAuthenticated;
-  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
+  const { getFreeProxyBalance } = useBalancesProvider();
   const usingTradeAddress = profileState.selectedAccount.tradeAddress;
-  const showProtectedPassword = useReduxSelector(
-    selectTradeAccount(usingTradeAddress)
+
+  const showProtectedPassword = selectTradeAccount(
+    usingTradeAddress,
+    tradeWalletState.allBrowserAccounts
   )?.isLocked;
 
   const [tab, setTab] = useState({

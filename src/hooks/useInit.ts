@@ -3,25 +3,25 @@ import { useDispatch } from "react-redux";
 
 import { assetsFetch, selectAssetsFetchSuccess } from "../modules/public/assets";
 
-import {
-  extensionWalletFetch,
-  marketsFetch,
-  rangerConnectFetch,
-  selectShouldRangerConnect,
-  tradeAccountsFetch,
-} from "@polkadex/orderbook-modules";
+import { marketsFetch } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook/hooks/useReduxSelector";
+import { useTradeWallet } from "../providers/user/tradeWallet";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const useInit = () => {
   const dispatch = useDispatch();
+  const { onConnectNativeApi, timestamp, connecting } = useNativeApi();
+  const { onLoadTradeAccounts } = useTradeWallet();
+  const { onPolkadotExtensionWallet } = useExtensionWallet();
   const isAssets = useReduxSelector(selectAssetsFetchSuccess);
-  const shouldRangerConnect = useReduxSelector(selectShouldRangerConnect);
+  const shouldRangerConnect = !timestamp && !connecting;
 
   // basic initialization
   useEffect(() => {
-    if (shouldRangerConnect) dispatch(rangerConnectFetch());
-    dispatch(tradeAccountsFetch());
-    dispatch(extensionWalletFetch());
+    if (shouldRangerConnect) onConnectNativeApi();
+    onLoadTradeAccounts();
+    onPolkadotExtensionWallet();
     dispatch(assetsFetch());
   }, [dispatch, shouldRangerConnect]);
 

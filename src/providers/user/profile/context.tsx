@@ -10,6 +10,10 @@ export const Context = createContext<ProfileContextProps>({
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
   onUserAuthFetch: () => {},
+  onUserProfileAccountPush: () => {},
+  onUserProfileTradeAccountDelete: () => {},
+  onUserProfileMainAccountPush: () => {},
+  onUserAccountSelectFetch: () => {},
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

@@ -20,15 +20,15 @@ const cases: testCases[] = [
       type: "publicAssets/DATA",
       payload: {
         list: [
-          { asset_id: "PDEX", name: "POLKADEX", symbol: "PDEX" },
-          { asset_id: "TDOT", name: "TEST DOT", symbol: "1" },
+          { assetId: "PDEX", name: "POLKADEX", symbol: "PDEX" },
+          { assetId: "TDOT", name: "TEST DOT", symbol: "1" },
         ],
       },
     },
     output: {
       list: [
-        { asset_id: "PDEX", name: "POLKADEX", symbol: "PDEX" },
-        { asset_id: "TDOT", name: "TEST DOT", symbol: "1" },
+        { assetId: "PDEX", name: "POLKADEX", symbol: "PDEX" },
+        { assetId: "TDOT", name: "TEST DOT", symbol: "1" },
       ],
       loading: false,
       success: true,

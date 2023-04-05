@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 import { CommonActionState } from "../../types";
+import * as A from "./actions";
 
 export interface UserSelectAccount {
   tradeAddress: string;
@@ -54,6 +55,10 @@ export type ProfileContextProps = ProfileState & {
   onUserLogout: () => void;
   onUserChangeInitBanner: (value?: boolean) => void;
   onUserAuthFetch: () => void;
+  onUserProfileAccountPush: (value: UserAccount) => void;
+  onUserProfileTradeAccountDelete: (value: string) => void;
+  onUserProfileMainAccountPush: (value: string) => void;
+  onUserAccountSelectFetch: (value: A.UserAccountSelectFetch["payload"]) => void;
 };
 
 export interface ProfileProps {

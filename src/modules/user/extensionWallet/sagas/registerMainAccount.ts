@@ -7,7 +7,6 @@ import * as mutations from "../../../../graphql/mutations";
 import {
   notificationPush,
   removeTradeAccountFromBrowser,
-  selectRangerApi,
   registerTradeAccountData,
   userProfileAccountPush,
   userProfileMainAccountPush,
@@ -25,16 +24,18 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { ErrorMessages } from "@polkadex/web-constants";
 import { userEventsChannelHandler } from "@polkadex/orderbook/modules/user/userEventsListener/sagas/userEventsChannel";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 type RegisterEmailData = { email: string; main_address: string };
 
 export function* registerMainAccountSaga(action: RegisterMainAccountFetch) {
   let data: RegisterEmailData, signature: string;
   const { mainAccount, tradeAddress, mnemonic } = action.payload;
+  const nativeApiState = useNativeApi();
   try {
     const selectedControllerAccount = yield select(selectMainAccount(mainAccount));
     const { email } = useAuth();
-    const api: ApiPromise = yield select(selectRangerApi);
+    const api: ApiPromise = nativeApiState.api;
     // listen for events in this new registered main address
     yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
     const hasAddressAndEmail =
