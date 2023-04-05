@@ -14,7 +14,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const authState = useAuth();
 
-  const onUserSelectAccount = useCallback((payload: T.UserSelectAccount) => {
+  const onUserSelectAccount = (payload: T.UserSelectAccount) => {
     const { tradeAddress: trade_address } = payload;
     try {
       const mainAddress = state.userData?.userAccounts?.find(
@@ -28,7 +28,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       console.log("error: ", e);
       onNotification(`Invalid funding account! ${e?.message}`);
     }
-  }, []);
+  };
 
   const getAllMainLinkedAccounts = async (email: string, Api = API) => {
     try {

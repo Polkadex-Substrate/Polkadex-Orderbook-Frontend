@@ -2,7 +2,7 @@ import { useContext } from "react";
 
 import { Context } from "./context";
 
-export function useAssetsProvider() {
+export function useBalancesProvider() {
   const state = useContext(Context);
 
   if (!Context) {

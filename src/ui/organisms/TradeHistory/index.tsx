@@ -1,14 +1,13 @@
 import * as S from "./styles";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
 import { EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const TradeHistory = ({ filters }) => {
   const { priceFixed, amountFixed, trades } = useTradeHistory(filters);
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { selectGetAsset } = useAssetsProvider();
 
   return (
     <S.Wrapper>
@@ -25,8 +24,8 @@ export const TradeHistory = ({ filters }) => {
           <S.Tbody>
             {trades.map((trade, i) => {
               const date = new Date(trade.timestamp).toLocaleString();
-              const baseUnit = getAsset(trade.baseAsset).symbol;
-              const quoteUnit = getAsset(trade.quoteAsset).symbol;
+              const baseUnit = selectGetAsset(trade.baseAsset).symbol;
+              const quoteUnit = selectGetAsset(trade.quoteAsset).symbol;
               return (
                 <TradeHistoryCard
                   key={i}
