@@ -82,8 +82,6 @@ export const BalancesProvider: T.BalancesComponent = ({
   };
 
   useEffect(() => {
-    console.log("effect");
-
     onBalancesFetch();
   }, [onBalancesFetch]);
 
