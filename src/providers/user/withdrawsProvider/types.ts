@@ -16,8 +16,8 @@ export interface Fee {
 }
 
 export type WithdrawsContextProps = WithdrawsState & {
-  onFetchWithdraws: (value: WithdrawsFetch) => void;
-  onFetchClaimWithdraw: (value: WithdrawsClaimFetch) => void;
+  onFetchWithdraws: (value: WithdrawsFetch["payload"]) => void;
+  onFetchClaimWithdraw: (value: WithdrawsClaimFetch["payload"]) => void;
 };
 
 export type WithdrawsProviderProps = PropsWithChildren<{

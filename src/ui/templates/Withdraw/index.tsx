@@ -45,6 +45,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -52,7 +53,7 @@ export const WithdrawTemplate = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { selectedAccount: currentAccount } = useProfile();
   const extensionWalletState = useExtensionWallet();
-
+  const { onFetchWithdraws } = useWithdrawsProvider();
   const currMainAcc =
     currentAccount.mainAddress &&
     extensionWalletState.allAccounts?.find(
@@ -79,7 +80,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.asset_id === selectedAsset?.assetId),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -104,15 +105,13 @@ export const WithdrawTemplate = () => {
   };
 
   const handleSubmitWithdraw = (amount: string | number) => {
+    console.log("submit");
+
     const asset = isAssetPDEX(selectedAsset.assetId)
       ? { polkadex: null }
       : { asset: selectedAsset.assetId };
-    dispatch(
-      withdrawsFetch({
-        asset,
-        amount,
-      })
-    );
+
+    onFetchWithdraws({ asset, amount });
   };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {

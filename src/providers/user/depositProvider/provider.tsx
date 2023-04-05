@@ -13,6 +13,7 @@ import {
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
+import { useNativeApi } from "../../public/nativeApi";
 
 export const DepositProvider: T.DepositsComponent = ({
   onError,
@@ -21,17 +22,17 @@ export const DepositProvider: T.DepositsComponent = ({
 }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
 
-  //TODO: Replace Redux selectors when providers have been created
-  const api = useReduxSelector(selectRangerApi);
-  const isApiReady = useReduxSelector(selectRangerIsReady);
-
+  const { connected: isApiReady, api } = useNativeApi();
   const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
+    console.log(isApiReady);
+
     try {
       if (isApiReady && mainAccount?.account?.address !== "") {
         onNotification(
           "Processing Deposit, Please wait while the deposit is processing and the block is finalized. This may take a few mins."
         );
         dispatch(A.depositsFetch());
+        console.log("try");
 
         const res = await depositToEnclave(api, mainAccount, asset, amount);
 

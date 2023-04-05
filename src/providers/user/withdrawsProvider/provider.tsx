@@ -28,13 +28,14 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const { selectMainAccount } = useExtensionWallet();
-  const onFetchWithdraws = async (action: A.WithdrawsFetch) => {
+  const currentAccount: UserAccount = profileState.selectedAccount;
+  const address = currentAccount.tradeAddress;
+  const keyringPair = useReduxSelector(selectTradeAccount(address));
+
+  const onFetchWithdraws = async ({ asset, amount }) => {
+    console.log(asset, amount, "onFetchWithdraws");
+
     try {
-      const { asset, amount } = action.payload;
-      const currentAccount: UserAccount = profileState.selectedAccount;
-      const address = currentAccount.tradeAddress;
-      // const keyringPair = yield select(selectTradeAccount(address));
-      const keyringPair = useReduxSelector(selectTradeAccount(address));
       const nonce = getNonce();
       const api = nativeApiState.api;
       if (address !== "" && keyringPair && api) {
@@ -62,9 +63,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
     });
   };
 
-  const onFetchClaimWithdraw = async (action: A.WithdrawsClaimFetch) => {
+  const onFetchClaimWithdraw = async ({ sid }: A.WithdrawsClaimFetch["payload"]) => {
     try {
-      const { sid } = action.payload;
       const api = nativeApiState.api;
       const currentAccount: UserAccount = profileState.selectedAccount;
       const { account, signer } = selectMainAccount(currentAccount.mainAddress);
@@ -89,7 +89,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
         }
       }
     } catch (error) {
-      dispatch(A.withdrawClaimCancel(action.payload.sid));
+      dispatch(A.withdrawClaimCancel(sid));
       onError("Error in withdrawal");
     }
   };

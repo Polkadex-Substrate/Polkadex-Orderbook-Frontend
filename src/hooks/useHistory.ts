@@ -8,8 +8,8 @@ import {
   selectTransactions,
   Transaction,
   transactionsFetch,
-  withdrawsClaimFetch,
 } from "@polkadex/orderbook-modules";
+import { useWithdrawsProvider } from "../providers/user/withdrawsProvider/useWithdrawsProvider";
 
 export function useHistory() {
   const [filterBy, setFilterBy] = useState({
@@ -19,7 +19,7 @@ export function useHistory() {
 
   const dispatch = useDispatch();
   const transactionsHistory = useReduxSelector(selectTransactions);
-
+  const { onFetchClaimWithdraw } = useWithdrawsProvider();
   useEffect(() => {
     dispatch(transactionsFetch());
   }, [dispatch]);
@@ -50,7 +50,7 @@ export function useHistory() {
   );
 
   const handleClaimWithdraws = (sid: number) => {
-    dispatch(withdrawsClaimFetch({ sid }));
+    onFetchClaimWithdraw({ sid });
   };
 
   useEffect(() => {
