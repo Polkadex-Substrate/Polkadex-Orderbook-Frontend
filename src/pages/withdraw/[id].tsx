@@ -6,6 +6,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { WithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/provider";
+import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 import { toast } from "react-toastify";
 
 const WithdrawTemplate = dynamic(
@@ -43,9 +44,13 @@ const Withdraw = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <WithdrawsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-      <WithdrawTemplate />
-    </WithdrawsProvider>
+    <TransactionsProvider
+      onError={(v) => toast.error(v)}
+      onNotification={(v) => toast.info(v)}>
+      <WithdrawsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <WithdrawTemplate />
+      </WithdrawsProvider>
+    </TransactionsProvider>
   );
 };
 

@@ -10,6 +10,7 @@ import {
   transactionsFetch,
 } from "@polkadex/orderbook-modules";
 import { useWithdrawsProvider } from "../providers/user/withdrawsProvider/useWithdrawsProvider";
+import { useTransactionssProvider } from "../providers/user/transactionsProvider/useTransactionProvider";
 
 export function useHistory() {
   const [filterBy, setFilterBy] = useState({
@@ -18,6 +19,7 @@ export function useHistory() {
   });
 
   const dispatch = useDispatch();
+  const { transactions: transactionsHistory } = useTransactionssProvider();
   const transactionsHistory = useReduxSelector(selectTransactions);
   const { onFetchClaimWithdraw } = useWithdrawsProvider();
   useEffect(() => {
