@@ -116,12 +116,17 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
     }
   };
 
+  const onSetCurrentPrice = (payload: A.SetCurrentPrice["payload"]) => {
+    dispatch(A.setCurrentPrice(payload));
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onPlaceOrders,
         onCancelOrder,
+        onSetCurrentPrice,
       }}>
       {children}
     </Provider>

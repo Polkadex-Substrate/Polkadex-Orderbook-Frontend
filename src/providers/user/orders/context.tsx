@@ -7,6 +7,7 @@ export const Context = createContext<OrdersContextProps>({
   ...initialState,
   onPlaceOrders: () => {},
   onCancelOrder: () => {},
+  onSetCurrentPrice: () => {},
 });
 
 export const Provider = ({ value, children }: OrdersProviderProps) => {

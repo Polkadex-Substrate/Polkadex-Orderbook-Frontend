@@ -7,8 +7,6 @@ import {
   selectCurrentMarket,
   selectCurrentPrice,
   selectCurrentMarketTickers,
-  setCurrentPrice,
-  orderExecuteFetch,
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
@@ -21,12 +19,14 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
+import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
   const orderBookState = useOrderBook();
   const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
+  const ordersState = useOrders();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const currentTicker = useReduxSelector(selectCurrentMarketTickers);
@@ -134,7 +134,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       ...tab,
       priceLimit: undefined,
     });
-    dispatch(setCurrentPrice(0));
+    ordersState.onSetCurrentPrice(0);
   }, [dispatch, setTab, tab]);
 
   /**
@@ -233,16 +233,14 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       notify("Amount cannot be greater than max market amount");
     } else {
       // VALID TRANSACTION
-      dispatch(
-        orderExecuteFetch({
-          order_type: isLimit ? "LIMIT" : "MARKET",
-          symbol: currentMarket.assetIdArray,
-          side: isSell ? "Sell" : "Buy",
-          price: isLimit ? form.price : "",
-          market: currentMarket.id,
-          amount,
-        })
-      );
+      ordersState.onPlaceOrders({
+        order_type: isLimit ? "LIMIT" : "MARKET",
+        symbol: currentMarket.assetIdArray,
+        side: isSell ? "Sell" : "Buy",
+        price: isLimit ? form.price : "",
+        market: currentMarket.id,
+        amount,
+      });
     }
   };
 
