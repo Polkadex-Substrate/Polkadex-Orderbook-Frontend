@@ -1,25 +1,19 @@
-import { useReducer } from "react";
-import BigNumber from "bignumber.js";
-import { ApiPromise } from "@polkadot/api";
+import { useReducer, useEffect, useCallback } from "react";
+import { endOfDay, startOfMonth } from "date-fns";
+
+import { useProfile } from "../profile";
+
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, sessionReducer } from "./reducer";
-import { endOfDay, startOfMonth } from "date-fns";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger/selectors";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { UNIT_BN } from "@polkadex/web-constants";
-
-export const SessionProvider: T.SessionComponent = ({ onError, onNotification, children }) => {
+export const SessionProvider: T.SessionComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(sessionReducer, initialState);
-
-  const onFetchSession = () => {
+  const profileState = useProfile();
+  const address = profileState.selectedAccount.mainAddress;
+  const onFetchSession = useCallback(() => {
+    dispatch(A.userSessionFetch());
     try {
       // add default user session values
       const now = new Date();
@@ -30,7 +24,11 @@ export const SessionProvider: T.SessionComponent = ({ onError, onNotification, c
       console.log(error);
       onError("User session error");
     }
-  };
+  }, [onError]);
+
+  useEffect(() => {
+    onFetchSession();
+  }, [onFetchSession, address]);
 
   return (
     <Provider

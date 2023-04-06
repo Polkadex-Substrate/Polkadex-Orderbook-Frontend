@@ -1,7 +1,6 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { startOfMonth } from "date-fns";
 
 import * as S from "./styles";
 
@@ -16,11 +15,7 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 // eslint-disable-next-line import/order
-import {
-  selectUserSession,
-  selectUsingAccount,
-  userSessionData,
-} from "@polkadex/orderbook-modules";
+import { userSessionData } from "@polkadex/orderbook-modules";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -31,8 +26,8 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useOrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/useOrderHistroyProvider";
+import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/useSessionProvider";
 
 export type Ifilters = {
   hiddenPairs: boolean;
@@ -52,7 +47,6 @@ const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 export const Transactions = () => {
   const dispatch = useDispatch();
-  const now = new Date();
 
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
@@ -60,7 +54,7 @@ export const Transactions = () => {
 
   const orderHistory = useOrderHistoryProvider(filters);
 
-  const userSession = useReduxSelector(selectUserSession);
+  const userSession = useSessionProvider();
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>

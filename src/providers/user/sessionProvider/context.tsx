@@ -1,4 +1,5 @@
 import { createContext } from "react";
+
 import { SessionContextProps, SessionProviderProps } from "./types";
 import { initialState } from "./reducer";
 
