@@ -4,7 +4,7 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { initialState, transactionsReducer } from "./reducer";
 import * as T from "./types";
-import { fetchAllFromAppSync, sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useProfile } from "../profile/useProfile";
 import { UserAccount } from "../profile/types";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";

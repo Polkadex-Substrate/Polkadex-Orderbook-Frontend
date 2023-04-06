@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
@@ -33,7 +32,6 @@ import {
   selectClaimWithdrawsInLoading,
   selectTradeAccount,
   selectWithdrawsLoading,
-  withdrawsFetch,
 } from "@polkadex/orderbook-modules";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -66,7 +64,6 @@ export const WithdrawTemplate = () => {
   const loading = useReduxSelector(selectWithdrawsLoading);
   const { balances: userBalances } = useBalancesProvider();
 
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } =

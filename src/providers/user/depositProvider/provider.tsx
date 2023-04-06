@@ -5,11 +5,7 @@ import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { depositsReducer, initialState } from "./reducer";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger/selectors";
+
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
