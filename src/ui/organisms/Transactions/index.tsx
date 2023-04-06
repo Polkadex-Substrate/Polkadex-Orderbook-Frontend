@@ -31,7 +31,7 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useOrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/useOrderHistroyProvider";
 
 export type Ifilters = {
