@@ -58,7 +58,7 @@ export function useMarkets(onClose: () => void) {
 
   const handleSelectedFavorite = (id: string) => {
     // this should dispatch an action to make store favorites to the dynamo db
-    dispatch(userFavoriteMarketPush(id.trim()));
+    profileState.onUserFavoriteMarketPush(id.trim());
   };
 
   /**

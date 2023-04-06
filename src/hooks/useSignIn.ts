@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { signInFetch } from "../modules/user/auth";
-import { userChangeInitBanner } from "../modules/user/profile";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useSignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const profileState = useProfile();
   const {
     signin: { isLoading: loading, isSuccess },
   } = useAuth();
@@ -34,7 +35,7 @@ export const useSignIn = () => {
 
   useEffect(() => {
     if (isSuccess || isAuthenticated) {
-      dispatch(userChangeInitBanner(true));
+      profileState.onUserChangeInitBanner(true);
       router.push("/trading/" + defaultConfig.landingPageMarket);
     }
   }, [isAuthenticated, isSuccess, router, dispatch]);
