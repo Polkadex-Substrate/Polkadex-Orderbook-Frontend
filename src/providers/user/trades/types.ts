@@ -9,11 +9,22 @@ export interface TradesState {
   data: A.UserTrade[];
 }
 
+export type TradesQueryResult = {
+  m: string;
+  p: string;
+  q: string;
+  s: string;
+  t: string;
+};
+
 export type TradesProviderProps = PropsWithChildren<{
   value: TradesContextProps;
 }>;
 
-export type TradesContextProps = TradesState & {};
+export type TradesContextProps = TradesState & {
+  onFetchTrades: () => void;
+  onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
+};
 
 export interface TradesProps {
   onError?: (value: string) => void;
