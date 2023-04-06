@@ -22,11 +22,13 @@ export interface OrderExecution {
   order_type?: OrderType;
   amount?: string;
 }
+
 export interface OrderCancellation {
   orderId: string;
   base: string;
   quote: string;
 }
+
 export interface OrderExecuteFetch {
   type: typeof ORDER_EXECUTE_FETCH;
   payload: OrderExecution;
@@ -44,6 +46,7 @@ export interface OrderExecuteError {
   type: typeof ORDER_EXECUTE_ERROR;
   error: CommonError;
 }
+
 export interface OrderCancelFetch {
   type: typeof ORDER_CANCEL_FETCH;
   payload: OrderCancellation;

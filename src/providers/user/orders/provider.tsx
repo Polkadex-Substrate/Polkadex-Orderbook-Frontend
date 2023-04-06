@@ -16,13 +16,8 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "../tradeWallet";
 import { selectTradeAccount } from "../tradeWallet/helper";
 import { useNativeApi } from "../../public/nativeApi";
-import {
-  parseError,
-  executePlaceOrder,
-  getNewClientId,
-  isAssetPDEX,
-  executeCancelOrder,
-} from "./helper";
+import { parseError, executePlaceOrder, getNewClientId, executeCancelOrder } from "./helper";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);

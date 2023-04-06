@@ -30,14 +30,6 @@ export const parseError = (msg: any) => {
   }
 };
 
-export const isAssetPDEX = (assetId: string | null | undefined | number): boolean =>
-  assetId === "-1" ||
-  assetId === null ||
-  assetId === -1 ||
-  assetId === "POLKADEX" ||
-  assetId === "PDEX" ||
-  assetId === "polkadex";
-
 export const executeCancelOrder = async (cancelOrderPayload, proxyAddress: string) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
   const res = await sendQueryToAppSync({
