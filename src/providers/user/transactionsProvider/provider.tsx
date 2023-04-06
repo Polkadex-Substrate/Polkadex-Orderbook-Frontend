@@ -27,10 +27,8 @@ export const TransactionsProvider: T.TransactionsComponent = ({
 
   const profileState = useProfile();
 
-  const onTransactionsFetch = useCallback(async () => {
+  const onTransactionsFetch = useCallback(async (mainAddress: string) => {
     dispatch(A.transactionsFetch());
-    const selectedAccount: UserAccount = profileState.selectedAccount;
-    const mainAddress = selectedAccount.mainAddress;
     if (mainAddress) {
       const transactions = await fetchTransactions(mainAddress, 3, 10);
       dispatch(A.transactionsData(transactions));
@@ -106,11 +104,13 @@ export const TransactionsProvider: T.TransactionsComponent = ({
 
   useEffect(() => {
     try {
-      onTransactionsFetch();
+      if (profileState?.selectedAccount?.mainAddress) {
+        onTransactionsFetch(profileState.selectedAccount.mainAddress);
+      }
     } catch (error) {
       onError("error while fetching transaction");
     }
-  }, [onError, onTransactionsFetch]);
+  }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
 
   return (
     <Provider
