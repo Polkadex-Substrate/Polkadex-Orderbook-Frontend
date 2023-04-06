@@ -33,8 +33,6 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
   const keyringPair = useReduxSelector(selectTradeAccount(address));
 
   const onFetchWithdraws = async ({ asset, amount }) => {
-    console.log(asset, amount, "onFetchWithdraws");
-
     try {
       const nonce = getNonce();
       const api = nativeApiState.api;
@@ -48,8 +46,6 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       }
     } catch (error) {
       dispatch(A.withdrawsData());
-
-      console.error("withdraw error: ", error);
       onError("error");
     }
   };
@@ -71,7 +67,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
         onNotification(
-          "Processing Claim Withdraw----Please wait while the withdraw is processed and the block is finalized. This may take a few mins."
+          "...Please wait while the withdraw is processing and until the block is finalized... this may take a few mins"
         );
         const res = await claimWithdrawal(api, signer, account?.address, sid);
         if (res.isSuccess) {
@@ -101,8 +97,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
     sid: number
   ): Promise<ExtrinsicResult> {
     const ext = api.tx.ocex.claimWithdraw(sid, account);
-    const res = await signAndSendExtrinsic(api, ext, { signer }, account, true);
-    return res;
+    return await signAndSendExtrinsic(api, ext, { signer }, account, true);
   }
 
   return (

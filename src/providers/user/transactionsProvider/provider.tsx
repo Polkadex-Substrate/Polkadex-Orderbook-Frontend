@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useReducer, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -11,6 +11,7 @@ import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTim
 import * as queries from "../../../graphql/queries";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 import { useWithdrawsProvider } from "../withdrawsProvider/useWithdrawsProvider";
+import { DEPOSIT, WITHDRAW } from "./constants";
 
 export const TransactionsProvider: T.TransactionsComponent = ({
   onError,
@@ -22,9 +23,11 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     type: "all",
     fieldValue: "",
   });
+
   const profileState = useProfile();
   const { onFetchClaimWithdraw } = useWithdrawsProvider();
-  const onTransactionsFetch = async () => {
+
+  const onTransactionsFetch = useCallback(async () => {
     try {
       dispatch(A.transactionsFetch());
       const selectedAccount: UserAccount = profileState.selectedAccount;
@@ -37,9 +40,9 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       }
     } catch (error) {
       console.error(error);
-      onError("Sonething has gone wrong in fetching transactions");
+      onError("Something has gone wrong in fetching transactions");
     }
-  };
+  }, [profileState.selectedAccount]);
 
   const fetchTransactions = async (
     address: string,
@@ -57,7 +60,8 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       },
       "listTransactionsByMainAccount"
     );
-    const transactions: T.Transaction[] = txs.map((item) => ({
+
+    return txs.map((item) => ({
       amount: item.q,
       asset: item.a,
       event_id: item.eid,
@@ -68,7 +72,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       status: item.st as T.Transaction["status"],
       txn_type: item.tt as T.Transaction["txn_type"],
     }));
-    return transactions;
   };
 
   const transactionHistory: T.Transaction[] = useMemo(() => {
@@ -88,8 +91,16 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     }, []);
     return transactions;
   }, [filterBy, state.transactions]);
-  const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type !== "DEPOSIT");
-  const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
+
+  const withdrawalsList = useMemo(
+    () => transactionHistory?.filter((txn) => txn.txn_type !== DEPOSIT),
+    [transactionHistory]
+  );
+
+  const deposits = useMemo(
+    () => transactionHistory?.filter((txn) => txn.txn_type == DEPOSIT),
+    [transactionHistory]
+  );
 
   const readyWithdrawals = useMemo(
     () => groupWithdrawsBySnapShotIds(withdrawalsList),
@@ -97,14 +108,12 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   );
 
   const handleClaimWithdraws = (sid: number) => {
-    console.log(sid, "handle");
-
     onFetchClaimWithdraw({ sid });
   };
 
   useEffect(() => {
-    onTransactionsFetch();
-  }, []);
+    onTransactionsFetch().finally;
+  }, [onTransactionsFetch]);
 
   return (
     <Provider

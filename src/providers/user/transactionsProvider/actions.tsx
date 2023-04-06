@@ -33,6 +33,7 @@ export interface TransactionsUpdateEventData {
   type: typeof TRANSACTIONS_UPDATE_EVENT_DATA;
   payload: Transaction;
 }
+
 export type TransactionsAction =
   | TransactionsFetch
   | TransactionsData

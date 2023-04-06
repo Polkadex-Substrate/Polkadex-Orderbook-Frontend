@@ -33,7 +33,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { useTransactionssProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
@@ -53,7 +53,7 @@ export const DepositTemplate = () => {
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
-  const { deposits } = useTransactionssProvider();
+  const { deposits } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;

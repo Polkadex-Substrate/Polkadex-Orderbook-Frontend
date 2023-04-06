@@ -3,22 +3,17 @@ import { useDispatch } from "react-redux";
 
 import { groupWithdrawsBySnapShotIds } from "../helpers/groupWithdrawsBySnapshotIds";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectTransactions,
-  Transaction,
-  transactionsFetch,
-} from "@polkadex/orderbook-modules";
+import { Transaction, transactionsFetch } from "@polkadex/orderbook-modules";
 import { useWithdrawsProvider } from "../providers/user/withdrawsProvider/useWithdrawsProvider";
-import { useTransactionssProvider } from "../providers/user/transactionsProvider/useTransactionProvider";
-
+import { useTransactionsProvider } from "../providers/user/transactionsProvider/useTransactionProvider";
+// to be deleted
 export function useHistory() {
   const [filterBy, setFilterBy] = useState({
     type: "all",
     fieldValue: "",
   });
   const dispatch = useDispatch();
-  const { transactions: transactionsHistory } = useTransactionssProvider();
+  const { transactions: transactionsHistory } = useTransactionsProvider();
   const { onFetchClaimWithdraw } = useWithdrawsProvider();
   useEffect(() => {
     dispatch(transactionsFetch());

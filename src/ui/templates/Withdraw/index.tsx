@@ -41,11 +41,10 @@ import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balances
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
-import { useTransactionssProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
-
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -57,7 +56,6 @@ export const WithdrawTemplate = () => {
   const { onFetchWithdraws } = useWithdrawsProvider();
 
   const tradeWalletState = useTradeWallet();
-
 
   const currMainAcc =
     currentAccount.mainAddress &&
@@ -78,8 +76,7 @@ export const WithdrawTemplate = () => {
 
   const router = useRouter();
 
-  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } =
-    useTransactionssProvider();
+  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useTransactionsProvider();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +

@@ -10,11 +10,6 @@ export interface WithdrawsState {
   claimSuccess: boolean;
 }
 
-export interface Fee {
-  currency: string;
-  cost: number;
-}
-
 export type WithdrawsContextProps = WithdrawsState & {
   onFetchWithdraws: (value: WithdrawsFetch["payload"]) => void;
   onFetchClaimWithdraw: (value: WithdrawsClaimFetch["payload"]) => void;

@@ -2,7 +2,7 @@ import { useContext } from "react";
 
 import { Context } from "./context";
 
-export function useTransactionssProvider() {
+export function useTransactionsProvider() {
   const state = useContext(Context);
 
   if (!Context) {

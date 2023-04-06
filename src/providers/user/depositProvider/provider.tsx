@@ -20,15 +20,12 @@ export const DepositProvider: T.DepositsComponent = ({
 
   const { connected: isApiReady, api } = useNativeApi();
   const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
-    console.log(isApiReady);
-
     try {
       if (isApiReady && mainAccount?.account?.address !== "") {
         onNotification(
           "Processing Deposit, Please wait while the deposit is processing and the block is finalized. This may take a few mins."
         );
         dispatch(A.depositsFetch());
-        console.log("try");
 
         const res = await depositToEnclave(api, mainAccount, asset, amount);
 
