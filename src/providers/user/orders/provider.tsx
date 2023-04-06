@@ -37,9 +37,10 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
         tradeWalletState.allBrowserAccounts
       );
       const timestamp = getNonce();
+      const isApiConnected = nativeApiState.connected;
       const api = nativeApiState.api;
       const client_order_id = getNewClientId();
-      if (address !== "" && keyringPair && api) {
+      if (address !== "" && keyringPair && api && isApiConnected) {
         const order = createOrderPayload(
           api,
           address,
@@ -97,7 +98,7 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
           baseAsset,
           quoteAsset
         );
-        const res = await executeCancelOrder([order_id, account, pair, signature], address);
+        await executeCancelOrder([order_id, account, pair, signature], address);
         dispatch(A.orderCancelData());
         onNotification(`Order cancelled of OrderID: ${orderId}`);
         setTimeout(() => {
