@@ -5,6 +5,14 @@ import { TransactionsContextProps, TransactionsProviderProps } from "./types";
 
 export const Context = createContext<TransactionsContextProps>({
   ...initialState,
+  filterByType: null,
+  onChangeFilterByType: () => {},
+  search: null,
+  onChangeSearch: () => {},
+  allWithdrawals: [],
+  readyWithdrawals: [],
+  deposits: [],
+  handleClaimWithdraws: () => {},
 });
 
 export const Provider = ({ value, children }: TransactionsProviderProps) => {

@@ -1,5 +1,6 @@
-import { FC, PropsWithChildren } from "react";
+import { ChangeEvent, FC, PropsWithChildren } from "react";
 import { CommonError } from "../../types";
+import { WithdrawGroup } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 
 export interface Transaction {
   event_id: number;
@@ -44,10 +45,14 @@ export type TransactionQueryResult = {
 };
 
 export type TransactionsContextProps = TransactionsState & {
-  // fetchAssets: () => void;
-  // selectAssetsFetchSuccess: () => boolean;
-  // selectAllAssets: () => IPublicAsset[];
-  // selectGetAsset: (assetId: string | number | Record<string, string>) => IPublicAsset;
+  filterByType;
+  onChangeFilterByType: (value: string) => void;
+  search;
+  onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  allWithdrawals: Transaction[];
+  readyWithdrawals: WithdrawGroup[];
+  deposits: Transaction[];
+  handleClaimWithdraws: (value: number) => void;
 };
 
 export type TransactionsProviderProps = PropsWithChildren<{

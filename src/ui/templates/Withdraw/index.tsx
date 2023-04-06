@@ -27,11 +27,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  useHistory,
-  useReduxSelector,
-  useTryUnlockTradeAccount,
-} from "@polkadex/orderbook-hooks";
+import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
@@ -46,6 +42,7 @@ import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
+import { useTransactionssProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -72,7 +69,8 @@ export const WithdrawTemplate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
+  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } =
+    useTransactionssProvider();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +

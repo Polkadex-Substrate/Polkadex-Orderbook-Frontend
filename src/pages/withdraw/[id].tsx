@@ -44,13 +44,13 @@ const Withdraw = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <TransactionsProvider
-      onError={(v) => toast.error(v)}
-      onNotification={(v) => toast.info(v)}>
-      <WithdrawsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+    <WithdrawsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+      <TransactionsProvider
+        onError={(v) => toast.error(v)}
+        onNotification={(v) => toast.info(v)}>
         <WithdrawTemplate />
-      </WithdrawsProvider>
-    </TransactionsProvider>
+      </TransactionsProvider>
+    </WithdrawsProvider>
   );
 };
 

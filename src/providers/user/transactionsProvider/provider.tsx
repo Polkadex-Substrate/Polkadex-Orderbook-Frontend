@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { ChangeEvent, useEffect, useMemo, useReducer, useState } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -9,6 +9,8 @@ import { useProfile } from "../profile/useProfile";
 import { UserAccount } from "../profile/types";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import * as queries from "../../../graphql/queries";
+import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
+import { useWithdrawsProvider } from "../withdrawsProvider/useWithdrawsProvider";
 
 export const TransactionsProvider: T.TransactionsComponent = ({
   onError,
@@ -16,10 +18,15 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
+  const [filterBy, setFilterBy] = useState({
+    type: "all",
+    fieldValue: "",
+  });
   const profileState = useProfile();
-
+  const { onFetchClaimWithdraw } = useWithdrawsProvider();
   const onTransactionsFetch = async () => {
     try {
+      dispatch(A.transactionsFetch());
       const selectedAccount: UserAccount = profileState.selectedAccount;
       const mainAddress = selectedAccount.mainAddress;
       if (mainAddress) {
@@ -64,6 +71,37 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     return transactions;
   };
 
+  const transactionHistory: T.Transaction[] = useMemo(() => {
+    const transactionsBydate = state.transactions?.sort(
+      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+    );
+    const transactions = transactionsBydate?.reduce((pv, cv) => {
+      if (
+        cv.main_account.toLowerCase().includes(filterBy.fieldValue.toLowerCase()) &&
+        (filterBy.type === "" ||
+          filterBy.type === cv.txn_type.toLowerCase() ||
+          filterBy.type === "all")
+      ) {
+        pv.push(cv);
+      }
+      return pv;
+    }, []);
+    return transactions;
+  }, [filterBy, state.transactions]);
+  const withdrawalsList = transactionHistory.filter((txn) => txn.txn_type !== "DEPOSIT");
+  const deposits = transactionHistory.filter((txn) => txn.txn_type === "DEPOSIT");
+
+  const readyWithdrawals = useMemo(
+    () => groupWithdrawsBySnapShotIds(withdrawalsList),
+    [withdrawalsList]
+  );
+
+  const handleClaimWithdraws = (sid: number) => {
+    console.log(sid, "handle");
+
+    onFetchClaimWithdraw({ sid });
+  };
+
   useEffect(() => {
     onTransactionsFetch();
   }, []);
@@ -72,6 +110,15 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     <Provider
       value={{
         ...state,
+        filterByType: filterBy.type,
+        onChangeFilterByType: (value: string) => setFilterBy({ ...filterBy, type: value }),
+        search: filterBy.fieldValue,
+        onChangeSearch: (e: ChangeEvent<HTMLInputElement>) =>
+          setFilterBy({ ...filterBy, fieldValue: e.target.value }),
+        allWithdrawals: withdrawalsList,
+        readyWithdrawals,
+        deposits,
+        handleClaimWithdraws,
       }}>
       {children}
     </Provider>

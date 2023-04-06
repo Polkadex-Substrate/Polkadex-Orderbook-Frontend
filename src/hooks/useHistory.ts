@@ -17,15 +17,12 @@ export function useHistory() {
     type: "all",
     fieldValue: "",
   });
-
   const dispatch = useDispatch();
   const { transactions: transactionsHistory } = useTransactionssProvider();
-  const transactionsHistory = useReduxSelector(selectTransactions);
   const { onFetchClaimWithdraw } = useWithdrawsProvider();
   useEffect(() => {
     dispatch(transactionsFetch());
   }, [dispatch]);
-
   const transactionHistory: Transaction[] = useMemo(() => {
     const transactionsBydate = transactionsHistory?.sort(
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
