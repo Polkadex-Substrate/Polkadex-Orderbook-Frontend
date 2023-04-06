@@ -14,7 +14,6 @@ import {
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  selectIsAddressInExtension,
   userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
@@ -43,6 +42,8 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -93,13 +94,17 @@ export function Trading() {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
   } = useProfile();
+  const extensionWalletState = useExtensionWallet();
 
   const market = getCurrentMarket();
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+  const hasMainAccount = selectIsAddressInExtension(
+    mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const userAccounts = profileState.userData.userAccounts;
   const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);

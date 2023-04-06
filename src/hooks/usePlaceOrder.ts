@@ -12,18 +12,20 @@ import {
   selectOrderExecuteLoading,
   selectOrderExecuteSucess,
   selectGetFreeProxyBalance,
-  selectTradeAccount,
   alertPush,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const dispatch = useDispatch();
   const orderBookState = useOrderBook();
-
+  const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
 
   const currentMarket = useReduxSelector(selectCurrentMarket);
@@ -40,10 +42,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const isSignedIn = profileState.authInfo.isAuthenticated;
-  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
+  const { getFreeProxyBalance } = useBalancesProvider();
   const usingTradeAddress = profileState.selectedAccount.tradeAddress;
-  const showProtectedPassword = useReduxSelector(
-    selectTradeAccount(usingTradeAddress)
+
+  const showProtectedPassword = selectTradeAccount(
+    usingTradeAddress,
+    tradeWalletState.allBrowserAccounts
   )?.isLocked;
 
   const [tab, setTab] = useState({

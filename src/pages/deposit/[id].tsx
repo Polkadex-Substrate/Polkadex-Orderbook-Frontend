@@ -2,11 +2,12 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectIsAddressInExtension,
-} from "@polkadex/orderbook-modules";
+import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
+import { toast } from "react-toastify";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -22,8 +23,14 @@ const Deposit = () => {
     selectedAccount: { mainAddress },
   } = useProfile();
   const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
+
   const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
-  const hasSelectedAccount = useReduxSelector(selectIsAddressInExtension(mainAddress));
+
+  const hasSelectedAccount = selectIsAddressInExtension(
+    mainAddress,
+    extensionWalletState.allAccounts
+  );
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
@@ -35,7 +42,11 @@ const Deposit = () => {
   }, [hasUser, router]);
   if (shouldRedirect) return <div />;
 
-  return <DepositTemplate />;
+  return (
+    <DepositProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+      <DepositTemplate />
+    </DepositProvider>
+  );
 };
 
 export default Deposit;

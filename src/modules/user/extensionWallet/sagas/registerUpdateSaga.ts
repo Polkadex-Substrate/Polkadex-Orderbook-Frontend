@@ -1,6 +1,5 @@
 import { put, select } from "redux-saga/effects";
 
-import { tradeAccountsFetch } from "../../tradeWallet";
 import { registerMainAccountError, RegisterMainAccountUpdateEvent } from "../actions";
 
 import {

@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
@@ -20,32 +19,39 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import {
-  depositsFetch,
-  selectDepositsLoading,
-  selectMainAccount,
-  Transaction,
-} from "@polkadex/orderbook-modules";
-import { useHistory, useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  isAssetPDEX,
-  selectAllAssets,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
+
+import { Transaction } from "@polkadex/orderbook-modules";
+import { useHistory } from "@polkadex/orderbook-hooks";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
+
+import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
-  const assets = useReduxSelector(selectAllAssets);
-  const getAsset = useReduxSelector(selectGetAsset);
-  const loading = useReduxSelector(selectDepositsLoading);
-  const dispatch = useDispatch();
+
+  const { list, selectGetAsset } = useAssetsProvider();
+
+  const extensionWalletState = useExtensionWallet();
+
+  const currMainAcc =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
+    );
+  const { loading, onFetchDeposit } = useDepositProvider();
+
   const router = useRouter();
   const { deposits } = useHistory();
 
@@ -57,13 +63,13 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
-    const initialAsset = assets.find(
+    const initialAsset = list.find(
       (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
     );
     if (initialAsset) {
       setSelectedAsset(initialAsset);
     }
-  }, [assets, routedAsset]);
+  }, [list, routedAsset]);
 
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
@@ -95,13 +101,12 @@ export const DepositTemplate = () => {
         const asset = isAssetPDEX(selectedAsset.assetId)
           ? { polkadex: null }
           : { asset: selectedAsset.assetId };
-        dispatch(
-          depositsFetch({
-            asset: asset,
-            amount: values.amount,
-            mainAccount: currMainAcc,
-          })
-        );
+
+        onFetchDeposit({
+          asset: asset,
+          amount: values.amount,
+          mainAccount: currMainAcc,
+        });
       },
     });
 
@@ -182,9 +187,9 @@ export const DepositTemplate = () => {
                             </S.DropdownHeader>
                           </Dropdown.Trigger>
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {assets.map((asset) => (
+                            {list.map((asset) => (
                               <Dropdown.Item
-                                key={asset.asset_id}
+                                key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -252,7 +257,7 @@ export const DepositTemplate = () => {
                           <Table.Row key={i}>
                             <Table.Cell>
                               <S.CellName>
-                                <span>{getAsset(item.asset)?.symbol}</span>
+                                <span>{selectGetAsset(item.asset)?.symbol}</span>
                               </S.CellName>
                             </Table.Cell>
                             <Table.Cell>

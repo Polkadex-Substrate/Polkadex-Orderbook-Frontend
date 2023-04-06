@@ -1,14 +1,8 @@
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { endOfDay, startOfMonth } from "date-fns";
 
-import {
-  selectUsingAccount,
-  UserAccount,
-  selectUserSession,
-  selectHasSelectedAccount,
-} from "@polkadex/orderbook-modules";
+import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
-import { useCallback, useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "../../../graphql/queries";
 
