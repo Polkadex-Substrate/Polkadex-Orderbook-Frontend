@@ -8,7 +8,8 @@ import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
 import { notificationPush } from "../../notificationHandler";
-import { userTradesUpdateEvent } from "../../trades";
+import { useTrades } from "@polkadex/orderbook/providers/user/trades";
+import { userTradesUpdateEvent } from "@polkadex/orderbook/providers/user/trades/actions";
 
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
@@ -81,6 +82,7 @@ function createActionFromUserEvent(eventData: any) {
   console.info("User Event: ", data);
   const eventType = data.type;
   const { onTradeAccountUpdate } = useTradeWallet();
+  const { onUserTradeUpdate } = useTrades();
   switch (eventType) {
     case USER_EVENTS.SetBalance:
       return balanceUpdateEvent(data);
@@ -96,8 +98,10 @@ function createActionFromUserEvent(eventData: any) {
       onTradeAccountUpdate(data);
       return tradeAccountUpdateEvent(data);
     }
-    case USER_EVENTS.TradeFormat:
+    case USER_EVENTS.TradeFormat: {
+      onUserTradeUpdate(data);
       return userTradesUpdateEvent(data);
+    }
     case USER_EVENTS.RemoveProxy:
       return registerSuccessNotification(
         "Trade account removed",

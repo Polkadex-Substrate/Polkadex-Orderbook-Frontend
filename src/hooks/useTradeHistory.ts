@@ -1,28 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import {
-  selectCurrentMarket,
-  selectUserTrades,
-  userTradesFetch,
-  selectTradesLoading,
-  selectUserSession,
-} from "@polkadex/orderbook-modules";
+import { selectCurrentMarket, selectUserSession } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTrades } from "@polkadex/orderbook/providers/user/trades";
 
 export function useTradeHistory(filters: Ifilters) {
   const dispatch = useDispatch();
   const profileState = useProfile();
+  const tradesState = useTrades();
 
-  const list = useReduxSelector(selectUserTrades);
+  const list = tradesState.data;
   const listSorted = useMemo(() => {
     return list.sort((a, b) => {
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
     });
   }, [list]);
-  const fetching = useReduxSelector(selectTradesLoading);
+  const fetching = tradesState.loading;
   const currentMarket = useReduxSelector(selectCurrentMarket);
   const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
   const userSession = useReduxSelector(selectUserSession);
@@ -30,7 +26,7 @@ export function useTradeHistory(filters: Ifilters) {
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) dispatch(userTradesFetch());
+    if (userLoggedIn && currentMarket) tradesState.onFetchTrades();
   }, [userLoggedIn, currentMarket, dispatch, userSession]);
 
   useEffect(() => {
