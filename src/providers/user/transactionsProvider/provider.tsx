@@ -1,17 +1,19 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
+import { useProfile } from "../profile/useProfile";
+import { UserAccount } from "../profile/types";
+import * as queries from "../../../graphql/queries";
+import { useWithdrawsProvider } from "../withdrawsProvider/useWithdrawsProvider";
+
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialState, transactionsReducer } from "./reducer";
 import * as T from "./types";
+import { DEPOSIT } from "./constants";
+
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { useProfile } from "../profile/useProfile";
-import { UserAccount } from "../profile/types";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
-import * as queries from "../../../graphql/queries";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
-import { useWithdrawsProvider } from "../withdrawsProvider/useWithdrawsProvider";
-import { DEPOSIT, WITHDRAW } from "./constants";
 
 export const TransactionsProvider: T.TransactionsComponent = ({
   onError,
@@ -28,21 +30,16 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   const { onFetchClaimWithdraw } = useWithdrawsProvider();
 
   const onTransactionsFetch = useCallback(async () => {
-    try {
-      dispatch(A.transactionsFetch());
-      const selectedAccount: UserAccount = profileState.selectedAccount;
-      const mainAddress = selectedAccount.mainAddress;
-      if (mainAddress) {
-        const transactions = await fetchTransactions(mainAddress, 3, 10);
-        dispatch(A.transactionsData(transactions));
-      } else {
-        onNotification("No account selected, Please select a trading account");
-      }
-    } catch (error) {
-      console.error(error);
-      onError("Something has gone wrong in fetching transactions");
+    dispatch(A.transactionsFetch());
+    const selectedAccount: UserAccount = profileState.selectedAccount;
+    const mainAddress = selectedAccount.mainAddress;
+    if (mainAddress) {
+      const transactions = await fetchTransactions(mainAddress, 3, 10);
+      dispatch(A.transactionsData(transactions));
+    } else {
+      onNotification("No account selected, Please select a trading account");
     }
-  }, [profileState.selectedAccount]);
+  }, [profileState.selectedAccount, onNotification]);
 
   const fetchTransactions = async (
     address: string,
@@ -61,7 +58,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       "listTransactionsByMainAccount"
     );
 
-    return txs.map((item) => ({
+    return txs?.map((item) => ({
       amount: item.q,
       asset: item.a,
       event_id: item.eid,
@@ -98,7 +95,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   );
 
   const deposits = useMemo(
-    () => transactionHistory?.filter((txn) => txn.txn_type == DEPOSIT),
+    () => transactionHistory?.filter((txn) => txn.txn_type === DEPOSIT),
     [transactionHistory]
   );
 
@@ -112,8 +109,12 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   };
 
   useEffect(() => {
-    onTransactionsFetch().finally;
-  }, [onTransactionsFetch]);
+    try {
+      onTransactionsFetch();
+    } catch (error) {
+      onError("error while fetching transaction");
+    }
+  }, [onError, onTransactionsFetch]);
 
   return (
     <Provider
