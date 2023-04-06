@@ -13,6 +13,7 @@ import { executeRegisterEmail, createSignedData, registerMainAccount } from "./h
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { useTradeWallet } from "../tradeWallet";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   onError,
@@ -23,6 +24,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   const authState = useAuth();
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
+  const tradeWalletState = useTradeWallet();
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -54,8 +56,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   };
 
   const onRegisterMainAccountReset = () => {
-    // TODO: When tradeWallet Provider would merge, then it should be done.
-    // dispatch(A.registerTradeAccountReset());
+    tradeWalletState.onRegisterTradeAccountReset();
   };
 
   const onRegisterMainAccountUpdate = (
@@ -108,16 +109,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         );
 
         if (res.isSuccess) {
-          // TODO - When TradeWallet would be created
-          // dispatch(
-          //   A.registerTradeAccountData({
-          //     mnemonic,
-          //     account: {
-          //       name: selectedControllerAccount.account.meta.name,
-          //       address: selectedControllerAccount.account.address,
-          //     },
-          //   })
-          // );
+          tradeWalletState.onRegisterTradeAccountData({
+            mnemonic,
+            account: {
+              name: selectedControllerAccount.account.meta.name,
+              address: selectedControllerAccount.account.address,
+            },
+          });
           dispatch(A.registerMainAccountData());
         } else {
           throw new Error("Extrinsic failed");
@@ -136,8 +134,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         await retryRegisterToAppsync(data, signature, tradeAddress, mainAccount);
         return;
       }
-      // TODO - When TradeWallet Would be created
-      // yield put(removeTradeAccountFromBrowser({ address: tradeAddress }));
+      tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
       dispatch(A.registerMainAccountError());
       onError(`Cannot Register Account! ${error.message}`);
     }

@@ -185,7 +185,7 @@ export const userProfileMainAccountPush = (
 
 export const userProfileTradeAccountDelete = (
   payload: UserProfileTradeAccountDelete["payload"]
-) => ({
+): UserProfileTradeAccountDelete => ({
   type: PROFILE_USER_TRADE_ACCOUNT_DELETE,
   payload,
 });

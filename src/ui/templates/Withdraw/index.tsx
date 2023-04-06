@@ -30,7 +30,7 @@ import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
-  selectTradeAccount,
+  selectUserBalance,
   selectWithdrawsLoading,
 } from "@polkadex/orderbook-modules";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
@@ -39,8 +39,13 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+
 import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
 import { useTransactionssProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
@@ -48,7 +53,12 @@ export const WithdrawTemplate = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { selectedAccount: currentAccount } = useProfile();
   const extensionWalletState = useExtensionWallet();
+
   const { onFetchWithdraws } = useWithdrawsProvider();
+
+  const tradeWalletState = useTradeWallet();
+
+
   const currMainAcc =
     currentAccount.mainAddress &&
     extensionWalletState.allAccounts?.find(
@@ -56,9 +66,11 @@ export const WithdrawTemplate = () => {
         account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
     );
 
-  const tradingAccountInBrowser = useReduxSelector(
-    selectTradeAccount(currentAccount?.tradeAddress)
+  const tradingAccountInBrowser = selectTradeAccount(
+    currentAccount?.tradeAddress,
+    tradeWalletState.allBrowserAccounts
   );
+
   useTryUnlockTradeAccount(tradingAccountInBrowser);
   const { list: assets } = useAssetsProvider();
   const loading = useReduxSelector(selectWithdrawsLoading);

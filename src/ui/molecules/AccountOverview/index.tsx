@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { BigHead } from "@bigheads/core";
 
@@ -16,21 +15,21 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectBrowserTradeAccounts } from "@polkadex/orderbook-modules";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
-import { getTradeAccount } from "@polkadex/orderbook/modules/user/tradeWallet/helper";
+import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { userMainAccountDetails } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const router = useRouter();
   const extensionWalletState = useExtensionWallet();
-  const dispatch = useDispatch();
-  const tradingAccounts = useReduxSelector(selectBrowserTradeAccounts);
+  const tradeWalletState = useTradeWallet();
+
+  const tradingAccounts = tradeWalletState.allBrowserAccounts;
   const mainAccounts = extensionWalletState.allAccounts;
   const {
     selectedAccount: currentUsingAccount,

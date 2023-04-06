@@ -10,14 +10,10 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
-import {
-  registerTradeAccountFetch,
-  tradeAccountPush,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const CreateAccountForm = ({
   onCancel = undefined,
@@ -28,6 +24,7 @@ export const CreateAccountForm = ({
   const dispatch = useDispatch();
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
+  const tradeWalletState = useTradeWallet();
   const controllerWallets = extensionWalletState.allAccounts;
   const linkedMainAddresses = profileState.userData.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(({ account }) =>
@@ -69,7 +66,7 @@ export const CreateAccountForm = ({
         const { pair } = keyring.addUri(mnemonic, passcode.length > 0 ? passcode : null, {
           name,
         });
-        dispatch(tradeAccountPush({ pair }));
+        tradeWalletState.onTradeAccountPush({ pair });
         onRegisterMainAccount({
           mainAccount: selectedAccountAddress,
           tradeAddress: pair.address,
@@ -77,13 +74,11 @@ export const CreateAccountForm = ({
           mnemonic,
         });
       } else {
-        dispatch(
-          registerTradeAccountFetch({
-            address: controllerWallet.address,
-            name,
-            password: String(passcode),
-          })
-        );
+        tradeWalletState.onRegisterTradeAccount({
+          address: controllerWallet.address,
+          name,
+          password: String(passcode),
+        });
       }
     },
   });

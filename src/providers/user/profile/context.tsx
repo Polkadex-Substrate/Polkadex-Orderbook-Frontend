@@ -10,8 +10,9 @@ export const Context = createContext<ProfileContextProps>({
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
   onUserAuthFetch: () => {},
-  onUserProfileMainAccountPush: () => {},
   onUserProfileAccountPush: () => {},
+  onUserProfileTradeAccountDelete: () => {},
+  onUserProfileMainAccountPush: () => {},
   onUserAccountSelectFetch: () => {},
 });
 

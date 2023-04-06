@@ -3,14 +3,13 @@ import { Formik, Form } from "formik";
 import { useState } from "react";
 import Head from "next/head";
 import { generateUsername } from "friendly-username-generator";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import { Button, Icon, InputPrimary, MnemonicImport } from "@polkadex/orderbook-ui/molecules";
 import { importValiations } from "@polkadex/orderbook/validations";
-import { importTradeAccountFetch } from "@polkadex/orderbook-modules";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const defaultValues = {
   accountName: generateUsername({ useRandomNumber: false }),
@@ -18,7 +17,7 @@ const defaultValues = {
 
 export const RecoveryTemplate = () => {
   const [state, setState] = useState({ tags: [] });
-  const dispatch = useDispatch();
+  const { onImportTradeAccount } = useTradeWallet();
   return (
     <>
       <Head>
@@ -43,13 +42,11 @@ export const RecoveryTemplate = () => {
                       if (state.tags.length === 12) {
                         const { accountName } = values;
                         const mnemonicString = state.tags.join(" ");
-                        dispatch(
-                          importTradeAccountFetch({
-                            mnemonic: mnemonicString,
-                            name: accountName,
-                            password: "",
-                          })
-                        );
+                        onImportTradeAccount({
+                          mnemonic: mnemonicString,
+                          name: accountName,
+                          password: "",
+                        });
                       }
                     }}>
                     {({ errors, touched, values }) => (
