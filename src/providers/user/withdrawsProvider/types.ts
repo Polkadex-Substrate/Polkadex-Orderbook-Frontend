@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+
 import { WithdrawsClaimFetch, WithdrawsFetch } from "./actions";
 
 export interface WithdrawsState {
@@ -12,7 +13,7 @@ export interface WithdrawsState {
 
 export type WithdrawsContextProps = WithdrawsState & {
   onFetchWithdraws: (value: WithdrawsFetch["payload"]) => void;
-  onFetchClaimWithdraw: (value: WithdrawsClaimFetch["payload"]) => void;
+  handleClaimWithdraws: (value: number) => void;
 };
 
 export type WithdrawsProviderProps = PropsWithChildren<{

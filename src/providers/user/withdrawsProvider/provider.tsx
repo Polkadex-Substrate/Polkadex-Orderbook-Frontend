@@ -1,23 +1,25 @@
 import { useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
+import { Signer } from "@polkadot/types/types";
+
+import * as mutations from "../../../graphql/mutations";
+import { useProfile } from "../profile";
+import { useNativeApi } from "../../public/nativeApi";
+import { UserAccount } from "../profile/types";
+import { useExtensionWallet } from "../extensionWallet";
+
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState } from "./reducer";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import * as mutations from "../../../graphql/mutations";
-import { Signer } from "@polkadot/types/types";
 
+import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { selectTradeAccount, withdrawsReducer } from "@polkadex/orderbook-modules";
-import { useProfile } from "../profile";
-import { useNativeApi } from "../../public/nativeApi";
-import { UserAccount } from "../profile/types";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { useExtensionWallet } from "../extensionWallet";
 
 export const WithdrawsProvider: T.WithdrawsComponent = ({
   onError,
@@ -100,12 +102,16 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
     return await signAndSendExtrinsic(api, ext, { signer }, account, true);
   }
 
+  const handleClaimWithdraws = (sid: number) => {
+    onFetchClaimWithdraw({ sid });
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onFetchWithdraws,
-        onFetchClaimWithdraw,
+        handleClaimWithdraws,
       }}>
       {children}
     </Provider>

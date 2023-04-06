@@ -76,7 +76,8 @@ export const WithdrawTemplate = () => {
 
   const router = useRouter();
 
-  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useTransactionsProvider();
+  const { allWithdrawals, readyWithdrawals } = useTransactionsProvider();
+  const { handleClaimWithdraws } = useWithdrawsProvider()
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +

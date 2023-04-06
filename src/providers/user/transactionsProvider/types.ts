@@ -52,7 +52,6 @@ export type TransactionsContextProps = TransactionsState & {
   allWithdrawals: Transaction[];
   readyWithdrawals: WithdrawGroup[];
   deposits: Transaction[];
-  handleClaimWithdraws: (value: number) => void;
 };
 
 export type TransactionsProviderProps = PropsWithChildren<{

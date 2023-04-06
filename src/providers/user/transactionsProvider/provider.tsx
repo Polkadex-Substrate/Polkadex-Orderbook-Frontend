@@ -3,7 +3,6 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } fr
 import { useProfile } from "../profile/useProfile";
 import { UserAccount } from "../profile/types";
 import * as queries from "../../../graphql/queries";
-import { useWithdrawsProvider } from "../withdrawsProvider/useWithdrawsProvider";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -27,7 +26,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   });
 
   const profileState = useProfile();
-  const { onFetchClaimWithdraw } = useWithdrawsProvider();
 
   const onTransactionsFetch = useCallback(async () => {
     dispatch(A.transactionsFetch());
@@ -104,9 +102,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     [withdrawalsList]
   );
 
-  const handleClaimWithdraws = (sid: number) => {
-    onFetchClaimWithdraw({ sid });
-  };
+
 
   useEffect(() => {
     try {
@@ -128,7 +124,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         allWithdrawals: withdrawalsList,
         readyWithdrawals,
         deposits,
-        handleClaimWithdraws,
       }}>
       {children}
     </Provider>
