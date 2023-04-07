@@ -11,7 +11,7 @@ import {
 } from "./constants";
 import { Market, MarketsState, Ticker } from "./types";
 
-import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
+import { buildFilterPrice } from "@polkadex/web-helpers";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { setToStorage } from "@polkadex/orderbook/helpers/storage";
 export const defaultTickers: Ticker = {
@@ -80,7 +80,7 @@ export const marketsReducer = (
 
     case MARKETS_SET_CURRENT_MARKET: {
       const tickers = [...state.tickers];
-      const currentTicker = tickers.find((x) => x.m === action.payload.m);
+      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
       if (!currentTicker) {
         return {
           ...state,
@@ -100,7 +100,7 @@ export const marketsReducer = (
         return state;
       }
       const tickers = [...state.tickers];
-      const currentTicker = tickers.find((x) => x.m === action.payload.m);
+      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
       if (!currentTicker) {
         return {
           ...state,

@@ -1,5 +1,4 @@
 import { CommonError } from "@polkadex/orderbook/modules/types";
-import { TypeOf } from "yup";
 
 import {
   MARKETS_DATA,

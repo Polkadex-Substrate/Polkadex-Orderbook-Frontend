@@ -25,29 +25,12 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
+  const { list: allAssets } = useAssetsProvider();
 
-  const onMarketsFetch = useCallback(
-    async (allAssets: IPublicAsset[]) => {
-      dispatch(A.marketsFetch());
-      try {
-        if (allAssets.length > 0) {
-          const markets = await fetchMarkets(allAssets);
-
-          dispatch(A.marketsData(markets));
-          dispatch(A.setCurrentMarketIfUnset(markets[0]));
-        }
-      } catch (error) {
-        console.log(error, "error in fetching markets");
-        onError(`error in fetching markets `);
-      }
-    },
-    [onError]
-  );
-
-  const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
+  const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res: any = await sendQueryToAppSync({ query: getAllMarkets });
     const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
-    const markets = pairs.map(async (pair: MarketQueryResult): Promise<Market> => {
+    const markets = pairs?.map(async (pair: MarketQueryResult): Promise<Market> => {
       const [baseAsset, quoteAsset] = pair.market.split("-");
       const [baseSymbol, baseAssetId] = findAsset(assets, baseAsset);
       const [quoteSymbol, quoteAssetId] = findAsset(assets, quoteAsset);
@@ -72,15 +55,33 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
         qty_step_size: Number(pair.qty_step_size),
       };
     });
-    return Promise.all(markets);
-  };
+    return await Promise.all(markets);
+  }, []);
+
+  const onMarketsFetch = useCallback(
+    async (allAssets: IPublicAsset[]) => {
+      dispatch(A.marketsFetch());
+      try {
+        if (allAssets.length > 0) {
+          const markets = await fetchMarkets(allAssets);
+
+          dispatch(A.marketsData(markets));
+          dispatch(A.setCurrentMarketIfUnset(markets[0]));
+        }
+      } catch (error) {
+        console.log(error, "error in fetching markets");
+        onError(`error in fetching markets `);
+      }
+    },
+    [fetchMarkets, onError]
+  );
 
   const findAsset = (assets: IPublicAsset[], id: string) => {
     if (isAssetPDEX(id)) {
       const { name, symbol, assetId } = POLKADEX_ASSET;
       return [name, symbol, assetId];
     }
-    const asset = assets.find(({ assetId }) => assetId === id);
+    const asset = assets?.find(({ assetId }) => assetId === id);
     if (asset) return [asset.name, asset.symbol, asset.assetId];
     else return ["", "", ""];
   };
@@ -94,14 +95,14 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
       console.error("Market tickers fetch error", error);
       onError(`error in fetching tickers `);
     }
-  }, []);
+  }, [onError]);
 
   const fetchMarketTickers = async (): Promise<Ticker[]> => {
     // TODO: check sendQueryToAppSync market variable
     const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
 
     const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
-    const tickers: Ticker[] = tickersRaw.map((elem) => {
+    const tickers: Ticker[] = tickersRaw?.map((elem) => {
       const priceChange = Number(elem.c) - Number(elem.o);
       const priceChangePercent = (priceChange / Number(elem.o)) * 100;
       return {
@@ -149,7 +150,6 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
     dispatch(A.setCurrentMarket(market));
   };
 
-  const { list: allAssets } = useAssetsProvider();
 
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {

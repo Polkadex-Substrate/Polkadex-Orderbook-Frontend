@@ -11,8 +11,8 @@ export const Context = createContext<RecentTradesContextProps>({
   baseUnit: "",
   pricePrecision: 0,
   amountPrecision: 0,
-  getCurrentTradePrice: () => { },
-  getLastTradePrice: () => { }
+  getCurrentTradePrice: () => "",
+  getLastTradePrice: () => "",
 });
 
 export const Provider = ({ value, children }: RecentTradesProviderProps) => (

@@ -31,14 +31,17 @@ export const RecentTradesProvider = ({ children }) => {
     q: string;
     t: number;
   };
-  const fetchRecentTrade = async (market: string, limit = 50): Promise<RawTrades[]> => {
-    const res = await fetchAllFromAppSync(
-      getRecentTrades,
-      { m: market, limit },
-      "getRecentTrades"
-    );
-    return res;
-  };
+  const fetchRecentTrade = useCallback(
+    async (market: string, limit = 50): Promise<RawTrades[]> => {
+      const res = await fetchAllFromAppSync(
+        getRecentTrades,
+        { m: market, limit },
+        "getRecentTrades"
+      );
+      return res;
+    },
+    []
+  );
 
   const { currentMarket } = useMarketsProvider();
 
@@ -69,22 +72,25 @@ export const RecentTradesProvider = ({ children }) => {
     };
   }, [currentMarket?.m]);
 
-  const recentTradesFetch = useCallback(async (market: Market) => {
-    try {
-      if (market) {
-        const res = await fetchRecentTrade(market.m);
-        const trades: T.PublicTrade[] = res.map((x) => ({
-          market_id: market.m,
-          price: x.p,
-          amount: x.q,
-          timestamp: Number(x.t),
-        }));
-        dispatch(A.recentTradesData(trades));
+  const recentTradesFetch = useCallback(
+    async (market: Market) => {
+      try {
+        if (market) {
+          const res = await fetchRecentTrade(market.m);
+          const trades: T.PublicTrade[] = res.map((x) => ({
+            market_id: market.m,
+            price: x.p,
+            amount: x.q,
+            timestamp: Number(x.t),
+          }));
+          dispatch(A.recentTradesData(trades));
+        }
+      } catch (error) {
+        dispatch(A.recentTradesError(error));
       }
-    } catch (error) {
-      dispatch(A.recentTradesError(error));
-    }
-  }, []);
+    },
+    [fetchRecentTrade]
+  );
 
   useEffect(() => {
     recentTradesFetch(currentMarket);
@@ -94,13 +100,11 @@ export const RecentTradesProvider = ({ children }) => {
 
   const getCurrentTradePrice = () => {
     return state.list.length > 0 ? state.list[0].price : "0";
-
-  }
+  };
 
   const getLastTradePrice = () => {
-    state.list.length > 1 ? state.list[1].price : "0";
-
-  }
+    return state.list.length > 1 ? state.list[1].price : "0";
+  };
 
   return (
     <Provider
@@ -113,7 +117,7 @@ export const RecentTradesProvider = ({ children }) => {
         pricePrecision: currentMarket?.quote_precision,
         amountPrecision: currentMarket?.base_precision,
         getCurrentTradePrice,
-        getLastTradePrice
+        getLastTradePrice,
       }}>
       {children}
     </Provider>
