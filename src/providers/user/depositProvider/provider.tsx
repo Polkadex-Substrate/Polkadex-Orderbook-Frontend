@@ -5,14 +5,11 @@ import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { depositsReducer, initialState } from "./reducer";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectRangerApi,
-  selectRangerIsReady,
-} from "@polkadex/orderbook/modules/public/ranger/selectors";
+
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
+import { useNativeApi } from "../../public/nativeApi";
 
 export const DepositProvider: T.DepositsComponent = ({
   onError,
@@ -21,10 +18,7 @@ export const DepositProvider: T.DepositsComponent = ({
 }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
 
-  //TODO: Replace Redux selectors when providers have been created
-  const api = useReduxSelector(selectRangerApi);
-  const isApiReady = useReduxSelector(selectRangerIsReady);
-
+  const { connected: isApiReady, api } = useNativeApi();
   const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
     try {
       if (isApiReady && mainAccount?.account?.address !== "") {

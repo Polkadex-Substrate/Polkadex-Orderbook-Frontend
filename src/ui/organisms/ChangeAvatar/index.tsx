@@ -6,7 +6,6 @@ import * as S from "./styles";
 import { randomAvatars } from "./randomAvatars";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { userSetAvatar } from "@polkadex/orderbook-modules";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type Props = {
@@ -20,7 +19,7 @@ export const ChangeAvatar = ({ onClose = undefined }: Props) => {
   const [state, setState] = useState(currentAvatar);
   const handleChange = (id: number) => setState(id);
   const handleSubmit = () => {
-    dispatch(userSetAvatar(state.toString()));
+    profileState.onUserSetAvatar(state.toString());
     onClose();
   };
   return (

@@ -14,7 +14,6 @@ import {
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
@@ -43,6 +42,7 @@ import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recen
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
+import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -71,6 +71,7 @@ export function Trading() {
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
+    onUserChangeInitBanner,
   } = useProfile();
   const extensionWalletState = useExtensionWallet();
 
@@ -124,7 +125,7 @@ export function Trading() {
 
   const closeBanner = () => {
     setBanner(false);
-    dispatch(userChangeInitBanner());
+    onUserChangeInitBanner();
   };
 
   if (!id) return <div />;
@@ -227,9 +228,11 @@ export function Trading() {
                     <S.GraphEpmty>
                       <Graph />
                       {hasUser ? (
-                        <OrderHistoryProvider>
-                          <Transactions />
-                        </OrderHistoryProvider>
+                        <SessionProvider>
+                          <OrderHistoryProvider>
+                            <Transactions />
+                          </OrderHistoryProvider>
+                        </SessionProvider>
                       ) : (
                         <EmptyMyAccount hasLimit {...hasSelectedAccount} />
                       )}

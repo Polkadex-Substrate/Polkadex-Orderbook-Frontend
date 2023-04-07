@@ -3,7 +3,8 @@ import { call, put, select } from "redux-saga/effects";
 import { sendError } from "../../../";
 import { marketsData, marketsError, MarketsFetch, setCurrentMarketIfUnset } from "../actions";
 import { Market, MarketQueryResult } from "..";
-import { IPublicAsset, isAssetPDEX, selectAllAssets } from "../../assets";
+import { IPublicAsset, selectAllAssets } from "../../assets";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";

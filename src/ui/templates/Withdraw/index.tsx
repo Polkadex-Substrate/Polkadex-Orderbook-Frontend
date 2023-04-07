@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
@@ -27,17 +26,12 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  useHistory,
-  useReduxSelector,
-  useTryUnlockTradeAccount,
-} from "@polkadex/orderbook-hooks";
+import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   selectClaimWithdrawsInLoading,
   selectUserBalance,
   selectWithdrawsLoading,
-  withdrawsFetch,
 } from "@polkadex/orderbook-modules";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -45,6 +39,10 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+
+import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
+import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 
@@ -54,6 +52,9 @@ export const WithdrawTemplate = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { selectedAccount: currentAccount } = useProfile();
   const extensionWalletState = useExtensionWallet();
+
+  const { onFetchWithdraws } = useWithdrawsProvider();
+
   const tradeWalletState = useTradeWallet();
 
   const currMainAcc =
@@ -73,10 +74,10 @@ export const WithdrawTemplate = () => {
   const loading = useReduxSelector(selectWithdrawsLoading);
   const { balances: userBalances } = useBalancesProvider();
 
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
+  const { allWithdrawals, readyWithdrawals } = useTransactionsProvider();
+  const { handleClaimWithdraws } = useWithdrawsProvider()
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -84,7 +85,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.asset_id === selectedAsset?.assetId),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -109,15 +110,13 @@ export const WithdrawTemplate = () => {
   };
 
   const handleSubmitWithdraw = (amount: string | number) => {
+    console.log("submit");
+
     const asset = isAssetPDEX(selectedAsset.assetId)
       ? { polkadex: null }
       : { asset: selectedAsset.assetId };
-    dispatch(
-      withdrawsFetch({
-        asset,
-        amount,
-      })
-    );
+
+    onFetchWithdraws({ asset, amount });
   };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
