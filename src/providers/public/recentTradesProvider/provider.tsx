@@ -1,19 +1,21 @@
-import { ApiPromise, ApiRx } from "@polkadot/api";
 import { useCallback, useEffect, useReducer } from "react";
+import { API } from "aws-amplify";
+
+import * as subscriptions from "../../../graphql/subscriptions";
+import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+import { Market } from "../marketsProvider";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { recentTradesReducer, initialState } from "./reducer";
 import * as T from "./types";
+import { PublicTrade } from "./types";
+
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { PublicTrade } from "./types";
-import { Market } from "@polkadex/orderbook-modules";
-import { API } from "aws-amplify";
-import * as subscriptions from "../../../graphql/subscriptions";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectCurrentMarket } from "@polkadex/orderbook-modules";
+import { getIsDecreasingArray } from "@polkadex/web-helpers";
+
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);
 
@@ -38,12 +40,12 @@ export const RecentTradesProvider = ({ children }) => {
     return res;
   };
 
-  const market = useReduxSelector(selectCurrentMarket);
+  const { currentMarket } = useMarketsProvider();
 
   useEffect(() => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: `${market?.m}-recent-trades` },
+      variables: { name: `${currentMarket?.m}-recent-trades` },
       authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -65,9 +67,9 @@ export const RecentTradesProvider = ({ children }) => {
     return () => {
       return subscription.unsubscribe;
     };
-  }, [market?.m]);
+  }, [currentMarket?.m]);
 
-  const recentTradesFetch = async (market: Market) => {
+  const recentTradesFetch = useCallback(async (market: Market) => {
     try {
       if (market) {
         const res = await fetchRecentTrade(market.m);
@@ -82,12 +84,24 @@ export const RecentTradesProvider = ({ children }) => {
     } catch (error) {
       dispatch(A.recentTradesError(error));
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    recentTradesFetch(currentMarket);
+  }, [currentMarket?.m, recentTradesFetch, currentMarket]);
+
+  const isDecreasing = getIsDecreasingArray(state.list);
+
   return (
     <Provider
       value={{
         ...state,
         recentTradesFetch,
+        isDecreasing,
+        quoteUnit: currentMarket?.quote_ticker,
+        baseUnit: currentMarket?.base_ticker,
+        pricePrecision: currentMarket?.quote_precision,
+        amountPrecision: currentMarket?.base_precision,
       }}>
       {children}
     </Provider>
