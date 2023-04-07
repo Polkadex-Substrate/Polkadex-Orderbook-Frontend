@@ -1,14 +1,16 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
+import { API } from "aws-amplify";
+
+import { useAuth } from "../auth";
+
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
-import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { API } from "aws-amplify";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "@polkadex/orderbook/graphql/queries";
-
 import * as T from "./types";
 import * as A from "./actions";
-import { useAuth } from "../auth";
+
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import * as queries from "@polkadex/orderbook/graphql/queries";
 
 export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -137,6 +139,18 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userAccountSelectFetch(payload));
   };
 
+  const onUserSetDefaultTradeAccount = (payload: A.UserSetDefaultTradeAccount["payload"]) => {
+    dispatch(A.userSetDefaultTradeAccount(payload));
+  };
+
+  const onUserSetAvatar = (payload?: A.UserSetAvatar["payload"]) => {
+    dispatch(A.userSetAvatar(payload));
+  };
+
+  const onUserFavoriteMarketPush = (payload: A.UserFavoriteMarketPush["payload"]) => {
+    dispatch(A.userFavoriteMarketPush(payload));
+  };
+
   const logoutIsSuccess = authState.logout.isSuccess;
 
   useEffect(() => {
@@ -156,6 +170,9 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
         onUserProfileTradeAccountDelete,
         onUserProfileMainAccountPush,
         onUserAccountSelectFetch,
+        onUserSetDefaultTradeAccount,
+        onUserSetAvatar,
+        onUserFavoriteMarketPush,
       }}>
       {children}
     </Provider>

@@ -8,8 +8,9 @@ import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
+
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { useProfile } from "../profile";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const AuthProvider: T.AuthComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -22,6 +23,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         dispatch(A.signInFetch({ email, password }));
         const user: CognitoUser = await Auth.signIn(email, password);
         dispatch(A.signInData({ user, email, isConfirmed: true }));
+        profileState.onUserAuthFetch();
       } catch (error) {
         console.log("error:", error);
         const errorCode = error?.name;
@@ -57,7 +59,7 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
     async ({ email, password }: T.SignUp["fetch"]) => {
       try {
         dispatch(A.signUpFetch({ email, password }));
-        const { user, userConfirmed } = await Auth.signUp({
+        const { userConfirmed } = await Auth.signUp({
           username: email.toLowerCase(),
           password,
           attributes: {

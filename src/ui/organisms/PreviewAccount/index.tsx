@@ -18,7 +18,6 @@ import {
   RemoveFromDevice,
   RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
-import { userSetDefaultTradeAccount } from "@polkadex/orderbook-modules";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
@@ -361,8 +360,8 @@ const DefaultAccount = ({ label = "", tradeAddress }) => {
 
   const handleChange = () =>
     !isActive
-      ? dispatch(userSetDefaultTradeAccount(tradeAddress))
-      : dispatch(userSetDefaultTradeAccount(null));
+      ? profileState.onUserSetDefaultTradeAccount(tradeAddress)
+      : profileState.onUserSetDefaultTradeAccount(null);
 
   return (
     <S.CardWrapper>

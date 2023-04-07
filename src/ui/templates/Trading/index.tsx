@@ -14,7 +14,6 @@ import {
   recentTradesFetch,
   selectCurrentMarket,
   selectCurrentTradePrice,
-  userChangeInitBanner,
 } from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
@@ -71,6 +70,7 @@ export function Trading() {
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
+    onUserChangeInitBanner,
   } = useProfile();
   const extensionWalletState = useExtensionWallet();
 
@@ -124,7 +124,7 @@ export function Trading() {
 
   const closeBanner = () => {
     setBanner(false);
-    dispatch(userChangeInitBanner());
+    onUserChangeInitBanner();
   };
 
   if (!id) return <div />;
