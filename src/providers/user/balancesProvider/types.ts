@@ -45,7 +45,6 @@ export interface BalancesState {
 }
 
 export type BalancesContextProps = BalancesState & {
-  dispatchBalancesFetch: () => void;
   getFreeProxyBalance: (value: string) => string;
 };
 

@@ -20,8 +20,6 @@ import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory"
 import { ProfileState, rootProfileSaga } from "./user/profile";
 import { TradeAccountsState, rootTradeAccountsSaga } from "./user/tradeWallet";
 import { publicReducer, userReducer } from "./app";
-import { DepositsState } from "./user/deposit/reducer";
-import { rootDepositsSaga } from "./user/deposit";
 import { rootTradesSaga, TradesState } from "./user/trades";
 import { WithdrawsState, rootWithdrawsSaga } from "./user/withdraws";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
@@ -43,7 +41,6 @@ export * from "./user/profile";
 export * from "./user/notificationHandler";
 export * from "./user/tradeWallet";
 export * from "./user/extensionWallet";
-export * from "./user/deposit";
 export * from "./user/withdraws";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
@@ -76,7 +73,6 @@ export interface RootState {
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
     profile: ProfileState;
-    deposits: DepositsState;
     trades: TradesState;
     transactions: TransactionsState;
     withdraws: WithdrawsState;
@@ -95,7 +91,6 @@ export function* rootSaga() {
     call(rootMainAccountsSaga),
     call(rootSessionSaga),
     call(rootAuthSaga),
-    call(rootDepositsSaga),
     call(rootTransactionsSaga),
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),

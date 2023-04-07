@@ -41,6 +41,7 @@ export const BalancesProvider: T.BalancesComponent = ({
     [sendQueryToAppSync]
   );
   const onBalancesFetch = useCallback(async () => {
+    dispatch(A.balancesFetch());
     try {
       if (mainAddress && isAssetData) {
         const assetMap = assetsList?.reduce((acc, asset) => {
@@ -69,10 +70,6 @@ export const BalancesProvider: T.BalancesComponent = ({
     }
   }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync]);
 
-  const dispatchBalancesFetch = () => {
-    dispatch(A.balancesFetch());
-  };
-
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
       (balance) => balance?.assetId?.toString() === assetId
@@ -83,13 +80,12 @@ export const BalancesProvider: T.BalancesComponent = ({
 
   useEffect(() => {
     onBalancesFetch();
-  }, [onBalancesFetch]);
+  }, [onBalancesFetch, mainAddress, isAssetData]);
 
   return (
     <Provider
       value={{
         ...state,
-        dispatchBalancesFetch,
         getFreeProxyBalance,
       }}>
       {children}
