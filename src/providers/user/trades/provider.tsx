@@ -1,15 +1,19 @@
 import { useReducer } from "react";
 
+import { useProfile } from "../profile";
+import { UserSessionPayload } from "../sessionProvider/actions";
+import { useSessionProvider } from "../sessionProvider/useSessionProvider";
+
 import { Provider } from "./context";
 import { tradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
-import { useProfile } from "../profile";
 import { processTradeData, fetchUserTrades } from "./helper";
 
 export const TradesProvider: T.TradesComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
+  const sessionState = useSessionProvider();
 
   // Actions
   const onFetchTrades = async () => {
@@ -17,7 +21,7 @@ export const TradesProvider: T.TradesComponent = ({ onError, onNotification, chi
       const currAccount = profileState.selectedAccount;
       const address = currAccount.tradeAddress;
       if (address) {
-        const userSession: UserSessionPayload = yield select(selectUserSession);
+        const userSession: UserSessionPayload = sessionState;
         const { dateFrom, dateTo } = userSession;
         const trades = await fetchUserTrades(address, dateFrom, dateTo);
         dispatch(A.userTradesData(trades));

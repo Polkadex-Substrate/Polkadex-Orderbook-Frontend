@@ -83,7 +83,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
       onOrderBook(currentMarket);
       onOrderBookChanel(currentMarket);
     }
-  }, [currentMarket, dispatch]);
+  }, [currentMarket, dispatch, onOrderBook, onOrderBookChanel]);
 
   return (
     <Provider
