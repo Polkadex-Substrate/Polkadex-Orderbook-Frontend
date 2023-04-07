@@ -1,7 +1,4 @@
-import { useContext, useEffect } from "react";
-
-import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
-import { IPublicAsset } from "../assetsProvider";
+import { useContext } from "react";
 
 import { Context } from "./context";
 
