@@ -27,7 +27,8 @@ export const SessionProvider: T.SessionComponent = ({ onError, children }) => {
   }, [onError]);
 
   useEffect(() => {
-    onFetchSession();
+    if (address)
+      onFetchSession();
   }, [onFetchSession, address]);
 
   return (
