@@ -13,9 +13,7 @@ export interface SessionState {
   dateFrom: Date;
 }
 
-export type SessionContextProps = SessionState & {
-  // onFetchDeposit: (value: onFetchDeposit) => void;
-};
+export type SessionContextProps = SessionState
 
 export type SessionProviderProps = PropsWithChildren<{
   value: SessionContextProps;
