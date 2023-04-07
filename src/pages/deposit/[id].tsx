@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
+import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -43,9 +44,13 @@ const Deposit = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <DepositProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-      <DepositTemplate />
-    </DepositProvider>
+    <TransactionsProvider
+      onError={(v) => toast.error(v)}
+      onNotification={(v) => toast.info(v)}>
+      <DepositProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+        <DepositTemplate />
+      </DepositProvider>
+    </TransactionsProvider>
   );
 };
 

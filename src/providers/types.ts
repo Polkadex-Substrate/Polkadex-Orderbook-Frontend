@@ -13,6 +13,8 @@ export type CommonError = {
   message: string[];
 };
 
+export type OrderSide = "Sell" | "Buy";
+export type OrderType = "LIMIT" | "MARKET";
 export type TradeAccount = KeyringPair;
 export interface ExtensionAccount {
   account: InjectedAccountWithMeta;

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { orderCancelFetch, selectCancelLoading } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export const OpenOrderCard = ({
   isSell,
@@ -19,13 +18,14 @@ export const OpenOrderCard = ({
   data = [],
 }) => {
   const dispatch = useDispatch();
+  const ordersState = useOrders();
   const [isCancelClicked, setIsCancleClicked] = useState(false);
-  const cancelLoading = useReduxSelector(selectCancelLoading);
+  const cancelLoading = ordersState.cancel.isLoading;
 
   const handleCancelClick = () => {
     if (!isCancelClicked) {
       setIsCancleClicked(true);
-      dispatch(orderCancelFetch({ orderId, base, quote }));
+      ordersState.onCancelOrder({ orderId, base, quote });
     }
   };
   useEffect(() => {

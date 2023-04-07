@@ -21,7 +21,6 @@ import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 
 import { Transaction } from "@polkadex/orderbook-modules";
-import { useHistory } from "@polkadex/orderbook-hooks";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
@@ -34,6 +33,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);
@@ -53,7 +53,7 @@ export const DepositTemplate = () => {
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
-  const { deposits } = useHistory();
+  const { deposits } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
   const routedAsset = router.query.id as string;
