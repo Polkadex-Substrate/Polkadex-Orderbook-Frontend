@@ -1,8 +1,9 @@
-import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
-import { CommonState } from "@polkadex/orderbook/modules/types";
-import BigNumber from "bignumber.js";
 import { FC, PropsWithChildren } from "react";
+
 import { IPublicAsset } from "../assetsProvider";
+
+import { CommonState } from "@polkadex/orderbook/modules/types";
+import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
 
 export type MarketId = string;
 
@@ -114,14 +115,9 @@ export type TickerQueryResult = {
 };
 
 export type MarketsContextProps = MarketsState & {
-  marketsFetch: (allAssets: IPublicAsset[]) => void;
-  marketTickersFetch: () => void;
-  getMarkets: () => Market[];
-  getCurrentMarket: () => Market;
+  onMarketsFetch: (allAssets: IPublicAsset[]) => void;
+  onMarketTickersFetch: () => void;
   setCurrentMarket: (market: Market) => void;
-  dispatchMarketFetch: () => void;
-  isMarketLoading: () => boolean;
-  getMarketsTimestamp: () => number;
 };
 
 export type MarketsProviderProps = PropsWithChildren<{

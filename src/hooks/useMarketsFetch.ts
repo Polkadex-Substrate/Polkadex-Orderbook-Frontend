@@ -10,7 +10,7 @@ import {
   selectMarkets,
   setCurrentMarket,
 } from "@polkadex/orderbook-modules";
-
+// to be deleted
 export const useMarketsFetch = (id: string) => {
   const dispatch = useDispatch();
   const shouldDispatch = useReduxSelector(selectShouldFetchMarkets);

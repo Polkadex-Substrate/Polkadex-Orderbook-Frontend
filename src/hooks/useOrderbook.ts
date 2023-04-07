@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import {
-  selectCurrentMarket,
   selectCurrentTradePrice,
   selectLastTradePrice,
 } from "@polkadex/orderbook-modules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -29,7 +29,8 @@ export function useOrderbook() {
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const  {currentMarket}  = useMarketsProvider();
+  
   const currentTrade = useReduxSelector(selectCurrentTradePrice);
   const lastTrade = useReduxSelector(selectLastTradePrice);
   const bidsSorted = sortArrayDescending(bids);

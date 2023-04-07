@@ -2,15 +2,14 @@ import * as S from "./styles";
 
 import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
+import { selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
-import { useEffect } from "react";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export const Navbar = ({ onOpenMarkets }) => {
   const { selectGetAsset } = useAssetsProvider();
-  const currMarket = useReduxSelector(selectCurrentMarket);
+  const { currentMarket: currMarket } = useMarketsProvider();
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
   const quoteAsset = selectGetAsset(currMarket?.assetIdArray[1]);
   const currPrice = Number(currentTickers?.close).toFixed(2);

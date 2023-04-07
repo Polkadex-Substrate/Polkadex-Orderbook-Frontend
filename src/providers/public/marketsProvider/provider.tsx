@@ -1,10 +1,14 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
+import { API } from "aws-amplify";
+
 import * as queries from "../../../graphql/queries";
+import * as subscriptions from "../../../graphql/subscriptions";
+import { IPublicAsset } from "../assetsProvider";
+import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialMarketsState, marketsReducer } from "./reducer";
-import { isAssetPDEX, selectAllAssets } from "@polkadex/orderbook/modules/public/assets";
 import {
   Market,
   MarketQueryResult,
@@ -12,38 +16,41 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
-import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { API } from "aws-amplify";
-import * as subscriptions from "../../../graphql/subscriptions";
+
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
-import { IPublicAsset } from "../assetsProvider";
-import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
-export const MarketsProvider: MarketsComponent = ({ onError, onNotification, children }) => {
+import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
+import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
 
-  const marketsFetch = async (allAssets: IPublicAsset[]) => {
-    try {
-      if (allAssets.length > 0) {
-        const markets = await fetchMarkets(allAssets);
+  const onMarketsFetch = useCallback(
+    async (allAssets: IPublicAsset[]) => {
+      dispatch(A.marketsFetch());
+      try {
+        if (allAssets.length > 0) {
+          const markets = await fetchMarkets(allAssets);
 
-        dispatch(A.marketsData(markets));
-        dispatch(A.setCurrentMarketIfUnset(markets[0]));
+          dispatch(A.marketsData(markets));
+          dispatch(A.setCurrentMarketIfUnset(markets[0]));
+        }
+      } catch (error) {
+        console.log(error, "error in fetching markets");
+        onError(`error in fetching markets `);
       }
-    } catch (error) {
-      console.log(error, "error in fetching markets");
-      onError(`error in fetching markets `);
-    }
-  };
+    },
+    [onError]
+  );
 
   const fetchMarkets = async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res: any = await sendQueryToAppSync({ query: getAllMarkets });
     const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
     const markets = pairs.map(async (pair: MarketQueryResult): Promise<Market> => {
       const [baseAsset, quoteAsset] = pair.market.split("-");
-      const [baseName, baseSymbol, baseAssetId] = findAsset(assets, baseAsset);
-      const [quoteName, quoteSymbol, quoteAssetId] = findAsset(assets, quoteAsset);
+      const [baseSymbol, baseAssetId] = findAsset(assets, baseAsset);
+      const [quoteSymbol, quoteAssetId] = findAsset(assets, quoteAsset);
 
       return {
         id: pair.market,
@@ -78,7 +85,7 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
     else return ["", "", ""];
   };
 
-  const marketTickersFetch = async () => {
+  const onMarketTickersFetch = useCallback(async () => {
     try {
       const tickers = await fetchMarketTickers();
 
@@ -87,7 +94,7 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
       console.error("Market tickers fetch error", error);
       onError(`error in fetching tickers `);
     }
-  };
+  }, []);
 
   const fetchMarketTickers = async (): Promise<Ticker[]> => {
     // TODO: check sendQueryToAppSync market variable
@@ -138,52 +145,26 @@ export const MarketsProvider: MarketsComponent = ({ onError, onNotification, chi
     };
   }, [market?.m]);
 
-  const getMarkets = () => {
-    return state.list;
-  };
-
-  const getCurrentMarket = () => {
-    return state.currentMarket;
-  };
-
   const setCurrentMarket = (market: Market) => {
     dispatch(A.setCurrentMarket(market));
   };
 
-  const dispatchMarketFetch = () => {
-    dispatch(A.marketsFetch());
-  };
-
-  const isMarketLoading = () => {
-    return state.loading;
-  };
-
-  const getMarketsTimestamp = () => {
-    return state.timestamp;
-  };
-
-  const { selectAllAssets } = useAssetsProvider();
-  const allAssets: IPublicAsset[] = selectAllAssets();
+  const { list: allAssets } = useAssetsProvider();
 
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
-      marketsFetch(allAssets);
-      marketTickersFetch();
+      onMarketsFetch(allAssets);
+      onMarketTickersFetch();
     }
-  }, [allAssets]);
+  }, [allAssets, state.list.length, onMarketsFetch, onMarketTickersFetch]);
 
   return (
     <Provider
       value={{
         ...state,
-        marketsFetch,
-        marketTickersFetch,
-        getMarkets,
-        getCurrentMarket,
+        onMarketsFetch,
+        onMarketTickersFetch,
         setCurrentMarket,
-        dispatchMarketFetch,
-        isMarketLoading,
-        getMarketsTimestamp,
       }}>
       {children}
     </Provider>

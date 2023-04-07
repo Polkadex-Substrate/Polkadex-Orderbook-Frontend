@@ -11,7 +11,6 @@ import {
   klineFetch,
   klineSubscribe,
   selectCurrentDarkTheme,
-  selectCurrentMarket,
   selectKline,
   selectKlineInterval,
   selectKlineLoading,
@@ -34,7 +33,7 @@ export const OriginalChart = ({ chart, resolution }) => {
   const target = useRef(null);
 
   const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
-  const currentMarket = useMarketsProvider().getCurrentMarket();
+  const { currentMarket } = useMarketsProvider();
 
   const klines = useReduxSelector(selectKline);
   const klineInterval = useReduxSelector(selectKlineInterval);
