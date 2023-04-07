@@ -217,6 +217,15 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     }
   };
 
+  const selectMainAccount = (address: string) => {
+    return (
+      address &&
+      state.allAccounts?.find(
+        ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
+      )
+    );
+  };
+
   return (
     <Provider
       value={{
@@ -226,6 +235,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         onRegisterMainAccountUpdate,
         onRegisterMainAccount,
         onPolkadotExtensionWallet,
+        selectMainAccount,
       }}>
       {children}
     </Provider>
