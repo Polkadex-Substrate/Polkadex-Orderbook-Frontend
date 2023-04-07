@@ -92,6 +92,16 @@ export const RecentTradesProvider = ({ children }) => {
 
   const isDecreasing = getIsDecreasingArray(state.list);
 
+  const getCurrentTradePrice = () => {
+    return state.list.length > 0 ? state.list[0].price : "0";
+
+  }
+
+  const getLastTradePrice = () => {
+    state.list.length > 1 ? state.list[1].price : "0";
+
+  }
+
   return (
     <Provider
       value={{
@@ -102,6 +112,8 @@ export const RecentTradesProvider = ({ children }) => {
         baseUnit: currentMarket?.base_ticker,
         pricePrecision: currentMarket?.quote_precision,
         amountPrecision: currentMarket?.base_precision,
+        getCurrentTradePrice,
+        getLastTradePrice
       }}>
       {children}
     </Provider>

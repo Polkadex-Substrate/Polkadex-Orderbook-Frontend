@@ -7,11 +7,8 @@ import * as S from "./styles";
 
 import {
   useMarketsTickersFetch,
-  useReduxSelector,
 } from "@polkadex/orderbook-hooks";
-import {
-  selectCurrentTradePrice,
-} from "@polkadex/orderbook-modules";
+
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
   AccountBanner,
@@ -35,7 +32,7 @@ import {
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { RecentTradesProvider, useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
@@ -94,8 +91,7 @@ export function Trading() {
   } = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  // const market = getCurrentMarket();
-  const currentTrade = useReduxSelector(selectCurrentTradePrice);
+  const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;

@@ -26,13 +26,10 @@ export function useMarkets(onClose: () => void) {
     showFavourite: false,
   });
 
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const router = useRouter();
   const allMarketTickers = useReduxSelector(selectMarketTickers);
-  const { getMarkets, getCurrentMarket, setCurrentMarket } = useMarketsProvider();
-  const markets = getMarkets();
-  const currentMarket = getCurrentMarket();
+  const { list:markets, currentMarket, setCurrentMarket } = useMarketsProvider();
   const favorites = profileState.userMarket.favoriteMarkets;
 
   /**

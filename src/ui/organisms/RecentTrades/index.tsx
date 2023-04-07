@@ -15,9 +15,8 @@ import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/re
 export const filters = ["all", "buy", "sell"];
 
 export const RecentTrades = () => {
-  const { state, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+  const { list, loading, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTradesProvider();
-  const { list, loading } = state;
 
   return (
     <S.MainContainer>

@@ -24,6 +24,8 @@ export type RecentTradesContextProps = RecentTradesState & {
   baseUnit: string,
   pricePrecision: number,
   amountPrecision: number,
+  getLastTradePrice:()=>string,
+  getCurrentTradePrice:()=>string
 };
 
 export type RecentTradesProviderProps = PropsWithChildren<{
