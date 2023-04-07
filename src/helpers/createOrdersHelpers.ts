@@ -12,7 +12,7 @@ import {
 
 import { signPayload } from "./enclavePayloadSigner";
 
-import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const createOrderPayload = (
   api: ApiPromise,

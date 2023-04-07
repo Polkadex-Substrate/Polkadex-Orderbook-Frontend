@@ -5,9 +5,9 @@ import { Balance, BalancesUpdateEvent, balanceUpdateEventData } from "../actions
 
 import {
   IPublicAsset,
-  isAssetPDEX,
   selectGetAsset,
 } from "@polkadex/orderbook/modules/public/assets";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {
   try {
