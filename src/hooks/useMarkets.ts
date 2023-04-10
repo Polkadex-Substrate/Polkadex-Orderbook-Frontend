@@ -1,16 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
-import {
-  Market,
-  defaultTickers,
-  selectMarketTickers,
-  userFavoriteMarketPush,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { useProfile } from "../providers/user/profile";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
+import { Market, defaultTickers } from "../providers/public/marketsProvider";
+
 export type InitialMarkets = {
   last: string | number;
   volume: string | number;
@@ -28,8 +22,12 @@ export function useMarkets(onClose: () => void) {
 
   const profileState = useProfile();
   const router = useRouter();
-  const allMarketTickers = useReduxSelector(selectMarketTickers);
-  const { list:markets, currentMarket, setCurrentMarket } = useMarketsProvider();
+  const {
+    list: markets,
+    currentMarket,
+    setCurrentMarket,
+    tickers: allMarketTickers,
+  } = useMarketsProvider();
   const favorites = profileState.userMarket.favoriteMarkets;
 
   /**
