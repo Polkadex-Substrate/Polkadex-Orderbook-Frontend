@@ -1,20 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
 import * as S from "./styles";
 
-import {
-  useMarketsFetch,
-  useMarketsTickersFetch,
-  useReduxSelector,
-} from "@polkadex/orderbook-hooks";
-import {
-  recentTradesFetch,
-  selectCurrentMarket,
-  selectCurrentTradePrice,
-} from "@polkadex/orderbook-modules";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
   AccountBanner,
@@ -38,10 +28,15 @@ import {
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import {
+  RecentTradesProvider,
+  useRecentTradesProvider,
+} from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 
 export function Trading() {
@@ -64,8 +59,46 @@ export function Trading() {
   const dispatch = useDispatch();
   const { id } = useRouter().query;
 
-  useMarketsFetch(id as string);
-  useMarketsTickersFetch();
+  const {
+    loading: isMarketLoading,
+    timestamp,
+    onMarketsFetch,
+    list: markets,
+    setCurrentMarket,
+    currentMarket: market,
+    tickersTimestamp,
+    onMarketTickersFetch,
+  } = useMarketsProvider();
+
+  const shouldDispatchMarketsFetch = useCallback(() => {
+    return !isMarketLoading && !timestamp;
+  }, [isMarketLoading, timestamp]);
+
+  const selectMarket = markets.find(
+    (item) => `${item.base_ticker}${item.quote_ticker}` === id
+  );
+
+  const { list: allAssets } = useAssetsProvider();
+
+  useEffect(() => {
+    if (shouldDispatchMarketsFetch()) {
+      onMarketsFetch(allAssets);
+    } else if (!shouldDispatchMarketsFetch && markets && selectMarket?.id)
+      setCurrentMarket(selectMarket);
+  }, [
+    shouldDispatchMarketsFetch,
+    markets,
+    selectMarket,
+    allAssets,
+    onMarketsFetch,
+    setCurrentMarket,
+  ]);
+
+  useEffect(() => {
+    if (!market?.id && !tickersTimestamp) {
+      onMarketTickersFetch();
+    }
+  }, [market, onMarketTickersFetch, tickersTimestamp]);
 
   const { email } = useAuth();
   const {
@@ -75,8 +108,7 @@ export function Trading() {
   } = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  const market = useReduxSelector(selectCurrentMarket);
-  const currentTrade = useReduxSelector(selectCurrentTradePrice);
+  const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
@@ -103,14 +135,6 @@ export function Trading() {
       secondaryLink: "/settings",
       secondaryLinkTitle: "Select Account",
     };
-
-  // intitialize market dependent events
-  useEffect(() => {
-    if (market) {
-      // dispatch(rangerConnectFetch());
-      dispatch(recentTradesFetch(market));
-    }
-  }, [dispatch, market]);
 
   // initialize user specific sagas
   useUserDataFetch();

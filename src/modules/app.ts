@@ -5,7 +5,6 @@ import { changeGlobalSettingsReducer } from "./public/globalSettings";
 import { errorHandlerReducer } from "./public/errorHandler";
 import { klineReducer } from "./public/kline";
 import { rangerReducer } from "./public/ranger";
-import { marketsReducer } from "./public/markets";
 import { depthReducer, orderBookReducer } from "./public/orderBook";
 import { recentTradesReducer } from "./public/recentTrades";
 import { authReducer } from "./user/auth";
@@ -27,7 +26,6 @@ export const publicReducer = combineReducers({
   globalSettings: changeGlobalSettingsReducer,
   errorHandler: errorHandlerReducer,
   kline: klineReducer,
-  markets: marketsReducer,
   orderBook: orderBookReducer,
   depth: depthReducer,
   recentTrades: recentTradesReducer,

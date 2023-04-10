@@ -2,20 +2,15 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import {
-  selectCurrentMarket,
-  selectCurrentMarketTickers,
-  selectGetFreeProxyBalance,
-  alertPush,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { alertPush } from "@polkadex/orderbook-modules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
-import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
@@ -25,8 +20,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const profileState = useProfile();
   const ordersState = useOrders();
 
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
+  const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
 
   const asks = orderBookState.depth.asks;
@@ -86,7 +80,9 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const [changeTypeIsRange, setChangeType] = useState(false);
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
-  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
+  const [baseAssetId, quoteAssetId] = currentMarket
+    ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
+    : [-1, -1];
 
   const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
   const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
@@ -232,7 +228,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       // VALID TRANSACTION
       ordersState.onPlaceOrders({
         order_type: isLimit ? "LIMIT" : "MARKET",
-        symbol: currentMarket.assetIdArray,
+        symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
         side: isSell ? "Sell" : "Buy",
         price: isLimit ? form.price : "",
         market: currentMarket.id,
