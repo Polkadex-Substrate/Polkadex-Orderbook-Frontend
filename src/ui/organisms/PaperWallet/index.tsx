@@ -3,7 +3,7 @@ import { useRef, useEffect, forwardRef, PropsWithChildren, Ref, useMemo } from "
 
 import * as S from "./styles";
 
-import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 
 const PaperWallet = forwardRef(
   (

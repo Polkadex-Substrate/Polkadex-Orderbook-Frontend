@@ -3,8 +3,7 @@ import keyring from "@polkadot/ui-keyring";
 import FileSaver from "file-saver";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { transformAddress } from "../../profile/helpers";
-
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 import {
   notificationPush,
   selectTradeAccount,

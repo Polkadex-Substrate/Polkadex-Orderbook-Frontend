@@ -33,7 +33,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import {
   getMainAddresssLinkedToTradingAccount,
   transformAddress,
-} from "@polkadex/orderbook/modules/user/profile/helpers";
+} from "@polkadex/orderbook/providers/user/profile/helpers";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";

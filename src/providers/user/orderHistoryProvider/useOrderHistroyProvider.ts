@@ -1,20 +1,17 @@
 import { useContext, useState, useEffect } from "react";
-import { Ifilters } from "@polkadex/orderbook-ui/organisms";
-import * as A from "./actions";
+
+import { useProfile } from "../profile";
 
 import { Context } from "./context";
-import { useDispatch } from "react-redux";
+
+import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectCurrentMarket,
-  selectUserSession,
-  selectHasSelectedAccount,
-  selectUsingAccount,
-} from "@polkadex/orderbook-modules";
+import { selectUserSession, selectCurrentMarket } from "@polkadex/orderbook-modules";
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
+  const profileState = useProfile();
 
   if (!Context) {
     const error = new Error("Order history context is undefined");
@@ -23,14 +20,14 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     throw error;
   }
   const userSession = useReduxSelector(selectUserSession);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const usingAccount = profileState.selectedAccount;
 
   const orderList = state.list;
   const openOrders = state.openOrders;
   const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
+  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
 
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
@@ -38,7 +35,7 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     const { dateFrom, dateTo } = userSession;
     state.onOpenOrdersHistoryFetch();
     state.onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [usingAccount, userSession]);
+  }, [usingAccount, userSession, state]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {

@@ -1,3 +1,5 @@
+//! This File would be deleted later.
+
 import { call, put, select, take, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { API } from "aws-amplify";

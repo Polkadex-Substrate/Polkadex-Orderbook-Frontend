@@ -15,7 +15,7 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { userMainAccountDetails } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";

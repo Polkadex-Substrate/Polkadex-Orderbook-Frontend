@@ -20,7 +20,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
-import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
