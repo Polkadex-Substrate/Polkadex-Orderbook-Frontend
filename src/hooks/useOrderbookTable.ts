@@ -1,13 +1,13 @@
-import { useDispatch } from "react-redux";
 import { MutableRefObject, useEffect } from "react";
 
 import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 
 import {
   DepthState,
-  selectCurrentMarket,
+  
 } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
+
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
@@ -18,13 +18,12 @@ export type Props = {
 };
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
-  const dispatch = useDispatch();
   const orderBookState = useOrderBook();
   const ordersState = useOrders();
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const {currentMarket} = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
 
   /**

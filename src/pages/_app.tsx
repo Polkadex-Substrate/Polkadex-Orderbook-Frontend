@@ -10,10 +10,15 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ToastContainer, toast } from "react-toastify";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
 import { useUserDataFetch } from "../hooks/useUserDataFetch";
+import { AssetsProvider } from "../providers/public/assetsProvider/provider";
+import { MarketsProvider } from "../providers/public/marketsProvider/provider";
+import { BalancesProvider } from "../providers/user/balancesProvider/provider";
+import { OrdersProvider } from "../providers/user/orders";
 
 import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
@@ -24,11 +29,8 @@ import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
-import { AssetsProvider } from "../providers/public/assetsProvider/provider";
-import { BalancesProvider } from "../providers/user/balancesProvider/provider";
-import { OrdersProvider } from "../providers/user/orders";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -80,40 +82,44 @@ function App({ Component, pageProps }: AppProps) {
               <NativeApiProvider
                 onError={(v) => toast.error(v)}
                 onNotification={(v) => toast.info(v)}>
-                <OrderBookProvider
+                <MarketsProvider
                   onError={(v) => toast.error(v)}
                   onNotification={(v) => toast.info(v)}>
-                  <ExtensionWalletProvider
+                  <OrderBookProvider
                     onError={(v) => toast.error(v)}
                     onNotification={(v) => toast.info(v)}>
-                    <TradeWalletProvider
+                    <ExtensionWalletProvider
                       onError={(v) => toast.error(v)}
                       onNotification={(v) => toast.info(v)}>
-                      <BalancesProvider
+                      <TradeWalletProvider
                         onError={(v) => toast.error(v)}
                         onNotification={(v) => toast.info(v)}>
-                        <OverlayProvider>
-                          <ThemeProvider
-                            theme={
-                              color === "light" ? defaultThemes.light : defaultThemes.dark
-                            }>
-                            {defaultConfig.maintenanceMode ? (
-                              <Maintenance />
-                            ) : (
-                              <QueryClientProvider client={queryClient}>
-                                <ThemeWrapper>
-                                  <Component {...pageProps} />
-                                </ThemeWrapper>
-                              </QueryClientProvider>
-                            )}
+                        <BalancesProvider
+                          onError={(v) => toast.error(v)}
+                          onNotification={(v) => toast.info(v)}>
+                          <OverlayProvider>
+                            <ThemeProvider
+                              theme={
+                                color === "light" ? defaultThemes.light : defaultThemes.dark
+                              }>
+                              {defaultConfig.maintenanceMode ? (
+                                <Maintenance />
+                              ) : (
+                                <QueryClientProvider client={queryClient}>
+                                  <ThemeWrapper>
+                                    <Component {...pageProps} />
+                                  </ThemeWrapper>
+                                </QueryClientProvider>
+                              )}
 
-                            <GlobalStyles />
-                          </ThemeProvider>
-                        </OverlayProvider>
-                      </BalancesProvider>
-                    </TradeWalletProvider>
-                  </ExtensionWalletProvider>
-                </OrderBookProvider>
+                              <GlobalStyles />
+                            </ThemeProvider>
+                          </OverlayProvider>
+                        </BalancesProvider>
+                      </TradeWalletProvider>
+                    </ExtensionWalletProvider>
+                  </OrderBookProvider>
+                </MarketsProvider>
               </NativeApiProvider>
             </OrdersProvider>
           </AssetsProvider>

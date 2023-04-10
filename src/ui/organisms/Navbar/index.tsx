@@ -1,22 +1,20 @@
 import * as S from "./styles";
 
 import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectCurrentMarket, selectCurrentMarketTickers } from "@polkadex/orderbook-modules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export const Navbar = ({ onOpenMarkets }) => {
   const { selectGetAsset } = useAssetsProvider();
-  const currMarket = useReduxSelector(selectCurrentMarket);
-  const currentTickers = useReduxSelector(selectCurrentMarketTickers);
-  const quoteAsset = selectGetAsset(currMarket?.assetIdArray[1]);
-  const currPrice = Number(currentTickers?.close).toFixed(2);
-  const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
-  const isPriceChangeNegative = currentTickers?.priceChange24Hr < 0;
-  const volume = Number(currentTickers?.volumeBase24hr).toFixed(2);
-  const high = Number(currentTickers?.high).toFixed(2);
-  const low = Number(currentTickers?.low).toFixed(2);
+  const { currentMarket: currMarket, currentTicker } = useMarketsProvider();
+  const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
+  const currPrice = Number(currentTicker?.close).toFixed(2);
+  const price_change_percent = Number(currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
+  const isPriceChangeNegative = currentTicker?.priceChange24Hr < 0;
+  const volume = Number(currentTicker?.volumeBase24hr).toFixed(2);
+  const high = Number(currentTicker?.high).toFixed(2);
+  const low = Number(currentTicker?.low).toFixed(2);
 
   return (
     <S.Wrapper>
