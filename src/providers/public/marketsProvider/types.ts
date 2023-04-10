@@ -42,10 +42,9 @@ export type MarketFilter = MarketFilterSignificantDigit | MarketFilterCustomStep
 export interface Market {
   id: MarketId;
   m: string; // id in terms of PDEX-1
-  assetIdArray: string[];
   name: string;
-  base_unit: string;
-  quote_unit: string;
+  baseAssetId: string;
+  quoteAssetId: string;
   min_price: number;
   max_price: number;
   min_amount: number;

@@ -1,17 +1,19 @@
 import { useEffect, useReducer } from "react";
-import { Provider } from "./context";
-import { initialOrderBook, orderBookReducer } from "./reducer";
-import { Market } from "@polkadex/orderbook/modules/public/markets/types";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "@polkadex/orderbook/graphql/queries";
-import { getDepthFromOrderbook } from "./helper";
-import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import * as subscriptions from "@polkadex/orderbook/graphql/subscriptions";
 import { API } from "aws-amplify";
 
+import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+import { Market } from "../marketsProvider";
+
+import { Provider } from "./context";
+import { initialOrderBook, orderBookReducer } from "./reducer";
+import { getDepthFromOrderbook } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
-import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import * as queries from "@polkadex/orderbook/graphql/queries";
+import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+import * as subscriptions from "@polkadex/orderbook/graphql/subscriptions";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);

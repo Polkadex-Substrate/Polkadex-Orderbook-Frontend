@@ -80,6 +80,7 @@ export const marketsReducer = (
 
     case MARKETS_SET_CURRENT_MARKET: {
       const tickers = [...state.tickers];
+
       const currentTicker = tickers?.find((x) => x.m === action.payload.m);
       if (!currentTicker) {
         return {
@@ -107,6 +108,7 @@ export const marketsReducer = (
           currentMarket: action.payload,
         };
       }
+
       return {
         ...state,
         currentMarket: action.payload,

@@ -32,18 +32,17 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
     const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
     const markets = pairs?.map(async (pair: MarketQueryResult): Promise<Market> => {
       const [baseAsset, quoteAsset] = pair.market.split("-");
-      const [baseSymbol, baseAssetId] = findAsset(assets, baseAsset);
-      const [quoteSymbol, quoteAssetId] = findAsset(assets, quoteAsset);
+      const { ticker: baseSymbol } = findAsset(assets, baseAsset);
+      const { ticker: quoteSymbol } = findAsset(assets, quoteAsset);
 
       return {
         id: pair.market,
         name: baseSymbol + "/" + quoteSymbol,
         m: pair.market,
-        assetIdArray: [baseAssetId, quoteAssetId],
         base_ticker: baseSymbol,
         quote_ticker: quoteSymbol,
-        base_unit: baseAsset,
-        quote_unit: quoteAsset,
+        baseAssetId: baseAsset,
+        quoteAssetId: quoteAsset,
         base_precision: Number(pair.quote_asset_precision),
         quote_precision: Number(pair.quote_asset_precision),
         min_price: Number(pair.min_order_price),
@@ -76,14 +75,22 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
     [fetchMarkets, onError]
   );
 
-  const findAsset = (assets: IPublicAsset[], id: string) => {
+  const findAsset = (
+    assets: IPublicAsset[],
+    id: string
+  ): { name: string; ticker: string; assetId: string } => {
     if (isAssetPDEX(id)) {
       const { name, symbol, assetId } = POLKADEX_ASSET;
-      return [name, symbol, assetId];
+      return { name, ticker: symbol, assetId };
     }
     const asset = assets?.find(({ assetId }) => assetId === id);
-    if (asset) return [asset.name, asset.symbol, asset.assetId];
-    else return ["", "", ""];
+    if (asset?.name && asset?.symbol && asset?.assetId)
+      return {
+        name: asset.name,
+        ticker: asset.symbol,
+        assetId: asset.assetId,
+      };
+    else throw new Error("cannot find asset id");
   };
 
   const onMarketTickersFetch = useCallback(async () => {
@@ -150,13 +157,12 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
     dispatch(A.setCurrentMarket(market));
   };
 
-
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
       onMarketTickersFetch();
     }
-  }, [allAssets, state.list.length, onMarketsFetch, onMarketTickersFetch]);
+  }, [allAssets, state.list, onMarketsFetch, onMarketTickersFetch]);
 
   return (
     <Provider

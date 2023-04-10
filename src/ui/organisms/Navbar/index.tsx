@@ -11,7 +11,7 @@ export const Navbar = ({ onOpenMarkets }) => {
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket: currMarket } = useMarketsProvider();
   const currentTickers = useReduxSelector(selectCurrentMarketTickers);
-  const quoteAsset = selectGetAsset(currMarket?.assetIdArray[1]);
+  const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
   const currPrice = Number(currentTickers?.close).toFixed(2);
   const price_change_percent = Number(currentTickers?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = currentTickers?.priceChange24Hr < 0;

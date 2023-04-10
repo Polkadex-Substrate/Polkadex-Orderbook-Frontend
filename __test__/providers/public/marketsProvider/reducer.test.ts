@@ -1,4 +1,3 @@
-import { validatePriceStep } from "@polkadex/orderbook/helpers/filterPrice";
 import {
   MarketsAction,
   marketsReducer,
@@ -59,11 +58,10 @@ const cases: testCases[] = [
           id: "PDEX-1",
           name: "PDEX/TDOT",
           m: "PDEX-1",
-          assetIdArray: ["PDEX", "1"],
           base_ticker: "PDEX",
           quote_ticker: "TDOT",
-          base_unit: "PDEX",
-          quote_unit: "1",
+          baseAssetId: "PDEX",
+          quoteAssetId: "1",
           base_precision: 8,
           quote_precision: 8,
           min_price: 0.0001,
@@ -82,10 +80,9 @@ const cases: testCases[] = [
       filters: { "PDEX-1": [] },
       list: [
         {
-          assetIdArray: ["PDEX", "1"],
           base_precision: 8,
           base_ticker: "PDEX",
-          base_unit: "PDEX",
+          baseAssetId: "PDEX",
           id: "PDEX-1",
           m: "PDEX-1",
           max_amount: 10000,
@@ -97,7 +94,7 @@ const cases: testCases[] = [
           qty_step_size: 0.001,
           quote_precision: 8,
           quote_ticker: "TDOT",
-          quote_unit: "1",
+          quoteAssetId: "1",
           tokenTickerName: "PDEX",
         },
       ],

@@ -5,10 +5,7 @@ import Head from "next/head";
 
 import * as S from "./styles";
 
-import {
-  useMarketsTickersFetch,
-} from "@polkadex/orderbook-hooks";
-
+import { useMarketsTickersFetch } from "@polkadex/orderbook-hooks";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
   AccountBanner,
@@ -32,7 +29,10 @@ import {
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { RecentTradesProvider, useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import {
+  RecentTradesProvider,
+  useRecentTradesProvider,
+} from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
@@ -75,15 +75,23 @@ export function Trading() {
     return !isMarketLoading && !timestamp;
   };
 
-  // const markets = getMarkets();
-  const selectMarket = markets.find((item) => item.id === id);
-  const { list: allAssets } = useAssetsProvider()
+  const selectMarket = markets.find(
+    (item) => `${item.base_ticker}${item.quote_ticker}` === id
+  );
+  const { list: allAssets } = useAssetsProvider();
   useEffect(() => {
     if (shouldDispatchMarketsFetch()) {
       onMarketsFetch(allAssets);
     } else if (!shouldDispatchMarketsFetch && markets && selectMarket?.id)
       setCurrentMarket(selectMarket);
-  }, [shouldDispatchMarketsFetch, markets, selectMarket]);
+  }, [
+    shouldDispatchMarketsFetch,
+    markets,
+    selectMarket,
+    allAssets,
+    onMarketsFetch,
+    setCurrentMarket,
+  ]);
 
   useMarketsTickersFetch();
 
@@ -114,16 +122,14 @@ export function Trading() {
   const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
-    image: "emptyWallet",
-    title: "Connect your Trading Account",
-    description: "Import your existing account, or create a new account",
-    primaryLink: "/createAccount",
-    primaryLinkTitle: "Create Account",
-    secondaryLink: "/settings",
-    secondaryLinkTitle: "Select Account",
-  };
-
-
+      image: "emptyWallet",
+      title: "Connect your Trading Account",
+      description: "Import your existing account, or create a new account",
+      primaryLink: "/createAccount",
+      primaryLinkTitle: "Create Account",
+      secondaryLink: "/settings",
+      secondaryLinkTitle: "Select Account",
+    };
 
   // initialize user specific sagas
   useUserDataFetch();
