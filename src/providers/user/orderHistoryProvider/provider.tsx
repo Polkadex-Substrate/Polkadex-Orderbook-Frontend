@@ -11,9 +11,12 @@ import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
 import { Utils } from "@polkadex/web-helpers";
 import { SetOrder } from "./types";
+import { useProfile } from "../profile";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
+  const profileState = useProfile();
+
   type orderHistoryQueryResult = {
     u: string;
     cid: string;
@@ -29,7 +32,7 @@ export const OrderHistoryProvider = ({ children }) => {
     fq: string;
     fee: string;
   };
-  const account: UserAccount = useReduxSelector(selectUsingAccount);
+  const account: UserAccount = profileState.selectedAccount;
 
   const onOpenOrdersHistoryFetch = async () => {
     try {

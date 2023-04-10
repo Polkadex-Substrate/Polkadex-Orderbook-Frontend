@@ -12,9 +12,11 @@ import {
   selectHasSelectedAccount,
   selectUsingAccount,
 } from "@polkadex/orderbook-modules";
+import { useProfile } from "../profile";
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
+  const profileState = useProfile();
 
   if (!Context) {
     const error = new Error("Order history context is undefined");
@@ -23,14 +25,14 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     throw error;
   }
   const userSession = useReduxSelector(selectUserSession);
-  const usingAccount = useReduxSelector(selectUsingAccount);
+  const usingAccount = profileState.selectedAccount;
 
   const orderList = state.list;
   const openOrders = state.openOrders;
   const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
   const currentMarket = useReduxSelector(selectCurrentMarket);
-  const userLoggedIn = useReduxSelector(selectHasSelectedAccount);
+  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
 
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
