@@ -27,7 +27,7 @@ export function useTradeHistory(filters: Ifilters) {
 
   useEffect(() => {
     if (userLoggedIn && currentMarket) tradesState.onFetchTrades();
-  }, [userLoggedIn, currentMarket, dispatch, userSession]);
+  }, [userLoggedIn, currentMarket, dispatch, userSession, tradesState]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
