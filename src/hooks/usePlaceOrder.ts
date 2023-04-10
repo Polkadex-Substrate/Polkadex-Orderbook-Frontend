@@ -5,8 +5,7 @@ import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../help
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { selectCurrentMarketTickers, alertPush } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { alertPush } from "@polkadex/orderbook-modules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -21,8 +20,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const profileState = useProfile();
   const ordersState = useOrders();
 
-  const { currentMarket } = useMarketsProvider();
-  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
+  const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
 
   const asks = orderBookState.depth.asks;

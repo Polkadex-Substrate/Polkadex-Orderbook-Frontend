@@ -93,18 +93,7 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
     else throw new Error("cannot find asset id");
   };
 
-  const onMarketTickersFetch = useCallback(async () => {
-    try {
-      const tickers = await fetchMarketTickers();
-
-      dispatch(A.marketsTickersData(tickers));
-    } catch (error) {
-      console.error("Market tickers fetch error", error);
-      onError(`error in fetching tickers `);
-    }
-  }, [onError]);
-
-  const fetchMarketTickers = async (): Promise<Ticker[]> => {
+  const fetchMarketTickers = useCallback(async (): Promise<Ticker[]> => {
     // TODO: check sendQueryToAppSync market variable
     const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
 
@@ -125,7 +114,19 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
       };
     });
     return tickers;
-  };
+  }, []);
+
+  const onMarketTickersFetch = useCallback(async () => {
+    dispatch(A.marketsTickersFetch());
+    try {
+      const tickers = await fetchMarketTickers();
+
+      dispatch(A.marketsTickersData(tickers));
+    } catch (error) {
+      console.error("Market tickers fetch error", error);
+      onError(`error in fetching tickers`);
+    }
+  }, [onError, fetchMarketTickers]);
 
   const market = state.currentMarket;
   useEffect(() => {

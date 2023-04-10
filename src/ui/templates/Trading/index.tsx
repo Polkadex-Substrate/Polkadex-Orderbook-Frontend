@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
 import * as S from "./styles";
 
-import { useMarketsTickersFetch } from "@polkadex/orderbook-hooks";
 import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
   AccountBanner,
@@ -37,11 +36,8 @@ import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHi
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
-
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
-
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
-
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -70,15 +66,20 @@ export function Trading() {
     list: markets,
     setCurrentMarket,
     currentMarket: market,
+    tickersTimestamp,
+    onMarketTickersFetch,
   } = useMarketsProvider();
-  const shouldDispatchMarketsFetch = () => {
+
+  const shouldDispatchMarketsFetch = useCallback(() => {
     return !isMarketLoading && !timestamp;
-  };
+  }, [isMarketLoading, timestamp]);
 
   const selectMarket = markets.find(
     (item) => `${item.base_ticker}${item.quote_ticker}` === id
   );
+
   const { list: allAssets } = useAssetsProvider();
+
   useEffect(() => {
     if (shouldDispatchMarketsFetch()) {
       onMarketsFetch(allAssets);
@@ -93,7 +94,11 @@ export function Trading() {
     setCurrentMarket,
   ]);
 
-  useMarketsTickersFetch();
+  useEffect(() => {
+    if (!market?.id && !tickersTimestamp) {
+      onMarketTickersFetch();
+    }
+  }, [market, onMarketTickersFetch, tickersTimestamp]);
 
   const { email } = useAuth();
   const {
