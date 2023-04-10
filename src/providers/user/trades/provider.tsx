@@ -10,7 +10,7 @@ import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
-export const TradesProvider: T.TradesComponent = ({ onError, onNotification, children }) => {
+export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const sessionState = useSessionProvider();
