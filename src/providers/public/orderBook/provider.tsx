@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
@@ -20,26 +20,29 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
   const { currentMarket } = useMarketsProvider();
 
   // Actions
-  const onOrderBook = async (payload: Market) => {
-    try {
-      const market = payload;
-      if (market?.m) {
-        const dataRaw: T.OrderBookDbState[] = await fetchAllFromAppSync(
-          queries.getOrderbook,
-          { market: market.m },
-          "getOrderbook"
-        );
+  const onOrderBook = useCallback(
+    async (payload: Market) => {
+      try {
+        const market = payload;
+        if (market?.m) {
+          const dataRaw: T.OrderBookDbState[] = await fetchAllFromAppSync(
+            queries.getOrderbook,
+            { market: market.m },
+            "getOrderbook"
+          );
 
-        const data = formatOrderBookData(dataRaw);
-        const { asks, bids } = getDepthFromOrderbook(data);
-        dispatch(A.depthData({ asks, bids }));
+          const data = formatOrderBookData(dataRaw);
+          const { asks, bids } = getDepthFromOrderbook(data);
+          dispatch(A.depthData({ asks, bids }));
+        }
+      } catch (error) {
+        onNotification(`Something has gone wrong !! ${error.message}`);
       }
-    } catch (error) {
-      onNotification(`Something has gone wrong !! ${error.message}`);
-    }
-  };
+    },
+    [onNotification]
+  );
 
-  const onOrderBookChanel = (market: Market) => {
+  const onOrderBookChanel = useCallback((market: Market) => {
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
       variables: { name: `${market.m}-ob-inc` },
@@ -58,7 +61,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
     return () => {
       subscription.unsubscribe();
     };
-  };
+  }, []);
 
   const formatOrderBookData = (data: T.OrderBookDbState[]): T.OrderBookDbState[] => {
     return data.map((item) => ({
@@ -83,7 +86,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
       onOrderBook(currentMarket);
       onOrderBookChanel(currentMarket);
     }
-  }, [currentMarket, dispatch]);
+  }, [currentMarket, dispatch, onOrderBook, onOrderBookChanel]);
 
   return (
     <Provider
