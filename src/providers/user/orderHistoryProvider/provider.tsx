@@ -1,17 +1,17 @@
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-
-import { selectUsingAccount, UserAccount } from "@polkadex/orderbook-modules";
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { useReducer } from "react";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "../../../graphql/queries";
 
-import * as A from "./actions";
+import * as queries from "../../../graphql/queries";
+import { useProfile } from "../profile";
+
 import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
-import { Utils } from "@polkadex/web-helpers";
+import * as A from "./actions";
 import { SetOrder } from "./types";
-import { useProfile } from "../profile";
+
+import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { Utils } from "@polkadex/web-helpers";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);

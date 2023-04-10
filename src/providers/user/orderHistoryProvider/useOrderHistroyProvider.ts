@@ -1,18 +1,13 @@
 import { useContext, useState, useEffect } from "react";
-import { Ifilters } from "@polkadex/orderbook-ui/organisms";
-import * as A from "./actions";
+
+import { useProfile } from "../profile";
 
 import { Context } from "./context";
-import { useDispatch } from "react-redux";
+
+import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  selectCurrentMarket,
-  selectUserSession,
-  selectHasSelectedAccount,
-  selectUsingAccount,
-} from "@polkadex/orderbook-modules";
-import { useProfile } from "../profile";
+import { selectUserSession, selectCurrentMarket } from "@polkadex/orderbook-modules";
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
@@ -40,7 +35,7 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     const { dateFrom, dateTo } = userSession;
     state.onOpenOrdersHistoryFetch();
     state.onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [usingAccount, userSession]);
+  }, [usingAccount, userSession, state]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
