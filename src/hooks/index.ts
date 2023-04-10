@@ -12,8 +12,6 @@ export * from "./useSignIn";
 export * from "./useMarkets";
 export * from "./useOrderbook";
 export * from "./useOrderbookTable";
-export * from "./useRecentTrades";
-export * from "./useOrderHistory";
 export * from "./usePlaceOrder";
 export * from "./useAppearance";
 export * from "./useFunds";
