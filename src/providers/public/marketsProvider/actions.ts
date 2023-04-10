@@ -1,6 +1,4 @@
-import { TypeOf } from "yup";
-
-import { CommonError } from "../../types";
+import { CommonError } from "@polkadex/orderbook/modules/types";
 
 import {
   MARKETS_DATA,
@@ -90,6 +88,7 @@ export const marketsError = (error: CommonError): MarketsError => ({
   type: MARKETS_ERROR,
   error,
 });
+
 export const setCurrentMarket = (payload: SetCurrentMarket["payload"]): SetCurrentMarket => ({
   type: MARKETS_SET_CURRENT_MARKET,
   payload,
@@ -101,6 +100,7 @@ export const setCurrentMarketIfUnset = (
   type: MARKETS_SET_CURRENT_MARKET_IFUNSET,
   payload,
 });
+
 export const marketsTickersFetch = (): MarketsTickersFetch => ({
   type: MARKETS_TICKERS_FETCH,
 });
@@ -121,7 +121,9 @@ export const marketsTickersChannelFetch = (): MarketsTickerChannelFetch => ({
   type: MARKET_TICKER_CHANNEL_FETCH,
 });
 
-export const marketsTickersChannelData = (payload: MarketsTickersChannelData["payload"]) => ({
+export const marketsTickersChannelData = (
+  payload: MarketsTickersChannelData["payload"]
+): MarketsTickersChannelData => ({
   type: MARKET_TICKER_CHANNEL_DATA,
   payload,
 });

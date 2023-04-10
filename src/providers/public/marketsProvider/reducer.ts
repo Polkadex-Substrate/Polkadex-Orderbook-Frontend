@@ -1,5 +1,3 @@
-import { CommonState } from "../../types";
-
 import { MarketsAction } from "./actions";
 import {
   MARKETS_DATA,
@@ -11,10 +9,11 @@ import {
   MARKETS_TICKERS_FETCH,
   MARKET_TICKER_CHANNEL_DATA,
 } from "./constants";
-import { Market, Ticker } from "./types";
+import { Market, MarketsState, Ticker } from "./types";
 
-import { buildFilterPrice, FilterPrice } from "@polkadex/web-helpers";
+import { buildFilterPrice } from "@polkadex/web-helpers";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import { setToStorage } from "@polkadex/orderbook/helpers/storage";
 export const defaultTickers: Ticker = {
   m: "0-0",
   priceChange24Hr: 0,
@@ -26,21 +25,6 @@ export const defaultTickers: Ticker = {
   volumeBase24hr: "0",
   volumeQuote24Hr: "0",
 };
-
-export interface MarketsState extends CommonState {
-  list: Market[];
-  filters: {
-    [marketId: string]: FilterPrice;
-  };
-  currentMarket: Market | undefined;
-  currentTicker: Ticker;
-  tickersTimestamp: number;
-  timestamp: number;
-  tickerLoading: boolean;
-  tickers: Ticker[];
-  loading: boolean;
-  marketPrice: string;
-}
 
 export const initialMarketsState: MarketsState = {
   list: [],
@@ -96,14 +80,15 @@ export const marketsReducer = (
 
     case MARKETS_SET_CURRENT_MARKET: {
       const tickers = [...state.tickers];
-      const currentTicker = tickers.find((x) => x.m === action.payload.m);
+
+      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
       if (!currentTicker) {
         return {
           ...state,
           currentMarket: action.payload,
         };
       }
-      window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
+      setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {
         ...state,
         currentMarket: action.payload,
@@ -116,13 +101,14 @@ export const marketsReducer = (
         return state;
       }
       const tickers = [...state.tickers];
-      const currentTicker = tickers.find((x) => x.m === action.payload.m);
+      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
       if (!currentTicker) {
         return {
           ...state,
           currentMarket: action.payload,
         };
       }
+
       return {
         ...state,
         currentMarket: action.payload,

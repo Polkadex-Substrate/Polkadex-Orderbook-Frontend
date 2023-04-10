@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from "react";
-import { Market } from "@polkadex/orderbook/modules/public/markets/types";
+
+import { Market } from "../marketsProvider";
 
 export type OrderbookRawUpdate = {
   side: "Bid" | "Ask";

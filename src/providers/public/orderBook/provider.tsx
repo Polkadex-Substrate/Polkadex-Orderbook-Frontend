@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
-import { useSelector } from "react-redux";
+
+import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+import { Market } from "../marketsProvider";
 
 import { Provider } from "./context";
 import { initialOrderBook, orderBookReducer } from "./reducer";
@@ -8,17 +10,14 @@ import { getDepthFromOrderbook } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { Market } from "@polkadex/orderbook/modules/public/markets/types";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import * as subscriptions from "@polkadex/orderbook/graphql/subscriptions";
-import { selectCurrentMarket } from "@polkadex/orderbook-modules";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
-  // TODO?: Replace ... Redux selector to market context selector when created
-  const currentMarket = useSelector(selectCurrentMarket);
+  const { currentMarket } = useMarketsProvider();
 
   // Actions
   const onOrderBook = useCallback(

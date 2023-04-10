@@ -1,6 +1,26 @@
-import BigNumber from "bignumber.js";
+import { FC, PropsWithChildren } from "react";
+
+import { IPublicAsset } from "../assetsProvider";
+
+import { CommonState } from "@polkadex/orderbook/modules/types";
+import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
 
 export type MarketId = string;
+
+export interface MarketsState extends CommonState {
+  list: Market[];
+  filters: {
+    [marketId: string]: FilterPrice;
+  };
+  currentMarket: Market | undefined;
+  currentTicker: Ticker;
+  tickersTimestamp: number;
+  timestamp: number;
+  tickerLoading: boolean;
+  tickers: Ticker[];
+  loading: boolean;
+  marketPrice: string;
+}
 
 export interface MarketFilterCustomStepRule {
   limit: string;
@@ -22,10 +42,9 @@ export type MarketFilter = MarketFilterSignificantDigit | MarketFilterCustomStep
 export interface Market {
   id: MarketId;
   m: string; // id in terms of PDEX-1
-  assetIdArray: string[];
   name: string;
-  base_unit: string;
-  quote_unit: string;
+  baseAssetId: string;
+  quoteAssetId: string;
   min_price: number;
   max_price: number;
   min_amount: number;
@@ -83,3 +102,30 @@ export interface MarketQueryResult {
   qty_step_size: number;
   quote_asset_precision: number;
 }
+
+export type TickerQueryResult = {
+  m?: string;
+  o: string;
+  c: string;
+  h: string;
+  l: string;
+  vb: string;
+  vq: string;
+};
+
+export type MarketsContextProps = MarketsState & {
+  onMarketsFetch: (allAssets: IPublicAsset[]) => void;
+  onMarketTickersFetch: () => void;
+  setCurrentMarket: (market: Market) => void;
+};
+
+export type MarketsProviderProps = PropsWithChildren<{
+  value: MarketsContextProps;
+}>;
+
+export interface MarketsProps {
+  onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
+}
+
+export type MarketsComponent = FC<PropsWithChildren<MarketsProps>>;
