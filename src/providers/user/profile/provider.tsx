@@ -225,10 +225,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     },
     [
       onBalanceUpdate,
-      onRegisterMainAccountUpdate,
-      onTradeAccountUpdate,
+      onRegisterMainAccountUpdate, // arjun
+      onTradeAccountUpdate, // arjun
       onTransactionsUpdate,
-      onUserTradeUpdate,
+      onUserTradeUpdate, // arjun
       registerSuccessNotification,
     ]
   );

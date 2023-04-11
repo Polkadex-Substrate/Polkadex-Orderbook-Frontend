@@ -1,19 +1,20 @@
 import { useCallback, useReducer } from "react";
-import { extensionWalletReducer, initialState } from "./reducer";
 import { ApiPromise } from "@polkadot/api";
-import { ExtensionAccount } from "../../types";
-import { ErrorMessages } from "@polkadex/web-constants";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
+import { ExtensionAccount } from "../../types";
+import { useTradeWallet } from "../tradeWallet";
+
+import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
 import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
 
+import { ErrorMessages } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
-import { useTradeWallet } from "../tradeWallet";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   onError,

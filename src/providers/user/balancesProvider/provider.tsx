@@ -81,27 +81,34 @@ export const BalancesProvider: T.BalancesComponent = ({
     return balance.free_balance;
   };
 
-  const onBalanceUpdate = (payload: T.BalanceUpdatePayload) => {
-    try {
-      const updateBalance = updateBalanceFromEvent(payload);
-      dispatch(A.balanceUpdateEventData(updateBalance));
-    } catch (error) {
-      onError("Something has gone wrong while updating balance");
-    }
-  };
+  const updateBalanceFromEvent = useCallback(
+    (msg: T.BalanceUpdatePayload): T.Balance => {
+      const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
+      const newBalance = {
+        name: selectGetAsset(assetId).name,
+        symbol: selectGetAsset(assetId).symbol,
+        assetId: assetId.toString(),
+        free_balance: msg.free,
+        reserved_balance: msg.reserved,
+        pending_withdrawal: msg.pending_withdrawal,
+      };
+      return newBalance;
+    },
+    [selectGetAsset]
+  );
 
-  const updateBalanceFromEvent = (msg: T.BalanceUpdatePayload): T.Balance => {
-    const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
-    const newBalance = {
-      name: selectGetAsset(assetId).name,
-      symbol: selectGetAsset(assetId).symbol,
-      assetId: assetId.toString(),
-      free_balance: msg.free,
-      reserved_balance: msg.reserved,
-      pending_withdrawal: msg.pending_withdrawal,
-    };
-    return newBalance;
-  };
+  const onBalanceUpdate = useCallback(
+    (payload: T.BalanceUpdatePayload) => {
+      try {
+        const updateBalance = updateBalanceFromEvent(payload);
+        dispatch(A.balanceUpdateEventData(updateBalance));
+      } catch (error) {
+        onError("Something has gone wrong while updating balance");
+      }
+    },
+    [onError, updateBalanceFromEvent]
+  );
+
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);

@@ -113,18 +113,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     }
   }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
 
-  const onTransactionsUpdate = (payload: T.TransactionUpdatePayload) => {
-    try {
-      if (payload) {
-        console.log("transactionsUpdateSaga", payload);
-        const data = formatTransactionData(payload);
-        dispatch(A.transactionsUpdateEventData(data));
-      }
-    } catch (error) {
-      onError("Something has gone wrong while updating transactions");
-    }
-  };
-
   const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
     if (data.txn_type === "DEPOSIT") {
       return {
@@ -150,6 +138,21 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       };
     }
   };
+
+  const onTransactionsUpdate = useCallback(
+    (payload: T.TransactionUpdatePayload) => {
+      try {
+        if (payload) {
+          console.log("transactionsUpdateSaga", payload);
+          const data = formatTransactionData(payload);
+          dispatch(A.transactionsUpdateEventData(data));
+        }
+      } catch (error) {
+        onError("Something has gone wrong while updating transactions");
+      }
+    },
+    [onError]
+  );
 
   return (
     <Provider
