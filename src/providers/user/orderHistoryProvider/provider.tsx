@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useReducer } from "react";
 
 import * as queries from "../../../graphql/queries";
 import { useProfile } from "../profile";
-import { useSessionProvider } from "../sessionProvider/useSessionProvider";
-import { useMarketsProvider } from "../../public/marketsProvider/useMarketsProvider";
 
 import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
@@ -14,7 +12,6 @@ import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
-import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
@@ -104,6 +101,7 @@ export const OrderHistoryProvider = ({ children }) => {
     try {
       if (account.tradeAddress) {
         const transactions: OrderCommon[] = await fetchOpenOrders(account.tradeAddress);
+
         dispatch(A.userOpenOrderHistoryData({ list: transactions }));
       }
     } catch (error) {

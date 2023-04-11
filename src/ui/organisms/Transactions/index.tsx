@@ -1,6 +1,5 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import { useCallback, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -14,9 +13,6 @@ import {
   Popover,
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
-// eslint-disable-next-line import/order
-import { userSessionData } from "@polkadex/orderbook-modules";
-
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import {
@@ -46,8 +42,6 @@ const initialFilters: Ifilters = {
 const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
 
 export const Transactions = () => {
-  const dispatch = useDispatch();
-
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -55,6 +49,7 @@ export const Transactions = () => {
   const orderHistory = useOrderHistoryProvider(filters);
 
   const userSession = useSessionProvider();
+  const { dispatchUserSessionData } = userSession;
 
   // Filters Actions
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") =>
@@ -62,9 +57,9 @@ export const Transactions = () => {
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }) => {
-      dispatch(userSessionData({ dateFrom: startDate, dateTo: endDate }));
+      dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
     },
-    [dispatch]
+    [dispatchUserSessionData]
   );
 
   const ranges = useMemo(() => {

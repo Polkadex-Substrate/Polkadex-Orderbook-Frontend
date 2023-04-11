@@ -1,5 +1,6 @@
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { PropsWithChildren } from "react";
+
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 export interface SetOrder {
   event_id: number;
