@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 
 import { useProfile } from "../profile";
+import { useSessionProvider } from "../sessionProvider/useSessionProvider";
+import { useMarketsProvider } from "../../public/marketsProvider/useMarketsProvider";
 
 import { Context } from "./context";
 
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectUserSession, selectCurrentMarket } from "@polkadex/orderbook-modules";
 
 export function useOrderHistoryProvider(filters: Ifilters) {
   const state = useContext(Context);
@@ -19,24 +19,28 @@ export function useOrderHistoryProvider(filters: Ifilters) {
     Error?.captureStackTrace?.(error, useContext);
     throw error;
   }
-  const userSession = useReduxSelector(selectUserSession);
+  const { dateFrom, dateTo } = useSessionProvider();
   const usingAccount = profileState.selectedAccount;
-
+  const { onOpenOrdersHistoryFetch, onOrdersHistoryFetch } = state;
   const orderList = state.list;
   const openOrders = state.openOrders;
   const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const { currentMarket } = useMarketsProvider();
   const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
 
   const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
   useEffect(() => {
-    const { dateFrom, dateTo } = userSession;
-    state.onOpenOrdersHistoryFetch();
-    state.onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [usingAccount, userSession, state]);
-
+    onOpenOrdersHistoryFetch();
+    onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
+  }, [
+    usingAccount.tradeAddress,
+    dateFrom,
+    dateTo,
+    onOpenOrdersHistoryFetch,
+    onOrdersHistoryFetch,
+  ]);
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
       setUpdatedList(list);
@@ -67,7 +71,6 @@ export function useOrderHistoryProvider(filters: Ifilters) {
       setUpdatedOpenOrdersSorted(openOrdersSorted);
     }
   }, [filters, openOrdersSorted, list]);
-
   return {
     orders: updatedList,
     openOrders: updatedOpenOrdersSorted,
