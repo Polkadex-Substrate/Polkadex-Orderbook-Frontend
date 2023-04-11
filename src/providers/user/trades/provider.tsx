@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 
 import { useProfile } from "../profile";
 import { UserSessionPayload } from "../sessionProvider/actions";
@@ -33,14 +33,17 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
     }
   };
 
-  const onUserTradeUpdate = (payload: A.UserTradesUpdateEvent["payload"]) => {
-    try {
-      const trade = processTradeData(payload);
-      dispatch(A.userTradesUpdateData(trade));
-    } catch (error) {
-      onError(`Something has gone wrong (user trades channel)...${error.message}`);
-    }
-  };
+  const onUserTradeUpdate = useCallback(
+    (payload: A.UserTradesUpdateEvent["payload"]) => {
+      try {
+        const trade = processTradeData(payload);
+        dispatch(A.userTradesUpdateData(trade));
+      } catch (error) {
+        onError(`Something has gone wrong (user trades channel)...${error.message}`);
+      }
+    },
+    [onError]
+  );
 
   return (
     <Provider
