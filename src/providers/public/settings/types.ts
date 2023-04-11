@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 
-export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert";
+export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert" | "";
 
 export interface AlertState {
   type?: AlertTypes;
