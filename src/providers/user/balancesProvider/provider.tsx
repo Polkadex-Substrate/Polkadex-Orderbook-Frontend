@@ -1,13 +1,16 @@
 import { useReducer, useEffect, useCallback } from "react";
+
 import { useProfile } from "../profile/useProfile";
+import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
+import * as queries from "../../../graphql/queries";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
-import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
+
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "../../../graphql/queries";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const BalancesProvider: T.BalancesComponent = ({
   onError,
@@ -18,7 +21,7 @@ export const BalancesProvider: T.BalancesComponent = ({
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
-  const { list: assetsList, success: isAssetData } = useAssetsProvider();
+  const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
   const fetchbalancesAsync = useCallback(
     async (account: string): Promise<T.IBalanceFromDb[]> => {
       const res: any = await sendQueryToAppSync({
@@ -68,7 +71,7 @@ export const BalancesProvider: T.BalancesComponent = ({
       console.error(error);
       onError("Something has gone wrong (balances fetch)..");
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync]);
+  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onError]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
@@ -78,6 +81,27 @@ export const BalancesProvider: T.BalancesComponent = ({
     return balance.free_balance;
   };
 
+  const onBalanceUpdate = (payload: T.BalanceUpdatePayload) => {
+    try {
+      const updateBalance = updateBalanceFromEvent(payload);
+      dispatch(A.balanceUpdateEventData(updateBalance));
+    } catch (error) {
+      onError("Something has gone wrong while updating balance");
+    }
+  };
+
+  const updateBalanceFromEvent = (msg: T.BalanceUpdatePayload): T.Balance => {
+    const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
+    const newBalance = {
+      name: selectGetAsset(assetId).name,
+      symbol: selectGetAsset(assetId).symbol,
+      assetId: assetId.toString(),
+      free_balance: msg.free,
+      reserved_balance: msg.reserved,
+      pending_withdrawal: msg.pending_withdrawal,
+    };
+    return newBalance;
+  };
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
@@ -87,6 +111,7 @@ export const BalancesProvider: T.BalancesComponent = ({
       value={{
         ...state,
         getFreeProxyBalance,
+        onBalanceUpdate,
       }}>
       {children}
     </Provider>
