@@ -1,5 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 
+import * as A from "./actions";
+
 export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert" | "";
 
 export interface AlertState {
@@ -49,7 +51,15 @@ export type SettingProviderProps = PropsWithChildren<{
   value: SettingContextProps;
 }>;
 
-export type SettingContextProps = SettingState & {};
+export type SettingContextProps = SettingState & {
+  onToggleChartRebuild: () => void;
+  onToggleMarketSelector: () => void;
+  onToggleOpenOrdersPairsSwitcher: (value: boolean) => void;
+  onChangeColorTheme: (value: string) => void;
+  onHandleError: (value: A.ErrorHandlerFetch["payload"]) => void;
+  onHandleAlert: (value: A.AlertPush["payload"]) => void;
+  onHandleNotification: (value: A.NotificationPush["payload"]) => void;
+};
 
 export interface SettingProps {
   onError?: (value: string) => void;

@@ -34,7 +34,7 @@ export const initialState: T.SettingState = {
     (process.browser && JSON.parse(window.localStorage.getItem("notifications"))) || [],
 };
 
-export const orderBookReducer = (state: T.SettingState, action) => {
+export const settingReducer = (state: T.SettingState, action) => {
   switch (action.type) {
     case CHANGE_COLOR_THEME: {
       process.browser && localStorage.setItem("colorTheme", action.payload);
