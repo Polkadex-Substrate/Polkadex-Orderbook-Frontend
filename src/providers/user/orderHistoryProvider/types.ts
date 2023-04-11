@@ -1,5 +1,6 @@
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { PropsWithChildren } from "react";
+
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
 
 export interface SetOrder {
   event_id: number;
@@ -42,6 +43,7 @@ export interface onOrdersHistoryFetch {
 export type OrderHistoryContextProps = OrdersHistoryState & {
   onOpenOrdersHistoryFetch: () => void;
   onOrdersHistoryFetch: (value: onOrdersHistoryFetch) => void;
+  onOrderUpdates: (value: SetOrder) => void;
 };
 
 export type OrderHistoryProviderProps = PropsWithChildren<{

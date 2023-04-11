@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
@@ -7,6 +7,10 @@ import { useExtensionWallet } from "../extensionWallet";
 import { orderUpdateEvent } from "../orderHistoryProvider";
 import { balanceUpdateEvent } from "../balancesProvider/actions";
 import { useBalancesProvider } from "../balancesProvider/useBalancesProvider";
+import { transactionsUpdateEvent } from "../transactionsProvider";
+import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
+import { useTradeWallet } from "../tradeWallet";
+import { useTrades } from "../trades";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -21,8 +25,6 @@ import {
   tradeAccountUpdateEvent,
   userTradesUpdateEvent,
 } from "@polkadex/orderbook-modules";
-import { transactionsUpdateEvent } from "../transactionsProvider";
-import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
 
 export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -170,7 +172,66 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   }, [logoutIsSuccess]);
 
   // user event listener
+  const { onRegisterMainAccountUpdate } = useExtensionWallet();
+  const { onBalanceUpdate } = useBalancesProvider();
+  const { onTransactionsUpdate } = useTransactionsProvider();
+  const { onTradeAccountUpdate } = useTradeWallet();
+  const { onUserTradeUpdate } = useTrades();
 
+  const registerSuccessNotification = useCallback(
+    (title: string, description: string) => onNotification(title),
+    [onNotification]
+  );
+
+  const createActionFromUserEvent = useCallback(
+    (eventData: any) => {
+      console.log("got raw event", eventData);
+      const data = JSON.parse(eventData.value.data.websocket_streams.data);
+      console.info("User Event: ", data);
+      const eventType = data.type;
+      switch (eventType) {
+        case USER_EVENTS.SetBalance: {
+          onBalanceUpdate(data);
+          return balanceUpdateEvent(data);
+        }
+        case USER_EVENTS.SetTransaction: {
+          onTransactionsUpdate(data);
+          return transactionsUpdateEvent(data);
+        }
+        case USER_EVENTS.Order: {
+          // order update function will be added here once order history refactor pr is merged
+          return orderUpdateEvent(data);
+        }
+        case USER_EVENTS.RegisterAccount: {
+          onRegisterMainAccountUpdate(data);
+          return registerMainAccountUpdateEvent(data);
+        }
+        case USER_EVENTS.AddProxy: {
+          onTradeAccountUpdate(data);
+          return tradeAccountUpdateEvent(data);
+        }
+
+        case USER_EVENTS.TradeFormat: {
+          onUserTradeUpdate(data);
+          return userTradesUpdateEvent(data);
+        }
+
+        case USER_EVENTS.RemoveProxy:
+          return registerSuccessNotification(
+            "Trade account removed",
+            "Trade account removal Confirmed"
+          );
+      }
+    },
+    [
+      onBalanceUpdate,
+      onRegisterMainAccountUpdate,
+      onTradeAccountUpdate,
+      onTransactionsUpdate,
+      onUserTradeUpdate,
+      registerSuccessNotification,
+    ]
+  );
   const currentAccount: T.UserAccount = state.selectedAccount;
   const mainAddr = currentAccount.mainAddress;
   const tradeAddr = currentAccount.tradeAddress;
@@ -187,7 +248,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        emit(createActionFromUserEvent(data));
+        createActionFromUserEvent(data);
       },
       error: (err) => {
         console.log("subscription error", err);
@@ -197,45 +258,31 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     return () => {
       subscription.unsubscribe();
     };
-  }, [mainAddr]);
+  }, [createActionFromUserEvent, mainAddr]);
 
-  const { onRegisterMainAccountUpdate } = useExtensionWallet();
-  const { onBalanceUpdate } = useBalancesProvider();
-  const { onTransactionsUpdate } = useTransactionsProvider();
-  function createActionFromUserEvent(eventData: any) {
-    console.log("got raw event", eventData);
-    const data = JSON.parse(eventData.value.data.websocket_streams.data);
-    console.info("User Event: ", data);
-    const eventType = data.type;
-    switch (eventType) {
-      case USER_EVENTS.SetBalance: {
-        onBalanceUpdate(data);
-        return balanceUpdateEvent(data);
-      }
-      case USER_EVENTS.SetTransaction: {
-        onTransactionsUpdate(data);
-        return transactionsUpdateEvent(data);
-      }
-      case USER_EVENTS.Order:
-        return orderUpdateEvent(data);
-      case USER_EVENTS.RegisterAccount: {
-        onRegisterMainAccountUpdate(data);
-        return registerMainAccountUpdateEvent(data);
-      }
-      case USER_EVENTS.AddProxy:
-        return tradeAccountUpdateEvent(data);
-      case USER_EVENTS.TradeFormat:
-        return userTradesUpdateEvent(data);
-      case USER_EVENTS.RemoveProxy:
-        return registerSuccessNotification(
-          "Trade account removed",
-          "Trade account removal Confirmed"
-        );
-    }
-  }
+  useEffect(() => {
+    console.log("created User Events Channel...", tradeAddr);
 
-  const registerSuccessNotification = (title: string, description: string) =>
-    onNotification(title);
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: tradeAddr },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        createActionFromUserEvent(data);
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [createActionFromUserEvent, tradeAddr]);
 
   return (
     <Provider

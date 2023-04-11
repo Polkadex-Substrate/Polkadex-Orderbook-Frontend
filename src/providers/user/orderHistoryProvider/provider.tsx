@@ -58,9 +58,9 @@ export const OrderHistoryProvider = ({ children }) => {
     }
   };
 
-  const OnOrderUpdates = (setOrder: SetOrder) => {
+  const onOrderUpdates = (payload: A.OrderUpdateEvent["payload"]) => {
     try {
-      const order = processOrderData(setOrder);
+      const order = processOrderData(payload);
       dispatch(A.orderUpdateEventData(order));
     } catch (error) {
       console.log(error, "Something has gone wrong (order updates channel)...", error);
@@ -105,7 +105,7 @@ export const OrderHistoryProvider = ({ children }) => {
     return orders;
   };
 
-  function processOrderData(eventData: SetOrder): OrderCommon {
+  function processOrderData(eventData: A.OrderUpdateEvent["payload"]): OrderCommon {
     const base = eventData.pair.base_asset;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -161,6 +161,7 @@ export const OrderHistoryProvider = ({ children }) => {
         ...state,
         onOpenOrdersHistoryFetch,
         onOrdersHistoryFetch,
+        onOrderUpdates,
       }}>
       {children}
     </Provider>
