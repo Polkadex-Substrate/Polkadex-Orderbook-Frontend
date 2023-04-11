@@ -1,12 +1,18 @@
 import { useReducer } from "react";
-import { Provider } from "./context";
-import { tradeWalletReducer, initialState } from "./reducer";
 import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
-import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
 import { ApiPromise } from "@polkadot/api";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
+import { transformAddress } from "../profile/helpers";
+import { TradeAccount } from "../../types";
+import { useProfile } from "../profile";
+import { useNativeApi } from "../../public/nativeApi";
+import { useExtensionWallet } from "../extensionWallet";
+
+import { Provider } from "./context";
+import { tradeWalletReducer, initialState } from "./reducer";
 import {
   loadKeyring,
   getAllTradeAccountsInBrowser,
@@ -15,11 +21,6 @@ import {
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
-import { TradeAccount } from "../../types";
-import { useProfile } from "../profile";
-import { useNativeApi } from "../../public/nativeApi";
-import { useExtensionWallet } from "../extensionWallet";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({
   onError,

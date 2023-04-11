@@ -21,6 +21,8 @@ import {
   tradeAccountUpdateEvent,
   userTradesUpdateEvent,
 } from "@polkadex/orderbook-modules";
+import { transactionsUpdateEvent } from "../transactionsProvider";
+import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
 
 export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -199,6 +201,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
 
   const { onRegisterMainAccountUpdate } = useExtensionWallet();
   const { onBalanceUpdate } = useBalancesProvider();
+  const { onTransactionsUpdate } = useTransactionsProvider();
   function createActionFromUserEvent(eventData: any) {
     console.log("got raw event", eventData);
     const data = JSON.parse(eventData.value.data.websocket_streams.data);
@@ -210,6 +213,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
         return balanceUpdateEvent(data);
       }
       case USER_EVENTS.SetTransaction: {
+        onTransactionsUpdate(data);
         return transactionsUpdateEvent(data);
       }
       case USER_EVENTS.Order:
