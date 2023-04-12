@@ -1,5 +1,4 @@
 import { AppProps } from "next/app";
-import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
@@ -20,7 +19,6 @@ import { MarketsProvider } from "../providers/public/marketsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 import { OrdersProvider } from "../providers/user/orders";
 
-import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
@@ -29,6 +27,10 @@ import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
+import {
+  SettingProvider,
+  useSettingsProvider,
+} from "@polkadex/orderbook/providers/public/settings";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -56,8 +58,6 @@ const Maintenance = dynamic(
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-  const color = useSelector(selectCurrentColorTheme);
-
   // Removes all console from production environment
   if (process.env.NODE_ENV === "production") {
     console.log = () => {};
@@ -70,64 +70,76 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
-
-      <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-        <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <AssetsProvider
+      <SettingProvider>
+        <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
+          <ProfileProvider
             onError={(v) => toast.error(v)}
             onNotification={(v) => toast.info(v)}>
-            <OrdersProvider
+            <AssetsProvider
               onError={(v) => toast.error(v)}
               onNotification={(v) => toast.info(v)}>
-              <NativeApiProvider
+              <OrdersProvider
                 onError={(v) => toast.error(v)}
                 onNotification={(v) => toast.info(v)}>
-                <MarketsProvider
+                <NativeApiProvider
                   onError={(v) => toast.error(v)}
                   onNotification={(v) => toast.info(v)}>
-                  <OrderBookProvider
+                  <MarketsProvider
                     onError={(v) => toast.error(v)}
                     onNotification={(v) => toast.info(v)}>
-                    <ExtensionWalletProvider
+                    <OrderBookProvider
                       onError={(v) => toast.error(v)}
                       onNotification={(v) => toast.info(v)}>
-                      <TradeWalletProvider
+                      <ExtensionWalletProvider
                         onError={(v) => toast.error(v)}
                         onNotification={(v) => toast.info(v)}>
-                        <BalancesProvider
+                        <TradeWalletProvider
                           onError={(v) => toast.error(v)}
                           onNotification={(v) => toast.info(v)}>
-                          <OverlayProvider>
-                            <ThemeProvider
-                              theme={
-                                color === "light" ? defaultThemes.light : defaultThemes.dark
-                              }>
-                              {defaultConfig.maintenanceMode ? (
-                                <Maintenance />
-                              ) : (
-                                <QueryClientProvider client={queryClient}>
-                                  <ThemeWrapper>
-                                    <Component {...pageProps} />
-                                  </ThemeWrapper>
-                                </QueryClientProvider>
-                              )}
-
-                              <GlobalStyles />
-                            </ThemeProvider>
-                          </OverlayProvider>
-                        </BalancesProvider>
-                      </TradeWalletProvider>
-                    </ExtensionWalletProvider>
-                  </OrderBookProvider>
-                </MarketsProvider>
-              </NativeApiProvider>
-            </OrdersProvider>
-          </AssetsProvider>
-        </ProfileProvider>
-      </AuthProvider>
+                          <BalancesProvider
+                            onError={(v) => toast.error(v)}
+                            onNotification={(v) => toast.info(v)}>
+                            <OverlayProvider>
+                              <ModifiedThemeProvider
+                                Component={Component}
+                                pageProps={pageProps}
+                              />
+                            </OverlayProvider>
+                          </BalancesProvider>
+                        </TradeWalletProvider>
+                      </ExtensionWalletProvider>
+                    </OrderBookProvider>
+                  </MarketsProvider>
+                </NativeApiProvider>
+              </OrdersProvider>
+            </AssetsProvider>
+          </ProfileProvider>
+        </AuthProvider>
+      </SettingProvider>
     </>
   );
 }
+
+const ModifiedThemeProvider = ({ Component, pageProps }) => {
+  const { color } = useSettingsProvider();
+
+  return (
+    <>
+      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+        {defaultConfig.maintenanceMode ? (
+          <Maintenance />
+        ) : (
+          <QueryClientProvider client={queryClient}>
+            <ThemeWrapper>
+              <Component {...pageProps} />
+            </ThemeWrapper>
+          </QueryClientProvider>
+        )}
+        <GlobalStyles />
+      </ThemeProvider>
+    </>
+  );
+};
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   const profileState = useProfile();
