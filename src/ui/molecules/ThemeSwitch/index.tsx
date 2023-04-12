@@ -1,12 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import * as S from "./styles";
 
-import { changeColorTheme, selectCurrentColorTheme } from "@polkadex/orderbook-modules";
+import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const ThemeSwitch = () => {
-  const dispatch = useDispatch();
+  const { onChangeColorTheme } = useSettingsProvider();
   const color = useSelector(selectCurrentColorTheme);
 
   return (
@@ -15,7 +16,7 @@ export const ThemeSwitch = () => {
         name={color === "dark" ? "Moon" : "Sun"}
         background="none"
         size="large"
-        onClick={() => dispatch(changeColorTheme(color === "dark" ? "light" : "dark"))}
+        onClick={() => onChangeColorTheme(color === "dark" ? "light" : "dark")}
       />
     </S.Wrapper>
   );
