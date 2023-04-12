@@ -11,6 +11,7 @@ import { transactionsUpdateEvent } from "../transactionsProvider";
 import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
 import { useTradeWallet } from "../tradeWallet";
 import { useTrades } from "../trades";
+import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -177,7 +178,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   const { onTransactionsUpdate } = useTransactionsProvider();
   const { onTradeAccountUpdate } = useTradeWallet();
   const { onUserTradeUpdate } = useTrades();
-
+  const { onOrderUpdates } = useOrderHistoryProvider();
   const registerSuccessNotification = useCallback(
     (title: string, description: string) => onNotification(title),
     [onNotification]
@@ -199,7 +200,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
           return transactionsUpdateEvent(data);
         }
         case USER_EVENTS.Order: {
-          // order update function will be added here once order history refactor pr is merged
+          onOrderUpdates(data);
           return orderUpdateEvent(data);
         }
         case USER_EVENTS.RegisterAccount: {
@@ -225,6 +226,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     },
     [
       onBalanceUpdate,
+      onOrderUpdates,
       onRegisterMainAccountUpdate,
       onTradeAccountUpdate,
       onTransactionsUpdate,
