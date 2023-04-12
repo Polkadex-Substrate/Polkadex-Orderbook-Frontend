@@ -1,5 +1,4 @@
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
@@ -9,15 +8,12 @@ import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  notificationMarkAsReadBy,
-  selectNotificationsAlert,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { selectNotificationsAlert } from "@polkadex/orderbook/providers/public/settings/helpers";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const Notifications = () => {
-  const dispatch = useDispatch();
-  const notifications = useReduxSelector(selectNotificationsAlert);
+  const { onNotificationMarkAsReadBy, notification } = useSettingsProvider();
+  const notifications = selectNotificationsAlert(notification);
 
   return (
     <S.Wrapper>
@@ -27,9 +23,7 @@ export const Notifications = () => {
             return (
               <CSSTransition key={i} timeout={300} classNames="notification">
                 <Card
-                  onRemove={() =>
-                    dispatch(notificationMarkAsReadBy({ id: value.id, by: "isActive" }))
-                  }
+                  onRemove={() => onNotificationMarkAsReadBy({ id: value.id, by: "isActive" })}
                   {...value}
                 />
               </CSSTransition>

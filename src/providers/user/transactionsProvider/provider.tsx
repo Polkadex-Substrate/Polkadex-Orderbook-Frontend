@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useProfile } from "../profile/useProfile";
-import { UserAccount } from "../profile/types";
 import * as queries from "../../../graphql/queries";
 
 import * as A from "./actions";
@@ -13,12 +12,9 @@ import { DEPOSIT } from "./constants";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const TransactionsProvider: T.TransactionsComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const TransactionsProvider: T.TransactionsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
   const [filterBy, setFilterBy] = useState({
     type: "all",
@@ -26,16 +22,27 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   });
 
   const profileState = useProfile();
+  const settingsState = useSettingsProvider();
 
-  const onTransactionsFetch = useCallback(async (mainAddress: string) => {
-    dispatch(A.transactionsFetch());
-    if (mainAddress) {
-      const transactions = await fetchTransactions(mainAddress, 3, 10);
-      dispatch(A.transactionsData(transactions));
-    } else {
-      onNotification("No account selected, Please select a trading account");
-    }
-  }, [profileState.selectedAccount, onNotification]);
+  const onTransactionsFetch = useCallback(
+    async (mainAddress: string) => {
+      dispatch(A.transactionsFetch());
+      if (mainAddress) {
+        const transactions = await fetchTransactions(mainAddress, 3, 10);
+        dispatch(A.transactionsData(transactions));
+      } else {
+        settingsState.onHandleNotification({
+          message: {
+            title: "No account selected",
+            description: "Please select a trading account",
+          },
+          type: "ErrorAlert",
+          time: new Date().getTime(),
+        });
+      }
+    },
+    [settingsState]
+  );
 
   const fetchTransactions = async (
     address: string,
@@ -99,8 +106,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     () => groupWithdrawsBySnapShotIds(withdrawalsList),
     [withdrawalsList]
   );
-
-
 
   useEffect(() => {
     try {

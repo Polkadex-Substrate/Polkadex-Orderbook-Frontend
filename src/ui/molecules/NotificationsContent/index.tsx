@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 
@@ -11,7 +10,8 @@ import {
   TooltipHeader,
   ResultFound,
 } from "@polkadex/orderbook-ui/molecules";
-import { notificationMarkAsReadBy, NotificationState } from "@polkadex/orderbook-modules";
+import { NotificationState } from "@polkadex/orderbook-modules";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 type Props = {
   notifications: NotificationState;
@@ -20,7 +20,7 @@ type Props = {
 export const NotificationsContent = ({ notifications = [] }: Props) => {
   const [state, setState] = useState(true);
 
-  const dispatch = useDispatch();
+  const { onNotificationMarkAsReadBy } = useSettingsProvider();
 
   const allNotifications = useMemo(
     () => notifications.filter((value) => (!state ? value.isRead === state : value)),
@@ -58,7 +58,7 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
                 actionUrl={notification.actionUrl}
                 actionTitle={notification.actionTitle}
                 onMarkAsRead={() =>
-                  dispatch(notificationMarkAsReadBy({ id: notification.id, by: "isRead" }))
+                  onNotificationMarkAsReadBy({ id: notification.id, by: "isRead" })
                 }
               />
             ))

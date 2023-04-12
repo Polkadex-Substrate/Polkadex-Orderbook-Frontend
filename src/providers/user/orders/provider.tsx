@@ -1,10 +1,15 @@
 import { useReducer } from "react";
+
+import { selectTradeAccount } from "../tradeWallet/helper";
+import { useNativeApi } from "../../public/nativeApi";
+
+import { parseError, executePlaceOrder, getNewClientId, executeCancelOrder } from "./helper";
 import { Provider } from "./context";
 import { initialState, ordersReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
-import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 
+import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import {
   createOrderPayload,
   createCancelOrderPayloadSigned,
@@ -13,17 +18,16 @@ import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { useTradeWallet } from "../tradeWallet";
-import { selectTradeAccount } from "../tradeWallet/helper";
-import { useNativeApi } from "../../public/nativeApi";
-import { parseError, executePlaceOrder, getNewClientId, executeCancelOrder } from "./helper";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, children }) => {
+export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
   const profileState = useProfile();
   const tradeWalletState = useTradeWallet();
   const nativeApiState = useNativeApi();
+  const settingsState = useSettingsProvider();
 
   // Actions
   const onPlaceOrders = async (payload: A.OrderExecuteFetch["payload"]) => {
@@ -57,10 +61,16 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
         const signature = signPayload(api, keyringPair, order);
         const res = await executePlaceOrder([order, signature], address);
         if (res.data.place_order) {
-          onNotification("Order placed");
-          dispatch(A.orderExecuteData());
-          dispatch(A.orderExecuteDataDelete());
+          settingsState.onHandleNotification({
+            type: "SuccessAlert",
+            message: {
+              title: "Order Placed",
+            },
+            time: new Date().getTime(),
+          });
         }
+        dispatch(A.orderExecuteData());
+        dispatch(A.orderExecuteDataDelete());
       }
     } catch (error) {
       dispatch(A.orderExecuteDataDelete());
@@ -70,10 +80,23 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
       // ignore market liquidity error as there will always be a small qty which cannot be filled
       // due to the step size of the configuration. Its expected even-though order-book throws error
       if (errorText.includes("MarketLiquidityError")) {
-        onNotification("Market order placed");
+        settingsState.onHandleNotification({
+          type: "SuccessAlert",
+          message: {
+            title: "Market order placed",
+          },
+          time: new Date().getTime(),
+        });
         return;
       }
-      onError("Order failed");
+      settingsState.onHandleNotification({
+        type: "ErrorAlert",
+        message: {
+          title: "Order failed",
+          description: errorText,
+        },
+        time: new Date().getTime(),
+      });
     }
   };
 
@@ -100,7 +123,16 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, onNotification, chi
         );
         await executeCancelOrder([order_id, account, pair, signature], address);
         dispatch(A.orderCancelData());
-        onNotification(`Order cancelled of OrderID: ${orderId}`);
+
+        settingsState.onHandleNotification({
+          type: "SuccessAlert",
+          message: {
+            title: "Order cancelled",
+            description: `OrderId: ${orderId}`,
+          },
+          time: new Date().getTime(),
+        });
+
         setTimeout(() => {
           dispatch(A.orderCancelDataDelete());
         }, 1000);

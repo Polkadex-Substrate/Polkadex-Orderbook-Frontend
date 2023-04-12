@@ -12,6 +12,7 @@ export const Context = createContext<SettingContextProps>({
   onHandleError: () => {},
   onHandleAlert: () => {},
   onHandleNotification: () => {},
+  onNotificationMarkAsReadBy: () => {},
 });
 
 export const Provider = ({ value, children }: SettingProviderProps) => (

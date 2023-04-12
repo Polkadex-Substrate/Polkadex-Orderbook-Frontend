@@ -59,6 +59,7 @@ export type SettingContextProps = SettingState & {
   onHandleError: (value: A.ErrorHandlerFetch["payload"]) => void;
   onHandleAlert: (value: A.AlertPush["payload"]) => void;
   onHandleNotification: (value: A.NotificationPush["payload"]) => void;
+  onNotificationMarkAsReadBy: (value: A.NotificationMarkAsReadBy["payload"]) => void;
 };
 
 export interface SettingProps {

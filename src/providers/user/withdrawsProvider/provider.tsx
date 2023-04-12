@@ -20,15 +20,13 @@ import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const WithdrawsProvider: T.WithdrawsComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const WithdrawsProvider: T.WithdrawsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
+  const settingsState = useSettingsProvider();
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAccount = profileState.selectedAccount;
   const address = currentAccount.tradeAddress;
@@ -44,7 +42,14 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
         const res = await executeWithdraw([address, payload, signature], address);
         console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
-        onNotification("Withdraw Successful, Your withdraw has been processed.");
+        settingsState.onHandleNotification({
+          type: "SuccessAlert",
+          message: {
+            title: "Withdraw Successful",
+            description: "Your withdraw has been processed.",
+          },
+          time: new Date().getTime(),
+        });
       }
     } catch (error) {
       dispatch(A.withdrawsData());
@@ -68,18 +73,32 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({
       const { account, signer } = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
-        onNotification(
-          "...Please wait while the withdraw is processing and until the block is finalized... this may take a few mins"
-        );
+        settingsState.onHandleNotification({
+          type: "InformationAlert",
+          message: {
+            title: "Processing Claim Withdraw",
+            description:
+              "Please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
+          },
+          time: new Date().getTime(),
+        });
         const res = await claimWithdrawal(api, signer, account?.address, sid);
         if (res.isSuccess) {
           dispatch(A.withdrawsClaimData({ sid }));
           // TODO?: Check delay
           // for ux
           setTimeout(() => {
-            onNotification(
-              "Claim Withdraw Successful-----Congratulations! You have successfully withdrawn your assets to your funding account."
-            );
+            settingsState.onHandleNotification({
+              type: "SuccessAlert",
+              message: {
+                title: "Claim Withdraw Successful",
+                description:
+                  "Congratulations! You have successfully withdrawn your assets to your funding account.",
+              },
+              time: new Date().getTime(),
+              hasConfetti: true,
+            });
+
             dispatch(A.withdrawClaimReset());
           }, 3000);
         } else {

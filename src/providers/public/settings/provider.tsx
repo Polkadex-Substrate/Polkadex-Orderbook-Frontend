@@ -68,10 +68,14 @@ export const SettingProvider = ({ children }) => {
 
   // Notification Handler Actions
   const onHandleNotification = (payload: A.NotificationPush["payload"]) => {
-    dispatch(A.notificationData(payload));
+    dispatch(A.notificationPush(payload));
     setTimeout(() => {
       dispatch(A.notificationMarkAsReadBy({ id: payload.id, by: "isActive" }));
     }, alertDisplayTime);
+  };
+
+  const onNotificationMarkAsReadBy = (payload: A.NotificationMarkAsReadBy["payload"]) => {
+    dispatch(A.notificationMarkAsReadBy(payload));
   };
 
   return (
@@ -85,6 +89,7 @@ export const SettingProvider = ({ children }) => {
         onHandleError,
         onHandleAlert,
         onHandleNotification,
+        onNotificationMarkAsReadBy,
       }}>
       {children}
     </Provider>
