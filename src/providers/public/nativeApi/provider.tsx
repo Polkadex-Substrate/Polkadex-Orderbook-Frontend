@@ -9,9 +9,9 @@ import * as A from "./actions";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) => {
+export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
-  const { onHandleAlert } = useSettingsProvider();
+  const { onHandleAlert, onHandleError } = useSettingsProvider();
 
   // Actions
   const onConnectNativeApi = useCallback(async () => {
@@ -37,9 +37,10 @@ export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) =
         );
 
         api.on("error", () => {
-          if (typeof onError === "function") {
-            onError(`Polkadex can't connect to ${defaultConfig.polkadexChain}`);
-          }
+          onHandleError({
+            error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
+            processingType: "alert",
+          });
           dispatch(A.nativeApiConnectError());
         });
       };
@@ -57,7 +58,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) =
         type: "Error",
       });
     }
-  }, [onHandleAlert, onError]);
+  }, [onHandleAlert, onHandleError]);
 
   return (
     <Provider

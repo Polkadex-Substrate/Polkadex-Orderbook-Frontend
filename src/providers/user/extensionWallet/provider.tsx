@@ -82,8 +82,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ onError, c
       });
     } catch (error) {
       console.log("error:", error);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError({
+        error: error,
+        processingType: "alert",
+      });
       dispatch(A.registerMainAccountError());
     }
   };
@@ -176,9 +178,12 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ onError, c
       );
       return () => unsubscribe.then((fn) => fn());
     } catch (error) {
-      onError(error.message);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
     }
-  }, [onError]);
+  }, [settingsState]);
 
   async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
     try {

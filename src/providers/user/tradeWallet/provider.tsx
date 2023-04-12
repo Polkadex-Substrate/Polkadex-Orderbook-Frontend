@@ -23,7 +23,7 @@ import {
 import * as T from "./types";
 import * as A from "./actions";
 
-export const TradeWalletProvider: T.TradeWalletComponent = ({ onError, children }) => {
+export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
@@ -139,8 +139,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ onError, children 
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
     }
   };
 
@@ -159,8 +161,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ onError, children 
         time: new Date().getTime(),
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -201,8 +205,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ onError, children 
       }
     } catch (error) {
       dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -252,8 +258,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ onError, children 
       }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
+
       dispatch(A.registerTradeAccountError(error));
     }
   };

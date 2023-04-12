@@ -2,16 +2,19 @@ import { useReducer, useEffect, useCallback } from "react";
 import { endOfDay, startOfMonth } from "date-fns";
 
 import { useProfile } from "../profile";
+import { useSettingsProvider } from "../../public/settings";
 
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, sessionReducer } from "./reducer";
 
-export const SessionProvider: T.SessionComponent = ({ onError, children }) => {
+export const SessionProvider: T.SessionComponent = ({ children }) => {
   const [state, dispatch] = useReducer(sessionReducer, initialState);
   const profileState = useProfile();
   const address = profileState.selectedAccount.mainAddress;
+  const { onHandleError } = useSettingsProvider();
+
   const onFetchSession = useCallback(() => {
     dispatch(A.userSessionFetch());
     try {
@@ -22,13 +25,16 @@ export const SessionProvider: T.SessionComponent = ({ onError, children }) => {
       dispatch(A.userSessionData({ dateFrom, dateTo }));
     } catch (error) {
       console.log(error);
-      onError("User session error");
+      onHandleError({
+        error,
+        processingType: "alert",
+      });
+      dispatch(A.userSessionError(error));
     }
-  }, [onError]);
+  }, [onHandleError]);
 
   useEffect(() => {
-    if (address)
-      onFetchSession();
+    if (address) onFetchSession();
   }, [onFetchSession, address]);
 
   return (

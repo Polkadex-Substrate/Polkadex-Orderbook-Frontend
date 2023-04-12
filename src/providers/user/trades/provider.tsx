@@ -11,11 +11,11 @@ import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
-export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
+export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const sessionState = useSessionProvider();
-  const { onHandleAlert } = useSettingsProvider();
+  const { onHandleAlert, onHandleError } = useSettingsProvider();
 
   // Actions
   const onFetchTrades = async () => {
@@ -29,8 +29,11 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
         dispatch(A.userTradesData(trades));
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      onHandleError({
+        error,
+        processingType: "alert",
+      });
+
       dispatch(A.userTradesError(error));
     }
   };
@@ -50,12 +53,17 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
     }
   };
 
+  const onUserTradesError = (payload: A.UserTradesError["error"]) => {
+    dispatch(A.userTradesError(payload));
+  };
+
   return (
     <Provider
       value={{
         ...state,
         onFetchTrades,
         onUserTradeUpdate,
+        onUserTradesError,
       }}>
       {children}
     </Provider>

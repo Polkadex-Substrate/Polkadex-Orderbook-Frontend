@@ -1,6 +1,8 @@
 import { FC, PropsWithChildren } from "react";
-import * as A from "./actions";
+
 import { CommonError } from "../../types";
+
+import * as A from "./actions";
 
 export interface TradesState {
   error?: CommonError;
@@ -24,6 +26,7 @@ export type TradesProviderProps = PropsWithChildren<{
 export type TradesContextProps = TradesState & {
   onFetchTrades: () => void;
   onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
+  onUserTradesError: (value: A.UserTradesError["error"]) => void;
 };
 
 export interface TradesProps {

@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 
+import { useTrades } from "../trades";
 import * as mutations from "../../../graphql/mutations";
 import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
@@ -22,7 +23,7 @@ import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const WithdrawsProvider: T.WithdrawsComponent = ({ onError, children }) => {
+export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
@@ -31,6 +32,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ onError, children }) =
   const currentAccount: UserAccount = profileState.selectedAccount;
   const address = currentAccount.tradeAddress;
   const keyringPair = useReduxSelector(selectTradeAccount(address));
+  const { onUserTradesError } = useTrades();
 
   const onFetchWithdraws = async ({ asset, amount }) => {
     try {
@@ -53,7 +55,11 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ onError, children }) =
       }
     } catch (error) {
       dispatch(A.withdrawsData());
-      onError("error");
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
+      onUserTradesError(error);
     }
   };
 
@@ -107,7 +113,11 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ onError, children }) =
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));
-      onError("Error in withdrawal");
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
+      dispatch(A.withdrawsError(error));
     }
   };
 

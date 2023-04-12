@@ -22,7 +22,7 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
+export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
   const profileState = useProfile();
   const tradeWalletState = useTradeWallet();
@@ -138,8 +138,10 @@ export const OrdersProvider: T.OrdersComponent = ({ onError, children }) => {
         }, 1000);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
       dispatch(A.orderCancelError(error));
     }
   };
