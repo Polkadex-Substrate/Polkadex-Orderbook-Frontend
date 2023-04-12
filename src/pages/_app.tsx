@@ -9,7 +9,6 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ToastContainer, toast } from "react-toastify";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -31,8 +30,6 @@ import {
   SettingProvider,
   useSettingsProvider,
 } from "@polkadex/orderbook/providers/public/settings";
-
-import "react-toastify/dist/ReactToastify.css";
 
 const Message = dynamic(
   () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
@@ -69,18 +66,17 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <ToastContainer />
       <SettingProvider>
-        <AuthProvider onNotification={(v) => toast.info(v)}>
-          <ProfileProvider onNotification={(v) => toast.info(v)}>
-            <AssetsProvider onNotification={(v) => toast.info(v)}>
-              <OrdersProvider onNotification={(v) => toast.info(v)}>
-                <NativeApiProvider onNotification={(v) => toast.info(v)}>
-                  <MarketsProvider onNotification={(v) => toast.info(v)}>
-                    <OrderBookProvider onNotification={(v) => toast.info(v)}>
-                      <ExtensionWalletProvider onNotification={(v) => toast.info(v)}>
-                        <TradeWalletProvider onNotification={(v) => toast.info(v)}>
-                          <BalancesProvider onNotification={(v) => toast.info(v)}>
+        <AuthProvider>
+          <ProfileProvider>
+            <AssetsProvider>
+              <OrdersProvider>
+                <NativeApiProvider>
+                  <MarketsProvider>
+                    <OrderBookProvider>
+                      <ExtensionWalletProvider>
+                        <TradeWalletProvider>
+                          <BalancesProvider>
                             <OverlayProvider>
                               <ModifiedThemeProvider
                                 Component={Component}
@@ -128,6 +124,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   const authState = useAuth();
   const signInSuccess = authState.signin.isSuccess;
   const logoutSuccess = authState.logout.isSuccess;
+  const settingsState = useSettingsProvider();
 
   const cryptoWait = async () => {
     try {
@@ -188,7 +185,10 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         }
         default: {
           console.error("Error=>", `User data fetch error: ${error.message}`);
-          toast.error(`User data fetch error: ${error.message}`);
+          settingsState.onHandleError({
+            error: `User data fetch error: ${error.message}`,
+            processingType: "alert",
+          });
           break;
         }
       }

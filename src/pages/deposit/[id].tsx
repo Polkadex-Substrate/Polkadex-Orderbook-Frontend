@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
-import { toast } from "react-toastify";
 
 import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -43,8 +42,8 @@ const Deposit = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <TransactionsProvider onNotification={(v) => toast.info(v)}>
-      <DepositProvider onNotification={(v) => toast.info(v)}>
+    <TransactionsProvider>
+      <DepositProvider>
         <DepositTemplate />
       </DepositProvider>
     </TransactionsProvider>

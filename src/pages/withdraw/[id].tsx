@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
-import { toast } from "react-toastify";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
@@ -44,8 +43,8 @@ const Withdraw = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <WithdrawsProvider onNotification={(v) => toast.info(v)}>
-      <TransactionsProvider onNotification={(v) => toast.info(v)}>
+    <WithdrawsProvider>
+      <TransactionsProvider>
         <WithdrawTemplate />
       </TransactionsProvider>
     </WithdrawsProvider>
