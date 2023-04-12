@@ -13,7 +13,9 @@ export interface SessionState {
   dateFrom: Date;
 }
 
-export type SessionContextProps = SessionState
+export type SessionContextProps = SessionState & {
+  dispatchUserSessionData: (value: SessionState) => void;
+};
 
 export type SessionProviderProps = PropsWithChildren<{
   value: SessionContextProps;

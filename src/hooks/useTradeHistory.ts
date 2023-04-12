@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
-import { selectCurrentMarket, selectUserSession } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
+import { useSessionProvider } from "../providers/user/sessionProvider/useSessionProvider";
+
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTrades } from "@polkadex/orderbook/providers/user/trades";
 
 export function useTradeHistory(filters: Ifilters) {
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const tradesState = useTrades();
 
@@ -19,15 +18,15 @@ export function useTradeHistory(filters: Ifilters) {
     });
   }, [list]);
   const fetching = tradesState.loading;
-  const currentMarket = useReduxSelector(selectCurrentMarket);
+  const { currentMarket } = useMarketsProvider();
   const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
-  const userSession = useReduxSelector(selectUserSession);
+  const userSession = useSessionProvider();
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
     if (userLoggedIn && currentMarket) tradesState.onFetchTrades();
-  }, [userLoggedIn, currentMarket, dispatch, userSession, tradesState]);
+  }, [userLoggedIn, currentMarket, userSession, tradesState]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {

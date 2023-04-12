@@ -5,6 +5,7 @@ import { initialState } from "./reducer";
 
 export const Context = createContext<SessionContextProps>({
   ...initialState,
+  dispatchUserSessionData: () => {},
 });
 
 export const Provider = ({ value, children }: SessionProviderProps) => {

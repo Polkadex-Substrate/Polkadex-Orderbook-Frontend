@@ -4,9 +4,14 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export const OpenOrders = ({ orderHistory }) => {
-  const { priceFixed, amountFixed, openOrders } = orderHistory;
+  const { openOrders } = orderHistory;
+  const { currentMarket } = useMarketsProvider();
+  const priceFixed = currentMarket.quote_precision;
+  const amountFixed = currentMarket.base_precision;
+
   const { selectGetAsset } = useAssetsProvider();
   return (
     <S.Wrapper>
