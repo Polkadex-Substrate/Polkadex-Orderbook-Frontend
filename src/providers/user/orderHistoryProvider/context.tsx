@@ -8,6 +8,10 @@ export const Context = createContext<OrderHistoryContextProps>({
   onOpenOrdersHistoryFetch: () => {},
   onOrdersHistoryFetch: () => {},
   onOrderUpdates: () => {},
+  orders: [],
+  openOrders: [],
+  userLoggedIn: false,
+  filterOrders: () => {},
 });
 
 export const Provider = ({ value, children }: OrderHistoryProviderProps) => {

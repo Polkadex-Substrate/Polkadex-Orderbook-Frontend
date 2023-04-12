@@ -1,13 +1,13 @@
 import { ChangeEvent, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 
-import { Balance, selectUserBalance } from "@polkadex/orderbook-modules";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
+import { Balance } from "../providers/user/balancesProvider/types";
 
 export function useFunds() {
   const [state, setState] = useState("");
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setState(e.target.value);
 
-  const userBalances = useSelector(selectUserBalance);
+  const { balances: userBalances } = useBalancesProvider();
 
   const balances: Balance[] = useMemo(
     () =>
