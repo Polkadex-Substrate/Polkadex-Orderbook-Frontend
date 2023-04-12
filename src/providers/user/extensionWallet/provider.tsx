@@ -17,7 +17,7 @@ import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ onError, children }) => {
+export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
   const profileState = useProfile();
@@ -50,7 +50,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ onError, c
       }
     } catch (error) {
       console.log("error in registration:", error.message);
-      onError(error.message);
+      settingsState.onHandleError({
+        error,
+        processingType: "alert",
+      });
     }
   };
 

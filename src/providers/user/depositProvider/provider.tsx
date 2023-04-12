@@ -1,6 +1,10 @@
 import { useReducer } from "react";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
+
+import { useNativeApi } from "../../public/nativeApi";
+import { useSettingsProvider } from "../../public/settings";
+
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
@@ -9,31 +13,41 @@ import { depositsReducer, initialState } from "./reducer";
 import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
-import { useNativeApi } from "../../public/nativeApi";
 
-export const DepositProvider: T.DepositsComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const DepositProvider: T.DepositsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
 
   const { connected: isApiReady, api } = useNativeApi();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
+
   const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
     try {
       if (isApiReady && mainAccount?.account?.address !== "") {
-        onNotification(
-          "Processing Deposit, Please wait while the deposit is processing and the block is finalized. This may take a few mins."
-        );
+        onHandleNotification({
+          type: "InformationAlert",
+          message: {
+            title: "Processing Deposit",
+            description:
+              "Please wait while the deposit is processed and the block is finalized. This may take a few mins.",
+          },
+          time: new Date().getTime(),
+        });
         dispatch(A.depositsFetch());
 
         const res = await depositToEnclave(api, mainAccount, asset, amount);
 
         if (res.isSuccess) {
           dispatch(A.depositsData());
-          onNotification(
-            "Success, Congratulations! You have successfully deposited assets to your trading account. "
-          );
+          onHandleNotification({
+            type: "SuccessAlert",
+            message: {
+              title: "Deposit Successful",
+              description:
+                "Congratulations! You have successfully deposited assets to your trading account.",
+            },
+            time: new Date().getTime(),
+            hasConfetti: true,
+          });
 
           dispatch(A.depositsReset());
         } else {
@@ -42,7 +56,11 @@ export const DepositProvider: T.DepositsComponent = ({
       }
     } catch (error) {
       console.log(error, "error");
-      onError(`Deposits failed ${error}`);
+      onHandleError({
+        error,
+        processingType: "alert",
+      });
+      dispatch(A.depositsError(error));
     }
   };
 

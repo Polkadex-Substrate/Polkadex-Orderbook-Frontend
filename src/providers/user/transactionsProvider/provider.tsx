@@ -14,7 +14,7 @@ import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTim
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const TransactionsProvider: T.TransactionsComponent = ({ onError, children }) => {
+export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
   const [filterBy, setFilterBy] = useState({
     type: "all",
@@ -113,9 +113,15 @@ export const TransactionsProvider: T.TransactionsComponent = ({ onError, childre
         onTransactionsFetch(profileState.selectedAccount.mainAddress);
       }
     } catch (error) {
-      onError("error while fetching transaction");
+      settingsState.onHandleAlert({
+        message: {
+          title: "Something has gone wrong (transactions)..",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
-  }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
+  }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
 
   return (
     <Provider

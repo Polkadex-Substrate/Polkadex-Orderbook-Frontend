@@ -71,34 +71,16 @@ function App({ Component, pageProps }: AppProps) {
     <>
       <ToastContainer />
       <SettingProvider>
-        <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <ProfileProvider
-            onError={(v) => toast.error(v)}
-            onNotification={(v) => toast.info(v)}>
-            <AssetsProvider
-              onError={(v) => toast.error(v)}
-              onNotification={(v) => toast.info(v)}>
-              <OrdersProvider
-                onError={(v) => toast.error(v)}
-                onNotification={(v) => toast.info(v)}>
-                <NativeApiProvider
-                  onError={(v) => toast.error(v)}
-                  onNotification={(v) => toast.info(v)}>
-                  <MarketsProvider
-                    onError={(v) => toast.error(v)}
-                    onNotification={(v) => toast.info(v)}>
-                    <OrderBookProvider
-                      onError={(v) => toast.error(v)}
-                      onNotification={(v) => toast.info(v)}>
-                      <ExtensionWalletProvider
-                        onError={(v) => toast.error(v)}
-                        onNotification={(v) => toast.info(v)}>
-                        <TradeWalletProvider
-                          onError={(v) => toast.error(v)}
-                          onNotification={(v) => toast.info(v)}>
-                          <BalancesProvider
-                            onError={(v) => toast.error(v)}
-                            onNotification={(v) => toast.info(v)}>
+        <AuthProvider onNotification={(v) => toast.info(v)}>
+          <ProfileProvider onNotification={(v) => toast.info(v)}>
+            <AssetsProvider onNotification={(v) => toast.info(v)}>
+              <OrdersProvider onNotification={(v) => toast.info(v)}>
+                <NativeApiProvider onNotification={(v) => toast.info(v)}>
+                  <MarketsProvider onNotification={(v) => toast.info(v)}>
+                    <OrderBookProvider onNotification={(v) => toast.info(v)}>
+                      <ExtensionWalletProvider onNotification={(v) => toast.info(v)}>
+                        <TradeWalletProvider onNotification={(v) => toast.info(v)}>
+                          <BalancesProvider onNotification={(v) => toast.info(v)}>
                             <OverlayProvider>
                               <ModifiedThemeProvider
                                 Component={Component}

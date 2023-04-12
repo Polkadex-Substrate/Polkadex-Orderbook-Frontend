@@ -5,6 +5,7 @@ import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { IPublicAsset } from "../assetsProvider";
 import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
+import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -23,12 +24,13 @@ import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
+export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
-    const res: any = await sendQueryToAppSync({ query: getAllMarkets });
+    const res = await sendQueryToAppSync({ query: getAllMarkets });
     const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
     const markets = pairs?.map(async (pair: MarketQueryResult): Promise<Market> => {
       const [baseAsset, quoteAsset] = pair.market.split("-");
@@ -69,10 +71,14 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
-        onError(`error in fetching markets `);
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.marketsError(error));
       }
     },
-    [fetchMarkets, onError]
+    [fetchMarkets, onHandleError]
   );
 
   const findAsset = (
@@ -124,9 +130,12 @@ export const MarketsProvider: MarketsComponent = ({ onError, children }) => {
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error);
-      onError(`error in fetching tickers`);
+      onHandleError({
+        error: "Market tickers fetch error",
+        processingType: "console",
+      });
     }
-  }, [onError, fetchMarketTickers]);
+  }, [onHandleError, fetchMarketTickers]);
 
   const market = state.currentMarket;
   useEffect(() => {
