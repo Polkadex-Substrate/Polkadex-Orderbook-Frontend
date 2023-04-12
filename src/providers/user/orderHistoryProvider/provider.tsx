@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 
 import * as queries from "../../../graphql/queries";
+import { useSettingsProvider } from "../../public/settings";
 import { useProfile } from "../profile";
 
 import { Provider } from "./context";
@@ -16,6 +17,7 @@ import { Utils } from "@polkadex/web-helpers";
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
   const profileState = useProfile();
+  const { onHandleAlert } = useSettingsProvider();
 
   type orderHistoryQueryResult = {
     u: string;
@@ -43,6 +45,13 @@ export const OrderHistoryProvider = ({ children }) => {
     } catch (error) {
       console.error(error);
       dispatch(A.userOpenOrdersHistoryError(error));
+      onHandleAlert({
+        message: {
+          title: "Something has gone wrong (openOrderHistory)..",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
   };
 
@@ -55,6 +64,13 @@ export const OrderHistoryProvider = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.userOrdersHistoryError(error));
+      onHandleAlert({
+        message: {
+          title: "Something has gone wrong (orderHistory)..",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
   };
 
@@ -65,6 +81,13 @@ export const OrderHistoryProvider = ({ children }) => {
     } catch (error) {
       console.log(error, "Something has gone wrong (order updates channel)...", error);
       dispatch(A.orderUpdateEventError(error));
+      onHandleAlert({
+        message: {
+          title: "Something has gone wrong (order updates channel)...",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
   };
 

@@ -11,6 +11,7 @@ export const Context = createContext<SettingContextProps>({
   onChangeColorTheme: () => {},
   onHandleError: () => {},
   onHandleAlert: () => {},
+  onAlertDelete: () => {},
   onHandleNotification: () => {},
   onNotificationMarkAsReadBy: () => {},
 });

@@ -58,6 +58,7 @@ export type SettingContextProps = SettingState & {
   onChangeColorTheme: (value: string) => void;
   onHandleError: (value: A.ErrorHandlerFetch["payload"]) => void;
   onHandleAlert: (value: A.AlertPush["payload"]) => void;
+  onAlertDelete: () => void;
   onHandleNotification: (value: A.NotificationPush["payload"]) => void;
   onNotificationMarkAsReadBy: (value: A.NotificationMarkAsReadBy["payload"]) => void;
 };

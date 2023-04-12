@@ -66,6 +66,10 @@ export const SettingProvider = ({ children }) => {
     dispatch(A.alertData(payload));
   };
 
+  const onAlertDelete = () => {
+    dispatch(A.alertDelete());
+  };
+
   // Notification Handler Actions
   const onHandleNotification = (payload: A.NotificationPush["payload"]) => {
     dispatch(A.notificationPush(payload));
@@ -88,6 +92,7 @@ export const SettingProvider = ({ children }) => {
         onChangeColorTheme,
         onHandleError,
         onHandleAlert,
+        onAlertDelete,
         onHandleNotification,
         onNotificationMarkAsReadBy,
       }}>

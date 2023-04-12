@@ -4,14 +4,17 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
+
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, children }) => {
+export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
+  const settingsState = useSettingsProvider();
 
   const fetchAssets = async () => {
     try {
@@ -20,7 +23,13 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
       dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
-      onError(`Something has gone wrong, could not fetch assets ${error}`);
+      settingsState.onHandleAlert({
+        message: {
+          title: "Something has gone wrong (fetchAssets)..",
+          description: `${error.name}: ${error.message}`,
+        },
+        type: "Error",
+      });
     }
   };
 

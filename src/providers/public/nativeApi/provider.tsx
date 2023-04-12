@@ -1,14 +1,17 @@
 import { useCallback, useReducer } from "react";
+import { ApiPromise, WsProvider } from "@polkadot/api";
+
 import { Provider } from "./context";
 import { nativeApiReducer, initialState } from "./reducer";
-import { ApiPromise, WsProvider } from "@polkadot/api";
-import { defaultConfig } from "@polkadex/orderbook-config";
-
 import * as T from "./types";
 import * as A from "./actions";
 
+import { defaultConfig } from "@polkadex/orderbook-config";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+
 export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
+  const { onHandleAlert } = useSettingsProvider();
 
   // Actions
   const onConnectNativeApi = useCallback(async () => {
@@ -46,9 +49,15 @@ export const NativeApiProvider: T.NativeApiComponent = ({ onError, children }) =
         api.disconnect();
       };
     } catch (error) {
-      onError(`Error connecting to Polkadex chain.. ${error.message}`);
+      onHandleAlert({
+        message: {
+          title: "Error connecting to Polkadex chain..",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
-  }, []);
+  }, [onHandleAlert, onError]);
 
   return (
     <Provider

@@ -3,6 +3,7 @@ import { useReducer } from "react";
 import { useProfile } from "../profile";
 import { UserSessionPayload } from "../sessionProvider/actions";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
+import { useSettingsProvider } from "../../public/settings";
 
 import { Provider } from "./context";
 import { tradesReducer, initialState } from "./reducer";
@@ -14,6 +15,7 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const sessionState = useSessionProvider();
+  const { onHandleAlert } = useSettingsProvider();
 
   // Actions
   const onFetchTrades = async () => {
@@ -38,7 +40,13 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
       const trade = processTradeData(payload);
       dispatch(A.userTradesUpdateData(trade));
     } catch (error) {
-      onError(`Something has gone wrong (user trades channel)...${error.message}`);
+      onHandleAlert({
+        message: {
+          title: "Something has gone wrong (user trades channel)...",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
   };
 

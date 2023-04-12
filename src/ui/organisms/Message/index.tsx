@@ -1,17 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-
 import { Props } from "./types";
 import * as S from "./styles";
 
 import { MessageCard, Icon, Modal } from "@polkadex/orderbook-ui/molecules";
-import { alertDelete, selectAlertState } from "@polkadex/orderbook-modules";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const Message = ({ children }: Props) => {
-  const dispatch = useDispatch();
+  const { onAlertDelete, alert } = useSettingsProvider();
 
-  const alert = useSelector(selectAlertState);
+  const handleClose = () => (alert.type === "Loading" ? undefined : onAlertDelete());
 
-  const handleClose = () => (alert.type === "Loading" ? undefined : dispatch(alertDelete()));
   return (
     <Modal open={alert.status} onClose={handleClose} placement="bottom left" isFullWidth>
       <S.Wrapper>

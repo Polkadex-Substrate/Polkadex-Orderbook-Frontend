@@ -1,24 +1,25 @@
 import { useReducer, useEffect, useCallback } from "react";
+
 import { useProfile } from "../profile/useProfile";
+import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
+import * as queries from "../../../graphql/queries";
+import { useSettingsProvider } from "../../public/settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
-import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as queries from "../../../graphql/queries";
 
-export const BalancesProvider: T.BalancesComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+
+export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData } = useAssetsProvider();
+  const { onHandleAlert } = useSettingsProvider();
+
   const fetchbalancesAsync = useCallback(
     async (account: string): Promise<T.IBalanceFromDb[]> => {
       const res: any = await sendQueryToAppSync({
@@ -66,9 +67,15 @@ export const BalancesProvider: T.BalancesComponent = ({
       }
     } catch (error) {
       console.error(error);
-      onError("Something has gone wrong (balances fetch)..");
+      onHandleAlert({
+        message: {
+          title: "Something has gone wrong (balances fetch)..",
+          description: error.message,
+        },
+        type: "Error",
+      });
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync]);
+  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleAlert]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(

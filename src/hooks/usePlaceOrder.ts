@@ -1,24 +1,23 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { alertPush } from "@polkadex/orderbook-modules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
-  const dispatch = useDispatch();
   const orderBookState = useOrderBook();
   const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
   const ordersState = useOrders();
+  const settingsState = useSettingsProvider();
 
   const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
@@ -74,7 +73,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       amountSell: "",
       amountBuy: "",
     });
-  }, [isLimit]);
+  }, [isLimit, form]);
 
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
@@ -128,7 +127,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       priceLimit: undefined,
     });
     ordersState.onSetCurrentPrice(0);
-  }, [dispatch, setTab, tab]);
+  }, [setTab, tab, ordersState]);
 
   /**
    * @description Change Price
@@ -197,15 +196,13 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
     const notify = (description: string) => {
-      dispatch(
-        alertPush({
-          message: {
-            title: "Order Failed",
-            description,
-          },
-          type: "Alert",
-        })
-      );
+      settingsState.onHandleAlert({
+        message: {
+          title: "Order Failed",
+          description,
+        },
+        type: "Alert",
+      });
     };
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
@@ -331,12 +328,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   }, [
     isSell,
     isLimit,
-    estimatedTotal,
     form.amountBuy,
     form.amountSell,
     form.price,
     getEstimatedTotal,
     rangeValue,
+    calculateTotal,
   ]);
 
   const updateRange = useCallback(
