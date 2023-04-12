@@ -11,10 +11,12 @@ import * as A from "./actions";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const AuthProvider: T.AuthComponent = ({ onError, onNotification, children }) => {
+export const AuthProvider: T.AuthComponent = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   const profileState = useProfile();
+  const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   // Actions
   const onSignIn = useCallback(
@@ -27,32 +29,41 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
       } catch (error) {
         console.log("error:", error);
         const errorCode = error?.name;
-        const errorMessage = error instanceof Error ? error.message : (error as string);
         switch (errorCode) {
           case AUTH_ERROR_CODES.NOT_AUTHORIZED: {
-            if (typeof onError === "function") onError(errorMessage);
+            onHandleError({
+              error,
+              processingType: "alert",
+            });
             dispatch(A.signInError(error));
             return;
           }
           case AUTH_ERROR_CODES.USER_NOT_CONFIRMED: {
             dispatch(A.signInData({ email, isConfirmed: false }));
-            router.push("/codeVerification");
-            if (typeof onError === "function") {
-              onError(
-                "It looks like you have not confirmed your email. Please confirm your email and try again."
-              );
-            }
+            onHandleNotification({
+              message: {
+                title: "Sign in Failed!",
+                description:
+                  "It looks like you have not confirmed your email. Please confirm your email and try again.",
+              },
+              time: new Date().getTime(),
+              type: "AttentionAlert",
+            });
             dispatch(A.signInError(error));
+            router.push("/codeVerification");
             return;
           }
           default: {
-            if (typeof onError === "function") onError(errorMessage);
+            onHandleError({
+              error,
+              processingType: "alert",
+            });
             dispatch(A.signInError(error));
           }
         }
       }
     },
-    [onError]
+    [profileState, onHandleError, onHandleNotification]
   );
 
   const onSignUp = useCallback(
@@ -69,30 +80,43 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         dispatch(A.signUpData({ userConfirmed, email }));
       } catch (error) {
         console.log("error: ", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
         dispatch(A.signUpError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onLogout = useCallback(() => {
     try {
       Auth.signOut();
       dispatch(A.logOutData());
-      onNotification("You have been logged out.");
+      onHandleNotification({
+        type: "SuccessAlert",
+        message: {
+          title: "Logged out",
+          description: "You have been logged out.",
+        },
+        time: new Date().getTime(),
+      });
     } catch (error) {
       console.log("error: ", error);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      else dispatch(A.logOutError(error));
+
+      onHandleError({
+        error,
+        processingType: "alert",
+      });
+
+      dispatch(A.logOutError(error));
 
       if (error.message.indexOf("identity.session.not_found") > -1) {
         profileState.onUserAuthFetch();
       }
     }
-  }, [onError]);
+  }, [onHandleError, onHandleNotification, profileState]);
 
   const onForgotPassword = useCallback(
     async ({ code, newPassword, email }: T.ForgotPassword) => {
@@ -105,12 +129,14 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         }, 5000);
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.forgotPasswordError(error));
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.forgotPasswordError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onForgotPasswordCode = useCallback(
@@ -124,12 +150,14 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         }, 5000);
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.forgotPasswordError(error));
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.forgotPasswordError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onResendCode = useCallback(
@@ -139,12 +167,14 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         dispatch(A.resendCodeData());
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.resendCodeError(error));
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.resendCodeError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onCodeVerification = useCallback(
@@ -154,12 +184,14 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         dispatch(A.codeVerifyData());
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.codeVerifyError(error));
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.codeVerifyError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onChangePassword = useCallback(
@@ -171,12 +203,14 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
         dispatch(A.changePasswordData());
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
-        else dispatch(A.changePasswordError(error));
+        onHandleError({
+          error,
+          processingType: "alert",
+        });
+        dispatch(A.changePasswordError(error));
       }
     },
-    [onError]
+    [onHandleError]
   );
 
   const onUserAuth = async (payload: T.UserAuth) => {
@@ -206,13 +240,13 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
     if (signinIsSuccess || isAuthenticated) {
       router.push("/trading/" + defaultConfig.landingPageMarket);
     }
-  }, [isAuthenticated, signinIsSuccess, router]);
+  }, [isAuthenticated, signinIsSuccess]);
 
   // For SignUp Purposes
   const signupIsSuccess = state.signup.isSuccess;
   useEffect(() => {
     if (signupIsSuccess) router.push("/codeVerification");
-  }, [signupIsSuccess, router]);
+  }, [signupIsSuccess]);
 
   // For Code Verification Purposes
   const isVerificationSuccess = state.userConfirmed;
@@ -220,18 +254,22 @@ export const AuthProvider: T.AuthComponent = ({ onError, onNotification, childre
 
   useEffect(() => {
     if (signupIsSuccess && isVerificationSuccess) {
-      onNotification(
-        "Successfully created a new account!. Please sign in with your new account."
-      );
+      onHandleNotification({
+        message: {
+          title: "Successfully created a new account!",
+          description: "Please sign in with your new account.",
+        },
+        time: new Date().getTime(),
+      });
       setTimeout(() => {
         router.push("/signIn");
       }, 2000);
     }
-  }, [isVerificationSuccess, signupIsSuccess, router]);
+  }, [isVerificationSuccess, signupIsSuccess, onHandleNotification]);
 
   useEffect(() => {
     if (signupIsSuccess && !email) router.push("/sign");
-  }, [email, signupIsSuccess, router]);
+  }, [email, signupIsSuccess]);
 
   // For Logout Purposes
   const user = state.user;

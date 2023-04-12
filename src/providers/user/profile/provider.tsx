@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
+import { useSettingsProvider } from "../../public/settings";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -12,9 +13,10 @@ import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
 
-export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
+export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const authState = useAuth();
+  const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   const onUserSelectAccount = (payload: T.UserSelectAccount) => {
     const { tradeAddress: trade_address } = payload;
@@ -28,13 +30,19 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
     } catch (e) {
       console.log("error: ", e);
-      onNotification(`Invalid funding account! ${e?.message}`);
+      onHandleNotification({
+        message: {
+          title: "Invalid funding account!",
+          description: e?.message,
+        },
+        time: new Date().getTime(),
+      });
     }
   };
 
   const getAllMainLinkedAccounts = async (email: string, Api = API) => {
     try {
-      const res: any = await sendQueryToAppSync({
+      const res = await sendQueryToAppSync({
         query: queries.listMainAccountsByEmail,
         variables: {
           email,
@@ -46,8 +54,10 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      onHandleError({
+        error,
+        processingType: "alert",
+      });
     }
   };
 
@@ -57,7 +67,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   ): Promise<T.UserAccount[]> => {
     const promises = mainAccounts.map(async (main_account) => {
       try {
-        const res: any = await sendQueryToAppSync({
+        const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
           variables: { main_account },
           API: Api,
@@ -102,12 +112,21 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
 
       if (!isConfirmed && userExists) {
-        onNotification("Please confirm your email. Sign in again and confirm your email.");
+        onHandleNotification({
+          type: "AttentionAlert",
+          message: {
+            title: "Please confirm your email.",
+            description: "Sign in again and confirm your email.",
+          },
+          time: new Date().getTime(),
+        });
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      else dispatch(A.userAuthError(error));
+      onHandleError({
+        error: `User auth error:${error.message}`,
+        processingType: "alert",
+      });
+      dispatch(A.userAuthError(error));
     }
   };
 
@@ -115,7 +134,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userReset());
   };
 
-  const onUserChangeInitBanner = (payload: boolean = false) => {
+  const onUserChangeInitBanner = (payload = false) => {
     dispatch(A.userChangeInitBanner(payload));
   };
 
