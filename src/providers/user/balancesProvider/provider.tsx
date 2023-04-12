@@ -41,7 +41,7 @@ export const BalancesProvider: T.BalancesComponent = ({
       });
       return balances;
     },
-    [sendQueryToAppSync]
+    []
   );
   const onBalancesFetch = useCallback(async () => {
     dispatch(A.balancesFetch());

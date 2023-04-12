@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useProfile } from "../profile/useProfile";
-import { UserAccount } from "../profile/types";
 import * as queries from "../../../graphql/queries";
 
 import * as A from "./actions";
@@ -37,7 +36,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         onNotification("No account selected, Please select a trading account");
       }
     },
-    [profileState.selectedAccount, onNotification]
+    [onNotification]
   );
 
   const fetchTransactions = async (
