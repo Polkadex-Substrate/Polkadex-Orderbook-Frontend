@@ -9,7 +9,7 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { toast, ToastContainer } from "react-toastify";
+import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { wrapper } from "../store";
@@ -53,11 +53,12 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
-          onError: (e) => toast(e, { type: "error" }),
-          onSuccess: (e) => toast(e, { type: "success" }),
+          onError: (e) => toast(e, { type: "error", theme: "colored" }),
+          onSuccess: (e) =>
+            toast(e, { type: "success", theme: "colored", className: "toastBg" }),
         }}>
         <AuthProvider>
           <ProfileProvider>

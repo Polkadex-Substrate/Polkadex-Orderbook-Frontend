@@ -48,7 +48,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
-      onHandleError(error?.message ?? error);
+      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
     }
   };
 
