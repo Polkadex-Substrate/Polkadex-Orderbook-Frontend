@@ -34,7 +34,7 @@ export const initialState: T.SettingState = {
 
 export const settingReducer = (state: T.SettingState, action) => {
   switch (action.type) {
-    case C.CHANGE_COLOR_THEME: {
+    case C.SETTINGS_CHANGE_THEME: {
       process.browser && window.localStorage.setItem(C.DEFAULTTHEMENAME, action.payload);
       return {
         ...state,

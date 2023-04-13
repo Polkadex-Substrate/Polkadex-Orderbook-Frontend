@@ -23,10 +23,9 @@ export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) 
     dispatch(A.toggleOpenOrdersPairsSwitcher(payload));
   }, []);
 
-  const onChangeTheme = useCallback(
-    (value: A.ChangeThemeSettings["payload"]) => dispatch(A.onChangeThemeSettings(value)),
-    []
-  );
+  const onChangeTheme = useCallback((value: A.ChangeThemeSettings["payload"]) => {
+    dispatch(A.onChangeThemeSettings(value));
+  }, []);
 
   const onChangeLanguage = useCallback(
     (value: A.ChangeLanguageSettings["payload"]) =>
