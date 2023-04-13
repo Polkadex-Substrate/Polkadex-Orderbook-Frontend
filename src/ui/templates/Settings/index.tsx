@@ -1,5 +1,3 @@
-// TODO: Fix Bighead typing and unused imports
-
 import Head from "next/head";
 import { useDispatch } from "react-redux";
 import { Fragment, useRef } from "react";
