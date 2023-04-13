@@ -1,6 +1,8 @@
 import { FC, PropsWithChildren } from "react";
-import * as A from "./actions";
+
 import { CommonError } from "../../types";
+
+import * as A from "./actions";
 
 export interface TradesState {
   error?: CommonError;

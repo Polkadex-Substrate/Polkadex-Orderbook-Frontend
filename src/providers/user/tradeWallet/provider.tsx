@@ -1,12 +1,18 @@
-import { useReducer } from "react";
-import { Provider } from "./context";
-import { tradeWalletReducer, initialState } from "./reducer";
+import { useCallback, useReducer } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
-import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
 import { ApiPromise } from "@polkadot/api";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
+import { transformAddress } from "../profile/helpers";
+import { TradeAccount } from "../../types";
+import { useProfile } from "../profile";
+import { useNativeApi } from "../../public/nativeApi";
+import { useExtensionWallet } from "../extensionWallet";
+
+import { Provider } from "./context";
+import { tradeWalletReducer, initialState } from "./reducer";
 import {
   loadKeyring,
   getAllTradeAccountsInBrowser,
@@ -15,11 +21,6 @@ import {
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
-import { TradeAccount } from "../../types";
-import { useProfile } from "../profile";
-import { useNativeApi } from "../../public/nativeApi";
-import { useExtensionWallet } from "../extensionWallet";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({
   onError,
@@ -123,19 +124,22 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     }
   };
 
-  const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
-    try {
-      const { proxy } = payload;
-      profileState.onUserSelectAccount({
-        tradeAddress: proxy,
-      });
-      onNotification("Trade account added");
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      dispatch(A.registerTradeAccountError(error));
-    }
-  };
+  const onTradeAccountUpdate = useCallback(
+    (payload: A.TradeAccountUpdate["payload"]) => {
+      try {
+        const { proxy } = payload;
+        profileState.onUserSelectAccount({
+          tradeAddress: proxy,
+        });
+        onNotification("Trade account added");
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : (error as string);
+        if (typeof onError === "function") onError(errorMessage);
+        dispatch(A.registerTradeAccountError(error));
+      }
+    },
+    [onError, onNotification, profileState]
+  );
 
   const onRegisterTradeAccount = async (payload: A.RegisterTradeAccountFetch["payload"]) => {
     let tradeAddress: string;

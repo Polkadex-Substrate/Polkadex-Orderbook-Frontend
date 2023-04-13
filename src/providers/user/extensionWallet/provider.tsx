@@ -1,19 +1,20 @@
 import { useCallback, useReducer } from "react";
-import { extensionWalletReducer, initialState } from "./reducer";
 import { ApiPromise } from "@polkadot/api";
-import { ExtensionAccount } from "../../types";
-import { ErrorMessages } from "@polkadex/web-constants";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
+import { ExtensionAccount } from "../../types";
+import { useTradeWallet } from "../tradeWallet";
+
+import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
 import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
 
+import { ErrorMessages } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
-import { useTradeWallet } from "../tradeWallet";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   onError,
@@ -59,28 +60,29 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     tradeWalletState.onRegisterTradeAccountReset();
   };
 
-  const onRegisterMainAccountUpdate = (
-    payload: A.RegisterMainAccountUpdateEvent["payload"]
-  ) => {
-    try {
-      const { proxy, main } = payload;
-      profileState.onUserProfileMainAccountPush(main);
-      profileState.onUserProfileAccountPush({
-        tradeAddress: proxy,
-        mainAddress: main,
-      });
+  const onRegisterMainAccountUpdate = useCallback(
+    (payload: A.RegisterMainAccountUpdateEvent["payload"]) => {
+      try {
+        const { proxy, main } = payload;
+        profileState.onUserProfileMainAccountPush(main);
+        profileState.onUserProfileAccountPush({
+          tradeAddress: proxy,
+          mainAddress: main,
+        });
 
-      profileState.onUserAccountSelectFetch({
-        tradeAddress: proxy,
-      });
-      onNotification("You have successfully registered a new controller account");
-    } catch (error) {
-      console.log("error:", error);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      dispatch(A.registerMainAccountError());
-    }
-  };
+        profileState.onUserAccountSelectFetch({
+          tradeAddress: proxy,
+        });
+        onNotification("You have successfully registered a new controller account");
+      } catch (error) {
+        console.log("error:", error);
+        const errorMessage = error instanceof Error ? error.message : (error as string);
+        if (typeof onError === "function") onError(errorMessage);
+        dispatch(A.registerMainAccountError());
+      }
+    },
+    [onError, onNotification, profileState]
+  );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
     let data: T.RegisterEmailData, signature: string;

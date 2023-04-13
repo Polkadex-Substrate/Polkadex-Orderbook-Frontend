@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useProfile } from "../profile/useProfile";
-import { UserAccount } from "../profile/types";
 import * as queries from "../../../graphql/queries";
 
 import * as A from "./actions";
@@ -27,15 +26,18 @@ export const TransactionsProvider: T.TransactionsComponent = ({
 
   const profileState = useProfile();
 
-  const onTransactionsFetch = useCallback(async (mainAddress: string) => {
-    dispatch(A.transactionsFetch());
-    if (mainAddress) {
-      const transactions = await fetchTransactions(mainAddress, 3, 10);
-      dispatch(A.transactionsData(transactions));
-    } else {
-      onNotification("No account selected, Please select a trading account");
-    }
-  }, [profileState.selectedAccount, onNotification]);
+  const onTransactionsFetch = useCallback(
+    async (mainAddress: string) => {
+      dispatch(A.transactionsFetch());
+      if (mainAddress) {
+        const transactions = await fetchTransactions(mainAddress, 3, 10);
+        dispatch(A.transactionsData(transactions));
+      } else {
+        onNotification("No account selected, Please select a trading account");
+      }
+    },
+    [onNotification]
+  );
 
   const fetchTransactions = async (
     address: string,
@@ -100,8 +102,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     [withdrawalsList]
   );
 
-
-
   useEffect(() => {
     try {
       if (profileState?.selectedAccount?.mainAddress) {
@@ -111,6 +111,47 @@ export const TransactionsProvider: T.TransactionsComponent = ({
       onError("error while fetching transaction");
     }
   }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
+
+  const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
+    if (data.txn_type === "DEPOSIT") {
+      return {
+        ...data,
+        sid: data.sid ?? 0,
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    } else {
+      return {
+        event_id: data.event_id,
+        status: data.status,
+        sid: Number(data.sid) ?? 0,
+        txn_type: "WITHDRAWAL",
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    }
+  };
+
+  const onTransactionsUpdate = useCallback(
+    (payload: T.TransactionUpdatePayload) => {
+      try {
+        if (payload) {
+          console.log("transactionsUpdateSaga", payload);
+          const data = formatTransactionData(payload);
+          dispatch(A.transactionsUpdateEventData(data));
+        }
+      } catch (error) {
+        onError("Something has gone wrong while updating transactions");
+      }
+    },
+    [onError]
+  );
 
   return (
     <Provider
@@ -124,6 +165,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         allWithdrawals: withdrawalsList,
         readyWithdrawals,
         deposits,
+        onTransactionsUpdate,
       }}>
       {children}
     </Provider>
