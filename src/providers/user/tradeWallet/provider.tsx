@@ -49,14 +49,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
       );
     } catch (error) {
-      settingsState.onHandleNotification({
-        type: "ErrorAlert",
-        message: {
-          title: "Cannot export this account",
-          description: "Incorrect Password",
-        },
-        time: new Date().getTime(),
-      });
+      settingsState.onHandleError("Cannot export this account, incorrect password");
     } finally {
       dispatch(A.exportTradeAccountData());
     }
@@ -84,14 +77,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       dispatch(A.registerTradeAccountError(error));
-      settingsState.onHandleNotification({
-        type: "ErrorAlert",
-        message: {
-          title: "Cannot import account",
-          description: "Invalid password or file",
-        },
-        time: new Date().getTime(),
-      });
+      settingsState.onHandleError("Cannot import account, Invalid password or file");
     }
   };
 
@@ -120,15 +106,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
 
-      settingsState.onHandleNotification({
-        type: "ErrorAlert",
-        message: {
-          title: "Cannot import account",
-          description: "Please check your mnemonic",
-        },
-        time: new Date().getTime(),
-      });
-
+      settingsState.onHandleError("Cannot import account, please check your mnemonic");
       dispatch(A.tradeAccountsError(error));
     }
   };
@@ -139,10 +117,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
     }
   };
 
@@ -153,18 +128,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         tradeAddress: proxy,
       });
       settingsState.onHandleNotification({
-        type: "SuccessAlert",
-        message: {
-          title: "Trade account added",
-          description: "New Trade account created",
-        },
-        time: new Date().getTime(),
+        type: "Success",
+        message: "Trade account added,new trade account created",
       });
     } catch (error) {
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -205,10 +173,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -241,12 +206,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         const res = await removeProxyFromAccount(api, trade_Address, signer, account.address);
         if (res.isSuccess) {
           settingsState.onHandleNotification({
-            type: "SuccessAlert",
-            message: {
-              title: "Congratulations!",
-              description: "Your trade account has been removed from the chain!",
-            },
-            time: new Date().getTime(),
+            type: "Success",
+            message: "Congratulations! Your trade account has been removed from the chain!",
           });
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
@@ -258,12 +219,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
-
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };

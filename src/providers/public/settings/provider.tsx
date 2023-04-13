@@ -1,87 +1,70 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
 import * as A from "./actions";
+import * as T from "./types";
 
-import { transFormErrorMessage } from "@polkadex/orderbook/modules/public/errorHandler/helper";
-import { defaultConfig } from "@polkadex/orderbook-config";
-
-const { alertDisplayTime } = defaultConfig;
-
-export const SettingProvider = ({ children }) => {
+export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) => {
   const [state, dispatch] = useReducer(settingReducer, initialState);
 
   // Actions
 
   // Global Setting Actions
-  const onToggleChartRebuild = () => {
+  const onToggleChartRebuild = useCallback(() => {
     dispatch(A.toggleChartRebuild());
-  };
+  }, []);
 
-  const onToggleMarketSelector = () => {
+  const onToggleMarketSelector = useCallback(() => {
     dispatch(A.toggleMarketSelector());
-  };
+  }, []);
 
-  const onToggleOpenOrdersPairsSwitcher = (payload: boolean) => {
+  const onToggleOpenOrdersPairsSwitcher = useCallback((payload: boolean) => {
     dispatch(A.toggleOpenOrdersPairsSwitcher(payload));
-  };
+  }, []);
 
-  const onChangeColorTheme = (payload: string) => {
-    dispatch(A.changeColorTheme(payload));
-  };
+  const onChangeTheme = useCallback(
+    (value: A.ChangeThemeSettings["payload"]) => dispatch(A.onChangeThemeSettings(value)),
+    []
+  );
 
-  // Error Handler Actions
-  const onHandleError = (payload: A.ErrorHandlerFetch["payload"]) => {
-    const { processingType, error, extraOptions } = payload;
+  const onChangeLanguage = useCallback(
+    (value: A.ChangeLanguageSettings["payload"]) =>
+      dispatch(A.onChangeLanguageSettings(value)),
+    []
+  );
 
-    if (extraOptions?.params) dispatch(extraOptions.actionError(extraOptions.params));
+  const onChangeCurrency = useCallback(
+    (value: A.ChangeCurrencySettings["payload"]) =>
+      dispatch(A.onChangeCurrencySettings(value)),
+    []
+  );
 
-    if (extraOptions?.actionError && !extraOptions?.params)
-      dispatch(extraOptions.actionError());
+  const onPushNotification = useCallback(
+    (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
+    []
+  );
 
-    switch (processingType) {
-      case "alert": {
-        onHandleAlert({
-          message: {
-            title: "Error",
-            description: transFormErrorMessage(error),
-          },
-          type: "Alert",
-        });
-        break;
-      }
-      case "console": {
-        process.browser && window.console.log(error);
-        break;
-      }
-      default:
-        break;
-    }
-    dispatch(A.getErrorData());
-  };
+  const onRemoveNotification = useCallback(
+    (value: T.Notification["id"]) => dispatch(A.notificationDeleteById(value)),
+    []
+  );
 
-  // Alert Actions
-  const onHandleAlert = (payload: A.AlertPush["payload"]) => {
-    dispatch(A.alertData(payload));
-  };
+  const onReadNotification = useCallback(
+    (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
+    []
+  );
 
-  const onAlertDelete = () => {
-    dispatch(A.alertDelete());
-  };
+  const onClearNotifications = useCallback(() => dispatch(A.notificationDeleteAll()), []);
 
-  // Notification Handler Actions
-  const onHandleNotification = (payload: A.NotificationPush["payload"]) => {
-    dispatch(A.notificationPush(payload));
-    setTimeout(() => {
-      dispatch(A.notificationMarkAsReadBy({ id: payload.id, by: "isActive" }));
-    }, alertDisplayTime);
-  };
-
-  const onNotificationMarkAsReadBy = (payload: A.NotificationMarkAsReadBy["payload"]) => {
-    dispatch(A.notificationMarkAsReadBy(payload));
-  };
-
+  const onHandleNotification = useCallback(
+    (payload: T.NotificationPayload) => {
+      if (payload.type === "Error") defaultToast.onError(payload.message);
+      else defaultToast.onSuccess(payload.message);
+      dispatch(A.notificationPush(payload));
+    },
+    [defaultToast]
+  );
   return (
     <Provider
       value={{
@@ -89,12 +72,16 @@ export const SettingProvider = ({ children }) => {
         onToggleChartRebuild,
         onToggleMarketSelector,
         onToggleOpenOrdersPairsSwitcher,
-        onChangeColorTheme,
-        onHandleError,
-        onHandleAlert,
-        onAlertDelete,
+        onChangeTheme,
+        onChangeLanguage,
+        onChangeCurrency,
+        onPushNotification,
+        onClearNotifications,
+        onRemoveNotification,
+        onReadNotification,
+        onHandleError: defaultToast.onError,
+        onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
-        onNotificationMarkAsReadBy,
       }}>
       {children}
     </Provider>

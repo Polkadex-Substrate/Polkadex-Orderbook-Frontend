@@ -34,7 +34,7 @@ export const OriginalChart = ({ chart, resolution }) => {
 
   const settingsState = useSettingsProvider();
 
-  const isDarkTheme = settingsState.color === "dark";
+  const isDarkTheme = settingsState.theme === "dark";
   const { currentMarket } = useMarketsProvider();
 
   const klines = useReduxSelector(selectKline);

@@ -1,156 +1,162 @@
-import {
-  CHANGE_COLOR_THEME,
-  TOGGLE_CHART_REBUILD,
-  TOGGLE_ORDERS_PAIRS_SWITCHER,
-  TOGGLE_MARKET_SELECTOR,
-  ERROR_HANDLE_DATA,
-  ERROR_HANDLE_FETCH,
-  ALERT_DATA,
-  ALERT_DELETE,
-  ALERT_PUSH,
-  NOTIFICATION_DATA,
-  NOTIFICATION_DELETE_ALL,
-  NOTIFICATION_PUSH,
-  NOTIFICATION_DELETE_BY_ID,
-  NOTIFICATION_MARK_AS_READ_BY,
-} from "./constants";
 import * as T from "./types";
+import * as C from "./constants";
+
+const defaultTheme =
+  process.browser && window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+
+const defaultLanguage = process.browser && navigator.language.substring(0, 2);
+
+const theme = ((process.browser && localStorage.getItem(C.DEFAULTTHEMENAME)) ??
+  defaultTheme) as T.SettingState["theme"];
+
+const language = ((process.browser && localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
+  defaultLanguage) as T.SettingState["language"];
+
+const currency = ((process.browser && localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
+  "USD") as T.SettingState["currency"];
+
+const notifications =
+  JSON.parse(
+    process.browser && (window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string)
+  ) || [];
 
 export const initialState: T.SettingState = {
-  color: (process.browser && localStorage.getItem("colorTheme")) || "dark",
+  theme,
+  currency,
+  language,
+  notifications,
   chartRebuild: false,
   marketSelectorActive: false,
   ordersHideOtherPairs: true,
-  error: { processing: false },
-  alert: {
-    type: "",
-    status: false,
-    message: {
-      title: "",
-      description: "",
-    },
-  },
-  notification:
-    (process.browser && JSON.parse(window.localStorage.getItem("notifications"))) || [],
 };
 
 export const settingReducer = (state: T.SettingState, action) => {
   switch (action.type) {
-    case CHANGE_COLOR_THEME: {
-      process.browser && localStorage.setItem("colorTheme", action.payload);
+    case C.CHANGE_COLOR_THEME: {
+      process.browser && window.localStorage.setItem(C.DEFAULTTHEMENAME, action.payload);
       return {
         ...state,
-        color: action.payload,
+        theme: action.payload,
       };
     }
-    case TOGGLE_CHART_REBUILD: {
+    case C.SETTINGS_CHANGE_LANGUAGE: {
+      process.browser && window.localStorage.setItem(C.DEFAULTLANGUAGENAME, action.payload);
+      return {
+        ...state,
+        language: action.payload,
+      };
+    }
+
+    case C.SETTINGS_CHANGE_CURRENCY: {
+      process.browser && window.localStorage.setItem(C.DEFAULTCURRENCYNAME, action.payload);
+      return {
+        ...state,
+        currency: action.payload,
+      };
+    }
+    case C.TOGGLE_CHART_REBUILD: {
       return {
         ...state,
         chartRebuild: !state.chartRebuild,
       };
     }
-    case TOGGLE_MARKET_SELECTOR: {
+    case C.TOGGLE_MARKET_SELECTOR: {
       return {
         ...state,
         marketSelectorActive: !state.marketSelectorActive,
         sideBarActive: false,
       };
     }
-    case TOGGLE_ORDERS_PAIRS_SWITCHER: {
+    case C.TOGGLE_ORDERS_PAIRS_SWITCHER: {
       return {
         ...state,
         ordersHideOtherPairs: action.payload,
       };
     }
-    case ERROR_HANDLE_FETCH: {
-      return {
-        ...state,
-        error: {
-          processing: true,
-        },
-      };
-    }
-    case ERROR_HANDLE_DATA: {
-      return {
-        ...state,
-        error: {
-          processing: true,
-        },
-      };
-    }
-    case ALERT_DATA: {
-      return {
-        ...state,
-        alert: {
-          status: true,
-          ...action.payload,
-        },
-      };
-    }
-    case ALERT_DELETE: {
-      return {
-        ...state,
-        alert: {
-          ...initialState.alert,
-        },
-      };
-    }
-    case NOTIFICATION_PUSH: {
-      const prevObj = JSON.parse(window.localStorage.getItem("notifications")) || [];
-      const data = {
-        isRead: false,
-        isActive: false,
+
+    case C.NOTIFICATION_PUSH: {
+      const localData =
+        process.browser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
+      const prevObj: T.Notification[] =
+        JSON.parse(localData as string)?.sort(
+          (a: T.Notification, b: T.Notification) => a.date - b.date
+        ) || [];
+      const data: T.Notification = {
+        id: new Date().getTime().toString(36) + new Date().getUTCMilliseconds(),
+        active: true,
+        date: Date.now(),
         ...action.payload,
       };
-      window.localStorage.setItem("notifications", JSON.stringify([...prevObj, data]));
-      return { ...state, notification: [...state.notification, data] };
-    }
-    case NOTIFICATION_DELETE_ALL: {
-      window.localStorage.removeItem("notifications");
-      return {
-        ...state,
-        notification: [],
-      };
-    }
-    case NOTIFICATION_DELETE_BY_ID: {
-      const prevObj = JSON.parse(window.localStorage.getItem("notifications")) || [];
-      const newObj = prevObj?.filter((item) => item.id !== action.id);
+      if (prevObj?.length >= 16) prevObj.shift();
 
-      window.localStorage.setItem("notifications", JSON.stringify([...newObj]));
+      window.localStorage.setItem(
+        C.DEFAULTNOTIFICATIONNAME,
+        JSON.stringify([...prevObj, data])
+      );
       return {
         ...state,
-        notification: state.notification.filter((item) => item.id !== action.id),
+        notifications: [...state.notifications, data],
       };
     }
-    case NOTIFICATION_MARK_AS_READ_BY: {
-      const prevObj = JSON.parse(window.localStorage.getItem("notifications")) || [];
+
+    case C.NOTIFICATION_DELETE_ALL:
+      process.browser && window.localStorage.removeItem(C.DEFAULTNOTIFICATIONNAME);
+      return {
+        ...state,
+        notifications: [],
+      };
+
+    case C.NOTIFICATION_DELETE_BY_ID: {
+      const localNotifications = window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
+      const prevObj: T.Notification[] = JSON.parse(localNotifications as string) || [];
+
+      const newObj = prevObj?.filter((item) => item.id !== action.payload);
+
+      process.browser &&
+        window.localStorage.setItem(C.DEFAULTNOTIFICATIONNAME, JSON.stringify([...newObj]));
+
+      return {
+        ...state,
+        notifications: [...state?.notifications?.filter((item) => item.id !== action.payload)],
+      };
+    }
+
+    case C.NOTIFICATION_MARK_AS_READ: {
+      const localNotifications =
+        process.browser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
+      const prevObj: T.Notification[] = JSON.parse(localNotifications as string) || [];
+
       const newObj = prevObj?.map((item) => {
-        if (item.id === action.payload.id) {
+        if (item.id === action.payload)
           return {
             ...item,
-            [action.payload.by]: true,
+            active: false,
           };
-        }
+
         return item;
       });
 
-      window.localStorage.setItem("notifications", JSON.stringify([...newObj]));
-      const newData = state.notification.map((item) => {
-        if (item.id === action.payload.id) {
-          return {
-            ...item,
-            [action.payload.by]: true,
-          };
-        }
-        return item;
-      });
+      process.browser &&
+        window.localStorage.setItem(C.DEFAULTNOTIFICATIONNAME, JSON.stringify([...newObj]));
+
       return {
         ...state,
-        notification: newData,
+        notifications: [
+          ...state?.notifications?.map((item) => {
+            if (item.id === action.payload) {
+              return {
+                ...item,
+                active: false,
+              };
+            }
+            return item;
+          }),
+        ],
       };
     }
-    case NOTIFICATION_DATA:
-    case ALERT_PUSH:
+
     default:
       return state;
   }

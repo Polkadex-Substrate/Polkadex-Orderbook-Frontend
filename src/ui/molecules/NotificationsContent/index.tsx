@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import Link from "next/link";
 
 import * as S from "./styles";
 
@@ -10,20 +9,22 @@ import {
   TooltipHeader,
   ResultFound,
 } from "@polkadex/orderbook-ui/molecules";
-import { NotificationState } from "@polkadex/orderbook-modules";
-import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import {
+  useSettingsProvider,
+  Notification,
+} from "@polkadex/orderbook/providers/public/settings";
 
 type Props = {
-  notifications: NotificationState;
+  notifications: Notification[];
 };
 
 export const NotificationsContent = ({ notifications = [] }: Props) => {
   const [state, setState] = useState(true);
 
-  const { onNotificationMarkAsReadBy } = useSettingsProvider();
+  const { onReadNotification } = useSettingsProvider();
 
   const allNotifications = useMemo(
-    () => notifications.filter((value) => (!state ? value.isRead === state : value)),
+    () => notifications?.filter((value) => (!state ? value.active === state : value)),
     [notifications, state]
   );
   return (
@@ -50,16 +51,11 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
             allNotifications.map((notification) => (
               <Card
                 key={notification.id}
-                title={notification.message.title}
-                description={notification.message.description}
-                time={new Date(notification.time).toLocaleString()}
-                isRead={!notification.isRead}
+                description={notification.message}
+                time={new Date(notification.date).toLocaleString()}
+                isRead={!notification.active}
                 type={notification.type}
-                actionUrl={notification.actionUrl}
-                actionTitle={notification.actionTitle}
-                onMarkAsRead={() =>
-                  onNotificationMarkAsReadBy({ id: notification.id, by: "isRead" })
-                }
+                onMarkAsRead={() => onReadNotification(notification.id)}
               />
             ))
           ) : (
@@ -71,28 +67,16 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
   );
 };
 
-const Card = ({
-  title,
-  description,
-  type,
-  time,
-  isRead = false,
-  onMarkAsRead,
-  actionUrl,
-  actionTitle,
-}) => (
+const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => (
   <S.Card isRead={isRead}>
     <S.CardIcon>
       <Icon size="extraSmall" name={type} />
       {isRead && <S.Read />}
     </S.CardIcon>
     <S.CardContent>
-      <strong>{title}</strong>
       <p>{description}</p>
-
       <S.Actions>
         <small>{time}</small>
-        {actionUrl?.length && <Link href={actionUrl}>{actionTitle}</Link>}
       </S.Actions>
     </S.CardContent>
     {isRead && (

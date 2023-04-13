@@ -11,7 +11,7 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
-  const { onHandleAlert, onHandleError } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   // Actions
   const onConnectNativeApi = useCallback(async () => {
@@ -37,10 +37,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
         );
 
         api.on("error", () => {
-          onHandleError({
-            error: `Polkadex can't connect to ${defaultConfig.polkadexChain}`,
-            processingType: "alert",
-          });
+          onHandleError(`Polkadex can't connect to ${defaultConfig.polkadexChain}`);
           dispatch(A.nativeApiConnectError());
         });
       };
@@ -50,15 +47,9 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
         api.disconnect();
       };
     } catch (error) {
-      onHandleAlert({
-        message: {
-          title: "Error connecting to Polkadex chain..",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      onHandleError(`Error connecting to Polkadex chain: ${error?.message ?? error}`);
     }
-  }, [onHandleAlert, onHandleError]);
+  }, [onHandleError]);
 
   return (
     <Provider

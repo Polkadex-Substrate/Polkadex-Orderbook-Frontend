@@ -1,3 +1,4 @@
+// TODO: check callbacks
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
@@ -195,15 +196,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
-    const notify = (description: string) => {
-      settingsState.onHandleAlert({
-        message: {
-          title: "Order Failed",
-          description,
-        },
-        type: "Alert",
-      });
-    };
+    const notify = (description: string) =>
+      settingsState.onHandleAlert(`Order Failed ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 

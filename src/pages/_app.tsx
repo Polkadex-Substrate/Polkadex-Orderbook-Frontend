@@ -9,6 +9,8 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -31,21 +33,6 @@ import {
   useSettingsProvider,
 } from "@polkadex/orderbook/providers/public/settings";
 
-const Message = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
-  {
-    ssr: false,
-  }
-);
-
-const Notifications = dynamic(
-  () =>
-    import("@polkadex/orderbook-ui/organisms/Notifications").then((mod) => mod.Notifications),
-  {
-    ssr: false,
-  }
-);
-
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
   {
@@ -66,7 +53,12 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <SettingProvider>
+      <ToastContainer />
+      <SettingProvider
+        defaultToast={{
+          onError: (e) => toast(e, { type: "error" }),
+          onSuccess: (e) => toast(e, { type: "success" }),
+        }}>
         <AuthProvider>
           <ProfileProvider>
             <AssetsProvider>
@@ -99,11 +91,11 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const ModifiedThemeProvider = ({ Component, pageProps }) => {
-  const { color } = useSettingsProvider();
+  const { theme } = useSettingsProvider();
 
   return (
     <>
-      <ThemeProvider theme={color === "light" ? defaultThemes.light : defaultThemes.dark}>
+      <ThemeProvider theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}>
         {defaultConfig.maintenanceMode ? (
           <Maintenance />
         ) : (
@@ -139,6 +131,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     cryptoWait();
   }, []);
 
+  // TODO: Missing fetchDataOnUserAuth dependcy
   useEffect(() => {
     // When User logout, do not fetch the data
     if (!logoutSuccess) {
@@ -185,10 +178,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         }
         default: {
           console.error("Error=>", `User data fetch error: ${error.message}`);
-          settingsState.onHandleError({
-            error: `User data fetch error: ${error.message}`,
-            processingType: "alert",
-          });
+          settingsState.onHandleError(`User data fetch error: ${error?.message ?? error}`);
           break;
         }
       }
@@ -197,8 +187,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Notifications />
-      <Message />
       <GoogleAnalytics trackPageViews />
       <NextNProgress
         color="#E6007A"

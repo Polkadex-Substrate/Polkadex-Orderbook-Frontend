@@ -25,10 +25,7 @@ export const SessionProvider: T.SessionComponent = ({ children }) => {
       dispatch(A.userSessionData({ dateFrom, dateTo }));
     } catch (error) {
       console.log(error);
-      onHandleError({
-        error,
-        processingType: "alert",
-      });
+      onHandleError(error?.message ?? error);
       dispatch(A.userSessionError(error));
     }
   }, [onHandleError]);

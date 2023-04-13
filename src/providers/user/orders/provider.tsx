@@ -62,11 +62,8 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         const res = await executePlaceOrder([order, signature], address);
         if (res.data.place_order) {
           settingsState.onHandleNotification({
-            type: "SuccessAlert",
-            message: {
-              title: "Order Placed",
-            },
-            time: new Date().getTime(),
+            type: "Success",
+            message: "Order Placed",
           });
         }
         dispatch(A.orderExecuteData());
@@ -81,21 +78,14 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       // due to the step size of the configuration. Its expected even-though order-book throws error
       if (errorText.includes("MarketLiquidityError")) {
         settingsState.onHandleNotification({
-          type: "SuccessAlert",
-          message: {
-            title: "Market order placed",
-          },
-          time: new Date().getTime(),
+          type: "Success",
+          message: "Market order placed",
         });
         return;
       }
       settingsState.onHandleNotification({
-        type: "ErrorAlert",
-        message: {
-          title: "Order failed",
-          description: errorText,
-        },
-        time: new Date().getTime(),
+        type: "Error",
+        message: `Order failed: ${errorText}`,
       });
     }
   };
@@ -125,12 +115,8 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         dispatch(A.orderCancelData());
 
         settingsState.onHandleNotification({
-          type: "SuccessAlert",
-          message: {
-            title: "Order cancelled",
-            description: `OrderId: ${orderId}`,
-          },
-          time: new Date().getTime(),
+          type: "Success",
+          message: `Order cancelled: ${orderId}`,
         });
 
         setTimeout(() => {
@@ -138,10 +124,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         }, 1000);
       }
     } catch (error) {
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.orderCancelError(error));
     }
   };

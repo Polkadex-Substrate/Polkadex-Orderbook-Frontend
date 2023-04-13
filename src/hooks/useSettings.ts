@@ -1,12 +1,13 @@
 // TODO: Refactor hook
 import { useMemo, useState } from "react";
 
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
-import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
-import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAuth } from "../providers/user/auth";
 import { useExtensionWallet } from "../providers/user/extensionWallet";
 import { useTradeWallet } from "../providers/user/tradeWallet";
+
+import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -36,7 +37,7 @@ export const useSettings = () => {
   const {
     userData: { userAccounts: allAccounts },
   } = useProfile();
-  let authInfo = profileState.authInfo;
+  const authInfo = profileState.authInfo;
   const user = {
     ...authInfo,
     email: authState.email,

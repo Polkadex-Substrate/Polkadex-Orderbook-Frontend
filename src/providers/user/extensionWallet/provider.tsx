@@ -50,10 +50,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       }
     } catch (error) {
       console.log("error in registration:", error.message);
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
     }
   };
 
@@ -76,19 +73,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         tradeAddress: proxy,
       });
       settingsState.onHandleNotification({
-        type: "SuccessAlert",
-        message: {
-          title: "New Account Registered",
-          description: "You have successfully registered a new controller account",
-        },
-        time: new Date().getTime(),
+        type: "Success",
+        message:
+          "New Account Registered, you have successfully registered a new controller account",
       });
     } catch (error) {
       console.log("error:", error);
-      settingsState.onHandleError({
-        error: error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerMainAccountError());
     }
   };
@@ -148,9 +139,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
       dispatch(A.registerMainAccountError());
       settingsState.onHandleNotification({
-        message: { title: "Cannot Register Account!", description: error.message },
-        type: "ErrorAlert",
-        time: new Date().getTime(),
+        message: `Cannot Register Account: ${error?.message ?? error}`,
+        type: "Error",
       });
     }
   };
@@ -181,10 +171,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       );
       return () => unsubscribe.then((fn) => fn());
     } catch (error) {
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
     }
   }, [settingsState]);
 
@@ -232,9 +219,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       console.log("error", error);
       dispatch(A.registerMainAccountError());
       settingsState.onHandleNotification({
-        message: { title: "Cannot Register Account to Server!", description: error.message },
-        type: "ErrorAlert",
-        time: new Date().getTime(),
+        message: `Cannot Register Account to Server!, ${error?.message ?? error}`,
+        type: "Error",
       });
     }
   };

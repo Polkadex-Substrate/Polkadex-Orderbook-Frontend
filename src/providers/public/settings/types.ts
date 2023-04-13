@@ -1,71 +1,55 @@
 import { FC, PropsWithChildren } from "react";
 
-import * as A from "./actions";
+export type NotificationPayload = {
+  type: "Error" | "Info" | "Success" | "Loading" | "Attention";
+  message: string;
+};
 
-export type AlertTypes = "Error" | "Successful" | "Attention" | "Loading" | "Alert" | "";
-
-export interface AlertState {
-  type?: AlertTypes;
-  status?: boolean;
-  message?: {
-    title?: string;
-    description?: string;
-  };
+export interface Notification extends NotificationPayload {
+  id: number | string;
+  date: number;
+  active?: boolean;
 }
-
-export type NotificationTypes =
-  | "InformationAlert"
-  | "ErrorAlert"
-  | "AttentionAlert"
-  | "SuccessAlert"
-  | "LoadingAlert";
-
-export interface Notification {
-  id?: number;
-  type?: NotificationTypes;
-  isRead?: boolean;
-  isActive?: boolean;
-  message?: {
-    title?: string;
-    description?: string;
-  };
-  time: number;
-  actionUrl?: string;
-  actionTitle?: string;
-  hasConfetti?: boolean;
-}
-
 export interface SettingState {
-  color: string;
   chartRebuild: boolean;
   ordersHideOtherPairs: boolean;
   marketSelectorActive: boolean;
-  error: {
-    processing: boolean;
-  };
-  alert: AlertState;
-  notification: Notification[];
+  theme: "light" | "dark";
+  language: "en" | "fr" | "es" | "zh";
+  currency: "USD" | "EUR" | "CNY" | "INR";
+  notifications: Notification[];
 }
 
 export type SettingProviderProps = PropsWithChildren<{
   value: SettingContextProps;
 }>;
 
+type ToastActions = {
+  onError: (value: string) => void;
+  onSuccess: (value: string) => void;
+};
+
 export type SettingContextProps = SettingState & {
   onToggleChartRebuild: () => void;
   onToggleMarketSelector: () => void;
   onToggleOpenOrdersPairsSwitcher: (value: boolean) => void;
-  onChangeColorTheme: (value: string) => void;
-  onHandleError: (value: A.ErrorHandlerFetch["payload"]) => void;
-  onHandleAlert: (value: A.AlertPush["payload"]) => void;
-  onAlertDelete: () => void;
-  onHandleNotification: (value: A.NotificationPush["payload"]) => void;
-  onNotificationMarkAsReadBy: (value: A.NotificationMarkAsReadBy["payload"]) => void;
+  onChangeTheme: (value: SettingState["theme"]) => void;
+  onChangeLanguage: (value: SettingState["language"]) => void;
+  onChangeCurrency: (value: SettingState["currency"]) => void;
+  onPushNotification: (value: NotificationPayload) => void;
+  onRemoveNotification: (value: Notification["id"]) => void;
+  onReadNotification: (value: Notification["id"]) => void;
+  onClearNotifications: () => void;
+  onHandleError: ToastActions["onError"];
+  onHandleAlert: ToastActions["onSuccess"];
+  onHandleNotification: (value: NotificationPayload) => void;
 };
 
-export interface SettingProps {
-  onError?: (value: string) => void;
-  onNotification?: (value: string) => void;
-}
+export type SettingsProps = {
+  defaultTheme?: SettingState["theme"];
+  defaultLanguage?: SettingState["language"];
+  defaultCurrency?: SettingState["currency"];
+  defaultToast: ToastActions;
+};
 
-export type SettingComponent = FC<PropsWithChildren<SettingProps>>;
+export type SettingComponent = FC<PropsWithChildren<SettingsProps>>;

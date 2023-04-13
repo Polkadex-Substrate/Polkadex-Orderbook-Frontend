@@ -31,14 +31,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         const transactions = await fetchTransactions(mainAddress, 3, 10);
         dispatch(A.transactionsData(transactions));
       } else {
-        settingsState.onHandleNotification({
-          message: {
-            title: "No account selected",
-            description: "Please select a trading account",
-          },
-          type: "ErrorAlert",
-          time: new Date().getTime(),
-        });
+        settingsState.onHandleError("No account selected, please select a trading account");
       }
     },
     [settingsState]
@@ -113,13 +106,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         onTransactionsFetch(profileState.selectedAccount.mainAddress);
       }
     } catch (error) {
-      settingsState.onHandleAlert({
-        message: {
-          title: "Something has gone wrong (transactions)..",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      settingsState.onHandleError(`Transactions error: ${error?.message ?? error}`);
     }
   }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
 

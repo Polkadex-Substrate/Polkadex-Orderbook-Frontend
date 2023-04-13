@@ -8,12 +8,16 @@ export const Context = createContext<SettingContextProps>({
   onToggleChartRebuild: () => {},
   onToggleMarketSelector: () => {},
   onToggleOpenOrdersPairsSwitcher: () => {},
-  onChangeColorTheme: () => {},
   onHandleError: () => {},
   onHandleAlert: () => {},
-  onAlertDelete: () => {},
   onHandleNotification: () => {},
-  onNotificationMarkAsReadBy: () => {},
+  onChangeTheme: () => {},
+  onChangeLanguage: () => {},
+  onChangeCurrency: () => {},
+  onPushNotification: () => {},
+  onRemoveNotification: () => {},
+  onReadNotification: () => {},
+  onClearNotifications: () => {},
 });
 
 export const Provider = ({ value, children }: SettingProviderProps) => (
