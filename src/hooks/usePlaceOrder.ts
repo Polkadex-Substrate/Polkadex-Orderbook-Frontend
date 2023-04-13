@@ -74,7 +74,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       amountSell: "",
       amountBuy: "",
     }));
-  }, []);
+  }, [isLimit]);
 
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
