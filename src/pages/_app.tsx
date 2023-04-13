@@ -29,6 +29,7 @@ import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { TradesProvider } from "@polkadex/orderbook/providers/user/trades";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -97,24 +98,26 @@ function App({ Component, pageProps }: AppProps) {
                         <BalancesProvider
                           onError={(v) => toast.error(v)}
                           onNotification={(v) => toast.info(v)}>
-                          <OverlayProvider>
-                            <ThemeProvider
-                              theme={
-                                color === "light" ? defaultThemes.light : defaultThemes.dark
-                              }>
-                              {defaultConfig.maintenanceMode ? (
-                                <Maintenance />
-                              ) : (
-                                <QueryClientProvider client={queryClient}>
-                                  <ThemeWrapper>
-                                    <Component {...pageProps} />
-                                  </ThemeWrapper>
-                                </QueryClientProvider>
-                              )}
+                          <TradesProvider onError={(v) => toast.error(v)}>
+                            <OverlayProvider>
+                              <ThemeProvider
+                                theme={
+                                  color === "light" ? defaultThemes.light : defaultThemes.dark
+                                }>
+                                {defaultConfig.maintenanceMode ? (
+                                  <Maintenance />
+                                ) : (
+                                  <QueryClientProvider client={queryClient}>
+                                    <ThemeWrapper>
+                                      <Component {...pageProps} />
+                                    </ThemeWrapper>
+                                  </QueryClientProvider>
+                                )}
 
-                              <GlobalStyles />
-                            </ThemeProvider>
-                          </OverlayProvider>
+                                <GlobalStyles />
+                              </ThemeProvider>
+                            </OverlayProvider>
+                          </TradesProvider>
                         </BalancesProvider>
                       </TradeWalletProvider>
                     </ExtensionWalletProvider>

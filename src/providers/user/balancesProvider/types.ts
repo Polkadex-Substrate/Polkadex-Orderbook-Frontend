@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+
 import { CommonError } from "../../types";
 
 export type BalanceQueryResult = {
@@ -46,6 +47,7 @@ export interface BalancesState {
 
 export type BalancesContextProps = BalancesState & {
   getFreeProxyBalance: (value: string) => string;
+  onBalanceUpdate: (value: BalanceUpdatePayload) => void;
 };
 
 export type BalancesProviderProps = PropsWithChildren<{

@@ -3,10 +3,7 @@ import { put, select } from "redux-saga/effects";
 import { alertPush, BalanceUpdatePayload } from "../../..";
 import { Balance, BalancesUpdateEvent, balanceUpdateEventData } from "../actions";
 
-import {
-  IPublicAsset,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
+import { IPublicAsset, selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export function* balanceUpdateSaga(action: BalancesUpdateEvent) {
