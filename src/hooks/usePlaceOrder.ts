@@ -1,4 +1,4 @@
-// TODO: check callbacks
+// TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
