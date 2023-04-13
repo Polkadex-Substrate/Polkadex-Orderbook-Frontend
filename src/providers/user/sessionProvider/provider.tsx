@@ -26,15 +26,19 @@ export const SessionProvider: T.SessionComponent = ({ onError, children }) => {
     }
   }, [onError]);
 
+  const dispatchUserSessionData = useCallback(({ dateFrom, dateTo }) => {
+    dispatch(A.userSessionData({ dateFrom, dateTo }));
+  }, []);
+
   useEffect(() => {
-    if (address)
-      onFetchSession();
+    if (address) onFetchSession();
   }, [onFetchSession, address]);
 
   return (
     <Provider
       value={{
         ...state,
+        dispatchUserSessionData,
       }}>
       {children}
     </Provider>

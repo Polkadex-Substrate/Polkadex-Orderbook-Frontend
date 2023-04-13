@@ -1,5 +1,23 @@
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
 import { PropsWithChildren } from "react";
+
+import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+
+export type orderHistoryQueryResult = {
+  u: string;
+  cid: string;
+  id: string;
+  t: string;
+  m: string;
+  s: string;
+  ot: string;
+  st: string;
+  p: string;
+  q: string;
+  afp: string;
+  fq: string;
+  fee: string;
+};
 
 export interface SetOrder {
   event_id: number;
@@ -42,6 +60,11 @@ export interface onOrdersHistoryFetch {
 export type OrderHistoryContextProps = OrdersHistoryState & {
   onOpenOrdersHistoryFetch: () => void;
   onOrdersHistoryFetch: (value: onOrdersHistoryFetch) => void;
+  onOrderUpdates: (value: SetOrder) => void;
+  orders: OrderCommon[];
+  openOrders: OrderCommon[];
+  userLoggedIn: boolean;
+  filterOrders: (value: Ifilters) => void;
 };
 
 export type OrderHistoryProviderProps = PropsWithChildren<{
