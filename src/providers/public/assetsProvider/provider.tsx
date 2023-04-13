@@ -11,7 +11,7 @@ import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentIn
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
-export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, children }) => {
+export const AssetsProvider: T.AssetsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
@@ -32,7 +32,7 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, onNotification, chi
 
   const fetchAssets = useCallback(async () => {
     try {
-      const assetsList = await (() => fetchAllAssetMetadata())();
+      const assetsList = await fetchAllAssetMetadata();
 
       dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
