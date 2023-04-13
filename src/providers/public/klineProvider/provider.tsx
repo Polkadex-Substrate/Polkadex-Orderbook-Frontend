@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import { API } from "aws-amplify";
 
 import * as subscriptions from "../../../graphql/subscriptions";
+import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -13,8 +14,10 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export const KlineProvider: KlineComponent = ({ onError, onNotification, children }) => {
+export const KlineProvider: KlineComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
+  console.log("kline");
+
   const fetchKlineAsync = async (
     market: string,
     interval: string,
@@ -37,7 +40,9 @@ export const KlineProvider: KlineComponent = ({ onError, onNotification, childre
     return processKlineData(data);
   };
 
-  const processKlineData = (data: any[]) => {
+  const processKlineData = (data: KlineDbData[]) => {
+    console.log(data, "process");
+
     const klinesData = data.map((x) => ({
       timestamp: Number(x.t.split(",")[0].split("=")[1]) * 1000,
       open: Number(x.o),
@@ -72,6 +77,13 @@ export const KlineProvider: KlineComponent = ({ onError, onNotification, childre
       onError("Kline fetch error");
     }
   };
+  const { currentMarket } = useMarketsProvider();
+  onHandleKlineFetch({
+    market: currentMarket.m,
+    resolution: "1m",
+    from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
+    to: new Date(),
+  });
 
   const processKline = (data: any, interval: string): KlineEvent => {
     const kline = {

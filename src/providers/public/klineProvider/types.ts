@@ -11,8 +11,8 @@ export type KlineDbData = {
   c: string;
   h: string;
   l: string;
-  v_base: string;
-  v_quote: string;
+  vb: string;
+  vq: string;
   t: string;
 };
 
