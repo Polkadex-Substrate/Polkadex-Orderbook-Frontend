@@ -67,31 +67,34 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
   );
 };
 
-const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => (
-  <S.Card isRead={isRead}>
-    <S.CardIcon>
-      <Icon size="extraSmall" name={type} />
-      {isRead && <S.Read />}
-    </S.CardIcon>
-    <S.CardContent>
-      <p>{description}</p>
-      <S.Actions>
-        <small>{time}</small>
-      </S.Actions>
-    </S.CardContent>
-    {isRead && (
-      <S.CardActionContainer>
-        <Tooltip>
-          <TooltipHeader>
-            <S.CardAction onClick={onMarkAsRead}>
-              <Icon name="Verified" color="black" />
-            </S.CardAction>
-          </TooltipHeader>
-          <TooltipContent position="right">
-            <p>Mark as read</p>
-          </TooltipContent>
-        </Tooltip>
-      </S.CardActionContainer>
-    )}
-  </S.Card>
-);
+const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => {
+  const iconName = `${type}Alert`;
+  return (
+    <S.Card isRead={isRead}>
+      <S.CardIcon>
+        <Icon size="extraSmall" name={iconName} />
+        {isRead && <S.Read />}
+      </S.CardIcon>
+      <S.CardContent>
+        <p>{description}</p>
+        <S.Actions>
+          <small>{time}</small>
+        </S.Actions>
+      </S.CardContent>
+      {isRead && (
+        <S.CardActionContainer>
+          <Tooltip>
+            <TooltipHeader>
+              <S.CardAction onClick={onMarkAsRead}>
+                <Icon name="Verified" color="black" />
+              </S.CardAction>
+            </TooltipHeader>
+            <TooltipContent position="right">
+              <p>Mark as read</p>
+            </TooltipContent>
+          </Tooltip>
+        </S.CardActionContainer>
+      )}
+    </S.Card>
+  );
+};
