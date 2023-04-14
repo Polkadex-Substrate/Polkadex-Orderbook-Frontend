@@ -3,7 +3,6 @@ export * from "./useInit";
 export * from "./useReduxSelector";
 export * from "./useWindowSize";
 export * from "./useAccount";
-export * from "./useHistory";
 export * from "./useMarkets";
 export * from "./useOrderbook";
 export * from "./useOrderbookTable";
