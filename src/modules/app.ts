@@ -6,7 +6,6 @@ import { errorHandlerReducer } from "./public/errorHandler";
 import { klineReducer } from "./public/kline";
 import { rangerReducer } from "./public/ranger";
 import { depthReducer, orderBookReducer } from "./public/orderBook";
-import { recentTradesReducer } from "./public/recentTrades";
 import { ordersReducer } from "./user/orders";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
@@ -21,7 +20,6 @@ export const publicReducer = combineReducers({
   kline: klineReducer,
   orderBook: orderBookReducer,
   depth: depthReducer,
-  recentTrades: recentTradesReducer,
   ranger: rangerReducer,
   assets: assetsReducer,
 });
