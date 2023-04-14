@@ -22,13 +22,11 @@ import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
-import { rootSessionSaga, SessionState } from "./user/session";
 
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
 export * from "./user/trades";
-export * from "./user/session";
 export * from "./user/transactions";
 export * from "./user/notificationHandler";
 export * from "./user/tradeWallet";
@@ -61,7 +59,6 @@ export interface RootState {
     trades: TradesState;
     transactions: TransactionsState;
     notifications: NotificationState;
-    session: SessionState;
   };
 }
 
@@ -72,7 +69,6 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield all([
-    call(rootSessionSaga),
     call(rootTransactionsSaga),
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
