@@ -110,6 +110,47 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     }
   }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
 
+  const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
+    if (data.txn_type === "DEPOSIT") {
+      return {
+        ...data,
+        sid: data.sid ?? 0,
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    } else {
+      return {
+        event_id: data.event_id,
+        status: data.status,
+        sid: Number(data.sid) ?? 0,
+        txn_type: "WITHDRAWAL",
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    }
+  };
+
+  const onTransactionsUpdate = useCallback(
+    (payload: T.TransactionUpdatePayload) => {
+      try {
+        if (payload) {
+          console.log("transactionsUpdateSaga", payload);
+          const data = formatTransactionData(payload);
+          dispatch(A.transactionsUpdateEventData(data));
+        }
+      } catch (error) {
+        settingsState.onHandleError("Something has gone wrong while updating transactions");
+      }
+    },
+    [settingsState]
+  );
+
   return (
     <Provider
       value={{
@@ -122,6 +163,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         allWithdrawals: withdrawalsList,
         readyWithdrawals,
         deposits,
+        onTransactionsUpdate,
       }}>
       {children}
     </Provider>

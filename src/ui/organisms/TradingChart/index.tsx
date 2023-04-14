@@ -18,17 +18,13 @@ import {
   klineUnsubscribe,
   klineUpdatePeriod,
   klineUpdateTimeRange,
-  Market,
-  MarketsState,
   RootState,
   selectChartRebuildState,
   selectCurrentColorTheme,
-  selectCurrentMarket,
   selectKline,
-  selectMarkets,
-  selectCurrentMarketTickers,
   klinePush,
 } from "@polkadex/orderbook-modules";
+import { Market, MarketsState } from "@polkadex/orderbook/providers/public/marketsProvider";
 
 interface ReduxProps {
   markets: Market[];

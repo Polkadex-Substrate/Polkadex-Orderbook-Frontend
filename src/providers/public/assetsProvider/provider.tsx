@@ -1,5 +1,4 @@
-// TODO: Check useEffect warnings
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -11,22 +10,9 @@ import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
 import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
-import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const AssetsProvider: T.AssetsComponent = ({ children }) => {
+export const AssetsProvider: T.AssetsComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
-  const settingsState = useSettingsProvider();
-
-  const fetchAssets = async () => {
-    try {
-      const assetsList = await (() => fetchAllAssetMetadata())();
-
-      dispatch(A.assetsData({ list: assetsList }));
-    } catch (error) {
-      console.warn("something has gone wrong with fetchassets");
-      settingsState.onHandleAlert(`${error.name}: ${error.message}`);
-    }
-  };
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
     const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
@@ -44,25 +30,37 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     return newAssets;
   }
 
-  const selectGetAsset = (
-    assetId: string | number | Record<string, string>
-  ): T.IPublicAsset | null => {
-    if (!assetId) {
-      return null;
+  const fetchAssets = useCallback(async () => {
+    try {
+      const assetsList = await fetchAllAssetMetadata();
+
+      dispatch(A.assetsData({ list: assetsList }));
+    } catch (error) {
+      console.warn("something has gone wrong with fetchassets");
+      onError(`Something has gone wrong, could not fetch assets ${error}`);
     }
-    if (isKeyPresentInObject(assetId, "asset")) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      assetId = assetId.asset;
-    }
-    return isAssetPDEX(assetId.toString())
-      ? POLKADEX_ASSET
-      : state.list.find((asset) => asset.assetId === assetId.toString());
-  };
+  }, [onError]);
+
+  const selectGetAsset = useCallback(
+    (assetId: string | number | Record<string, string>): T.IPublicAsset | null => {
+      if (!assetId) {
+        return null;
+      }
+      if (isKeyPresentInObject(assetId, "asset")) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        assetId = assetId.asset;
+      }
+      return isAssetPDEX(assetId.toString())
+        ? POLKADEX_ASSET
+        : state.list.find((asset) => asset.assetId === assetId.toString());
+    },
+    [state.list]
+  );
 
   useEffect(() => {
     fetchAssets();
-  }, []);
+  }, [fetchAssets]);
 
   return (
     <Provider

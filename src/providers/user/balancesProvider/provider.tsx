@@ -12,13 +12,14 @@ import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
-  const { list: assetsList, success: isAssetData } = useAssetsProvider();
+  const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
 
   const fetchbalancesAsync = useCallback(
@@ -40,7 +41,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
       });
       return balances;
     },
-    [sendQueryToAppSync]
+    []
   );
   const onBalancesFetch = useCallback(async () => {
     dispatch(A.balancesFetch());
@@ -80,6 +81,34 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     return balance.free_balance;
   };
 
+  const updateBalanceFromEvent = useCallback(
+    (msg: T.BalanceUpdatePayload): T.Balance => {
+      const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
+      const newBalance = {
+        name: selectGetAsset(assetId).name,
+        symbol: selectGetAsset(assetId).symbol,
+        assetId: assetId.toString(),
+        free_balance: msg.free,
+        reserved_balance: msg.reserved,
+        pending_withdrawal: msg.pending_withdrawal,
+      };
+      return newBalance;
+    },
+    [selectGetAsset]
+  );
+
+  const onBalanceUpdate = useCallback(
+    (payload: T.BalanceUpdatePayload) => {
+      try {
+        const updateBalance = updateBalanceFromEvent(payload);
+        dispatch(A.balanceUpdateEventData(updateBalance));
+      } catch (error) {
+        onHandleError("Something has gone wrong while updating balance");
+      }
+    },
+    [onHandleError, updateBalanceFromEvent]
+  );
+
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
@@ -89,6 +118,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
       value={{
         ...state,
         getFreeProxyBalance,
+        onBalanceUpdate,
       }}>
       {children}
     </Provider>
