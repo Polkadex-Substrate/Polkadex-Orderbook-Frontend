@@ -12,7 +12,6 @@ import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
 import { tradesReducer } from "./user/trades";
-import { withdrawsReducer } from "./user/withdraws";
 import { balancesReducer } from "./user/balances";
 import { transactionsReducer } from "./user/transactions";
 import { sessionReducer } from "./user/session";
@@ -37,7 +36,6 @@ export const userReducer = combineReducers({
   ordersHistory: ordersHistoryReducer,
   trades: tradesReducer,
   transactions: transactionsReducer,
-  withdraws: withdrawsReducer,
   notifications: notificationReducer,
   session: sessionReducer,
 });

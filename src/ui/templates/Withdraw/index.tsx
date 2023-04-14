@@ -26,23 +26,16 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
+import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import {
-  selectClaimWithdrawsInLoading,
-  selectUserBalance,
-  selectWithdrawsLoading,
-} from "@polkadex/orderbook-modules";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-
 import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
-
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 
@@ -71,13 +64,12 @@ export const WithdrawTemplate = () => {
 
   useTryUnlockTradeAccount(tradingAccountInBrowser);
   const { list: assets } = useAssetsProvider();
-  const loading = useReduxSelector(selectWithdrawsLoading);
   const { balances: userBalances } = useBalancesProvider();
 
   const router = useRouter();
 
   const { allWithdrawals, readyWithdrawals } = useTransactionsProvider();
-  const { handleClaimWithdraws } = useWithdrawsProvider()
+  const { handleClaimWithdraws, loading } = useWithdrawsProvider();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -343,8 +335,7 @@ export const WithdrawTemplate = () => {
 };
 
 const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) => {
-  const claimWithdrawsInLoading = useReduxSelector(selectClaimWithdrawsInLoading);
-
+  const { claimsInLoading: claimWithdrawsInLoading } = useWithdrawsProvider();
   const claimIsLoading = useMemo(
     () => claimWithdrawsInLoading.includes(sid),
     [claimWithdrawsInLoading, sid]
