@@ -7,6 +7,7 @@ export const Context = createContext<TradesContextProps>({
   ...initialState,
   onFetchTrades: () => {},
   onUserTradeUpdate: () => {},
+  onUserTradesError: () => {},
 });
 
 export const Provider = ({ value, children }: TradesProviderProps) => {

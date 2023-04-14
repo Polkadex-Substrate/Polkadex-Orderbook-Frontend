@@ -3,6 +3,7 @@ import { useReducer } from "react";
 import { useProfile } from "../profile";
 import { UserSessionPayload } from "../sessionProvider/actions";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
+import { useSettingsProvider } from "../../public/settings";
 
 import { Provider } from "./context";
 import { tradesReducer, initialState } from "./reducer";
@@ -10,10 +11,11 @@ import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
-export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
+export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const sessionState = useSessionProvider();
+  const { onHandleError } = useSettingsProvider();
 
   // Actions
   const onFetchTrades = async () => {
@@ -27,8 +29,7 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
         dispatch(A.userTradesData(trades));
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      onHandleError(error?.message ?? error);
       dispatch(A.userTradesError(error));
     }
   };
@@ -38,8 +39,12 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
       const trade = processTradeData(payload);
       dispatch(A.userTradesUpdateData(trade));
     } catch (error) {
-      onError(`Something has gone wrong (user trades channel)...${error.message}`);
+      onHandleError(`User trades channel error: ${error?.message ?? error}`);
     }
+  };
+
+  const onUserTradesError = (payload: A.UserTradesError["error"]) => {
+    dispatch(A.userTradesError(payload));
   };
 
   return (
@@ -48,6 +53,7 @@ export const TradesProvider: T.TradesComponent = ({ onError, children }) => {
         ...state,
         onFetchTrades,
         onUserTradeUpdate,
+        onUserTradesError,
       }}>
       {children}
     </Provider>

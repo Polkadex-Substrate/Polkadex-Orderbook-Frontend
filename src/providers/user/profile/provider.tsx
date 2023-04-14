@@ -1,20 +1,37 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
+import { useSettingsProvider } from "../../public/settings";
+import * as subscriptions from "../../../graphql/subscriptions";
+import { useExtensionWallet } from "../extensionWallet";
+import { orderUpdateEvent } from "../orderHistoryProvider";
+import { balanceUpdateEvent } from "../balancesProvider/actions";
+import { useBalancesProvider } from "../balancesProvider/useBalancesProvider";
+import { transactionsUpdateEvent } from "../transactionsProvider";
+import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
+import { useTradeWallet } from "../tradeWallet";
+import { useTrades } from "../trades";
+import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
+import { LOCAL_STORAGE_ID, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
+import {
+  registerMainAccountUpdateEvent,
+  tradeAccountUpdateEvent,
+  userTradesUpdateEvent,
+} from "@polkadex/orderbook-modules";
 
-export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
+export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const authState = useAuth();
+  const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   const onUserSelectAccount = (payload: T.UserSelectAccount) => {
     const { tradeAddress: trade_address } = payload;
@@ -28,13 +45,13 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
     } catch (e) {
       console.log("error: ", e);
-      onNotification(`Invalid funding account! ${e?.message}`);
+      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
     }
   };
 
   const getAllMainLinkedAccounts = async (email: string, Api = API) => {
     try {
-      const res: any = await sendQueryToAppSync({
+      const res = await sendQueryToAppSync({
         query: queries.listMainAccountsByEmail,
         variables: {
           email,
@@ -46,8 +63,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
     }
   };
 
@@ -57,7 +73,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   ): Promise<T.UserAccount[]> => {
     const promises = mainAccounts.map(async (main_account) => {
       try {
-        const res: any = await sendQueryToAppSync({
+        const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
           variables: { main_account },
           API: Api,
@@ -102,12 +118,14 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
 
       if (!isConfirmed && userExists) {
-        onNotification("Please confirm your email. Sign in again and confirm your email.");
+        onHandleNotification({
+          type: "Attention",
+          message: "Please confirm your email, sign in again and confirm your email.",
+        });
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      else dispatch(A.userAuthError(error));
+      onHandleError(`User auth error:${error?.message ?? error}`);
+      dispatch(A.userAuthError(error));
     }
   };
 
@@ -115,7 +133,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
     dispatch(A.userReset());
   };
 
-  const onUserChangeInitBanner = (payload: boolean = false) => {
+  const onUserChangeInitBanner = (payload = false) => {
     dispatch(A.userChangeInitBanner(payload));
   };
 
@@ -156,6 +174,121 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   useEffect(() => {
     if (logoutIsSuccess) onUserLogout();
   }, [logoutIsSuccess]);
+
+  // user event listener
+  const { onRegisterMainAccountUpdate } = useExtensionWallet();
+  const { onBalanceUpdate } = useBalancesProvider();
+  const { onTransactionsUpdate } = useTransactionsProvider();
+  const { onTradeAccountUpdate } = useTradeWallet();
+  const { onUserTradeUpdate } = useTrades();
+  const { onOrderUpdates } = useOrderHistoryProvider();
+  const registerSuccessNotification = useCallback(
+    (title: string, description: string) =>
+      onHandleNotification({ type: "Success", message: description }),
+    [onHandleNotification]
+  );
+
+  const createActionFromUserEvent = useCallback(
+    (eventData: any) => {
+      console.log("got raw event", eventData);
+      const data = JSON.parse(eventData.value.data.websocket_streams.data);
+      console.info("User Event: ", data);
+      const eventType = data.type;
+      switch (eventType) {
+        case USER_EVENTS.SetBalance: {
+          onBalanceUpdate(data);
+          return balanceUpdateEvent(data);
+        }
+        case USER_EVENTS.SetTransaction: {
+          onTransactionsUpdate(data);
+          return transactionsUpdateEvent(data);
+        }
+        case USER_EVENTS.Order: {
+          onOrderUpdates(data);
+          return orderUpdateEvent(data);
+        }
+        case USER_EVENTS.RegisterAccount: {
+          onRegisterMainAccountUpdate(data);
+          return registerMainAccountUpdateEvent(data);
+        }
+        case USER_EVENTS.AddProxy: {
+          onTradeAccountUpdate(data);
+          return tradeAccountUpdateEvent(data);
+        }
+
+        case USER_EVENTS.TradeFormat: {
+          onUserTradeUpdate(data);
+          return userTradesUpdateEvent(data);
+        }
+
+        case USER_EVENTS.RemoveProxy:
+          return registerSuccessNotification(
+            "Trade account removed",
+            "Trade account removal Confirmed"
+          );
+      }
+    },
+    [
+      onBalanceUpdate,
+      onOrderUpdates,
+      onRegisterMainAccountUpdate,
+      onTradeAccountUpdate,
+      onTransactionsUpdate,
+      onUserTradeUpdate,
+      registerSuccessNotification,
+    ]
+  );
+  const currentAccount: T.UserAccount = state.selectedAccount;
+  const mainAddr = currentAccount.mainAddress;
+  const tradeAddr = currentAccount.tradeAddress;
+
+  useEffect(() => {
+    console.log("created User Events Channel...", mainAddr);
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: mainAddr },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        createActionFromUserEvent(data);
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [createActionFromUserEvent, mainAddr]);
+
+  useEffect(() => {
+    console.log("created User Events Channel...", tradeAddr);
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: tradeAddr },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        createActionFromUserEvent(data);
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [createActionFromUserEvent, tradeAddr]);
 
   return (
     <Provider

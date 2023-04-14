@@ -1,5 +1,7 @@
 import { ChangeEvent, FC, PropsWithChildren } from "react";
+
 import { CommonError } from "../../types";
+
 import { WithdrawGroup } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 
 export interface Transaction {
@@ -52,6 +54,7 @@ export type TransactionsContextProps = TransactionsState & {
   allWithdrawals: Transaction[];
   readyWithdrawals: WithdrawGroup[];
   deposits: Transaction[];
+  onTransactionsUpdate: (value: TransactionUpdatePayload) => void;
 };
 
 export type TransactionsProviderProps = PropsWithChildren<{

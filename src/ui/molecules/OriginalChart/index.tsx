@@ -10,7 +10,6 @@ import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import {
   klineFetch,
   klineSubscribe,
-  selectCurrentDarkTheme,
   selectKline,
   selectKlineInterval,
   selectKlineLoading,
@@ -24,6 +23,7 @@ import {
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -32,7 +32,9 @@ export const OriginalChart = ({ chart, resolution }) => {
   const dispatch = useDispatch();
   const target = useRef(null);
 
-  const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
+  const settingsState = useSettingsProvider();
+
+  const isDarkTheme = settingsState.theme === "dark";
   const { currentMarket } = useMarketsProvider();
 
   const klines = useReduxSelector(selectKline);

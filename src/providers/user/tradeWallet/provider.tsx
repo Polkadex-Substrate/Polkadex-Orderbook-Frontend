@@ -1,12 +1,19 @@
 import { useReducer } from "react";
-import { Provider } from "./context";
-import { tradeWalletReducer, initialState } from "./reducer";
 import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
-import { transformAddress } from "../profile/helpers";
 import FileSaver from "file-saver";
 import { ApiPromise } from "@polkadot/api";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
+import { transformAddress } from "../profile/helpers";
+import { TradeAccount } from "../../types";
+import { useProfile } from "../profile";
+import { useNativeApi } from "../../public/nativeApi";
+import { useExtensionWallet } from "../extensionWallet";
+import { useSettingsProvider } from "../../public/settings";
+
+import { Provider } from "./context";
+import { tradeWalletReducer, initialState } from "./reducer";
 import {
   loadKeyring,
   getAllTradeAccountsInBrowser,
@@ -15,21 +22,13 @@ import {
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
-import { TradeAccount } from "../../types";
-import { useProfile } from "../profile";
-import { useNativeApi } from "../../public/nativeApi";
-import { useExtensionWallet } from "../extensionWallet";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
 
-export const TradeWalletProvider: T.TradeWalletComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const extensionWalletState = useExtensionWallet();
+  const settingsState = useSettingsProvider();
 
   // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
@@ -50,7 +49,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
         `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
       );
     } catch (error) {
-      onError("Cannot export this account due to Incorrect Password");
+      settingsState.onHandleError("Cannot export this account, incorrect password");
     } finally {
       dispatch(A.exportTradeAccountData());
     }
@@ -78,7 +77,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       dispatch(A.registerTradeAccountError(error));
-      onError("Cannot import account. Invalid password or file");
+      settingsState.onHandleError("Cannot import account, Invalid password or file");
     }
   };
 
@@ -106,8 +105,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
     } catch (error) {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-      if (typeof onError === "function")
-        onError("Can not import account. Please check your mnemonic");
+
+      settingsState.onHandleError("Cannot import account, please check your mnemonic");
       dispatch(A.tradeAccountsError(error));
     }
   };
@@ -118,8 +117,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError(error?.message ?? error);
     }
   };
 
@@ -129,10 +127,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       profileState.onUserSelectAccount({
         tradeAddress: proxy,
       });
-      onNotification("Trade account added");
+      settingsState.onHandleNotification({
+        type: "Success",
+        message: "Trade account added,new trade account created",
+      });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -173,8 +173,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       }
     } catch (error) {
       dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -206,9 +205,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       if (api.isConnected && account?.address) {
         const res = await removeProxyFromAccount(api, trade_Address, signer, account.address);
         if (res.isSuccess) {
-          onNotification(
-            "Congratulations! Your trade account has been removed from the chain!"
-          );
+          settingsState.onHandleNotification({
+            type: "Success",
+            message: "Congratulations! Your trade account has been removed from the chain!",
+          });
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
           dispatch(A.removeTradeAccountFromBrowser({ address: trade_Address }));
@@ -219,8 +219,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({
       }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };

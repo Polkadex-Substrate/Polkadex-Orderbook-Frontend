@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useProfile } from "../profile/useProfile";
-import { UserAccount } from "../profile/types";
 import * as queries from "../../../graphql/queries";
 
 import * as A from "./actions";
@@ -13,12 +12,9 @@ import { DEPOSIT } from "./constants";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const TransactionsProvider: T.TransactionsComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
   const [filterBy, setFilterBy] = useState({
     type: "all",
@@ -26,16 +22,20 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   });
 
   const profileState = useProfile();
+  const settingsState = useSettingsProvider();
 
-  const onTransactionsFetch = useCallback(async (mainAddress: string) => {
-    dispatch(A.transactionsFetch());
-    if (mainAddress) {
-      const transactions = await fetchTransactions(mainAddress, 3, 10);
-      dispatch(A.transactionsData(transactions));
-    } else {
-      onNotification("No account selected, Please select a trading account");
-    }
-  }, [profileState.selectedAccount, onNotification]);
+  const onTransactionsFetch = useCallback(
+    async (mainAddress: string) => {
+      dispatch(A.transactionsFetch());
+      if (mainAddress) {
+        const transactions = await fetchTransactions(mainAddress, 3, 10);
+        dispatch(A.transactionsData(transactions));
+      } else {
+        settingsState.onHandleError("No account selected, please select a trading account");
+      }
+    },
+    [settingsState]
+  );
 
   const fetchTransactions = async (
     address: string,
@@ -100,17 +100,56 @@ export const TransactionsProvider: T.TransactionsComponent = ({
     [withdrawalsList]
   );
 
-
-
   useEffect(() => {
     try {
       if (profileState?.selectedAccount?.mainAddress) {
         onTransactionsFetch(profileState.selectedAccount.mainAddress);
       }
     } catch (error) {
-      onError("error while fetching transaction");
+      settingsState.onHandleError(`Transactions error: ${error?.message ?? error}`);
     }
-  }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
+  }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
+
+  const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
+    if (data.txn_type === "DEPOSIT") {
+      return {
+        ...data,
+        sid: data.sid ?? 0,
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    } else {
+      return {
+        event_id: data.event_id,
+        status: data.status,
+        sid: Number(data.sid) ?? 0,
+        txn_type: "WITHDRAWAL",
+        main_account: data.user,
+        fee: data.fee.toString(),
+        amount: data.amount.toString(),
+        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        time: new Date().toISOString(),
+      };
+    }
+  };
+
+  const onTransactionsUpdate = useCallback(
+    (payload: T.TransactionUpdatePayload) => {
+      try {
+        if (payload) {
+          console.log("transactionsUpdateSaga", payload);
+          const data = formatTransactionData(payload);
+          dispatch(A.transactionsUpdateEventData(data));
+        }
+      } catch (error) {
+        settingsState.onHandleError("Something has gone wrong while updating transactions");
+      }
+    },
+    [settingsState]
+  );
 
   return (
     <Provider
@@ -124,6 +163,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         allWithdrawals: withdrawalsList,
         readyWithdrawals,
         deposits,
+        onTransactionsUpdate,
       }}>
       {children}
     </Provider>

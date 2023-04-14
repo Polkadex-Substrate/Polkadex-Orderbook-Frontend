@@ -14,10 +14,12 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import * as subscriptions from "@polkadex/orderbook/graphql/subscriptions";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, children }) => {
+export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
   const { currentMarket } = useMarketsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   // Actions
   const onOrderBook = useCallback(
@@ -36,10 +38,11 @@ export const OrderBookProvider: T.OrderBookComponent = ({ onNotification, childr
           dispatch(A.depthData({ asks, bids }));
         }
       } catch (error) {
-        onNotification(`Something has gone wrong !! ${error.message}`);
+        console.log(error);
+        onHandleError(`Orderbook fetch error:${error.message}`);
       }
     },
-    [onNotification]
+    [onHandleError]
   );
 
   const onOrderBookChanel = useCallback((market: Market) => {

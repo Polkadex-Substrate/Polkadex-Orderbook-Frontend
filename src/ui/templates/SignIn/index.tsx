@@ -9,7 +9,6 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
-
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SignInTemplate = () => {
@@ -26,7 +25,8 @@ export const SignInTemplate = () => {
       email: "",
     },
     validationSchema: signValidations,
-    onSubmit: (values) => onSignIn({ email: values.email.toLowerCase(), password: values.password }),
+    onSubmit: (values) =>
+      onSignIn({ email: values.email.toLowerCase(), password: values.password }),
   });
 
   return (

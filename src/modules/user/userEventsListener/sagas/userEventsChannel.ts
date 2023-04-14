@@ -10,9 +10,9 @@ import { transactionsUpdateEvent } from "../../transactions/actions";
 import { balanceUpdateEvent } from "../../balances";
 import { orderUpdateEvent } from "../../ordersHistory";
 import { notificationPush } from "../../notificationHandler";
+
 import { useTrades } from "@polkadex/orderbook/providers/user/trades";
 import { userTradesUpdateEvent } from "@polkadex/orderbook/providers/user/trades/actions";
-
 import { alertPush } from "@polkadex/orderbook/modules/public/alertHandler";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 import { UserAccount } from "@polkadex/orderbook-modules";
