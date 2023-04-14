@@ -26,6 +26,7 @@ export type TradesProviderProps = PropsWithChildren<{
 export type TradesContextProps = TradesState & {
   onFetchTrades: () => void;
   onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
+  onUserTradesError: (value: A.UserTradesError["error"]) => void;
 };
 
 export interface TradesProps {

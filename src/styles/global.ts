@@ -44,6 +44,14 @@ ${({ theme }) => css`
     width: 100%;
   }
 
+  .Toastify__toast-theme--colored.Toastify__toast--success {
+    background-color: ${theme.colors.green};
+  }
+
+  .Toastify__toast-theme--colored.Toastify__toast--error {
+    background-color: ${theme.colors.red};
+  }
+
   .animation {
     animation-duration: 0.3s;
     -webkit-animation-duration: 0.3s;

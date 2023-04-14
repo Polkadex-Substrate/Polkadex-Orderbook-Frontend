@@ -4,6 +4,7 @@ import { API } from "aws-amplify";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
 import { Market } from "../marketsProvider";
+import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -18,6 +19,8 @@ import { getIsDecreasingArray } from "@polkadex/web-helpers";
 
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);
+
+  const { onHandleError } = useSettingsProvider();
 
   type RawTrades = {
     m: string;
@@ -86,10 +89,11 @@ export const RecentTradesProvider = ({ children }) => {
           dispatch(A.recentTradesData(trades));
         }
       } catch (error) {
+        onHandleError(error?.message ?? error);
         dispatch(A.recentTradesError(error));
       }
     },
-    [fetchRecentTrade]
+    [fetchRecentTrade, onHandleError]
   );
 
   useEffect(() => {

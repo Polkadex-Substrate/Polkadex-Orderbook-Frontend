@@ -1,24 +1,24 @@
-import { useDispatch } from "react-redux";
+// TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { alertPush } from "@polkadex/orderbook-modules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
-  const dispatch = useDispatch();
   const orderBookState = useOrderBook();
   const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
   const ordersState = useOrders();
+  const settingsState = useSettingsProvider();
 
   const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
@@ -68,12 +68,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   // when type is changed reset form.
   useEffect(() => {
-    setForm({
-      ...form,
+    setForm((e) => ({
+      ...e,
       price: "",
       amountSell: "",
       amountBuy: "",
-    });
+    }));
   }, [isLimit]);
 
   const [rangeValue, setRangeValue] = useState([1]);
@@ -128,7 +128,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       priceLimit: undefined,
     });
     ordersState.onSetCurrentPrice(0);
-  }, [dispatch, setTab, tab]);
+  }, [setTab, tab, ordersState]);
 
   /**
    * @description Change Price
@@ -196,17 +196,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
-    const notify = (description: string) => {
-      dispatch(
-        alertPush({
-          message: {
-            title: "Order Failed",
-            description,
-          },
-          type: "Alert",
-        })
-      );
-    };
+    const notify = (description: string) =>
+      settingsState.onHandleAlert(`Order Failed ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
@@ -286,7 +277,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     hasTradeAccount,
   ]);
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     // limit and sell
     if (isLimit && isSell) {
       return Number(form.amountSell) * Number(form.price);
@@ -319,7 +310,21 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       }
       return Number(estimatedTotal.buy) || 0;
     }
-  };
+  }, [
+    availableBaseAmount,
+    availableQuoteAmount,
+    bestAskPrice,
+    bestBidPrice,
+    changeTypeIsRange,
+    estimatedTotal?.buy,
+    estimatedTotal?.sell,
+    form.amountBuy,
+    form.amountSell,
+    form.price,
+    isLimit,
+    isSell,
+    rangeValue,
+  ]);
 
   /**
    * @description Memorize the total amount to buy/sell based on the amount and price
@@ -328,16 +333,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    */
   const total = useMemo(() => {
     return form.amountSell || form.amountBuy ? getEstimatedTotal(calculateTotal()) : "";
-  }, [
-    isSell,
-    isLimit,
-    estimatedTotal,
-    form.amountBuy,
-    form.amountSell,
-    form.price,
-    getEstimatedTotal,
-    rangeValue,
-  ]);
+  }, [form.amountBuy, form.amountSell, getEstimatedTotal, calculateTotal]);
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
@@ -394,7 +390,16 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         }
       }
     },
-    [rangeValue, total, isSell, isLimit, form.price, form.amountBuy, form.amountSell]
+    [
+      isSell,
+      isLimit,
+      availableBaseAmount,
+      availableQuoteAmount,
+      bestAskPrice,
+      bestBidPrice,
+      form,
+      qtyPrecision,
+    ]
   );
 
   useEffect(() => {

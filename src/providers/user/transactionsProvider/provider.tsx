@@ -12,12 +12,9 @@ import { DEPOSIT } from "./constants";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const TransactionsProvider: T.TransactionsComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
   const [filterBy, setFilterBy] = useState({
     type: "all",
@@ -25,6 +22,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({
   });
 
   const profileState = useProfile();
+  const settingsState = useSettingsProvider();
 
   const onTransactionsFetch = useCallback(
     async (mainAddress: string) => {
@@ -33,10 +31,10 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         const transactions = await fetchTransactions(mainAddress, 3, 10);
         dispatch(A.transactionsData(transactions));
       } else {
-        onNotification("No account selected, Please select a trading account");
+        settingsState.onHandleError("No account selected, please select a trading account");
       }
     },
-    [onNotification]
+    [settingsState]
   );
 
   const fetchTransactions = async (
@@ -108,9 +106,9 @@ export const TransactionsProvider: T.TransactionsComponent = ({
         onTransactionsFetch(profileState.selectedAccount.mainAddress);
       }
     } catch (error) {
-      onError("error while fetching transaction");
+      settingsState.onHandleError(`Transactions error: ${error?.message ?? error}`);
     }
-  }, [onError, profileState?.selectedAccount?.mainAddress, onTransactionsFetch]);
+  }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
 
   const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
     if (data.txn_type === "DEPOSIT") {
@@ -147,10 +145,10 @@ export const TransactionsProvider: T.TransactionsComponent = ({
           dispatch(A.transactionsUpdateEventData(data));
         }
       } catch (error) {
-        onError("Something has gone wrong while updating transactions");
+        settingsState.onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [onError]
+    [settingsState]
   );
 
   return (

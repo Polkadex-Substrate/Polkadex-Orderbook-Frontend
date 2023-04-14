@@ -4,8 +4,6 @@ import { alertReducer } from "./public/alertHandler";
 import { changeGlobalSettingsReducer } from "./public/globalSettings";
 import { errorHandlerReducer } from "./public/errorHandler";
 import { klineReducer } from "./public/kline";
-import { rangerReducer } from "./public/ranger";
-import { depthReducer, orderBookReducer } from "./public/orderBook";
 import { ordersReducer } from "./user/orders";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
@@ -16,9 +14,6 @@ export const publicReducer = combineReducers({
   globalSettings: changeGlobalSettingsReducer,
   errorHandler: errorHandlerReducer,
   kline: klineReducer,
-  orderBook: orderBookReducer,
-  depth: depthReducer,
-  ranger: rangerReducer,
 });
 
 export const userReducer = combineReducers({

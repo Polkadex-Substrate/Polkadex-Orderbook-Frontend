@@ -1,8 +1,10 @@
+// TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
 
 import { useProfile } from "../profile/useProfile";
 import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
 import * as queries from "../../../graphql/queries";
+import { useSettingsProvider } from "../../public/settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -12,16 +14,14 @@ import * as T from "./types";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
-export const BalancesProvider: T.BalancesComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
+  const { onHandleError } = useSettingsProvider();
+
   const fetchbalancesAsync = useCallback(
     async (account: string): Promise<T.IBalanceFromDb[]> => {
       const res: any = await sendQueryToAppSync({
@@ -69,9 +69,9 @@ export const BalancesProvider: T.BalancesComponent = ({
       }
     } catch (error) {
       console.error(error);
-      onError("Something has gone wrong (balances fetch)..");
+      onHandleError(`Balances fetch error: ${error?.message ?? error}`);
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onError]);
+  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
@@ -103,10 +103,10 @@ export const BalancesProvider: T.BalancesComponent = ({
         const updateBalance = updateBalanceFromEvent(payload);
         dispatch(A.balanceUpdateEventData(updateBalance));
       } catch (error) {
-        onError("Something has gone wrong while updating balance");
+        onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [onError, updateBalanceFromEvent]
+    [onHandleError, updateBalanceFromEvent]
   );
 
   useEffect(() => {

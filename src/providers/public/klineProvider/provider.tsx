@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import { API } from "aws-amplify";
 
 import * as subscriptions from "../../../graphql/subscriptions";
-import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -14,8 +14,9 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export const KlineProvider: KlineComponent = ({ onError, children }) => {
+export const KlineProvider: KlineComponent = ({ children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
+  const { onHandleError } = useSettingsProvider();
 
   const fetchKlineAsync = async (
     market: string,
@@ -71,7 +72,7 @@ export const KlineProvider: KlineComponent = ({ onError, children }) => {
       dispatch(A.klineData({ list: data, market, interval: resolution }));
     } catch (error) {
       console.log("Kline fetch error", error);
-      onError("Kline fetch error");
+      onHandleError("Kline fetch error");
     }
   };
   // for testing kline provider , will be integrating with the UI  once trading view purchase is completed
@@ -128,7 +129,7 @@ export const KlineProvider: KlineComponent = ({ onError, children }) => {
       },
       error: (err) => {
         console.warn("error in onCandleStickEvents channel", err);
-        onError("error in onCandleStickEvents channel");
+        onHandleError("error in onCandleStickEvents channel");
       },
     });
     return () => {

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useReducer } from "react";
 
+import { useSettingsProvider } from "../settings";
+
 import * as A from "./actions";
 import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
@@ -11,8 +13,9 @@ import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentIn
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
-export const AssetsProvider: T.AssetsComponent = ({ onError, children }) => {
+export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
+  const { onHandleError } = useSettingsProvider();
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
     const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
@@ -38,9 +41,9 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, children }) => {
       dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
-      onError(`Something has gone wrong, could not fetch assets ${error}`);
+      onHandleError(`Something has gone wrong, could not fetch assets ${error}`);
     }
-  }, [onError]);
+  }, [onHandleError]);
 
   const selectGetAsset = useCallback(
     (assetId: string | number | Record<string, string>): T.IPublicAsset | null => {
