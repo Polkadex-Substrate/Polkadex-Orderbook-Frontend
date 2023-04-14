@@ -38,6 +38,7 @@ import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extension
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
+import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -250,7 +251,9 @@ export function Trading() {
                   </S.Header>
                   <S.CenterWrapper>
                     <S.GraphEpmty>
-                      <Graph />
+                      <KlineProvider>
+                        <Graph />
+                      </KlineProvider>
                       {hasUser ? (
                         <SessionProvider>
                           <OrderHistoryProvider>

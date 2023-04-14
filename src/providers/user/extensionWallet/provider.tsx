@@ -3,7 +3,6 @@ import { ApiPromise } from "@polkadot/api";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
 import { ExtensionAccount } from "../../types";
-import { useTradeWallet } from "../tradeWallet";
 
 import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
@@ -15,17 +14,16 @@ import { ErrorMessages } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
-  onError,
-  onNotification,
-  children,
-}) => {
+export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -52,7 +50,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       }
     } catch (error) {
       console.log("error in registration:", error.message);
-      onError(error.message);
+      onHandleError(error?.message ?? error);
     }
   };
 
@@ -73,15 +71,18 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         profileState.onUserAccountSelectFetch({
           tradeAddress: proxy,
         });
-        onNotification("You have successfully registered a new controller account");
+        onHandleNotification({
+          type: "Success",
+          message:
+            "New Account Registered, you have successfully registered a new controller account",
+        });
       } catch (error) {
         console.log("error:", error);
-        const errorMessage = error instanceof Error ? error.message : (error as string);
-        if (typeof onError === "function") onError(errorMessage);
+        onHandleError(error?.message ?? error);
         dispatch(A.registerMainAccountError());
       }
     },
-    [onError, onNotification, profileState]
+    [onHandleError, onHandleNotification, profileState]
   );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
@@ -138,7 +139,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       }
       tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
       dispatch(A.registerMainAccountError());
-      onError(`Cannot Register Account! ${error.message}`);
+      onHandleNotification({
+        message: `Cannot Register Account: ${error?.message ?? error}`,
+        type: "Error",
+      });
     }
   };
 
@@ -168,9 +172,9 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       );
       return () => unsubscribe.then((fn) => fn());
     } catch (error) {
-      onError(error.message);
+      onHandleError(error?.message ?? error);
     }
-  }, [onError]);
+  }, [onHandleError]);
 
   async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
     try {
@@ -215,7 +219,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     } catch (error) {
       console.log("error", error);
       dispatch(A.registerMainAccountError());
-      onError(`Cannot Register Account to Server! ${error.message}`);
+      onHandleNotification({
+        message: `Cannot Register Account to Server!, ${error?.message ?? error}`,
+        type: "Error",
+      });
     }
   };
 

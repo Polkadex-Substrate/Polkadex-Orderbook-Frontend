@@ -1,5 +1,4 @@
 import { AppProps } from "next/app";
-import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
@@ -10,7 +9,8 @@ import { ReactNode, useEffect } from "react";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import keyring from "@polkadot/ui-keyring";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ToastContainer, toast } from "react-toastify";
+import { Flip, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
@@ -20,7 +20,6 @@ import { MarketsProvider } from "../providers/public/marketsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 import { OrdersProvider } from "../providers/user/orders";
 
-import { selectCurrentColorTheme } from "@polkadex/orderbook-modules";
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
@@ -29,24 +28,10 @@ import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
 import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { TradesProvider } from "@polkadex/orderbook/providers/user/trades";
-
-import "react-toastify/dist/ReactToastify.css";
-
-const Message = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Message").then((mod) => mod.Message),
-  {
-    ssr: false,
-  }
-);
-
-const Notifications = dynamic(
-  () =>
-    import("@polkadex/orderbook-ui/organisms/Notifications").then((mod) => mod.Notifications),
-  {
-    ssr: false,
-  }
-);
+import {
+  SettingProvider,
+  useSettingsProvider,
+} from "@polkadex/orderbook/providers/public/settings";
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
@@ -57,8 +42,6 @@ const Maintenance = dynamic(
 const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
-  const color = useSelector(selectCurrentColorTheme);
-
   // Removes all console from production environment
   if (process.env.NODE_ENV === "production") {
     console.log = () => {};
@@ -70,73 +53,71 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <ToastContainer />
-
-      <AuthProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-        <ProfileProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-          <AssetsProvider
-            onError={(v) => toast.error(v)}
-            onNotification={(v) => toast.info(v)}>
-            <OrdersProvider
-              onError={(v) => toast.error(v)}
-              onNotification={(v) => toast.info(v)}>
-              <NativeApiProvider
-                onError={(v) => toast.error(v)}
-                onNotification={(v) => toast.info(v)}>
-                <MarketsProvider
-                  onError={(v) => toast.error(v)}
-                  onNotification={(v) => toast.info(v)}>
-                  <OrderBookProvider
-                    onError={(v) => toast.error(v)}
-                    onNotification={(v) => toast.info(v)}>
-                    <ExtensionWalletProvider
-                      onError={(v) => toast.error(v)}
-                      onNotification={(v) => toast.info(v)}>
-                      <TradeWalletProvider
-                        onError={(v) => toast.error(v)}
-                        onNotification={(v) => toast.info(v)}>
-                        <BalancesProvider
-                          onError={(v) => toast.error(v)}
-                          onNotification={(v) => toast.info(v)}>
-                          <TradesProvider onError={(v) => toast.error(v)}>
+      <ToastContainer transition={Flip} />
+      <SettingProvider
+        defaultToast={{
+          onError: (e) => toast(e, { type: "error", theme: "colored" }),
+          onSuccess: (e) =>
+            toast(e, { type: "success", theme: "colored", className: "toastBg" }),
+        }}>
+        <AuthProvider>
+          <ProfileProvider>
+            <AssetsProvider>
+              <OrdersProvider>
+                <NativeApiProvider>
+                  <MarketsProvider>
+                    <OrderBookProvider>
+                      <ExtensionWalletProvider>
+                        <TradeWalletProvider>
+                          <BalancesProvider>
                             <OverlayProvider>
-                              <ThemeProvider
-                                theme={
-                                  color === "light" ? defaultThemes.light : defaultThemes.dark
-                                }>
-                                {defaultConfig.maintenanceMode ? (
-                                  <Maintenance />
-                                ) : (
-                                  <QueryClientProvider client={queryClient}>
-                                    <ThemeWrapper>
-                                      <Component {...pageProps} />
-                                    </ThemeWrapper>
-                                  </QueryClientProvider>
-                                )}
-
-                                <GlobalStyles />
-                              </ThemeProvider>
+                              <ModifiedThemeProvider
+                                Component={Component}
+                                pageProps={pageProps}
+                              />
                             </OverlayProvider>
-                          </TradesProvider>
-                        </BalancesProvider>
-                      </TradeWalletProvider>
-                    </ExtensionWalletProvider>
-                  </OrderBookProvider>
-                </MarketsProvider>
-              </NativeApiProvider>
-            </OrdersProvider>
-          </AssetsProvider>
-        </ProfileProvider>
-      </AuthProvider>
+                          </BalancesProvider>
+                        </TradeWalletProvider>
+                      </ExtensionWalletProvider>
+                    </OrderBookProvider>
+                  </MarketsProvider>
+                </NativeApiProvider>
+              </OrdersProvider>
+            </AssetsProvider>
+          </ProfileProvider>
+        </AuthProvider>
+      </SettingProvider>
     </>
   );
 }
+
+const ModifiedThemeProvider = ({ Component, pageProps }) => {
+  const { theme } = useSettingsProvider();
+
+  return (
+    <>
+      <ThemeProvider theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}>
+        {defaultConfig.maintenanceMode ? (
+          <Maintenance />
+        ) : (
+          <QueryClientProvider client={queryClient}>
+            <ThemeWrapper>
+              <Component {...pageProps} />
+            </ThemeWrapper>
+          </QueryClientProvider>
+        )}
+        <GlobalStyles />
+      </ThemeProvider>
+    </>
+  );
+};
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   const profileState = useProfile();
   const authState = useAuth();
   const signInSuccess = authState.signin.isSuccess;
   const logoutSuccess = authState.logout.isSuccess;
+  const settingsState = useSettingsProvider();
 
   const cryptoWait = async () => {
     try {
@@ -151,6 +132,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     cryptoWait();
   }, []);
 
+  // TODO: Missing fetchDataOnUserAuth dependcy
   useEffect(() => {
     // When User logout, do not fetch the data
     if (!logoutSuccess) {
@@ -197,7 +179,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         }
         default: {
           console.error("Error=>", `User data fetch error: ${error.message}`);
-          toast.error(`User data fetch error: ${error.message}`);
+          settingsState.onHandleError(`User data fetch error: ${error?.message ?? error}`);
           break;
         }
       }
@@ -206,8 +188,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Notifications />
-      <Message />
       <GoogleAnalytics trackPageViews />
       <NextNProgress
         color="#E6007A"

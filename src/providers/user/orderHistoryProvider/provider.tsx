@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 
 import * as queries from "../../../graphql/queries";
+import { useSettingsProvider } from "../../public/settings";
 import { useProfile } from "../profile";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
 
@@ -19,6 +20,7 @@ import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
   const profileState = useProfile();
+  const { onHandleError } = useSettingsProvider();
 
   const account: UserAccount = profileState.selectedAccount;
 
@@ -57,9 +59,10 @@ export const OrderHistoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error(error);
+      onHandleError(`Open orders fetch error: ${error?.message ?? error}`);
       dispatch(A.userOpenOrdersHistoryError(error));
     }
-  }, [account.tradeAddress, fetchOpenOrders]);
+  }, [account.tradeAddress, fetchOpenOrders, onHandleError]);
 
   const fetchOrders = useCallback(
     async (proxy_acc: string, dateFrom: Date, dateTo: Date): Promise<OrderCommon[]> => {
@@ -106,10 +109,11 @@ export const OrderHistoryProvider = ({ children }) => {
           dispatch(A.userOrdersHistoryData({ list: orders }));
         }
       } catch (error) {
+        onHandleError(`Order history fetch error: ${error?.message ?? error} `);
         dispatch(A.userOrdersHistoryError(error));
       }
     },
-    [fetchOrders]
+    [fetchOrders, onHandleError]
   );
   function processOrderData(eventData: SetOrder): OrderCommon {
     const base = eventData.pair.base_asset;
@@ -138,7 +142,8 @@ export const OrderHistoryProvider = ({ children }) => {
       const order = processOrderData(payload);
       dispatch(A.orderUpdateEventData(order));
     } catch (error) {
-      console.log(error, "Something has gone wrong (order updates channel)...", error);
+      console.log(error, "Something has gone wrong (order updates channel)...");
+      onHandleError(`Order updates channel ${error?.message ?? error}`);
       dispatch(A.orderUpdateEventError(error));
     }
   };
