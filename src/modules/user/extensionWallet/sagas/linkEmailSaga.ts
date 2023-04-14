@@ -55,7 +55,32 @@ const createSignedData = async (
       data: stringToHex(email),
       type: "bytes",
     });
-    return { signature };
+    // remove 0x prefix
+    const trimmedSignature = signature.slice(2);
+    let multiSig: MultiSig;
+    console.log("raw signature", signature);
+    switch (account.type) {
+      case "ed25519": {
+        //   prepend number 0 to signify sr25519
+        multiSig = { Ed25519: trimmedSignature };
+        break;
+      }
+      case "sr25519": {
+        //   prepend number 1 to signify ed25519
+        multiSig = { Sr25519: trimmedSignature };
+        break;
+      }
+      case "ecdsa": {
+        //   prepend number 2 to signify ecdsa
+        multiSig = { Ecdsa: trimmedSignature };
+        break;
+      }
+      default: {
+        throw new Error("Invalid signature type");
+        break;
+      }
+    }
+    return { signature: multiSig };
   } else throw new Error("Cannot get Signer");
 };
 

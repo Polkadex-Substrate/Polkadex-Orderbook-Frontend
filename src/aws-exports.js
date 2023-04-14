@@ -8,11 +8,11 @@ const awsmobile = {
     "aws_appsync_authenticationType": "AWS_LAMBDA",
     "ssr": true,
     "Auth": {
-        "identityPoolId": "eu-west-1:55097f5e-2889-4644-9967-099b4140f14e",
+        "identityPoolId": "eu-west-1:2a298ff9-0ca7-404c-b402-747dcc925fb1",
         "region": "eu-west-1",
         "identityPoolRegion": "eu-west-1",
-        "userPoolId": "eu-west-1_LUye3NHVf",
-        "userPoolWebClientId": "7f39329fs6tb90vq2uiartp9js"
+        "userPoolId": "eu-west-1_scTw5antn",
+        "userPoolWebClientId": "5clq0tscr5u3d6dav0ufrks8ed"
     }
 };
 

@@ -19,7 +19,7 @@ export const getAllMainLinkedAccounts = async (
       authMode: "AMAZON_COGNITO_USER_POOLS",
       API: Api,
     });
-    const accounts = res.data?.listMainAccountsByEmail?.items ?? [];
+    const accounts = res.data?.listMainAccountsByEmail?.accounts ?? [];
     return { accounts };
   } catch (error) {
     console.log("Error: getAllMainLinkedAccounts", error.errors);
