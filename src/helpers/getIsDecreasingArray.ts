@@ -1,4 +1,3 @@
-import { PublicTrade } from "@polkadex/orderbook-modules";
 // TODO: Type response
 
 export const getIsDecreasingArray = (recentTrades): [boolean] => {

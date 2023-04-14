@@ -15,11 +15,11 @@ import {
   UserAccount,
 } from "@polkadex/orderbook-modules";
 import { createCancelOrderPayloadSigned } from "@polkadex/orderbook/helpers/createOrdersHelpers";
-import { isAssetPDEX } from "@polkadex/orderbook/modules/public/assets";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { TradeAccount } from "@polkadex/orderbook/modules/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 export function* cancelOrderSaga(action: OrderCancelFetch) {
   try {

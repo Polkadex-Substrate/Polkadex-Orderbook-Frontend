@@ -12,13 +12,13 @@ import {
   KlineState,
   klineUpdatePeriod,
   klineUpdateTimeRange,
-  Market,
 } from "@polkadex/orderbook-modules";
 import {
   buildQueryString,
   getTimestampPeriod,
   periodMinutesToString,
 } from "@polkadex/web-helpers";
+import { Market } from "@polkadex/orderbook/providers/public/marketsProvider";
 
 export interface CurrentKlineSubscription {
   marketId?: string;

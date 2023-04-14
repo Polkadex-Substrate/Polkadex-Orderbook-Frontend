@@ -12,11 +12,11 @@ import { useExtensionWallet } from "../extensionWallet";
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
-import { initialState } from "./reducer";
+import { initialState, withdrawsReducer } from "./reducer";
 
 import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectTradeAccount, withdrawsReducer } from "@polkadex/orderbook-modules";
+import { selectTradeAccount } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";

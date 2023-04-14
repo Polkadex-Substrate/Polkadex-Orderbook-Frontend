@@ -5,7 +5,6 @@ import Head from "next/head";
 
 import * as S from "./styles";
 
-import { useUserDataFetch } from "@polkadex/orderbook/hooks/useUserDataFetch";
 import {
   AccountBanner,
   Button,
@@ -138,7 +137,6 @@ export function Trading() {
     };
 
   // initialize user specific sagas
-  useUserDataFetch();
 
   const marketName = market?.name?.replace("/", "");
 

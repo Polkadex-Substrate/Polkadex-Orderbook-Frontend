@@ -13,6 +13,9 @@ import { useTransactionsProvider } from "../transactionsProvider/useTransactionP
 import { useTradeWallet } from "../tradeWallet";
 import { useTrades } from "../trades";
 import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
+import { registerMainAccountUpdateEvent } from "../extensionWallet/actions";
+import { tradeAccountUpdateEvent } from "../tradeWallet/actions";
+import { userTradesUpdateEvent } from "../trades/actions";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -22,11 +25,6 @@ import * as A from "./actions";
 import { LOCAL_STORAGE_ID, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
-import {
-  registerMainAccountUpdateEvent,
-  tradeAccountUpdateEvent,
-  userTradesUpdateEvent,
-} from "@polkadex/orderbook-modules";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
