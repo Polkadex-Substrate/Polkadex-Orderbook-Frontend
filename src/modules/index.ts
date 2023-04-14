@@ -20,14 +20,12 @@ import { publicReducer, userReducer } from "./app";
 import { rootTradesSaga, TradesState } from "./user/trades";
 import { BalancesState, rootBalancesSaga } from "./user/balances";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
-import { TransactionsState, rootTransactionsSaga } from "./user/transactions";
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 
 export * from "./user/orders";
 export * from "./user/ordersHistory";
 export * from "./user/balances";
 export * from "./user/trades";
-export * from "./user/transactions";
 export * from "./user/notificationHandler";
 export * from "./user/tradeWallet";
 export * from "./public/errorHandler";
@@ -57,7 +55,6 @@ export interface RootState {
     orders: OrdersState;
     ordersHistory: OrdersHistoryState;
     trades: TradesState;
-    transactions: TransactionsState;
     notifications: NotificationState;
   };
 }
@@ -69,7 +66,6 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield all([
-    call(rootTransactionsSaga),
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
