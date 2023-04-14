@@ -8,7 +8,6 @@ import { rangerReducer } from "./public/ranger";
 import { depthReducer, orderBookReducer } from "./public/orderBook";
 import { recentTradesReducer } from "./public/recentTrades";
 import { ordersReducer } from "./user/orders";
-import { ordersHistoryReducer } from "./user/ordersHistory";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
 import { tradesReducer } from "./user/trades";
@@ -31,7 +30,6 @@ export const userReducer = combineReducers({
   tradeWallet: TradeAccountsReducer,
   balances: balancesReducer,
   orders: ordersReducer,
-  ordersHistory: ordersHistoryReducer,
   trades: tradesReducer,
   notifications: notificationReducer,
 });

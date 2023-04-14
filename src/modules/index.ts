@@ -14,7 +14,6 @@ import {
 } from "./public/orderBook";
 import { RecentTradesState, rootRecentTradesSaga } from "./public/recentTrades";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
-import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
 import { TradeAccountsState, rootTradeAccountsSaga } from "./user/tradeWallet";
 import { publicReducer, userReducer } from "./app";
 import { rootTradesSaga, TradesState } from "./user/trades";
@@ -23,7 +22,6 @@ import { NotificationState, rootNotificationSaga } from "./user/notificationHand
 import { AssetsState, rootAssetsSaga } from "./public/assets";
 
 export * from "./user/orders";
-export * from "./user/ordersHistory";
 export * from "./user/balances";
 export * from "./user/trades";
 export * from "./user/notificationHandler";
@@ -53,7 +51,6 @@ export interface RootState {
     tradeWallet: TradeAccountsState;
     balances: BalancesState;
     orders: OrdersState;
-    ordersHistory: OrdersHistoryState;
     trades: TradesState;
     notifications: NotificationState;
   };
@@ -72,7 +69,6 @@ export function* rootSaga() {
     call(rootKlineFetchSaga),
     call(rootRangerSaga),
     call(rootOrderBookSaga),
-    call(rootOrdersHistorySaga),
     call(rootOrdersSaga),
     call(rootRecentTradesSaga),
     call(rootTradeAccountsSaga),
