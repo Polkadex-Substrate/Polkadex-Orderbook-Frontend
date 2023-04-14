@@ -14,7 +14,6 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
-import { useUserDataFetch } from "../hooks/useUserDataFetch";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 import { MarketsProvider } from "../providers/public/marketsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
@@ -159,7 +158,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   }, [signInSuccess, logoutSuccess]);
 
   useInit();
-  useUserDataFetch();
 
   const fetchDataOnUserAuth = async () => {
     try {
