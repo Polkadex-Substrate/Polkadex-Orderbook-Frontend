@@ -5,12 +5,6 @@ import { GlobalSettingsState } from "./public/globalSettings";
 import { rootHandleAlertSaga, AlertState } from "./public/alertHandler";
 import { ErrorHandlerState, rootErrorHandlerSaga } from "./public/errorHandler";
 import { KlineState, rootKlineFetchSaga } from "./public/kline";
-import {
-  DepthIncrementState,
-  DepthState,
-  OrderBookState,
-  rootOrderBookSaga,
-} from "./public/orderBook";
 import { RecentTradesState, rootRecentTradesSaga } from "./public/recentTrades";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { OrdersHistoryState, rootOrdersHistorySaga } from "./user/ordersHistory";
@@ -40,18 +34,14 @@ export * from "./public/errorHandler";
 export * from "./public/globalSettings";
 export * from "./public/alertHandler";
 export * from "./public/kline";
-export * from "./public/orderBook";
 export * from "./public/recentTrades";
 
 export interface RootState {
   public: {
     alerts: AlertState;
     globalSettings: GlobalSettingsState;
-    depth: DepthState;
     errorHandler: ErrorHandlerState;
-    incrementDepth: DepthIncrementState;
     kline: KlineState;
-    orderBook: OrderBookState;
     recentTrades: RecentTradesState;
     assets: AssetsState;
   };
@@ -83,7 +73,6 @@ export function* rootSaga() {
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
     call(rootKlineFetchSaga),
-    call(rootOrderBookSaga),
     call(rootOrdersHistorySaga),
     call(rootOrdersSaga),
     call(rootRecentTradesSaga),
