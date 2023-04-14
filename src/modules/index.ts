@@ -8,11 +8,9 @@ import { KlineState, rootKlineFetchSaga } from "./public/kline";
 import { OrdersState, rootOrdersSaga } from "./user/orders";
 import { TradeAccountsState, rootTradeAccountsSaga } from "./user/tradeWallet";
 import { publicReducer, userReducer } from "./app";
-import { rootTradesSaga, TradesState } from "./user/trades";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 
 export * from "./user/orders";
-export * from "./user/trades";
 export * from "./user/notificationHandler";
 export * from "./user/tradeWallet";
 export * from "./public/errorHandler";
@@ -30,7 +28,6 @@ export interface RootState {
   user: {
     tradeWallet: TradeAccountsState;
     orders: OrdersState;
-    trades: TradesState;
     notifications: NotificationState;
   };
 }
@@ -48,7 +45,6 @@ export function* rootSaga() {
     call(rootKlineFetchSaga),
     call(rootOrdersSaga),
     call(rootTradeAccountsSaga),
-    call(rootTradesSaga),
     call(rootNotificationSaga),
   ]);
 }

@@ -7,7 +7,6 @@ import { klineReducer } from "./public/kline";
 import { ordersReducer } from "./user/orders";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
-import { tradesReducer } from "./user/trades";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -19,6 +18,5 @@ export const publicReducer = combineReducers({
 export const userReducer = combineReducers({
   tradeWallet: TradeAccountsReducer,
   orders: ordersReducer,
-  trades: tradesReducer,
   notifications: notificationReducer,
 });
