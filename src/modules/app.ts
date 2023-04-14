@@ -10,7 +10,6 @@ import { ordersReducer } from "./user/orders";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
 import { tradesReducer } from "./user/trades";
-import { balancesReducer } from "./user/balances";
 import { assetsReducer } from "./public/assets";
 
 export const publicReducer = combineReducers({
@@ -26,7 +25,6 @@ export const publicReducer = combineReducers({
 
 export const userReducer = combineReducers({
   tradeWallet: TradeAccountsReducer,
-  balances: balancesReducer,
   orders: ordersReducer,
   trades: tradesReducer,
   notifications: notificationReducer,

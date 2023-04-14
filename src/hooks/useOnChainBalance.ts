@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { fetchOnChainBalance } from "../helpers/fetchOnChainBalance";
-import { selectUserBalance } from "../modules/user/balances";
-
-import { useReduxSelector } from "./useReduxSelector";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
@@ -14,7 +12,7 @@ export const useOnChainBalance = (assetId: string) => {
 
   const api = nativeApiState.api;
   const isApiConnected = nativeApiState.connected;
-  const balances = useReduxSelector(selectUserBalance);
+  const { balances } = useBalancesProvider();
   const currentAccount = profileState?.selectedAccount;
   const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);
