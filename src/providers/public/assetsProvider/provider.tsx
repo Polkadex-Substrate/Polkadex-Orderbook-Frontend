@@ -31,6 +31,7 @@ export const AssetsProvider: T.AssetsComponent = ({ onError, children }) => {
   }
 
   const fetchAssets = useCallback(async () => {
+    dispatch(A.assetsFetch());
     try {
       const assetsList = await fetchAllAssetMetadata();
 

@@ -10,7 +10,6 @@ import { ordersReducer } from "./user/orders";
 import { notificationReducer } from "./user/notificationHandler";
 import { TradeAccountsReducer } from "./user/tradeWallet";
 import { tradesReducer } from "./user/trades";
-import { assetsReducer } from "./public/assets";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -20,7 +19,6 @@ export const publicReducer = combineReducers({
   orderBook: orderBookReducer,
   depth: depthReducer,
   ranger: rangerReducer,
-  assets: assetsReducer,
 });
 
 export const userReducer = combineReducers({

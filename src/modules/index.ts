@@ -17,7 +17,6 @@ import { TradeAccountsState, rootTradeAccountsSaga } from "./user/tradeWallet";
 import { publicReducer, userReducer } from "./app";
 import { rootTradesSaga, TradesState } from "./user/trades";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
-import { AssetsState, rootAssetsSaga } from "./public/assets";
 
 export * from "./user/orders";
 export * from "./user/trades";
@@ -40,7 +39,6 @@ export interface RootState {
     kline: KlineState;
     orderBook: OrderBookState;
     ranger: RangerState;
-    assets: AssetsState;
   };
   user: {
     tradeWallet: TradeAccountsState;
@@ -66,7 +64,6 @@ export function* rootSaga() {
     call(rootOrdersSaga),
     call(rootTradeAccountsSaga),
     call(rootTradesSaga),
-    call(rootAssetsSaga),
     call(rootNotificationSaga),
   ]);
 }
