@@ -1,5 +1,5 @@
 import { CommonError } from "../../types";
-import { Market } from "@polkadex/orderbook/modules/public/markets/types";
+import { Market } from "../marketsProvider";
 
 import {
   DEPTH_DATA,

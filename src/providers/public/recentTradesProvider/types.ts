@@ -1,6 +1,8 @@
 import { PropsWithChildren } from "react";
+
+import { Market } from "../marketsProvider";
+
 import { CommonError } from "@polkadex/orderbook/modules/types";
-import { Market } from "@polkadex/orderbook-modules";
 export interface PublicTrade {
   market_id: string;
   price: string;
@@ -20,12 +22,12 @@ export interface RecentTradesState {
 export type RecentTradesContextProps = RecentTradesState & {
   recentTradesFetch: (value: Market) => void;
   isDecreasing: boolean[];
-  quoteUnit: string,
-  baseUnit: string,
-  pricePrecision: number,
-  amountPrecision: number,
-  getLastTradePrice:()=>string,
-  getCurrentTradePrice:()=>string
+  quoteUnit: string;
+  baseUnit: string;
+  pricePrecision: number;
+  amountPrecision: number;
+  getLastTradePrice: () => string;
+  getCurrentTradePrice: () => string;
 };
 
 export type RecentTradesProviderProps = PropsWithChildren<{

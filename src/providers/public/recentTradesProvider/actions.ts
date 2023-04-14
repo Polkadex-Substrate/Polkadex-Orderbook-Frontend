@@ -1,5 +1,5 @@
 import { CommonError } from "../../../modules/types";
-import { Market } from "../../../modules/public/markets";
+import { Market } from "../marketsProvider";
 
 import {
   RECENT_TRADES_DATA,

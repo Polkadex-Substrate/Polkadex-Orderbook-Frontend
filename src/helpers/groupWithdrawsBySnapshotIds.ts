@@ -1,4 +1,4 @@
-import { Transaction } from "@polkadex/orderbook-modules";
+import { Transaction } from "../providers/user/transactionsProvider";
 
 export type WithdrawGroup = {
   id: number;
