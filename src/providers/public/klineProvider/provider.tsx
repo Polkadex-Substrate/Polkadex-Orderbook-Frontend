@@ -16,7 +16,6 @@ import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 export const KlineProvider: KlineComponent = ({ onError, children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
-  console.log("kline");
 
   const fetchKlineAsync = async (
     market: string,
@@ -41,8 +40,6 @@ export const KlineProvider: KlineComponent = ({ onError, children }) => {
   };
 
   const processKlineData = (data: KlineDbData[]) => {
-    console.log(data, "process");
-
     const klinesData = data.map((x) => ({
       timestamp: Number(x.t.split(",")[0].split("=")[1]) * 1000,
       open: Number(x.o),
@@ -77,13 +74,14 @@ export const KlineProvider: KlineComponent = ({ onError, children }) => {
       onError("Kline fetch error");
     }
   };
-  const { currentMarket } = useMarketsProvider();
-  onHandleKlineFetch({
-    market: currentMarket.m,
-    resolution: "1m",
-    from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
-    to: new Date(),
-  });
+  // for testing kline provider , will be integrating with the UI  once trading view purchase is completed
+  // const { currentMarket } = useMarketsProvider();
+  // onHandleKlineFetch({
+  //   market: currentMarket.m,
+  //   resolution: "1m",
+  //   from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
+  //   to: new Date(),
+  // });
 
   const processKline = (data: any, interval: string): KlineEvent => {
     const kline = {
