@@ -75,8 +75,8 @@ export interface NativeApiState {
 }
 
 export type NativeApiProps = {
-  onError: (value: string) => void;
-  onNotification: (value: string) => void;
+  onError?: (value: string) => void;
+  onNotification?: (value: string) => void;
 };
 
 export type NativeApiProviderProps = PropsWithChildren<{

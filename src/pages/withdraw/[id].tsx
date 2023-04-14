@@ -7,7 +7,6 @@ import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extension
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { WithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/provider";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
-import { toast } from "react-toastify";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -44,10 +43,8 @@ const Withdraw = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <WithdrawsProvider onError={(v) => toast.error(v)} onNotification={(v) => toast.info(v)}>
-      <TransactionsProvider
-        onError={(v) => toast.error(v)}
-        onNotification={(v) => toast.info(v)}>
+    <WithdrawsProvider>
+      <TransactionsProvider>
         <WithdrawTemplate />
       </TransactionsProvider>
     </WithdrawsProvider>

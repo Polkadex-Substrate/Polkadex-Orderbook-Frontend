@@ -2,6 +2,7 @@ import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
+import { useSettingsProvider } from "../../public/settings";
 import * as subscriptions from "../../../graphql/subscriptions";
 import { useExtensionWallet } from "../extensionWallet";
 import { orderUpdateEvent } from "../orderHistoryProvider";
@@ -27,9 +28,10 @@ import {
   userTradesUpdateEvent,
 } from "@polkadex/orderbook-modules";
 
-export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, children }) => {
+export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const authState = useAuth();
+  const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   const onUserSelectAccount = (payload: T.UserSelectAccount) => {
     const { tradeAddress: trade_address } = payload;
@@ -43,13 +45,13 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
     } catch (e) {
       console.log("error: ", e);
-      onNotification(`Invalid funding account! ${e?.message}`);
+      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
     }
   };
 
   const getAllMainLinkedAccounts = async (email: string, Api = API) => {
     try {
-      const res: any = await sendQueryToAppSync({
+      const res = await sendQueryToAppSync({
         query: queries.listMainAccountsByEmail,
         variables: {
           email,
@@ -61,8 +63,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
+      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
     }
   };
 
@@ -72,7 +73,7 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   ): Promise<T.UserAccount[]> => {
     const promises = mainAccounts.map(async (main_account) => {
       try {
-        const res: any = await sendQueryToAppSync({
+        const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
           variables: { main_account },
           API: Api,
@@ -117,12 +118,14 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
       }
 
       if (!isConfirmed && userExists) {
-        onNotification("Please confirm your email. Sign in again and confirm your email.");
+        onHandleNotification({
+          type: "Attention",
+          message: "Please confirm your email, sign in again and confirm your email.",
+        });
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : (error as string);
-      if (typeof onError === "function") onError(errorMessage);
-      else dispatch(A.userAuthError(error));
+      onHandleError(`User auth error:${error?.message ?? error}`);
+      dispatch(A.userAuthError(error));
     }
   };
 
@@ -180,8 +183,9 @@ export const ProfileProvider: T.ProfileComponent = ({ onError, onNotification, c
   const { onUserTradeUpdate } = useTrades();
   const { onOrderUpdates } = useOrderHistoryProvider();
   const registerSuccessNotification = useCallback(
-    (title: string, description: string) => onNotification(title),
-    [onNotification]
+    (title: string, description: string) =>
+      onHandleNotification({ type: "Success", message: description }),
+    [onHandleNotification]
   );
 
   const createActionFromUserEvent = useCallback(

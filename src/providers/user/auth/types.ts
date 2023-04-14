@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
+
 import { CommonActionState } from "../../types";
 
 export interface UserAuth {
