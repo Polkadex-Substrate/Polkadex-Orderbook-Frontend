@@ -20,7 +20,7 @@ import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
   const profileState = useProfile();
-  const { onHandleAlert } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   const account: UserAccount = profileState.selectedAccount;
 
@@ -59,16 +59,10 @@ export const OrderHistoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error(error);
-      onHandleAlert({
-        message: {
-          title: "Something has gone wrong (openOrderHistory)..",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      onHandleError(`Open orders fetch error: ${error?.message ?? error}`);
       dispatch(A.userOpenOrdersHistoryError(error));
     }
-  }, [account.tradeAddress, fetchOpenOrders, onHandleAlert]);
+  }, [account.tradeAddress, fetchOpenOrders, onHandleError]);
 
   const fetchOrders = useCallback(
     async (proxy_acc: string, dateFrom: Date, dateTo: Date): Promise<OrderCommon[]> => {
@@ -115,17 +109,11 @@ export const OrderHistoryProvider = ({ children }) => {
           dispatch(A.userOrdersHistoryData({ list: orders }));
         }
       } catch (error) {
-        onHandleAlert({
-          message: {
-            title: "Something has gone wrong (orderHistory)..",
-            description: error.message,
-          },
-          type: "Error",
-        });
+        onHandleError(`Order history fetch error: ${error?.message ?? error} `);
         dispatch(A.userOrdersHistoryError(error));
       }
     },
-    [fetchOrders, onHandleAlert]
+    [fetchOrders, onHandleError]
   );
   function processOrderData(eventData: SetOrder): OrderCommon {
     const base = eventData.pair.base_asset;
@@ -155,13 +143,7 @@ export const OrderHistoryProvider = ({ children }) => {
       dispatch(A.orderUpdateEventData(order));
     } catch (error) {
       console.log(error, "Something has gone wrong (order updates channel)...");
-      onHandleAlert({
-        message: {
-          title: "Something has gone wrong (order updates channel)...",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      onHandleError(`Order updates channel ${error?.message ?? error}`);
       dispatch(A.orderUpdateEventError(error));
     }
   };

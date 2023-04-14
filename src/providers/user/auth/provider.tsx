@@ -27,37 +27,27 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.signInData({ user, email, isConfirmed: true }));
         profileState.onUserAuthFetch();
       } catch (error) {
-        console.log("error:", error);
+        console.log("onSignIn:", error);
         const errorCode = error?.name;
         switch (errorCode) {
           case AUTH_ERROR_CODES.NOT_AUTHORIZED: {
-            onHandleError({
-              error,
-              processingType: "alert",
-            });
+            onHandleError(error?.message ?? error);
             dispatch(A.signInError(error));
             return;
           }
           case AUTH_ERROR_CODES.USER_NOT_CONFIRMED: {
             dispatch(A.signInData({ email, isConfirmed: false }));
             onHandleNotification({
-              message: {
-                title: "Sign in Failed!",
-                description:
-                  "It looks like you have not confirmed your email. Please confirm your email and try again.",
-              },
-              time: new Date().getTime(),
-              type: "AttentionAlert",
+              message:
+                "Sign in Failed!, it looks like you have not confirmed your email. Please confirm your email and try again.",
+              type: "Attention",
             });
             dispatch(A.signInError(error));
             router.push("/codeVerification");
             return;
           }
           default: {
-            onHandleError({
-              error,
-              processingType: "alert",
-            });
+            onHandleError(error?.message ?? error);
             dispatch(A.signInError(error));
           }
         }
@@ -80,10 +70,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.signUpData({ userConfirmed, email }));
       } catch (error) {
         console.log("error: ", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.signUpError(error));
       }
     },
@@ -95,20 +82,13 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
       Auth.signOut();
       dispatch(A.logOutData());
       onHandleNotification({
-        type: "SuccessAlert",
-        message: {
-          title: "Logged out",
-          description: "You have been logged out.",
-        },
-        time: new Date().getTime(),
+        type: "Success",
+        message: "Logged out, you have been logged out",
       });
     } catch (error) {
       console.log("error: ", error);
 
-      onHandleError({
-        error,
-        processingType: "alert",
-      });
+      onHandleError(error?.message ?? error);
 
       dispatch(A.logOutError(error));
 
@@ -129,10 +109,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         }, 5000);
       } catch (error) {
         console.log("error:", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.forgotPasswordError(error));
       }
     },
@@ -150,10 +127,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         }, 5000);
       } catch (error) {
         console.log("error:", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.forgotPasswordError(error));
       }
     },
@@ -167,10 +141,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.resendCodeData());
       } catch (error) {
         console.log("error:", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.resendCodeError(error));
       }
     },
@@ -184,10 +155,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.codeVerifyData());
       } catch (error) {
         console.log("error:", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.codeVerifyError(error));
       }
     },
@@ -203,10 +171,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.changePasswordData());
       } catch (error) {
         console.log("error:", error);
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.changePasswordError(error));
       }
     },
@@ -255,11 +220,8 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
   useEffect(() => {
     if (signupIsSuccess && isVerificationSuccess) {
       onHandleNotification({
-        message: {
-          title: "Successfully created a new account!",
-          description: "Please sign in with your new account.",
-        },
-        time: new Date().getTime(),
+        type: "Success",
+        message: "Successfully created a new account!, please sign in with your new account",
       });
       setTimeout(() => {
         router.push("/signIn");

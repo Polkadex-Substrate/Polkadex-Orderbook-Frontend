@@ -1,3 +1,4 @@
+// TODO: Check useEffect warnings
 import { useEffect, useReducer } from "react";
 
 import * as A from "./actions";
@@ -23,13 +24,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
       dispatch(A.assetsData({ list: assetsList }));
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
-      settingsState.onHandleAlert({
-        message: {
-          title: "Something has gone wrong (fetchAssets)..",
-          description: `${error.name}: ${error.message}`,
-        },
-        type: "Error",
-      });
+      settingsState.onHandleAlert(`${error.name}: ${error.message}`);
     }
   };
 

@@ -30,13 +30,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       }
     } catch (e) {
       console.log("error: ", e);
-      onHandleNotification({
-        message: {
-          title: "Invalid funding account!",
-          description: e?.message,
-        },
-        time: new Date().getTime(),
-      });
+      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
     }
   };
 
@@ -54,10 +48,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       return res.data.listMainAccountsByEmail ?? { accounts: [] };
     } catch (error) {
       console.log("Error: getAllMainLinkedAccounts", error.errors);
-      onHandleError({
-        error,
-        processingType: "alert",
-      });
+      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
     }
   };
 
@@ -113,19 +104,12 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
       if (!isConfirmed && userExists) {
         onHandleNotification({
-          type: "AttentionAlert",
-          message: {
-            title: "Please confirm your email.",
-            description: "Sign in again and confirm your email.",
-          },
-          time: new Date().getTime(),
+          type: "Attention",
+          message: "Please confirm your email, sign in again and confirm your email.",
         });
       }
     } catch (error) {
-      onHandleError({
-        error: `User auth error:${error.message}`,
-        processingType: "alert",
-      });
+      onHandleError(`User auth error:${error?.message ?? error}`);
       dispatch(A.userAuthError(error));
     }
   };

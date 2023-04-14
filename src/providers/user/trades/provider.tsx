@@ -15,7 +15,7 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const sessionState = useSessionProvider();
-  const { onHandleAlert, onHandleError } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   // Actions
   const onFetchTrades = async () => {
@@ -29,11 +29,7 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
         dispatch(A.userTradesData(trades));
       }
     } catch (error) {
-      onHandleError({
-        error,
-        processingType: "alert",
-      });
-
+      onHandleError(error?.message ?? error);
       dispatch(A.userTradesError(error));
     }
   };
@@ -43,13 +39,7 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
       const trade = processTradeData(payload);
       dispatch(A.userTradesUpdateData(trade));
     } catch (error) {
-      onHandleAlert({
-        message: {
-          title: "Something has gone wrong (user trades channel)...",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      onHandleError(`User trades channel error: ${error?.message ?? error}`);
     }
   };
 

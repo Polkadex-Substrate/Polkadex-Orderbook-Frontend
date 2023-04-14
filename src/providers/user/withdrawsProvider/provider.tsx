@@ -45,20 +45,13 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({
-          type: "SuccessAlert",
-          message: {
-            title: "Withdraw Successful",
-            description: "Your withdraw has been processed.",
-          },
-          time: new Date().getTime(),
+          type: "Success",
+          message: "Withdraw Successful, your withdraw has been processed.",
         });
       }
     } catch (error) {
       dispatch(A.withdrawsData());
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       onUserTradesError(error);
     }
   };
@@ -80,13 +73,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
         settingsState.onHandleNotification({
-          type: "InformationAlert",
-          message: {
-            title: "Processing Claim Withdraw",
-            description:
-              "Please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-          },
-          time: new Date().getTime(),
+          type: "Info",
+          message:
+            "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
         });
         const res = await claimWithdrawal(api, signer, account?.address, sid);
         if (res.isSuccess) {
@@ -95,14 +84,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           // for ux
           setTimeout(() => {
             settingsState.onHandleNotification({
-              type: "SuccessAlert",
-              message: {
-                title: "Claim Withdraw Successful",
-                description:
-                  "Congratulations! You have successfully withdrawn your assets to your funding account.",
-              },
-              time: new Date().getTime(),
-              hasConfetti: true,
+              type: "Success",
+              message:
+                "Congratulations! You have successfully withdrawn your assets to your funding account.",
             });
 
             dispatch(A.withdrawClaimReset());
@@ -113,10 +97,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));
-      settingsState.onHandleError({
-        error,
-        processingType: "alert",
-      });
+      settingsState.onHandleError(error?.message ?? error);
       dispatch(A.withdrawsError(error));
     }
   };

@@ -24,13 +24,9 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     try {
       if (isApiReady && mainAccount?.account?.address !== "") {
         onHandleNotification({
-          type: "InformationAlert",
-          message: {
-            title: "Processing Deposit",
-            description:
-              "Please wait while the deposit is processed and the block is finalized. This may take a few mins.",
-          },
-          time: new Date().getTime(),
+          type: "Info",
+          message:
+            "Processing Deposit, please wait while the deposit is processed and the block is finalized. This may take a few mins",
         });
         dispatch(A.depositsFetch());
 
@@ -39,14 +35,9 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
         if (res.isSuccess) {
           dispatch(A.depositsData());
           onHandleNotification({
-            type: "SuccessAlert",
-            message: {
-              title: "Deposit Successful",
-              description:
-                "Congratulations! You have successfully deposited assets to your trading account.",
-            },
-            time: new Date().getTime(),
-            hasConfetti: true,
+            type: "Success",
+            message:
+              "Congratulations! You have successfully deposited assets to your trading account.",
           });
 
           dispatch(A.depositsReset());
@@ -56,10 +47,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       }
     } catch (error) {
       console.log(error, "error");
-      onHandleError({
-        error,
-        processingType: "alert",
-      });
+      onHandleError(error?.message ?? error);
       dispatch(A.depositsError(error));
     }
   };

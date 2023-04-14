@@ -71,10 +71,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.marketsError(error));
       }
     },
@@ -129,11 +126,8 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
 
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
-      console.error("Market tickers fetch error", error);
-      onHandleError({
-        error: "Market tickers fetch error",
-        processingType: "console",
-      });
+      console.error("Market tickers fetch error", error?.errors);
+      onHandleError(`Market tickers fetch error`);
     }
   }, [onHandleError, fetchMarketTickers]);
 

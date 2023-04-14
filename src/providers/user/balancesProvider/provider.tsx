@@ -1,3 +1,4 @@
+// TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
 
 import { useProfile } from "../profile/useProfile";
@@ -18,7 +19,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData } = useAssetsProvider();
-  const { onHandleAlert } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   const fetchbalancesAsync = useCallback(
     async (account: string): Promise<T.IBalanceFromDb[]> => {
@@ -67,15 +68,9 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
       }
     } catch (error) {
       console.error(error);
-      onHandleAlert({
-        message: {
-          title: "Something has gone wrong (balances fetch)..",
-          description: error.message,
-        },
-        type: "Error",
-      });
+      onHandleError(`Balances fetch error: ${error?.message ?? error}`);
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleAlert]);
+  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(

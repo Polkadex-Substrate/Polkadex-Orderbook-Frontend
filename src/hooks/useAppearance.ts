@@ -1,9 +1,11 @@
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export function useAppearance() {
-  const { onChangeColorTheme, color } = useSettingsProvider();
-  const isDarkTheme = color === "dark";
-  const changeTheme = () => onChangeColorTheme(isDarkTheme ? "light" : "dark");
+  const { onChangeTheme, theme } = useSettingsProvider();
+  const isDarkTheme = theme === "dark";
+  const changeTheme = () => {
+    onChangeTheme(isDarkTheme ? "light" : "dark");
+  };
 
   return {
     isDarkTheme,

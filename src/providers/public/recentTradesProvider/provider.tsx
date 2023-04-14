@@ -89,10 +89,7 @@ export const RecentTradesProvider = ({ children }) => {
           dispatch(A.recentTradesData(trades));
         }
       } catch (error) {
-        onHandleError({
-          error,
-          processingType: "alert",
-        });
+        onHandleError(error?.message ?? error);
         dispatch(A.recentTradesError(error));
       }
     },

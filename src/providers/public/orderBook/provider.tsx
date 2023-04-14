@@ -19,7 +19,7 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
   const { currentMarket } = useMarketsProvider();
-  const { onHandleAlert } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
 
   // Actions
   const onOrderBook = useCallback(
@@ -38,16 +38,11 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
           dispatch(A.depthData({ asks, bids }));
         }
       } catch (error) {
-        onHandleAlert({
-          message: {
-            title: "Something has gone wrong (orderbook fetch)..",
-            description: error.message,
-          },
-          type: "Error",
-        });
+        console.log(error);
+        onHandleError(`Orderbook fetch error:${error.message}`);
       }
     },
-    [onHandleAlert]
+    [onHandleError]
   );
 
   const onOrderBookChanel = useCallback((market: Market) => {
