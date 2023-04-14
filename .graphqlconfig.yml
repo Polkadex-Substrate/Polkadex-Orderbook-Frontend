@@ -1,5 +1,5 @@
 projects:
-  testobv2-orderbook-api:
+  testobver2-orderbook-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -11,7 +11,7 @@ projects:
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
         region: eu-west-1
-        apiId: stbdllds6zaj7pakg625ugphge
+        apiId: 7xjrfx7ijfa3zm47ljkudlvple
         maxDepth: 2
 extensions:
   amplify:

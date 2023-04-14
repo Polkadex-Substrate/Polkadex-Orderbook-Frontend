@@ -1,19 +1,19 @@
 {
     "providers": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-authRole",
-            "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obvtwotest-153911-authRole",
+            "AuthRoleName": "amplify-orderbookfrontend-obtwo-165249-authRole",
+            "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obtwo-165249-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-obtwo-165249-authRole",
             "Region": "eu-west-1",
-            "DeploymentBucketName": "amplify-orderbookfrontend-obvtwotest-153911-deployment",
-            "UnauthRoleName": "amplify-orderbookfrontend-obvtwotest-153911-unauthRole",
-            "StackName": "amplify-orderbookfrontend-obvtwotest-153911",
-            "StackId": "arn:aws:cloudformation:eu-west-1:876703040586:stack/amplify-orderbookfrontend-obvtwotest-153911/70d79a10-c319-11ed-a7ba-0694f977f5ad",
+            "DeploymentBucketName": "amplify-orderbookfrontend-obtwo-165249-deployment",
+            "UnauthRoleName": "amplify-orderbookfrontend-obtwo-165249-unauthRole",
+            "StackName": "amplify-orderbookfrontend-obtwo-165249",
+            "StackId": "arn:aws:cloudformation:eu-west-1:876703040586:stack/amplify-orderbookfrontend-obtwo-165249/b22cfff0-dab6-11ed-afa2-06948f7d4eef",
             "AmplifyAppId": "d3h7jtye5lj0k8"
         }
     },
     "api": {
-        "testobv2-orderbook-api": {
+        "testobver2-orderbook-api": {
             "service": "AppSync",
             "output": {
                 "authConfig": {
@@ -24,19 +24,19 @@
                         {
                             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
                             "userPoolConfig": {
-                                "userPoolId": "eu-west-1_LUye3NHVf",
+                                "userPoolId": "eu-west-1_scTw5antn",
                                 "awsRegion": "eu-west-1",
                                 "appIdClientRegex": null
                             }
                         }
                     ]
                 },
-                "GraphQLAPIIdOutput": "stbdllds6zaj7pakg625ugphge",
-                "GraphQLAPIEndpointOutput": "https://5qy4l5nhfva3nn6pc3cm2i2vae.appsync-api.eu-west-1.amazonaws.com/graphql",
-                "name": "testobv2-orderbook-api",
+                "GraphQLAPIIdOutput": "7xjrfx7ijfa3zm47ljkudlvple",
+                "GraphQLAPIEndpointOutput": "https://ze3arsnlczf6xk2sq6jbry43ii.appsync-api.eu-west-1.amazonaws.com/graphql",
+                "name": "testobver2-orderbook-api",
                 "region": "eu-west-1"
             },
-            "lastPushTimeStamp": "2023-03-15T10:11:32.733Z"
+            "lastPushTimeStamp": "2023-04-14T11:23:56.399Z"
         }
     }
 }

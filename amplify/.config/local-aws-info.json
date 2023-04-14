@@ -13,5 +13,10 @@
     "configLevel": "project",
     "useProfile": false,
     "awsConfigFilePath": "/Users/nuel/.amplify/awscloudformation/3ERV9DwqE2"
+  },
+  "obtwo": {
+    "configLevel": "project",
+    "useProfile": false,
+    "awsConfigFilePath": "/Users/nuel/.amplify/awscloudformation/lF6bp5I1En"
   }
 }
