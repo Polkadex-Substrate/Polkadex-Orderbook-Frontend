@@ -5,7 +5,10 @@ import * as queries from "../../../../graphql/queries";
 import { UserAccount } from "@polkadex/orderbook-modules";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
+export const getAllMainLinkedAccounts = async (
+  email: string,
+  Api = API
+): Promise<{ accounts: string[] }> => {
   try {
     const res: any = await sendQueryToAppSync({
       query: queries.listMainAccountsByEmail,
@@ -16,9 +19,11 @@ export const getAllMainLinkedAccounts = async (email: string, Api = API) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
       API: Api,
     });
-    return res.data.listMainAccountsByEmail ?? { accounts: [] };
+    const accounts = res.data?.listMainAccountsByEmail?.items ?? [];
+    return { accounts };
   } catch (error) {
     console.log("Error: getAllMainLinkedAccounts", error.errors);
+    return { accounts: [] };
   }
 };
 

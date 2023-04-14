@@ -26,9 +26,7 @@ export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
 
     if (hasAddressAndEmail) {
       const { signature } = yield call(createSignedData, selectedControllerAccount, email);
-      // console.log("sig length", signature.length);
-      // const multi_signature = api.createType("MultiSignature", signature);
-      console.log("multi_signature", signature);
+      console.log("signature", signature);
       yield call(
         executeRegisterEmail,
         email,
@@ -44,6 +42,7 @@ export function* linkEmailSaga(action: RegisterMainAccountLinkEmailFetch) {
     console.log("error in registration:", error);
   }
 }
+
 const createSignedData = async (
   mainAccount: ExtensionAccount,
   email: string
@@ -56,39 +55,14 @@ const createSignedData = async (
       data: stringToHex(email),
       type: "bytes",
     });
-    // remove 0x prefix
-    const trimmedSignature = signature.slice(2);
-    let multiSig: MultiSig;
-    console.log("raw signature", signature);
-    switch (account.type) {
-      case "ed25519": {
-        //   prepend number 0 to signify sr25519
-        multiSig = { Ed25519: trimmedSignature };
-        break;
-      }
-      case "sr25519": {
-        //   prepend number 1 to signify ed25519
-        multiSig = { Sr25519: trimmedSignature };
-        break;
-      }
-      case "ecdsa": {
-        //   prepend number 2 to signify ecdsa
-        multiSig = { Ecdsa: trimmedSignature };
-        break;
-      }
-      default: {
-        throw new Error("Invalid signature type");
-        break;
-      }
-    }
-    return { signature: multiSig };
+    return { signature };
   } else throw new Error("Cannot get Signer");
 };
 
 const executeRegisterEmail = async (
   email: string,
   main_address: string,
-  multisignature: Map<string, string>
+  multisignature: string
 ) => {
   const payloadStr = JSON.stringify({ RegisterUser: [email, main_address, multisignature] });
   console.log("email register payload string:", payloadStr);
