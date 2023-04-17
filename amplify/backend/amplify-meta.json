@@ -51,19 +51,19 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "eu-central-1_Rllv5siDU",
+                "userPoolId": "eu-central-1_cjkhP1Qmu",
                 "awsRegion": "eu-central-1",
                 "appIdClientRegex": null
               }
             }
           ]
         },
-        "GraphQLAPIIdOutput": "xpl6eqs3t5amhgbkrxdl4pebe4",
-        "GraphQLAPIEndpointOutput": "https://szzsvapgkjdurfl7ijvc3vtbba.appsync-api.eu-central-1.amazonaws.com/graphql",
+        "GraphQLAPIIdOutput": "hzhheqbilbhatnjs3bjt56wegq",
+        "GraphQLAPIEndpointOutput": "https://kckpespz5bb2rmdnuxycz6e7he.appsync-api.eu-central-1.amazonaws.com/graphql",
         "name": "staging-orderbook-api",
         "region": "eu-central-1"
       },
-      "lastPushTimeStamp": "2022-10-10T03:24:28.850Z"
+      "lastPushTimeStamp": "2023-04-17T09:54:58.340Z"
     }
   }
 }
