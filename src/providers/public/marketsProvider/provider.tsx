@@ -98,8 +98,13 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
 
   const fetchMarketTickers = useCallback(async (): Promise<Ticker[]> => {
     // TODO: check sendQueryToAppSync market variable
-    const res: any = await sendQueryToAppSync({ query: queries.getAllMarketTickers });
-
+    const to = new Date().toISOString();
+    // tickers are fetched for the last 24 hours
+    const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
+    const res: any = await sendQueryToAppSync({
+      query: queries.getAllMarketTickers,
+      variables: { from, to },
+    });
     const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
     const tickers: Ticker[] = tickersRaw?.map((elem) => {
       const priceChange = Number(elem.c) - Number(elem.o);
