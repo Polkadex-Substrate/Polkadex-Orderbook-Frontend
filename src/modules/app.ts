@@ -5,7 +5,6 @@ import { changeGlobalSettingsReducer } from "./public/globalSettings";
 import { errorHandlerReducer } from "./public/errorHandler";
 import { klineReducer } from "./public/kline";
 import { notificationReducer } from "./user/notificationHandler";
-import { tradesReducer } from "./user/trades";
 
 export const publicReducer = combineReducers({
   alerts: alertReducer,
@@ -15,6 +14,5 @@ export const publicReducer = combineReducers({
 });
 
 export const userReducer = combineReducers({
-  trades: tradesReducer,
   notifications: notificationReducer,
 });
