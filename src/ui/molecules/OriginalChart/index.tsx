@@ -34,10 +34,6 @@ export const OriginalChart = ({ chart, resolution }) => {
     onHandleKlineFetch,
     onFetchKlineChannel,
   } = useKlineProvider();
-  // const klines = useReduxSelector(selectKline);
-  // const klineInterval = useReduxSelector(selectKlineInterval);
-  // const lastKline = useReduxSelector(selectLastKline);
-  // const isLoading = useReduxSelector(selectKlineLoading);
   useEffect(() => {
     if (currentMarket?.m) {
       onHandleKlineFetch({
@@ -49,7 +45,7 @@ export const OriginalChart = ({ chart, resolution }) => {
 
       onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
     }
-  }, [currentMarket, onFetchKlineChannel, onHandleKlineFetch, resolution]);
+  }, [currentMarket?.m, onFetchKlineChannel, onHandleKlineFetch, resolution]);
 
   useEffect(() => {
     chart.current = init("original-chart", options(isDarkTheme));
