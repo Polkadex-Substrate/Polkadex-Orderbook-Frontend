@@ -111,6 +111,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
 
   const onFetchKlineChannel = useCallback(
     (payload: A.KlineSubscribe["payload"]) => {
+      dispatch(A.klineSubscribe(payload));
       const { market, interval } = payload;
       const subscription = API.graphql({
         query: subscriptions.websocket_streams,
