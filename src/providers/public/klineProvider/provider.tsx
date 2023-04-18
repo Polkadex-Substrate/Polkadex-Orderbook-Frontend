@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -18,27 +18,25 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
   const { onHandleError } = useSettingsProvider();
 
-  const fetchKlineAsync = async (
-    market: string,
-    interval: string,
-    from: Date,
-    to: Date
-  ): Promise<KlineEvent[]> => {
-    const res = await sendQueryToAppSync({
-      query: getKlinesbyMarketInterval,
-      variables: {
-        market,
-        interval,
-        from: from.toISOString(),
-        to: to.toISOString(),
-      },
-    });
-    const data: KlineDbData[] = res.data?.getKlinesbyMarketInterval?.items;
-    if (!data) {
-      return [];
-    }
-    return processKlineData(data);
-  };
+  const fetchKlineAsync = useCallback(
+    async (market: string, interval: string, from: Date, to: Date): Promise<KlineEvent[]> => {
+      const res = await sendQueryToAppSync({
+        query: getKlinesbyMarketInterval,
+        variables: {
+          market,
+          interval,
+          from: from.toISOString(),
+          to: to.toISOString(),
+        },
+      });
+      const data: KlineDbData[] = res.data?.getKlinesbyMarketInterval?.items;
+      if (!data) {
+        return [];
+      }
+      return processKlineData(data);
+    },
+    []
+  );
 
   const processKlineData = (data: KlineDbData[]) => {
     const klinesData = data.map((x) => ({
@@ -65,16 +63,20 @@ export const KlineProvider: KlineComponent = ({ children }) => {
     return klinesData;
   };
 
-  const onHandleKlineFetch = async (payload: A.KlineFetch["payload"]) => {
-    try {
-      const { market, resolution, from, to } = payload;
-      const data = await fetchKlineAsync(market, resolution, from, to);
-      dispatch(A.klineData({ list: data, market, interval: resolution }));
-    } catch (error) {
-      console.log("Kline fetch error", error);
-      onHandleError("Kline fetch error");
-    }
-  };
+  const onHandleKlineFetch = useCallback(
+    async (payload: A.KlineFetch["payload"]) => {
+      dispatch(A.klineFetch(payload));
+      try {
+        const { market, resolution, from, to } = payload;
+        const data = await fetchKlineAsync(market, resolution, from, to);
+        dispatch(A.klineData({ list: data, market, interval: resolution }));
+      } catch (error) {
+        console.log("Kline fetch error", error);
+        onHandleError("Kline fetch error");
+      }
+    },
+    [fetchKlineAsync, onHandleError]
+  );
   // for testing kline provider , will be integrating with the UI  once trading view purchase is completed
   // const { currentMarket } = useMarketsProvider();
   // onHandleKlineFetch({
@@ -107,35 +109,38 @@ export const KlineProvider: KlineComponent = ({ children }) => {
     return kline;
   };
 
-  const onFetchKlineChannel = (payload: A.KlineSubscribe["payload"]) => {
-    const { market, interval } = payload;
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: `${market}_${interval.toLowerCase()}` },
-      authToken: READ_ONLY_TOKEN,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        const dataParsed = JSON.parse(data.value.data.websocket_streams.data);
-        const kline = processKline(dataParsed, interval);
-        dispatch(
-          A.klinePush({
-            kline: kline,
-            market: data.m,
-            interval: data.interval,
-          })
-        );
-      },
-      error: (err) => {
-        console.warn("error in onCandleStickEvents channel", err);
-        onHandleError("error in onCandleStickEvents channel");
-      },
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  };
+  const onFetchKlineChannel = useCallback(
+    (payload: A.KlineSubscribe["payload"]) => {
+      const { market, interval } = payload;
+      const subscription = API.graphql({
+        query: subscriptions.websocket_streams,
+        variables: { name: `${market}_${interval.toLowerCase()}` },
+        authToken: READ_ONLY_TOKEN,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+      }).subscribe({
+        next: (data) => {
+          const dataParsed = JSON.parse(data.value.data.websocket_streams.data);
+          const kline = processKline(dataParsed, interval);
+          dispatch(
+            A.klinePush({
+              kline: kline,
+              market: data.m,
+              interval: data.interval,
+            })
+          );
+        },
+        error: (err) => {
+          console.warn("error in onCandleStickEvents channel", err);
+          onHandleError("error in onCandleStickEvents channel");
+        },
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    },
+    [onHandleError]
+  );
 
   return (
     <Provider
