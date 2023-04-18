@@ -12,7 +12,6 @@ function Home() {
     []
   );
   const { currentMarket } = useMarketsProvider();
-  console.log(currentMarket, "current market"); // this does not get printed
 
   useEffect(() => {
     if (currentMarket)
