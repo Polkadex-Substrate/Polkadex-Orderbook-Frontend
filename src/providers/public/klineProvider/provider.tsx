@@ -6,62 +6,16 @@ import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
 import { Provider } from "./context";
-import { KlineComponent, KlineDbData, KlineEvent } from "./types";
+import { KlineComponent, KlineEvent } from "./types";
 import { initialKlineState, klineReducer } from "./reducer";
 
-import { getKlinesbyMarketInterval } from "@polkadex/orderbook/graphql/queries";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
+import { fetchKlineAsync } from "@polkadex/orderbook/helpers/fetchKlineAsync";
 
 export const KlineProvider: KlineComponent = ({ children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
   const { onHandleError } = useSettingsProvider();
-
-  const fetchKlineAsync = useCallback(
-    async (market: string, interval: string, from: Date, to: Date): Promise<KlineEvent[]> => {
-      const res = await sendQueryToAppSync({
-        query: getKlinesbyMarketInterval,
-        variables: {
-          market,
-          interval,
-          from: from.toISOString(),
-          to: to.toISOString(),
-        },
-      });
-      const data: KlineDbData[] = res.data?.getKlinesbyMarketInterval?.items;
-      if (!data) {
-        return [];
-      }
-      return processKlineData(data);
-    },
-    []
-  );
-
-  const processKlineData = (data: KlineDbData[]) => {
-    const klinesData = data.map((x) => ({
-      timestamp: Number(x.t.split(",")[0].split("=")[1]) * 1000,
-      open: Number(x.o),
-      high: Number(x.h),
-      low: Number(x.l),
-      close: Number(x.c),
-      volume: Number(x.vb),
-    }));
-    // if volume is 0, take previous close as candle
-    klinesData.forEach((elem, idx) => {
-      if (idx === 0) {
-        return;
-      }
-      if (!elem.volume) {
-        elem.low = klinesData[idx - 1].close;
-        elem.high = klinesData[idx - 1].close;
-        elem.close = klinesData[idx - 1].close;
-        elem.open = klinesData[idx - 1].close;
-        elem.volume = 0;
-      }
-    });
-    return klinesData;
-  };
 
   const onHandleKlineFetch = useCallback(
     async (payload: A.KlineFetch["payload"]) => {
@@ -75,7 +29,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         onHandleError("Kline fetch error");
       }
     },
-    [fetchKlineAsync, onHandleError]
+    [onHandleError]
   );
   // for testing kline provider , will be integrating with the UI  once trading view purchase is completed
   // const { currentMarket } = useMarketsProvider();

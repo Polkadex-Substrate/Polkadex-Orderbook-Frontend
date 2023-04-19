@@ -4,7 +4,6 @@ import { combineReducers } from "redux";
 import { GlobalSettingsState } from "./public/globalSettings";
 import { rootHandleAlertSaga, AlertState } from "./public/alertHandler";
 import { ErrorHandlerState, rootErrorHandlerSaga } from "./public/errorHandler";
-import { KlineState, rootKlineFetchSaga } from "./public/kline";
 import { publicReducer, userReducer } from "./app";
 import { NotificationState, rootNotificationSaga } from "./user/notificationHandler";
 
@@ -12,14 +11,12 @@ export * from "./user/notificationHandler";
 export * from "./public/errorHandler";
 export * from "./public/globalSettings";
 export * from "./public/alertHandler";
-export * from "./public/kline";
 
 export interface RootState {
   public: {
     alerts: AlertState;
     globalSettings: GlobalSettingsState;
     errorHandler: ErrorHandlerState;
-    kline: KlineState;
   };
   user: {
     notifications: NotificationState;
@@ -36,7 +33,6 @@ export function* rootSaga() {
     call(rootNotificationSaga),
     call(rootErrorHandlerSaga),
     call(rootHandleAlertSaga),
-    call(rootKlineFetchSaga),
     call(rootNotificationSaga),
   ]);
 }

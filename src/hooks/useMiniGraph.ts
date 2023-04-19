@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { useEffect, useState } from "react";
 
-import { fetchKlineAsync } from "@polkadex/orderbook/modules/public/kline/sagas/handleKlineFetchSaga";
-import { KlineEvent } from "@polkadex/orderbook-modules";
+import { KlineEvent } from "../providers/public/klineProvider";
+import { fetchKlineAsync } from "../helpers/fetchKlineAsync";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const [points, setPoints] = useState([]);
@@ -17,7 +17,7 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
       const points: number[] = dailyKline?.data?.map((i) => Number(i.close));
       setPoints(points);
     }
-  }, [dailyKline.isFetched]);
+  }, [dailyKline?.data, dailyKline.isFetched]);
 
   return {
     graphPoints: points,
