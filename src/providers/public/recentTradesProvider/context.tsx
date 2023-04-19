@@ -5,7 +5,7 @@ import { RecentTradesContextProps, RecentTradesProviderProps } from "./types";
 
 export const Context = createContext<RecentTradesContextProps>({
   ...initialState,
-  recentTradesFetch: () => { },
+  recentTradesFetch: () => {},
   isDecreasing: [],
   quoteUnit: "",
   baseUnit: "",

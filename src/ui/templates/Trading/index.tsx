@@ -157,8 +157,8 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade?.length && marketName?.length && `${currentTrade} | ${marketName} | `}
-          Polkadex Orderbook
+          {currentTrade && marketName && `${currentTrade} | ${marketName} | `} Polkadex
+          Orderbook
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
@@ -264,9 +264,7 @@ export function Trading() {
                     </S.GraphEpmty>
                     <S.WrapperRight>
                       <MarketOrder />
-                      <RecentTradesProvider>
-                        <RecentTrades />
-                      </RecentTradesProvider>
+                      <RecentTrades />
                     </S.WrapperRight>
                   </S.CenterWrapper>
                 </S.WrapperGraph>
