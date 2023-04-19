@@ -102,7 +102,7 @@ export const RecentTradesProvider = ({ children }) => {
 
   const isDecreasing = getIsDecreasingArray(state.list);
 
-  const getCurrentTradePrice = () => {
+  const getCurrentTradePrice = (): string => {
     return state.list.length > 0 ? state.list[0].price : "0";
   };
 
