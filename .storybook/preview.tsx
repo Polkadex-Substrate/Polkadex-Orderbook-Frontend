@@ -19,7 +19,7 @@ const withTheme: Decorator = (StoryFn, context) => {
   const theme = context.parameters.theme || context.globals.theme;
 
   return (
-    <ThemeProvider theme={defaultThemes.dark}>
+    <ThemeProvider theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}>
       <GlobalStyles />
       <StoryFn />
     </ThemeProvider>
