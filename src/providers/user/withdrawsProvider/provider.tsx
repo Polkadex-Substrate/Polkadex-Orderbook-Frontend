@@ -8,15 +8,15 @@ import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
 import { UserAccount } from "../profile/types";
 import { useExtensionWallet } from "../extensionWallet";
+import { selectTradeAccount } from "../tradeWallet/helper";
+import { useTradeWallet } from "../tradeWallet";
 
 import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, withdrawsReducer } from "./reducer";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
-import { selectTradeAccount } from "@polkadex/orderbook-modules";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
@@ -31,7 +31,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAccount = profileState.selectedAccount;
   const address = currentAccount.tradeAddress;
-  const keyringPair = useReduxSelector(selectTradeAccount(address));
+  const { allBrowserAccounts } = useTradeWallet();
+  const keyringPair = selectTradeAccount(address, allBrowserAccounts);
   const { onUserTradesError } = useTrades();
 
   const onFetchWithdraws = async ({ asset, amount }) => {

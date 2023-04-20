@@ -1,19 +1,15 @@
 import { MutableRefObject, useEffect } from "react";
 
 import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
-
-import {
-  DepthState,
-  
-} from "@polkadex/orderbook-modules";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
+import { OrderBookState } from "../providers/public/orderBook/types";
 
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export type Props = {
   isSell?: boolean;
-  orders: DepthState["bids"];
+  orders: OrderBookState["depth"]["bids"];
   contentRef?: MutableRefObject<HTMLDivElement>;
 };
 
@@ -23,7 +19,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const {currentMarket} = useMarketsProvider();
+  const { currentMarket } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
 
   /**

@@ -1,11 +1,14 @@
-import { TradeAccount } from "../../types";
-import * as T from "./types";
-import { ProfileState } from "../profile/types";
 import { isReady } from "@polkadot/wasm-crypto";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import keyring from "@polkadot/ui-keyring";
+
+import { ProfileState } from "../profile/types";
+import { TradeAccount } from "../../types";
+
+import * as T from "./types";
+
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
 // This is needed as the selector one can not be used inside a function.
 export const getTradeAccount = (addr: string, tradeAccounts: TradeAccount[]) => {
