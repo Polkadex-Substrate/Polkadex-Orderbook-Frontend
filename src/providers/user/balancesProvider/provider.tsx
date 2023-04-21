@@ -119,6 +119,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         ...state,
         getFreeProxyBalance,
         onBalanceUpdate,
+        onBalancesFetch,
       }}>
       {children}
     </Provider>
