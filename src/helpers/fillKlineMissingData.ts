@@ -1,4 +1,4 @@
-import { KlineEvent } from "../modules/public/kline";
+import { KlineEvent } from "../providers/public/klineProvider";
 
 export const fillKlineMissingData = (klines: KlineEvent[], interval: number): KlineEvent[] => {
   const inc = Number(interval);

@@ -19,21 +19,16 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-
-import { Transaction } from "@polkadex/orderbook-modules";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
-
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
-
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
-
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 
 export const DepositTemplate = () => {
   const [state, setState] = useState(false);

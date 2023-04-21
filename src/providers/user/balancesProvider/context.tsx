@@ -7,6 +7,7 @@ export const Context = createContext<BalancesContextProps>({
   ...initialState,
   getFreeProxyBalance: () => "",
   onBalanceUpdate: () => {},
+  onBalancesFetch: () => {},
 });
 
 export const Provider = ({ value, children }: BalancesProviderProps) => (
