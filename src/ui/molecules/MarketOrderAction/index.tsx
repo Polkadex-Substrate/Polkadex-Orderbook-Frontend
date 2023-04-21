@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -148,7 +147,6 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 };
 
 const ProtectPassword = () => {
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const tradeWalletState = useTradeWallet();
   const currTradeAddr = profileState.selectedAccount.tradeAddress;

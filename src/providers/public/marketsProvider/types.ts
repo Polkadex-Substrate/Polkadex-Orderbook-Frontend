@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 import { IPublicAsset } from "../assetsProvider";
 
-import { CommonState } from "@polkadex/orderbook/modules/types";
+import { CommonState } from "@polkadex/orderbook/providers/types";
 import { FilterPrice } from "@polkadex/orderbook/helpers/filterPrice";
 
 export type MarketId = string;

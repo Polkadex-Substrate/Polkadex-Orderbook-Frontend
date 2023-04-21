@@ -5,7 +5,7 @@ import { useAuth } from "../providers/user/auth";
 import { useExtensionWallet } from "../providers/user/extensionWallet";
 import { useTradeWallet } from "../providers/user/tradeWallet";
 
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 

@@ -1,6 +1,5 @@
 export * from "./useMnemonic";
 export * from "./useInit";
-export * from "./useReduxSelector";
 export * from "./useWindowSize";
 export * from "./useAccount";
 export * from "./useMarkets";

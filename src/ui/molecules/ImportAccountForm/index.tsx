@@ -2,7 +2,6 @@ import { KeyboardEvent, useMemo, useRef, useState } from "react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
-import { useDispatch } from "react-redux";
 import { useDropzone } from "react-dropzone";
 import { intlFormat } from "date-fns";
 
@@ -16,7 +15,6 @@ import {
   importAccountJsonValidations,
   importAccountValidations,
 } from "@polkadex/orderbook/validations";
-
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const informationData = [
@@ -77,7 +75,6 @@ export const ImportAccountForm = ({ onCancel = undefined, defaultImportJson = fa
 const ImportAccountMnemonic = ({ onCancel = undefined }) => {
   const { onImportTradeAccount } = useTradeWallet();
   const mnemonicInputRef = useRef(null);
-  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {

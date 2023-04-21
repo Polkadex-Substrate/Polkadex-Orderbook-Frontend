@@ -10,7 +10,7 @@ import * as T from "./types";
 import { Provider } from "./context";
 import { depositsReducer, initialState } from "./reducer";
 
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { UNIT_BN } from "@polkadex/web-constants";
 

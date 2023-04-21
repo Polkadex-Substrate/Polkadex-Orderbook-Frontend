@@ -1,5 +1,4 @@
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 import { generateUsername } from "friendly-username-generator";
 import keyring from "@polkadot/ui-keyring";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
@@ -21,7 +20,6 @@ export const CreateAccountForm = ({
   selectedAccountAddress = "",
   buttonTitle = "",
 }) => {
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();

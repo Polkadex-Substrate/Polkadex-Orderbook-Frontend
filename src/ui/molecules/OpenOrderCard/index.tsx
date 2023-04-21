@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 
 import * as S from "./styles";
@@ -17,7 +16,6 @@ export const OpenOrderCard = ({
   quoteUnit,
   data = [],
 }) => {
-  const dispatch = useDispatch();
   const ordersState = useOrders();
   const [isCancelClicked, setIsCancleClicked] = useState(false);
   const cancelLoading = ordersState.cancel.isLoading;

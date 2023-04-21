@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
@@ -27,10 +26,7 @@ import {
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import {
-  RecentTradesProvider,
-  useRecentTradesProvider,
-} from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
@@ -56,7 +52,6 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const router = useRouter();
-  const dispatch = useDispatch();
   const { id } = useRouter().query;
 
   const {
@@ -144,7 +139,7 @@ export function Trading() {
     if (isSignedIn && shouldShowInitialBanner && !hasAssociatedAccounts) {
       setBanner(true);
     }
-  }, [isSignedIn, hasAssociatedAccounts, dispatch, shouldShowInitialBanner]);
+  }, [isSignedIn, hasAssociatedAccounts, shouldShowInitialBanner]);
 
   const closeBanner = () => {
     setBanner(false);

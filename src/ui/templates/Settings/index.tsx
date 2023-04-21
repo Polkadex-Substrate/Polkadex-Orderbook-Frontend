@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useDispatch } from "react-redux";
 import { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
@@ -75,7 +74,6 @@ export const SettingsTemplate = () => {
   const { onUserSelectAccount } = useProfile();
   const tradeWalletState = useTradeWallet();
 
-  const dispatch = useDispatch();
   return (
     <>
       <Modal

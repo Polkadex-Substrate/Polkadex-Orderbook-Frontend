@@ -1,4 +1,3 @@
-import { CommonError } from "../../../modules/types";
 import { Market } from "../marketsProvider";
 
 import {
@@ -9,6 +8,8 @@ import {
   RECENT_TRADES_FETCH_CHANNEL,
 } from "./constants";
 import { PublicTrade } from "./types";
+
+import { CommonError } from "@polkadex/orderbook/providers/types";
 
 export interface RecentTradesFetch {
   type: typeof RECENT_TRADES_FETCH;

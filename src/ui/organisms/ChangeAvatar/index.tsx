@@ -1,6 +1,5 @@
 import { AvatarProps, BigHead } from "@bigheads/core";
 import { useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 import { randomAvatars } from "./randomAvatars";
@@ -12,7 +11,6 @@ type Props = {
   onClose: () => void;
 };
 export const ChangeAvatar = ({ onClose = undefined }: Props) => {
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const currentAvatar = Number(profileState.userProfile?.avatar);
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { TradeAccount } from "@polkadex/orderbook/providers/types";
 
 export function useTryUnlockTradeAccount(account: TradeAccount) {
   const handleUnlock = useCallback(() => {

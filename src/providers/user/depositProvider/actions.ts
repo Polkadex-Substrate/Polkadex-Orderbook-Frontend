@@ -1,6 +1,6 @@
-import { CommonError } from "@polkadex/orderbook/modules/types";
-
 import { DEPOSITS_FETCH, DEPOSITS_DATA, DEPOSITS_ERROR, DEPOSITS_RESET } from "./constants";
+
+import { CommonError } from "@polkadex/orderbook/providers/types";
 
 export interface DepositsData {
   type: typeof DEPOSITS_DATA;

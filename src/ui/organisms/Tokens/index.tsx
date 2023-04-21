@@ -1,18 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { useEffect, ChangeEvent, useState, useMemo } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const Tokens = () => {
-  const dispatch = useDispatch();
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
   });
@@ -23,7 +20,7 @@ export const Tokens = () => {
 
   useEffect(() => {
     if (hasUser) dispatchBalancesFetch();
-  }, [hasUser, dispatch]);
+  }, [hasUser]);
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });

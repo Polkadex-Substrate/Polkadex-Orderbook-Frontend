@@ -1,5 +1,3 @@
-import { CommonError, OrderCommon } from "../../../modules/types";
-
 import {
   OPEN_ORDERS_HISTORY_DATA,
   OPEN_ORDERS_HISTORY_ERROR,
@@ -12,6 +10,8 @@ import {
   ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
 import { SetOrder } from "./types";
+
+import { CommonError, OrderCommon } from "@polkadex/orderbook/providers/types";
 
 export interface UserOrdersHistoryFetch {
   type: typeof ORDERS_HISTORY_FETCH;
