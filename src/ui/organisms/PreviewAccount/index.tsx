@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 
 import { UnlockAccount } from "../UnlockAccount";
 
@@ -47,7 +46,6 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     removesInLoading,
     exportAccountLoading,
   } = useTradeWallet();
-  const dispatch = useDispatch();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -94,7 +92,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
       : onExportTradeAccount({ address: selected?.address });
-  }, [selected, tradingAccountInBrowser, dispatch]);
+  }, [selected, tradingAccountInBrowser]);
   const handleClose = () =>
     setRemove({
       ...remove,
@@ -353,7 +351,6 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 };
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
-  const dispatch = useDispatch();
   const profileState = useProfile();
   const defaultTradeAddress = profileState.defaultTradeAccount;
   const isActive = tradeAddress === defaultTradeAddress;

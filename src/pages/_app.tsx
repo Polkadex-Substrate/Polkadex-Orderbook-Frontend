@@ -12,7 +12,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { wrapper } from "../store";
 import { useInit } from "../hooks/useInit";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 import { MarketsProvider } from "../providers/public/marketsProvider/provider";
@@ -201,4 +200,4 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default wrapper.withRedux(App);
+export default App;

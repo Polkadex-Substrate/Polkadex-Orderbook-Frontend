@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
 export type orderHistoryQueryResult = {

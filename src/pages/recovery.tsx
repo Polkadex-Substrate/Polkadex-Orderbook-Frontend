@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { useReduxSelector } from "../hooks/useReduxSelector";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const RecoveryTemplate = dynamic(

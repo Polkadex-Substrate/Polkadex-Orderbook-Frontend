@@ -1,6 +1,7 @@
-import { CommonError, ExtensionAccount } from "@polkadex/orderbook/modules/types";
-// todo: replace when providers are ready
 import { FC, PropsWithChildren } from "react";
+
+import { CommonError, ExtensionAccount } from "@polkadex/orderbook/providers/types";
+// todo: replace when providers are ready
 
 export interface DepositsState {
   error?: CommonError;

@@ -11,7 +11,7 @@ import * as A from "./actions";
 import { SetOrder, orderHistoryQueryResult } from "./types";
 
 import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";

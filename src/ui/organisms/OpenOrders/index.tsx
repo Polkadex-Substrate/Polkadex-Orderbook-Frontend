@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";

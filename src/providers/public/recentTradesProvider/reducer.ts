@@ -1,5 +1,3 @@
-import { CommonError } from "../../../modules/types";
-
 import { RecentTradesActions } from "./actions";
 import {
   RECENT_TRADES_DATA,
@@ -7,7 +5,7 @@ import {
   RECENT_TRADES_FETCH,
   RECENT_TRADES_PUSH,
 } from "./constants";
-import { PublicTrade, RecentTradesState } from "./types";
+import { RecentTradesState } from "./types";
 
 import { sliceArray } from "@polkadex/web-helpers";
 import { defaultConfig } from "@polkadex/orderbook-config";

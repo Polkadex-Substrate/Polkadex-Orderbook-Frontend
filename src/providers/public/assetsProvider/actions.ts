@@ -1,6 +1,7 @@
-import { CommonError } from "@polkadex/orderbook/modules/types";
 import { PUBLIC_ASSETS_FETCH, PUBLIC_ASSETS_ERROR, PUBLIC_ASSETS_DATA } from "./constants";
 import { IPublicAsset } from "./types";
+
+import { CommonError } from "@polkadex/orderbook/providers/types";
 
 export interface AssetsFetch {
   type: typeof PUBLIC_ASSETS_FETCH;

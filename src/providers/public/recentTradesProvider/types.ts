@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 
 import { Market } from "../marketsProvider";
 
-import { CommonError } from "@polkadex/orderbook/modules/types";
+import { CommonError } from "@polkadex/orderbook/providers/types";
 export interface PublicTrade {
   market_id: string;
   price: string;

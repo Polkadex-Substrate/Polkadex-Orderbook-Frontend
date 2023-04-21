@@ -1,5 +1,4 @@
 import { HTMLAttributes, useState } from "react";
-import { useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 
 import { Skeleton, Icon, Appearance, AccountOverview, EmptyMyAccount } from "../";
@@ -91,7 +90,6 @@ export const WalletContent = () => {
   const currentTradeAddr = profileState.selectedAccount.tradeAddress;
 
   const { isSignedIn } = useAccount();
-  const dispatch = useDispatch();
 
   const address = currentTradeAddr;
 

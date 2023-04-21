@@ -18,7 +18,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { userMainAccountDetails } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";

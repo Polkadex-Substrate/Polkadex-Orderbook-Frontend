@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { generateUsername } from "friendly-username-generator";
 
 import * as S from "./styles";
@@ -20,7 +19,6 @@ export const CreateAccountTemplate = () => {
   const isLoading = tradeWalletState.registerAccountLoading;
 
   const router = useRouter();
-  const dispatch = useDispatch();
   const handleMnemonicUpdate = (value) => setMnemonicString(value);
 
   const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =

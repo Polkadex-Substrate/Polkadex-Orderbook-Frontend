@@ -16,7 +16,7 @@ import {
 } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { TradeAccount } from "@polkadex/orderbook/providers/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";

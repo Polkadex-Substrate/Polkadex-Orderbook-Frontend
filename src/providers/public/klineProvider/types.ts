@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 import { KlineFetch, KlineSubscribe } from "./actions";
 
-import { CommonState } from "@polkadex/orderbook/modules/types";
+import { CommonState } from "@polkadex/orderbook/providers/types";
 
 export type KlineDbData = {
   m: string;

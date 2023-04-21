@@ -1,4 +1,4 @@
-import { TradeAccount } from "@polkadex/orderbook/modules/types";
+import { TradeAccount } from "@polkadex/orderbook/providers/types";
 
 export type IUserTradeAccount = {
   address: string;

@@ -1,5 +1,6 @@
-import { CommonError } from "@polkadex/orderbook/modules/types";
 import { FC, PropsWithChildren } from "react";
+
+import { CommonError } from "@polkadex/orderbook/providers/types";
 
 export type IPublicAsset = {
   assetId: string;

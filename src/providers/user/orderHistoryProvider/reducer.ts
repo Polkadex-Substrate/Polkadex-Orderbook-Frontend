@@ -1,5 +1,3 @@
-import { OrderCommon } from "../../../modules/types";
-
 import { OrdersHistoryAction } from "./actions";
 import {
   OPEN_ORDERS_HISTORY_DATA,
@@ -10,10 +8,11 @@ import {
   ORDER_UPDATE_EVENT_DATA,
   ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
+import { OrdersHistoryState } from "./types";
 
 import { sliceArray } from "@polkadex/web-helpers";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { OrdersHistoryState } from "./types";
 
 const { defaultStorageLimit } = defaultConfig;
 

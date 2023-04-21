@@ -1,5 +1,3 @@
-import { CommonError } from "@polkadex/orderbook/modules/types";
-
 import {
   MARKETS_DATA,
   MARKETS_ERROR,
@@ -14,6 +12,7 @@ import {
 } from "./constants";
 import { Market, Ticker } from "./types";
 
+import { CommonError } from "@polkadex/orderbook/providers/types";
 export interface MarketsFetch {
   type: typeof MARKETS_FETCH;
   payload?: {
