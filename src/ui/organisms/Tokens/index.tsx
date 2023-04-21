@@ -15,12 +15,12 @@ export const Tokens = () => {
   });
 
   const profileState = useProfile();
-  const { loading: isLoading, balances, dispatchBalancesFetch } = useBalancesProvider();
+  const { loading: isLoading, balances, onBalancesFetch } = useBalancesProvider();
   const hasUser = profileState.selectedAccount.tradeAddress !== "";
 
   useEffect(() => {
-    if (hasUser) dispatchBalancesFetch();
-  }, [hasUser]);
+    if (hasUser) onBalancesFetch();
+  }, [hasUser, onBalancesFetch]);
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
