@@ -83,8 +83,6 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@babel/preset-typescript": "^7.15.0",
     "@storybook/addon-essentials": "^7.0.6",
     "@storybook/addon-interactions": "^7.0.6",
     "@storybook/addon-links": "^7.0.6",
@@ -105,8 +103,6 @@
     "@types/ws": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
-    "babel-loader": "^9.1.0",
-    "babel-plugin-styled-components": "^1.13.2",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
