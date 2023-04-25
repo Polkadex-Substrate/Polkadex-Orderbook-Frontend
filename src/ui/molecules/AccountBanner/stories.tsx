@@ -23,7 +23,7 @@ export const Default: StoryObj<typeof AccountBanner> = {
     description: "Looks like you’re using this browser for the first time.",
     subDescription: "Please create a new trading account.",
     closeButtonTitle: "Close",
-    linkText: "Close",
+    linkText: "Create Account",
     link: "/settings",
     heroAlt: "Man in tie with open arms welcoming",
     heroImage: "welcomeBack.svg",

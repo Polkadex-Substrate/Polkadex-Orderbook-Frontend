@@ -170,7 +170,7 @@ export function Trading() {
           subDescription="Please create a new trading account."
           closeButtonTitle="Close"
           onClose={closeBanner}
-          linkText="Close"
+          linkText="Create Account"
           link="/settings"
           heroAlt="Man in tie with open arms welcoming"
           heroImage="welcomeBack.svg"
