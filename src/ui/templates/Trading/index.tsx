@@ -164,7 +164,7 @@ export function Trading() {
         <Disclaimer onClose={handleAcceptDisclaimer} />
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
-        <AccountBanner onClose={closeBanner} />
+        <AccountBanner title={"Welcome back!"} onClose={closeBanner} />
       </Modal>
       <Modal
         open={state}

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { AccountBanner} from ".";
+import { AccountBanner } from ".";
 
 export default {
   title: "Molecules/AccountBanner",
@@ -11,5 +11,6 @@ export default {
 export const Default: StoryObj<typeof AccountBanner> = {
   args: {
     onClose: "test",
+    title: "Welcome back!",
   },
 };

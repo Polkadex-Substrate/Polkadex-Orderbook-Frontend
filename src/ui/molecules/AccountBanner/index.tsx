@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
-export const AccountBanner = ({ onClose }) => (
+export const AccountBanner = ({ title, onClose }) => (
   <S.Wrapper>
     <S.Container>
       <S.Column>
@@ -12,7 +12,7 @@ export const AccountBanner = ({ onClose }) => (
       </S.Column>
       <S.Content>
         <div>
-          <h2>Welcome back!</h2>
+          <h2>{title}</h2>
           <p>
             Looks like you’re using this browser for the first time.
             <br />
