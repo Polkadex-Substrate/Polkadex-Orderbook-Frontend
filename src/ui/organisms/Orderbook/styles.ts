@@ -7,22 +7,21 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-   /* height: 70%; */
+    /* height: 70%; */
     max-height: 50rem;
     @media screen and (min-width: 900px) {
-      /* border-left: 1px solid ${theme.colosrs.secondaryBackground}; */
+      /* border-left: 1px solid ${theme.colors.secondaryBackground}; */
       max-width: 35rem;
-    width: 30%;
-    min-width: 30rem;
-    
+      width: 30%;
+      min-width: 30rem;
     }
-   
+
     @media screen and (min-width: 1688px) {
       /* border-left: 1px solid ${theme.colors.secondaryBackground}; */
       max-width: 41.8rem;
     }
     @media screen and (min-height: 1200px) {
-     min-height: 50vh;
+      min-height: 50vh;
     }
   `}
 `;
