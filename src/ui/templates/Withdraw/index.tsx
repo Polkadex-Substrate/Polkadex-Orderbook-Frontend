@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { intlFormat } from "date-fns";
 
 import * as S from "./styles";
@@ -27,46 +26,50 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  useHistory,
-  useReduxSelector,
-  useTryUnlockTradeAccount,
-} from "@polkadex/orderbook-hooks";
+import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import {
-  selectClaimWithdrawsInLoading,
-  selectMainAccount,
-  selectTradeAccount,
-  selectUserBalance,
-  selectUsingAccount,
-  selectWithdrawsLoading,
-  withdrawsFetch,
-} from "@polkadex/orderbook-modules";
-import {
-  isAssetPDEX,
-  selectAllAssets,
-  selectGetAsset,
-} from "@polkadex/orderbook/modules/public/assets";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/useWithdrawsProvider";
+import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 
 export const WithdrawTemplate = () => {
   const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
-  const currentAccount = useReduxSelector(selectUsingAccount);
-  const currMainAcc = useReduxSelector(selectMainAccount(currentAccount.mainAddress));
-  const tradingAccountInBrowser = useReduxSelector(
-    selectTradeAccount(currentAccount?.tradeAddress)
-  );
-  useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const assets = useReduxSelector(selectAllAssets);
-  const loading = useReduxSelector(selectWithdrawsLoading);
-  const userBalances = useReduxSelector(selectUserBalance);
+  const { selectedAccount: currentAccount } = useProfile();
+  const extensionWalletState = useExtensionWallet();
 
-  const dispatch = useDispatch();
+  const { onFetchWithdraws } = useWithdrawsProvider();
+
+  const tradeWalletState = useTradeWallet();
+
+  const currMainAcc =
+    currentAccount.mainAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
+    );
+
+  const tradingAccountInBrowser = selectTradeAccount(
+    currentAccount?.tradeAddress,
+    tradeWalletState.allBrowserAccounts
+  );
+
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
+  const { list: assets } = useAssetsProvider();
+  const { balances: userBalances } = useBalancesProvider();
+
   const router = useRouter();
 
-  const { allWithdrawals, readyWithdrawals, handleClaimWithdraws } = useHistory();
+  const { allWithdrawals, readyWithdrawals } = useTransactionsProvider();
+  const { handleClaimWithdraws, loading } = useWithdrawsProvider();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -74,7 +77,7 @@ export const WithdrawTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   const availableAmount = useMemo(
-    () => userBalances?.find((item) => item.asset_id === selectedAsset?.asset_id),
+    () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
   useEffect(() => {
@@ -99,15 +102,13 @@ export const WithdrawTemplate = () => {
   };
 
   const handleSubmitWithdraw = (amount: string | number) => {
-    const asset = isAssetPDEX(selectedAsset.asset_id)
+    console.log("submit");
+
+    const asset = isAssetPDEX(selectedAsset.assetId)
       ? { polkadex: null }
-      : { asset: selectedAsset.asset_id };
-    dispatch(
-      withdrawsFetch({
-        asset,
-        amount,
-      })
-    );
+      : { asset: selectedAsset.assetId };
+
+    onFetchWithdraws({ asset, amount });
   };
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
@@ -233,7 +234,7 @@ export const WithdrawTemplate = () => {
                           <Dropdown.Menu fill="secondaryBackgroundSolid">
                             {assets.map((asset) => (
                               <Dropdown.Item
-                                key={asset.asset_id}
+                                key={asset.assetId}
                                 onAction={() => setSelectedAsset(asset)}>
                                 {asset.name}
                               </Dropdown.Item>
@@ -334,8 +335,7 @@ export const WithdrawTemplate = () => {
 };
 
 const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) => {
-  const claimWithdrawsInLoading = useReduxSelector(selectClaimWithdrawsInLoading);
-
+  const { claimsInLoading: claimWithdrawsInLoading } = useWithdrawsProvider();
   const claimIsLoading = useMemo(
     () => claimWithdrawsInLoading.includes(sid),
     [claimWithdrawsInLoading, sid]
@@ -390,7 +390,7 @@ const Copy = ({ copyData }) => {
 };
 
 const HistoryTable = ({ items }) => {
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { selectGetAsset } = useAssetsProvider();
 
   return (
     <S.HistoryTable>
@@ -415,7 +415,8 @@ const HistoryTable = ({ items }) => {
               <Table.Cell>
                 <S.Cell>
                   <span>
-                    {getAsset(item.asset)?.name} <small>{getAsset(item.asset)?.symbol}</small>
+                    {selectGetAsset(item.asset)?.name}{" "}
+                    <small>{selectGetAsset(item.asset)?.symbol}</small>
                   </span>
                 </S.Cell>
               </Table.Cell>

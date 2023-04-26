@@ -1,7 +1,7 @@
 import { ApiPromise } from "@polkadot/api";
 import BigNumber from "bignumber.js";
 
-import { isAssetPDEX } from "../modules/public/assets";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
 import { UNIT_BN } from "@polkadex/web-constants";
 

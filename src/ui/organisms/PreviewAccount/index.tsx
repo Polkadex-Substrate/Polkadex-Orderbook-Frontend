@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 
 import { UnlockAccount } from "../UnlockAccount";
 
@@ -18,23 +17,13 @@ import {
   RemoveFromDevice,
   RemoveFromBlockchain,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  removeProxyAccountFromChainFetch,
-  removeTradeAccountFromBrowser,
-  selectIsTradeAccountRemoveLoading,
-  selectDefaultTradeAccount,
-  selectMainAccount,
-  selectTradeAccount,
-  selectUsingAccount,
-  userAccountSelectFetch,
-  userSetDefaultTradeAccount,
-  selectExportingTradeAccount,
-  exportTradeAccountActive,
-  exportTradeAccountFetch,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector, useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
-import { transformAddress } from "@polkadex/orderbook/modules/user/profile/helpers";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 type Props = {
   onClose: () => void;
@@ -48,7 +37,15 @@ enum menuDisableKeysEnum {
 }
 
 export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }: Props) => {
-  const dispatch = useDispatch();
+  const {
+    onExportTradeAccount,
+    onRemoveProxyAccountFromChain,
+    onRemoveTradeAccountFromBrowser,
+    onExportTradeAccountActive,
+    allBrowserAccounts,
+    removesInLoading,
+    exportAccountLoading,
+  } = useTradeWallet();
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -57,15 +54,23 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     isRemoveDevice: false,
     status: false,
   });
-  const mainAccountDetails = useReduxSelector(selectMainAccount(mainAccAddress));
-  const tradingAccountInBrowser = useReduxSelector(selectTradeAccount(selected?.address));
+
+  const extensionWalletState = useExtensionWallet();
+
+  const mainAccountDetails =
+    mainAccAddress &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) => account?.address?.toLowerCase() === mainAccAddress?.toLowerCase()
+    );
+
+  const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const usingAccount = useReduxSelector(selectUsingAccount);
-  const isRemoveFromBlockchainLoading = useReduxSelector((state) =>
-    selectIsTradeAccountRemoveLoading(state, selected?.address)
-  );
-  const showProtectedPassword = useReduxSelector(selectExportingTradeAccount);
+  const { selectedAccount: usingAccount } = useProfile();
+  const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
+
+  const showProtectedPassword = exportAccountLoading;
   const using = usingAccount.tradeAddress === selected?.address;
+  const { onUserSelectAccount } = useProfile();
 
   const menuDisableKeys = () => {
     const disableKeysList = [];
@@ -84,12 +89,10 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
   );
 
   const handleExportAccount = useCallback(() => {
-    dispatch(
-      tradingAccountInBrowser?.isLocked
-        ? exportTradeAccountActive()
-        : exportTradeAccountFetch({ address: selected?.address })
-    );
-  }, [selected, tradingAccountInBrowser, dispatch]);
+    tradingAccountInBrowser?.isLocked
+      ? onExportTradeAccountActive()
+      : onExportTradeAccount({ address: selected?.address });
+  }, [selected, tradingAccountInBrowser]);
   const handleClose = () =>
     setRemove({
       ...remove,
@@ -108,7 +111,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
           {remove.isRemoveDevice ? (
             <RemoveFromDevice
               onAction={() => {
-                dispatch(removeTradeAccountFromBrowser({ address: selected?.address }));
+                onRemoveTradeAccountFromBrowser(selected?.address);
                 handleClose();
               }}
               onClose={handleClose}
@@ -118,7 +121,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                dispatch(removeProxyAccountFromChainFetch({ address: selected?.address }));
+                onRemoveProxyAccountFromChain({ address: selected?.address });
                 handleClose();
               }}
             />
@@ -134,9 +137,9 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  dispatch(exportTradeAccountFetch({ address: selected.address, password }))
+                  onExportTradeAccount({ address: selected.address, password })
                 }
-                handleClose={() => dispatch(exportTradeAccountActive())}
+                handleClose={() => onExportTradeAccountActive()}
               />
             </S.UnlockAccount>
           ) : (
@@ -182,9 +185,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   {tradingAccountInBrowser && (
                     <S.Button
                       disabled={!tradingAccountInBrowser || !mainAccountDetails}
-                      onClick={() =>
-                        dispatch(userAccountSelectFetch({ tradeAddress: selected?.address }))
-                      }
+                      onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
                       {using ? "Using" : "Use"}
                     </S.Button>
@@ -350,14 +351,14 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 };
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
-  const dispatch = useDispatch();
-  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
+  const profileState = useProfile();
+  const defaultTradeAddress = profileState.defaultTradeAccount;
   const isActive = tradeAddress === defaultTradeAddress;
 
   const handleChange = () =>
     !isActive
-      ? dispatch(userSetDefaultTradeAccount(tradeAddress))
-      : dispatch(userSetDefaultTradeAccount(null));
+      ? profileState.onUserSetDefaultTradeAccount(tradeAddress)
+      : profileState.onUserSetDefaultTradeAccount(null);
 
   return (
     <S.CardWrapper>

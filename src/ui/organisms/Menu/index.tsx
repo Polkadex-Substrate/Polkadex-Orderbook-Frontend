@@ -1,3 +1,4 @@
+// TODO: Fix Bighead typing
 import Link from "next/link";
 import { BigHead } from "@bigheads/core";
 import { useState } from "react";
@@ -14,9 +15,12 @@ import {
   Popover,
   NotificationsContent,
 } from "@polkadex/orderbook-ui/molecules";
-import { useAppearance, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectDefaultAvatarOptions, selectNotifications } from "@polkadex/orderbook-modules";
+import { useAppearance } from "@polkadex/orderbook/hooks";
+import { selectNotifications } from "@polkadex/orderbook/providers/public/settings/helpers";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export type MenuProps = {
   handleChange?: () => void;
@@ -24,9 +28,13 @@ export type MenuProps = {
 };
 
 export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
+  const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
-  const notifications = useReduxSelector(selectNotifications);
-  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  const settingsState = useSettingsProvider();
+  const notifications = selectNotifications(settingsState.notifications);
+  const avatarOptions = randomAvatars?.find(
+    (v) => v.id === Number(profileState.userProfile?.avatar)
+  );
 
   return (
     <S.Wrapper>
@@ -95,7 +103,7 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
                 <Tooltip>
                   <TooltipHeader>
                     <S.NotificationsWrapper
-                      isActive={!!notifications?.find((value) => !value.isRead)}>
+                      isActive={!!notifications?.find((value) => !value.active)}>
                       <Icons.Notifications />
                       <div />
                     </S.NotificationsWrapper>

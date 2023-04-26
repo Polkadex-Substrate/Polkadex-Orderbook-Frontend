@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 
-import { selectRangerApi, selectRangerIsReady } from "../modules/public/ranger";
 import { fetchOnChainBalance } from "../helpers/fetchOnChainBalance";
-import { selectUserBalance } from "../modules/user/balances";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 
-import { useReduxSelector } from "./useReduxSelector";
-
-import { selectUsingAccount } from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export const useOnChainBalance = (assetId: string) => {
-  const api = useReduxSelector(selectRangerApi);
-  const isApiConnected = useReduxSelector(selectRangerIsReady);
-  const balances = useReduxSelector(selectUserBalance);
-  const currentAccount = useReduxSelector(selectUsingAccount);
+  const profileState = useProfile();
+  const nativeApiState = useNativeApi();
+
+  const api = nativeApiState.api;
+  const isApiConnected = nativeApiState.connected;
+  const { balances } = useBalancesProvider();
+  const currentAccount = profileState?.selectedAccount;
   const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);

@@ -1,19 +1,14 @@
 import * as S from "./styles";
 
-import {
-  AvailableMessage,
-  ResultFound,
-  Skeleton,
-  Dropdown,
-} from "@polkadex/orderbook-ui/molecules";
-import { useRecentTrades } from "@polkadex/orderbook/hooks";
-import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
+import { ResultFound, Skeleton, Spinner } from "@polkadex/orderbook-ui/molecules";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 
 export const filters = ["all", "buy", "sell"];
 
 export const RecentTrades = () => {
-  const { isDecreasing, recentTrades, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
-    useRecentTrades();
+  const { list, loading, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+    useRecentTradesProvider();
 
   return (
     <S.MainContainer>
@@ -21,7 +16,11 @@ export const RecentTrades = () => {
         <S.Header>
           <h2>Recent Trades</h2>
         </S.Header>
-        {recentTrades.length ? (
+        {loading ? (
+          <S.SpinnerWrapper>
+            <Spinner />
+          </S.SpinnerWrapper>
+        ) : list.length ? (
           <>
             <S.Head>
               <S.CellHead>Price({quoteUnit})</S.CellHead>
@@ -29,7 +28,7 @@ export const RecentTrades = () => {
               <S.CellHead>Time</S.CellHead>
             </S.Head>
             <S.Content>
-              {recentTrades.map((order, i) => {
+              {list.map((order, i) => {
                 const date = new Date(order.timestamp).toLocaleTimeString();
                 return (
                   <Card

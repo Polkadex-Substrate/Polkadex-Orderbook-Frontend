@@ -1,12 +1,12 @@
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { selectRangerIsConnecting, selectRangerIsReady } from "@polkadex/orderbook-modules";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 
 export const Footer = () => {
-  const isConnecting = useReduxSelector(selectRangerIsConnecting);
-  const isConnected = useReduxSelector(selectRangerIsReady);
+  const nativeApiState = useNativeApi();
+  const isConnecting = nativeApiState.connecting;
+  const isConnected = nativeApiState.connected;
 
   const message = isConnected ? "Connected" : "Disconnected";
   const color = isConnected ? "green" : "primary";

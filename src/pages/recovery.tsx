@@ -2,8 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsUserSignedIn } from "../modules/user/profile";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const RecoveryTemplate = dynamic(
   () =>
@@ -15,7 +14,9 @@ const RecoveryTemplate = dynamic(
 
 const Recovery = () => {
   const router = useRouter();
-  const hasUser = useReduxSelector(selectIsUserSignedIn);
+  const {
+    authInfo: { isAuthenticated: hasUser },
+  } = useProfile();
 
   useEffect(() => {
     if (!hasUser) router.push("/settings");

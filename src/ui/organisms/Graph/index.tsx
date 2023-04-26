@@ -6,7 +6,6 @@ import { tz } from "moment-timezone";
 import * as S from "./styles";
 
 import { OrderBook } from "@polkadex/orderbook-ui/organisms";
-import { TradingChart } from "@polkadex/orderbook-ui/organisms/TradingChart";
 import {
   AvailableMessage,
   Icon,

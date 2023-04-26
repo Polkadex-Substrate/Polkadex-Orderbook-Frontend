@@ -1,33 +1,26 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { useEffect, ChangeEvent, useState, useMemo } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  balancesFetch,
-  selectBalancesLoading,
-  selectHasSelectedAccount,
-  selectUserBalance,
-} from "@polkadex/orderbook-modules";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const Tokens = () => {
-  const dispatch = useDispatch();
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
   });
 
-  const balances = useReduxSelector(selectUserBalance);
-  const hasUser = useReduxSelector(selectHasSelectedAccount);
-  const isLoading = useReduxSelector(selectBalancesLoading);
+  const profileState = useProfile();
+  const { loading: isLoading, balances, onBalancesFetch } = useBalancesProvider();
+  const hasUser = profileState.selectedAccount.tradeAddress !== "";
 
   useEffect(() => {
-    if (hasUser) dispatch(balancesFetch());
-  }, [hasUser, dispatch]);
+    if (hasUser) onBalancesFetch();
+  }, [hasUser, onBalancesFetch]);
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });

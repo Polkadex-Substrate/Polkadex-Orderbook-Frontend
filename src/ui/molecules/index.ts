@@ -9,7 +9,6 @@ export * from "./Icon";
 export * from "./Skeleton";
 export * from "./Checkbox";
 export * from "./Input";
-export * from "./MessageCard";
 export * from "./Tooltip";
 export * from "./Table";
 export * from "./AccountBanner";
@@ -52,6 +51,6 @@ export * from "./SuccessImport";
 export * from "./Dropdown";
 export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
-export * from "./SliderPercentage"
+export * from "./SliderPercentage";
 
 export * as LoadingIcons from "./LoadingIcons";

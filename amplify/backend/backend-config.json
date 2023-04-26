@@ -1,11 +1,45 @@
 {
   "auth": {
     "orderbookfrontend80237148": {
-      "service": "Cognito",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
+      "customAuth": false,
       "dependsOn": [],
-      "customAuth": false
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_orderbookfrontend80237148_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "orderbookfrontend80237148"
+        }
+      ]
+    },
+    "AMPLIFY_auth_orderbookfrontend80237148_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "orderbookfrontend80237148"
+        }
+      ]
+    },
+    "AMPLIFY_auth_orderbookfrontend80237148_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "orderbookfrontend80237148"
+        }
+      ]
+    },
+    "AMPLIFY_auth_orderbookfrontend80237148_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "orderbookfrontend80237148"
+        }
+      ]
     }
   }
 }

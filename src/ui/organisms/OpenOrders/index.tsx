@@ -1,15 +1,18 @@
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistory, useReduxSelector } from "@polkadex/orderbook/hooks";
-import { selectGetAsset } from "@polkadex/orderbook/modules/public/assets";
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export const OpenOrders = ({ orderHistory }) => {
-  const { priceFixed, amountFixed, openOrders } = orderHistory;
-  const getAsset = useReduxSelector(selectGetAsset);
+  const { openOrders } = orderHistory;
+  const { currentMarket } = useMarketsProvider();
+  const priceFixed = currentMarket.quote_precision;
+  const amountFixed = currentMarket.base_precision;
 
+  const { selectGetAsset } = useAssetsProvider();
   return (
     <S.Wrapper>
       {openOrders?.length ? (
@@ -32,8 +35,8 @@ export const OpenOrders = ({ orderHistory }) => {
                 const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";
                 const isMarket = order.order_type === "MARKET";
-                const baseUnit = getAsset(base)?.symbol;
-                const quoteUnit = getAsset(quote)?.symbol;
+                const baseUnit = selectGetAsset(base)?.symbol;
+                const quoteUnit = selectGetAsset(quote)?.symbol;
                 const avgPrice = order.avg_filled_price;
                 return (
                   <OpenOrderCard

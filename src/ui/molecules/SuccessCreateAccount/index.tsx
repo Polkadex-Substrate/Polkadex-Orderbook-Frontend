@@ -6,8 +6,7 @@ import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { PaperWallet } from "@polkadex/orderbook-ui/organisms";
-import { selectUserAccounts } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type Props = {
   title: string;
@@ -37,7 +36,9 @@ export const SuccessCreateAccount = ({
   const IconComponent = Icons[state ? "Show" : "Hidden"];
   const componentRef = useRef();
   const mnemonicArr = useMemo(() => mnemonic?.split(" "), [mnemonic]);
-  const userAccounts = useReduxSelector(selectUserAccounts);
+  const {
+    userData: { userAccounts },
+  } = useProfile();
 
   const controllerAccount = useMemo(
     () =>

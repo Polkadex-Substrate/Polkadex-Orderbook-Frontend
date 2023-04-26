@@ -38,7 +38,7 @@ export const MarketOrder = () => {
               <Dropdown.Item key="limit" onAction={() => handleChangeType(true)}>
                 Limit Order
               </Dropdown.Item>
-              <Dropdown.Item key="limit" onAction={() => handleChangeType(false)}>
+              <Dropdown.Item key="market" onAction={() => handleChangeType(false)}>
                 Market Order
               </Dropdown.Item>
             </Dropdown.Menu>

@@ -2,7 +2,6 @@ import { KeyboardEvent, useMemo, useRef, useState } from "react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
-import { useDispatch } from "react-redux";
 import { useDropzone } from "react-dropzone";
 import { intlFormat } from "date-fns";
 
@@ -16,10 +15,7 @@ import {
   importAccountJsonValidations,
   importAccountValidations,
 } from "@polkadex/orderbook/validations";
-import {
-  importTradeAccountFetch,
-  importTradeAccountJsonFetch,
-} from "@polkadex/orderbook-modules";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const informationData = [
   {
@@ -77,8 +73,8 @@ export const ImportAccountForm = ({ onCancel = undefined, defaultImportJson = fa
 };
 
 const ImportAccountMnemonic = ({ onCancel = undefined }) => {
+  const { onImportTradeAccount } = useTradeWallet();
   const mnemonicInputRef = useRef(null);
-  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -89,13 +85,11 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
       mnemonic: [],
     },
     onSubmit: ({ mnemonic, name, passcode }) => {
-      dispatch(
-        importTradeAccountFetch({
-          mnemonic: mnemonic.join(" "),
-          name: name,
-          password: passcode,
-        })
-      );
+      onImportTradeAccount({
+        mnemonic: mnemonic.join(" "),
+        name: name,
+        password: passcode,
+      });
     },
   });
   const {
@@ -260,7 +254,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
 };
 
 const ImportAccountJson = ({ onCancel = undefined }) => {
-  const dispatch = useDispatch();
+  const { onImportTradeAccountJson } = useTradeWallet();
   const formik = useFormik({
     initialValues: {
       hasPasscode: false,
@@ -270,12 +264,10 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
     },
     validationSchema: importAccountJsonValidations,
     onSubmit: ({ passcode, file }) => {
-      dispatch(
-        importTradeAccountJsonFetch({
-          file,
-          password: passcode,
-        })
-      );
+      onImportTradeAccountJson({
+        file,
+        password: passcode,
+      });
     },
   });
   const { getRootProps, getInputProps, isDragReject, isDragAccept } = useDropzone({

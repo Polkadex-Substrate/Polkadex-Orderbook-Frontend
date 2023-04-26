@@ -1,5 +1,0 @@
-export const NOTIFICATION_DELETE_ALL = "notification/NOTIFICATION_DELETE_ALL";
-export const NOTIFICATION_DATA = "notification/NOTIFICATION_DATA";
-export const NOTIFICATION_PUSH = "notification/NOTIFICATION_PUSH";
-export const NOTIFICATION_DELETE_BY_ID = "notification/NOTIFICATION_DELETE_BY_ID";
-export const NOTIFICATION_MARK_AS_READ_BY = "notification/NOTIFICATION_MARK_AS_READ_BY";

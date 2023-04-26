@@ -2,14 +2,10 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
-import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectIsAddressInExtension } from "../modules/user/extensionWallet";
-import {
-  selectIsMainAddressRegistered,
-  selectIsUserSignedIn,
-  selectUsingAccount,
-} from "../modules/user/profile";
-import { selectRegisterTradeAccountSuccess } from "../modules/user/tradeWallet";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
+import { useTradeWallet } from "../providers/user/tradeWallet";
 
 const CreateAccountTemplate = dynamic(
   () =>
@@ -22,15 +18,24 @@ const CreateAccountTemplate = dynamic(
 );
 const CreateAccount = () => {
   const router = useRouter();
-  const hasUser = useReduxSelector(selectIsUserSignedIn);
-  const currentAccount = useReduxSelector(selectUsingAccount);
-  const hasSelectedAccount = useReduxSelector(
-    selectIsAddressInExtension(currentAccount.mainAddress)
+  const {
+    authInfo: { isAuthenticated: hasUser },
+    selectedAccount: currentAccount,
+  } = useProfile();
+  const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
+  const tradeWalletState = useTradeWallet();
+
+  const hasSelectedAccount = selectIsAddressInExtension(
+    currentAccount.mainAddress,
+    extensionWalletState.allAccounts
   );
-  const isRegistered = useReduxSelector(
-    selectIsMainAddressRegistered(currentAccount.mainAddress)
-  );
-  const success = useReduxSelector(selectRegisterTradeAccountSuccess);
+
+  const isRegistered =
+    currentAccount.mainAddress &&
+    profileState.userData.mainAccounts.includes(currentAccount.mainAddress);
+
+  const success = tradeWalletState.registerAccountSuccess;
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount || success,

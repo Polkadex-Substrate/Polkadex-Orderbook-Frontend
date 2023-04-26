@@ -38,7 +38,7 @@ export const Funds = ({ onHideFilters }) => {
           </Table.Header>
           <Table.Body striped>
             {balances.map((item) => (
-              <Table.Row key={item.asset_id}>
+              <Table.Row key={item.assetId}>
                 <Table.Cell>
                   <S.CellFlex>
                     <S.TokenIcon>

@@ -1,31 +1,13 @@
 // TODO: Refactor hook
 import { useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  previewAccountModalCancel,
-  registerAccountModalCancel,
-  registerMainAccountReset,
-  registerTradeAccountReset,
-  selectBrowserTradeAccounts,
-  selectDefaultTradeAccount,
-  selectExtensionWalletAccounts,
-  selectImportTradeAccountSuccess,
-  selectIsPreviewTradeAccountActive,
-  selectIsRegisterMainAccountLoading,
-  selectLinkedMainAddress,
-  selectLinkedMainAddresses,
-  selectPreviewTradeAccountSelect,
-  selectRegisterTradeAccountInfo,
-  selectRegisterTradeAccountLoading,
-  selectRegisterTradeAccountSuccess,
-  selectUserAccounts,
-  selectUserInfo,
-  selectUsingAccount,
-} from "@polkadex/orderbook-modules";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+import { useAuth } from "../providers/user/auth";
+import { useExtensionWallet } from "../providers/user/extensionWallet";
+import { useTradeWallet } from "../providers/user/tradeWallet";
+
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useSettings = () => {
   const [state, setState] = useState(false);
@@ -36,33 +18,50 @@ export const useSettings = () => {
     useState("All");
   const [avatarModal, setAvatarModal] = useState(false);
 
-  const dispatch = useDispatch();
   const [currentControllerWallet, setCurrentControllerWallet] =
     useState<ExtensionAccount | null>(null);
 
   const handleChangeCurrentControllerWallet = (account: ExtensionAccount | null) =>
     setCurrentControllerWallet(account);
 
-  const currentTradeAccount = useReduxSelector(selectUsingAccount);
-  const isTradeAccountLoading = useReduxSelector(selectRegisterTradeAccountLoading);
-  const isControllerAccountLoading = useReduxSelector(selectIsRegisterMainAccountLoading);
-  const controllerWallets = useReduxSelector(selectExtensionWalletAccounts);
-  const browserTradeAccounts = useReduxSelector(selectBrowserTradeAccounts);
-  const allAccounts = useReduxSelector(selectUserAccounts);
-  const user = useReduxSelector(selectUserInfo);
-  const userAccounts = useReduxSelector(selectUserAccounts);
-  const linkedMainAddress = useReduxSelector(selectLinkedMainAddresses);
-  const isTradeAccountSuccess = useReduxSelector(selectRegisterTradeAccountSuccess);
-  const isImportAccountSuccess = useReduxSelector(selectImportTradeAccountSuccess);
-  const { isActive } = useReduxSelector(selectRegisterTradeAccountInfo);
-  const usingAccount = useReduxSelector(selectUsingAccount);
-  const isRegisterControllerAccountSuccess = useReduxSelector(
-    selectRegisterTradeAccountSuccess
-  );
-  const defaultTradeAddress = useReduxSelector(selectDefaultTradeAccount);
-  const defaultFundingAddress = useReduxSelector(selectLinkedMainAddress(defaultTradeAddress));
-  const isPreviewActive = useReduxSelector(selectIsPreviewTradeAccountActive);
-  const previewAccountSelected = useReduxSelector(selectPreviewTradeAccountSelect);
+  const profileState = useProfile();
+  const authState = useAuth();
+  const extensionWalletState = useExtensionWallet();
+  const tradeWalletState = useTradeWallet();
+
+  const currentTradeAccount = profileState.selectedAccount;
+  const isTradeAccountLoading = tradeWalletState.registerAccountLoading;
+  const isControllerAccountLoading = extensionWalletState.registerMainAccountLoading;
+  const controllerWallets = extensionWalletState.allAccounts;
+  const browserTradeAccounts = tradeWalletState.allBrowserAccounts;
+  const {
+    userData: { userAccounts: allAccounts },
+  } = useProfile();
+  const authInfo = profileState.authInfo;
+  const user = {
+    ...authInfo,
+    email: authState.email,
+    isConfirmed: authState.userConfirmed,
+  };
+  const {
+    userData: { userAccounts },
+  } = useProfile();
+  const linkedMainAddress = profileState.userData.mainAccounts;
+  const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
+  const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
+  const { isActive } = tradeWalletState.registerAccountModal;
+  const { selectedAccount: usingAccount } = useProfile();
+  const isRegisterControllerAccountSuccess = tradeWalletState.registerAccountSuccess;
+
+  const defaultTradeAddress = profileState.defaultTradeAccount;
+  const defaultFundingAddress =
+    defaultTradeAddress &&
+    profileState.userData?.userAccounts?.find(
+      ({ tradeAddress }) => tradeAddress === defaultTradeAddress
+    )?.mainAddress;
+
+  const isPreviewActive = tradeWalletState.previewAccountModal.isActive;
+  const previewAccountSelected = tradeWalletState.previewAccountModal.selected;
   const isLoading = isTradeAccountLoading || isControllerAccountLoading;
 
   const tradeAccounts = useMemo(
@@ -136,6 +135,8 @@ export const useSettings = () => {
     [linkedMainAddress]
   );
 
+  const { onRegisterMainAccountReset } = useExtensionWallet();
+
   const handleCloseNewAccount = () => {
     const hasAction =
       isTradeAccountSuccess ||
@@ -145,13 +146,13 @@ export const useSettings = () => {
 
     if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
-        dispatch(registerMainAccountReset());
+        onRegisterMainAccountReset();
       else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
-        dispatch(registerTradeAccountReset());
-      else dispatch(registerAccountModalCancel());
+        tradeWalletState.onRegisterTradeAccountReset();
+      else tradeWalletState.onRegisterAccountModalCancel();
     }
   };
-  const handleClosePreviewModal = () => dispatch(previewAccountModalCancel());
+  const handleClosePreviewModal = () => tradeWalletState.onPreviewAccountModalCancel();
 
   const filterTradeAccountsByControllerAccountHeader = useMemo(
     () =>
