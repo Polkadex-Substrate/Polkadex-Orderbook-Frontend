@@ -27,6 +27,7 @@ import {
   SettingProvider,
   useSettingsProvider,
 } from "@polkadex/orderbook/providers/public/settings";
+import { MarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/provider";
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
@@ -58,17 +59,19 @@ function App({ Component, pageProps }: AppProps) {
         <AuthProvider>
           <ProfileProvider>
             <AssetsProvider>
-              <NativeApiProvider>
-                <ExtensionWalletProvider>
-                  <TradeWalletProvider>
-                    <BalancesProvider>
-                      <OverlayProvider>
-                        <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
-                      </OverlayProvider>
-                    </BalancesProvider>
-                  </TradeWalletProvider>
-                </ExtensionWalletProvider>
-              </NativeApiProvider>
+              <MarketsProvider>
+                <NativeApiProvider>
+                  <ExtensionWalletProvider>
+                    <TradeWalletProvider>
+                      <BalancesProvider>
+                        <OverlayProvider>
+                          <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+                        </OverlayProvider>
+                      </BalancesProvider>
+                    </TradeWalletProvider>
+                  </ExtensionWalletProvider>
+                </NativeApiProvider>
+              </MarketsProvider>
             </AssetsProvider>
           </ProfileProvider>
         </AuthProvider>
