@@ -14,13 +14,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useInit } from "../hooks/useInit";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
-import { MarketsProvider } from "../providers/public/marketsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
-import { OrdersProvider } from "../providers/user/orders";
 
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
@@ -61,26 +58,17 @@ function App({ Component, pageProps }: AppProps) {
         <AuthProvider>
           <ProfileProvider>
             <AssetsProvider>
-              <OrdersProvider>
-                <NativeApiProvider>
-                  <MarketsProvider>
-                    <OrderBookProvider>
-                      <ExtensionWalletProvider>
-                        <TradeWalletProvider>
-                          <BalancesProvider>
-                            <OverlayProvider>
-                              <ModifiedThemeProvider
-                                Component={Component}
-                                pageProps={pageProps}
-                              />
-                            </OverlayProvider>
-                          </BalancesProvider>
-                        </TradeWalletProvider>
-                      </ExtensionWalletProvider>
-                    </OrderBookProvider>
-                  </MarketsProvider>
-                </NativeApiProvider>
-              </OrdersProvider>
+              <NativeApiProvider>
+                <ExtensionWalletProvider>
+                  <TradeWalletProvider>
+                    <BalancesProvider>
+                      <OverlayProvider>
+                        <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+                      </OverlayProvider>
+                    </BalancesProvider>
+                  </TradeWalletProvider>
+                </ExtensionWalletProvider>
+              </NativeApiProvider>
             </AssetsProvider>
           </ProfileProvider>
         </AuthProvider>
@@ -134,7 +122,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // When User logout, do not fetch the data
     if (!logoutSuccess) {
-      fetchDataOnUserAuth();
+      fetchDataOnUserAuth().then(console.log);
     }
   }, [signInSuccess, logoutSuccess]);
 
