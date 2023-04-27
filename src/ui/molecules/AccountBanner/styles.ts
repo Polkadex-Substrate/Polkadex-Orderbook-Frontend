@@ -65,6 +65,9 @@ export const Content = styled.div`
           font-weight: 550;
           margin-bottom: 1rem;
         }
+        p: last-child {
+          margin-top: 1rem;
+        }
       }
       :last-child {
         display: flex;
