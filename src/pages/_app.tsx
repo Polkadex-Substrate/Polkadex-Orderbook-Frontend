@@ -111,12 +111,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  const profileState = useProfile();
-  const authState = useAuth();
-  const signInSuccess = authState.signin.isSuccess;
-  const logoutSuccess = authState.logout.isSuccess;
-  const settingsState = useSettingsProvider();
-
   const cryptoWait = async () => {
     try {
       await cryptoWaitReady();
@@ -130,58 +124,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     cryptoWait();
   }, []);
 
-  // TODO: Missing fetchDataOnUserAuth dependcy
-  useEffect(() => {
-    // When User logout, do not fetch the data
-    if (!logoutSuccess) {
-      fetchDataOnUserAuth();
-    }
-  }, [signInSuccess, logoutSuccess]);
-
   useInit();
-
-  const fetchDataOnUserAuth = async () => {
-    try {
-      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
-      profileState.onUserChangeInitBanner();
-      authState.onUserAuth({
-        email: attributes?.email,
-        userConfirmed: attributes?.email_verified,
-      });
-      profileState.onUserAuth({
-        email: attributes?.email,
-        isAuthenticated: true,
-        userExists: true,
-        isConfirmed: attributes?.email_verified,
-        jwt: signInUserSession?.accessToken?.jwtToken,
-      });
-    } catch (error) {
-      console.log("User error", error);
-      switch (error) {
-        case "User is not confirmed.": {
-          authState.onUserAuth({
-            email: "",
-            userConfirmed: false,
-          });
-          profileState.onUserAuth({
-            email: "",
-            isAuthenticated: false,
-            userExists: true,
-            isConfirmed: false,
-          });
-          break;
-        }
-        case "The user is not authenticated": {
-          break;
-        }
-        default: {
-          console.error("Error=>", `User data fetch error: ${error.message}`);
-          settingsState.onHandleError(`User data fetch error: ${error?.message ?? error}`);
-          break;
-        }
-      }
-    }
-  };
 
   return (
     <>

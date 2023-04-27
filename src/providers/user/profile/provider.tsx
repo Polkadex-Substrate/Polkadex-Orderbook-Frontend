@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
@@ -167,7 +167,59 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
 
+  const signInSuccess = authState.signin.isSuccess;
   const logoutIsSuccess = authState.logout.isSuccess;
+
+  const fetchDataOnUserAuth = async () => {
+    try {
+      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
+      onUserChangeInitBanner();
+      authState.onUserAuth({
+        email: attributes?.email,
+        userConfirmed: attributes?.email_verified,
+      });
+      onUserAuth({
+        email: attributes?.email,
+        isAuthenticated: true,
+        userExists: true,
+        isConfirmed: attributes?.email_verified,
+        jwt: signInUserSession?.accessToken?.jwtToken,
+      });
+    } catch (error) {
+      console.log("User error", error);
+      switch (error) {
+        case "User is not confirmed.": {
+          authState.onUserAuth({
+            email: "",
+            userConfirmed: false,
+          });
+          onUserAuth({
+            email: "",
+            isAuthenticated: false,
+            userExists: true,
+            isConfirmed: false,
+          });
+          break;
+        }
+        case "The user is not authenticated": {
+          break;
+        }
+        default: {
+          console.error("Error=>", `User data fetch error: ${error.message}`);
+          onHandleError(`User data fetch error: ${error?.message ?? error}`);
+          break;
+        }
+      }
+    }
+  };
+
+  // TODO: Missing fetchDataOnUserAuth dependcy
+  useEffect(() => {
+    // When User logout, do not fetch the data
+    if (!logoutIsSuccess) {
+      fetchDataOnUserAuth();
+    }
+  }, [signInSuccess, logoutIsSuccess]);
 
   useEffect(() => {
     if (logoutIsSuccess) onUserLogout();
