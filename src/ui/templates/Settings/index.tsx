@@ -452,16 +452,18 @@ const ControllerWallets = ({
                 onClick={() => {
                   handleLinkEmail(extensionAccount);
                 }}>
-                Link Email
+                Use in Orderbook
               </S.Button>
             )}
-            <S.Button
-              type="button"
-              onClick={() => {
-                handleRegister(extensionAccount);
-              }}>
-              Register Now
-            </S.Button>
+            {isRegistered && (
+              <S.Button
+                type="button"
+                onClick={() => {
+                  handleRegister(extensionAccount);
+                }}>
+                Register Now
+              </S.Button>
+            )}
           </Fragment>
         )}
       </S.WalletActions>
