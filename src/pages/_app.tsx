@@ -4,9 +4,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
-import { ReactNode, useEffect } from "react";
-import { cryptoWaitReady } from "@polkadot/util-crypto";
-import keyring from "@polkadot/ui-keyring";
+import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -110,19 +108,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  const cryptoWait = async () => {
-    try {
-      await cryptoWaitReady();
-      keyring.loadAll({ ss58Format: 88, type: "sr25519" });
-    } catch (e) {
-      console.warn(e);
-    }
-  };
-
-  useEffect(() => {
-    cryptoWait();
-  }, []);
-
   useInit();
 
   return (
