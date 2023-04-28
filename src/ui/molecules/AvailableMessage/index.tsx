@@ -1,5 +1,5 @@
 import * as S from "./styles";
-
+import * as T from "./types";
 export const AvailableMessage = ({
   message = "Not available in Beta",
   color = "tertiaryBackground",
@@ -7,7 +7,7 @@ export const AvailableMessage = ({
   isVisible = false,
   isPriority = false,
   ...props
-}) => (
+}: T.Props) => (
   <S.Wrapper {...props}>
     {children}
     <S.Container color={color} isVisible={isVisible} isPriority={isPriority}>
