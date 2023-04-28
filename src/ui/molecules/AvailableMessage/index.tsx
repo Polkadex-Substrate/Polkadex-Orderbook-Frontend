@@ -6,9 +6,8 @@ export const AvailableMessage = ({
   children,
   isVisible = false,
   isPriority = false,
-  ...props
 }: T.Props) => (
-  <S.Wrapper {...props}>
+  <S.Wrapper>
     {children}
     <S.Container color={color} isVisible={isVisible} isPriority={isPriority}>
       <p>{message}</p>
