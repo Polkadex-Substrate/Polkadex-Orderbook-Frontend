@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { AccountOverview } from ".";
-
 export default {
   title: "Molecules/AccountOverview",
   component: AccountOverview,
@@ -10,7 +9,9 @@ export default {
 
 export const Default: StoryObj<typeof AccountOverview> = {
   args: {
-    onNavigate:()=>{},
-    logout:()=>{},
+    onNavigate: () => {},
+    logout: () => {},
+    emptyMsg: "No trading accounts found",
+    settingLinkMsg: "Import or Create a new one",
   },
 };

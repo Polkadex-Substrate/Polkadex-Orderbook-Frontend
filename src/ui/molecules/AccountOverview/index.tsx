@@ -24,7 +24,7 @@ import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/ran
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
-export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
+export const AccountOverview = ({ onNavigate, logout, emptyMsg, settingLinkMsg }: T.Props) => {
   const router = useRouter();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
@@ -40,6 +40,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     (v) => v.id === Number(profileState.userProfile?.avatar)
   );
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
+
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<KeyringPair>(null);
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
   const { onUserSelectAccount } = useProfile();
@@ -162,8 +163,8 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           </Dropdown>
         ) : (
           <S.DropdownEmpty>
-            <p>No trading accounts found</p>
-            <Link href="/settings">Import or Create a new one</Link>
+            <p>{emptyMsg}</p>
+            <Link href="/settings">{settingLinkMsg}</Link>
           </S.DropdownEmpty>
         )}
         {selectedTradeAccount && (

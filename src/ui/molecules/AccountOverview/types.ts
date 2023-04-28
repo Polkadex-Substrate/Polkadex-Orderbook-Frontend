@@ -4,6 +4,8 @@ export type Props = {
   address: string;
   onNavigate: (value: string) => void;
   logout: () => void;
+  emptyMsg: string;
+  settingLinkMsg: string;
 };
 
 export type Card = {

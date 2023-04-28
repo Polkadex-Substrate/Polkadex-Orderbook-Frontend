@@ -38,6 +38,8 @@ export const Profile = () => {
             address={address || "0x000000000"}
             logout={() => onLogout()}
             onNavigate={onNavigate}
+            emptyMsg="No trading accounts found"
+            settingLinkMsg="Import or Create a new one"
           />
         ) : (
           <EmptyMyAccount />
