@@ -38,12 +38,7 @@ module.exports = withPlugins([
       styledComponents: true,
     },
 
-    target: "experimental-serverless-trace",
     staticPageGenerationTimeout: 120,
-    optimization: {
-      mergeDuplicateChunks: true,
-    },
-
     eslint: {
       // Warning: Dangerously allow production builds to successfully complete even if
       // your project has ESLint errors.
