@@ -98,7 +98,7 @@ export function useMarkets(onClose: () => void) {
         volume: (ticker || defaultTickers).volumeBase24hr,
         price_change_percent: (ticker || defaultTickers).priceChangePercent24Hr,
         price_change_percent_num: Number.parseFloat(
-          (ticker || defaultTickers).priceChangePercent24Hr
+          String((ticker || defaultTickers).priceChangePercent24Hr)
         ),
         isFavourite: favorites.includes(item.id),
       };

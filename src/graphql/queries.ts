@@ -73,7 +73,7 @@ export const getRecentTrades = /* GraphQL */ `
   }
 `;
 export const getAllMarketTickers = /* GraphQL */ `
-  query GetAllMarketTickers($from: String, $to: String) {
+  query GetAllMarketTickers($from: String!, $to: String!) {
     getAllMarketTickers(from: $from, to: $to) {
       items {
         m
