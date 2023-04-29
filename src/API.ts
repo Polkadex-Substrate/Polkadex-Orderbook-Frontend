@@ -343,8 +343,8 @@ export type GetRecentTradesQuery = {
 };
 
 export type GetAllMarketTickersQueryVariables = {
-  from?: string | null,
-  to?: string | null,
+  from: string,
+  to: string,
 };
 
 export type GetAllMarketTickersQuery = {
