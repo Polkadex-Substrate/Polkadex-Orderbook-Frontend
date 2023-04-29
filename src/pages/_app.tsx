@@ -46,7 +46,7 @@ function App({ Component, pageProps }: AppProps) {
   //   console.warn = () => {};
   //   console.error = () => {};
   // }
-  console.log("env vars:", process.env);
+  console.log("env vars:", defaultConfig);
   return (
     <>
       <ToastContainer transition={Flip} />
