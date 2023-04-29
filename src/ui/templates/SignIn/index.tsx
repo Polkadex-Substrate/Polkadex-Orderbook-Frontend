@@ -8,11 +8,14 @@ import * as S from "./styles";
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { signValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useSignIn } from "@polkadex/orderbook-hooks";
 import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SignInTemplate = () => {
-  const { signIn, loading } = useSignIn();
+  const {
+    signin: { isLoading },
+    onSignIn,
+  } = useAuth();
   const [state, setState] = useState(false);
   const [view, setView] = useState(false);
 
@@ -22,7 +25,8 @@ export const SignInTemplate = () => {
       email: "",
     },
     validationSchema: signValidations,
-    onSubmit: (values) => signIn(values.email, values.password),
+    onSubmit: (values) =>
+      onSignIn({ email: values.email.toLowerCase(), password: values.password }),
   });
 
   return (
@@ -59,7 +63,7 @@ export const SignInTemplate = () => {
                     label="Email"
                     placeholder="Enter your email"
                     error={errors.email && touched.email && errors.email}
-                    disabled={loading}
+                    disabled={isLoading}
                     {...getFieldProps("email")}
                   />
                   <InputLine
@@ -73,7 +77,7 @@ export const SignInTemplate = () => {
                     }
                     placeholder="Enter your password"
                     error={errors.password && touched.password && errors.password}
-                    disabled={loading}
+                    disabled={isLoading}
                     {...getFieldProps("password")}>
                     <S.Show type="button" onClick={() => setView(!view)}>
                       {view ? <Icons.Show /> : <Icons.Hidden />}
@@ -109,9 +113,9 @@ export const SignInTemplate = () => {
                     size="extraLarge"
                     background="primary"
                     color="white"
-                    disabled={!(isValid && dirty) || loading}
+                    disabled={!(isValid && dirty) || isLoading}
                     isFull
-                    isLoading={loading}>
+                    isLoading={isLoading}>
                     Log In
                   </Button>
                 </form>

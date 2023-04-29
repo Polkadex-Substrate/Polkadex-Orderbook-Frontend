@@ -25,7 +25,8 @@
     "plugin:react/recommended",
     "standard",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:storybook/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -44,7 +45,12 @@
   ],
   "rules": {
     "import/first": "error",
-    "import/order": ["error", { "newlines-between": "always" }],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "react-hooks/rules-of-hooks": "error",
@@ -54,7 +60,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "space-before-function-paren": "off",
-    "camelcase": "off",
+    "camelcase": "warn",
     "@typescript-eslint/ban-type": "off",
     "@typescript-eslint/no-empty-function": "off"
   }

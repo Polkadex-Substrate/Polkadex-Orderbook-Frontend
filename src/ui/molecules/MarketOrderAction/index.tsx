@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 
@@ -13,17 +12,11 @@ import {
   PassCode,
   SliderPercentage,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  usePlaceOrder,
-  useReduxSelector,
-  useTryUnlockTradeAccount,
-} from "@polkadex/orderbook/hooks";
+import { usePlaceOrder, useTryUnlockTradeAccount } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  selectTradeAccount,
-  selectUsingAccount,
-  unlockTradeAccount,
-} from "@polkadex/orderbook-modules";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const MarketOrderAction = ({ isSell = false, isLimit }) => {
   const {
@@ -154,9 +147,10 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
 };
 
 const ProtectPassword = () => {
-  const dispatch = useDispatch();
-  const currTradeAddr = useReduxSelector(selectUsingAccount).tradeAddress;
-  const tradeAccount = useReduxSelector(selectTradeAccount(currTradeAddr));
+  const profileState = useProfile();
+  const tradeWalletState = useTradeWallet();
+  const currTradeAddr = profileState.selectedAccount.tradeAddress;
+  const tradeAccount = selectTradeAccount(currTradeAddr, tradeWalletState.allBrowserAccounts);
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);
 
@@ -168,7 +162,10 @@ const ProtectPassword = () => {
     onSubmit: (values) => {
       isValidSize &&
         tradeAccount.isLocked &&
-        dispatch(unlockTradeAccount({ address: currTradeAddr, password: values.password }));
+        tradeWalletState.onUnlockTradeAccount({
+          address: currTradeAddr,
+          password: values.password,
+        });
     },
   });
 

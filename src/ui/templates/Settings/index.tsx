@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useDispatch } from "react-redux";
 import { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
@@ -27,23 +26,16 @@ import {
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useReduxSelector, useSettings } from "@polkadex/orderbook-hooks";
-import {
-  registerMainAccountLinkEmail,
-  previewAccountModalActive,
-  registerAccountModalActive,
-  registerMainAccountFetch,
-  selectAssociatedTradeAddresses,
-  selectDefaultAvatarOptions,
-  selectIsMainAddressRegistered,
-  selectMainAccount,
-  userAccountSelectFetch,
-} from "@polkadex/orderbook-modules";
+import { useSettings } from "@polkadex/orderbook-hooks";
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import {
   getMainAddresssLinkedToTradingAccount,
   transformAddress,
-} from "@polkadex/orderbook/modules/user/profile/helpers";
-import { ExtensionAccount } from "@polkadex/orderbook/modules/types";
+} from "@polkadex/orderbook/providers/user/profile/helpers";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const SettingsTemplate = () => {
   const router = useRouter();
@@ -79,7 +71,9 @@ export const SettingsTemplate = () => {
     hasRegisteredMainAccount,
   } = useSettings();
 
-  const dispatch = useDispatch();
+  const { onUserSelectAccount } = useProfile();
+  const tradeWalletState = useTradeWallet();
+
   return (
     <>
       <Modal
@@ -146,7 +140,7 @@ export const SettingsTemplate = () => {
                       type="button"
                       onClick={() => {
                         handleChangeCurrentControllerWallet(null);
-                        dispatch(registerAccountModalActive());
+                        tradeWalletState.onRegisterAccountModalActive();
                       }}>
                       {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
                     </ButtonWallet>
@@ -240,11 +234,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
-                                            tradeAddress: account.address,
-                                          })
-                                        );
+                                        onUserSelectAccount({
+                                          tradeAddress: account.address,
+                                        });
                                         router.push("/balances");
                                       }}>
                                       Add funds
@@ -254,11 +246,9 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        dispatch(
-                                          userAccountSelectFetch({
-                                            tradeAddress: account.address,
-                                          })
-                                        );
+                                        onUserSelectAccount({
+                                          tradeAddress: account.address,
+                                        });
                                       }}>
                                       Use
                                     </S.Button>
@@ -267,20 +257,18 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() =>
-                                        dispatch(
-                                          registerAccountModalActive({
-                                            defaultImportActive: true,
-                                          })
-                                        )
+                                        tradeWalletState.onRegisterAccountModalActive({
+                                          defaultImportActive: true,
+                                        })
                                       }>
                                       Import
                                     </S.Button>
                                   )}
                                   <S.Preview
                                     type="button"
-                                    onClick={() =>
-                                      dispatch(previewAccountModalActive(account))
-                                    }>
+                                    onClick={() => {
+                                      tradeWalletState.onPreviewAccountModalActive(account);
+                                    }}>
                                     <div>
                                       <Icons.OptionsHorizontal />
                                     </div>
@@ -351,14 +339,12 @@ export const SettingsTemplate = () => {
                                 isDefault={defaultFundingAddress === account.address}
                                 handleRegister={(account: ExtensionAccount) => {
                                   handleChangeCurrentControllerWallet(account);
-                                  dispatch(
-                                    registerAccountModalActive({
-                                      data: {
-                                        name: account.account.meta.name,
-                                        address: account.account.address,
-                                      },
-                                    })
-                                  );
+                                  tradeWalletState.onRegisterAccountModalActive({
+                                    data: {
+                                      name: account.account.meta.name,
+                                      address: account.account.address,
+                                    },
+                                  });
                                 }}
                               />
                             );
@@ -421,20 +407,29 @@ const ControllerWallets = ({
   isDefault,
   handleRegister = undefined,
 }: ControllerWaletsProps) => {
-  const isRegistered = useReduxSelector(selectIsMainAddressRegistered(address));
-  const linkedTradeAccounts = useReduxSelector(selectAssociatedTradeAddresses(address));
-  const extensionAccount = useReduxSelector(selectMainAccount(address));
+  const profileState = useProfile();
+  const extensionWalletState = useExtensionWallet();
 
-  const dispatch = useDispatch();
+  const isRegistered = address && profileState.userData.mainAccounts.includes(address);
+
+  const userAccounts = profileState.userData.userAccounts;
+  const accounts = userAccounts.filter((account) => account.mainAddress === address);
+  const linkedTradeAccounts = accounts.map((account) => account.tradeAddress);
+
+  const extensionAccount =
+    address &&
+    extensionWalletState.allAccounts?.find(
+      ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
+    );
+
+  const { onLinkEmail } = useExtensionWallet();
 
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
     const accountAddress = extensionAccount.account.address;
-    dispatch(
-      registerMainAccountLinkEmail({
-        mainAccount: accountAddress
-      })
-    );
-  }
+    onLinkEmail({
+      mainAccount: accountAddress,
+    });
+  };
 
   return (
     <WalletCard
@@ -447,26 +442,28 @@ const ControllerWallets = ({
         isRegistered && `(${linkedTradeAccounts?.length ?? 0} trading accounts)`
       }>
       <S.WalletActions>
-        {isRegistered && linkedTradeAccounts?.length>0 ? (
+        {isRegistered && linkedTradeAccounts?.length > 0 ? (
           <Badge isRegistered={true}>Registered</Badge>
         ) : (
           <Fragment>
-            {!isRegistered && 
+            {!isRegistered && (
               <S.Button
                 type="button"
                 onClick={() => {
                   handleLinkEmail(extensionAccount);
                 }}>
-                Link Email
+                Use in Orderbook
               </S.Button>
-            }
-            <S.Button
-              type="button"
-              onClick={() => {
-                handleRegister(extensionAccount);
-              }}>
-              Register Now
-            </S.Button>
+            )}
+            {isRegistered && (
+              <S.Button
+                type="button"
+                onClick={() => {
+                  handleRegister(extensionAccount);
+                }}>
+                Register Now
+              </S.Button>
+            )}
           </Fragment>
         )}
       </S.WalletActions>
@@ -484,7 +481,10 @@ const Card = ({
   isVerified = false,
   onClick,
 }: T.Props) => {
-  const avatarOptions = useReduxSelector(selectDefaultAvatarOptions);
+  const profileState = useProfile();
+  const avatarOptions = randomAvatars?.find(
+    (v) => v.id === Number(profileState.userProfile?.avatar)
+  );
   return (
     <S.AccountCard>
       <S.AccountCardWrapper>

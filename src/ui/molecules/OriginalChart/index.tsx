@@ -1,22 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { dispose, init } from "klinecharts";
-import { useDispatch } from "react-redux";
 import useResizeObserver from "@react-hook/resize-observer";
 
 import { options, tools } from "./options";
 import * as S from "./styles";
 
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import {
-  klineFetch,
-  klineSubscribe,
-  selectCurrentDarkTheme,
-  selectCurrentMarket,
-  selectKline,
-  selectKlineInterval,
-  selectKlineLoading,
-  selectLastKline,
-} from "@polkadex/orderbook-modules";
 import {
   Icon,
   Spinner,
@@ -24,33 +12,40 @@ import {
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
 
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const OriginalChart = ({ chart, resolution }) => {
-  const dispatch = useDispatch();
   const target = useRef(null);
 
-  const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const klines = useReduxSelector(selectKline);
-  const klineInterval = useReduxSelector(selectKlineInterval);
-  const lastKline = useReduxSelector(selectLastKline);
-  const isLoading = useReduxSelector(selectKlineLoading);
+  const settingsState = useSettingsProvider();
+
+  const isDarkTheme = settingsState.theme === "dark";
+  const { currentMarket } = useMarketsProvider();
+  const {
+    data: klines,
+    interval: klineInterval,
+    last: lastKline,
+    loading: isLoading,
+    onHandleKlineFetch,
+    onFetchKlineChannel,
+  } = useKlineProvider();
   useEffect(() => {
     if (currentMarket?.m) {
-      dispatch(
-        klineFetch({
-          market: currentMarket.m,
-          resolution: resolution,
-          from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
-          to: new Date(),
-        })
-      );
-      dispatch(klineSubscribe({ market: currentMarket.m, interval: resolution }));
+      onHandleKlineFetch({
+        market: currentMarket.m,
+        resolution: resolution,
+        from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
+        to: new Date(),
+      });
+
+      onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
     }
-  }, [currentMarket, dispatch, resolution]);
+  }, [currentMarket?.m, onFetchKlineChannel, onHandleKlineFetch, resolution]);
 
   useEffect(() => {
     chart.current = init("original-chart", options(isDarkTheme));

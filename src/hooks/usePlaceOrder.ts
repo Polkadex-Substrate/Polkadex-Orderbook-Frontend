@@ -1,44 +1,44 @@
-import { useDispatch } from "react-redux";
+// TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
+import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import {
-  selectCurrentMarket,
-  selectCurrentPrice,
-  selectCurrentMarketTickers,
-  setCurrentPrice,
-  selectBestAskPrice,
-  selectBestBidPrice,
-  orderExecuteFetch,
-  selectOrderExecuteLoading,
-  selectOrderExecuteSucess,
-  selectGetFreeProxyBalance,
-  selectIsUserSignedIn,
-  selectUsingAccount,
-  selectTradeAccount,
-  selectHasSelectedAccount,
-  alertPush,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useOrders } from "@polkadex/orderbook/providers/user/orders";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
-  const dispatch = useDispatch();
+  const orderBookState = useOrderBook();
+  const tradeWalletState = useTradeWallet();
+  const profileState = useProfile();
+  const ordersState = useOrders();
+  const settingsState = useSettingsProvider();
 
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentTicker = useReduxSelector(selectCurrentMarketTickers);
-  const currentPrice = useReduxSelector(selectCurrentPrice);
-  const bestAskPrice = useReduxSelector(selectBestAskPrice);
-  const bestBidPrice = useReduxSelector(selectBestBidPrice);
-  const isOrderLoading = useReduxSelector(selectOrderExecuteLoading);
-  const isOrderExecuted = useReduxSelector(selectOrderExecuteSucess);
-  const hasTradeAccount = useReduxSelector(selectHasSelectedAccount);
-  const isSignedIn = useReduxSelector(selectIsUserSignedIn);
-  const getFreeProxyBalance = useReduxSelector(selectGetFreeProxyBalance);
-  const usingTradeAddress = useReduxSelector(selectUsingAccount).tradeAddress;
-  const showProtectedPassword = useReduxSelector(
-    selectTradeAccount(usingTradeAddress)
+  const { currentMarket, currentTicker } = useMarketsProvider();
+  const currentPrice = ordersState.currentPrice;
+
+  const asks = orderBookState.depth.asks;
+  const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
+
+  const bids = orderBookState.depth.bids;
+  const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
+
+  const isOrderLoading = ordersState.execute.isLoading;
+  const isOrderExecuted = ordersState.execute.isSuccess;
+  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
+  const isSignedIn = profileState.authInfo.isAuthenticated;
+  const { getFreeProxyBalance } = useBalancesProvider();
+  const usingTradeAddress = profileState.selectedAccount.tradeAddress;
+
+  const showProtectedPassword = selectTradeAccount(
+    usingTradeAddress,
+    tradeWalletState.allBrowserAccounts
   )?.isLocked;
 
   const [tab, setTab] = useState({
@@ -68,19 +68,21 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
 
   // when type is changed reset form.
   useEffect(() => {
-    setForm({
-      ...form,
+    setForm((e) => ({
+      ...e,
       price: "",
       amountSell: "",
       amountBuy: "",
-    });
+    }));
   }, [isLimit]);
 
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
-  const [baseAssetId, quoteAssetId] = currentMarket ? currentMarket?.assetIdArray : [-1, -1];
+  const [baseAssetId, quoteAssetId] = currentMarket
+    ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
+    : [-1, -1];
 
   const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
   const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
@@ -125,8 +127,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       ...tab,
       priceLimit: undefined,
     });
-    dispatch(setCurrentPrice(0));
-  }, [dispatch, setTab, tab]);
+    ordersState.onSetCurrentPrice(0);
+  }, [setTab, tab, ordersState]);
 
   /**
    * @description Change Price
@@ -194,17 +196,8 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
-    const notify = (description: string) => {
-      dispatch(
-        alertPush({
-          message: {
-            title: "Order Failed",
-            description,
-          },
-          type: "Alert",
-        })
-      );
-    };
+    const notify = (description: string) =>
+      settingsState.onHandleAlert(`Order Failed ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
@@ -224,16 +217,14 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       notify("Amount cannot be greater than max market amount");
     } else {
       // VALID TRANSACTION
-      dispatch(
-        orderExecuteFetch({
-          order_type: isLimit ? "LIMIT" : "MARKET",
-          symbol: currentMarket.assetIdArray,
-          side: isSell ? "Sell" : "Buy",
-          price: isLimit ? form.price : "",
-          market: currentMarket.id,
-          amount,
-        })
-      );
+      ordersState.onPlaceOrders({
+        order_type: isLimit ? "LIMIT" : "MARKET",
+        symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
+        side: isSell ? "Sell" : "Buy",
+        price: isLimit ? form.price : "",
+        market: currentMarket.id,
+        amount,
+      });
     }
   };
 
@@ -286,7 +277,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     hasTradeAccount,
   ]);
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     // limit and sell
     if (isLimit && isSell) {
       return Number(form.amountSell) * Number(form.price);
@@ -319,7 +310,21 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       }
       return Number(estimatedTotal.buy) || 0;
     }
-  };
+  }, [
+    availableBaseAmount,
+    availableQuoteAmount,
+    bestAskPrice,
+    bestBidPrice,
+    changeTypeIsRange,
+    estimatedTotal?.buy,
+    estimatedTotal?.sell,
+    form.amountBuy,
+    form.amountSell,
+    form.price,
+    isLimit,
+    isSell,
+    rangeValue,
+  ]);
 
   /**
    * @description Memorize the total amount to buy/sell based on the amount and price
@@ -328,16 +333,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
    */
   const total = useMemo(() => {
     return form.amountSell || form.amountBuy ? getEstimatedTotal(calculateTotal()) : "";
-  }, [
-    isSell,
-    isLimit,
-    estimatedTotal,
-    form.amountBuy,
-    form.amountSell,
-    form.price,
-    getEstimatedTotal,
-    rangeValue,
-  ]);
+  }, [form.amountBuy, form.amountSell, getEstimatedTotal, calculateTotal]);
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
@@ -394,7 +390,16 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         }
       }
     },
-    [rangeValue, total, isSell, isLimit, form.price, form.amountBuy, form.amountSell]
+    [
+      isSell,
+      isLimit,
+      availableBaseAmount,
+      availableQuoteAmount,
+      bestAskPrice,
+      bestBidPrice,
+      form,
+      qtyPrecision,
+    ]
   );
 
   useEffect(() => {

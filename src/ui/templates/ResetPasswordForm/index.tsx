@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 import confetti from "canvas-confetti";
 
 import * as S from "./styles";
@@ -10,12 +9,7 @@ import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecul
 import { newPasswordValidations } from "@polkadex/orderbook/validations";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  forgotPasswordFetch,
-  selectForgotPasswordLoading,
-  selectForgotPasswordSuccess,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const ResetPasswordFormTemplate = () => {
   const [state, setState] = useState(false);
@@ -23,9 +17,11 @@ export const ResetPasswordFormTemplate = () => {
     password: false,
     repeatPassword: false,
   });
-  const isLoading = useReduxSelector(selectForgotPasswordLoading);
-  const isSuccess = useReduxSelector(selectForgotPasswordSuccess);
-  const dispatch = useDispatch();
+  const { forgotPassword, onForgotPassword } = useAuth();
+  const isLoading = forgotPassword.isLoading;
+  const isSuccess = forgotPassword.isSuccess;
+  const email = forgotPassword.email;
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
@@ -34,7 +30,7 @@ export const ResetPasswordFormTemplate = () => {
     },
     validationSchema: newPasswordValidations,
     onSubmit: ({ code, password }) => {
-      dispatch(forgotPasswordFetch({ code, newPassword: password }));
+      onForgotPassword({ email, code, newPassword: password });
     },
   });
 

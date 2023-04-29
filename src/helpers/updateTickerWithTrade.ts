@@ -1,5 +1,5 @@
-import { Ticker } from "../modules/public/markets";
-import { PublicTrade } from "../modules/public/recentTrades";
+import { Ticker } from "../providers/public/marketsProvider";
+import { PublicTrade } from "../providers/public/recentTradesProvider/types";
 
 export const updateTickerWithTrade = (currentTrade: PublicTrade, currentTicker: Ticker) => {
   const updatedTicker = {

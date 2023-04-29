@@ -1,25 +1,23 @@
 import { AvatarProps, BigHead } from "@bigheads/core";
 import { useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import * as S from "./styles";
 import { randomAvatars } from "./randomAvatars";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { selectDefaultAvatarId, userSetAvatar } from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 type Props = {
   onClose: () => void;
 };
 export const ChangeAvatar = ({ onClose = undefined }: Props) => {
-  const dispatch = useDispatch();
-  const currentAvatar = useReduxSelector(selectDefaultAvatarId);
+  const profileState = useProfile();
+  const currentAvatar = Number(profileState.userProfile?.avatar);
 
   const [state, setState] = useState(currentAvatar);
   const handleChange = (id: number) => setState(id);
   const handleSubmit = () => {
-    dispatch(userSetAvatar(state.toString()));
+    profileState.onUserSetAvatar(state.toString());
     onClose();
   };
   return (

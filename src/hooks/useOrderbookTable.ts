@@ -1,31 +1,26 @@
-import { useDispatch } from "react-redux";
 import { MutableRefObject, useEffect } from "react";
 
 import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
+import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
+import { OrderBookState } from "../providers/public/orderBook/types";
 
-import {
-  DepthState,
-  selectCurrentMarket,
-  selectCurrentPrice,
-  selectDepthAsks,
-  selectDepthBids,
-  setCurrentPrice,
-} from "@polkadex/orderbook-modules";
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
+import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export type Props = {
   isSell?: boolean;
-  orders: DepthState["bids"];
+  orders: OrderBookState["depth"]["bids"];
   contentRef?: MutableRefObject<HTMLDivElement>;
 };
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
-  const dispatch = useDispatch();
+  const orderBookState = useOrderBook();
+  const ordersState = useOrders();
 
-  const bids = useReduxSelector(selectDepthBids);
-  const asks = useReduxSelector(selectDepthAsks);
-  const currentMarket = useReduxSelector(selectCurrentMarket);
-  const currentPrice = useReduxSelector(selectCurrentPrice);
+  const bids = orderBookState.depth.bids;
+  const asks = orderBookState.depth.asks;
+  const { currentMarket } = useMarketsProvider();
+  const currentPrice = ordersState.currentPrice;
 
   /**
    * @description Change market price
@@ -38,7 +33,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const changeMarketPrice = (index: number, side: "asks" | "bids"): void => {
     const arr = side === "asks" ? asks : bids;
     const priceToSet = arr[index] && Number(arr[index][0]);
-    if (currentPrice !== priceToSet) dispatch(setCurrentPrice(priceToSet));
+    if (currentPrice !== priceToSet) ordersState.onSetCurrentPrice(priceToSet);
   };
 
   /**

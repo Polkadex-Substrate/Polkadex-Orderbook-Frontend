@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 
 import { Appearance, AccountOverview, EmptyMyAccount } from "..";
 
 import * as S from "./styles";
 
-import { useAccount, useReduxSelector } from "@polkadex/orderbook-hooks";
-import { logOutFetch } from "@polkadex/orderbook-modules";
+import { useAccount } from "@polkadex/orderbook-hooks";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const Profile = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
   const [menuHeight, setMenuHeight] = useState(null);
   const currentTradeAddr = "";
+  const { onLogout } = useAuth();
 
   const { isSignedIn } = useAccount();
-  const dispatch = useDispatch();
 
   const address = currentTradeAddr;
 
@@ -37,7 +36,7 @@ export const Profile = () => {
         {isSignedIn ? (
           <AccountOverview
             address={address || "0x000000000"}
-            logout={() => dispatch(logOutFetch())}
+            logout={() => onLogout()}
             onNavigate={onNavigate}
           />
         ) : (

@@ -2,8 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { useReduxSelector } from "../hooks/useReduxSelector";
-import { selectForgotPasswordEmail } from "../modules/user/auth";
+import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 const ResetPasswordFormTemplate = dynamic(
   () =>
@@ -16,7 +15,10 @@ const ResetPasswordFormTemplate = dynamic(
 );
 const ResetPasswordForm = () => {
   const router = useRouter();
-  const hasEmail = !!useReduxSelector(selectForgotPasswordEmail);
+  const {
+    forgotPassword: { email },
+  } = useAuth();
+  const hasEmail = !!email;
 
   useEffect(() => {
     if (!hasEmail) router.push("/signIn");

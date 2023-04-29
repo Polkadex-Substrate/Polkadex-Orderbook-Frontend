@@ -1,12 +1,11 @@
-import { useDispatch } from "react-redux";
-
-import { useReduxSelector } from "@polkadex/orderbook-hooks";
-import { changeColorTheme, selectCurrentDarkTheme } from "@polkadex/orderbook-modules";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export function useAppearance() {
-  const dispatch = useDispatch();
-  const isDarkTheme = useReduxSelector(selectCurrentDarkTheme);
-  const changeTheme = () => dispatch(changeColorTheme(isDarkTheme ? "light" : "dark"));
+  const { onChangeTheme, theme } = useSettingsProvider();
+  const isDarkTheme = theme === "dark";
+  const changeTheme = () => {
+    onChangeTheme(isDarkTheme ? "light" : "dark");
+  };
 
   return {
     isDarkTheme,

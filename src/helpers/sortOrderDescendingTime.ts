@@ -1,4 +1,4 @@
-import { OrderCommon } from "@polkadex/orderbook/modules/types";
+import { OrderCommon } from "@polkadex/orderbook/providers/types";
 
 export const sortOrdersDescendingTime = (orders: OrderCommon[]) =>
   orders.sort((a, b) => {
