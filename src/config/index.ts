@@ -1,11 +1,11 @@
 import { Amplify, Analytics, Auth } from "aws-amplify";
 
-import awsconfig from "../aws-exports";
+// import awsconfig from "../aws-exports";
 
 import { DefaultConfig } from ".";
 export * from "./types";
 
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
 const analyticsConfig = {
   AWSPinpoint: {
