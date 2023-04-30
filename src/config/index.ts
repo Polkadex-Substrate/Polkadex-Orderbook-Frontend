@@ -19,7 +19,7 @@ const analyticsConfig = {
 
 Analytics.configure(analyticsConfig);
 
-console.log("process env chain:", process.env.POLKADEX_CHAIN);
+console.log("process", process.env.POLKADEX_CHAIN);
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
