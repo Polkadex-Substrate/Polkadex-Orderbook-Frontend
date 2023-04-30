@@ -18,7 +18,7 @@ import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWall
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
-export const MarketOrderAction = ({ isSell = false, isLimit }) => {
+export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) => {
   const {
     changeAmount,
     changePrice,
@@ -39,7 +39,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit }) => {
     isOrderExecuted,
     showProtectedPassword,
     slider,
-  } = usePlaceOrder(isSell, isLimit);
+  } = usePlaceOrder(isSell, isLimit, form, setForm);
 
   return (
     <S.WrapperOrder>
