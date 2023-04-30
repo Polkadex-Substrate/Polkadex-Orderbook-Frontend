@@ -46,7 +46,7 @@
     "klinecharts": "^8.5.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
-    "next": "13.2.4",
+    "next": "12.1.0",
     "next-compose-plugins": "^2.2.1",
     "nextjs-google-analytics": "^2.2.0",
     "nextjs-progressbar": "^0.0.16",
