@@ -43,7 +43,7 @@ function App({ Component, pageProps }: AppProps) {
   //   console.warn = () => {};
   //   console.error = () => {};
   // }
-  console.log("env vars:", defaultConfig);
+  console.log("env varirables remove amplify:", defaultConfig);
   return (
     <>
       <ToastContainer transition={Flip} />
