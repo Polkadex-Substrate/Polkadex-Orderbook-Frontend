@@ -87,6 +87,31 @@
                 "region": "eu-central-1"
             },
             "lastPushTimeStamp": "2023-04-17T09:54:58.340Z"
+        },
+        "production-orderbook-api": {
+            "service": "AppSync",
+            "output": {
+                "authConfig": {
+                    "defaultAuthentication": {
+                        "authenticationType": "AWS_LAMBDA"
+                    },
+                    "additionalAuthenticationProviders": [
+                        {
+                            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                            "userPoolConfig": {
+                                "userPoolId": "eu-central-1_Ui4p5oesz",
+                                "awsRegion": "eu-central-1",
+                                "appIdClientRegex": null
+                            }
+                        }
+                    ]
+                },
+                "GraphQLAPIIdOutput": "sh3utu45srautfgamlr2yfzmfy",
+                "GraphQLAPIEndpointOutput": "https://gu5xqmhhcnfeveotzwhe6ohfba.appsync-api.eu-central-1.amazonaws.com/graphql",
+                "name": "production-orderbook-api",
+                "region": "eu-central-1"
+            },
+            "lastPushTimeStamp": "2023-04-29T04:19:09.511Z"
         }
     },
     "auth": {

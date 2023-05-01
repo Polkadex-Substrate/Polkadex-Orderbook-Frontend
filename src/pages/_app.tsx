@@ -11,13 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useInit } from "../hooks/useInit";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
-import { MarketsProvider } from "../providers/public/marketsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
-import { OrdersProvider } from "../providers/user/orders";
 
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
 import { AuthProvider } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider } from "@polkadex/orderbook/providers/user/profile";
 import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
@@ -27,6 +24,7 @@ import {
   SettingProvider,
   useSettingsProvider,
 } from "@polkadex/orderbook/providers/public/settings";
+import { MarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/provider";
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
@@ -38,14 +36,14 @@ const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
-  if (process.env.NODE_ENV === "production") {
-    console.log = () => {};
-    console.debug = () => {};
-    console.info = () => {};
-    console.warn = () => {};
-    console.error = () => {};
-  }
-
+  // if (process.env.NODE_ENV === "production") {
+  //   console.log = () => {};
+  //   console.debug = () => {};
+  //   console.info = () => {};
+  //   console.warn = () => {};
+  //   console.error = () => {};
+  // }
+  console.log("env vars:", defaultConfig);
   return (
     <>
       <ToastContainer transition={Flip} />
@@ -58,26 +56,19 @@ function App({ Component, pageProps }: AppProps) {
         <AuthProvider>
           <ProfileProvider>
             <AssetsProvider>
-              <OrdersProvider>
+              <MarketsProvider>
                 <NativeApiProvider>
-                  <MarketsProvider>
-                    <OrderBookProvider>
-                      <ExtensionWalletProvider>
-                        <TradeWalletProvider>
-                          <BalancesProvider>
-                            <OverlayProvider>
-                              <ModifiedThemeProvider
-                                Component={Component}
-                                pageProps={pageProps}
-                              />
-                            </OverlayProvider>
-                          </BalancesProvider>
-                        </TradeWalletProvider>
-                      </ExtensionWalletProvider>
-                    </OrderBookProvider>
-                  </MarketsProvider>
+                  <ExtensionWalletProvider>
+                    <TradeWalletProvider>
+                      <BalancesProvider>
+                        <OverlayProvider>
+                          <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+                        </OverlayProvider>
+                      </BalancesProvider>
+                    </TradeWalletProvider>
+                  </ExtensionWalletProvider>
                 </NativeApiProvider>
-              </OrdersProvider>
+              </MarketsProvider>
             </AssetsProvider>
           </ProfileProvider>
         </AuthProvider>
