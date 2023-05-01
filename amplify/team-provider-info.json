@@ -1,48 +1,18 @@
 {
   "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-orderbookfrontend-dev-213922-authRole",
-      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-dev-213922-authRole",
-      "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-orderbookfrontend-dev-213922-deployment",
-      "UnauthRoleName": "amplify-orderbookfrontend-dev-213922-unauthRole",
-      "StackName": "amplify-orderbookfrontend-dev-213922",
-      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-dev-213922/59f148c0-f0b3-11ec-93ea-0a1621de353a",
-      "AmplifyAppId": "djf6q4n044sil"
-    },
-    "categories": {
-      "auth": {
-        "orderbookfrontend80237148": {
-          "userPoolId": "ap-south-1_G7xhCI6s5",
-          "userPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
-          "webClientId": "6ccnjqn0ik28hf8v0603pq3m81",
-          "nativeClientId": "4cmd6mbm93vb7u87v72911n279"
-        }
-      }
-    }
+    "awscloudformation": {}
   },
   "orderbook": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-orderbookfrontend-orderbook-235331-authRole",
-      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-orderbookfrontend-orderbook-235331-authRole",
-      "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-orderbookfrontend-orderbook-235331-deployment",
-      "UnauthRoleName": "amplify-orderbookfrontend-orderbook-235331-unauthRole",
-      "StackName": "amplify-orderbookfrontend-orderbook-235331",
-      "StackId": "arn:aws:cloudformation:ap-south-1:876703040586:stack/amplify-orderbookfrontend-orderbook-235331/620204f0-1359-11ed-8572-02501297e2fe",
-      "AmplifyAppId": "djf6q4n044sil"
-    },
-    "categories": {
-      "auth": {
-        "orderbookfrontend80237148": {
-          "userPoolId": "ap-south-1_G7xhCI6s5",
-          "userPoolName": "orderbookfrontenda2aee476_userpool_a2aee476-dev",
-          "webClientId": "6ccnjqn0ik28hf8v0603pq3m81",
-          "nativeClientId": "4cmd6mbm93vb7u87v72911n279"
-        }
-      }
+      "AuthRoleName": "amplify-polkadexorderbookfro-orderbook-120447-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-polkadexorderbookfro-orderbook-120447-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-polkadexorderbookfro-orderbook-120447-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-polkadexorderbookfro-orderbook-120447-deployment",
+      "UnauthRoleName": "amplify-polkadexorderbookfro-orderbook-120447-unauthRole",
+      "StackName": "amplify-polkadexorderbookfro-orderbook-120447",
+      "StackId": "arn:aws:cloudformation:eu-central-1:876703040586:stack/amplify-polkadexorderbookfro-orderbook-120447/46d5e5a0-e7ea-11ed-8041-0648d988f914",
+      "AmplifyAppId": "d4jkqk0z8wu7g"
     }
   }
 }
