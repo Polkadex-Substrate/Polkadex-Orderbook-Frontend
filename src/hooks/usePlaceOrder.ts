@@ -13,7 +13,7 @@ import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWall
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-interface formType {
+interface FormType {
   orderType: string;
   price: string;
   priceMarket?: any;
@@ -24,8 +24,8 @@ interface formType {
 export function usePlaceOrder(
   isSell: boolean,
   isLimit: boolean,
-  form: formType,
-  setForm: Dispatch<SetStateAction<formType>>
+  form: FormType,
+  setForm: Dispatch<SetStateAction<FormType>>
 ) {
   const orderBookState = useOrderBook();
   const tradeWalletState = useTradeWallet();
