@@ -6,7 +6,6 @@ export function useAppearance() {
   const changeTheme = () => {
     onChangeTheme(isDarkTheme ? "light" : "dark");
   };
-
   return {
     isDarkTheme,
     changeTheme,
