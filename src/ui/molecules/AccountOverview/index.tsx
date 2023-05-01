@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import Link from "next/link";
 import { BigHead } from "@bigheads/core";
@@ -45,14 +45,18 @@ export const AccountOverview = ({ onNavigate, logout, emptyMsg, settingLinkMsg }
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
   const { onUserSelectAccount } = useProfile();
 
+  const tradeAcc = useMemo(
+    () => getTradeAccount(currentUsingAccount.tradeAddress, tradingAccounts),
+    [currentUsingAccount.tradeAddress, tradingAccounts]
+  );
+
   useEffect(() => {
     if (currentUsingAccount) {
-      const tradeAcc = getTradeAccount(currentUsingAccount.tradeAddress, tradingAccounts);
       const mainAcc = userMainAccountDetails(currentUsingAccount.mainAddress, mainAccounts);
       setSelectedTradeAccount(tradeAcc);
       setSelectedMainAccount(mainAcc);
     }
-  }, [currentUsingAccount]);
+  }, [currentUsingAccount, mainAccounts, tradeAcc]);
 
   useEffect(() => {
     const accountList: KeyringPair[] = [];
