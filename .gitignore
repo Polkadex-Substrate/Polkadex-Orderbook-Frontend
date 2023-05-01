@@ -39,11 +39,14 @@ yarn-error.log*
 .vercel
 .vscode/settings.json
 
+.idea/jsLinters/eslint.xml
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
+amplify/mock-api-resources
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
 build/
@@ -59,4 +62,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-.idea/jsLinters/eslint.xml
