@@ -3,7 +3,7 @@ import { useReducer } from "react";
 import { selectTradeAccount } from "../tradeWallet/helper";
 import { useNativeApi } from "../../public/nativeApi";
 
-import { parseError, executePlaceOrder, getNewClientId, executeCancelOrder } from "./helper";
+import { executeCancelOrder, executePlaceOrder, getNewClientId, parseError } from "./helper";
 import { Provider } from "./context";
 import { initialState, ordersReducer } from "./reducer";
 import * as T from "./types";
@@ -11,8 +11,8 @@ import * as A from "./actions";
 
 import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import {
-  createOrderPayload,
   createCancelOrderPayloadSigned,
+  createOrderPayload,
 } from "@polkadex/orderbook/helpers/createOrdersHelpers";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
@@ -97,21 +97,24 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const api = nativeApiState.api;
       const account: UserAccount = profileState.selectedAccount;
-      const address = account.tradeAddress;
+      const { tradeAddress, mainAddress } = account;
       const keyringPair: TradeAccount = selectTradeAccount(
-        address,
+        tradeAddress,
         tradeWalletState.allBrowserAccounts
       );
       if (keyringPair.isLocked) throw new Error("Please unlock your account with password");
-      if (address !== "" && keyringPair) {
-        const { order_id, account, pair, signature } = createCancelOrderPayloadSigned(
+      if (tradeAddress !== "" && keyringPair) {
+        const { pair, signature } = createCancelOrderPayloadSigned(
           api,
           keyringPair,
           orderId,
           baseAsset,
           quoteAsset
         );
-        await executeCancelOrder([order_id, account, pair, signature], address);
+        await executeCancelOrder(
+          [orderId, mainAddress, tradeAddress, pair, signature],
+          tradeAddress
+        );
         dispatch(A.orderCancelData());
 
         settingsState.onHandleNotification({

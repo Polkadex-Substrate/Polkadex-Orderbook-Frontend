@@ -32,13 +32,13 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   const onUserSelectAccount = (payload: T.UserSelectAccount) => {
-    const { tradeAddress: trade_address } = payload;
+    const { tradeAddress: _tradeAddress } = payload;
     try {
       const mainAddress = state.userData?.userAccounts?.find(
-        ({ tradeAddress }) => trade_address === tradeAddress
+        ({ tradeAddress }) => _tradeAddress === tradeAddress
       )?.mainAddress;
       if (mainAddress) {
-        const data = { tradeAddress: trade_address, mainAddress };
+        const data = { tradeAddress: _tradeAddress, mainAddress };
         dispatch(A.userAccountSelectData(data));
       }
     } catch (e) {
@@ -69,18 +69,18 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     mainAccounts: [string],
     Api = API
   ): Promise<T.UserAccount[]> => {
-    const promises = mainAccounts.map(async (main_account) => {
+    const promises = mainAccounts.map(async (mainAccount) => {
       try {
         const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
-          variables: { main_account },
+          variables: { main_account: mainAccount },
           API: Api,
         });
         const proxies = res.data.findUserByMainAccount.proxies ?? [];
-        return { main_account, proxies };
+        return { main_account: mainAccount, proxies };
       } catch (error) {
         console.log("Error: getAllProxyAccounts", error.errors);
-        return { main_account, proxies: [] };
+        return { main_account: mainAccount, proxies: [] };
       }
     });
     const list = await Promise.all(promises);
@@ -224,6 +224,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
             "Trade account removed",
             "Trade account removal Confirmed"
           );
+        case USER_EVENTS.Error:
+          return onHandleError(`Server error, ${data?.message ?? data.toString()}`);
       }
     },
     [
@@ -234,6 +236,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onTransactionsUpdate,
       onUserTradeUpdate,
       registerSuccessNotification,
+      onHandleError,
     ]
   );
   const currentAccount: T.UserAccount = state.selectedAccount;

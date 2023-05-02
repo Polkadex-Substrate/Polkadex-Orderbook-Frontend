@@ -25,8 +25,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       if (isApiReady && mainAccount?.account?.address !== "") {
         onHandleNotification({
           type: "Info",
-          message:
-            "Processing Deposit, please wait while the deposit is processed and the block is finalized. This may take a few mins",
+          message: "Processing Deposit...",
         });
         dispatch(A.depositsFetch());
 

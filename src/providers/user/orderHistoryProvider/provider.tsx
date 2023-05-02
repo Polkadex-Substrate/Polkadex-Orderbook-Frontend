@@ -6,9 +6,9 @@ import { useProfile } from "../profile";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
 
 import { Provider } from "./context";
-import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
+import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
 import * as A from "./actions";
-import { SetOrder, orderHistoryQueryResult } from "./types";
+import { orderHistoryQueryResult, SetOrder } from "./types";
 
 import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import { OrderCommon } from "@polkadex/orderbook/providers/types";
@@ -24,17 +24,17 @@ export const OrderHistoryProvider = ({ children }) => {
 
   const account: UserAccount = profileState.selectedAccount;
 
-  const fetchOpenOrders = useCallback(async (proxy_acc: string): Promise<OrderCommon[]> => {
+  const fetchOpenOrders = useCallback(async (tradeAccount: string): Promise<OrderCommon[]> => {
     const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
       queries.listOpenOrdersByMainAccount,
       {
-        main_account: proxy_acc,
+        main_account: tradeAccount,
         limit: 100,
       },
       "listOpenOrdersByMainAccount"
     );
-    const orders = ordersRaw.map((order) => ({
-      main_account: proxy_acc,
+    return ordersRaw.map((order) => ({
+      main_account: tradeAccount,
       id: order.id,
       client_order_id: order.cid,
       time: new Date(Number(order.t)).toISOString(),
@@ -48,7 +48,6 @@ export const OrderHistoryProvider = ({ children }) => {
       filled_quantity: order.fq,
       fee: order.fee,
     }));
-    return orders;
   }, []);
 
   const onOpenOrdersHistoryFetch = useCallback(async () => {
@@ -65,22 +64,22 @@ export const OrderHistoryProvider = ({ children }) => {
   }, [account.tradeAddress, fetchOpenOrders, onHandleError]);
 
   const fetchOrders = useCallback(
-    async (proxy_acc: string, dateFrom: Date, dateTo: Date): Promise<OrderCommon[]> => {
+    async (tradeAddress: string, dateFrom: Date, dateTo: Date): Promise<OrderCommon[]> => {
       // TODO: make limit resonable by utilizing nextToken
       const dateFromStr = Utils.date.formatDateToISO(dateFrom);
       const dateToStr = Utils.date.formatDateToISO(dateTo);
       const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
         queries.listOrderHistorybyMainAccount,
         {
-          main_account: proxy_acc,
+          main_account: tradeAddress,
           from: dateFromStr,
           to: dateToStr,
           limit: 100,
         },
         "listOrderHistorybyMainAccount"
       );
-      const orders: OrderCommon[] = ordersRaw.map((order) => ({
-        main_account: proxy_acc,
+      return ordersRaw.map((order) => ({
+        main_account: tradeAddress,
         id: order.id,
         client_order_id: order.cid,
         time: new Date(Number(order.t)).toISOString(),
@@ -94,8 +93,6 @@ export const OrderHistoryProvider = ({ children }) => {
         filled_quantity: order.fq,
         fee: order.fee,
       }));
-
-      return orders;
     },
     []
   );
@@ -115,17 +112,18 @@ export const OrderHistoryProvider = ({ children }) => {
     },
     [fetchOrders, onHandleError]
   );
+
   function processOrderData(eventData: SetOrder): OrderCommon {
-    const base = eventData.pair.base_asset;
+    const base = eventData.pair.base.asset;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const quote = eventData.pair.quote_asset;
+    const quote = eventData.pair.quote.asset;
 
     return {
       main_account: eventData.user,
       id: eventData.id.toString(),
       client_order_id: eventData.client_order_id,
-      time: new Date(Number(eventData.timestamp) * 1000).toISOString(),
+      time: new Date(Number(eventData.timestamp)).toISOString(),
       m: `${base}-${quote}`, // marketid
       side: eventData.side,
       order_type: eventData.order_type,
@@ -137,6 +135,7 @@ export const OrderHistoryProvider = ({ children }) => {
       fee: eventData.fee.toString(),
     };
   }
+
   const onOrderUpdates = (payload: A.OrderUpdateEvent["payload"]) => {
     try {
       const order = processOrderData(payload);

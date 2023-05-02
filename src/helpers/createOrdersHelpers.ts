@@ -59,7 +59,7 @@ export const createCancelOrderPayloadSigned = (
   const tradingPair = `${base}-${quote}`;
   const signature = signPayload(api, userKeyring, orderIdCodec);
   return {
-    order_id: orderIdCodec,
+    orderId: orderIdCodec,
     account: userKeyring.address,
     pair: tradingPair,
     signature: signature,

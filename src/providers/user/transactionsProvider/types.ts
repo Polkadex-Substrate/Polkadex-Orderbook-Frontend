@@ -5,10 +5,9 @@ import { CommonError } from "../../types";
 import { WithdrawGroup } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 
 export interface Transaction {
-  event_id: number;
-  sid: number;
+  stid: number;
   amount: string;
-  asset: "PDEX" | string;
+  asset: string;
   fee: string;
   main_account?: string;
   time: string;
@@ -24,9 +23,9 @@ export interface TransactionsState {
 }
 
 export type TransactionUpdatePayload = {
-  event_id: number;
+  stid: number;
   user: string;
-  asset: string & { asset: string };
+  asset: { asset: string };
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";

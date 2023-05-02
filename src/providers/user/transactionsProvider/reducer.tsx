@@ -41,7 +41,7 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
       const { payload } = action;
       const transactions = _.cloneDeep(state.transactions);
       const index = transactions.findIndex(
-        ({ event_id }) => Number(event_id) === Number(payload.event_id)
+        ({ stid }) => Number(stid) === Number(payload.stid)
       );
       if (index !== -1) {
         transactions[index] = payload;

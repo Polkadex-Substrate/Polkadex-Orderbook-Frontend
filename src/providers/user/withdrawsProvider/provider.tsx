@@ -30,19 +30,22 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const settingsState = useSettingsProvider();
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAccount = profileState.selectedAccount;
-  const address = currentAccount.tradeAddress;
+  const { mainAddress, tradeAddress } = currentAccount;
   const { allBrowserAccounts } = useTradeWallet();
-  const keyringPair = selectTradeAccount(address, allBrowserAccounts);
+  const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
   const { onUserTradesError } = useTrades();
 
   const onFetchWithdraws = async ({ asset, amount }) => {
     try {
       const nonce = getNonce();
       const api = nativeApiState.api;
-      if (address !== "" && keyringPair && api) {
+      if (tradeAddress !== "" && keyringPair && api) {
         const payload = createWithdrawPayload(api, asset, amount, nonce);
         const signature = signPayload(api, keyringPair, payload);
-        const res = await executeWithdraw([address, payload, signature], address);
+        const res = await executeWithdraw(
+          [mainAddress, tradeAddress, payload, signature],
+          tradeAddress
+        );
         console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({
