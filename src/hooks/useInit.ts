@@ -31,5 +31,5 @@ export const useInit = () => {
     if (shouldRangerConnect) onConnectNativeApi();
     onLoadTradeAccounts();
     onPolkadotExtensionWallet();
-  }, [shouldRangerConnect]);
+  }, [shouldRangerConnect, onConnectNativeApi, onPolkadotExtensionWallet]);
 };

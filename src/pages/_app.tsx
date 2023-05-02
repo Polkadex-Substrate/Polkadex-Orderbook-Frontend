@@ -10,21 +10,21 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useInit } from "../hooks/useInit";
-import { AssetsProvider } from "../providers/public/assetsProvider/provider";
-import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 
 import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { AuthProvider } from "@polkadex/orderbook/providers/user/auth";
-import { ProfileProvider } from "@polkadex/orderbook/providers/user/profile";
-import { TradeWalletProvider } from "@polkadex/orderbook/providers/user/tradeWallet";
-import { NativeApiProvider } from "@polkadex/orderbook/providers/public/nativeApi";
-import { ExtensionWalletProvider } from "@polkadex/orderbook/providers/user/extensionWallet";
 import {
+  AuthProvider,
+  ProfileProvider,
+  TradeWalletProvider,
+  NativeApiProvider,
+  ExtensionWalletProvider,
   SettingProvider,
-  useSettingsProvider,
-} from "@polkadex/orderbook/providers/public/settings";
-import { MarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/provider";
+  MarketsProvider,
+  BalancesProvider,
+  AssetsProvider,
+} from "@polkadex/orderbook/providers";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
