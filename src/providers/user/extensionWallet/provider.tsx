@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
@@ -234,6 +234,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       )
     );
   };
+
+  useEffect(() => {
+    onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet]);
 
   return (
     <Provider

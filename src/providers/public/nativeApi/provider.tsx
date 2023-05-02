@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
 import { Provider } from "./context";
@@ -50,6 +50,11 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
       onHandleError(`Error connecting to Polkadex chain: ${error?.message ?? error}`);
     }
   }, [onHandleError]);
+
+  const shouldRangerConnect = !state.timestamp && !state.connecting;
+  useEffect(() => {
+    if (shouldRangerConnect) onConnectNativeApi();
+  }, [shouldRangerConnect, onConnectNativeApi]);
 
   return (
     <Provider

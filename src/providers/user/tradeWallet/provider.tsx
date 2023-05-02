@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
 import FileSaver from "file-saver";
@@ -111,7 +111,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     }
   };
 
-  const onLoadTradeAccounts = async () => {
+  const onLoadTradeAccounts = useCallback(async () => {
     try {
       await loadKeyring();
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
@@ -119,7 +119,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     } catch (error) {
       settingsState.onHandleError(error?.message ?? error);
     }
-  };
+  }, [settingsState]);
 
   const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
     try {
@@ -267,6 +267,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onExportTradeAccountActive = () => {
     dispatch(A.exportTradeAccountActive());
   };
+
+  useEffect(() => {
+    onLoadTradeAccounts();
+  }, []);
 
   return (
     <Provider
