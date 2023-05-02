@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
@@ -16,7 +17,7 @@ import { useInit } from "../hooks/useInit";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 
-import { defaultThemes, GlobalStyles } from "src/styles";
+import { defaultThemes, GlobalStyles, FontStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -48,6 +49,74 @@ function App({ Component, pageProps }: AppProps) {
   }
   return (
     <>
+      <Head>
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-100.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-200.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-300.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-regular.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-500.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-700.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-600.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-800.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/work-sans-v13-latin-900.woff2"
+          as="font"
+          crossOrigin="anonymous"
+          type="font/woff2"
+        />
+      </Head>
+
+      <FontStyles />
+
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
