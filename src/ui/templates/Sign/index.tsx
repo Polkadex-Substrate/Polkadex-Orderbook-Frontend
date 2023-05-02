@@ -41,13 +41,10 @@ export const SignTemplate = () => {
     },
     validationSchema: signUpValidations,
     onSubmit: (values) => {
-      console.log("on submit");
-
       const { password, email } = values;
       onSignUp({ email, password });
     },
   });
-  console.log("sign up page");
 
   return (
     <>
