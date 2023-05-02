@@ -36,14 +36,13 @@ const queryClient = new QueryClient();
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
-  // if (process.env.NODE_ENV === "production") {
-  //   console.log = () => {};
-  //   console.debug = () => {};
-  //   console.info = () => {};
-  //   console.warn = () => {};
-  //   console.error = () => {};
-  // }
-  console.log("env vars:", defaultConfig);
+  if (process.env.NODE_ENV === "production") {
+    console.log = () => {};
+    console.debug = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.error = () => {};
+  }
   return (
     <>
       <ToastContainer transition={Flip} />
