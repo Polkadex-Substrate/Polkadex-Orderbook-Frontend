@@ -8,9 +8,8 @@ import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
-import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
+import { createSignedData, executeRegisterEmail, registerMainAccount } from "./helper";
 
-import { ErrorMessages } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
@@ -40,7 +39,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
 
       if (hasAddressAndEmail) {
         const signedData = await createSignedData(selectedControllerAccount, email);
-        const data: T.LinkEmailData = signedData.data;
+        const data = signedData.data;
         const signature: string = signedData.signature;
         await executeRegisterEmail(data, signature);
 
@@ -86,7 +85,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
-    let data: T.RegisterEmailData, signature: string;
     const { mainAccount, tradeAddress, mnemonic } = payload;
     try {
       const selectedControllerAccount = state.allAccounts?.find(
@@ -94,11 +92,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       );
       const email = authState.email;
       const api: ApiPromise = nativeApiState.api;
-
-      // listen for events in this new registered main address
-
-      // TODO : When userEventsChanelHandler provider will be created
-      // yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
 
       const hasAddressAndEmail =
         !!selectedControllerAccount.account?.address?.length && !!email?.length;
@@ -128,15 +121,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       }
     } catch (error) {
       console.log("error in registration:", error.message);
-
-      // if account is already registered , it means that that sending data to aws failed on a previous attempt
-      // but it was successfully on the blockchain, since the transaction was submitted and signed by the wallet
-      // it is assumed that the wallet belongs to the user, so we do a retry of sending to aws.
-
-      if (error.message === ErrorMessages.OCEX_ALREADY_REGISTERED) {
-        await retryRegisterToAppsync(data, signature, tradeAddress, mainAccount);
-        return;
-      }
       tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
       dispatch(A.registerMainAccountError());
       onHandleNotification({
@@ -201,30 +185,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       console.log(error.message);
     }
   }
-
-  const retryRegisterToAppsync = async (
-    data: T.RegisterEmailData,
-    signature: string,
-    tradeAddress: string,
-    mainAddress: string
-  ) => {
-    try {
-      await executeRegisterEmail(data, signature);
-      profileState.onUserProfileAccountPush({
-        tradeAddress,
-        mainAddress,
-      });
-      profileState.onUserProfileMainAccountPush(mainAddress);
-      dispatch(A.registerMainAccountData());
-    } catch (error) {
-      console.log("error", error);
-      dispatch(A.registerMainAccountError());
-      onHandleNotification({
-        message: `Cannot Register Account to Server!, ${error?.message ?? error}`,
-        type: "Error",
-      });
-    }
-  };
 
   const selectMainAccount = (address: string) => {
     return (

@@ -1,11 +1,13 @@
-import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
-import * as T from "./types";
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import * as mutations from "@polkadex/orderbook/graphql/mutations";
 import { stringToHex } from "@polkadot/util";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { Signer } from "@polkadot/types/types";
 import { ApiPromise } from "@polkadot/api";
+
+import * as T from "./types";
+
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
+import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import * as mutations from "@polkadex/orderbook/graphql/mutations";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 
 export const userMainAccountDetails = (
   userMainAccount: string,
@@ -22,8 +24,8 @@ export const selectIsAddressInExtension = (
   return address && allAccounts?.some(({ account }) => account?.address === address);
 };
 
-export const executeRegisterEmail = async (data: T.LinkEmailData, signature: string) => {
-  const payloadStr = JSON.stringify({ RegisterUser: { data, signature } });
+export const executeRegisterEmail = async (data: string[], signature: string) => {
+  const payloadStr = JSON.stringify({ RegisterUser: [...data, signature] });
   const res = await sendQueryToAppSync({
     query: mutations.register_user,
     variables: {
@@ -38,12 +40,12 @@ export const executeRegisterEmail = async (data: T.LinkEmailData, signature: str
 export const createSignedData = async (
   mainAccount: ExtensionAccount,
   email: string
-): Promise<{ data: T.LinkEmailData; signature: string }> => {
+): Promise<{ data: string[]; signature: string }> => {
   const { signer, account } = mainAccount;
   const signRaw = signer?.signRaw;
-  const main_address = account.address;
+  const mainAddress = account.address;
   if (signRaw) {
-    const data: T.LinkEmailData = { email, main_address };
+    const data = [email, mainAddress];
     const { signature } = await signRaw({
       address: account.address,
       data: stringToHex(JSON.stringify(data)),

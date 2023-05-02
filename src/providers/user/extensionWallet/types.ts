@@ -1,6 +1,8 @@
 import { FC, PropsWithChildren } from "react";
-import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
+
 import * as A from "./actions";
+
+import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 
 export type LinkEmailData = { email: string; main_address: string };
 export type RegisterEmailData = { email: string; main_address: string };
