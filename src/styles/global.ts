@@ -11,6 +11,7 @@ const iconThemingModifier = {
   `,
 };
 
+// We need this because We will call FontStyles before than GlobalStyles
 export const FontStyles = createGlobalStyle`
 	body {
 		${fonts}
