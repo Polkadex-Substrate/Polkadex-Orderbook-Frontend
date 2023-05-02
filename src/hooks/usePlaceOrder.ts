@@ -1,5 +1,5 @@
 // TODO: Refactor code
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
@@ -13,7 +13,20 @@ import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWall
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
+interface FormType {
+  orderType: string;
+  price: string;
+  priceMarket?: any;
+  amountSell: string;
+  amountBuy: string;
+}
+
+export function usePlaceOrder(
+  isSell: boolean,
+  isLimit: boolean,
+  form: FormType,
+  setForm: Dispatch<SetStateAction<FormType>>
+) {
   const orderBookState = useOrderBook();
   const tradeWalletState = useTradeWallet();
   const profileState = useProfile();
@@ -45,19 +58,12 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     priceLimit: undefined,
   });
 
-  const [form, setForm] = useState<{
-    orderType: string;
-    price: string;
-    priceMarket: any;
-    amountSell: string;
-    amountBuy: string;
-  }>({
-    orderType: isLimit ? "Limit" : "Market",
-    price: "",
-    priceMarket: currentTicker || 0,
-    amountSell: "",
-    amountBuy: "",
-  });
+  useEffect(() => {
+    setForm((e) => ({
+      ...e,
+      priceMarket: currentTicker || 0,
+    }));
+  }, [currentTicker, setForm]);
 
   const [slider, setSlider] = useState([
     { percentage: "25%", percentageNum: 1, isActive: false },
@@ -65,16 +71,6 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
     { percentage: "75%", percentageNum: 3, isActive: false },
     { percentage: "100%", percentageNum: 4, isActive: false },
   ]);
-
-  // when type is changed reset form.
-  useEffect(() => {
-    setForm((e) => ({
-      ...e,
-      price: "",
-      amountSell: "",
-      amountBuy: "",
-    }));
-  }, [isLimit]);
 
   const [rangeValue, setRangeValue] = useState([1]);
   const [changeTypeIsRange, setChangeType] = useState(false);
@@ -149,7 +145,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       handleCleanPrice && handleCleanPrice();
     },
 
-    [pricePrecision, form, handleCleanPrice]
+    [pricePrecision, form, setForm, handleCleanPrice]
   );
 
   /**
@@ -183,7 +179,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
         };
       });
     },
-    [qtyPrecision, form, isSell, bestBidPrice, bestAskPrice]
+    [qtyPrecision, form, setForm, isSell, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -398,6 +394,7 @@ export function usePlaceOrder(isSell: boolean, isLimit: boolean) {
       bestAskPrice,
       bestBidPrice,
       form,
+      setForm,
       qtyPrecision,
     ]
   );
