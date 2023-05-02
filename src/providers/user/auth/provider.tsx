@@ -227,7 +227,9 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         router.push("/signIn");
       }, 2000);
     }
-  }, [isVerificationSuccess, signupIsSuccess, onHandleNotification]);
+  }, [isVerificationSuccess, signupIsSuccess]);
+
+  // removed the onHandleNotification from dependency array as it was causing infinite rerenders
 
   useEffect(() => {
     if (signupIsSuccess && !email) router.push("/sign");
