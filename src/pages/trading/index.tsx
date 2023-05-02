@@ -15,7 +15,7 @@ function Home() {
 
   useEffect(() => {
     if (currentMarket)
-      router.push(`${currentMarket.base_ticker + currentMarket.quote_ticker}`);
+      router.push(`/trading/${currentMarket.base_ticker + currentMarket.quote_ticker}`);
     else router.push(`/trading/${defaultConfig.landingPageMarket}`);
   }, [router, persistedMarket, currentMarket]);
 
