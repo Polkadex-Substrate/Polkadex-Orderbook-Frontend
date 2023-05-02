@@ -268,9 +268,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.exportTradeAccountActive());
   };
 
+  const shouldRangerConnect = !nativeApiState.timestamp && !nativeApiState.connecting;
   useEffect(() => {
-    onLoadTradeAccounts();
-  }, []);
+    if (shouldRangerConnect) onLoadTradeAccounts();
+  }, [shouldRangerConnect, onLoadTradeAccounts]);
 
   return (
     <Provider
