@@ -111,7 +111,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
                   fullWidth={true}
                   type="text"
-                  defaultValue={total}
+                  value={total}
                   placeholder={isLimit ? "Total" : "Estimated Amount"}
                   autoComplete="off"
                   disabled={isOrderLoading}
