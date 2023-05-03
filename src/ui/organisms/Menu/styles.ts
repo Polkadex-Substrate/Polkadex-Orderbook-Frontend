@@ -16,7 +16,7 @@ export const WrapperIcon = styled.div<{
     flex-direction: row;
     align-items: center;
     width: fit-content;
-    cursor: ${isDisabled ? "not-allowed" : "pointer"};
+    pointer-events: ${isDisabled ? "none" : "auto"};
     :hover {
       ${Span},${TermsLinks} {
         opacity: 1;
@@ -222,5 +222,11 @@ export const TermsLinks = styled.div`
         background: ${theme.colors.secondaryBackground};
       }
     }
+  `}
+`;
+
+export const MenuButtonWrapper = styled.div<{ isDisabled?: boolean }>`
+  ${({ theme, isDisabled }) => css`
+    cursor: ${isDisabled ? "not-allowed" : "pointer"};
   `}
 `;
