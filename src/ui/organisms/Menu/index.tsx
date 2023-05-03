@@ -50,14 +50,6 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
           <Logo size="Medium" href="/trading" />
         </S.Logo>
         <S.Container>
-          {!isWallet && (
-            <S.WrapperIcon onClick={handleChange}>
-              <div>
-                <Icon name="Graph" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Markets</S.Span>
-            </S.WrapperIcon>
-          )}
           <S.MenuButtonWrapper isDisabled={router.pathname === "/trading/[id]"}>
             <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
               <Link href="/trading">
