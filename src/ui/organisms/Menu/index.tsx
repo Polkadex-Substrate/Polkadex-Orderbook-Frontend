@@ -36,6 +36,10 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
     (v) => v.id === Number(profileState.userProfile?.avatar)
   );
 
+  const {
+    authInfo: { isAuthenticated },
+  } = profileState;
+
   return (
     <S.Wrapper>
       <S.WrapperLinks>
@@ -59,16 +63,16 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
               <S.Span>Exchange</S.Span>
             </S.WrapperIcon>
           </Link>
-          <Link href="/balances">
-            <S.WrapperIcon>
+          <Link href={isAuthenticated ? "/balances" : "#"}>
+            <S.WrapperIcon isDisabled={!isAuthenticated}>
               <div>
                 <Icon name="Coins" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Balances</S.Span>
             </S.WrapperIcon>
           </Link>
-          <Link href="/settings">
-            <S.WrapperIcon>
+          <Link href={isAuthenticated ? "/settings" : "#"}>
+            <S.WrapperIcon isDisabled={!isAuthenticated}>
               <div>
                 <Icon name="Wallet" background="none" stroke="text" size="large" />
               </div>
