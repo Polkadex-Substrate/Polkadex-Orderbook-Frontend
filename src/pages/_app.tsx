@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useInit } from "../hooks/useInit";
 
-import { defaultThemes, GlobalStyles } from "src/styles";
+import { defaultThemes, GlobalStyles, FontStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import {
   AuthProvider,
@@ -45,6 +45,8 @@ function App({ Component, pageProps }: AppProps) {
   }
   return (
     <>
+      <FontStyles />
+
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{

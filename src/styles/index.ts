@@ -1,4 +1,4 @@
-import GlobalStyles from "src/styles/global";
+import { GlobalStyles, FontStyles } from "src/styles/global";
 import { darkTheme, lightTheme } from "src/styles/theme";
 
 const defaultThemes = {
@@ -6,4 +6,4 @@ const defaultThemes = {
   dark: darkTheme,
 };
 
-export { defaultThemes, GlobalStyles };
+export { defaultThemes, FontStyles, GlobalStyles };
