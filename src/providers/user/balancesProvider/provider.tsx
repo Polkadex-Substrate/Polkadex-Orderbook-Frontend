@@ -1,10 +1,12 @@
 // TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
+import { API } from "aws-amplify";
 
 import { useProfile } from "../profile/useProfile";
 import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
 import * as queries from "../../../graphql/queries";
 import { useSettingsProvider } from "../../public/settings";
+import * as subscriptions from "../../../graphql/subscriptions";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -13,11 +15,12 @@ import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
-    selectedAccount: { mainAddress },
+    selectedAccount: { mainAddress, tradeAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
@@ -112,6 +115,66 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
+
+  useEffect(() => {
+    console.log("created User Events Channel...", mainAddress);
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: mainAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+        console.info("User Event: ", eventData);
+        const eventType = eventData.type;
+        if (eventType === USER_EVENTS.SetBalance) {
+          onBalanceUpdate(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onBalanceUpdate]);
+
+  useEffect(() => {
+    console.log("created User Events Channel...", tradeAddress);
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: tradeAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+        console.info("User Event: ", eventData);
+        const eventType = eventData.type;
+        if (eventType === USER_EVENTS.SetBalance) {
+          onBalanceUpdate(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onBalanceUpdate, tradeAddress]);
 
   return (
     <Provider
