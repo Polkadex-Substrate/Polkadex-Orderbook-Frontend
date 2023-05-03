@@ -1,7 +1,9 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { API } from "aws-amplify";
 
 import { useProfile } from "../profile/useProfile";
 import * as queries from "../../../graphql/queries";
+import * as subscriptions from "../../../graphql/subscriptions";
 
 import * as A from "./actions";
 import { Provider } from "./context";
@@ -13,6 +15,7 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
@@ -22,6 +25,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   });
 
   const profileState = useProfile();
+  const { mainAddress, tradeAddress } = profileState.selectedAccount;
   const settingsState = useSettingsProvider();
 
   const onTransactionsFetch = useCallback(
@@ -150,6 +154,74 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     },
     [settingsState]
   );
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from transactions provider",
+      mainAddress
+    );
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: mainAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.SetTransaction) {
+          onTransactionsUpdate(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onTransactionsUpdate]);
+
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for trade address from transactions provider",
+      tradeAddress
+    );
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: tradeAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.SetTransaction) {
+          onTransactionsUpdate(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onTransactionsUpdate, tradeAddress]);
 
   return (
     <Provider
