@@ -175,7 +175,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         console.info("User Event: ", eventData, "event type", eventType);
 
         if (eventType === USER_EVENTS.SetTransaction) {
-          onTransactionsUpdate(data);
+          onTransactionsUpdate(eventData);
         }
       },
       error: (err) => {
@@ -210,7 +210,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         console.info("User Event: ", eventData, "event type", eventType);
 
         if (eventType === USER_EVENTS.SetTransaction) {
-          onTransactionsUpdate(data);
+          onTransactionsUpdate(eventData);
         }
       },
       error: (err) => {

@@ -228,7 +228,7 @@ export const OrderHistoryProvider = ({ children }) => {
         console.info("User Event: ", eventData, "event type", eventType);
 
         if (eventType === USER_EVENTS.Order) {
-          onOrderUpdates(data);
+          onOrderUpdates(eventData);
         }
       },
       error: (err) => {
@@ -263,7 +263,7 @@ export const OrderHistoryProvider = ({ children }) => {
         console.info("User Event: ", eventData, "event type", eventType);
 
         if (eventType === USER_EVENTS.Order) {
-          onOrderUpdates(data);
+          onOrderUpdates(eventData);
         }
       },
       error: (err) => {

@@ -133,7 +133,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         console.info("User Event: ", eventData);
         const eventType = eventData.type;
         if (eventType === USER_EVENTS.SetBalance) {
-          onBalanceUpdate(data);
+          onBalanceUpdate(eventData);
         }
       },
       error: (err) => {
@@ -163,7 +163,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         console.info("User Event: ", eventData);
         const eventType = eventData.type;
         if (eventType === USER_EVENTS.SetBalance) {
-          onBalanceUpdate(data);
+          onBalanceUpdate(eventData);
         }
       },
       error: (err) => {
