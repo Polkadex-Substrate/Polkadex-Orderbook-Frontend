@@ -32,6 +32,69 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="shortcut icon" href="/favicon.ico" />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-100.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-200.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-300.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-regular.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-500.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-700.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-600.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-800.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/fonts/work-sans-v13-latin-900.woff2"
+            as="font"
+            crossOrigin="anonymous"
+            type="font/woff2"
+          />
           <meta property="og:title" content="Welcome to Polkadex Orderbook" key="title" />
           <meta
             property="og:description"
