@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { API } from "aws-amplify";
 
 import * as queries from "../../../graphql/queries";
 import { useSettingsProvider } from "../../public/settings";
 import { useProfile } from "../profile";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
+import * as subscriptions from "../../../graphql/subscriptions";
 
 import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
@@ -16,6 +18,7 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
@@ -150,7 +153,7 @@ export const OrderHistoryProvider = ({ children }) => {
 
   const { dateTo, dateFrom } = useSessionProvider();
   const usingAccount = profileState.selectedAccount;
-
+  const { mainAddress, tradeAddress } = usingAccount;
   const orderList = state.list;
   const openOrders = state.openOrders;
   const list = sortOrdersDescendingTime(orderList);
@@ -204,6 +207,74 @@ export const OrderHistoryProvider = ({ children }) => {
     },
     [list, openOrdersSorted]
   );
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from order history provider",
+      mainAddress
+    );
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: mainAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.Order) {
+          onOrderUpdates(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onOrderUpdates]);
+
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for trade address from order history provider",
+      tradeAddress
+    );
+
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: tradeAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.Order) {
+          onOrderUpdates(data);
+        }
+      },
+      error: (err) => {
+        console.log("subscription error", err);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onOrderUpdates, tradeAddress]);
 
   return (
     <Provider
