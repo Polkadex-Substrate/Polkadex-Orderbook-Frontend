@@ -175,11 +175,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   // user event listener
   const { onRegisterMainAccountUpdate } = useExtensionWallet();
-  const { onBalanceUpdate } = useBalancesProvider();
-  const { onTransactionsUpdate } = useTransactionsProvider();
-  const { onTradeAccountUpdate } = useTradeWallet();
   const { onUserTradeUpdate } = useTrades();
-  const { onOrderUpdates } = useOrderHistoryProvider();
   const registerSuccessNotification = useCallback(
     (title: string, description: string) =>
       onHandleNotification({ type: "Success", message: description }),
@@ -193,26 +189,26 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       console.info("User Event: ", data);
       const eventType = data.type;
       switch (eventType) {
-        case USER_EVENTS.SetBalance: {
-          onBalanceUpdate(data);
-          return balanceUpdateEvent(data);
-        }
-        case USER_EVENTS.SetTransaction: {
-          onTransactionsUpdate(data);
-          return transactionsUpdateEvent(data);
-        }
-        case USER_EVENTS.Order: {
-          onOrderUpdates(data);
-          return orderUpdateEvent(data);
-        }
+        // case USER_EVENTS.SetBalance: {
+        //   onBalanceUpdate(data);
+        //   return balanceUpdateEvent(data);
+        // }
+        // case USER_EVENTS.SetTransaction: {
+        //   onTransactionsUpdate(data);
+        //   return transactionsUpdateEvent(data);
+        // }
+        // case USER_EVENTS.Order: {
+        //   onOrderUpdates(data);
+        //   return orderUpdateEvent(data);
+        // }
         case USER_EVENTS.RegisterAccount: {
           onRegisterMainAccountUpdate(data);
           return registerMainAccountUpdateEvent(data);
         }
-        case USER_EVENTS.AddProxy: {
-          onTradeAccountUpdate(data);
-          return tradeAccountUpdateEvent(data);
-        }
+        // case USER_EVENTS.AddProxy: {
+        //   onTradeAccountUpdate(data);
+        //   return tradeAccountUpdateEvent(data);
+        // }
 
         case USER_EVENTS.TradeFormat: {
           onUserTradeUpdate(data);
@@ -226,15 +222,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           );
       }
     },
-    [
-      onBalanceUpdate,
-      onOrderUpdates,
-      onRegisterMainAccountUpdate,
-      onTradeAccountUpdate,
-      onTransactionsUpdate,
-      onUserTradeUpdate,
-      registerSuccessNotification,
-    ]
+    [onRegisterMainAccountUpdate, onUserTradeUpdate, registerSuccessNotification]
   );
   const currentAccount: T.UserAccount = state.selectedAccount;
   const mainAddr = currentAccount.mainAddress;
