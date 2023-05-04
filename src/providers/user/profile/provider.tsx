@@ -4,17 +4,7 @@ import { API } from "aws-amplify";
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
 import * as subscriptions from "../../../graphql/subscriptions";
-import { useExtensionWallet } from "../extensionWallet";
-import { orderUpdateEvent } from "../orderHistoryProvider";
-import { balanceUpdateEvent } from "../balancesProvider/actions";
-import { useBalancesProvider } from "../balancesProvider/useBalancesProvider";
-import { transactionsUpdateEvent } from "../transactionsProvider";
-import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
-import { useTradeWallet } from "../tradeWallet";
 import { useTrades } from "../trades";
-import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
-import { registerMainAccountUpdateEvent } from "../extensionWallet/actions";
-import { tradeAccountUpdateEvent } from "../tradeWallet/actions";
 import { userTradesUpdateEvent } from "../trades/actions";
 
 import { Provider } from "./context";
@@ -174,7 +164,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   }, [logoutIsSuccess]);
 
   // user event listener
-  const { onRegisterMainAccountUpdate } = useExtensionWallet();
   const { onUserTradeUpdate } = useTrades();
   const registerSuccessNotification = useCallback(
     (title: string, description: string) =>
@@ -201,10 +190,10 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         //   onOrderUpdates(data);
         //   return orderUpdateEvent(data);
         // }
-        case USER_EVENTS.RegisterAccount: {
-          onRegisterMainAccountUpdate(data);
-          return registerMainAccountUpdateEvent(data);
-        }
+        // case USER_EVENTS.RegisterAccount: {
+        //   onRegisterMainAccountUpdate(data);
+        //   return registerMainAccountUpdateEvent(data);
+        // }
         // case USER_EVENTS.AddProxy: {
         //   onTradeAccountUpdate(data);
         //   return tradeAccountUpdateEvent(data);
@@ -222,7 +211,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           );
       }
     },
-    [onRegisterMainAccountUpdate, onUserTradeUpdate, registerSuccessNotification]
+    [onUserTradeUpdate, registerSuccessNotification]
   );
   const currentAccount: T.UserAccount = state.selectedAccount;
   const mainAddr = currentAccount.mainAddress;
