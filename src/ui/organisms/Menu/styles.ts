@@ -16,6 +16,7 @@ export const WrapperIcon = styled.div<{
     flex-direction: row;
     align-items: center;
     width: fit-content;
+    cursor: pointer;
     pointer-events: ${isDisabled ? "none" : "auto"};
     opacity: ${isDisabled ? 0.4 : 1};
     :hover {
