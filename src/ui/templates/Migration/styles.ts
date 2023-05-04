@@ -7,12 +7,41 @@ export const Wrapper = styled.section`
 `;
 
 export const Container = styled.div`
-  max-width: 1200px;
+  position: relative;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   column-gap: 4rem;
   flex: 1;
   flex-wrap: wrap;
+  @media screen and (min-width: 855px) {
+    flex-direction: row;
+  }
+`;
+export const Details = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    background: ${theme.colors.primary};
+    width: 20rem;
+    height: 20rem;
+    border-radius: 100rem;
+    top: -10rem;
+    right: -10rem;
+    :before {
+      content: "";
+      position: absolute;
+      width: 40rem;
+      height: 40rem;
+      border-radius: 100rem;
+      top: -10rem;
+      right: -10rem;
+      background: ${theme.colors.primary}22;
+    }
+    @media screen and (max-width: 855px) {
+      display: none;
+    }
+  `}
 `;
 
 export const Content = styled.div`
@@ -23,12 +52,17 @@ export const Content = styled.div`
     gap: 2rem;
     flex: 1;
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    max-width: 50rem;
-    padding: 4rem;
+    padding: 2rem;
     p,
     a,
     span {
       font-size: 1.4rem;
+    }
+    @media screen and (min-width: 855px) {
+      max-width: 50rem;
+    }
+    @media screen and (min-width: 1006px) {
+      padding: 4rem;
     }
   `}
 `;
@@ -105,8 +139,9 @@ export const Timer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 6rem;
+  flex: 1;
   img {
     width: 100%;
     max-width: 60rem;
@@ -115,7 +150,14 @@ export const Timer = styled.div`
     font-weight: normal;
     font-size: 1.4rem;
   }
+  @media screen and (max-width: 1006px) {
+    padding: 2rem;
+  }
+  @media screen and (min-width: 855px) {
+    align-items: flex-start;
+  }
 `;
+
 export const TimerWrapper = styled.div`
   display: flex;
   flex-direction: column;

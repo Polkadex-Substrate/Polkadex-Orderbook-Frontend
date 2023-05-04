@@ -1,22 +1,59 @@
 import Head from "next/head";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 import * as S from "./styles";
 
 import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
+
+const initialState = {
+  hours: "00",
+  minutes: "00",
+  seconds: "00",
+};
+
 export type Props = {
   title: string;
   footerText?: string;
   textButton?: string;
   buttonLink?: string;
+  dateIntimestampMs?: Date;
 };
+
 export const Migration = ({
   title = "Orderbook v1 will go offline as it is upgraded to v2",
   footerText,
   textButton,
-  buttonLink,
+  buttonLink = "https://t.me/Polkadex",
+  dateIntimestampMs = new Date("06/05/2023"),
   children = <MigrationText />,
 }: PropsWithChildren<Props>) => {
+  const [state, setState] = useState(initialState);
+
+  const updateRemainingTime = useCallback((time: Date) => {
+    const timestampDay = dayjs(time);
+    const nowDay = dayjs();
+    if (timestampDay.isBefore(nowDay)) return initialState;
+
+    return {
+      hours: addZeros(timestampDay.diff(nowDay, "hours") % 25),
+      minutes: addZeros(timestampDay.diff(nowDay, "minutes") % 60),
+      seconds: addZeros(timestampDay.diff(nowDay, "seconds") % 60),
+    };
+  }, []);
+
+  const addZeros = (value: number, minLenght = 2) =>
+    value.toString().length >= minLenght ? value.toString() : `0${value.toString()}`;
+
+  useEffect(() => {
+    const initTimer = setInterval(
+      () => setState(updateRemainingTime(dateIntimestampMs)),
+      1000
+    );
+
+    return () => clearTimeout(initTimer);
+  }, [dateIntimestampMs, updateRemainingTime]);
+
   return (
     <S.Wrapper>
       <Head>
@@ -24,6 +61,7 @@ export const Migration = ({
       </Head>
       <S.Container>
         <S.Content>
+          <S.Details />
           <S.Header>
             <span>
               <svg
@@ -76,15 +114,15 @@ export const Migration = ({
             <h3>The migration ends in:</h3>
             <S.CountDown>
               <div>
-                <span>10</span>
+                <span>{state.hours}</span>
                 <p>hrs</p>
               </div>
               <div>
-                <span>30</span>
+                <span>{state.minutes}</span>
                 <p>mins</p>
               </div>
               <div>
-                <span>40</span>
+                <span>{state.seconds}</span>
                 <p>secs</p>
               </div>
             </S.CountDown>
@@ -106,7 +144,7 @@ const MigrationText = ({ chainBridgeDate = "20/05/2023" }) => (
     <p>
       <span>
         If you have cUSDT, use the{" "}
-        <a href="/" target="_blank">
+        <a href="www.bridge.polkadex.trade" target="_blank">
           {" "}
           ChainBridge portal
         </a>{" "}
