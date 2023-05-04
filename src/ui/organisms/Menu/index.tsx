@@ -45,38 +45,30 @@ export const Menu = () => {
           <Logo size="Medium" href="/trading" />
         </S.Logo>
         <S.Container>
-          <S.MenuButtonWrapper isDisabled={router.pathname === "/trading/[id]"}>
-            <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
-              <Link href="/trading">
-                <div>
-                  <Icon name="Exchange" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Exchange</S.Span>
-              </Link>
-            </S.WrapperIcon>
-          </S.MenuButtonWrapper>
-          <S.MenuButtonWrapper
-            isDisabled={!isAuthenticated || router.pathname === "/balances"}>
-            <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/balances"}>
-              <Link href="/balances">
-                <div>
-                  <Icon name="Coins" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Balances</S.Span>
-              </Link>
-            </S.WrapperIcon>
-          </S.MenuButtonWrapper>
-          <S.MenuButtonWrapper
-            isDisabled={!isAuthenticated || router.pathname === "/settings"}>
-            <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/settings"}>
-              <Link href="/settings">
-                <div>
-                  <Icon name="Wallet" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Accounts</S.Span>
-              </Link>
-            </S.WrapperIcon>
-          </S.MenuButtonWrapper>
+          <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
+            <Link href="/trading">
+              <div>
+                <Icon name="Exchange" background="none" stroke="text" size="large" />
+              </div>
+              <S.Span>Exchange</S.Span>
+            </Link>
+          </S.WrapperIcon>
+          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/balances"}>
+            <Link href="/balances">
+              <div>
+                <Icon name="Coins" background="none" stroke="text" size="large" />
+              </div>
+              <S.Span>Balances</S.Span>
+            </Link>
+          </S.WrapperIcon>
+          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/settings"}>
+            <Link href="/settings">
+              <div>
+                <Icon name="Wallet" background="none" stroke="text" size="large" />
+              </div>
+              <S.Span>Accounts</S.Span>
+            </Link>
+          </S.WrapperIcon>
           <Terms />
           <Help />
         </S.Container>
