@@ -91,6 +91,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
     let data: T.RegisterEmailData, signature: string;
     const { mainAccount, tradeAddress, mnemonic } = payload;
+    dispatch(A.registerMainAccountFetch(payload));
+
     try {
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) => account?.address?.toLowerCase() === mainAccount?.toLowerCase()
