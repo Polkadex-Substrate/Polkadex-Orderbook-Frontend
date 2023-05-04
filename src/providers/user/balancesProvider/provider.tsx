@@ -117,7 +117,10 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   }, [onBalancesFetch, mainAddress, isAssetData]);
 
   useEffect(() => {
-    console.log("created User Events Channel...", mainAddress);
+    console.log(
+      "created User Events Channel...with main address for balances provider",
+      mainAddress
+    );
 
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
@@ -147,7 +150,10 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   }, [mainAddress, onBalanceUpdate]);
 
   useEffect(() => {
-    console.log("created User Events Channel...", tradeAddress);
+    console.log(
+      "created User Events Channel... with trade address for balances",
+      tradeAddress
+    );
 
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,

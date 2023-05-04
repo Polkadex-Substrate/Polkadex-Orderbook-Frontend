@@ -145,9 +145,10 @@ export const useSettings = () => {
       isImportAccountSuccess;
 
     if (hasAction) {
-      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
+      if (isRegisterControllerAccountSuccess || isImportAccountSuccess) {
         onRegisterMainAccountReset();
-      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+        tradeWalletState.onRegisterAccountModalCancel();
+      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
         tradeWalletState.onRegisterTradeAccountReset();
       else tradeWalletState.onRegisterAccountModalCancel();
     }
