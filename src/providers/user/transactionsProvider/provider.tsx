@@ -188,41 +188,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     };
   }, [mainAddress, onTransactionsUpdate]);
 
-  useEffect(() => {
-    console.log(
-      "created User Events Channel... for trade address from transactions provider",
-      tradeAddress
-    );
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.SetTransaction) {
-          onTransactionsUpdate(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [onTransactionsUpdate, tradeAddress]);
-
   return (
     <Provider
       value={{
