@@ -29,6 +29,10 @@ module.exports = withPlugins([
               key: "Strict-Transport-Security",
               value: "max-age=31536000",
             },
+            {
+              key: "Cache-Control",
+              value: "public, max-age=31536000, immutable",
+            },
           ],
         },
       ];
