@@ -4,8 +4,6 @@ import { API } from "aws-amplify";
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
 import * as subscriptions from "../../../graphql/subscriptions";
-import { useTrades } from "../trades";
-import { userTradesUpdateEvent } from "../trades/actions";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -164,72 +162,42 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   }, [logoutIsSuccess]);
 
   // user event listener
-  const { onUserTradeUpdate } = useTrades();
   const registerSuccessNotification = useCallback(
     (title: string, description: string) =>
       onHandleNotification({ type: "Success", message: description }),
     [onHandleNotification]
   );
 
-  const createActionFromUserEvent = useCallback(
-    (eventData: any) => {
-      console.log("got raw event", eventData);
-      const data = JSON.parse(eventData.value.data.websocket_streams.data);
-      console.info("User Event: ", data);
-      const eventType = data.type;
-      switch (eventType) {
-        // case USER_EVENTS.SetBalance: {
-        //   onBalanceUpdate(data);
-        //   return balanceUpdateEvent(data);
-        // }
-        // case USER_EVENTS.SetTransaction: {
-        //   onTransactionsUpdate(data);
-        //   return transactionsUpdateEvent(data);
-        // }
-        // case USER_EVENTS.Order: {
-        //   onOrderUpdates(data);
-        //   return orderUpdateEvent(data);
-        // }
-        // case USER_EVENTS.RegisterAccount: {
-        //   onRegisterMainAccountUpdate(data);
-        //   return registerMainAccountUpdateEvent(data);
-        // }
-        // case USER_EVENTS.AddProxy: {
-        //   onTradeAccountUpdate(data);
-        //   return tradeAccountUpdateEvent(data);
-        // }
+  const currentAccount: T.UserAccount = state.selectedAccount;
+  const mainAddress = currentAccount.mainAddress;
+  const tradeAddress = currentAccount.tradeAddress;
 
-        case USER_EVENTS.TradeFormat: {
-          onUserTradeUpdate(data);
-          return userTradesUpdateEvent(data);
-        }
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from profile  provider",
+      mainAddress
+    );
 
-        case USER_EVENTS.RemoveProxy:
-          return registerSuccessNotification(
+    const subscription = API.graphql({
+      query: subscriptions.websocket_streams,
+      variables: { name: mainAddress },
+      authToken: READ_ONLY_TOKEN,
+      // ignore type error here as its a known bug in aws library
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }).subscribe({
+      next: (data) => {
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.RemoveProxy) {
+          registerSuccessNotification(
             "Trade account removed",
             "Trade account removal Confirmed"
           );
-      }
-    },
-    [onUserTradeUpdate, registerSuccessNotification]
-  );
-  const currentAccount: T.UserAccount = state.selectedAccount;
-  const mainAddr = currentAccount.mainAddress;
-  const tradeAddr = currentAccount.tradeAddress;
-
-  useEffect(() => {
-    console.log("created User Events Channel...", mainAddr);
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddr },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        createActionFromUserEvent(data);
+        }
       },
       error: (err) => {
         console.log("subscription error", err);
@@ -239,21 +207,35 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [createActionFromUserEvent, mainAddr]);
+  }, [mainAddress, registerSuccessNotification]);
 
   useEffect(() => {
-    console.log("created User Events Channel...", tradeAddr);
+    console.log(
+      "created User Events Channel... for trade address from profile  provider",
+      tradeAddress
+    );
 
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: tradeAddr },
+      variables: { name: tradeAddress },
       authToken: READ_ONLY_TOKEN,
       // ignore type error here as its a known bug in aws library
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        createActionFromUserEvent(data);
+        console.log("got raw event", data);
+        const eventData = JSON.parse(data.value.data.websocket_streams.data);
+
+        const eventType = eventData.type;
+        console.info("User Event: ", eventData, "event type", eventType);
+
+        if (eventType === USER_EVENTS.RemoveProxy) {
+          registerSuccessNotification(
+            "Trade account removed",
+            "Trade account removal Confirmed"
+          );
+        }
       },
       error: (err) => {
         console.log("subscription error", err);
@@ -263,7 +245,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [createActionFromUserEvent, tradeAddr]);
+  }, [registerSuccessNotification, tradeAddress]);
 
   return (
     <Provider
