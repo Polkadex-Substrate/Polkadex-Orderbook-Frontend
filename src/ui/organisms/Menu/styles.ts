@@ -17,6 +17,7 @@ export const WrapperIcon = styled.div<{
     align-items: center;
     width: fit-content;
     pointer-events: ${isDisabled ? "none" : "auto"};
+    opacity: ${isDisabled ? 0.5 : 1};
     :hover {
       ${Span},${TermsLinks} {
         opacity: 1;
