@@ -17,3 +17,4 @@ export { default as CUSDT } from "./Usdt";
 export { default as ZAR } from "./Zar";
 export { default as TRST } from "./Trst";
 export { default as UNKN } from "./Unkn";
+export { default as GLMR } from "./Glmr";
