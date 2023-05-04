@@ -23,12 +23,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export type MenuProps = {
-  handleChange?: () => void;
-  isWallet?: boolean;
-};
-
-export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
+export const Menu = () => {
   const router = useRouter();
 
   const profileState = useProfile();
