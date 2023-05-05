@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
@@ -9,10 +9,9 @@ import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { LOCAL_STORAGE_ID, USER_EVENTS } from "@polkadex/web-constants";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
-import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -162,50 +161,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   }, [logoutIsSuccess]);
 
   // user event listener
-  const registerSuccessNotification = useCallback(
-    () =>
-      onHandleNotification({ type: "Success", message: "Trade account removal Confirmed" }),
-    [onHandleNotification]
-  );
-
-  const currentAccount: T.UserAccount = state.selectedAccount;
-  const mainAddress = currentAccount.mainAddress;
-  const tradeAddress = currentAccount.tradeAddress;
-
-  useEffect(() => {
-    console.log(
-      "created User Events Channel... for main address from profile  provider",
-      mainAddress
-    );
-
-    const subscription = eventHandler(
-      registerSuccessNotification,
-      mainAddress,
-      USER_EVENTS.Order
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [mainAddress, registerSuccessNotification]);
-
-  useEffect(() => {
-    console.log(
-      "created User Events Channel... for trade address from profile  provider",
-      tradeAddress
-    );
-
-    const subscription = eventHandler(
-      registerSuccessNotification,
-      tradeAddress,
-      USER_EVENTS.Order
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [registerSuccessNotification, tradeAddress]);
-
   return (
     <Provider
       value={{

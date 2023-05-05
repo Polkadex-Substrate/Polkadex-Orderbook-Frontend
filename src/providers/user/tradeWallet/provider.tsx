@@ -23,7 +23,6 @@ import {
 import * as T from "./types";
 import * as A from "./actions";
 
-import { USER_EVENTS } from "@polkadex/web-constants";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
@@ -280,15 +279,17 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
   const { selectedAccount } = profileState;
   const { mainAddress, tradeAddress } = selectedAccount;
+
+  // subscribe to user account updates notifications
   useEffect(() => {
     console.log(
       "created User Events Channel... for main address from trade wallet provider",
       mainAddress
     );
-    const subscription = eventHandler(onTradeAccountUpdate, mainAddress, USER_EVENTS.AddProxy);
+    const updateSubscription = eventHandler(onTradeAccountUpdate, mainAddress, "AddProxy");
 
     return () => {
-      subscription.unsubscribe();
+      updateSubscription.unsubscribe();
     };
   }, [mainAddress, onTradeAccountUpdate]);
 
@@ -298,11 +299,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = eventHandler(
-      onTradeAccountUpdate,
-      tradeAddress,
-      USER_EVENTS.AddProxy
-    );
+    const subscription = eventHandler(onTradeAccountUpdate, tradeAddress, "AddProxy");
 
     return () => {
       subscription.unsubscribe();

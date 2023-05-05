@@ -10,19 +10,19 @@ import * as T from "./types";
 import * as A from "./actions";
 import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
 
-import { ErrorMessages, USER_EVENTS } from "@polkadex/web-constants";
+import { ErrorMessages } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
-import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
+import { eventHandler, eventHandlerCallback } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
   const profileState = useProfile();
-  const { mainAddress, tradeAddress } = profileState.selectedAccount;
+  const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
@@ -100,9 +100,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       const api: ApiPromise = nativeApiState.api;
 
       // listen for events in this new registered main address
-
-      // TODO : When userEventsChanelHandler provider will be created
-      // yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+      eventHandlerCallback({
+        cb: onRegisterMainAccountUpdate,
+        name: mainAddress,
+        eventType: "RegisterAccount",
+      });
 
       const hasAddressAndEmail =
         !!selectedControllerAccount.account?.address?.length && !!email?.length;
@@ -248,30 +250,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
     const subscription = eventHandler(
       onRegisterMainAccountUpdate,
       mainAddress,
-      USER_EVENTS.RegisterAccount
+      "RegisterAccount"
     );
 
     return () => {
       subscription.unsubscribe();
     };
   }, [mainAddress, onRegisterMainAccountUpdate]);
-
-  useEffect(() => {
-    console.log(
-      "created User Events Channel... for trade address from extension wallet provider",
-      tradeAddress
-    );
-
-    const subscription = eventHandler(
-      onRegisterMainAccountUpdate,
-      tradeAddress,
-      USER_EVENTS.RegisterAccount
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [onRegisterMainAccountUpdate, tradeAddress]);
 
   return (
     <Provider

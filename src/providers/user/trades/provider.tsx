@@ -11,13 +11,12 @@ import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
-import { USER_EVENTS } from "@polkadex/web-constants";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
-  const { mainAddress, tradeAddress } = profileState.selectedAccount;
+  const { mainAddress } = profileState.selectedAccount;
   const sessionState = useSessionProvider();
   const { onHandleError } = useSettingsProvider();
 
@@ -59,7 +58,7 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
       mainAddress
     );
 
-    const subscription = eventHandler(onUserTradeUpdate, mainAddress, USER_EVENTS.TradeFormat);
+    const subscription = eventHandler(onUserTradeUpdate, mainAddress, "TradeFormat");
 
     return () => {
       subscription.unsubscribe();

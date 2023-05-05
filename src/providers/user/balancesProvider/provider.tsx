@@ -13,13 +13,12 @@ import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
-import { USER_EVENTS } from "@polkadex/web-constants";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
-    selectedAccount: { mainAddress, tradeAddress },
+    selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
@@ -115,31 +114,19 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
 
+  // balance updates are give to main address
   useEffect(() => {
     console.log(
       "created User Events Channel...with main address for balances provider",
       mainAddress
     );
 
-    const subscription = eventHandler(onBalanceUpdate, mainAddress, USER_EVENTS.SetBalance);
+    const subscription = eventHandler(onBalanceUpdate, mainAddress, "SetBalance");
 
     return () => {
       subscription.unsubscribe();
     };
   }, [mainAddress, onBalanceUpdate]);
-
-  useEffect(() => {
-    console.log(
-      "created User Events Channel... with trade address for balances",
-      tradeAddress
-    );
-
-    const subscription = eventHandler(onBalanceUpdate, tradeAddress, USER_EVENTS.SetBalance);
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [onBalanceUpdate, tradeAddress]);
 
   return (
     <Provider

@@ -16,7 +16,6 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
-import { USER_EVENTS } from "@polkadex/web-constants";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const OrderHistoryProvider = ({ children }) => {
@@ -216,7 +215,7 @@ export const OrderHistoryProvider = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = eventHandler(onOrderUpdates, tradeAddress, USER_EVENTS.Order);
+    const subscription = eventHandler(onOrderUpdates, tradeAddress, "Order");
 
     return () => {
       subscription.unsubscribe();
