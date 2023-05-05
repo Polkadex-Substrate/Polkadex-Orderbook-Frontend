@@ -310,10 +310,12 @@ export const SettingsTemplate = () => {
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!controllerWallets?.length ? (
-                    <Empty
-                      title="No wallet found"
-                      description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
-                    />
+                    <div style={{ padding: "4rem 2rem" }}>
+                      <Empty
+                        title="No wallet found"
+                        description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
+                      />
+                    </div>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
