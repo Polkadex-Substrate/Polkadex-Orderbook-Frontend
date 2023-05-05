@@ -23,7 +23,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -236,8 +236,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   };
 
   useEffect(() => {
-    onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet]);
+    if (profileState.authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, profileState.authInfo.isAuthenticated, hasExtension]);
 
   return (
     <Provider
