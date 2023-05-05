@@ -49,7 +49,7 @@ export const useSettings = () => {
   const linkedMainAddress = profileState.userData.mainAccounts;
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
-  const { isActive } = tradeWalletState.registerAccountModal;
+  const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
   const isRegisterControllerAccountSuccess = tradeWalletState.registerAccountSuccess;
 
@@ -95,10 +95,10 @@ export const useSettings = () => {
         const isLinkedAccount = !!userAccounts.some(
           (v) =>
             v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
-            filterByController === v.mainAddress.toLowerCase()
+            filterByController === v.mainAddress?.toLowerCase()
         );
         if (
-          (isLinkedAccount || filterByController.includes("all")) &&
+          (isLinkedAccount || filterByController?.includes("all")) &&
           (address?.includes(checker) || name?.includes(checker))
         ) {
           pv.push(cv);
