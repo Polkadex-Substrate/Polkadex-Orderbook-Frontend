@@ -4,7 +4,6 @@ import keyring from "@polkadot/ui-keyring";
 import FileSaver from "file-saver";
 import { ApiPromise } from "@polkadot/api";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
-import { API } from "aws-amplify";
 
 import { transformAddress } from "../profile/helpers";
 import { TradeAccount } from "../../types";
@@ -12,7 +11,6 @@ import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
 import { useExtensionWallet } from "../extensionWallet";
 import { useSettingsProvider } from "../../public/settings";
-import * as subscriptions from "../../../graphql/subscriptions";
 
 import { Provider } from "./context";
 import { tradeWalletReducer, initialState } from "./reducer";
@@ -25,7 +23,8 @@ import {
 import * as T from "./types";
 import * as A from "./actions";
 
-import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { USER_EVENTS } from "@polkadex/web-constants";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
@@ -286,29 +285,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       "created User Events Channel... for main address from trade wallet provider",
       mainAddress
     );
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.AddProxy) {
-          onTradeAccountUpdate(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(onTradeAccountUpdate, mainAddress, USER_EVENTS.AddProxy);
 
     return () => {
       subscription.unsubscribe();
@@ -321,29 +298,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.AddProxy) {
-          onTradeAccountUpdate(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(
+      onTradeAccountUpdate,
+      tradeAddress,
+      USER_EVENTS.AddProxy
+    );
 
     return () => {
       subscription.unsubscribe();

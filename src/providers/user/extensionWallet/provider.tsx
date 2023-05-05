@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
-import { API } from "aws-amplify";
 
 import { ExtensionAccount } from "../../types";
-import * as subscriptions from "../../../graphql/subscriptions";
 
 import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
@@ -12,12 +10,13 @@ import * as T from "./types";
 import * as A from "./actions";
 import { executeRegisterEmail, createSignedData, registerMainAccount } from "./helper";
 
-import { ErrorMessages, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { ErrorMessages, USER_EVENTS } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
@@ -246,28 +245,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       mainAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.RegisterAccount) {
-          onRegisterMainAccountUpdate(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(
+      onRegisterMainAccountUpdate,
+      mainAddress,
+      USER_EVENTS.RegisterAccount
+    );
 
     return () => {
       subscription.unsubscribe();
@@ -280,29 +262,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       tradeAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.RegisterAccount) {
-          onRegisterMainAccountUpdate(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(
+      onRegisterMainAccountUpdate,
+      tradeAddress,
+      USER_EVENTS.RegisterAccount
+    );
 
     return () => {
       subscription.unsubscribe();

@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { API } from "aws-amplify";
 
 import * as queries from "../../../graphql/queries";
 import { useSettingsProvider } from "../../public/settings";
 import { useProfile } from "../profile";
 import { useSessionProvider } from "../sessionProvider/useSessionProvider";
-import * as subscriptions from "../../../graphql/subscriptions";
 
 import { Provider } from "./context";
 import { ordersHistoryReducer, initialOrdersHistoryState } from "./reducer";
@@ -18,7 +16,8 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
-import { READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { USER_EVENTS } from "@polkadex/web-constants";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
@@ -217,29 +216,7 @@ export const OrderHistoryProvider = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.Order) {
-          onOrderUpdates(eventData);
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(onOrderUpdates, tradeAddress, USER_EVENTS.Order);
 
     return () => {
       subscription.unsubscribe();

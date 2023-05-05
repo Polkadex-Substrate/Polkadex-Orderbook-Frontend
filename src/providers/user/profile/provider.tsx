@@ -3,16 +3,16 @@ import { API } from "aws-amplify";
 
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
-import * as subscriptions from "../../../graphql/subscriptions";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { LOCAL_STORAGE_ID, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { LOCAL_STORAGE_ID, USER_EVENTS } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -163,8 +163,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   // user event listener
   const registerSuccessNotification = useCallback(
-    (title: string, description: string) =>
-      onHandleNotification({ type: "Success", message: description }),
+    () =>
+      onHandleNotification({ type: "Success", message: "Trade account removal Confirmed" }),
     [onHandleNotification]
   );
 
@@ -178,31 +178,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       mainAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.RemoveProxy) {
-          registerSuccessNotification(
-            "Trade account removed",
-            "Trade account removal Confirmed"
-          );
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(
+      registerSuccessNotification,
+      mainAddress,
+      USER_EVENTS.Order
+    );
 
     return () => {
       subscription.unsubscribe();
@@ -215,32 +195,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddress },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        console.log("got raw event", data);
-        const eventData = JSON.parse(data.value.data.websocket_streams.data);
-
-        const eventType = eventData.type;
-        console.info("User Event: ", eventData, "event type", eventType);
-
-        if (eventType === USER_EVENTS.RemoveProxy) {
-          registerSuccessNotification(
-            "Trade account removed",
-            "Trade account removal Confirmed"
-          );
-        }
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
+    const subscription = eventHandler(
+      registerSuccessNotification,
+      tradeAddress,
+      USER_EVENTS.Order
+    );
 
     return () => {
       subscription.unsubscribe();
