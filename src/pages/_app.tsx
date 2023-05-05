@@ -16,7 +16,7 @@ import { useInit } from "../hooks/useInit";
 import { AssetsProvider } from "../providers/public/assetsProvider/provider";
 import { BalancesProvider } from "../providers/user/balancesProvider/provider";
 
-import { defaultThemes, GlobalStyles } from "src/styles";
+import { defaultThemes, GlobalStyles, FontStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { AuthProvider, useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { ProfileProvider, useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -46,14 +46,22 @@ function App({ Component, pageProps }: AppProps) {
     console.warn = () => {};
     console.error = () => {};
   }
+
   return (
     <>
+      <FontStyles />
+
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
           onError: (e) => toast(e, { type: "error", theme: "colored" }),
           onSuccess: (e) =>
-            toast(e, { type: "success", theme: "colored", className: "toastBg" }),
+            toast(e, {
+              type: "success",
+              theme: "colored",
+              className: "toastBg",
+              pauseOnFocusLoss: false,
+            }),
         }}>
         <AuthProvider>
           <ProfileProvider>

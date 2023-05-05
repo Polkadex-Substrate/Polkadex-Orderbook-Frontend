@@ -16,6 +16,19 @@ export const MarketOrder = () => {
   const [isLimit, setIsLimit] = useState(true);
   const handleChangeType = (value: boolean) => setIsLimit(value);
 
+  const [form, setForm] = useState<{
+    orderType: string;
+    price: string;
+    priceMarket?: any;
+    amountSell: string;
+    amountBuy: string;
+  }>({
+    orderType: isLimit ? "Limit" : "Market",
+    price: "",
+    amountSell: "",
+    amountBuy: "",
+  });
+
   return (
     <S.Section>
       <Tabs>
@@ -45,10 +58,10 @@ export const MarketOrder = () => {
           </Dropdown>
         </S.Header>
         <TabContent>
-          <MarketOrderAction isLimit={isLimit} />
+          <MarketOrderAction isLimit={isLimit} form={form} setForm={setForm} />
         </TabContent>
         <TabContent>
-          <MarketOrderAction isSell isLimit={isLimit} />
+          <MarketOrderAction isSell isLimit={isLimit} form={form} setForm={setForm} />
         </TabContent>
       </Tabs>
     </S.Section>

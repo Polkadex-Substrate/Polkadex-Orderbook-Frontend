@@ -13,6 +13,7 @@ import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
@@ -112,6 +113,24 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
+
+  // balance updates are give to main address
+  useEffect(() => {
+    console.log(
+      "created User Events Channel...with main address for balances provider",
+      mainAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onBalanceUpdate,
+      name: mainAddress,
+      eventType: "SetBalance",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onBalanceUpdate]);
 
   return (
     <Provider

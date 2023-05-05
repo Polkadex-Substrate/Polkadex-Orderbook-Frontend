@@ -10,7 +10,6 @@ import { Button, Checkbox, InputLine, OrderbookLogo } from "@polkadex/orderbook-
 import { signUpValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
-
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const SignTemplate = () => {
@@ -46,6 +45,7 @@ export const SignTemplate = () => {
       onSignUp({ email, password });
     },
   });
+
   return (
     <>
       <Head>
