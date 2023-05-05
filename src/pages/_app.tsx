@@ -36,12 +36,7 @@ const Maintenance = dynamic(
   }
 );
 const queryClient = new QueryClient();
-const onError = (e) => {
-  toast(e, { type: "error", theme: "colored" });
-};
-const onSuccess = (e) => {
-  toast(e, { type: "success", theme: "colored", className: "toastBg" });
-};
+
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
   if (process.env.NODE_ENV === "production") {
@@ -59,8 +54,9 @@ function App({ Component, pageProps }: AppProps) {
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
-          onError,
-          onSuccess,
+          onError: (e) => toast(e, { type: "error", theme: "colored" }),
+          onSuccess: (e) =>
+            toast(e, { type: "success", theme: "colored", className: "toastBg" }),
         }}>
         <AuthProvider>
           <ProfileProvider>
