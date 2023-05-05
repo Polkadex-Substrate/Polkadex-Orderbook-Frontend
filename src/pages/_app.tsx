@@ -46,6 +46,7 @@ function App({ Component, pageProps }: AppProps) {
     console.warn = () => {};
     console.error = () => {};
   }
+
   return (
     <>
       <FontStyles />
