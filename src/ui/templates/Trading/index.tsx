@@ -34,6 +34,7 @@ import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/e
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
+import { TradesProvider } from "@polkadex/orderbook/providers/user/trades/provider";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -259,9 +260,11 @@ export function Trading() {
                       </KlineProvider>
                       {hasUser ? (
                         <SessionProvider>
-                          <OrderHistoryProvider>
-                            <Transactions />
-                          </OrderHistoryProvider>
+                          <TradesProvider>
+                            <OrderHistoryProvider>
+                              <Transactions />
+                            </OrderHistoryProvider>
+                          </TradesProvider>
                         </SessionProvider>
                       ) : (
                         <EmptyMyAccount hasLimit {...hasSelectedAccount} />
