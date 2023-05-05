@@ -4,7 +4,10 @@ import * as subscriptions from "../graphql/subscriptions";
 
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
-export const eventHandler = (updateFunction, address, typeEvent) => {
+export const eventHandler = (updateFunction, address: string, typeEvent: string) => {
+  if (typeEvent === "RegisterAccount")
+    console.log(address, typeEvent, "event type and address");
+
   const subscription = API.graphql({
     query: subscriptions.websocket_streams,
     variables: { name: address },
