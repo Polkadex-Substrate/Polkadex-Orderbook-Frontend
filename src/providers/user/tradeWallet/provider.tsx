@@ -268,10 +268,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.exportTradeAccountActive());
   };
 
-  const shouldRangerConnect = !nativeApiState.timestamp && !nativeApiState.connecting;
   useEffect(() => {
-    if (shouldRangerConnect) onLoadTradeAccounts();
-  }, [shouldRangerConnect, onLoadTradeAccounts]);
+    if (profileState.authInfo.isAuthenticated && settingsState.hasExtension)
+      onLoadTradeAccounts();
+  }, [onLoadTradeAccounts, profileState.authInfo.isAuthenticated, settingsState.hasExtension]);
 
   return (
     <Provider
