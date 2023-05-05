@@ -153,13 +153,17 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
       try {
         await Auth.confirmSignUp(email, code);
         dispatch(A.codeVerifyData());
+        onHandleNotification({
+          type: "Success",
+          message: "Successfully created a new account!, please sign in with your new account",
+        });
       } catch (error) {
         console.log("error:", error);
         onHandleError(error?.message ?? error);
         dispatch(A.codeVerifyError(error));
       }
     },
-    [onHandleError]
+    [onHandleError, onHandleNotification]
   );
 
   const onChangePassword = useCallback(
@@ -219,15 +223,13 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
 
   useEffect(() => {
     if (signupIsSuccess && isVerificationSuccess) {
-      onHandleNotification({
-        type: "Success",
-        message: "Successfully created a new account!, please sign in with your new account",
-      });
       setTimeout(() => {
         router.push("/signIn");
       }, 2000);
     }
-  }, [isVerificationSuccess, signupIsSuccess, onHandleNotification]);
+  }, [isVerificationSuccess, signupIsSuccess]);
+
+  // removed the onHandleNotification from dependency array as it was causing infinite rerenders
 
   useEffect(() => {
     if (signupIsSuccess && !email) router.push("/sign");

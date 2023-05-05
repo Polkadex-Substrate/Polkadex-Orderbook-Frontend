@@ -84,12 +84,21 @@ export const WalletContent = styled.div`
     flex-direction: column;
     gap: 1.5rem;
     max-height: 40rem;
-    overflow-y: hidden;
     padding: 0 2rem;
+    overflow-y: auto;
+    ::-webkit-scrollbar-thumb {
+      background: none;
+    }
+    ::-webkit-scrollbar-track {
+      background: none;
+    }
     :hover {
-      overflow-y: auto;
-      ${WalletActions} {
-        padding-right: 2rem;
+      ::-webkit-scrollbar-thumb {
+        background: ${theme.colors.secondaryBackground};
+      }
+
+      ::-webkit-scrollbar-track {
+        background: ${theme.colors.secondaryBackgroundOpacity};
       }
     }
   `}
