@@ -25,10 +25,16 @@ import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const profileState = useProfile();
+  const {
+    authInfo,
+    onUserSelectAccount,
+    onUserProfileAccountPush,
+    userData,
+    onUserProfileTradeAccountDelete,
+  } = useProfile();
   const nativeApiState = useNativeApi();
   const extensionWalletState = useExtensionWallet();
-  const settingsState = useSettingsProvider();
+  const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
 
   // Actions
   const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
@@ -49,7 +55,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
       );
     } catch (error) {
-      settingsState.onHandleError("Cannot export this account, incorrect password");
+      onHandleError("Cannot export this account, incorrect password");
     } finally {
       dispatch(A.exportTradeAccountData());
     }
@@ -72,12 +78,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         })
       );
       dispatch(A.importTradeAccountData());
-      profileState.onUserSelectAccount({ tradeAddress });
+      onUserSelectAccount({ tradeAddress });
     } catch (error) {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       dispatch(A.registerTradeAccountError(error));
-      settingsState.onHandleError("Cannot import account, Invalid password or file");
+      onHandleError("Cannot import account, Invalid password or file");
     }
   };
 
@@ -106,7 +112,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
 
-      settingsState.onHandleError("Cannot import account, please check your mnemonic");
+      onHandleError("Cannot import account, please check your mnemonic");
       dispatch(A.tradeAccountsError(error));
     }
   };
@@ -117,22 +123,22 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
-      settingsState.onHandleError(error?.message ?? error);
+      onHandleError(error?.message ?? error);
     }
-  }, [settingsState]);
+  }, [onHandleError]);
 
   const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
     try {
       const { proxy } = payload;
-      profileState.onUserSelectAccount({
+      onUserSelectAccount({
         tradeAddress: proxy,
       });
-      settingsState.onHandleNotification({
+      onHandleNotification({
         type: "Success",
         message: "Trade account added,new trade account created",
       });
     } catch (error) {
-      settingsState.onHandleError(error?.message ?? error);
+      onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -156,7 +162,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (res.isSuccess) {
         dispatch(A.tradeAccountPush({ pair }));
 
-        profileState.onUserProfileAccountPush({ tradeAddress, mainAddress: address });
+        onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
           dispatch(
             A.registerTradeAccountData({
@@ -173,7 +179,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-      settingsState.onHandleError(error?.message ?? error);
+      onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -186,9 +192,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       const { address: trade_Address } = payload;
       const linkedMainAddress =
         trade_Address &&
-        profileState.userData?.userAccounts?.find(
-          ({ tradeAddress }) => tradeAddress === trade_Address
-        )?.mainAddress;
+        userData?.userAccounts?.find(({ tradeAddress }) => tradeAddress === trade_Address)
+          ?.mainAddress;
 
       if (!linkedMainAddress) {
         throw new Error("Invalid trade address.");
@@ -205,21 +210,21 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (api.isConnected && account?.address) {
         const res = await removeProxyFromAccount(api, trade_Address, signer, account.address);
         if (res.isSuccess) {
-          settingsState.onHandleNotification({
+          onHandleNotification({
             type: "Success",
             message: "Congratulations! Your trade account has been removed from the chain!",
           });
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
           dispatch(A.removeTradeAccountFromBrowser({ address: trade_Address }));
-          profileState.onUserProfileTradeAccountDelete(trade_Address);
+          onUserProfileTradeAccountDelete(trade_Address);
         } else {
           throw new Error(res.message);
         }
       }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-      settingsState.onHandleError(error?.message ?? error);
+      onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
   };
@@ -269,9 +274,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   useEffect(() => {
-    if (profileState.authInfo.isAuthenticated && settingsState.hasExtension)
-      onLoadTradeAccounts();
-  }, [onLoadTradeAccounts, profileState.authInfo.isAuthenticated, settingsState.hasExtension]);
+    if (authInfo.isAuthenticated && hasExtension) onLoadTradeAccounts();
+  }, [onLoadTradeAccounts, authInfo.isAuthenticated, hasExtension]);
 
   return (
     <Provider

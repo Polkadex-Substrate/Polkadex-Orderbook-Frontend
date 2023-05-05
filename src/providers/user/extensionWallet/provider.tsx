@@ -20,7 +20,12 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
-  const profileState = useProfile();
+  const {
+    authInfo,
+    onUserProfileMainAccountPush,
+    onUserProfileAccountPush,
+    onUserAccountSelectFetch,
+  } = useProfile();
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
   const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
@@ -44,7 +49,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         const signature: string = signedData.signature;
         await executeRegisterEmail(data, signature);
 
-        profileState.onUserProfileMainAccountPush(mainAccount);
+        onUserProfileMainAccountPush(mainAccount);
       } else {
         throw new Error("Email or address is not valid");
       }
@@ -62,13 +67,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
     (payload: A.RegisterMainAccountUpdateEvent["payload"]) => {
       try {
         const { proxy, main } = payload;
-        profileState.onUserProfileMainAccountPush(main);
-        profileState.onUserProfileAccountPush({
+        onUserProfileMainAccountPush(main);
+        onUserProfileAccountPush({
           tradeAddress: proxy,
           mainAddress: main,
         });
 
-        profileState.onUserAccountSelectFetch({
+        onUserAccountSelectFetch({
           tradeAddress: proxy,
         });
         onHandleNotification({
@@ -82,7 +87,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         dispatch(A.registerMainAccountError());
       }
     },
-    [onHandleError, onHandleNotification, profileState]
+    [
+      onHandleError,
+      onHandleNotification,
+      onUserAccountSelectFetch,
+      onUserProfileMainAccountPush,
+      onUserProfileAccountPush,
+    ]
   );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
@@ -210,11 +221,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   ) => {
     try {
       await executeRegisterEmail(data, signature);
-      profileState.onUserProfileAccountPush({
+      onUserProfileAccountPush({
         tradeAddress,
         mainAddress,
       });
-      profileState.onUserProfileMainAccountPush(mainAddress);
+      onUserProfileMainAccountPush(mainAddress);
       dispatch(A.registerMainAccountData());
     } catch (error) {
       console.log("error", error);
@@ -236,8 +247,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   };
 
   useEffect(() => {
-    if (profileState.authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet, profileState.authInfo.isAuthenticated, hasExtension]);
+    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
 
   return (
     <Provider
