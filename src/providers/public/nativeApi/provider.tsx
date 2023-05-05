@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
 import { Provider } from "./context";
@@ -13,10 +13,7 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
   const { onHandleError } = useSettingsProvider();
-  const shouldRangerConnect = useMemo(
-    () => !state.timestamp && !state.connecting,
-    [state.timestamp, state.connecting]
-  );
+  const shouldRangerConnect = !state.timestamp && !state.connecting;
 
   const onConnectNativeApi = useCallback(async () => {
     dispatch(A.nativeApiConnectFetch());
