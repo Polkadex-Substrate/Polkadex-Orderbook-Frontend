@@ -17,20 +17,15 @@ interface eventHandlerParams {
   eventType: UserEvents;
   cb: (string) => void;
 }
-export const eventHandler = (
-  updateFunction: (UserEvents) => void,
-  address: string,
-  typeEvent: UserEvents
-) => {
-  return createEventsObservable(address).subscribe({
+export const eventHandler = ({ cb, name, eventType }: eventHandlerParams) => {
+  return createEventsObservable(name).subscribe({
     next: (data) => {
       console.log("got raw event", data);
       const eventData = JSON.parse(data.value.data.websocket_streams.data);
-      const eventType = eventData.type;
-      console.info("User Event: ", eventData, "event type", eventType);
+      console.info("User Event: ", eventData, "event type", eventData.type);
 
-      if (eventType === typeEvent) {
-        updateFunction(eventData);
+      if (eventType === eventData.type) {
+        cb(eventData);
       }
     },
     error: (err) => {
