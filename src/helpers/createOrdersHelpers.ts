@@ -5,11 +5,11 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { signPayload } from "./enclavePayloadSigner";
 
 import {
+  OrderKindEnum,
   OrderSide,
+  OrderSideEnum,
   OrderType,
   OrderTypeEnum,
-  OrderSideEnum,
-  OrderKindEnum,
 } from "@polkadex/orderbook/providers/types";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
@@ -23,7 +23,7 @@ export const createOrderPayload = (
   quantity: string,
   price: string,
   timestamp = 0,
-  client_order_id: Uint8Array,
+  clientOrderId: Uint8Array,
   mainAddress: string
 ): Codec => {
   const baseAssetId = !isAssetPDEX(baseAsset) ? baseAsset : "PDEX";
@@ -33,17 +33,18 @@ export const createOrderPayload = (
     [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
   };
   const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
+  const zero = (0).toFixed(8);
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
     pair: baseAssetId + "-" + quoteAssetId,
     side: orderSide,
     order_type: orderType,
-    qty: isMarketBid ? "0" : quantity.toString(),
-    quote_order_quantity: isMarketBid ? quantity.toString() : "0",
-    price: type === OrderTypeEnum.LIMIT ? price.toString() : "0",
+    qty: isMarketBid ? zero : quantity.toString(),
+    quote_order_quantity: isMarketBid ? quantity.toString() : zero,
+    price: type === OrderTypeEnum.LIMIT ? price.toString() : zero,
     timestamp: timestamp,
-    client_order_id,
+    client_order_id: clientOrderId,
   };
   return api.createType("OrderPayload", jsonPayload);
 };

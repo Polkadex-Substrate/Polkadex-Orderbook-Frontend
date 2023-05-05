@@ -43,7 +43,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const timestamp = getNonce();
       const isApiConnected = nativeApiState.connected;
       const api = nativeApiState.api;
-      const client_order_id = getNewClientId();
+      const clientOrderId = getNewClientId();
       if (address !== "" && keyringPair && api && isApiConnected) {
         const order = createOrderPayload(
           api,
@@ -55,7 +55,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
           amount,
           price,
           timestamp,
-          client_order_id,
+          clientOrderId,
           mainAddress
         );
         const signature = signPayload(api, keyringPair, order);
