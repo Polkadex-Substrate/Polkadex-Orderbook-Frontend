@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { BigHead } from "@bigheads/core";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -22,12 +23,9 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-export type MenuProps = {
-  handleChange?: () => void;
-  isWallet?: boolean;
-};
+export const Menu = () => {
+  const router = useRouter();
 
-export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) => {
   const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
   const settingsState = useSettingsProvider();
@@ -36,6 +34,10 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
     (v) => v.id === Number(profileState.userProfile?.avatar)
   );
 
+  const {
+    authInfo: { isAuthenticated },
+  } = profileState;
+
   return (
     <S.Wrapper>
       <S.WrapperLinks>
@@ -43,38 +45,30 @@ export const Menu = ({ handleChange = undefined, isWallet = true }: MenuProps) =
           <Logo size="Medium" href="/trading" />
         </S.Logo>
         <S.Container>
-          {!isWallet && (
-            <S.WrapperIcon onClick={handleChange}>
-              <div>
-                <Icon name="Graph" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Markets</S.Span>
-            </S.WrapperIcon>
-          )}
-          <Link href="/trading">
-            <S.WrapperIcon>
+          <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
+            <Link href="/trading">
               <div>
                 <Icon name="Exchange" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Exchange</S.Span>
-            </S.WrapperIcon>
-          </Link>
-          <Link href="/balances">
-            <S.WrapperIcon>
+            </Link>
+          </S.WrapperIcon>
+          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/balances"}>
+            <Link href="/balances">
               <div>
                 <Icon name="Coins" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Balances</S.Span>
-            </S.WrapperIcon>
-          </Link>
-          <Link href="/settings">
-            <S.WrapperIcon>
+            </Link>
+          </S.WrapperIcon>
+          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/settings"}>
+            <Link href="/settings">
               <div>
                 <Icon name="Wallet" background="none" stroke="text" size="large" />
               </div>
               <S.Span>Accounts</S.Span>
-            </S.WrapperIcon>
-          </Link>
+            </Link>
+          </S.WrapperIcon>
           <Terms />
           <Help />
         </S.Container>
