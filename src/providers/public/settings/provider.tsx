@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
@@ -64,6 +64,17 @@ export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) 
     },
     [defaultToast]
   );
+
+  const onCheckExtension = useCallback(async () => {
+    const { web3Enable } = await import("@polkadot/extension-dapp");
+    const extensions = await web3Enable("Polkadex Orderbook");
+    if (extensions?.length > 0) dispatch(A.checkHasExtension());
+  }, []);
+
+  useEffect(() => {
+    onCheckExtension();
+  }, [onCheckExtension]);
+
   return (
     <Provider
       value={{
@@ -81,6 +92,7 @@ export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) 
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
+        onCheckExtension,
       }}>
       {children}
     </Provider>
