@@ -28,6 +28,7 @@ export const eventHandler = (
       const eventData = JSON.parse(data.value.data.websocket_streams.data);
       const eventType = eventData.type;
       console.info("User Event: ", eventData, "event type", eventType);
+
       if (eventType === typeEvent) {
         updateFunction(eventData);
       }

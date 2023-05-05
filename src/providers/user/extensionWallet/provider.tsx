@@ -26,6 +26,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
+  console.log("extension wallet", profileState.selectedAccount);
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
