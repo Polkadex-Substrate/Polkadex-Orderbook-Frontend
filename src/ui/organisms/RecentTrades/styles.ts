@@ -78,8 +78,8 @@ export const Content = styled.div`
   ${({ theme }) => css`
     padding-bottom: 2rem;
     flex: 1;
-    overflow: hidden;
     height: 100%;
+    overflow: auto;
 
     ::-webkit-scrollbar-thumb {
       background: none;
@@ -88,7 +88,6 @@ export const Content = styled.div`
       background: none;
     }
     :hover {
-      overflow: auto;
       ::-webkit-scrollbar-thumb {
         background: ${theme.colors.secondaryBackground};
       }
