@@ -121,7 +121,11 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
       mainAddress
     );
 
-    const subscription = eventHandler(onBalanceUpdate, mainAddress, "SetBalance");
+    const subscription = eventHandler({
+      cb: onBalanceUpdate,
+      name: mainAddress,
+      eventType: "SetBalance",
+    });
 
     return () => {
       subscription.unsubscribe();

@@ -58,7 +58,11 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
       mainAddress
     );
 
-    const subscription = eventHandler(onUserTradeUpdate, mainAddress, "TradeFormat");
+    const subscription = eventHandler({
+      cb: onUserTradeUpdate,
+      name: mainAddress,
+      eventType: "TradeFormat",
+    });
 
     return () => {
       subscription.unsubscribe();

@@ -103,7 +103,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       // listen for events in this new registered main address
       eventHandlerCallback({
         cb: onRegisterMainAccountUpdate,
-        name: mainAddress,
+        name: mainAccount,
         eventType: "RegisterAccount",
       });
 
@@ -248,11 +248,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       mainAddress
     );
 
-    const subscription = eventHandler(
-      onRegisterMainAccountUpdate,
-      mainAddress,
-      "RegisterAccount"
-    );
+    const subscription = eventHandler({
+      cb: onRegisterMainAccountUpdate,
+      name: mainAddress,
+      eventType: "RegisterAccount",
+    });
 
     return () => {
       subscription.unsubscribe();

@@ -286,7 +286,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       "created User Events Channel... for main address from trade wallet provider",
       mainAddress
     );
-    const updateSubscription = eventHandler(onTradeAccountUpdate, mainAddress, "AddProxy");
+    const updateSubscription = eventHandler({
+      cb: onTradeAccountUpdate,
+      name: mainAddress,
+      eventType: "AddProxy",
+    });
 
     return () => {
       updateSubscription.unsubscribe();
@@ -299,7 +303,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = eventHandler(onTradeAccountUpdate, tradeAddress, "AddProxy");
+    const subscription = eventHandler({
+      cb: onTradeAccountUpdate,
+      name: tradeAddress,
+      eventType: "AddProxy",
+    });
 
     return () => {
       subscription.unsubscribe();

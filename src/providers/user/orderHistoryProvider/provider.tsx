@@ -215,7 +215,11 @@ export const OrderHistoryProvider = ({ children }) => {
       tradeAddress
     );
 
-    const subscription = eventHandler(onOrderUpdates, tradeAddress, "Order");
+    const subscription = eventHandler({
+      cb: onOrderUpdates,
+      name: tradeAddress,
+      eventType: "Order",
+    });
 
     return () => {
       subscription.unsubscribe();

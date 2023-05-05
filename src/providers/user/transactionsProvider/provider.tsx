@@ -159,11 +159,11 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
       mainAddress
     );
 
-    const subscription = eventHandler(
-      onTransactionsUpdate,
-      mainAddress,
-      USER_EVENTS.SetTransaction
-    );
+    const subscription = eventHandler({
+      cb: onTransactionsUpdate,
+      name: mainAddress,
+      eventType: "SetTransaction",
+    });
     return () => {
       subscription.unsubscribe();
     };
