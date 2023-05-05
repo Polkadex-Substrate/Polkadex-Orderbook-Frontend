@@ -12,17 +12,14 @@ export const createEventsObservable = (name: string): Observable<any> =>
     authToken: READ_ONLY_TOKEN,
   }) as Observable<any>;
 
-interface eventHandlerCallbackParams {
-  name: string;
-  eventType: UserEvents;
-  cb: (value: string) => void;
-}
 interface eventHandlerParams {
   name: string;
   eventType: UserEvents;
-  cb: (value) => void;
+  cb: (value: any) => void;
 }
 export const eventHandler = ({ cb, name, eventType }: eventHandlerParams) => {
+  console.log(name, "address");
+
   return createEventsObservable(name).subscribe({
     next: (data) => {
       console.log("got raw event", data);
@@ -42,14 +39,14 @@ export const eventHandler = ({ cb, name, eventType }: eventHandlerParams) => {
 
 // waits for the specified event `eventType` to happen and then calls the callback function provided
 // unsubscribes from observable once done
-export const eventHandlerCallback = ({ name, eventType, cb }: eventHandlerCallbackParams) => {
-  console.log(name, eventType, "address and event type");
+export const eventHandlerCallback = ({ name, eventType, cb }: eventHandlerParams) => {
+  console.log(name, eventType, "address and event type from callback");
 
   const sub = createEventsObservable(name).subscribe({
     next(value) {
       const eventData = JSON.parse(value.value.data.websocket_streams.data);
       if (eventType === eventData.type) {
-        cb(eventType);
+        cb(eventData);
         sub.unsubscribe();
       }
     },
