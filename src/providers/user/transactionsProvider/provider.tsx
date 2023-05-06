@@ -13,6 +13,8 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { USER_EVENTS } from "@polkadex/web-constants";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
@@ -22,7 +24,8 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   });
 
   const profileState = useProfile();
-  const settingsState = useSettingsProvider();
+  const { mainAddress, tradeAddress } = profileState.selectedAccount;
+  const { onHandleError } = useSettingsProvider();
 
   const onTransactionsFetch = useCallback(
     async (mainAddress: string) => {
@@ -31,10 +34,10 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         const transactions = await fetchTransactions(mainAddress, 3, 10);
         dispatch(A.transactionsData(transactions));
       } else {
-        settingsState.onHandleError("No account selected, please select a trading account");
+        onHandleError("No account selected, please select a trading account");
       }
     },
-    [settingsState]
+    [onHandleError]
   );
 
   const fetchTransactions = async (
@@ -106,9 +109,9 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         onTransactionsFetch(profileState.selectedAccount.mainAddress);
       }
     } catch (error) {
-      settingsState.onHandleError(`Transactions error: ${error?.message ?? error}`);
+      onHandleError(`Transactions error: ${error?.message ?? error}`);
     }
-  }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, settingsState]);
+  }, [profileState?.selectedAccount?.mainAddress, onTransactionsFetch, onHandleError]);
 
   const formatTransactionData = (data: T.TransactionUpdatePayload): T.Transaction => {
     if (data.txn_type === "DEPOSIT") {
@@ -145,11 +148,26 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
           dispatch(A.transactionsUpdateEventData(data));
         }
       } catch (error) {
-        settingsState.onHandleError("Something has gone wrong while updating transactions");
+        onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [settingsState]
+    [onHandleError]
   );
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from transactions provider",
+      mainAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onTransactionsUpdate,
+      name: mainAddress,
+      eventType: "SetTransaction",
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onTransactionsUpdate]);
 
   return (
     <Provider

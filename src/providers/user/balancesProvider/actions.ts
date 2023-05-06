@@ -35,6 +35,7 @@ export type BalancesAction =
   | BalancesFetch
   | BalancesData
   | BalancesError
+  | BalancesUpdateEvent
   | BalanceUpdateEventData;
 
 export const balancesFetch = (): BalancesFetch => ({

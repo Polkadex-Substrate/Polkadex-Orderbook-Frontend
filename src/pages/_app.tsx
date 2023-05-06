@@ -56,7 +56,12 @@ function App({ Component, pageProps }: AppProps) {
         defaultToast={{
           onError: (e) => toast(e, { type: "error", theme: "colored" }),
           onSuccess: (e) =>
-            toast(e, { type: "success", theme: "colored", className: "toastBg" }),
+            toast(e, {
+              type: "success",
+              theme: "colored",
+              className: "toastBg",
+              pauseOnFocusLoss: false,
+            }),
         }}>
         <AuthProvider>
           <ProfileProvider>

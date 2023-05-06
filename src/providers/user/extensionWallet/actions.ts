@@ -95,7 +95,9 @@ export const extensionWalletFetch = (): ExtensionWalletFetch => ({
   type: POLKADOT_EXTENSION_WALLET_FETCH,
 });
 
-export const registerMainAccountFetch = (payload: RegisterMainAccountFetch["payload"]) => ({
+export const registerMainAccountFetch = (
+  payload: RegisterMainAccountFetch["payload"]
+): RegisterMainAccountFetch => ({
   type: REGISTER_MAIN_ACCOUNT_FETCH,
   payload,
 });

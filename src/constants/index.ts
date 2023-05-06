@@ -20,15 +20,30 @@ export const LOCAL_STORAGE_ID = {
 };
 
 export const USER_EVENTS = {
+  // Trade address update for the user
+  // send to main address
   AddProxy: "AddProxy",
-  RegisterAccount: "RegisterAccount",
-  Order: "Order",
-  SetTransaction: "SetTransaction",
-  SetBalance: "SetBalance",
-  TradeFormat: "TradeFormat",
   RemoveProxy: "RemoveProxy",
+  // Register address update for the user
+  // send to main address
+  RegisterAccount: "RegisterAccount",
+  // Order update for the user
+  // send to trade address
+  Order: "Order",
+  // Deposit and withdrawal update for the user
+  // send to main address
+  SetTransaction: "SetTransaction",
+  // balance update for the user
+  // send to main address
+  SetBalance: "SetBalance",
+  // Trade update for the user
+  // send to trade address
+  TradeFormat: "TradeFormat",
+  // Errors from server
   Error: "error",
 };
+
+export type UserEvents = keyof typeof USER_EVENTS;
 
 export const ErrorMessages = {
   OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered: ",

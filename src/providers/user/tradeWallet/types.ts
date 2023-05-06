@@ -1,7 +1,10 @@
 import { FC, PropsWithChildren } from "react";
+
 import { TradeAccount } from "../../types";
-import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
+
 import * as A from "./actions";
+
+import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 
 export interface TradeWalletState {
   isFetching: boolean;
