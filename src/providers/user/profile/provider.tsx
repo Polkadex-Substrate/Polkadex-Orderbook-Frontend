@@ -18,21 +18,24 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const { onUserAuth, signin, logout } = useAuth();
   const { onHandleNotification, onHandleError } = useSettingsProvider();
 
-  const onUserSelectAccount = (payload: T.UserSelectAccount) => {
-    const { tradeAddress: trade_address } = payload;
-    try {
-      const mainAddress = state.userData?.userAccounts?.find(
-        ({ tradeAddress }) => trade_address === tradeAddress
-      )?.mainAddress;
-      if (mainAddress) {
-        const data = { tradeAddress: trade_address, mainAddress };
-        dispatch(A.userAccountSelectData(data));
+  const onUserSelectAccount = useCallback(
+    (payload: T.UserSelectAccount) => {
+      const { tradeAddress: trade_address } = payload;
+      try {
+        const mainAddress = state.userData?.userAccounts?.find(
+          ({ tradeAddress }) => trade_address === tradeAddress
+        )?.mainAddress;
+        if (mainAddress) {
+          const data = { tradeAddress: trade_address, mainAddress };
+          dispatch(A.userAccountSelectData(data));
+        }
+      } catch (e) {
+        console.log("error: ", e);
+        onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
-    } catch (e) {
-      console.log("error: ", e);
-      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
-    }
-  };
+    },
+    [onHandleError, state.userData?.userAccounts]
+  );
 
   const getAllMainLinkedAccounts = useCallback(
     async (email: string, Api = API) => {
