@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { useState } from "react";
 import Link from "next/link";
+import { useMemo, useState } from "react";
 
 import * as S from "./styles";
 
@@ -19,13 +19,20 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const BalancesTemplate = () => {
-  const [state, setState] = useState(false);
+  const [search, setSearch] = useState("");
   const { list } = useAssetsProvider();
   const { balances: userBalances } = useBalancesProvider();
   const profileState = useProfile();
   const userHasSelectedAccount = !!Object?.keys(profileState.selectedAccount?.mainAddress)
     ?.length;
 
+  const allAssets = useMemo(
+    () =>
+      list?.filter(
+        (e) => e.name.toLowerCase().includes(search) || e.symbol.toLowerCase().includes(search)
+      ),
+    [search, list]
+  );
   return (
     <>
       <Head>
@@ -33,7 +40,7 @@ export const BalancesTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu />
         <S.Wrapper>
           <S.ContainerMain>
             <S.Title>
@@ -45,7 +52,12 @@ export const BalancesTemplate = () => {
                   <S.Header>
                     <h2>Overview</h2>
                     <S.HeaderBox>
-                      <Search isFull placeholder="Search" />
+                      <Search
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        isFull
+                        placeholder="Search"
+                      />
                       <Checkbox>Hide small balances</Checkbox>
                     </S.HeaderBox>
                   </S.Header>
@@ -69,7 +81,7 @@ export const BalancesTemplate = () => {
                         </Table.Column>
                       </Table.Header>
                       <Table.Body striped>
-                        {list.map((item) => {
+                        {allAssets.map((item) => {
                           const balance = userBalances?.find(
                             (value) => value.assetId === item.assetId
                           );
