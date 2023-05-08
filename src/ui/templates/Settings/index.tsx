@@ -112,7 +112,7 @@ export const SettingsTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu />
         <S.Wrapper>
           <S.ContainerMain>
             <S.Title>
@@ -148,12 +148,14 @@ export const SettingsTemplate = () => {
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
-                    <Empty
-                      title="No trading accounts"
-                      description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
-                      // actionTitle="Import trading account"
-                      onClick={() => console.log("Open Modal")}
-                    />
+                    <div style={{ padding: "4rem 2rem" }}>
+                      <Empty
+                        title="No trading accounts"
+                        description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
+                        // actionTitle="Import trading account"
+                        onClick={() => console.log("Open Modal")}
+                      />
+                    </div>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
