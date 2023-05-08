@@ -16,6 +16,7 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
@@ -137,20 +138,23 @@ export const OrderHistoryProvider = ({ children }) => {
       fee: eventData.fee.toString(),
     };
   }
-  const onOrderUpdates = (payload: A.OrderUpdateEvent["payload"]) => {
-    try {
-      const order = processOrderData(payload);
-      dispatch(A.orderUpdateEventData(order));
-    } catch (error) {
-      console.log(error, "Something has gone wrong (order updates channel)...");
-      onHandleError(`Order updates channel ${error?.message ?? error}`);
-      dispatch(A.orderUpdateEventError(error));
-    }
-  };
+  const onOrderUpdates = useCallback(
+    (payload: A.OrderUpdateEvent["payload"]) => {
+      try {
+        const order = processOrderData(payload);
+        dispatch(A.orderUpdateEventData(order));
+      } catch (error) {
+        console.log(error, "Something has gone wrong (order updates channel)...");
+        onHandleError(`Order updates channel ${error?.message ?? error}`);
+        dispatch(A.orderUpdateEventError(error));
+      }
+    },
+    [onHandleError]
+  );
 
   const { dateTo, dateFrom } = useSessionProvider();
   const usingAccount = profileState.selectedAccount;
-
+  const { tradeAddress } = usingAccount;
   const orderList = state.list;
   const openOrders = state.openOrders;
   const list = sortOrdersDescendingTime(orderList);
@@ -204,6 +208,23 @@ export const OrderHistoryProvider = ({ children }) => {
     },
     [list, openOrdersSorted]
   );
+
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for trade address from order history provider",
+      tradeAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onOrderUpdates,
+      name: tradeAddress,
+      eventType: "Order",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onOrderUpdates, tradeAddress]);
 
   return (
     <Provider

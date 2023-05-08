@@ -24,7 +24,6 @@ import {
   USER_TRADE_ACCOUNT_EXPORT_DATA,
   USER_TRADE_ACCOUNT_IMPORT_JSON,
 } from "./constants";
-
 import { TradeWalletState } from "./types";
 
 export const initialState: TradeWalletState = {

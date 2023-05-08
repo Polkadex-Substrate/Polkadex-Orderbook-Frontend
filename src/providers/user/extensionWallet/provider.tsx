@@ -16,14 +16,17 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { eventHandler, eventHandlerCallback } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
   const profileState = useProfile();
+  const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
+  console.log("extension wallet", profileState.selectedAccount);
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -88,6 +91,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
     let data: T.RegisterEmailData, signature: string;
     const { mainAccount, tradeAddress, mnemonic } = payload;
+    dispatch(A.registerMainAccountFetch(payload));
+
     try {
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) => account?.address?.toLowerCase() === mainAccount?.toLowerCase()
@@ -96,9 +101,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       const api: ApiPromise = nativeApiState.api;
 
       // listen for events in this new registered main address
-
-      // TODO : When userEventsChanelHandler provider will be created
-      // yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+      eventHandlerCallback({
+        cb: onRegisterMainAccountUpdate,
+        name: mainAccount,
+        eventType: "RegisterAccount",
+      });
 
       const hasAddressAndEmail =
         !!selectedControllerAccount.account?.address?.length && !!email?.length;
@@ -236,8 +243,21 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   };
 
   useEffect(() => {
-    onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet]);
+    console.log(
+      "created User Events Channel... for main address from extension wallet provider",
+      mainAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onRegisterMainAccountUpdate,
+      name: mainAddress,
+      eventType: "RegisterAccount",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onRegisterMainAccountUpdate]);
 
   return (
     <Provider
