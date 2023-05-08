@@ -145,7 +145,7 @@ export const SettingsTemplate = () => {
                   )}
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {tradeAccounts.length ? (
+                  {!tradeAccounts.length ? (
                     <div style={{ padding: "4rem 2rem" }}>
                       <Empty
                         title="No trading accounts"
