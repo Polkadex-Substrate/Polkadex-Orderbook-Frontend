@@ -23,6 +23,8 @@ import {
 import * as T from "./types";
 import * as A from "./actions";
 
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
+
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const {
@@ -31,6 +33,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     onUserProfileAccountPush,
     userData,
     onUserProfileTradeAccountDelete,
+    selectedAccount,
   } = useProfile();
   const nativeApiState = useNativeApi();
   const extensionWalletState = useExtensionWallet();
@@ -146,6 +149,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onRegisterTradeAccount = async (payload: A.RegisterTradeAccountFetch["payload"]) => {
     let tradeAddress: string;
     try {
+      dispatch(A.registerTradeAccountFetch(payload));
+
       const api = nativeApiState.api;
       const controllerWallets = extensionWalletState.allAccounts;
       const { password, name, address } = payload;
@@ -187,6 +192,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onRemoveProxyAccountFromChain = async (
     payload: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => {
+    dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
       const api: ApiPromise = nativeApiState.api;
       const { address: trade_Address } = payload;
@@ -272,6 +278,41 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onExportTradeAccountActive = () => {
     dispatch(A.exportTradeAccountActive());
   };
+  const { mainAddress, tradeAddress } = selectedAccount;
+
+  // subscribe to user account updates notifications
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from trade wallet provider",
+      mainAddress
+    );
+    const updateSubscription = eventHandler({
+      cb: onTradeAccountUpdate,
+      name: mainAddress,
+      eventType: "AddProxy",
+    });
+
+    return () => {
+      updateSubscription.unsubscribe();
+    };
+  }, [mainAddress, onTradeAccountUpdate]);
+
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for trade address from trade wallet provider",
+      tradeAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onTradeAccountUpdate,
+      name: tradeAddress,
+      eventType: "AddProxy",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {
     if (authInfo.isAuthenticated && hasExtension) onLoadTradeAccounts();

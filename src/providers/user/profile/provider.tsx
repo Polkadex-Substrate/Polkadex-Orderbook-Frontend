@@ -1,28 +1,15 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { API, Auth } from "aws-amplify";
 
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
-import * as subscriptions from "../../../graphql/subscriptions";
-import { useExtensionWallet } from "../extensionWallet";
-import { orderUpdateEvent } from "../orderHistoryProvider";
-import { balanceUpdateEvent } from "../balancesProvider/actions";
-import { useBalancesProvider } from "../balancesProvider/useBalancesProvider";
-import { transactionsUpdateEvent } from "../transactionsProvider";
-import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
-import { useTradeWallet } from "../tradeWallet";
-import { useTrades } from "../trades";
-import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
-import { registerMainAccountUpdateEvent } from "../extensionWallet/actions";
-import { tradeAccountUpdateEvent } from "../tradeWallet/actions";
-import { userTradesUpdateEvent } from "../trades/actions";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { LOCAL_STORAGE_ID, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
 
@@ -226,120 +213,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   }, [logoutIsSuccess]);
 
   // user event listener
-  const { onRegisterMainAccountUpdate } = useExtensionWallet();
-  const { onBalanceUpdate } = useBalancesProvider();
-  const { onTransactionsUpdate } = useTransactionsProvider();
-  const { onTradeAccountUpdate } = useTradeWallet();
-  const { onUserTradeUpdate } = useTrades();
-  const { onOrderUpdates } = useOrderHistoryProvider();
-  const registerSuccessNotification = useCallback(
-    (title: string, description: string) =>
-      onHandleNotification({ type: "Success", message: description }),
-    [onHandleNotification]
-  );
-
-  const createActionFromUserEvent = useCallback(
-    (eventData: any) => {
-      console.log("got raw event", eventData);
-      const data = JSON.parse(eventData.value.data.websocket_streams.data);
-      console.info("User Event: ", data);
-      const eventType = data.type;
-      switch (eventType) {
-        case USER_EVENTS.SetBalance: {
-          onBalanceUpdate(data);
-          return balanceUpdateEvent(data);
-        }
-        case USER_EVENTS.SetTransaction: {
-          onTransactionsUpdate(data);
-          return transactionsUpdateEvent(data);
-        }
-        case USER_EVENTS.Order: {
-          onOrderUpdates(data);
-          return orderUpdateEvent(data);
-        }
-        case USER_EVENTS.RegisterAccount: {
-          onRegisterMainAccountUpdate(data);
-          return registerMainAccountUpdateEvent(data);
-        }
-        case USER_EVENTS.AddProxy: {
-          onTradeAccountUpdate(data);
-          return tradeAccountUpdateEvent(data);
-        }
-
-        case USER_EVENTS.TradeFormat: {
-          onUserTradeUpdate(data);
-          return userTradesUpdateEvent(data);
-        }
-
-        case USER_EVENTS.RemoveProxy:
-          return registerSuccessNotification(
-            "Trade account removed",
-            "Trade account removal Confirmed"
-          );
-      }
-    },
-    [
-      onBalanceUpdate,
-      onOrderUpdates,
-      onRegisterMainAccountUpdate,
-      onTradeAccountUpdate,
-      onTransactionsUpdate,
-      onUserTradeUpdate,
-      registerSuccessNotification,
-    ]
-  );
-  const currentAccount: T.UserAccount = state.selectedAccount;
-  const mainAddr = currentAccount.mainAddress;
-  const tradeAddr = currentAccount.tradeAddress;
-
-  useEffect(() => {
-    console.log("created User Events Channel...", mainAddr);
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddr },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        createActionFromUserEvent(data);
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [createActionFromUserEvent, mainAddr]);
-
-  useEffect(() => {
-    console.log("created User Events Channel...", tradeAddr);
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddr },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        createActionFromUserEvent(data);
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [createActionFromUserEvent, tradeAddr]);
-
   return (
     <Provider
       value={{

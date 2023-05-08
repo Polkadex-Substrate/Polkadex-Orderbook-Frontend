@@ -91,7 +91,7 @@ export const SettingsTemplate = () => {
         />
       </Modal>
       <Modal
-        open={isActive}
+        open={!!isActive}
         onClose={handleCloseNewAccount}
         placement="start right"
         isFullHeight>
