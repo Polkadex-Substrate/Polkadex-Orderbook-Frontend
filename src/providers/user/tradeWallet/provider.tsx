@@ -130,21 +130,24 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     }
   }, [onHandleError]);
 
-  const onTradeAccountUpdate = (payload: A.TradeAccountUpdate["payload"]) => {
-    try {
-      const { proxy } = payload;
-      onUserSelectAccount({
-        tradeAddress: proxy,
-      });
-      onHandleNotification({
-        type: "Success",
-        message: "Trade account added,new trade account created",
-      });
-    } catch (error) {
-      onHandleError(error?.message ?? error);
-      dispatch(A.registerTradeAccountError(error));
-    }
-  };
+  const onTradeAccountUpdate = useCallback(
+    (payload: A.TradeAccountUpdate["payload"]) => {
+      try {
+        const { proxy } = payload;
+        onUserSelectAccount({
+          tradeAddress: proxy,
+        });
+        onHandleNotification({
+          type: "Success",
+          message: "Trade account added,new trade account created",
+        });
+      } catch (error) {
+        onHandleError(error?.message ?? error);
+        dispatch(A.registerTradeAccountError(error));
+      }
+    },
+    [onHandleError, onHandleNotification, onUserSelectAccount]
+  );
 
   const onRegisterTradeAccount = async (payload: A.RegisterTradeAccountFetch["payload"]) => {
     let tradeAddress: string;
