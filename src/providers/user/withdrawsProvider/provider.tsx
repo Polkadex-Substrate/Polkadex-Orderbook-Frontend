@@ -18,7 +18,7 @@ import { initialState, withdrawsReducer } from "./reducer";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
-import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
+import { createWithdrawSigningPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
@@ -41,8 +41,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       const nonce = getNonce();
       const api = nativeApiState.api;
       if (tradeAddress !== "" && keyringPair && api) {
-        const payload = createWithdrawPayload(api, asset, amount, nonce);
-        const signature = signPayload(api, keyringPair, payload);
+        const payload = { asset_id: { asset }, amount, timestamp: nonce };
+        const signingPayload = createWithdrawSigningPayload(api, asset, amount, nonce);
+        const signature = signPayload(api, keyringPair, signingPayload);
         const res = await executeWithdraw(
           [mainAddress, tradeAddress, payload, signature],
           tradeAddress

@@ -1,15 +1,14 @@
 import { ApiPromise } from "@polkadot/api";
 
-export const createWithdrawPayload = (
+export const createWithdrawSigningPayload = (
   api: ApiPromise,
-  asset: Record<string, string | null>,
+  asset: string | "PDEX",
   amount: string | number,
   timestamp: number
 ) => {
-  const withdraw_payload = api.createType("WithdrawPayload", {
-    asset_id: asset,
+  return api.createType("WithdrawPayload", {
+    asset_id: asset === "PDEX" ? { polkadex: null } : { asset },
     amount,
     timestamp,
   });
-  return withdraw_payload;
 };

@@ -6,6 +6,7 @@ import { WithdrawGroup } from "@polkadex/orderbook/helpers/groupWithdrawsBySnaps
 
 export interface Transaction {
   stid: number;
+  snapshot_id?: number;
   amount: string;
   asset: string;
   fee: string;
@@ -31,7 +32,8 @@ export type TransactionUpdatePayload = {
   status: "PENDING" | "CONFIRMED" | "FAILED";
   txn_type: "DEPOSIT" | "WITHDRAWAL";
   t: number;
-  sid: number; // snapshot id
+  // only withdrawals with READY state will have snapshot_id
+  snapshot_id?: number;
 };
 
 export type TransactionQueryResult = {
@@ -41,8 +43,9 @@ export type TransactionQueryResult = {
   fee: string;
   st: string;
   t: string;
-  eid: number;
-  sid: number;
+  stid: number;
+  // only withdrawals with READY state will have snapshot_id
+  snapshot_id?: number;
 };
 
 export type TransactionsContextProps = TransactionsState & {

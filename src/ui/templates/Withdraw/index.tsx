@@ -104,9 +104,7 @@ export const WithdrawTemplate = () => {
   const handleSubmitWithdraw = (amount: string | number) => {
     console.log("submit");
 
-    const asset = isAssetPDEX(selectedAsset.assetId)
-      ? { polkadex: null }
-      : { asset: selectedAsset.assetId };
+    const asset = isAssetPDEX(selectedAsset.assetId) ? "PDEX" : selectedAsset.assetId;
 
     onFetchWithdraws({ asset, amount });
   };

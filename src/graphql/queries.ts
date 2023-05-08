@@ -266,6 +266,8 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
         st
         t
         stid
+        snapshot_id
+        worker_nonce
         isReverted
       }
       nextToken
