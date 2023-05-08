@@ -120,7 +120,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         main_account: data.user,
         fee: data.fee.toString(),
         amount: data.amount.toString(),
-        asset: data.asset.asset,
+        asset: data.asset,
         time: new Date().toISOString(),
       };
     } else {
@@ -132,7 +132,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         main_account: data.user,
         fee: data.fee.toString(),
         amount: data.amount.toString(),
-        asset: data.asset.asset,
+        asset: data.asset,
         time: new Date().toISOString(),
       };
     }

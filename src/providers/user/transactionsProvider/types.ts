@@ -26,7 +26,7 @@ export interface TransactionsState {
 export type TransactionUpdatePayload = {
   stid: number;
   user: string;
-  asset: { asset: string };
+  asset: string;
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";

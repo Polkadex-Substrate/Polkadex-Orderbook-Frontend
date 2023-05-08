@@ -409,7 +409,7 @@ const HistoryTable = ({ items }) => {
         </Table.Header>
         <Table.Body>
           {items.map((item) => (
-            <Table.Row key={item.event_id}>
+            <Table.Row key={item.stid}>
               <Table.Cell>
                 <S.Cell>
                   <span>
