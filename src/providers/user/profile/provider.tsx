@@ -213,7 +213,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   useEffect(() => {
     // When User logout, do not fetch the data
-    if (!logoutIsSuccess && !signInSuccess) fetchDataOnUserAuth();
+    if (!logoutIsSuccess) fetchDataOnUserAuth();
   }, [logoutIsSuccess, signInSuccess, fetchDataOnUserAuth]);
 
   useEffect(() => {
