@@ -4,8 +4,8 @@ import { Colors } from "../../../helpers";
 
 export type Props = {
   message: string;
-  color: Colors;
+  color?: Colors;
   children: ReactNode;
-  isVisible: boolean;
-  isPriority: boolean;
+  isVisible?: boolean;
+  isPriority?: boolean;
 };
