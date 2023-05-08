@@ -98,7 +98,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     <S.Wrapper>
       <S.Profile>
         <div>
-          <BigHead {...avatarOptions} />
+          <BigHead {...avatarOptions.data} />
         </div>
         <span>Profile</span>
       </S.Profile>

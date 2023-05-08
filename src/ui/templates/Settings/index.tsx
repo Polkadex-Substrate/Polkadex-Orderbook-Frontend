@@ -40,7 +40,6 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 export const SettingsTemplate = () => {
   const router = useRouter();
   const {
-    state,
     allFilteredTradeAccounts,
     filterControllerWallets,
     isPreviewActive,
@@ -52,7 +51,6 @@ export const SettingsTemplate = () => {
     userAccounts,
     isActive,
     isLoading,
-    setState,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
     handleChangeCurrentControllerWallet,
@@ -147,13 +145,11 @@ export const SettingsTemplate = () => {
                   )}
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {!tradeAccounts.length ? (
+                  {tradeAccounts.length ? (
                     <div style={{ padding: "4rem 2rem" }}>
                       <Empty
                         title="No trading accounts"
                         description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
-                        // actionTitle="Import trading account"
-                        onClick={() => console.log("Open Modal")}
                       />
                     </div>
                   ) : (
@@ -494,7 +490,7 @@ const Card = ({
       <S.AccountCardWrapper>
         {isAvatar && (
           <S.AccountCardAvatar>
-            <BigHead {...avatarOptions} />
+            <BigHead {...avatarOptions.data} />
           </S.AccountCardAvatar>
         )}
         <S.AccountCardContent>
