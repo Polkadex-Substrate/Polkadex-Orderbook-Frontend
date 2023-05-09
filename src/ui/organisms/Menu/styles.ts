@@ -51,6 +51,7 @@ export const Span = styled.span`
     transform: translateY(1rem);
     transition: transform 0.2s ease-out, visibility 0.2s ease-in, opacity 0.2s ease-in;
     user-select: none;
+    top: 0.5rem;
     /* top: -4rem; */
     @media screen and (min-width: 590px) {
       left: 2.5rem;
