@@ -4,6 +4,7 @@ import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
 import * as A from "./actions";
 import * as T from "./types";
+import { APP_NAME } from "./constants";
 
 export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) => {
   const [state, dispatch] = useReducer(settingReducer, initialState);
@@ -67,7 +68,8 @@ export const SettingProvider: T.SettingComponent = ({ defaultToast, children }) 
 
   const onCheckExtension = useCallback(async () => {
     const { web3Enable } = await import("@polkadot/extension-dapp");
-    const extensions = await web3Enable("Polkadex Orderbook");
+
+    const extensions = await web3Enable(APP_NAME);
     if (extensions?.length > 0) dispatch(A.checkHasExtension());
   }, []);
 
