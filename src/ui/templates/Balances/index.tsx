@@ -79,7 +79,7 @@ export const BalancesTemplate = () => {
                     </S.HeaderBox>
                   </S.Header>
                   <S.Content>
-                    {allAssets.length ? (
+                    {allAssets?.length ? (
                       <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
                         <Table.Header fill="none">
                           <Table.Column>
