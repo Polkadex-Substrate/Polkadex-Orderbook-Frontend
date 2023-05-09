@@ -5,53 +5,42 @@ import { Provider } from "./context";
 import { nativeApiReducer, initialState } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
+import { RECONNECT_TIME_MS } from "./constants";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
+const convertMillisecondsToSeconds = Math.floor(RECONNECT_TIME_MS / 1000);
+
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
   const { onHandleError } = useSettingsProvider();
+  const shouldRangerConnect = !state.timestamp && !state.connecting;
 
-  // Actions
   const onConnectNativeApi = useCallback(async () => {
-    let api: ApiPromise;
     dispatch(A.nativeApiConnectFetch());
-    try {
-      /* Checking if the extension is installed. */
-      const { web3Enable } = await import("@polkadot/extension-dapp");
-      const extensions = await web3Enable("Polkadex Orderbook");
-      if (extensions.length === 0) dispatch(A.nativeApiNoExtension());
+    const provider = new WsProvider(defaultConfig.polkadexChain);
+    const api = new ApiPromise({ provider, types: T.orderbookTypes });
 
-      const createWs = () => {
-        const provider = new WsProvider(defaultConfig.polkadexChain);
-        api = new ApiPromise({ provider, types: T.orderbookTypes });
+    const onReady = () => dispatch(A.nativeApiConnectData(api));
+    const onConnectError = () => {
+      api.disconnect().then(() => setTimeout(() => onConnectNativeApi(), RECONNECT_TIME_MS));
+      onHandleError(
+        `Polkadex can't connect to ${defaultConfig.polkadexChain}, reconnecting in ${convertMillisecondsToSeconds} seconds`
+      );
+      dispatch(A.nativeApiConnectError());
+    };
 
-        api.on("ready", () => dispatch(A.nativeApiConnectData(api)));
+    api.on("ready", onReady);
+    api.on("error", onConnectError);
 
-        api.on("disconnected", () =>
-          setTimeout(() => {
-            console.log(`Reconnecting to ${defaultConfig.polkadexChain}`);
-            createWs();
-          }, defaultConfig.reconnectRangerTime)
-        );
-
-        api.on("error", () => {
-          onHandleError(`Polkadex can't connect to ${defaultConfig.polkadexChain}`);
-          dispatch(A.nativeApiConnectError());
-        });
-      };
-
-      createWs();
-      return () => {
-        api.disconnect();
-      };
-    } catch (error) {
-      onHandleError(`Error connecting to Polkadex chain: ${error?.message ?? error}`);
-    }
+    return () => {
+      api.off("ready", onReady);
+      api.off("error", onConnectError);
+      api.disconnect();
+    };
   }, [onHandleError]);
 
-  const shouldRangerConnect = !state.timestamp && !state.connecting;
   useEffect(() => {
     if (shouldRangerConnect) onConnectNativeApi();
   }, [shouldRangerConnect, onConnectNativeApi]);

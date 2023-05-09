@@ -18,6 +18,7 @@ export interface SettingState {
   language: "en" | "fr" | "es" | "zh";
   currency: "USD" | "EUR" | "CNY" | "INR";
   notifications: Notification[];
+  hasExtension?: boolean;
 }
 
 export type SettingProviderProps = PropsWithChildren<{
@@ -43,6 +44,7 @@ export type SettingContextProps = SettingState & {
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];
   onHandleNotification: (value: NotificationPayload) => void;
+  onCheckExtension: (extension: boolean) => void;
 };
 
 export type SettingsProps = {

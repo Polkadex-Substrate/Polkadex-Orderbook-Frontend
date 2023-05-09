@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { API, Auth } from "aws-amplify";
 
 import { useAuth } from "../auth";
@@ -15,42 +15,48 @@ import * as queries from "@polkadex/orderbook/graphql/queries";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const authState = useAuth();
+  const { onUserAuth, signin, logout } = useAuth();
   const { onHandleNotification, onHandleError } = useSettingsProvider();
 
-  const onUserSelectAccount = (payload: T.UserSelectAccount) => {
-    const { tradeAddress: trade_address } = payload;
-    try {
-      const mainAddress = state.userData?.userAccounts?.find(
-        ({ tradeAddress }) => trade_address === tradeAddress
-      )?.mainAddress;
-      if (mainAddress) {
-        const data = { tradeAddress: trade_address, mainAddress };
-        dispatch(A.userAccountSelectData(data));
+  const onUserSelectAccount = useCallback(
+    (payload: T.UserSelectAccount) => {
+      const { tradeAddress: trade_address } = payload;
+      try {
+        const mainAddress = state.userData?.userAccounts?.find(
+          ({ tradeAddress }) => trade_address === tradeAddress
+        )?.mainAddress;
+        if (mainAddress) {
+          const data = { tradeAddress: trade_address, mainAddress };
+          dispatch(A.userAccountSelectData(data));
+        }
+      } catch (e) {
+        console.log("error: ", e);
+        onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
-    } catch (e) {
-      console.log("error: ", e);
-      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
-    }
-  };
+    },
+    [onHandleError, state.userData?.userAccounts]
+  );
 
-  const getAllMainLinkedAccounts = async (email: string, Api = API) => {
-    try {
-      const res = await sendQueryToAppSync({
-        query: queries.listMainAccountsByEmail,
-        variables: {
-          email,
-        },
-        token: null,
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-        API: Api,
-      });
-      return res.data.listMainAccountsByEmail ?? { accounts: [] };
-    } catch (error) {
-      console.log("Error: getAllMainLinkedAccounts", error.errors);
-      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
-    }
-  };
+  const getAllMainLinkedAccounts = useCallback(
+    async (email: string, Api = API) => {
+      try {
+        const res = await sendQueryToAppSync({
+          query: queries.listMainAccountsByEmail,
+          variables: {
+            email,
+          },
+          token: null,
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+          API: Api,
+        });
+        return res.data.listMainAccountsByEmail ?? { accounts: [] };
+      } catch (error) {
+        console.log("Error: getAllMainLinkedAccounts", error.errors);
+        onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
+      }
+    },
+    [onHandleError]
+  );
 
   const getAllProxyAccounts = async (
     mainAccounts: [string],
@@ -80,39 +86,47 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return accounts;
   };
 
-  const onUserAuth = async (payload: T.UserAuth) => {
-    const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
-    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
+  const onUserAuthentication = useCallback(
+    async (payload: T.UserAuth) => {
+      const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
+      dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
 
-    const userAccounts = state.userData?.userAccounts;
-    const defaultTradeAddress = window.localStorage.getItem(
-      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-    );
+      const userAccounts = state.userData?.userAccounts;
+      const defaultTradeAddress = window.localStorage.getItem(
+        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+      );
 
-    try {
-      if (!userAccounts?.length) {
-        const { accounts } = await getAllMainLinkedAccounts(email);
-        const userAccounts = await getAllProxyAccounts(accounts);
-        dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
+      try {
+        if (!userAccounts?.length) {
+          const { accounts } = await getAllMainLinkedAccounts(email);
+          const userAccounts = await getAllProxyAccounts(accounts);
+          dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
+        }
+
+        if (defaultTradeAddress?.length) {
+          dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
+          dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
+          dispatch(A.userSetAvatar());
+        }
+
+        if (!isConfirmed && userExists) {
+          onHandleNotification({
+            type: "Attention",
+            message: "Please confirm your email, sign in again and confirm your email.",
+          });
+        }
+      } catch (error) {
+        onHandleError(`User auth error:${error?.message ?? error}`);
+        dispatch(A.userAuthError(error));
       }
-
-      if (defaultTradeAddress?.length) {
-        dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
-        dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
-        dispatch(A.userSetAvatar());
-      }
-
-      if (!isConfirmed && userExists) {
-        onHandleNotification({
-          type: "Attention",
-          message: "Please confirm your email, sign in again and confirm your email.",
-        });
-      }
-    } catch (error) {
-      onHandleError(`User auth error:${error?.message ?? error}`);
-      dispatch(A.userAuthError(error));
-    }
-  };
+    },
+    [
+      onHandleError,
+      onHandleNotification,
+      getAllMainLinkedAccounts,
+      state?.userData?.userAccounts,
+    ]
+  );
 
   const onUserLogout = () => {
     dispatch(A.userReset());
@@ -154,18 +168,18 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
 
-  const signInSuccess = authState.signin.isSuccess;
-  const logoutIsSuccess = authState.logout.isSuccess;
+  const signInSuccess = signin.isSuccess;
+  const logoutIsSuccess = logout.isSuccess;
 
-  const fetchDataOnUserAuth = async () => {
+  const fetchDataOnUserAuth = useCallback(async () => {
     try {
       const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
-      authState.onUserAuth({
+      onUserAuth({
         email: attributes?.email,
         userConfirmed: attributes?.email_verified,
       });
-      onUserAuth({
+      onUserAuthentication({
         email: attributes?.email,
         isAuthenticated: true,
         userExists: true,
@@ -176,11 +190,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       console.log("User error", error);
       switch (error) {
         case "User is not confirmed.": {
-          authState.onUserAuth({
+          onUserAuth({
             email: "",
             userConfirmed: false,
           });
-          onUserAuth({
+          onUserAuthentication({
             email: "",
             isAuthenticated: false,
             userExists: true,
@@ -198,15 +212,12 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         }
       }
     }
-  };
+  }, [onUserAuth, onUserAuthentication, onHandleError]);
 
-  // TODO: Missing fetchDataOnUserAuth dependcy
   useEffect(() => {
     // When User logout, do not fetch the data
-    if (!logoutIsSuccess) {
-      fetchDataOnUserAuth();
-    }
-  }, [signInSuccess, logoutIsSuccess]);
+    if (!logoutIsSuccess) fetchDataOnUserAuth();
+  }, [logoutIsSuccess, signInSuccess, fetchDataOnUserAuth]);
 
   useEffect(() => {
     if (logoutIsSuccess) onUserLogout();
@@ -218,7 +229,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       value={{
         ...state,
         onUserSelectAccount,
-        onUserAuth,
+        onUserAuth: onUserAuthentication,
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,
