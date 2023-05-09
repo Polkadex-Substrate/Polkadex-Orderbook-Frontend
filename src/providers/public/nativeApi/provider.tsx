@@ -5,10 +5,12 @@ import { Provider } from "./context";
 import { nativeApiReducer, initialState } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
-import { RECONNECT_TIME } from "./constants";
+import { RECONNECT_TIME_MS } from "./constants";
 
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+
+const convertMillisecondsToSeconds = Math.floor(RECONNECT_TIME_MS / 1000);
 
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
@@ -22,9 +24,9 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
 
     const onReady = () => dispatch(A.nativeApiConnectData(api));
     const onConnectError = () => {
-      api.disconnect().then(() => setTimeout(() => onConnectNativeApi(), RECONNECT_TIME));
+      api.disconnect().then(() => setTimeout(() => onConnectNativeApi(), RECONNECT_TIME_MS));
       onHandleError(
-        `Polkadex can't connect to ${defaultConfig.polkadexChain}, reconnecting in 30 seconds`
+        `Polkadex can't connect to ${defaultConfig.polkadexChain}, reconnecting in ${convertMillisecondsToSeconds} seconds`
       );
       dispatch(A.nativeApiConnectError());
     };
