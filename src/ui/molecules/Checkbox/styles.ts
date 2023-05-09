@@ -6,6 +6,7 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
   css({
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
     "& label": {
       width: " fit-content",
       marginLeft: "0.5rem",
@@ -37,8 +38,8 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       transitionProperty: "all",
       transitionDuration: "350ms",
       transitionTimingFunction: "cubic-bezier(0.53, -0.67, 0.73, 0.74)",
-      width: "1.8rem",
-      height: "1.8rem",
+      width: "1.5rem",
+      height: "1.5rem",
       borderRadius: "0.5rem",
       border: "1px solid",
       borderColor: theme.colors.secondaryBackground,
@@ -53,12 +54,9 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       borderLeft: "0",
       transform: "rotate(45deg)",
       position: "absolute",
-      top: "0.2rem",
+      top: "0.1rem",
       opacity: "0",
     },
-    // "& input:focus": {
-    //   boxShadow: `0 0 0.5rem ${theme.colors.primary}33`,
-    // },
     "& input:hover:after": {
       transform: "scale3d(1.3, 1.3, 1.2)",
       transitionTimingFunction: "cubic-bezier(0.37, 0.74, 0.15, 1.65)",
