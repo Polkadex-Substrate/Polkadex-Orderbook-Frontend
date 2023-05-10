@@ -85,6 +85,14 @@ export const WrapperLinks = styled.div`
   `}
 `;
 
+export const Main = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    margin-right: 45px;
+  `}
+`;
+
 export const Wrapper = styled.nav`
   ${({ theme }) => css`
     position: fixed;
@@ -99,11 +107,11 @@ export const Wrapper = styled.nav`
     z-index: 33;
 
     @media screen and (min-width: 590px) {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      left: 0;
+      bottom: 0;
       min-width: 4.5rem;
-      height: 100vh;
-      max-height: 100rem;
+      height: 100vh !important;
       max-width: 4.5rem;
       display: grid;
       grid-template-rows: 1.5fr 1fr;

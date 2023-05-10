@@ -39,101 +39,104 @@ export const Menu = () => {
   } = profileState;
 
   return (
-    <S.Wrapper>
-      <S.WrapperLinks>
-        <S.Logo>
-          <Logo size="Medium" href="/trading" />
-        </S.Logo>
-        <S.Container>
-          <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
-            <Link href="/trading">
-              <div>
-                <Icon name="Exchange" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Exchange</S.Span>
-            </Link>
+    <S.Main>
+      <S.Wrapper>
+        <S.WrapperLinks>
+          <S.Logo>
+            <Logo size="Medium" href="/trading" />
+          </S.Logo>
+          <S.Container>
+            <S.WrapperIcon isDisabled={router.pathname === "/trading/[id]"}>
+              <Link href="/trading">
+                <div>
+                  <Icon name="Exchange" background="none" stroke="text" size="large" />
+                </div>
+                <S.Span>Exchange</S.Span>
+              </Link>
+            </S.WrapperIcon>
+            <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/balances"}>
+              <Link href="/balances">
+                <div>
+                  <Icon name="Coins" background="none" stroke="text" size="large" />
+                </div>
+                <S.Span>Balances</S.Span>
+              </Link>
+            </S.WrapperIcon>
+            <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/settings"}>
+              <Link href="/settings">
+                <div>
+                  <Icon name="Wallet" background="none" stroke="text" size="large" />
+                </div>
+                <S.Span>Accounts</S.Span>
+              </Link>
+            </S.WrapperIcon>
+            <Terms />
+            <Help />
+          </S.Container>
+          <S.WrapperIcon onClick={changeTheme} as="div">
+            <Tooltip>
+              <TooltipHeader>
+                <div>
+                  <Icon
+                    name={isDarkTheme ? "Sun" : "Moon"}
+                    background="secondaryBackground"
+                    size="large"
+                  />
+                </div>
+              </TooltipHeader>
+              <TooltipContent position="left">
+                <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
+              </TooltipContent>
+            </Tooltip>
           </S.WrapperIcon>
-          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/balances"}>
-            <Link href="/balances">
-              <div>
-                <Icon name="Coins" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Balances</S.Span>
-            </Link>
-          </S.WrapperIcon>
-          <S.WrapperIcon isDisabled={!isAuthenticated || router.pathname === "/settings"}>
-            <Link href="/settings">
-              <div>
-                <Icon name="Wallet" background="none" stroke="text" size="large" />
-              </div>
-              <S.Span>Accounts</S.Span>
-            </Link>
-          </S.WrapperIcon>
-          <Terms />
-          <Help />
-        </S.Container>
-        <S.WrapperIcon onClick={changeTheme} as="div">
-          <Tooltip>
-            <TooltipHeader>
-              <div>
-                <Icon
-                  name={isDarkTheme ? "Sun" : "Moon"}
-                  background="secondaryBackground"
-                  size="large"
-                />
-              </div>
-            </TooltipHeader>
-            <TooltipContent position="left">
-              <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-            </TooltipContent>
-          </Tooltip>
-        </S.WrapperIcon>
-      </S.WrapperLinks>
-      <S.WrapperProfile>
-        <S.ContainerProfile>
-          <Popover>
-            <Popover.Trigger>
-              <S.Notifications>
-                <Tooltip>
-                  <TooltipHeader>
-                    <S.NotificationsWrapper
-                      isActive={!!notifications?.find((value) => !value.active)}>
-                      <Icons.Notifications />
-                      <div />
-                    </S.NotificationsWrapper>
-                  </TooltipHeader>
-                  <TooltipContent position="left">
-                    <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
-                  </TooltipContent>
-                </Tooltip>
-              </S.Notifications>
-            </Popover.Trigger>
-            <Popover.Content>
-              <NotificationsContent notifications={notifications} />
-            </Popover.Content>
-          </Popover>
-          <Popover>
-            <Popover.Trigger>
-              <S.Profile>
-                <Tooltip>
-                  <TooltipHeader>
-                    <S.Avatar>
-                      <BigHead {...avatarOptions} />
-                    </S.Avatar>
-                  </TooltipHeader>
-                  <TooltipContent position="left">
-                    <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
-                  </TooltipContent>
-                </Tooltip>
-              </S.Profile>
-            </Popover.Trigger>
-            <Popover.Content>
-              <Profile />
-            </Popover.Content>
-          </Popover>
-        </S.ContainerProfile>
-      </S.WrapperProfile>
-    </S.Wrapper>
+        </S.WrapperLinks>
+        <S.WrapperProfile>
+          <S.ContainerProfile>
+            <Popover>
+              <Popover.Trigger>
+                <S.Notifications>
+                  <Tooltip>
+                    <TooltipHeader>
+                      <S.NotificationsWrapper
+                        isActive={!!notifications?.find((value) => !value.active)}>
+                        <Icons.Notifications />
+                        <div />
+                      </S.NotificationsWrapper>
+                    </TooltipHeader>
+                    <TooltipContent position="left">
+                      <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </S.Notifications>
+              </Popover.Trigger>
+              <Popover.Content>
+                <NotificationsContent notifications={notifications} />
+              </Popover.Content>
+            </Popover>
+            <Popover>
+              <Popover.Trigger>
+                <S.Profile>
+                  <Tooltip>
+                    <TooltipHeader>
+                      <S.Avatar>
+                        <BigHead {...avatarOptions} />
+                      </S.Avatar>
+                    </TooltipHeader>
+                    <TooltipContent position="left">
+                      <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </S.Profile>
+              </Popover.Trigger>
+              <Popover.Content>
+                <Profile />
+              </Popover.Content>
+            </Popover>
+          </S.ContainerProfile>
+        </S.WrapperProfile>
+      </S.Wrapper>
+      <div></div>
+    </S.Main>
   );
 };
 
