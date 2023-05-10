@@ -1,4 +1,6 @@
 import React, {
+  Fragment,
+  ReactNode,
   cloneElement,
   createContext,
   isValidElement,
@@ -63,25 +65,26 @@ export const usePanelState = () => {
   return panelIndex === activeIndex;
 };
 
-export const TabHeader: React.FC = ({ children }) => {
+export const TabHeader: React.FC<{ children: ReactNode }> = ({ children }) => {
   const state = useTabState();
-  if (typeof children === "function") {
-    return children(state);
-  }
 
-  return isValidElement(children)
-    ? cloneElement<{
-        isActive: boolean;
-        onClick: () => void;
-      }>(children, state)
-    : children;
+  return (
+    <Fragment>
+      {isValidElement(children)
+        ? cloneElement<{
+            isActive?: boolean;
+            onClick?: () => void;
+          }>(children, state)
+        : children}
+    </Fragment>
+  );
 };
 
-export const TabContent: React.FC<{ active?: boolean; isDisabled?: boolean }> = ({
-  active,
-  isDisabled = false,
-  children,
-}) => {
+export const TabContent: React.FC<{
+  active?: boolean;
+  isDisabled?: boolean;
+  children: ReactNode;
+}> = ({ active, isDisabled = false, children }) => {
   const isActive = usePanelState();
 
   return <>{(isActive && !isDisabled) || active ? children : null}</>;
