@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 import { useProfile } from "../profile";
 import { UserSessionPayload } from "../sessionProvider/actions";
@@ -11,9 +11,12 @@ import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
+import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
+
 export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
+  const { mainAddress } = profileState.selectedAccount;
   const sessionState = useSessionProvider();
   const { onHandleError } = useSettingsProvider();
 
@@ -34,18 +37,37 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
     }
   };
 
-  const onUserTradeUpdate = (payload: A.UserTradesUpdateEvent["payload"]) => {
-    try {
-      const trade = processTradeData(payload);
-      dispatch(A.userTradesUpdateData(trade));
-    } catch (error) {
-      onHandleError(`User trades channel error: ${error?.message ?? error}`);
-    }
-  };
+  const onUserTradeUpdate = useCallback(
+    (payload: A.UserTradesUpdateEvent["payload"]) => {
+      try {
+        const trade = processTradeData(payload);
+        dispatch(A.userTradesUpdateData(trade));
+      } catch (error) {
+        onHandleError(`User trades channel error: ${error?.message ?? error}`);
+      }
+    },
+    [onHandleError]
+  );
 
   const onUserTradesError = (payload: A.UserTradesError["error"]) => {
     dispatch(A.userTradesError(payload));
   };
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from trades  provider",
+      mainAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onUserTradeUpdate,
+      name: mainAddress,
+      eventType: "TradeFormat",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onUserTradeUpdate]);
 
   return (
     <Provider
