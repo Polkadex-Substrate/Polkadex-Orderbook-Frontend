@@ -32,7 +32,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
-  console.log("extension wallet", profileState.selectedAccount);
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -166,57 +165,26 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   };
 
   const onPolkadotExtensionWallet = useCallback(async () => {
-    try {
-      const allAccounts: ExtensionAccount[] = await getAllExtensionWalletAccounts();
-      dispatch(A.extensionWalletData({ allAccounts }));
-
-      const { web3AccountsSubscribe, web3FromAddress } = await import(
-        "@polkadot/extension-dapp"
-      );
-
-      const unsubscribe = web3AccountsSubscribe(
-        async (injectedAccounts: InjectedAccountWithMeta[]) => {
-          const extensionAccountPromises: Promise<ExtensionAccount>[] = injectedAccounts.map(
-            async (account): Promise<ExtensionAccount> => {
-              return {
-                account,
-                signer: (await web3FromAddress(account.address)).signer,
-              };
-            }
-          );
-          const allAccounts = await Promise.all(extensionAccountPromises);
-          dispatch(A.extensionWalletData({ allAccounts }));
-        },
-        { ss58Format: 88 }
-      );
-      return () => unsubscribe.then((fn) => fn());
-    } catch (error) {
-      onHandleError(error?.message ?? error);
-    }
-  }, [onHandleError]);
-
-  async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
-    try {
-      const { web3Accounts, web3FromAddress, web3EnablePromise } = await import(
-        "@polkadot/extension-dapp"
-      );
-      const isAuthGiven = await web3EnablePromise;
-      if (!isAuthGiven) {
-        throw new Error("Please give authorization in polkadot.js wallet");
-      }
-
-      const allAccounts: InjectedAccountWithMeta[] = await web3Accounts({ ss58Format: 88 });
-      const promises = allAccounts.map(async (account): Promise<ExtensionAccount> => {
-        return {
-          account,
-          signer: (await web3FromAddress(account.address)).signer,
-        };
-      });
-      return Promise.all(promises);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
+    const { web3AccountsSubscribe, web3FromAddress } = await import(
+      "@polkadot/extension-dapp"
+    );
+    const unsubscribe = await web3AccountsSubscribe(
+      async (injectedAccounts: InjectedAccountWithMeta[]) => {
+        const allAccounts = await Promise.all(
+          injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
+            const { signer } = await web3FromAddress(account.address);
+            return {
+              account,
+              signer,
+            };
+          })
+        );
+        dispatch(A.extensionWalletData({ allAccounts }));
+      },
+      { ss58Format: 88 }
+    );
+    return () => unsubscribe();
+  }, []);
 
   const retryRegisterToAppsync = async (
     data: T.RegisterEmailData,
