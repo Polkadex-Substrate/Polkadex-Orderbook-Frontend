@@ -351,31 +351,6 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
   );
 };
 
-const Copy = ({ copyData }) => {
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(copyData);
-    buttonRef.current.innerHTML = "Copied";
-  };
-  return (
-    <S.Cell>
-      <Tooltip>
-        <TooltipHeader>
-          <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
-            <Icons.Copy />
-          </button>
-          {copyData}
-        </TooltipHeader>
-        <TooltipContent>
-          <p ref={buttonRef}>Copy to clipboard</p>
-        </TooltipContent>
-      </Tooltip>
-    </S.Cell>
-  );
-};
-
 const HistoryTable = ({ items }) => {
   const { selectGetAsset } = useAssetsProvider();
 
