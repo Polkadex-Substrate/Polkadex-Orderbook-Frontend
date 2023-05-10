@@ -48,7 +48,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({
           type: "Success",
-          message: "Withdraw Successful, your withdraw has been processed.",
+          message:
+            "Your withdrawal is being processed and will be available for you to claim in a few minutes",
         });
       }
     } catch (error) {
@@ -116,16 +117,12 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     return await signAndSendExtrinsic(api, ext, { signer }, account, true);
   }
 
-  const handleClaimWithdraws = (sid: number) => {
-    onFetchClaimWithdraw({ sid });
-  };
-
   return (
     <Provider
       value={{
         ...state,
         onFetchWithdraws,
-        handleClaimWithdraws,
+        onFetchClaimWithdraw,
       }}>
       {children}
     </Provider>
