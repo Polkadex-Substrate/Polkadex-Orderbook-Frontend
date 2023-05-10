@@ -182,9 +182,10 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
     [onHandleError]
   );
 
-  const onUserAuth = async (payload: T.UserAuth) => {
-    dispatch(A.authUserData(payload));
-  };
+  const onUserAuth = useCallback(
+    async (payload: T.UserAuth) => dispatch(A.authUserData(payload)),
+    []
+  );
 
   // For SignIn Purposes
   const signinIsSuccess = state.signin.isSuccess;

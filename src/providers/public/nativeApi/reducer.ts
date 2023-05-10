@@ -4,9 +4,7 @@ import {
   NATIVEAPI_CONNECT_ERROR,
   NATIVEAPI_CONNECT_FETCH,
   NATIVEAPI_DISCONNECT_DATA,
-  NATIVEAPI_NO_EXTENSION,
 } from "./constants";
-
 import { NativeApiState } from "./types";
 
 export const initialState: NativeApiState = {
