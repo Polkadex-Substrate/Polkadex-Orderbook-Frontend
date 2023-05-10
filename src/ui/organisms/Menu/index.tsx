@@ -119,7 +119,7 @@ export const Menu = () => {
                   <Tooltip>
                     <TooltipHeader>
                       <S.Avatar>
-                        <BigHead {...avatarOptions} />
+                        <BigHead {...avatarOptions.data} />
                       </S.Avatar>
                     </TooltipHeader>
                     <TooltipContent position="left">
