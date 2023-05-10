@@ -40,7 +40,6 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 export const SettingsTemplate = () => {
   const router = useRouter();
   const {
-    state,
     allFilteredTradeAccounts,
     filterControllerWallets,
     isPreviewActive,
@@ -52,7 +51,6 @@ export const SettingsTemplate = () => {
     userAccounts,
     isActive,
     isLoading,
-    setState,
     handleFilterTradeAccounts,
     handleFilterControllerWallets,
     handleChangeCurrentControllerWallet,
@@ -91,7 +89,7 @@ export const SettingsTemplate = () => {
         />
       </Modal>
       <Modal
-        open={isActive}
+        open={!!isActive}
         onClose={handleCloseNewAccount}
         placement="start right"
         isFullHeight>
@@ -112,7 +110,7 @@ export const SettingsTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu />
         <S.Wrapper>
           <S.ContainerMain>
             <S.Title>
@@ -148,12 +146,12 @@ export const SettingsTemplate = () => {
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!tradeAccounts.length ? (
-                    <Empty
-                      title="No trading accounts"
-                      description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
-                      // actionTitle="Import trading account"
-                      onClick={() => console.log("Open Modal")}
-                    />
+                    <div style={{ padding: "4rem 2rem" }}>
+                      <Empty
+                        title="No trading accounts"
+                        description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
+                      />
+                    </div>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
@@ -310,10 +308,12 @@ export const SettingsTemplate = () => {
                 </S.WalletTitle>
                 <S.WalletContainer>
                   {!controllerWallets?.length ? (
-                    <Empty
-                      title="No wallet found"
-                      description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
-                    />
+                    <div style={{ padding: "4rem 2rem" }}>
+                      <Empty
+                        title="No wallet found"
+                        description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
+                      />
+                    </div>
                   ) : (
                     <S.WalletWrapper>
                       <AccountHeader
@@ -490,7 +490,7 @@ const Card = ({
       <S.AccountCardWrapper>
         {isAvatar && (
           <S.AccountCardAvatar>
-            <BigHead {...avatarOptions} />
+            <BigHead {...avatarOptions.data} />
           </S.AccountCardAvatar>
         )}
         <S.AccountCardContent>

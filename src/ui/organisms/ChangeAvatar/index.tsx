@@ -53,7 +53,7 @@ const RandomAvatars = ({ currentAvatar, handleSelect }: RandomAvatarProps) => {
         {randomAvatars.map(({ id, ...v }) => {
           return (
             <S.Card isActive={currentAvatar === id} key={id} onClick={() => handleSelect(id)}>
-              <BigHead {...(v as AvatarProps)} />
+              <BigHead {...v.data} />
             </S.Card>
           );
         })}

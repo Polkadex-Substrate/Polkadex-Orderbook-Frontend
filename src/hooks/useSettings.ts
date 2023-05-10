@@ -10,7 +10,6 @@ import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useSettings = () => {
-  const [state, setState] = useState(false);
   const [showRegistered, setShowRegistered] = useState(false);
   const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
@@ -49,7 +48,7 @@ export const useSettings = () => {
   const linkedMainAddress = profileState.userData.mainAccounts;
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
-  const { isActive } = tradeWalletState.registerAccountModal;
+  const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
   const isRegisterControllerAccountSuccess = tradeWalletState.registerAccountSuccess;
 
@@ -95,10 +94,10 @@ export const useSettings = () => {
         const isLinkedAccount = !!userAccounts.some(
           (v) =>
             v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
-            filterByController === v.mainAddress.toLowerCase()
+            filterByController === v.mainAddress?.toLowerCase()
         );
         if (
-          (isLinkedAccount || filterByController.includes("all")) &&
+          (isLinkedAccount || filterByController?.includes("all")) &&
           (address?.includes(checker) || name?.includes(checker))
         ) {
           pv.push(cv);
@@ -145,9 +144,10 @@ export const useSettings = () => {
       isImportAccountSuccess;
 
     if (hasAction) {
-      if (isRegisterControllerAccountSuccess || isImportAccountSuccess)
+      if (isRegisterControllerAccountSuccess || isImportAccountSuccess) {
         onRegisterMainAccountReset();
-      else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+        tradeWalletState.onRegisterAccountModalCancel();
+      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
         tradeWalletState.onRegisterTradeAccountReset();
       else tradeWalletState.onRegisterAccountModalCancel();
     }
@@ -167,7 +167,6 @@ export const useSettings = () => {
   return {
     handleClosePreviewModal,
     handleCloseNewAccount,
-    state,
     currentControllerWallet,
     currentTradeAccount,
     isTradeAccountLoading,
@@ -185,7 +184,6 @@ export const useSettings = () => {
     usingAccount,
     isRegisterControllerAccountSuccess,
     isLoading,
-    setState,
     isPreviewActive,
     previewAccountSelected,
     handleFilterTradeAccounts: setFilterTradeAccounts,

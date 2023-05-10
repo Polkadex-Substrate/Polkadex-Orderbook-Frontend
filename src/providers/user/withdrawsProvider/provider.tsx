@@ -36,6 +36,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { onUserTradesError } = useTrades();
 
   const onFetchWithdraws = async ({ asset, amount }) => {
+    dispatch(A.withdrawsFetch({ asset, amount }));
     try {
       const nonce = getNonce();
       const api = nativeApiState.api;
@@ -78,6 +79,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           message:
             "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
         });
+        dispatch(A.withdrawsClaimFetch({ sid }));
+
         const res = await claimWithdrawal(api, signer, account?.address, sid);
         if (res.isSuccess) {
           dispatch(A.withdrawsClaimData({ sid }));

@@ -1,69 +1,62 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 
 import { useAuth } from "../auth";
 import { useSettingsProvider } from "../../public/settings";
-import * as subscriptions from "../../../graphql/subscriptions";
-import { useExtensionWallet } from "../extensionWallet";
-import { orderUpdateEvent } from "../orderHistoryProvider";
-import { balanceUpdateEvent } from "../balancesProvider/actions";
-import { useBalancesProvider } from "../balancesProvider/useBalancesProvider";
-import { transactionsUpdateEvent } from "../transactionsProvider";
-import { useTransactionsProvider } from "../transactionsProvider/useTransactionProvider";
-import { useTradeWallet } from "../tradeWallet";
-import { useTrades } from "../trades";
-import { useOrderHistoryProvider } from "../orderHistoryProvider/useOrderHistroyProvider";
-import { registerMainAccountUpdateEvent } from "../extensionWallet/actions";
-import { tradeAccountUpdateEvent } from "../tradeWallet/actions";
-import { userTradesUpdateEvent } from "../trades/actions";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 
-import { LOCAL_STORAGE_ID, READ_ONLY_TOKEN, USER_EVENTS } from "@polkadex/web-constants";
+import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const authState = useAuth();
+  const { onUserAuth, signin, logout } = useAuth();
   const { onHandleNotification, onHandleError } = useSettingsProvider();
 
-  const onUserSelectAccount = (payload: T.UserSelectAccount) => {
-    const { tradeAddress: trade_address } = payload;
-    try {
-      const mainAddress = state.userData?.userAccounts?.find(
-        ({ tradeAddress }) => trade_address === tradeAddress
-      )?.mainAddress;
-      if (mainAddress) {
-        const data = { tradeAddress: trade_address, mainAddress };
-        dispatch(A.userAccountSelectData(data));
+  const onUserSelectAccount = useCallback(
+    (payload: T.UserSelectAccount) => {
+      const { tradeAddress: trade_address } = payload;
+      try {
+        const mainAddress = state.userData?.userAccounts?.find(
+          ({ tradeAddress }) => trade_address === tradeAddress
+        )?.mainAddress;
+        if (mainAddress) {
+          const data = { tradeAddress: trade_address, mainAddress };
+          dispatch(A.userAccountSelectData(data));
+        }
+      } catch (e) {
+        console.log("error: ", e);
+        onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
-    } catch (e) {
-      console.log("error: ", e);
-      onHandleError(`Invalid funding account, ${e?.message ?? e}`);
-    }
-  };
+    },
+    [onHandleError, state.userData?.userAccounts]
+  );
 
-  const getAllMainLinkedAccounts = async (email: string, Api = API) => {
-    try {
-      const res = await sendQueryToAppSync({
-        query: queries.listMainAccountsByEmail,
-        variables: {
-          email,
-        },
-        token: null,
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-        API: Api,
-      });
-      return res.data.listMainAccountsByEmail ?? { accounts: [] };
-    } catch (error) {
-      console.log("Error: getAllMainLinkedAccounts", error.errors);
-      onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
-    }
-  };
+  const getAllMainLinkedAccounts = useCallback(
+    async (email: string, Api = API) => {
+      try {
+        const res = await sendQueryToAppSync({
+          query: queries.listMainAccountsByEmail,
+          variables: {
+            email,
+          },
+          token: null,
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+          API: Api,
+        });
+        return res.data.listMainAccountsByEmail ?? { accounts: [] };
+      } catch (error) {
+        console.log("Error: getAllMainLinkedAccounts", error.errors);
+        onHandleError(`Fet all linked accounts error: ${error?.message ?? error}`);
+      }
+    },
+    [onHandleError]
+  );
 
   const getAllProxyAccounts = async (
     mainAccounts: [string],
@@ -93,39 +86,47 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return accounts;
   };
 
-  const onUserAuth = async (payload: T.UserAuth) => {
-    const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
-    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
+  const onUserAuthentication = useCallback(
+    async (payload: T.UserAuth) => {
+      const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
+      dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
 
-    const userAccounts = state.userData?.userAccounts;
-    const defaultTradeAddress = window.localStorage.getItem(
-      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-    );
+      const userAccounts = state.userData?.userAccounts;
+      const defaultTradeAddress = window.localStorage.getItem(
+        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+      );
 
-    try {
-      if (!userAccounts?.length) {
-        const { accounts } = await getAllMainLinkedAccounts(email);
-        const userAccounts = await getAllProxyAccounts(accounts);
-        dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
+      try {
+        if (!userAccounts?.length) {
+          const { accounts } = await getAllMainLinkedAccounts(email);
+          const userAccounts = await getAllProxyAccounts(accounts);
+          dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
+        }
+
+        if (defaultTradeAddress?.length) {
+          dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
+          dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
+          dispatch(A.userSetAvatar());
+        }
+
+        if (!isConfirmed && userExists) {
+          onHandleNotification({
+            type: "Attention",
+            message: "Please confirm your email, sign in again and confirm your email.",
+          });
+        }
+      } catch (error) {
+        onHandleError(`User auth error:${error?.message ?? error}`);
+        dispatch(A.userAuthError(error));
       }
-
-      if (defaultTradeAddress?.length) {
-        dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
-        dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
-        dispatch(A.userSetAvatar());
-      }
-
-      if (!isConfirmed && userExists) {
-        onHandleNotification({
-          type: "Attention",
-          message: "Please confirm your email, sign in again and confirm your email.",
-        });
-      }
-    } catch (error) {
-      onHandleError(`User auth error:${error?.message ?? error}`);
-      dispatch(A.userAuthError(error));
-    }
-  };
+    },
+    [
+      onHandleError,
+      onHandleNotification,
+      getAllMainLinkedAccounts,
+      state?.userData?.userAccounts,
+    ]
+  );
 
   const onUserLogout = () => {
     dispatch(A.userReset());
@@ -167,133 +168,68 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
 
-  const logoutIsSuccess = authState.logout.isSuccess;
+  const signInSuccess = signin.isSuccess;
+  const logoutIsSuccess = logout.isSuccess;
+
+  const fetchDataOnUserAuth = useCallback(async () => {
+    try {
+      const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
+      onUserChangeInitBanner();
+      onUserAuth({
+        email: attributes?.email,
+        userConfirmed: attributes?.email_verified,
+      });
+      onUserAuthentication({
+        email: attributes?.email,
+        isAuthenticated: true,
+        userExists: true,
+        isConfirmed: attributes?.email_verified,
+        jwt: signInUserSession?.accessToken?.jwtToken,
+      });
+    } catch (error) {
+      console.log("User error", error);
+      switch (error) {
+        case "User is not confirmed.": {
+          onUserAuth({
+            email: "",
+            userConfirmed: false,
+          });
+          onUserAuthentication({
+            email: "",
+            isAuthenticated: false,
+            userExists: true,
+            isConfirmed: false,
+          });
+          break;
+        }
+        case "The user is not authenticated": {
+          break;
+        }
+        default: {
+          console.error("Error=>", `User data fetch error: ${error.message}`);
+          onHandleError(`User data fetch error: ${error?.message ?? error}`);
+          break;
+        }
+      }
+    }
+  }, [onUserAuth, onUserAuthentication, onHandleError]);
+
+  useEffect(() => {
+    // When User logout, do not fetch the data
+    if (!logoutIsSuccess) fetchDataOnUserAuth();
+  }, [logoutIsSuccess, signInSuccess, fetchDataOnUserAuth]);
 
   useEffect(() => {
     if (logoutIsSuccess) onUserLogout();
   }, [logoutIsSuccess]);
 
   // user event listener
-  const { onRegisterMainAccountUpdate } = useExtensionWallet();
-  const { onBalanceUpdate } = useBalancesProvider();
-  const { onTransactionsUpdate } = useTransactionsProvider();
-  const { onTradeAccountUpdate } = useTradeWallet();
-  const { onUserTradeUpdate } = useTrades();
-  const { onOrderUpdates } = useOrderHistoryProvider();
-  const registerSuccessNotification = useCallback(
-    (title: string, description: string) =>
-      onHandleNotification({ type: "Success", message: description }),
-    [onHandleNotification]
-  );
-
-  const createActionFromUserEvent = useCallback(
-    (eventData: any) => {
-      console.log("got raw event", eventData);
-      const data = JSON.parse(eventData.value.data.websocket_streams.data);
-      console.info("User Event: ", data);
-      const eventType = data.type;
-      switch (eventType) {
-        case USER_EVENTS.SetBalance: {
-          onBalanceUpdate(data);
-          return balanceUpdateEvent(data);
-        }
-        case USER_EVENTS.SetTransaction: {
-          onTransactionsUpdate(data);
-          return transactionsUpdateEvent(data);
-        }
-        case USER_EVENTS.Order: {
-          onOrderUpdates(data);
-          return orderUpdateEvent(data);
-        }
-        case USER_EVENTS.RegisterAccount: {
-          onRegisterMainAccountUpdate(data);
-          return registerMainAccountUpdateEvent(data);
-        }
-        case USER_EVENTS.AddProxy: {
-          onTradeAccountUpdate(data);
-          return tradeAccountUpdateEvent(data);
-        }
-
-        case USER_EVENTS.TradeFormat: {
-          onUserTradeUpdate(data);
-          return userTradesUpdateEvent(data);
-        }
-
-        case USER_EVENTS.RemoveProxy:
-          return registerSuccessNotification(
-            "Trade account removed",
-            "Trade account removal Confirmed"
-          );
-      }
-    },
-    [
-      onBalanceUpdate,
-      onOrderUpdates,
-      onRegisterMainAccountUpdate,
-      onTradeAccountUpdate,
-      onTransactionsUpdate,
-      onUserTradeUpdate,
-      registerSuccessNotification,
-    ]
-  );
-  const currentAccount: T.UserAccount = state.selectedAccount;
-  const mainAddr = currentAccount.mainAddress;
-  const tradeAddr = currentAccount.tradeAddress;
-
-  useEffect(() => {
-    console.log("created User Events Channel...", mainAddr);
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: mainAddr },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        createActionFromUserEvent(data);
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [createActionFromUserEvent, mainAddr]);
-
-  useEffect(() => {
-    console.log("created User Events Channel...", tradeAddr);
-
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: tradeAddr },
-      authToken: READ_ONLY_TOKEN,
-      // ignore type error here as its a known bug in aws library
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (data) => {
-        createActionFromUserEvent(data);
-      },
-      error: (err) => {
-        console.log("subscription error", err);
-      },
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [createActionFromUserEvent, tradeAddr]);
-
   return (
     <Provider
       value={{
         ...state,
         onUserSelectAccount,
-        onUserAuth,
+        onUserAuth: onUserAuthentication,
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,

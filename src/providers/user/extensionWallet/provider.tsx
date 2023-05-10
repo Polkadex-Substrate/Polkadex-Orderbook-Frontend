@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 
@@ -16,14 +16,23 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { eventHandler, eventHandlerCallback } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
+  const {
+    authInfo,
+    onUserProfileMainAccountPush,
+    onUserProfileAccountPush,
+    onUserAccountSelectFetch,
+  } = useProfile();
+  const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
   const profileState = useProfile();
+  const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  console.log("extension wallet", profileState.selectedAccount);
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -44,7 +53,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         const signature: string = signedData.signature;
         await executeRegisterEmail(data, signature);
 
-        profileState.onUserProfileMainAccountPush(mainAccount);
+        onUserProfileMainAccountPush(mainAccount);
       } else {
         throw new Error("Email or address is not valid");
       }
@@ -62,13 +71,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
     (payload: A.RegisterMainAccountUpdateEvent["payload"]) => {
       try {
         const { proxy, main } = payload;
-        profileState.onUserProfileMainAccountPush(main);
-        profileState.onUserProfileAccountPush({
+        onUserProfileMainAccountPush(main);
+        onUserProfileAccountPush({
           tradeAddress: proxy,
           mainAddress: main,
         });
 
-        profileState.onUserAccountSelectFetch({
+        onUserAccountSelectFetch({
           tradeAddress: proxy,
         });
         onHandleNotification({
@@ -82,12 +91,20 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         dispatch(A.registerMainAccountError());
       }
     },
-    [onHandleError, onHandleNotification, profileState]
+    [
+      onHandleError,
+      onHandleNotification,
+      onUserAccountSelectFetch,
+      onUserProfileMainAccountPush,
+      onUserProfileAccountPush,
+    ]
   );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
     let data: T.RegisterEmailData, signature: string;
     const { mainAccount, tradeAddress, mnemonic } = payload;
+    dispatch(A.registerMainAccountFetch(payload));
+
     try {
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) => account?.address?.toLowerCase() === mainAccount?.toLowerCase()
@@ -96,9 +113,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       const api: ApiPromise = nativeApiState.api;
 
       // listen for events in this new registered main address
-
-      // TODO : When userEventsChanelHandler provider will be created
-      // yield fork(userEventsChannelHandler, selectedControllerAccount.account.address);
+      eventHandlerCallback({
+        cb: onRegisterMainAccountUpdate,
+        name: mainAccount,
+        eventType: "RegisterAccount",
+      });
 
       const hasAddressAndEmail =
         !!selectedControllerAccount.account?.address?.length && !!email?.length;
@@ -178,17 +197,14 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
 
   async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
     try {
-      const { web3Accounts, web3Enable, web3FromAddress, web3EnablePromise } = await import(
+      const { web3Accounts, web3FromAddress, web3EnablePromise } = await import(
         "@polkadot/extension-dapp"
       );
       const isAuthGiven = await web3EnablePromise;
       if (!isAuthGiven) {
         throw new Error("Please give authorization in polkadot.js wallet");
       }
-      const extensions = await web3Enable("polkadex");
-      if (extensions.length === 0) {
-        throw new Error("no extensions installed");
-      }
+
       const allAccounts: InjectedAccountWithMeta[] = await web3Accounts({ ss58Format: 88 });
       const promises = allAccounts.map(async (account): Promise<ExtensionAccount> => {
         return {
@@ -210,11 +226,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   ) => {
     try {
       await executeRegisterEmail(data, signature);
-      profileState.onUserProfileAccountPush({
+      onUserProfileAccountPush({
         tradeAddress,
         mainAddress,
       });
-      profileState.onUserProfileMainAccountPush(mainAddress);
+      onUserProfileMainAccountPush(mainAddress);
       dispatch(A.registerMainAccountData());
     } catch (error) {
       console.log("error", error);
@@ -234,6 +250,26 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       )
     );
   };
+  useEffect(() => {
+    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
+
+  useEffect(() => {
+    console.log(
+      "created User Events Channel... for main address from extension wallet provider",
+      mainAddress
+    );
+
+    const subscription = eventHandler({
+      cb: onRegisterMainAccountUpdate,
+      name: mainAddress,
+      eventType: "RegisterAccount",
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [mainAddress, onRegisterMainAccountUpdate]);
 
   return (
     <Provider

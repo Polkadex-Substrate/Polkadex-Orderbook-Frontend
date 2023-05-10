@@ -7,19 +7,26 @@ export const Logo = styled.div`
   }
 `;
 
-export const WrapperIcon = styled.div`
-  ${({ theme }) => css`
+export const WrapperIcon = styled.div<{
+  isDisabled?: boolean;
+}>`
+  ${({ theme, isDisabled }) => css`
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     width: fit-content;
     cursor: pointer;
+    pointer-events: ${isDisabled ? "none" : "auto"};
+    opacity: ${isDisabled ? 0.4 : 1};
     :hover {
       ${Span},${TermsLinks} {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
+      }
+      ${Span} {
+        visibility: ${isDisabled ? "hidden" : "visible"};
       }
     }
     ${Icon} {
@@ -113,7 +120,7 @@ export const Wrapper = styled.nav`
         flex-direction: column;
       }
     }
-    @media screen and (min-height:1200px){
+    @media screen and (min-height: 1200px) {
       max-height: 77vh;
     }
   `}

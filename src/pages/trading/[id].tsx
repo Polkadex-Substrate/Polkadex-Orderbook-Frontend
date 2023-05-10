@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBook";
+import { OrdersProvider } from "@polkadex/orderbook/providers/user/orders";
 
 const TradingTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Trading").then((mod) => mod.Trading),
@@ -12,11 +13,11 @@ const TradingTemplate = dynamic(
 
 const Trading = () => (
   <OrderBookProvider>
-    <OrderBookProvider>
+    <OrdersProvider>
       <RecentTradesProvider>
         <TradingTemplate />
       </RecentTradesProvider>
-    </OrderBookProvider>
+    </OrdersProvider>
   </OrderBookProvider>
 );
 export default Trading;
