@@ -193,6 +193,7 @@ const Terms = () => {
     </S.Terms>
   );
 };
+
 const Help = () => {
   const [state, setState] = useState(false);
   return (
@@ -231,4 +232,5 @@ const Help = () => {
     </S.Terms>
   );
 };
+
 export default Menu;
