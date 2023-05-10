@@ -46,6 +46,10 @@ export interface NotificationMarkAsRead {
   payload: number | string;
 }
 
+export interface CheckHasExtension {
+  type: typeof C.CHECK_HAS_EXTENSION;
+}
+
 export type SettingActions =
   | ToggleChartRebuildAction
   | ToggleMarketSelectorAction
@@ -56,7 +60,8 @@ export type SettingActions =
   | NotificationPush
   | NotificationDeleteAll
   | NotificationDeleteById
-  | NotificationMarkAsRead;
+  | NotificationMarkAsRead
+  | CheckHasExtension;
 
 export const toggleChartRebuild = (): ToggleChartRebuildAction => ({
   type: C.TOGGLE_CHART_REBUILD,
@@ -115,4 +120,8 @@ export const notificationMarkAsRead = (
 ): NotificationMarkAsRead => ({
   type: C.NOTIFICATION_MARK_AS_READ,
   payload,
+});
+
+export const checkHasExtension = (): CheckHasExtension => ({
+  type: C.CHECK_HAS_EXTENSION,
 });
