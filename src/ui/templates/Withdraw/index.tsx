@@ -89,18 +89,6 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
-  const validate = (values) => {
-    const errors = {} as any;
-    if (values?.amount?.includes("e")) {
-      errors.amount = "use a valid amount instead";
-    }
-
-    if (+values?.amount > +availableAmount?.free_balance) {
-      errors.amount = "Amount cannot be greater than balance";
-    }
-    return errors;
-  };
-
   const handleSubmitWithdraw = (amount: string | number) => {
     console.log("submit");
 
@@ -115,8 +103,7 @@ export const WithdrawTemplate = () => {
       amount: 0.0,
       asset: null,
     },
-    validationSchema: withdrawValidations,
-    validate,
+    validationSchema: withdrawValidations(availableAmount?.free_balance),
     onSubmit: ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
       else {
@@ -184,7 +171,7 @@ export const WithdrawTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu />
         <S.Wrapper>
           <S.Title type="button" onClick={() => router.back()}>
             <div>
