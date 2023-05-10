@@ -37,8 +37,8 @@ export const BalancesTemplate = () => {
         // TODO: Define small amount based on the decimals of the token.
         const hasZeroAmount = filters.hideZero && Number(tokenBalance?.free_balance) < 0.001;
         const matchesNameOrTicker =
-          e.name.toLowerCase().includes(filters.search) ||
-          e.symbol.toLowerCase().includes(filters.search);
+          e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+          e.symbol.toLowerCase().includes(filters.search.toLowerCase());
 
         return matchesNameOrTicker && !hasZeroAmount;
       }),
