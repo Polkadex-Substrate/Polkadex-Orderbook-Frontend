@@ -236,23 +236,25 @@ export const WithdrawTemplate = () => {
                         </strong>
                       </S.Available>
                     </S.SelectInput>
-                    <InputLine
-                      name="amount"
-                      label="Token Amount"
-                      placeholder="0.00"
-                      error={errors.amount && touched.amount && errors.amount}
-                      {...getFieldProps("amount")}
-                    />
-                    <Button
-                      type="submit"
-                      size="extraLarge"
-                      background="primary"
-                      color="white"
-                      disabled={!(isValid && dirty) || loading}
-                      isFull
-                      isLoading={loading}>
-                      Withdraw
-                    </Button>
+                    <S.Flex>
+                      <InputLine
+                        name="amount"
+                        label="Token Amount"
+                        placeholder="0.00"
+                        error={errors.amount && touched.amount && errors.amount}
+                        {...getFieldProps("amount")}
+                      />
+                      <Button
+                        type="submit"
+                        size="extraLarge"
+                        background="primary"
+                        color="white"
+                        disabled={!(isValid && dirty) || loading}
+                        isFull
+                        isLoading={loading}>
+                        Withdraw
+                      </Button>
+                    </S.Flex>
                   </LoadingSection>
                 </form>
               </S.Form>

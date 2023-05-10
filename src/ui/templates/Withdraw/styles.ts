@@ -17,6 +17,12 @@ export const UnlockAccount = styled.div`
     position: relative;
   `}
 `;
+
+export const Flex = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
 export const UnlockButton = styled.button`
   ${({ theme }) => css`
     position: absolute;
