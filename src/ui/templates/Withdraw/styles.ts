@@ -128,6 +128,9 @@ export const Box = styled.div`
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
   }
+  @media screen and (max-width: 830px) {
+    padding-bottom: 5rem;
+  }
 `;
 
 export const SelectInput = styled.div`
@@ -271,7 +274,7 @@ export const Form = styled.div`
 
 export const History = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 1rem;
     margin-top: 4rem;
     h2 {
@@ -283,36 +286,49 @@ export const History = styled.div`
 `;
 export const HistoryWrapper = styled.div`
   max-height: 26rem;
-  overflow-y: hidden;
-  padding: 2rem;
+  overflow-y: auto;
   height: fit-content;
-  :hover {
-    overflow-y: auto;
-  }
+  overflow-x: hidden;
 `;
 
 export const HistoryContent = styled.div`
   ${({ theme }) => css`
     :not(:last-child) {
-      border-bottom: 1px solid ${theme.colors.secondaryBackground};
-      padding-bottom: 1.5rem;
       margin-bottom: 2rem;
+      background-color: ${theme.colors.tertiaryBackgroundOpacity};
+    }
+    :is(:hover) {
+      overflow-x: auto;
+    }
+    ::-webkit-scrollbar-thumb,
+    ::-webkit-scrollbar-track {
+      background: ${theme.colors.secondaryBackground};
     }
   `}
 `;
 export const HistoryTable = styled.div`
   th,
   td {
-    width: 10rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    /* white-space: nowrap; */
+    vertical-align: top;
+  }
+  th:first-child,
+  td:first-child {
+    /* width: 17rem; */
   }
 `;
 
 export const Cell = styled.div`
   ${({ theme }) => css`
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
     vertical-align: middle;
     font-weight: 500;
     small {
+      display: block;
       font-size: 1.3rem;
       color: ${theme.colors.tertiaryText};
     }
@@ -342,9 +358,11 @@ export const HistoryTitle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    padding: 1rem 2rem 1rem 2rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
+
     strong {
-      font-weight: normal;
+      font-weight: 550;
       font-size: 1.5rem;
     }
     button {
@@ -371,6 +389,10 @@ export const HistoryHeader = styled.div`
     padding: 0 2rem;
     margin-top: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (max-width: 600px) {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
   `}
 `;
 export const HistoryTab = styled.div<{ isActive?: boolean; hasPendingClaims?: boolean }>`
@@ -384,6 +406,7 @@ export const HistoryTab = styled.div<{ isActive?: boolean; hasPendingClaims?: bo
     font-weight: ${hasPendingClaims ? "bold" : "normal"};
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
     span {
       display: ${hasPendingClaims ? "flex" : "none"};
       font-size: 1rem;

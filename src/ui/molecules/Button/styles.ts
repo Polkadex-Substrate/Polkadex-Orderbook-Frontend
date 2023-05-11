@@ -93,6 +93,7 @@ export const Wrapper = styled.button<{
         color: ${theme.colors.white};
         p {
           display: inline-block;
+          padding-right: 0.8rem;
           :after {
             content: ".";
             animation: dots 1.5s steps(5, end) infinite;

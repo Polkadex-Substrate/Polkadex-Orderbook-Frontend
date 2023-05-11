@@ -280,7 +280,9 @@ export const WithdrawTemplate = () => {
                       {pendingWithdraws?.length ? (
                         <HistoryTable items={pendingWithdraws} />
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                     <TabContent>
@@ -297,14 +299,18 @@ export const WithdrawTemplate = () => {
                           />
                         ))
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                     <TabContent>
-                      {claimedWithdraws?.length ? (
+                      {!claimedWithdraws?.length ? (
                         <HistoryTable items={claimedWithdraws} />
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                   </S.HistoryWrapper>
@@ -354,7 +360,7 @@ const HistoryTable = ({ items }) => {
   return (
     <S.HistoryTable>
       <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
-        <Table.Header fill="none">
+        <Table.Header fill="none" striped>
           <Table.Column>
             <S.HeaderColumn>Name</S.HeaderColumn>
           </Table.Column>
@@ -368,15 +374,13 @@ const HistoryTable = ({ items }) => {
             <S.HeaderColumn>Status</S.HeaderColumn>
           </Table.Column>
         </Table.Header>
-        <Table.Body>
+        <Table.Body striped border="squared">
           {items.map((item) => (
             <Table.Row key={item.event_id}>
               <Table.Cell>
                 <S.Cell>
-                  <span>
-                    {selectGetAsset(item.asset)?.name}{" "}
-                    <small>{selectGetAsset(item.asset)?.symbol}</small>
-                  </span>
+                  <span>{selectGetAsset(item.asset)?.name} </span>
+                  <small>{selectGetAsset(item.asset)?.symbol}</small>
                 </S.Cell>
               </Table.Cell>
               <Table.Cell>
@@ -385,8 +389,8 @@ const HistoryTable = ({ items }) => {
                     {intlFormat(
                       item.date,
                       {
-                        year: "numeric",
-                        month: "short",
+                        year: "2-digit",
+                        month: "2-digit",
                         day: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",

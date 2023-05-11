@@ -7,7 +7,6 @@ import * as S from "./styles";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
-  EmptyData,
   EmptyMyAccount,
   Footer,
   Icon,
