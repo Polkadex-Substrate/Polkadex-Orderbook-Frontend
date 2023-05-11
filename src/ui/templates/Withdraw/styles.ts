@@ -297,27 +297,26 @@ export const HistoryContent = styled.div`
       margin-bottom: 2rem;
       background-color: ${theme.colors.tertiaryBackgroundOpacity};
     }
-    :is(:hover) {
-      overflow-x: auto;
-    }
+  `}
+`;
+export const HistoryTable = styled.div`
+  ${({ theme }) => css`
     ::-webkit-scrollbar-thumb,
     ::-webkit-scrollbar-track {
       background: ${theme.colors.secondaryBackground};
     }
+    th,
+    td {
+      padding-right: 1rem;
+      padding-bottom: 1rem;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    th:first-child,
+    td:first-child {
+      width: 17rem;
+    }
   `}
-`;
-export const HistoryTable = styled.div`
-  th,
-  td {
-    padding-right: 1rem;
-    padding-bottom: 1rem;
-    /* white-space: nowrap; */
-    vertical-align: top;
-  }
-  th:first-child,
-  td:first-child {
-    /* width: 17rem; */
-  }
 `;
 
 export const Cell = styled.div`
@@ -411,12 +410,14 @@ export const HistoryTab = styled.div<{ isActive?: boolean; hasPendingClaims?: bo
       display: ${hasPendingClaims ? "flex" : "none"};
       font-size: 1rem;
       background: ${theme.colors.primary};
-      width: 1.3rem;
-      height: 1.3rem;
+      width: 1.6rem;
+      height: 1.6rem;
       border-radius: 2rem;
       align-items: center;
       justify-content: center;
       margin-top: -0.3rem;
+      padding-right: 1px;
+      padding-bottom: 2px;
     }
   `}
 `;
