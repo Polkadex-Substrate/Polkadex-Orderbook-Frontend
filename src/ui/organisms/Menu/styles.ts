@@ -8,10 +8,9 @@ export const Logo = styled.div`
 `;
 
 export const WrapperIcon = styled.div<{
-  isEnabled?: boolean;
   isDisabled?: boolean;
 }>`
-  ${({ theme, isEnabled, isDisabled = false }) => css`
+  ${({ theme, isDisabled = false }) => css`
     position: relative;
     display: flex;
     flex-direction: row;
@@ -19,7 +18,7 @@ export const WrapperIcon = styled.div<{
     width: fit-content;
     cursor: pointer;
     pointer-events: ${isDisabled ? "none" : "auto"};
-    border-left: ${isEnabled ? "4px solid #e6007a;" : "none"};
+    opacity: ${isDisabled ? 0.4 : 1};
     :hover {
       ${Span},${TermsLinks} {
         opacity: 1;
@@ -27,18 +26,26 @@ export const WrapperIcon = styled.div<{
         transform: translateY(0);
       }
       ${Span} {
-        visibility: ${isEnabled ? "hidden" : "visible"};
+        visibility: ${isDisabled ? "hidden" : "visible"};
       }
     }
     ${Icon} {
       border-radius: 10rem;
-      margin-left: ${isEnabled ? "2px" : "5px"};
+      margin-left: 5px;
     }
   `}
 `;
 
 export const ThemeIcon = styled.div`
   margin-left: -5px !important;
+`;
+
+export const LineBorder = styled.span`
+  height: 30px;
+  width: 3px;
+  background-color: #e6007a;
+  border-radius: 99px;
+  margin-right: -2px;
 `;
 
 export const SpanWrapper = styled.div``;

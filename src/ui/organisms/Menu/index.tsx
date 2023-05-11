@@ -46,7 +46,8 @@ export const Menu = () => {
             <Logo size="Medium" href="/trading" />
           </S.Logo>
           <S.Container>
-            <S.WrapperIcon isEnabled={router.pathname === "/trading/[id]"}>
+            <S.WrapperIcon>
+              {router.pathname === "/trading/[id]" && <S.LineBorder />}
               <Link href="/trading">
                 <div>
                   <Icon name="Exchange" background="none" stroke="text" size="large" />
@@ -54,9 +55,8 @@ export const Menu = () => {
                 <S.Span>Exchange</S.Span>
               </Link>
             </S.WrapperIcon>
-            <S.WrapperIcon
-              isDisabled={!isAuthenticated}
-              isEnabled={router.pathname === "/balances"}>
+            <S.WrapperIcon isDisabled={!isAuthenticated}>
+              {router.pathname === "/balances" && <S.LineBorder />}
               <Link href="/balances">
                 <div>
                   <Icon name="Coins" background="none" stroke="text" size="large" />
@@ -64,9 +64,8 @@ export const Menu = () => {
                 <S.Span>Balances</S.Span>
               </Link>
             </S.WrapperIcon>
-            <S.WrapperIcon
-              isDisabled={!isAuthenticated}
-              isEnabled={router.pathname === "/settings"}>
+            <S.WrapperIcon isDisabled={!isAuthenticated}>
+              {router.pathname === "/settings" && <S.LineBorder />}
               <Link href="/settings">
                 <div>
                   <Icon name="Wallet" background="none" stroke="text" size="large" />
