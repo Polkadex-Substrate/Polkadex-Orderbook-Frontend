@@ -8,9 +8,10 @@ export const Logo = styled.div`
 `;
 
 export const WrapperIcon = styled.div<{
+  isEnabled?: boolean;
   isDisabled?: boolean;
 }>`
-  ${({ theme, isDisabled }) => css`
+  ${({ theme, isEnabled, isDisabled = false }) => css`
     position: relative;
     display: flex;
     flex-direction: row;
@@ -18,7 +19,7 @@ export const WrapperIcon = styled.div<{
     width: fit-content;
     cursor: pointer;
     pointer-events: ${isDisabled ? "none" : "auto"};
-    opacity: ${isDisabled ? 0.4 : 1};
+    border-left: ${isEnabled ? "4px solid #e6007a;" : "none"};
     :hover {
       ${Span},${TermsLinks} {
         opacity: 1;
@@ -26,11 +27,12 @@ export const WrapperIcon = styled.div<{
         transform: translateY(0);
       }
       ${Span} {
-        visibility: ${isDisabled ? "hidden" : "visible"};
+        visibility: ${isEnabled ? "hidden" : "visible"};
       }
     }
     ${Icon} {
       border-radius: 10rem;
+      margin-left: ${isEnabled ? "2px" : "5px"};
     }
   `}
 `;
@@ -139,6 +141,7 @@ export const Container = styled.div`
   display: flex;
   gap: 1rem;
   width: fit-content;
+  margin-left: -0.8rem !important;
   @media screen and (max-width: 690px) {
     width: 100%;
     justify-content: space-around;
