@@ -147,7 +147,7 @@ export const SelectInputContainer = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding-bottom: 1rem;
     margin-top: 1rem;
-
+    cursor: pointer;
     input {
       width: 100%;
       display: block;
