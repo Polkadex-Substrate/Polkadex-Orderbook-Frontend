@@ -75,6 +75,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       const { account, signer } = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
       if (isApiReady && account?.address !== "") {
+        // TODO: Move this toast as callback to signAndSendExtrinsic,
         settingsState.onHandleNotification({
           type: "Info",
           message:
