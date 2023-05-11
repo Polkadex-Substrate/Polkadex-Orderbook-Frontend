@@ -80,13 +80,13 @@ export const Menu = () => {
           <S.WrapperIcon onClick={changeTheme} as="div">
             <Tooltip>
               <TooltipHeader>
-                <div>
+                <S.ThemeIcon>
                   <Icon
                     name={isDarkTheme ? "Sun" : "Moon"}
                     background="secondaryBackground"
                     size="large"
                   />
-                </div>
+                </S.ThemeIcon>
               </TooltipHeader>
               <TooltipContent position="left">
                 <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>

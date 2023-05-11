@@ -36,6 +36,11 @@ export const WrapperIcon = styled.div<{
     }
   `}
 `;
+
+export const ThemeIcon = styled.div`
+  margin-left: -5px !important;
+`;
+
 export const SpanWrapper = styled.div``;
 
 export const Span = styled.span`
