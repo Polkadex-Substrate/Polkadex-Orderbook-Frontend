@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { subDays } from "date-fns";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import { tz } from "moment-timezone";
 
@@ -26,7 +25,6 @@ import {
 const filters = ["1m", "5m", "15m", "30m", "1H", "6H", "1D", "1W"];
 
 export const Graph = () => {
-  const now = useRef(new Date());
   const chart = useRef(null);
 
   const [state, setState] = useState(chartType[0]);
@@ -42,13 +40,15 @@ export const Graph = () => {
     subTechnicalIndicatorTypes
   );
 
-  const [to, setTo] = useState(now.current);
-  const [from, setFrom] = useState(subDays(now.current, 5));
+  const [to, setTo] = useState(new Date());
+  const [from, setFrom] = useState(
+    new Date(new Date(new Date().setHours(new Date().getHours() - 24)))
+  );
 
-  const handleSelect = useCallback(({ selection: { startDate, endDate } }) => {
+  const handleSelect = ({ selection: { startDate, endDate } }) => {
     setFrom(startDate);
     setTo(endDate);
-  }, []);
+  };
 
   const ranges = useMemo(() => {
     return [
@@ -281,7 +281,11 @@ export const Graph = () => {
         </S.Header>
 
         <S.ChartWrapper>
-          {isOriginal ? <OriginalChart chart={chart} resolution={filter} /> : <div />}
+          {isOriginal ? (
+            <OriginalChart chart={chart} resolution={filter} ranges={ranges[0]} />
+          ) : (
+            <div />
+          )}
         </S.ChartWrapper>
       </S.WrapperGraph>
       <OrderBook />
