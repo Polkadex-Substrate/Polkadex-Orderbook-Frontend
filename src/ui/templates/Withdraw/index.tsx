@@ -305,7 +305,7 @@ export const WithdrawTemplate = () => {
                       )}
                     </TabContent>
                     <TabContent>
-                      {!claimedWithdraws?.length ? (
+                      {claimedWithdraws?.length ? (
                         <HistoryTable items={claimedWithdraws} />
                       ) : (
                         <div style={{ padding: "2rem" }}>
