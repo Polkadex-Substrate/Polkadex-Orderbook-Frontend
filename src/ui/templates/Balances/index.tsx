@@ -97,7 +97,7 @@ export const BalancesTemplate = () => {
                             <S.Column>Actions</S.Column>
                           </Table.Column>
                         </Table.Header>
-                        <Table.Body striped>
+                        <Table.Body striped border="squared">
                           {allAssets?.map((item) => {
                             const balance = userBalances?.find(
                               (value) => value.assetId === item.assetId

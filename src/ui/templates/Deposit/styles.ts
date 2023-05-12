@@ -247,19 +247,18 @@ export const DropdownContent = styled.div`
 export const History = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 2rem;
     border-radius: 1rem;
     margin-top: 4rem;
     flex: 1;
     h2 {
       font-size: 1.8rem;
       font-weight: 500;
+      padding: 2rem 3rem;
     }
   `}
 `;
 export const HistoryContent = styled.div`
   ${({ theme }) => css`
-    margin-top: 2rem;
     :not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackground};
       padding-bottom: 1.5rem;
