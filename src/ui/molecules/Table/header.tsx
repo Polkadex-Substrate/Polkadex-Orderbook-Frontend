@@ -13,7 +13,7 @@ const Header = forwardRef(
     const componentRef = useRef();
     const { rowProps } = useTableHeaderRow({ node: item }, state, componentRef);
     return (
-      <S.Header {...mergeProps(rowProps, props)} ref={componentRef}>
+      <S.Header striped={props.striped} {...mergeProps(rowProps, props)} ref={componentRef}>
         {children}
       </S.Header>
     );
