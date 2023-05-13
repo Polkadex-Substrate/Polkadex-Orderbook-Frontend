@@ -247,7 +247,7 @@ export const DepositTemplate = () => {
                           <S.HeaderColumn>Fee</S.HeaderColumn>
                         </Table.Column>
                       </Table.Header>
-                      <Table.Body striped>
+                      <Table.Body striped border="squared">
                         {deposits.map((item, i) => (
                           <Table.Row key={i}>
                             <Table.Cell>

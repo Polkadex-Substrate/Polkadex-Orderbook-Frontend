@@ -51,7 +51,6 @@ export const Container = styled.div`
   `}
 `;
 export const Content = styled.div`
-  padding: 1.5rem;
   overflow-x: hidden;
   :is(:hover) {
     overflow-x: auto;

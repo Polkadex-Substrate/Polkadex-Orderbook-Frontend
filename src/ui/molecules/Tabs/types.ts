@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction } from "react";
 
 export type RegisteredElements = {
   tabs: number;
@@ -9,4 +9,5 @@ export type TabsinitialState = [number, Dispatch<SetStateAction<number>>];
 
 export type TabsComponent = FC<{
   state?: TabsinitialState;
+  children: ReactNode;
 }>;

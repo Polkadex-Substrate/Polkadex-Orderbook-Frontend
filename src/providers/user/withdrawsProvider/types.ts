@@ -12,8 +12,8 @@ export interface WithdrawsState {
 }
 
 export type WithdrawsContextProps = WithdrawsState & {
-  onFetchWithdraws: (value: WithdrawsFetch["payload"]) => void;
-  handleClaimWithdraws: (value: number) => void;
+  onFetchWithdraws: (value: WithdrawsFetch["payload"]) => Promise<void>;
+  onFetchClaimWithdraw: (value: WithdrawsClaimFetch["payload"]) => Promise<void>;
 };
 
 export type WithdrawsProviderProps = PropsWithChildren<{
