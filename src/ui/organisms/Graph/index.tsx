@@ -68,6 +68,18 @@ export const Graph = () => {
     chart?.current?.setTimezone(timezone);
   }, [timezone]);
 
+  const handleZoomOut = () => {
+    if (space < 50) {
+      setSpace(space + 1);
+    }
+  };
+
+  const handleZoomIn = () => {
+    if (space > 1) {
+      setSpace(space - 1);
+    }
+  };
+
   const { width } = useWindowSize();
   return (
     <S.Wrapper>
@@ -239,7 +251,7 @@ export const Graph = () => {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <button type="button" onClick={() => setSpace(space + 1)}>
+              <button type="button" onClick={handleZoomOut}>
                 <Icon
                   name="ZoomOut"
                   size="extraMedium"
@@ -247,7 +259,7 @@ export const Graph = () => {
                   stroke="text"
                 />
               </button>
-              <button type="button" onClick={() => setSpace(space - 1)}>
+              <button type="button" onClick={handleZoomIn}>
                 <Icon
                   name="ZoomIn"
                   size="extraMedium"
