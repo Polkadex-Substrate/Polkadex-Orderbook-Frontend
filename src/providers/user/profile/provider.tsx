@@ -223,6 +223,14 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     if (logoutIsSuccess) onUserLogout();
   }, [logoutIsSuccess]);
 
+  // Set Selected User Account
+  useEffect(() => {
+    const lastSelectedTradingAccount = localStorage.getItem("selectedTradingAccount");
+    if (lastSelectedTradingAccount) {
+      dispatch(A.userAccountSelectData(JSON.parse(lastSelectedTradingAccount)));
+    }
+  }, []);
+
   // user event listener
   return (
     <Provider

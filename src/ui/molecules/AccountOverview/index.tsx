@@ -73,6 +73,11 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     setSelectedTradeAccount(acc);
     setSelectedMainAccount(mainAcc);
     onUserSelectAccount({ tradeAddress: addr });
+
+    if (userAcc?.mainAddress) {
+      const data = { tradeAddress: addr, mainAddress: userAcc.mainAddress };
+      localStorage.setItem("selectedTradingAccount", JSON.stringify(data));
+    }
   };
 
   const headerMessage = !allUserAccounts?.length
