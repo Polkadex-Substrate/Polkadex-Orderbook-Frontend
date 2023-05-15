@@ -36,6 +36,11 @@ export const LineContainer = styled.div`
   `}
 `;
 
+export const InputLineWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
 export const LineBox = styled.div<{ error?: boolean }>`
   ${({ theme, error }) => css`
     border-bottom: 1px solid

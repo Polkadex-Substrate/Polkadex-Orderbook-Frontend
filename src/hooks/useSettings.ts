@@ -10,7 +10,6 @@ import { IUserTradeAccount } from "@polkadex/orderbook/hooks/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const useSettings = () => {
-  const [state, setState] = useState(false);
   const [showRegistered, setShowRegistered] = useState(false);
   const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
@@ -168,7 +167,6 @@ export const useSettings = () => {
   return {
     handleClosePreviewModal,
     handleCloseNewAccount,
-    state,
     currentControllerWallet,
     currentTradeAccount,
     isTradeAccountLoading,
@@ -186,7 +184,6 @@ export const useSettings = () => {
     usingAccount,
     isRegisterControllerAccountSuccess,
     isLoading,
-    setState,
     isPreviewActive,
     previewAccountSelected,
     handleFilterTradeAccounts: setFilterTradeAccounts,

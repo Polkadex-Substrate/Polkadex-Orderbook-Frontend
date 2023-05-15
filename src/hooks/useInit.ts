@@ -1,20 +1,18 @@
+import keyring from "@polkadot/ui-keyring";
 import { useEffect } from "react";
-
-import { useTradeWallet } from "../providers/user/tradeWallet";
-
-import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
-import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
+import { cryptoWaitReady } from "@polkadot/util-crypto";
 
 export const useInit = () => {
-  const { onConnectNativeApi, timestamp, connecting } = useNativeApi();
-  const { onLoadTradeAccounts } = useTradeWallet();
-  const { onPolkadotExtensionWallet } = useExtensionWallet();
-  const shouldRangerConnect = !timestamp && !connecting;
+  const cryptoWait = async () => {
+    try {
+      await cryptoWaitReady();
+      keyring.loadAll({ ss58Format: 88, type: "sr25519" });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
-  // basic initialization
   useEffect(() => {
-    if (shouldRangerConnect) onConnectNativeApi();
-    onLoadTradeAccounts();
-    onPolkadotExtensionWallet();
-  }, [shouldRangerConnect]);
+    cryptoWait();
+  }, []);
 };

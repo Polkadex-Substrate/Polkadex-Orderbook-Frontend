@@ -37,11 +37,13 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
 );
 
 export const SecondaryInput = ({ label, children, ...props }: T.SecondaryInputProps) => {
+  const { crossOrigin, ...restProps } = props;
+
   return (
     <S.SecondaryWrapper hasLabel={!!label}>
       {label && <label htmlFor={props.name}>{label}</label>}
       <div>
-        <input type="text" {...props} />
+        <input type="text" {...restProps} />
         {children || (
           <Skeleton height="10px" style={{ display: "inline-block", width: "2rem" }} />
         )}
@@ -56,9 +58,9 @@ export const InputLine = forwardRef(
     ref: T.ReactRef<HTMLInputElement>
   ) => {
     const inputRef = useRef(null);
-
+    const { crossOrigin, ...restProps } = props;
     return (
-      <div>
+      <S.InputLineWrapper>
         <S.LineBox error={!!error?.length}>
           <label htmlFor={props.name}>
             <S.LabelBox>
@@ -66,13 +68,13 @@ export const InputLine = forwardRef(
               {labelRight}
             </S.LabelBox>
             <S.LineContainer>
-              <input ref={ref || inputRef} {...props} />
+              <input ref={ref || inputRef} {...restProps} />
               {children}
             </S.LineContainer>
           </label>
         </S.LineBox>
         {error && <S.Error hasMargin={false}>{error}</S.Error>}
-      </div>
+      </S.InputLineWrapper>
     );
   }
 );
@@ -226,10 +228,10 @@ type TextInputProps = {
 
 const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
   const ref = useRef(null);
-
+  const { crossOrigin, ...restProps } = props;
   useEffect(() => {
     if (focus) ref.current.focus();
   }, [focus]);
 
-  return <input pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...props} />;
+  return <input pattern="[0-9]*" maxLength={1} min={0} max={9} ref={ref} {...restProps} />;
 };

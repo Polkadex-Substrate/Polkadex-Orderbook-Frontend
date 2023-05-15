@@ -6,7 +6,6 @@ import {
   NATIVEAPI_CONNECT_FETCH,
   NATIVEAPI_DISCONNECT_DATA,
   NATIVEAPI_DISCONNECT_FETCH,
-  NATIVEAPI_NO_EXTENSION,
 } from "./constants";
 
 export interface NativeApiConnectFetch {
@@ -33,15 +32,12 @@ export interface NativeApiConnectError {
     message: string[];
   };
 }
-export interface NativeApiNoExtension {
-  type: typeof NATIVEAPI_NO_EXTENSION;
-}
+
 export type NativeApiAction =
   | NativeApiConnectFetch
   | NativeApiConnectData
   | NativeApiConnectError
-  | NativeApiDisconnectData
-  | NativeApiNoExtension;
+  | NativeApiDisconnectData;
 
 export type NativeApiErrorType = typeof NATIVEAPI_CONNECT_ERROR;
 
@@ -64,8 +60,4 @@ export const nativeApiDisconnectData = (): NativeApiDisconnectData => ({
 
 export const nativeApiDisconnectFetch = (): NativeApiDisconnectFetch => ({
   type: NATIVEAPI_DISCONNECT_FETCH,
-});
-
-export const nativeApiNoExtension = (): NativeApiNoExtension => ({
-  type: NATIVEAPI_NO_EXTENSION,
 });

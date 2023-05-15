@@ -30,6 +30,7 @@ export const initialState: T.SettingState = {
   chartRebuild: false,
   marketSelectorActive: false,
   ordersHideOtherPairs: true,
+  hasExtension: false,
 };
 
 export const settingReducer = (state: T.SettingState, action) => {
@@ -154,6 +155,13 @@ export const settingReducer = (state: T.SettingState, action) => {
             return item;
           }),
         ],
+      };
+    }
+
+    case C.CHECK_HAS_EXTENSION: {
+      return {
+        ...state,
+        hasExtension: true,
       };
     }
 
