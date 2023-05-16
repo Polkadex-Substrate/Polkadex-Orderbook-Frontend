@@ -27,6 +27,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         )?.mainAddress;
         if (mainAddress) {
           const data = { tradeAddress: trade_address, mainAddress };
+          localStorage.setItem("selectedTradingAccount", JSON.stringify(data));
           dispatch(A.userAccountSelectData(data));
         }
       } catch (e) {

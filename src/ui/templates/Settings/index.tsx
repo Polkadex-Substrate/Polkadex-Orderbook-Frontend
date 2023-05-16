@@ -69,20 +69,8 @@ export const SettingsTemplate = () => {
     hasRegisteredMainAccount,
   } = useSettings();
 
-  const { onUserSelectAccount, userData } = useProfile();
+  const { onUserSelectAccount } = useProfile();
   const tradeWalletState = useTradeWallet();
-
-  const handleSelectTradingAccount = ({ tradeAddress }: { tradeAddress: string }) => {
-    onUserSelectAccount({ tradeAddress });
-
-    const mainAddress = userData?.userAccounts?.find(
-      (account) => account.tradeAddress === tradeAddress
-    )?.mainAddress;
-    if (mainAddress) {
-      const data = { tradeAddress, mainAddress };
-      localStorage.setItem("selectedTradingAccount", JSON.stringify(data));
-    }
-  };
 
   return (
     <>
@@ -256,7 +244,7 @@ export const SettingsTemplate = () => {
                                     <S.Button
                                       type="button"
                                       onClick={() => {
-                                        handleSelectTradingAccount({
+                                        onUserSelectAccount({
                                           tradeAddress: account.address,
                                         });
                                       }}>
