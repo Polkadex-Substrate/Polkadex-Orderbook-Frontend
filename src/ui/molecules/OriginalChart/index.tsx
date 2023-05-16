@@ -19,7 +19,7 @@ import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProv
 export const getRamdom = (min = 3000, max = 5000) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const OriginalChart = ({ chart, resolution }) => {
+export const OriginalChart = ({ chart, resolution, ranges }) => {
   const target = useRef(null);
 
   const settingsState = useSettingsProvider();
@@ -39,13 +39,13 @@ export const OriginalChart = ({ chart, resolution }) => {
       onHandleKlineFetch({
         market: currentMarket.m,
         resolution: resolution,
-        from: new Date(new Date(new Date().setHours(new Date().getHours() - 24))),
-        to: new Date(),
+        from: ranges.startDate,
+        to: ranges.endDate,
       });
 
       onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
     }
-  }, [currentMarket?.m, onFetchKlineChannel, onHandleKlineFetch, resolution]);
+  }, [currentMarket?.m, onFetchKlineChannel, onHandleKlineFetch, resolution, ranges]);
 
   useEffect(() => {
     chart.current = init("original-chart", options(isDarkTheme));
