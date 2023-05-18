@@ -27,7 +27,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         )?.mainAddress;
         if (mainAddress) {
           const data = { tradeAddress: trade_address, mainAddress };
-          localStorage.setItem("selectedTradingAccount", JSON.stringify(data));
+          dispatch(A.userSetDefaultTradeAccount(trade_address));
           dispatch(A.userAccountSelectData(data));
         }
       } catch (e) {
@@ -98,14 +98,23 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       );
 
       try {
+        let mainAddress: string | null;
         if (!userAccounts?.length) {
           const { accounts } = await getAllMainLinkedAccounts(email);
           const userAccounts = await getAllProxyAccounts(accounts);
+
+          mainAddress = userAccounts?.find(
+            ({ tradeAddress }) => defaultTradeAddress === tradeAddress
+          )?.mainAddress;
+
           dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
         }
 
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
+          dispatch(
+            A.userAccountSelectData({ tradeAddress: defaultTradeAddress, mainAddress })
+          );
           dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
           dispatch(A.userSetAvatar());
         }
@@ -223,14 +232,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   useEffect(() => {
     if (logoutIsSuccess) onUserLogout();
   }, [logoutIsSuccess]);
-
-  // Set Selected User Account
-  useEffect(() => {
-    const lastSelectedTradingAccount = localStorage.getItem("selectedTradingAccount");
-    if (lastSelectedTradingAccount) {
-      dispatch(A.userAccountSelectData(JSON.parse(lastSelectedTradingAccount)));
-    }
-  }, []);
 
   // user event listener
   return (
