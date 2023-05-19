@@ -21,12 +21,17 @@ import { eventHandler, eventHandlerCallback } from "@polkadex/orderbook/helpers/
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const authState = useAuth();
+  const {
+    authInfo,
+    onUserProfileMainAccountPush,
+    onUserProfileAccountPush,
+    onUserAccountSelectFetch,
+  } = useProfile();
+  const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
-  console.log("extension wallet", profileState.selectedAccount);
 
   // Actions
   const onLinkEmail = async (payload: A.RegisterMainAccountLinkEmailFetch["payload"]) => {
@@ -47,7 +52,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         const signature: string = signedData.signature;
         await executeRegisterEmail(data, signature);
 
-        profileState.onUserProfileMainAccountPush(mainAccount);
+        onUserProfileMainAccountPush(mainAccount);
       } else {
         throw new Error("Email or address is not valid");
       }
@@ -65,13 +70,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
     (payload: A.RegisterMainAccountUpdateEvent["payload"]) => {
       try {
         const { proxy, main } = payload;
-        profileState.onUserProfileMainAccountPush(main);
-        profileState.onUserProfileAccountPush({
+        onUserProfileMainAccountPush(main);
+        onUserProfileAccountPush({
           tradeAddress: proxy,
           mainAddress: main,
         });
 
-        profileState.onUserAccountSelectFetch({
+        onUserAccountSelectFetch({
           tradeAddress: proxy,
         });
         onHandleNotification({
@@ -85,7 +90,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
         dispatch(A.registerMainAccountError());
       }
     },
-    [onHandleError, onHandleNotification, profileState]
+    [
+      onHandleError,
+      onHandleNotification,
+      onUserAccountSelectFetch,
+      onUserProfileMainAccountPush,
+      onUserProfileAccountPush,
+    ]
   );
 
   const onRegisterMainAccount = async (payload: A.RegisterMainAccountFetch["payload"]) => {
@@ -154,60 +165,26 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   };
 
   const onPolkadotExtensionWallet = useCallback(async () => {
-    try {
-      const allAccounts: ExtensionAccount[] = await getAllExtensionWalletAccounts();
-      dispatch(A.extensionWalletData({ allAccounts }));
-
-      const { web3AccountsSubscribe, web3FromAddress } = await import(
-        "@polkadot/extension-dapp"
-      );
-
-      const unsubscribe = web3AccountsSubscribe(
-        async (injectedAccounts: InjectedAccountWithMeta[]) => {
-          const extensionAccountPromises: Promise<ExtensionAccount>[] = injectedAccounts.map(
-            async (account): Promise<ExtensionAccount> => {
-              return {
-                account,
-                signer: (await web3FromAddress(account.address)).signer,
-              };
-            }
-          );
-          const allAccounts = await Promise.all(extensionAccountPromises);
-          dispatch(A.extensionWalletData({ allAccounts }));
-        },
-        { ss58Format: 88 }
-      );
-      return () => unsubscribe.then((fn) => fn());
-    } catch (error) {
-      onHandleError(error?.message ?? error);
-    }
-  }, [onHandleError]);
-
-  async function getAllExtensionWalletAccounts(): Promise<ExtensionAccount[]> {
-    try {
-      const { web3Accounts, web3Enable, web3FromAddress, web3EnablePromise } = await import(
-        "@polkadot/extension-dapp"
-      );
-      const isAuthGiven = await web3EnablePromise;
-      if (!isAuthGiven) {
-        throw new Error("Please give authorization in polkadot.js wallet");
-      }
-      const extensions = await web3Enable("polkadex");
-      if (extensions.length === 0) {
-        throw new Error("no extensions installed");
-      }
-      const allAccounts: InjectedAccountWithMeta[] = await web3Accounts({ ss58Format: 88 });
-      const promises = allAccounts.map(async (account): Promise<ExtensionAccount> => {
-        return {
-          account,
-          signer: (await web3FromAddress(account.address)).signer,
-        };
-      });
-      return Promise.all(promises);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
+    const { web3AccountsSubscribe, web3FromAddress } = await import(
+      "@polkadot/extension-dapp"
+    );
+    const unsubscribe = await web3AccountsSubscribe(
+      async (injectedAccounts: InjectedAccountWithMeta[]) => {
+        const allAccounts = await Promise.all(
+          injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
+            const { signer } = await web3FromAddress(account.address);
+            return {
+              account,
+              signer,
+            };
+          })
+        );
+        dispatch(A.extensionWalletData({ allAccounts }));
+      },
+      { ss58Format: 88 }
+    );
+    return () => unsubscribe();
+  }, []);
 
   const retryRegisterToAppsync = async (
     data: T.RegisterEmailData,
@@ -217,11 +194,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   ) => {
     try {
       await executeRegisterEmail(data, signature);
-      profileState.onUserProfileAccountPush({
+      onUserProfileAccountPush({
         tradeAddress,
         mainAddress,
       });
-      profileState.onUserProfileMainAccountPush(mainAddress);
+      onUserProfileMainAccountPush(mainAddress);
       dispatch(A.registerMainAccountData());
     } catch (error) {
       console.log("error", error);
@@ -241,6 +218,9 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
       )
     );
   };
+  useEffect(() => {
+    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
 
   useEffect(() => {
     console.log(

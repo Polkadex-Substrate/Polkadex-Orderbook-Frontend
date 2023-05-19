@@ -13,7 +13,7 @@ const imageModifier = {
     width: 16rem;
   `,
 };
-export const Link = styled.a<Partial<LogoProps>>`
+export const Link = styled.div<Partial<LogoProps>>`
   ${({ size = "Medium" }) => css`
     display: block;
     cursor: pointer;

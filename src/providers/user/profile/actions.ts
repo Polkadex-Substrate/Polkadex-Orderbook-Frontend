@@ -1,6 +1,6 @@
 import { CommonError } from "../../types";
-import { AuthInfo, UserAccount } from "./types";
 
+import { AuthInfo, UserAccount } from "./types";
 import {
   PROFILE_RESET_USER,
   PROFILE_USER_DATA,

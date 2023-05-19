@@ -55,7 +55,7 @@ export const SliderWrapper = styled.div`
   `}
 `;
 
-export const Connect = styled.a`
+export const Connect = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
     display: block;

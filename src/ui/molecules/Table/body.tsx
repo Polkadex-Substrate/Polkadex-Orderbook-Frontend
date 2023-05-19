@@ -29,7 +29,7 @@ const Body = forwardRef(
         isSelected={isSelected}
         outline={isFocusVisible}
         isPressed={isPressed}
-        alternate={striped && item.index % 2 === 1}
+        alternate={striped}
         border={border}
         fill={fill}
         ref={componentRef}>

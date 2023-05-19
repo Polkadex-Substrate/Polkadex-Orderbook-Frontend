@@ -60,12 +60,19 @@ export const resetPasswordValidations = Yup.object().shape({
   email: Yup.string().email("Must be a valid email").required("Required"),
 });
 
-export const withdrawValidations = Yup.object().shape({
-  amount: Yup.number()
-    .required("Required")
-    .min(0.0001, "Too Small!")
-    .typeError("Must be a number"),
-});
+export const withdrawValidations = (balance: string) => {
+  return Yup.object().shape({
+    amount: Yup.number()
+      .required("Required")
+      .min(0.0001, "Too Small!")
+      .typeError("Must be a number")
+      .test(
+        "Test Value greater than balance",
+        "The amount you entered exceeds your balance",
+        (value) => value < Number(balance)
+      ),
+  });
+};
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),
 });

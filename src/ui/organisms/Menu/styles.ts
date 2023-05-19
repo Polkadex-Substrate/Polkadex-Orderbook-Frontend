@@ -10,7 +10,7 @@ export const Logo = styled.div`
 export const WrapperIcon = styled.div<{
   isDisabled?: boolean;
 }>`
-  ${({ theme, isDisabled }) => css`
+  ${({ theme, isDisabled = false }) => css`
     position: relative;
     display: flex;
     flex-direction: row;
@@ -31,9 +31,23 @@ export const WrapperIcon = styled.div<{
     }
     ${Icon} {
       border-radius: 10rem;
+      margin-left: 5px;
     }
   `}
 `;
+
+export const ThemeIcon = styled.div`
+  margin-left: -5px !important;
+`;
+
+export const LineBorder = styled.span`
+  height: 30px;
+  width: 3px;
+  background-color: #e6007a;
+  border-radius: 99px;
+  margin-right: -2px;
+`;
+
 export const SpanWrapper = styled.div``;
 
 export const Span = styled.span`
@@ -51,9 +65,10 @@ export const Span = styled.span`
     transform: translateY(1rem);
     transition: transform 0.2s ease-out, visibility 0.2s ease-in, opacity 0.2s ease-in;
     user-select: none;
+    top: 0.5rem;
     /* top: -4rem; */
     @media screen and (min-width: 590px) {
-      left: 2.5rem;
+      left: 3.1rem;
     }
     @media screen and (max-width: 590px) {
       top: -4rem;
@@ -84,6 +99,14 @@ export const WrapperLinks = styled.div`
   `}
 `;
 
+export const Main = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    margin-right: 45px;
+  `}
+`;
+
 export const Wrapper = styled.nav`
   ${({ theme }) => css`
     position: fixed;
@@ -98,11 +121,11 @@ export const Wrapper = styled.nav`
     z-index: 33;
 
     @media screen and (min-width: 590px) {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      left: 0;
+      bottom: 0;
       min-width: 4.5rem;
-      height: 100vh;
-      max-height: 100rem;
+      height: 100vh !important;
       max-width: 4.5rem;
       display: grid;
       grid-template-rows: 1.5fr 1fr;
@@ -130,6 +153,7 @@ export const Container = styled.div`
   display: flex;
   gap: 1rem;
   width: fit-content;
+  margin-left: -0.8rem !important;
   @media screen and (max-width: 690px) {
     width: 100%;
     justify-content: space-around;
@@ -196,7 +220,7 @@ export const TermsLinks = styled.div`
     flex-direction: column;
     gap: 0.1rem;
     padding: 1rem;
-    margin-left: 0.8rem;
+    margin-left: 1.4rem;
     border-radius: 0.5rem;
     background: ${theme.colors.text};
     opacity: 0;
