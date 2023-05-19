@@ -77,20 +77,14 @@ export const Menu = () => {
             <Help />
           </S.Container>
           <S.WrapperIcon onClick={changeTheme} as="div">
-            <Tooltip>
-              <TooltipHeader>
-                <S.ThemeIcon>
-                  <Icon
-                    name={isDarkTheme ? "Sun" : "Moon"}
-                    background="secondaryBackground"
-                    size="large"
-                  />
-                </S.ThemeIcon>
-              </TooltipHeader>
-              <TooltipContent position="left">
-                <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-              </TooltipContent>
-            </Tooltip>
+            <S.ThemeIcon>
+              <Icon
+                name={isDarkTheme ? "Sun" : "Moon"}
+                background="secondaryBackground"
+                size="large"
+              />
+            </S.ThemeIcon>
+            <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
           </S.WrapperIcon>
         </S.WrapperLinks>
         <S.WrapperProfile>

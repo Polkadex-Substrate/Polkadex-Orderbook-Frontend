@@ -68,7 +68,7 @@ export const Span = styled.span`
     top: 0.5rem;
     /* top: -4rem; */
     @media screen and (min-width: 590px) {
-      left: 2.5rem;
+      left: 3.1rem;
     }
     @media screen and (max-width: 590px) {
       top: -4rem;
@@ -220,7 +220,7 @@ export const TermsLinks = styled.div`
     flex-direction: column;
     gap: 0.1rem;
     padding: 1rem;
-    margin-left: 0.8rem;
+    margin-left: 1.4rem;
     border-radius: 0.5rem;
     background: ${theme.colors.text};
     opacity: 0;
