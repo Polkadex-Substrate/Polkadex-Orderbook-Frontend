@@ -10,8 +10,8 @@ export const OrderHistory = ({ orderHistory }) => {
   const { orders } = orderHistory;
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
-  const priceFixed = currentMarket.quote_precision;
-  const amountFixed = currentMarket.base_precision;
+  const priceFixed = currentMarket?.quote_precision;
+  const amountFixed = currentMarket?.base_precision;
   return (
     <S.Wrapper>
       {orders?.length ? (
