@@ -16,12 +16,12 @@ export const Checkbox = forwardRef(
     const componentRef = useRef();
     const state = useToggleState(props);
     const { inputProps } = useCheckbox(props, state, componentRef);
-
+    const { crossOrigin, ...restProps } = inputProps;
     const hasChild = isValidChildren(children)?.length || children?.toString()?.length;
 
     return (
       <S.Wrapper disabled={props.disabled}>
-        <input type="checkbox" id={name} {...inputProps} ref={mergeRefs(componentRef, ref)} />
+        <input type="checkbox" id={name} {...restProps} ref={mergeRefs(componentRef, ref)} />
         {hasChild && <label htmlFor={name}>{children}</label>}
       </S.Wrapper>
     );

@@ -27,6 +27,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         )?.mainAddress;
         if (mainAddress) {
           const data = { tradeAddress: trade_address, mainAddress };
+          dispatch(A.userSetDefaultTradeAccount(trade_address));
           dispatch(A.userAccountSelectData(data));
         }
       } catch (e) {
@@ -100,6 +101,15 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         if (!userAccounts?.length) {
           const { accounts } = await getAllMainLinkedAccounts(email);
           const userAccounts = await getAllProxyAccounts(accounts);
+
+          const mainAddress = userAccounts?.find(
+            ({ tradeAddress }) => defaultTradeAddress === tradeAddress
+          )?.mainAddress;
+
+          defaultTradeAddress?.length &&
+            dispatch(
+              A.userAccountSelectData({ tradeAddress: defaultTradeAddress, mainAddress })
+            );
           dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
         }
 

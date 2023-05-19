@@ -55,6 +55,7 @@ export type HeaderCustomProps = {
   fill?: Colors;
   border?: BorderStyle;
   bgStyle?: BackgroundStyle;
+  striped?: boolean;
 };
 
 export type HeaderAttrProps = HeaderCustomProps &

@@ -9,8 +9,8 @@ import { useMarketsProvider } from "@polkadex/orderbook/providers/public/markets
 export const OpenOrders = ({ orderHistory }) => {
   const { openOrders } = orderHistory;
   const { currentMarket } = useMarketsProvider();
-  const priceFixed = currentMarket.quote_precision;
-  const amountFixed = currentMarket.base_precision;
+  const priceFixed = currentMarket?.quote_precision;
+  const amountFixed = currentMarket?.base_precision;
 
   const { selectGetAsset } = useAssetsProvider();
   return (

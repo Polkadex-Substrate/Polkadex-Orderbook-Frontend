@@ -24,7 +24,10 @@ export const Cell = styled.td<{ outline?: boolean }>`
 export const Header = styled.tr<Partial<T.HeaderCustomProps>>`
   ${({ theme, fill }) => css`
     ${bgStyleVariants({ theme, fill })};
-    ${borderVariants({ theme, is: "th" })}
+    ${borderVariants({ theme, is: "th" })};
+    & th {
+      padding: 1rem 2rem;
+    }
   `}
 `;
 
@@ -60,7 +63,7 @@ type BodyProps = {
 } & T.HeaderCustomProps;
 
 export const Body = styled.tr<BodyProps>`
-  ${({ theme, isSelected, outline, fill }) => css`
+  ${({ theme, isSelected, outline }) => css`
     outline: ${outline ? "2px solid orange" : "none"};
     color: ${isSelected ? "white" : "inherit"};
 
@@ -90,6 +93,9 @@ export const Body = styled.tr<BodyProps>`
       variants: {
         true: {
           "& td": {
+            padding: "1rem 2rem",
+          },
+          ":nth-child(odd)": {
             background: `${theme.colors.tertiaryBackgroundOpacity}`,
           },
         },

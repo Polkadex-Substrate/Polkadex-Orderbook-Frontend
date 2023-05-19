@@ -1,5 +1,3 @@
-// TODO: Refactor history
-
 import Head from "next/head";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
@@ -13,9 +11,6 @@ import {
   Dropdown,
   InputLine,
   Table,
-  Tooltip,
-  TooltipContent,
-  TooltipHeader,
   EmptyData,
   LoadingSection,
   Tabs,
@@ -38,17 +33,25 @@ import { useWithdrawsProvider } from "@polkadex/orderbook/providers/user/withdra
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+
+const initialValues = {
+  amount: 0.0,
+};
 
 export const WithdrawTemplate = () => {
-  const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
+
   const { selectedAccount: currentAccount } = useProfile();
   const extensionWalletState = useExtensionWallet();
-
   const { onFetchWithdraws } = useWithdrawsProvider();
-
   const tradeWalletState = useTradeWallet();
+  const { list: assets } = useAssetsProvider();
+  const { allWithdrawals, readyWithdrawals: readyToClaim } = useTransactionsProvider();
+  const { onFetchClaimWithdraw, loading } = useWithdrawsProvider();
 
   const currMainAcc =
     currentAccount.mainAddress &&
@@ -63,13 +66,8 @@ export const WithdrawTemplate = () => {
   );
 
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const { list: assets } = useAssetsProvider();
   const { balances: userBalances } = useBalancesProvider();
 
-  const router = useRouter();
-
-  const { allWithdrawals, readyWithdrawals } = useTransactionsProvider();
-  const { handleClaimWithdraws, loading } = useWithdrawsProvider();
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -80,6 +78,7 @@ export const WithdrawTemplate = () => {
     () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
     [userBalances, selectedAsset]
   );
+
   useEffect(() => {
     const initialAsset = assets.find(
       (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
@@ -89,56 +88,39 @@ export const WithdrawTemplate = () => {
     }
   }, [assets, routedAsset]);
 
-  const validate = (values) => {
-    const errors = {} as any;
-    if (values?.amount?.includes("e")) {
-      errors.amount = "use a valid amount instead";
-    }
+  const handleSubmitWithdraw = async (amount: string | number) => {
+    try {
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
 
-    if (+values?.amount > +availableAmount?.free_balance) {
-      errors.amount = "Amount cannot be greater than balance";
+      await onFetchWithdraws({ asset, amount });
+    } finally {
+      resetForm({ values: initialValues });
     }
-    return errors;
   };
 
-  const handleSubmitWithdraw = (amount: string | number) => {
-    console.log("submit");
-
-    const asset = isAssetPDEX(selectedAsset.assetId)
-      ? { polkadex: null }
-      : { asset: selectedAsset.assetId };
-
-    onFetchWithdraws({ asset, amount });
-  };
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
-    initialValues: {
-      amount: 0.0,
-      asset: null,
-    },
-    validationSchema: withdrawValidations,
-    validate,
-    onSubmit: ({ amount }) => {
-      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
-      else {
-        /* Calling the handleSubmitWithdraw function with the amount parameter. */
-        handleSubmitWithdraw(amount);
-      }
-    },
-  });
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
+    useFormik({
+      initialValues,
+      validationSchema: withdrawValidations(availableAmount?.free_balance),
+      onSubmit: ({ amount }) => {
+        if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+        else {
+          /* Calling the handleSubmitWithdraw function with the amount parameter. */
+          handleSubmitWithdraw(amount);
+        }
+      },
+    });
 
   const selectedWithdraw = useCallback(
-    (status: "PENDING" | "CONFIRMED") => {
-      const result = allWithdrawals.filter((txn) => txn.status === status);
-      // eslint-disable-next-line prefer-spread
-      return [].concat.apply([], result);
-    },
+    (status: Transaction["status"]) =>
+      allWithdrawals?.filter((txn) => txn.status === status)?.flat(),
     [allWithdrawals]
   );
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
-
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
-  const readyToClaim = readyWithdrawals;
 
   const hasPendingClaims = useMemo(
     () =>
@@ -180,11 +162,11 @@ export const WithdrawTemplate = () => {
         </Modal.Body>
       </Modal>
       <Head>
-        <title>Deposit | Polkadex Orderbook</title>
+        <title>Withdraw | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
+        <Menu />
         <S.Wrapper>
           <S.Title type="button" onClick={() => router.back()}>
             <div>
@@ -249,23 +231,25 @@ export const WithdrawTemplate = () => {
                         </strong>
                       </S.Available>
                     </S.SelectInput>
-                    <InputLine
-                      name="amount"
-                      label="Token Amount"
-                      placeholder="0.00"
-                      error={errors.amount && touched.amount && errors.amount}
-                      {...getFieldProps("amount")}
-                    />
-                    <Button
-                      type="submit"
-                      size="extraLarge"
-                      background="primary"
-                      color="white"
-                      disabled={!(isValid && dirty) || loading}
-                      isFull
-                      isLoading={loading}>
-                      Withdraw
-                    </Button>
+                    <S.Flex>
+                      <InputLine
+                        name="amount"
+                        label="Token Amount"
+                        placeholder="0.00"
+                        error={errors.amount && touched.amount && errors.amount}
+                        {...getFieldProps("amount")}
+                      />
+                      <Button
+                        type="submit"
+                        size="extraLarge"
+                        background="primary"
+                        color="white"
+                        disabled={!(isValid && dirty) || loading}
+                        isFull
+                        isLoading={loading}>
+                        Withdraw
+                      </Button>
+                    </S.Flex>
                   </LoadingSection>
                 </form>
               </S.Form>
@@ -296,31 +280,37 @@ export const WithdrawTemplate = () => {
                       {pendingWithdraws?.length ? (
                         <HistoryTable items={pendingWithdraws} />
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                     <TabContent>
                       {readyToClaim?.length ? (
-                        readyToClaim?.map((value) => (
+                        readyToClaim.map(({ id, sid, items }) => (
                           <HistoryCard
-                            key={value.id}
-                            sid={value.sid}
-                            hasPendingWithdraws={value?.items.filter(
-                              (v) => v.status === "READY"
-                            )}
-                            handleClaimWithdraws={() => handleClaimWithdraws(value.sid)}
-                            items={value.items.filter((v) => v.status === "READY")}
+                            key={id}
+                            sid={sid}
+                            hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
+                            handleClaimWithdraws={async () =>
+                              await onFetchClaimWithdraw({ sid })
+                            }
+                            items={items?.filter((v) => v.status === "READY")}
                           />
                         ))
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                     <TabContent>
                       {claimedWithdraws?.length ? (
                         <HistoryTable items={claimedWithdraws} />
                       ) : (
-                        <EmptyData />
+                        <div style={{ padding: "2rem" }}>
+                          <EmptyData />
+                        </div>
                       )}
                     </TabContent>
                   </S.HistoryWrapper>
@@ -364,38 +354,13 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
   );
 };
 
-const Copy = ({ copyData }) => {
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(copyData);
-    buttonRef.current.innerHTML = "Copied";
-  };
-  return (
-    <S.Cell>
-      <Tooltip>
-        <TooltipHeader>
-          <button type="button" onClick={handleCopy} onMouseOut={handleOnMouseOut}>
-            <Icons.Copy />
-          </button>
-          {copyData}
-        </TooltipHeader>
-        <TooltipContent>
-          <p ref={buttonRef}>Copy to clipboard</p>
-        </TooltipContent>
-      </Tooltip>
-    </S.Cell>
-  );
-};
-
 const HistoryTable = ({ items }) => {
   const { selectGetAsset } = useAssetsProvider();
 
   return (
     <S.HistoryTable>
       <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
-        <Table.Header fill="none">
+        <Table.Header fill="none" striped>
           <Table.Column>
             <S.HeaderColumn>Name</S.HeaderColumn>
           </Table.Column>
@@ -409,15 +374,13 @@ const HistoryTable = ({ items }) => {
             <S.HeaderColumn>Status</S.HeaderColumn>
           </Table.Column>
         </Table.Header>
-        <Table.Body>
+        <Table.Body striped border="squared">
           {items.map((item) => (
             <Table.Row key={item.event_id}>
               <Table.Cell>
                 <S.Cell>
-                  <span>
-                    {selectGetAsset(item.asset)?.name}{" "}
-                    <small>{selectGetAsset(item.asset)?.symbol}</small>
-                  </span>
+                  <span>{selectGetAsset(item.asset)?.name} </span>
+                  <small>{selectGetAsset(item.asset)?.symbol}</small>
                 </S.Cell>
               </Table.Cell>
               <Table.Cell>
@@ -426,8 +389,8 @@ const HistoryTable = ({ items }) => {
                     {intlFormat(
                       item.date,
                       {
-                        year: "numeric",
-                        month: "short",
+                        year: "2-digit",
+                        month: "2-digit",
                         day: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
