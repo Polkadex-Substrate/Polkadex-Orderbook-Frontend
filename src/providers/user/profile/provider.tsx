@@ -98,23 +98,23 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       );
 
       try {
-        let mainAddress: string | null;
         if (!userAccounts?.length) {
           const { accounts } = await getAllMainLinkedAccounts(email);
           const userAccounts = await getAllProxyAccounts(accounts);
 
-          mainAddress = userAccounts?.find(
+          const mainAddress = userAccounts?.find(
             ({ tradeAddress }) => defaultTradeAddress === tradeAddress
           )?.mainAddress;
 
+          defaultTradeAddress?.length &&
+            dispatch(
+              A.userAccountSelectData({ tradeAddress: defaultTradeAddress, mainAddress })
+            );
           dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
         }
 
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
-          dispatch(
-            A.userAccountSelectData({ tradeAddress: defaultTradeAddress, mainAddress })
-          );
           dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
           dispatch(A.userSetAvatar());
         }
