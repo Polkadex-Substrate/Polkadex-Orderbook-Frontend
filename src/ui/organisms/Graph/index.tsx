@@ -13,6 +13,7 @@ import {
   Checkbox,
   Popover,
   Dropdown,
+  TradingView,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useWindowSize } from "@polkadex/orderbook-hooks";
@@ -278,14 +279,12 @@ export const Graph = () => {
                 isActive={isOriginal}
                 onClick={() => setIsOrigina(true)}
               />
-              <AvailableMessage message="Soon">
-                <ListItemButton
-                  title="TradingView"
-                  size="Small"
-                  isActive={!isOriginal}
-                  onClick={() => setIsOrigina(false)}
-                />
-              </AvailableMessage>
+              <ListItemButton
+                title="TradingView"
+                size="Small"
+                isActive={!isOriginal}
+                onClick={() => setIsOrigina(false)}
+              />
 
               <Icon name="Expand" size="extraMedium" background="primaryBackgroundOpacity" />
             </S.List>
@@ -296,7 +295,8 @@ export const Graph = () => {
           {isOriginal ? (
             <OriginalChart chart={chart} resolution={filter} ranges={ranges[0]} />
           ) : (
-            <div />
+            // <div />
+            <TradingView />
           )}
         </S.ChartWrapper>
       </S.WrapperGraph>

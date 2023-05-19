@@ -10287,6 +10287,11 @@ extract-zip@^1.6.6:
     mkdirp "^0.5.4"
     yauzl "^2.10.0"
 
+fancy-canvas@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/fancy-canvas/-/fancy-canvas-2.1.0.tgz#44b40e40419ad8ef8304df365e4276767e918552"
+  integrity sha512-nifxXJ95JNLFR2NgRV4/MxVP45G9909wJTEKz5fg/TZS20JJZA6hfgRVh/bC9bwl2zBtBNcYPjiBE4njQHVBwQ==
+
 fast-base64-decode@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz#b434a0dd7d92b12b43f26819300d2dafb83ee418"
@@ -12574,6 +12579,13 @@ liftoff@^4.0.0:
     object.map "^1.0.1"
     rechoir "^0.8.0"
     resolve "^1.20.0"
+
+lightweight-charts@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-4.0.1.tgz#cb66f98f5e81eaa0a937e3b75928108491fa5622"
+  integrity sha512-p+j6w41PVzf9Vn7IrmpmCJacunpN0kKsl0IZoxMOySSkDcSagZ7Is9pb6pclIfN/usHdta0aYm9FktkYpAQe0g==
+  dependencies:
+    fancy-canvas "2.1.0"
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
