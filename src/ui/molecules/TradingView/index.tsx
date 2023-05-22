@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createChart, ColorType } from "lightweight-charts";
 
-import * as S from "../OriginalChart/styles";
+import * as S from "./styles";
 
 import { Spinner } from "@polkadex/orderbook-ui/molecules";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
