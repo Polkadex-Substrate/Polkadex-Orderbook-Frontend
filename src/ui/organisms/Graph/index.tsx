@@ -296,7 +296,7 @@ export const Graph = () => {
             <OriginalChart chart={chart} resolution={filter} ranges={ranges[0]} />
           ) : (
             // <div />
-            <TradingView />
+            <TradingView resolution={filter} ranges={ranges[0]} />
           )}
         </S.ChartWrapper>
       </S.WrapperGraph>

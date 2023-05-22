@@ -1,52 +1,90 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createChart, ColorType } from "lightweight-charts";
-import React, { useEffect, useRef } from "react";
 
-const initialData = [
-  { open: 10, high: 10.63, low: 9.49, close: 9.55, time: 1642427876 },
-  { open: 9.55, high: 10.3, low: 9.42, close: 9.94, time: 1642514276 },
-  { open: 9.94, high: 10.17, low: 9.92, close: 9.78, time: 1642600676 },
-  { open: 9.78, high: 10.59, low: 9.18, close: 9.51, time: 1642687076 },
-  { open: 9.51, high: 10.46, low: 9.1, close: 10.17, time: 1642773476 },
-  { open: 10.17, high: 10.96, low: 10.16, close: 10.47, time: 1642859876 },
-  { open: 10.47, high: 11.39, low: 10.4, close: 10.81, time: 1642946276 },
-  { open: 10.81, high: 11.6, low: 10.3, close: 10.75, time: 1643032676 },
-  { open: 10.75, high: 11.6, low: 10.49, close: 10.93, time: 1643119076 },
-  { open: 10.93, high: 11.53, low: 10.76, close: 10.96, time: 1643205476 },
-];
+import * as S from "../OriginalChart/styles";
 
-export const TradingView = () => {
-  return <ChartComponent data={initialData} />;
-};
+import { Spinner } from "@polkadex/orderbook-ui/molecules";
+import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
-export const ChartComponent = (props) => {
+export const TradingView = ({ resolution, ranges }) => {
+  const [data, setData] = useState([]);
+  const [volumeData, setVolumeData] = useState([]);
   const {
-    data,
-    colors: {
-      backgroundColor = "#1C1C26",
-      lineColor = "#2962FF",
-      textColor = "white",
-      areaTopColor = "#2962FF",
-      areaBottomColor = "rgba(41, 98, 255, 0.28)",
-    } = {},
-  } = props;
+    data: klines,
+    loading: isLoading,
+    onHandleKlineFetch,
+    onFetchKlineChannel,
+  } = useKlineProvider();
 
-  const chartContainerRef = useRef();
+  const { currentMarket } = useMarketsProvider();
 
   useEffect(() => {
-    console.log(chartContainerRef?.current, "chartContainerRef?.current?");
+    setData(
+      klines.map((data) => {
+        return {
+          time: data.timestamp / 1000,
+          open: data.open,
+          close: data.close,
+          high: data.high,
+          low: data.low,
+        };
+      })
+    );
+    setVolumeData(
+      klines.map((data) => {
+        return {
+          time: data.timestamp / 1000,
+          value: data.volume,
+        };
+      })
+    );
+  }, [klines]);
+
+  useEffect(() => {
+    if (currentMarket?.m) {
+      onHandleKlineFetch({
+        market: currentMarket.m,
+        resolution: resolution,
+        from: ranges.startDate,
+        to: ranges.endDate,
+      });
+
+      onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
+    }
+  }, [currentMarket?.m, onFetchKlineChannel, onHandleKlineFetch, resolution, ranges]);
+
+  const colors = useMemo(
+    () => ({
+      backgroundColor: "#2E303C",
+      lineColor: "#2962FF",
+      textColor: "white",
+      areaTopColor: "#2962FF",
+      areaBottomColor: "rgba(41, 98, 255, 0.28)",
+    }),
+    []
+  );
+
+  const chartContainerRef =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+
+  useEffect(() => {
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef?.current?.clientWidth });
     };
 
     const chart = createChart(chartContainerRef.current, {
       layout: {
-        background: { type: ColorType.Solid, color: backgroundColor },
-        textColor,
+        background: { type: ColorType.Solid, color: colors.backgroundColor },
+        textColor: colors.textColor,
+      },
+      grid: {
+        vertLines: { color: "#444" },
+        horzLines: { color: "#444" },
       },
       width: chartContainerRef?.current?.clientWidth,
       height: 440,
     });
-    chart.timeScale().fitContent();
 
     const newSeries = chart.addCandlestickSeries({
       upColor: "#26a69a",
@@ -57,6 +95,31 @@ export const ChartComponent = (props) => {
     });
     newSeries.setData(data);
 
+    newSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0,
+        bottom: 0.2,
+      },
+    });
+
+    const volumeSeries = chart.addHistogramSeries({
+      color: "#26a69a",
+      priceFormat: {
+        type: "volume",
+      },
+      priceScaleId: "Trading View Polkadex",
+    });
+
+    volumeSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+    });
+
+    volumeSeries.setData(volumeData);
+
+    chart.timeScale().fitContent();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -64,7 +127,17 @@ export const ChartComponent = (props) => {
 
       chart.remove();
     };
-  }, [data, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
+  }, [data, volumeData, colors]);
 
-  return <div ref={chartContainerRef} />;
+  return (
+    <S.Wrapper ref={chartContainerRef}>
+      {isLoading && (
+        <S.LoadingWrapper>
+          <S.LoadingeMessage>
+            <Spinner />
+          </S.LoadingeMessage>
+        </S.LoadingWrapper>
+      )}
+    </S.Wrapper>
+  );
 };
