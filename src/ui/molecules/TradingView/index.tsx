@@ -79,8 +79,8 @@ export const TradingView = ({ resolution, ranges }) => {
         textColor: colors.textColor,
       },
       grid: {
-        vertLines: { color: "#444" },
-        horzLines: { color: "#444" },
+        vertLines: { color: "transparent" },
+        horzLines: { color: "transparent" },
       },
       width: chartContainerRef?.current?.clientWidth,
       height: 440,
