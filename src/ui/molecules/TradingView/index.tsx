@@ -6,6 +6,7 @@ import * as S from "./styles";
 import { Spinner } from "@polkadex/orderbook-ui/molecules";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const TradingView = ({ resolution, ranges }) => {
   const [data, setData] = useState([]);
@@ -18,6 +19,8 @@ export const TradingView = ({ resolution, ranges }) => {
   } = useKlineProvider();
 
   const { currentMarket } = useMarketsProvider();
+  const settingsState = useSettingsProvider();
+  const isDarkTheme = settingsState.theme === "dark";
 
   useEffect(() => {
     setData(
@@ -56,13 +59,13 @@ export const TradingView = ({ resolution, ranges }) => {
 
   const colors = useMemo(
     () => ({
-      backgroundColor: "#2E303C",
-      lineColor: "#2962FF",
-      textColor: "white",
-      areaTopColor: "#2962FF",
-      areaBottomColor: "rgba(41, 98, 255, 0.28)",
+      background: {
+        type: ColorType.Solid,
+        color: isDarkTheme ? "#2E303C" : "#EEF0F6",
+      },
+      textColor: isDarkTheme ? "white" : "#000000",
     }),
-    []
+    [isDarkTheme]
   );
 
   const chartContainerRef =
@@ -74,16 +77,16 @@ export const TradingView = ({ resolution, ranges }) => {
     };
 
     const chart = createChart(chartContainerRef.current, {
-      layout: {
-        background: { type: ColorType.Solid, color: colors.backgroundColor },
-        textColor: colors.textColor,
-      },
       grid: {
         vertLines: { color: "transparent" },
         horzLines: { color: "transparent" },
       },
       width: chartContainerRef?.current?.clientWidth,
       height: 440,
+    });
+
+    chart.applyOptions({
+      layout: { ...colors },
     });
 
     const newSeries = chart.addCandlestickSeries({
