@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { createChart, ColorType } from "lightweight-charts";
+import { createChart, ColorType, CrosshairMode } from "lightweight-charts";
 
 import * as S from "./styles";
 
@@ -87,6 +87,9 @@ export const TradingView = ({ resolution, ranges }) => {
 
     chart.applyOptions({
       layout: { ...colors },
+      crosshair: {
+        mode: CrosshairMode.Normal,
+      },
     });
 
     const newSeries = chart.addCandlestickSeries({
@@ -134,6 +137,7 @@ export const TradingView = ({ resolution, ranges }) => {
 
   return (
     <S.Wrapper ref={chartContainerRef}>
+      <S.Container id="original-chart" />
       {isLoading && (
         <S.LoadingWrapper>
           <S.LoadingeMessage>

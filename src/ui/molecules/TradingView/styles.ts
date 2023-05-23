@@ -27,3 +27,13 @@ export const Wrapper = styled.div`
   transition: width 0.5s ease-in-out;
   gap: 1rem;
 `;
+
+export const Container = styled.div`
+  flex: 1;
+  height: 100%;
+  height: 36vh;
+  min-height: 44rem;
+  @media screen and (min-height: 1200px) {
+    height: 42vh;
+  }
+`;
