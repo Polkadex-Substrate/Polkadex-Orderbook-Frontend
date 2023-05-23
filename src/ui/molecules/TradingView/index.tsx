@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createChart, ColorType, CrosshairMode } from "lightweight-charts";
 
 import * as S from "./styles";
+import { CurrentDataType } from "./types";
 
 import { Spinner } from "@polkadex/orderbook-ui/molecules";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
@@ -11,6 +12,7 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 export const TradingView = ({ resolution, ranges }) => {
   const [data, setData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
+  const [currentData, setCurrentData] = useState<CurrentDataType>();
   const {
     data: klines,
     loading: isLoading,
@@ -92,16 +94,16 @@ export const TradingView = ({ resolution, ranges }) => {
       },
     });
 
-    const newSeries = chart.addCandlestickSeries({
+    const candleSeries = chart.addCandlestickSeries({
       upColor: "#26a69a",
       downColor: "#ef5350",
       borderVisible: false,
       wickUpColor: "#26a69a",
       wickDownColor: "#ef5350",
     });
-    newSeries.setData(data);
+    candleSeries.setData(data);
 
-    newSeries.priceScale().applyOptions({
+    candleSeries.priceScale().applyOptions({
       scaleMargins: {
         top: 0,
         bottom: 0.2,
@@ -125,6 +127,25 @@ export const TradingView = ({ resolution, ranges }) => {
 
     volumeSeries.setData(volumeData);
 
+    chart.subscribeCrosshairMove((param) => {
+      if (param.point === undefined || !param.time || param.point.x < 0 || param.point.y < 0) {
+        console.log("Outside the chart");
+      } else {
+        const dateStr = param.time;
+        const volumeData = param.seriesData.get(volumeSeries);
+        const candleData = param.seriesData.get(candleSeries);
+        const date = new Date(parseInt(dateStr.toString()) * 1000).toLocaleString();
+        setCurrentData({
+          timestamp: date,
+          volume: volumeData.value,
+          open: candleData.open,
+          close: candleData.close,
+          low: candleData.low,
+          high: candleData.high,
+        });
+      }
+    });
+
     chart.timeScale().fitContent();
     window.addEventListener("resize", handleResize);
 
@@ -137,6 +158,14 @@ export const TradingView = ({ resolution, ranges }) => {
 
   return (
     <S.Wrapper ref={chartContainerRef}>
+      <S.ToolTip>
+        <span>Time: {currentData?.timestamp}</span>
+        <span>Open: {currentData?.open}</span>
+        <span>Close: {currentData?.close}</span>
+        <span>High: {currentData?.high}</span>
+        <span>Low: {currentData?.low}</span>
+        <span>Volume: {currentData?.volume}</span>
+      </S.ToolTip>
       <S.Container id="original-chart" />
       {isLoading && (
         <S.LoadingWrapper>

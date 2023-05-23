@@ -37,3 +37,11 @@ export const Container = styled.div`
     height: 42vh;
   }
 `;
+
+export const ToolTip = styled.div`
+  position: absolute;
+  z-index: 9999;
+  span {
+    margin: 8px;
+  }
+`;
