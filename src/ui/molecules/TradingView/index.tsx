@@ -5,7 +5,7 @@ import {
   DatafeedConfiguration,
   LibrarySymbolInfo,
   ResolutionString,
-  widget,
+  widget as Widget,
 } from "../../../../public/static/charting_library";
 
 import * as S from "./styles";
@@ -45,7 +45,7 @@ async function getAllSymbols() {
 }
 
 export const TradingView = () => {
-  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
+  const { onHandleKlineFetch, onFetchKlineChannel, last } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
 
   const chartContainerRef =
@@ -180,26 +180,7 @@ export const TradingView = () => {
       symbol: "Polkadex:PDEX/CUSDT", // Default symbol
     };
 
-    const tvWidget = new widget(widgetOptions);
-
-    tvWidget.onChartReady(() => {
-      tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton();
-        button.setAttribute("title", "Click to show a notification popup");
-        button.classList.add("apply-common-tooltip");
-        button.addEventListener("click", () =>
-          tvWidget.showNoticeDialog({
-            title: "Notification",
-            body: "TradingView Charting Library API works correctly",
-            callback: () => {
-              console.log("Noticed!");
-            },
-          })
-        );
-
-        button.innerHTML = "Check API";
-      });
-    });
+    const tvWidget = new Widget(widgetOptions);
 
     return () => {
       tvWidget.remove();
