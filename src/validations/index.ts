@@ -60,7 +60,7 @@ export const resetPasswordValidations = Yup.object().shape({
   email: Yup.string().email("Must be a valid email").required("Required"),
 });
 
-export const withdrawValidations = (balance: string) => {
+export const withdrawValidations = (balance: number) => {
   return Yup.object().shape({
     amount: Yup.number()
       .required("Required")
