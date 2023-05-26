@@ -26,8 +26,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           ({ tradeAddress }) => _tradeAddress === tradeAddress
         )?.mainAddress;
         if (mainAddress) {
-          const data = { tradeAddress: trade_address, mainAddress };
-          dispatch(A.userSetDefaultTradeAccount(trade_address));
+          const data = { tradeAddress: _tradeAddress, mainAddress };
+          dispatch(A.userSetDefaultTradeAccount(_tradeAddress));
           dispatch(A.userAccountSelectData(data));
         }
       } catch (e) {
