@@ -103,7 +103,7 @@ export const WithdrawTemplate = () => {
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
     useFormik({
       initialValues,
-      validationSchema: withdrawValidations(availableAmount?.free_balance),
+      validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
       onSubmit: ({ amount }) => {
         if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
         else {
