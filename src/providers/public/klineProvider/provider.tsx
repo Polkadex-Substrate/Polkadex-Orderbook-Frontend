@@ -24,6 +24,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         const { market, resolution, from, to } = payload;
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
+        return data;
       } catch (error) {
         console.log("Kline fetch error", error);
         onHandleError("Kline fetch error");
