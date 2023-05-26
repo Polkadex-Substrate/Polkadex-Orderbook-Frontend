@@ -7,7 +7,6 @@ import * as S from "./styles";
 
 import { OrderBook } from "@polkadex/orderbook-ui/organisms";
 import {
-  AvailableMessage,
   Icon,
   ListItemButton,
   OriginalChart,
@@ -308,7 +307,7 @@ export const Graph = () => {
             {isOriginal ? (
               <OriginalChart chart={chart} resolution={filter} ranges={ranges[0]} />
             ) : (
-              isScriptReady && <TradingView resolution={filter} ranges={ranges[0]} />
+              isScriptReady && <TradingView />
             )}
           </S.ChartWrapper>
         </S.WrapperGraph>
