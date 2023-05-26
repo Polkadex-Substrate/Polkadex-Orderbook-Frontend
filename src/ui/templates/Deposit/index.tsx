@@ -51,6 +51,7 @@ export const DepositTemplate = () => {
   const { deposits } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -90,7 +91,7 @@ export const DepositTemplate = () => {
         asset: selectedAsset,
       },
       // TODO: re-add the validations
-      validationSchema: withdrawValidations,
+      validationSchema: withdrawValidations(onChainBalance),
       validate,
       onSubmit: (values) => {
         const asset = isAssetPDEX(selectedAsset.assetId)
