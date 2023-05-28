@@ -91,7 +91,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
                   : successInformation.description
               }
               mnemonic={tradeInfo?.mnemonic}
-              account={tradeInfo.account}
+              account={tradeInfo?.account}
             />
           ) : (
             <>
