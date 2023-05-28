@@ -140,6 +140,17 @@ export const TradingView = () => {
           const { from, to } = periodParams;
           try {
             const bars = await getData(resolution, from, to);
+            bars.pop();
+            bars.push({
+              time: last.kline.timestamp,
+              low: last.kline.low,
+              high: last.kline.high,
+              open: last.kline.open,
+              close: last.kline.close,
+              volume: last.kline.volume,
+              isBarClosed: false,
+              isLastBar: true,
+            });
             if (bars.length < 1) {
               onResult([], { noData: true });
             } else {
@@ -173,11 +184,10 @@ export const TradingView = () => {
       user_id: "public_user_id",
       fullscreen: false,
       autosize: true,
-      // additional_symbol_info_fields: [{ title: "Bitcoin", propertyName: "BTC" }],
       container: chartContainerRef.current,
       disabled_features: ["use_localstorage_for_settings"],
       enabled_features: ["study_templates"],
-      symbol: "Polkadex:PDEX/CUSDT", // Default symbol
+      symbol: "Polkadex:PDEX/CUSDT",
     };
 
     const tvWidget = new Widget(widgetOptions);
@@ -185,7 +195,18 @@ export const TradingView = () => {
     return () => {
       tvWidget.remove();
     };
-  }, [currentMarket.m, onHandleKlineFetch, getData, onFetchKlineChannel]);
+  }, [
+    currentMarket.m,
+    onHandleKlineFetch,
+    getData,
+    onFetchKlineChannel,
+    last.kline.close,
+    last.kline.open,
+    last.kline.low,
+    last.kline.high,
+    last.kline.timestamp,
+    last.kline.volume,
+  ]);
 
   return <S.Wrapper ref={chartContainerRef}></S.Wrapper>;
 };
