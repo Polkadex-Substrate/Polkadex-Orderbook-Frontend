@@ -20,8 +20,20 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const onHandleKlineFetch = useCallback(
     async (payload: A.KlineFetch["payload"]): Promise<KlineEvent[]> => {
       dispatch(A.klineFetch(payload));
+      const getCorrectResolutions = {
+        "1": "1m",
+        "5": "5m",
+        "15": "15m",
+        "30": "30m",
+        "60": "1h",
+        "360": "6h",
+      };
       try {
-        const { market, resolution, from, to } = payload;
+        const { market, resolution: currentResolution, from, to } = payload;
+        let resolution: string = currentResolution;
+        if (getCorrectResolutions[currentResolution] !== undefined) {
+          resolution = getCorrectResolutions[currentResolution];
+        }
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
         return data;
