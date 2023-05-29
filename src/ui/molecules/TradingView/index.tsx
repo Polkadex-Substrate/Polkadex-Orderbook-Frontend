@@ -175,7 +175,7 @@ export const TradingView = () => {
       },
       theme: "Dark",
       interval: "1D" as ResolutionString,
-      library_path: "https://pr-638.d3kagsll73okyl.amplifyapp.com/static/charting_library/",
+      library_path: "/static/charting_library/",
       locale: "en",
       timezone: "Asia/Kolkata",
       charts_storage_url: "https://saveload.tradingview.com",
