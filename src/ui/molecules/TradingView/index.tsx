@@ -105,7 +105,9 @@ export const TradingView = () => {
               symbol.full_name.toLowerCase().indexOf(userInput.toLowerCase()) !== -1;
             return isExchangeValid && isFullSymbolContainsInput;
           });
-          onResult(newSymbols);
+          setTimeout(() => {
+            onResult(newSymbols);
+          }, 0);
         },
         async resolveSymbol(symbolName, onResolve, onError, extension) {
           const symbols = await getAllSymbols();
@@ -124,9 +126,10 @@ export const TradingView = () => {
             exchange: symbolItem.exchange,
             minmov: 1,
             pricescale: 100,
-            has_intraday: false,
+            has_intraday: true,
             has_no_volume: false,
-            has_weekly_and_monthly: false,
+            has_daily: true,
+            has_weekly_and_monthly: true,
             supported_resolutions: configurationData.supported_resolutions,
             volume_precision: 2,
             data_status: "streaming",
@@ -152,9 +155,13 @@ export const TradingView = () => {
               isLastBar: true,
             });
             if (bars.length < 1) {
-              onResult([], { noData: true });
+              setTimeout(() => {
+                onResult([], { noData: true });
+              }, 0);
             } else {
-              onResult(bars, { noData: false });
+              setTimeout(() => {
+                onResult(bars, { noData: false });
+              }, 0);
             }
           } catch (error) {
             onError(error);
@@ -200,12 +207,12 @@ export const TradingView = () => {
     onHandleKlineFetch,
     getData,
     onFetchKlineChannel,
-    last.kline.close,
-    last.kline.open,
-    last.kline.low,
-    last.kline.high,
-    last.kline.timestamp,
-    last.kline.volume,
+    last?.kline?.close,
+    last?.kline?.open,
+    last?.kline?.low,
+    last?.kline?.high,
+    last?.kline?.timestamp,
+    last?.kline?.volume,
   ]);
 
   return <S.Wrapper ref={chartContainerRef}></S.Wrapper>;
