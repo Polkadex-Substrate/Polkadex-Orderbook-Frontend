@@ -1,5 +1,4 @@
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
-import Script from "next/script";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -107,9 +106,9 @@ export default class MyDocument extends Document {
           <meta name="twitter:image" content="https://polkadex.trade/twitterCardImage.jpg" />
           <meta name="twitter:site" content="@polkadex" />
           <meta name="twitter:creator" content="@polkadex" />
-          <Script
+          <script
             type="text/javascript"
-            src="https://pr-638.d3kagsll73okyl.amplifyapp.com/static/charting_library/charting_library.standalone.js"></Script>
+            src="https://pr-638.d3kagsll73okyl.amplifyapp.com/static/charting_library/charting_library.standalone.js"></script>
         </Head>
         <body>
           <Main />
