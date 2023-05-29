@@ -143,7 +143,6 @@ export const TradingView = () => {
           const { from, to } = periodParams;
           try {
             const bars = await getData(resolution, from, to);
-            bars.pop();
             bars.push({
               time: last.kline.timestamp,
               low: last.kline.low,
