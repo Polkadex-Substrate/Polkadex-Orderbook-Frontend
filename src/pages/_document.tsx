@@ -106,9 +106,6 @@ export default class MyDocument extends Document {
           <meta name="twitter:image" content="https://polkadex.trade/twitterCardImage.jpg" />
           <meta name="twitter:site" content="@polkadex" />
           <meta name="twitter:creator" content="@polkadex" />
-          <script
-            type="text/javascript"
-            src="https://pr-638.d3kagsll73okyl.amplifyapp.com/static/charting_library/charting_library.standalone.js"></script>
         </Head>
         <body>
           <Main />

@@ -84,8 +84,8 @@ export const KlineProvider: KlineComponent = ({ children }) => {
           dispatch(
             A.klinePush({
               kline: kline,
-              market: data.m,
-              interval: data.interval,
+              market: dataParsed.m,
+              interval,
             })
           );
         },

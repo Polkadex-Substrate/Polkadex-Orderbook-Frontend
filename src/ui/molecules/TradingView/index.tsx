@@ -79,6 +79,16 @@ export const TradingView = () => {
             isLastBar: false,
           };
         });
+        bars.push({
+          time: last.kline.timestamp,
+          low: last.kline.low,
+          high: last.kline.high,
+          open: last.kline.open,
+          close: last.kline.close,
+          volume: last.kline.volume,
+          isBarClosed: false,
+          isLastBar: true,
+        });
         if (bars.length < 1) {
           return [];
         } else {
@@ -88,7 +98,17 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket.m, onHandleKlineFetch, onFetchKlineChannel]
+    [
+      currentMarket.m,
+      onHandleKlineFetch,
+      onFetchKlineChannel,
+      last?.kline?.close,
+      last?.kline?.open,
+      last?.kline?.low,
+      last?.kline?.high,
+      last?.kline?.timestamp,
+      last?.kline?.volume,
+    ]
   );
 
   useEffect(() => {
@@ -127,7 +147,7 @@ export const TradingView = () => {
             minmov: 1,
             pricescale: 100,
             has_intraday: true,
-            has_no_volume: false,
+            visible_plots_set: "ohlcv",
             has_daily: true,
             has_weekly_and_monthly: true,
             supported_resolutions: configurationData.supported_resolutions,
@@ -143,16 +163,6 @@ export const TradingView = () => {
           const { from, to } = periodParams;
           try {
             const bars = await getData(resolution, from, to);
-            bars.push({
-              time: last.kline.timestamp,
-              low: last.kline.low,
-              high: last.kline.high,
-              open: last.kline.open,
-              close: last.kline.close,
-              volume: last.kline.volume,
-              isBarClosed: false,
-              isLastBar: true,
-            });
             if (bars.length < 1) {
               setTimeout(() => {
                 onResult([], { noData: true });
@@ -184,7 +194,6 @@ export const TradingView = () => {
       library_path: "/static/charting_library/",
       locale: "en",
       timezone: "Asia/Kolkata",
-      charts_storage_url: "https://saveload.tradingview.com",
       charts_storage_api_version: "1.1",
       client_id: "tradingview.com",
       user_id: "public_user_id",
@@ -201,18 +210,7 @@ export const TradingView = () => {
     return () => {
       tvWidget.remove();
     };
-  }, [
-    currentMarket.m,
-    onHandleKlineFetch,
-    getData,
-    onFetchKlineChannel,
-    last?.kline?.close,
-    last?.kline?.open,
-    last?.kline?.low,
-    last?.kline?.high,
-    last?.kline?.timestamp,
-    last?.kline?.volume,
-  ]);
+  }, [currentMarket.m, onHandleKlineFetch, getData, onFetchKlineChannel]);
 
   return <S.Wrapper ref={chartContainerRef}></S.Wrapper>;
 };
