@@ -91,7 +91,9 @@ export const tradeWalletReducer = (
         ...state,
         exportAccountLoading: false,
       };
-    case USER_REGISTER_TRADE_ACCOUNT_DATA:
+    case USER_REGISTER_TRADE_ACCOUNT_DATA: {
+      console.log("register trade account data reducer");
+
       return {
         ...state,
         registerAccountModal: {
@@ -101,6 +103,8 @@ export const tradeWalletReducer = (
         registerAccountLoading: false,
         registerAccountSuccess: true,
       };
+    }
+
     case USER_TRADE_ACCOUNT_MODAL_ACTIVE:
       return {
         ...state,

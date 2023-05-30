@@ -62,6 +62,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
     status: tradeInfo.defaultImportActive,
     isImport: false,
   });
+
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isControllerAccountSuccess = extensionWalletState.registerMainAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;

@@ -51,7 +51,7 @@ export const useSettings = () => {
   const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
   const isRegisterControllerAccountSuccess = tradeWalletState.registerAccountSuccess;
-
+  const isRegisterMainAccountSuccess = extensionWalletState.registerMainAccountSuccess;
   const defaultTradeAddress = profileState.defaultTradeAccount;
   const defaultFundingAddress =
     defaultTradeAddress &&
@@ -141,15 +141,22 @@ export const useSettings = () => {
       isTradeAccountSuccess ||
       !isLoading ||
       isRegisterControllerAccountSuccess ||
-      isImportAccountSuccess;
+      isImportAccountSuccess ||
+      isRegisterMainAccountSuccess;
 
     if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess) {
+        tradeWalletState.onRegisterTradeAccountReset();
         onRegisterMainAccountReset();
         tradeWalletState.onRegisterAccountModalCancel();
-      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess) {
         tradeWalletState.onRegisterTradeAccountReset();
-      else tradeWalletState.onRegisterAccountModalCancel();
+      } else if (isRegisterMainAccountSuccess) {
+        tradeWalletState.onRegisterAccountModalCancel();
+        onRegisterMainAccountReset();
+      } else {
+        tradeWalletState.onRegisterAccountModalCancel();
+      }
     }
   };
   const handleClosePreviewModal = () => tradeWalletState.onPreviewAccountModalCancel();

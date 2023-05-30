@@ -64,6 +64,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
 
   const onRegisterMainAccountReset = () => {
     tradeWalletState.onRegisterTradeAccountReset();
+    dispatch(A.registerMainAccountReset());
   };
 
   const onRegisterMainAccountUpdate = useCallback(
