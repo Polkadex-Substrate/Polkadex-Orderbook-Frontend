@@ -30,23 +30,23 @@ const configurationData: DatafeedConfiguration = {
   ],
 };
 
-async function getAllSymbols() {
-  const allSymbols = [
-    {
-      description: "PDEX/CUSDT",
-      exchange: "Polkadex",
-      full_name: "Polkadex:PDEX/CUSDT",
-      symbol: "PDEX/CUSDT",
-      type: "crypto",
-    },
-  ];
-
-  return allSymbols;
-}
-
 export const TradingView = () => {
-  const { onHandleKlineFetch, onFetchKlineChannel, last } = useKlineProvider();
+  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
+
+  const getAllSymbols = useCallback(() => {
+    const allSymbols = [
+      {
+        description: currentMarket.name,
+        exchange: "Polkadex",
+        full_name: `Polkadex:${currentMarket.name}`,
+        symbol: currentMarket.name,
+        type: "crypto",
+      },
+    ];
+
+    return allSymbols;
+  }, [currentMarket.name]);
 
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -61,7 +61,10 @@ export const TradingView = () => {
           to: new Date(to * 1000),
         });
 
-        onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
+        onFetchKlineChannel({
+          market: currentMarket.m,
+          interval: resolution,
+        });
 
         if (klines.length === 0) {
           return [];
@@ -79,16 +82,6 @@ export const TradingView = () => {
             isLastBar: false,
           };
         });
-        bars.push({
-          time: last.kline.timestamp,
-          low: last.kline.low,
-          high: last.kline.high,
-          open: last.kline.open,
-          close: last.kline.close,
-          volume: last.kline.volume,
-          isBarClosed: false,
-          isLastBar: true,
-        });
         if (bars.length < 1) {
           return [];
         } else {
@@ -98,17 +91,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [
-      currentMarket.m,
-      onHandleKlineFetch,
-      onFetchKlineChannel,
-      last?.kline?.close,
-      last?.kline?.open,
-      last?.kline?.low,
-      last?.kline?.high,
-      last?.kline?.timestamp,
-      last?.kline?.volume,
-    ]
+    [currentMarket.m, onHandleKlineFetch, onFetchKlineChannel]
   );
 
   useEffect(() => {
@@ -118,7 +101,7 @@ export const TradingView = () => {
           setTimeout(() => callback(configurationData), 0);
         },
         async searchSymbols(userInput, exchange, symbolType, onResult) {
-          const symbols = await getAllSymbols();
+          const symbols = getAllSymbols();
           const newSymbols = symbols.filter((symbol) => {
             const isExchangeValid = exchange === "" || symbol.exchange === exchange;
             const isFullSymbolContainsInput =
@@ -130,8 +113,10 @@ export const TradingView = () => {
           }, 0);
         },
         async resolveSymbol(symbolName, onResolve, onError, extension) {
-          const symbols = await getAllSymbols();
-          const symbolItem = symbols.find(({ full_name }) => full_name === symbolName);
+          const symbols = getAllSymbols();
+          const symbolItem = symbols.find(
+            ({ full_name: fullName }) => fullName === symbolName
+          );
           if (!symbolItem) {
             onError("cannot resolve symbol");
             return;
@@ -198,8 +183,7 @@ export const TradingView = () => {
       container: chartContainerRef.current,
       disabled_features: ["use_localstorage_for_settings"],
       enabled_features: [],
-      symbol: "Polkadex:PDEX/CUSDT",
-      debug: true,
+      symbol: `Polkadex:${currentMarket.name}`,
     };
 
     const tvWidget = new Widget(widgetOptions);
@@ -207,7 +191,14 @@ export const TradingView = () => {
     return () => {
       tvWidget.remove();
     };
-  }, [currentMarket.m, onHandleKlineFetch, getData, onFetchKlineChannel]);
+  }, [
+    currentMarket.m,
+    onHandleKlineFetch,
+    getData,
+    onFetchKlineChannel,
+    getAllSymbols,
+    currentMarket.name,
+  ]);
 
   return <S.Wrapper ref={chartContainerRef}></S.Wrapper>;
 };
