@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
@@ -47,11 +46,6 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head>
-        <script
-          type="text/javascript"
-          src="https://pr-638.d3kagsll73okyl.amplifyapp.com/static/charting_library/charting_library.standalone.js"></script>
-      </Head>
       <FontStyles />
 
       <ToastContainer transition={Flip} />
