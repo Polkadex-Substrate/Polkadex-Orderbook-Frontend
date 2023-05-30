@@ -201,7 +201,7 @@ export const TradingView = () => {
       autosize: true,
       container: chartContainerRef.current,
       disabled_features: ["use_localstorage_for_settings"],
-      enabled_features: ["study_templates"],
+      enabled_features: [],
       symbol: "Polkadex:PDEX/CUSDT",
     };
 
