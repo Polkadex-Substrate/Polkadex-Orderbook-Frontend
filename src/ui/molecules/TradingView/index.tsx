@@ -203,6 +203,7 @@ export const TradingView = () => {
       disabled_features: ["use_localstorage_for_settings"],
       enabled_features: [],
       symbol: "Polkadex:PDEX/CUSDT",
+      debug: true,
     };
 
     const tvWidget = new Widget(widgetOptions);
