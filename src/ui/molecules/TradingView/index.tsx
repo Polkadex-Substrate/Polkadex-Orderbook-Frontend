@@ -164,13 +164,9 @@ export const TradingView = () => {
           try {
             const bars = await getData(resolution, from, to);
             if (bars.length < 1) {
-              setTimeout(() => {
-                onResult([], { noData: true });
-              }, 0);
+              return onResult([], { noData: true });
             } else {
-              setTimeout(() => {
-                onResult(bars, { noData: false });
-              }, 0);
+              return onResult(bars, { noData: false });
             }
           } catch (error) {
             onError(error);
