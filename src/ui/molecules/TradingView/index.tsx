@@ -37,16 +37,16 @@ export const TradingView = () => {
   const getAllSymbols = useCallback(() => {
     const allSymbols = [
       {
-        description: currentMarket.name,
+        description: currentMarket?.name,
         exchange: "Polkadex",
-        full_name: `Polkadex:${currentMarket.name}`,
-        symbol: currentMarket.name,
+        full_name: `Polkadex:${currentMarket?.name}`,
+        symbol: currentMarket?.name,
         type: "crypto",
       },
     ];
 
     return allSymbols;
-  }, [currentMarket.name]);
+  }, [currentMarket?.name]);
 
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -54,15 +54,16 @@ export const TradingView = () => {
   const getData = useCallback(
     async (resolution: ResolutionString, from: number, to: number) => {
       try {
+        if (!currentMarket) return [];
         const klines = await onHandleKlineFetch({
-          market: currentMarket.m,
+          market: currentMarket?.m,
           resolution: resolution,
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
 
         onFetchKlineChannel({
-          market: currentMarket.m,
+          market: currentMarket?.m,
           interval: resolution,
         });
 
@@ -91,7 +92,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket.m, onHandleKlineFetch, onFetchKlineChannel]
+    [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
   );
 
   useEffect(() => {
@@ -164,7 +165,7 @@ export const TradingView = () => {
           listenerGuid,
           onResetCacheNeededCallback
         ) {
-          onFetchKlineChannel({ market: currentMarket.m, interval: resolution });
+          onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
@@ -186,7 +187,7 @@ export const TradingView = () => {
         "create_volume_indicator_by_default",
       ],
       enabled_features: [],
-      symbol: `Polkadex:${currentMarket.name}`,
+      symbol: `Polkadex:${currentMarket?.name}`,
     };
 
     const tvWidget = new Widget(widgetOptions);
@@ -199,12 +200,12 @@ export const TradingView = () => {
       tvWidget.remove();
     };
   }, [
-    currentMarket.m,
+    currentMarket?.m,
     onHandleKlineFetch,
     getData,
     onFetchKlineChannel,
     getAllSymbols,
-    currentMarket.name,
+    currentMarket?.name,
   ]);
 
   return (
