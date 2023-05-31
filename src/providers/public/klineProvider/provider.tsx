@@ -24,7 +24,6 @@ export const KlineProvider: KlineComponent = ({ children }) => {
       try {
         const { market, resolution: currentResolution, from, to } = payload;
         const resolution = getAbsoluteResolution(currentResolution);
-        // console.log({ market, resolution, currentResolution, from, to }, "payload goes here");
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
         return data;
