@@ -31,7 +31,7 @@ export const OrderBook = () => {
   return (
     <S.Wrapper>
       <S.WrapperTitle>
-        <Heading title="Order Book" />
+        <Heading title="Orderbook" />
         <S.ContainerTitle>
           <S.ContainerActions>
             <OrderBookIcon
@@ -146,7 +146,6 @@ export const OrderbookTable = ({
                 </S.Card>
               );
             })}
-            
           </S.Body>
         </S.Table>
       ) : (
