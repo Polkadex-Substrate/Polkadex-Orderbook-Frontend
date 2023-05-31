@@ -34,16 +34,16 @@ export const createOrderPayload = (
   };
   const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
   console.log("is market bid", isMarketBid);
-  const zero = (0).toFixed(8);
+  const ZERO = "0.00000000"; // for signature verification you have to specify like this.
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
     pair: baseAssetId + "-" + quoteAssetId,
     side: orderSide,
     order_type: orderType,
-    qty: isMarketBid ? zero : quantity.toString(),
-    quote_order_quantity: isMarketBid ? quantity.toString() : zero,
-    price: type === OrderTypeEnum.LIMIT ? price.toString() : zero,
+    qty: isMarketBid ? ZERO : quantity.toString(),
+    quote_order_quantity: isMarketBid ? quantity.toString() : ZERO,
+    price: type === OrderTypeEnum.LIMIT ? price.toString() : ZERO,
     timestamp: timestamp,
     client_order_id: clientOrderId,
   };
