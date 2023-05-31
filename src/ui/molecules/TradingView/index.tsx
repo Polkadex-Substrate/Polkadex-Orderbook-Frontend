@@ -52,7 +52,7 @@ export const TradingView = () => {
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
   const getData = useCallback(
-    async (resolution, from, to) => {
+    async (resolution: ResolutionString, from: number, to: number) => {
       try {
         const klines = await onHandleKlineFetch({
           market: currentMarket.m,
