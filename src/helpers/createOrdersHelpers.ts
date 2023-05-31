@@ -20,8 +20,8 @@ export const createOrderPayload = (
   side: OrderSide,
   baseAsset: string | null,
   quoteAsset: string | null,
-  quantity: string,
-  price: string,
+  quantity: number,
+  price: number,
   timestamp = 0,
   clientOrderId: Uint8Array,
   mainAddress: string
@@ -33,6 +33,7 @@ export const createOrderPayload = (
     [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
   };
   const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
+  console.log("is market bid", isMarketBid);
   const zero = (0).toFixed(8);
   const jsonPayload = {
     user: proxyAddress,
@@ -46,6 +47,7 @@ export const createOrderPayload = (
     timestamp: timestamp,
     client_order_id: clientOrderId,
   };
+  console.log("jsonPayload for order", jsonPayload);
   return api.createType("OrderPayload", jsonPayload);
 };
 
