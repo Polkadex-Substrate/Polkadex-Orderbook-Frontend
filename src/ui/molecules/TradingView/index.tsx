@@ -181,12 +181,19 @@ export const TradingView = () => {
       fullscreen: false,
       autosize: true,
       container: chartContainerRef.current,
-      disabled_features: ["use_localstorage_for_settings"],
+      disabled_features: [
+        "use_localstorage_for_settings",
+        "create_volume_indicator_by_default",
+      ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket.name}`,
     };
 
     const tvWidget = new Widget(widgetOptions);
+
+    tvWidget.onChartReady(() => {
+      tvWidget.activeChart().createStudy("Volume");
+    });
 
     return () => {
       tvWidget.remove();
@@ -200,5 +207,9 @@ export const TradingView = () => {
     currentMarket.name,
   ]);
 
-  return <S.Wrapper ref={chartContainerRef}></S.Wrapper>;
+  return (
+    <S.Wrapper>
+      <S.Container ref={chartContainerRef} />
+    </S.Wrapper>
+  );
 };
