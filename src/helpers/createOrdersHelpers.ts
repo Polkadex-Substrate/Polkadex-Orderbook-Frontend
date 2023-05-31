@@ -40,9 +40,9 @@ export const createOrderPayload = (
     pair: baseAssetId + "-" + quoteAssetId,
     side: orderSide,
     order_type: orderType,
-    qty: isMarketBid ? zero : quantity.toString(),
-    quote_order_quantity: isMarketBid ? quantity.toString() : zero,
-    price: type === OrderTypeEnum.LIMIT ? price.toString() : zero,
+    qty: isMarketBid ? zero : Number(quantity).toFixed(8),
+    quote_order_quantity: isMarketBid ? Number(quantity).toFixed(8) : zero,
+    price: type === OrderTypeEnum.LIMIT ? Number(price).toFixed(8) : zero,
     timestamp: timestamp,
     client_order_id: clientOrderId,
   };
