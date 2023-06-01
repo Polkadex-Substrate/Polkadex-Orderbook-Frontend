@@ -58,7 +58,6 @@ export const TradingView = () => {
   const getData = useCallback(
     async (resolution: ResolutionString, from: number, to: number) => {
       try {
-        if (!currentMarket) return [];
         const klines = await onHandleKlineFetch({
           market: currentMarket?.m,
           resolution: resolution,
@@ -100,6 +99,8 @@ export const TradingView = () => {
   );
 
   useEffect(() => {
+    if (!currentMarket?.m) return;
+
     const widgetOptions: ChartingLibraryWidgetOptions = {
       datafeed: {
         onReady(callback) {
@@ -186,10 +187,7 @@ export const TradingView = () => {
       fullscreen: false,
       autosize: true,
       container: chartContainerRef.current,
-      disabled_features: [
-        "use_localstorage_for_settings",
-        "create_volume_indicator_by_default",
-      ],
+      disabled_features: ["use_localstorage_for_settings", "volume_force_overlay"],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
       overrides: { ...options(isDarkTheme).overrides },
@@ -199,10 +197,6 @@ export const TradingView = () => {
     };
 
     const tvWidget = new Widget(widgetOptions);
-
-    tvWidget.onChartReady(() => {
-      tvWidget.activeChart().createStudy("Volume");
-    });
 
     return () => {
       tvWidget.remove();
