@@ -34,7 +34,7 @@ export const createOrderPayload = (
   };
   const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
   console.log("is market bid", isMarketBid);
-  const ZERO = (0).toFixed(8); // for signature verification you have to specify like this.
+  const ZERO = "0.00000000"; // for signature verification you have to specify like this.
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
