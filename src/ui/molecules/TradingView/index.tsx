@@ -9,9 +9,11 @@ import {
 } from "../../../../public/static/charting_library";
 
 import * as S from "./styles";
+import { options } from "./options";
 
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 const configurationData: DatafeedConfiguration = {
   supported_resolutions: ["1", "5", "15", "30", "60", "360", "1D", "1W"] as ResolutionString[],
@@ -33,6 +35,8 @@ const configurationData: DatafeedConfiguration = {
 export const TradingView = () => {
   const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
+  const { theme } = useSettingsProvider();
+  const isDarkTheme = theme === "dark";
 
   const getAllSymbols = useCallback(() => {
     const allSymbols = [
@@ -171,7 +175,7 @@ export const TradingView = () => {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
         },
       },
-      theme: "Dark",
+      theme: isDarkTheme ? "Dark" : "Light",
       interval: "1D" as ResolutionString,
       library_path: "/static/charting_library/",
       locale: "en",
@@ -188,6 +192,7 @@ export const TradingView = () => {
       ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
+      overrides: { ...options(isDarkTheme) },
     };
 
     const tvWidget = new Widget(widgetOptions);
@@ -206,6 +211,7 @@ export const TradingView = () => {
     onFetchKlineChannel,
     getAllSymbols,
     currentMarket?.name,
+    isDarkTheme,
   ]);
 
   return (
