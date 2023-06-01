@@ -54,14 +54,12 @@ export const extensionWalletReducer = (
         registerMainAccountLoading: true,
         registerMainAccountSuccess: false,
       };
-    case REGISTER_MAIN_ACCOUNT_DATA: {
+    case REGISTER_MAIN_ACCOUNT_DATA:
       return {
         ...state,
         registerMainAccountLoading: false,
         registerMainAccountSuccess: true,
       };
-    }
-
     case REGISTER_MAIN_ACCOUNT_ERROR:
       return {
         ...state,
