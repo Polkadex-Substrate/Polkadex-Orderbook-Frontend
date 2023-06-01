@@ -18,7 +18,7 @@ export const options = (isDarkTheme = true) => {
       "paneProperties.crossHairProperties.color": "#888888",
       "paneProperties.crossHairProperties.style": 2,
       "paneProperties.topMargin": 16,
-      "scalesProperties.textColor": theme.colors.white,
+      "scalesProperties.textColor": isDarkTheme ? theme.colors.white : theme.colors.black,
       "scalesProperties.fontSize": 12,
       // Candle Props
       "mainSeriesProperties.candleStyle.upColor": theme.colors.green,
