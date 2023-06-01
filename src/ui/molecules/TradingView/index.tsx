@@ -192,7 +192,10 @@ export const TradingView = () => {
       ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
-      overrides: { ...options(isDarkTheme) },
+      overrides: { ...options(isDarkTheme).overrides },
+      studies_overrides: { ...options(isDarkTheme).studies_overrides },
+      custom_font_family: options(isDarkTheme).custom_font_family,
+      custom_css_url: "/static/style.css/",
     };
 
     const tvWidget = new Widget(widgetOptions);
