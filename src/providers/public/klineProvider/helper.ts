@@ -7,9 +7,5 @@ export const getAbsoluteResolution = (currentResolution: string) => {
     "60": "1h",
     "360": "6h",
   };
-  let resolution: string = currentResolution;
-  if (getCorrectResolutions[currentResolution] !== undefined) {
-    resolution = getCorrectResolutions[currentResolution];
-  }
-  return resolution;
+  return getCorrectResolutions[currentResolution] || currentResolution;
 };
