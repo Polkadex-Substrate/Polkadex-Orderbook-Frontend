@@ -76,6 +76,7 @@ export const CreateAccountForm = ({
           address: controllerWallet.address,
           name,
           password: String(passcode),
+          allAccounts: extensionWalletState.allAccounts,
         });
       }
     },

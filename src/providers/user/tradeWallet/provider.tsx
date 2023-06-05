@@ -9,7 +9,6 @@ import { transformAddress } from "../profile/helpers";
 import { TradeAccount } from "../../types";
 import { useProfile } from "../profile";
 import { useNativeApi } from "../../public/nativeApi";
-import { useExtensionWallet } from "../extensionWallet";
 import { useSettingsProvider } from "../../public/settings";
 
 import { Provider } from "./context";
@@ -36,7 +35,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     selectedAccount,
   } = useProfile();
   const nativeApiState = useNativeApi();
-  const extensionWalletState = useExtensionWallet();
   const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
 
   // Actions
@@ -155,8 +153,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       dispatch(A.registerTradeAccountFetch(payload));
 
       const api = nativeApiState.api;
-      const controllerWallets = extensionWalletState.allAccounts;
-      const { password, name, address } = payload;
+      const { password, name, address, allAccounts: controllerWallets } = payload;
       const mnemonic = mnemonicGenerate();
       const { account, signer } = controllerWallets?.find(
         ({ account }) => account.address === address
@@ -198,7 +195,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
       const api: ApiPromise = nativeApiState.api;
-      const { address: trade_Address } = payload;
+      const { address: trade_Address, allAccounts } = payload;
       const linkedMainAddress =
         trade_Address &&
         userData?.userAccounts?.find(({ tradeAddress }) => tradeAddress === trade_Address)
@@ -209,7 +206,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       }
       const { account, signer } =
         linkedMainAddress &&
-        extensionWalletState.allAccounts?.find(
+        allAccounts?.find(
           ({ account }) => account?.address?.toLowerCase() === linkedMainAddress?.toLowerCase()
         );
 
