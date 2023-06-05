@@ -3,8 +3,10 @@ import { useCallback, useEffect, useRef } from "react";
 import {
   ChartingLibraryWidgetOptions,
   DatafeedConfiguration,
+  IChartingLibraryWidget,
   LibrarySymbolInfo,
   ResolutionString,
+  TradingTerminalWidgetOptions,
   widget as Widget,
 } from "../../../../public/static/charting_library";
 
@@ -55,6 +57,8 @@ export const TradingView = () => {
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
+  const tvWidget = useRef<IChartingLibraryWidget>();
+
   const getData = useCallback(
     async (resolution: ResolutionString, from: number, to: number) => {
       try {
@@ -101,7 +105,7 @@ export const TradingView = () => {
   useEffect(() => {
     if (!currentMarket?.m) return;
 
-    const widgetOptions: ChartingLibraryWidgetOptions = {
+    const widgetOptions: ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions = {
       datafeed: {
         onReady(callback) {
           setTimeout(() => callback(configurationData), 0);
@@ -196,10 +200,10 @@ export const TradingView = () => {
       custom_css_url: "/static/style.css/",
     };
 
-    const tvWidget = new Widget(widgetOptions);
+    tvWidget.current = new Widget(widgetOptions);
 
     return () => {
-      tvWidget.remove();
+      tvWidget.current.remove();
     };
   }, [
     currentMarket?.m,
@@ -208,8 +212,12 @@ export const TradingView = () => {
     onFetchKlineChannel,
     getAllSymbols,
     currentMarket?.name,
-    isDarkTheme,
   ]);
+
+  useEffect(() => {
+    tvWidget?.current?.changeTheme &&
+      tvWidget?.current?.changeTheme(isDarkTheme ? "Dark" : "Light");
+  }, [isDarkTheme]);
 
   return (
     <S.Wrapper>
