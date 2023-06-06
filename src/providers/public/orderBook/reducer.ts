@@ -1,6 +1,4 @@
 import _ from "lodash";
-import { defaultConfig } from "@polkadex/orderbook-config";
-import { deleteFromBook, replaceOrAddToBook, sliceArray } from "@polkadex/web-helpers";
 
 import {
   DEPTH_DATA,
@@ -14,11 +12,14 @@ import {
 import { OrderBookState } from "./types";
 import { OrderBookActions, DepthActions } from "./actions";
 
+import { deleteFromBook, replaceOrAddToBook, sliceArray } from "@polkadex/web-helpers";
+import { defaultConfig } from "@polkadex/orderbook-config";
+
 const { orderBookSideLimit } = defaultConfig;
 
 export const initialOrderBook: OrderBookState = {
-  orderbook: { asks: [], bids: [], loading: false },
-  depth: { asks: [], bids: [], loading: false },
+  orderbook: { asks: [], bids: [], loading: true },
+  depth: { asks: [], bids: [], loading: true },
 };
 
 export const orderBookReducer = (
