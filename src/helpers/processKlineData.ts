@@ -2,7 +2,7 @@ import { KlineDbData } from "../providers/public/klineProvider";
 
 export const processKlineData = (data: KlineDbData[]) => {
   const klinesData = data.map((x) => ({
-    timestamp: Number(x.t.split(",")[0].split("=")[1]) * 1000,
+    timestamp: new Date(x.t).getTime(),
     open: Number(x.o),
     high: Number(x.h),
     low: Number(x.l),
@@ -10,7 +10,7 @@ export const processKlineData = (data: KlineDbData[]) => {
     volume: Number(x.vb),
   }));
   // if volume is 0, take previous close as candle
-  klinesData.forEach((elem, idx) => {
+  klinesData?.forEach((elem, idx) => {
     if (idx === 0) {
       return;
     }
