@@ -58,7 +58,7 @@ export const Card = styled.div`
     display: grid;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: 2rem 2rem 6rem 2rem;
     @media screen and (min-width: 880px) {
       grid-template-columns: 0.6fr 1fr;
     }
