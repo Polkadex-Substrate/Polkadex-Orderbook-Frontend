@@ -18,7 +18,7 @@ import { initialState, withdrawsReducer } from "./reducer";
 
 import { ExtrinsicResult, signAndSendExtrinsic } from "@polkadex/web-helpers";
 import { getNonce } from "@polkadex/orderbook/helpers/getNonce";
-import { createWithdrawPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
+import { createWithdrawSigningPayload } from "@polkadex/orderbook/helpers/createWithdrawHelpers";
 import { signPayload } from "@polkadex/orderbook/helpers/enclavePayloadSigner";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
@@ -30,9 +30,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const settingsState = useSettingsProvider();
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAccount = profileState.selectedAccount;
-  const address = currentAccount.tradeAddress;
+  const { mainAddress, tradeAddress } = currentAccount;
   const { allBrowserAccounts } = useTradeWallet();
-  const keyringPair = selectTradeAccount(address, allBrowserAccounts);
+  const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
   const { onUserTradesError } = useTrades();
 
   const onFetchWithdraws = async ({ asset, amount }) => {
@@ -40,10 +40,14 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     try {
       const nonce = getNonce();
       const api = nativeApiState.api;
-      if (address !== "" && keyringPair && api) {
-        const payload = createWithdrawPayload(api, asset, amount, nonce);
-        const signature = signPayload(api, keyringPair, payload);
-        const res = await executeWithdraw([address, payload, signature], address);
+      if (tradeAddress !== "" && keyringPair && api) {
+        const payload = { asset_id: { asset }, amount, timestamp: nonce };
+        const signingPayload = createWithdrawSigningPayload(api, asset, amount, nonce);
+        const signature = signPayload(api, keyringPair, signingPayload);
+        const res = await executeWithdraw(
+          [mainAddress, tradeAddress, payload, signature],
+          tradeAddress
+        );
         console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({

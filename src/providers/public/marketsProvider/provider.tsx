@@ -96,16 +96,16 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     else throw new Error("cannot find asset id");
   };
 
-  const fetchMarketTickers = useCallback(async (): Promise<Ticker[]> => {
+  const fetchMarketTickers = useCallback(async (market: string): Promise<Ticker> => {
     // TODO: check sendQueryToAppSync market variable
     const to = new Date().toISOString();
     // tickers are fetched for the last 24 hours
     const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
     const res: any = await sendQueryToAppSync({
-      query: queries.getAllMarketTickers,
-      variables: { from, to },
+      query: queries.getMarketTickers,
+      variables: { market, from, to },
     });
-    const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
+    const tickersRaw: TickerQueryResult[] = res.data.getMarketTickers.items;
     const tickers: Ticker[] = tickersRaw?.map((elem) => {
       const priceChange = Number(elem.c) - Number(elem.o);
       const priceChangePercent = (priceChange / Number(elem.o)) * 100;
@@ -121,20 +121,22 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         volumeQuote24Hr: elem.vq,
       };
     });
-    return tickers;
+    return tickers[0];
   }, []);
 
   const onMarketTickersFetch = useCallback(async () => {
     dispatch(A.marketsTickersFetch());
+    const markets = state.list;
+    if (markets.length === 0) return;
     try {
-      const tickers = await fetchMarketTickers();
-
+      const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
+      const tickers = await Promise.all(tickersPromises);
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error?.errors);
       onHandleError(`Market tickers fetch error`);
     }
-  }, [onHandleError, fetchMarketTickers]);
+  }, [state.list, fetchMarketTickers, onHandleError]);
 
   const market = state.currentMarket;
   useEffect(() => {
@@ -146,12 +148,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        const data_parsed: TickerQueryResult = JSON.parse(
+        const dataParsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
 
-        const ticker_data: Ticker = convertToTicker(data_parsed, market.m);
-        dispatch(A.marketsTickersChannelData(ticker_data));
+        const tickerData: Ticker = convertToTicker(dataParsed, market.m);
+        dispatch(A.marketsTickersChannelData(tickerData));
       },
       error: (err) => {
         console.warn(err);

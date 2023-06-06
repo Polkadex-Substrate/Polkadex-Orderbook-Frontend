@@ -13,7 +13,6 @@ import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { subtractMonthsFromDateOrNow } from "@polkadex/orderbook/helpers/DateTime";
 import { groupWithdrawsBySnapShotIds } from "@polkadex/orderbook/helpers/groupWithdrawsBySnapshotIds";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
-import { USER_EVENTS } from "@polkadex/web-constants";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
@@ -24,7 +23,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   });
 
   const profileState = useProfile();
-  const { mainAddress, tradeAddress } = profileState.selectedAccount;
+  const { mainAddress } = profileState.selectedAccount;
   const { onHandleError } = useSettingsProvider();
 
   const onTransactionsFetch = useCallback(
@@ -60,8 +59,8 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     return txs?.map((item) => ({
       amount: item.q,
       asset: item.a,
-      event_id: item.eid,
-      sid: item.sid,
+      stid: item.stid,
+      snapshot_id: item.snapshot_id ?? 0,
       fee: item.fee,
       main_account: address,
       time: new Date(Number(item.t)).toISOString(),
@@ -117,23 +116,23 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     if (data.txn_type === "DEPOSIT") {
       return {
         ...data,
-        sid: data.sid ?? 0,
+        stid: Number(data.stid),
         main_account: data.user,
         fee: data.fee.toString(),
         amount: data.amount.toString(),
-        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        asset: data.asset,
         time: new Date().toISOString(),
       };
     } else {
       return {
-        event_id: data.event_id,
+        stid: Number(data.stid),
         status: data.status,
-        sid: Number(data.sid) ?? 0,
+        snapshot_id: Number(data?.snapshot_id) || 0,
         txn_type: "WITHDRAWAL",
         main_account: data.user,
         fee: data.fee.toString(),
         amount: data.amount.toString(),
-        asset: data.asset === "polkadex" ? "PDEX" : data?.asset?.asset,
+        asset: data.asset,
         time: new Date().toISOString(),
       };
     }

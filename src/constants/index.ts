@@ -39,6 +39,8 @@ export const USER_EVENTS = {
   // Trade update for the user
   // send to trade address
   TradeFormat: "TradeFormat",
+  // Errors from server
+  Error: "error",
 };
 
 export type UserEvents = keyof typeof USER_EVENTS;

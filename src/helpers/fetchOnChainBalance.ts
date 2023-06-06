@@ -2,7 +2,6 @@ import { ApiPromise } from "@polkadot/api";
 import BigNumber from "bignumber.js";
 
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
-
 import { UNIT_BN } from "@polkadex/web-constants";
 
 export const fetchOnChainBalance = async (
@@ -17,7 +16,7 @@ export const fetchOnChainBalance = async (
     return balance;
   } else {
     const res = await api.query.assets.account(assetId, address);
-    const balanceJson = res.toJSON();
+    const balanceJson: any = res.toJSON();
     const freeBalance = new BigNumber(balanceJson?.balance || "0")
       .dividedBy(UNIT_BN)
       .toNumber();

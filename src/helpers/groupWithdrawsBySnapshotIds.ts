@@ -10,7 +10,7 @@ export type WithdrawGroupItem = {
   id: number;
   asset: string;
   date: string | Date;
-  event_id: number;
+  stid: number;
   amount: string;
   status: string;
 };
@@ -25,14 +25,14 @@ export const groupWithdrawsBySnapShotIds = (
 
   readyWithdrawals.forEach((withdrawal, index) => {
     const id = index;
-    const sid = Number(withdrawal.sid);
+    const snapshotId = Number(withdrawal.snapshot_id);
     const items: WithdrawGroupItem[] = [];
-    if (sidsProcessed.has(sid)) return;
+    if (sidsProcessed.has(snapshotId)) return;
     readyWithdrawals.forEach((item) => {
-      if (Number(item.sid) === sid) {
+      if (Number(item.snapshot_id) === snapshotId) {
         items.push({
           id,
-          event_id: item.event_id,
+          stid: item.stid,
           asset: item.asset,
           date: new Date(item.time),
           amount: item.amount,
@@ -40,8 +40,8 @@ export const groupWithdrawsBySnapShotIds = (
         });
       }
     });
-    sidsProcessed.add(sid);
-    withdrawals.push({ id, sid: sid, items });
+    sidsProcessed.add(snapshotId);
+    withdrawals.push({ id, sid: snapshotId, items });
   });
   return withdrawals;
 };

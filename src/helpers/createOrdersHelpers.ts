@@ -5,11 +5,11 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { signPayload } from "./enclavePayloadSigner";
 
 import {
+  OrderKindEnum,
   OrderSide,
+  OrderSideEnum,
   OrderType,
   OrderTypeEnum,
-  OrderSideEnum,
-  OrderKindEnum,
 } from "@polkadex/orderbook/providers/types";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
@@ -20,10 +20,10 @@ export const createOrderPayload = (
   side: OrderSide,
   baseAsset: string | null,
   quoteAsset: string | null,
-  quantity: string,
-  price: string,
+  quantity: number,
+  price: number,
   timestamp = 0,
-  client_order_id: Uint8Array,
+  clientOrderId: Uint8Array,
   mainAddress: string
 ): Codec => {
   const baseAssetId = !isAssetPDEX(baseAsset) ? baseAsset : "PDEX";
@@ -33,18 +33,21 @@ export const createOrderPayload = (
     [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
   };
   const isMarketBid = type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
+  console.log("is market bid", isMarketBid);
+  const ZERO = "0.00000000"; // for signature verification you have to specify like this.
   const jsonPayload = {
     user: proxyAddress,
     main_account: mainAddress,
     pair: baseAssetId + "-" + quoteAssetId,
     side: orderSide,
     order_type: orderType,
-    qty: isMarketBid ? "0" : quantity.toString(),
-    quote_order_quantity: isMarketBid ? quantity.toString() : "0",
-    price: type === OrderTypeEnum.LIMIT ? price.toString() : "0",
+    qty: isMarketBid ? ZERO : quantity.toString(),
+    quote_order_quantity: isMarketBid ? quantity.toString() : ZERO,
+    price: type === OrderTypeEnum.LIMIT ? price.toString() : ZERO,
     timestamp: timestamp,
-    client_order_id,
+    client_order_id: clientOrderId,
   };
+  console.log("jsonPayload for order", jsonPayload);
   return api.createType("OrderPayload", jsonPayload);
 };
 
@@ -59,7 +62,7 @@ export const createCancelOrderPayloadSigned = (
   const tradingPair = `${base}-${quote}`;
   const signature = signPayload(api, userKeyring, orderIdCodec);
   return {
-    order_id: orderIdCodec,
+    orderId: orderIdCodec,
     account: userKeyring.address,
     pair: tradingPair,
     signature: signature,
