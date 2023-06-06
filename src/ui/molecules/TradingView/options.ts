@@ -1,6 +1,13 @@
 import { defaultThemes } from "@polkadex/orderbook/styles";
+import { ChartPropertiesOverrides } from "public/static/charting_library/charting_library";
 
-export const options = (isDarkTheme = true) => {
+type Options = {
+  custom_font_family: string;
+  studies_overrides: object;
+  overrides: Partial<ChartPropertiesOverrides>;
+};
+
+export const options = (isDarkTheme = true): Options => {
   const theme = isDarkTheme ? defaultThemes.dark : defaultThemes.light;
   return {
     custom_font_family: theme.font.family,
@@ -12,9 +19,9 @@ export const options = (isDarkTheme = true) => {
       "paneProperties.background": theme.colors.primaryBackgroundSolid,
       "paneProperties.backgroundType": "solid",
       "paneProperties.vertGridProperties.color": theme.colors.secondaryBackgroundOpacity,
-      "paneProperties.vertGridProperties.style": "2",
+      "paneProperties.vertGridProperties.style": 2,
       "paneProperties.horzGridProperties.color": theme.colors.secondaryBackgroundOpacity,
-      "paneProperties.horzGridProperties.style": "2",
+      "paneProperties.horzGridProperties.style": 2,
       "paneProperties.crossHairProperties.color": "#888888",
       "paneProperties.crossHairProperties.style": 2,
       "paneProperties.topMargin": 16,

@@ -30,7 +30,7 @@ export const ContainerInfo = styled.div`
     border-radius: 0 0 2rem 2rem;
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     @media screen and (max-width: 1268px) {
       grid-column-gap: 4rem;
     }
