@@ -1,11 +1,10 @@
 import Script from "next/script";
-import { useState } from "react";
 import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
 import { OrderBook } from "@polkadex/orderbook-ui/organisms";
-import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 const TradingView = dynamic(
   () => import("@polkadex/orderbook-ui/molecules").then((mod) => mod.TradingView),
@@ -15,10 +14,11 @@ const TradingView = dynamic(
 );
 
 export const Graph = () => {
+  const { theme } = useSettingsProvider();
   return (
     <>
       <Script src="/static/datafeeds/udf/dist/bundle.js" strategy="lazyOnload" />
-      <S.Wrapper>
+      <S.Wrapper isLightMode={theme === "light"}>
         <S.WrapperGraph>
           <S.ChartWrapper>
             <TradingView />

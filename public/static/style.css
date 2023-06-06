@@ -4,9 +4,11 @@
 }
 
 :root:not(.theme-dark) {
-  --tv-color-pane-background: #eef0f6;
+  --tv-color-pane-background: #F9FBFC;
+  --tv-color-platform-background: #F9FBFC;
 }
 
 .theme-dark:root {
-  --tv-color-pane-background: #2e303c;
+  --tv-color-pane-background: #22232E;
+  --tv-color-platform-background: #22232E;
 }

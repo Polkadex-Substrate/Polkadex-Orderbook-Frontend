@@ -55,6 +55,7 @@ export const ContainerTitle = styled.div`
   align-items: center;
 `;
 export const SizeHeader = styled.div`
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -140,7 +141,7 @@ export const Head = styled.div<{ lightMode?: boolean }>`
     position: sticky;
     top: -0.1px;
     z-index: 2;
-    background: ${lightMode ? theme.colors.tertiaryBackground : theme.colors.inverse};
+    background: ${lightMode ? theme.colors.primaryBackgroundSolid : theme.colors.inverse};
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;

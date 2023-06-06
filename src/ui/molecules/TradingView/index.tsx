@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   ChartingLibraryWidgetOptions,
@@ -6,13 +6,13 @@ import {
   IChartingLibraryWidget,
   LibrarySymbolInfo,
   ResolutionString,
-  TradingTerminalWidgetOptions,
   widget as Widget,
 } from "../../../../public/static/charting_library";
 
 import * as S from "./styles";
 import { options } from "./options";
 
+import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
@@ -35,9 +35,12 @@ const configurationData: DatafeedConfiguration = {
 };
 
 export const TradingView = () => {
+  const [isReady, setIsReady] = useState(false);
+
   const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
   const { theme } = useSettingsProvider();
+
   const isDarkTheme = theme === "dark";
 
   const getAllSymbols = useCallback(() => {
@@ -101,11 +104,10 @@ export const TradingView = () => {
     },
     [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
   );
-
   useEffect(() => {
     if (!currentMarket?.m) return;
 
-    const widgetOptions: ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions = {
+    const widgetOptions: ChartingLibraryWidgetOptions = {
       datafeed: {
         onReady(callback) {
           setTimeout(() => callback(configurationData), 0);
@@ -191,16 +193,23 @@ export const TradingView = () => {
       fullscreen: false,
       autosize: true,
       container: chartContainerRef.current,
-      disabled_features: ["use_localstorage_for_settings", "volume_force_overlay"],
+      disabled_features: [
+        "use_localstorage_for_settings",
+        "volume_force_overlay",
+        "header_symbol_search",
+      ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
       overrides: { ...options(isDarkTheme).overrides },
       studies_overrides: { ...options(isDarkTheme).studies_overrides },
       custom_font_family: options(isDarkTheme).custom_font_family,
       custom_css_url: "/static/style.css/",
+      loading_screen: {
+        foregroundColor: "transparent",
+      },
     };
-
     tvWidget.current = new Widget(widgetOptions);
+    tvWidget?.current?.onChartReady && tvWidget?.current?.onChartReady(() => setIsReady(true));
 
     return () => {
       tvWidget.current.remove();
@@ -212,16 +221,13 @@ export const TradingView = () => {
     onFetchKlineChannel,
     getAllSymbols,
     currentMarket?.name,
+    isDarkTheme,
   ]);
-
-  useEffect(() => {
-    tvWidget?.current?.changeTheme &&
-      tvWidget?.current?.changeTheme(isDarkTheme ? "Dark" : "Light");
-  }, [isDarkTheme]);
 
   return (
     <S.Wrapper>
-      <S.Container ref={chartContainerRef} />
+      <S.Container isVisible={isReady} ref={chartContainerRef} />
+      {!isReady && <Keyboard color="primary" />}
     </S.Wrapper>
   );
 };

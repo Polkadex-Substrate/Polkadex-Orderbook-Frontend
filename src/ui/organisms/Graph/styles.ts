@@ -2,9 +2,9 @@ import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.tertiaryBackground};
+export const Wrapper = styled.div<{ isLightMode: boolean }>`
+  ${({ theme, isLightMode }) => css`
+    background: ${theme.colors.primaryBackgroundSolid};
     border-radius: 0 2rem 2rem 2rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
@@ -16,12 +16,17 @@ export const Wrapper = styled.div`
       flex-direction: column;
     }
     @media screen and (min-height: 1200px) {
-     height: 50vh;
+      height: 50vh;
     }
-    @media screen and (min-width: 1688px)
-{
-    min-height: 50rem;
-}
+    @media screen and (min-width: 1688px) {
+      min-height: 50rem;
+    }
+    ${
+      isLightMode &&
+      css`
+        border: 2px solid ${theme.colors.secondaryBackground};
+      `
+    }
   `}
 `;
 export const WrapperGraph = styled.section`

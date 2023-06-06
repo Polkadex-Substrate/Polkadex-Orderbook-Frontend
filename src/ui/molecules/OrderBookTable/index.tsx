@@ -1,3 +1,5 @@
+import { Skeleton } from "../Skeleton";
+
 import * as S from "./styles";
 
 import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook-ui/organisms";
@@ -22,14 +24,15 @@ export const OrderBookTable = ({
         lightMode={lightMode}
         loading={loading}
       />
-      {hasMarket && (
-        <OrderbookPricing
-          price={lastPriceValue}
-          isPriceUp={isPriceUp}
-          hasFilter={false}
-          precision={precision}
-        />
-      )}
+
+      <OrderbookPricing
+        price={lastPriceValue}
+        isPriceUp={isPriceUp}
+        hasFilter={false}
+        precision={precision}
+        loading={!hasMarket}
+      />
+
       <OrderbookTable
         precision={precision}
         orders={bids}

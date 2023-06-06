@@ -170,13 +170,18 @@ export const OrderbookPricing = ({
   isPriceUp = false,
   hasFilter = true,
   precision,
+  loading,
 }) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
-      <span>
-        <Icon name="SingleArrowBottom" size="extraSmall" />
-        <Decimal fixed={precision}>{price}</Decimal>
-      </span>
+      {loading ? (
+        <Skeleton height="2rem" width="50%" />
+      ) : (
+        <span>
+          <Icon name="SingleArrowBottom" size="extraSmall" />
+          <Decimal fixed={precision}>{price}</Decimal>
+        </span>
+      )}
     </S.PricingAsideLeft>
     {hasFilter && (
       <S.PricingAsideRight>

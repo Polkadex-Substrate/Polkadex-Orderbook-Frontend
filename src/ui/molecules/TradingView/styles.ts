@@ -28,14 +28,17 @@ export const Wrapper = styled.div`
   gap: 1rem;
 `;
 
-export const Container = styled.div`
-  flex: 1;
-  height: 100%;
-  height: 36vh;
-  min-height: 44rem;
-  @media screen and (min-height: 1200px) {
-    height: 42vh;
-  }
+export const Container = styled.div<{ isVisible: boolean }>`
+  ${({ isVisible }) => css`
+    display: ${isVisible ? "block" : "none"};
+    flex: 1;
+    height: 100%;
+    height: 38vh;
+    min-height: 48.5rem;
+    @media screen and (min-height: 1200px) {
+      height: 42vh;
+    }
+  `}
 `;
 
 export const ToolTip = styled.div`

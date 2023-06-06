@@ -9,7 +9,7 @@ export const options = (isDarkTheme = true) => {
       "volume.volume.color.1": theme.colors.green,
     },
     overrides: {
-      "paneProperties.background": theme.colors.tertiaryBackground,
+      "paneProperties.background": theme.colors.primaryBackgroundSolid,
       "paneProperties.backgroundType": "solid",
       "paneProperties.vertGridProperties.color": theme.colors.secondaryBackgroundOpacity,
       "paneProperties.vertGridProperties.style": "2",
