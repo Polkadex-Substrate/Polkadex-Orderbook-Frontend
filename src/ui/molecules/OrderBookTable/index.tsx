@@ -1,3 +1,5 @@
+import { Skeleton } from "../Skeleton";
+
 import * as S from "./styles";
 
 import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook-ui/organisms";
@@ -11,19 +13,32 @@ export const OrderBookTable = ({
   bids,
   lastPriceValue,
   precision,
+  loading,
 }) => {
   return (
     <S.Wrapper filterBy={filterBy}>
-      <OrderbookTable precision={precision} orders={asks} isSell lightMode={lightMode} />
-      {hasMarket && (
-        <OrderbookPricing
-          price={lastPriceValue}
-          isPriceUp={isPriceUp}
-          hasFilter={false}
-          precision={precision}
-        />
-      )}
-      <OrderbookTable precision={precision} orders={bids} lightMode={lightMode} />
+      <OrderbookTable
+        precision={precision}
+        orders={asks}
+        isSell
+        lightMode={lightMode}
+        loading={loading}
+      />
+
+      <OrderbookPricing
+        price={lastPriceValue}
+        isPriceUp={isPriceUp}
+        hasFilter={false}
+        precision={precision}
+        loading={!hasMarket}
+      />
+
+      <OrderbookTable
+        precision={precision}
+        orders={bids}
+        lightMode={lightMode}
+        loading={loading}
+      />
     </S.Wrapper>
   );
 };

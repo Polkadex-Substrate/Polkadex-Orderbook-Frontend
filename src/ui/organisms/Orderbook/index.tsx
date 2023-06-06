@@ -10,6 +10,7 @@ import {
   OrderBookIcon,
   Heading,
   Dropdown,
+  Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
 import { useOrderbookTable, useOrderbook } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -26,6 +27,7 @@ export const OrderBook = () => {
     initialState,
     handleChange,
     handleAction,
+    loading,
   } = useOrderbook();
 
   return (
@@ -78,6 +80,7 @@ export const OrderBook = () => {
         bids={bids}
         lastPriceValue={lastPriceValue}
         precision={sizeState.length}
+        loading={loading}
       />
     </S.Wrapper>
   );
@@ -88,6 +91,7 @@ export const OrderbookTable = ({
   orders = [],
   precision,
   lightMode,
+  loading,
 }: T.Props) => {
   const contentRef = useRef(null);
 
@@ -103,7 +107,9 @@ export const OrderbookTable = ({
 
   return (
     <>
-      {orders.length ? (
+      {loading ? (
+        <OrderbookSkeleton />
+      ) : orders.length ? (
         <S.Table isSell={isSell} ref={contentRef}>
           <S.Head lightMode={lightMode}>
             <S.CellHead>Price({quoteUnit})</S.CellHead>
@@ -146,7 +152,6 @@ export const OrderbookTable = ({
                 </S.Card>
               );
             })}
-            
           </S.Body>
         </S.Table>
       ) : (
@@ -165,13 +170,18 @@ export const OrderbookPricing = ({
   isPriceUp = false,
   hasFilter = true,
   precision,
+  loading,
 }) => (
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
-      <span>
-        <Icon name="SingleArrowBottom" size="extraSmall" />
-        <Decimal fixed={precision}>{price}</Decimal>
-      </span>
+      {loading ? (
+        <Skeleton height="2rem" width="50%" />
+      ) : (
+        <span>
+          <Icon name="SingleArrowBottom" size="extraSmall" />
+          <Decimal fixed={precision}>{price}</Decimal>
+        </span>
+      )}
     </S.PricingAsideLeft>
     {hasFilter && (
       <S.PricingAsideRight>
@@ -179,4 +189,17 @@ export const OrderbookPricing = ({
       </S.PricingAsideRight>
     )}
   </S.Pricing>
+);
+
+export const OrderbookSkeleton = () => (
+  <S.Skeleton>
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+    <Skeleton height="2rem" width="100%" />
+  </S.Skeleton>
 );

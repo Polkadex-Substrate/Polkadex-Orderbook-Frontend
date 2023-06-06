@@ -1,26 +1,28 @@
 import Script from "next/script";
-import { useState } from "react";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
 import { OrderBook } from "@polkadex/orderbook-ui/organisms";
-import { TradingView } from "@polkadex/orderbook-ui/molecules";
+import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+
+const TradingView = dynamic(
+  () => import("@polkadex/orderbook-ui/molecules").then((mod) => mod.TradingView),
+  {
+    ssr: false,
+  }
+);
 
 export const Graph = () => {
-  const [isScriptReady, setIsScriptReady] = useState(false);
-
+  const { theme } = useSettingsProvider();
   return (
     <>
-      <Script
-        src="/static/datafeeds/udf/dist/bundle.js"
-        strategy="lazyOnload"
-        onReady={() => {
-          setIsScriptReady(true);
-        }}
-      />
-      <S.Wrapper>
+      <Script src="/static/datafeeds/udf/dist/bundle.js" strategy="lazyOnload" />
+      <S.Wrapper isLightMode={theme === "light"}>
         <S.WrapperGraph>
-          <S.ChartWrapper>{isScriptReady && <TradingView />}</S.ChartWrapper>
+          <S.ChartWrapper>
+            <TradingView />
+          </S.ChartWrapper>
         </S.WrapperGraph>
         <OrderBook />
       </S.Wrapper>

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-
-import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 import { useRecentTradesProvider } from "../providers/public/recentTradesProvider";
+
+import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -26,10 +26,12 @@ export function useOrderbook() {
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const  {currentMarket}  = useMarketsProvider();
-  
-  const {getCurrentTradePrice,getLastTradePrice} = useRecentTradesProvider();
-  const currentTrade = getCurrentTradePrice()
+  const loading = orderBookState.depth.loading;
+
+  const { currentMarket } = useMarketsProvider();
+
+  const { getCurrentTradePrice, getLastTradePrice } = useRecentTradesProvider();
+  const currentTrade = getCurrentTradePrice();
   const lastTrade = getLastTradePrice();
   const bidsSorted = sortArrayDescending(bids);
   const asksSorted = sortArrayDescending(asks);
@@ -48,6 +50,7 @@ export function useOrderbook() {
     isPriceUp,
     lastPriceValue: currentPrice,
     hasMarket: !!currentMarket,
+    loading,
     asks: asksSorted,
     bids: bidsSorted,
     initialState,
