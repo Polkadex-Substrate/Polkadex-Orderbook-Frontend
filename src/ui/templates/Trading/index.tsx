@@ -173,7 +173,6 @@ export function Trading() {
           onClose={() => setShutdownBanner(false)}
         />
       </Modal>
-
       <Modal
         open={isSignedIn && disclaimer}
         onClose={handleAcceptDisclaimer}
@@ -203,7 +202,7 @@ export function Trading() {
       </Modal>
       <S.Container>
         <S.Wrapper>
-          <Menu handleChange={() => setState(!state)} isWallet={false} />
+          <Menu />
           <S.WrapperMain>
             <S.ContainerMain>
               <S.Box>
