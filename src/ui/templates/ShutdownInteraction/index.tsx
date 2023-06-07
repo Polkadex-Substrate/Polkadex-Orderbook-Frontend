@@ -66,7 +66,7 @@ export const ShutdownInteraction = ({
   );
 };
 
-const ShutdownText = ({ orderbookDate = "12/06/2023", chainBridgeDate = "30/06/2023" }) => (
+const ShutdownText = ({ orderbookDate = "12/06/2023", chainBridgeDate = "August" }) => (
   <>
     <p>
       In preparation for the upcoming mainnet <span>upgrade followed by Orderbook v2</span> ,
