@@ -153,11 +153,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     [onHandleError]
   );
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for main address from transactions provider",
-      mainAddress
-    );
-
     const subscription = eventHandler({
       cb: onTransactionsUpdate,
       name: mainAddress,

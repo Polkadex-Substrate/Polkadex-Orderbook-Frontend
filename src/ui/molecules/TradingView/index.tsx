@@ -71,7 +71,6 @@ export const TradingView = () => {
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
-
         onFetchKlineChannel({
           market: currentMarket?.m,
           interval: resolution,

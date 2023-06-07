@@ -1,29 +1,31 @@
 import { MarketsAction } from "./actions";
 import {
+  MARKET_TICKER_CHANNEL_DATA,
   MARKETS_DATA,
   MARKETS_ERROR,
   MARKETS_FETCH,
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
+  MARKETS_SET_CURRENT_TICKER,
   MARKETS_TICKERS_DATA,
   MARKETS_TICKERS_FETCH,
-  MARKET_TICKER_CHANNEL_DATA,
 } from "./constants";
 import { Market, MarketsState, Ticker } from "./types";
 
 import { buildFilterPrice } from "@polkadex/web-helpers";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { setToStorage } from "@polkadex/orderbook/helpers/storage";
+
 export const defaultTickers: Ticker = {
   m: "0-0",
   priceChange24Hr: 0,
   priceChangePercent24Hr: 0,
-  open: "0",
-  close: "0",
-  high: "0",
-  low: "0",
-  volumeBase24hr: "0",
-  volumeQuote24Hr: "0",
+  open: 0,
+  close: 0,
+  high: 0,
+  low: 0,
+  volumeBase24hr: 0,
+  volumeQuote24Hr: 0,
 };
 
 export const initialMarketsState: MarketsState = {
@@ -77,25 +79,24 @@ export const marketsReducer = (
         ...state,
         loading: false,
       };
-
     case MARKETS_SET_CURRENT_MARKET: {
-      const tickers = [...state.tickers];
-
-      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
-      if (!currentTicker) {
-        return {
-          ...state,
-          currentMarket: action.payload,
-        };
-      }
       setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {
         ...state,
         currentMarket: action.payload,
+      };
+    }
+    case MARKETS_SET_CURRENT_TICKER: {
+      const tickers = [...state.tickers];
+      const currentTicker = tickers?.find((x) => x.m === action.payload);
+      if (!currentTicker) {
+        return state;
+      }
+      return {
+        ...state,
         currentTicker,
       };
     }
-
     case MARKETS_SET_CURRENT_MARKET_IFUNSET: {
       if (state.currentMarket) {
         return state;
