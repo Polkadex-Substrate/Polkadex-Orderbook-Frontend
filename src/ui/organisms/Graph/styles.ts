@@ -131,7 +131,7 @@ export const WrapperFilters = styled.div``;
 // Graph
 export const Graph = styled.div``;
 export const FilterIcon = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+  ${({ theme }) => css`
     display: flex;
     gap: 0.5rem;
     align-items: center;
