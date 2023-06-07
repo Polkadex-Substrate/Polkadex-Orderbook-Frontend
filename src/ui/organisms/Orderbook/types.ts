@@ -5,4 +5,5 @@ export type Props = {
   orders: OrderBookState["depth"]["bids"];
   lightMode?: boolean;
   precision?: number;
+  loading?: boolean;
 };

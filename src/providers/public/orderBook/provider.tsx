@@ -9,6 +9,7 @@ import { initialOrderBook, orderBookReducer } from "./reducer";
 import { getDepthFromOrderbook } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
+import { OBIncrementData, OrderbookRawUpdate } from "./types";
 
 import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import * as queries from "@polkadex/orderbook/graphql/queries";
@@ -74,14 +75,26 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
     }));
   };
 
-  const formatOrderbookUpdate = (dataStr: string): T.OrderbookRawUpdate[] => {
-    const data = JSON.parse(dataStr);
-    return data.changes.map((item) => ({
-      side: item[0],
-      price: item[1],
-      qty: item[2],
-      seq: item[3],
-    }));
+  const formatOrderbookUpdate = (dataStr: string): OrderbookRawUpdate[] => {
+    const data = JSON.parse(dataStr) as OBIncrementData;
+    const { b, a } = data;
+    const bids = Object.entries(b).map(
+      ([price, qty]): OrderbookRawUpdate => ({
+        side: "Bid",
+        price,
+        qty,
+        seq: data.i,
+      })
+    );
+    const asks = Object.entries(a).map(
+      ([price, qty]): OrderbookRawUpdate => ({
+        side: "Ask",
+        price,
+        qty,
+        seq: data.i,
+      })
+    );
+    return [...bids, ...asks];
   };
 
   useEffect(() => {

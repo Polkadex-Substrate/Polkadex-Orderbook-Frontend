@@ -14,3 +14,4 @@ export * from "./ResetPasswordForm";
 export * from "./AccessDenied";
 export * from "./Maintenance";
 export * from "./Migration";
+export * from "./ShutdownInteraction";

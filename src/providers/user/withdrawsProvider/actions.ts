@@ -12,7 +12,7 @@ import {
 export interface WithdrawsFetch {
   type: typeof WITHDRAWS_FETCH;
   payload: {
-    asset: Record<string, string | null>;
+    asset: string | "PDEX";
     amount: string | number;
   };
 }

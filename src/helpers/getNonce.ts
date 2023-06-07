@@ -1,3 +1,3 @@
 export function getNonce(): number {
-  return Math.floor(new Date().getTime() / 1000);
+  return new Date().getTime();
 }

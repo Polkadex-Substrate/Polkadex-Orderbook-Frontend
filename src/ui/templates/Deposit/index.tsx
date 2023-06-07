@@ -51,6 +51,7 @@ export const DepositTemplate = () => {
   const { deposits } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
@@ -77,7 +78,7 @@ export const DepositTemplate = () => {
       errors.amount = "Amount cannot be greater than balance";
     }
     const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
-    if (balanceAfterDeposit < 1) {
+    if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
       errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
     }
     return errors;
@@ -90,7 +91,7 @@ export const DepositTemplate = () => {
         asset: selectedAsset,
       },
       // TODO: re-add the validations
-      validationSchema: withdrawValidations,
+      validationSchema: withdrawValidations(onChainBalance),
       validate,
       onSubmit: (values) => {
         const asset = isAssetPDEX(selectedAsset.assetId)

@@ -1,18 +1,15 @@
 import styled, { css } from "styled-components";
-import media from "styled-media-query";
 
 import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
 export const Wrapper = styled.section`
-  ${({ theme }) => css`
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 1rem;
-    width: 100%;
-  `}
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  width: 100%;
 `;
 
 export const ContainerPair = styled.div`
@@ -30,19 +27,19 @@ export const ContainerInfo = styled.div`
     display: grid;
     grid-template-columns: repeat(4, auto);
     grid-column-gap: 14rem;
-    border-radius: 0 0 3rem 3rem;
+    border-radius: 0 0 2rem 2rem;
     background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
-    padding: 1.5rem 2.5rem;
+    padding: 1rem 1.5rem;
     @media screen and (max-width: 1268px) {
       grid-column-gap: 4rem;
     }
 
     @media screen and (max-width: 494px) {
-    grid-template-columns: 1fr 1fr;
-    grid-row-gap: 0.5rem;
-    grid-column-gap: 1rem;
-  }
+      grid-template-columns: 1fr 1fr;
+      grid-row-gap: 0.5rem;
+      grid-column-gap: 1rem;
+    }
   `}
 `;
 export const WrapperInfo = styled.div`
@@ -101,19 +98,19 @@ export const BoxWrapper = styled.div`
 
 export const VolumeHigh = styled.div`
   align-items: center;
-  ${({theme})=>css`
-  p{
-    color: ${theme.colors.green};
-  }
+  ${({ theme }) => css`
+    p {
+      color: ${theme.colors.green};
+    }
   `}
 `;
 
 export const VolumeLow = styled.div<{ isNegative?: boolean }>`
   align-items: baseline;
-  ${({theme})=>css`
-  p{
-    color: ${theme.colors.primary};
-  }
+  ${({ theme }) => css`
+    p {
+      color: ${theme.colors.primary};
+    }
   `}
 `;
 export const WrapperVolume = styled.div`
@@ -121,27 +118,26 @@ export const WrapperVolume = styled.div`
 `;
 
 export const ContainerVolume = styled.div`
-${({ theme }) => css`
-span {
-    display: block;
-    margin-right: 1rem;
-    font-size: 1.1rem;
-    color: #8ba1be;
-    opacity: 0.7;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  div {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    justify-content: flex-end;
-  }
-  p {
-    font-weight: 500;
-    font-size: ${theme.font.sizes.medium};
-  }
+  ${({ theme }) => css`
+    span {
+      display: block;
+      margin-right: 1rem;
+      font-size: 1.1rem;
+      color: #8ba1be;
+      opacity: 0.7;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    div {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      justify-content: flex-end;
+    }
+    p {
+      font-weight: 500;
+      font-size: ${theme.font.sizes.medium};
+    }
   `}
-  
 `;
 
 // Dropdown

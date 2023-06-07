@@ -14,14 +14,6 @@ export const orderbookTypes = {
   ShardIdentifier: "H256",
   Balance: "u128",
   BalanceOf: "Balance",
-  AccountInfo: {
-    nonce: "Index",
-    consumers: "RefCount",
-    providers: "RefCount",
-    sufficients: "RefCount",
-    sufficients2: "u128",
-    data: "AccountData",
-  },
   OrderPayload: {
     client_order_id: "H256",
     user: "AccountId",
@@ -51,14 +43,8 @@ export const orderbookTypes = {
       MARKET: null,
     },
   },
-  AssetIdString: {
-    _enum: {
-      asset: "String",
-      polkadex: null,
-    },
-  },
   WithdrawPayload: {
-    asset_id: "AssetIdString",
+    asset_id: "AssetId",
     amount: "String",
     timestamp: "i64",
   },

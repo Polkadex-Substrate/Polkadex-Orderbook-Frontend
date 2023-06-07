@@ -18,9 +18,9 @@ export interface OrderExecution {
   market: string;
   symbol: string[];
   side: OrderSide;
-  price?: string;
+  price?: number;
   order_type?: OrderType;
-  amount?: string;
+  amount?: number;
 }
 
 export interface OrderCancellation {
