@@ -227,7 +227,11 @@ export const TradingView = () => {
   return (
     <S.Wrapper>
       <S.Container isVisible={isReady} ref={chartContainerRef} />
-      <S.LoadingWrapper>{!isReady && <Keyboard color="primary" />}</S.LoadingWrapper>
+      {!isReady && (
+        <S.LoadingWrapper>
+          <Keyboard color="primary" />
+        </S.LoadingWrapper>
+      )}
     </S.Wrapper>
   );
 };

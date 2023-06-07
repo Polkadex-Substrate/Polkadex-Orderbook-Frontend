@@ -8,7 +8,7 @@ export const Wrapper = styled.div<{ isLightMode: boolean }>`
     border-radius: 0 2rem 2rem 2rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
-    min-height: 30rem;
+    min-height: 50rem;
     width:100%;
     display:flex;
     align-self:baseline;
