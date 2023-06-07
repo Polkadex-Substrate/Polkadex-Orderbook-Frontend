@@ -12,7 +12,7 @@ const initialState = {
   seconds: "00",
 };
 
-export type Props = {
+type Props = {
   title: string;
   footerText?: string;
   textButton?: string;

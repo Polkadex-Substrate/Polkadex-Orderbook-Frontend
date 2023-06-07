@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export type Props = {
+type Props = {
   title: string;
   textLink?: string;
   link?: string;
