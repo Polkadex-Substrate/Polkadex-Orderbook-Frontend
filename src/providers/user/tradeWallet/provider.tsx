@@ -197,8 +197,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       const api: ApiPromise = nativeApiState.api;
       const { address: trade_Address, allAccounts } = payload;
       const linkedMainAddress =
-        trade_Address &&
-        userData?.userAccounts?.find(({ tradeAddress }) => tradeAddress === trade_Address)
+        tradeAddress &&
+        userData?.userAccounts?.find(({ tradeAddress: addr }) => addr === tradeAddress)
           ?.mainAddress;
 
       if (!linkedMainAddress) {
@@ -214,7 +214,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         throw new Error("Please select a funding account!");
       }
       if (api.isConnected && account?.address) {
-        const res = await removeProxyFromAccount(api, trade_Address, signer, account.address);
+        const res = await removeProxyFromAccount(api, tradeAddress, signer, account.address);
         if (res.isSuccess) {
           onHandleNotification({
             type: "Success",
@@ -222,8 +222,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           });
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
-          dispatch(A.removeTradeAccountFromBrowser({ address: trade_Address }));
-          onUserProfileTradeAccountDelete(trade_Address);
+          dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+          onUserProfileTradeAccountDelete(tradeAddress);
         } else {
           throw new Error(res.message);
         }
@@ -282,10 +282,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   // subscribe to user account updates notifications
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for main address from trade wallet provider",
-      mainAddress
-    );
     const updateSubscription = eventHandler({
       cb: onTradeAccountUpdate,
       name: mainAddress,
@@ -298,11 +294,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   }, [mainAddress, onTradeAccountUpdate]);
 
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for trade address from trade wallet provider",
-      tradeAddress
-    );
-
     const subscription = eventHandler({
       cb: onTradeAccountUpdate,
       name: tradeAddress,

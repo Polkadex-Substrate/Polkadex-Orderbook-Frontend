@@ -217,9 +217,9 @@ export function usePlaceOrder(
         order_type: isLimit ? "LIMIT" : "MARKET",
         symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
         side: isSell ? "Sell" : "Buy",
-        price: isLimit ? form.price : "",
+        price: isLimit ? Number(form.price) : 0,
         market: currentMarket.id,
-        amount,
+        amount: Number(amount),
       });
     }
   };

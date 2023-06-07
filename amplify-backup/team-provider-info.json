@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "awscloudformation": {}
+  },
+  "orderbook": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-polkadexorderbookfro-orderbook-120447-authRole",
+      "UnauthRoleArn": "arn:aws:iam::876703040586:role/amplify-polkadexorderbookfro-orderbook-120447-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::876703040586:role/amplify-polkadexorderbookfro-orderbook-120447-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-polkadexorderbookfro-orderbook-120447-deployment",
+      "UnauthRoleName": "amplify-polkadexorderbookfro-orderbook-120447-unauthRole",
+      "StackName": "amplify-polkadexorderbookfro-orderbook-120447",
+      "StackId": "arn:aws:cloudformation:eu-central-1:876703040586:stack/amplify-polkadexorderbookfro-orderbook-120447/46d5e5a0-e7ea-11ed-8041-0648d988f914",
+      "AmplifyAppId": "d4jkqk0z8wu7g"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
+import _ from "lodash";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -17,6 +18,7 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
+import { setCurrentTicker } from "./actions";
 
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
@@ -96,62 +98,63 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     else throw new Error("cannot find asset id");
   };
 
-  const fetchMarketTickers = useCallback(async (): Promise<Ticker[]> => {
+  const fetchMarketTickers = useCallback(async (market: string): Promise<Ticker> => {
     // TODO: check sendQueryToAppSync market variable
     const to = new Date().toISOString();
     // tickers are fetched for the last 24 hours
     const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
     const res: any = await sendQueryToAppSync({
-      query: queries.getAllMarketTickers,
-      variables: { from, to },
+      query: queries.getMarketTickers,
+      variables: { market, from, to },
     });
-    const tickersRaw: TickerQueryResult[] = res.data.getAllMarketTickers.items;
-    const tickers: Ticker[] = tickersRaw?.map((elem) => {
-      const priceChange = Number(elem.c) - Number(elem.o);
-      const priceChangePercent = (priceChange / Number(elem.o)) * 100;
-      return {
-        m: elem.m,
-        priceChange24Hr: priceChange,
-        priceChangePercent24Hr: priceChangePercent,
-        open: elem.o,
-        close: elem.c,
-        high: elem.h,
-        low: elem.l,
-        volumeBase24hr: elem.vb,
-        volumeQuote24Hr: elem.vq,
-      };
-    });
-    return tickers;
+    const item: TickerQueryResult = res.data.getMarketTickers.items;
+    const priceChange = Number(item.c) - Number(item.o);
+    const priceChangePercent = (priceChange / Number(item.o)) * 100;
+    const precision = 2; // TOOD: should be added to market config.
+    return {
+      m: market,
+      priceChange24Hr: _.round(priceChange, precision),
+      priceChangePercent24Hr: _.round(priceChangePercent, precision),
+      open: _.round(Number(item.o), precision),
+      close: _.round(Number(item.c), precision),
+      high: _.round(Number(item.h), precision),
+      low: _.round(Number(item.l), precision),
+      volumeBase24hr: _.round(Number(item.vb), precision),
+      volumeQuote24Hr: _.round(Number(item.vq), precision),
+    };
   }, []);
 
   const onMarketTickersFetch = useCallback(async () => {
     dispatch(A.marketsTickersFetch());
+    const markets = state.list;
     try {
-      const tickers = await fetchMarketTickers();
-
+      const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
+      const tickers = await Promise.all(tickersPromises);
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error?.errors);
       onHandleError(`Market tickers fetch error`);
     }
-  }, [onHandleError, fetchMarketTickers]);
+  }, [state.list, fetchMarketTickers, onHandleError]);
 
-  const market = state.currentMarket;
   useEffect(() => {
+    if (!state?.currentMarket?.m) {
+      return;
+    }
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: market?.m + "-ticker" },
+      variables: { name: state.currentMarket.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
     }).subscribe({
       next: (data) => {
-        const data_parsed: TickerQueryResult = JSON.parse(
+        const dataParsed: TickerQueryResult = JSON.parse(
           data.value.data.websocket_streams.data
         );
 
-        const ticker_data: Ticker = convertToTicker(data_parsed, market.m);
-        dispatch(A.marketsTickersChannelData(ticker_data));
+        const tickerData: Ticker = convertToTicker(dataParsed, state.currentMarket.m);
+        dispatch(A.marketsTickersChannelData(tickerData));
       },
       error: (err) => {
         console.warn(err);
@@ -160,7 +163,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [market?.m]);
+  }, [state?.currentMarket?.m]);
 
   const setCurrentMarket = (market: Market) => {
     dispatch(A.setCurrentMarket(market));
@@ -169,9 +172,17 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
-      onMarketTickersFetch();
     }
+    onMarketTickersFetch();
   }, [allAssets, state.list, onMarketsFetch, onMarketTickersFetch]);
+
+  // set current ticker on market change
+  useEffect(() => {
+    if (!state?.currentMarket?.m || !state?.tickers || state?.tickers.length === 0) {
+      return;
+    }
+    dispatch(setCurrentTicker(state.currentMarket.m));
+  }, [state?.currentMarket?.m, state?.tickers]);
 
   return (
     <Provider

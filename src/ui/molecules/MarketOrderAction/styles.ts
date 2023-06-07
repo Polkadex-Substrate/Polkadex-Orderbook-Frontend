@@ -5,8 +5,8 @@ import styled, { css } from "styled-components";
 export const WrapperOrder = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
-    border-radius: 0 3rem 3rem 3rem;
-    padding: 2rem;
+    border-radius: 0 2rem 2rem 2rem;
+    padding: 1rem;
   `}
 `;
 

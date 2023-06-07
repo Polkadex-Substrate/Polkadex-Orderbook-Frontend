@@ -12,7 +12,6 @@ import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
@@ -32,7 +31,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         },
       });
       const balancesRaw: T.BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
-      const balances = balancesRaw?.map((val) => {
+      return balancesRaw?.map((val) => {
         return {
           asset_type: val.a,
           reserved_balance: val.r,
@@ -40,7 +39,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
           pending_withdrawal: val.p,
         };
       });
-      return balances;
     },
     []
   );
@@ -84,16 +82,14 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   const updateBalanceFromEvent = useCallback(
     (msg: T.BalanceUpdatePayload): T.Balance => {
-      const assetId = isAssetPDEX(msg.asset.asset) ? "PDEX" : msg.asset.asset;
-      const newBalance = {
+      const assetId = msg.asset.asset;
+      return {
         name: selectGetAsset(assetId).name,
         symbol: selectGetAsset(assetId).symbol,
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,
-        pending_withdrawal: msg.pending_withdrawal,
       };
-      return newBalance;
     },
     [selectGetAsset]
   );
@@ -116,11 +112,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   // balance updates are give to main address
   useEffect(() => {
-    console.log(
-      "created User Events Channel...with main address for balances provider",
-      mainAddress
-    );
-
     const subscription = eventHandler({
       cb: onBalanceUpdate,
       name: mainAddress,

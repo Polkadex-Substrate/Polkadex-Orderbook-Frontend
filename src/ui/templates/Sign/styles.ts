@@ -9,6 +9,9 @@ export const Main = styled.main`
     display: flex;
     max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
+    @media screen and (max-width: 590px) {
+      display: block;
+    }
   `}
 `;
 
@@ -55,7 +58,7 @@ export const Card = styled.div`
     display: grid;
     border-radius: 2rem;
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: 2rem 2rem 6rem 2rem;
     @media screen and (min-width: 880px) {
       grid-template-columns: 0.6fr 1fr;
     }

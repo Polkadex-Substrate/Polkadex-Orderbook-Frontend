@@ -29,7 +29,7 @@ export interface Balance extends BalanceBase {
 export type FreeOrUsedOrTotal = Record<string, number>;
 
 export type BalanceUpdatePayload = {
-  event_id: number;
+  stid: number;
   asset: { asset: string } & string;
   free: string;
   user: string;

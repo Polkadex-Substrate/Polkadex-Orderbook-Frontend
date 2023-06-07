@@ -90,9 +90,8 @@ export const WithdrawTemplate = () => {
 
   const handleSubmitWithdraw = async (amount: string | number) => {
     try {
-      const asset = isAssetPDEX(selectedAsset.assetId)
-        ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+
+    const asset = isAssetPDEX(selectedAsset.assetId) ? "PDEX" : selectedAsset.assetId;
 
       await onFetchWithdraws({ asset, amount });
     } finally {
@@ -376,7 +375,7 @@ const HistoryTable = ({ items }) => {
         </Table.Header>
         <Table.Body striped border="squared">
           {items.map((item) => (
-            <Table.Row key={item.event_id}>
+            <Table.Row key={item.stid}>
               <Table.Cell>
                 <S.Cell>
                   <span>{selectGetAsset(item.asset)?.name} </span>

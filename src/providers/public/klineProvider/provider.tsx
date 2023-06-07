@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { API } from "aws-amplify";
+import { reverse } from "d3-array";
 
 import * as subscriptions from "../../../graphql/subscriptions";
 import { useSettingsProvider } from "../settings";
@@ -8,6 +9,7 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { KlineComponent, KlineEvent } from "./types";
 import { initialKlineState, klineReducer } from "./reducer";
+import { getAbsoluteResolution } from "./helper";
 
 import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
@@ -18,12 +20,14 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const { onHandleError } = useSettingsProvider();
 
   const onHandleKlineFetch = useCallback(
-    async (payload: A.KlineFetch["payload"]) => {
+    async (payload: A.KlineFetch["payload"]): Promise<KlineEvent[]> => {
       dispatch(A.klineFetch(payload));
       try {
-        const { market, resolution, from, to } = payload;
+        const { market, resolution: currentResolution, from, to } = payload;
+        const resolution = getAbsoluteResolution(currentResolution);
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
+        return reverse(data);
       } catch (error) {
         console.log("Kline fetch error", error);
         onHandleError("Kline fetch error");
@@ -80,8 +84,8 @@ export const KlineProvider: KlineComponent = ({ children }) => {
           dispatch(
             A.klinePush({
               kline: kline,
-              market: data.m,
-              interval: data.interval,
+              market: dataParsed.m,
+              interval,
             })
           );
         },

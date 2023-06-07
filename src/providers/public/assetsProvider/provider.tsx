@@ -9,7 +9,6 @@ import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { getAllAssets } from "@polkadex/orderbook/graphql/queries";
-import { isKeyPresentInObject } from "@polkadex/orderbook/helpers/isKeyPresentInObject";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 
@@ -21,7 +20,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
 
     const assets = assetEntries.data.getAllAssets.items;
-    const newAssets = assets.map((asset) => {
+    return assets.map((asset) => {
       return {
         assetId: asset.asset_id,
         name: asset.name,
@@ -29,8 +28,6 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
         withdrawal_fee: asset.withdrawal_fee,
       };
     });
-
-    return newAssets;
   }
 
   const fetchAssets = useCallback(async () => {
@@ -50,9 +47,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
       if (!assetId) {
         return null;
       }
-      if (isKeyPresentInObject(assetId, "asset")) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+      if (typeof assetId === "object" && "asset" in assetId) {
         assetId = assetId.asset;
       }
       return isAssetPDEX(assetId.toString())

@@ -20,14 +20,14 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   const onUserSelectAccount = useCallback(
     (payload: T.UserSelectAccount) => {
-      const { tradeAddress: trade_address } = payload;
+      const { tradeAddress: _tradeAddress } = payload;
       try {
         const mainAddress = state.userData?.userAccounts?.find(
-          ({ tradeAddress }) => trade_address === tradeAddress
+          ({ tradeAddress }) => _tradeAddress === tradeAddress
         )?.mainAddress;
         if (mainAddress) {
-          const data = { tradeAddress: trade_address, mainAddress };
-          dispatch(A.userSetDefaultTradeAccount(trade_address));
+          const data = { tradeAddress: _tradeAddress, mainAddress };
+          dispatch(A.userSetDefaultTradeAccount(_tradeAddress));
           dispatch(A.userAccountSelectData(data));
         }
       } catch (e) {
@@ -63,18 +63,18 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     mainAccounts: [string],
     Api = API
   ): Promise<T.UserAccount[]> => {
-    const promises = mainAccounts.map(async (main_account) => {
+    const promises = mainAccounts.map(async (mainAccount) => {
       try {
         const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
-          variables: { main_account },
+          variables: { main_account: mainAccount },
           API: Api,
         });
         const proxies = res.data.findUserByMainAccount.proxies ?? [];
-        return { main_account, proxies };
+        return { main_account: mainAccount, proxies };
       } catch (error) {
         console.log("Error: getAllProxyAccounts", error.errors);
-        return { main_account, proxies: [] };
+        return { main_account: mainAccount, proxies: [] };
       }
     });
     const list = await Promise.all(promises);

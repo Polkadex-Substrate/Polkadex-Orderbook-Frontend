@@ -78,7 +78,7 @@ export const DepositTemplate = () => {
       errors.amount = "Amount cannot be greater than balance";
     }
     const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
-    if (balanceAfterDeposit < 1) {
+    if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
       errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
     }
     return errors;
