@@ -14,6 +14,9 @@ export const Wrapper = styled.main`
   height: 100vh;
   overflow: auto;
   overflow-x: hidden;
+  @media screen and (max-width: 590px) {
+    display: block;
+  }
 `;
 
 export const WrapperMain = styled.div`

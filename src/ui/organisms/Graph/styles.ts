@@ -8,7 +8,7 @@ export const Wrapper = styled.div<{ isLightMode: boolean }>`
     border-radius: 0 2rem 2rem 2rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
-    min-height: 30rem;
+    min-height: 50rem;
     width:100%;
     display:flex;
     align-self:baseline;
@@ -131,7 +131,7 @@ export const WrapperFilters = styled.div``;
 // Graph
 export const Graph = styled.div``;
 export const FilterIcon = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+  ${({ theme }) => css`
     display: flex;
     gap: 0.5rem;
     align-items: center;

@@ -30,7 +30,7 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div<{ isVisible: boolean }>`
   ${({ isVisible }) => css`
-    display: ${isVisible ? "block" : "none"};
+    visibility: ${isVisible ? "visible" : "hidden"};
     flex: 1;
     height: 100%;
     height: 38vh;
