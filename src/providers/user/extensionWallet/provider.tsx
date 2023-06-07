@@ -188,11 +188,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
 
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for main address from extension wallet provider",
-      mainAddress
-    );
-
     const subscription = eventHandler({
       cb: onRegisterMainAccountUpdate,
       name: mainAddress,

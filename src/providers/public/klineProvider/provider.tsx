@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { API } from "aws-amplify";
+import { reverse } from "d3-array";
 
 import * as subscriptions from "../../../graphql/subscriptions";
 import { useSettingsProvider } from "../settings";
@@ -26,7 +27,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         const resolution = getAbsoluteResolution(currentResolution);
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
-        return data;
+        return reverse(data);
       } catch (error) {
         console.log("Kline fetch error", error);
         onHandleError("Kline fetch error");
