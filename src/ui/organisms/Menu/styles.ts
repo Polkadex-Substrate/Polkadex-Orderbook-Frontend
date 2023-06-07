@@ -52,6 +52,8 @@ export const LineBorder = styled.span`
   @media screen and (max-width: 590px) {
     width: 30px;
     height: 3px;
+    position: relative;
+    top: -8px;
   }
 `;
 
