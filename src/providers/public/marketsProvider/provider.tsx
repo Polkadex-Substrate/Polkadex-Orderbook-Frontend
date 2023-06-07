@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
+import _ from "lodash";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -17,6 +18,7 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
+import { setCurrentTicker } from "./actions";
 
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
@@ -105,29 +107,26 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       query: queries.getMarketTickers,
       variables: { market, from, to },
     });
-    const tickersRaw: TickerQueryResult[] = res.data.getMarketTickers.items;
-    const tickers: Ticker[] = tickersRaw?.map((elem) => {
-      const priceChange = Number(elem.c) - Number(elem.o);
-      const priceChangePercent = (priceChange / Number(elem.o)) * 100;
-      return {
-        m: elem.m,
-        priceChange24Hr: priceChange,
-        priceChangePercent24Hr: priceChangePercent,
-        open: elem.o,
-        close: elem.c,
-        high: elem.h,
-        low: elem.l,
-        volumeBase24hr: elem.vb,
-        volumeQuote24Hr: elem.vq,
-      };
-    });
-    return tickers[0];
+    const item: TickerQueryResult = res.data.getMarketTickers.items;
+    const priceChange = Number(item.c) - Number(item.o);
+    const priceChangePercent = (priceChange / Number(item.o)) * 100;
+    const precision = 2; // TOOD: should be added to market config.
+    return {
+      m: market,
+      priceChange24Hr: _.round(priceChange, precision),
+      priceChangePercent24Hr: _.round(priceChangePercent, precision),
+      open: _.round(Number(item.o), precision),
+      close: _.round(Number(item.c), precision),
+      high: _.round(Number(item.h), precision),
+      low: _.round(Number(item.l), precision),
+      volumeBase24hr: _.round(Number(item.vb), precision),
+      volumeQuote24Hr: _.round(Number(item.vq), precision),
+    };
   }, []);
 
   const onMarketTickersFetch = useCallback(async () => {
     dispatch(A.marketsTickersFetch());
     const markets = state.list;
-    if (markets.length === 0) return;
     try {
       const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
       const tickers = await Promise.all(tickersPromises);
@@ -138,11 +137,13 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     }
   }, [state.list, fetchMarketTickers, onHandleError]);
 
-  const market = state.currentMarket;
   useEffect(() => {
+    if (!state?.currentMarket?.m) {
+      return;
+    }
     const subscription = API.graphql({
       query: subscriptions.websocket_streams,
-      variables: { name: market?.m + "-ticker" },
+      variables: { name: state.currentMarket.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -152,7 +153,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
           data.value.data.websocket_streams.data
         );
 
-        const tickerData: Ticker = convertToTicker(dataParsed, market.m);
+        const tickerData: Ticker = convertToTicker(dataParsed, state.currentMarket.m);
         dispatch(A.marketsTickersChannelData(tickerData));
       },
       error: (err) => {
@@ -162,7 +163,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [market?.m]);
+  }, [state?.currentMarket?.m]);
 
   const setCurrentMarket = (market: Market) => {
     dispatch(A.setCurrentMarket(market));
@@ -171,9 +172,17 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
-      onMarketTickersFetch();
     }
+    onMarketTickersFetch();
   }, [allAssets, state.list, onMarketsFetch, onMarketTickersFetch]);
+
+  // set current ticker on market change
+  useEffect(() => {
+    if (!state?.currentMarket?.m || !state?.tickers || state?.tickers.length === 0) {
+      return;
+    }
+    dispatch(setCurrentTicker(state.currentMarket.m));
+  }, [state?.currentMarket?.m, state?.tickers]);
 
   return (
     <Provider

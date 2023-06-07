@@ -112,11 +112,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   // balance updates are give to main address
   useEffect(() => {
-    console.log(
-      "created User Events Channel...with main address for balances provider",
-      mainAddress
-    );
-
     const subscription = eventHandler({
       cb: onBalanceUpdate,
       name: mainAddress,

@@ -9,12 +9,12 @@ export const Navbar = ({ onOpenMarkets }) => {
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket: currMarket, currentTicker } = useMarketsProvider();
   const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
-  const currPrice = Number(currentTicker?.close).toFixed(2);
-  const price_change_percent = Number(currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
+  const currPrice = currentTicker?.close;
+  const priceChangePerCent = currentTicker?.priceChangePercent24Hr + "%";
   const isPriceChangeNegative = currentTicker?.priceChange24Hr < 0;
-  const volume = Number(currentTicker?.volumeBase24hr).toFixed(2);
-  const high = Number(currentTicker?.high).toFixed(2);
-  const low = Number(currentTicker?.low).toFixed(2);
+  const volume = currentTicker?.volumeBase24hr;
+  const high = currentTicker?.high;
+  const low = currentTicker?.low;
 
   return (
     <S.Wrapper>
@@ -35,7 +35,7 @@ export const Navbar = ({ onOpenMarkets }) => {
 
           <NavbarItem
             label="Price % 24h"
-            info={price_change_percent}
+            info={priceChangePerCent}
             color={isPriceChangeNegative ? "primary" : "green"}
           />
           <NavbarItem
