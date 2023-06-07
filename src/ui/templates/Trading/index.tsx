@@ -37,8 +37,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
 import { TradesProvider } from "@polkadex/orderbook/providers/user/trades/provider";
-
-const shouldShowPopup = process.env.SHOW_SHUTDOWN_POPUP === "true";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -53,7 +52,7 @@ export function Trading() {
   };
 
   const [state, setState] = useState(false);
-  const [shutdownBanner, setShutdownBanner] = useState(shouldShowPopup);
+  const [shutdownBanner, setShutdownBanner] = useState(defaultConfig.showShutdownPopup);
 
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);

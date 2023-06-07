@@ -16,4 +16,5 @@ export type DefaultConfig = {
   maintenanceMode: boolean;
   signUpDisabled: boolean;
   reconnectRangerTime: number;
+  showShutdownPopup: boolean;
 };
