@@ -38,6 +38,8 @@ import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvi
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
 import { TradesProvider } from "@polkadex/orderbook/providers/user/trades/provider";
 
+const shouldShowPopup = process.env.SHOW_SHUTDOWN_POPUP === "true";
+
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
     () => process.browser && window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER),
@@ -51,7 +53,7 @@ export function Trading() {
   };
 
   const [state, setState] = useState(false);
-  const [shutdownBanner, setShutdownBanner] = useState(false);
+  const [shutdownBanner, setShutdownBanner] = useState(shouldShowPopup);
 
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
@@ -162,13 +164,13 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
-      <Modal open={shutdownBanner} onClose={() => setShutdownBanner(false)}>
+      <Modal open={shutdownBanner} isBlur onClose={() => setShutdownBanner(false)}>
         <ShutdownInteraction
           title="Orderbook v1 will go offline as it is upgraded to v2"
           textLink="Read the full statement"
-          link="/"
+          link="https://polkadex.medium.com/"
           footerText="Join our Telegram for more updates!"
-          buttonLink="/"
+          buttonLink="https://t.me/Polkadex"
           textButton="Join Telegram"
           onClose={() => setShutdownBanner(false)}
         />

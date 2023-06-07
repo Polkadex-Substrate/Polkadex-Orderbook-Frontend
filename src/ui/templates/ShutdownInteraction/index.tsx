@@ -66,7 +66,7 @@ export const ShutdownInteraction = ({
   );
 };
 
-const ShutdownText = ({ orderbookDate = "20/05/2023", chainBridgeDate = "20/05/2023" }) => (
+const ShutdownText = ({ orderbookDate = "12/06/2023", chainBridgeDate = "30/06/2023" }) => (
   <>
     <p>
       In preparation for the upcoming mainnet <span>upgrade followed by Orderbook v2</span> ,
@@ -80,7 +80,7 @@ const ShutdownText = ({ orderbookDate = "20/05/2023", chainBridgeDate = "20/05/2
       trading account will be withdrawn automatically into your Polkadex address.{" "}
       <span>
         If you have cUSDT, please use the{" "}
-        <a target="_blank" href="www.bridge.polkadex.trade">
+        <a target="_blank" href="https://tokenmanager.polkadex.trade" rel="noreferrer">
           ChainBridge portal
         </a>{" "}
         before {chainBridgeDate} to return your USDT to your Ethereum address.
