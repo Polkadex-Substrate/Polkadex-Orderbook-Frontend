@@ -209,11 +209,6 @@ export const OrderHistoryProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for trade address from order history provider",
-      tradeAddress
-    );
-
     const subscription = eventHandler({
       cb: onOrderUpdates,
       name: tradeAddress,
