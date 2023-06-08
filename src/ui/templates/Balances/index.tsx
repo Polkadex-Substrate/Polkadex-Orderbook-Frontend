@@ -26,8 +26,7 @@ export const BalancesTemplate = () => {
   const { balances: userBalances } = useBalancesProvider();
   const profileState = useProfile();
 
-  const userHasSelectedAccount = !!Object?.keys(profileState.selectedAccount?.mainAddress)
-    ?.length;
+  const userHasSelectedAccount = profileState?.selectedAccount?.mainAddress?.length > 0;
 
   const allAssets = useMemo(
     () =>
