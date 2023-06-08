@@ -167,7 +167,7 @@ export function Trading() {
         <ShutdownInteraction
           title="Orderbook v1 will go offline as it is upgraded to v2"
           textLink="Read the full statement"
-          link="https://polkadex.medium.com/"
+          link="https://polkadex.medium.com/orderbook-v2-thea-and-crowdloan-rewards-are-now-live-on-kaizen-the-polkadex-test-net-7ca5c88855ad"
           footerText="Join our Telegram for more updates!"
           buttonLink="https://t.me/Polkadex"
           textButton="Join Telegram"
