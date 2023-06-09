@@ -75,6 +75,7 @@ module.exports = withPlugins([
       SIGNUP_DISABLED: process.env.SIGNUP_DISABLED,
       PIN_POINT_CLIENT_ID: process.env.PIN_POINT_CLIENT_ID,
       MAINTENACE_MODE: process.env.MAINTENACE_MODE,
+      SHOW_SHUTDOWN_POPUP: process.env.SHOW_SHUTDOWN_POPUP,
     },
   },
 ]);
