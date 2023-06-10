@@ -33,8 +33,8 @@ export interface ProfileState {
   authInfo: AuthInfo;
   auth: CommonActionState;
   userData: {
-    userAccounts: UserAccount[];
-    mainAccounts: string[];
+    userAccounts?: UserAccount[];
+    mainAccounts?: string[];
   };
   data: CommonActionState;
   userProfile?: {
