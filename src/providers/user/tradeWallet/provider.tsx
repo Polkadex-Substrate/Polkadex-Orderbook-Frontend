@@ -282,27 +282,29 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   // subscribe to user account updates notifications
   useEffect(() => {
-    const updateSubscription = eventHandler({
-      cb: onTradeAccountUpdate,
-      name: mainAddress,
-      eventType: "AddProxy",
-    });
-
-    return () => {
-      updateSubscription.unsubscribe();
-    };
+    if (mainAddress?.length) {
+      const updateSubscription = eventHandler({
+        cb: onTradeAccountUpdate,
+        name: mainAddress,
+        eventType: "AddProxy",
+      });
+      return () => {
+        updateSubscription.unsubscribe();
+      };
+    }
   }, [mainAddress, onTradeAccountUpdate]);
 
   useEffect(() => {
-    const subscription = eventHandler({
-      cb: onTradeAccountUpdate,
-      name: tradeAddress,
-      eventType: "AddProxy",
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (tradeAddress?.length) {
+      const subscription = eventHandler({
+        cb: onTradeAccountUpdate,
+        name: tradeAddress,
+        eventType: "AddProxy",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {

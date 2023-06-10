@@ -153,14 +153,16 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     [onHandleError]
   );
   useEffect(() => {
-    const subscription = eventHandler({
-      cb: onTransactionsUpdate,
-      name: mainAddress,
-      eventType: "SetTransaction",
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (mainAddress) {
+      const subscription = eventHandler({
+        cb: onTransactionsUpdate,
+        name: mainAddress,
+        eventType: "SetTransaction",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [mainAddress, onTransactionsUpdate]);
 
   return (
