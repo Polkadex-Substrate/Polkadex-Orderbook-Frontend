@@ -119,8 +119,8 @@ export function Trading() {
   );
 
   const userAccounts = profileState.userData.userAccounts;
-  const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
-  const hasAssociatedAccounts = accounts.map((account) => account.tradeAddress)?.length;
+  const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
+  const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
   const { selectedAccount } = useProfile();
 

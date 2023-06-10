@@ -111,9 +111,9 @@ export const useSettings = () => {
   const allFilteredControllerWallets = useMemo(
     () =>
       controllerWallets
-        ?.sort((a) => (linkedMainAddress.includes(a.account.address) ? -1 : 1))
+        ?.sort((a) => (linkedMainAddress?.includes(a.account.address) ? -1 : 1))
         ?.filter((value) =>
-          showRegistered ? linkedMainAddress.includes(value.account.address) : value
+          showRegistered ? linkedMainAddress?.includes(value.account.address) : value
         )
         ?.reduce((pv, cv) => {
           const { account } = cv;

@@ -145,7 +145,7 @@ export const SettingsTemplate = () => {
                   )}
                 </S.WalletTitle>
                 <S.WalletContainer>
-                  {!tradeAccounts.length ? (
+                  {!tradeAccounts?.length ? (
                     <div style={{ padding: "4rem 2rem" }}>
                       <Empty
                         title="No trading accounts"
@@ -413,8 +413,8 @@ const ControllerWallets = ({
   const isRegistered = address && profileState.userData.mainAccounts.includes(address);
 
   const userAccounts = profileState.userData.userAccounts;
-  const accounts = userAccounts.filter((account) => account.mainAddress === address);
-  const linkedTradeAccounts = accounts.map((account) => account.tradeAddress);
+  const accounts = userAccounts?.filter((account) => account.mainAddress === address);
+  const linkedTradeAccounts = accounts?.map((account) => account.tradeAddress);
 
   const extensionAccount =
     address &&
