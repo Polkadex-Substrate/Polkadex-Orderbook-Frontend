@@ -37,6 +37,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
 import { TradesProvider } from "@polkadex/orderbook/providers/user/trades/provider";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export function Trading() {
   const shouldShowDisclaimer = useMemo(
@@ -51,7 +52,7 @@ export function Trading() {
   };
 
   const [state, setState] = useState(false);
-  const [shutdownBanner, setShutdownBanner] = useState(false);
+  const [shutdownBanner, setShutdownBanner] = useState(defaultConfig.showShutdownPopup);
 
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
@@ -162,13 +163,13 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
-      <Modal open={shutdownBanner} onClose={() => setShutdownBanner(false)}>
+      <Modal open={shutdownBanner} isBlur onClose={() => setShutdownBanner(false)}>
         <ShutdownInteraction
           title="Orderbook v1 will go offline as it is upgraded to v2"
           textLink="Read the full statement"
-          link="/"
+          link="https://polkadex.medium.com/orderbook-v2-thea-and-crowdloan-rewards-are-now-live-on-kaizen-the-polkadex-test-net-7ca5c88855ad"
           footerText="Join our Telegram for more updates!"
-          buttonLink="/"
+          buttonLink="https://t.me/Polkadex"
           textButton="Join Telegram"
           onClose={() => setShutdownBanner(false)}
         />

@@ -38,4 +38,5 @@ export const defaultConfig: DefaultConfig = {
   maintenanceMode: process.env.MAINTENACE_MODE === "true",
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
   reconnectRangerTime: 30000,
+  showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",
 };
