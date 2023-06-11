@@ -24,7 +24,7 @@ export const CreateAccountForm = ({
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
   const controllerWallets = extensionWalletState.allAccounts;
-  const linkedMainAddresses = profileState.userData.mainAccounts;
+  const linkedMainAddresses = profileState.userData?.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(({ account }) =>
     linkedMainAddresses?.includes(account.address)
   );

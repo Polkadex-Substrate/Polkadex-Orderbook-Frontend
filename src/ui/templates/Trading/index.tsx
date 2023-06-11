@@ -118,7 +118,7 @@ export function Trading() {
     extensionWalletState.allAccounts
   );
 
-  const userAccounts = profileState.userData.userAccounts;
+  const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 

@@ -45,7 +45,7 @@ export const useSettings = () => {
   const {
     userData: { userAccounts },
   } = useProfile();
-  const linkedMainAddress = profileState.userData.mainAccounts;
+  const linkedMainAddress = profileState.userData?.mainAccounts;
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
   const { isActive } = tradeWalletState?.registerAccountModal;
