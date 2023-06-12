@@ -3,6 +3,7 @@ import Link from "next/link";
 import * as S from "./styles";
 
 export const EmptyMyAccount = ({
+  balances = false,
   hasLimit = false,
   image = "loginEmpty",
   title = "Looks like you're not logged in",
@@ -12,7 +13,7 @@ export const EmptyMyAccount = ({
   secondaryLink = "/signIn",
   secondaryLinkTitle = "Login",
 }) => (
-  <S.Empty hasLimit={hasLimit}>
+  <S.Empty balances={balances} hasLimit={hasLimit}>
     <S.EmptyContainer>
       <S.EmptyHeader>
         <figure>
