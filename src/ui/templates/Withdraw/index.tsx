@@ -19,6 +19,7 @@ import {
   Checkbox,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
+import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
@@ -90,8 +91,7 @@ export const WithdrawTemplate = () => {
 
   const handleSubmitWithdraw = async (amount: string | number) => {
     try {
-
-    const asset = isAssetPDEX(selectedAsset.assetId) ? "PDEX" : selectedAsset.assetId;
+      const asset = isAssetPDEX(selectedAsset.assetId) ? "PDEX" : selectedAsset.assetId;
 
       await onFetchWithdraws({ asset, amount });
     } finally {
@@ -99,10 +99,19 @@ export const WithdrawTemplate = () => {
     }
   };
 
+  const validate = (values) => {
+    const errors = {} as any;
+    if (getDigitsAfterDecimal(values.amount) > 8)
+      errors.amount = "Maximum 8 digits are allowed after decimal";
+
+    return errors;
+  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
     useFormik({
       initialValues,
       validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
+      validate,
       onSubmit: ({ amount }) => {
         if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
         else {

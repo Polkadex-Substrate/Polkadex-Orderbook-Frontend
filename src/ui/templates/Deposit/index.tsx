@@ -17,6 +17,7 @@ import {
   EmptyData,
   Loading,
 } from "@polkadex/orderbook-ui/molecules";
+import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
@@ -82,13 +83,8 @@ export const DepositTemplate = () => {
       errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
     }
 
-    const amountStr = String(values.amount);
-    if (amountStr.includes(".")) {
-      const digitAfterDecimal = amountStr.split(".")[1].length;
-      if (digitAfterDecimal > 8) {
-        errors.amount = "Maximum 8 digits are allowed after decimal";
-      }
-    }
+    if (getDigitsAfterDecimal(values.amount) > 8)
+      errors.amount = "Maximum 8 digits are allowed after decimal";
 
     return errors;
   };
