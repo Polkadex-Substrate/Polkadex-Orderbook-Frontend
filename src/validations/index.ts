@@ -69,7 +69,7 @@ export const withdrawValidations = (balance: number) => {
       .test(
         "Test Value greater than balance",
         "The amount you entered exceeds your balance",
-        (value) => value < Number(balance)
+        (value) => value <= Number(balance)
       ),
   });
 };
