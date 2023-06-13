@@ -81,6 +81,15 @@ export const DepositTemplate = () => {
     if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
       errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
     }
+
+    const amountStr = String(values.amount);
+    if (amountStr.includes(".")) {
+      const digitAfterDecimal = amountStr.split(".")[1].length;
+      if (digitAfterDecimal > 8) {
+        errors.amount = "Maximum 8 digits are allowed after decimal";
+      }
+    }
+
     return errors;
   };
 
