@@ -48,9 +48,5 @@ export const eraseCookie = (name: string) => {
 
 export const getDigitsAfterDecimal = (value: number) => {
   const amountStr = String(value);
-  if (amountStr.includes(".")) {
-    const digitAfterDecimal = amountStr.split(".")[1].length;
-    return digitAfterDecimal;
-  }
-  return 0;
+  return amountStr.includes(".") ? amountStr.split(".")[1].length : 0;
 };
