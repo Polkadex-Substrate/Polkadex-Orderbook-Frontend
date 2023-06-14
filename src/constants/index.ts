@@ -48,3 +48,5 @@ export type UserEvents = keyof typeof USER_EVENTS;
 export const ErrorMessages = {
   OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered: ",
 };
+
+export const MAX_DIGITS_AFTER_DECIMAL = 8;
