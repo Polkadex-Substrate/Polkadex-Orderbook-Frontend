@@ -58,7 +58,7 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const router = useRouter();
-  const { id } = useRouter().query;
+  const { id } = router?.query;
 
   const {
     loading: isMarketLoading,
