@@ -91,7 +91,10 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       return {
         ...state,
         data: { ...state.data, isLaoding: false, isSuccess: true },
-        userData: action.payload,
+        userData: {
+          ...state.userData,
+          ...action.payload,
+        },
       };
     }
     case PROFILE_USER_SELECT_ACCOUNT_DATA: {
