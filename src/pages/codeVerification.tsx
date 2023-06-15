@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
 
+import { useDisabledPages } from "../hooks/useDisabledPages";
+
 const CodeVerificationTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/CodeVerification").then(
@@ -9,6 +11,11 @@ const CodeVerificationTemplate = dynamic(
     ssr: false,
   }
 );
-const CodeVerification = () => <CodeVerificationTemplate />;
+const CodeVerification = () => {
+  const { disabled } = useDisabledPages();
+  if (disabled) return <div />;
+
+  return <CodeVerificationTemplate />;
+};
 
 export default CodeVerification;

@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { useDisabledPages } from "../hooks/useDisabledPages";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const BalancesTemplate = dynamic(
@@ -13,6 +15,8 @@ const BalancesTemplate = dynamic(
 );
 const Balances = () => {
   const router = useRouter();
+  const { disabled } = useDisabledPages();
+
   const {
     authInfo: { isAuthenticated: hasUser },
   } = useProfile();
@@ -21,7 +25,7 @@ const Balances = () => {
     if (!hasUser) router?.push("/trading/");
   }, [hasUser, router]);
 
-  if (!hasUser) return <div />;
+  if (!hasUser || disabled) return <div />;
   return <BalancesTemplate />;
 };
 

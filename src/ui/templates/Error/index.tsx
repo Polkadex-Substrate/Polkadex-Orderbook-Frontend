@@ -4,13 +4,13 @@ import React, { useEffect } from "react";
 
 import * as S from "./styles";
 
+import { defaultConfig } from "@polkadex/orderbook-config";
+
 export const ErrorTemplate = () => {
   const router = useRouter();
   useEffect(() => {
-    setTimeout(() => {
-      router.push("/");
-    }, 4000);
-  }, []);
+    setTimeout(() => router.push(defaultConfig.mainUrl), 4000);
+  }, [router]);
 
   return (
     <S.Wrapper>
