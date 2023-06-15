@@ -40,5 +40,5 @@ export const defaultConfig: DefaultConfig = {
   reconnectRangerTime: 30000,
   showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",
   underMaintenance: process.env.UNDER_MAINTENACE?.split(","),
-  mainUrl: process.env.MAIN_URL,
+  mainUrl: process.env.MAIN_URL || "migration",
 };
