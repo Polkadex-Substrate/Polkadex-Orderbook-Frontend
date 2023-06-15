@@ -2,10 +2,12 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
+import { useTradeWallet } from "../providers/user/tradeWallet";
+import { useDisabledPages } from "../hooks/useDisabledPages";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
-import { useTradeWallet } from "../providers/user/tradeWallet";
 
 const CreateAccountTemplate = dynamic(
   () =>
@@ -18,6 +20,8 @@ const CreateAccountTemplate = dynamic(
 );
 const CreateAccount = () => {
   const router = useRouter();
+  const { disabled } = useDisabledPages();
+
   const {
     authInfo: { isAuthenticated: hasUser },
     selectedAccount: currentAccount,
@@ -46,7 +50,7 @@ const CreateAccount = () => {
     if (shouldRedirect) router.push("/settings");
   }, [shouldRedirect, router]);
 
-  if (shouldRedirect) return <div />;
+  if (shouldRedirect || disabled) return <div />;
 
   return <CreateAccountTemplate />;
 };
