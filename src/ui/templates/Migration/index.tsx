@@ -95,7 +95,7 @@ export const Migration = ({
               </svg>
             </span>
             <span>
-              <OrderbookLogo />
+              <OrderbookLogo light />
             </span>
           </S.Header>
           <S.Box>

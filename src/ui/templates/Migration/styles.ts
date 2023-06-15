@@ -82,8 +82,9 @@ export const Box = styled.div`
       color: ${theme.colors.tertiaryText};
       line-height: 1.5;
     }
-    span {
-      color: ${theme.colors.text};
+    span,
+    h1 {
+      color: ${theme.colors.white};
     }
     a {
       color: ${theme.colors.primary};
@@ -127,6 +128,7 @@ export const Footer = styled.div`
       border-radius: 0.6rem;
       padding: 1rem;
       background: ${theme.colors.primary};
+      color: ${theme.colors.white};
       transition: background-color 0.4s ease;
       :hover {
         background: ${theme.colors.primary}BF;
@@ -159,9 +161,14 @@ export const Timer = styled.div`
 `;
 
 export const TimerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    h3 {
+      color: ${theme.colors.white};
+    }
+  `}
 `;
 
 export const CountDown = styled.div`
@@ -188,6 +195,9 @@ export const CountDown = styled.div`
       color: ${theme.colors.tertiaryText};
       opacity: 0.5;
       font-weight: 550;
+    }
+    span {
+      color: ${theme.colors.white};
     }
   `}
 `;
