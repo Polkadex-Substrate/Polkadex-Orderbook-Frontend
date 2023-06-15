@@ -58,7 +58,7 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const router = useRouter();
-  const { id } = useRouter().query;
+  const { id } = router?.query;
 
   const {
     loading: isMarketLoading,
@@ -118,9 +118,9 @@ export function Trading() {
     extensionWalletState.allAccounts
   );
 
-  const userAccounts = profileState.userData.userAccounts;
-  const accounts = userAccounts.filter((account) => account.mainAddress === mainAddress);
-  const hasAssociatedAccounts = accounts.map((account) => account.tradeAddress)?.length;
+  const userAccounts = profileState.userData?.userAccounts;
+  const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
+  const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
   const { selectedAccount } = useProfile();
 

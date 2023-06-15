@@ -63,17 +63,16 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     mainAccounts: [string],
     Api = API
   ): Promise<T.UserAccount[]> => {
-    const promises = mainAccounts.map(async (mainAccount) => {
+    const promises = mainAccounts?.map(async (mainAccount) => {
       try {
         const res = await sendQueryToAppSync({
           query: queries.findUserByMainAccount,
           variables: { main_account: mainAccount },
           API: Api,
         });
-        const proxies = res.data.findUserByMainAccount.proxies ?? [];
+        const proxies = res?.data?.findUserByMainAccount?.proxies ?? [];
         return { main_account: mainAccount, proxies };
       } catch (error) {
-        console.log("Error: getAllProxyAccounts", error.errors);
         return { main_account: mainAccount, proxies: [] };
       }
     });
@@ -87,38 +86,41 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return accounts;
   };
 
+  // TODO: Refactor this function
   const onUserAuthentication = useCallback(
     async (payload: T.UserAuth) => {
       const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
       dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
-
       const userAccounts = state.userData?.userAccounts;
-      const defaultTradeAddress = window.localStorage.getItem(
+      const defaultTradeAccountFromStorage = window.localStorage.getItem(
         LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
       );
+      const defaultTradeAddress =
+        defaultTradeAccountFromStorage === "null" ? null : defaultTradeAccountFromStorage;
 
       try {
         if (!userAccounts?.length) {
-          const { accounts } = await getAllMainLinkedAccounts(email);
+          const { accounts }: { accounts: [string] } = await getAllMainLinkedAccounts(email);
           const userAccounts = await getAllProxyAccounts(accounts);
-
           const mainAddress = userAccounts?.find(
             ({ tradeAddress }) => defaultTradeAddress === tradeAddress
           )?.mainAddress;
 
-          defaultTradeAddress?.length &&
+          if (mainAddress && defaultTradeAddress)
             dispatch(
-              A.userAccountSelectData({ tradeAddress: defaultTradeAddress, mainAddress })
+              A.userAccountSelectData({
+                tradeAddress: defaultTradeAddress ?? null,
+                mainAddress: mainAddress ?? null,
+              })
             );
-          dispatch(A.userData({ mainAccounts: accounts, userAccounts }));
+          if (accounts?.length) dispatch(A.userData({ mainAccounts: accounts }));
+          if (userAccounts?.length) dispatch(A.userData({ userAccounts: userAccounts }));
         }
-
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
           dispatch(A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }));
           dispatch(A.userSetAvatar());
         }
-
         if (!isConfirmed && userExists) {
           onHandleNotification({
             type: "Attention",
