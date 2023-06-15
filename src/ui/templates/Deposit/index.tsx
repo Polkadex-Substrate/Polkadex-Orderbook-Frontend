@@ -20,7 +20,11 @@ import {
 import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { MAX_DIGITS_AFTER_DECIMAL, POLKADEX_ASSET } from "@polkadex/web-constants";
+import {
+  MAX_DIGITS_AFTER_DECIMAL,
+  POLKADEX_ASSET,
+  ErrorMessages,
+} from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -73,18 +77,18 @@ export const DepositTemplate = () => {
   const validate = (values) => {
     const errors = {} as any;
     if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
-      errors.amount = "use a valid amount instead";
+      errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
     if (+values.amount > onChainBalance) {
-      errors.amount = "Amount cannot be greater than balance";
+      errors.amount = ErrorMessages.CHECK_BALANCE;
     }
     const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
     if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
-      errors.amount = "You need atleast 1 PDEX in your funding account to keep it alive";
+      errors.amount = ErrorMessages.REMAINING_BALANCE;
     }
 
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
-      errors.amount = "Maximum 8 digits are allowed after decimal";
+      errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
 
     return errors;
   };

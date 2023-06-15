@@ -24,7 +24,11 @@ import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { MAX_DIGITS_AFTER_DECIMAL, POLKADEX_ASSET } from "@polkadex/web-constants";
+import {
+  ErrorMessages,
+  MAX_DIGITS_AFTER_DECIMAL,
+  POLKADEX_ASSET,
+} from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
@@ -102,7 +106,7 @@ export const WithdrawTemplate = () => {
   const validate = (values) => {
     const errors = {} as any;
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
-      errors.amount = "Maximum 8 digits are allowed after decimal";
+      errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
 
     return errors;
   };
