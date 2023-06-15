@@ -200,7 +200,7 @@ export function usePlaceOrder(
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
     const notify = (description: string) =>
-      settingsState.onHandleAlert(`Order Failed ${description}`);
+      settingsState.onHandleError(`Order Failed. ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
@@ -209,15 +209,15 @@ export function usePlaceOrder(
       ((!isSell && +total > +userAvailableBalance) ||
         (isSell && +form.amountSell > +userAvailableBalance))
     ) {
-      notify("balance not enough");
+      notify("Balance not enough");
     } else if (isLimit && +form.price < currentMarket.min_price) {
-      notify("price cannot be less than min market price");
+      notify("Price can not be less than min market price");
     } else if (isLimit && +form.price > currentMarket.max_price) {
-      notify("price cannot be greater than max market price");
+      notify("Price can not be greater than max market price");
     } else if (+amount < currentMarket.min_amount) {
-      notify("Amount cannot be less than min market amount");
+      notify("Amount can not be less than min market amount");
     } else if (+amount > currentMarket.max_amount) {
-      notify("Amount cannot be greater than max market amount");
+      notify("Amount can not be greater than max market amount");
     } else {
       // VALID TRANSACTION
       ordersState.onPlaceOrders({
