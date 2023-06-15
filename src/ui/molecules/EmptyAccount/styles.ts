@@ -7,12 +7,12 @@ export const EmptyContainer = styled.div`
   justify-content: center;
 `;
 
-export const Empty = styled.div<{ hasLimit?: boolean }>`
-  ${({ theme, hasLimit }) => css`
+export const Empty = styled.div<{ hasLimit?: boolean; balances?: boolean }>`
+  ${({ theme, hasLimit, balances }) => css`
     background: ${!hasLimit ? theme.colors.secondaryBackgroundSolid : "inherit"};
     border: 1px solid ${!hasLimit ? theme.colors.secondaryBackground : "none"};
     border-radius: 1.5rem;
-    padding: 1rem;
+    padding: 1rem 1rem ${balances ? "4rem" : "1rem"} 1rem;
     text-align: center;
     display: flex;
     align-items: center;

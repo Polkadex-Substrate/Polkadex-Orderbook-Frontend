@@ -157,7 +157,7 @@ export const BalancesTemplate = () => {
                   </S.Content>
                 </>
               ) : (
-                <EmptyMyAccount hasLimit {...connectWalletData} />
+                <EmptyMyAccount balances hasLimit {...connectWalletData} />
               )}
             </S.Container>
           </S.ContainerMain>
