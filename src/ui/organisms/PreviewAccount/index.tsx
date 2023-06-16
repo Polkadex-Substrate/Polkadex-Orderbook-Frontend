@@ -184,7 +184,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   </S.Box>
                   {tradingAccountInBrowser && (
                     <S.Button
-                      disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                      disabled={!tradingAccountInBrowser}
                       onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
                       {using ? "Using" : "Use"}
