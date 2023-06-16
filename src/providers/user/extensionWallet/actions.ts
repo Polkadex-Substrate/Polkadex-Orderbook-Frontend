@@ -48,6 +48,9 @@ export interface RegisterMainAccountLinkEmailFetch {
 export interface RegisterMainAccountData {
   type: typeof REGISTER_MAIN_ACCOUNT_DATA;
 }
+export interface RegisterMainAccountReset {
+  type: typeof REGISTER_MAIN_ACCOUNT_RESET;
+}
 
 export interface RegisterMainAccountError {
   type: typeof REGISTER_MAIN_ACCOUNT_ERROR;
@@ -77,6 +80,7 @@ export type GetExtensionWalletAction =
   | RegisterMainAccountData
   | RegisterMainAccountError
   | RegisterMainAccountUpdateEvent
+  | RegisterMainAccountReset
   | RegisterMainAccountUpdateData;
 
 export const extensionWalletData = (
@@ -131,6 +135,6 @@ export const registerMainAccountUpdateData = (
   payload,
 });
 
-export const registerMainAccountReset = () => ({
+export const registerMainAccountReset = (): RegisterMainAccountReset => ({
   type: REGISTER_MAIN_ACCOUNT_RESET,
 });

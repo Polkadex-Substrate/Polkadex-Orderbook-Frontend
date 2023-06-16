@@ -24,7 +24,8 @@ const Deposit = () => {
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
+  const isRegistered =
+    mainAddress && profileState.userData?.mainAccounts?.includes(mainAddress);
 
   const hasSelectedAccount = selectIsAddressInExtension(
     mainAddress,

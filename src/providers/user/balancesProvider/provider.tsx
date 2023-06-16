@@ -106,21 +106,23 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     [onHandleError, updateBalanceFromEvent]
   );
 
+  // TODO: Add conditions..
   useEffect(() => {
     onBalancesFetch();
   }, [onBalancesFetch, mainAddress, isAssetData]);
 
   // balance updates are give to main address
   useEffect(() => {
-    const subscription = eventHandler({
-      cb: onBalanceUpdate,
-      name: mainAddress,
-      eventType: "SetBalance",
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (mainAddress) {
+      const subscription = eventHandler({
+        cb: onBalanceUpdate,
+        name: mainAddress,
+        eventType: "SetBalance",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [mainAddress, onBalanceUpdate]);
 
   return (

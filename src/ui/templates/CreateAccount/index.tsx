@@ -11,11 +11,13 @@ import { createAccountValidations } from "@polkadex/orderbook/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 
 export const CreateAccountTemplate = () => {
   const [state, setState] = useState(false);
   const [mnemoicString, setMnemonicString] = useState("");
   const tradeWalletState = useTradeWallet();
+  const extensionWalletState = useExtensionWallet();
   const isLoading = tradeWalletState.registerAccountLoading;
 
   const router = useRouter();
@@ -33,6 +35,7 @@ export const CreateAccountTemplate = () => {
           name: values.name,
           password: String(values.passcode),
           address: mnemoicString,
+          allAccounts: extensionWalletState.allAccounts,
         });
       },
     });

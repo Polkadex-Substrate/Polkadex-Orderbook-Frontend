@@ -209,15 +209,16 @@ export const OrderHistoryProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    const subscription = eventHandler({
-      cb: onOrderUpdates,
-      name: tradeAddress,
-      eventType: "Order",
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (tradeAddress?.length) {
+      const subscription = eventHandler({
+        cb: onOrderUpdates,
+        name: tradeAddress,
+        eventType: "Order",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [onOrderUpdates, tradeAddress]);
 
   return (
