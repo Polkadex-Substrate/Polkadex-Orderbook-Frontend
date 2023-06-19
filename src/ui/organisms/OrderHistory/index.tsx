@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import * as S from "./styles";
 
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -12,6 +14,18 @@ export const OrderHistory = ({ orderHistory }) => {
   const { currentMarket } = useMarketsProvider();
   const priceFixed = currentMarket?.quote_precision;
   const amountFixed = currentMarket?.base_precision;
+
+  const [orderHistoryItems, setOrderHistoryItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const endItem = currentPage * itemsPerPage;
+  const startItem = endItem - itemsPerPage;
+
+  useEffect(() => {
+    setOrderHistoryItems(orders.slice(startItem, endItem));
+  }, [orders, startItem, endItem]);
+
   return (
     <S.Wrapper>
       {orders?.length ? (
@@ -28,8 +42,8 @@ export const OrderHistory = ({ orderHistory }) => {
             </S.Tr>
           </S.Thead>
           <S.Tbody>
-            {orders &&
-              orders.map((order: OrderCommon, i) => {
+            {orderHistoryItems &&
+              orderHistoryItems.map((order: OrderCommon, i) => {
                 const [base, quote] = order.m.split("-");
                 const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";
@@ -65,11 +79,19 @@ export const OrderHistory = ({ orderHistory }) => {
               })}
           </S.Tbody>
           <S.ButtonWrapper>
-            <Button size="medium">
+            <Button
+              size="medium"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}>
               <Icons.ArrowLeft />
               <span>Prev</span>
             </Button>
-            <Button size="medium">
+            <Button
+              size="medium"
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, Math.ceil(orders.length / itemsPerPage))
+                )
+              }>
               <span>Next</span>
               <Icons.ArrowRight />
             </Button>
