@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { OrderHistoryCard, EmptyData } from "@polkadex/orderbook-ui/molecules";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
+import { OrderHistoryCard, EmptyData, Button } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
@@ -64,6 +64,16 @@ export const OrderHistory = ({ orderHistory }) => {
                 );
               })}
           </S.Tbody>
+          <S.ButtonWrapper>
+            <Button size="medium">
+              <Icons.ArrowLeft />
+              <span>Prev</span>
+            </Button>
+            <Button size="medium">
+              <span>Next</span>
+              <Icons.ArrowRight />
+            </Button>
+          </S.ButtonWrapper>
         </S.Table>
       ) : (
         <S.EmptyWrapper>

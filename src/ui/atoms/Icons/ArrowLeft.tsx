@@ -6,16 +6,10 @@ function SvgArrowLeft(props: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       width="1.2em"
       height="1.2em"
-      viewBox="0 0 24 23"
+      viewBox="0 0 14 14"
+      transform="rotate(180)"
       {...props}>
-      <g transform="rotate(90 12.011 11.989)">
-        <path
-          data-name="Path 6"
-          d="M14.747 10.403l-3.325 3.325-3.325-3.325"
-          fill="none"
-          strokeWidth={2}
-        />
-      </g>
+      <path d="M5 3L9 7L5 11" fill="none" strokeWidth="2" />
     </svg>
   );
 }
