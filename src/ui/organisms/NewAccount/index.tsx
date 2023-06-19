@@ -62,6 +62,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
     status: tradeInfo.defaultImportActive,
     isImport: false,
   });
+
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isControllerAccountSuccess = extensionWalletState.registerMainAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
@@ -69,7 +70,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
   const hasExtensionAccounts = extensionWalletState.allAccounts?.length > 0;
-  const hasLinkedAccounts = profileState.userData.mainAccounts?.length > 0;
+  const hasLinkedAccounts = profileState.userData?.mainAccounts?.length > 0;
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 

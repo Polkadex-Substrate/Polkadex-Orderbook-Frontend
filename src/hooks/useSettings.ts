@@ -45,13 +45,13 @@ export const useSettings = () => {
   const {
     userData: { userAccounts },
   } = useProfile();
-  const linkedMainAddress = profileState.userData.mainAccounts;
+  const linkedMainAddress = profileState.userData?.mainAccounts;
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
   const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
   const isRegisterControllerAccountSuccess = tradeWalletState.registerAccountSuccess;
-
+  const isRegisterMainAccountSuccess = extensionWalletState.registerMainAccountSuccess;
   const defaultTradeAddress = profileState.defaultTradeAccount;
   const defaultFundingAddress =
     defaultTradeAddress &&
@@ -111,9 +111,9 @@ export const useSettings = () => {
   const allFilteredControllerWallets = useMemo(
     () =>
       controllerWallets
-        ?.sort((a) => (linkedMainAddress.includes(a.account.address) ? -1 : 1))
+        ?.sort((a) => (linkedMainAddress?.includes(a.account.address) ? -1 : 1))
         ?.filter((value) =>
-          showRegistered ? linkedMainAddress.includes(value.account.address) : value
+          showRegistered ? linkedMainAddress?.includes(value.account.address) : value
         )
         ?.reduce((pv, cv) => {
           const { account } = cv;
@@ -141,15 +141,21 @@ export const useSettings = () => {
       isTradeAccountSuccess ||
       !isLoading ||
       isRegisterControllerAccountSuccess ||
-      isImportAccountSuccess;
+      isImportAccountSuccess ||
+      isRegisterMainAccountSuccess;
 
     if (hasAction) {
       if (isRegisterControllerAccountSuccess || isImportAccountSuccess) {
         onRegisterMainAccountReset();
         tradeWalletState.onRegisterAccountModalCancel();
-      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess)
+      } else if (!isRegisterControllerAccountSuccess && isTradeAccountSuccess) {
         tradeWalletState.onRegisterTradeAccountReset();
-      else tradeWalletState.onRegisterAccountModalCancel();
+      } else if (isRegisterMainAccountSuccess) {
+        tradeWalletState.onRegisterAccountModalCancel();
+        onRegisterMainAccountReset();
+      } else {
+        tradeWalletState.onRegisterAccountModalCancel();
+      }
     }
   };
   const handleClosePreviewModal = () => tradeWalletState.onPreviewAccountModalCancel();

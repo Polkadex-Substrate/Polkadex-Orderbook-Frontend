@@ -121,7 +121,10 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                onRemoveProxyAccountFromChain({ address: selected?.address });
+                onRemoveProxyAccountFromChain({
+                  address: selected?.address,
+                  allAccounts: extensionWalletState.allAccounts,
+                });
                 handleClose();
               }}
             />

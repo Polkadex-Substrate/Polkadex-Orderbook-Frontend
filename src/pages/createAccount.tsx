@@ -2,10 +2,11 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 
+import { useTradeWallet } from "../providers/user/tradeWallet";
+
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
-import { useTradeWallet } from "../providers/user/tradeWallet";
 
 const CreateAccountTemplate = dynamic(
   () =>
@@ -33,7 +34,7 @@ const CreateAccount = () => {
 
   const isRegistered =
     currentAccount.mainAddress &&
-    profileState.userData.mainAccounts.includes(currentAccount.mainAddress);
+    profileState.userData?.mainAccounts?.includes(currentAccount.mainAddress);
 
   const success = tradeWalletState.registerAccountSuccess;
 

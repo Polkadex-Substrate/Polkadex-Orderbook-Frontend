@@ -65,15 +65,15 @@ function App({ Component, pageProps }: AppProps) {
             <AssetsProvider>
               <MarketsProvider>
                 <NativeApiProvider>
-                  <ExtensionWalletProvider>
-                    <TradeWalletProvider>
+                  <TradeWalletProvider>
+                    <ExtensionWalletProvider>
                       <BalancesProvider>
                         <OverlayProvider>
                           <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
                         </OverlayProvider>
                       </BalancesProvider>
-                    </TradeWalletProvider>
-                  </ExtensionWalletProvider>
+                    </ExtensionWalletProvider>
+                  </TradeWalletProvider>
                 </NativeApiProvider>
               </MarketsProvider>
             </AssetsProvider>

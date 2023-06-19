@@ -91,7 +91,10 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       return {
         ...state,
         data: { ...state.data, isLaoding: false, isSuccess: true },
-        userData: action.payload,
+        userData: {
+          ...state.userData,
+          ...action.payload,
+        },
       };
     }
     case PROFILE_USER_SELECT_ACCOUNT_DATA: {
@@ -127,7 +130,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
     }
     case PROFILE_USER_ACCOUNT_PUSH: {
       const newAccount = action.payload;
-      const userAccounts = [...state.userData.userAccounts];
+      const userAccounts = [...state.userData?.userAccounts];
       const isPresent = userAccounts.find(
         ({ tradeAddress }) => tradeAddress === newAccount.tradeAddress
       );
@@ -144,8 +147,10 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
     }
     case PROFILE_USER_MAIN_ACCOUNT_PUSH: {
       const newMainAddress = action.payload;
-      const mainAddresses = [...state.userData.mainAccounts];
-      const isPresent = mainAddresses.find((address) => address === newMainAddress);
+      const mainAddresses = state?.userData?.mainAccounts
+        ? [...state.userData.mainAccounts]
+        : [];
+      const isPresent = mainAddresses?.find((address) => address === newMainAddress);
       if (!isPresent) {
         return {
           ...state,
@@ -184,7 +189,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
     }
     case PROFILE_USER_TRADE_ACCOUNT_DELETE: {
       const address = action.payload;
-      const userAccounts = [...state.userData.userAccounts];
+      const userAccounts = [...state.userData?.userAccounts];
       const updateState = _.cloneDeep(state);
       const filtered = userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
       if (state.defaultTradeAccount === address) {

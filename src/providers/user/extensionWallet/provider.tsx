@@ -63,6 +63,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
 
   const onRegisterMainAccountReset = () => {
     tradeWalletState.onRegisterTradeAccountReset();
+    dispatch(A.registerMainAccountReset());
   };
 
   const onRegisterMainAccountUpdate = useCallback(
@@ -188,15 +189,16 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({ children }
   }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
 
   useEffect(() => {
-    const subscription = eventHandler({
-      cb: onRegisterMainAccountUpdate,
-      name: mainAddress,
-      eventType: "RegisterAccount",
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (mainAddress) {
+      const subscription = eventHandler({
+        cb: onRegisterMainAccountUpdate,
+        name: mainAddress,
+        eventType: "RegisterAccount",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [mainAddress, onRegisterMainAccountUpdate]);
 
   return (
