@@ -75,9 +75,12 @@ export const ButtonWrapper = styled.div`
     padding-inline: 10px;
     cursor: pointer;
     transition: none;
+    background: ${theme.colors.secondaryBackground};
+    color: ${theme.colors.text};
     svg {
-      fill: ${theme.colors.inverse};
-      stroke: ${theme.colors.inverse};
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+      font-size: 10px;
     }
     :hover {
       svg {

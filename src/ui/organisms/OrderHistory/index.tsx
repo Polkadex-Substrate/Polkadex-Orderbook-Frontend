@@ -80,12 +80,14 @@ export const OrderHistory = ({ orderHistory }) => {
           </S.Tbody>
           <S.ButtonWrapper>
             <Button
+              disabled={startItem <= 0}
               size="medium"
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}>
               <Icons.ArrowLeft />
               <span>Prev</span>
             </Button>
             <Button
+              disabled={endItem >= orders.length}
               size="medium"
               onClick={() =>
                 setCurrentPage((prev) =>

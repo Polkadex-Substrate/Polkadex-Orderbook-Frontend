@@ -56,12 +56,14 @@ export const TradeHistory = ({ filters }) => {
           </S.Tbody>
           <S.ButtonWrapper>
             <Button
+              disabled={startItem <= 0}
               size="medium"
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}>
               <Icons.ArrowLeft />
               <span>Prev</span>
             </Button>
             <Button
+              disabled={endItem >= trades.length}
               size="medium"
               onClick={() =>
                 setCurrentPage((prev) =>
