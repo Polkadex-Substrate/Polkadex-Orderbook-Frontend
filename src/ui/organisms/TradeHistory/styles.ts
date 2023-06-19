@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div``;
@@ -47,4 +47,30 @@ export const Th = styled.th`
 `;
 export const EmptyWrapper = styled.div`
   padding: 10rem 0;
+`;
+
+export const ButtonWrapper = styled.div`
+  ${({ theme }) => css`
+  display: flex;
+  gap: 1.3rem;
+  justify-content: center;
+  align-items: center;
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 10px;
+    cursor: pointer;
+    transition: none;
+    svg {
+      fill: ${theme.colors.inverse};
+      stroke: ${theme.colors.inverse};
+    }
+    :hover {
+      svg {
+        fill: #fff;
+        stroke: #fff;
+      }
+    }
+  `}
 `;

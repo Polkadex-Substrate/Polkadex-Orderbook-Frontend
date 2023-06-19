@@ -1,13 +1,26 @@
+import { useEffect, useState } from "react";
+
 import * as S from "./styles";
 
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
-import { EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
+import { Button, EmptyData, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const TradeHistory = ({ filters }) => {
   const { priceFixed, amountFixed, trades } = useTradeHistory(filters);
   const { selectGetAsset } = useAssetsProvider();
+
+  const [tradeHistoryItems, setTradeHistoryItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const endItem = currentPage * itemsPerPage;
+  const startItem = endItem - itemsPerPage;
+
+  useEffect(() => {
+    setTradeHistoryItems(trades.slice(startItem, endItem));
+  }, [trades, startItem, endItem]);
 
   return (
     <S.Wrapper>
@@ -22,7 +35,7 @@ export const TradeHistory = ({ filters }) => {
             </S.Tr>
           </S.Thead>
           <S.Tbody>
-            {trades.map((trade, i) => {
+            {tradeHistoryItems?.map((trade, i) => {
               const date = new Date(trade.timestamp).toLocaleString();
               const baseUnit = selectGetAsset(trade.baseAsset).symbol;
               const quoteUnit = selectGetAsset(trade.quoteAsset).symbol;
@@ -41,6 +54,24 @@ export const TradeHistory = ({ filters }) => {
               );
             })}
           </S.Tbody>
+          <S.ButtonWrapper>
+            <Button
+              size="medium"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}>
+              <Icons.ArrowLeft />
+              <span>Prev</span>
+            </Button>
+            <Button
+              size="medium"
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, Math.ceil(trades.length / itemsPerPage))
+                )
+              }>
+              <span>Next</span>
+              <Icons.ArrowRight />
+            </Button>
+          </S.ButtonWrapper>
         </S.Table>
       ) : (
         <S.EmptyWrapper>
