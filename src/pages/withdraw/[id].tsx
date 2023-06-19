@@ -7,7 +7,7 @@ import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extension
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { WithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/provider";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
-import { BalancesProvider } from "@polkadex/orderbook/providers";
+import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -45,13 +45,15 @@ const Withdraw = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <BalancesProvider>
-      <WithdrawsProvider>
-        <TransactionsProvider>
-          <WithdrawTemplate />
-        </TransactionsProvider>
-      </WithdrawsProvider>
-    </BalancesProvider>
+    <AssetsProvider>
+      <BalancesProvider>
+        <WithdrawsProvider>
+          <TransactionsProvider>
+            <WithdrawTemplate />
+          </TransactionsProvider>
+        </WithdrawsProvider>
+      </BalancesProvider>
+    </AssetsProvider>
   );
 };
 

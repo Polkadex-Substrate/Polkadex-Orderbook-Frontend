@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { BalancesProvider } from "@polkadex/orderbook/providers";
+import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const BalancesTemplate = dynamic(
@@ -24,9 +24,11 @@ const Balances = () => {
 
   if (!hasUser) return <div />;
   return (
-    <BalancesProvider>
-      <BalancesTemplate />
-    </BalancesProvider>
+    <AssetsProvider>
+      <BalancesProvider>
+        <BalancesTemplate />
+      </BalancesProvider>
+    </AssetsProvider>
   );
 };
 

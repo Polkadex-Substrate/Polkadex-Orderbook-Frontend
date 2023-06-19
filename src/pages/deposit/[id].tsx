@@ -7,7 +7,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
-import { BalancesProvider } from "@polkadex/orderbook/providers";
+import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -44,13 +44,15 @@ const Deposit = () => {
   if (shouldRedirect) return <div />;
 
   return (
-    <BalancesProvider>
-      <TransactionsProvider>
-        <DepositProvider>
-          <DepositTemplate />
-        </DepositProvider>
-      </TransactionsProvider>
-    </BalancesProvider>
+    <AssetsProvider>
+      <BalancesProvider>
+        <TransactionsProvider>
+          <DepositProvider>
+            <DepositTemplate />
+          </DepositProvider>
+        </TransactionsProvider>
+      </BalancesProvider>
+    </AssetsProvider>
   );
 };
 
