@@ -4,7 +4,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -54,11 +54,10 @@ function App({ Component, pageProps }: AppProps) {
     console.warn = () => {};
     console.error = () => {};
   }
-  const [isActive, setIsActive] = useState(false);
   const router = useRouter();
   const availableRoutes = defaultConfig.availableRoutes;
-  useEffect(() => {
-    setIsActive(availableRoutes.some((word) => router.pathname.includes(word)));
+  const isActive = useMemo(() => {
+    return availableRoutes.some((word) => router.pathname.includes(word));
   }, [availableRoutes, router.pathname]);
 
   return (
