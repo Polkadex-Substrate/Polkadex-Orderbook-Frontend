@@ -39,4 +39,18 @@ export const defaultConfig: DefaultConfig = {
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
   reconnectRangerTime: 30000,
   showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",
+  availableRoutes: [
+    "/trading",
+    "/balances",
+    "/codeVerification",
+    "/createAccount",
+    "/deposit",
+    "/recovery",
+    "/resetPassword",
+    "/resetPasswordForm",
+    "/settings",
+    "/sign",
+    "/signIn",
+    "/withdraw",
+  ],
 };
