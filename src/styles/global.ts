@@ -61,6 +61,12 @@ ${({ theme }) => css`
     background-color: ${theme.colors.red};
   }
 
+  .infinite-scroll-component {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   .animation {
     animation-duration: 0.3s;
     -webkit-animation-duration: 0.3s;

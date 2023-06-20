@@ -63,31 +63,15 @@ export const EmptyWrapper = styled.div`
   padding: 10rem 0;
 `;
 
-export const ButtonWrapper = styled.div`
+export const Loader = styled.div`
   ${({ theme }) => css`
-  display: flex;
-  gap: 1.3rem;
-  justify-content: center;
-  align-items: center;
-  button {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-inline: 10px;
-    cursor: pointer;
-    transition: none;
-    background: ${theme.colors.secondaryBackground};
-    color: ${theme.colors.text};
-    svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-      font-size: 10px;
-    }
-    :hover {
-      svg {
-        fill: #fff;
-        stroke: #fff;
-      }
-    }
+    gap: 0.5rem;
+    text-align: center;
+    margin: 1rem;
+    font-weight: 500;
+    padding-top: 20px;
   `}
 `;
