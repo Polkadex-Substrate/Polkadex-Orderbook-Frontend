@@ -37,7 +37,7 @@ const Providers = ({ children }) => {
       <ProfileProvider>
         <NativeApiProvider>
           <TradeWalletProvider>
-            <ExtensionWalletProvider>({children})</ExtensionWalletProvider>
+            <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
           </TradeWalletProvider>
         </NativeApiProvider>
       </ProfileProvider>
