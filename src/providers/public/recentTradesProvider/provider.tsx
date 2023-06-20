@@ -36,7 +36,7 @@ export const RecentTradesProvider = ({ children }) => {
   };
   const fetchRecentTrade = useCallback(
     async (market: string, limit = 20): Promise<RawTrades[]> => {
-      const res = await fetchFromAppSync(
+      const { response: res } = await fetchFromAppSync(
         getRecentTrades,
         { m: market, limit },
         "getRecentTrades"

@@ -19,6 +19,13 @@ export type orderHistoryQueryResult = {
   fee: string;
 };
 
+export type OrderHistoryResult = {
+  response: orderHistoryQueryResult[];
+  nextToken: string;
+};
+
+export type OrderHistoryFetchResult = { nextToken: string; orders: OrderCommon[] };
+
 export interface SetOrder {
   stid: number;
   client_order_id: string;
@@ -51,12 +58,14 @@ export interface OrdersHistoryState {
   loading: boolean;
   pageIndex: number;
   success: boolean;
+  orderHistoryNextToken: string;
 }
 
 export interface onOrdersHistoryFetch {
   dateFrom: Date;
   dateTo: Date;
   tradeAddress: string;
+  orderHistoryNextToken: string;
 }
 
 export type OrderHistoryContextProps = OrdersHistoryState & {

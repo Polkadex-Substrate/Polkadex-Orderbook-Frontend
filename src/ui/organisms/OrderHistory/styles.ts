@@ -32,6 +32,7 @@ export const Tbody = styled(Grid)`
     display: block;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;
+    overflow: hidden;
     ::-webkit-scrollbar {
       display: none;
     }

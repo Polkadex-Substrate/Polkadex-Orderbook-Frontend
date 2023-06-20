@@ -23,7 +23,7 @@ export interface UserOrdersHistoryFetch {
 }
 export interface UserOrdersHistoryData {
   type: typeof ORDERS_HISTORY_DATA;
-  payload: { list: OrderCommon[] };
+  payload: { list: OrderCommon[]; nextToken: string };
 }
 
 export interface UserOrdersHistoryError {

@@ -22,6 +22,7 @@ export const initialOrdersHistoryState: OrdersHistoryState = {
   loading: false,
   pageIndex: 0,
   success: false,
+  orderHistoryNextToken: null,
 };
 
 export const ordersHistoryReducer = (
@@ -35,6 +36,7 @@ export const ordersHistoryReducer = (
       return {
         ...state,
         list: sliceArray(action.payload.list, defaultStorageLimit),
+        orderHistoryNextToken: action.payload.nextToken,
         loading: false,
         success: true,
       };
