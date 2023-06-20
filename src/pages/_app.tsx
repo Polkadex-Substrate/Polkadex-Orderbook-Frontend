@@ -4,7 +4,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
