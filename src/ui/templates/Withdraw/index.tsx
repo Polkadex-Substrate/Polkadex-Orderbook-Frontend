@@ -19,11 +19,16 @@ import {
   Checkbox,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
+import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import {
+  ErrorMessages,
+  MAX_DIGITS_AFTER_DECIMAL,
+  POLKADEX_ASSET,
+} from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
@@ -90,9 +95,7 @@ export const WithdrawTemplate = () => {
 
   const handleSubmitWithdraw = async (amount: string | number) => {
     try {
-      const asset = isAssetPDEX(selectedAsset.assetId)
-        ? { polkadex: null }
-        : { asset: selectedAsset.assetId };
+      const asset = isAssetPDEX(selectedAsset.assetId) ? "PDEX" : selectedAsset.assetId;
 
       await onFetchWithdraws({ asset, amount });
     } finally {
@@ -100,10 +103,19 @@ export const WithdrawTemplate = () => {
     }
   };
 
+  const validate = (values) => {
+    const errors = {} as any;
+    if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
+      errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
+
+    return errors;
+  };
+
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
     useFormik({
       initialValues,
       validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
+      validate,
       onSubmit: ({ amount }) => {
         if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
         else {
@@ -376,7 +388,7 @@ const HistoryTable = ({ items }) => {
         </Table.Header>
         <Table.Body striped border="squared">
           {items.map((item) => (
-            <Table.Row key={item.event_id}>
+            <Table.Row key={item.stid}>
               <Table.Cell>
                 <S.Cell>
                   <span>{selectGetAsset(item.asset)?.name} </span>

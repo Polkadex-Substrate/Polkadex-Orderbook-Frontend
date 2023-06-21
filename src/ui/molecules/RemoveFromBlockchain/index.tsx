@@ -22,7 +22,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
   return (
     <S.Wrapper>
       <S.Tag>
-        <strong>Warning: </strong> Warning: This action is not reversible
+        <strong>Warning: </strong>This action is not reversible
       </S.Tag>
       <S.Title>
         <h2>Remove account from the blockchain</h2>

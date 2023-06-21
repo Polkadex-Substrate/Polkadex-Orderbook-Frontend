@@ -7,6 +7,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
+import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useDisabledPages } from "@polkadex/orderbook-hooks";
 
 const DepositTemplate = dynamic(
@@ -27,7 +28,8 @@ const Deposit = () => {
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  const isRegistered = mainAddress && profileState.userData.mainAccounts.includes(mainAddress);
+  const isRegistered =
+    mainAddress && profileState.userData?.mainAccounts?.includes(mainAddress);
 
   const hasSelectedAccount = selectIsAddressInExtension(
     mainAddress,
@@ -45,11 +47,15 @@ const Deposit = () => {
   if (shouldRedirect || disabled) return <div />;
 
   return (
-    <TransactionsProvider>
-      <DepositProvider>
-        <DepositTemplate />
-      </DepositProvider>
-    </TransactionsProvider>
+    <AssetsProvider>
+      <BalancesProvider>
+        <TransactionsProvider>
+          <DepositProvider>
+            <DepositTemplate />
+          </DepositProvider>
+        </TransactionsProvider>
+      </BalancesProvider>
+    </AssetsProvider>
   );
 };
 

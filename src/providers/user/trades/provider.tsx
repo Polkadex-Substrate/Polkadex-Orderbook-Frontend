@@ -53,20 +53,16 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
     dispatch(A.userTradesError(payload));
   };
   useEffect(() => {
-    console.log(
-      "created User Events Channel... for main address from trades  provider",
-      mainAddress
-    );
-
-    const subscription = eventHandler({
-      cb: onUserTradeUpdate,
-      name: mainAddress,
-      eventType: "TradeFormat",
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    if (mainAddress) {
+      const subscription = eventHandler({
+        cb: onUserTradeUpdate,
+        name: mainAddress,
+        eventType: "TradeFormat",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [mainAddress, onUserTradeUpdate]);
 
   return (

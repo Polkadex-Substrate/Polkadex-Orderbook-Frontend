@@ -121,7 +121,10 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                onRemoveProxyAccountFromChain({ address: selected?.address });
+                onRemoveProxyAccountFromChain({
+                  address: selected?.address,
+                  allAccounts: extensionWalletState.allAccounts,
+                });
                 handleClose();
               }}
             />
@@ -184,7 +187,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   </S.Box>
                   {tradingAccountInBrowser && (
                     <S.Button
-                      disabled={!tradingAccountInBrowser || !mainAccountDetails}
+                      disabled={!tradingAccountInBrowser}
                       onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
                       {using ? "Using" : "Use"}

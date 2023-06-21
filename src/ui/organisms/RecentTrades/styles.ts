@@ -4,7 +4,6 @@ export const MainContainer = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  margin-top: 1.5rem;
   @media screen and (max-width: 1180px) {
     width: 50%;
   }
@@ -19,7 +18,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     display: flex;
     flex-flow: column;
     flex: 1;
-    border-radius: 0 3rem 3rem 0rem;
+    border-radius: 0 2rem 2rem 0rem;
     min-width: 29rem;
     width: 100%;
     height: 100%;
@@ -42,7 +41,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem 2rem 0 2rem;
+  padding: 1rem 1rem 0 1rem;
   margin-bottom: 1rem;
   h2 {
     font-size: 1.5rem;
@@ -108,7 +107,7 @@ export const Head = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 1rem;
     margin-bottom: 0.5rem;
     span {
       opacity: 0.5;
@@ -129,7 +128,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 1.6rem 0 2rem;
+    padding: 0 1.6rem 0 1rem;
     font-weight: 500;
     :not(:last-child) {
       margin-bottom: 0.1rem;

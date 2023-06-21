@@ -64,12 +64,12 @@ export interface Ticker {
   m: string; // eg "PDEX-1"
   priceChange24Hr: number;
   priceChangePercent24Hr: number;
-  open: string;
-  close: string;
-  high: string;
-  low: string;
-  volumeBase24hr: string;
-  volumeQuote24Hr: string;
+  open: number;
+  close: number;
+  high: number;
+  low: number;
+  volumeBase24hr: number;
+  volumeQuote24Hr: number;
 }
 export interface TickerEvent {
   amount: string;
@@ -104,7 +104,6 @@ export interface MarketQueryResult {
 }
 
 export type TickerQueryResult = {
-  m?: string;
   o: string;
   c: string;
   h: string;

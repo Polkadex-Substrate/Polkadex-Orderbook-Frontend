@@ -44,6 +44,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
   const { onUserSelectAccount } = useProfile();
 
+  // TODO: Missing dependencies
   useEffect(() => {
     if (currentUsingAccount) {
       const tradeAcc = getTradeAccount(currentUsingAccount.tradeAddress, tradingAccounts);
@@ -55,7 +56,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   useEffect(() => {
     const accountList: KeyringPair[] = [];
-    allUserAccounts.forEach((data) => {
+    allUserAccounts?.forEach((data) => {
       const res = getTradeAccount(data.tradeAddress, tradingAccounts);
       if (res && accountList.length < 5) {
         accountList.push(res);

@@ -14,9 +14,10 @@ export const Wrapper = styled.main`
   height: 100vh;
   overflow: auto;
   overflow-x: hidden;
+  @media screen and (max-width: 590px) {
+    display: block;
+  }
 `;
-
-
 
 export const WrapperMain = styled.div`
   display: flex;
@@ -33,82 +34,75 @@ export const ContainerMain = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  padding: 0 1rem;
+  padding: 0 0.8rem;
   flex: 1;
   @media screen and (max-width: 590px) {
     margin-bottom: 8rem;
   }
 `;
 
-export const Content = styled.div`
- 
-`;
+export const Content = styled.div``;
 export const WrapperGraph = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 0.8rem;
   flex: 1;
   overflow: hidden;
   width: 100%;
 `;
 
 export const Header = styled.div`
-display:flex;
-align-items: center;
-width: 100%;
-justify-content: space-between;
-`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
 
 export const CenterWrapper = styled.div`
-display: flex;
-width: 100%;
-gap: 1.5rem;
-@media screen and (max-width: 1180px) {
-      flex-direction: column;
-    }
-`
+  display: flex;
+  width: 100%;
+  gap: 0.8rem;
+  @media screen and (max-width: 1180px) {
+    flex-direction: column;
+  }
+`;
 export const GraphEpmty = styled.div`
-display: flex;
-flex-direction: column;
-gap: 3rem;
-width: 100%;
-`
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+`;
 
 export const WrapperRight = styled.div`
-  ${({ theme }) => css`
-    
-    min-width: 29rem;
-   width: 25%;
-   display: flex;
-   flex-direction: column;
-    
-    @media screen and (max-width: 1180px) {
+  min-width: 28rem;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  @media screen and (max-width: 1180px) {
     flex-direction: row;
     width: 100%;
     gap: 1rem;
     height: 41.4rem;
-    }
-    @media screen and (max-width: 750px) {
+  }
+  @media screen and (max-width: 750px) {
     flex-direction: column;
     height: max-content;
-    }
-  `}
+  }
 `;
 export const Actions = styled.div<{ isSignedIn?: boolean }>`
-  ${({ isSignedIn }) => css`
-    display: flex;
-    flex-direction: column;
-   
-    @media screen and (max-width: 1080px) {
-      display: none;
-    }
-  `}
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: 1080px) {
+    display: none;
+  }
 `;
 export const Box = styled.div`
   ${({ theme }) => css`
     justify-content: space-between;
     align-items: center;
-   
+
     display: none;
     padding: 0 1rem;
     ${Button} {

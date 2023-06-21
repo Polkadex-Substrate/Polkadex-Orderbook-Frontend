@@ -5,6 +5,7 @@ import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../help
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
+import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/orderbook/constants";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -80,8 +81,14 @@ export function usePlaceOrder(
     ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
     : [-1, -1];
 
-  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
-  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
+  const pricePrecision = Math.max(
+    decimalPlaces(currentMarket?.price_tick_size),
+    MAX_DIGITS_AFTER_DECIMAL
+  );
+  const qtyPrecision = Math.max(
+    decimalPlaces(currentMarket?.qty_step_size),
+    MAX_DIGITS_AFTER_DECIMAL
+  );
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
 
@@ -193,7 +200,7 @@ export function usePlaceOrder(
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
     const notify = (description: string) =>
-      settingsState.onHandleAlert(`Order Failed ${description}`);
+      settingsState.onHandleError(`Order Failed. ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
@@ -202,24 +209,24 @@ export function usePlaceOrder(
       ((!isSell && +total > +userAvailableBalance) ||
         (isSell && +form.amountSell > +userAvailableBalance))
     ) {
-      notify("balance not enough");
+      notify("Balance not enough");
     } else if (isLimit && +form.price < currentMarket.min_price) {
-      notify("price cannot be less than min market price");
+      notify("Price can not be less than min market price");
     } else if (isLimit && +form.price > currentMarket.max_price) {
-      notify("price cannot be greater than max market price");
+      notify("Price can not be greater than max market price");
     } else if (+amount < currentMarket.min_amount) {
-      notify("Amount cannot be less than min market amount");
+      notify("Amount can not be less than min market amount");
     } else if (+amount > currentMarket.max_amount) {
-      notify("Amount cannot be greater than max market amount");
+      notify("Amount can not be greater than max market amount");
     } else {
       // VALID TRANSACTION
       ordersState.onPlaceOrders({
         order_type: isLimit ? "LIMIT" : "MARKET",
         symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
         side: isSell ? "Sell" : "Buy",
-        price: isLimit ? form.price : "",
+        price: isLimit ? Number(form.price) : 0,
         market: currentMarket.id,
-        amount,
+        amount: Number(amount),
       });
     }
   };

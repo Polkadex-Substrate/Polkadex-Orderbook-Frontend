@@ -9,6 +9,13 @@ export type OrderbookRawUpdate = {
   seq: number;
 };
 
+export type OBIncrementData = {
+  i: number;
+  m: string;
+  b: Record<string, string>;
+  a: Record<string, string>;
+};
+
 export interface OrderBookDbState {
   p: string;
   q: string;

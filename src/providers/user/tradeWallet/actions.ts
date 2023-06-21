@@ -1,4 +1,4 @@
-import { CommonError, TradeAccount } from "../../types";
+import { CommonError, TradeAccount, ExtensionAccount } from "../../types";
 
 import {
   REMOVE_TRADE_ACCOUNT_FROM_BROWSER,
@@ -53,6 +53,7 @@ export interface RegisterTradeAccountFetch {
     address: string;
     password?: string;
     name?: string;
+    allAccounts: ExtensionAccount[];
   };
 }
 
@@ -106,7 +107,7 @@ export interface RemoveTradeAccountFromBrowser {
 
 export interface RemoveProxyAccountFromChainFetch {
   type: typeof USER_TRADE_ACCOUNT_REMOVE_FROM_CHAIN_FETCH;
-  payload: { address: string };
+  payload: { address: string; allAccounts: ExtensionAccount[] };
 }
 
 export interface RemoveProxyAccountFromChainData {

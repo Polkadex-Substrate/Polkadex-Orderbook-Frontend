@@ -1,11 +1,11 @@
 import { createContext } from "react";
 
 import { initialKlineState } from "./reducer";
-import { KlineContextProps, KlineProviderProps } from "./types";
+import { KlineContextProps, KlineProviderProps, KlineEvent } from "./types";
 
 export const Context = createContext<KlineContextProps>({
   ...initialKlineState,
-  onHandleKlineFetch: () => {},
+  onHandleKlineFetch: (): Promise<KlineEvent[]> => null,
   onFetchKlineChannel: () => {},
 });
 

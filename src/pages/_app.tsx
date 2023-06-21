@@ -4,10 +4,11 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { GoogleAnalytics } from "nextjs-google-analytics";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 import { useInit } from "../hooks/useInit";
 
@@ -20,9 +21,6 @@ import {
   NativeApiProvider,
   ExtensionWalletProvider,
   SettingProvider,
-  MarketsProvider,
-  BalancesProvider,
-  AssetsProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
@@ -33,6 +31,19 @@ const Maintenance = dynamic(
   }
 );
 const queryClient = new QueryClient();
+const Providers = ({ children }) => {
+  return (
+    <AuthProvider>
+      <ProfileProvider>
+        <NativeApiProvider>
+          <TradeWalletProvider>
+            <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
+          </TradeWalletProvider>
+        </NativeApiProvider>
+      </ProfileProvider>
+    </AuthProvider>
+  );
+};
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
@@ -43,6 +54,11 @@ function App({ Component, pageProps }: AppProps) {
     console.warn = () => {};
     console.error = () => {};
   }
+  const router = useRouter();
+  const availableRoutes = defaultConfig.availableRoutes;
+  const isActive = useMemo(() => {
+    return availableRoutes.some((word) => router.pathname.includes(word));
+  }, [availableRoutes, router.pathname]);
 
   return (
     <>
@@ -60,25 +76,15 @@ function App({ Component, pageProps }: AppProps) {
               pauseOnFocusLoss: false,
             }),
         }}>
-        <AuthProvider>
-          <ProfileProvider>
-            <AssetsProvider>
-              <MarketsProvider>
-                <NativeApiProvider>
-                  <ExtensionWalletProvider>
-                    <TradeWalletProvider>
-                      <BalancesProvider>
-                        <OverlayProvider>
-                          <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
-                        </OverlayProvider>
-                      </BalancesProvider>
-                    </TradeWalletProvider>
-                  </ExtensionWalletProvider>
-                </NativeApiProvider>
-              </MarketsProvider>
-            </AssetsProvider>
-          </ProfileProvider>
-        </AuthProvider>
+        <OverlayProvider>
+          {isActive ? (
+            <Providers>
+              <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+            </Providers>
+          ) : (
+            <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+          )}
+        </OverlayProvider>
       </SettingProvider>
     </>
   );

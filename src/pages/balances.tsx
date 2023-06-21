@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { useDisabledPages } from "../hooks/useDisabledPages";
 
+import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 const BalancesTemplate = dynamic(
@@ -26,7 +27,13 @@ const Balances = () => {
   }, [hasUser, router]);
 
   if (!hasUser || disabled) return <div />;
-  return <BalancesTemplate />;
+  return (
+    <AssetsProvider>
+      <BalancesProvider>
+        <BalancesTemplate />
+      </BalancesProvider>
+    </AssetsProvider>
+  );
 };
 
 export default Balances;

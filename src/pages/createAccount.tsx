@@ -37,7 +37,7 @@ const CreateAccount = () => {
 
   const isRegistered =
     currentAccount.mainAddress &&
-    profileState.userData.mainAccounts.includes(currentAccount.mainAddress);
+    profileState.userData?.mainAccounts?.includes(currentAccount.mainAddress);
 
   const success = tradeWalletState.registerAccountSuccess;
 

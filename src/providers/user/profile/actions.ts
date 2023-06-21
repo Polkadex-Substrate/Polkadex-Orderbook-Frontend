@@ -39,8 +39,8 @@ export interface UserFetch {
 export interface UserData {
   type: typeof PROFILE_USER_DATA;
   payload: {
-    mainAccounts: string[];
-    userAccounts: UserAccount[];
+    mainAccounts?: string[];
+    userAccounts?: UserAccount[];
   };
 }
 export interface UserError {

@@ -33,6 +33,9 @@ export const WrapperIcon = styled.div<{
       border-radius: 10rem;
       margin-left: 5px;
     }
+    @media screen and (max-width: 590px) {
+      flex-direction: column;
+    }
   `}
 `;
 
@@ -46,6 +49,12 @@ export const LineBorder = styled.span`
   background-color: #e6007a;
   border-radius: 99px;
   margin-right: -2px;
+  @media screen and (max-width: 590px) {
+    width: 30px;
+    height: 3px;
+    position: relative;
+    top: -8px;
+  }
 `;
 
 export const SpanWrapper = styled.div``;

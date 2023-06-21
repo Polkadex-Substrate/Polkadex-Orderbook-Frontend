@@ -2,13 +2,13 @@ import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
-    background: ${theme.colors.tertiaryBackground};
-    border-radius: 0 3rem 3rem 3rem;
+export const Wrapper = styled.div<{ isLightMode: boolean }>`
+  ${({ theme, isLightMode }) => css`
+    background: ${theme.colors.primaryBackgroundSolid};
+    border-radius: 0 2rem 2rem 2rem;
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
-    min-height: 30rem;
+    min-height: 50rem;
     width:100%;
     display:flex;
     align-self:baseline;
@@ -16,34 +16,36 @@ export const Wrapper = styled.div`
       flex-direction: column;
     }
     @media screen and (min-height: 1200px) {
-     height: 50vh;
+      height: 50vh;
     }
-    @media screen and (min-width: 1688px)
-{
-    min-height: 50rem;
-}
+    @media screen and (min-width: 1688px) {
+      min-height: 50rem;
+    }
+    ${
+      isLightMode &&
+      css`
+        border: 2px solid ${theme.colors.secondaryBackground};
+      `
+    }
   `}
 `;
 export const WrapperGraph = styled.section`
-  
-    ${({ theme }) => css`
+  ${({ theme }) => css`
     display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 2rem;
-  @media screen and (min-width: 1240px) {
-    min-width: 58rem;
-  }
-  @media screen and (min-width: 1080px) and (max-width: 1240px) {
-    min-width: 36rem;
-  }
-  @media screen and (min-width: 1688px)  {
-    min-height: 50rem;
-  }
-  @media screen and (min-width: 900px) {
+    flex-direction: column;
+    width: 100%;
+    /* padding: 2rem; */
+    @media screen and (min-width: 1240px) {
+      min-width: 58rem;
+    }
+    @media screen and (min-width: 1080px) and (max-width: 1240px) {
+      min-width: 36rem;
+    }
+    @media screen and (min-width: 1688px) {
+      min-height: 50rem;
+    }
+    @media screen and (min-width: 900px) {
       border-right: 1px solid ${theme.colors.secondaryBackground};
-   
-    
     }
   `}
 `;
@@ -63,9 +65,9 @@ export const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
- 
+
   height: 38rem;
-  @media screen and (min-width: 1688px)  {
+  @media screen and (min-width: 1688px) {
     height: 100%;
   }
 `;
@@ -120,7 +122,7 @@ export const Li = styled.li<{ isActive?: boolean }>`
     background: ${isActive ? theme.colors.primary : "none"};
     color: ${isActive ? theme.colors.white : "inherit"};
     user-select: none;
-    cursor: pointer; ;
+    cursor: pointer;
   `}
 `;
 
@@ -129,7 +131,7 @@ export const WrapperFilters = styled.div``;
 // Graph
 export const Graph = styled.div``;
 export const FilterIcon = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+  ${({ theme }) => css`
     display: flex;
     gap: 0.5rem;
     align-items: center;
