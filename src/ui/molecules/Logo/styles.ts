@@ -36,3 +36,8 @@ export const LogoText = styled.g`
   opacity: 0;
 `;
 export const LogoIcon = styled.g``;
+export const OrderbookLogoWrapper = styled.svg<{ light: boolean }>`
+  ${({ theme, light }) => css`
+    fill: ${light ? theme.colors.white : theme.colors.text};
+  `}
+`;

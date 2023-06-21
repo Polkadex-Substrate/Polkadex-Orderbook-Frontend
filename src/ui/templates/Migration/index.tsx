@@ -7,6 +7,7 @@ import * as S from "./styles";
 import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 
 const initialState = {
+  days: "00",
   hours: "00",
   minutes: "00",
   seconds: "00",
@@ -21,11 +22,11 @@ type Props = {
 };
 
 export const Migration = ({
-  title = "Orderbook v1 will go offline as it is upgraded to v2",
+  title,
   footerText,
   textButton,
-  buttonLink = "https://t.me/Polkadex",
-  dateIntimestampMs = new Date("06/05/2023"),
+  buttonLink,
+  dateIntimestampMs,
   children = <MigrationText />,
 }: PropsWithChildren<Props>) => {
   const [state, setState] = useState(initialState);
@@ -36,6 +37,7 @@ export const Migration = ({
     if (timestampDay.isBefore(nowDay)) return initialState;
 
     return {
+      days: addZeros(timestampDay.diff(nowDay, "days")),
       hours: addZeros(timestampDay.diff(nowDay, "hours") % 25),
       minutes: addZeros(timestampDay.diff(nowDay, "minutes") % 60),
       seconds: addZeros(timestampDay.diff(nowDay, "seconds") % 60),
@@ -93,7 +95,7 @@ export const Migration = ({
               </svg>
             </span>
             <span>
-              <OrderbookLogo />
+              <OrderbookLogo light />
             </span>
           </S.Header>
           <S.Box>
@@ -113,6 +115,10 @@ export const Migration = ({
           <S.TimerWrapper>
             <h3>The migration ends in:</h3>
             <S.CountDown>
+              <div>
+                <span>{state.days}</span>
+                <p>days</p>
+              </div>
               <div>
                 <span>{state.hours}</span>
                 <p>hrs</p>
@@ -134,21 +140,22 @@ export const Migration = ({
   );
 };
 
-const MigrationText = ({ chainBridgeDate = "20/05/2023" }) => (
+const MigrationText = ({ chainBridgeDate = "August 2023" }) => (
   <>
     <p>
-      <span>Accounts are migrating to Orderbook v2 for improved decentralized trading</span> .
-      Trading will be unavailable during the migration, and all open orders have been
-      cancelled. Funds have been withdrawn to the Polkadex address.
+      Your accounts are being migrated. Hang tight and get ready for better decentralized
+      trading with Orderbook v2. Keep in mind you will not be able to trade during migration.
+      All open orders will be cancelled and your funds will be automatically withdrawn from
+      your trading account to your main account (aka your Polkadex address).
     </p>
     <p>
       <span>
-        If you have cUSDT, use the{" "}
-        <a href="www.bridge.polkadex.trade" target="_blank">
-          {" "}
+        Please note, cUSDT will no longer be used for trading on Polkadex Orderbook. If you
+        have cUSDT, please use the{" "}
+        <a href="https://tokenmanager.polkadex.trade" target="_blank" rel="noreferrer">
           ChainBridge portal
         </a>{" "}
-        by {chainBridgeDate} to return USDT to your Ethereum address.
+        before {chainBridgeDate} to return your USDT to your Ethereum address.
       </span>
     </p>
   </>

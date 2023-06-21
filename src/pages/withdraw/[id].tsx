@@ -8,6 +8,7 @@ import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/e
 import { WithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsProvider/provider";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
+import { useDisabledPages } from "@polkadex/orderbook-hooks";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -18,6 +19,8 @@ const WithdrawTemplate = dynamic(
 );
 const Withdraw = () => {
   const router = useRouter();
+  const { disabled } = useDisabledPages();
+
   const {
     authInfo: { isAuthenticated: hasUser },
     selectedAccount: { mainAddress },
@@ -42,8 +45,7 @@ const Withdraw = () => {
     if (shouldRedirect) router.push("/settings");
   }, [router, shouldRedirect]);
 
-  if (shouldRedirect) return <div />;
-
+  if (shouldRedirect || disabled) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>

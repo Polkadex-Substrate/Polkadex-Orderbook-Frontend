@@ -8,6 +8,7 @@ import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extension
 import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
+import { useDisabledPages } from "@polkadex/orderbook-hooks";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
@@ -18,6 +19,8 @@ const DepositTemplate = dynamic(
 
 const Deposit = () => {
   const router = useRouter();
+  const { disabled } = useDisabledPages();
+
   const {
     authInfo: { isAuthenticated: hasUser },
     selectedAccount: { mainAddress },
@@ -41,7 +44,7 @@ const Deposit = () => {
   useEffect(() => {
     if (!hasUser) router?.push("/accountManager/");
   }, [hasUser, router]);
-  if (shouldRedirect) return <div />;
+  if (shouldRedirect || disabled) return <div />;
 
   return (
     <AssetsProvider>

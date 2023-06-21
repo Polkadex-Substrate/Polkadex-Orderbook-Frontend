@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { useDisabledPages } from "../hooks/useDisabledPages";
+
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 const ResetPasswordFormTemplate = dynamic(
@@ -15,6 +17,7 @@ const ResetPasswordFormTemplate = dynamic(
 );
 const ResetPasswordForm = () => {
   const router = useRouter();
+  const { disabled } = useDisabledPages();
   const {
     forgotPassword: { email },
   } = useAuth();
@@ -24,7 +27,7 @@ const ResetPasswordForm = () => {
     if (!hasEmail) router.push("/signIn");
   }, [router, hasEmail]);
 
-  if (!hasEmail) return <div />;
+  if (!hasEmail || disabled) return <div />;
   return <ResetPasswordFormTemplate />;
 };
 

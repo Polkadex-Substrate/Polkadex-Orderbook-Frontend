@@ -8,6 +8,7 @@ import {
   BalancesProvider,
   MarketsProvider,
 } from "@polkadex/orderbook/providers";
+import { useDisabledPages } from "@polkadex/orderbook-hooks";
 
 const TradingTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Trading").then((mod) => mod.Trading),
@@ -16,19 +17,25 @@ const TradingTemplate = dynamic(
   }
 );
 
-const Trading = () => (
-  <AssetsProvider>
-    <MarketsProvider>
-      <BalancesProvider>
-        <OrderBookProvider>
-          <OrdersProvider>
-            <RecentTradesProvider>
-              <TradingTemplate />
-            </RecentTradesProvider>
-          </OrdersProvider>
-        </OrderBookProvider>
-      </BalancesProvider>
-    </MarketsProvider>
-  </AssetsProvider>
-);
+const Trading = () => {
+  const { disabled } = useDisabledPages();
+  if (disabled) return <div />;
+
+  return (
+    <AssetsProvider>
+      <MarketsProvider>
+        <BalancesProvider>
+          <OrderBookProvider>
+            <OrdersProvider>
+              <RecentTradesProvider>
+                <TradingTemplate />
+              </RecentTradesProvider>
+            </OrdersProvider>
+          </OrderBookProvider>
+        </BalancesProvider>
+      </MarketsProvider>
+    </AssetsProvider>
+  );
+};
+
 export default Trading;

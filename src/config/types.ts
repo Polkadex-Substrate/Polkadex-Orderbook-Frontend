@@ -18,4 +18,6 @@ export type DefaultConfig = {
   reconnectRangerTime: number;
   showShutdownPopup: boolean;
   availableRoutes: string[];
+  underMaintenance: string[];
+  mainUrl: string;
 };
