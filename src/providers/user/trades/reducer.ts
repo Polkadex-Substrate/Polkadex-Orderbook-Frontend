@@ -1,5 +1,11 @@
 import { TradesAction } from "./actions";
-import { TRADES_DATA, TRADES_ERROR, TRADES_FETCH, USER_TRADES_UPDATE_DATA } from "./constants";
+import {
+  TRADES_DATA,
+  TRADES_ERROR,
+  TRADES_FETCH,
+  TRADES_RESET,
+  USER_TRADES_UPDATE_DATA,
+} from "./constants";
 import * as T from "./types";
 
 export const initialState: T.TradesState = {
@@ -25,6 +31,9 @@ export const tradesReducer = (state = initialState, action: TradesAction): T.Tra
         data: state.data.concat(action.payload.trades),
         tradeHistoryNextToken: action.payload.nextToken,
       };
+    case TRADES_RESET: {
+      return { ...state, data: [], tradeHistoryNextToken: null };
+    }
     case USER_TRADES_UPDATE_DATA: {
       const trade = action.payload;
       const trades = [...state.data];

@@ -6,6 +6,7 @@ import {
   TRADES_ERROR,
   USER_TRADES_UPDATE_EVENT,
   USER_TRADES_UPDATE_DATA,
+  TRADES_RESET,
 } from "./constants";
 
 export interface UserTrade {
@@ -38,6 +39,10 @@ export interface UserTradesData {
   };
 }
 
+export interface UserTradesReset {
+  type: typeof TRADES_RESET;
+}
+
 export interface UserTradesError {
   type: typeof TRADES_ERROR;
   error: CommonError;
@@ -56,6 +61,7 @@ export interface UserTradesUpdateData {
 export type TradesAction =
   | UserTradesFetch
   | UserTradesData
+  | UserTradesReset
   | UserTradesError
   | UserTradesUpdateData;
 
@@ -66,6 +72,10 @@ export const userTradesFetch = (): UserTradesFetch => ({
 export const userTradesData = (payload: UserTradesData["payload"]): UserTradesData => ({
   type: TRADES_DATA,
   payload,
+});
+
+export const userTradesReset = (): UserTradesReset => ({
+  type: TRADES_RESET,
 });
 
 export const userTradesError = (error: CommonError): UserTradesError => ({

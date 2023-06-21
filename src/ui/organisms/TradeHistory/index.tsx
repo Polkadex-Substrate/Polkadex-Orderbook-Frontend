@@ -16,8 +16,6 @@ export const TradeHistory = ({ filters }) => {
   const { dateFrom, dateTo } = useSessionProvider();
   const { selectedAccount } = useProfile();
 
-  console.log(trades);
-
   return (
     <S.Wrapper>
       {trades.length ? (
