@@ -186,6 +186,10 @@ export const OrderHistoryProvider = ({ children }) => {
     onOpenOrdersHistoryFetch();
   }, [onOpenOrdersHistoryFetch]);
 
+  useEffect(() => {
+    dispatch(A.userOrdersHistoryReset());
+  }, [usingAccount.mainAddress]);
+
   const filterOrders = useCallback(
     (filters: Ifilters) => {
       if (filters?.onlyBuy && filters?.onlySell) {

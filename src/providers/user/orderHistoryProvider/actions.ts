@@ -5,6 +5,7 @@ import {
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
+  RESET_ORDER_HISTORY,
   ORDER_UPDATE_EVENT,
   ORDER_UPDATE_EVENT_DATA,
   ORDER_UPDATE_EVENT_ERROR,
@@ -24,6 +25,10 @@ export interface UserOrdersHistoryFetch {
 export interface UserOrdersHistoryData {
   type: typeof ORDERS_HISTORY_DATA;
   payload: { list: OrderCommon[]; nextToken: string | null };
+}
+
+export interface UserOrdersHistoryReset {
+  type: typeof RESET_ORDER_HISTORY;
 }
 
 export interface UserOrdersHistoryError {
@@ -61,6 +66,7 @@ export type OrdersHistoryAction =
   | UserOrdersHistoryError
   | OrderUpdateEventData
   | UserOpenOrdersHistoryData
+  | UserOrdersHistoryReset
   | OrderUpdateEventError
   | UserOpenOrdersHistoryError;
 
@@ -76,6 +82,10 @@ export const userOrdersHistoryData = (
 ): UserOrdersHistoryData => ({
   type: ORDERS_HISTORY_DATA,
   payload,
+});
+
+export const userOrdersHistoryReset = (): UserOrdersHistoryReset => ({
+  type: RESET_ORDER_HISTORY,
 });
 
 export const userOrdersHistoryError = (error: CommonError): UserOrdersHistoryError => ({
