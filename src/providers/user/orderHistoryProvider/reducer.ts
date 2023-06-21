@@ -35,7 +35,7 @@ export const ordersHistoryReducer = (
     case ORDERS_HISTORY_DATA:
       return {
         ...state,
-        list: sliceArray(action.payload.list, defaultStorageLimit),
+        list: state.list.concat(sliceArray(action.payload.list, defaultStorageLimit)),
         orderHistoryNextToken: action.payload.nextToken,
         loading: false,
         success: true,

@@ -65,7 +65,7 @@ export interface onOrdersHistoryFetch {
   dateFrom: Date;
   dateTo: Date;
   tradeAddress: string;
-  orderHistoryNextToken: string;
+  orderHistoryNextToken: string | null;
 }
 
 export type OrderHistoryContextProps = OrdersHistoryState & {

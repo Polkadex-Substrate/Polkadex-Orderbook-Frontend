@@ -68,10 +68,8 @@ export const Loader = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
     text-align: center;
-    margin: 1rem;
     font-weight: 500;
-    padding-top: 20px;
+    padding-top: 5px;
   `}
 `;
