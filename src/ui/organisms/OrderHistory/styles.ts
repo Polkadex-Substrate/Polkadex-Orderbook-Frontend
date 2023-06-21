@@ -73,3 +73,19 @@ export const Loader = styled.div`
     padding-top: 5px;
   `}
 `;
+
+export const ErrorWrapper = styled.div`
+  ${({ theme }) => css`
+    text-align: center;
+    padding-top: 8px;
+    p {
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+      color: ${theme.colors.red};
+    }
+    button {
+      background: rgba(139, 161, 190, 0.2);
+      color: ${theme.colors.text};
+    }
+  `}
+`;

@@ -4,14 +4,26 @@ import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useTradeHistory } from "@polkadex/orderbook/hooks/useTradeHistory";
-import { EmptyData, LoadingSpinner, TradeHistoryCard } from "@polkadex/orderbook-ui/molecules";
+import {
+  Button,
+  EmptyData,
+  LoadingSpinner,
+  TradeHistoryCard,
+} from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/useSessionProvider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const TradeHistory = ({ filters }) => {
-  const { priceFixed, amountFixed, trades, tradeHistoryNextToken, onFetchTrades } =
-    useTradeHistory(filters);
+  const {
+    priceFixed,
+    amountFixed,
+    trades,
+    tradeHistoryNextToken,
+    onFetchTrades,
+    error,
+    isLoading,
+  } = useTradeHistory(filters);
   const { selectGetAsset } = useAssetsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
   const { selectedAccount } = useProfile();
@@ -64,6 +76,22 @@ export const TradeHistory = ({ filters }) => {
                   />
                 );
               })}
+              {!isLoading && error && (
+                <S.ErrorWrapper>
+                  <p>{error.message}</p>
+                  <Button
+                    onClick={() => {
+                      onFetchTrades({
+                        dateFrom,
+                        dateTo,
+                        tradeAddress: selectedAccount.tradeAddress,
+                        tradeHistoryFetchToken: tradeHistoryNextToken,
+                      });
+                    }}>
+                    Try Again
+                  </Button>
+                </S.ErrorWrapper>
+              )}
             </InfiniteScroll>
           </S.Tbody>
         </S.Table>

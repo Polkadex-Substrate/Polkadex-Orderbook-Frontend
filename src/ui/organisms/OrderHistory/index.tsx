@@ -4,7 +4,12 @@ import { useEffect } from "react";
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { OrderHistoryCard, EmptyData, LoadingSpinner } from "@polkadex/orderbook-ui/molecules";
+import {
+  OrderHistoryCard,
+  EmptyData,
+  LoadingSpinner,
+  Button,
+} from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/providers/types";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
@@ -12,7 +17,7 @@ import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionPr
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
 export const OrderHistory = ({ orderHistory }) => {
-  const { orders, onOrdersHistoryFetch, orderHistoryNextToken } = orderHistory;
+  const { orders, onOrdersHistoryFetch, orderHistoryNextToken, loading, error } = orderHistory;
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
   const priceFixed = currentMarket?.quote_precision;
@@ -102,6 +107,22 @@ export const OrderHistory = ({ orderHistory }) => {
                     />
                   );
                 })}
+              {!loading && error && (
+                <S.ErrorWrapper>
+                  <p>{error.message}</p>
+                  <Button
+                    onClick={() => {
+                      onOrdersHistoryFetch({
+                        dateFrom,
+                        dateTo,
+                        orderHistoryNextToken,
+                        tradeAddress: selectedAccount.tradeAddress,
+                      });
+                    }}>
+                    Try Again
+                  </Button>
+                </S.ErrorWrapper>
+              )}
             </InfiniteScroll>
           </S.Tbody>
         </S.Table>
