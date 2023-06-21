@@ -32,7 +32,10 @@ export interface UserTradesFetch {
 
 export interface UserTradesData {
   type: typeof TRADES_DATA;
-  payload: UserTrade[];
+  payload: {
+    trades: UserTrade[];
+    nextToken: string | null;
+  };
 }
 
 export interface UserTradesError {
@@ -60,7 +63,7 @@ export const userTradesFetch = (): UserTradesFetch => ({
   type: TRADES_FETCH,
 });
 
-export const userTradesData = (payload: UserTrade[]): UserTradesData => ({
+export const userTradesData = (payload: UserTradesData["payload"]): UserTradesData => ({
   type: TRADES_DATA,
   payload,
 });

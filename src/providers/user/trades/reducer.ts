@@ -6,6 +6,7 @@ export const initialState: T.TradesState = {
   loading: false,
   success: false,
   data: [],
+  tradeHistoryNextToken: null,
 };
 
 export const tradesReducer = (state = initialState, action: TradesAction): T.TradesState => {
@@ -21,7 +22,8 @@ export const tradesReducer = (state = initialState, action: TradesAction): T.Tra
         ...state,
         loading: false,
         success: true,
-        data: action.payload,
+        data: state.data.concat(action.payload.trades),
+        tradeHistoryNextToken: action.payload.nextToken,
       };
     case USER_TRADES_UPDATE_DATA: {
       const trade = action.payload;

@@ -22,13 +22,15 @@ export const OrderHistory = ({ orderHistory }) => {
   const { selectedAccount } = useProfile();
 
   useEffect(() => {
-    onOrdersHistoryFetch({
-      dateFrom,
-      dateTo,
-      tradeAddress: selectedAccount.tradeAddress,
-      orderHistoryNextToken: null,
-    });
-  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch]);
+    if (!orders.length) {
+      onOrdersHistoryFetch({
+        dateFrom,
+        dateTo,
+        tradeAddress: selectedAccount.tradeAddress,
+        orderHistoryNextToken: null,
+      });
+    }
+  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch, orders]);
 
   return (
     <S.Wrapper>
