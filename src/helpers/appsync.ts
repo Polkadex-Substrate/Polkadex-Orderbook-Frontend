@@ -59,14 +59,12 @@ export const fetchFromAppSync = async (
   variables: Record<string, any>,
   key: string
 ) => {
-  let fullResponse = [];
-
   const res = await sendQueryToAppSync({
     query,
     variables,
   });
 
-  fullResponse = [...fullResponse, ...res.data[key].items];
+  const fullResponse = res.data[key].items;
 
   const nextToken = res.data[key].nextToken;
 
