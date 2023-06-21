@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
 
+import { useDisabledPages } from "../hooks/useDisabledPages";
+
 const ResetPasswordTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/ResetPassword").then(
@@ -9,6 +11,11 @@ const ResetPasswordTemplate = dynamic(
     ssr: false,
   }
 );
-const ResetPassword = () => <ResetPasswordTemplate />;
+const ResetPassword = () => {
+  const { disabled } = useDisabledPages();
+  if (disabled) return <div />;
+
+  return <ResetPasswordTemplate />;
+};
 
 export default ResetPassword;

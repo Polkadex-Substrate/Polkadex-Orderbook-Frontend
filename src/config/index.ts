@@ -53,4 +53,6 @@ export const defaultConfig: DefaultConfig = {
     "/signIn",
     "/withdraw",
   ],
+  underMaintenance: process.env.UNDER_MAINTENACE?.split(","),
+  mainUrl: process.env.MAIN_URL || "/migration",
 };

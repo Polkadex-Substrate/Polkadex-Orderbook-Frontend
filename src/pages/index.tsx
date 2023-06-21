@@ -7,7 +7,7 @@ function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/trading/" + defaultConfig.landingPageMarket);
+    router.push(defaultConfig.mainUrl);
   }, [router]);
 
   return <div />;
