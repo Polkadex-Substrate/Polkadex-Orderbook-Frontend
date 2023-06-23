@@ -42,7 +42,7 @@ export const ordersHistoryReducer = (
         success: true,
       };
     case ORDERS_HISTORY_ERROR:
-      return { ...state, list: [], pageIndex: 0, loading: false };
+      return { ...state, list: [], pageIndex: 0, loading: false, error: action.error };
     case RESET_ORDER_HISTORY:
       return { ...state, list: [] };
 

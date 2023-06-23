@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { OrderCommon } from "@polkadex/orderbook/providers/types";
+import { CommonError, OrderCommon } from "@polkadex/orderbook/providers/types";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
 export type orderHistoryQueryResult = {
@@ -59,6 +59,7 @@ export interface OrdersHistoryState {
   pageIndex: number;
   success: boolean;
   orderHistoryNextToken: string;
+  error?: CommonError;
 }
 
 export interface onOrdersHistoryFetch {

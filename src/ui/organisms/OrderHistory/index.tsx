@@ -11,12 +11,17 @@ import {
   Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@polkadex/orderbook/providers/types";
+import { OrderHistoryContextProps } from "@polkadex/orderbook/providers/user/orderHistoryProvider/types";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/useSessionProvider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
-export const OrderHistory = ({ orderHistory }) => {
+type Props = {
+  orderHistory: OrderHistoryContextProps;
+};
+
+export const OrderHistory = ({ orderHistory }: Props) => {
   const { orders, onOrdersHistoryFetch, orderHistoryNextToken, loading, error } = orderHistory;
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
