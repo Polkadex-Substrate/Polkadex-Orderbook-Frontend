@@ -257,6 +257,10 @@ export const SettingsTemplate = () => {
                                       onClick={() =>
                                         tradeWalletState.onRegisterAccountModalActive({
                                           defaultImportActive: true,
+                                          data: {
+                                            name: account.name,
+                                            address: account.address,
+                                          },
                                         })
                                       }>
                                       Import
