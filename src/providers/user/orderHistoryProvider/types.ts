@@ -21,10 +21,10 @@ export type orderHistoryQueryResult = {
 
 export type OrderHistoryResult = {
   response: orderHistoryQueryResult[];
-  nextToken: string;
+  nextToken: string | null;
 };
 
-export type OrderHistoryFetchResult = { nextToken: string; orders: OrderCommon[] };
+export type OrderHistoryFetchResult = { nextToken: string | null; orders: OrderCommon[] };
 
 export interface SetOrder {
   stid: number;
@@ -58,7 +58,7 @@ export interface OrdersHistoryState {
   loading: boolean;
   pageIndex: number;
   success: boolean;
-  orderHistoryNextToken: string;
+  orderHistoryNextToken: string | null;
   error?: CommonError;
 }
 

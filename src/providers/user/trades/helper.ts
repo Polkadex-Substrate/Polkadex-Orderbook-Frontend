@@ -5,6 +5,8 @@ import * as queries from "@polkadex/orderbook/graphql/queries";
 import { fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 
+const LIMIT = 15;
+
 export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
   const [base, quote] = eventData.m.split("-");
   return {
@@ -33,7 +35,7 @@ export const fetchUserTrades = async (
       main_account: proxyAccount,
       from: dateFromStr,
       to: dateToStr,
-      limit: 15,
+      limit: LIMIT,
       nextToken: tradeHistoryFetchToken,
     },
     "listTradesByMainAccount"
