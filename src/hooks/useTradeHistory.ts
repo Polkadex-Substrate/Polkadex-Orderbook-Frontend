@@ -27,12 +27,8 @@ export function useTradeHistory(filters: Ifilters) {
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
-    if (
-      userLoggedIn &&
-      currentMarket &&
-      tradesState.data.length === 0 &&
-      selectedAccount.tradeAddress
-    )
+    if (tradesState.data.length) return;
+    if (userLoggedIn && currentMarket && selectedAccount.tradeAddress)
       onFetchTrades({
         dateFrom,
         dateTo,
@@ -46,7 +42,7 @@ export function useTradeHistory(filters: Ifilters) {
     dateFrom,
     dateTo,
     selectedAccount.tradeAddress,
-    tradesState.data,
+    tradesState.data.length,
   ]);
 
   useEffect(() => {

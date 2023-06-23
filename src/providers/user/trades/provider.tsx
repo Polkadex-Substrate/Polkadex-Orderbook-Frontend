@@ -67,8 +67,8 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
   }, [mainAddress, onUserTradeUpdate]);
 
   useEffect(() => {
-    dispatch(A.userTradesReset());
-  }, [profileState.selectedAccount]);
+    if (profileState.selectedAccount.tradeAddress) dispatch(A.userTradesReset());
+  }, [profileState.selectedAccount.tradeAddress]);
 
   return (
     <Provider
