@@ -32,7 +32,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
   const { selectedAccount } = useProfile();
 
   useEffect(() => {
-    if (!orders.length) {
+    if (selectedAccount.tradeAddress) {
       onOrdersHistoryFetch({
         dateFrom,
         dateTo,
@@ -40,7 +40,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
         orderHistoryNextToken: null,
       });
     }
-  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch, orders]);
+  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch]);
 
   return (
     <S.Wrapper>

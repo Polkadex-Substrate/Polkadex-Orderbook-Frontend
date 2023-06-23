@@ -75,7 +75,6 @@ export const OrderHistoryProvider = ({ children }) => {
       dateTo: Date,
       nextTokenFetch: string | null
     ): Promise<{ orders: OrderCommon[]; nextToken: string | null }> => {
-      // TODO: make limit resonable by utilizing nextToken
       const dateFromStr = Utils.date.formatDateToISO(dateFrom);
       const dateToStr = Utils.date.formatDateToISO(dateTo);
       const { response: ordersRaw, nextToken }: OrderHistoryResult = await fetchFromAppSync(
@@ -183,12 +182,8 @@ export const OrderHistoryProvider = ({ children }) => {
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
 
   useEffect(() => {
-    if (usingAccount.tradeAddress) onOpenOrdersHistoryFetch();
-  }, [onOpenOrdersHistoryFetch, usingAccount.tradeAddress]);
-
-  useEffect(() => {
-    dispatch(A.userOrdersHistoryReset());
-  }, [usingAccount.mainAddress]);
+    if (usingAccount.tradeAddress) dispatch(A.userOrdersHistoryReset());
+  }, [usingAccount.tradeAddress]);
 
   const filterOrders = useCallback(
     (filters: Ifilters) => {
