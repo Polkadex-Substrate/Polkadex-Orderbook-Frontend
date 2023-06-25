@@ -10,6 +10,9 @@ export const fetchKlineAsync = async (
   from: Date,
   to: Date
 ): Promise<KlineEvent[]> => {
+  if (!market) {
+    return [];
+  }
   const res = await sendQueryToAppSync({
     query: getKlinesbyMarketInterval,
     variables: {
