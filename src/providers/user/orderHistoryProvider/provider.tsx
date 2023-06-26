@@ -182,6 +182,10 @@ export const OrderHistoryProvider = ({ children }) => {
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] = useState(openOrdersSorted);
 
   useEffect(() => {
+    onOpenOrdersHistoryFetch();
+  }, [onOpenOrdersHistoryFetch]);
+
+  useEffect(() => {
     if (usingAccount.tradeAddress) dispatch(A.userOrdersHistoryReset());
   }, [usingAccount.tradeAddress]);
 
