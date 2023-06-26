@@ -68,7 +68,8 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
 };
 
 const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => {
-  const iconName = `${type}Alert`;
+  const iconType = type === "Info" ? "Information" : type;
+  const iconName = `${iconType}Alert`;
   return (
     <S.Card isRead={isRead}>
       <S.CardIcon>
