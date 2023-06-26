@@ -66,9 +66,6 @@ export const withdrawValidations = (balance: number) => {
       .required("Required")
       .min(0.0001, "Too Small!")
       .typeError("Must be a number")
-      .transform((value: number, originalValue: string) =>
-        /\s/.test(originalValue) ? NaN : value
-      )
       .test(
         "Test Value greater than balance",
         "The amount you entered exceeds your balance",
