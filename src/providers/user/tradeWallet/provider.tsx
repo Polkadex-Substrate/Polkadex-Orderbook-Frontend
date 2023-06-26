@@ -66,6 +66,10 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     const { file, password } = payload;
     let tradeAddress = "";
     try {
+      if (state.registerAccountModal.selectedAddress.address !== file.address) {
+        onHandleError("Incorrect JSON File");
+        return;
+      }
       const modifiedFile = file;
       const pair = keyring.restoreAccount(modifiedFile, password);
       tradeAddress = pair?.address;
@@ -84,7 +88,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       dispatch(A.registerTradeAccountError(error));
-      onHandleError("Cannot import account, Invalid password or file");
+      onHandleError("Can't Import Account, Invalid password or file");
     }
   };
 
