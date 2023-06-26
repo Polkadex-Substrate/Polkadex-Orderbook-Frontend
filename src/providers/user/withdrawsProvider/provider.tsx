@@ -81,7 +81,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       if (isApiReady && account?.address !== "") {
         // TODO: Move this toast as callback to signAndSendExtrinsic,
         settingsState.onHandleNotification({
-          type: "Info",
+          type: "Information",
           message:
             "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
         });
