@@ -10,7 +10,10 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const isIncreasing = !!len ?? points[len - 2] < points[len - 1];
   const dailyKline: UseQueryResult<KlineEvent[], Error> = useQuery(
     `mini-graph-${market}`,
-    () => fetchKlineAsync(market, "1D", from, to)
+    () => fetchKlineAsync(market, "1D", from, to),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
   useEffect(() => {
     if (dailyKline.isFetched) {
