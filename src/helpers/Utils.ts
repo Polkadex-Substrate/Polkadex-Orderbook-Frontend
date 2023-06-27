@@ -50,3 +50,10 @@ export const getDigitsAfterDecimal = (value: number) => {
   const amountStr = String(value);
   return amountStr.includes(".") ? amountStr.split(".")[1].length : 0;
 };
+
+export const hasOnlyZeros = (floatString: string): boolean => {
+  const floatValue = parseFloat(floatString);
+  const integerValue = parseInt(floatString, 10);
+
+  return floatValue === integerValue;
+};
