@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { OrderCommon } from "@polkadex/orderbook/providers/types";
+import { CommonError, OrderCommon } from "@polkadex/orderbook/providers/types";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 
 export type orderHistoryQueryResult = {
@@ -18,6 +18,13 @@ export type orderHistoryQueryResult = {
   fq: string;
   fee: string;
 };
+
+export type OrderHistoryResult = {
+  response: orderHistoryQueryResult[];
+  nextToken: string | null;
+};
+
+export type OrderHistoryFetchResult = { nextToken: string | null; orders: OrderCommon[] };
 
 export interface SetOrder {
   stid: number;
@@ -51,12 +58,15 @@ export interface OrdersHistoryState {
   loading: boolean;
   pageIndex: number;
   success: boolean;
+  orderHistoryNextToken: string | null;
+  error?: CommonError;
 }
 
 export interface onOrdersHistoryFetch {
   dateFrom: Date;
   dateTo: Date;
   tradeAddress: string;
+  orderHistoryNextToken: string | null;
 }
 
 export type OrderHistoryContextProps = OrdersHistoryState & {

@@ -1,6 +1,7 @@
 export const ORDERS_HISTORY_FETCH = "ordersHistory/FETCH";
 export const ORDERS_HISTORY_DATA = "ordersHistory/DATA";
 export const ORDERS_HISTORY_ERROR = "ordersHistory/ERROR";
+export const RESET_ORDER_HISTORY = "orderHistory/RESET";
 
 export const OPEN_ORDERS_HISTORY_FETCH = "ordersHistory/openOrders/FETCH";
 export const OPEN_ORDERS_HISTORY_DATA = "ordersHistory/openOrders/DATA";

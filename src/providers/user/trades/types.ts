@@ -9,6 +9,7 @@ export interface TradesState {
   loading: boolean;
   success: boolean;
   data: A.UserTrade[];
+  tradeHistoryNextToken: string | null;
 }
 
 export type TradesQueryResult = {
@@ -19,12 +20,24 @@ export type TradesQueryResult = {
   t: string;
 };
 
+export type FetchUserTradesResult = {
+  response: TradesQueryResult[];
+  nextToken: string | null;
+};
+
+export interface onTradeHistoryFetch {
+  dateFrom: Date;
+  dateTo: Date;
+  tradeAddress: string;
+  tradeHistoryFetchToken: string | null;
+}
+
 export type TradesProviderProps = PropsWithChildren<{
   value: TradesContextProps;
 }>;
 
 export type TradesContextProps = TradesState & {
-  onFetchTrades: () => void;
+  onFetchTrades: (value: onTradeHistoryFetch) => void;
   onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
   onUserTradesError: (value: A.UserTradesError["error"]) => void;
 };

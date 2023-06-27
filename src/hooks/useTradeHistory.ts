@@ -9,7 +9,9 @@ import { useTrades } from "@polkadex/orderbook/providers/user/trades";
 
 export function useTradeHistory(filters: Ifilters) {
   const profileState = useProfile();
+  const { selectedAccount } = profileState;
   const tradesState = useTrades();
+  const { onFetchTrades } = tradesState;
 
   const list = tradesState.data;
   const listSorted = useMemo(() => {
@@ -20,13 +22,28 @@ export function useTradeHistory(filters: Ifilters) {
   const fetching = tradesState.loading;
   const { currentMarket } = useMarketsProvider();
   const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
-  const userSession = useSessionProvider();
+  const { dateFrom, dateTo } = useSessionProvider();
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
-    if (userLoggedIn && currentMarket) tradesState.onFetchTrades();
-  }, [userLoggedIn, currentMarket, userSession, tradesState]);
+    if (tradesState.data.length) return;
+    if (userLoggedIn && currentMarket && selectedAccount.tradeAddress)
+      onFetchTrades({
+        dateFrom,
+        dateTo,
+        tradeAddress: selectedAccount.tradeAddress,
+        tradeHistoryFetchToken: null,
+      });
+  }, [
+    userLoggedIn,
+    currentMarket,
+    onFetchTrades,
+    dateFrom,
+    dateTo,
+    selectedAccount.tradeAddress,
+    tradesState.data.length,
+  ]);
 
   useEffect(() => {
     if (filters?.onlyBuy && filters?.onlySell) {
@@ -52,5 +69,8 @@ export function useTradeHistory(filters: Ifilters) {
     amountFixed: currentMarket?.base_precision,
     userLoggedIn,
     isLoading: fetching,
+    tradeHistoryNextToken: tradesState.tradeHistoryNextToken,
+    onFetchTrades,
+    error: tradesState.error,
   };
 }
