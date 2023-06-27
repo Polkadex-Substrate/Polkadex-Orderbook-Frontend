@@ -8,7 +8,8 @@ import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/re
 import { hasOnlyZeros } from "@polkadex/web-helpers";
 
 export const Navbar = ({ onOpenMarkets }) => {
-  const currTrade = useRecentTradesProvider().getCurrentTradePrice();
+  const { getCurrentTradePrice } = useRecentTradesProvider();
+  const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket: currMarket, currentTicker } = useMarketsProvider();
   const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
@@ -18,6 +19,8 @@ export const Navbar = ({ onOpenMarkets }) => {
   const volume = currentTicker?.volumeBase24hr;
   const high = currentTicker?.high;
   const low = currentTicker?.low;
+
+  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
 
   return (
     <S.Wrapper>
@@ -33,7 +36,7 @@ export const Navbar = ({ onOpenMarkets }) => {
         <S.ContainerInfo>
           <NavbarItem
             label={`Price ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
-            info={hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2)}
+            info={price}
           />
 
           <NavbarItem
