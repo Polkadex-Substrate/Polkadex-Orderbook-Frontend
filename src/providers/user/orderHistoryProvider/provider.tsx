@@ -3,16 +3,20 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import * as queries from "../../../graphql/queries";
 import { useSettingsProvider } from "../../public/settings";
 import { useProfile } from "../profile";
-import { useSessionProvider } from "../sessionProvider/useSessionProvider";
 
 import { Provider } from "./context";
 import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
 import * as A from "./actions";
-import { orderHistoryQueryResult, SetOrder } from "./types";
+import {
+  OrderHistoryFetchResult,
+  orderHistoryQueryResult,
+  OrderHistoryResult,
+  SetOrder,
+} from "./types";
 
 import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import { OrderCommon } from "@polkadex/orderbook/providers/types";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchAllFromAppSync, fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
@@ -65,46 +69,61 @@ export const OrderHistoryProvider = ({ children }) => {
   }, [account.tradeAddress, fetchOpenOrders, onHandleError]);
 
   const fetchOrders = useCallback(
-    async (tradeAddress: string, dateFrom: Date, dateTo: Date): Promise<OrderCommon[]> => {
-      // TODO: make limit resonable by utilizing nextToken
+    async (
+      tradeAddress: string,
+      dateFrom: Date,
+      dateTo: Date,
+      nextTokenFetch: string | null
+    ): Promise<{ orders: OrderCommon[]; nextToken: string | null }> => {
       const dateFromStr = Utils.date.formatDateToISO(dateFrom);
       const dateToStr = Utils.date.formatDateToISO(dateTo);
-      const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
+      const { response: ordersRaw, nextToken }: OrderHistoryResult = await fetchFromAppSync(
         queries.listOrderHistorybyMainAccount,
         {
           main_account: tradeAddress,
           from: dateFromStr,
           to: dateToStr,
-          limit: 100,
+          limit: 5,
+          nextToken: nextTokenFetch,
         },
         "listOrderHistorybyMainAccount"
       );
-      return ordersRaw.map((order) => ({
-        main_account: tradeAddress,
-        id: order.id,
-        client_order_id: order.cid,
-        time: new Date(Number(order.t)).toISOString(),
-        m: order.m, // marketid
-        side: order.s,
-        order_type: order.ot,
-        status: order.st,
-        price: Number(order.p),
-        qty: Number(order.q),
-        avg_filled_price: order.afp,
-        filled_quantity: order.fq,
-        fee: order.fee,
-      }));
+
+      return {
+        nextToken,
+        orders: ordersRaw.map((order) => ({
+          main_account: tradeAddress,
+          id: order.id,
+          client_order_id: order.cid,
+          time: new Date(Number(order.t)).toISOString(),
+          m: order.m, // marketid
+          side: order.s,
+          order_type: order.ot,
+          status: order.st,
+          price: Number(order.p),
+          qty: Number(order.q),
+          avg_filled_price: order.afp,
+          filled_quantity: order.fq,
+          fee: order.fee,
+        })),
+      };
     },
     []
   );
 
   const onOrdersHistoryFetch = useCallback(
-    async ({ dateFrom, dateTo, tradeAddress }) => {
+    async ({ dateFrom, dateTo, tradeAddress, orderHistoryNextToken }) => {
+      dispatch(A.userOrdersHistoryFetch({ tradeAddress, dateFrom, dateTo }));
       try {
         if (tradeAddress) {
-          const orders: OrderCommon[] = await fetchOrders(tradeAddress, dateFrom, dateTo);
+          const { orders, nextToken }: OrderHistoryFetchResult = await fetchOrders(
+            tradeAddress,
+            dateFrom,
+            dateTo,
+            orderHistoryNextToken
+          );
 
-          dispatch(A.userOrdersHistoryData({ list: orders }));
+          dispatch(A.userOrdersHistoryData({ list: orders, nextToken }));
         }
       } catch (error) {
         onHandleError(`Order history fetch error: ${error?.message ?? error} `);
@@ -151,7 +170,6 @@ export const OrderHistoryProvider = ({ children }) => {
     [onHandleError]
   );
 
-  const { dateTo, dateFrom } = useSessionProvider();
   const usingAccount = profileState.selectedAccount;
   const { tradeAddress } = usingAccount;
   const orderList = state.list;
@@ -165,14 +183,11 @@ export const OrderHistoryProvider = ({ children }) => {
 
   useEffect(() => {
     onOpenOrdersHistoryFetch();
-    onOrdersHistoryFetch({ dateFrom, dateTo, tradeAddress: usingAccount.tradeAddress });
-  }, [
-    usingAccount.tradeAddress,
-    dateFrom,
-    dateTo,
-    onOpenOrdersHistoryFetch,
-    onOrdersHistoryFetch,
-  ]);
+  }, [onOpenOrdersHistoryFetch]);
+
+  useEffect(() => {
+    if (usingAccount.tradeAddress) dispatch(A.userOrdersHistoryReset());
+  }, [usingAccount.tradeAddress]);
 
   const filterOrders = useCallback(
     (filters: Ifilters) => {

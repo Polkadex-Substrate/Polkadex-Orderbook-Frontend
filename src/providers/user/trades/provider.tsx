@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 
 import { useProfile } from "../profile";
-import { UserSessionPayload } from "../sessionProvider/actions";
-import { useSessionProvider } from "../sessionProvider/useSessionProvider";
 import { useSettingsProvider } from "../../public/settings";
 
 import { Provider } from "./context";
@@ -17,25 +15,28 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
-  const sessionState = useSessionProvider();
   const { onHandleError } = useSettingsProvider();
 
   // Actions
-  const onFetchTrades = async () => {
-    try {
-      const currAccount = profileState.selectedAccount;
-      const address = currAccount.tradeAddress;
-      if (address) {
-        const userSession: UserSessionPayload = sessionState;
-        const { dateFrom, dateTo } = userSession;
-        const trades = await fetchUserTrades(address, dateFrom, dateTo);
-        dispatch(A.userTradesData(trades));
+  const onFetchTrades = useCallback(
+    async ({ dateFrom, dateTo, tradeAddress, tradeHistoryFetchToken }) => {
+      try {
+        if (tradeAddress) {
+          const { trades, nextToken } = await fetchUserTrades(
+            tradeAddress,
+            dateFrom,
+            dateTo,
+            tradeHistoryFetchToken
+          );
+          dispatch(A.userTradesData({ trades, nextToken }));
+        }
+      } catch (error) {
+        onHandleError(error?.message ?? error);
+        dispatch(A.userTradesError(error));
       }
-    } catch (error) {
-      onHandleError(error?.message ?? error);
-      dispatch(A.userTradesError(error));
-    }
-  };
+    },
+    [onHandleError]
+  );
 
   const onUserTradeUpdate = useCallback(
     (payload: A.UserTradesUpdateEvent["payload"]) => {
@@ -64,6 +65,10 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
       };
     }
   }, [mainAddress, onUserTradeUpdate]);
+
+  useEffect(() => {
+    if (profileState.selectedAccount.tradeAddress) dispatch(A.userTradesReset());
+  }, [profileState.selectedAccount.tradeAddress]);
 
   return (
     <Provider

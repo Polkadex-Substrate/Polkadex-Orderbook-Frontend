@@ -13,7 +13,7 @@ import * as T from "./types";
 import { PublicTrade } from "./types";
 
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getIsDecreasingArray } from "@polkadex/web-helpers";
 
@@ -35,8 +35,8 @@ export const RecentTradesProvider = ({ children }) => {
     t: number;
   };
   const fetchRecentTrade = useCallback(
-    async (market: string, limit = 50): Promise<RawTrades[]> => {
-      const res = await fetchAllFromAppSync(
+    async (market: string, limit = 20): Promise<RawTrades[]> => {
+      const { response: res } = await fetchFromAppSync(
         getRecentTrades,
         { m: market, limit },
         "getRecentTrades"
