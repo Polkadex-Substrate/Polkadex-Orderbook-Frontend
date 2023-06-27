@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 
 export type NotificationPayload = {
-  type: "Error" | "Info" | "Success" | "Loading" | "Attention";
+  type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
 };
 
