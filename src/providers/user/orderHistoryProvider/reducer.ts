@@ -5,6 +5,7 @@ import {
   ORDERS_HISTORY_DATA,
   ORDERS_HISTORY_ERROR,
   ORDERS_HISTORY_FETCH,
+  RESET_ORDER_HISTORY,
   ORDER_UPDATE_EVENT_DATA,
   ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
@@ -22,6 +23,7 @@ export const initialOrdersHistoryState: OrdersHistoryState = {
   loading: false,
   pageIndex: 0,
   success: false,
+  orderHistoryNextToken: null,
 };
 
 export const ordersHistoryReducer = (
@@ -34,12 +36,15 @@ export const ordersHistoryReducer = (
     case ORDERS_HISTORY_DATA:
       return {
         ...state,
-        list: sliceArray(action.payload.list, defaultStorageLimit),
+        list: state.list.concat(sliceArray(action.payload.list, defaultStorageLimit)),
+        orderHistoryNextToken: action.payload.nextToken,
         loading: false,
         success: true,
       };
     case ORDERS_HISTORY_ERROR:
-      return { ...state, list: [], pageIndex: 0, loading: false };
+      return { ...state, list: [], pageIndex: 0, loading: false, error: action.error };
+    case RESET_ORDER_HISTORY:
+      return { ...state, list: [] };
 
     case OPEN_ORDERS_HISTORY_DATA:
       return { ...state, openOrders: sliceArray(action.payload.list, defaultStorageLimit) };

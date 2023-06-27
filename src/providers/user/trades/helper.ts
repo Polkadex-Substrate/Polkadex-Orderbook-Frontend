@@ -2,7 +2,10 @@ import * as T from "./types";
 import * as A from "./actions";
 
 import * as queries from "@polkadex/orderbook/graphql/queries";
-import { fetchAllFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { Utils } from "@polkadex/web-helpers";
+
+const LIMIT = 15;
 
 export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
   const [base, quote] = eventData.m.split("-");
@@ -18,18 +21,22 @@ export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
 }
 
 export const fetchUserTrades = async (
-  proxy_account: string,
+  proxyAccount: string,
   dateFrom: Date,
-  dateTo: Date
-): Promise<A.UserTrade[]> => {
-  // TODO: make limit resonable by utilizing nextToken
-  const tradesRaw: T.TradesQueryResult[] = await fetchAllFromAppSync(
+  dateTo: Date,
+  tradeHistoryFetchToken: string | null
+): Promise<{ trades: A.UserTrade[]; nextToken: string | null }> => {
+  const dateFromStr = Utils.date.formatDateToISO(dateFrom);
+  const dateToStr = Utils.date.formatDateToISO(dateTo);
+
+  const { response: tradesRaw, nextToken }: T.FetchUserTradesResult = await fetchFromAppSync(
     queries.listTradesByMainAccount,
     {
-      main_account: proxy_account,
-      from: dateFrom.toISOString(),
-      to: dateTo.toISOString(),
-      limit: 100,
+      main_account: proxyAccount,
+      from: dateFromStr,
+      to: dateToStr,
+      limit: LIMIT,
+      nextToken: tradeHistoryFetchToken,
     },
     "listTradesByMainAccount"
   );
@@ -42,5 +49,5 @@ export const fetchUserTrades = async (
     baseAsset: trade.m.split("-")[0],
     quoteAsset: trade.m.split("-")[1],
   }));
-  return trades;
+  return { nextToken, trades };
 };
