@@ -79,12 +79,16 @@ export const DepositTemplate = () => {
     if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
       errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
-    if (+values.amount > onChainBalance) {
-      errors.amount = ErrorMessages.CHECK_BALANCE;
+    if (/\s/.test(String(values.amount))) {
+      errors.amount = ErrorMessages.WHITESPACE_NOT_ALLOWED;
     }
     const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
     if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
       errors.amount = ErrorMessages.REMAINING_BALANCE;
+    }
+
+    if (+values.amount > onChainBalance) {
+      errors.amount = ErrorMessages.CHECK_BALANCE;
     }
 
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
