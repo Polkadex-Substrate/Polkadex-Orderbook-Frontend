@@ -4,8 +4,12 @@ import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
+import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
+import { hasOnlyZeros } from "@polkadex/web-helpers";
 
 export const Navbar = ({ onOpenMarkets }) => {
+  const { getCurrentTradePrice } = useRecentTradesProvider();
+  const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket: currMarket, currentTicker } = useMarketsProvider();
   const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
@@ -15,6 +19,8 @@ export const Navbar = ({ onOpenMarkets }) => {
   const volume = currentTicker?.volumeBase24hr;
   const high = currentTicker?.high;
   const low = currentTicker?.low;
+
+  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
 
   return (
     <S.Wrapper>
@@ -30,7 +36,7 @@ export const Navbar = ({ onOpenMarkets }) => {
         <S.ContainerInfo>
           <NavbarItem
             label={`Price ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
-            info={currPrice}
+            info={price}
           />
 
           <NavbarItem
