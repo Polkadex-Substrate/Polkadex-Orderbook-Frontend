@@ -1,4 +1,4 @@
-import { ReactNode, isValidElement } from "react";
+import { ReactNode, isValidElement, useMemo } from "react";
 import Link from "next/link";
 
 import * as S from "./styles";
@@ -15,6 +15,9 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 import { selectNotifications } from "@polkadex/orderbook/providers/public/settings/helpers";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
+import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
 
 const languages = ["en", "fr", "es", "zh"];
 type Languages = "en" | "fr" | "es" | "zh";
@@ -22,10 +25,23 @@ type Languages = "en" | "fr" | "es" | "zh";
 export const Header = ({ children }: { children?: ReactNode }) => {
   const { notifications, language, onChangeLanguage } = useSettingsProvider();
   const allNotifications = selectNotifications(notifications);
+  const { allBrowserAccounts } = useTradeWallet();
+
+  const tradingAccounts = allBrowserAccounts;
   const {
     authInfo: { isAuthenticated },
     selectedAccount,
   } = useProfile();
+
+  const tradeAccountInfo = useMemo(
+    () => getTradeAccount(selectedAccount.tradeAddress, tradingAccounts),
+    [selectedAccount.tradeAddress, tradingAccounts]
+  );
+
+  const walletName = tradeAccountInfo?.meta?.name as string;
+  const addressName =
+    tradeAccountInfo &&
+    ` • ${tradeAccountInfo ? transformAddress(tradeAccountInfo.address, 5) : ""}`;
 
   const isValidChild = isValidElement(children);
   return (
@@ -76,14 +92,17 @@ export const Header = ({ children }: { children?: ReactNode }) => {
                   <S.Avatar>
                     <Icons.Avatar />
                   </S.Avatar>
-                  {selectedAccount.tradeAddress ? (
-                    <p>
-                      {selectedAccount.tradeAddress}
-                      <span> • esp33...JTb5Ej</span>
-                    </p>
-                  ) : (
-                    <p>No trade wallet selected</p>
-                  )}
+                  <S.AccountInfo>
+                    {tradeAccountInfo ? (
+                      <p>
+                        {walletName}
+                        <span>{addressName}</span>
+                      </p>
+                    ) : (
+                      <p>No trade wallet selected</p>
+                    )}
+                  </S.AccountInfo>
+                  <S.AccountMessage>Account</S.AccountMessage>
                 </S.Account>
               </Popover.Trigger>
               <Popover.Content>

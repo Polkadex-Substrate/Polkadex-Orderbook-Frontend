@@ -5,7 +5,6 @@ export const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     position: sticky;
     top: 0;
     left: 0;
@@ -110,6 +109,17 @@ export const Avatar = styled.div`
       height: 100%;
     }
   `}
+`;
+export const AccountInfo = styled.div`
+  @media screen and (max-width: 650px) {
+    display: none;
+  }
+`;
+export const AccountMessage = styled.p`
+  display: none;
+  @media screen and (max-width: 650px) {
+    display: block;
+  }
 `;
 
 export const UserActions = styled.div`
