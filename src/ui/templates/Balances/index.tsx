@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import * as S from "./styles";
 
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
   EmptyMyAccount,
@@ -49,120 +49,124 @@ export const BalancesTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu />
-        <S.Wrapper>
-          <S.ContainerMain>
-            <S.Title>
-              <h1>Balances.</h1>
-            </S.Title>
-            <S.Container>
-              {userHasSelectedAccount ? (
-                <>
-                  <S.Header>
-                    <h2>Overview</h2>
-                    <S.HeaderBox>
-                      <Search
-                        value={filters.search}
-                        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                        isFull
-                        placeholder="Search"
-                      />
-                      <Checkbox
-                        checked={filters.hideZero}
-                        onChange={() =>
-                          setFilters({ ...filters, hideZero: !filters.hideZero })
-                        }>
-                        Hide small balances
-                      </Checkbox>
-                    </S.HeaderBox>
-                  </S.Header>
-                  <S.Content>
-                    {allAssets?.length ? (
-                      <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
-                        <Table.Header fill="none">
-                          <Table.Column>
-                            <S.Column style={{ paddingLeft: 10 }}>Name</S.Column>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.Column>Available</S.Column>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.Column>Locked</S.Column>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.Column>In Orders</S.Column>
-                          </Table.Column>
-                          <Table.Column>
-                            <S.Column>Actions</S.Column>
-                          </Table.Column>
-                        </Table.Header>
-                        <Table.Body striped border="squared">
-                          {allAssets?.map((item) => {
-                            const balance = userBalances?.find(
-                              (value) => value.assetId === item.assetId
-                            );
-                            return (
-                              <Table.Row key={item.assetId}>
-                                <Table.Cell>
-                                  <S.CellFlex>
-                                    <S.TokenIcon>
-                                      <Icon isToken name={item.symbol} size="extraSmall" />
-                                    </S.TokenIcon>
+        <Header />
+        <S.Flex>
+          <Menu />
+          <S.Wrapper>
+            <S.ContainerMain>
+              <S.Title>
+                <h1>Balances.</h1>
+              </S.Title>
+              <S.Container>
+                {userHasSelectedAccount ? (
+                  <>
+                    <S.Header>
+                      <h2>Overview</h2>
+                      <S.HeaderBox>
+                        <Search
+                          value={filters.search}
+                          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                          isFull
+                          placeholder="Search"
+                        />
+                        <Checkbox
+                          checked={filters.hideZero}
+                          onChange={() =>
+                            setFilters({ ...filters, hideZero: !filters.hideZero })
+                          }>
+                          Hide small balances
+                        </Checkbox>
+                      </S.HeaderBox>
+                    </S.Header>
+                    <S.Content>
+                      {allAssets?.length ? (
+                        <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
+                          <Table.Header fill="none">
+                            <Table.Column>
+                              <S.Column style={{ paddingLeft: 10 }}>Name</S.Column>
+                            </Table.Column>
+                            <Table.Column>
+                              <S.Column>Available</S.Column>
+                            </Table.Column>
+                            <Table.Column>
+                              <S.Column>Locked</S.Column>
+                            </Table.Column>
+                            <Table.Column>
+                              <S.Column>In Orders</S.Column>
+                            </Table.Column>
+                            <Table.Column>
+                              <S.Column>Actions</S.Column>
+                            </Table.Column>
+                          </Table.Header>
+                          <Table.Body striped border="squared">
+                            {allAssets?.map((item) => {
+                              const balance = userBalances?.find(
+                                (value) => value.assetId === item.assetId
+                              );
+                              return (
+                                <Table.Row key={item.assetId}>
+                                  <Table.Cell>
+                                    <S.CellFlex>
+                                      <S.TokenIcon>
+                                        <Icon isToken name={item.symbol} size="extraSmall" />
+                                      </S.TokenIcon>
+                                      <S.Cell>
+                                        <span>
+                                          {toCapitalize(item.name)}{" "}
+                                          <small> {item.symbol}</small>
+                                        </span>
+                                      </S.Cell>
+                                    </S.CellFlex>
+                                  </Table.Cell>
+                                  <Table.Cell>
                                     <S.Cell>
                                       <span>
-                                        {toCapitalize(item.name)} <small> {item.symbol}</small>
+                                        {Number(balance?.free_balance || 0).toFixed(8)}{" "}
                                       </span>
                                     </S.Cell>
-                                  </S.CellFlex>
-                                </Table.Cell>
-                                <Table.Cell>
-                                  <S.Cell>
-                                    <span>
-                                      {Number(balance?.free_balance || 0).toFixed(8)}{" "}
-                                    </span>
-                                  </S.Cell>
-                                </Table.Cell>
-                                <Table.Cell>
-                                  <S.Cell>
-                                    <span>
-                                      {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                    </span>
-                                  </S.Cell>
-                                </Table.Cell>
-                                <Table.Cell>
-                                  <S.Cell>
-                                    <span>
-                                      {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                    </span>
-                                  </S.Cell>
-                                </Table.Cell>
-                                <Table.Cell>
-                                  <S.Actions>
-                                    <Link href={`/deposit/${item.symbol}`}>
-                                      <S.DepositLink>Deposit</S.DepositLink>
-                                    </Link>
-                                    <Link href={`/withdraw/${item.symbol}`}>
-                                      <S.WithdrawLink>Withdraw</S.WithdrawLink>
-                                    </Link>
-                                  </S.Actions>
-                                </Table.Cell>
-                              </Table.Row>
-                            );
-                          })}
-                        </Table.Body>
-                      </Table>
-                    ) : (
-                      <ResultFound />
-                    )}
-                  </S.Content>
-                </>
-              ) : (
-                <EmptyMyAccount balances hasLimit {...connectWalletData} />
-              )}
-            </S.Container>
-          </S.ContainerMain>
-          <Footer />
-        </S.Wrapper>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>
+                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                      </span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Cell>
+                                      <span>
+                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                      </span>
+                                    </S.Cell>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <S.Actions>
+                                      <Link href={`/deposit/${item.symbol}`}>
+                                        <S.DepositLink>Deposit</S.DepositLink>
+                                      </Link>
+                                      <Link href={`/withdraw/${item.symbol}`}>
+                                        <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                                      </Link>
+                                    </S.Actions>
+                                  </Table.Cell>
+                                </Table.Row>
+                              );
+                            })}
+                          </Table.Body>
+                        </Table>
+                      ) : (
+                        <ResultFound />
+                      )}
+                    </S.Content>
+                  </>
+                ) : (
+                  <EmptyMyAccount balances hasLimit {...connectWalletData} />
+                )}
+              </S.Container>
+            </S.ContainerMain>
+            <Footer />
+          </S.Wrapper>
+        </S.Flex>
       </S.Main>
     </>
   );

@@ -14,9 +14,7 @@ export const Wrapper = styled.main`
   height: 100vh;
   overflow: auto;
   overflow-x: hidden;
-  @media screen and (max-width: 590px) {
-    display: block;
-  }
+  flex-direction: column;
 `;
 
 export const WrapperMain = styled.div`
@@ -147,4 +145,13 @@ export const Profile = styled.div`
   gap: 0.7rem;
   justify-self: flex-end;
   align-self: flex-end;
+`;
+
+export const Flex = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  @media screen and (min-width: 590px) {
+    flex-direction: row;
+  }
 `;

@@ -1,139 +1,67 @@
-// TODO: Fix Bighead typing
 import Link from "next/link";
-import { BigHead } from "@bigheads/core";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
-import {
-  Icon,
-  Logo,
-  Tooltip,
-  TooltipContent,
-  TooltipHeader,
-  Profile,
-  Popover,
-  NotificationsContent,
-} from "@polkadex/orderbook-ui/molecules";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/hooks";
-import { selectNotifications } from "@polkadex/orderbook/providers/public/settings/helpers";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
-import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const Menu = () => {
   const router = useRouter();
 
   const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
-  const settingsState = useSettingsProvider();
-  const notifications = selectNotifications(settingsState.notifications);
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
 
   const {
     authInfo: { isAuthenticated },
   } = profileState;
 
   return (
-    <S.Main>
-      <S.Wrapper>
-        <S.WrapperLinks>
-          <S.Logo>
-            <Logo size="Medium" href="/trading" />
-          </S.Logo>
-          <S.Container>
-            <S.WrapperIcon>
-              {router.pathname === "/trading/[id]" && <S.LineBorder />}
-              <Link href="/trading">
-                <div>
-                  <Icon name="Exchange" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Exchange</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <S.WrapperIcon isDisabled={!isAuthenticated}>
-              {router.pathname === "/balances" && <S.LineBorder />}
-              <Link href="/balances">
-                <div>
-                  <Icon name="Coins" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Balances</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <S.WrapperIcon isDisabled={!isAuthenticated}>
-              {router.pathname === "/settings" && <S.LineBorder />}
-              <Link href="/settings">
-                <div>
-                  <Icon name="Wallet" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Accounts</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <Terms />
-            <Help />
-          </S.Container>
-          <S.WrapperIcon onClick={changeTheme} as="div">
-            <S.ThemeIcon>
-              <Icon
-                name={isDarkTheme ? "Sun" : "Moon"}
-                background="secondaryBackground"
-                size="large"
-              />
-            </S.ThemeIcon>
-            <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-          </S.WrapperIcon>
-        </S.WrapperLinks>
-        <S.WrapperProfile>
-          <S.ContainerProfile>
-            <Popover>
-              <Popover.Trigger>
-                <S.Notifications>
-                  <Tooltip>
-                    <TooltipHeader>
-                      <S.NotificationsWrapper
-                        isActive={!!notifications?.find((value) => !value.active)}>
-                        <Icons.Notifications />
-                        <div />
-                      </S.NotificationsWrapper>
-                    </TooltipHeader>
-                    <TooltipContent position="left">
-                      <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </S.Notifications>
-              </Popover.Trigger>
-              <Popover.Content>
-                <NotificationsContent notifications={notifications} />
-              </Popover.Content>
-            </Popover>
-            <Popover>
-              <Popover.Trigger>
-                <S.Profile>
-                  <Tooltip>
-                    <TooltipHeader>
-                      <S.Avatar>
-                        <BigHead {...avatarOptions.data} />
-                      </S.Avatar>
-                    </TooltipHeader>
-                    <TooltipContent position="left">
-                      <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </S.Profile>
-              </Popover.Trigger>
-              <Popover.Content>
-                <Profile />
-              </Popover.Content>
-            </Popover>
-          </S.ContainerProfile>
-        </S.WrapperProfile>
-      </S.Wrapper>
-      <div></div>
-    </S.Main>
+    <S.Wrapper>
+      <S.WrapperLinks>
+        <S.WrapperIcon>
+          {router.pathname === "/trading/[id]" && <S.LineBorder />}
+          <Link href="/trading">
+            <div>
+              <Icon name="Exchange" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>Exchange</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <S.WrapperIcon isDisabled={!isAuthenticated}>
+          {router.pathname === "/balances" && <S.LineBorder />}
+          <Link href="/balances">
+            <div>
+              <Icon name="Coins" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>Balances</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <S.WrapperIcon isDisabled={!isAuthenticated}>
+          {router.pathname === "/settings" && <S.LineBorder />}
+          <Link href="/settings">
+            <div>
+              <Icon name="Wallet" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>Accounts</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <Terms />
+        <Help />
+      </S.WrapperLinks>
+      <S.BottomContainer>
+        <S.WrapperIcon onClick={changeTheme} as="button">
+          <Icon
+            name={isDarkTheme ? "Sun" : "Moon"}
+            background="secondaryBackground"
+            size="large"
+          />
+          <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
+        </S.WrapperIcon>
+      </S.BottomContainer>
+    </S.Wrapper>
   );
 };
 

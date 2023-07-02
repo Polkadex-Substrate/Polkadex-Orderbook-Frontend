@@ -24,6 +24,7 @@ import {
   Navbar,
   RecentTrades,
   Disclaimer,
+  Header,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
@@ -203,99 +204,103 @@ export function Trading() {
       </Modal>
       <S.Container>
         <S.Wrapper>
-          <Menu />
-          <S.WrapperMain>
-            <S.ContainerMain>
-              <S.Box>
-                <S.Logo>
-                  <Logo size="Medium" href="/trading" />
-                </S.Logo>
-                {!isSignedIn ? (
-                  <Button
-                    onClick={() => router.push("/signIn")}
-                    color="inverse"
-                    background="text"
-                    icon={{
-                      name: "Wallet",
-                      background: "inverse",
-                      size: "medium",
-                      stroke: "text",
-                      fill: "text",
-                    }}>
-                    Login/Sign Up
-                  </Button>
-                ) : (
-                  <S.Profile>
-                    <Profile
-                      hasTradeAccount={hasTradeAccount}
-                      hasMainAccount={hasMainAccount}
-                      currentMainAccount={currentMainAddr}
-                      currentTradeAccount={currentTradeAddr}
-                      email={email}
-                    />
-                  </S.Profile>
-                )}
-              </S.Box>
-              <S.Content>
-                <S.WrapperGraph>
-                  <S.Header>
-                    <Navbar onOpenMarkets={() => setState(!state)} />
-                    <S.Actions isSignedIn={isSignedIn}>
-                      {!isSignedIn ? (
-                        <Button
-                          onClick={() => router.push("/signIn")}
-                          color="inverse"
-                          background="text"
-                          style={{ alignSelf: "flex-end" }}
-                          icon={{
-                            name: "Wallet",
-                            background: "inverse",
-                            size: "medium",
-                            stroke: "text",
-                            fill: "text",
-                          }}>
-                          Login/Sign Up
-                        </Button>
-                      ) : (
-                        <S.Profile>
-                          <Profile
-                            hasTradeAccount={hasTradeAccount}
-                            hasMainAccount={hasMainAccount}
-                            currentMainAccount={currentMainAddr}
-                            currentTradeAccount={currentTradeAddr}
-                            email={email}
-                          />
-                        </S.Profile>
-                      )}
-                    </S.Actions>
-                  </S.Header>
-                  <S.CenterWrapper>
-                    <S.GraphEpmty>
-                      <KlineProvider>
-                        <Graph />
-                      </KlineProvider>
-                      {hasUser ? (
-                        <SessionProvider>
-                          <TradesProvider>
-                            <OrderHistoryProvider>
-                              <Transactions />
-                            </OrderHistoryProvider>
-                          </TradesProvider>
-                        </SessionProvider>
-                      ) : (
-                        <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                      )}
-                    </S.GraphEpmty>
-                    <S.WrapperRight>
-                      <MarketOrder />
-                      <RecentTrades />
-                    </S.WrapperRight>
-                  </S.CenterWrapper>
-                </S.WrapperGraph>
-              </S.Content>
-            </S.ContainerMain>
-            <Footer />
-          </S.WrapperMain>
+          <Header />
+
+          <S.Flex>
+            <Menu />
+            <S.WrapperMain>
+              <S.ContainerMain>
+                <S.Box>
+                  <S.Logo>
+                    <Logo size="Medium" href="/trading" />
+                  </S.Logo>
+                  {!isSignedIn ? (
+                    <Button
+                      onClick={() => router.push("/signIn")}
+                      color="inverse"
+                      background="text"
+                      icon={{
+                        name: "Wallet",
+                        background: "inverse",
+                        size: "medium",
+                        stroke: "text",
+                        fill: "text",
+                      }}>
+                      Login/Sign Up
+                    </Button>
+                  ) : (
+                    <S.Profile>
+                      <Profile
+                        hasTradeAccount={hasTradeAccount}
+                        hasMainAccount={hasMainAccount}
+                        currentMainAccount={currentMainAddr}
+                        currentTradeAccount={currentTradeAddr}
+                        email={email}
+                      />
+                    </S.Profile>
+                  )}
+                </S.Box>
+                <S.Content>
+                  <S.WrapperGraph>
+                    <S.Header>
+                      <Navbar onOpenMarkets={() => setState(!state)} />
+                      <S.Actions isSignedIn={isSignedIn}>
+                        {!isSignedIn ? (
+                          <Button
+                            onClick={() => router.push("/signIn")}
+                            color="inverse"
+                            background="text"
+                            style={{ alignSelf: "flex-end" }}
+                            icon={{
+                              name: "Wallet",
+                              background: "inverse",
+                              size: "medium",
+                              stroke: "text",
+                              fill: "text",
+                            }}>
+                            Login/Sign Up
+                          </Button>
+                        ) : (
+                          <S.Profile>
+                            <Profile
+                              hasTradeAccount={hasTradeAccount}
+                              hasMainAccount={hasMainAccount}
+                              currentMainAccount={currentMainAddr}
+                              currentTradeAccount={currentTradeAddr}
+                              email={email}
+                            />
+                          </S.Profile>
+                        )}
+                      </S.Actions>
+                    </S.Header>
+                    <S.CenterWrapper>
+                      <S.GraphEpmty>
+                        <KlineProvider>
+                          <Graph />
+                        </KlineProvider>
+                        {hasUser ? (
+                          <SessionProvider>
+                            <TradesProvider>
+                              <OrderHistoryProvider>
+                                <Transactions />
+                              </OrderHistoryProvider>
+                            </TradesProvider>
+                          </SessionProvider>
+                        ) : (
+                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                        )}
+                      </S.GraphEpmty>
+                      <S.WrapperRight>
+                        <MarketOrder />
+                        <RecentTrades />
+                      </S.WrapperRight>
+                    </S.CenterWrapper>
+                  </S.WrapperGraph>
+                </S.Content>
+              </S.ContainerMain>
+              <Footer />
+            </S.WrapperMain>
+          </S.Flex>
         </S.Wrapper>
       </S.Container>
     </>

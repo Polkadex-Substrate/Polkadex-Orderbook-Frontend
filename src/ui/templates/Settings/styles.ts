@@ -10,12 +10,18 @@ export const Main = styled.main`
     display: flex;
     max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
-    @media screen and (max-width: 590px) {
-      display: block;
-    }
+    flex-direction: column;
   `}
 `;
 
+export const Flex = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  @media screen and (min-width: 590px) {
+    flex-direction: row;
+  }
+`;
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
