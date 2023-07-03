@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
     top: 0;
     left: 0;
     flex: 1;
-    max-height: 5rem;
+    max-height: 5.5rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     background: ${theme.colors.primaryBackground};
     z-index: 9;
@@ -21,9 +21,14 @@ export const Content = styled.div`
   gap: 1rem;
   padding: 1rem;
   align-items: center;
+  flex: 1;
+`;
+export const ContentFull = styled.div`
+  flex: 1;
+  padding: 1rem;
 `;
 
-export const Logo = styled.div<{ borderActive: boolean }>`
+export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
   ${({ theme, borderActive }) => css`
     padding-right: 1rem;
     flex: 1;

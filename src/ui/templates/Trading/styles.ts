@@ -67,7 +67,6 @@ export const CenterWrapper = styled.div`
 export const GraphEpmty = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
   width: 100%;
 `;
 
@@ -100,11 +99,10 @@ export const Box = styled.div`
   ${({ theme }) => css`
     justify-content: space-between;
     align-items: center;
-
     display: none;
     padding: 0 1rem;
     ${Button} {
-      transition: background 0.5s ease-in-out;
+      transition: background-color 0.5s ease-in-out;
       margin-left: 2rem;
     }
     ${Logo} {

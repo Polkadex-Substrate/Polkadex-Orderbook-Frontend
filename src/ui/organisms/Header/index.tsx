@@ -47,10 +47,10 @@ export const Header = ({ children }: { children?: ReactNode }) => {
   return (
     <S.Wrapper>
       <S.Content>
-        <S.Logo borderActive={isValidChild}>
+        <S.Logo borderActive={isValidChild} hideLogo>
           <PolkadexLogo />
         </S.Logo>
-        <div>{children}</div>
+        <S.ContentFull>{children}</S.ContentFull>
       </S.Content>
       <S.Actions>
         <S.ActionsWrapper>

@@ -205,77 +205,16 @@ export function Trading() {
       <S.Container>
         <S.Wrapper>
           <Header />
-
           <S.Flex>
             <Menu />
             <S.WrapperMain>
               <S.ContainerMain>
-                <S.Box>
-                  <S.Logo>
-                    <Logo size="Medium" href="/trading" />
-                  </S.Logo>
-                  {!isSignedIn ? (
-                    <Button
-                      onClick={() => router.push("/signIn")}
-                      color="inverse"
-                      background="text"
-                      icon={{
-                        name: "Wallet",
-                        background: "inverse",
-                        size: "medium",
-                        stroke: "text",
-                        fill: "text",
-                      }}>
-                      Login/Sign Up
-                    </Button>
-                  ) : (
-                    <S.Profile>
-                      <Profile
-                        hasTradeAccount={hasTradeAccount}
-                        hasMainAccount={hasMainAccount}
-                        currentMainAccount={currentMainAddr}
-                        currentTradeAccount={currentTradeAddr}
-                        email={email}
-                      />
-                    </S.Profile>
-                  )}
-                </S.Box>
                 <S.Content>
                   <S.WrapperGraph>
-                    <S.Header>
-                      <Navbar onOpenMarkets={() => setState(!state)} />
-                      <S.Actions isSignedIn={isSignedIn}>
-                        {!isSignedIn ? (
-                          <Button
-                            onClick={() => router.push("/signIn")}
-                            color="inverse"
-                            background="text"
-                            style={{ alignSelf: "flex-end" }}
-                            icon={{
-                              name: "Wallet",
-                              background: "inverse",
-                              size: "medium",
-                              stroke: "text",
-                              fill: "text",
-                            }}>
-                            Login/Sign Up
-                          </Button>
-                        ) : (
-                          <S.Profile>
-                            <Profile
-                              hasTradeAccount={hasTradeAccount}
-                              hasMainAccount={hasMainAccount}
-                              currentMainAccount={currentMainAddr}
-                              currentTradeAccount={currentTradeAddr}
-                              email={email}
-                            />
-                          </S.Profile>
-                        )}
-                      </S.Actions>
-                    </S.Header>
                     <S.CenterWrapper>
                       <S.GraphEpmty>
                         <KlineProvider>
+                          <Navbar onOpenMarkets={() => setState(!state)} />
                           <Graph />
                         </KlineProvider>
                         {hasUser ? (
