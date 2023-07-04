@@ -4,7 +4,7 @@ import * as S from "./styles";
 const HomeLayout = ({ children }) => {
   return (
     <S.HomeLayout>
-      <div>{children}</div>
+      {children}
       <FAQsidebar />
     </S.HomeLayout>
   );
