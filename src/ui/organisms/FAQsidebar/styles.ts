@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+
 export const Container = styled.div`
   ${({ theme }) => css`
     border-left: 1px solid ${theme.colors.secondaryBackground};
@@ -8,14 +9,17 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    flex-shrink: 0;
   `}
 `;
+
 export const Heading = styled.div`
   ${({ theme }) => css`
     font-size: medium;
     font-weight: 500;
   `}
 `;
+
 export const Button = styled.button`
   ${({ theme }) => css`
     background-color: ${theme.colors.primary};
@@ -25,6 +29,7 @@ export const Button = styled.button`
     border-radius: ${theme.border.radius.medium};
   `}
 `;
+
 export const SocialWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
@@ -37,14 +42,35 @@ export const SocialWrapper = styled.div`
     gap: 1.5rem;
   `}
 `;
+
 export const Social = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
 `;
+
+export const OnlyIcons = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1.5rem;
+  `}
+`;
+export const IconWrapper = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.colors.tertiaryBackgroundOpacity};
+    width: 6rem;
+    height: 6rem;
+    border-radius: ${theme.border.radius.medium};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `}
+`;
+
 export const Icon = styled.div`
   opacity: 0.2;
 `;
+
 export const Community = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
@@ -52,6 +78,7 @@ export const Community = styled.div`
     border-radius: ${theme.border.radius.medium};
   `}
 `;
+
 export const Description = styled.div`
   ${({ theme }) => css`
     font-size: small;
@@ -61,6 +88,7 @@ export const Description = styled.div`
     line-height: 2.5rem;
   `}
 `;
+
 export const Pink = styled.span`
   ${({ theme }) => css`
     color: ${theme.colors.primary};
