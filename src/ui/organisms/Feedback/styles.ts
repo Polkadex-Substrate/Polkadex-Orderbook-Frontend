@@ -50,9 +50,9 @@ export const Question = styled.p`
   `}
 `;
 
-export const Button = styled.button`
-  ${({ theme }) => css`
-    background-color: ${theme.colors.primary};
+export const Button = styled.button<{ isDisabled: boolean }>`
+  ${({ theme, isDisabled }) => css`
+    background-color: ${isDisabled ? "gray" : theme.colors.primary};
     font-size: large;
     padding: 1.8rem 0rem;
     border-radius: ${theme.border.radius.medium};
