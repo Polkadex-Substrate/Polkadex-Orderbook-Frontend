@@ -127,7 +127,7 @@ export const Transactions = () => {
                         </div>
                       </S.Icon>
                     </Dropdown.Trigger>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu fill="secondaryBackgroundSolid">
                       {initialState.map((status) => (
                         <Dropdown.Item key={status}>{status}</Dropdown.Item>
                       ))}

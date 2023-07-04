@@ -344,6 +344,9 @@ Super Form Reset
   }
 
   .rdrMonthAndYearPickers select {
+    option {
+      background: ${theme.colors.inverse};
+    }
     color: ${theme.colors.text}99;
     font-family: ${theme.font.family};
     ${iconThemingModifier[theme.colors.text === "#ffffff" ? "dark" : "light"]()};
