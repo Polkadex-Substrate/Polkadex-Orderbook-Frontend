@@ -22,3 +22,5 @@ export * from "./MarketOrder";
 export * from "./Graph";
 export * from "./Disclaimer";
 export * from "./FAQsidebar";
+export * from "./Rating";
+export { default as Feedback } from "./Feedback";
