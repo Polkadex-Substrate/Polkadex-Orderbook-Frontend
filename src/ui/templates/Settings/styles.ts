@@ -6,7 +6,7 @@ export const Main = styled.main`
     position: relative;
     background: ${theme.colors.primaryBackground};
     min-width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
@@ -18,6 +18,7 @@ export const Flex = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column-reverse;
+  overflow: hidden;
   @media screen and (min-width: 590px) {
     flex-direction: row;
   }
@@ -27,6 +28,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 1rem;
+  overflow-y: scroll;
 `;
 
 export const ContainerMain = styled.div`
