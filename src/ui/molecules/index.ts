@@ -53,5 +53,6 @@ export * from "./RemoveFromBlockchain";
 export * from "./RemoveFromDevice";
 export * from "./SliderPercentage";
 export * from "./TradingView";
+export * from "./FaqTopMessage";
 
 export * as LoadingIcons from "./LoadingIcons";
