@@ -60,6 +60,7 @@ export const Social = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const OnlyIcons = styled.div`
@@ -78,6 +79,12 @@ export const IconWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${theme.colors.tertiaryBackground};
+    }
+    transition: 0.2s;
   `}
 `;
 
@@ -107,5 +114,6 @@ export const Pink = styled.span`
   ${({ theme }) => css`
     color: ${theme.colors.primary};
     text-decoration: underline;
+    cursor: pointer;
   `}
 `;

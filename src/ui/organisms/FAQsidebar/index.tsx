@@ -55,13 +55,13 @@ export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
       <S.Heading>Get in touch</S.Heading>
       <S.OnlyIcons>
         <S.IconWrapper>
-          <Icon name="TelegramFAQ" background="none" stroke="text" size="large" />
+          <Icon name="TelegramFAQ" background="none" stroke="none" size="large" />
         </S.IconWrapper>
         <S.IconWrapper>
-          <Icon name="Discord" background="none" stroke="text" size="large" />
+          <Icon name="Discord" background="none" stroke="none" size="large" />
         </S.IconWrapper>
         <S.IconWrapper>
-          <Icon name="MailFAQ" background="none" stroke="text" size="large" />
+          <Icon name="MailFAQ" background="none" stroke="none" size="large" />
         </S.IconWrapper>
       </S.OnlyIcons>
 
