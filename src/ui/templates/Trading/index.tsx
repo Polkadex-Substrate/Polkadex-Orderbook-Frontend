@@ -8,11 +8,9 @@ import * as S from "./styles";
 
 import {
   AccountBanner,
-  Button,
   EmptyMyAccount,
   Footer,
   Icon,
-  Logo,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import {
@@ -27,13 +25,10 @@ import {
   Header,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
-import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
@@ -102,31 +97,21 @@ export function Trading() {
     }
   }, [market, onMarketTickersFetch, tickersTimestamp]);
 
-  const { email } = useAuth();
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
     onUserChangeInitBanner,
   } = useProfile();
-  const extensionWalletState = useExtensionWallet();
 
   const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount = selectIsAddressInExtension(
-    mainAddress,
-    extensionWalletState.allAccounts
-  );
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
-  const { selectedAccount } = useProfile();
-
-  const currentMainAddr = selectedAccount.mainAddress;
-  const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",

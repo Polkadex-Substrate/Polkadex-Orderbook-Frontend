@@ -25,6 +25,7 @@ export const WrapperMain = styled.div`
   max-width: 1920px;
   margin-left: auto;
   margin-right: auto;
+  overflow-y: scroll;
 `;
 
 export const ContainerMain = styled.div`
@@ -149,6 +150,7 @@ export const Flex = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column-reverse;
+  overflow: hidden;
   @media screen and (min-width: 590px) {
     flex-direction: row;
   }
