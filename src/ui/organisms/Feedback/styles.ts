@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import media, { generateMedia } from "styled-media-query";
 
 export const Container = styled.div`
   ${({ theme }) => css`
@@ -31,6 +32,9 @@ export const Heading = styled.p`
   font-size: 4rem;
   padding-top: 3rem;
   font-weight: 700;
+  ${media.lessThan("medium")`
+  font-size:3rem
+  `}
 `;
 
 export const QuestionWrapper = styled.div`
@@ -56,13 +60,15 @@ export const Button = styled.button<{ isDisabled: boolean }>`
     font-size: large;
     padding: 1.8rem 0rem;
     border-radius: ${theme.border.radius.medium};
-    width: 50rem;
+    max-width: 51rem;
+    width: 100%;
   `}
 `;
 
 export const Input = styled.input`
   ${({ theme }) => css`
-    width: 50rem;
+    max-width: 50rem;
+    width: 100%;
     border: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;

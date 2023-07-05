@@ -1,15 +1,28 @@
 import styled, { css } from "styled-components";
+import { generateMedia } from "styled-media-query";
+const customMedia = generateMedia({
+  large: "923px",
+});
 
-export const Container = styled.div`
-  ${({ theme }) => css`
+export const Container = styled.div<{ show: boolean }>`
+  ${({ theme, show }) => css`
     border-left: 1px solid ${theme.colors.secondaryBackground};
-    width: 35rem;
+    max-width: 35rem;
+    width: 100%;
     min-height: 100vh;
     padding: 3rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     flex-shrink: 0;
+    ${customMedia.lessThan("large")`
+        display:${show ? "flex" : "none"};
+        position:absolute;
+        right:0;
+        top:0;
+        z-index:2;
+        background:${theme.colors.primaryBackground}
+  `};
   `}
 `;
 
@@ -55,6 +68,7 @@ export const OnlyIcons = styled.div`
     gap: 1.5rem;
   `}
 `;
+
 export const IconWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};

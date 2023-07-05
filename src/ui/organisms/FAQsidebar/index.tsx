@@ -1,10 +1,16 @@
+import { useEffect, useRef } from "react";
+
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
+import useClickOutside from "@polkadex/orderbook/hooks/useClickOutside";
 
-export const FAQsidebar = () => {
+export const FAQsidebar = ({ closeSidebar, show }) => {
+  const ref = useRef(null);
+  useClickOutside(ref, closeSidebar);
+
   return (
-    <S.Container>
+    <S.Container ref={ref} show={show}>
       <S.Heading>Still have questions?</S.Heading>
       <S.Button>Submit a request</S.Button>
       <S.SocialWrapper>
