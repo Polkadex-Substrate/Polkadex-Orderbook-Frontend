@@ -66,7 +66,6 @@ export const SettingsTemplate = () => {
     defaultFundingAddress,
     avatarModal,
     handleCloseAvatarModal,
-    handleOpenAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
 
@@ -373,13 +372,6 @@ export const SettingsTemplate = () => {
                       isLocked
                       hasBadge
                       isVerified={user.isConfirmed}
-                    />
-                    <Card
-                      label="Avatar"
-                      isAvatar
-                      description="Select an avatar to personalize your account."
-                      actionTitle="Change"
-                      onClick={handleOpenAvatarModal}
                     />
                     <AvailableMessage message="Soon">
                       <Card
