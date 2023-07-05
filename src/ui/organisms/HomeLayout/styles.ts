@@ -16,7 +16,7 @@ export const Sticker = styled.div`
   position: absolute;
   right: -8.5rem;
   top: 50%;
-  transform: translateY(-50%) rotate(-89deg);
+  transform: translateY(-50%) rotate(-90deg);
   padding: 1rem 1.5rem;
   background-color: black;
   color: white;

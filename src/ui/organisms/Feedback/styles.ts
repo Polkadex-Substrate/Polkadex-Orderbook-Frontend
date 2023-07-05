@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import media, { generateMedia } from "styled-media-query";
+import media from "styled-media-query";
 
 export const Container = styled.div`
   ${({ theme }) => css`
