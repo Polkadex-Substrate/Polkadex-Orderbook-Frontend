@@ -6,7 +6,7 @@ import { Rating } from "../Rating";
 
 import * as S from "./styles";
 
-import { SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
+import { Button, SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 const Feedback = () => {
@@ -35,34 +35,45 @@ const Feedback = () => {
     <S.Container>
       <FAQHeader heading={"Give us your feedback"} lastCrumb={"Feedbackform"} />
       <form action="" onSubmit={formik.handleSubmit}>
-        <S.QuestionWrapper>
-          <S.Question>Were we able to answer your question?</S.Question>
+        <S.BorderWrapper>
+          <S.QuestionWrapper>
+            <S.Question>Were we able to answer your question?</S.Question>
 
-          <SwitchFAQ checked={answer} setChecked={() => setAnswer(!answer)} />
-          <S.Question>Did you find the relevant information you were looking for?</S.Question>
-          <SwitchFAQ
-            checked={relevantInformation}
-            setChecked={() => setRelevantInformation(!relevantInformation)}
-          />
-          <S.Question>Was the FAQ Webpage user friendly?</S.Question>
-          <SwitchFAQ
-            checked={userFriendly}
-            setChecked={() => setUserFriendly(!userFriendly)}
-          />
-          <S.Question>Is there anything you would want us to improve?</S.Question>
-          <div>
-            <S.Input placeholder="Enter your comment" {...formik.getFieldProps("value")} />
-            {formik.touched.value && formik.errors.value ? (
-              <S.InputError>{formik.errors.value}</S.InputError>
-            ) : null}
-          </div>
+            <SwitchFAQ checked={answer} setChecked={() => setAnswer(!answer)} />
+            <S.Question>
+              Did you find the relevant information you were looking for?
+            </S.Question>
+            <SwitchFAQ
+              checked={relevantInformation}
+              setChecked={() => setRelevantInformation(!relevantInformation)}
+            />
+            <S.Question>Was the FAQ Webpage user friendly?</S.Question>
+            <SwitchFAQ
+              checked={userFriendly}
+              setChecked={() => setUserFriendly(!userFriendly)}
+            />
+            <S.Question>Is there anything you would want us to improve?</S.Question>
+            <div>
+              <S.Input placeholder="Enter your comment" {...formik.getFieldProps("value")} />
+              {formik.touched.value && formik.errors.value ? (
+                <S.InputError>{formik.errors.value}</S.InputError>
+              ) : null}
+            </div>
 
-          <S.Question>How would you rate our service?</S.Question>
-          <Rating value={stars} setValue={handleRating} />
-          <S.Button disabled={disabled} isDisabled={disabled}>
-            Submit a request
-          </S.Button>
-        </S.QuestionWrapper>
+            <S.Question>How would you rate our service?</S.Question>
+            <Rating value={stars} setValue={handleRating} />
+            <Button
+              type="submit"
+              size="extraLarge"
+              background="primary"
+              hoverColor="primary"
+              color="white"
+              disabled={disabled}
+              isFull>
+              Submit a request
+            </Button>
+          </S.QuestionWrapper>
+        </S.BorderWrapper>
       </form>
     </S.Container>
   );

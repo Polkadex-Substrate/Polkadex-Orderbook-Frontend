@@ -37,12 +37,20 @@ export const Heading = styled.p`
   `}
 `;
 
+export const BorderWrapper = styled.div`
+  ${({ theme }) => css`
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
+  `}
+`;
+
 export const QuestionWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     padding: 3rem;
+    max-width: 51rem;
+    width: 100%;
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
   `}
 `;
@@ -50,7 +58,7 @@ export const QuestionWrapper = styled.div`
 export const Question = styled.p`
   ${({ theme }) => css`
     opacity: 0.5;
-    font-size: medium;
+    font-size: 1.5rem;
   `}
 `;
 
@@ -67,8 +75,8 @@ export const Button = styled.button<{ isDisabled: boolean }>`
 
 export const Input = styled.input`
   ${({ theme }) => css`
-    max-width: 50rem;
     width: 100%;
+    max-width: 44rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;

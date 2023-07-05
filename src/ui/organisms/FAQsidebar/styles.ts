@@ -16,12 +16,15 @@ export const Container = styled.div<{ show: boolean }>`
     gap: 2rem;
     flex-shrink: 0;
     ${customMedia.lessThan("large")`
-        display:${show ? "flex" : "none"};
+        display:flex;
         position:absolute;
         right:0;
         top:0;
+        opacity:${show ? "1" : "0"};
+        visibility:${show ? "visible" : "hidden"};
         z-index:2;
-        background:${theme.colors.primaryBackground}
+        background:${theme.colors.primaryBackground};
+        transition: 0.2s;
   `};
   `}
 `;
@@ -46,7 +49,7 @@ export const Button = styled.button`
 export const SocialWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    font-size: medium;
+    font-size: 1.5rem;
     padding: 1.8rem;
     font-weight: 400;
     border-radius: ${theme.border.radius.medium};

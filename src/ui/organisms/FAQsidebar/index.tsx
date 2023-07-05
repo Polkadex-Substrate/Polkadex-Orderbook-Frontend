@@ -3,7 +3,7 @@ import { useRef } from "react";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { Button, Icon } from "@polkadex/orderbook-ui/molecules";
 import useClickOutside from "@polkadex/orderbook/hooks/useClickOutside";
 
 export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
@@ -13,7 +13,15 @@ export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
   return (
     <S.Container ref={ref} show={show}>
       <S.Heading>Still have questions?</S.Heading>
-      <S.Button>Submit a request</S.Button>
+      <Button
+        type="submit"
+        size="extraLarge"
+        background="primary"
+        hoverColor="primary"
+        color="white"
+        isFull>
+        Submit a request
+      </Button>
       <S.SocialWrapper>
         <S.Social>
           <S.Icon>
