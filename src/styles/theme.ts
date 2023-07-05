@@ -31,6 +31,7 @@ const defaultTheme = {
       large: "1.8rem",
       xlarge: "2.0rem",
       xxlarge: "2.8rem",
+      giant: "3rem",
     },
   },
   icon: {
