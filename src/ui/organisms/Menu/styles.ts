@@ -35,16 +35,17 @@ export const WrapperIcon = styled.div<{
 `;
 
 export const LineBorder = styled.span`
+  position: absolute;
   height: 30px;
   width: 3px;
   background-color: #e6007a;
   border-radius: 99px;
-  margin-right: -2px;
+  left: -8px;
   @media screen and (max-width: 590px) {
     width: 30px;
     height: 3px;
     position: relative;
-    top: -8px;
+    top: -11px;
   }
 `;
 
