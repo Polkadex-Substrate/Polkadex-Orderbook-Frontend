@@ -8,6 +8,7 @@ import * as S from "./styles";
 
 import { SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 const Feedback = () => {
   const [answer, setAnswer] = useState(false);
   const [relevantInformation, setRelevantInformation] = useState(false);
@@ -32,12 +33,7 @@ const Feedback = () => {
 
   return (
     <S.Container>
-      <S.Header>
-        <S.BreadCrumbWrapper>
-          Home/<S.LastCrumb>Feedbackform</S.LastCrumb>
-        </S.BreadCrumbWrapper>
-        <S.Heading>Give us your feedback</S.Heading>
-      </S.Header>
+      <FAQHeader heading={"Give us your feedback"} lastCrumb={"Feedbackform"} />
       <form action="" onSubmit={formik.handleSubmit}>
         <S.QuestionWrapper>
           <S.Question>Were we able to answer your question?</S.Question>
