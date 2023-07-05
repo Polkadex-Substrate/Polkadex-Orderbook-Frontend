@@ -24,6 +24,7 @@ export const ContainerInfo = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: space-around;
     gap: 5rem;
     border-radius: 0 0 2rem 2rem;
     box-shadow: ${theme.shadows.smooth};
@@ -43,6 +44,7 @@ export const WrapperInfo = styled.div`
   display: flex;
   flex: 1;
   gap: 1rem;
+  justify-content: space-between;
   @media screen and (max-width: 780px) {
     flex-direction: column;
   }
