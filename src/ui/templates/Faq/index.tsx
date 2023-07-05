@@ -48,9 +48,63 @@ export const FaqTemplate = () => {
                 </p>
               </S.IntroductionSearch>
             </S.Introduction>
+            <S.Trending>
+              <h2>Trending topics</h2>
+              <S.TrendingCards>
+                {trendingTopics.map((v) => (
+                  <div key={v.id}>
+                    <span>{v.title}</span>
+                    <p>{v.description}</p>
+                  </div>
+                ))}
+              </S.TrendingCards>
+            </S.Trending>
           </S.Wrapper>
         </S.Flex>
       </S.Main>
     </>
   );
 };
+
+const trendingTopics = [
+  {
+    id: 1,
+    title: "Register main account",
+    description: "Elit duis tristique sollicitudin nibh..",
+  },
+  {
+    id: 2,
+    title: "Create trade account",
+    description: "Sit a met commodo nulla facil.",
+  },
+  {
+    id: 3,
+    title: "Delete trade account from blockchain",
+    description: "Amet commodo nulla facil vinar..",
+  },
+  {
+    id: 4,
+    title: "Deposit coin",
+    description: "Aulla facil Pellentesque pulvinar..",
+  },
+  {
+    id: 5,
+    title: "Withdraw coin",
+    description: "Commodo nulla facil Entesque..",
+  },
+  {
+    id: 5,
+    title: "How limit order works",
+    description: "Nulla facil Pellentesque pulvinar..",
+  },
+  {
+    id: 5,
+    title: "Locked balances",
+    description: "Facil Pellentesque pulvinar amet..",
+  },
+  {
+    id: 5,
+    title: "Excluded Jurisdictions",
+    description: "Pellentesque pulvinar sit amete..",
+  },
+];

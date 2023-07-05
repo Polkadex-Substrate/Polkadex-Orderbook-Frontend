@@ -120,3 +120,46 @@ export const IntroductionSearch = styled.div`
     }
   `}
 `;
+
+export const Trending = styled.div`
+  ${({ theme }) => css`
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
+    h2 {
+      font-size: ${theme.font.sizes.xlarge};
+      font-weight: 500;
+    }
+  `}
+`;
+
+export const TrendingCards = styled.div`
+  ${({ theme }) => css`
+    display: grid;
+    justify-content: space-between;
+    column-gap: 2rem;
+    row-gap: 3rem;
+    flex-wrap: wrap;
+    div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    span {
+      font-size: ${theme.font.sizes.medium};
+      font-weight: 500;
+    }
+    p {
+      color: ${theme.colors.tertiaryText};
+    }
+    @media screen and (min-width: 600px) and (max-width: 850px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (min-width: 850px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  `}
+`;
