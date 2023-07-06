@@ -21,3 +21,4 @@ export * from "./Transactions";
 export * from "./MarketOrder";
 export * from "./Graph";
 export * from "./Disclaimer";
+export { default as GettingStartedComponent } from "./GettingStartedComponent";
