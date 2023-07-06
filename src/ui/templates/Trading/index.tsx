@@ -274,7 +274,7 @@ export function Trading() {
                       <KlineProvider>
                         <Graph />
                       </KlineProvider>
-                      {hasUser ? (
+                      {!hasUser ? (
                         <SessionProvider>
                           <TradesProvider>
                             <OrderHistoryProvider>
