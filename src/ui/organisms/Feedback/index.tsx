@@ -11,9 +11,6 @@ import { Button, SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 const Feedback = () => {
-  const [answer, setAnswer] = useState(false);
-  const [relevantInformation, setRelevantInformation] = useState(false);
-  const [userFriendly, setUserFriendly] = useState(false);
   const [stars, setStars] = useState(0);
   const { onHandleAlert } = useSettingsProvider();
   const handleRating = (index) => {
@@ -22,6 +19,9 @@ const Feedback = () => {
   const formik = useFormik({
     initialValues: {
       value: "",
+      answer: false,
+      relevantInformation: false,
+      userFriendly: false,
     },
     validationSchema: Yup.object({
       value: Yup.string().typeError("Input must be a string").required("Required"),
@@ -32,6 +32,7 @@ const Feedback = () => {
   });
   const disabled = !(formik.dirty && formik.isValid);
   const router = useRouter();
+  console.log(formik.getFieldProps("answer"), "check");
 
   return (
     <S.Container>
@@ -41,18 +42,27 @@ const Feedback = () => {
           <S.QuestionWrapper>
             <S.Question>Were we able to answer your question?</S.Question>
 
-            <SwitchFAQ checked={answer} setChecked={() => setAnswer(!answer)} />
+            <SwitchFAQ
+              id="answer"
+              name="answer"
+              checked={formik.values.answer}
+              setChecked={formik.handleChange}
+            />
             <S.Question>
               Did you find the relevant information you were looking for?
             </S.Question>
             <SwitchFAQ
-              checked={relevantInformation}
-              setChecked={() => setRelevantInformation(!relevantInformation)}
+              id="relevantInformation"
+              name="relevantInformation"
+              checked={formik.values.relevantInformation}
+              setChecked={formik.handleChange}
             />
             <S.Question>Was the FAQ Webpage user friendly?</S.Question>
             <SwitchFAQ
-              checked={userFriendly}
-              setChecked={() => setUserFriendly(!userFriendly)}
+              id="userFriendly"
+              name="userFriendly"
+              checked={formik.values.userFriendly}
+              setChecked={formik.handleChange}
             />
             <S.Question>Is there anything you would want us to improve?</S.Question>
             <div>

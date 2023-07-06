@@ -1,4 +1,8 @@
+import { ChangeEvent } from "react";
+
 export type Props = {
+  id: string;
+  name: string;
   checked: boolean;
-  setChecked: () => void;
+  setChecked: (e: ChangeEvent<any>) => void;
 };

@@ -1,12 +1,12 @@
 import * as S from "./styles";
 import * as T from "./types";
-export const SwitchFAQ = ({ checked, setChecked }: T.Props) => {
+export const SwitchFAQ = ({ id, name, checked, setChecked }: T.Props) => {
   return (
-    <div>
-      <S.CheckBoxWrapper onClick={setChecked}>
-        <S.Checker checked={checked}></S.Checker>
+    <S.Label>
+      <S.Input id={id} name={name} checked={checked} type="checkbox" onChange={setChecked} />
+      <S.Switch>
         <S.Text checked={checked}>{checked ? "Yes" : "No"}</S.Text>
-      </S.CheckBoxWrapper>
-    </div>
+      </S.Switch>
+    </S.Label>
   );
 };

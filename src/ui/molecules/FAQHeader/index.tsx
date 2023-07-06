@@ -6,7 +6,6 @@ export const FAQHeader = ({ heading, pathname }) => {
   const pathSegments = pathname.slice(1).split("/");
   const lastCrumb = pathSegments[pathSegments.length - 1];
   pathSegments.pop();
-  console.log(pathSegments);
   const getLink = (item, index) => {
     if (index === 0) return `/${item}`;
     let link = "/";
