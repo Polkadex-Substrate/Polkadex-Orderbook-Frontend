@@ -58,7 +58,7 @@ export const QuestionWrapper = styled.div`
 export const Question = styled.p`
   ${({ theme }) => css`
     opacity: 0.5;
-    font-size: 1.5rem;
+    font-size: ${theme.font.sizes.small};
   `}
 `;
 
@@ -73,7 +73,7 @@ export const Button = styled.button<{ isDisabled: boolean }>`
   `}
 `;
 
-export const Input = styled.input`
+export const Input = styled.textarea`
   ${({ theme }) => css`
     width: 100%;
     max-width: 44rem;
@@ -81,8 +81,9 @@ export const Input = styled.input`
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;
     font-size: small;
-    height: 5.4rem;
+    height: 3.4rem;
     padding-left: 0.8rem;
+    padding: 1.5rem;
     color: white;
     &::placeholder {
       color: ${theme.colors.tertiaryText};

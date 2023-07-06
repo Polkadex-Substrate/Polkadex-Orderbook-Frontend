@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
 
 import { Rating } from "../Rating";
 
@@ -30,10 +31,11 @@ const Feedback = () => {
     },
   });
   const disabled = !(formik.dirty && formik.isValid);
+  const router = useRouter();
 
   return (
     <S.Container>
-      <FAQHeader heading={"Give us your feedback"} lastCrumb={"Feedbackform"} />
+      <FAQHeader heading={"Give us your feedback"} pathname={router.pathname} />
       <form action="" onSubmit={formik.handleSubmit}>
         <S.BorderWrapper>
           <S.QuestionWrapper>

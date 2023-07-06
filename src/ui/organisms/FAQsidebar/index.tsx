@@ -17,7 +17,7 @@ export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
         type="submit"
         size="extraLarge"
         background="primary"
-        hoverColor="primary"
+        hoverColor="primaryHover"
         color="white"
         isFull>
         Submit a request

@@ -7,10 +7,10 @@ const customMedia = generateMedia({
 export const Container = styled.div<{ show: boolean }>`
   ${({ theme, show }) => css`
     border-left: 1px solid ${theme.colors.secondaryBackground};
-    max-width: 35rem;
+    max-width: 30rem;
     width: 100%;
     min-height: 100vh;
-    padding: 3rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -31,7 +31,7 @@ export const Container = styled.div<{ show: boolean }>`
 
 export const Heading = styled.div`
   ${({ theme }) => css`
-    font-size: medium;
+    font-size: ${theme.font.sizes.small};
     font-weight: 500;
   `}
 `;
@@ -49,7 +49,7 @@ export const Button = styled.button`
 export const SocialWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    font-size: 1.5rem;
+    font-size: ${theme.font.sizes.small};
     padding: 1.8rem;
     font-weight: 400;
     border-radius: ${theme.border.radius.medium};
@@ -60,24 +60,33 @@ export const SocialWrapper = styled.div`
 `;
 
 export const Social = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  cursor: pointer;
+  ${({ theme }) => css`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    &:hover svg {
+      fill: white;
+    }
+    transition: 0.2s;
+  `}
 `;
 
 export const OnlyIcons = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
   `}
 `;
 
 export const IconWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    width: 6rem;
-    height: 6rem;
+    width: 4.5rem;
+    height: 4.5rem;
     border-radius: ${theme.border.radius.medium};
     display: flex;
     align-items: center;
@@ -109,7 +118,7 @@ export const Description = styled.div`
     color: ${theme.colors.tertiaryText};
     margin-top: 1rem;
     font-weight: 400;
-    line-height: 2.5rem;
+    line-height: 2rem;
   `}
 `;
 

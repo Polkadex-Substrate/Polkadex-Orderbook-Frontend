@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
-
+import Link from "next/link";
 export const Header = styled.div`
   ${({ theme }) => css`
     padding: 3rem;
@@ -11,14 +11,14 @@ export const Header = styled.div`
 
 export const BreadCrumbWrapper = styled.div`
   ${({ theme }) => css`
-    font-size: large;
-    font-weight: 300;
+    text-transform: capitalize;
+    cursor: pointer;
   `}
 `;
 
-export const LastCrumb = styled.span`
+export const LastCrumb = styled(Link)`
   ${({ theme }) => css`
-    color: ${theme.colors.tertiaryText};
+    color: ${theme.colors.tertiaryText}!important;
   `}
 `;
 
