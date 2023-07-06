@@ -25,6 +25,12 @@ export const Flex = styled.div`
   }
 `;
 
+export const QuickAccess = styled.div`
+  flex: 1;
+  max-width: 30rem;
+  background: rgba(255, 255, 255, 0.1);
+`;
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -160,6 +166,73 @@ export const TrendingCards = styled.div`
     }
     @media screen and (min-width: 850px) {
       grid-template-columns: repeat(4, 1fr);
+    }
+  `}
+`;
+
+export const Categories = styled.div`
+  ${({ theme }) => css`
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
+  `}
+`;
+
+export const CategoriesTitle = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    h2 {
+      font-size: ${theme.font.sizes.xlarge};
+      font-weight: 500;
+    }
+    p {
+      font-size: ${theme.font.sizes.small};
+      color: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
+
+export const CategoriesCards = styled.div`
+  display: grid;
+  justify-content: space-between;
+  column-gap: 2rem;
+  row-gap: 3rem;
+  flex-wrap: wrap;
+  @media screen and (min-width: 600px) and (max-width: 850px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (min-width: 850px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+`;
+
+export const CategoriesCard = styled.div`
+  ${({ theme }) => css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: ${theme.colors.tertiaryBackgroundOpacity};
+    padding: 2rem;
+    border-radius: 0.8rem;
+
+    span {
+      font-size: ${theme.font.sizes.medium};
+    }
+    div {
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+    }
+    span {
+      font-size: ${theme.font.sizes.small};
     }
   `}
 `;

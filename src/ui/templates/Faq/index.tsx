@@ -59,12 +59,72 @@ export const FaqTemplate = () => {
                 ))}
               </S.TrendingCards>
             </S.Trending>
+            <S.Categories>
+              <S.CategoriesTitle>
+                <h2>Categories</h2>
+                <p>Perhaps you can find the answer in out collections</p>
+              </S.CategoriesTitle>
+              <S.CategoriesCards>
+                {categories.map((v) => (
+                  <S.CategoriesCard key={v.id}>
+                    <div>
+                      <Icons.AddWallet />
+                    </div>
+                    <span>{v.title}</span>
+                  </S.CategoriesCard>
+                ))}
+              </S.CategoriesCards>
+            </S.Categories>
           </S.Wrapper>
+          <S.QuickAccess />
         </S.Flex>
       </S.Main>
     </>
   );
 };
+
+const categories = [
+  {
+    id: "GettingStarted",
+    title: "Getting started",
+  },
+  {
+    id: "Accounts",
+    title: "Accounts",
+  },
+  {
+    id: "Deposit&Withdraw",
+    title: "Deposit & Withdraw",
+  },
+  {
+    id: "Spot&Margin",
+    title: "Spot & Margin",
+  },
+  {
+    id: "Security",
+    title: "Security",
+  },
+  {
+    id: "Wallets",
+    title: "Wallets",
+  },
+  {
+    id: "Trading bots",
+    title: "Trading bots",
+  },
+  {
+    id: "Balances",
+    title: "Balances",
+  },
+  {
+    id: "PlatormIdsues",
+    title: "Platorm issues",
+  },
+  {
+    id: "OtherTopics",
+    title: "Other topics",
+  },
+];
 
 const trendingTopics = [
   {
