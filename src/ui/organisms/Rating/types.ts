@@ -1,4 +1,4 @@
 export type Props = {
   value: number;
-  setValue: (value: number) => void;
+  onClick: (value: number) => void;
 };

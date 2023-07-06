@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
@@ -11,17 +10,15 @@ import { Button, SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 const Feedback = () => {
-  const [stars, setStars] = useState(0);
   const { onHandleAlert } = useSettingsProvider();
-  const handleRating = (index) => {
-    setStars(index + 1);
-  };
+
   const formik = useFormik({
     initialValues: {
       value: "",
       answer: false,
       relevantInformation: false,
       userFriendly: false,
+      stars: 0,
     },
     validationSchema: Yup.object({
       value: Yup.string().typeError("Input must be a string").required("Required"),
@@ -32,8 +29,9 @@ const Feedback = () => {
   });
   const disabled = !(formik.dirty && formik.isValid);
   const router = useRouter();
-  console.log(formik.getFieldProps("answer"), "check");
-
+  const handleStarClick = (selectedValue) => {
+    formik.setFieldValue("stars", selectedValue);
+  };
   return (
     <S.Container>
       <FAQHeader heading={"Give us your feedback"} pathname={router.pathname} />
@@ -73,7 +71,8 @@ const Feedback = () => {
             </div>
 
             <S.Question>How would you rate our service?</S.Question>
-            <Rating value={stars} setValue={handleRating} />
+
+            <Rating value={formik.values.stars} onClick={handleStarClick} />
             <Button
               type="submit"
               size="extraLarge"
