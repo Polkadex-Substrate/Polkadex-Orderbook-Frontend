@@ -44,7 +44,7 @@ export const Question = styled.p`
 export const Input = styled.textarea`
   ${({ theme }) => css`
     width: 100%;
-    max-width: 44rem;
+    max-width: 42rem;
     border: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;
