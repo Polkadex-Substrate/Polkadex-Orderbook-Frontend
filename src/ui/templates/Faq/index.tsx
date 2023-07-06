@@ -75,6 +75,43 @@ export const FaqTemplate = () => {
                 ))}
               </S.CategoriesCards>
             </S.Categories>
+            <S.Videos>
+              <S.VideosTitle>
+                <div>
+                  <h2>Tutorials & videos</h2>
+                  <p>These videos might help you</p>
+                </div>
+                <Link href="#">View all</Link>
+              </S.VideosTitle>
+              <S.VideosCards>
+                <S.VideosPrimary>
+                  <S.VideosPrimaryContainer>
+                    <p>ORDERBOOK IS LIVE: Orderbook Demo</p>
+                    <span>Polkadex</span>
+                  </S.VideosPrimaryContainer>
+                  <S.IframeContainer>
+                    <iframe
+                      width="560"
+                      height="315"
+                      src="https://www.youtube-nocookie.com/embed/usrE9CGC_1M"
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    />
+                  </S.IframeContainer>
+                </S.VideosPrimary>
+                <S.VideosSecondary>
+                  {videos.map((v) => (
+                    <S.VideosSecondaryCard key={v.id}>
+                      <img src={`/img/faq/${v.image}`} alt="Polkadex video" />
+                      <div>
+                        <p>{v.title}</p>
+                        <span>{v.author}</span>
+                      </div>
+                    </S.VideosSecondaryCard>
+                  ))}
+                </S.VideosSecondary>
+              </S.VideosCards>
+            </S.Videos>
           </S.Wrapper>
           <S.QuickAccess />
         </S.Flex>
@@ -82,6 +119,44 @@ export const FaqTemplate = () => {
     </>
   );
 };
+
+const videos = [
+  {
+    id: 1,
+    title: "Quick guide: Stake your PDEX and earn amazing APY!",
+    author: "Polkadex",
+    image: "stakingYoutube.png",
+    link: "",
+  },
+  {
+    id: 2,
+    title: "PDEX Migration walk through",
+    author: "Polkadex",
+    link: "",
+    image: "migrationYoutube.png",
+  },
+  {
+    id: 3,
+    title: "Run a Polkadex validator node with OnFinality",
+    author: "Polkadex",
+    link: "",
+    image: "validatorYoutube.png",
+  },
+  {
+    id: 4,
+    title: "How to set an identity on-chain and verify your validator",
+    author: "Polkadex",
+    link: "",
+    image: "identityYoutube.png",
+  },
+  {
+    id: 5,
+    title: "Sneak Peek: The PolkaIDO Interface",
+    author: "Polkadex",
+    link: "",
+    image: "polkaidoYoutube.png",
+  },
+];
 
 const categories = [
   {
@@ -93,11 +168,11 @@ const categories = [
     title: "Accounts",
   },
   {
-    id: "Deposit&Withdraw",
-    title: "Deposit & Withdraw",
+    id: "DepositWithdraw",
+    title: "Deposit/Withdraw",
   },
   {
-    id: "Spot&Margin",
+    id: "SpotMargin",
     title: "Spot & Margin",
   },
   {

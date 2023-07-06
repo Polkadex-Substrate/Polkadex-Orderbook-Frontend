@@ -161,10 +161,10 @@ export const TrendingCards = styled.div`
     p {
       color: ${theme.colors.tertiaryText};
     }
-    @media screen and (min-width: 600px) and (max-width: 850px) {
+    @media screen and (min-width: 800px) and (max-width: 1150px) {
       grid-template-columns: repeat(3, 1fr);
     }
-    @media screen and (min-width: 850px) {
+    @media screen and (min-width: 1150px) {
       grid-template-columns: repeat(4, 1fr);
     }
   `}
@@ -198,15 +198,17 @@ export const CategoriesTitle = styled.div`
 
 export const CategoriesCards = styled.div`
   display: grid;
-  justify-content: space-between;
-  column-gap: 2rem;
+  column-gap: 1rem;
   row-gap: 3rem;
-  flex-wrap: wrap;
-  @media screen and (min-width: 600px) and (max-width: 850px) {
+  @media screen and (min-width: 800px) and (max-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
   }
-  @media screen and (min-width: 850px) {
+  @media screen and (min-width: 900px) and (max-width: 1150px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media screen and (min-width: 1150px) {
     grid-template-columns: repeat(5, 1fr);
+    column-gap: 1rem;
   }
 `;
 
@@ -233,6 +235,117 @@ export const CategoriesCard = styled.div`
     }
     span {
       font-size: ${theme.font.sizes.small};
+    }
+  `}
+`;
+
+export const Videos = styled.div`
+  ${({ theme }) => css`
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackground};
+  `}
+`;
+
+export const VideosTitle = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex: 1;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      h2 {
+        font-size: ${theme.font.sizes.xlarge};
+        font-weight: 500;
+      }
+      p {
+        font-size: ${theme.font.sizes.small};
+        color: ${theme.colors.tertiaryText};
+      }
+    }
+    a {
+      color: ${theme.colors.primary};
+    }
+  `}
+`;
+
+export const VideosCards = styled.div`
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+`;
+
+export const VideosPrimary = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const VideosPrimaryContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    span {
+      color: ${theme.colors.tertiaryText};
+    }
+    p {
+      font-size: ${theme.font.sizes.small};
+      font-weight: 500;
+    }
+  `}
+`;
+
+export const IframeContainer = styled.div`
+  flex: 1;
+  position: relative;
+  min-width: 30rem;
+  min-height: 20rem;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+export const VideosSecondary = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  flex: 1;
+  max-width: 28rem;
+`;
+
+export const VideosSecondaryCard = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 28rem;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      span {
+        color: ${theme.colors.tertiaryText};
+        font-size: ${theme.font.sizes.xxsmall};
+      }
+      p {
+        font-size: ${theme.font.sizes.xsmall};
+      }
+    }
+    img {
+      max-height: 7rem;
     }
   `}
 `;
