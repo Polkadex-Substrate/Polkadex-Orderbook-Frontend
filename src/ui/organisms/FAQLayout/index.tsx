@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { FAQsidebar } from "../FAQsidebar";
 
 import * as S from "./styles";
-const HomeLayout = ({ children }) => {
+const FAQLayout = ({ children }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const closeSidebar = useCallback(() => {
     setShowSidebar(false);
@@ -17,4 +17,4 @@ const HomeLayout = ({ children }) => {
   );
 };
 
-export default HomeLayout;
+export default FAQLayout;
