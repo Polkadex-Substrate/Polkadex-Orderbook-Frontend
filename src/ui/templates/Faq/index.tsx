@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import * as S from "./styles";
 
-// import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
+import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
 import { FaqTopMessage } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
@@ -15,10 +15,10 @@ export const FaqTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <FaqTopMessage />
         <S.Flex>
-          {/* <Menu /> */}
+          <Menu />
           <S.Wrapper>
+            <FaqTopMessage />
             <S.Introduction>
               <S.IntroductionTitle>
                 <Link href="#">Home</Link>
