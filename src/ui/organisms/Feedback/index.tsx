@@ -21,7 +21,7 @@ const Feedback = () => {
       stars: 0,
     },
     validationSchema: Yup.object({
-      value: Yup.string().typeError("Input must be a string").required("Required"),
+      value: Yup.string().typeError("Input must be a string"),
     }),
     onSubmit: (values) => {
       onHandleAlert(JSON.stringify(values, null, 2));
