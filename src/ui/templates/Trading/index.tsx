@@ -126,6 +126,7 @@ export function Trading() {
   const { selectedAccount } = useProfile();
 
   const { t } = useTranslation("trading");
+  const { t: tc } = useTranslation("common");
 
   const currentMainAddr = selectedAccount.mainAddress;
   const currentTradeAddr = selectedAccount.tradeAddress;
@@ -159,19 +160,19 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade && marketName && `${currentTrade} | ${marketName} | `} Polkadex
-          Orderbook
+          {currentTrade && marketName && `${currentTrade} | ${marketName} | `}{" "}
+          {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
       <Modal open={shutdownBanner} isBlur onClose={() => setShutdownBanner(false)}>
         <ShutdownInteraction
-          title="Orderbook v1 will go offline as it is upgraded to v2"
-          textLink="Read the full statement"
+          title={t("shutDown.title")}
+          textLink={t("shutDown.textLink")}
           link="https://polkadex.medium.com/orderbook-v2-thea-and-crowdloan-rewards-are-now-live-on-kaizen-the-polkadex-test-net-7ca5c88855ad"
-          footerText="Join our Telegram for more updates!"
+          footerText={t("shutDown.footerText")}
           buttonLink="https://t.me/Polkadex"
-          textButton="Join Telegram"
+          textButton={t("shutDown.buttonText")}
           onClose={() => setShutdownBanner(false)}
         />
       </Modal>
@@ -183,12 +184,12 @@ export function Trading() {
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner
-          title="Welcome back!"
-          description="Looks like you’re using this browser for the first time."
-          subDescription="Please create a new trading account."
-          closeButtonTitle="Close"
+          title={t("accountBanner.title")}
+          description={t("accountBanner.description")}
+          subDescription={t("accountBanner.subDescription")}
+          closeButtonTitle={t("accountBanner.closeButtonText")}
           onClose={closeBanner}
-          linkText="Create Account"
+          linkText={t("accountBanner.linkText")}
           link="/settings"
           heroAlt="Man in tie with open arms welcoming"
           heroImage="welcomeBack.svg"
@@ -223,7 +224,7 @@ export function Trading() {
                       stroke: "text",
                       fill: "text",
                     }}>
-                    Login/Sign Up
+                    {t("login/signup")}
                   </Button>
                 ) : (
                   <S.Profile>
@@ -255,7 +256,7 @@ export function Trading() {
                             stroke: "text",
                             fill: "text",
                           }}>
-                          Login/Sign Up
+                          {t("login/signup")}
                         </Button>
                       ) : (
                         <S.Profile>

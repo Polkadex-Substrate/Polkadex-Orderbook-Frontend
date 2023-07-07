@@ -12,7 +12,7 @@ i18next
   .init({
     supportedLngs: languages.map((l) => l.code),
     fallbackLng: "en",
-    debug: true,
+    debug: false,
     // Options for language detector
     detection: {
       order: ["path", "localStorage", "htmlTag"],
