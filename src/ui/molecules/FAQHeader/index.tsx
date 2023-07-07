@@ -1,8 +1,9 @@
 import Link from "next/link";
 
 import * as S from "./styles";
+import * as T from "./type";
 
-export const FAQHeader = ({ heading, pathname }) => {
+export const FAQHeader = ({ heading, pathname, noBorder }: T.Props) => {
   const pathSegments = pathname.slice(1).split("/");
   const lastCrumb = pathSegments[pathSegments.length - 1];
   pathSegments.pop();
@@ -16,7 +17,7 @@ export const FAQHeader = ({ heading, pathname }) => {
     return link;
   };
   return (
-    <S.Header>
+    <S.Header noBorder>
       <S.BreadCrumbWrapper>
         {pathSegments.map((item, index) => {
           return (
@@ -27,7 +28,7 @@ export const FAQHeader = ({ heading, pathname }) => {
         })}
         <S.LastCrumb href={getLink(lastCrumb, pathSegments.length)}>{lastCrumb}</S.LastCrumb>
       </S.BreadCrumbWrapper>
-      <S.Heading>{heading}</S.Heading>
+      {heading && <S.Heading>{heading}</S.Heading>}
     </S.Header>
   );
 };
