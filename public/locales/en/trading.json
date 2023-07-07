@@ -1,0 +1,8 @@
+{
+  "selectAccount": {
+    "title": "Connect your Trading Account",
+    "description": "Import your existing account, or create a new account",
+    "primaryLinkTitle": "Create Account",
+    "secondaryLinkTitle": "Select Account"
+  }
+}

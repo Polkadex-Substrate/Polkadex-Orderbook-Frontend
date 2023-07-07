@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import Head from "next/head";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
@@ -124,20 +125,20 @@ export function Trading() {
 
   const { selectedAccount } = useProfile();
 
+  const { t } = useTranslation("trading");
+
   const currentMainAddr = selectedAccount.mainAddress;
   const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
-      title: "Connect your Trading Account",
-      description: "Import your existing account, or create a new account",
+      title: t("selectAccount.title"),
+      description: t("selectAccount.description"),
       primaryLink: "/createAccount",
-      primaryLinkTitle: "Create Account",
+      primaryLinkTitle: t("selectAccount.primaryLinkTitle"),
       secondaryLink: "/settings",
-      secondaryLinkTitle: "Select Account",
+      secondaryLinkTitle: t("selectAccount.secondaryLinkTitle"),
     };
-
-  // initialize user specific sagas
 
   const marketName = market?.name?.replace("/", "");
 
