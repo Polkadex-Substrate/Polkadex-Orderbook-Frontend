@@ -275,11 +275,8 @@ Super Form Reset
     }
     .rdrDateDisplayItem {
       background: ${theme.colors.secondaryBackgroundOpacity};
-      /* box-shadow: 0 1px 2px 0 rgba(35, 57, 66, 0.21);
-      border: 1px solid transparent; */
     }
     .rdrDateDisplayItemActive {
-      /* background-color: ${theme.colors.primary}; */
       border-color: ${theme.colors.primary};
     }
     .rdrDefinedRangesWrapper {
@@ -361,7 +358,5 @@ Super Form Reset
       ${iconThemingModifier[theme.colors.text === "#ffffff" ? "dark" : "light"]()};
       
   }
-    /* Calendar ------------------------------------
-    -----------------------------------------------*/
     `}
     `;
