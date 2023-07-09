@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import Link from "next/link";
-import { BigHead } from "@bigheads/core";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -20,7 +19,6 @@ import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/
 import { userMainAccountDetails } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
@@ -35,10 +33,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     selectedAccount: currentUsingAccount,
     userData: { userAccounts: allUserAccounts },
   } = useProfile();
-  const profileState = useProfile();
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
+
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<KeyringPair>(null);
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
@@ -97,12 +92,6 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   return (
     <S.Wrapper>
-      <S.Profile>
-        <div>
-          <BigHead {...avatarOptions.data} />
-        </div>
-        <span>Profile</span>
-      </S.Profile>
       <S.Switch>
         {accountList.length ? (
           <Dropdown>

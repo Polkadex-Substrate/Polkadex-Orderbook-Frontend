@@ -14,9 +14,7 @@ export const Wrapper = styled.main`
   height: 100vh;
   overflow: auto;
   overflow-x: hidden;
-  @media screen and (max-width: 590px) {
-    display: block;
-  }
+  flex-direction: column;
 `;
 
 export const WrapperMain = styled.div`
@@ -27,6 +25,7 @@ export const WrapperMain = styled.div`
   max-width: 1920px;
   margin-left: auto;
   margin-right: auto;
+  overflow-y: scroll;
 `;
 
 export const ContainerMain = styled.div`
@@ -69,7 +68,6 @@ export const CenterWrapper = styled.div`
 export const GraphEpmty = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
   width: 100%;
 `;
 
@@ -102,11 +100,10 @@ export const Box = styled.div`
   ${({ theme }) => css`
     justify-content: space-between;
     align-items: center;
-
     display: none;
     padding: 0 1rem;
     ${Button} {
-      transition: background 0.5s ease-in-out;
+      transition: background-color 0.5s ease-in-out;
       margin-left: 2rem;
     }
     ${Logo} {
@@ -147,4 +144,14 @@ export const Profile = styled.div`
   gap: 0.7rem;
   justify-self: flex-end;
   align-self: flex-end;
+`;
+
+export const Flex = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  overflow: hidden;
+  @media screen and (min-width: 590px) {
+    flex-direction: row;
+  }
 `;

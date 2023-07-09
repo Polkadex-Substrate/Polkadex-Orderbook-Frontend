@@ -17,18 +17,16 @@ export const ContainerPair = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  @media screen and (max-width: 780px) {
-    padding-top: 1rem;
-  }
 `;
 
 export const ContainerInfo = styled.div`
   ${({ theme }) => css`
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    grid-column-gap: 14rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 5rem;
     border-radius: 0 0 2rem 2rem;
-    background: ${theme.colors.tertiaryBackground};
     box-shadow: ${theme.shadows.smooth};
     padding: 1rem 1.5rem;
     @media screen and (max-width: 1268px) {
@@ -46,7 +44,7 @@ export const WrapperInfo = styled.div`
   display: flex;
   flex: 1;
   gap: 1rem;
-
+  justify-content: space-between;
   @media screen and (max-width: 780px) {
     flex-direction: column;
   }

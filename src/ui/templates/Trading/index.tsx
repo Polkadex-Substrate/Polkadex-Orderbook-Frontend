@@ -8,11 +8,9 @@ import * as S from "./styles";
 
 import {
   AccountBanner,
-  Button,
   EmptyMyAccount,
   Footer,
   Icon,
-  Logo,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import {
@@ -24,15 +22,13 @@ import {
   Navbar,
   RecentTrades,
   Disclaimer,
+  Header,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
-import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
@@ -101,31 +97,21 @@ export function Trading() {
     }
   }, [market, onMarketTickersFetch, tickersTimestamp]);
 
-  const { email } = useAuth();
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
     onUserChangeInitBanner,
   } = useProfile();
-  const extensionWalletState = useExtensionWallet();
 
   const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount = selectIsAddressInExtension(
-    mainAddress,
-    extensionWalletState.allAccounts
-  );
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
-  const { selectedAccount } = useProfile();
-
-  const currentMainAddr = selectedAccount.mainAddress;
-  const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
@@ -203,99 +189,42 @@ export function Trading() {
       </Modal>
       <S.Container>
         <S.Wrapper>
-          <Menu />
-          <S.WrapperMain>
-            <S.ContainerMain>
-              <S.Box>
-                <S.Logo>
-                  <Logo size="Medium" href="/trading" />
-                </S.Logo>
-                {!isSignedIn ? (
-                  <Button
-                    onClick={() => router.push("/signIn")}
-                    color="inverse"
-                    background="text"
-                    icon={{
-                      name: "Wallet",
-                      background: "inverse",
-                      size: "medium",
-                      stroke: "text",
-                      fill: "text",
-                    }}>
-                    Login/Sign Up
-                  </Button>
-                ) : (
-                  <S.Profile>
-                    <Profile
-                      hasTradeAccount={hasTradeAccount}
-                      hasMainAccount={hasMainAccount}
-                      currentMainAccount={currentMainAddr}
-                      currentTradeAccount={currentTradeAddr}
-                      email={email}
-                    />
-                  </S.Profile>
-                )}
-              </S.Box>
-              <S.Content>
-                <S.WrapperGraph>
-                  <S.Header>
-                    <Navbar onOpenMarkets={() => setState(!state)} />
-                    <S.Actions isSignedIn={isSignedIn}>
-                      {!isSignedIn ? (
-                        <Button
-                          onClick={() => router.push("/signIn")}
-                          color="inverse"
-                          background="text"
-                          style={{ alignSelf: "flex-end" }}
-                          icon={{
-                            name: "Wallet",
-                            background: "inverse",
-                            size: "medium",
-                            stroke: "text",
-                            fill: "text",
-                          }}>
-                          Login/Sign Up
-                        </Button>
-                      ) : (
-                        <S.Profile>
-                          <Profile
-                            hasTradeAccount={hasTradeAccount}
-                            hasMainAccount={hasMainAccount}
-                            currentMainAccount={currentMainAddr}
-                            currentTradeAccount={currentTradeAddr}
-                            email={email}
-                          />
-                        </S.Profile>
-                      )}
-                    </S.Actions>
-                  </S.Header>
-                  <S.CenterWrapper>
-                    <S.GraphEpmty>
-                      <KlineProvider>
-                        <Graph />
-                      </KlineProvider>
-                      {hasUser ? (
-                        <SessionProvider>
-                          <TradesProvider>
-                            <OrderHistoryProvider>
-                              <Transactions />
-                            </OrderHistoryProvider>
-                          </TradesProvider>
-                        </SessionProvider>
-                      ) : (
-                        <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                      )}
-                    </S.GraphEpmty>
-                    <S.WrapperRight>
-                      <MarketOrder />
-                      <RecentTrades />
-                    </S.WrapperRight>
-                  </S.CenterWrapper>
-                </S.WrapperGraph>
-              </S.Content>
-            </S.ContainerMain>
-            <Footer />
-          </S.WrapperMain>
+          <Header />
+          <S.Flex>
+            <Menu />
+            <S.WrapperMain>
+              <S.ContainerMain>
+                <S.Content>
+                  <S.WrapperGraph>
+                    <S.CenterWrapper>
+                      <S.GraphEpmty>
+                        <KlineProvider>
+                          <Navbar onOpenMarkets={() => setState(!state)} />
+                          <Graph />
+                        </KlineProvider>
+                        {hasUser ? (
+                          <SessionProvider>
+                            <TradesProvider>
+                              <OrderHistoryProvider>
+                                <Transactions />
+                              </OrderHistoryProvider>
+                            </TradesProvider>
+                          </SessionProvider>
+                        ) : (
+                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                        )}
+                      </S.GraphEpmty>
+                      <S.WrapperRight>
+                        <MarketOrder />
+                        <RecentTrades />
+                      </S.WrapperRight>
+                    </S.CenterWrapper>
+                  </S.WrapperGraph>
+                </S.Content>
+              </S.ContainerMain>
+              <Footer />
+            </S.WrapperMain>
+          </S.Flex>
         </S.Wrapper>
       </S.Container>
     </>
