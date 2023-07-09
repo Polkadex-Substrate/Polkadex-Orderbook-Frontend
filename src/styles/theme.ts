@@ -46,6 +46,7 @@ const defaultTheme = {
   },
   colors: {
     primary: "#E6007A",
+    primaryHover: "rgba(230,0,122,0.7)",
     secondary: "#6745D2",
     secondaryBackground: "rgba(139,161,190,0.2)",
     secondaryBackgroundDark: "#ABB2BC",

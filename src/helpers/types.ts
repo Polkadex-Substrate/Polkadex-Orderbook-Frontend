@@ -41,6 +41,7 @@ export type Direction =
 
 export type Colors =
   | "primary"
+  | "primaryHover"
   | "secondary"
   | "primaryBackground"
   | "primaryBackgroundOpacity"
