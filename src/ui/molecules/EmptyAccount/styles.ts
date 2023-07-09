@@ -21,9 +21,6 @@ export const Empty = styled.div<{ hasLimit?: boolean; balances?: boolean }>`
     ${!hasLimit &&
     css`
       max-width: 25rem;
-      ${EmptyHeader} {
-        background: ${theme.colors.inverse};
-      }
     `}
   `}
 `;

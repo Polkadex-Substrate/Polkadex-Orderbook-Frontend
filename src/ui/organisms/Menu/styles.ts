@@ -1,20 +1,16 @@
 import styled, { css } from "styled-components";
 
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-export const Logo = styled.div`
-  @media screen and (max-width: 590px) {
-    display: none;
-  }
-`;
 
 export const WrapperIcon = styled.div<{
   isDisabled?: boolean;
 }>`
-  ${({ theme, isDisabled = false }) => css`
+  ${({ isDisabled = false }) => css`
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     width: fit-content;
     cursor: pointer;
     pointer-events: ${isDisabled ? "none" : "auto"};
@@ -31,7 +27,6 @@ export const WrapperIcon = styled.div<{
     }
     ${Icon} {
       border-radius: 10rem;
-      margin-left: 5px;
     }
     @media screen and (max-width: 590px) {
       flex-direction: column;
@@ -39,21 +34,18 @@ export const WrapperIcon = styled.div<{
   `}
 `;
 
-export const ThemeIcon = styled.div`
-  margin-left: -5px !important;
-`;
-
 export const LineBorder = styled.span`
+  position: absolute;
   height: 30px;
   width: 3px;
   background-color: #e6007a;
   border-radius: 99px;
-  margin-right: -2px;
+  left: -8px;
   @media screen and (max-width: 590px) {
     width: 30px;
     height: 3px;
     position: relative;
-    top: -8px;
+    top: -11px;
   }
 `;
 
@@ -86,62 +78,41 @@ export const Span = styled.span`
 `;
 
 export const WrapperLinks = styled.div`
-  ${({ theme }) => css`
-    width: 100%;
-    min-width: 4.5rem;
-    display: flex;
-    justify-content: space-between;
-    background: ${theme.colors.tertiaryBackground};
-    border-radius: 0 3rem 3rem 3rem;
-    padding: 1rem;
-    transition-duration: 0.8s;
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
-    transition-delay: initial;
-    transition-property: initial;
-    @media screen and (min-width: 590px) {
-      padding: 2rem 1rem 1rem 0.9rem;
-      min-height: 42rem;
-    }
-    @media screen and (max-width: 690px) {
-      gap: 2rem;
-    }
-  `}
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 0 3rem 3rem 3rem;
+  gap: 2rem;
+  flex: 1;
+  transition-duration: 0.8s;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
+  transition-delay: initial;
+  transition-property: initial;
 `;
-
-export const Main = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    margin-right: 45px;
-  `}
-`;
+export const BottomContainer = styled.div``;
 
 export const Wrapper = styled.nav`
   ${({ theme }) => css`
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 100%;
+    position: sticky;
+    top: 5.5rem;
+    left: 0;
     display: flex;
-    transition-duration: 0.8s;
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
-    transition-delay: initial;
-    transition-property: initial;
-    z-index: 33;
+    padding: 1rem;
+    background: ${theme.colors.primaryBackground};
+    z-index: 2;
+    @media screen and (max-width: 590px) {
+      border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    }
 
     @media screen and (min-width: 590px) {
-      position: fixed;
+      flex: 1;
+      position: sticky;
       left: 0;
       bottom: 0;
-      min-width: 4.5rem;
-      height: 100vh !important;
-      max-width: 4.5rem;
-      display: grid;
-      grid-template-rows: 1.5fr 1fr;
-      ${Container} {
-        display: grid;
-        width: 100%;
-      }
+      max-width: 3.5rem;
+      align-items: center;
+      border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      flex-direction: column;
       ${WrapperIcon} {
         width: 100%;
       }
@@ -152,75 +123,9 @@ export const Wrapper = styled.nav`
         flex-direction: column;
       }
     }
-    @media screen and (min-height: 1200px) {
-      max-height: 77vh;
-    }
   `}
 `;
 
-export const Container = styled.div`
-  display: flex;
-  gap: 1rem;
-  width: fit-content;
-  margin-left: -0.8rem !important;
-  @media screen and (max-width: 690px) {
-    width: 100%;
-    justify-content: space-around;
-  }
-`;
-
-export const WrapperProfile = styled.div`
-  ${({ theme }) => css`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding-left: 1rem;
-    padding-bottom: 1.5rem;
-    @media screen and (max-width: 590px) {
-      display: none;
-    }
-  `}
-`;
-export const ContainerProfile = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
-
-export const Notifications = styled.div`
-  position: relative;
-  width: 1.8rem;
-  height: 1.8rem;
-  cursor: pointer;
-`;
-export const NotificationsWrapper = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
-    ${isActive &&
-    css`
-      div {
-        position: absolute;
-        top: 0.2rem;
-        right: 0.1rem;
-        width: 0.7rem;
-        height: 0.7rem;
-        border-radius: 5rem;
-        background: ${theme.colors.primary};
-      }
-    `}
-  `}
-`;
-
-export const Profile = styled.div`
-  cursor: pointer;
-`;
-
-export const Avatar = styled.div`
-  width: 3.5rem;
-  height: 3.5rem;
-`;
 export const Terms = styled.div``;
 export const TermsLinks = styled.div`
   ${({ theme }) => css`
