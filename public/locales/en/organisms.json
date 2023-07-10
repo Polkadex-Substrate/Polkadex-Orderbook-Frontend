@@ -11,5 +11,20 @@
   },
   "faqLayout": {
     "stillHaveQuestions": "Still have questions?"
+  },
+  "faqSideBar": {
+    "stillHaveQuestions": "$t(faqLayout.stillHaveQuestions)",
+    "submitRequest": "Submit a request",
+    "polkadexArticles": "Polkadex articles",
+    "twitterNews": "Twitter news",
+    "videoTutorials": "Video tutorials",
+    "orderbookListings": "Orderbook listings",
+    "reportIssues": "Report issues",
+    "giveUsFeedback": "Give us your feedback",
+    "getInTouch": "Get in touch",
+    "communityHeading": "Community question?",
+    "reachOutTo": "Reach out to ",
+    "pinkText": "#Polkadex Orderbook Queries channel on Discord",
+    "communityDescription": " and someone from thee community would definitely try to answer your query as and when they see the message."
   }
 }
