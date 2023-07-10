@@ -5,17 +5,26 @@ export const Main = styled.main`
     position: relative;
     background: ${theme.colors.primaryBackground};
     min-width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
+    flex-direction: column;
     max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
-    @media screen and (max-width: 590px) {
-      display: block;
-    }
   `}
 `;
 
+export const Flex = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  overflow: hidden;
+  @media screen and (min-width: 590px) {
+    flex-direction: row;
+  }
+`;
+
 export const Wrapper = styled.div`
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -94,7 +103,6 @@ export const Column = styled.div`
 export const Box = styled.div`
   padding: 2rem;
   @media screen and (min-width: 880px) {
-    max-width: 40rem;
     padding: 4rem;
     justify-self: center;
   }
