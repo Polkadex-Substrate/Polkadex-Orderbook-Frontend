@@ -7,12 +7,11 @@ import * as S from "./styles";
 
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { newPasswordValidations } from "@polkadex/orderbook/validations";
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Menu, Header } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const ResetPasswordFormTemplate = () => {
-  const [state, setState] = useState(false);
   const [view, setView] = useState({
     password: false,
     repeatPassword: false,
@@ -41,83 +40,86 @@ export const ResetPasswordFormTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
-        <S.Wrapper>
-          <S.Container>
-            <S.Title>
-              <div>
-                <OrderbookLogo />
-              </div>
-            </S.Title>
-            {isSuccess ? (
-              <Success />
-            ) : (
-              <S.Card>
-                <S.Column />
-                <S.Box>
-                  <S.BoxTitle>
-                    <h1>New password</h1>
-                    <p>For safety of your account, please use strong password.</p>
-                  </S.BoxTitle>
-                  <form onSubmit={handleSubmit}>
-                    <InputLine
-                      name="code"
-                      label="Email code verification"
-                      placeholder="000000"
-                      error={errors.code && touched.code && errors.code}
-                      disabled={isLoading}
-                      {...getFieldProps("code")}
-                    />
-                    <InputLine
-                      name="password"
-                      type={view.password ? "text" : "password"}
-                      label="Password"
-                      placeholder="Enter your password"
-                      disabled={isLoading}
-                      error={errors.password && touched.password && errors.password}
-                      {...getFieldProps("password")}>
-                      <S.Show
-                        type="button"
-                        onClick={() => setView({ ...view, password: !view.password })}>
-                        {view.password ? <Icons.Hidden /> : <Icons.Show />}
-                      </S.Show>
-                    </InputLine>
-                    <InputLine
-                      name="repeatPassword"
-                      type={view.repeatPassword ? "text" : "password"}
-                      label="Repeat password"
-                      placeholder="Repeat your password"
-                      disabled={isLoading}
-                      error={
-                        errors.repeatPassword &&
-                        touched.repeatPassword &&
-                        errors.repeatPassword
-                      }
-                      {...getFieldProps("repeatPassword")}>
-                      <S.Show
-                        type="button"
-                        onClick={() =>
-                          setView({ ...view, repeatPassword: !view.repeatPassword })
-                        }>
-                        {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
-                      </S.Show>
-                    </InputLine>
-                    <Button
-                      disabled={!(isValid && dirty)}
-                      type="submit"
-                      size="extraLarge"
-                      background="primary"
-                      color="white"
-                      isLoading={isLoading}
-                      isFull>
-                      Continue
-                    </Button>
-                  </form>
-                </S.Box>
-              </S.Card>
-            )}
-          </S.Container>
-        </S.Wrapper>
+        <Header />
+        <S.Flex>
+          <S.Wrapper>
+            <S.Container>
+              <S.Title>
+                <div>
+                  <OrderbookLogo />
+                </div>
+              </S.Title>
+              {isSuccess ? (
+                <Success />
+              ) : (
+                <S.Card>
+                  <S.Column />
+                  <S.Box>
+                    <S.BoxTitle>
+                      <h1>New password</h1>
+                      <p>For safety of your account, please use strong password.</p>
+                    </S.BoxTitle>
+                    <form onSubmit={handleSubmit}>
+                      <InputLine
+                        name="code"
+                        label="Email code verification"
+                        placeholder="000000"
+                        error={errors.code && touched.code && errors.code}
+                        disabled={isLoading}
+                        {...getFieldProps("code")}
+                      />
+                      <InputLine
+                        name="password"
+                        type={view.password ? "text" : "password"}
+                        label="Password"
+                        placeholder="Enter your password"
+                        disabled={isLoading}
+                        error={errors.password && touched.password && errors.password}
+                        {...getFieldProps("password")}>
+                        <S.Show
+                          type="button"
+                          onClick={() => setView({ ...view, password: !view.password })}>
+                          {view.password ? <Icons.Hidden /> : <Icons.Show />}
+                        </S.Show>
+                      </InputLine>
+                      <InputLine
+                        name="repeatPassword"
+                        type={view.repeatPassword ? "text" : "password"}
+                        label="Repeat password"
+                        placeholder="Repeat your password"
+                        disabled={isLoading}
+                        error={
+                          errors.repeatPassword &&
+                          touched.repeatPassword &&
+                          errors.repeatPassword
+                        }
+                        {...getFieldProps("repeatPassword")}>
+                        <S.Show
+                          type="button"
+                          onClick={() =>
+                            setView({ ...view, repeatPassword: !view.repeatPassword })
+                          }>
+                          {view.repeatPassword ? <Icons.Hidden /> : <Icons.Show />}
+                        </S.Show>
+                      </InputLine>
+                      <Button
+                        disabled={!(isValid && dirty)}
+                        type="submit"
+                        size="extraLarge"
+                        background="primary"
+                        color="white"
+                        isLoading={isLoading}
+                        isFull>
+                        Continue
+                      </Button>
+                    </form>
+                  </S.Box>
+                </S.Card>
+              )}
+            </S.Container>
+          </S.Wrapper>
+        </S.Flex>
+        <Menu />
       </S.Main>
     </>
   );

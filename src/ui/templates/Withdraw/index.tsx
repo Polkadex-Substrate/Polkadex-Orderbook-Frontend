@@ -23,7 +23,7 @@ import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
-import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { Header, Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -180,159 +180,162 @@ export const WithdrawTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu />
-        <S.Wrapper>
-          <S.Title type="button" onClick={() => router.back()}>
-            <div>
-              <Icons.SingleArrowLeft />
-            </div>
-            Overview
-          </S.Title>
-          <S.Container>
-            <S.Column>
+        <Header />
+        <S.FlexContainer>
+          <Menu />
+          <S.Wrapper>
+            <S.Title type="button" onClick={() => router.back()}>
               <div>
-                <h1>Withdraw Crypto</h1>
-                <p>
-                  Polkadex is a fully non-custodial platform, so the assets in your wallet are
-                  always under your control.
-                </p>
+                <Icons.SingleArrowLeft />
               </div>
-            </S.Column>
-            <S.Box>
-              <S.Form>
-                <S.SelectAccount>
-                  <div>
-                    <Icons.Avatar />
-                  </div>
-                  <div>
-                    <strong>
-                      {currMainAcc?.account?.meta?.name || "Wallet not selected"}
-                    </strong>
-                    <span>{shortAddress}</span>
-                  </div>
-                </S.SelectAccount>
-                <form ref={formRef} onSubmit={handleSubmit}>
-                  <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
-                    <S.SelectInput>
-                      <span>Select a coin</span>
-                      <S.SelectInputContainer>
-                        <Dropdown>
-                          <Dropdown.Trigger>
-                            <S.DropdownHeader>
-                              <div>{selectedAsset?.name}</div>
-                              <div>
-                                <span>
-                                  <Icons.ArrowBottom />
-                                </span>
-                              </div>
-                            </S.DropdownHeader>
-                          </Dropdown.Trigger>
-                          <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {assets.map((asset) => (
-                              <Dropdown.Item
-                                key={asset.assetId}
-                                onAction={() => setSelectedAsset(asset)}>
-                                {asset.name}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </S.SelectInputContainer>
-                      <S.Available>
-                        Available{" "}
-                        <strong>
-                          {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
-                        </strong>
-                      </S.Available>
-                    </S.SelectInput>
-                    <S.Flex>
-                      <InputLine
-                        name="amount"
-                        label="Token Amount"
-                        placeholder="0.00"
-                        error={errors.amount && touched.amount && errors.amount}
-                        {...getFieldProps("amount")}
-                      />
-                      <Button
-                        type="submit"
-                        size="extraLarge"
-                        background="primary"
-                        color="white"
-                        disabled={!(isValid && dirty) || loading}
-                        isFull
-                        isLoading={loading}>
-                        Withdraw
-                      </Button>
-                    </S.Flex>
-                  </LoadingSection>
-                </form>
-              </S.Form>
-              <S.History>
-                <Tabs>
-                  <h2>History</h2>
-                  <S.HistoryHeader>
-                    <S.HistoryTabs>
-                      <TabHeader>
-                        <S.HistoryTab>Pending</S.HistoryTab>
-                      </TabHeader>
-                      <TabHeader>
-                        <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
-                          Ready to Claim
-                          <span>{hasPendingClaims}</span>
-                        </S.HistoryTab>
-                      </TabHeader>
-                      <TabHeader>
-                        <S.HistoryTab>Claimed</S.HistoryTab>
-                      </TabHeader>
-                    </S.HistoryTabs>
-                    <S.HistoryHeaderAside>
-                      <Checkbox name="hide">Show only selected coin</Checkbox>
-                    </S.HistoryHeaderAside>
-                  </S.HistoryHeader>
-                  <S.HistoryWrapper>
-                    <TabContent>
-                      {pendingWithdraws?.length ? (
-                        <HistoryTable items={pendingWithdraws} />
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                    <TabContent>
-                      {readyToClaim?.length ? (
-                        readyToClaim.map(({ id, sid, items }) => (
-                          <HistoryCard
-                            key={id}
-                            sid={sid}
-                            hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
-                            handleClaimWithdraws={async () =>
-                              await onFetchClaimWithdraw({ sid })
-                            }
-                            items={items?.filter((v) => v.status === "READY")}
-                          />
-                        ))
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                    <TabContent>
-                      {claimedWithdraws?.length ? (
-                        <HistoryTable items={claimedWithdraws} />
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                  </S.HistoryWrapper>
-                </Tabs>
-              </S.History>
-            </S.Box>
-          </S.Container>
-        </S.Wrapper>
+              Overview
+            </S.Title>
+            <S.Container>
+              <S.Column>
+                <div>
+                  <h1>Withdraw Crypto</h1>
+                  <p>
+                    Polkadex is a fully non-custodial platform, so the assets in your wallet
+                    are always under your control.
+                  </p>
+                </div>
+              </S.Column>
+              <S.Box>
+                <S.Form>
+                  <S.SelectAccount>
+                    <div>
+                      <Icons.Avatar />
+                    </div>
+                    <div>
+                      <strong>
+                        {currMainAcc?.account?.meta?.name || "Wallet not selected"}
+                      </strong>
+                      <span>{shortAddress}</span>
+                    </div>
+                  </S.SelectAccount>
+                  <form ref={formRef} onSubmit={handleSubmit}>
+                    <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
+                      <S.SelectInput>
+                        <span>Select a coin</span>
+                        <S.SelectInputContainer>
+                          <Dropdown>
+                            <Dropdown.Trigger>
+                              <S.DropdownHeader>
+                                <div>{selectedAsset?.name}</div>
+                                <div>
+                                  <span>
+                                    <Icons.ArrowBottom />
+                                  </span>
+                                </div>
+                              </S.DropdownHeader>
+                            </Dropdown.Trigger>
+                            <Dropdown.Menu fill="secondaryBackgroundSolid">
+                              {assets.map((asset) => (
+                                <Dropdown.Item
+                                  key={asset.assetId}
+                                  onAction={() => setSelectedAsset(asset)}>
+                                  {asset.name}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </S.SelectInputContainer>
+                        <S.Available>
+                          Available{" "}
+                          <strong>
+                            {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
+                          </strong>
+                        </S.Available>
+                      </S.SelectInput>
+                      <S.Flex>
+                        <InputLine
+                          name="amount"
+                          label="Token Amount"
+                          placeholder="0.00"
+                          error={errors.amount && touched.amount && errors.amount}
+                          {...getFieldProps("amount")}
+                        />
+                        <Button
+                          type="submit"
+                          size="extraLarge"
+                          background="primary"
+                          color="white"
+                          disabled={!(isValid && dirty) || loading}
+                          isFull
+                          isLoading={loading}>
+                          Withdraw
+                        </Button>
+                      </S.Flex>
+                    </LoadingSection>
+                  </form>
+                </S.Form>
+                <S.History>
+                  <Tabs>
+                    <h2>History</h2>
+                    <S.HistoryHeader>
+                      <S.HistoryTabs>
+                        <TabHeader>
+                          <S.HistoryTab>Pending</S.HistoryTab>
+                        </TabHeader>
+                        <TabHeader>
+                          <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
+                            Ready to Claim
+                            <span>{hasPendingClaims}</span>
+                          </S.HistoryTab>
+                        </TabHeader>
+                        <TabHeader>
+                          <S.HistoryTab>Claimed</S.HistoryTab>
+                        </TabHeader>
+                      </S.HistoryTabs>
+                      <S.HistoryHeaderAside>
+                        <Checkbox name="hide">Show only selected coin</Checkbox>
+                      </S.HistoryHeaderAside>
+                    </S.HistoryHeader>
+                    <S.HistoryWrapper>
+                      <TabContent>
+                        {pendingWithdraws?.length ? (
+                          <HistoryTable items={pendingWithdraws} />
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                      <TabContent>
+                        {readyToClaim?.length ? (
+                          readyToClaim.map(({ id, sid, items }) => (
+                            <HistoryCard
+                              key={id}
+                              sid={sid}
+                              hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
+                              handleClaimWithdraws={async () =>
+                                await onFetchClaimWithdraw({ sid })
+                              }
+                              items={items?.filter((v) => v.status === "READY")}
+                            />
+                          ))
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                      <TabContent>
+                        {claimedWithdraws?.length ? (
+                          <HistoryTable items={claimedWithdraws} />
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                    </S.HistoryWrapper>
+                  </Tabs>
+                </S.History>
+              </S.Box>
+            </S.Container>
+          </S.Wrapper>
+        </S.FlexContainer>
       </S.Main>
     </>
   );

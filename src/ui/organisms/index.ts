@@ -22,3 +22,8 @@ export * from "./MarketOrder";
 export * from "./Graph";
 export * from "./Disclaimer";
 export { default as GettingStartedComponent } from "./GettingStartedComponent";
+export * from "./FAQsidebar";
+export * from "./Rating";
+export { default as Feedback } from "./Feedback";
+export * from "./Header";
+
