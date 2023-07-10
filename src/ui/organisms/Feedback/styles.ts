@@ -2,9 +2,7 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Container = styled.div`
-  ${({ theme }) => css`
-    width: 100%;
-  `}
+  width: 100%;
 `;
 
 export const Heading = styled.p`
@@ -12,7 +10,7 @@ export const Heading = styled.p`
   padding-top: 3rem;
   font-weight: 700;
   ${media.lessThan("medium")`
-  font-size:3rem
+    font-size:3rem;
   `}
 `;
 

@@ -14,14 +14,14 @@ export const HomeLayout = styled.div`
 
 export const Sticker = styled.div`
   position: absolute;
-  right: -8.5rem;
+  right: -7rem;
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
   padding: 1rem 1.5rem;
   background-color: black;
   color: white;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   ${customMedia.greaterThan("large")`
-  display:none
+    display:none
   `}
 `;

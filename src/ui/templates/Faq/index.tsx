@@ -1,11 +1,25 @@
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { Menu } from "@polkadex/orderbook-ui/organisms/Menu";
 import { FaqTopMessage } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+
+const Menu = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Menu").then((mod) => mod.Menu),
+  {
+    ssr: false,
+  }
+);
+
+const Header = dynamic(
+  () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.Header),
+  {
+    ssr: false,
+  }
+);
 
 export const FaqTemplate = () => {
   return (
@@ -15,6 +29,7 @@ export const FaqTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
+        <Header />
         <S.Flex>
           <Menu />
           <S.Wrapper>
@@ -113,7 +128,6 @@ export const FaqTemplate = () => {
               </S.VideosCards>
             </S.Videos>
           </S.Wrapper>
-          <S.QuickAccess />
         </S.Flex>
       </S.Main>
     </>

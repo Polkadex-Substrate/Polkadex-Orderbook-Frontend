@@ -4,8 +4,7 @@ export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.colors.primaryBackground};
-    min-width: 100vw;
-    height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     max-width: 160rem;
@@ -22,15 +21,6 @@ export const Flex = styled.div`
   flex-direction: column-reverse;
   @media screen and (min-width: 590px) {
     flex-direction: row;
-  }
-`;
-
-export const QuickAccess = styled.div`
-  flex: 1;
-  max-width: 30rem;
-  background: rgba(255, 255, 255, 0.1);
-  @media screen and (max-width: 1000px) {
-    display: none;
   }
 `;
 
