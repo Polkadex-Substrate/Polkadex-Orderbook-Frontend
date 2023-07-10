@@ -20,7 +20,6 @@ i18next
     react: { useSuspense: false },
     backend: {
       loadPath: "../locales/{{lng}}/{{ns}}.json",
-      // TODO: We should store translations in cache so that translation could be faster
       requestOptions: {
         cache: "no-store",
       },

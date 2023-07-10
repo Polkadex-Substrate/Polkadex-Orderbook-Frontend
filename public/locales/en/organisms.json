@@ -26,5 +26,15 @@
     "reachOutTo": "Reach out to ",
     "pinkText": "#Polkadex Orderbook Queries channel on Discord",
     "communityDescription": " and someone from thee community would definitely try to answer your query as and when they see the message."
+  },
+  "feedback": {
+    "heading": "Give us your feedback",
+    "firstQuestion": "Were we able to answer your question?",
+    "secondQuestion": "Did you find the relevant information you were looking for?",
+    "thirdQuestion": "Was the FAQ Webpage user friendly?",
+    "fourthQuestion": "Is there anything you would want us to improve?",
+    "fifthQuestion": "How would you rate our service?",
+    "inputPlaceholder": "Enter your comment",
+    "submitRequest": "Submit a request"
   }
 }
