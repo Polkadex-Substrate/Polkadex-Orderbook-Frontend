@@ -17,8 +17,6 @@ export const Accordion = ({ title, questions }: T.Props): JSX.Element => {
 
   const router = useRouter();
   const question = router.query.question;
-  const item = "is this real";
-  console.log(router.query.categories, `faq/${router.query.categories}/${item}`);
 
   return (
     <S.Container>
@@ -36,7 +34,7 @@ export const Accordion = ({ title, questions }: T.Props): JSX.Element => {
             return (
               <S.Single
                 href={`faq/${router.query.categories}/${item}`}
-                active={question === item}
+                active={question === item ? "true" : "false"}
                 key={item}>
                 {item}?
               </S.Single>

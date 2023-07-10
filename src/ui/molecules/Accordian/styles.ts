@@ -34,9 +34,9 @@ export const Content = styled.div`
   `}
 `;
 
-export const Single = styled(Link)<{ active: boolean }>`
+export const Single = styled(Link)<{ active: string }>`
   ${({ theme, active }) => css`
     cursor: pointer;
-    color: ${active ? "white" : theme.colors.tertiaryText};
+    color: ${active === "true" ? "white" : theme.colors.tertiaryText};
   `}
 `;
