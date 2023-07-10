@@ -26,7 +26,7 @@ import {
   ErrorMessages,
 } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -36,7 +36,6 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 
 export const DepositTemplate = () => {
-  const [state, setState] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
@@ -119,10 +118,6 @@ export const DepositTemplate = () => {
       },
     });
 
-  const handleInputChange = (e) => {
-    console.log({ e }, e.ta);
-  };
-
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
       case "CONFIRMED":
@@ -141,180 +136,183 @@ export const DepositTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu isWallet handleChange={() => setState(!state)} />
-        <S.Wrapper>
-          <S.Title type="button" onClick={() => router.back()}>
-            <div>
-              <Icons.SingleArrowLeft />
-            </div>
-            Overview
-          </S.Title>
-          <S.Container>
-            <S.Column>
+        <Header />
+        <S.Flex>
+          <Menu />
+          <S.Wrapper>
+            <S.Title type="button" onClick={() => router.back()}>
               <div>
-                <h1>Deposit Crypto</h1>
-                <p>
-                  Polkadex is a fully non-custodial platform, so the assets in your wallet are
-                  always under your control.
-                </p>
+                <Icons.SingleArrowLeft />
               </div>
-            </S.Column>
-            <S.Box>
-              <S.Form>
-                <Loading
-                  message="Block finalization will take a few mins."
-                  isVisible={loading}>
-                  <S.SelectAccount>
-                    <div>
-                      <Icons.Avatar />
-                    </div>
-                    <div>
-                      <strong>
-                        {currMainAcc?.account?.meta?.name || "Wallet not present"}
-                      </strong>
-                      <span>{shortAddress}</span>
-                    </div>
-                  </S.SelectAccount>
-                  <form onSubmit={handleSubmit}>
-                    <S.SelectInput>
-                      <span>Select a coin</span>
-                      <S.SelectInputContainer>
-                        <Dropdown>
-                          <Dropdown.Trigger>
-                            <S.DropdownHeader>
-                              <div>
-                                <span>
-                                  <Tokens.PDEX />
-                                </span>
-                                {selectedAsset?.name}
-                              </div>
-                              <div>
-                                <span>
-                                  <Icons.ArrowBottom />
-                                </span>
-                              </div>
-                            </S.DropdownHeader>
-                          </Dropdown.Trigger>
-                          <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {list.map((asset) => (
-                              <Dropdown.Item
-                                key={asset.assetId}
-                                onAction={() => setSelectedAsset(asset)}>
-                                {asset.name}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </S.SelectInputContainer>
-                      <S.Available>
-                        Available{" "}
+              Overview
+            </S.Title>
+            <S.Container>
+              <S.Column>
+                <div>
+                  <h1>Deposit Crypto</h1>
+                  <p>
+                    Polkadex is a fully non-custodial platform, so the assets in your wallet
+                    are always under your control.
+                  </p>
+                </div>
+              </S.Column>
+              <S.Box>
+                <S.Form>
+                  <Loading
+                    message="Block finalization will take a few mins."
+                    isVisible={loading}>
+                    <S.SelectAccount>
+                      <div>
+                        <Icons.Avatar />
+                      </div>
+                      <div>
                         <strong>
-                          {onChainBalanceLoading ? "Loading..." : onChainBalance}
+                          {currMainAcc?.account?.meta?.name || "Wallet not present"}
                         </strong>
-                      </S.Available>
-                    </S.SelectInput>
-                    <InputLine
-                      name="amount"
-                      label="Token Amount"
-                      placeholder="0.00"
-                      error={errors.amount && touched.amount && errors.amount}
-                      {...getFieldProps("amount")}
-                    />
-                    <Button
-                      type="submit"
-                      size="extraLarge"
-                      background="green"
-                      hoverColor="green"
-                      color="white"
-                      disabled={!(isValid && dirty) || loading || !currMainAcc}
-                      isFull
-                      isLoading={loading}>
-                      {currMainAcc
-                        ? "Deposit"
-                        : "Funding account not found in polkadot.js extension"}
-                    </Button>
-                  </form>
-                </Loading>
-              </S.Form>
+                        <span>{shortAddress}</span>
+                      </div>
+                    </S.SelectAccount>
+                    <form onSubmit={handleSubmit}>
+                      <S.SelectInput>
+                        <span>Select a coin</span>
+                        <S.SelectInputContainer>
+                          <Dropdown>
+                            <Dropdown.Trigger>
+                              <S.DropdownHeader>
+                                <div>
+                                  <span>
+                                    <Tokens.PDEX />
+                                  </span>
+                                  {selectedAsset?.name}
+                                </div>
+                                <div>
+                                  <span>
+                                    <Icons.ArrowBottom />
+                                  </span>
+                                </div>
+                              </S.DropdownHeader>
+                            </Dropdown.Trigger>
+                            <Dropdown.Menu fill="secondaryBackgroundSolid">
+                              {list.map((asset) => (
+                                <Dropdown.Item
+                                  key={asset.assetId}
+                                  onAction={() => setSelectedAsset(asset)}>
+                                  {asset.name}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </S.SelectInputContainer>
+                        <S.Available>
+                          Available{" "}
+                          <strong>
+                            {onChainBalanceLoading ? "Loading..." : onChainBalance}
+                          </strong>
+                        </S.Available>
+                      </S.SelectInput>
+                      <InputLine
+                        name="amount"
+                        label="Token Amount"
+                        placeholder="0.00"
+                        error={errors.amount && touched.amount && errors.amount}
+                        {...getFieldProps("amount")}
+                      />
+                      <Button
+                        type="submit"
+                        size="extraLarge"
+                        background="green"
+                        hoverColor="green"
+                        color="white"
+                        disabled={!(isValid && dirty) || loading || !currMainAcc}
+                        isFull
+                        isLoading={loading}>
+                        {currMainAcc
+                          ? "Deposit"
+                          : "Funding account not found in polkadot.js extension"}
+                      </Button>
+                    </form>
+                  </Loading>
+                </S.Form>
 
-              <S.History>
-                <h2>History</h2>
-                {deposits.length ? (
-                  <S.HistoryContent>
-                    <Table
-                      aria-label="Polkadex Deposit History Table"
-                      style={{ width: "100%" }}>
-                      <Table.Header fill="none">
-                        <Table.Column>
-                          <S.HeaderColumn style={{ paddingLeft: 10 }}>Name</S.HeaderColumn>
-                        </Table.Column>
-                        <Table.Column>
-                          <S.HeaderColumn>Date</S.HeaderColumn>
-                        </Table.Column>
-                        <Table.Column>
-                          <S.HeaderColumn>Status</S.HeaderColumn>
-                        </Table.Column>
-                        <Table.Column>
-                          <S.HeaderColumn>Amount</S.HeaderColumn>
-                        </Table.Column>
-                        <Table.Column>
-                          <S.HeaderColumn>Fee</S.HeaderColumn>
-                        </Table.Column>
-                      </Table.Header>
-                      <Table.Body striped border="squared">
-                        {deposits.map((item, i) => (
-                          <Table.Row key={i}>
-                            <Table.Cell>
-                              <S.CellName>
-                                <span>{selectGetAsset(item.asset)?.symbol}</span>
-                              </S.CellName>
-                            </Table.Cell>
-                            <Table.Cell>
-                              <S.Cell>
-                                <span>
-                                  {intlFormat(
-                                    new Date(item.time),
-                                    {
-                                      year: "numeric",
-                                      month: "short",
-                                      day: "numeric",
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    },
-                                    { locale: "EN" }
-                                  )}
-                                </span>
-                              </S.Cell>
-                            </Table.Cell>
-                            <Table.Cell>
-                              <S.Cell>
-                                <S.Status color={getColor(item.status)}>
-                                  {item.status}
-                                </S.Status>
-                              </S.Cell>
-                            </Table.Cell>
-                            <Table.Cell>
-                              <S.Cellamount>
-                                <Decimal fixed={5}>{item.amount}</Decimal>
-                              </S.Cellamount>
-                            </Table.Cell>
-                            <Table.Cell>
-                              <S.Cell>
-                                <Decimal fixed={5}>{item.fee}</Decimal>
-                              </S.Cell>
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
-                      </Table.Body>
-                    </Table>
-                  </S.HistoryContent>
-                ) : (
-                  <EmptyData />
-                )}
-              </S.History>
-            </S.Box>
-          </S.Container>
-        </S.Wrapper>
+                <S.History>
+                  <h2>History</h2>
+                  {deposits.length ? (
+                    <S.HistoryContent>
+                      <Table
+                        aria-label="Polkadex Deposit History Table"
+                        style={{ width: "100%" }}>
+                        <Table.Header fill="none">
+                          <Table.Column>
+                            <S.HeaderColumn style={{ paddingLeft: 10 }}>Name</S.HeaderColumn>
+                          </Table.Column>
+                          <Table.Column>
+                            <S.HeaderColumn>Date</S.HeaderColumn>
+                          </Table.Column>
+                          <Table.Column>
+                            <S.HeaderColumn>Status</S.HeaderColumn>
+                          </Table.Column>
+                          <Table.Column>
+                            <S.HeaderColumn>Amount</S.HeaderColumn>
+                          </Table.Column>
+                          <Table.Column>
+                            <S.HeaderColumn>Fee</S.HeaderColumn>
+                          </Table.Column>
+                        </Table.Header>
+                        <Table.Body striped border="squared">
+                          {deposits.map((item, i) => (
+                            <Table.Row key={i}>
+                              <Table.Cell>
+                                <S.CellName>
+                                  <span>{selectGetAsset(item.asset)?.symbol}</span>
+                                </S.CellName>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <S.Cell>
+                                  <span>
+                                    {intlFormat(
+                                      new Date(item.time),
+                                      {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      },
+                                      { locale: "EN" }
+                                    )}
+                                  </span>
+                                </S.Cell>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <S.Cell>
+                                  <S.Status color={getColor(item.status)}>
+                                    {item.status}
+                                  </S.Status>
+                                </S.Cell>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <S.Cellamount>
+                                  <Decimal fixed={5}>{item.amount}</Decimal>
+                                </S.Cellamount>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <S.Cell>
+                                  <Decimal fixed={5}>{item.fee}</Decimal>
+                                </S.Cell>
+                              </Table.Cell>
+                            </Table.Row>
+                          ))}
+                        </Table.Body>
+                      </Table>
+                    </S.HistoryContent>
+                  ) : (
+                    <EmptyData />
+                  )}
+                </S.History>
+              </S.Box>
+            </S.Container>
+          </S.Wrapper>
+        </S.Flex>
       </S.Main>
     </>
   );

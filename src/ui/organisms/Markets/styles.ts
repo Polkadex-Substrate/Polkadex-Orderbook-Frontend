@@ -63,7 +63,7 @@ export const HeaderToken = styled.div`
 `;
 
 export const HeaderAsideCenter = styled.div`
-  max-height: 5rem;
+  max-height: 4rem;
   max-width: 10rem;
   height: 100%;
   width: 100%;

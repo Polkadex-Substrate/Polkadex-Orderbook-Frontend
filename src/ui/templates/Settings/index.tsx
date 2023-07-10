@@ -12,6 +12,7 @@ import {
   NewAccount,
   ChangeAvatar,
   DisclaimerMessage,
+  Header,
 } from "@polkadex/orderbook-ui/organisms";
 import {
   AvailableMessage,
@@ -65,7 +66,6 @@ export const SettingsTemplate = () => {
     defaultFundingAddress,
     avatarModal,
     handleCloseAvatarModal,
-    handleOpenAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
 
@@ -110,288 +110,284 @@ export const SettingsTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu />
-        <S.Wrapper>
-          <S.ContainerMain>
-            <S.Title>
-              <h1>Accounts.</h1>
-              <p>General account settings.</p>
-            </S.Title>
-            <S.Content>
-              <S.Wallet>
-                <S.WalletTitle>
-                  <S.WalletTitleWrapper>
-                    <Tooltip>
-                      <TooltipHeader>
-                        <S.TooltipHeader>
-                          <Icons.Info />
-                        </S.TooltipHeader>
-                      </TooltipHeader>
-                      <TooltipContent>
-                        <span>Trading account info</span>
-                      </TooltipContent>
-                    </Tooltip>
-                    <h2>Trading accounts</h2>
-                  </S.WalletTitleWrapper>
-                  {hasRegisteredMainAccount && (
-                    <ButtonWallet
-                      type="button"
-                      onClick={() => {
-                        handleChangeCurrentControllerWallet(null);
-                        tradeWalletState.onRegisterAccountModalActive();
-                      }}>
-                      {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
-                    </ButtonWallet>
-                  )}
-                </S.WalletTitle>
-                <S.WalletContainer>
-                  {!tradeAccounts?.length ? (
-                    <div style={{ padding: "4rem 2rem" }}>
-                      <Empty
-                        title="No trading accounts"
-                        description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
-                      />
-                    </div>
-                  ) : (
-                    <S.WalletWrapper>
-                      <AccountHeader
-                        handleFilter={(e) => handleFilterTradeAccounts(e.target.value)}>
-                        <S.AccountHeaderContent>
-                          {/* don't show all section if no linked address */}
-                          {controllerWallets?.length ? (
-                            <Dropdown>
-                              <Dropdown.Trigger>
-                                <S.AccountHeaderTrigger>
-                                  <span>{filterTradeAccountsByControllerAccount}</span>
-                                  <div>
-                                    <Icons.ArrowBottom />
-                                  </div>
-                                </S.AccountHeaderTrigger>
-                              </Dropdown.Trigger>
-                              <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                {[
-                                  { account: { meta: { name: "All" }, address: "all" } },
-                                  ...controllerWallets,
-                                ]?.map(({ account }, i) => {
-                                  const name = account?.meta?.name?.length
-                                    ? account?.meta?.name
-                                    : transformAddress(account.address, 5);
-
-                                  return (
-                                    <Dropdown.Item
-                                      key={i}
-                                      onAction={() =>
-                                        handleFilterTradeAccountByController(account.address)
-                                      }>
-                                      <S.Dropdown>{name}</S.Dropdown>
-                                    </Dropdown.Item>
-                                  );
-                                })}
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          ) : null}
-                        </S.AccountHeaderContent>
-                      </AccountHeader>
-                      <S.WalletContent>
-                        {allFilteredTradeAccounts?.length ? (
-                          allFilteredTradeAccounts?.map((account, i) => {
-                            const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
-                              account.address,
-                              userAccounts
-                            );
-                            const acc = controllerWallets?.find(
-                              ({ account }) => account?.address === linkedMainAddress
-                            );
-                            const hasLinkedAccount =
-                              !!linkedMainAddress?.length ||
-                              !!acc?.account?.meta?.name?.length;
-                            const isUsing = account.address === usingAccount.tradeAddress;
-                            const isDefault = defaultTradeAddress === account.address;
-                            const isPresentInBrowser = !!account?.account?.meta?.name;
-                            return (
-                              <WalletCard
-                                key={i}
-                                isUsing={isUsing}
-                                isDefault={isDefault}
-                                defaultTitle="Default trade account"
-                                isPresentInBrowser={isPresentInBrowser}
-                                name={String(
-                                  account?.account?.meta?.name ||
-                                    "Account not present in the browser"
-                                )}
-                                address={account.address}
-                                additionalInfo={
-                                  hasLinkedAccount &&
-                                  `(Linked to ${
-                                    acc?.account?.meta?.name ||
-                                    transformAddress(linkedMainAddress)
-                                  })`
-                                }>
-                                <S.WalletActions>
-                                  {isPresentInBrowser && (
-                                    <S.Button
-                                      type="button"
-                                      onClick={() => {
-                                        onUserSelectAccount({
-                                          tradeAddress: account.address,
-                                        });
-                                        router.push("/balances");
-                                      }}>
-                                      Add funds
-                                    </S.Button>
-                                  )}
-                                  {!isUsing && account.isPresentInBrowser && (
-                                    <S.Button
-                                      type="button"
-                                      onClick={() => {
-                                        onUserSelectAccount({
-                                          tradeAddress: account.address,
-                                        });
-                                      }}>
-                                      Use
-                                    </S.Button>
-                                  )}
-                                  {!isPresentInBrowser && (
-                                    <S.Button
-                                      type="button"
-                                      onClick={() =>
-                                        tradeWalletState.onRegisterAccountModalActive({
-                                          defaultImportActive: true,
-                                          data: {
-                                            name: account.name,
-                                            address: account.address,
-                                          },
-                                        })
-                                      }>
-                                      Import
-                                    </S.Button>
-                                  )}
-                                  <S.Preview
-                                    type="button"
-                                    onClick={() => {
-                                      tradeWalletState.onPreviewAccountModalActive(account);
-                                    }}>
-                                    <div>
-                                      <Icons.OptionsHorizontal />
-                                    </div>
-                                    <span>Actions</span>
-                                  </S.Preview>
-                                </S.WalletActions>
-                              </WalletCard>
-                            );
-                          })
-                        ) : (
-                          <ResultFound />
-                        )}
-                      </S.WalletContent>
-                      <S.Disclaimer>
-                        <DisclaimerMessage
-                          isSmall
-                          message="Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one."
+        <Header />
+        <S.Flex>
+          <Menu />
+          <S.Wrapper>
+            <S.ContainerMain>
+              <S.Title>
+                <h1>Accounts.</h1>
+                <p>General account settings.</p>
+              </S.Title>
+              <S.Content>
+                <S.Wallet>
+                  <S.WalletTitle>
+                    <S.WalletTitleWrapper>
+                      <Tooltip>
+                        <TooltipHeader>
+                          <S.TooltipHeader>
+                            <Icons.Info />
+                          </S.TooltipHeader>
+                        </TooltipHeader>
+                        <TooltipContent>
+                          <span>Trading account info</span>
+                        </TooltipContent>
+                      </Tooltip>
+                      <h2>Trading accounts</h2>
+                    </S.WalletTitleWrapper>
+                    {hasRegisteredMainAccount && (
+                      <ButtonWallet
+                        type="button"
+                        onClick={() => {
+                          handleChangeCurrentControllerWallet(null);
+                          tradeWalletState.onRegisterAccountModalActive();
+                        }}>
+                        {controllerWallets?.length > 0 ? "New Account" : "Import Account"}
+                      </ButtonWallet>
+                    )}
+                  </S.WalletTitle>
+                  <S.WalletContainer>
+                    {!tradeAccounts?.length ? (
+                      <div style={{ padding: "4rem 2rem" }}>
+                        <Empty
+                          title="No trading accounts"
+                          description="Trading accounts allow you to deposit funds to Orderbook, trade and withdraw funds to your Polkadex account."
                         />
-                      </S.Disclaimer>
-                    </S.WalletWrapper>
-                  )}
-                </S.WalletContainer>
-              </S.Wallet>
-              <S.Wallet>
-                <S.WalletTitle>
-                  <S.WalletTitleWrapper>
-                    <Tooltip>
-                      <TooltipHeader>
-                        <S.TooltipHeader>
-                          <Icons.Info />
-                        </S.TooltipHeader>
-                      </TooltipHeader>
-                      <TooltipContent>
-                        <span>Funding account info</span>
-                      </TooltipContent>
-                    </Tooltip>
-                    <h2>Funding Accounts</h2>
-                  </S.WalletTitleWrapper>
-                </S.WalletTitle>
-                <S.WalletContainer>
-                  {!controllerWallets?.length ? (
-                    <div style={{ padding: "4rem 2rem" }}>
-                      <Empty
-                        title="No wallet found"
-                        description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
-                      />
-                    </div>
-                  ) : (
-                    <S.WalletWrapper>
-                      <AccountHeader
-                        handleFilter={(e) => handleFilterControllerWallets(e.target.value)}>
-                        <S.AccountHeaderContent>
-                          <Checkbox
-                            checked={showRegistered}
-                            onChange={handleChangeShowRegistered}>
-                            Only registered accounts
-                          </Checkbox>
-                        </S.AccountHeaderContent>
-                      </AccountHeader>
-                      <S.WalletContent>
-                        {filterControllerWallets?.length ? (
-                          filterControllerWallets.map(({ account }, i) => {
-                            const isUsing = usingAccount?.mainAddress === account?.address;
-                            return (
-                              <ControllerWallets
-                                key={i}
-                                address={account.address}
-                                name={account.meta.name}
-                                isUsing={isUsing}
-                                isDefault={defaultFundingAddress === account.address}
-                                handleRegister={(account: ExtensionAccount) => {
-                                  handleChangeCurrentControllerWallet(account);
-                                  tradeWalletState.onRegisterAccountModalActive({
-                                    data: {
-                                      name: account.account.meta.name,
-                                      address: account.account.address,
-                                    },
-                                  });
-                                }}
-                              />
-                            );
-                          })
-                        ) : (
-                          <ResultFound />
-                        )}
-                      </S.WalletContent>
-                    </S.WalletWrapper>
-                  )}
-                </S.WalletContainer>
-              </S.Wallet>
-              <S.Account>
-                <h2>Profile</h2>
-                <S.AccountContainer>
-                  <Card
-                    label="Email"
-                    description={user.email}
-                    isLocked
-                    hasBadge
-                    isVerified={user.isConfirmed}
-                  />
-                  <Card
-                    label="Avatar"
-                    isAvatar
-                    description="Select an avatar to personalize your account."
-                    actionTitle="Change"
-                    onClick={handleOpenAvatarModal}
-                  />
-                  <AvailableMessage message="Soon">
+                      </div>
+                    ) : (
+                      <S.WalletWrapper>
+                        <AccountHeader
+                          handleFilter={(e) => handleFilterTradeAccounts(e.target.value)}>
+                          <S.AccountHeaderContent>
+                            {/* don't show all section if no linked address */}
+                            {controllerWallets?.length ? (
+                              <Dropdown>
+                                <Dropdown.Trigger>
+                                  <S.AccountHeaderTrigger>
+                                    <span>{filterTradeAccountsByControllerAccount}</span>
+                                    <div>
+                                      <Icons.ArrowBottom />
+                                    </div>
+                                  </S.AccountHeaderTrigger>
+                                </Dropdown.Trigger>
+                                <Dropdown.Menu fill="secondaryBackgroundSolid">
+                                  {[
+                                    { account: { meta: { name: "All" }, address: "all" } },
+                                    ...controllerWallets,
+                                  ]?.map(({ account }, i) => {
+                                    const name = account?.meta?.name?.length
+                                      ? account?.meta?.name
+                                      : transformAddress(account.address, 5);
+
+                                    return (
+                                      <Dropdown.Item
+                                        key={i}
+                                        onAction={() =>
+                                          handleFilterTradeAccountByController(account.address)
+                                        }>
+                                        <S.Dropdown>{name}</S.Dropdown>
+                                      </Dropdown.Item>
+                                    );
+                                  })}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            ) : null}
+                          </S.AccountHeaderContent>
+                        </AccountHeader>
+                        <S.WalletContent>
+                          {allFilteredTradeAccounts?.length ? (
+                            allFilteredTradeAccounts?.map((account, i) => {
+                              const linkedMainAddress = getMainAddresssLinkedToTradingAccount(
+                                account.address,
+                                userAccounts
+                              );
+                              const acc = controllerWallets?.find(
+                                ({ account }) => account?.address === linkedMainAddress
+                              );
+                              const hasLinkedAccount =
+                                !!linkedMainAddress?.length ||
+                                !!acc?.account?.meta?.name?.length;
+                              const isUsing = account.address === usingAccount.tradeAddress;
+                              const isDefault = defaultTradeAddress === account.address;
+                              const isPresentInBrowser = !!account?.account?.meta?.name;
+                              return (
+                                <WalletCard
+                                  key={i}
+                                  isUsing={isUsing}
+                                  isDefault={isDefault}
+                                  defaultTitle="Default trade account"
+                                  isPresentInBrowser={isPresentInBrowser}
+                                  name={String(
+                                    account?.account?.meta?.name ||
+                                      "Account not present in the browser"
+                                  )}
+                                  address={account.address}
+                                  additionalInfo={
+                                    hasLinkedAccount &&
+                                    `(Linked to ${
+                                      acc?.account?.meta?.name ||
+                                      transformAddress(linkedMainAddress)
+                                    })`
+                                  }>
+                                  <S.WalletActions>
+                                    {isPresentInBrowser && (
+                                      <S.Button
+                                        type="button"
+                                        onClick={() => {
+                                          onUserSelectAccount({
+                                            tradeAddress: account.address,
+                                          });
+                                          router.push("/balances");
+                                        }}>
+                                        Add funds
+                                      </S.Button>
+                                    )}
+                                    {!isUsing && account.isPresentInBrowser && (
+                                      <S.Button
+                                        type="button"
+                                        onClick={() => {
+                                          onUserSelectAccount({
+                                            tradeAddress: account.address,
+                                          });
+                                        }}>
+                                        Use
+                                      </S.Button>
+                                    )}
+                                    {!isPresentInBrowser && (
+                                      <S.Button
+                                        type="button"
+                                        onClick={() =>
+                                          tradeWalletState.onRegisterAccountModalActive({
+                                            defaultImportActive: true,
+                                            data: {
+                                              name: account.name,
+                                              address: account.address,
+                                            },
+                                          })
+                                        }>
+                                        Import
+                                      </S.Button>
+                                    )}
+                                    <S.Preview
+                                      type="button"
+                                      onClick={() => {
+                                        tradeWalletState.onPreviewAccountModalActive(account);
+                                      }}>
+                                      <div>
+                                        <Icons.OptionsHorizontal />
+                                      </div>
+                                      <span>Actions</span>
+                                    </S.Preview>
+                                  </S.WalletActions>
+                                </WalletCard>
+                              );
+                            })
+                          ) : (
+                            <ResultFound />
+                          )}
+                        </S.WalletContent>
+                        <S.Disclaimer>
+                          <DisclaimerMessage
+                            isSmall
+                            message="Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one."
+                          />
+                        </S.Disclaimer>
+                      </S.WalletWrapper>
+                    )}
+                  </S.WalletContainer>
+                </S.Wallet>
+                <S.Wallet>
+                  <S.WalletTitle>
+                    <S.WalletTitleWrapper>
+                      <Tooltip>
+                        <TooltipHeader>
+                          <S.TooltipHeader>
+                            <Icons.Info />
+                          </S.TooltipHeader>
+                        </TooltipHeader>
+                        <TooltipContent>
+                          <span>Funding account info</span>
+                        </TooltipContent>
+                      </Tooltip>
+                      <h2>Funding Accounts</h2>
+                    </S.WalletTitleWrapper>
+                  </S.WalletTitle>
+                  <S.WalletContainer>
+                    {!controllerWallets?.length ? (
+                      <div style={{ padding: "4rem 2rem" }}>
+                        <Empty
+                          title="No wallet found"
+                          description="Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet."
+                        />
+                      </div>
+                    ) : (
+                      <S.WalletWrapper>
+                        <AccountHeader
+                          handleFilter={(e) => handleFilterControllerWallets(e.target.value)}>
+                          <S.AccountHeaderContent>
+                            <Checkbox
+                              checked={showRegistered}
+                              onChange={handleChangeShowRegistered}>
+                              Only registered accounts
+                            </Checkbox>
+                          </S.AccountHeaderContent>
+                        </AccountHeader>
+                        <S.WalletContent>
+                          {filterControllerWallets?.length ? (
+                            filterControllerWallets.map(({ account }, i) => {
+                              const isUsing = usingAccount?.mainAddress === account?.address;
+                              return (
+                                <ControllerWallets
+                                  key={i}
+                                  address={account.address}
+                                  name={account.meta.name}
+                                  isUsing={isUsing}
+                                  isDefault={defaultFundingAddress === account.address}
+                                  handleRegister={(account: ExtensionAccount) => {
+                                    handleChangeCurrentControllerWallet(account);
+                                    tradeWalletState.onRegisterAccountModalActive({
+                                      data: {
+                                        name: account.account.meta.name,
+                                        address: account.account.address,
+                                      },
+                                    });
+                                  }}
+                                />
+                              );
+                            })
+                          ) : (
+                            <ResultFound />
+                          )}
+                        </S.WalletContent>
+                      </S.WalletWrapper>
+                    )}
+                  </S.WalletContainer>
+                </S.Wallet>
+                <S.Account>
+                  <h2>Profile</h2>
+                  <S.AccountContainer>
                     <Card
-                      label="Delete Account"
-                      description="This action is irreversible, please make sure you`re certain of it."
-                      onClick={() => console.log("Open Modal")}
-                      actionTitle="Delete account"
+                      label="Email"
+                      description={user.email}
+                      isLocked
+                      hasBadge
+                      isVerified={user.isConfirmed}
                     />
-                  </AvailableMessage>
-                </S.AccountContainer>
-              </S.Account>
-            </S.Content>
-          </S.ContainerMain>
-          <Footer />
-        </S.Wrapper>
+                    <AvailableMessage message="Soon">
+                      <Card
+                        label="Delete Account"
+                        description="This action is irreversible, please make sure you`re certain of it."
+                        onClick={() => console.log("Open Modal")}
+                        actionTitle="Delete account"
+                      />
+                    </AvailableMessage>
+                  </S.AccountContainer>
+                </S.Account>
+              </S.Content>
+            </S.ContainerMain>
+            <Footer />
+          </S.Wrapper>
+        </S.Flex>
       </S.Main>
     </>
   );

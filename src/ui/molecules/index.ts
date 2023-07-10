@@ -54,5 +54,6 @@ export * from "./RemoveFromDevice";
 export * from "./SliderPercentage";
 export * from "./TradingView";
 export * from "./FaqTopMessage";
+export * from "./SwitchFAQ";
 
 export * as LoadingIcons from "./LoadingIcons";
