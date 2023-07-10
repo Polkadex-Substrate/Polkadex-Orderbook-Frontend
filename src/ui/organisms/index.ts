@@ -23,5 +23,8 @@ export * from "./Graph";
 export * from "./Disclaimer";
 export * from "./FAQsidebar";
 export * from "./Rating";
+export * from "./NestedLayout";
+export * from "./Question";
+export * from "./FAQquestionBar";
 export { default as Feedback } from "./Feedback";
 export * from "./Header";

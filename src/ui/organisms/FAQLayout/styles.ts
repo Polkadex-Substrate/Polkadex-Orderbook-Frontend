@@ -10,6 +10,7 @@ export const HomeLayout = styled.div`
   width: 100%;
   position: relative;
   justify-content: space-between;
+  min-height: 100vh;
 `;
 
 export const Sticker = styled.div`
