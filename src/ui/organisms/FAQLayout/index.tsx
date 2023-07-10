@@ -31,13 +31,17 @@ const FAQLayout = ({ children }) => {
 
   return (
     <S.HomeLayout>
-      <FaqTopMessage />
       <Header />
       <S.Flex>
         <Menu />
-        {children}
-        <FAQsidebar closeSidebar={() => setShowSidebar(false)} show={showSidebar} />
-        <S.Sticker onClick={() => setShowSidebar(true)}>Still have questions?</S.Sticker>
+        <S.Container>
+          <FaqTopMessage />
+          <S.Wrapper>
+            {children}
+            <FAQsidebar closeSidebar={() => setShowSidebar(false)} show={showSidebar} />
+            <S.Sticker onClick={() => setShowSidebar(true)}>Still have questions?</S.Sticker>
+          </S.Wrapper>
+        </S.Container>
       </S.Flex>
     </S.HomeLayout>
   );

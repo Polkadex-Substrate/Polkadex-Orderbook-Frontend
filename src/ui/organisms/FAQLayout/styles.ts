@@ -8,11 +8,10 @@ const customMedia = generateMedia({
 export const HomeLayout = styled.div`
   ${({ theme }) => css`
     display: flex;
-    max-width: 160rem;
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    position: relative;
+    max-width: 160rem;
+    max-height: 100vh;
+    flex-direction: column;
     justify-content: space-between;
     margin: 0 auto;
     @media screen and (min-width: 1600px) {
@@ -22,13 +21,33 @@ export const HomeLayout = styled.div`
   `}
 `;
 
+export const Wrapper = styled.div`
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-height: 830px) {
+    justify-content: flex-start;
+    margin-top: 3rem;
+  }
+`;
+
 export const Flex = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  overflow: hidden;
   @media screen and (min-width: 590px) {
     flex-direction: row;
   }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 export const Sticker = styled.div`

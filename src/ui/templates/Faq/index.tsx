@@ -1,11 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 
 export const FaqTemplate = () => {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -13,17 +16,13 @@ export const FaqTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Wrapper>
+        <FAQHeader heading="Frequently asked question" pathname={router.pathname}>
+          <p>
+            Would request you to search with the keyword in your query inside the{" "}
+            <span>Search Bar</span> and check if the solution provided suffice enough.
+          </p>
+        </FAQHeader>
         <S.Introduction>
-          <S.IntroductionTitle>
-            <Link href="#">Home</Link>
-            <div>
-              <h1>Frequently asked question</h1>
-              <p>
-                Would request you to search with the keyword in your query inside the{" "}
-                <span>Search Bar</span> and check if the solution provided suffice enough.
-              </p>
-            </div>
-          </S.IntroductionTitle>
           <S.IntroductionSearch>
             <S.Search>
               <S.SearchContainer>

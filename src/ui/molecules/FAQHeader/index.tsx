@@ -3,7 +3,7 @@ import Link from "next/link";
 import * as S from "./styles";
 import * as T from "./type";
 
-export const FAQHeader = ({ heading, pathname }: T.Props) => {
+export const FAQHeader = ({ heading, children, pathname }: T.Props) => {
   const pathSegments = pathname.slice(1).split("/");
   const lastCrumb = pathSegments[pathSegments.length - 1];
   pathSegments.pop();
@@ -24,13 +24,16 @@ export const FAQHeader = ({ heading, pathname }: T.Props) => {
         {pathSegments.map((item, index) => {
           return (
             <Link href={getLink(item, index)} key={item}>
-              {item}/
+              {item} /{" "}
             </Link>
           );
         })}
         <S.LastCrumb href={getLink(lastCrumb, pathSegments.length)}>{lastCrumb}</S.LastCrumb>
       </S.BreadCrumbWrapper>
-      {heading && <S.Heading>{heading}</S.Heading>}
+      <S.Title>
+        {heading && <h1>{heading}</h1>}
+        {children && children}
+      </S.Title>
     </S.Header>
   );
 };
