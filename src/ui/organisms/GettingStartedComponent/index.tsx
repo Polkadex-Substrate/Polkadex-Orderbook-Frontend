@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
-const GettingStartedComponent = () => {
+export const GettingStartedComponent = () => {
   const questions = [
     "How to register on Polkadex website?",
     "How to find my user ID on Polkadex.trade?",
@@ -32,4 +32,3 @@ const GettingStartedComponent = () => {
     </S.Container>
   );
 };
-export default GettingStartedComponent;

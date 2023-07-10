@@ -171,3 +171,4 @@ export * from "./MessageFAQ";
 export * from "./DiscordFAQ";
 export * from "./TelegramFAQ";
 export * from "./MailFAQ";
+export * from "./ArrowRightFilled";
