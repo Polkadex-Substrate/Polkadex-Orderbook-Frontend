@@ -1,3 +1,11 @@
 {
-  "polkadexOrderbook": "Polkadex Orderbook"
+  "polkadexOrderbook": "Polkadex Orderbook",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw",
+  "connectTradingAccount": {
+    "title": "Connect your Trading Account",
+    "description": "Import your existing account, or create a new account",
+    "primaryLinkTitle": "Create Account",
+    "secondaryLinkTitle": "Select Account"
+  }
 }

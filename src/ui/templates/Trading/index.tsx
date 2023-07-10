@@ -119,12 +119,12 @@ export function Trading() {
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
-      title: t("selectAccount.title"),
-      description: t("selectAccount.description"),
+      title: tc("connectTradingAccount.title"),
+      description: tc("connectTradingAccount.description"),
       primaryLink: "/createAccount",
-      primaryLinkTitle: t("selectAccount.primaryLinkTitle"),
+      primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
       secondaryLink: "/settings",
-      secondaryLinkTitle: t("selectAccount.secondaryLinkTitle"),
+      secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
     };
 
   const marketName = market?.name?.replace("/", "");

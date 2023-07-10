@@ -1,10 +1,4 @@
 {
-  "selectAccount": {
-    "title": "Connect your Trading Account",
-    "description": "Import your existing account, or create a new account",
-    "primaryLinkTitle": "Create Account",
-    "secondaryLinkTitle": "Select Account"
-  },
   "shutDown": {
     "title": "Orderbook v1 will go offline as it is upgraded to v2",
     "textLink": "Read the full statement",
