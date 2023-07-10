@@ -1,0 +1,15 @@
+{
+  "changeAvatar": {
+    "title": "Select your Avatar",
+    "description": "Select an avatar to use as your profile picture",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "disclaimer": {
+    "title": "DISCLAIMER:",
+    "message": "Polkadex Orderbook is currently in its beta phase. Please observe caution while using it."
+  },
+  "faqLayout": {
+    "stillHaveQuestions": "Still have questions?"
+  }
+}
