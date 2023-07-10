@@ -46,6 +46,7 @@ const defaultTheme = {
   },
   colors: {
     primary: "#E6007A",
+    primaryHover: "rgba(230,0,122,0.7)",
     secondary: "#6745D2",
     secondaryBackground: "rgba(139,161,190,0.2)",
     secondaryBackgroundDark: "#ABB2BC",
@@ -56,7 +57,7 @@ const defaultTheme = {
     gradientRed: "linear-gradient(90deg, #E6007A 0.04%, rgba(230, 0, 225, 0.3) 92.26%)",
     gradientPrimary: "linear-gradient(180deg, #E6007A13 0%, rgba(230, 0, 122, 0) 100%);",
     transparent: "transparent",
-    secondaryText: "#8BA1BE",
+    secondaryText: "#575A60",
     tertiaryText: "#A8ADB7",
     none: "none",
     green: "#0CA564",

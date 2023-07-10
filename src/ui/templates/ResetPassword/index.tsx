@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 
@@ -7,11 +6,10 @@ import * as S from "./styles";
 
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { resetPasswordValidations } from "@polkadex/orderbook/validations";
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Menu, Header } from "@polkadex/orderbook-ui/organisms";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const ResetPasswordTemplate = () => {
-  const [state, setState] = useState(false);
   const { forgotPassword, onForgotPasswordCode } = useAuth();
   const isLoading = forgotPassword.isLoading;
   const isSuccess = forgotPassword.isSuccess;
@@ -33,52 +31,55 @@ export const ResetPasswordTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
-        <S.Wrapper>
-          <S.Container>
-            <S.Title>
-              <div>
-                <OrderbookLogo />
-              </div>
-              <span>
-                Back to <Link href="/signIn"> login</Link>
-              </span>
-            </S.Title>
-            {isSuccess ? (
-              <Success />
-            ) : (
-              <S.Card>
-                <S.Column />
-                <S.Box>
-                  <S.BoxTitle>
-                    <h1>Reset password?</h1>
-                    <p>No worries, we`ll send you instructions.</p>
-                  </S.BoxTitle>
-                  <form onSubmit={handleSubmit}>
-                    <InputLine
-                      name="email"
-                      label="Email"
-                      placeholder="Enter your email"
-                      disabled={isLoading}
-                      error={errors.email && touched.email && errors.email}
-                      {...getFieldProps("email")}
-                    />
-                    <Button
-                      disabled={!(isValid && dirty)}
-                      type="submit"
-                      size="extraLarge"
-                      background="primary"
-                      color="white"
-                      isLoading={isLoading}
-                      isFull>
-                      Send reset code
-                    </Button>
-                  </form>
-                </S.Box>
-              </S.Card>
-            )}
-          </S.Container>
-        </S.Wrapper>
+        <Header />
+        <S.Flex>
+          <Menu />
+          <S.Wrapper>
+            <S.Container>
+              <S.Title>
+                <div>
+                  <OrderbookLogo />
+                </div>
+                <span>
+                  Back to <Link href="/signIn"> login</Link>
+                </span>
+              </S.Title>
+              {isSuccess ? (
+                <Success />
+              ) : (
+                <S.Card>
+                  <S.Column />
+                  <S.Box>
+                    <S.BoxTitle>
+                      <h1>Reset password?</h1>
+                      <p>No worries, we`ll send you instructions.</p>
+                    </S.BoxTitle>
+                    <form onSubmit={handleSubmit}>
+                      <InputLine
+                        name="email"
+                        label="Email"
+                        placeholder="Enter your email"
+                        disabled={isLoading}
+                        error={errors.email && touched.email && errors.email}
+                        {...getFieldProps("email")}
+                      />
+                      <Button
+                        disabled={!(isValid && dirty)}
+                        type="submit"
+                        size="extraLarge"
+                        background="primary"
+                        color="white"
+                        isLoading={isLoading}
+                        isFull>
+                        Send reset code
+                      </Button>
+                    </form>
+                  </S.Box>
+                </S.Card>
+              )}
+            </S.Container>
+          </S.Wrapper>
+        </S.Flex>
       </S.Main>
     </>
   );
