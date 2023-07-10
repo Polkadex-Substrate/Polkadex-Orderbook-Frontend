@@ -10,5 +10,6 @@
   },
   "blockFinalizationMessage": "Block finalization will take a few mins.",
   "createAccount": "Create Account",
-  "signUp": "Sign Up"
+  "signUp": "Sign Up",
+  "available": "Available"
 }
