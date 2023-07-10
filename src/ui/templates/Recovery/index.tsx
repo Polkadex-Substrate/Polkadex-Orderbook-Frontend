@@ -2,6 +2,7 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import Head from "next/head";
+import { useTranslation } from "react-i18next";
 import { generateUsername } from "friendly-username-generator";
 
 import * as S from "./styles";
@@ -18,10 +19,13 @@ const defaultValues = {
 export const RecoveryTemplate = () => {
   const [state, setState] = useState({ tags: [] });
   const { onImportTradeAccount } = useTradeWallet();
+
+  const { t } = useTranslation("recovery");
+
   return (
     <>
       <Head>
-        <title>Import Wallet | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="Feels like a CEX, works like a DEX" />
       </Head>
       <S.Main>
@@ -31,8 +35,8 @@ export const RecoveryTemplate = () => {
             <S.Container>
               <S.AsideLeft>
                 <S.Title>
-                  <h1>Import trade account</h1>
-                  <p>Do you have a trade account? Import it here and start trading</p>
+                  <h1>{t("heading")}</h1>
+                  <p>{t("description")}</p>
                 </S.Title>
                 <S.Form>
                   <Formik
@@ -57,8 +61,8 @@ export const RecoveryTemplate = () => {
                           handleChange={setState}
                         />
                         <InputPrimary
-                          label="Account Name"
-                          placeholder="Enter name for this account"
+                          label={t("inputLabel")}
+                          placeholder={t("inputPlaceholder")}
                           type="accountName"
                           name="accountName"
                           error={
@@ -70,7 +74,7 @@ export const RecoveryTemplate = () => {
                           type="submit"
                           disabled={state.tags.length < 12}
                           style={{ marginTop: 20 }}>
-                          Import Account
+                          {t("importAccount")}
                         </Button>
                       </Form>
                     )}
@@ -84,12 +88,10 @@ export const RecoveryTemplate = () => {
             <S.Card>
               <S.CardContent>
                 <Icon size="extraLarge" color="inverse" name="Mnemonic" />
-                <h4>What do you use mnemonic for?</h4>
+                <h4>{t("card.heading")}</h4>
                 <p>
-                  A Mnemonic Phrase is also called Seed Phrase or Recovery Backup for a
-                  decentralized wallet. It is a list of words and proof of ownership of your
-                  crypto assets. Polkadex does not store any information about your wallet.
-                  <strong>Never share your mnemonic phrase with anyone</strong>
+                  {t("card.description")}
+                  <strong>{t("card.strongText")}</strong>
                 </p>
               </S.CardContent>
             </S.Card>
