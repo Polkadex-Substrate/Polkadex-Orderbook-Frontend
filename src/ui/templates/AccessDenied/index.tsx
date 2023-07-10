@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -7,10 +8,12 @@ import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const AccessDeniedTemplate = () => {
+  const { t } = useTranslation("accessDenied");
+
   return (
     <S.Wrapper>
       <Head>
-        <title>Polkadex - Access denied</title>
+        <title>{t("title")}</title>
       </Head>
       <S.Container>
         <S.Header>
@@ -22,32 +25,32 @@ export const AccessDeniedTemplate = () => {
         </S.Header>
         <S.Content>
           <S.AsideLeft>
-            <span>403</span>
-            <h1>Access denied</h1>
+            <span>{t("statuscode")}</span>
+            <h1>{t("heading")}</h1>
             <p>
-              Your IP address indicates that you are attempting to access our services from a{" "}
+              {t("primaryDescription")}
               <a
                 href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
                 target="_blank"
                 rel="noreferrer">
-                restricted jurisdiction
+                {t("restrictedJurisdiction")}
               </a>
-              . Based on our{" "}
+              {t("basedOnOur")}
               <a
                 href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
                 target="_blank"
                 rel="noreferrer">
-                Terms of use
+                {t("termOfUse")}
               </a>
-              , we are unable to provide services to users from this jurisdiction.
+              {t("secondaryDescription")}
             </p>
-            <small>Need help? contact us on Discord</small>
+            <small>{t("needHelp")}</small>
             <S.Social>
               <a href="https://discord.com/invite/Uvua83QAzk" target="_blank" rel="noreferrer">
                 <div>
                   <Icons.Discord />
                 </div>
-                Discord
+                {t("discord")}
               </a>
             </S.Social>
           </S.AsideLeft>

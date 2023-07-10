@@ -17,6 +17,5 @@
     "subDescription": "Please create a new trading account.",
     "closeButtonText": "Close",
     "linkText": "Create Account"
-  },
-  "login/signup": "Login/Sign Up"
+  }
 }
