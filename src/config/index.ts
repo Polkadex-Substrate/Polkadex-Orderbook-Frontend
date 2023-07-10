@@ -1,4 +1,4 @@
-import { Amplify, Analytics, Auth } from "aws-amplify";
+import { Amplify, Analytics } from "aws-amplify";
 
 import awsconfig from "../aws-exports";
 
@@ -55,4 +55,5 @@ export const defaultConfig: DefaultConfig = {
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(","),
   mainUrl: process.env.MAIN_URL || "/trading",
+  cmsGraphqlUrl: process.env.CMS_GRAPHQL_URL || "http://127.0.0.1:1337/graphql",
 };

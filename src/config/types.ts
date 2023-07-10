@@ -20,4 +20,5 @@ export type DefaultConfig = {
   availableRoutes: string[];
   underMaintenance: string[];
   mainUrl: string;
+  cmsGraphqlUrl: string;
 };

@@ -78,6 +78,7 @@ module.exports = withPlugins([
       SHOW_SHUTDOWN_POPUP: process.env.SHOW_SHUTDOWN_POPUP,
       UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
       MAIN_URL: process.env.MAIN_URL,
+      CMS_GRAPHQL_URL: process.env.CMS_GRAPHQL_URL,
     },
   },
 ]);
