@@ -7,5 +7,6 @@
     "description": "Import your existing account, or create a new account",
     "primaryLinkTitle": "Create Account",
     "secondaryLinkTitle": "Select Account"
-  }
+  },
+  "signUp": "Sign Up"
 }
