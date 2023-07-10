@@ -3,10 +3,11 @@ import Link from "next/link";
 import * as S from "./styles";
 import * as T from "./type";
 
-export const FAQHeader = ({ heading, pathname, noBorder }: T.Props) => {
+export const FAQHeader = ({ heading, pathname }: T.Props) => {
   const pathSegments = pathname.slice(1).split("/");
   const lastCrumb = pathSegments[pathSegments.length - 1];
   pathSegments.pop();
+
   const getLink = (item, index) => {
     if (index === 0) return `/${item}`;
     let link = "/";
@@ -16,6 +17,7 @@ export const FAQHeader = ({ heading, pathname, noBorder }: T.Props) => {
     link = link + item;
     return link;
   };
+
   return (
     <S.Header noBorder>
       <S.BreadCrumbWrapper>

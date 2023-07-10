@@ -16,8 +16,6 @@ export const Container = styled.div`
     padding: 2rem;
     max-width: 160rem;
     margin: 0 auto;
-    border-left: 1px solid ${theme.colors.secondaryBackground};
-    border-right: 1px solid ${theme.colors.secondaryBackground};
 
     span {
       font-size: 4rem;

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled, { css } from "styled-components";
 import { generateMedia } from "styled-media-query";
 const customMedia = generateMedia({
@@ -59,20 +60,18 @@ export const SocialWrapper = styled.div`
   `}
 `;
 
-export const Social = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    cursor: pointer;
-    &:hover {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    &:hover svg {
-      fill: white;
-    }
-    transition: 0.2s;
-  `}
+export const Social = styled(Link)`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  &:hover svg {
+    fill: white;
+  }
+  transition: 0.2s;
 `;
 
 export const OnlyIcons = styled.div`

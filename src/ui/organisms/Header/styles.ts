@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
@@ -28,7 +29,7 @@ export const ContentFull = styled.div`
   padding: 1rem;
 `;
 
-export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
+export const Logo = styled(Link)<{ borderActive: boolean; hideLogo?: boolean }>`
   ${({ theme, borderActive }) => css`
     padding-right: 1rem;
     flex: 1;

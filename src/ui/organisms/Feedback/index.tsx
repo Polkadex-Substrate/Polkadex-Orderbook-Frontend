@@ -34,7 +34,7 @@ const Feedback = () => {
   };
   return (
     <S.Container>
-      <FAQHeader heading={"Give us your feedback"} pathname={router.pathname} />
+      <FAQHeader heading="Give us your feedback" pathname={router.pathname} />
       <form action="" onSubmit={formik.handleSubmit}>
         <S.BorderWrapper>
           <S.QuestionWrapper>

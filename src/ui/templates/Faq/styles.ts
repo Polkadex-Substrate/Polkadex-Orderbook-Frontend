@@ -15,15 +15,6 @@ export const Main = styled.main`
   `}
 `;
 
-export const Flex = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column-reverse;
-  @media screen and (min-width: 590px) {
-    flex-direction: row;
-  }
-`;
-
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;

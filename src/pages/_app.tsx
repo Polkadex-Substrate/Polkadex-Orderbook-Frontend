@@ -131,10 +131,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 const Layout = ({ Component, pageProps }) => {
-  if (Component.getLayout) {
-    return Component.getLayout(<Component {...pageProps} />);
-  } else {
-    return <Component {...pageProps} />;
-  }
+  const getLayout = Component.getLayout || ((page: ReactNode) => page);
+  return getLayout(<Component {...pageProps} />);
 };
 export default App;

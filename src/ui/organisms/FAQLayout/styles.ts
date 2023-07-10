@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { generateMedia } from "styled-media-query";
 
 const customMedia = generateMedia({
@@ -6,10 +6,29 @@ const customMedia = generateMedia({
 });
 
 export const HomeLayout = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    max-width: 160rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    justify-content: space-between;
+    margin: 0 auto;
+    @media screen and (min-width: 1600px) {
+      border-left: 1px solid ${theme.colors.secondaryBackground};
+      border-right: 1px solid ${theme.colors.secondaryBackground};
+    }
+  `}
+`;
+
+export const Flex = styled.div`
   display: flex;
-  width: 100%;
-  position: relative;
-  justify-content: space-between;
+  flex: 1;
+  flex-direction: column-reverse;
+  @media screen and (min-width: 590px) {
+    flex-direction: row;
+  }
 `;
 
 export const Sticker = styled.div`

@@ -23,37 +23,37 @@ export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
         Submit a request
       </Button>
       <S.SocialWrapper>
-        <S.Social>
+        <S.Social href="#">
           <S.Icon>
             <Icon name="MediumFAQ" background="none" stroke="text" size="large" />
           </S.Icon>
           <p>Polkadex articles</p>
         </S.Social>
-        <S.Social>
+        <S.Social href="#">
           <S.Icon>
             <Icon name="TwitterFAQ" background="none" stroke="text" size="large" />
           </S.Icon>
           <p>Twitter news</p>
         </S.Social>
-        <S.Social>
+        <S.Social href="#">
           <S.Icon>
             <Icon name="YoutubeFAQ" background="none" stroke="text" size="large" />
           </S.Icon>
           <p>Video tutorials </p>
         </S.Social>
-        <S.Social>
+        <S.Social href="#">
           <S.Icon>
             <Icon name="OrderbookListingsFAQ" background="none" stroke="text" size="large" />
           </S.Icon>
           <p>Orderbook listings</p>
         </S.Social>
-        <S.Social>
+        <S.Social href="#">
           <S.Icon>
             <Icon name="IssuesFAQ" background="none" stroke="text" size="large" />
           </S.Icon>
           <p>Report issues </p>
         </S.Social>
-        <S.Social>
+        <S.Social href="/faq/feedbackForm">
           <S.Icon>
             <Icon name="MessageFAQ" background="none" stroke="text" size="large" />
           </S.Icon>

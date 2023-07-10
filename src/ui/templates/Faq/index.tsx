@@ -1,25 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
-import { FaqTopMessage } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-
-const Menu = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Menu").then((mod) => mod.Menu),
-  {
-    ssr: false,
-  }
-);
-
-const Header = dynamic(
-  () => import("@polkadex/orderbook-ui/organisms/Header").then((mod) => mod.Header),
-  {
-    ssr: false,
-  }
-);
 
 export const FaqTemplate = () => {
   return (
@@ -28,108 +12,100 @@ export const FaqTemplate = () => {
         <title>FAQ | Polkadex Orderbook</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
-      <S.Main>
-        <Header />
-        <S.Flex>
-          <Menu />
-          <S.Wrapper>
-            <FaqTopMessage />
-            <S.Introduction>
-              <S.IntroductionTitle>
-                <Link href="#">Home</Link>
+      <S.Wrapper>
+        <S.Introduction>
+          <S.IntroductionTitle>
+            <Link href="#">Home</Link>
+            <div>
+              <h1>Frequently asked question</h1>
+              <p>
+                Would request you to search with the keyword in your query inside the{" "}
+                <span>Search Bar</span> and check if the solution provided suffice enough.
+              </p>
+            </div>
+          </S.IntroductionTitle>
+          <S.IntroductionSearch>
+            <S.Search>
+              <S.SearchContainer>
+                <Icons.Search />
+                <input id="search" type="text" placeholder="Ask your question.." />
+              </S.SearchContainer>
+              <button type="button" onClick={() => window.alert("Searching..")}>
+                Search
+              </button>
+            </S.Search>
+            <p>
+              If your query is not listed and you`re unable to find a solution, please reach
+              out to <Link href="#">#Polkadex Orderbook Helpdesk channel on Discord</Link>{" "}
+              which would connect you with a support executive.
+            </p>
+          </S.IntroductionSearch>
+        </S.Introduction>
+        <S.Trending>
+          <h2>Trending topics</h2>
+          <S.TrendingCards>
+            {trendingTopics.map((v) => (
+              <div key={v.id}>
+                <span>{v.title}</span>
+                <p>{v.description}</p>
+              </div>
+            ))}
+          </S.TrendingCards>
+        </S.Trending>
+        <S.Categories>
+          <S.CategoriesTitle>
+            <h2>Categories</h2>
+            <p>Perhaps you can find the answer in out collections</p>
+          </S.CategoriesTitle>
+          <S.CategoriesCards>
+            {categories.map((v) => (
+              <S.CategoriesCard key={v.id}>
                 <div>
-                  <h1>Frequently asked question</h1>
-                  <p>
-                    Would request you to search with the keyword in your query inside the{" "}
-                    <span>Search Bar</span> and check if the solution provided suffice enough.
-                  </p>
+                  <Icons.AddWallet />
                 </div>
-              </S.IntroductionTitle>
-              <S.IntroductionSearch>
-                <S.Search>
-                  <S.SearchContainer>
-                    <Icons.Search />
-                    <input id="search" type="text" placeholder="Ask your question.." />
-                  </S.SearchContainer>
-                  <button type="button" onClick={() => window.alert("Searching..")}>
-                    Search
-                  </button>
-                </S.Search>
-                <p>
-                  If your query is not listed and you`re unable to find a solution, please
-                  reach out to{" "}
-                  <Link href="#">#Polkadex Orderbook Helpdesk channel on Discord</Link> which
-                  would connect you with a support executive.
-                </p>
-              </S.IntroductionSearch>
-            </S.Introduction>
-            <S.Trending>
-              <h2>Trending topics</h2>
-              <S.TrendingCards>
-                {trendingTopics.map((v) => (
-                  <div key={v.id}>
-                    <span>{v.title}</span>
-                    <p>{v.description}</p>
+                <span>{v.title}</span>
+              </S.CategoriesCard>
+            ))}
+          </S.CategoriesCards>
+        </S.Categories>
+        <S.Videos>
+          <S.VideosTitle>
+            <div>
+              <h2>Tutorials & videos</h2>
+              <p>These videos might help you</p>
+            </div>
+            <Link href="#">View all</Link>
+          </S.VideosTitle>
+          <S.VideosCards>
+            <S.VideosPrimary>
+              <S.VideosPrimaryContainer>
+                <p>ORDERBOOK IS LIVE: Orderbook Demo</p>
+                <span>Polkadex</span>
+              </S.VideosPrimaryContainer>
+              <S.IframeContainer>
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube-nocookie.com/embed/usrE9CGC_1M"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                />
+              </S.IframeContainer>
+            </S.VideosPrimary>
+            <S.VideosSecondary>
+              {videos.map((v) => (
+                <S.VideosSecondaryCard key={v.id}>
+                  <img src={`/img/faq/${v.image}`} alt="Polkadex video" />
+                  <div>
+                    <p>{v.title}</p>
+                    <span>{v.author}</span>
                   </div>
-                ))}
-              </S.TrendingCards>
-            </S.Trending>
-            <S.Categories>
-              <S.CategoriesTitle>
-                <h2>Categories</h2>
-                <p>Perhaps you can find the answer in out collections</p>
-              </S.CategoriesTitle>
-              <S.CategoriesCards>
-                {categories.map((v) => (
-                  <S.CategoriesCard key={v.id}>
-                    <div>
-                      <Icons.AddWallet />
-                    </div>
-                    <span>{v.title}</span>
-                  </S.CategoriesCard>
-                ))}
-              </S.CategoriesCards>
-            </S.Categories>
-            <S.Videos>
-              <S.VideosTitle>
-                <div>
-                  <h2>Tutorials & videos</h2>
-                  <p>These videos might help you</p>
-                </div>
-                <Link href="#">View all</Link>
-              </S.VideosTitle>
-              <S.VideosCards>
-                <S.VideosPrimary>
-                  <S.VideosPrimaryContainer>
-                    <p>ORDERBOOK IS LIVE: Orderbook Demo</p>
-                    <span>Polkadex</span>
-                  </S.VideosPrimaryContainer>
-                  <S.IframeContainer>
-                    <iframe
-                      width="560"
-                      height="315"
-                      src="https://www.youtube-nocookie.com/embed/usrE9CGC_1M"
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    />
-                  </S.IframeContainer>
-                </S.VideosPrimary>
-                <S.VideosSecondary>
-                  {videos.map((v) => (
-                    <S.VideosSecondaryCard key={v.id}>
-                      <img src={`/img/faq/${v.image}`} alt="Polkadex video" />
-                      <div>
-                        <p>{v.title}</p>
-                        <span>{v.author}</span>
-                      </div>
-                    </S.VideosSecondaryCard>
-                  ))}
-                </S.VideosSecondary>
-              </S.VideosCards>
-            </S.Videos>
-          </S.Wrapper>
-        </S.Flex>
-      </S.Main>
+                </S.VideosSecondaryCard>
+              ))}
+            </S.VideosSecondary>
+          </S.VideosCards>
+        </S.Videos>
+      </S.Wrapper>
     </>
   );
 };
