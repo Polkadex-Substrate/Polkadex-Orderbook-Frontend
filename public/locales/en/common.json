@@ -11,5 +11,8 @@
   "blockFinalizationMessage": "Block finalization will take a few mins.",
   "createAccount": "Create Account",
   "signUp": "Sign Up",
-  "available": "Available"
+  "available": "Available",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "disclaimerAndLegalNotice": "Disclaimer and Legal Notice"
 }
