@@ -16,7 +16,7 @@ export const FaqTemplate = () => {
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Wrapper>
-        <FAQHeader heading="Frequently asked question" pathname={router.pathname}>
+        <FAQHeader noBorder heading="Frequently asked question" pathname={router.pathname}>
           <p>
             Would request you to search with the keyword in your query inside the{" "}
             <span>Search Bar</span> and check if the solution provided suffice enough.

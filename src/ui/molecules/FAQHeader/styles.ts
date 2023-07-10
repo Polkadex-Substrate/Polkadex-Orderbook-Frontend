@@ -6,9 +6,12 @@ export const Header = styled.div<{ noBorder: boolean }>`
     display: flex;
     flex-direction: column;
     padding: 4rem 2rem;
-    border-bottom: ${!noBorder ? "1px solid ${theme.colors.secondaryBackground" : ""};
     width: 100%;
     gap: 2rem;
+    ${!noBorder &&
+    css`
+      border-bottom: 1px solid ${theme.colors.secondaryBackground};
+    `}
   `}
 `;
 

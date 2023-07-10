@@ -3,7 +3,7 @@ import Link from "next/link";
 import * as S from "./styles";
 import * as T from "./type";
 
-export const FAQHeader = ({ heading, children, pathname }: T.Props) => {
+export const FAQHeader = ({ heading, children, pathname, noBorder }: T.Props) => {
   const pathSegments = pathname.slice(1).split("/");
   const lastCrumb = pathSegments[pathSegments.length - 1];
   pathSegments.pop();
@@ -19,7 +19,7 @@ export const FAQHeader = ({ heading, children, pathname }: T.Props) => {
   };
 
   return (
-    <S.Header noBorder>
+    <S.Header noBorder={noBorder}>
       <S.BreadCrumbWrapper>
         {pathSegments.map((item, index) => {
           return (

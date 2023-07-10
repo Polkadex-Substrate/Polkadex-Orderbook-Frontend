@@ -21,15 +21,12 @@ export const BorderWrapper = styled.div`
 `;
 
 export const QuestionWrapper = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 3rem;
-    max-width: 51rem;
-    width: 100%;
-    border-bottom: 1px solid ${theme.colors.secondaryBackground};
-  `}
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 4rem 2rem;
+  max-width: 51rem;
+  width: 100%;
 `;
 
 export const Question = styled.p`
