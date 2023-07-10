@@ -1,5 +1,5 @@
-import FAQLayout from "@polkadex/orderbook-ui/organisms/FAQLayout";
 import { GettingStartedComponent } from "@polkadex/orderbook-ui/organisms";
+import FAQLayout from "@polkadex/orderbook-ui/organisms/FAQLayout";
 
 const GettingStarted = () => {
   return <GettingStartedComponent />;

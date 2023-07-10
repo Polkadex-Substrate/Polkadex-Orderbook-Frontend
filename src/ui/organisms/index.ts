@@ -21,8 +21,11 @@ export * from "./Transactions";
 export * from "./MarketOrder";
 export * from "./Graph";
 export * from "./Disclaimer";
-export * from "./FAQsidebar";
 export * from "./GettingStartedComponent";
+
 export * from "./Rating";
 export { default as Feedback } from "./Feedback";
+export { default as FAQLayout } from "./FAQLayout";
+export * from "./FAQsidebar";
+
 export * from "./Header";
