@@ -34,3 +34,4 @@ export * from "./getHighLightValue";
 export * from "./getIsDecreasingArray";
 export * from "./resolutionToSeconds";
 export * from "./resolutionForPayload";
+export * from "./getImgUrl";

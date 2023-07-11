@@ -1,18 +1,14 @@
+// TODO: Add types
 import * as S from "./styles";
 
-export const FaqTopMessage = () => {
+import { getImgUrl } from "@polkadex/web-helpers";
+export const FaqTopMessage = ({ icon, children }) => {
+  const iconUrl = getImgUrl(icon);
   return (
     <S.Wrapper>
       <S.Container>
-        <span>👨🏻‍💻</span>
-        <p>
-          <small>
-            We are in constant endeavour to improve this Help Page by catering to our user
-            needs and requirements.{" "}
-          </small>
-          We would require your patience and understanding to help us achieve the best in this
-          journey.
-        </p>
+        {icon && <img src={iconUrl} />}
+        {children}
       </S.Container>
     </S.Wrapper>
   );

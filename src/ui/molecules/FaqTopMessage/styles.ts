@@ -16,16 +16,16 @@ export const Container = styled.div`
     padding: 1rem 2rem;
     max-width: 160rem;
     margin: 0 auto;
-
-    span {
-      font-size: 3rem;
+    img {
+      width: 3rem;
     }
     p {
       color: ${theme.colors.tertiaryText};
       line-height: 1.3;
-      small {
+      strong {
         color: ${theme.colors.text};
         font-size: ${theme.font.sizes.small};
+        font-weight: normal;
       }
     }
   `}

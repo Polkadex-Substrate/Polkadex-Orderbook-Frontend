@@ -37,6 +37,19 @@ export const Heading = styled.div`
   `}
 `;
 
+export const CallToActionLink = styled(Link)`
+  ${({ theme }) => css`
+    background: ${theme.colors.primary};
+    padding: 1.4rem;
+    border-radius: 0.8rem;
+    text-align: center;
+    transition: ease 0.8s background-color;
+    :hover {
+      background: ${theme.colors.primaryHover};
+    }
+  `}
+`;
+
 export const Button = styled.button`
   ${({ theme }) => css`
     background-color: ${theme.colors.primary};
@@ -56,7 +69,7 @@ export const SocialWrapper = styled.div`
     border-radius: ${theme.border.radius.medium};
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   `}
 `;
 
@@ -75,13 +88,11 @@ export const Social = styled(Link)`
 `;
 
 export const OnlyIcons = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 1rem;
-  `}
+  display: flex;
+  gap: 1rem;
 `;
 
-export const IconWrapper = styled.div`
+export const IconWrapper = styled(Link)`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
     width: 4.5rem;
@@ -91,16 +102,14 @@ export const IconWrapper = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
-
+    transition: 0.2s;
     &:hover {
       background-color: ${theme.colors.tertiaryBackground};
     }
-    transition: 0.2s;
+    img {
+      max-width: 1.6rem;
+    }
   `}
-`;
-
-export const Icon = styled.div`
-  opacity: 0.2;
 `;
 
 export const Community = styled.div`
@@ -118,13 +127,11 @@ export const Description = styled.div`
     margin-top: 1rem;
     font-weight: 400;
     line-height: 2rem;
-  `}
-`;
-
-export const Pink = styled.span`
-  ${({ theme }) => css`
-    color: ${theme.colors.primary};
-    text-decoration: underline;
-    cursor: pointer;
+    strong {
+      color: ${theme.colors.primary};
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: normal;
+    }
   `}
 `;

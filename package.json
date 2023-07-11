@@ -60,6 +60,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-markdown": "^8.0.7",
     "react-query": "^3.39.2",
     "react-range": "^1.8.12",
     "react-redux": "^8.0.5",

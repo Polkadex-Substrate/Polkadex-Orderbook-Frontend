@@ -21,4 +21,5 @@ export type DefaultConfig = {
   underMaintenance: string[];
   mainUrl: string;
   cmsGraphqlUrl: string;
+  cmslUrl: string;
 };

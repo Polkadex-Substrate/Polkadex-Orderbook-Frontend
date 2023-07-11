@@ -1,86 +1,61 @@
+// TODO: Add types
+
 import { useRef } from "react";
+import ReactMarkdown from "react-markdown";
 
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Button, Icon } from "@polkadex/orderbook-ui/molecules";
 import useClickOutside from "@polkadex/orderbook/hooks/useClickOutside";
+import { getImgUrl } from "@polkadex/web-helpers";
 
-export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
+export const FAQsidebar = ({ closeSidebar, pageQuickAccess, show }: T.Props) => {
   const ref = useRef(null);
   useClickOutside(ref, closeSidebar);
 
+  const generikLinks = pageQuickAccess?.genericLink;
+  const callToAction = pageQuickAccess?.callToAction;
+  const socialLinks = pageQuickAccess?.socialCard;
+  const communityCard = pageQuickAccess?.communityCard;
+
   return (
     <S.Container ref={ref} show={show}>
-      <S.Heading>Still have questions?</S.Heading>
-      <Button
-        type="submit"
-        size="extraLarge"
-        background="primary"
-        hoverColor="primaryHover"
-        color="white"
-        isFull>
-        Submit a request
-      </Button>
-      <S.SocialWrapper>
-        <S.Social href="#">
-          <S.Icon>
-            <Icon name="MediumFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Polkadex articles</p>
-        </S.Social>
-        <S.Social href="#">
-          <S.Icon>
-            <Icon name="TwitterFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Twitter news</p>
-        </S.Social>
-        <S.Social href="#">
-          <S.Icon>
-            <Icon name="YoutubeFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Video tutorials </p>
-        </S.Social>
-        <S.Social href="#">
-          <S.Icon>
-            <Icon name="OrderbookListingsFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Orderbook listings</p>
-        </S.Social>
-        <S.Social href="#">
-          <S.Icon>
-            <Icon name="IssuesFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Report issues </p>
-        </S.Social>
-        <S.Social href="/faq/feedbackForm">
-          <S.Icon>
-            <Icon name="MessageFAQ" background="none" stroke="text" size="large" />
-          </S.Icon>
-          <p>Give us your feedback</p>
-        </S.Social>
-      </S.SocialWrapper>
-      <S.Heading>Get in touch</S.Heading>
-      <S.OnlyIcons>
-        <S.IconWrapper>
-          <Icon name="TelegramFAQ" background="none" stroke="none" size="large" />
-        </S.IconWrapper>
-        <S.IconWrapper>
-          <Icon name="Discord" background="none" stroke="none" size="large" />
-        </S.IconWrapper>
-        <S.IconWrapper>
-          <Icon name="MailFAQ" background="none" stroke="none" size="large" />
-        </S.IconWrapper>
-      </S.OnlyIcons>
+      <S.Heading>{pageQuickAccess?.title}</S.Heading>
+      {callToAction?.title && (
+        <S.CallToActionLink href={callToAction.link}>{callToAction.title}</S.CallToActionLink>
+      )}
 
-      <S.Community>
-        <S.Heading>Community question?</S.Heading>
-        <S.Description>
-          Reach out to <S.Pink>#Polkadex Orderbook Queries channel on Discord </S.Pink> and
-          someone from thee community would definitely try to answer your query as and when
-          they see the message.
-        </S.Description>
-      </S.Community>
+      <S.SocialWrapper>
+        {generikLinks?.map((value, i) => {
+          const icon = value?.icon?.data?.attributes?.url;
+          const iconUrl = getImgUrl(icon);
+          return (
+            <S.Social key={i} href={value.link}>
+              <div>{icon && <img src={iconUrl} />}</div>
+              <p>{value.title}</p>
+            </S.Social>
+          );
+        })}
+      </S.SocialWrapper>
+      <S.OnlyIcons>
+        {socialLinks?.map((value, i) => {
+          const icon = value?.icon?.data?.attributes?.url;
+          const iconUrl = getImgUrl(icon);
+          return (
+            <S.IconWrapper key={i} href={value.link}>
+              <img src={iconUrl} />
+            </S.IconWrapper>
+          );
+        })}
+      </S.OnlyIcons>
+      {communityCard?.description && (
+        <S.Community>
+          <S.Heading>{communityCard.title}</S.Heading>
+          <S.Description>
+            <ReactMarkdown>{communityCard.description}</ReactMarkdown>
+          </S.Description>
+        </S.Community>
+      )}
     </S.Container>
   );
 };

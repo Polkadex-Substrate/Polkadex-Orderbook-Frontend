@@ -7,13 +7,13 @@ import * as S from "./styles";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 
-export const FaqTemplate = () => {
+export const FaqTemplate = ({ title, seo, blocks }) => {
   const router = useRouter();
   return (
     <>
       <Head>
-        <title>FAQ | Polkadex Orderbook</title>
-        <meta name="description" content="A new era in DeFi" />
+        <title>{title}</title>
+        <meta name="description" content={seo?.metaDescription} />
       </Head>
       <S.Wrapper>
         <FAQHeader noBorder heading="Frequently asked question" pathname={router.pathname}>
@@ -217,17 +217,17 @@ const trendingTopics = [
     description: "Commodo nulla facil Entesque..",
   },
   {
-    id: 5,
+    id: 6,
     title: "How limit order works",
     description: "Nulla facil Pellentesque pulvinar..",
   },
   {
-    id: 5,
+    id: 7,
     title: "Locked balances",
     description: "Facil Pellentesque pulvinar amet..",
   },
   {
-    id: 5,
+    id: 8,
     title: "Excluded Jurisdictions",
     description: "Pellentesque pulvinar sit amete..",
   },

@@ -43,11 +43,10 @@ export const Header = ({ children }: { children?: ReactNode }) => {
     tradeAccountInfo &&
     ` • ${tradeAccountInfo ? transformAddress(tradeAccountInfo.address, 5) : ""}`;
 
-  const isValidChild = isValidElement(children);
   return (
     <S.Wrapper>
       <S.Content>
-        <S.Logo href="/" borderActive={isValidChild} hideLogo>
+        <S.Logo href="/">
           <PolkadexLogo />
         </S.Logo>
         <S.ContentFull>{children}</S.ContentFull>

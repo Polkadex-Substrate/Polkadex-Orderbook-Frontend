@@ -29,8 +29,8 @@ export const ContentFull = styled.div`
   padding: 1rem;
 `;
 
-export const Logo = styled(Link)<{ borderActive: boolean; hideLogo?: boolean }>`
-  ${({ theme, borderActive }) => css`
+export const Logo = styled(Link)`
+  ${({ theme }) => css`
     padding-right: 1rem;
     flex: 1;
     display: flex;
@@ -41,11 +41,8 @@ export const Logo = styled(Link)<{ borderActive: boolean; hideLogo?: boolean }>`
     svg {
       width: 100%;
       height: 100%;
-    }
-    ${borderActive &&
-    css`
-      border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    `}
+
+    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 

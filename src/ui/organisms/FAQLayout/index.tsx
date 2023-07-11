@@ -1,5 +1,8 @@
+// TODO: Add types
+
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import ReactMarkdown from "react-markdown";
 
 import * as S from "./styles";
 
@@ -26,8 +29,9 @@ const Menu = dynamic(
   }
 );
 
-const FAQLayout = ({ children }) => {
+const FAQLayout = ({ children, pageMessage, pageQuickAccess }) => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const pageMessageIcon = pageMessage?.icon?.data?.attributes?.url;
 
   return (
     <S.HomeLayout>
@@ -35,10 +39,18 @@ const FAQLayout = ({ children }) => {
       <S.Flex>
         <Menu />
         <S.Container>
-          <FaqTopMessage />
+          {pageMessage && (
+            <FaqTopMessage icon={pageMessageIcon}>
+              <ReactMarkdown>{pageMessage.description}</ReactMarkdown>
+            </FaqTopMessage>
+          )}
           <S.Wrapper>
             {children}
-            <FAQsidebar closeSidebar={() => setShowSidebar(false)} show={showSidebar} />
+            <FAQsidebar
+              pageQuickAccess={pageQuickAccess}
+              closeSidebar={() => setShowSidebar(false)}
+              show={showSidebar}
+            />
             <S.Sticker onClick={() => setShowSidebar(true)}>Still have questions?</S.Sticker>
           </S.Wrapper>
         </S.Container>
