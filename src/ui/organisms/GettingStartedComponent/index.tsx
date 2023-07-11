@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 export const GettingStartedComponent = () => {
   const questions = [
     "How to register on Polkadex website?",
@@ -16,6 +16,12 @@ export const GettingStartedComponent = () => {
     "Why is email registration necessary?",
   ];
   const router = useRouter();
+  const FAQHeader = dynamic(
+    () => import("@polkadex/orderbook-ui/molecules").then((mod) => mod.FAQHeader),
+    {
+      ssr: false,
+    }
+  );
   return (
     <S.Container>
       <FAQHeader pathname={router.pathname} heading={"Getting started"} />

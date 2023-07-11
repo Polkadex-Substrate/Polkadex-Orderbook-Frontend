@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import { Rating } from "../Rating";
 
@@ -8,7 +9,6 @@ import * as S from "./styles";
 
 import { Button, SwitchFAQ } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
-import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
 const Feedback = () => {
   const { onHandleAlert } = useSettingsProvider();
 
@@ -32,6 +32,12 @@ const Feedback = () => {
   const handleStarClick = (selectedValue) => {
     formik.setFieldValue("stars", selectedValue);
   };
+  const FAQHeader = dynamic(
+    () => import("@polkadex/orderbook-ui/molecules").then((mod) => mod.FAQHeader),
+    {
+      ssr: false,
+    }
+  );
   return (
     <S.Container>
       <FAQHeader heading={"Give us your feedback"} pathname={router.pathname} />
