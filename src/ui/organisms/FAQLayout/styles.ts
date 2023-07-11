@@ -26,10 +26,6 @@ export const Wrapper = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
-  @media screen and (max-height: 830px) {
-    justify-content: flex-start;
-    margin-top: 3rem;
-  }
 `;
 
 export const Flex = styled.div`
