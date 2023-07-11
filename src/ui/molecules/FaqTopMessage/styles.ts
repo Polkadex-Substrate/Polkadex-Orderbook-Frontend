@@ -13,12 +13,12 @@ export const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 2rem;
+    padding: 1rem 2rem;
     max-width: 160rem;
     margin: 0 auto;
 
     span {
-      font-size: 4rem;
+      font-size: 3rem;
     }
     p {
       color: ${theme.colors.tertiaryText};
