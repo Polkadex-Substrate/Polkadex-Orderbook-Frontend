@@ -22,15 +22,14 @@ const Feedback = () => {
       value: "",
     },
     validationSchema: Yup.object({
-      value: Yup.string().typeError("Input must be a string"),
       answerValue: Yup.string().typeError("Input must be a string"),
       userFriendlyValue: Yup.string().typeError("Input must be a string"),
+      value: Yup.string().typeError("Input must be a string"),
     }),
     onSubmit: (values) => {
       onHandleAlert(JSON.stringify(values, null, 2));
     },
   });
-  const disabled = !formik.dirty && formik.isValid;
 
   const router = useRouter();
   const handleStarClick = (selectedValue) => {
@@ -114,7 +113,7 @@ const Feedback = () => {
               background="primary"
               hoverColor="primary"
               color="white"
-              disabled={!disabled}
+              disabled={!(formik.isValid && formik.dirty)}
               isFull>
               Submit a request
             </Button>
