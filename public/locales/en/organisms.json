@@ -31,10 +31,57 @@
     "heading": "Give us your feedback",
     "firstQuestion": "Were we able to answer your question?",
     "secondQuestion": "Did you find the relevant information you were looking for?",
-    "thirdQuestion": "Was the FAQ Webpage user friendly?",
+    "thirdQuestion": "Was ,the FAQ Webpage user friendly?",
     "fourthQuestion": "Is there anything you would want us to improve?",
     "fifthQuestion": "How would you rate our service?",
     "inputPlaceholder": "Enter your comment",
     "submitRequest": "Submit a request"
+  },
+  "funds": {
+    "token": "Token",
+    "available": "Available",
+    "locked": "Locked",
+    "reserved": "Reserved",
+    "actions": "Actions"
+  },
+  "header": {
+    "noTradeWallet": "No trade wallet selected",
+    "account": "Account",
+    "login": "Log In",
+    "register": "Register"
+  },
+  "marketOrder": {
+    "buy": "Buy",
+    "sell": "Sell",
+    "limitOrder": "Limit Order",
+    "marketOrder": "Market Order"
+  },
+  "markets": {
+    "markets": "Markets",
+    "searchPlaceHolder": "Search Menu..",
+    "vol": "Vol:"
+  },
+  "menu": {
+    "exchange": "Exchange",
+    "balances": "Balances",
+    "accounts": "Accounts",
+    "light": "Light",
+    "dark": "Dark",
+    "help": "Help",
+    "faq": "FAQ",
+    "discord": "Discord"
+  },
+  "mnemonic": {
+    "title": "Mnemonic",
+    "doNotShareMnemonic": "Never share your mnemonic seed with anyone.",
+    "paperWallet": "Paper Wallet",
+    "print": "Print"
+  },
+  "navbar": {
+    "price": "Price {{price}}",
+    "volume24hr": "Volume 24h {{volume}}",
+    "price%24h": "Price % 24h",
+    "24hrhigh": "24h High",
+    "24hrlow": "24h Low"
   }
 }

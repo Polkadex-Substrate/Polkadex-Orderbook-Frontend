@@ -15,5 +15,9 @@
   "available": "Available",
   "termsOfService": "Terms of Service",
   "privacyPolicy": "Privacy Policy",
-  "disclaimerAndLegalNotice": "Disclaimer and Legal Notice"
+  "disclaimerAndLegalNotice": "Disclaimer and Legal Notice",
+  "termsOfUse": "Terms of Use",
+  "disclaimer": "Disclaimer",
+  "dataRetentionPolicy": "Data Retention Policy",
+  "excludedJurisdictions": "Excluded Jurisdictions"
 }
