@@ -1,19 +1,30 @@
-import { useState } from "react";
-import { Field } from "formik";
-
 import * as S from "./styles";
 import * as T from "./types";
 export const Rating = ({ onClick, value }: T.Props) => {
-  const stars = [0, 1, 2, 3, 4];
+  const stars = ["worst", "average", "good", "best"];
+
+  const getNumber = (value) => {
+    if (value === "worst") return 0;
+    else if (value === "average") return 1;
+    else if (value === "good") return 2;
+    else return 3;
+  };
   return (
-    <S.Container>
-      {stars.map((item, index) => {
-        return (
-          <S.Image key={item} onClick={() => onClick(index + 1)}>
-            <img src={value >= index + 1 ? "/img/pinkStar.svg" : "/img/greyStar.svg"} alt="" />
-          </S.Image>
-        );
-      })}
-    </S.Container>
+    <S.RatingWrapper>
+      {" "}
+      <S.Container>
+        {stars.map((item, index) => {
+          return (
+            <S.Image key={item} onClick={() => onClick(item)}>
+              <img
+                src={getNumber(value) >= index ? "/img/pinkStar.svg" : "/img/greyStar.svg"}
+                alt=""
+              />
+            </S.Image>
+          );
+        })}
+      </S.Container>
+      <S.RatingText>{value}</S.RatingText>
+    </S.RatingWrapper>
   );
 };
