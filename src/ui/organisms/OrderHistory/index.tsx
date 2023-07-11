@@ -53,6 +53,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
               <S.Th>Pair</S.Th>
               <S.Th>Date</S.Th>
               <S.Th>Type</S.Th>
+              <S.Th>Status</S.Th>
               <S.Th>Price</S.Th>
               <S.Th>Total</S.Th>
               <S.Th>Filled</S.Th>
@@ -87,12 +88,13 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                   const avgPrice = order.avg_filled_price;
                   const shortId =
                     order.id.slice(0, 4) + "..." + order.id.slice(order.id.length - 4);
-
+                  const status = order.status;
                   return (
                     <OrderHistoryCard
                       key={i}
                       id={shortId}
                       isSell={isSell}
+                      status={status}
                       orderSide={order.side}
                       orderType={order.order_type}
                       baseUnit={baseUnit}
