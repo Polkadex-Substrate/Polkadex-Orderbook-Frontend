@@ -83,5 +83,96 @@
     "price%24h": "Price % 24h",
     "24hrhigh": "24h High",
     "24hrlow": "24h Low"
+  },
+  "newAccount": {
+    "newAccountImported": "Trading Account Imported",
+    "createNewTradingAccount": {
+      "label": "Create new trading account",
+      "description": "Quickly create a trading account."
+    },
+    "importExistingTradingAccount": {
+      "label": "Import existing trading account",
+      "description": "Import existing trading account using your mnemonic phrases."
+    }
+  },
+  "openOrders": {
+    "pair": "Pair",
+    "date": "Date",
+    "type": "Type",
+    "price": "Price",
+    "total": "Total",
+    "filled": "Filled"
+  },
+  "orderBook": {
+    "table": {
+      "price": "Price ({{price}})",
+      "amount": "Amount ({{amount}})",
+      "sum": "Sum ({{sum}})",
+      "noAsks": "No Asks",
+      "noBids": "No Bids"
+    }
+  },
+  "orderHistory": {
+    "id": "Id",
+    "pair": "Pair",
+    "date": "Date",
+    "type": "Type",
+    "price": "Price",
+    "total": "Total",
+    "filled": "Filled",
+    "tryAgain": "Try Again"
+  },
+  "previewWallet": {
+    "title": "Preview Wallet",
+    "walletLabel": "Trading account name",
+    "accountNotPresent": "Account not present in the browser",
+    "tradeWalletLabel": "Trade Wallet",
+    "fundingWalletLabel": "Funding account",
+    "fundingAccountPresent": "Funding Account not present in polkadot.js extension",
+    "protectedPassword": "Protected by password",
+    "defaultTradeAccount": "Default trade account",
+    "using": "Using",
+    "use": "Use",
+    "export": "Export",
+    "removeAccount": "Remove account",
+    "removefromBlockchain": "Remove from blockchain",
+    "removeFromDevice": "Remove from device",
+
+    "copyToClipBoard": "Copy to clipboard",
+    "copied": "Copied"
+  },
+  "recentTrades": {
+    "title": "Recent Trades",
+    "price": "Price ({{price}})",
+    "amount": "Amount ({{amount}})",
+    "time": "Time",
+    "noRecentTrades": "No recent trades"
+  },
+  "tradeHistory": {
+    "pair": "Pair",
+    "date": "Date",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "filled": "Filled",
+    "tryAgain": "Try Again"
+  },
+  "transactions": {
+    "openOrders": "Open Orders",
+    "orderHistory": "Order History",
+    "tradeHistory": "Trade History",
+    "funds": "Funds",
+    "hideOtherPairs": "Hide Other Pairs",
+    "buy": "Buy",
+    "sell": "Sell",
+    "allTransactions": "All Transactions",
+    "pending": "Pending",
+    "completed": "Completed",
+    "canceled": "Canceled"
+  },
+  "unlockAccount": {
+    "title": "Unlock Account",
+    "description": "Enter 5-digit password to unlock your account",
+    "cancel": "Cancel"
   }
 }
