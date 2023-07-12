@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 
 import * as S from "./styles";
@@ -24,10 +25,12 @@ export const ResetPasswordTemplate = () => {
     },
   });
 
+  const { t } = useTranslation("resetPassword");
+
   return (
     <>
       <Head>
-        <title>Reset password | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -41,7 +44,7 @@ export const ResetPasswordTemplate = () => {
                   <OrderbookLogo />
                 </div>
                 <span>
-                  Back to <Link href="/signIn"> login</Link>
+                  {t("backTo")} <Link href="/signIn"> {t("login")}</Link>
                 </span>
               </S.Title>
               {isSuccess ? (
@@ -51,14 +54,14 @@ export const ResetPasswordTemplate = () => {
                   <S.Column />
                   <S.Box>
                     <S.BoxTitle>
-                      <h1>Reset password?</h1>
-                      <p>No worries, we`ll send you instructions.</p>
+                      <h1>{t("card.title")}</h1>
+                      <p>{t("card.description")}</p>
                     </S.BoxTitle>
                     <form onSubmit={handleSubmit}>
                       <InputLine
                         name="email"
-                        label="Email"
-                        placeholder="Enter your email"
+                        label={t("card.input.label")}
+                        placeholder={t("card.input.placeHolder")}
                         disabled={isLoading}
                         error={errors.email && touched.email && errors.email}
                         {...getFieldProps("email")}
@@ -71,7 +74,7 @@ export const ResetPasswordTemplate = () => {
                         color="white"
                         isLoading={isLoading}
                         isFull>
-                        Send reset code
+                        {t("card.button")}
                       </Button>
                     </form>
                   </S.Box>
@@ -86,17 +89,16 @@ export const ResetPasswordTemplate = () => {
 };
 
 const Success = () => {
+  const { t } = useTranslation("resetPassword");
+
   return (
     <S.Success>
       <div>
         <img src="/img/emailSent.svg" alt="email sent" />
       </div>
-      <h2>Email has been sent!</h2>
-      <p>
-        If this email address was used to create an account, a code will arrive in your email.
-        Please check your email.
-      </p>
-      <small>You will be automatically redirected in 5 seconds. </small>
+      <h2>{t("success.heading")}</h2>
+      <p>{t("success.description")}</p>
+      <small>{t("success.small")} </small>
     </S.Success>
   );
 };

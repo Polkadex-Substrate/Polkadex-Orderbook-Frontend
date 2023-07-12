@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
     border-top: 1px solid ${theme.colors.tertiaryBackgroundOpacity};
     padding: 0.4rem 1rem;
     background: ${theme.colors.primaryBackground};
-    z-index: 2;
+    z-index: 1;
     p {
       font-size: 1.2rem;
     }

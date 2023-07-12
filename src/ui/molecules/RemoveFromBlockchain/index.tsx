@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -19,24 +20,29 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
     () => values.account === `delete ${name} account`.replace(/\s+/g, " ").trim(),
     [values, name]
   );
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string, args = {}) => translation(`removeFromBlockchain.${key}`, args);
+
   return (
     <S.Wrapper>
       <S.Tag>
-        <strong>Warning: </strong>This action is not reversible
+        <strong>{t("warningLabel")}</strong>
+        {t("text")}
       </S.Tag>
       <S.Title>
-        <h2>Remove account from the blockchain</h2>
-        <p>Don’t worry your funds are safe in your funding account</p>
+        <h2>{t("description")}</h2>
+        <p>{t("summary")}</p>
       </S.Title>
       <form onSubmit={handleSubmit}>
         <InputLine
           name="account"
           label={
             <>
-              To verify, type <S.Strong> delete {name} account</S.Strong> below:
+              {t("toVerify")} <S.Strong> {t("deleteAccount", { name })}</S.Strong> {t("below")}
             </>
           }
-          placeholder="Type here"
+          placeholder={t("inputPlaceholder")}
           error={errors.account && touched.account && errors.account}
           {...getFieldProps("account")}
         />
@@ -47,7 +53,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
             color="tertiaryText"
             type="button"
             onClick={onClose}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             size="large"
@@ -55,7 +61,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
             background="primary"
             type="submit"
             disabled={!isDisabled}>
-            Continue
+            {t("continue")}
           </Button>
         </S.Actions>
       </form>

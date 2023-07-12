@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -22,10 +23,13 @@ export const CodeVerificationTemplate = () => {
     },
   });
 
+  const { t } = useTranslation("codeVerification");
+  const { t: tc } = useTranslation("common");
+
   return (
     <>
       <Head>
-        <title>Verification Code | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -39,17 +43,17 @@ export const CodeVerificationTemplate = () => {
                   <OrderbookLogo />
                 </div>
                 <span>
-                  Not a member? <Link href="/sign"> Sign Up</Link>
+                  {t("notMember")} <Link href="/sign"> {tc("signUp")}</Link>
                 </span>
               </S.Title>
               <S.Card>
                 <S.Column />
                 <S.Box>
-                  <h1>Code Verification</h1>
+                  <h1>{t("heading")}</h1>
                   <form onSubmit={handleSubmit}>
                     <InputLine
                       name="code"
-                      label="Code Verification"
+                      label={t("inputLabel")}
                       placeholder="000000"
                       error={errors.code && touched.code && errors.code}
                       {...getFieldProps("code")}>
@@ -62,7 +66,7 @@ export const CodeVerificationTemplate = () => {
                       background="primary"
                       color="white"
                       isFull>
-                      Verify code
+                      {t("verifyCode")}
                     </Button>
                   </form>
                 </S.Box>
@@ -81,9 +85,11 @@ const Resend = ({ onResend }) => {
     setTime(60);
     onResend();
   };
+
+  const { t } = useTranslation("codeVerification");
   return (
     <S.ResendButton disabled={time !== 0} type="button" onClick={handleResend}>
-      {time === 0 ? "Resend Code" : `Resend Code in ${time}s`}
+      {time === 0 ? t("resend.resendCode") : t("resend.timer", { time })}
     </S.ResendButton>
   );
 };

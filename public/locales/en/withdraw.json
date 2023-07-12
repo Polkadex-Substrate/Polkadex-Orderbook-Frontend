@@ -1,0 +1,25 @@
+{
+  "title": "Withdraw | Polkadex Orderbook",
+  "overview": "Overview",
+  "heading": "Withdraw Crypto",
+  "description": "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control.",
+  "walletNotSelected": "Wallet not selected",
+  "selectCoin": "Select a coin",
+  "inputLabel": "Token Amount",
+  "accountNotFound": "Funding account not found in polkadot.js extension",
+  "history": "History",
+
+  "pending": "Pending",
+  "readyToClaim": "Ready to Claim",
+  "claimed": "Claimed",
+  "showSelectedCoin": "Show only selected coin",
+  "alreadyInProgress": "There is already a transaction in progress",
+  "claim": "Claim",
+
+  "table": {
+    "name": "Name",
+    "date": "Date",
+    "status": "Status",
+    "amount": "Amount"
+  }
+}

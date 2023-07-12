@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import * as S from "./styles";
 
 import { ResultFound, Skeleton, Spinner } from "@polkadex/orderbook-ui/molecules";
@@ -7,6 +9,9 @@ import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/re
 export const filters = ["all", "buy", "sell"];
 
 export const RecentTrades = () => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string, args = {}) => translation(`recentTrades.${key}`, args);
+
   const { list, loading, isDecreasing, quoteUnit, baseUnit, pricePrecision, amountPrecision } =
     useRecentTradesProvider();
 
@@ -14,7 +19,7 @@ export const RecentTrades = () => {
     <S.MainContainer>
       <S.Main>
         <S.Header>
-          <h2>Recent Trades</h2>
+          <h2>{t("title")}</h2>
         </S.Header>
         {loading ? (
           <S.SpinnerWrapper>
@@ -23,9 +28,9 @@ export const RecentTrades = () => {
         ) : list.length ? (
           <>
             <S.Head>
-              <S.CellHead>Price({quoteUnit})</S.CellHead>
-              <S.CellHead>Amount({baseUnit})</S.CellHead>
-              <S.CellHead>Time</S.CellHead>
+              <S.CellHead>{t("price", { price: quoteUnit })}</S.CellHead>
+              <S.CellHead>{t("amount", { amount: baseUnit })}</S.CellHead>
+              <S.CellHead>{t("time")}</S.CellHead>
             </S.Head>
             <S.Content>
               {list.map((order, i) => {
@@ -43,7 +48,7 @@ export const RecentTrades = () => {
             </S.Content>
           </>
         ) : (
-          <ResultFound>No recent trades</ResultFound>
+          <ResultFound>{t("noRecentTrades")}</ResultFound>
         )}
       </S.Main>
     </S.MainContainer>

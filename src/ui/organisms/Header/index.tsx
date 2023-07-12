@@ -1,5 +1,7 @@
-import { ReactNode, isValidElement, useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import Link from "next/link";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -18,9 +20,10 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { transformAddress } from "@polkadex/orderbook/providers/user/profile/helpers";
+import { languages as avaliableLanguages } from "@polkadex/orderbook/utils/languages";
 
-const languages = ["en", "fr", "es", "zh"];
-type Languages = "en" | "fr" | "es" | "zh";
+const languages = avaliableLanguages.map((l) => l.code);
+type Languages = "en";
 
 export const Header = ({ children }: { children?: ReactNode }) => {
   const { notifications, language, onChangeLanguage } = useSettingsProvider();
@@ -43,6 +46,14 @@ export const Header = ({ children }: { children?: ReactNode }) => {
     tradeAccountInfo &&
     ` • ${tradeAccountInfo ? transformAddress(tradeAccountInfo.address, 5) : ""}`;
 
+  const handleChangeLanguage = (languageCode: Languages) => {
+    i18next.changeLanguage(languageCode);
+    onChangeLanguage(languageCode);
+  };
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`header.${key}`);
+
   return (
     <S.Wrapper>
       <S.Content>
@@ -62,7 +73,7 @@ export const Header = ({ children }: { children?: ReactNode }) => {
             </Dropdown.Trigger>
             <Dropdown.Menu fill="secondaryBackgroundSolid">
               {languages.map((value: Languages) => (
-                <Dropdown.Item onAction={() => onChangeLanguage(value)} key={value}>
+                <Dropdown.Item onAction={() => handleChangeLanguage(value)} key={value}>
                   {value.toUpperCase()}
                 </Dropdown.Item>
               ))}
@@ -98,10 +109,10 @@ export const Header = ({ children }: { children?: ReactNode }) => {
                         <span>{addressName}</span>
                       </p>
                     ) : (
-                      <p>No trade wallet selected</p>
+                      <p>{t("noTradeWallet")}</p>
                     )}
                   </S.AccountInfo>
-                  <S.AccountMessage>Account</S.AccountMessage>
+                  <S.AccountMessage>{t("account")}</S.AccountMessage>
                 </S.Account>
               </Popover.Trigger>
               <Popover.Content>
@@ -110,8 +121,8 @@ export const Header = ({ children }: { children?: ReactNode }) => {
             </Popover>
           ) : (
             <S.UserActions>
-              <Link href="/signIn">Log In</Link>
-              <Link href="/sign">Register</Link>
+              <Link href="/signIn">{t("login")}</Link>
+              <Link href="/sign">{t("register")}</Link>
             </S.UserActions>
           )}
         </S.AccountContainer>

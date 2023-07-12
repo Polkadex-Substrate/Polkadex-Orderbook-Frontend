@@ -1,0 +1,27 @@
+{
+  "title": "New Account | Polkadex Orderbook",
+  "alreadyMember": "Already a member?",
+  "signIn": "Sign In",
+  "card": {
+    "title": "Discover the decentralized world.",
+    "description": "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control.",
+    "secondaryTitle": "Sign up to Orderbook",
+    "input": {
+      "email": {
+        "label": "Email",
+        "placeHolder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeHolder": "Enter your password"
+      },
+      "repeatPassword": {
+        "label": "Repeat password",
+        "placeHolder": "Repeat your password"
+      },
+      "button": "Create Account",
+      "disabledText": "We are only onboarding 50 users per week at the moment. The limit has reached for this week. Check back soon."
+    },
+    "checkBox": "By clicking the Create Account button below, I hereby agree with Polkadex"
+  }
+}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -29,30 +30,33 @@ export const MarketOrder = () => {
     amountBuy: "",
   });
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`marketOrder.${key}`);
+
   return (
     <S.Section>
       <Tabs>
         <S.Header>
           <S.HeaderWrapper>
             <TabHeader>
-              <S.ActionItem isActive>Buy</S.ActionItem>
+              <S.ActionItem isActive>{t("buy")}</S.ActionItem>
             </TabHeader>
             <TabHeader>
-              <S.ActionItem>Sell</S.ActionItem>
+              <S.ActionItem>{t("sell")}</S.ActionItem>
             </TabHeader>
           </S.HeaderWrapper>
           <Dropdown>
             <Dropdown.Trigger>
               <S.DropdownTrigger>
-                {isLimit ? "Limit Order" : "Market Order"} <Icons.ArrowBottom />
+                {isLimit ? t("limitOrder") : t("marketOrder")} <Icons.ArrowBottom />
               </S.DropdownTrigger>
             </Dropdown.Trigger>
             <Dropdown.Menu fill="secondaryBackgroundSolid">
               <Dropdown.Item key="limit" onAction={() => handleChangeType(true)}>
-                Limit Order
+                {t("limitOrder")}
               </Dropdown.Item>
               <Dropdown.Item key="market" onAction={() => handleChangeType(false)}>
-                Market Order
+                {t("marketOrder")}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
