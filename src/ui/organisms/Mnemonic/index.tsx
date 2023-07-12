@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -47,6 +48,10 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
     }
     `,
   });
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`mnemonic.${key}`);
+
   return (
     <S.Wrapper isActive={state}>
       {!!mnemonic?.length && (
@@ -55,7 +60,7 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
         </div>
       )}
       <S.Title>
-        <span>Mnemonic</span>
+        <span>{t("title")}</span>
         <button type="button" onClick={() => setState(!state)}>
           {state ? <Icons.Show /> : <Icons.Hidden />} {state ? "Show" : "Hide"}
         </button>
@@ -63,7 +68,7 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
       {state && (
         <S.Container>
           <S.Phrases>
-            <p>Never share your mnemonic seed with anyone. </p>
+            <p>{t("doNotShareMnemonic")} </p>
             <S.Content>
               {mnemonic?.map((value, i) => (
                 <span key={i}>{value}</span>
@@ -71,9 +76,9 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
             </S.Content>
           </S.Phrases>
           <S.Footer>
-            <span>Paper Wallet</span>
+            <span>{t("paperWallet")}</span>
             <button type="button" onClick={handlePrint}>
-              <Icons.Download /> Print
+              <Icons.Download /> {t("print")}
             </button>
           </S.Footer>
         </S.Container>

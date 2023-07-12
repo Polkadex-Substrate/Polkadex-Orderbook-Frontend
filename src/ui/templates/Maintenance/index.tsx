@@ -1,23 +1,22 @@
 import Head from "next/head";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 export const Maintenance = () => {
+  const { t } = useTranslation("maintenance");
   return (
     <S.Wrapper>
       <Head>
-        <title>Polkadex - Maintenance</title>
+        <title>{t("title")}</title>
       </Head>
       <S.Container>
         <S.TitleContainer>
           <S.TitleWrapper>
-            <h1>We’re improving your Experience</h1>
-            <p>
-              We’ll be back up and running again shortly. Please check out our social channels
-              for further update!
-            </p>
+            <h1>{t("heading")}</h1>
+            <p>{t("description")}</p>
           </S.TitleWrapper>
           <S.SocialIcons>
             <a href="https://twitter.com/polkadex" target="_blank" rel="noreferrer">

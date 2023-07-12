@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useTranslation } from "react-i18next";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 
@@ -56,10 +57,12 @@ export const Migration = ({
     return () => clearTimeout(initTimer);
   }, [dateIntimestampMs, updateRemainingTime]);
 
+  const { t } = useTranslation("migration");
+
   return (
     <S.Wrapper>
       <Head>
-        <title>Polkadex - Orderbook v2 migration</title>
+        <title>{t("title")}</title>
       </Head>
       <S.Container>
         <S.Content>
@@ -113,23 +116,23 @@ export const Migration = ({
         </S.Content>
         <S.Timer>
           <S.TimerWrapper>
-            <h3>The migration ends in:</h3>
+            <h3>{t("migrationEndsIn")}</h3>
             <S.CountDown>
               <div>
                 <span>{state.days}</span>
-                <p>days</p>
+                <p>{t("days")}</p>
               </div>
               <div>
                 <span>{state.hours}</span>
-                <p>hrs</p>
+                <p>{t("hrs")}</p>
               </div>
               <div>
                 <span>{state.minutes}</span>
-                <p>mins</p>
+                <p>{t("mins")}</p>
               </div>
               <div>
                 <span>{state.seconds}</span>
-                <p>secs</p>
+                <p>{t("secs")}</p>
               </div>
             </S.CountDown>
           </S.TimerWrapper>
@@ -140,23 +143,21 @@ export const Migration = ({
   );
 };
 
-const MigrationText = ({ chainBridgeDate = "August 2023" }) => (
-  <>
-    <p>
-      Your accounts are being migrated. Hang tight and get ready for better decentralized
-      trading with Orderbook v2. Keep in mind you will not be able to trade during migration.
-      All open orders will be cancelled and your funds will be automatically withdrawn from
-      your trading account to your main account (aka your Polkadex address).
-    </p>
-    <p>
-      <span>
-        Please note, cUSDT will no longer be used for trading on Polkadex Orderbook. If you
-        have cUSDT, please use the{" "}
-        <a href="https://tokenmanager.polkadex.trade" target="_blank" rel="noreferrer">
-          ChainBridge portal
-        </a>{" "}
-        before {chainBridgeDate} to return your USDT to your Ethereum address.
-      </span>
-    </p>
-  </>
-);
+const MigrationText = ({ chainBridgeDate = "August 2023" }) => {
+  const { t } = useTranslation("migration");
+
+  return (
+    <>
+      <p>{t("accountMigration")}</p>
+      <p>
+        <span>
+          {t("description1")}{" "}
+          <a href="https://tokenmanager.polkadex.trade" target="_blank" rel="noreferrer">
+            {t("chainBridgePortal")}
+          </a>{" "}
+          {t("description2", { chainBridgeDate })}
+        </span>
+      </p>
+    </>
+  );
+};

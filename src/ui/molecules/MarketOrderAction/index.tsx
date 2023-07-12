@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -41,6 +42,9 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
     slider,
   } = usePlaceOrder(isSell, isLimit, form, setForm);
 
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`marketOrderAction.${key}`);
+
   return (
     <S.WrapperOrder>
       {showProtectedPassword ? (
@@ -55,7 +59,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
               stroke="text"
             />
             <S.WrapperBalance>
-              <small>Available</small>
+              <small>{t("avaliable")}</small>
               <S.Span>
                 <Decimal fixed={8} hasStyle={false}>
                   {availableAmount}
@@ -68,7 +72,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
             <form onSubmit={executeOrder}>
               {isLimit && (
                 <MarketInput
-                  label="Price"
+                  label={t("priceLabel")}
                   icon="Price"
                   inputInfo={quoteTicker}
                   fullWidth={true}
@@ -82,7 +86,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 />
               )}
               <MarketInput
-                label="Amount"
+                label={t("amountLabel")}
                 icon="Amount"
                 inputInfo={isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}
                 fullWidth={true}
@@ -107,12 +111,12 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
 
               {isLimit && (
                 <MarketInput
-                  label="Total"
+                  label={t("totalLabel")}
                   inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
                   fullWidth={true}
                   type="text"
                   value={total}
-                  placeholder={isLimit ? "Total" : "Estimated Amount"}
+                  placeholder={isLimit ? t("totalLabel") : t("estimatedAmount")}
                   autoComplete="off"
                   disabled={isOrderLoading}
                   readOnly
@@ -122,11 +126,9 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 <ButtonStatus
                   isSell={isSell}
                   heading={{
-                    text: !isSignedIn
-                      ? "Sign In to Place Order"
-                      : `${orderSide} ${baseTicker}`,
-                    loading: "Waiting",
-                    success: "Order Created",
+                    text: !isSignedIn ? t("signIntoPlaceOrder") : `${orderSide} ${baseTicker}`,
+                    loading: t("waiting"),
+                    success: t("orderCreated"),
                   }}
                   isLoading={isOrderLoading}
                   isSuccess={isOrderExecuted}
@@ -135,7 +137,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 />
               ) : (
                 <Link href="/settings">
-                  <S.Connect>Connect Trading Account</S.Connect>
+                  <S.Connect>{t("connectTradingAccount")}</S.Connect>
                 </Link>
               )}
             </form>
@@ -173,12 +175,16 @@ const ProtectPassword = () => {
   const error = "";
 
   const isValidSize = useMemo(() => values?.password?.length === 5, [values.password]);
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`marketOrderAction.protectPassword.${key}`);
+
   return (
     <LoadingSection isActive={isLoading} color="transparent">
       <form onChange={handleSubmit}>
         <S.ProtectPassword>
           <S.ProtectPasswordTitle>
-            <span>Input 5-digit trading password</span>
+            <span>{t("title")}</span>
             <S.Show
               type="button"
               onClick={() => setFieldValue("showPassword", !values.showPassword)}>

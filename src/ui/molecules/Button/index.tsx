@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Icon, LoadingSpinner } from "../";
 
 import * as S from "./styles";
@@ -13,22 +15,26 @@ export const Button = ({
   hoverColor = "primary",
   isLoading = false,
   ...props
-}: T.Props) => (
-  <S.Wrapper
-    size={size}
-    background={background}
-    color={color}
-    isFull={isFull}
-    hasIcon={!!icon}
-    isDisabled={props.disabled}
-    hoverColor={hoverColor}
-    isLoading={isLoading}
-    {...props}>
-    {isLoading ? (
-      <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />
-    ) : (
-      !!icon && <Icon {...icon} />
-    )}
-    {isLoading ? <p>Loading</p> : children}
-  </S.Wrapper>
-);
+}: T.Props) => {
+  const { t } = useTranslation("molecules");
+
+  return (
+    <S.Wrapper
+      size={size}
+      background={background}
+      color={color}
+      isFull={isFull}
+      hasIcon={!!icon}
+      isDisabled={props.disabled}
+      hoverColor={hoverColor}
+      isLoading={isLoading}
+      {...props}>
+      {isLoading ? (
+        <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />
+      ) : (
+        !!icon && <Icon {...icon} />
+      )}
+      {isLoading ? <p>{t("button.loading")}</p> : children}
+    </S.Wrapper>
+  );
+};
