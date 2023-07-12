@@ -39,7 +39,7 @@ export const Migration = ({
 
     return {
       days: addZeros(timestampDay.diff(nowDay, "days")),
-      hours: addZeros(timestampDay.diff(nowDay, "hours") % 25),
+      hours: addZeros(timestampDay.diff(nowDay, "hours") % 24),
       minutes: addZeros(timestampDay.diff(nowDay, "minutes") % 60),
       seconds: addZeros(timestampDay.diff(nowDay, "seconds") % 60),
     };
