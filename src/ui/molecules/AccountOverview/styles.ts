@@ -130,6 +130,9 @@ export const Card = styled.div<{ isHoverable?: boolean }>`
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
+    &:last-child {
+      margin-bottom: 1rem;
+    }
     ${isHoverable &&
     css`
       cursor: pointer;

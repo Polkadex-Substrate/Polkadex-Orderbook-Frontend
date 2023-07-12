@@ -1,0 +1,11 @@
+{
+  "title": "Verification Code | Polkadex Orderbook",
+  "notMember": "Not a member?",
+  "heading": "Code Verification",
+  "inputLabel": "Code Verification",
+  "verifyCode": "Verify code",
+  "resend": {
+    "resendCode": "Resend Code",
+    "timer": "Resend Code in {{time}}s"
+  }
+}

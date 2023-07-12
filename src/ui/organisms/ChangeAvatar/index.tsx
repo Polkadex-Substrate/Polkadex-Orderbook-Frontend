@@ -1,5 +1,6 @@
 import { AvatarProps, BigHead } from "@bigheads/core";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { randomAvatars } from "./randomAvatars";
@@ -20,22 +21,26 @@ export const ChangeAvatar = ({ onClose = undefined }: Props) => {
     profileState.onUserSetAvatar(state.toString());
     onClose();
   };
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`changeAvatar.${key}`);
+
   return (
     <S.Main>
       <S.Header type="button" onClick={onClose}>
         <Icons.SingleArrowLeft />
       </S.Header>
       <S.Content>
-        <h2>Select your Avatar</h2>
-        <p>Select an avatar to use as your profile picture</p>
+        <h2>{t("title")}</h2>
+        <p>{t("description")}</p>
         <RandomAvatars currentAvatar={state} handleSelect={handleChange} />
       </S.Content>
       <S.Footer>
         <S.Button type="button" onClick={onClose}>
-          Cancel
+          {t("cancel")}
         </S.Button>
         <S.Button disabled={state === currentAvatar} type="button" onClick={handleSubmit}>
-          Save
+          {t("save")}
         </S.Button>
       </S.Footer>
     </S.Main>

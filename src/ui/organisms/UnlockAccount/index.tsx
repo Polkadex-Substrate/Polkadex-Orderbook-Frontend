@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -23,14 +24,17 @@ export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
   const message =
     isValid && dirty ? "Lets go" : `${digitsLeft} digit${digitsLeft > 1 ? "s" : ""} left`;
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`unlockAccount.${key}`);
+
   return (
     <S.Wrapper>
       <S.Title>
         <S.Icon>
           <Icons.Lock />
         </S.Icon>
-        <h2>Unlock account</h2>
-        <p>Enter 5-digit password to unlock your account</p>
+        <h2>{t("title")}</h2>
+        <p>{t("description")}</p>
       </S.Title>
       <form onChange={() => handleSubmit()}>
         <PassCode
@@ -47,7 +51,7 @@ export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
               color="tertiaryText"
               type="button"
               onClick={handleClose}>
-              Cancel
+              {t("cancel")}
             </Button>
           )}
           <S.Span color={isValid && dirty ? "green" : "secondaryBackground"}>{message}</S.Span>
