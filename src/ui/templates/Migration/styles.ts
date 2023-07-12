@@ -146,7 +146,7 @@ export const Timer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: fit-content;
-
+  margin-top: 3rem;
   gap: 6rem;
   flex: 1;
   img {
@@ -167,7 +167,7 @@ export const TimerWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 3rem;
     h3 {
       color: ${theme.colors.white};
     }
