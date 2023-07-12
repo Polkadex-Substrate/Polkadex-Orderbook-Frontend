@@ -11,12 +11,12 @@ export const Container = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
   column-gap: 4rem;
   flex: 1;
+  justify-content: center;
   flex-wrap: wrap;
-  @media screen and (min-width: 855px) {
-    flex-direction: row;
+  @media screen and (max-width: 945px) {
+    justify-content: flex-start;
   }
 `;
 export const Details = styled.div`
@@ -142,6 +142,8 @@ export const Timer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: fit-content;
+
   gap: 6rem;
   flex: 1;
   img {
@@ -152,9 +154,7 @@ export const Timer = styled.div`
     font-weight: normal;
     font-size: 1.4rem;
   }
-  @media screen and (max-width: 1006px) {
-    padding: 2rem;
-  }
+
   @media screen and (min-width: 855px) {
     align-items: flex-start;
   }
@@ -198,6 +198,14 @@ export const CountDown = styled.div`
     }
     span {
       color: ${theme.colors.white};
+    }
+    @media screen and (max-width: 612px) {
+      span {
+        font-size: 4rem;
+      }
+      p {
+        font-size: 1.5rem;
+      }
     }
   `}
 `;
