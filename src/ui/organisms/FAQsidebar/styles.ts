@@ -25,7 +25,7 @@ export const Container = styled.div<{ show: boolean }>`
         visibility:${show ? "visible" : "hidden"};
         z-index:2;
         background:${theme.colors.primaryBackground};
-        transition: 0.2s;
+        transition: 0.2s ease background-color;;
   `};
   `}
 `;
@@ -78,7 +78,7 @@ export const Social = styled(Link)`
   gap: 1rem;
   align-items: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease background-color;
   &:hover {
     color: rgba(255, 255, 255, 0.7);
     svg {
@@ -108,7 +108,7 @@ export const IconWrapper = styled(Link)`
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background-color ease 0.2s;
     &:hover {
       background-color: ${theme.colors.tertiaryBackground};
     }

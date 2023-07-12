@@ -29,8 +29,10 @@ export const FAQsidebar = ({ closeSidebar, pageQuickAccess, show }: T.Props) => 
         {generikLinks?.map((value, i) => {
           const icon = value?.icon?.data?.attributes?.url;
           const iconUrl = getImgUrl(icon);
+          const link = `/faq/${value.link}`;
+
           return (
-            <S.Social key={i} href={value.link}>
+            <S.Social key={i} href={link}>
               {icon && (
                 <div>
                   <img src={iconUrl} />

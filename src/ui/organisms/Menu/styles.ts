@@ -93,8 +93,9 @@ export const BottomContainer = styled.div``;
 
 export const Wrapper = styled.nav`
   ${({ theme }) => css`
-    position: sticky;
-    top: 5.5rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     left: 0;
     display: flex;
     padding: 1rem;
@@ -103,7 +104,6 @@ export const Wrapper = styled.nav`
     @media screen and (max-width: 590px) {
       border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     }
-
     @media screen and (min-width: 590px) {
       flex: 1;
       position: sticky;

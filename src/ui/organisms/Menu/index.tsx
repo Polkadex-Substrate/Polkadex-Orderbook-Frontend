@@ -132,12 +132,14 @@ const Help = () => {
     <S.Terms>
       <span role="button" onClick={() => setState(!state)}>
         <S.WrapperIcon>
-          <div>
-            <Icon name="Question" background="none" stroke="text" size="large" />
-          </div>
-          <div>
-            <S.Span>{t("help")}</S.Span>
-          </div>
+          <Link href="/faq">
+            <div>
+              <Icon name="Question" background="none" stroke="text" size="large" />
+            </div>
+            <div>
+              <S.Span>{t("help")}</S.Span>
+            </div>
+          </Link>
         </S.WrapperIcon>
       </span>
       {state && (
