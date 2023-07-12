@@ -1,14 +1,26 @@
+// TODO: Add types
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import ReactMarkdown from "react-markdown";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";
+import { getImgUrl } from "@polkadex/web-helpers";
 
 export const FaqTemplate = ({ title, seo, blocks }) => {
   const router = useRouter();
+  const pageHero = blocks?.[1];
+  const pageSearch = blocks?.[2];
+  const pageCategories = blocks?.[4];
+  const pageVideos = blocks?.[5];
+  const pageTrendingTopics = blocks?.[6];
+
+  const featuredVideo = pageVideos?.videoCard?.find((v) => v.featured);
+  const allPageVideos = pageVideos?.videoCard?.filter((v) => !v.featured);
+
   return (
     <>
       <Head>
@@ -16,91 +28,99 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
         <meta name="description" content={seo?.metaDescription} />
       </Head>
       <S.Wrapper>
-        <FAQHeader noBorder heading="Frequently asked question" pathname={router.pathname}>
-          <p>
-            Would request you to search with the keyword in your query inside the{" "}
-            <span>Search Bar</span> and check if the solution provided suffice enough.
-          </p>
+        <FAQHeader noBorder heading={pageHero?.title} pathname={router.pathname}>
+          {pageHero?.description && <ReactMarkdown>{pageHero?.description}</ReactMarkdown>}
         </FAQHeader>
         <S.Introduction>
           <S.IntroductionSearch>
             <S.Search>
               <S.SearchContainer>
                 <Icons.Search />
-                <input id="search" type="text" placeholder="Ask your question.." />
+                <input id="search" type="text" placeholder={pageSearch?.placeholder} />
               </S.SearchContainer>
               <button type="button" onClick={() => window.alert("Searching..")}>
-                Search
+                {pageSearch?.buttonTitle}
               </button>
             </S.Search>
-            <p>
-              If your query is not listed and you`re unable to find a solution, please reach
-              out to <Link href="#">#Polkadex Orderbook Helpdesk channel on Discord</Link>{" "}
-              which would connect you with a support executive.
-            </p>
+            <ReactMarkdown>{pageSearch?.message}</ReactMarkdown>
           </S.IntroductionSearch>
         </S.Introduction>
         <S.Trending>
-          <h2>Trending topics</h2>
+          <h2>{pageTrendingTopics?.title}</h2>
           <S.TrendingCards>
-            {trendingTopics.map((v) => (
-              <div key={v.id}>
-                <span>{v.title}</span>
-                <p>{v.description}</p>
-              </div>
-            ))}
+            {pageTrendingTopics?.faq_articles?.data?.map(({ attributes }) => {
+              const link = `/${attributes.faq_category.data.attributes.slug}/${attributes.slug}`;
+              return (
+                <Link href={link} key={attributes.slug}>
+                  <span>{attributes.heading}</span>
+                  <p>{attributes.shortDescription}</p>
+                </Link>
+              );
+            })}
           </S.TrendingCards>
         </S.Trending>
         <S.Categories>
           <S.CategoriesTitle>
-            <h2>Categories</h2>
-            <p>Perhaps you can find the answer in out collections</p>
+            <h2>{pageCategories?.title}</h2>
+            <p>{pageCategories?.description}</p>
           </S.CategoriesTitle>
           <S.CategoriesCards>
-            {categories.map((v) => (
-              <S.CategoriesCard key={v.id}>
-                <div>
-                  <Icons.AddWallet />
-                </div>
-                <span>{v.title}</span>
-              </S.CategoriesCard>
-            ))}
+            {pageCategories?.faq_categories?.data?.map(({ attributes }) => {
+              const icon = attributes?.icon?.data?.attributes?.url;
+              const iconUrl = getImgUrl(icon);
+              return (
+                <S.CategoriesCard href={`/${attributes.slug}`} key={attributes.slug}>
+                  {icon && (
+                    <div>
+                      <img src={iconUrl} />
+                    </div>
+                  )}
+                  <span>{attributes.title}</span>
+                </S.CategoriesCard>
+              );
+            })}
           </S.CategoriesCards>
         </S.Categories>
         <S.Videos>
           <S.VideosTitle>
             <div>
-              <h2>Tutorials & videos</h2>
-              <p>These videos might help you</p>
+              <h2>{pageVideos?.title}</h2>
+              <p>{pageVideos?.description}</p>
             </div>
             <Link href="#">View all</Link>
           </S.VideosTitle>
           <S.VideosCards>
-            <S.VideosPrimary>
-              <S.VideosPrimaryContainer>
-                <p>ORDERBOOK IS LIVE: Orderbook Demo</p>
-                <span>Polkadex</span>
-              </S.VideosPrimaryContainer>
-              <S.IframeContainer>
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube-nocookie.com/embed/usrE9CGC_1M"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                />
-              </S.IframeContainer>
-            </S.VideosPrimary>
+            {featuredVideo && (
+              <S.VideosPrimary>
+                <S.VideosPrimaryContainer>
+                  <p>{featuredVideo.title}</p>
+                  <span>{featuredVideo.author}</span>
+                </S.VideosPrimaryContainer>
+                <S.IframeContainer>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={featuredVideo.url}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                </S.IframeContainer>
+              </S.VideosPrimary>
+            )}
             <S.VideosSecondary>
-              {videos.map((v) => (
-                <S.VideosSecondaryCard key={v.id}>
-                  <img src={`/img/faq/${v.image}`} alt="Polkadex video" />
-                  <div>
-                    <p>{v.title}</p>
-                    <span>{v.author}</span>
-                  </div>
-                </S.VideosSecondaryCard>
-              ))}
+              {allPageVideos?.map((value) => {
+                const icon = value?.image?.data?.attributes?.url;
+                const iconUrl = getImgUrl(icon);
+                return (
+                  <S.VideosSecondaryCard key={value.id}>
+                    <img src={iconUrl} alt="Polkadex video" />
+                    <div>
+                      <p>{value.title}</p>
+                      <span>{value.author}</span>
+                    </div>
+                  </S.VideosSecondaryCard>
+                );
+              })}
             </S.VideosSecondary>
           </S.VideosCards>
         </S.Videos>
@@ -108,127 +128,3 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
     </>
   );
 };
-
-const videos = [
-  {
-    id: 1,
-    title: "Quick guide: Stake your PDEX and earn amazing APY!",
-    author: "Polkadex",
-    image: "stakingYoutube.png",
-    link: "",
-  },
-  {
-    id: 2,
-    title: "PDEX Migration walk through",
-    author: "Polkadex",
-    link: "",
-    image: "migrationYoutube.png",
-  },
-  {
-    id: 3,
-    title: "Run a Polkadex validator node with OnFinality",
-    author: "Polkadex",
-    link: "",
-    image: "validatorYoutube.png",
-  },
-  {
-    id: 4,
-    title: "How to set an identity on-chain and verify your validator",
-    author: "Polkadex",
-    link: "",
-    image: "identityYoutube.png",
-  },
-  {
-    id: 5,
-    title: "Sneak Peek: The PolkaIDO Interface",
-    author: "Polkadex",
-    link: "",
-    image: "polkaidoYoutube.png",
-  },
-];
-
-const categories = [
-  {
-    id: "GettingStarted",
-    title: "Getting started",
-  },
-  {
-    id: "Accounts",
-    title: "Accounts",
-  },
-  {
-    id: "DepositWithdraw",
-    title: "Deposit/Withdraw",
-  },
-  {
-    id: "SpotMargin",
-    title: "Spot & Margin",
-  },
-  {
-    id: "Security",
-    title: "Security",
-  },
-  {
-    id: "Wallets",
-    title: "Wallets",
-  },
-  {
-    id: "Trading bots",
-    title: "Trading bots",
-  },
-  {
-    id: "Balances",
-    title: "Balances",
-  },
-  {
-    id: "PlatormIdsues",
-    title: "Platorm issues",
-  },
-  {
-    id: "OtherTopics",
-    title: "Other topics",
-  },
-];
-
-const trendingTopics = [
-  {
-    id: 1,
-    title: "Register main account",
-    description: "Elit duis tristique sollicitudin nibh..",
-  },
-  {
-    id: 2,
-    title: "Create trade account",
-    description: "Sit a met commodo nulla facil.",
-  },
-  {
-    id: 3,
-    title: "Delete trade account from blockchain",
-    description: "Amet commodo nulla facil vinar..",
-  },
-  {
-    id: 4,
-    title: "Deposit coin",
-    description: "Aulla facil Pellentesque pulvinar..",
-  },
-  {
-    id: 5,
-    title: "Withdraw coin",
-    description: "Commodo nulla facil Entesque..",
-  },
-  {
-    id: 6,
-    title: "How limit order works",
-    description: "Nulla facil Pellentesque pulvinar..",
-  },
-  {
-    id: 7,
-    title: "Locked balances",
-    description: "Facil Pellentesque pulvinar amet..",
-  },
-  {
-    id: 8,
-    title: "Excluded Jurisdictions",
-    description: "Pellentesque pulvinar sit amete..",
-  },
-];

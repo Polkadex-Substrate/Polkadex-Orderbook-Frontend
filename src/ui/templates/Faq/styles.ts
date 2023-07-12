@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled, { css } from "styled-components";
 
 export const Main = styled.main`
@@ -16,13 +17,19 @@ export const Main = styled.main`
 `;
 
 export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
-  @media screen and (max-height: 830px) {
-    justify-content: flex-start;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    @media screen and (max-height: 830px) {
+      justify-content: flex-start;
+    }
+    strong {
+      color: ${theme.colors.text};
+      font-weight: normal;
+    }
+  `}
 `;
 
 export const Introduction = styled.div`
@@ -131,7 +138,7 @@ export const TrendingCards = styled.div`
     column-gap: 2rem;
     row-gap: 3rem;
     flex-wrap: wrap;
-    div {
+    a {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -143,6 +150,11 @@ export const TrendingCards = styled.div`
     }
     p {
       color: ${theme.colors.tertiaryText};
+      line-height: 1.4;
+      max-width: 22rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     @media screen and (min-width: 800px) and (max-width: 1150px) {
       grid-template-columns: repeat(3, 1fr);
@@ -195,12 +207,12 @@ export const CategoriesCards = styled.div`
   }
 `;
 
-export const CategoriesCard = styled.div`
+export const CategoriesCard = styled(Link)`
   ${({ theme }) => css`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 1.4rem;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
     border-radius: 0.8rem;
@@ -211,11 +223,11 @@ export const CategoriesCard = styled.div`
     div {
       width: 1.8rem;
       height: 1.8rem;
+      img {
+        width: 100%;
+      }
     }
-    svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-    }
+
     span {
       font-size: ${theme.font.sizes.small};
     }

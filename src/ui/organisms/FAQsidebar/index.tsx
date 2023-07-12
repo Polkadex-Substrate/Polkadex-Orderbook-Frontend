@@ -31,7 +31,11 @@ export const FAQsidebar = ({ closeSidebar, pageQuickAccess, show }: T.Props) => 
           const iconUrl = getImgUrl(icon);
           return (
             <S.Social key={i} href={value.link}>
-              <div>{icon && <img src={iconUrl} />}</div>
+              {icon && (
+                <div>
+                  <img src={iconUrl} />
+                </div>
+              )}
               <p>{value.title}</p>
             </S.Social>
           );
