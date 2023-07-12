@@ -4,10 +4,10 @@ export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
   background: #020303;
+  position: relative;
 `;
 
 export const Container = styled.div`
-  position: relative;
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
@@ -19,25 +19,27 @@ export const Container = styled.div`
     justify-content: flex-start;
   }
 `;
-export const Details = styled.div`
+
+export const Inner = styled.div`
   ${({ theme }) => css`
-    position: absolute;
     background: ${theme.colors.primary};
     width: 20rem;
+    height: 10rem;
+    border-radius: 0 0 10rem 10rem;
+  `}
+`;
+
+export const Outer = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    width: 40rem;
     height: 20rem;
-    border-radius: 100rem;
-    top: -10rem;
-    right: -10rem;
-    :before {
-      content: "";
-      position: absolute;
-      width: 40rem;
-      height: 40rem;
-      border-radius: 100rem;
-      top: -10rem;
-      right: -10rem;
-      background: ${theme.colors.primary}22;
-    }
+    border-radius: 0 0 20rem 20rem;
+    background: ${theme.colors.primary}22;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    right: 0;
     @media screen and (max-width: 855px) {
       display: none;
     }
@@ -113,6 +115,7 @@ export const Header = styled.div`
     }
   `}
 `;
+
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;

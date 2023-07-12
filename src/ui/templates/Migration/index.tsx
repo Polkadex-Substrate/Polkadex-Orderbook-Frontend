@@ -66,7 +66,9 @@ export const Migration = ({
       </Head>
       <S.Container>
         <S.Content>
-          <S.Details />
+          <S.Outer>
+            <S.Inner></S.Inner>
+          </S.Outer>
           <S.Header>
             <span>
               <svg
