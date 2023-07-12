@@ -78,13 +78,19 @@ export const Social = styled(Link)`
   gap: 1rem;
   align-items: center;
   cursor: pointer;
+  transition: 0.2s;
   &:hover {
     color: rgba(255, 255, 255, 0.7);
+    svg {
+      fill: white;
+    }
   }
-  &:hover svg {
-    fill: white;
+  div {
+    max-width: 2rem;
+    img {
+      width: 100%;
+    }
   }
-  transition: 0.2s;
 `;
 
 export const OnlyIcons = styled.div`
