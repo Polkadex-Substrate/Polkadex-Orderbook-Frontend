@@ -52,8 +52,13 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
               const link = `/${attributes.faq_category.data.attributes.slug}/${attributes.slug}`;
               return (
                 <Link href={link} key={attributes.slug}>
-                  <span>{attributes.heading}</span>
-                  <p>{attributes.shortDescription}</p>
+                  <div>
+                    <h4>{attributes.heading}</h4>
+                    <p>{attributes.shortDescription}</p>
+                  </div>
+                  <span>
+                    <Icons.SingleArrowRight />
+                  </span>
                 </Link>
               );
             })}
@@ -112,7 +117,7 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
                 const icon = value?.image?.data?.attributes?.url;
                 const iconUrl = getImgUrl(icon);
                 return (
-                  <S.VideosSecondaryCard href={value.link} target="_blank" key={value.id}>
+                  <S.VideosSecondaryCard href={value.url} target="_blank" key={value.id}>
                     <div>
                       <img src={iconUrl} alt="Polkadex video" />
                     </div>
