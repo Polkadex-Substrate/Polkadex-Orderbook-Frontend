@@ -27,23 +27,17 @@ export const AccessDeniedTemplate = () => {
           <S.AsideLeft>
             <span>{t("statuscode")}</span>
             <h1>{t("heading")}</h1>
-            <p>
-              {t("primaryDescription")}
-              <a
-                href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
-                target="_blank"
-                rel="noreferrer">
-                {t("restrictedJurisdiction")}
-              </a>
-              {t("basedOnOur")}
-              <a
-                href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
-                target="_blank"
-                rel="noreferrer">
-                {t("termOfUse")}
-              </a>
-              {t("secondaryDescription")}
-            </p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: t("primaryDescription", {
+                  restrictedJurisdictionLink: `<a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf" target="_blank" rel="noreferrer">${t(
+                    "restrictedJurisdiction"
+                  )}</a>`,
+                  termOfUseLink: `<a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf" target="_blank" rel="noreferrer">${t(
+                    "termOfUse"
+                  )}</a>`,
+                }),
+              }}></p>
             <small>{t("needHelp")}</small>
             <S.Social>
               <a href="https://discord.com/invite/Uvua83QAzk" target="_blank" rel="noreferrer">
