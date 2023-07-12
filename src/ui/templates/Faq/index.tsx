@@ -112,8 +112,10 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
                 const icon = value?.image?.data?.attributes?.url;
                 const iconUrl = getImgUrl(icon);
                 return (
-                  <S.VideosSecondaryCard key={value.id}>
-                    <img src={iconUrl} alt="Polkadex video" />
+                  <S.VideosSecondaryCard href={value.link} target="_blank" key={value.id}>
+                    <div>
+                      <img src={iconUrl} alt="Polkadex video" />
+                    </div>
                     <div>
                       <p>{value.title}</p>
                       <span>{value.author}</span>

@@ -72,9 +72,23 @@ export const Search = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: ${theme.colors.tertiaryBackground};
+    background-color: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
+    transition: background-color ease 0.5s;
+
+    button {
+      background-color: ${theme.colors.secondaryBackground};
+      padding: 1rem;
+      border-radius: 2rem;
+      transition: background-color ease 0.5s;
+      :hover {
+        background: ${theme.colors.primary};
+      }
+    }
+    :hover {
+      background-color: ${theme.colors.tertiaryBackground};
+    }
   `}
 `;
 
@@ -109,11 +123,6 @@ export const IntroductionSearch = styled.div`
         color: ${theme.colors.primary};
       }
     }
-    button {
-      background-color: ${theme.colors.secondaryBackground};
-      padding: 1rem;
-      border-radius: 2rem;
-    }
   `}
 `;
 
@@ -141,21 +150,45 @@ export const TrendingCards = styled.div`
     a {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      :hover span {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+      span {
+        display: block;
+        width: 1.2rem;
+        transition: transform ease 0.5s;
+        transform: translateX(-1rem);
+        opacity: 0;
+        visibility: none;
+        svg {
+          stroke: ${theme.colors.text};
+        }
+      }
+      div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        h4 {
+          font-size: ${theme.font.sizes.medium};
+          font-weight: 500;
+        }
+        p {
+          color: ${theme.colors.tertiaryText};
+          line-height: 1.4;
+          max-width: 22rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
     }
-    span {
-      font-size: ${theme.font.sizes.medium};
-      font-weight: 500;
-    }
-    p {
-      color: ${theme.colors.tertiaryText};
-      line-height: 1.4;
-      max-width: 22rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+
     @media screen and (min-width: 800px) and (max-width: 1150px) {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -216,9 +249,9 @@ export const CategoriesCard = styled(Link)`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
     border-radius: 0.8rem;
-
-    span {
-      font-size: ${theme.font.sizes.medium};
+    transition: background-color ease 0.5s;
+    :hover {
+      background: ${theme.colors.tertiaryBackground};
     }
     div {
       width: 1.8rem;
@@ -227,7 +260,6 @@ export const CategoriesCard = styled(Link)`
         width: 100%;
       }
     }
-
     span {
       font-size: ${theme.font.sizes.small};
     }
@@ -321,26 +353,40 @@ export const VideosSecondary = styled.div`
   max-width: 28rem;
 `;
 
-export const VideosSecondaryCard = styled.div`
+export const VideosSecondaryCard = styled(Link)`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     min-width: 28rem;
-    div {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      span {
-        color: ${theme.colors.tertiaryText};
-        font-size: ${theme.font.sizes.xxsmall};
-      }
-      p {
-        font-size: ${theme.font.sizes.xsmall};
-      }
+    :hover div:first-child img {
+      transform: scale(1.05);
     }
-    img {
-      max-height: 7rem;
+    div {
+      :first-child {
+        overflow: hidden;
+        width: 100%;
+        max-width: 10rem;
+        border-radius: 0.5rem;
+        img {
+          transition: transform 0.8s ease;
+        }
+      }
+      :last-child {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        span {
+          color: ${theme.colors.tertiaryText};
+          font-size: ${theme.font.sizes.xxsmall};
+        }
+        p {
+          font-size: ${theme.font.sizes.xsmall};
+        }
+      }
+      img {
+        max-height: 7rem;
+      }
     }
   `}
 `;
