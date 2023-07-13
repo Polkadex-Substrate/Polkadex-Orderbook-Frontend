@@ -1,6 +1,7 @@
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import { FC } from "react";
 import { endOfDay, subDays } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -89,13 +90,16 @@ export const HeaderMarket = ({
 };
 
 const Filters = ({ searchField, handleChange, handleShowFavourite, showFavourite }) => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`markets.${key}`);
+
   return (
     <S.Title>
-      <h2>Markets</h2>
+      <h2>{t("markets")}</h2>
       <S.TitleActions>
         <Search
           type="text"
-          placeholder="Search Menu.."
+          placeholder={t("searchPlaceHolder")}
           value={searchField}
           onChange={handleChange}
         />
@@ -156,6 +160,8 @@ const Card = ({
   isFavourite,
   handleSelectedFavorite,
 }) => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`markets.${key}`);
   return (
     <S.Card>
       <S.CardInfo type="button" onClick={() => handleSelectedFavorite(id)}>
@@ -173,7 +179,10 @@ const Card = ({
           </S.CardToken>
           <S.CardInfoWrapper>
             <span>{pair}</span>
-            <p>Vol:{vol}</p>
+            <p>
+              {t("vol")}
+              {vol}
+            </p>
           </S.CardInfoWrapper>
         </S.CardInfoContent>
         <S.CardPricing>

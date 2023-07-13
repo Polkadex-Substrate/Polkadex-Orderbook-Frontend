@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { generateUsername } from "friendly-username-generator";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -38,10 +39,13 @@ export const CreateAccountTemplate = () => {
         });
       },
     });
+
+  const { t } = useTranslation("createAccount");
+  const { t: tc } = useTranslation("common");
   return (
     <>
       <Head>
-        <title>Create Account | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -53,44 +57,42 @@ export const CreateAccountTemplate = () => {
               <div>
                 <Icons.SingleArrowLeft />
               </div>
-              Overview
+              {t("overview")}
             </S.Title>
             <S.Container>
               <S.Column>
                 <S.ColumnWrapper>
-                  <h1>Create Account</h1>
+                  <h1>{tc("createAccount")}</h1>
                   <p>
-                    Did you know that you can use your account in the Polkadex Mobile app?
+                    {t("info")}
                     <br />
                     <br />
-                    Download your paper wallet and scan the qr code.
+                    {t("downloadMessage")}
                   </p>
                   <S.Download>
                     <a href="/" target="_blank">
                       <span>
                         <Icons.Apple />
                       </span>
-                      App store
+                      {t("appStore")}
                     </a>
                     <a href="/" target="_blank">
                       <span>
                         <Icons.Android />
                       </span>
-                      Google Play
+                      {t("googlePlay")}
                     </a>
                   </S.Download>
                 </S.ColumnWrapper>
               </S.Column>
               <S.Box>
-                <Loading
-                  message="Block finalization will take a few mins."
-                  isVisible={isLoading}>
+                <Loading message={tc("blockFinalizationMessage")} isVisible={isLoading}>
                   <form onSubmit={handleSubmit}>
                     <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
                     <InputLine
                       name="name"
-                      label="Account Name (Optional)"
-                      placeholder="Enter a name for this account"
+                      label={t("inputLabel")}
+                      placeholder={t("inputPlaceholder")}
                       error={errors.name && touched.name && errors.name}
                       {...getFieldProps("name")}
                     />
@@ -111,7 +113,7 @@ export const CreateAccountTemplate = () => {
                       disabled={!isValid || isLoading}
                       isFull
                       isLoading={isLoading}>
-                      Create Account
+                      {tc("createAccount")}
                     </Button>
                   </form>
                 </Loading>

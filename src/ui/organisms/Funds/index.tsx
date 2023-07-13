@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -15,25 +16,29 @@ export const Funds = ({ onHideFilters }) => {
     return () => onHideFilters(true);
   }, [onHideFilters]);
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`funds.${key}`);
+  const { t: tc } = useTranslation("common");
+
   return (
     <S.Wrapper>
       {balances.length ? (
         <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
           <Table.Header fill="none">
             <Table.Column>
-              <S.Column style={{ paddingLeft: 10 }}>Token</S.Column>
+              <S.Column style={{ paddingLeft: 10 }}>{t("token")}</S.Column>
             </Table.Column>
             <Table.Column>
-              <S.Column>Available</S.Column>
+              <S.Column>{t("available")}</S.Column>
             </Table.Column>
             <Table.Column>
-              <S.Column>Locked</S.Column>
+              <S.Column>{t("locked")}</S.Column>
             </Table.Column>
             <Table.Column>
-              <S.Column>Reserved</S.Column>
+              <S.Column>{t("reserved")}</S.Column>
             </Table.Column>
             <Table.Column>
-              <S.Column>Actions</S.Column>
+              <S.Column>{t("actions")}</S.Column>
             </Table.Column>
           </Table.Header>
           <Table.Body striped>
@@ -69,10 +74,10 @@ export const Funds = ({ onHideFilters }) => {
                 <Table.Cell>
                   <S.Actions>
                     <Link href={`/deposit/${item.symbol}`}>
-                      <S.DepositLink>Deposit</S.DepositLink>
+                      <S.DepositLink>{tc("deposit")}</S.DepositLink>
                     </Link>
                     <Link href={`/withdraw/${item.symbol}`}>
-                      <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                      <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
                     </Link>
                   </S.Actions>
                 </Table.Cell>

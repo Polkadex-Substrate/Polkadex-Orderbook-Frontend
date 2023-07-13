@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -74,6 +75,9 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`newAccount.${key}`);
+
   return (
     <S.Main>
       <S.Header type="button" onClick={onClose}>
@@ -84,7 +88,7 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
           {isTradeAccountSuccess || isControllerAccountSuccess ? (
             <SuccessCreateAccount
               title={
-                isImportAccountSuccess ? "trading account imported" : successInformation.title
+                isImportAccountSuccess ? t("newAccountImported") : successInformation.title
               }
               description={
                 isImportAccountSuccess
@@ -103,8 +107,8 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
               <S.Container>
                 <S.Box>
                   <Card
-                    label="Create new trading account"
-                    description="Quickly create a trading account."
+                    label={t("createNewTradingAccount.label")}
+                    description={t("createNewTradingAccount.description")}
                     icon="AddWallet"
                     isActive={hasExtensionAccounts && (!state.status || state.isImport)}
                     handleChange={
@@ -121,8 +125,8 @@ export const NewAccount = ({ onClose = undefined, selected, isLoading = false }:
                   </Card>
                   {!hasData && (
                     <Card
-                      label="Import existing trading account"
-                      description="Import existing trading account using your mnemonic phrases. "
+                      label={t("importExistingTradingAccount.label")}
+                      description={t("importExistingTradingAccount.description")}
                       icon="AddMore"
                       isActive={hasLinkedAccounts && (!state.status || !state.isImport)}
                       handleChange={() => handleCancel(!state.status, false)}>

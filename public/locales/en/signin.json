@@ -1,0 +1,21 @@
+{
+  "title": "Login | Polkadex Orderbook",
+  "notMember": "Not a member?",
+  "card": {
+    "title": "Welcome Back!",
+    "description": "Buy and Sell Cryptocurrencies. Fast and Secure",
+    "secondaryTitle": "Sign In to Orderbook",
+    "input": {
+      "email": {
+        "label": "Email",
+        "placeHolder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeHolder": "Enter your password",
+        "forgotPassword": "Forgot password?"
+      }
+    },
+    "agreement": "By clicking the Log In button below, I hereby agree with Polkadex"
+  }
+}

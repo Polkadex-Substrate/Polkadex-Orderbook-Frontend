@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -30,10 +31,13 @@ export const OpenOrderCard = ({
     if (!cancelLoading) setIsCancleClicked(false);
   }, [cancelLoading]);
 
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`openOrderCard.${key}`);
+
   return (
     <S.Tr>
       <S.Td>
-        <S.Tag>Pair</S.Tag>
+        <S.Tag>{t("pair")}</S.Tag>
         <S.ContainerFlex>
           <S.Image isSell={isSell}>
             <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
@@ -44,38 +48,38 @@ export const OpenOrderCard = ({
         </S.ContainerFlex>
       </S.Td>
       <S.Td>
-        <S.Tag>Date</S.Tag>
+        <S.Tag>{t("date")}</S.Tag>
         <S.ContainerFlex>{data[0].value}</S.ContainerFlex>
       </S.Td>
 
       <S.Td>
-        <S.Tag>Type</S.Tag>
+        <S.Tag>{t("type")}</S.Tag>
         <S.ContainerFlex>
           <span>{orderType}</span>
         </S.ContainerFlex>
       </S.Td>
 
       <S.Td>
-        <S.Tag>Price</S.Tag>
+        <S.Tag>{t("price")}</S.Tag>
         <span>{data[3].value}</span>
       </S.Td>
 
       <S.Td>
-        <S.Tag>Total</S.Tag>
+        <S.Tag>{t("total")}</S.Tag>
         <span>{data[4].value}</span>
       </S.Td>
 
       <S.Td>
-        <S.Tag>Filled</S.Tag>
+        <S.Tag>{t("filled")}</S.Tag>
         <span>{data[5].value}</span>
       </S.Td>
 
       <S.Td>
-        <S.Tag>Actions</S.Tag>
+        <S.Tag>{t("actions")}</S.Tag>
 
         <S.ContainerActions>
           <button type="button" onClick={handleCancelClick}>
-            Cancel Order
+            {t("cancelOrder")}
           </button>
         </S.ContainerActions>
       </S.Td>

@@ -1,0 +1,10 @@
+{
+  "title": "Polkadex - Access denied",
+  "statuscode": "403",
+  "heading": "Access denied",
+  "primaryDescription": "Your IP address indicates that you are attempting to access our services from a {{- restrictedJurisdictionLink}}. Based on our {{- termOfUseLink}}, we are unable to provide services to users from this jurisdiction.",
+  "restrictedJurisdiction": "restricted jurisdiction",
+  "termOfUse": "Terms of use",
+  "needHelp": "Need help? contact us on Discord",
+  "discord": "Discord"
+}
