@@ -1,143 +1,76 @@
-// TODO: Fix Bighead typing
 import Link from "next/link";
-import { BigHead } from "@bigheads/core";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
-import {
-  Icon,
-  Logo,
-  Tooltip,
-  TooltipContent,
-  TooltipHeader,
-  Profile,
-  Popover,
-  NotificationsContent,
-} from "@polkadex/orderbook-ui/molecules";
+import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/hooks";
-import { selectNotifications } from "@polkadex/orderbook/providers/public/settings/helpers";
-import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
-import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 export const Menu = () => {
   const router = useRouter();
 
   const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
-  const settingsState = useSettingsProvider();
-  const notifications = selectNotifications(settingsState.notifications);
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
 
   const {
     authInfo: { isAuthenticated },
   } = profileState;
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`menu.${key}`);
+
   return (
-    <S.Main>
-      <S.Wrapper>
-        <S.WrapperLinks>
-          <S.Logo>
-            <Logo size="Medium" href="/trading" />
-          </S.Logo>
-          <S.Container>
-            <S.WrapperIcon>
-              {router.pathname === "/trading/[id]" && <S.LineBorder />}
-              <Link href="/trading">
-                <div>
-                  <Icon name="Exchange" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Exchange</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <S.WrapperIcon isDisabled={!isAuthenticated}>
-              {router.pathname === "/balances" && <S.LineBorder />}
-              <Link href="/balances">
-                <div>
-                  <Icon name="Coins" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Balances</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <S.WrapperIcon isDisabled={!isAuthenticated}>
-              {router.pathname === "/settings" && <S.LineBorder />}
-              <Link href="/settings">
-                <div>
-                  <Icon name="Wallet" background="none" stroke="text" size="large" />
-                </div>
-                <S.Span>Accounts</S.Span>
-              </Link>
-            </S.WrapperIcon>
-            <Terms />
-            <Help />
-          </S.Container>
-          <S.WrapperIcon onClick={changeTheme} as="div">
-            <S.ThemeIcon>
-              <Icon
-                name={isDarkTheme ? "Sun" : "Moon"}
-                background="secondaryBackground"
-                size="large"
-              />
-            </S.ThemeIcon>
-            <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
-          </S.WrapperIcon>
-        </S.WrapperLinks>
-        <S.WrapperProfile>
-          <S.ContainerProfile>
-            <Popover>
-              <Popover.Trigger>
-                <S.Notifications>
-                  <Tooltip>
-                    <TooltipHeader>
-                      <S.NotificationsWrapper
-                        isActive={!!notifications?.find((value) => !value.active)}>
-                        <Icons.Notifications />
-                        <div />
-                      </S.NotificationsWrapper>
-                    </TooltipHeader>
-                    <TooltipContent position="left">
-                      <p style={{ whiteSpace: "nowrap" }}>Notifications</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </S.Notifications>
-              </Popover.Trigger>
-              <Popover.Content>
-                <NotificationsContent notifications={notifications} />
-              </Popover.Content>
-            </Popover>
-            <Popover>
-              <Popover.Trigger>
-                <S.Profile>
-                  <Tooltip>
-                    <TooltipHeader>
-                      <S.Avatar>
-                        <BigHead {...avatarOptions.data} />
-                      </S.Avatar>
-                    </TooltipHeader>
-                    <TooltipContent position="left">
-                      <p style={{ whiteSpace: "nowrap" }}>My Profile</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </S.Profile>
-              </Popover.Trigger>
-              <Popover.Content>
-                <Profile />
-              </Popover.Content>
-            </Popover>
-          </S.ContainerProfile>
-        </S.WrapperProfile>
-      </S.Wrapper>
-      <div></div>
-    </S.Main>
+    <S.Wrapper>
+      <S.WrapperLinks>
+        <S.WrapperIcon>
+          {router.pathname === "/trading/[id]" && <S.LineBorder />}
+          <Link href="/trading">
+            <div>
+              <Icon name="Exchange" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>{t("exchange")}</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <S.WrapperIcon isDisabled={!isAuthenticated}>
+          {router.pathname === "/balances" && <S.LineBorder />}
+          <Link href="/balances">
+            <div>
+              <Icon name="Coins" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>{t("balances")}</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <S.WrapperIcon isDisabled={!isAuthenticated}>
+          {router.pathname === "/settings" && <S.LineBorder />}
+          <Link href="/settings">
+            <div>
+              <Icon name="Wallet" background="none" stroke="text" size="large" />
+            </div>
+            <S.Span>{t("accounts")}</S.Span>
+          </Link>
+        </S.WrapperIcon>
+        <Terms />
+        <Help />
+      </S.WrapperLinks>
+      <S.BottomContainer>
+        <S.WrapperIcon onClick={changeTheme} as="button">
+          <Icon
+            name={isDarkTheme ? "Sun" : "Moon"}
+            background="secondaryBackground"
+            size="large"
+          />
+          <S.Span>{isDarkTheme ? t("light") : t("dark")}</S.Span>
+        </S.WrapperIcon>
+      </S.BottomContainer>
+    </S.Wrapper>
   );
 };
 
 const Terms = () => {
+  const { t: tc } = useTranslation("common");
   return (
     <S.Terms>
       <S.WrapperIcon>
@@ -150,7 +83,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Terms of Use</span>
+              <span>{tc("termsOfUse")}</span>
             </div>
           </a>
           <a
@@ -158,7 +91,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Privacy Policy</span>
+              <span>{tc("privacyPolicy")}</span>
             </div>
           </a>
           <a
@@ -166,7 +99,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Disclaimer</span>
+              <span>{tc("disclaimer")}</span>
             </div>
           </a>
           <a
@@ -174,7 +107,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Excluded Jurisdictions</span>
+              <span>{tc("excludedJurisdictions")}</span>
             </div>
           </a>
           <a
@@ -182,7 +115,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Data Retention Policy</span>
+              <span>{tc("dataRetentionPolicy")}</span>
             </div>
           </a>
         </S.TermsLinks>
@@ -192,6 +125,8 @@ const Terms = () => {
 };
 
 const Help = () => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`menu.${key}`);
   const [state, setState] = useState(false);
   return (
     <S.Terms>
@@ -201,7 +136,7 @@ const Help = () => {
             <Icon name="Question" background="none" stroke="text" size="large" />
           </div>
           <div>
-            <S.Span>Help</S.Span>
+            <S.Span>{t("help")}</S.Span>
           </div>
         </S.WrapperIcon>
       </span>
@@ -213,14 +148,14 @@ const Help = () => {
             rel="noreferrer">
             <S.WrapperIcon>
               <div>
-                <S.Span>FAQ</S.Span>
+                <S.Span>{t("faq")}</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
           <a href="https://discord.gg/G4KMw2sGGe" target="_blank" rel="noreferrer">
             <S.WrapperIcon>
               <div>
-                <S.Span>Discord</S.Span>
+                <S.Span>{t("discord")}</S.Span>
               </div>
             </S.WrapperIcon>
           </a>

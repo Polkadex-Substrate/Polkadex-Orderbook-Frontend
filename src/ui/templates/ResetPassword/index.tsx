@@ -1,17 +1,16 @@
 import Head from "next/head";
-import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 
 import * as S from "./styles";
 
 import { Button, InputLine, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { resetPasswordValidations } from "@polkadex/orderbook/validations";
-import { Menu } from "@polkadex/orderbook-ui/organisms";
+import { Menu, Header } from "@polkadex/orderbook-ui/organisms";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
 export const ResetPasswordTemplate = () => {
-  const [state, setState] = useState(false);
   const { forgotPassword, onForgotPasswordCode } = useAuth();
   const isLoading = forgotPassword.isLoading;
   const isSuccess = forgotPassword.isSuccess;
@@ -26,76 +25,80 @@ export const ResetPasswordTemplate = () => {
     },
   });
 
+  const { t } = useTranslation("resetPassword");
+
   return (
     <>
       <Head>
-        <title>Reset password | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu handleChange={() => setState(!state)} />
-        <S.Wrapper>
-          <S.Container>
-            <S.Title>
-              <div>
-                <OrderbookLogo />
-              </div>
-              <span>
-                Back to <Link href="/signIn"> login</Link>
-              </span>
-            </S.Title>
-            {isSuccess ? (
-              <Success />
-            ) : (
-              <S.Card>
-                <S.Column />
-                <S.Box>
-                  <S.BoxTitle>
-                    <h1>Reset password?</h1>
-                    <p>No worries, we`ll send you instructions.</p>
-                  </S.BoxTitle>
-                  <form onSubmit={handleSubmit}>
-                    <InputLine
-                      name="email"
-                      label="Email"
-                      placeholder="Enter your email"
-                      disabled={isLoading}
-                      error={errors.email && touched.email && errors.email}
-                      {...getFieldProps("email")}
-                    />
-                    <Button
-                      disabled={!(isValid && dirty)}
-                      type="submit"
-                      size="extraLarge"
-                      background="primary"
-                      color="white"
-                      isLoading={isLoading}
-                      isFull>
-                      Send reset code
-                    </Button>
-                  </form>
-                </S.Box>
-              </S.Card>
-            )}
-          </S.Container>
-        </S.Wrapper>
+        <Header />
+        <S.Flex>
+          <Menu />
+          <S.Wrapper>
+            <S.Container>
+              <S.Title>
+                <div>
+                  <OrderbookLogo />
+                </div>
+                <span>
+                  {t("backTo")} <Link href="/signIn"> {t("login")}</Link>
+                </span>
+              </S.Title>
+              {isSuccess ? (
+                <Success />
+              ) : (
+                <S.Card>
+                  <S.Column />
+                  <S.Box>
+                    <S.BoxTitle>
+                      <h1>{t("card.title")}</h1>
+                      <p>{t("card.description")}</p>
+                    </S.BoxTitle>
+                    <form onSubmit={handleSubmit}>
+                      <InputLine
+                        name="email"
+                        label={t("card.input.label")}
+                        placeholder={t("card.input.placeHolder")}
+                        disabled={isLoading}
+                        error={errors.email && touched.email && errors.email}
+                        {...getFieldProps("email")}
+                      />
+                      <Button
+                        disabled={!(isValid && dirty)}
+                        type="submit"
+                        size="extraLarge"
+                        background="primary"
+                        color="white"
+                        isLoading={isLoading}
+                        isFull>
+                        {t("card.button")}
+                      </Button>
+                    </form>
+                  </S.Box>
+                </S.Card>
+              )}
+            </S.Container>
+          </S.Wrapper>
+        </S.Flex>
       </S.Main>
     </>
   );
 };
 
 const Success = () => {
+  const { t } = useTranslation("resetPassword");
+
   return (
     <S.Success>
       <div>
         <img src="/img/emailSent.svg" alt="email sent" />
       </div>
-      <h2>Email has been sent!</h2>
-      <p>
-        If this email address was used to create an account, a code will arrive in your email.
-        Please check your email.
-      </p>
-      <small>You will be automatically redirected in 5 seconds. </small>
+      <h2>{t("success.heading")}</h2>
+      <p>{t("success.description")}</p>
+      <small>{t("success.small")} </small>
     </S.Success>
   );
 };

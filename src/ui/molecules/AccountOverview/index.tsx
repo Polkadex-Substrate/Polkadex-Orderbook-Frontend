@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import Link from "next/link";
-import { BigHead } from "@bigheads/core";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -20,11 +20,13 @@ import { getTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/
 import { userMainAccountDetails } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`accountOverview.${key}`);
+
   const router = useRouter();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
@@ -35,10 +37,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     selectedAccount: currentUsingAccount,
     userData: { userAccounts: allUserAccounts },
   } = useProfile();
-  const profileState = useProfile();
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
+
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<KeyringPair>(null);
   const [selectedMainAccount, setSelectedMainAccount] = useState<ExtensionAccount>(null);
@@ -77,19 +76,19 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   };
 
   const headerMessage = !allUserAccounts?.length
-    ? "You have no registered trading account"
-    : selectedTradeAccount?.meta?.name || "Choose your trade account";
+    ? t("noRegisteredAccount")
+    : selectedTradeAccount?.meta?.name || t("chooseYourTradeAccount");
 
   const addressMessage =
     selectedTradeAccount &&
     ` • ${selectedTradeAccount ? transformAddress(selectedTradeAccount.address) : ""}`;
 
   const handleOnMouseOut = (ref: MutableRefObject<HTMLElement>) =>
-    (ref.current.innerHTML = "Copy to clipboard");
+    (ref.current.innerHTML = t("copyToClipboard"));
 
   const handleCopy = async (data: string, ref: MutableRefObject<HTMLElement>) => {
     await navigator.clipboard.writeText(data);
-    ref.current.innerHTML = "Copied";
+    ref.current.innerHTML = t("copied");
   };
 
   const tradeButton = useRef(null);
@@ -97,19 +96,13 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   return (
     <S.Wrapper>
-      <S.Profile>
-        <div>
-          <BigHead {...avatarOptions.data} />
-        </div>
-        <span>Profile</span>
-      </S.Profile>
       <S.Switch>
         {accountList.length ? (
           <Dropdown>
             <Dropdown.Trigger>
               <S.SwitchCard>
                 <S.SwitchCardContent>
-                  {selectedTradeAccount && <span>Trading account</span>}
+                  {selectedTradeAccount && <span>{t("tradingAccount")}</span>}
                   <S.SwitchCardInfo>
                     {selectedTradeAccount && (
                       <Tooltip>
@@ -125,7 +118,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                         </TooltipHeader>
                         <TooltipContent>
                           <span ref={tradeButton} style={{ whiteSpace: "nowrap" }}>
-                            Copy to clipboard
+                            {t("copyToClipboard")}
                           </span>
                         </TooltipContent>
                       </Tooltip>
@@ -163,15 +156,15 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           </Dropdown>
         ) : (
           <S.DropdownEmpty>
-            <p>No trading accounts found</p>
-            <Link href="/settings">Import or Create a new one</Link>
+            <p>{t("noTradingAccount")}</p>
+            <Link href="/settings">{t("importOrCreateOne")}</Link>
           </S.DropdownEmpty>
         )}
         {selectedTradeAccount && (
           <S.SwitchCard>
             <S.SwitchCardContent>
               <span>
-                Funding account
+                {t("fundingAccount")}
                 <div>
                   <Icons.Verified />
                 </div>
@@ -190,7 +183,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                   </TooltipHeader>
                   <TooltipContent>
                     <span ref={controllerButton} style={{ whiteSpace: "nowrap" }}>
-                      Copy to clipboard
+                      {t("copyToClipboard")}
                     </span>
                   </TooltipContent>
                 </Tooltip>
@@ -206,10 +199,14 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
         )}
       </S.Switch>
       <S.Links>
-        <Card title="Balances" icon="Coins" onClick={() => router.push("/balances")} />
-        <Card title="Accounts" icon="Wallet" onClick={() => router.push("/settings")} />
-        <Card title="Appearance" icon="Appearance" onClick={() => onNavigate("Appearance")} />
-        <Card title="Log Out" icon="Logout" onClick={logout} />
+        <Card title={t("balances")} icon="Coins" onClick={() => router.push("/balances")} />
+        <Card title={t("accounts")} icon="Wallet" onClick={() => router.push("/settings")} />
+        <Card
+          title={t("appearance")}
+          icon="Appearance"
+          onClick={() => onNavigate("Appearance")}
+        />
+        <Card title={t("logout")} icon="Logout" onClick={logout} />
       </S.Links>
     </S.Wrapper>
   );

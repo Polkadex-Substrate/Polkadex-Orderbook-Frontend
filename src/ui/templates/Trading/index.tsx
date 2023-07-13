@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import Head from "next/head";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
@@ -8,11 +9,9 @@ import * as S from "./styles";
 
 import {
   AccountBanner,
-  Button,
   EmptyMyAccount,
   Footer,
   Icon,
-  Logo,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
 import {
@@ -24,15 +23,13 @@ import {
   Navbar,
   RecentTrades,
   Disclaimer,
+  Header,
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
-import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/extensionWallet/helper";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
@@ -101,43 +98,34 @@ export function Trading() {
     }
   }, [market, onMarketTickersFetch, tickersTimestamp]);
 
-  const { email } = useAuth();
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
     selectedAccount: { mainAddress },
     onUserChangeInitBanner,
   } = useProfile();
-  const extensionWalletState = useExtensionWallet();
 
   const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
-  const hasMainAccount = selectIsAddressInExtension(
-    mainAddress,
-    extensionWalletState.allAccounts
-  );
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
-  const { selectedAccount } = useProfile();
+  const { t } = useTranslation("trading");
+  const { t: tc } = useTranslation("common");
 
-  const currentMainAddr = selectedAccount.mainAddress;
-  const currentTradeAddr = selectedAccount.tradeAddress;
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
-      title: "Connect your Trading Account",
-      description: "Import your existing account, or create a new account",
+      title: tc("connectTradingAccount.title"),
+      description: tc("connectTradingAccount.description"),
       primaryLink: "/createAccount",
-      primaryLinkTitle: "Create Account",
+      primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
       secondaryLink: "/settings",
-      secondaryLinkTitle: "Select Account",
+      secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
     };
-
-  // initialize user specific sagas
 
   const marketName = market?.name?.replace("/", "");
 
@@ -158,19 +146,19 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade && marketName && `${currentTrade} | ${marketName} | `} Polkadex
-          Orderbook
+          {currentTrade && marketName && `${currentTrade} | ${marketName} | `}{" "}
+          {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
       <Modal open={shutdownBanner} isBlur onClose={() => setShutdownBanner(false)}>
         <ShutdownInteraction
-          title="Orderbook v1 will go offline as it is upgraded to v2"
-          textLink="Read the full statement"
+          title={t("shutDown.title")}
+          textLink={t("shutDown.textLink")}
           link="https://polkadex.medium.com/orderbook-v2-thea-and-crowdloan-rewards-are-now-live-on-kaizen-the-polkadex-test-net-7ca5c88855ad"
-          footerText="Join our Telegram for more updates!"
+          footerText={t("shutDown.footerText")}
           buttonLink="https://t.me/Polkadex"
-          textButton="Join Telegram"
+          textButton={t("shutDown.buttonText")}
           onClose={() => setShutdownBanner(false)}
         />
       </Modal>
@@ -182,12 +170,12 @@ export function Trading() {
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner
-          title="Welcome back!"
-          description="Looks like you’re using this browser for the first time."
-          subDescription="Please create a new trading account."
-          closeButtonTitle="Close"
+          title={t("accountBanner.title")}
+          description={t("accountBanner.description")}
+          subDescription={t("accountBanner.subDescription")}
+          closeButtonTitle={t("accountBanner.closeButtonText")}
           onClose={closeBanner}
-          linkText="Create Account"
+          linkText={t("accountBanner.linkText")}
           link="/settings"
           heroAlt="Man in tie with open arms welcoming"
           heroImage="welcomeBack.svg"
@@ -203,99 +191,42 @@ export function Trading() {
       </Modal>
       <S.Container>
         <S.Wrapper>
-          <Menu />
-          <S.WrapperMain>
-            <S.ContainerMain>
-              <S.Box>
-                <S.Logo>
-                  <Logo size="Medium" href="/trading" />
-                </S.Logo>
-                {!isSignedIn ? (
-                  <Button
-                    onClick={() => router.push("/signIn")}
-                    color="inverse"
-                    background="text"
-                    icon={{
-                      name: "Wallet",
-                      background: "inverse",
-                      size: "medium",
-                      stroke: "text",
-                      fill: "text",
-                    }}>
-                    Login/Sign Up
-                  </Button>
-                ) : (
-                  <S.Profile>
-                    <Profile
-                      hasTradeAccount={hasTradeAccount}
-                      hasMainAccount={hasMainAccount}
-                      currentMainAccount={currentMainAddr}
-                      currentTradeAccount={currentTradeAddr}
-                      email={email}
-                    />
-                  </S.Profile>
-                )}
-              </S.Box>
-              <S.Content>
-                <S.WrapperGraph>
-                  <S.Header>
-                    <Navbar onOpenMarkets={() => setState(!state)} />
-                    <S.Actions isSignedIn={isSignedIn}>
-                      {!isSignedIn ? (
-                        <Button
-                          onClick={() => router.push("/signIn")}
-                          color="inverse"
-                          background="text"
-                          style={{ alignSelf: "flex-end" }}
-                          icon={{
-                            name: "Wallet",
-                            background: "inverse",
-                            size: "medium",
-                            stroke: "text",
-                            fill: "text",
-                          }}>
-                          Login/Sign Up
-                        </Button>
-                      ) : (
-                        <S.Profile>
-                          <Profile
-                            hasTradeAccount={hasTradeAccount}
-                            hasMainAccount={hasMainAccount}
-                            currentMainAccount={currentMainAddr}
-                            currentTradeAccount={currentTradeAddr}
-                            email={email}
-                          />
-                        </S.Profile>
-                      )}
-                    </S.Actions>
-                  </S.Header>
-                  <S.CenterWrapper>
-                    <S.GraphEpmty>
-                      <KlineProvider>
-                        <Graph />
-                      </KlineProvider>
-                      {hasUser ? (
-                        <SessionProvider>
-                          <TradesProvider>
-                            <OrderHistoryProvider>
-                              <Transactions />
-                            </OrderHistoryProvider>
-                          </TradesProvider>
-                        </SessionProvider>
-                      ) : (
-                        <EmptyMyAccount hasLimit {...hasSelectedAccount} />
-                      )}
-                    </S.GraphEpmty>
-                    <S.WrapperRight>
-                      <MarketOrder />
-                      <RecentTrades />
-                    </S.WrapperRight>
-                  </S.CenterWrapper>
-                </S.WrapperGraph>
-              </S.Content>
-            </S.ContainerMain>
-            <Footer />
-          </S.WrapperMain>
+          <Header />
+          <S.Flex>
+            <Menu />
+            <S.WrapperMain>
+              <S.ContainerMain>
+                <S.Content>
+                  <S.WrapperGraph>
+                    <S.CenterWrapper>
+                      <S.GraphEpmty>
+                        <KlineProvider>
+                          <Navbar onOpenMarkets={() => setState(!state)} />
+                          <Graph />
+                        </KlineProvider>
+                        {hasUser ? (
+                          <SessionProvider>
+                            <TradesProvider>
+                              <OrderHistoryProvider>
+                                <Transactions />
+                              </OrderHistoryProvider>
+                            </TradesProvider>
+                          </SessionProvider>
+                        ) : (
+                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                        )}
+                      </S.GraphEpmty>
+                      <S.WrapperRight>
+                        <MarketOrder />
+                        <RecentTrades />
+                      </S.WrapperRight>
+                    </S.CenterWrapper>
+                  </S.WrapperGraph>
+                </S.Content>
+              </S.ContainerMain>
+              <Footer />
+            </S.WrapperMain>
+          </S.Flex>
         </S.Wrapper>
       </S.Container>
     </>

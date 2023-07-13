@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { intlFormat } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -23,7 +24,7 @@ import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
-import { Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
+import { Header, Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -107,7 +108,9 @@ export const WithdrawTemplate = () => {
     const errors = {} as any;
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
       errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
-
+    if (/\s/.test(String(values.amount))) {
+      errors.amount = ErrorMessages.WHITESPACE_NOT_ALLOWED;
+    }
     return errors;
   };
 
@@ -143,6 +146,9 @@ export const WithdrawTemplate = () => {
     [readyToClaim]
   );
 
+  const { t } = useTranslation("withdraw");
+  const { t: tc } = useTranslation("common");
+
   const handleUnlockClose = () => setShowPassword(false);
   const formRef = useRef(null);
   return (
@@ -174,163 +180,163 @@ export const WithdrawTemplate = () => {
         </Modal.Body>
       </Modal>
       <Head>
-        <title>Withdraw | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
-        <Menu />
-        <S.Wrapper>
-          <S.Title type="button" onClick={() => router.back()}>
-            <div>
-              <Icons.SingleArrowLeft />
-            </div>
-            Overview
-          </S.Title>
-          <S.Container>
-            <S.Column>
+        <Header />
+        <S.FlexContainer>
+          <Menu />
+          <S.Wrapper>
+            <S.Title type="button" onClick={() => router.back()}>
               <div>
-                <h1>Withdraw Crypto</h1>
-                <p>
-                  Polkadex is a fully non-custodial platform, so the assets in your wallet are
-                  always under your control.
-                </p>
+                <Icons.SingleArrowLeft />
               </div>
-            </S.Column>
-            <S.Box>
-              <S.Form>
-                <S.SelectAccount>
-                  <div>
-                    <Icons.Avatar />
-                  </div>
-                  <div>
-                    <strong>
-                      {currMainAcc?.account?.meta?.name || "Wallet not selected"}
-                    </strong>
-                    <span>{shortAddress}</span>
-                  </div>
-                </S.SelectAccount>
-                <form ref={formRef} onSubmit={handleSubmit}>
-                  <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
-                    <S.SelectInput>
-                      <span>Select a coin</span>
-                      <S.SelectInputContainer>
-                        <Dropdown>
-                          <Dropdown.Trigger>
-                            <S.DropdownHeader>
-                              <div>{selectedAsset?.name}</div>
-                              <div>
-                                <span>
-                                  <Icons.ArrowBottom />
-                                </span>
-                              </div>
-                            </S.DropdownHeader>
-                          </Dropdown.Trigger>
-                          <Dropdown.Menu fill="secondaryBackgroundSolid">
-                            {assets.map((asset) => (
-                              <Dropdown.Item
-                                key={asset.assetId}
-                                onAction={() => setSelectedAsset(asset)}>
-                                {asset.name}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </S.SelectInputContainer>
-                      <S.Available>
-                        Available{" "}
-                        <strong>
-                          {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
-                        </strong>
-                      </S.Available>
-                    </S.SelectInput>
-                    <S.Flex>
-                      <InputLine
-                        name="amount"
-                        label="Token Amount"
-                        placeholder="0.00"
-                        error={errors.amount && touched.amount && errors.amount}
-                        {...getFieldProps("amount")}
-                      />
-                      <Button
-                        type="submit"
-                        size="extraLarge"
-                        background="primary"
-                        color="white"
-                        disabled={!(isValid && dirty) || loading}
-                        isFull
-                        isLoading={loading}>
-                        Withdraw
-                      </Button>
-                    </S.Flex>
-                  </LoadingSection>
-                </form>
-              </S.Form>
-              <S.History>
-                <Tabs>
-                  <h2>History</h2>
-                  <S.HistoryHeader>
-                    <S.HistoryTabs>
-                      <TabHeader>
-                        <S.HistoryTab>Pending</S.HistoryTab>
-                      </TabHeader>
-                      <TabHeader>
-                        <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
-                          Ready to Claim
-                          <span>{hasPendingClaims}</span>
-                        </S.HistoryTab>
-                      </TabHeader>
-                      <TabHeader>
-                        <S.HistoryTab>Claimed</S.HistoryTab>
-                      </TabHeader>
-                    </S.HistoryTabs>
-                    <S.HistoryHeaderAside>
-                      <Checkbox name="hide">Show only selected coin</Checkbox>
-                    </S.HistoryHeaderAside>
-                  </S.HistoryHeader>
-                  <S.HistoryWrapper>
-                    <TabContent>
-                      {pendingWithdraws?.length ? (
-                        <HistoryTable items={pendingWithdraws} />
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                    <TabContent>
-                      {readyToClaim?.length ? (
-                        readyToClaim.map(({ id, sid, items }) => (
-                          <HistoryCard
-                            key={id}
-                            sid={sid}
-                            hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
-                            handleClaimWithdraws={async () =>
-                              await onFetchClaimWithdraw({ sid })
-                            }
-                            items={items?.filter((v) => v.status === "READY")}
-                          />
-                        ))
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                    <TabContent>
-                      {claimedWithdraws?.length ? (
-                        <HistoryTable items={claimedWithdraws} />
-                      ) : (
-                        <div style={{ padding: "2rem" }}>
-                          <EmptyData />
-                        </div>
-                      )}
-                    </TabContent>
-                  </S.HistoryWrapper>
-                </Tabs>
-              </S.History>
-            </S.Box>
-          </S.Container>
-        </S.Wrapper>
+              {t("overview")}
+            </S.Title>
+            <S.Container>
+              <S.Column>
+                <div>
+                  <h1>{t("heading")}</h1>
+                  <p>{t("description")}</p>
+                </div>
+              </S.Column>
+              <S.Box>
+                <S.Form>
+                  <S.SelectAccount>
+                    <div>
+                      <Icons.Avatar />
+                    </div>
+                    <div>
+                      <strong>
+                        {currMainAcc?.account?.meta?.name || t("walletNotSelected")}
+                      </strong>
+                      <span>{shortAddress}</span>
+                    </div>
+                  </S.SelectAccount>
+                  <form ref={formRef} onSubmit={handleSubmit}>
+                    <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
+                      <S.SelectInput>
+                        <span>{t("selectCoin")}</span>
+                        <S.SelectInputContainer>
+                          <Dropdown>
+                            <Dropdown.Trigger>
+                              <S.DropdownHeader>
+                                <div>{selectedAsset?.name}</div>
+                                <div>
+                                  <span>
+                                    <Icons.ArrowBottom />
+                                  </span>
+                                </div>
+                              </S.DropdownHeader>
+                            </Dropdown.Trigger>
+                            <Dropdown.Menu fill="secondaryBackgroundSolid">
+                              {assets.map((asset) => (
+                                <Dropdown.Item
+                                  key={asset.assetId}
+                                  onAction={() => setSelectedAsset(asset)}>
+                                  {asset.name}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </S.SelectInputContainer>
+                        <S.Available>
+                          {tc("available")}{" "}
+                          <strong>
+                            {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
+                          </strong>
+                        </S.Available>
+                      </S.SelectInput>
+                      <S.Flex>
+                        <InputLine
+                          name="amount"
+                          label={t("inputLabel")}
+                          placeholder="0.00"
+                          error={errors.amount && touched.amount && errors.amount}
+                          {...getFieldProps("amount")}
+                        />
+                        <Button
+                          type="submit"
+                          size="extraLarge"
+                          background="primary"
+                          color="white"
+                          disabled={!(isValid && dirty) || loading}
+                          isFull
+                          isLoading={loading}>
+                          {tc("withdraw")}
+                        </Button>
+                      </S.Flex>
+                    </LoadingSection>
+                  </form>
+                </S.Form>
+                <S.History>
+                  <Tabs>
+                    <h2>{t("history")}</h2>
+                    <S.HistoryHeader>
+                      <S.HistoryTabs>
+                        <TabHeader>
+                          <S.HistoryTab>{t("pending")}</S.HistoryTab>
+                        </TabHeader>
+                        <TabHeader>
+                          <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
+                            {t("readyToClaim")}
+                            <span>{hasPendingClaims}</span>
+                          </S.HistoryTab>
+                        </TabHeader>
+                        <TabHeader>
+                          <S.HistoryTab>{t("claimed")}</S.HistoryTab>
+                        </TabHeader>
+                      </S.HistoryTabs>
+                      <S.HistoryHeaderAside>
+                        <Checkbox name="hide">{t("showSelectedCoin")}</Checkbox>
+                      </S.HistoryHeaderAside>
+                    </S.HistoryHeader>
+                    <S.HistoryWrapper>
+                      <TabContent>
+                        {pendingWithdraws?.length ? (
+                          <HistoryTable items={pendingWithdraws} />
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                      <TabContent>
+                        {readyToClaim?.length ? (
+                          readyToClaim.map(({ id, sid, items }) => (
+                            <HistoryCard
+                              key={id}
+                              sid={sid}
+                              hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
+                              handleClaimWithdraws={async () =>
+                                await onFetchClaimWithdraw({ sid })
+                              }
+                              items={items?.filter((v) => v.status === "READY")}
+                            />
+                          ))
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                      <TabContent>
+                        {claimedWithdraws?.length ? (
+                          <HistoryTable items={claimedWithdraws} />
+                        ) : (
+                          <div style={{ padding: "2rem" }}>
+                            <EmptyData />
+                          </div>
+                        )}
+                      </TabContent>
+                    </S.HistoryWrapper>
+                  </Tabs>
+                </S.History>
+              </S.Box>
+            </S.Container>
+          </S.Wrapper>
+        </S.FlexContainer>
       </S.Main>
     </>
   );
@@ -342,13 +348,16 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
     () => claimWithdrawsInLoading.includes(sid),
     [claimWithdrawsInLoading, sid]
   );
+
+  const { t } = useTranslation("withdraw");
+
   return (
     <S.HistoryContent>
       <S.HistoryTitle>
         <strong>Id #{sid ?? "QUEUED"}</strong>
 
         {claimWithdrawsInLoading?.length >= 1 && !claimIsLoading ? (
-          <p>There is already a transaction in progress</p>
+          <p>{t("alreadyInProgress")}</p>
         ) : (
           !!hasPendingWithdraws?.length && (
             <Button
@@ -356,7 +365,7 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
               disabled={claimIsLoading}
               isLoading={claimIsLoading}
               onClick={handleClaimWithdraws}>
-              Claim
+              {t("claim")}
             </Button>
           )
         )}
@@ -369,21 +378,23 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
 const HistoryTable = ({ items }) => {
   const { selectGetAsset } = useAssetsProvider();
 
+  const { t } = useTranslation("withdraw");
+
   return (
     <S.HistoryTable>
       <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
         <Table.Header fill="none" striped>
           <Table.Column>
-            <S.HeaderColumn>Name</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.name")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Date</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.date")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Amount</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.amount")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Status</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.status")}</S.HeaderColumn>
           </Table.Column>
         </Table.Header>
         <Table.Body striped border="squared">

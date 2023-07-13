@@ -27,7 +27,7 @@ export const Profile = styled.div`
 `;
 export const Switch = styled.div`
   ${({ theme }) => css`
-    margin: 0 1.5rem 1rem 1.5rem;
+    margin: 1.5rem;
     border: 2px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: 1rem;
   `}
@@ -130,6 +130,9 @@ export const Card = styled.div<{ isHoverable?: boolean }>`
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
+    &:last-child {
+      margin-bottom: 1rem;
+    }
     ${isHoverable &&
     css`
       cursor: pointer;

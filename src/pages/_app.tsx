@@ -23,6 +23,7 @@ import {
   SettingProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import "@polkadex/orderbook/i18n";
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
@@ -101,7 +102,7 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
         ) : (
           <QueryClientProvider client={queryClient}>
             <ThemeWrapper>
-              <Component {...pageProps} />
+              <Layout Component={Component} pageProps={pageProps} />
             </ThemeWrapper>
           </QueryClientProvider>
         )}
@@ -130,5 +131,11 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     </>
   );
 };
-
+const Layout = ({ Component, pageProps }) => {
+  if (Component.getLayout) {
+    return Component.getLayout(<Component {...pageProps} />);
+  } else {
+    return <Component {...pageProps} />;
+  }
+};
 export default App;

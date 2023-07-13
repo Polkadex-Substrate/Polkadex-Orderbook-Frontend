@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 
 export type NotificationPayload = {
-  type: "Error" | "Info" | "Success" | "Loading" | "Attention";
+  type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
 };
 
@@ -15,7 +15,7 @@ export interface SettingState {
   ordersHideOtherPairs: boolean;
   marketSelectorActive: boolean;
   theme: "light" | "dark";
-  language: "en" | "fr" | "es" | "zh";
+  language: "en";
   currency: "USD" | "EUR" | "CNY" | "INR";
   notifications: Notification[];
   hasExtension?: boolean;

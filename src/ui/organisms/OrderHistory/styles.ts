@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Wrapper = styled.div``;
@@ -32,6 +32,7 @@ export const Tbody = styled(Grid)`
     display: block;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;
+    overflow: hidden;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -60,4 +61,31 @@ export const Th = styled.th`
 
 export const EmptyWrapper = styled.div`
   padding: 10rem 0;
+`;
+
+export const Loader = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 5px;
+  `}
+`;
+
+export const ErrorWrapper = styled.div`
+  ${({ theme }) => css`
+    text-align: center;
+    padding-top: 8px;
+    p {
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+      color: ${theme.colors.red};
+    }
+    button {
+      background: rgba(139, 161, 190, 0.2);
+      color: ${theme.colors.text};
+    }
+  `}
 `;

@@ -52,6 +52,7 @@ export const ErrorMessages = {
   CHECK_BALANCE: "Amount can not be greater than balance",
   REMAINING_BALANCE: "You need atleast 1 PDEX in your funding account to keep it alive",
   MAX_EIGHT_DIGIT_AFTER_DECIMAL: "Maximum 8 digits are allowed after decimal",
+  WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
 };
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;

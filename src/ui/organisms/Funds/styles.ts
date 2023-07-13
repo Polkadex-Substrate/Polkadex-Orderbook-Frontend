@@ -103,7 +103,6 @@ export const Link = styled.div`
     border-radius: 0.4rem;
     padding: 0.2rem 0.4rem;
     font-size: 1.3rem;
-    color: ${theme.colors.white};
     transition: background 0.4s ease-in-out;
     border: 1px solid ${theme.colors.secondaryBackground};
     cursor: pointer;
@@ -114,6 +113,7 @@ export const WithdrawLink = styled(Link)``;
 export const DepositLink = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.green};
+    color: ${theme.colors.white};
     :hover {
       background-color: ${theme.colors.green}33;
     }
