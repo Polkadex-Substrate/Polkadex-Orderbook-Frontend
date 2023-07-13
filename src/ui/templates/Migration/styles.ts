@@ -111,13 +111,6 @@ export const Box = styled.div`
     a {
       color: ${theme.colors.primary};
     }
-    button {
-      cursor: pointer;
-      font-weight: 600;
-      border-radius: 0.6rem;
-      padding: 1.5rem 0;
-      background-color: ${theme.colors.primary};
-    }
   `}
 `;
 
@@ -237,5 +230,16 @@ export const CountDown = styled.div`
         font-size: 1.5rem;
       }
     }
+  `}
+`;
+
+export const InfoButton = styled.button`
+  ${({ theme }) => css`
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 0.6rem;
+    padding: 2rem 0;
+    background-color: ${theme.colors.primary};
+    font-size: ${theme.font.sizes.large};
   `}
 `;

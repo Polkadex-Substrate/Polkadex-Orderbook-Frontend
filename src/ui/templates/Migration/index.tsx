@@ -79,13 +79,14 @@ export const Migration = ({
               various runtime upgrades (which included the on-chain deployment of Orderbook v2
               and THEA) in June, the Polkadex Core Contributors switched on Orderbook v2 and
               THEA during the first week of July. Shortly after, the Polkadex network
-              experienced a standstill briefly due to the fact that some validators were
-              running nodes with lower-than-required specs. While this issue could be resolved
-              if all the validators in the network run optimal specs, this reliance on network
+              experienced a brief standstill due to the fact that some validators were running
+              nodes with lower-than-required specs. While this issue could be resolved if all
+              the validators in the network run optimal specs, this reliance on network
               validators to run high specs can threaten products built on the network as
               validators could at any time lower their specs and cause a similar crash to
-              happen. This problem was not in the testnet because of a controlled environment,
-              and only a live network could have reproduced these results.
+              happen. This problem was not found on the testnet because of its nature as a
+              controlled environment, only a live network with a diverse set of validators
+              could have reproduced these results.
             </p>
             <p>
               In other words, the Orderbook v2 and THEA architecture deployed in the v5.1.3
@@ -97,7 +98,7 @@ export const Migration = ({
             </p>
             <p>
               We have already released a new binary (v.5.2.0) which applies these changes to
-              Orderbook. v5.2.0 is already running on over 185 nodes, or nearly 80% of the
+              Orderbook. v5.2.0 is already running on over 185 nodes, or around 80% of the
               Polkadex network. We are currently working on moving THEA to the same logic.That
               binary is estimated to be released by the end of this week. Depending on the
               adoption of new binary releases, the execution of runtime upgrades, and the
@@ -111,9 +112,9 @@ export const Migration = ({
               before. It far exceeds the proof of reserves mechanism currently adopted by
               centralised exchanges because it also adds other qualities of an on-chain DEX.
               Though it may look like such roadblocks are a show stopper, and since this is a
-              solution that the industry is looking for, we sincerely hope it’s well worth the
-              wait. Thank you for your understanding and a special thanks to all the Polkadex
-              validators for their proactive collaboration.
+              product that the industry is looking for, we are confident the solutions will be
+              well worth the wait. Thank you for your understanding and a special thanks to all
+              the Polkadex validators for their proactive collaboration.
             </p>
             <button onClick={() => setShowMessage(false)}>Close</button>
           </S.Info>
@@ -159,9 +160,6 @@ export const Migration = ({
           <S.Box>
             <h1>{title}</h1>
             {children}
-            <button onClick={() => setShowMessage(true)}>
-              Important Update about Orderbook v2 Release.
-            </button>
           </S.Box>
           <S.Footer>
             {footerText && <p>{footerText}</p>}
@@ -174,6 +172,9 @@ export const Migration = ({
         </S.Content>
         <S.Timer>
           <S.TimerWrapper>
+            <S.InfoButton onClick={() => setShowMessage(true)}>
+              Important Update about Orderbook v2 Release.
+            </S.InfoButton>
             <h3>{t("migrationEndsIn")}</h3>
             <S.CountDown>
               <div>
