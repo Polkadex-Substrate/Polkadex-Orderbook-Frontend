@@ -19,7 +19,7 @@ const Migration = () => {
       footerText="Join our Telegram for more updates!"
       textButton="Join Telegram"
       buttonLink="https://t.me/Polkadex"
-      dateIntimestampMs={new Date("07/15/2023")}
+      dateIntimestampMs={new Date("07/31/2023")}
     />
   );
 };

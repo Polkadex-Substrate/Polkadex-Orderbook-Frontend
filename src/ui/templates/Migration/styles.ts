@@ -20,6 +20,19 @@ export const Container = styled.div`
   }
 `;
 
+export const Info = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1000px;
+    padding: 2rem;
+    background-color: ${theme.colors.black};
+    color: ${theme.colors.tertiaryText};
+    font-size: 1.5rem;
+  `}
+`;
+
 export const Inner = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primary};
@@ -90,6 +103,13 @@ export const Box = styled.div`
     }
     a {
       color: ${theme.colors.primary};
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 0.6rem;
+      padding: 1.5rem 0;
+      background-color: ${theme.colors.primary};
     }
   `}
 `;
