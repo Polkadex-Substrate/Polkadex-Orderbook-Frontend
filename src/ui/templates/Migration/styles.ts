@@ -30,6 +30,13 @@ export const Info = styled.div`
     background-color: ${theme.colors.black};
     color: ${theme.colors.tertiaryText};
     font-size: 1.5rem;
+    button {
+      background-color: ${theme.colors.primary};
+      width: max-content;
+      padding: 1rem 2rem;
+      color: ${theme.colors.text};
+      border-radius: ${theme.border.radius.small};
+    }
   `}
 `;
 

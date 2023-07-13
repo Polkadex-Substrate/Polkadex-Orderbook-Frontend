@@ -115,6 +115,7 @@ export const Migration = ({
               wait. Thank you for your understanding and a special thanks to all the Polkadex
               validators for their proactive collaboration.
             </p>
+            <button onClick={() => setShowMessage(false)}>Close</button>
           </S.Info>
         </Modal>
         <S.Content>
