@@ -27,7 +27,7 @@ export const selectIsAddressInExtension = (
 export const executeRegisterEmail = async (data: string[], signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: [...data, signature] });
   try {
-    const res = await sendQueryToAppSync({
+    return await sendQueryToAppSync({
       query: mutations.register_user,
       variables: {
         input: { payload: payloadStr },
@@ -35,7 +35,6 @@ export const executeRegisterEmail = async (data: string[], signature: string) =>
       token: null,
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    return res;
   } catch (error) {
     throw new Error("Invalid address or signature");
   }
