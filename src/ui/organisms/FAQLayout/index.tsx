@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { FAQsidebar } from "../FAQsidebar";
 
@@ -8,11 +9,15 @@ const FAQLayout = ({ children }) => {
   const closeSidebar = useCallback(() => {
     setShowSidebar(false);
   }, []);
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`faqLayout.${key}`);
+
   return (
     <S.HomeLayout>
       {children}
       <FAQsidebar closeSidebar={closeSidebar} show={showSidebar} />
-      <S.Sticker onClick={() => setShowSidebar(true)}>Still have questions?</S.Sticker>
+      <S.Sticker onClick={() => setShowSidebar(true)}>{t("stillHaveQuestions")}</S.Sticker>
     </S.HomeLayout>
   );
 };

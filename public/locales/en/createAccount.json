@@ -1,0 +1,10 @@
+{
+  "title": "Create Account | Polkadex Orderbook",
+  "overview": "Overview",
+  "info": "Did you know that you can use your account in the Polkadex Mobile app?",
+  "downloadMessage": "Download your paper wallet and scan the qr code.",
+  "appStore": "App store",
+  "googlePlay": "Google Play",
+  "inputLabel": "Account Name (Optional)",
+  "inputPlaceholder": "Enter a name for this account"
+}

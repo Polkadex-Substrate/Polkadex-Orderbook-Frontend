@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import confetti from "canvas-confetti";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -33,10 +34,12 @@ export const ResetPasswordFormTemplate = () => {
     },
   });
 
+  const { t } = useTranslation("resetPasswordForm");
+
   return (
     <>
       <Head>
-        <title>New password | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -56,13 +59,13 @@ export const ResetPasswordFormTemplate = () => {
                   <S.Column />
                   <S.Box>
                     <S.BoxTitle>
-                      <h1>New password</h1>
-                      <p>For safety of your account, please use strong password.</p>
+                      <h1>{t("card.title")}</h1>
+                      <p>{t("card.description")}</p>
                     </S.BoxTitle>
                     <form onSubmit={handleSubmit}>
                       <InputLine
                         name="code"
-                        label="Email code verification"
+                        label={t("card.inputEmailLabel")}
                         placeholder="000000"
                         error={errors.code && touched.code && errors.code}
                         disabled={isLoading}
@@ -71,8 +74,8 @@ export const ResetPasswordFormTemplate = () => {
                       <InputLine
                         name="password"
                         type={view.password ? "text" : "password"}
-                        label="Password"
-                        placeholder="Enter your password"
+                        label={t("card.inputPasswordLabel")}
+                        placeholder={t("card.inputPasswordPlaceHolder")}
                         disabled={isLoading}
                         error={errors.password && touched.password && errors.password}
                         {...getFieldProps("password")}>
@@ -85,8 +88,8 @@ export const ResetPasswordFormTemplate = () => {
                       <InputLine
                         name="repeatPassword"
                         type={view.repeatPassword ? "text" : "password"}
-                        label="Repeat password"
-                        placeholder="Repeat your password"
+                        label={t("card.inputRepeatPasswordLabel")}
+                        placeholder={t("card.inputRepeatPasswordPlaceHolder")}
                         disabled={isLoading}
                         error={
                           errors.repeatPassword &&
@@ -110,7 +113,7 @@ export const ResetPasswordFormTemplate = () => {
                         color="white"
                         isLoading={isLoading}
                         isFull>
-                        Continue
+                        {t("card.button")}
                       </Button>
                     </form>
                   </S.Box>
@@ -135,14 +138,17 @@ const Success = () => {
       },
     });
   }, []);
+
+  const { t } = useTranslation("resetPasswordForm");
+
   return (
     <S.Success>
       <div>
         <img src="/img/success.svg" alt="email sent" />
       </div>
-      <h2>Password changed!</h2>
-      <p>Awesome, your password has been changed successfully.</p>
-      <small>You will be automatically redirected in 5 seconds. </small>
+      <h2>{t("success.heading")}</h2>
+      <p>{t("success.description")}</p>
+      <small>{t("success.small")} </small>
     </S.Success>
   );
 };

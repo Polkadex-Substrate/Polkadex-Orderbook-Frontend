@@ -15,7 +15,7 @@ export interface SettingState {
   ordersHideOtherPairs: boolean;
   marketSelectorActive: boolean;
   theme: "light" | "dark";
-  language: "en" | "fr" | "es" | "zh";
+  language: "en";
   currency: "USD" | "EUR" | "CNY" | "INR";
   notifications: Notification[];
   hasExtension?: boolean;

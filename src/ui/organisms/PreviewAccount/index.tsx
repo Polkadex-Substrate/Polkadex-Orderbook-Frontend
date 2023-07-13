@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import { UnlockAccount } from "../UnlockAccount";
 
@@ -104,6 +105,11 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       status: true,
       name,
     });
+
+  const { t: translation } = useTranslation("organisms");
+  const { t: tc } = useTranslation("common");
+  const t = (key: string) => translation(`previewWallet.${key}`);
+
   return (
     <>
       <Modal open={remove.status} onClose={handleClose}>
@@ -133,7 +139,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
       </Modal>
       <Loading
         isVisible={isRemoveFromBlockchainLoading}
-        message="Block finalization will take a few mins."
+        message={tc("blockFinalizationMessage")}
         spinner="Keyboard">
         <S.Main>
           {shouldShowProtectedPassword ? (
@@ -153,22 +159,25 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                 <Icons.SingleArrowLeft />
               </S.Header>
               <S.Content>
-                <h2>Preview Wallet</h2>
+                <h2>{t("title")}</h2>
                 <S.Container>
                   <S.Box>
                     <WalletName
-                      label="Trading account name"
+                      label={t("walletLabel")}
                       information={String(
-                        selected?.account?.meta?.name || "Account not present in the browser"
+                        selected?.account?.meta?.name || t("accountNotPresent")
                       )}
                     />
-                    <WalletAddress label="Trade wallet" information={selected?.address} />
                     <WalletAddress
-                      label="Funding account"
+                      label={t("tradeWalletLabel")}
+                      information={selected?.address}
+                    />
+                    <WalletAddress
+                      label={t("fundingWalletLabel")}
                       information={
                         mainAccountDetails
                           ? mainAccountDetails?.account?.meta?.name
-                          : "Funding Account not present in polkadot.js extension"
+                          : t("fundingAccountPresent")
                       }
                       informationDisabled
                       additionalInformation={
@@ -177,11 +186,11 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                       isLocked
                     />
                     <ProtectedByPassword
-                      label="Protected by password"
+                      label={t("protectedPassword")}
                       isActive={tradingAccountInBrowser?.isLocked}
                     />
                     <DefaultAccount
-                      label="Default trade account"
+                      label={t("defaultTradeAccount")}
                       tradeAddress={selected?.address}
                     />
                   </S.Box>
@@ -190,7 +199,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                       disabled={!tradingAccountInBrowser}
                       onClick={() => onUserSelectAccount({ tradeAddress: selected?.address })}
                       type="button">
-                      {using ? "Using" : "Use"}
+                      {using ? t("using") : t("use")}
                     </S.Button>
                   )}
                 </S.Container>
@@ -200,12 +209,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                   disabled={!tradingAccountInBrowser || !mainAccountDetails}
                   type="button"
                   onClick={handleExportAccount}>
-                  Export
+                  {t("export")}
                 </S.ExportButton>
                 <Dropdown>
                   <Dropdown.Trigger>
                     <S.DropdownButton type="button">
-                      Remove account
+                      {t("removeAccount")}
                       <div>
                         <Icons.ArrowBottom />
                       </div>
@@ -219,10 +228,10 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                       onAction={() =>
                         handleOpenRemove(false, selected?.account?.meta?.name as string)
                       }>
-                      Remove from blockchain
+                      {t("removefromBlockchain")}
                     </Dropdown.Item>
                     <Dropdown.Item key={"2"} onAction={() => handleOpenRemove()}>
-                      Remove from device
+                      {t("removeFromDevice")}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -290,12 +299,15 @@ const WalletAddress = ({
   isLocked = false,
   informationDisabled = false,
 }) => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`previewWallet.${key}`);
+
   const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = t("copyToClipBoard"));
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(information);
-    buttonRef.current.innerHTML = "Copied";
+    buttonRef.current.innerHTML = t("copied");
   };
 
   return (
@@ -319,7 +331,7 @@ const WalletAddress = ({
               </TooltipHeader>
               <TooltipContent>
                 <span ref={buttonRef} style={{ whiteSpace: "nowrap" }}>
-                  Copy to clipboard
+                  {t("copyToClipBoard")}
                 </span>
               </TooltipContent>
             </Tooltip>

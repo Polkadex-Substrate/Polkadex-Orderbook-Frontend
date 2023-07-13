@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import * as S from "./styles";
 
 import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
@@ -22,6 +24,9 @@ export const Navbar = ({ onOpenMarkets }) => {
 
   const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string, args = {}) => translation(`navbar.${key}`, args);
+
   return (
     <S.Wrapper>
       <S.WrapperInfo>
@@ -35,28 +40,32 @@ export const Navbar = ({ onOpenMarkets }) => {
         </S.ContainerPair>
         <S.ContainerInfo>
           <NavbarItem
-            label={`Price ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
+            label={t("price", {
+              price: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
+            })}
             info={price}
           />
 
           <NavbarItem
-            label="Price % 24h"
+            label={t("price%24h")}
             info={priceChangePerCent}
             color={isPriceChangeNegative ? "primary" : "green"}
           />
           <NavbarItem
-            label={`Volume 24h ${quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : ""}`}
+            label={t("volume24hr", {
+              volume: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
+            })}
             info={volume}
           />
 
           <S.WrapperVolume>
             <S.ContainerVolume>
               <S.VolumeHigh>
-                <span>24h High</span>
+                <span>{t("24hrhigh")}</span>
                 <p>{high}</p>
               </S.VolumeHigh>
               <S.VolumeLow>
-                <span>24h Low</span>
+                <span>{t("24hrlow")}</span>
                 <p>{low}</p>
               </S.VolumeLow>
             </S.ContainerVolume>
