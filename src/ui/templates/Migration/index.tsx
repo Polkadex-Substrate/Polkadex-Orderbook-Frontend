@@ -94,7 +94,7 @@ export const Migration = ({
               specification. We have fixed this problem by not relying on the entire validator
               set to maintain Polkadex Orderbook and have also removed the need for a gossip
               protocol that relies heavily on the network quality and processing capacity of
-              individual validators within a limited block time
+              individual validators within a limited block time.
             </p>
             <p>
               We have already released a new binary (v.5.2.0) which applies these changes to
@@ -172,9 +172,6 @@ export const Migration = ({
         </S.Content>
         <S.Timer>
           <S.TimerWrapper>
-            <S.InfoButton onClick={() => setShowMessage(true)}>
-              Important Update about Orderbook v2 Release.
-            </S.InfoButton>
             <h3>{t("migrationEndsIn")}</h3>
             <S.CountDown>
               <div>
@@ -194,6 +191,9 @@ export const Migration = ({
                 <p>{t("secs")}</p>
               </div>
             </S.CountDown>
+            <S.InfoButton onClick={() => setShowMessage(true)}>
+              Important Update about Orderbook v2 Release.
+            </S.InfoButton>
           </S.TimerWrapper>
           <img alt="" src="/img/migrationHero.svg" />
         </S.Timer>
