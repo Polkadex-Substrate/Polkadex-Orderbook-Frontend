@@ -36,7 +36,7 @@ export const executeRegisterEmail = async (data: string[], signature: string) =>
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
   } catch (error) {
-    throw new Error("Invalid address or signature");
+    throw new Error("Registration failed. Please try again or contact us.");
   }
 };
 
