@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -45,10 +46,13 @@ export const SignTemplate = () => {
     },
   });
 
+  const { t } = useTranslation("sign");
+  const { t: tc } = useTranslation("common");
+
   return (
     <>
       <Head>
-        <title>New Account | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -62,27 +66,24 @@ export const SignTemplate = () => {
                   <OrderbookLogo />
                 </div>
                 <span>
-                  Already a member? <Link href="/signIn"> Sign In</Link>
+                  {t("alreadyMember")} <Link href="/signIn"> {t("signIn")}</Link>
                 </span>
               </S.Title>
               <S.Card>
                 <S.Column>
                   <div>
-                    <h2>Discover the decentralized world.</h2>
-                    <p>
-                      Polkadex is a fully non-custodial platform, so the assets in your wallet
-                      are always under your control.
-                    </p>
+                    <h2>{t("card.title")}</h2>
+                    <p>{t("card.description")}</p>
                   </div>
                 </S.Column>
                 <S.Box>
-                  <h1>Sign up to Orderbook</h1>
+                  <h1>{t("card.secondaryTitle")}</h1>
                   {!defaultConfig.signUpDisabled ? (
                     <form onSubmit={handleSubmit}>
                       <InputLine
                         name="email"
-                        label="Email"
-                        placeholder="Enter your email"
+                        label={t("card.input.email.label")}
+                        placeholder={t("card.input.email.placeHolder")}
                         error={errors.email && touched.email && errors.email}
                         disabled={loading}
                         {...getFieldProps("email")}
@@ -90,8 +91,8 @@ export const SignTemplate = () => {
                       <InputLine
                         name="password"
                         type={view.password ? "text" : "password"}
-                        label="Password"
-                        placeholder="Enter your password"
+                        label={t("card.input.password.label")}
+                        placeholder={t("card.input.password.placeHolder")}
                         disabled={loading}
                         error={errors.password && touched.password && errors.password}
                         {...getFieldProps("password")}>
@@ -104,8 +105,8 @@ export const SignTemplate = () => {
                       <InputLine
                         name="repeatPassword"
                         type={view.repeatPassword ? "text" : "password"}
-                        label="Repeat password"
-                        placeholder="Repeat your password"
+                        label={t("card.input.repeatPassword.label")}
+                        placeholder={t("card.input.repeatPassword.placeHolder")}
                         disabled={loading}
                         error={
                           errors.repeatPassword &&
@@ -128,27 +129,26 @@ export const SignTemplate = () => {
                             setFieldValue("termsAccepted", !values.termsAccepted)
                           }>
                           <span>
-                            By clicking the Create Account button below, I hereby agree with
-                            Polkadex{" "}
+                            {t("card.checkBox")}{" "}
                             <a
                               href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
                               target="_blank"
                               rel="noreferrer">
-                              Terms of Service
+                              {tc("termsOfService")}
                             </a>
                             ,{" "}
                             <a
                               href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                               target="_blank"
                               rel="noreferrer">
-                              Privacy Policy
+                              {tc("privacyPolicy")}
                             </a>
                             ,{" "}
                             <a
                               href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
                               target="_blank"
                               rel="noreferrer">
-                              Disclaimer and Legal Notice
+                              {tc("disclaimerAndLegalNotice")}
                             </a>{" "}
                           </span>
                         </Checkbox>
@@ -161,14 +161,11 @@ export const SignTemplate = () => {
                         disabled={!(isValid && dirty) || loading}
                         isFull
                         isLoading={loading}>
-                        Create Account
+                        {t("card.input.button")}
                       </Button>
                     </form>
                   ) : (
-                    <S.Disabled>
-                      We are only onboarding 50 users per week at the moment. The limit has
-                      reached for this week. Check back soon.
-                    </S.Disabled>
+                    <S.Disabled>{t("card.input.disabledText")}</S.Disabled>
                   )}
                 </S.Box>
               </S.Card>

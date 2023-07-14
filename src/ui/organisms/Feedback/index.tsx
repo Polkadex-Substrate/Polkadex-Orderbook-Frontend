@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Rating } from "../Rating";
 
@@ -49,9 +50,12 @@ const Feedback = () => {
     ? userFriendlyRef.current?.scrollHeight
     : 0;
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`feedback.${key}`);
+
   return (
     <S.Container>
-      <FAQHeader heading={"Give us your feedback"} pathname={router.pathname} />
+      <FAQHeader heading={t("heading")} pathname={router.pathname} />
       <form action="" onSubmit={formik.handleSubmit}>
         <S.BorderWrapper>
           <S.QuestionWrapper>
@@ -102,11 +106,15 @@ const Feedback = () => {
             <Rating value={formik.values.stars} onClick={handleStarClick} />
             <S.Question>Additional comments(Optional)</S.Question>
             <div>
-              <S.Input placeholder="Enter your comment" {...formik.getFieldProps("value")} />
+              <S.Input
+                placeholder={t("inputPlaceholder")}
+                {...formik.getFieldProps("value")}
+              />
               {formik.touched.value && formik.errors.value ? (
                 <S.InputError>{formik.errors.value}</S.InputError>
               ) : null}
             </div>
+
             <Button
               type="submit"
               size="extraLarge"
@@ -115,7 +123,7 @@ const Feedback = () => {
               color="white"
               disabled={!(formik.isValid && formik.dirty)}
               isFull>
-              Submit a request
+              {t("submitRequest")}
             </Button>
           </S.QuestionWrapper>
         </S.BorderWrapper>

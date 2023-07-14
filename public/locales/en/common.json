@@ -1,0 +1,23 @@
+{
+  "polkadexOrderbook": "Polkadex Orderbook",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw",
+  "connectTradingAccount": {
+    "title": "Connect your Trading Account",
+    "description": "Import your existing account, or create a new account",
+    "primaryLinkTitle": "Create Account",
+    "secondaryLinkTitle": "Select Account"
+  },
+  "blockFinalizationMessage": "Block finalization will take a few mins.",
+  "createAccount": "Create Account",
+  "signUp": "Sign Up",
+  "login": "Log In",
+  "available": "Available",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "disclaimerAndLegalNotice": "Disclaimer and Legal Notice",
+  "termsOfUse": "Terms of Use",
+  "disclaimer": "Disclaimer",
+  "dataRetentionPolicy": "Data Retention Policy",
+  "excludedJurisdictions": "Excluded Jurisdictions"
+}

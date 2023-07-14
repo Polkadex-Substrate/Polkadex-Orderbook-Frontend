@@ -1,10 +1,11 @@
 import Head from "next/head";
+import { useTranslation } from "react-i18next";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import * as S from "./styles";
 
-import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
+import { Modal, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 
 const initialState = {
   days: "00",
@@ -30,6 +31,7 @@ export const Migration = ({
   children = <MigrationText />,
 }: PropsWithChildren<Props>) => {
   const [state, setState] = useState(initialState);
+  const [showMessage, setShowMessage] = useState(false);
 
   const updateRemainingTime = useCallback((time: Date) => {
     const timestampDay = dayjs(time);
@@ -38,7 +40,7 @@ export const Migration = ({
 
     return {
       days: addZeros(timestampDay.diff(nowDay, "days")),
-      hours: addZeros(timestampDay.diff(nowDay, "hours") % 25),
+      hours: addZeros(timestampDay.diff(nowDay, "hours") % 24),
       minutes: addZeros(timestampDay.diff(nowDay, "minutes") % 60),
       seconds: addZeros(timestampDay.diff(nowDay, "seconds") % 60),
     };
@@ -56,14 +58,70 @@ export const Migration = ({
     return () => clearTimeout(initTimer);
   }, [dateIntimestampMs, updateRemainingTime]);
 
+  const { t } = useTranslation("migration");
+
   return (
     <S.Wrapper>
       <Head>
-        <title>Polkadex - Orderbook v2 migration</title>
+        <title>{t("title")}</title>
       </Head>
       <S.Container>
+        <Modal
+          open={showMessage}
+          onClose={() => setShowMessage(false)}
+          onOpen={() => setShowMessage(true)}
+          isBlur
+          border="semiRounded"
+          bgStyle="ghost">
+          <S.Info>
+            <p>
+              After the Polkadex network’s adoption of new binaries and the execution of
+              various runtime upgrades (which included the on-chain deployment of Orderbook v2
+              and THEA) in June, the Polkadex Core Contributors switched on Orderbook v2 and
+              THEA during the first week of July. Shortly after, the Polkadex network
+              experienced a standstill briefly due to the fact that some validators were
+              running nodes with lower-than-required specs. While this issue could be resolved
+              if all the validators in the network run optimal specs, this reliance on network
+              validators to run high specs can threaten products built on the network as
+              validators could at any time lower their specs and cause a similar crash to
+              happen. This problem was not in the testnet because of a controlled environment,
+              and only a live network could have reproduced these results.
+            </p>
+            <p>
+              In other words, the Orderbook v2 and THEA architecture deployed in the v5.1.3
+              binaries was built with the assumption that all validators are running a minimum
+              specification. We have fixed this problem by not relying on the entire validator
+              set to maintain Polkadex Orderbook and have also removed the need for a gossip
+              protocol that relies heavily on the network quality and processing capacity of
+              individual validators within a limited block time
+            </p>
+            <p>
+              We have already released a new binary (v.5.2.0) which applies these changes to
+              Orderbook. v5.2.0 is already running on over 185 nodes, or nearly 80% of the
+              Polkadex network. We are currently working on moving THEA to the same logic.That
+              binary is estimated to be released by the end of this week. Depending on the
+              adoption of new binary releases, the execution of runtime upgrades, and the
+              stability of the network, our most confident estimate for the start of trading is
+              late July.
+            </p>
+            <p>
+              Building an order-book that executes off-chain and with a capacity to be verified
+              on chain is extremely challenging because of the decentralised nature of the
+              available data set. This is an engineering challenge that has never been solved
+              before. It far exceeds the proof of reserves mechanism currently adopted by
+              centralised exchanges because it also adds other qualities of an on-chain DEX.
+              Though it may look like such roadblocks are a show stopper, and since this is a
+              solution that the industry is looking for, we sincerely hope it’s well worth the
+              wait. Thank you for your understanding and a special thanks to all the Polkadex
+              validators for their proactive collaboration.
+            </p>
+            <button onClick={() => setShowMessage(false)}>Close</button>
+          </S.Info>
+        </Modal>
         <S.Content>
-          <S.Details />
+          <S.Outer>
+            <S.Inner></S.Inner>
+          </S.Outer>
           <S.Header>
             <span>
               <svg
@@ -101,6 +159,9 @@ export const Migration = ({
           <S.Box>
             <h1>{title}</h1>
             {children}
+            <button onClick={() => setShowMessage(true)}>
+              Important Update about Orderbook v2 Release.
+            </button>
           </S.Box>
           <S.Footer>
             {footerText && <p>{footerText}</p>}
@@ -113,23 +174,23 @@ export const Migration = ({
         </S.Content>
         <S.Timer>
           <S.TimerWrapper>
-            <h3>The migration ends in:</h3>
+            <h3>{t("migrationEndsIn")}</h3>
             <S.CountDown>
               <div>
                 <span>{state.days}</span>
-                <p>days</p>
+                <p>{t("days")}</p>
               </div>
               <div>
                 <span>{state.hours}</span>
-                <p>hrs</p>
+                <p>{t("hrs")}</p>
               </div>
               <div>
                 <span>{state.minutes}</span>
-                <p>mins</p>
+                <p>{t("mins")}</p>
               </div>
               <div>
                 <span>{state.seconds}</span>
-                <p>secs</p>
+                <p>{t("secs")}</p>
               </div>
             </S.CountDown>
           </S.TimerWrapper>
@@ -140,23 +201,21 @@ export const Migration = ({
   );
 };
 
-const MigrationText = ({ chainBridgeDate = "August 2023" }) => (
-  <>
-    <p>
-      Your accounts are being migrated. Hang tight and get ready for better decentralized
-      trading with Orderbook v2. Keep in mind you will not be able to trade during migration.
-      All open orders will be cancelled and your funds will be automatically withdrawn from
-      your trading account to your main account (aka your Polkadex address).
-    </p>
-    <p>
-      <span>
-        Please note, cUSDT will no longer be used for trading on Polkadex Orderbook. If you
-        have cUSDT, please use the{" "}
-        <a href="https://tokenmanager.polkadex.trade" target="_blank" rel="noreferrer">
-          ChainBridge portal
-        </a>{" "}
-        before {chainBridgeDate} to return your USDT to your Ethereum address.
-      </span>
-    </p>
-  </>
-);
+const MigrationText = ({ chainBridgeDate = "August 2023" }) => {
+  const { t } = useTranslation("migration");
+
+  return (
+    <>
+      <p>{t("accountMigration")}</p>
+      <p>
+        <span>
+          {t("description1")}{" "}
+          <a href="https://tokenmanager.polkadex.trade" target="_blank" rel="noreferrer">
+            {t("chainBridgePortal")}
+          </a>{" "}
+          {t("description2", { chainBridgeDate })}
+        </span>
+      </p>
+    </>
+  );
+};

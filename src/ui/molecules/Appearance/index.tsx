@@ -1,23 +1,28 @@
+import { useTranslation } from "react-i18next";
+
 import * as T from "./types";
 
 import { AvailableMessage, Navigation, Switcher } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/hooks";
 
 export const Appearance = ({ navigateBack }: T.Props) => {
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`appearance.${key}`);
+
   const { isDarkTheme, changeTheme } = useAppearance();
   return (
-    <Navigation title="Appearance" onBack={navigateBack}>
+    <Navigation title={t("appearance")} onBack={navigateBack}>
       <Switcher
-        title="Dark Mode"
-        description="Adjust the appearance to reduce  glare and give your eyes a break."
+        title={t("darkMode.title")}
+        description={t("darkMode.description")}
         isActive={isDarkTheme}
         onChange={changeTheme}
       />
       <AvailableMessage message="Soon">
         <Switcher
-          title="Classic Mode"
+          title={t("classicMode.title")}
           icon="Computer"
-          description="The layout of the classic version is quite similar to other exchanges."
+          description={t("classicMode.description")}
         />
       </AvailableMessage>
     </Navigation>
