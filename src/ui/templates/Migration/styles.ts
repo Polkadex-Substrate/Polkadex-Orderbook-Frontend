@@ -27,6 +27,9 @@ export const Info = styled.div`
     gap: 1.5rem;
     max-width: 1000px;
     padding: 2rem;
+    max-height: 50rem;
+    min-height: 50rem;
+    overflow: auto;
     background-color: ${theme.colors.black};
     color: ${theme.colors.tertiaryText};
     font-size: 1.5rem;
@@ -169,6 +172,7 @@ export const Timer = styled.div`
   margin-top: 3rem;
   gap: 6rem;
   flex: 1;
+  padding: 0 2rem;
   img {
     width: 100%;
     max-width: 60rem;
@@ -187,9 +191,13 @@ export const TimerWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 3rem;
     h3 {
       color: ${theme.colors.white};
+    }
+    @media screen and (min-width: 855px) {
+      align-items: flex-start;
     }
   `}
 `;
@@ -241,5 +249,8 @@ export const InfoButton = styled.button`
     padding: 2rem 0;
     background-color: ${theme.colors.primary};
     font-size: ${theme.font.sizes.large};
+    @media screen and (max-width: 455px) {
+      font-size: ${theme.font.sizes.medium};
+    }
   `}
 `;
