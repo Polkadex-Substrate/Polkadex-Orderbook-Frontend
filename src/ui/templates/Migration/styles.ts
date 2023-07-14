@@ -246,7 +246,8 @@ export const InfoButton = styled.button`
     cursor: pointer;
     font-weight: 600;
     border-radius: 0.6rem;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
+    width: 100%;
     background-color: ${theme.colors.primary};
     font-size: ${theme.font.sizes.large};
     @media screen and (max-width: 455px) {
