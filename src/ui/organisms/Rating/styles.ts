@@ -24,8 +24,8 @@ export const RatingWrapper = styled.div`
     align-items: center;
   `}
 `;
-export const RatingText = styled.div`
-  ${({ theme }) => css`
+export const RatingText = styled.div<{ value: string }>`
+  ${({ theme, value }) => css`
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     height: 6rem;
     display: flex;
@@ -33,5 +33,10 @@ export const RatingText = styled.div`
     justify-content: center;
     padding: 0 2rem;
     text-transform: capitalize;
+    transition: width 0.2s ease-in-out;
+    width: ${(value === "best" && "6.5rem") ||
+    (value === "good" && "7.5rem") ||
+    (value === "average" && "9rem") ||
+    (value === "worst" && "8rem")};
   `}
 `;

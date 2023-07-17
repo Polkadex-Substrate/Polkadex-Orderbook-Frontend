@@ -24,7 +24,7 @@ export const Rating = ({ onClick, value }: T.Props) => {
           );
         })}
       </S.Container>
-      <S.RatingText>{value}</S.RatingText>
+      <S.RatingText value={value}>{value}</S.RatingText>
     </S.RatingWrapper>
   );
 };

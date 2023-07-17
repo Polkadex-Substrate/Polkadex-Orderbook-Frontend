@@ -15,9 +15,9 @@ const Feedback = () => {
   const { onHandleAlert } = useSettingsProvider();
   const formik = useFormik({
     initialValues: {
-      answer: true,
+      answer: null,
       answerValue: "",
-      userFriendly: true,
+      userFriendly: null,
       userFriendlyValue: "",
       stars: "best",
       value: "",
@@ -45,10 +45,9 @@ const Feedback = () => {
   const answerRef = useRef<HTMLDivElement>(null);
   const userFriendlyRef = useRef<HTMLDivElement>(null);
 
-  const answerHeight = !formik.values.answer ? answerRef.current?.scrollHeight : 0;
-  const userFriendlyHeight = !formik.values.userFriendly
-    ? userFriendlyRef.current?.scrollHeight
-    : 0;
+  const answerHeight = formik.values.answer === false ? answerRef.current?.scrollHeight : 0;
+  const userFriendlyHeight =
+    formik.values.userFriendly === false ? userFriendlyRef.current?.scrollHeight : 0;
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`feedback.${key}`);
@@ -62,7 +61,7 @@ const Feedback = () => {
             <S.Question>Were we able to answer your question?</S.Question>
             <S.SwitchWrapper>
               <S.Switch onClick={() => handleAnswer(false)}>
-                <S.SwitchHandle active={!formik.values.answer}></S.SwitchHandle>
+                <S.SwitchHandle active={formik.values.answer === false}></S.SwitchHandle>
                 <S.SwitchText>No</S.SwitchText>
               </S.Switch>
               <S.Switch onClick={() => handleAnswer(true)}>
@@ -73,10 +72,10 @@ const Feedback = () => {
 
             <S.Comment ref={answerRef} maxHeight={answerHeight}>
               <S.Question>
-                Please state your query below and our support executive will get back to you
+                Please state your query below and our Support Executive will get back to you
               </S.Question>
               <S.Input
-                placeholder="Enter your comment"
+                placeholder="Enter your comments"
                 {...formik.getFieldProps("answerValue")}
               />
             </S.Comment>
@@ -84,7 +83,7 @@ const Feedback = () => {
             <S.Question>Was the FAQ Webpage user friendly?</S.Question>
             <S.SwitchWrapper>
               <S.Switch onClick={() => handleUserFriendly(false)}>
-                <S.SwitchHandle active={!formik.values.userFriendly}></S.SwitchHandle>
+                <S.SwitchHandle active={formik.values.userFriendly === false}></S.SwitchHandle>
                 <S.SwitchText>No</S.SwitchText>
               </S.Switch>
               <S.Switch onClick={() => handleUserFriendly(true)}>
@@ -94,9 +93,9 @@ const Feedback = () => {
             </S.SwitchWrapper>
 
             <S.Comment ref={userFriendlyRef} maxHeight={userFriendlyHeight}>
-              <S.Question>What would you want us to improve</S.Question>
+              <S.Question>What would you want us to improve ?</S.Question>
               <S.Input
-                placeholder="Enter your comment"
+                placeholder="Enter your comments"
                 {...formik.getFieldProps("userFriendlyValue")}
               />
             </S.Comment>
@@ -121,7 +120,14 @@ const Feedback = () => {
               background="primary"
               hoverColor="primary"
               color="white"
-              disabled={!(formik.isValid && formik.dirty)}
+              disabled={
+                !(
+                  formik.isValid &&
+                  formik.dirty &&
+                  formik.values.answer !== null &&
+                  formik.values.userFriendly !== null
+                )
+              }
               isFull>
               {t("submitRequest")}
             </Button>

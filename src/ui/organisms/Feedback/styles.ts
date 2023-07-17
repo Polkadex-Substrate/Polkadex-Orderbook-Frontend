@@ -45,7 +45,6 @@ export const Input = styled.textarea`
   ${({ theme }) => css`
     width: 100%;
     max-width: 42rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;
     font-size: small;
