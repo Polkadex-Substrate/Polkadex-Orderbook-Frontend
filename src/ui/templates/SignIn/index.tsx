@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -28,10 +29,13 @@ export const SignInTemplate = () => {
       onSignIn({ email: values.email.toLowerCase(), password: values.password }),
   });
 
+  const { t } = useTranslation("signin");
+  const { t: tc } = useTranslation("common");
+
   return (
     <>
       <Head>
-        <title>Login | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -45,24 +49,24 @@ export const SignInTemplate = () => {
                   <OrderbookLogo />
                 </div>
                 <span>
-                  Not a member? <Link href="/sign"> Sign Up</Link>
+                  {t("notMember")} <Link href="/sign"> {tc("signUp")}</Link>
                 </span>
               </S.Title>
 
               <S.Card>
                 <S.Column>
                   <div>
-                    <h2>Welcome Back!</h2>
-                    <p>Buy and Sell Cryptocurrencies. Fast and Secure</p>
+                    <h2>{t("card.title")}</h2>
+                    <p>{t("card.description")}</p>
                   </div>
                 </S.Column>
                 <S.Box>
-                  <h1>Sign In to Orderbook</h1>
+                  <h1>{t("card.secondaryTitle")}</h1>
                   <form onSubmit={handleSubmit}>
                     <InputLine
                       name="email"
-                      label="Email"
-                      placeholder="Enter your email"
+                      label={t("card.input.email.label")}
+                      placeholder={t("card.input.email.placeHolder")}
                       error={errors.email && touched.email && errors.email}
                       disabled={isLoading}
                       {...getFieldProps("email")}
@@ -70,13 +74,15 @@ export const SignInTemplate = () => {
                     <InputLine
                       name="password"
                       type={view ? "text" : "password"}
-                      label="Password"
+                      label={t("card.input.password.label")}
                       labelRight={
                         <S.InputLineLink>
-                          <Link href="/resetPassword">Forgot password?</Link>
+                          <Link href="/resetPassword">
+                            {t("card.input.password.forgotPassword")}
+                          </Link>
                         </S.InputLineLink>
                       }
-                      placeholder="Enter your password"
+                      placeholder={t("card.input.password.placeHolder")}
                       error={errors.password && touched.password && errors.password}
                       disabled={isLoading}
                       {...getFieldProps("password")}>
@@ -91,21 +97,21 @@ export const SignInTemplate = () => {
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
                           target="_blank"
                           rel="noreferrer">
-                          Terms of Service
+                          {tc("termsOfService")}
                         </a>
                         ,{" "}
                         <a
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                           target="_blank"
                           rel="noreferrer">
-                          Privacy Policy
+                          {tc("privacyPolicy")}
                         </a>
                         ,{" "}
                         <a
                           href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
                           target="_blank"
                           rel="noreferrer">
-                          Disclaimer and Legal Notice
+                          {tc("disclaimerAndLegalNotice")}
                         </a>
                       </span>
                     </S.Terms>
@@ -117,7 +123,7 @@ export const SignInTemplate = () => {
                       disabled={!(isValid && dirty) || isLoading}
                       isFull
                       isLoading={isLoading}>
-                      Log In
+                      {tc("login")}
                     </Button>
                   </form>
                 </S.Box>

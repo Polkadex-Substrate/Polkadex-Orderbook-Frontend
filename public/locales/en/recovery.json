@@ -1,0 +1,13 @@
+{
+  "title": "Import Wallet | Polkadex Orderbook",
+  "heading": "Import trade account",
+  "description": "Do you have a trade account? Import it here and start trading",
+  "inputLabel": "Account Name",
+  "inputPlaceholder": "Enter name for this account",
+  "importAccount": "Import Account",
+  "card": {
+    "heading": "What do you use mnemonic for?",
+    "description": "A Mnemonic Phrase is also called Seed Phrase or Recovery Backup for a decentralized wallet. It is a list of words and proof of ownership of your crypto assets. Polkadex does not store any information about your wallet.",
+    "strongText": "Never share your mnemonic phrase with anyone"
+  }
+}

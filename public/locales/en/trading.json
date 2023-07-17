@@ -1,0 +1,15 @@
+{
+  "shutDown": {
+    "title": "Orderbook v1 will go offline as it is upgraded to v2",
+    "textLink": "Read the full statement",
+    "footerText": "Join our Telegram for more updates!",
+    "buttonText": "Join Telegram"
+  },
+  "accountBanner": {
+    "title": "Welcome back!",
+    "description": "Looks like you’re using this browser for the first time.",
+    "subDescription": "Please create a new trading account.",
+    "closeButtonText": "Close",
+    "linkText": "Create Account"
+  }
+}

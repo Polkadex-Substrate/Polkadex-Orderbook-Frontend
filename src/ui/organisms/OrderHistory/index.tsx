@@ -1,5 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -42,6 +43,9 @@ export const OrderHistory = ({ orderHistory }: Props) => {
       });
     }
   }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch, orders.length]);
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`orderHistory.${key}`);
 
   return (
     <S.Wrapper>
@@ -127,7 +131,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                         tradeAddress: selectedAccount.tradeAddress,
                       });
                     }}>
-                    Try Again
+                    {t("tryAgain")}
                   </Button>
                 </S.ErrorWrapper>
               )}

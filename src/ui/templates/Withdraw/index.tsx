@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { intlFormat } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -145,6 +146,9 @@ export const WithdrawTemplate = () => {
     [readyToClaim]
   );
 
+  const { t } = useTranslation("withdraw");
+  const { t: tc } = useTranslation("common");
+
   const handleUnlockClose = () => setShowPassword(false);
   const formRef = useRef(null);
   return (
@@ -176,7 +180,7 @@ export const WithdrawTemplate = () => {
         </Modal.Body>
       </Modal>
       <Head>
-        <title>Withdraw | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -188,16 +192,13 @@ export const WithdrawTemplate = () => {
               <div>
                 <Icons.SingleArrowLeft />
               </div>
-              Overview
+              {t("overview")}
             </S.Title>
             <S.Container>
               <S.Column>
                 <div>
-                  <h1>Withdraw Crypto</h1>
-                  <p>
-                    Polkadex is a fully non-custodial platform, so the assets in your wallet
-                    are always under your control.
-                  </p>
+                  <h1>{t("heading")}</h1>
+                  <p>{t("description")}</p>
                 </div>
               </S.Column>
               <S.Box>
@@ -208,7 +209,7 @@ export const WithdrawTemplate = () => {
                     </div>
                     <div>
                       <strong>
-                        {currMainAcc?.account?.meta?.name || "Wallet not selected"}
+                        {currMainAcc?.account?.meta?.name || t("walletNotSelected")}
                       </strong>
                       <span>{shortAddress}</span>
                     </div>
@@ -216,7 +217,7 @@ export const WithdrawTemplate = () => {
                   <form ref={formRef} onSubmit={handleSubmit}>
                     <LoadingSection isActive={loading} color="primaryBackgroundOpacity">
                       <S.SelectInput>
-                        <span>Select a coin</span>
+                        <span>{t("selectCoin")}</span>
                         <S.SelectInputContainer>
                           <Dropdown>
                             <Dropdown.Trigger>
@@ -241,7 +242,7 @@ export const WithdrawTemplate = () => {
                           </Dropdown>
                         </S.SelectInputContainer>
                         <S.Available>
-                          Available{" "}
+                          {tc("available")}{" "}
                           <strong>
                             {availableAmount?.free_balance || 0} {selectedAsset?.symbol}
                           </strong>
@@ -250,7 +251,7 @@ export const WithdrawTemplate = () => {
                       <S.Flex>
                         <InputLine
                           name="amount"
-                          label="Token Amount"
+                          label={t("inputLabel")}
                           placeholder="0.00"
                           error={errors.amount && touched.amount && errors.amount}
                           {...getFieldProps("amount")}
@@ -263,7 +264,7 @@ export const WithdrawTemplate = () => {
                           disabled={!(isValid && dirty) || loading}
                           isFull
                           isLoading={loading}>
-                          Withdraw
+                          {tc("withdraw")}
                         </Button>
                       </S.Flex>
                     </LoadingSection>
@@ -271,24 +272,24 @@ export const WithdrawTemplate = () => {
                 </S.Form>
                 <S.History>
                   <Tabs>
-                    <h2>History</h2>
+                    <h2>{t("history")}</h2>
                     <S.HistoryHeader>
                       <S.HistoryTabs>
                         <TabHeader>
-                          <S.HistoryTab>Pending</S.HistoryTab>
+                          <S.HistoryTab>{t("pending")}</S.HistoryTab>
                         </TabHeader>
                         <TabHeader>
                           <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
-                            Ready to Claim
+                            {t("readyToClaim")}
                             <span>{hasPendingClaims}</span>
                           </S.HistoryTab>
                         </TabHeader>
                         <TabHeader>
-                          <S.HistoryTab>Claimed</S.HistoryTab>
+                          <S.HistoryTab>{t("claimed")}</S.HistoryTab>
                         </TabHeader>
                       </S.HistoryTabs>
                       <S.HistoryHeaderAside>
-                        <Checkbox name="hide">Show only selected coin</Checkbox>
+                        <Checkbox name="hide">{t("showSelectedCoin")}</Checkbox>
                       </S.HistoryHeaderAside>
                     </S.HistoryHeader>
                     <S.HistoryWrapper>
@@ -347,13 +348,16 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
     () => claimWithdrawsInLoading.includes(sid),
     [claimWithdrawsInLoading, sid]
   );
+
+  const { t } = useTranslation("withdraw");
+
   return (
     <S.HistoryContent>
       <S.HistoryTitle>
         <strong>Id #{sid ?? "QUEUED"}</strong>
 
         {claimWithdrawsInLoading?.length >= 1 && !claimIsLoading ? (
-          <p>There is already a transaction in progress</p>
+          <p>{t("alreadyInProgress")}</p>
         ) : (
           !!hasPendingWithdraws?.length && (
             <Button
@@ -361,7 +365,7 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
               disabled={claimIsLoading}
               isLoading={claimIsLoading}
               onClick={handleClaimWithdraws}>
-              Claim
+              {t("claim")}
             </Button>
           )
         )}
@@ -374,21 +378,23 @@ const HistoryCard = ({ sid, hasPendingWithdraws, handleClaimWithdraws, items }) 
 const HistoryTable = ({ items }) => {
   const { selectGetAsset } = useAssetsProvider();
 
+  const { t } = useTranslation("withdraw");
+
   return (
     <S.HistoryTable>
       <Table aria-label="Polkadex Withdraw History Table" style={{ width: "100%" }}>
         <Table.Header fill="none" striped>
           <Table.Column>
-            <S.HeaderColumn>Name</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.name")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Date</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.date")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Amount</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.amount")}</S.HeaderColumn>
           </Table.Column>
           <Table.Column>
-            <S.HeaderColumn>Status</S.HeaderColumn>
+            <S.HeaderColumn>{t("table.status")}</S.HeaderColumn>
           </Table.Column>
         </Table.Header>
         <Table.Body striped border="squared">

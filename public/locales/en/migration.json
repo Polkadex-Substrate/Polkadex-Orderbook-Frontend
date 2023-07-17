@@ -1,0 +1,12 @@
+{
+  "title": "Polkadex - Orderbook v2 migration",
+  "migrationEndsIn": "The migration ends in:",
+  "days": "days",
+  "hours": "hours",
+  "mins": "mins",
+  "secs": "secs",
+  "accountMigration": "Your accounts are being migrated. Hang tight and get ready for better decentralized trading with Orderbook v2. Keep in mind you will not be able to trade during migration. All open orders will be cancelled and your funds will be automatically withdrawn from your trading account to your main account (aka your Polkadex address).",
+  "chainBridgePortal": "ChainBridge portal",
+  "description1": "Please note, cUSDT will no longer be used for trading on Polkadex Orderbook. If you have cUSDT, please use the",
+  "description2": "before {{chainBridgeDate}} to return your USDT to your Ethereum address."
+}

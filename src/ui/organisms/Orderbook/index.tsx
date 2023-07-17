@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -105,6 +106,9 @@ export const OrderbookTable = ({
     total,
   } = useOrderbookTable({ isSell, orders: [...orders], contentRef });
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string, args = {}) => translation(`orderBook.table.${key}`, args);
+
   return (
     <>
       {loading ? (
@@ -112,9 +116,9 @@ export const OrderbookTable = ({
       ) : orders.length ? (
         <S.Table isSell={isSell} ref={contentRef}>
           <S.Head lightMode={lightMode}>
-            <S.CellHead>Price({quoteUnit})</S.CellHead>
-            <S.CellHead>Amount({baseUnit})</S.CellHead>
-            <S.CellHead>Sum({quoteUnit})</S.CellHead>
+            <S.CellHead>{t("price", { price: quoteUnit })}</S.CellHead>
+            <S.CellHead>{t("amount", { amount: baseUnit })}</S.CellHead>
+            <S.CellHead>{t("sum", { sum: quoteUnit })}</S.CellHead>
           </S.Head>
           <S.Body isSell={isSell}>
             {orders.map((order, i) => {
@@ -157,7 +161,7 @@ export const OrderbookTable = ({
       ) : (
         <EmptyData
           image={isSell ? "emptyOrderbook" : "emptyOrderbookSell"}
-          title={`No ${isSell ? "Asks" : "Bids"}`}
+          title={`${isSell ? t("noAsks") : t("noBids")}`}
           style={{ paddingBottom: 20 }}
         />
       )}

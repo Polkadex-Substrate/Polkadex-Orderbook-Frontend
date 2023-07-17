@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -8,7 +10,10 @@ export const Footer = () => {
   const isConnecting = nativeApiState.connecting;
   const isConnected = nativeApiState.connected;
 
-  const message = isConnected ? "Connected" : "Disconnected";
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`footer.${key}`);
+
+  const message = isConnected ? t("connected") : t("disconnected");
   const color = isConnected ? "green" : "primary";
 
   return (
@@ -16,7 +21,7 @@ export const Footer = () => {
       <div />
       <S.Container color={isConnecting ? "orange" : color}>
         <Icons.Connection />
-        <span>{isConnecting ? "Connecting" : message}</span>
+        <span>{isConnecting ? t("connecting") : message}</span>
       </S.Container>
     </S.Wrapper>
   );

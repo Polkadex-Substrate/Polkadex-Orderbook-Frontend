@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { detect } from "detect-browser";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { MnemonicExportProps, MnemonicProps } from "./types";
@@ -49,6 +50,9 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
     handleChange({ tags: newTags });
   };
 
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`mnemonic.${key}`);
+
   return (
     <S.Wrapper>
       <S.MnemonicContainer>
@@ -67,7 +71,7 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
           <li>
             <input
               ref={inputRef}
-              placeholder="Type mnemonic to restore your proxy account in this browser"
+              placeholder={t("placeholder")}
               disabled={state.tags.length >= 12}
               onKeyDown={onInputKeyDown}
             />
@@ -79,8 +83,7 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
           ref={buttonRef}
           onClick={isBrowserSupported ? handleOnMouseOut : undefined}>
           <span>
-            {isBrowserSupported && "Click to paste from the clipboard or"} type each word from
-            the seed phrase and press enter.
+            {isBrowserSupported && t("clickToPaste")} {t("message")}
           </span>
         </S.MnemonicAction>
       </S.MnemonicImport>
@@ -89,12 +92,15 @@ export const MnemonicImport = ({ label, state, handleChange, ...props }: Mnemoni
 };
 
 export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`mnemonic.${key}`);
+
   const buttonRef = useRef(null);
-  const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
+  const handleOnMouseOut = () => (buttonRef.current.innerHTML = t("copyToClipboard"));
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(phrases.join(" "));
-    buttonRef.current.innerHTML = "Copied";
+    buttonRef.current.innerHTML = t("copied");
   };
   return (
     <S.Wrapper>
@@ -109,7 +115,7 @@ export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
         ref={buttonRef}
         onMouseOut={handleOnMouseOut}
         onClick={handleCopy}>
-        <span>Copy to clipboard</span>
+        <span>{t("copyToClipboard")}</span>
       </S.MnemonicAction>
     </S.Wrapper>
   );

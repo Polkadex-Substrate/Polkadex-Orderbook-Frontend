@@ -4,6 +4,7 @@ import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
 import { useDropzone } from "react-dropzone";
 import { intlFormat } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { Switch } from "../Switcher";
 import { AvailableMessage } from "../AvailableMessage";
@@ -46,10 +47,14 @@ export const ImportAccountForm = ({ onCancel = undefined, defaultImportJson = fa
         return <div />;
     }
   }, [state, onCancel]);
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`importAccountForm.${key}`);
+
   return (
     <S.Wrapper>
       <S.Method>
-        <span>Import wallet method</span>
+        <span>{t("title")}</span>
         <div>
           {informationData.map(({ id, title }) => (
             <label key={id} htmlFor={id}>
@@ -107,6 +112,10 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
   const isBrowserSupported = ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
 
   const IconComponent = Icons[values.isPasscodeVisible ? "Show" : "Hidden"];
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`importAccountForm.importAccountMnemonic.${key}`);
+
   return (
     <form onSubmit={handleSubmit}>
       <S.Menmonic>
@@ -156,7 +165,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                     <div>
                       <Icons.Info />
                     </div>
-                    <span>12-word mnemonic seed</span>
+                    <span>{t("title")}</span>
                   </S.WordsWrapper>
                   <S.WordsContainer>
                     {!!values?.mnemonic?.length &&
@@ -167,7 +176,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                       ))}
                     <input
                       type="text"
-                      placeholder="Press enter after each word"
+                      placeholder={t("placeHolder")}
                       ref={mnemonicInputRef}
                       onKeyDown={onInputKeyDown}
                     />
@@ -176,7 +185,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                     <S.WorrdsFooter
                       type="button"
                       onClick={isBrowserSupported ? handleOnMouseOut : undefined}>
-                      Click to paste
+                      {t("clickToPaste")}
                     </S.WorrdsFooter>
                   )}
                 </S.Words>
@@ -187,11 +196,11 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
         <S.WalletName>
           <S.WalletNameWrapper>
             <div>
-              <span>Wallet Name</span>
+              <span>{t("walletTitle")}</span>
               <input
                 {...getFieldProps("name")}
                 type="text"
-                placeholder="Enter a wallet name"
+                placeholder={t("walletPlaceHolder")}
               />
             </div>
             <button
@@ -199,7 +208,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
               onClick={() =>
                 setFieldValue("name", generateUsername({ useRandomNumber: false }))
               }>
-              Random
+              {t("random")}
             </button>
           </S.WalletNameWrapper>
           <S.WalletError isNegative={values.name.length >= 31}>
@@ -212,7 +221,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
         <S.Password>
           <S.PasswordWrapper>
             <S.PasswordHeader>
-              <span>Protect by password</span>
+              <span>{t("protectByPassword")}</span>
               <Switch
                 isActive={values.hasPasscode}
                 onChange={() => {
@@ -226,7 +235,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                 <input
                   {...getFieldProps("passcode")}
                   type={values.isPasscodeVisible ? "text" : "password"}
-                  placeholder="(Optional) Input 5-digit trading password"
+                  placeholder={t("passwordPlaceholder")}
                 />
                 <button
                   type="button"
@@ -242,10 +251,10 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
         </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </button>
           <button type="submit" disabled={!(isValid && dirty)}>
-            Import account
+            {t("importAccount")}
           </button>
         </S.Footer>
       </S.Menmonic>
@@ -254,6 +263,9 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
 };
 
 const ImportAccountJson = ({ onCancel = undefined }) => {
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`importAccountForm.importAccountJSON.${key}`);
+
   const { onImportTradeAccountJson } = useTradeWallet();
   const formik = useFormik({
     initialValues: {
@@ -314,9 +326,9 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
             <div>
               <Icons.Upload />
             </div>
-            <p>Select a Json file to upload</p>
-            <span>or drag and drop it here</span>
-            {isDragReject && <small>Invalid</small>}
+            <p>{t("title")}</p>
+            <span>{t("draganddrop")}</span>
+            {isDragReject && <small>{t("invalid")}</small>}
           </S.Upload>
         )}
         {hasDataFile && (
@@ -344,7 +356,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
         <S.Password>
           <S.PasswordWrapper>
             <S.PasswordHeader>
-              <span>Is this wallet protected by password?</span>
+              <span>{t("protectedByPassword")}</span>
               <Switch
                 isActive={values.hasPasscode}
                 onChange={() => {
@@ -358,7 +370,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
                 <input
                   {...getFieldProps("passcode")}
                   type={values.isPasscodeVisible ? "text" : "password"}
-                  placeholder="(Optional) Enter a password"
+                  placeholder={t("passwordPlaceholder")}
                 />
                 <button
                   type="button"
@@ -374,10 +386,10 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
         </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </button>
           <button type="submit" disabled={!(isValid && dirty)}>
-            Import account
+            {t("importAccount")}
           </button>
         </S.Footer>
       </S.Menmonic>

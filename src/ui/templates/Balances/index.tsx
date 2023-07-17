@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -20,6 +21,9 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 
 export const BalancesTemplate = () => {
+  const { t } = useTranslation("balances");
+  const { t: tc } = useTranslation("common");
+
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list } = useAssetsProvider();
@@ -42,10 +46,21 @@ export const BalancesTemplate = () => {
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
+
+  const connectWalletData = {
+    image: "emptyWallet",
+    title: tc("connectTradingAccount.title"),
+    description: tc("connectTradingAccount.description"),
+    primaryLink: "/createAccount",
+    primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
+    secondaryLink: "/settings",
+    secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
+  };
+
   return (
     <>
       <Head>
-        <title>Balances | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -55,26 +70,26 @@ export const BalancesTemplate = () => {
           <S.Wrapper>
             <S.ContainerMain>
               <S.Title>
-                <h1>Balances.</h1>
+                <h1>{t("heading")}</h1>
               </S.Title>
               <S.Container>
                 {userHasSelectedAccount ? (
                   <>
                     <S.Header>
-                      <h2>Overview</h2>
+                      <h2>{t("overview")}</h2>
                       <S.HeaderBox>
                         <Search
                           value={filters.search}
                           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                           isFull
-                          placeholder="Search"
+                          placeholder={t("searchPlaceholder")}
                         />
                         <Checkbox
                           checked={filters.hideZero}
                           onChange={() =>
                             setFilters({ ...filters, hideZero: !filters.hideZero })
                           }>
-                          Hide small balances
+                          {t("hideSmallBalances")}
                         </Checkbox>
                       </S.HeaderBox>
                     </S.Header>
@@ -83,19 +98,19 @@ export const BalancesTemplate = () => {
                         <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
                           <Table.Header fill="none">
                             <Table.Column>
-                              <S.Column style={{ paddingLeft: 10 }}>Name</S.Column>
+                              <S.Column style={{ paddingLeft: 10 }}>{t("name")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>Available</S.Column>
+                              <S.Column>{t("available")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>Locked</S.Column>
+                              <S.Column>{t("locked")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>In Orders</S.Column>
+                              <S.Column>{t("inOrders")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>Actions</S.Column>
+                              <S.Column>{t("actions")}</S.Column>
                             </Table.Column>
                           </Table.Header>
                           <Table.Body striped border="squared">
@@ -142,10 +157,10 @@ export const BalancesTemplate = () => {
                                   <Table.Cell>
                                     <S.Actions>
                                       <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink>Deposit</S.DepositLink>
+                                        <S.DepositLink>{tc("deposit")}</S.DepositLink>
                                       </Link>
                                       <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink>Withdraw</S.WithdrawLink>
+                                        <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
                                       </Link>
                                     </S.Actions>
                                   </Table.Cell>
@@ -170,14 +185,4 @@ export const BalancesTemplate = () => {
       </S.Main>
     </>
   );
-};
-
-const connectWalletData = {
-  image: "emptyWallet",
-  title: "Connect your Trading Account",
-  description: "Import your existing account, or create a new account",
-  primaryLink: "/createAccount",
-  primaryLinkTitle: "Create Account",
-  secondaryLink: "/settings",
-  secondaryLinkTitle: "Select Account",
 };

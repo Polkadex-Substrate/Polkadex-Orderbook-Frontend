@@ -1,0 +1,19 @@
+{
+  "title": "Deposit | Polkadex Orderbook",
+  "overview": "Overview",
+  "heading": "Deposit Crypto",
+  "description": "Polkadex is a fully non-custodial platform, so the assets in your wallet are always under your control.",
+  "walletNotPresent": "Wallet not present",
+  "selectCoin": "Select a coin",
+  "loading": "Loading...",
+  "inputLabel": "Token Amount",
+  "accountNotFound": "Funding account not found in polkadot.js extension",
+  "history": "History",
+  "table": {
+    "name": "Name",
+    "date": "Date",
+    "status": "Status",
+    "amount": "Amount",
+    "fee": "Fee"
+  }
+}
