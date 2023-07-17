@@ -4,40 +4,65 @@ export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
   background: #020303;
+  position: relative;
 `;
 
 export const Container = styled.div`
-  position: relative;
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
   column-gap: 4rem;
   flex: 1;
+  justify-content: center;
   flex-wrap: wrap;
-  @media screen and (min-width: 855px) {
-    flex-direction: row;
+  @media screen and (max-width: 945px) {
+    justify-content: flex-start;
   }
 `;
-export const Details = styled.div`
+
+export const Info = styled.div`
   ${({ theme }) => css`
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1000px;
+    padding: 2rem;
+    max-height: 50rem;
+    min-height: 50rem;
+    overflow: auto;
+    background-color: ${theme.colors.black};
+    color: ${theme.colors.tertiaryText};
+    font-size: 1.5rem;
+    button {
+      background-color: ${theme.colors.primary};
+      width: max-content;
+      padding: 1rem 2rem;
+      color: ${theme.colors.text};
+      border-radius: ${theme.border.radius.small};
+    }
+  `}
+`;
+
+export const Inner = styled.div`
+  ${({ theme }) => css`
     background: ${theme.colors.primary};
     width: 20rem;
+    height: 10rem;
+    border-radius: 0 0 10rem 10rem;
+  `}
+`;
+
+export const Outer = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    width: 40rem;
     height: 20rem;
-    border-radius: 100rem;
-    top: -10rem;
-    right: -10rem;
-    :before {
-      content: "";
-      position: absolute;
-      width: 40rem;
-      height: 40rem;
-      border-radius: 100rem;
-      top: -10rem;
-      right: -10rem;
-      background: ${theme.colors.primary}22;
-    }
+    border-radius: 0 0 20rem 20rem;
+    background: ${theme.colors.primary}22;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    right: 0;
     @media screen and (max-width: 855px) {
       display: none;
     }
@@ -113,6 +138,7 @@ export const Header = styled.div`
     }
   `}
 `;
+
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -142,8 +168,11 @@ export const Timer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: fit-content;
+  margin-top: 3rem;
   gap: 6rem;
   flex: 1;
+  padding: 0 2rem;
   img {
     width: 100%;
     max-width: 60rem;
@@ -152,9 +181,7 @@ export const Timer = styled.div`
     font-weight: normal;
     font-size: 1.4rem;
   }
-  @media screen and (max-width: 1006px) {
-    padding: 2rem;
-  }
+
   @media screen and (min-width: 855px) {
     align-items: flex-start;
   }
@@ -164,9 +191,13 @@ export const TimerWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    gap: 3rem;
     h3 {
       color: ${theme.colors.white};
+    }
+    @media screen and (min-width: 855px) {
+      align-items: flex-start;
     }
   `}
 `;
@@ -198,6 +229,29 @@ export const CountDown = styled.div`
     }
     span {
       color: ${theme.colors.white};
+    }
+    @media screen and (max-width: 612px) {
+      span {
+        font-size: 4rem;
+      }
+      p {
+        font-size: 1.5rem;
+      }
+    }
+  `}
+`;
+
+export const InfoButton = styled.button`
+  ${({ theme }) => css`
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 0.6rem;
+    padding: 2rem 1rem;
+    width: 100%;
+    background-color: ${theme.colors.primary};
+    font-size: ${theme.font.sizes.large};
+    @media screen and (max-width: 455px) {
+      font-size: ${theme.font.sizes.medium};
     }
   `}
 `;
