@@ -7,8 +7,8 @@ const fileReader = new FileReader();
 const createBlob = (fileBytes: Uint8Array): Blob =>
   new Blob([fileBytes], { type: "text/plain;charset=utf-8" });
 
-
 export const downloadAccount = (pair: KeyringPair, password: string, address: string) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const pairToJson = keyring.backupAccount(pair, password);
     const blob = new Blob([JSON.stringify(pairToJson)], { type: "text/plain;charset=utf-8" });

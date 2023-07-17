@@ -14,7 +14,7 @@ const buildQueryArray = (data) => {
 };
 
 // tslint:disable:no-any
-export const buildQueryString = (action: any, key?: string) =>
+export const buildQueryString = (action: any) =>
   Object.entries(action)
     .filter((w) => w[1] !== "" && w[1] !== undefined)
     .map((k: any) => {
