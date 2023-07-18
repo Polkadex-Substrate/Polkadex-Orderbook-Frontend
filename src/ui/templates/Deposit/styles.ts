@@ -289,11 +289,9 @@ export const Status = styled.span<{ color: string }>`
 `;
 
 export const Cell = styled.div`
-  ${({ theme }) => css`
-    display: inline-block;
-    vertical-align: middle;
-    font-weight: 500;
-  `}
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 500;
 `;
 
 export const CellName = styled(Cell)`

@@ -78,7 +78,7 @@ export const DepositTemplate = () => {
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
   const validate = (values) => {
-    const errors = {} as any;
+    const errors = { amount: "" };
     if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
       errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
@@ -100,27 +100,26 @@ export const DepositTemplate = () => {
     return errors;
   };
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } =
-    useFormik({
-      initialValues: {
-        amount: 0.0,
-        asset: selectedAsset,
-      },
-      // TODO: re-add the validations
-      validationSchema: withdrawValidations(onChainBalance),
-      validate,
-      onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.assetId)
-          ? { polkadex: null }
-          : { asset: selectedAsset.assetId };
+  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+    initialValues: {
+      amount: 0.0,
+      asset: selectedAsset,
+    },
+    // TODO: re-add the validations
+    validationSchema: withdrawValidations(onChainBalance),
+    validate,
+    onSubmit: (values) => {
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
 
-        onFetchDeposit({
-          asset: asset,
-          amount: values.amount,
-          mainAccount: currMainAcc,
-        });
-      },
-    });
+      onFetchDeposit({
+        asset: asset,
+        amount: values.amount,
+        mainAccount: currMainAcc,
+      });
+    },
+  });
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -317,7 +316,7 @@ export const DepositTemplate = () => {
   );
 };
 
-const Copy = ({ copyData }) => {
+export const Copy = ({ copyData }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
 

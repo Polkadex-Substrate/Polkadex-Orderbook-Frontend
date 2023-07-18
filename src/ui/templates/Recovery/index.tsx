@@ -53,7 +53,7 @@ export const RecoveryTemplate = () => {
                         });
                       }
                     }}>
-                    {({ errors, touched, values }) => (
+                    {({ errors, touched }) => (
                       <Form>
                         <MnemonicImport
                           label="12-word mnemonic seed"
