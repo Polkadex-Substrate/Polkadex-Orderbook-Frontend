@@ -34,9 +34,24 @@ export const RatingText = styled.div<{ value: string }>`
     padding: 0 2rem;
     text-transform: capitalize;
     transition: width 0.2s ease-in-out;
-    width: ${(value === "best" && "6.5rem") ||
-    (value === "good" && "7.5rem") ||
-    (value === "average" && "9rem") ||
-    (value === "worst" && "8rem")};
+    ${widthModifier[value]()};
   `}
 `;
+const widthModifier = {
+  good: () =>
+    css`
+      width: 7.5rem;
+    `,
+  average: () =>
+    css`
+      width: 9rem;
+    `,
+  best: () =>
+    css`
+      width: 6.5rem;
+    `,
+  worst: () =>
+    css`
+      width: 8rem;
+    `,
+};
