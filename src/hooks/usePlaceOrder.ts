@@ -340,14 +340,14 @@ export function usePlaceOrder(
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
-      const range_decimal = 0.01;
+      const rangeDecimal = 0.01;
       setRangeValue(data.values);
       setChangeType(true);
       // limit and sell
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
           const amount = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           setForm({
             ...form,
@@ -359,7 +359,7 @@ export function usePlaceOrder(
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
           const amount = `${
-            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
+            (Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal) /
             Number(form.price)
           }`;
           setForm({
@@ -372,7 +372,7 @@ export function usePlaceOrder(
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
           const amount = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           setForm({
             ...form,
@@ -384,7 +384,7 @@ export function usePlaceOrder(
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
           const amount = `${
-            Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
+            Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           setForm({
             ...form,

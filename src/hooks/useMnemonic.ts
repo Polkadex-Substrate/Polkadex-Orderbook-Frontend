@@ -8,13 +8,13 @@ export const useMnemonic = (defaultMnemonic = "") => {
   const isMnemonicFromSignUp = defaultMnemonic && defaultMnemonic.length > 0;
 
   const createMnemonic = async ({ defaultMnemonic = "" }) => {
-    let mnemonic_string = defaultMnemonic;
-    if (!mnemonic_string?.length) {
+    let mnemonicString = defaultMnemonic;
+    if (!mnemonicString?.length) {
       await cryptoWaitReady();
-      mnemonic_string = mnemonicGenerate();
+      mnemonicString = mnemonicGenerate();
     }
-    setMnemonicString(mnemonic_string);
-    const mnemonicList = mnemonic_string.split(" ");
+    setMnemonicString(mnemonicString);
+    const mnemonicList = mnemonicString.split(" ");
     setMnemonic(mnemonicList);
     setLoading(false);
   };
