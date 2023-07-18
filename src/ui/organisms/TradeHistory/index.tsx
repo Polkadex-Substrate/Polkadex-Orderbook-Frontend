@@ -1,4 +1,5 @@
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -28,16 +29,19 @@ export const TradeHistory = ({ filters }) => {
   const { dateFrom, dateTo } = useSessionProvider();
   const { selectedAccount } = useProfile();
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`tradeHistory.${key}`);
+
   return (
     <S.Wrapper>
       {trades.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
-              <S.Th>Pair</S.Th>
-              <S.Th>Date</S.Th>
-              <S.Th>Price</S.Th>
-              <S.Th>Quantity</S.Th>
+              <S.Th>{t("pair")}</S.Th>
+              <S.Th>{t("date")}</S.Th>
+              <S.Th>{t("price")}</S.Th>
+              <S.Th>{t("quantity")}</S.Th>
             </S.Tr>
           </S.Thead>
           <S.Tbody>
@@ -88,7 +92,7 @@ export const TradeHistory = ({ filters }) => {
                         tradeHistoryFetchToken: tradeHistoryNextToken,
                       });
                     }}>
-                    Try Again
+                    {t("tryAgain")}
                   </Button>
                 </S.ErrorWrapper>
               )}

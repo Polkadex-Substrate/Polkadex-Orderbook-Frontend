@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -18,6 +19,9 @@ export const Menu = () => {
     authInfo: { isAuthenticated },
   } = profileState;
 
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`menu.${key}`);
+
   return (
     <S.Wrapper>
       <S.WrapperLinks>
@@ -27,7 +31,7 @@ export const Menu = () => {
             <div>
               <Icon name="Exchange" background="none" stroke="text" size="large" />
             </div>
-            <S.Span>Exchange</S.Span>
+            <S.Span>{t("exchange")}</S.Span>
           </Link>
         </S.WrapperIcon>
         <S.WrapperIcon isDisabled={!isAuthenticated}>
@@ -36,7 +40,7 @@ export const Menu = () => {
             <div>
               <Icon name="Coins" background="none" stroke="text" size="large" />
             </div>
-            <S.Span>Balances</S.Span>
+            <S.Span>{t("balances")}</S.Span>
           </Link>
         </S.WrapperIcon>
         <S.WrapperIcon isDisabled={!isAuthenticated}>
@@ -45,7 +49,7 @@ export const Menu = () => {
             <div>
               <Icon name="Wallet" background="none" stroke="text" size="large" />
             </div>
-            <S.Span>Accounts</S.Span>
+            <S.Span>{t("accounts")}</S.Span>
           </Link>
         </S.WrapperIcon>
         <Terms />
@@ -58,7 +62,7 @@ export const Menu = () => {
             background="secondaryBackground"
             size="large"
           />
-          <S.Span>{isDarkTheme ? "Light" : "Dark"}</S.Span>
+          <S.Span>{isDarkTheme ? t("light") : t("dark")}</S.Span>
         </S.WrapperIcon>
       </S.BottomContainer>
     </S.Wrapper>
@@ -66,6 +70,7 @@ export const Menu = () => {
 };
 
 const Terms = () => {
+  const { t: tc } = useTranslation("common");
   return (
     <S.Terms>
       <S.WrapperIcon>
@@ -78,7 +83,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Terms of Use</span>
+              <span>{tc("termsOfUse")}</span>
             </div>
           </a>
           <a
@@ -86,7 +91,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Privacy Policy</span>
+              <span>{tc("privacyPolicy")}</span>
             </div>
           </a>
           <a
@@ -94,7 +99,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Disclaimer</span>
+              <span>{tc("disclaimer")}</span>
             </div>
           </a>
           <a
@@ -102,7 +107,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Excluded Jurisdictions</span>
+              <span>{tc("excludedJurisdictions")}</span>
             </div>
           </a>
           <a
@@ -110,7 +115,7 @@ const Terms = () => {
             target="_blank"
             rel="noreferrer">
             <div>
-              <span>Data Retention Policy</span>
+              <span>{tc("dataRetentionPolicy")}</span>
             </div>
           </a>
         </S.TermsLinks>
@@ -120,6 +125,8 @@ const Terms = () => {
 };
 
 const Help = () => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`menu.${key}`);
   const [state, setState] = useState(false);
   return (
     <S.Terms>
@@ -129,7 +136,7 @@ const Help = () => {
             <Icon name="Question" background="none" stroke="text" size="large" />
           </div>
           <div>
-            <S.Span>Help</S.Span>
+            <S.Span>{t("help")}</S.Span>
           </div>
         </S.WrapperIcon>
       </span>
@@ -141,14 +148,14 @@ const Help = () => {
             rel="noreferrer">
             <S.WrapperIcon>
               <div>
-                <S.Span>FAQ</S.Span>
+                <S.Span>{t("faq")}</S.Span>
               </div>
             </S.WrapperIcon>
           </a>
           <a href="https://discord.gg/G4KMw2sGGe" target="_blank" rel="noreferrer">
             <S.WrapperIcon>
               <div>
-                <S.Span>Discord</S.Span>
+                <S.Span>{t("discord")}</S.Span>
               </div>
             </S.WrapperIcon>
           </a>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import Head from "next/head";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
@@ -112,18 +113,19 @@ export function Trading() {
   const accounts = userAccounts?.filter((account) => account.mainAddress === mainAddress);
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)?.length;
 
+  const { t } = useTranslation("trading");
+  const { t: tc } = useTranslation("common");
+
   const hasSelectedAccount = isSignedIn &&
     !hasTradeAccount && {
       image: "emptyWallet",
-      title: "Connect your Trading Account",
-      description: "Import your existing account, or create a new account",
+      title: tc("connectTradingAccount.title"),
+      description: tc("connectTradingAccount.description"),
       primaryLink: "/createAccount",
-      primaryLinkTitle: "Create Account",
+      primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
       secondaryLink: "/settings",
-      secondaryLinkTitle: "Select Account",
+      secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
     };
-
-  // initialize user specific sagas
 
   const marketName = market?.name?.replace("/", "");
 
@@ -144,19 +146,19 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade && marketName && `${currentTrade} | ${marketName} | `} Polkadex
-          Orderbook
+          {currentTrade && marketName && `${currentTrade} | ${marketName} | `}{" "}
+          {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
       <Modal open={shutdownBanner} isBlur onClose={() => setShutdownBanner(false)}>
         <ShutdownInteraction
-          title="Orderbook v1 will go offline as it is upgraded to v2"
-          textLink="Read the full statement"
+          title={t("shutDown.title")}
+          textLink={t("shutDown.textLink")}
           link="https://polkadex.medium.com/orderbook-v2-thea-and-crowdloan-rewards-are-now-live-on-kaizen-the-polkadex-test-net-7ca5c88855ad"
-          footerText="Join our Telegram for more updates!"
+          footerText={t("shutDown.footerText")}
           buttonLink="https://t.me/Polkadex"
-          textButton="Join Telegram"
+          textButton={t("shutDown.buttonText")}
           onClose={() => setShutdownBanner(false)}
         />
       </Modal>
@@ -168,12 +170,12 @@ export function Trading() {
       </Modal>
       <Modal open={banner} onClose={closeBanner} placement="top right">
         <AccountBanner
-          title="Welcome back!"
-          description="Looks like you’re using this browser for the first time."
-          subDescription="Please create a new trading account."
-          closeButtonTitle="Close"
+          title={t("accountBanner.title")}
+          description={t("accountBanner.description")}
+          subDescription={t("accountBanner.subDescription")}
+          closeButtonTitle={t("accountBanner.closeButtonText")}
           onClose={closeBanner}
-          linkText="Create Account"
+          linkText={t("accountBanner.linkText")}
           link="/settings"
           heroAlt="Man in tie with open arms welcoming"
           heroImage="welcomeBack.svg"

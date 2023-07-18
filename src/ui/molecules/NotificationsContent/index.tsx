@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -27,22 +28,26 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
     () => notifications?.filter((value) => (!state ? value.active === state : value)),
     [notifications, state]
   );
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`notifications.${key}`);
+
   return (
     <S.Content>
       <S.Title>
         <div>
-          <h3>Notifications Center</h3>
+          <h3>{t("title")}</h3>
         </div>
       </S.Title>
       <S.Recent>
         <S.RecentTitle>
-          <h5>Recent</h5>
+          <h5>{t("recent")}</h5>
           <ul>
             <S.RecentLi isActive={state} onClick={() => setState(true)}>
-              All
+              {t("all")}
             </S.RecentLi>
             <S.RecentLi isActive={!state} onClick={() => setState(false)}>
-              Unread
+              {t("unread")}
             </S.RecentLi>
           </ul>
         </S.RecentTitle>
@@ -70,6 +75,10 @@ export const NotificationsContent = ({ notifications = [] }: Props) => {
 const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => {
   const iconType = type === "Info" ? "Information" : type;
   const iconName = `${iconType}Alert`;
+
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`notifications.${key}`);
+
   return (
     <S.Card isRead={isRead}>
       <S.CardIcon>
@@ -91,7 +100,7 @@ const Card = ({ description, type, time, isRead = false, onMarkAsRead }) => {
               </S.CardAction>
             </TooltipHeader>
             <TooltipContent position="right">
-              <p>Mark as read</p>
+              <p>{t("markAsRead")}</p>
             </TooltipContent>
           </Tooltip>
         </S.CardActionContainer>

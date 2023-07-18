@@ -1,5 +1,6 @@
 import { DateRangePicker, defaultStaticRanges } from "react-date-range";
 import { useCallback, useMemo, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -39,9 +40,12 @@ const initialFilters: Ifilters = {
   status: "All Transactions",
 };
 
-const initialState = ["All Transactions", "Pending", "Completed", "Canceled"];
-
 export const Transactions = () => {
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`transactions.${key}`);
+
+  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("canceled")];
+
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -76,6 +80,7 @@ export const Transactions = () => {
       },
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
+
   return (
     <S.Section>
       <Tabs>
@@ -85,16 +90,16 @@ export const Transactions = () => {
               setTrigger(!trigger);
             }}>
             <TabHeader>
-              <S.TabHeader>Open Orders</S.TabHeader>
+              <S.TabHeader>{t("openOrders")}</S.TabHeader>
             </TabHeader>
             <TabHeader>
-              <S.TabHeader>Order History</S.TabHeader>
+              <S.TabHeader>{t("orderHistory")}</S.TabHeader>
             </TabHeader>
             <TabHeader>
-              <S.TabHeader>Trade History</S.TabHeader>
+              <S.TabHeader>{t("tradeHistory")}</S.TabHeader>
             </TabHeader>
             <TabHeader>
-              <S.TabHeader>Funds</S.TabHeader>
+              <S.TabHeader>{t("funds")}</S.TabHeader>
             </TabHeader>
           </S.HeaderContent>
           {isVisible && (
@@ -102,19 +107,19 @@ export const Transactions = () => {
               <Checkbox
                 checked={filters.hiddenPairs}
                 onChange={() => handleChangeHidden("hiddenPairs")}>
-                Hide Other Pairs
+                {t("hideOtherPairs")}
               </Checkbox>
               <S.Flex>
                 <S.ContainerActions>
                   <Checkbox
                     checked={filters.onlyBuy}
                     onChange={() => handleChangeHidden("onlyBuy")}>
-                    Buy
+                    {t("buy")}
                   </Checkbox>
                   <Checkbox
                     checked={filters.onlySell}
                     onChange={() => handleChangeHidden("onlySell")}>
-                    Sell
+                    {t("sell")}
                   </Checkbox>
                 </S.ContainerActions>
                 <S.ContainerTransactions>

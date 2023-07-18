@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import keyring from "@polkadot/ui-keyring";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { useTranslation } from "react-i18next";
 
 import { Switch } from "../Switcher";
 
@@ -20,6 +21,9 @@ export const CreateAccountForm = ({
   selectedAccountAddress = "",
   buttonTitle = "",
 }) => {
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`createAccountForm.${key}`);
+
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
@@ -30,8 +34,8 @@ export const CreateAccountForm = ({
   );
   const hasData = !!selectedAccountAddress?.length;
   const initialMessage = registeredAccounts?.length
-    ? "Select your funding account"
-    : "Please register an account first";
+    ? t("selectFundingAccount")
+    : t("registerAccountFirst");
 
   const { onRegisterMainAccount } = useExtensionWallet();
 
@@ -99,7 +103,7 @@ export const CreateAccountForm = ({
                     <div>
                       <Icons.Info />
                     </div>
-                    <span>Funding account</span>
+                    <span>{t("fundingAccount")}</span>
                   </S.WalletSelectContent>
                   <WalletShortName
                     address={values.controllerWallet?.address}
@@ -138,11 +142,11 @@ export const CreateAccountForm = ({
         <S.WalletName>
           <S.WalletNameWrapper>
             <div>
-              <span>Trade account Name</span>
+              <span>{t("tradeAccountName")}</span>
               <input
                 {...getFieldProps("name")}
                 type="text"
-                placeholder="Enter a name for your trading account"
+                placeholder={t("tradeAccountPlaceholder")}
               />
             </div>
             <button
@@ -150,7 +154,7 @@ export const CreateAccountForm = ({
               onClick={() =>
                 setFieldValue("name", generateUsername({ useRandomNumber: false }))
               }>
-              Random
+              {t("random")}
             </button>
           </S.WalletNameWrapper>
           <S.WalletError isNegative={values.name.length >= 31}>
@@ -163,7 +167,7 @@ export const CreateAccountForm = ({
         <S.Password>
           <S.PasswordWrapper>
             <S.PasswordHeader>
-              <span>Protect by password</span>
+              <span>{t("protectByPassword")}</span>
               <Switch
                 isActive={values.hasPasscode}
                 onChange={() => {
@@ -177,7 +181,7 @@ export const CreateAccountForm = ({
                 <input
                   {...getFieldProps("passcode")}
                   type={values.isPasscodeVisible ? "text" : "password"}
-                  placeholder="(Optional) Input 5-digit trading password"
+                  placeholder={t("passwordPlaceholder")}
                 />
                 <button
                   type="button"
@@ -193,7 +197,7 @@ export const CreateAccountForm = ({
         </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </button>
           <button type="submit" disabled={!(isValid && dirty)}>
             {buttonTitle}

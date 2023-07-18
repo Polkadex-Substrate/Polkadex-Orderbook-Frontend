@@ -12,7 +12,7 @@ export const Navigation = ({
     <S.Main isFull={isFull}>
       <S.Header>
         <S.Action onClick={onBack}>
-          <Icon name="SingleArrowLeft" color="text" size="extraSmall" />
+          <Icon name="SingleArrowLeft" color="text" stroke="text" size="medium" />
         </S.Action>
         <span>{title}</span>
       </S.Header>

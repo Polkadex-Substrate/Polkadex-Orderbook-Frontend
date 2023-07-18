@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import * as S from "./styles";
 
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
@@ -13,18 +15,22 @@ export const OpenOrders = ({ orderHistory }) => {
   const amountFixed = currentMarket?.base_precision;
 
   const { selectGetAsset } = useAssetsProvider();
+
+  const { t: translation } = useTranslation("organisms");
+  const t = (key: string) => translation(`openOrders.${key}`);
+
   return (
     <S.Wrapper>
       {openOrders?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
-              <S.Th>Pair</S.Th>
-              <S.Th>Date</S.Th>
-              <S.Th>Type</S.Th>
-              <S.Th>Price</S.Th>
-              <S.Th>Total</S.Th>
-              <S.Th>Filled</S.Th>
+              <S.Th>{t("pair")}</S.Th>
+              <S.Th>{t("date")}</S.Th>
+              <S.Th>{t("type")}</S.Th>
+              <S.Th>{t("price")}</S.Th>
+              <S.Th>{t("total")}</S.Th>
+              <S.Th>{t("filled")}</S.Th>
               <S.Th />
             </S.Tr>
           </S.Thead>

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { intlFormat } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -36,6 +37,9 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 
 export const DepositTemplate = () => {
+  const { t } = useTranslation("deposit");
+  const { t: tc } = useTranslation("common");
+
   const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
@@ -132,7 +136,7 @@ export const DepositTemplate = () => {
   return (
     <>
       <Head>
-        <title>Deposit | Polkadex Orderbook</title>
+        <title>{t("title")}</title>
         <meta name="description" content="A new era in DeFi" />
       </Head>
       <S.Main>
@@ -144,37 +148,32 @@ export const DepositTemplate = () => {
               <div>
                 <Icons.SingleArrowLeft />
               </div>
-              Overview
+              {t("overview")}
             </S.Title>
             <S.Container>
               <S.Column>
                 <div>
-                  <h1>Deposit Crypto</h1>
-                  <p>
-                    Polkadex is a fully non-custodial platform, so the assets in your wallet
-                    are always under your control.
-                  </p>
+                  <h1>{t("heading")}</h1>
+                  <p>{t("description")}</p>
                 </div>
               </S.Column>
               <S.Box>
                 <S.Form>
-                  <Loading
-                    message="Block finalization will take a few mins."
-                    isVisible={loading}>
+                  <Loading message={tc("blockFinalizationMessage")} isVisible={loading}>
                     <S.SelectAccount>
                       <div>
                         <Icons.Avatar />
                       </div>
                       <div>
                         <strong>
-                          {currMainAcc?.account?.meta?.name || "Wallet not present"}
+                          {currMainAcc?.account?.meta?.name || t("walletNotPresent")}
                         </strong>
                         <span>{shortAddress}</span>
                       </div>
                     </S.SelectAccount>
                     <form onSubmit={handleSubmit}>
                       <S.SelectInput>
-                        <span>Select a coin</span>
+                        <span>{t("selectCoin")}</span>
                         <S.SelectInputContainer>
                           <Dropdown>
                             <Dropdown.Trigger>
@@ -204,15 +203,15 @@ export const DepositTemplate = () => {
                           </Dropdown>
                         </S.SelectInputContainer>
                         <S.Available>
-                          Available{" "}
+                          {tc("available")}{" "}
                           <strong>
-                            {onChainBalanceLoading ? "Loading..." : onChainBalance}
+                            {onChainBalanceLoading ? t("loading") : onChainBalance}
                           </strong>
                         </S.Available>
                       </S.SelectInput>
                       <InputLine
                         name="amount"
-                        label="Token Amount"
+                        label={t("inputLabel")}
                         placeholder="0.00"
                         error={errors.amount && touched.amount && errors.amount}
                         {...getFieldProps("amount")}
@@ -226,16 +225,14 @@ export const DepositTemplate = () => {
                         disabled={!(isValid && dirty) || loading || !currMainAcc}
                         isFull
                         isLoading={loading}>
-                        {currMainAcc
-                          ? "Deposit"
-                          : "Funding account not found in polkadot.js extension"}
+                        {currMainAcc ? tc("deposit") : t("accountNotFound")}
                       </Button>
                     </form>
                   </Loading>
                 </S.Form>
 
                 <S.History>
-                  <h2>History</h2>
+                  <h2>{t("history")}</h2>
                   {deposits.length ? (
                     <S.HistoryContent>
                       <Table
@@ -243,19 +240,21 @@ export const DepositTemplate = () => {
                         style={{ width: "100%" }}>
                         <Table.Header fill="none">
                           <Table.Column>
-                            <S.HeaderColumn style={{ paddingLeft: 10 }}>Name</S.HeaderColumn>
+                            <S.HeaderColumn style={{ paddingLeft: 10 }}>
+                              {t("table.name")}
+                            </S.HeaderColumn>
                           </Table.Column>
                           <Table.Column>
-                            <S.HeaderColumn>Date</S.HeaderColumn>
+                            <S.HeaderColumn>{t("table.date")}</S.HeaderColumn>
                           </Table.Column>
                           <Table.Column>
-                            <S.HeaderColumn>Status</S.HeaderColumn>
+                            <S.HeaderColumn>{t("table.status")}</S.HeaderColumn>
                           </Table.Column>
                           <Table.Column>
-                            <S.HeaderColumn>Amount</S.HeaderColumn>
+                            <S.HeaderColumn>{t("table.amount")}</S.HeaderColumn>
                           </Table.Column>
                           <Table.Column>
-                            <S.HeaderColumn>Fee</S.HeaderColumn>
+                            <S.HeaderColumn>{t("table.fee")}</S.HeaderColumn>
                           </Table.Column>
                         </Table.Header>
                         <Table.Body striped border="squared">

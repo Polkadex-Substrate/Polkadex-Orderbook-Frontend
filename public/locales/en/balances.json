@@ -1,0 +1,12 @@
+{
+  "title": "Balances | Polkadex Orderbook",
+  "heading": "Balances.",
+  "overview": "Overview",
+  "searchPlaceholder": "Search",
+  "hideSmallBalances": "Hide small balances",
+  "name": "Name",
+  "available": "Available",
+  "locked": "Locked",
+  "inOrders": "In Orders",
+  "actions": "Actions"
+}
