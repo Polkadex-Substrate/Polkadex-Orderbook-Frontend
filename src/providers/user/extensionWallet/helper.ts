@@ -26,15 +26,18 @@ export const selectIsAddressInExtension = (
 
 export const executeRegisterEmail = async (data: string[], signature: string) => {
   const payloadStr = JSON.stringify({ RegisterUser: [...data, signature] });
-  const res = await sendQueryToAppSync({
-    query: mutations.register_user,
-    variables: {
-      input: { payload: payloadStr },
-    },
-    token: null,
-    authMode: "AMAZON_COGNITO_USER_POOLS",
-  });
-  return res;
+  try {
+    return await sendQueryToAppSync({
+      query: mutations.register_user,
+      variables: {
+        input: { payload: payloadStr },
+      },
+      token: null,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+  } catch (error) {
+    throw new Error("Registration failed. Please try again or contact us.");
+  }
 };
 
 export const createSignedData = async (
