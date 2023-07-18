@@ -105,7 +105,7 @@ export const WithdrawTemplate = () => {
   };
 
   const validate = (values) => {
-    const errors = { amount: "" };
+    const errors = {} as any;
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
       errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
     if (/\s/.test(String(values.amount))) {

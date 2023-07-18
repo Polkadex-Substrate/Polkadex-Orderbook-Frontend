@@ -78,7 +78,7 @@ export const DepositTemplate = () => {
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
   const validate = (values) => {
-    const errors = { amount: "" };
+    const errors = {} as any;
     if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
       errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
