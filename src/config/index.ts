@@ -1,4 +1,4 @@
-import { Amplify, Analytics, Auth } from "aws-amplify";
+import { Amplify, Analytics } from "aws-amplify";
 
 import awsconfig from "../aws-exports";
 
