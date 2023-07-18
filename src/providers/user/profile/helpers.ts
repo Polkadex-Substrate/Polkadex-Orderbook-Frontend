@@ -1,11 +1,11 @@
 import { UserAccount } from "./types";
 
 export const getMainAddresssLinkedToTradingAccount = (
-  trade_address: string,
+  tradeaddress: string,
   userAccounts: UserAccount[]
 ) => {
   const account = userAccounts?.find(
-    ({ tradeAddress }) => tradeAddress?.toLowerCase() === trade_address?.toLowerCase()
+    ({ tradeAddress }) => tradeAddress?.toLowerCase() === tradeaddress?.toLowerCase()
   );
   return account ? account.mainAddress : "";
 };
