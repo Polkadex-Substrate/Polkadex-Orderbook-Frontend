@@ -88,13 +88,11 @@ export const ProtectPasswordTitle = styled.div`
   }
 `;
 export const ProtectPasswordContent = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  `}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
 
 export const Show = styled.button`

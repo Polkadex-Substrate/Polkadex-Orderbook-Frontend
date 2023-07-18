@@ -48,7 +48,7 @@ export const CardIconWrapper = styled.div`
   `}
 `;
 export const Image = styled.div<{ isSell?: boolean }>`
-  ${({ theme, isSell }) => css`
+  ${({ theme }) => css`
     width: 2.5rem;
     height: 2.5rem;
     display: flex;

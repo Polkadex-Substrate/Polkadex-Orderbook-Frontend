@@ -123,7 +123,7 @@ export const TradingView = () => {
             onResult(newSymbols);
           }, 0);
         },
-        async resolveSymbol(symbolName, onResolve, onError, extension) {
+        async resolveSymbol(symbolName, onResolve, onError) {
           const symbols = getAllSymbols();
           const symbolItem = symbols.find(
             ({ full_name: fullName }) => fullName === symbolName
@@ -168,13 +168,7 @@ export const TradingView = () => {
             onError(error);
           }
         },
-        subscribeBars(
-          symbolInfo,
-          resolution,
-          onTick,
-          listenerGuid,
-          onResetCacheNeededCallback
-        ) {
+        subscribeBars(symbolInfo, resolution) {
           onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
         },
         unsubscribeBars(listenerGuid) {

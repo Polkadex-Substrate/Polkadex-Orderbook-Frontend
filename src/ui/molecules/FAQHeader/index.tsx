@@ -17,7 +17,7 @@ export const FAQHeader = ({ heading, pathname, noBorder }: T.Props) => {
     return link;
   };
   return (
-    <S.Header noBorder>
+    <S.Header noBorder={noBorder}>
       <S.BreadCrumbWrapper>
         {pathSegments.map((item, index) => {
           return (

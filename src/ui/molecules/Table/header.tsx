@@ -1,15 +1,12 @@
 import { useTableHeaderRow } from "@react-aria/table";
 import { mergeProps } from "@react-aria/utils";
-import { forwardRef, PropsWithChildren, Ref, useRef } from "react";
+import { forwardRef, PropsWithChildren, useRef } from "react";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 const Header = forwardRef(
-  (
-    { children, item, state, ...props }: PropsWithChildren<T.HeaderForwardProps>,
-    ref: Ref<HTMLTableRowElement>
-  ) => {
+  ({ children, item, state, ...props }: PropsWithChildren<T.HeaderForwardProps>) => {
     const componentRef = useRef();
     const { rowProps } = useTableHeaderRow({ node: item }, state, componentRef);
     return (

@@ -4,5 +4,5 @@ export type Props = {
   id: string;
   name: string;
   checked: boolean;
-  setChecked: (e: ChangeEvent<any>) => void;
+  setChecked: (e: ChangeEvent<unknown>) => void;
 };

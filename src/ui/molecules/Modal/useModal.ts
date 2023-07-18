@@ -10,7 +10,6 @@ export function useModal({
   onClose,
   onOpen,
   isDismissable = true,
-  preventClose,
   ...props
 }: T.ModalProps) {
   // Handle interacting outside the dialog and pressing

@@ -23,9 +23,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
   const {
     changeAmount,
     changePrice,
-    updateRange,
     handleSliderClick,
-    rangeValue,
     price,
     total,
     amount,

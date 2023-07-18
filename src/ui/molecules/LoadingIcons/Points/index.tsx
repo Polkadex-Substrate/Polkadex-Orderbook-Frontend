@@ -1,9 +1,9 @@
-import { forwardRef, Ref } from "react";
+import { forwardRef } from "react";
 
 import * as S from "../styles";
 import * as T from "../types";
 
-const Points = forwardRef(({ ...props }: T.Props, ref: Ref<HTMLButtonElement | null>) => {
+const Points = forwardRef(({ ...props }: T.Props) => {
   return (
     <S.Points>
       <S.Wrapper

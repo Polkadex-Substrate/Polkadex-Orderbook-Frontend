@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
 export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
@@ -14,17 +12,15 @@ export const Content = styled.div`
 `;
 
 export const Title = styled.div`
-  ${({ theme }) => css`
-    padding: 2rem;
-    div {
-      justify-content: space-between;
-      align-items: center;
-      h3 {
-        font-size: 1.6rem;
-        font-weight: 550;
-      }
+  padding: 2rem;
+  div {
+    justify-content: space-between;
+    align-items: center;
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 550;
     }
-  `}
+  }
 `;
 
 export const RecentTitle = styled.div`

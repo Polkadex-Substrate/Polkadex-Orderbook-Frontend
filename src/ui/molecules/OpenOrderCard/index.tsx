@@ -8,7 +8,6 @@ import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 
 export const OpenOrderCard = ({
   isSell,
-  orderSide,
   orderType,
   orderId,
   base,

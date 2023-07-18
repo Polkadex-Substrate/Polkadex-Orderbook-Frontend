@@ -36,15 +36,13 @@ export const Wrapper = styled("svg")<T.Props>(
   })
 );
 export const Points = styled("div")`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    ${Wrapper} {
-      height: fit-content;
-      margin-left: 0.4rem;
-    }
-  `}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${Wrapper} {
+    height: fit-content;
+    margin-left: 0.4rem;
+  }
 `;
 
 Wrapper.defaultProps = {
