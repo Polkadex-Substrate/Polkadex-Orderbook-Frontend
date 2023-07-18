@@ -197,7 +197,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
         window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, "");
       }
       if (state.selectedAccount.tradeAddress === address) {
-        updateState.selectedAccount = null;
+        updateState.selectedAccount = { tradeAddress: "", mainAddress: "" };
       }
       updateState.userData.userAccounts = filtered;
       return updateState;
