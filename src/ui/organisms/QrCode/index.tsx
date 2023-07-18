@@ -15,6 +15,7 @@ export const QrCode = ({ mnemoicString }) => {
       logo: "/img/PolkadexIcon.svg",
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const qrcode = new QRCode(componentRef?.current, opts);
     const blob = new Blob([componentRef?.current.innerHTML], { type: "image/svg+xml" });
 

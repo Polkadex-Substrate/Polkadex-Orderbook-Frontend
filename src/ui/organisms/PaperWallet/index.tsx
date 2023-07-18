@@ -1,4 +1,3 @@
-import QRCode from "easyqrcodejs";
 import { useRef, useEffect, forwardRef, PropsWithChildren, Ref, useMemo } from "react";
 
 import * as S from "./styles";
@@ -9,7 +8,6 @@ const PaperWallet = forwardRef(
   (
     {
       mnemonic,
-      mnemoicString,
       controllerAddress,
     }: PropsWithChildren<{
       mnemoicString: string;
@@ -22,15 +20,6 @@ const PaperWallet = forwardRef(
     const componentRef = useRef(null);
 
     useEffect(() => {
-      const opts = {
-        drawer: "svg",
-        width: 150,
-        height: 150,
-        text: mnemoicString,
-        logo: "/img/PolkadexIcon.svg",
-      };
-
-      const qrcode = new QRCode(componentRef.current, opts);
       const blob = new Blob([componentRef.current.innerHTML], { type: "image/svg+xml" });
 
       const downloadlink = window.URL.createObjectURL(blob);

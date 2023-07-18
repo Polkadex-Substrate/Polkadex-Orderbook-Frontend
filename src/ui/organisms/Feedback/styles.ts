@@ -2,9 +2,7 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Container = styled.div`
-  ${({ theme }) => css`
-    width: 100%;
-  `}
+  width: 100%;
 `;
 
 export const Heading = styled.p`

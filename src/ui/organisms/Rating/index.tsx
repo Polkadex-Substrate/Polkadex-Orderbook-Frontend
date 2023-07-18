@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { Field } from "formik";
-
 import * as S from "./styles";
 import * as T from "./types";
 export const Rating = ({ onClick, value }: T.Props) => {

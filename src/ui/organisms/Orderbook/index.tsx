@@ -96,15 +96,11 @@ export const OrderbookTable = ({
 }: T.Props) => {
   const contentRef = useRef(null);
 
-  const {
-    quoteUnit,
-    baseUnit,
-    valumeData,
-    changeMarketPrice,
-    priceFixed,
-    amountFixed,
-    total,
-  } = useOrderbookTable({ isSell, orders: [...orders], contentRef });
+  const { quoteUnit, baseUnit, valumeData, changeMarketPrice, total } = useOrderbookTable({
+    isSell,
+    orders: [...orders],
+    contentRef,
+  });
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) => translation(`orderBook.table.${key}`, args);

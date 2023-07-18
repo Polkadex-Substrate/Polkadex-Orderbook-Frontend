@@ -38,29 +38,32 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
 
   // Actions
-  const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
-    const { address, password = "" } = payload;
-    const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
-      (account) => account?.address?.toLowerCase() === address?.toLowerCase()
-    );
-
-    try {
-      const pairToJson = keyring.backupAccount(selectedAccount, password);
-      selectedAccount.lock();
-
-      const blob = new Blob([JSON.stringify(pairToJson)], {
-        type: "text/plain;charset=utf-8",
-      });
-      FileSaver.saveAs(
-        blob,
-        `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
+  const onExportTradeAccount = useCallback(
+    (payload: A.ExportTradeAccountFetch["payload"]) => {
+      const { address, password = "" } = payload;
+      const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
+        (account) => account?.address?.toLowerCase() === address?.toLowerCase()
       );
-    } catch (error) {
-      onHandleError("Cannot export this account, incorrect password");
-    } finally {
-      dispatch(A.exportTradeAccountData());
-    }
-  };
+
+      try {
+        const pairToJson = keyring.backupAccount(selectedAccount, password);
+        selectedAccount.lock();
+
+        const blob = new Blob([JSON.stringify(pairToJson)], {
+          type: "text/plain;charset=utf-8",
+        });
+        FileSaver.saveAs(
+          blob,
+          `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
+        );
+      } catch (error) {
+        onHandleError("Cannot export this account, incorrect password");
+      } finally {
+        dispatch(A.exportTradeAccountData());
+      }
+    },
+    [onHandleError, state.allBrowserAccounts]
+  );
 
   const onImportTradeAccountJson = (payload: A.ImportTradeAccountJsonFetch["payload"]) => {
     const { file, password } = payload;
@@ -199,7 +202,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
       const api: ApiPromise = nativeApiState.api;
-      const { address: trade_Address, allAccounts } = payload;
+      const { allAccounts } = payload;
       const linkedMainAddress =
         tradeAddress &&
         userData?.userAccounts?.find(({ tradeAddress: addr }) => addr === tradeAddress)
@@ -279,9 +282,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.previewAccountModalCancel());
   };
 
-  const onExportTradeAccountActive = () => {
+  const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
-  };
+  }, []);
   const { mainAddress, tradeAddress } = selectedAccount;
 
   // subscribe to user account updates notifications

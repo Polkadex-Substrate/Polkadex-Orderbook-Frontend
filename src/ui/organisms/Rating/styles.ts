@@ -1,9 +1,7 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 export const Container = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 1rem;
-  `}
+  display: flex;
+  gap: 1rem;
 `;
 export const Image = styled.div`
   width: 2rem;
