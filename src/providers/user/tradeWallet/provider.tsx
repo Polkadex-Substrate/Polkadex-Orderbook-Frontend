@@ -227,7 +227,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
           dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          onUserProfileTradeAccountDelete(tradeAddress);
+          onUserProfileTradeAccountDelete({ address: tradeAddress });
         } else {
           throw new Error(res.message);
         }
@@ -249,7 +249,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onRemoveTradeAccountFromBrowser = (address: string) => {
     dispatch(A.removeTradeAccountFromBrowser({ address }));
-    onUserProfileTradeAccountDelete(address);
+    onUserProfileTradeAccountDelete({ address, deleteFromBrowser: true });
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {

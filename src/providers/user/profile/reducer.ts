@@ -188,10 +188,12 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       };
     }
     case PROFILE_USER_TRADE_ACCOUNT_DELETE: {
-      const address = action.payload;
+      const { address, deleteFromBrowser } = action.payload;
       const userAccounts = [...state.userData?.userAccounts];
       const updateState = _.cloneDeep(state);
-      const filtered = userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
+      const filtered = deleteFromBrowser
+        ? userAccounts
+        : userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
       if (state.defaultTradeAccount === address) {
         updateState.defaultTradeAccount = "";
         window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, "");
