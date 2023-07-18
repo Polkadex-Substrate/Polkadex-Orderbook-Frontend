@@ -1,12 +1,10 @@
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.main`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    max-width: 100rem;
-    margin: 0 auto 5rem auto;
-  `}
+  display: flex;
+  flex-direction: column;
+  max-width: 100rem;
+  margin: 0 auto 5rem auto;
 `;
 
 export const Header = styled.header`
@@ -38,26 +36,22 @@ export const Logo = styled.div`
   `}
 `;
 
-export const Content = styled.div`
-  ${({ theme }) => css``}
-`;
+export const Content = styled.div``;
 
 export const Status = styled.div`
-  ${({ theme }) => css`
-    max-width: 60rem;
-    padding: 10rem 0;
-    margin: 0 auto;
-    text-align: center;
-    h1 {
-      font-size: 4rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-    p {
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-    }
-  `}
+  max-width: 60rem;
+  padding: 10rem 0;
+  margin: 0 auto;
+  text-align: center;
+  h1 {
+    font-size: 4rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 export const Information = styled.div`
@@ -83,37 +77,31 @@ export const Nav = styled.div`
 `;
 
 export const Aside = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-  `}
+  display: flex;
+  align-items: center;
 `;
 
 export const AsideContainer = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    span {
-      margin-left: 0.5rem;
-    }
-    :not(:last-child) {
-      margin-right: 1rem;
-    }
-    @media screen and (max-width: 480px) {
-      margin-top: 1rem;
-    }
-  `}
+  span {
+    margin-left: 0.5rem;
+  }
+  :not(:last-child) {
+    margin-right: 1rem;
+  }
+  @media screen and (max-width: 480px) {
+    margin-top: 1rem;
+  }
 `;
 
 export const Table = styled.div`
-  ${({ theme }) => css`
-    display: grid;
-    @media screen and (min-width: 750px) {
-      grid-template-columns: 1fr 1fr;
-    }
-  `}
+  display: grid;
+  @media screen and (min-width: 750px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const Card = styled.div`
