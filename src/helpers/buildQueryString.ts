@@ -13,11 +13,11 @@ const buildQueryArray = (data) => {
   return queryArray;
 };
 
-// tslint:disable:no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buildQueryString = (action: any) =>
   Object.entries(action)
     .filter((w) => w[1] !== "" && w[1] !== undefined)
-    .map((k: any) => {
+    .map((k: unknown) => {
       const param = k[0] === "page" ? Number(k[1]) + 1 : k[1];
       return Array.isArray(param)
         ? buildQueryArray(k)

@@ -31,7 +31,8 @@ export const uploadAccount = (fileBytes: Uint8Array, password: string = null) =>
       if (!isUndefined(event) && event.target !== null) {
         // Cast to type 'any' since property 'result' does exist on type 'EventTarget'
         // Reference: https://stackoverflow.com/a/45017155/3208553
-        const uploadedFileKeyringPair = JSON.parse((event.target as any).result);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const uploadedFileKeyringPair = JSON.parse((event.target as any)?.result);
         const pair = keyring.restoreAccount(uploadedFileKeyringPair, password);
         return pair;
       }

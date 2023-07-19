@@ -11,15 +11,34 @@ export const fetchOnChainBalance = async (
 ): Promise<number> => {
   if (isAssetPDEX(assetId)) {
     const res = await api.query.system.account(address);
-    const balanceJson = res.toJSON();
+
+    const balanceJson: BalanceJson = res.toJSON() as BalanceJson;
+
     const balance = new BigNumber(balanceJson?.data?.free || 0).dividedBy(UNIT_BN).toNumber();
     return balance;
   } else {
     const res = await api.query.assets.account(assetId, address);
     const balanceJson: any = res.toJSON();
+    console.log(balanceJson, "res from fetchOnChainBalance ");
+
     const freeBalance = new BigNumber(balanceJson?.balance || "0")
       .dividedBy(UNIT_BN)
       .toNumber();
     return freeBalance;
   }
+};
+
+export type BalanceJson = {
+  consumers: number;
+  data: DataObj;
+  nonce: number;
+  providers: number;
+  sufficients: number;
+};
+
+export type DataObj = {
+  flags: string;
+  free: number;
+  frozen: number;
+  reserved: number;
 };

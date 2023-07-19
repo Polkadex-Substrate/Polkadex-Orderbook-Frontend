@@ -103,14 +103,18 @@ export const WithdrawTemplate = () => {
       resetForm({ values: initialValues });
     }
   };
-
+  type ValidationError = {
+    amount: string;
+  };
   const validate = (values) => {
-    const errors = {} as any;
+    const errors = {} as ValidationError;
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
       errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
     if (/\s/.test(String(values.amount))) {
       errors.amount = ErrorMessages.WHITESPACE_NOT_ALLOWED;
     }
+    console.log(errors, "errors");
+
     return errors;
   };
 

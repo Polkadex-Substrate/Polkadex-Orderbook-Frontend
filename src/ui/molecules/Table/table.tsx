@@ -23,84 +23,87 @@ import * as S from "./styles";
 import * as T from "./types";
 import { useTable } from "./useTable";
 
-const Table = forwardRef((props: PropsWithChildren<T.TableForwardProps>) => {
-  const { selectionMode, selectionBehavior, hideLoading, onRowAction, ...tableProps } = props;
+const Table = forwardRef(
+  (props: PropsWithChildren<T.TableForwardProps>, ref: Ref<HTMLTableElement>) => {
+    const { selectionMode, selectionBehavior, hideLoading, onRowAction, ...tableProps } =
+      props;
 
-  const context = useTable({
-    selectionMode,
-    selectionBehavior,
-    hideLoading,
-    ...tableProps,
-  });
+    const context = useTable({
+      selectionMode,
+      selectionBehavior,
+      hideLoading,
+      ...tableProps,
+    });
 
-  const tableRef = useRef<HTMLTableElement>(null);
-  const scrollRef = useRef<HTMLTableRowElement>(null);
+    const tableRef = useRef<HTMLTableElement>(null);
+    const scrollRef = useRef<HTMLTableRowElement>(null);
 
-  const state = useTableState({
-    ...props,
-    showSelectionCheckboxes:
-      props.selectionMode === "multiple" && props.selectionBehavior !== "replace",
-  });
+    const state = useTableState({
+      ...props,
+      showSelectionCheckboxes:
+        props.selectionMode === "multiple" && props.selectionBehavior !== "replace",
+    });
 
-  const { gridProps } = useTableAria(
-    { ...tableProps, onRowAction, scrollRef },
-    state,
-    tableRef
-  );
+    const { gridProps } = useTableAria(
+      { ...tableProps, onRowAction, scrollRef },
+      state,
+      tableRef
+    );
 
-  const [Header, Body] = Children.toArray(props.children);
+    const [Header, Body] = Children.toArray(props.children);
 
-  const headerProps = isValidElement(Header) && cloneElement(Header);
+    const headerProps = isValidElement(Header) && cloneElement(Header);
 
-  const bodyProps = isValidElement(Body) && cloneElement(Body);
+    const bodyProps = isValidElement(Body) && cloneElement(Body);
 
-  const { collection } = state;
+    const { collection } = state;
 
-  return (
-    <TableProvider value={context}>
-      <S.Table {...mergeProps(tableProps, gridProps)} ref={tableRef}>
-        <Group as="thead">
-          {collection.headerRows.map((headerRow) => (
-            <HeaderComponent
-              key={headerRow.key}
-              item={headerRow}
-              state={state}
-              fill={headerProps.props.fill}
-              border={headerProps.props.border}
-              bgStyle={headerProps.props.bgStyle}>
-              {[...headerRow.childNodes].map((column) =>
-                column.props.isSelectionCell ? (
-                  <CheckboxColumn key={column.key} column={column} state={state} />
-                ) : (
-                  <Column key={column.key} column={column} state={state} />
-                )
-              )}
-            </HeaderComponent>
-          ))}
-        </Group>
-        <Group as="tbody" ref={scrollRef}>
-          {[...collection.body.childNodes].map((row) => (
-            <BodyComponent
-              key={row.key}
-              item={row}
-              state={state}
-              striped={bodyProps.props.striped}
-              fill={bodyProps.props.fill}
-              border={bodyProps.props.border}>
-              {[...row.childNodes].map((cell) =>
-                cell.props.isSelectionCell ? (
-                  <CheckboxCell key={cell.key} cell={cell} state={state} />
-                ) : (
-                  <Cell key={cell.key} cell={cell} state={state} />
-                )
-              )}
-            </BodyComponent>
-          ))}
-        </Group>
-      </S.Table>
-    </TableProvider>
-  );
-});
+    return (
+      <TableProvider value={context}>
+        <S.Table {...mergeProps(tableProps, gridProps)} ref={tableRef}>
+          <Group as="thead">
+            {collection.headerRows.map((headerRow) => (
+              <HeaderComponent
+                key={headerRow.key}
+                item={headerRow}
+                state={state}
+                fill={headerProps.props.fill}
+                border={headerProps.props.border}
+                bgStyle={headerProps.props.bgStyle}>
+                {[...headerRow.childNodes].map((column) =>
+                  column.props.isSelectionCell ? (
+                    <CheckboxColumn key={column.key} column={column} state={state} />
+                  ) : (
+                    <Column key={column.key} column={column} state={state} />
+                  )
+                )}
+              </HeaderComponent>
+            ))}
+          </Group>
+          <Group as="tbody" ref={scrollRef}>
+            {[...collection.body.childNodes].map((row) => (
+              <BodyComponent
+                key={row.key}
+                item={row}
+                state={state}
+                striped={bodyProps.props.striped}
+                fill={bodyProps.props.fill}
+                border={bodyProps.props.border}>
+                {[...row.childNodes].map((cell) =>
+                  cell.props.isSelectionCell ? (
+                    <CheckboxCell key={cell.key} cell={cell} state={state} />
+                  ) : (
+                    <Cell key={cell.key} cell={cell} state={state} />
+                  )
+                )}
+              </BodyComponent>
+            ))}
+          </Group>
+        </S.Table>
+      </TableProvider>
+    );
+  }
+);
 
 Table.displayName = "Table";
 
