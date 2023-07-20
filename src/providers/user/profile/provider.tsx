@@ -160,8 +160,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userProfileAccountPush(payload));
   };
 
-  const onUserProfileTradeAccountDelete = (payload: string) => {
-    dispatch(A.userProfileTradeAccountDelete(payload));
+  const onUserProfileTradeAccountDelete = ({
+    address,
+    deleteFromBrowser = false,
+  }: A.UserProfileTradeAccountDelete["payload"]) => {
+    dispatch(A.userProfileTradeAccountDelete({ address, deleteFromBrowser }));
   };
 
   const onUserAccountSelectFetch = (payload: A.UserAccountSelectFetch["payload"]) => {
