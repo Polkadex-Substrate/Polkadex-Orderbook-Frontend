@@ -13,7 +13,6 @@ export const Rating = ({ onClick, value }: T.Props) => {
   };
   return (
     <S.RatingWrapper>
-      {" "}
       <S.Container>
         {Object.keys(stars).map((item) => {
           return (
@@ -22,7 +21,7 @@ export const Rating = ({ onClick, value }: T.Props) => {
                 src={
                   getNumber(value) >= stars[item] ? "/img/pinkStar.svg" : "/img/greyStar.svg"
                 }
-                alt=""
+                alt="star for rating"
               />
             </S.Image>
           );
