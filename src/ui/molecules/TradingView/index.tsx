@@ -208,6 +208,7 @@ export const TradingView = () => {
   useEffect(() => {
     if (!currentMarket?.m) return;
 
+    setIsReady(false);
     tvWidget.current = new Widget(widgetOptions);
 
     tvWidget?.current?.onChartReady &&
@@ -221,7 +222,8 @@ export const TradingView = () => {
   }, [currentMarket?.m, widgetOptions]);
 
   useEffect(() => {
-    tvWidget?.current?.onChartReady &&
+    isReady &&
+      tvWidget?.current?.onChartReady &&
       tvWidget?.current?.onChartReady(() => {
         tvWidget?.current?.changeTheme(isDarkTheme ? "Dark" : "Light").then(() => {
           tvWidget?.current.applyOverrides({ ...options(isDarkTheme).overrides });
@@ -230,7 +232,7 @@ export const TradingView = () => {
     tvWidget?.current?.applyStudiesOverrides({
       ...options(isDarkTheme).studies_overrides,
     });
-  }, [tvWidget?.current?.onChartReady, isDarkTheme]);
+  }, [isDarkTheme, isReady]);
 
   return (
     <S.Wrapper>
