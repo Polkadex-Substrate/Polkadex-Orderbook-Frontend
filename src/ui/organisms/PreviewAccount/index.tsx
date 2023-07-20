@@ -146,7 +146,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  onExportTradeAccount({ address: selected.address, password })
+                  onExportTradeAccount({ address: selected?.address, password })
                 }
                 handleClose={() => onExportTradeAccountActive()}
               />
