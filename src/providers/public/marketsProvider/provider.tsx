@@ -114,7 +114,10 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     return {
       m: market,
       priceChange24Hr: _.round(priceChange, precision),
-      priceChangePercent24Hr: _.round(priceChangePercent, precision),
+      priceChangePercent24Hr: _.round(
+        isNaN(priceChangePercent) ? 0 : priceChangePercent,
+        precision
+      ),
       open: _.round(Number(item.o), precision),
       close: _.round(Number(item.c), precision),
       high: _.round(Number(item.h), precision),
