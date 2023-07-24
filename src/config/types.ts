@@ -22,4 +22,5 @@ export type DefaultConfig = {
   mainUrl: string;
   cmsGraphqlUrl: string;
   cmslUrl: string;
+  cmsBearerToken: string;
 };

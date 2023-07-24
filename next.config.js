@@ -80,6 +80,7 @@ module.exports = withPlugins([
       MAIN_URL: process.env.MAIN_URL,
       CMS_GRAPHQL_URL: process.env.CMS_GRAPHQL_URL,
       CMS_URL: process.env.CMS_URL,
+      CMS_BEARER_TOKEN: process.env.CMS_BEARER_TOKEN,
     },
   },
 ]);

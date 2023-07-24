@@ -57,4 +57,5 @@ export const defaultConfig: DefaultConfig = {
   mainUrl: process.env.MAIN_URL || "/trading",
   cmsGraphqlUrl: process.env.CMS_GRAPHQL_URL || "http://127.0.0.1:1337/graphql",
   cmslUrl: process.env.CMS_URL || "http://127.0.0.1:1337",
+  cmsBearerToken: process.env.CMS_BEARER_TOKEN,
 };
