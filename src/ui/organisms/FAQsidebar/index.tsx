@@ -32,7 +32,7 @@ export const FAQsidebar = ({ closeSidebar, pageQuickAccess, show }: T.Props) => 
           const link = `/faq/${value.link}`;
 
           return (
-            <S.Social key={i} href={link}>
+            <S.Social key={i} href={link} target="_blank">
               {icon && (
                 <div>
                   <img src={iconUrl} />
@@ -48,7 +48,7 @@ export const FAQsidebar = ({ closeSidebar, pageQuickAccess, show }: T.Props) => 
           const icon = value?.icon?.data?.attributes?.url;
           const iconUrl = getImgUrl(icon);
           return (
-            <S.IconWrapper key={i} href={value.link}>
+            <S.IconWrapper key={i} href={value.link} target="_blank">
               <img src={iconUrl} />
             </S.IconWrapper>
           );

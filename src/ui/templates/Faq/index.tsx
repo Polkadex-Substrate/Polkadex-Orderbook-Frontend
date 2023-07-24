@@ -15,8 +15,8 @@ export const FaqTemplate = ({ title, seo, blocks }) => {
   const pageHero = blocks?.[1];
   const pageSearch = blocks?.[2];
   const pageCategories = blocks?.[4];
-  const pageVideos = blocks?.[5];
-  const pageTrendingTopics = blocks?.[6];
+  const pageTrendingTopics = blocks?.[5];
+  const pageVideos = blocks?.[6];
 
   const featuredVideo = pageVideos?.videoCard?.find((v) => v.featured);
   const allPageVideos = pageVideos?.videoCard?.filter((v) => !v.featured);
