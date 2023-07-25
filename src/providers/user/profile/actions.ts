@@ -90,7 +90,10 @@ export interface UserProfileMainAccountPush {
 }
 export interface UserProfileTradeAccountDelete {
   type: typeof PROFILE_USER_TRADE_ACCOUNT_DELETE;
-  payload: string;
+  payload: {
+    address: string;
+    deleteFromBrowser?: boolean;
+  };
 }
 export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;

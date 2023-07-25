@@ -2,7 +2,6 @@ import { defaultThemes } from "@polkadex/orderbook/styles";
 import { ChartPropertiesOverrides } from "public/static/charting_library/charting_library";
 
 type Options = {
-  custom_font_family: string;
   studies_overrides: object;
   overrides: Partial<ChartPropertiesOverrides>;
 };
@@ -10,7 +9,6 @@ type Options = {
 export const options = (isDarkTheme = true): Options => {
   const theme = isDarkTheme ? defaultThemes.dark : defaultThemes.light;
   return {
-    custom_font_family: theme.font.family,
     studies_overrides: {
       "volume.volume.color.0": theme.colors.primary,
       "volume.volume.color.1": theme.colors.green,
@@ -38,3 +36,5 @@ export const options = (isDarkTheme = true): Options => {
     },
   };
 };
+
+export const customFontFamily = defaultThemes.dark.font.family;

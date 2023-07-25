@@ -50,7 +50,7 @@ export const useSettings = () => {
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
   const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
-  const isRegisterMainAccountSuccess = extensionWalletState.registerMainAccountSuccess;
+  const isRegisterMainAccountSuccess = extensionWalletState?.registerMainAccountSuccess;
   const defaultTradeAddress = profileState.defaultTradeAccount;
   const defaultFundingAddress =
     defaultTradeAddress &&
@@ -105,6 +105,16 @@ export const useSettings = () => {
       }, []),
     [filterTradeAccounts, tradeAccounts, userAccounts, filterTradeAccountsByControllerAccount]
   );
+  // sorting the accounts on the basis of their presence in the browser
+  allFilteredTradeAccounts.sort((a, b) => {
+    if (a.isPresentInBrowser && !b.isPresentInBrowser) {
+      return -1;
+    } else if (!a.isPresentInBrowser && b.isPresentInBrowser) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
   /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
   const allFilteredControllerWallets = useMemo(

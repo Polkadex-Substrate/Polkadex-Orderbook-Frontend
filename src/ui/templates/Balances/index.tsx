@@ -37,7 +37,9 @@ export const BalancesTemplate = () => {
       list?.filter((e) => {
         const tokenBalance = userBalances?.find((value) => value.assetId === e.assetId);
         // TODO: Define small amount based on the decimals of the token.
-        const hasZeroAmount = filters.hideZero && Number(tokenBalance?.free_balance) < 0.001;
+        const hasZeroAmount =
+          filters.hideZero && Number(tokenBalance?.free_balance || 0) < 0.001;
+
         const matchesNameOrTicker =
           e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
           e.symbol.toLowerCase().includes(filters.search.toLowerCase());

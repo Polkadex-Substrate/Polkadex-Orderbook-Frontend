@@ -146,7 +146,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  onExportTradeAccount({ address: selected.address, password })
+                  onExportTradeAccount({ address: selected?.address, password })
                 }
                 handleClose={() => onExportTradeAccountActive()}
               />
@@ -189,10 +189,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                       label={t("protectedPassword")}
                       isActive={tradingAccountInBrowser?.isLocked}
                     />
-                    <DefaultAccount
-                      label={t("defaultTradeAccount")}
-                      tradeAddress={selected?.address}
-                    />
+                    {tradingAccountInBrowser && (
+                      <DefaultAccount
+                        label={t("defaultTradeAccount")}
+                        tradeAddress={selected?.address}
+                      />
+                    )}
                   </S.Box>
                   {tradingAccountInBrowser && (
                     <S.Button
