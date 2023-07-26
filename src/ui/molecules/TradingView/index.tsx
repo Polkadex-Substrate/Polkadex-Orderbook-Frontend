@@ -189,7 +189,7 @@ export const TradingView = () => {
       user_id: "public_user_id",
       fullscreen: false,
       autosize: true,
-      container: chartContainerRef.current,
+      container: chartContainerRef?.current,
       disabled_features: [
         "use_localstorage_for_settings",
         "volume_force_overlay",

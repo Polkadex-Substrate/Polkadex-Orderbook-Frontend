@@ -3,6 +3,8 @@ import { CognitoUser } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import router from "next/router";
 
+import { useMarketsProvider } from "../../public/marketsProvider/useMarketsProvider";
+
 import { Provider } from "./context";
 import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
@@ -17,7 +19,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   const profileState = useProfile();
   const { onHandleNotification, onHandleError } = useSettingsProvider();
-
+  const { currentMarket } = useMarketsProvider();
   // Actions
   const onSignIn = useCallback(
     async ({ email, password }: T.SignIn["fetch"]) => {
@@ -207,10 +209,18 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (signinIsSuccess || isAuthenticated) {
-      router.push("/trading/" + defaultConfig.landingPageMarket);
+    if (
+      signinIsSuccess ||
+      (isAuthenticated && currentMarket?.base_ticker && currentMarket?.quote_ticker)
+    ) {
+      router.push(`/trading/${currentMarket?.base_ticker + currentMarket?.quote_ticker}`);
     }
-  }, [isAuthenticated, signinIsSuccess]);
+  }, [
+    currentMarket?.base_ticker,
+    currentMarket?.quote_ticker,
+    isAuthenticated,
+    signinIsSuccess,
+  ]);
 
   // For SignUp Purposes
   const signupIsSuccess = state.signup.isSuccess;

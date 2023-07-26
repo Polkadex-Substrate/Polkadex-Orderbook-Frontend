@@ -8,6 +8,7 @@ import * as S from "./styles";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@polkadex/orderbook/hooks";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 
 export const Menu = () => {
   const router = useRouter();
@@ -21,13 +22,14 @@ export const Menu = () => {
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`menu.${key}`);
+  const { currentMarket } = useMarketsProvider();
 
   return (
     <S.Wrapper>
       <S.WrapperLinks>
         <S.WrapperIcon>
           {router.pathname === "/trading/[id]" && <S.LineBorder />}
-          <Link href="/trading">
+          <Link href={`/trading/${currentMarket?.base_ticker + currentMarket?.quote_ticker}`}>
             <div>
               <Icon name="Exchange" background="none" stroke="text" size="large" />
             </div>

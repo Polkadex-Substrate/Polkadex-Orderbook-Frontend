@@ -15,6 +15,7 @@ const TradingView = dynamic(
 
 export const Graph = () => {
   const { theme } = useSettingsProvider();
+
   return (
     <>
       <Script src="/static/datafeeds/udf/dist/bundle.js" strategy="lazyOnload" />

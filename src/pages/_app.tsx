@@ -21,6 +21,8 @@ import {
   NativeApiProvider,
   ExtensionWalletProvider,
   SettingProvider,
+  AssetsProvider,
+  MarketsProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import "@polkadex/orderbook/i18n";
@@ -34,15 +36,19 @@ const Maintenance = dynamic(
 const queryClient = new QueryClient();
 const Providers = ({ children }) => {
   return (
-    <AuthProvider>
-      <ProfileProvider>
-        <NativeApiProvider>
-          <TradeWalletProvider>
-            <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
-          </TradeWalletProvider>
-        </NativeApiProvider>
-      </ProfileProvider>
-    </AuthProvider>
+    <AssetsProvider>
+      <MarketsProvider>
+        <AuthProvider>
+          <ProfileProvider>
+            <NativeApiProvider>
+              <TradeWalletProvider>
+                <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
+              </TradeWalletProvider>
+            </NativeApiProvider>
+          </ProfileProvider>
+        </AuthProvider>
+      </MarketsProvider>
+    </AssetsProvider>
   );
 };
 

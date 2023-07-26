@@ -22,19 +22,17 @@ const Trading = () => {
   if (disabled) return <div />;
 
   return (
-    <AssetsProvider>
-      <MarketsProvider>
-        <BalancesProvider>
-          <OrderBookProvider>
-            <OrdersProvider>
-              <RecentTradesProvider>
-                <TradingTemplate />
-              </RecentTradesProvider>
-            </OrdersProvider>
-          </OrderBookProvider>
-        </BalancesProvider>
-      </MarketsProvider>
-    </AssetsProvider>
+    <MarketsProvider>
+      <BalancesProvider>
+        <OrderBookProvider>
+          <OrdersProvider>
+            <RecentTradesProvider>
+              <TradingTemplate />
+            </RecentTradesProvider>
+          </OrdersProvider>
+        </OrderBookProvider>
+      </BalancesProvider>
+    </MarketsProvider>
   );
 };
 
