@@ -6,7 +6,6 @@ export type Props = {
   actionTitle?: string;
   isLocked?: boolean;
   hasBadge?: boolean;
-  isAvatar?: boolean;
   isVerified?: boolean;
 } & InputHTMLAttributes<HTMLInputElement> &
   Pick<ButtonHTMLAttributes<HTMLButtonElement>, "onClick">;

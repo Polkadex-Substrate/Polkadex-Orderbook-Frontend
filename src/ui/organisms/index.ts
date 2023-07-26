@@ -14,7 +14,6 @@ export * from "./OpenOrders";
 export * from "./OrderHistory";
 export * from "./PreviewAccount";
 export * from "./NewAccount";
-export * from "./ChangeAvatar";
 export * from "./Menu";
 export * from "./Navbar";
 export * from "./Transactions";

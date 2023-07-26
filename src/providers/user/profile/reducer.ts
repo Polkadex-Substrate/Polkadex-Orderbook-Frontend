@@ -20,8 +20,6 @@ import {
 } from "./constants";
 
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
-const defaultAvatar = randomAvatars[1].id;
 
 const initialTemplate = {
   isLoading: false,
@@ -43,7 +41,7 @@ export const initialState: ProfileState = {
     mainAccounts: [],
   },
   userProfile: {
-    avatar: defaultAvatar.toString(),
+    avatar: "",
   },
   selectedAccount: {
     tradeAddress: "",
@@ -176,14 +174,10 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       if (hasAvatar)
         window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_AVATAR, action.payload);
 
-      if (!userAvatar)
-        window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_AVATAR, defaultAvatar.toString());
-
       return {
         ...state,
         userProfile: {
-          avatar:
-            hasAvatar || userAvatar ? action?.payload || userAvatar : defaultAvatar.toString(),
+          avatar: hasAvatar || userAvatar ? action?.payload : "",
         },
       };
     }

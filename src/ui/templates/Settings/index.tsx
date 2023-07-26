@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Fragment, useRef } from "react";
-import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
@@ -11,7 +10,6 @@ import {
   Menu,
   PreviewAccount,
   NewAccount,
-  ChangeAvatar,
   DisclaimerMessage,
   Header,
 } from "@polkadex/orderbook-ui/organisms";
@@ -36,7 +34,6 @@ import {
   transformAddress,
 } from "@polkadex/orderbook/providers/user/profile/helpers";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 export const SettingsTemplate = () => {
@@ -65,8 +62,6 @@ export const SettingsTemplate = () => {
     handleFilterTradeAccountByController,
     defaultTradeAddress,
     defaultFundingAddress,
-    avatarModal,
-    handleCloseAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
 
@@ -104,9 +99,6 @@ export const SettingsTemplate = () => {
           }}
           isLoading={isLoading}
         />
-      </Modal>
-      <Modal open={avatarModal} onClose={handleCloseAvatarModal} placement="start right">
-        <ChangeAvatar onClose={handleCloseAvatarModal} />
       </Modal>
       <Head>
         <title>{t("title")}</title>
@@ -480,25 +472,14 @@ const Card = ({
   actionTitle,
   isLocked = false,
   hasBadge = false,
-  isAvatar = false,
   isVerified = false,
   onClick,
 }: T.Props) => {
-  const profileState = useProfile();
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
-
   const { t } = useTranslation("settings");
 
   return (
     <S.AccountCard>
       <S.AccountCardWrapper>
-        {isAvatar && (
-          <S.AccountCardAvatar>
-            <BigHead {...avatarOptions.data} />
-          </S.AccountCardAvatar>
-        )}
         <S.AccountCardContent>
           <S.AccountCardFlex>
             {isLocked && (
