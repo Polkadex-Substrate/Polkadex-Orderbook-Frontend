@@ -22,7 +22,6 @@ export * from "./AccountOverview";
 export * from "./Appearance";
 export * from "./EmptyData";
 export * from "./Logged";
-export * from "./Range";
 export * from "./Profile";
 export * from "./Popover";
 export * from "./OriginalChart";
