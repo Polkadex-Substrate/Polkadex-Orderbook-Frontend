@@ -54,13 +54,13 @@ const Providers = ({ children }) => {
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
-  if (process.env.NODE_ENV === "production") {
-    console.log = () => {};
-    console.debug = () => {};
-    console.info = () => {};
-    console.warn = () => {};
-    console.error = () => {};
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   console.log = () => {};
+  //   console.debug = () => {};
+  //   console.info = () => {};
+  //   console.warn = () => {};
+  //   console.error = () => {};
+  // }
   const router = useRouter();
   const availableRoutes = defaultConfig.availableRoutes;
   const isActive = useMemo(() => {
