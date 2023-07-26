@@ -209,14 +209,11 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log("effect ran");
-
     if (
       signinIsSuccess ||
-      (isAuthenticated && currentMarket?.base_ticker && currentMarket?.quote_ticker)
+      isAuthenticated ||
+      (currentMarket?.base_ticker && currentMarket?.quote_ticker)
     ) {
-      console.log("if of effect ran");
-
       router.push(`/trading/${currentMarket?.base_ticker + currentMarket?.quote_ticker}`);
     }
   }, [
