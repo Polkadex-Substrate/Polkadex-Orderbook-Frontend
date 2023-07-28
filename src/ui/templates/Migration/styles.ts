@@ -26,16 +26,20 @@ export const Info = styled.div`
     flex-direction: column;
     gap: 1.5rem;
     max-width: 1000px;
-    padding: 2rem;
-    background-color: ${theme.colors.black};
-    color: ${theme.colors.tertiaryText};
+    padding: 4rem;
+    background-color: ${theme.colors.primaryBackgroundSolid};
+    color: ${theme.colors.text};
     font-size: 1.5rem;
+    border-radius: 1rem;
     button {
       background-color: ${theme.colors.primary};
       width: max-content;
       padding: 1rem 2rem;
       color: ${theme.colors.text};
       border-radius: ${theme.border.radius.small};
+    }
+    p {
+      line-height: 1.4;
     }
   `}
 `;
@@ -236,10 +240,10 @@ export const CountDown = styled.div`
 export const InfoButton = styled.button`
   ${({ theme }) => css`
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 550;
     border-radius: 0.6rem;
-    padding: 2rem 0;
+    padding: 1.8rem;
     background-color: ${theme.colors.primary};
-    font-size: ${theme.font.sizes.large};
+    font-size: 1.6rem;
   `}
 `;

@@ -1,18 +1,10 @@
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { PropsWithChildren, useState } from "react";
 
 import * as S from "./styles";
 
 import { Modal, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
-
-const initialState = {
-  days: "00",
-  hours: "00",
-  minutes: "00",
-  seconds: "00",
-};
 
 type Props = {
   title: string;
@@ -27,36 +19,9 @@ export const Migration = ({
   footerText,
   textButton,
   buttonLink,
-  dateIntimestampMs,
   children = <MigrationText />,
 }: PropsWithChildren<Props>) => {
-  const [state, setState] = useState(initialState);
   const [showMessage, setShowMessage] = useState(false);
-
-  const updateRemainingTime = useCallback((time: Date) => {
-    const timestampDay = dayjs(time);
-    const nowDay = dayjs();
-    if (timestampDay.isBefore(nowDay)) return initialState;
-
-    return {
-      days: addZeros(timestampDay.diff(nowDay, "days")),
-      hours: addZeros(timestampDay.diff(nowDay, "hours") % 24),
-      minutes: addZeros(timestampDay.diff(nowDay, "minutes") % 60),
-      seconds: addZeros(timestampDay.diff(nowDay, "seconds") % 60),
-    };
-  }, []);
-
-  const addZeros = (value: number, minLenght = 2) =>
-    value.toString().length >= minLenght ? value.toString() : `0${value.toString()}`;
-
-  useEffect(() => {
-    const initTimer = setInterval(
-      () => setState(updateRemainingTime(dateIntimestampMs)),
-      1000
-    );
-
-    return () => clearTimeout(initTimer);
-  }, [dateIntimestampMs, updateRemainingTime]);
 
   const { t } = useTranslation("migration");
 
@@ -172,25 +137,6 @@ export const Migration = ({
         </S.Content>
         <S.Timer>
           <S.TimerWrapper>
-            <h3>{t("migrationEndsIn")}</h3>
-            <S.CountDown>
-              <div>
-                <span>{state.days}</span>
-                <p>{t("days")}</p>
-              </div>
-              <div>
-                <span>{state.hours}</span>
-                <p>{t("hrs")}</p>
-              </div>
-              <div>
-                <span>{state.minutes}</span>
-                <p>{t("mins")}</p>
-              </div>
-              <div>
-                <span>{state.seconds}</span>
-                <p>{t("secs")}</p>
-              </div>
-            </S.CountDown>
             <S.InfoButton onClick={() => setShowMessage(true)}>
               Important Update about Orderbook v2 Release.
             </S.InfoButton>
