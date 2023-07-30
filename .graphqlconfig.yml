@@ -1,6 +1,6 @@
 projects:
-  stagingv2-orderbook-api:
-    schemaPath: src/graphql/schema.json
+  Codegen Project:
+    schemaPath: schema.json
     includes:
       - src/graphql/**/*.ts
     excludes:
@@ -10,9 +10,8 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
-        region: eu-west-1
-        apiId: d52win3735bdnm2v6xpe26rnda
+        region: us-east-1
+        apiId: cnu3rmnhxrdlta3hjomaj26z2m
+        frontend: javascript
+        framework: react
         maxDepth: 2
-extensions:
-  amplify:
-    version: 3

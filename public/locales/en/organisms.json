@@ -34,8 +34,8 @@
     "thirdQuestion": "Was ,the FAQ Webpage user friendly?",
     "fourthQuestion": "Is there anything you would want us to improve?",
     "fifthQuestion": "How would you rate our service?",
-    "inputPlaceholder": "Enter your comment",
-    "submitRequest": "Submit a request"
+    "inputPlaceholder": "Enter your comments",
+    "submitRequest": "Submit"
   },
   "funds": {
     "token": "Token",

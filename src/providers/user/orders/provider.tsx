@@ -92,6 +92,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
 
   const onCancelOrder = async (payload: A.OrderCancelFetch["payload"]) => {
     try {
+      dispatch(A.orderCancelFetch(payload));
       const { orderId, base, quote } = payload;
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;

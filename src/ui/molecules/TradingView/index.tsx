@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   ChartingLibraryWidgetOptions,
@@ -10,7 +10,7 @@ import {
 } from "../../../../public/static/charting_library";
 
 import * as S from "./styles";
-import { options } from "./options";
+import { customFontFamily, options } from "./options";
 
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
@@ -103,10 +103,9 @@ export const TradingView = () => {
     },
     [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
   );
-  useEffect(() => {
-    if (!currentMarket?.m) return;
 
-    const widgetOptions: ChartingLibraryWidgetOptions = {
+  const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
+    return {
       datafeed: {
         onReady(callback) {
           setTimeout(() => callback(configurationData), 0);
@@ -181,7 +180,6 @@ export const TradingView = () => {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
         },
       },
-      theme: isDarkTheme ? "Dark" : "Light",
       interval: "1D" as ResolutionString,
       library_path: "/static/charting_library/",
       locale: "en",
@@ -199,29 +197,42 @@ export const TradingView = () => {
       ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
-      overrides: { ...options(isDarkTheme).overrides },
-      studies_overrides: { ...options(isDarkTheme).studies_overrides },
-      custom_font_family: options(isDarkTheme).custom_font_family,
+      custom_font_family: customFontFamily,
       custom_css_url: "/static/style.css/",
       loading_screen: {
         foregroundColor: "transparent",
       },
     };
+  }, [currentMarket?.m, getAllSymbols, getData, currentMarket?.name, onFetchKlineChannel]);
+
+  useEffect(() => {
+    if (!currentMarket?.m) return;
+
+    setIsReady(false);
     tvWidget.current = new Widget(widgetOptions);
-    tvWidget?.current?.onChartReady && tvWidget?.current?.onChartReady(() => setIsReady(true));
+
+    tvWidget?.current?.onChartReady &&
+      tvWidget?.current?.onChartReady(() => {
+        setIsReady(true);
+      });
 
     return () => {
-      tvWidget.current.remove();
+      tvWidget?.current?.remove();
     };
-  }, [
-    currentMarket?.m,
-    onHandleKlineFetch,
-    getData,
-    onFetchKlineChannel,
-    getAllSymbols,
-    currentMarket?.name,
-    isDarkTheme,
-  ]);
+  }, [currentMarket?.m, widgetOptions]);
+
+  useEffect(() => {
+    isReady &&
+      tvWidget?.current?.onChartReady &&
+      tvWidget?.current?.onChartReady(() => {
+        tvWidget?.current?.changeTheme(isDarkTheme ? "Dark" : "Light").then(() => {
+          tvWidget?.current.applyOverrides({ ...options(isDarkTheme).overrides });
+        });
+      });
+    tvWidget?.current?.applyStudiesOverrides({
+      ...options(isDarkTheme).studies_overrides,
+    });
+  }, [isDarkTheme, isReady]);
 
   return (
     <S.Wrapper>

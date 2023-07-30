@@ -1,4 +1,4 @@
 export type Props = {
-  value: number;
-  onClick: (value: number) => void;
+  value: string;
+  onClick: (value: string) => void;
 };
