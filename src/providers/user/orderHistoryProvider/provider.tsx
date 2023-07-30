@@ -83,7 +83,7 @@ export const OrderHistoryProvider = ({ children }) => {
           main_account: tradeAddress,
           from: dateFromStr,
           to: dateToStr,
-          limit: 5,
+          limit: 10,
           nextToken: nextTokenFetch,
         },
         "listOrderHistorybyMainAccount"
