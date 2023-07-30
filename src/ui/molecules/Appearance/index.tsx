@@ -11,7 +11,7 @@ export const Appearance = ({ navigateBack }: T.Props) => {
 
   const { isDarkTheme, changeTheme } = useAppearance();
   return (
-    <Navigation title={t("appearance")} onBack={navigateBack}>
+    <Navigation title={t("title")} onBack={navigateBack}>
       <Switcher
         title={t("darkMode.title")}
         description={t("darkMode.description")}
