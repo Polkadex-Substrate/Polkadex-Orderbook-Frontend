@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -30,6 +31,8 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
+
+  const router = useRouter();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res = await sendQueryToAppSync({ query: getAllMarkets });
@@ -69,7 +72,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
           const markets = await fetchMarkets(allAssets);
 
           dispatch(A.marketsData(markets));
-          dispatch(A.setCurrentMarketIfUnset(markets[0]));
+          if (markets.length) {
+            dispatch(A.setCurrentMarketIfUnset(markets[0]));
+            router.push(`${markets[0].base_ticker + markets[0].quote_ticker}`, undefined, {
+              shallow: true,
+            });
+          }
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -77,7 +85,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         dispatch(A.marketsError(error));
       }
     },
-    [fetchMarkets, onHandleError]
+    [fetchMarkets, onHandleError, router]
   );
 
   const findAsset = (
