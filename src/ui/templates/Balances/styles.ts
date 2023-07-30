@@ -45,6 +45,10 @@ export const Title = styled.div`
     }
     width: 90%;
     max-width: 140rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
   `}
 `;
 
@@ -161,6 +165,22 @@ export const DepositLink = styled(Link)`
     color: ${theme.colors.white};
     :hover {
       background-color: ${theme.colors.green}33;
+    }
+  `}
+`;
+
+export const Back = styled.div`
+  ${({ theme }) => css`
+    display: inline-block;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 100%;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+      width: 1.5rem;
+      height: 1.5rem;
     }
   `}
 `;

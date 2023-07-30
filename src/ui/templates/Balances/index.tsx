@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 
@@ -19,6 +20,7 @@ import { toCapitalize } from "@polkadex/web-helpers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
+import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
@@ -70,6 +72,7 @@ export const BalancesTemplate = () => {
     secondaryLink: "/settings",
     secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
+  const router = useRouter();
 
   return (
     <>
@@ -84,6 +87,9 @@ export const BalancesTemplate = () => {
           <S.Wrapper>
             <S.ContainerMain>
               <S.Title>
+                <S.Back onClick={() => router.back()}>
+                  <Icons.SingleArrowLeft />
+                </S.Back>
                 <h1>{t("heading")}</h1>
               </S.Title>
               <S.Container>
