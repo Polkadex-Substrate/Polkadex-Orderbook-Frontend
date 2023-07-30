@@ -30,7 +30,7 @@ export const RemoveFromDevice = ({ onAction, onClose }) => {
             background="primary"
             type="submit"
             onClick={onAction}>
-            {t("continue")}
+            {t("confirm")}
           </Button>
         </S.Actions>
       </S.Content>

@@ -110,7 +110,7 @@
     "summary": "Don’t worry your funds are safe in your funding account",
     "inputPlaceholder": "Type here",
     "cancel": "Cancel",
-    "continue": "Continue",
+    "confirm": "Confirm",
     "toVerify": "To verify, type ",
     "deleteAccount": "delete {{name}} account",
     "below": "below:"
@@ -119,6 +119,6 @@
     "title": "Remove this account from your browser?",
     "description": "Don’t worry your funds are safe in your funding account",
     "cancel": "Cancel",
-    "continue": "Continue"
+    "confirm": "Confirm"
   }
 }

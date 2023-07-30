@@ -84,6 +84,10 @@ export const WordsContainer = styled.div`
     input {
       color: ${theme.colors.text};
     }
+    svg {
+      stroke: ${theme.colors.tertiaryText};
+      fill: ${theme.colors.tertiaryText};
+    }
   `}
 `;
 

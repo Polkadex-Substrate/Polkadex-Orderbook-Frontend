@@ -24,6 +24,8 @@ export const SuccessCreateAccount = ({
   account,
 }: Props) => {
   const [state, setState] = useState(false);
+  const [mnemonicCopied, setMnemonicCopied] = useState(false);
+  const [addressCopied, setAddressCopied] = useState(false);
   useEffect(() => {
     confetti({
       zIndex: 9999,
@@ -50,7 +52,18 @@ export const SuccessCreateAccount = ({
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
+  const copyAddress = () => {
+    if (account?.address) {
+      navigator.clipboard.writeText(account?.address);
+      setAddressCopied(true);
+    }
+  };
+  const copyMnemonic = () => {
+    if (account?.address) {
+      navigator.clipboard.writeText(mnemonic);
+      setMnemonicCopied(true);
+    }
+  };
   return (
     <S.Wrapper>
       {!!mnemonic && (
@@ -71,8 +84,8 @@ export const SuccessCreateAccount = ({
         <S.Wallet>
           <p>{account?.name}</p>
           <S.WalletContent>
-            <button type="button">
-              <Icons.Copy />
+            <button type="button" onClick={copyAddress}>
+              {addressCopied ? <Icons.Tick /> : <Icons.Copy />}
             </button>
             <span>{account?.address}</span>
           </S.WalletContent>
@@ -100,6 +113,9 @@ export const SuccessCreateAccount = ({
                   {mnemonicArr?.map((value, i) => (
                     <div key={i}>{`${i + 1}. ${value}`}</div>
                   ))}
+                  <button type="button" onClick={copyMnemonic}>
+                    {mnemonicCopied ? <Icons.Tick /> : <Icons.Copy />}
+                  </button>
                 </S.WordsContainer>
               )}
             </S.Words>
