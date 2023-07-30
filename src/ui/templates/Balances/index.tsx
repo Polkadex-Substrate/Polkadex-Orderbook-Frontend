@@ -169,14 +169,16 @@ export const BalancesTemplate = () => {
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Actions>
-                                      <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                                      </Link>
-                                      <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
-                                      </Link>
-                                    </S.Actions>
+                                    {item.symbol !== "PDEX" && (
+                                      <S.Actions>
+                                        <Link href={`/deposit/${item.symbol}`}>
+                                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
+                                        </Link>
+                                        <Link href={`/withdraw/${item.symbol}`}>
+                                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                                        </Link>
+                                      </S.Actions>
+                                    )}
                                   </Table.Cell>
                                 </Table.Row>
                               );
