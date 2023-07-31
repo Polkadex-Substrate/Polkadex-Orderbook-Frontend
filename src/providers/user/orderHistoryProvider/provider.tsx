@@ -219,6 +219,21 @@ export const OrderHistoryProvider = ({ children }) => {
         setUpdatedList(list);
         setUpdatedOpenOrdersSorted(openOrdersSorted);
       }
+
+      const status = filters?.status?.toLowerCase();
+      const filterStatus = status === "completed" ? "closed" : status;
+      if (filterStatus !== "all transactions") {
+        setUpdatedList(
+          list.filter((item) => {
+            return item.status.toLowerCase() === filterStatus;
+          })
+        );
+        setUpdatedOpenOrdersSorted(
+          openOrdersSorted.filter((item) => {
+            return item.status.toLowerCase() === filterStatus;
+          })
+        );
+      }
     },
     [list, openOrdersSorted]
   );

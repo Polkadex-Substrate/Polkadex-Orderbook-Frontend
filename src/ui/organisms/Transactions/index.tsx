@@ -81,6 +81,10 @@ export const Transactions = () => {
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
 
+  const handleActionDropdown = (status: string) => {
+    setFilters({ ...filters, status });
+  };
+
   return (
     <S.Section>
       <Tabs>
@@ -134,7 +138,11 @@ export const Transactions = () => {
                     </Dropdown.Trigger>
                     <Dropdown.Menu fill="secondaryBackgroundSolid">
                       {initialState.map((status) => (
-                        <Dropdown.Item key={status}>{status}</Dropdown.Item>
+                        <Dropdown.Item
+                          key={status}
+                          onAction={() => handleActionDropdown(status)}>
+                          {status}
+                        </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
