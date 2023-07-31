@@ -126,21 +126,24 @@ const Content: FC<{
   <S.Content>
     <S.ContainerWrapper>
       {tokens.length ? (
-        tokens.map((token) => (
-          <Card
-            key={token.id}
-            id={token.id}
-            pair={token.name}
-            tokenTicker={token.tokenTickerName}
-            vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
-            price={Decimal.format(Number(token.last), token.quote_precision, ",")}
-            fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
-            change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
-            changeMarket={() => changeMarket(token.name)}
-            handleSelectedFavorite={handleSelectedFavorite}
-            isFavourite={token.isFavourite}
-          />
-        ))
+        tokens.map(
+          (token) =>
+            token.name !== "TDEX/TBRI" && (
+              <Card
+                key={token.id}
+                id={token.id}
+                pair={token.name}
+                tokenTicker={token.tokenTickerName}
+                vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
+                price={Decimal.format(Number(token.last), token.quote_precision, ",")}
+                fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
+                change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
+                changeMarket={() => changeMarket(token.name)}
+                handleSelectedFavorite={handleSelectedFavorite}
+                isFavourite={token.isFavourite}
+              />
+            )
+        )
       ) : (
         <ResultFound />
       )}
