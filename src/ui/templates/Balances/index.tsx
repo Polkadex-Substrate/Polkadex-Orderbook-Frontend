@@ -73,7 +73,6 @@ export const BalancesTemplate = () => {
     secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
   const router = useRouter();
-  console.log("checking for check fails");
 
   return (
     <>
