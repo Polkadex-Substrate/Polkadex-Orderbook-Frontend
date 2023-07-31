@@ -44,6 +44,7 @@ export const DepositTemplate = () => {
   const { selectedAccount: currentAccount } = useProfile();
 
   const { list, selectGetAsset } = useAssetsProvider();
+  console.log(list, "all assets");
 
   const extensionWalletState = useExtensionWallet();
 
@@ -61,6 +62,7 @@ export const DepositTemplate = () => {
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
 
   const routedAsset = router.query.id as string;
+
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
@@ -68,8 +70,9 @@ export const DepositTemplate = () => {
 
   useEffect(() => {
     const initialAsset = list.find(
-      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+      (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
+
     if (initialAsset) {
       setSelectedAsset(initialAsset);
     }
