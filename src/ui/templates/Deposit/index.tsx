@@ -77,6 +77,8 @@ export const DepositTemplate = () => {
 
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
+
+  // TODO: Try to move these validations in Yup
   const validate = (values) => {
     const errors = {} as any;
     if (values?.amount?.toString().includes("e") || values?.amount?.toString().includes("o")) {
