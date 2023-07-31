@@ -14,6 +14,7 @@ export const getOrderbook = /* GraphQL */ `
         p
         q
         s
+        stid
       }
       nextToken
     }
@@ -66,6 +67,8 @@ export const getRecentTrades = /* GraphQL */ `
         p
         q
         stid
+        t_id
+        m_id
         isReverted
       }
       nextToken
@@ -267,7 +270,6 @@ export const listTransactionsByMainAccount = /* GraphQL */ `
         t
         stid
         snapshot_id
-        worker_nonce
         isReverted
       }
       nextToken
@@ -296,6 +298,8 @@ export const listTradesByMainAccount = /* GraphQL */ `
         s
         t
         stid
+        t_id
+        m_id
         isReverted
       }
       nextToken

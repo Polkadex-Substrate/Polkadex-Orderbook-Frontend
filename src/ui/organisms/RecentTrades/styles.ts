@@ -19,7 +19,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     flex-flow: column;
     flex: 1;
     border-radius: 0 2rem 2rem 0rem;
-    min-width: 29rem;
+    min-width: 28rem;
     width: 100%;
     height: 100%;
     min-height: 48rem;

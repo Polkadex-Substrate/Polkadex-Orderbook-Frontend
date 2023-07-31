@@ -23,6 +23,7 @@ export type SetPriceLevel = {
   p: string,
   q: string,
   s?: OrderSide | null,
+  stid: string,
 };
 
 export enum OrderSide {
@@ -74,6 +75,8 @@ export type RawTrade = {
   p: string,
   q: string,
   stid: number,
+  t_id?: string | null,
+  m_id?: string | null,
   isReverted?: boolean | null,
 };
 
@@ -177,7 +180,6 @@ export type Transaction = {
   t: string,
   stid: string,
   snapshot_id?: string | null,
-  worker_nonce: string,
   isReverted?: boolean | null,
 };
 
@@ -195,6 +197,8 @@ export type Trade = {
   s: string,
   t: string,
   stid: string,
+  t_id?: string | null,
+  m_id?: string | null,
   isReverted?: boolean | null,
 };
 
@@ -270,6 +274,7 @@ export type GetOrderbookQuery = {
       p: string,
       q: string,
       s?: OrderSide | null,
+      stid: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -336,6 +341,8 @@ export type GetRecentTradesQuery = {
       p: string,
       q: string,
       stid: number,
+      t_id?: string | null,
+      m_id?: string | null,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
@@ -560,7 +567,6 @@ export type ListTransactionsByMainAccountQuery = {
       t: string,
       stid: string,
       snapshot_id?: string | null,
-      worker_nonce: string,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
@@ -587,6 +593,8 @@ export type ListTradesByMainAccountQuery = {
       s: string,
       t: string,
       stid: string,
+      t_id?: string | null,
+      m_id?: string | null,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
