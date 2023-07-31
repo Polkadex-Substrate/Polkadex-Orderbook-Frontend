@@ -24,8 +24,9 @@ export const SuccessCreateAccount = ({
   account,
 }: Props) => {
   const [state, setState] = useState(false);
-  const [mnemonicCopied, setMnemonicCopied] = useState(false);
-  const [addressCopied, setAddressCopied] = useState(false);
+  const buttonRef = useRef(null);
+  const mnemonicButtonRef = useRef(null);
+
   useEffect(() => {
     confetti({
       zIndex: 9999,
@@ -52,16 +53,16 @@ export const SuccessCreateAccount = ({
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  const copyAddress = () => {
+  const copyAddress = async () => {
     if (account?.address) {
-      navigator.clipboard.writeText(account?.address);
-      setAddressCopied(true);
+      await navigator.clipboard.writeText(account?.address);
+      buttonRef.current.innerHTML = "Copied";
     }
   };
-  const copyMnemonic = () => {
+  const copyMnemonic = async () => {
     if (account?.address) {
-      navigator.clipboard.writeText(mnemonic);
-      setMnemonicCopied(true);
+      await navigator.clipboard.writeText(mnemonic);
+      mnemonicButtonRef.current.innerHTML = "Copied";
     }
   };
   return (
@@ -84,8 +85,8 @@ export const SuccessCreateAccount = ({
         <S.Wallet>
           <p>{account?.name}</p>
           <S.WalletContent>
-            <button type="button" onClick={copyAddress}>
-              {addressCopied ? <Icons.Tick /> : <Icons.Copy />}
+            <button ref={buttonRef} onClick={copyAddress}>
+              <Icons.Copy />
             </button>
             <span>{account?.address}</span>
           </S.WalletContent>
@@ -113,8 +114,8 @@ export const SuccessCreateAccount = ({
                   {mnemonicArr?.map((value, i) => (
                     <div key={i}>{`${i + 1}. ${value}`}</div>
                   ))}
-                  <button type="button" onClick={copyMnemonic}>
-                    {mnemonicCopied ? <Icons.Tick /> : <Icons.Copy />}
+                  <button ref={mnemonicButtonRef} onClick={copyMnemonic}>
+                    <Icons.Copy />
                   </button>
                 </S.WordsContainer>
               )}
