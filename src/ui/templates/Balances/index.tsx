@@ -54,18 +54,13 @@ export const BalancesTemplate = () => {
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
-  allAssets.sort((a, b) => {
-    const nameA = a.name.toUpperCase();
-    const nameB = b.name.toUpperCase();
-
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  });
+  console.log(allAssets, "all s");
+  const pdexIndex = allAssets.findIndex((obj) => obj.symbol === "PDEX");
+  const pdexObj = allAssets.splice(pdexIndex, 1)[0];
+  allAssets.sort((a, b) => a.name.localeCompare(b.name));
+  if (pdexObj) {
+    allAssets.unshift(pdexObj);
+  }
 
   const connectWalletData = {
     image: "emptyWallet",
