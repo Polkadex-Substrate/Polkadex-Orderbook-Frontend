@@ -116,8 +116,15 @@ export type Market = {
 
 export type ProxyConnection = {
   __typename: "ProxyConnection",
-  items?: Array< string | null > | null,
+  items?:  Array<ProxyConnectionItem | null > | null,
   nextToken?: string | null,
+};
+
+export type ProxyConnectionItem = {
+  __typename: "ProxyConnectionItem",
+  hash_key?: string | null,
+  range_key?: string | null,
+  stid?: string | null,
 };
 
 export type User = {
@@ -399,7 +406,12 @@ export type FindUserByProxyAccountQuery = {
   // Finds User by proxy account
   findUserByProxyAccount?:  {
     __typename: "ProxyConnection",
-    items?: Array< string | null > | null,
+    items?:  Array< {
+      __typename: "ProxyConnectionItem",
+      hash_key?: string | null,
+      range_key?: string | null,
+      stid?: string | null,
+    } | null > | null,
     nextToken?: string | null,
   } | null,
 };
