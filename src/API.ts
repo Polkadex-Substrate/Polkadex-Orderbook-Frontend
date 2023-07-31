@@ -23,6 +23,7 @@ export type SetPriceLevel = {
   p: string,
   q: string,
   s?: OrderSide | null,
+  stid: string,
 };
 
 export enum OrderSide {
@@ -273,6 +274,7 @@ export type GetOrderbookQuery = {
       p: string,
       q: string,
       s?: OrderSide | null,
+      stid: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,

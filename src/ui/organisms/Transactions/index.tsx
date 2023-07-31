@@ -44,11 +44,12 @@ export const Transactions = () => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
-  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("canceled")];
+  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("cancelled")];
 
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isTransactionDropdownVisible, setTransactionDropdownVisible] = useState(true);
 
   const orderHistory = useOrderHistoryProvider();
   const { filterOrders } = orderHistory;
@@ -80,6 +81,10 @@ export const Transactions = () => {
       },
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
+
+  const handleActionDropdown = (status: string) => {
+    setFilters({ ...filters, status });
+  };
 
   return (
     <S.Section>
@@ -123,21 +128,27 @@ export const Transactions = () => {
                   </Checkbox>
                 </S.ContainerActions>
                 <S.ContainerTransactions>
-                  <Dropdown>
-                    <Dropdown.Trigger>
-                      <S.Icon>
-                        {filters.status}
-                        <div>
-                          <Icons.ArrowBottom />
-                        </div>
-                      </S.Icon>
-                    </Dropdown.Trigger>
-                    <Dropdown.Menu fill="secondaryBackgroundSolid">
-                      {initialState.map((status) => (
-                        <Dropdown.Item key={status}>{status}</Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  {isTransactionDropdownVisible && (
+                    <Dropdown>
+                      <Dropdown.Trigger>
+                        <S.Icon>
+                          {filters.status}
+                          <div>
+                            <Icons.ArrowBottom />
+                          </div>
+                        </S.Icon>
+                      </Dropdown.Trigger>
+                      <Dropdown.Menu fill="secondaryBackgroundSolid">
+                        {initialState.map((status) => (
+                          <Dropdown.Item
+                            key={status}
+                            onAction={() => handleActionDropdown(status)}>
+                            {status}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
                   <Popover>
                     <Popover.Trigger>
                       <div>
@@ -175,7 +186,10 @@ export const Transactions = () => {
             <OrderHistory orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
-            <TradeHistory filters={filters} />
+            <TradeHistory
+              onHideTransactionDropdown={(v: boolean) => setTransactionDropdownVisible(v)}
+              filters={filters}
+            />
           </TabContent>
           <TabContent>
             <Funds onHideFilters={(v: boolean) => setIsVisible(v)} />

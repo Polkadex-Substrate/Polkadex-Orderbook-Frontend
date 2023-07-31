@@ -42,7 +42,7 @@ const Withdraw = () => {
   );
 
   useEffect(() => {
-    if (shouldRedirect) router.push("/settings");
+    if (shouldRedirect) router.push("/trading");
   }, [router, shouldRedirect]);
 
   if (shouldRedirect || disabled) return <div />;
