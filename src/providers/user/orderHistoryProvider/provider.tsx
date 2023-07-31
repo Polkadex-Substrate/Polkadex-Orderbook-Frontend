@@ -83,7 +83,7 @@ export const OrderHistoryProvider = ({ children }) => {
           main_account: tradeAddress,
           from: dateFromStr,
           to: dateToStr,
-          limit: 5,
+          limit: 10,
           nextToken: nextTokenFetch,
         },
         "listOrderHistorybyMainAccount"
@@ -218,6 +218,23 @@ export const OrderHistoryProvider = ({ children }) => {
       } else {
         setUpdatedList(list);
         setUpdatedOpenOrdersSorted(openOrdersSorted);
+      }
+
+      const acceptedStatus = ["all transactions", "pending", "completed", "cancelled"];
+
+      const status = filters?.status?.toLowerCase();
+      const filterStatus = status === acceptedStatus[2] ? "closed" : status;
+      if (filterStatus !== acceptedStatus[0]) {
+        setUpdatedList(
+          list.filter((item) => {
+            return item.status.toLowerCase() === filterStatus;
+          })
+        );
+        setUpdatedOpenOrdersSorted(
+          openOrdersSorted.filter((item) => {
+            return item.status.toLowerCase() === filterStatus;
+          })
+        );
       }
     },
     [list, openOrdersSorted]

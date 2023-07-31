@@ -28,12 +28,16 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
 
   const onTransactionsFetch = useCallback(
     async (mainAddress: string) => {
-      dispatch(A.transactionsFetch());
-      if (mainAddress) {
-        const transactions = await fetchTransactions(mainAddress, 3, 10);
-        dispatch(A.transactionsData(transactions));
-      } else {
-        onHandleError("No account selected, please select a trading account");
+      try {
+        dispatch(A.transactionsFetch());
+        if (mainAddress) {
+          const transactions = await fetchTransactions(mainAddress, 3, 10);
+          dispatch(A.transactionsData(transactions));
+        } else {
+          onHandleError("No account selected, please select a trading account");
+        }
+      } catch (error) {
+        onHandleError(`Could not fetch transaction history`);
       }
     },
     [onHandleError]
