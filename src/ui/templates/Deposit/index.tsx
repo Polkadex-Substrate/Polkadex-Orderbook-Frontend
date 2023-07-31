@@ -80,9 +80,11 @@ export const DepositTemplate = () => {
 
   // A custom validation function. This must return an object
   // which keys are symmetrical to our values/initialValues
+
+  // TODO: Try to move these validations in Yup
   const validate = (values) => {
     const errors = {} as any;
-    if (values?.amount?.includes("e") || values?.amount?.includes("o")) {
+    if (values?.amount?.toString().includes("e") || values?.amount?.toString().includes("o")) {
       errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
     if (/\s/.test(String(values.amount))) {
@@ -91,6 +93,14 @@ export const DepositTemplate = () => {
     const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
     if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
       errors.amount = ErrorMessages.REMAINING_BALANCE;
+    }
+
+    if (
+      !isAssetPDEX(selectedAsset?.assetId) &&
+      Number(values.amount) &&
+      balanceAfterDeposit < Math.pow(10, -12)
+    ) {
+      errors.amount = ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX;
     }
 
     if (+values.amount > onChainBalance) {

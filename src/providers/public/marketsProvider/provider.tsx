@@ -1,6 +1,13 @@
+// TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
+// [x] The platform have a default trading pair for the user's first access.
+// The user can access directly any pair from an URL.
+// [x] The user can access directly any pair from a market component.
+// If the user was on PDEXDOT, then the default pair should be PDEXDOT (You can observe the same behavior on Kucoin and Binance).
+
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -31,6 +38,8 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
+
+  const router = useRouter();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res = await sendQueryToAppSync({ query: getAllMarkets });
@@ -68,11 +77,27 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
-          const newMarkets = markets.filter((item) => {
-            return item.name !== defaultConfig.blockedMarkets;
-          });
-          dispatch(A.marketsData(newMarkets));
-          dispatch(A.setCurrentMarketIfUnset(newMarkets[0]));
+
+          dispatch(A.marketsData(markets));
+          if (markets.length) {
+            const defaultMarket = markets?.find((v) =>
+              v.name
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toLowerCase()
+                .includes(defaultConfig.landingPageMarket.toLowerCase())
+            );
+
+            const defaultMarketSelected = defaultMarket ?? markets[0];
+            dispatch(A.setCurrentMarketIfUnset(defaultMarketSelected));
+            router.push(
+              `${defaultMarketSelected.base_ticker + defaultMarketSelected.quote_ticker}`,
+              undefined,
+              {
+                shallow: true,
+              }
+            );
+          }
+
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -80,7 +105,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         dispatch(A.marketsError(error));
       }
     },
-    [fetchMarkets, onHandleError]
+    [fetchMarkets, onHandleError, router]
   );
 
   const findAsset = (

@@ -33,7 +33,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
   const { selectedAccount } = useProfile();
 
   useEffect(() => {
-    if (orders.length) return;
+    if (orders.length || orderHistoryNextToken) return;
     if (selectedAccount.tradeAddress) {
       onOrdersHistoryFetch({
         dateFrom,
@@ -42,7 +42,14 @@ export const OrderHistory = ({ orderHistory }: Props) => {
         orderHistoryNextToken: null,
       });
     }
-  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch, orders.length]);
+  }, [
+    selectedAccount.tradeAddress,
+    dateFrom,
+    dateTo,
+    onOrdersHistoryFetch,
+    orders.length,
+    orderHistoryNextToken,
+  ]);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`orderHistory.${key}`);

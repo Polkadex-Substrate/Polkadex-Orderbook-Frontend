@@ -14,6 +14,7 @@ export const getOrderbook = /* GraphQL */ `
         p
         q
         s
+        stid
       }
       nextToken
     }
