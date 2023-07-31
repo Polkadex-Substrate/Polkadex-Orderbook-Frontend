@@ -42,7 +42,7 @@ const Deposit = () => {
   );
 
   useEffect(() => {
-    if (!hasUser) router?.push("/accountManager/");
+    if (!hasUser) router?.push("/trading/");
   }, [hasUser, router]);
   if (shouldRedirect || disabled) return <div />;
 
