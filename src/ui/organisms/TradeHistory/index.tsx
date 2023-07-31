@@ -20,7 +20,7 @@ export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
-  status: string;
+  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
 };
 
 type Props = {

@@ -44,7 +44,7 @@ export const Transactions = () => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
-  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("canceled")];
+  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("cancelled")];
 
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);

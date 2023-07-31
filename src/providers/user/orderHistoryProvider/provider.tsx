@@ -220,9 +220,11 @@ export const OrderHistoryProvider = ({ children }) => {
         setUpdatedOpenOrdersSorted(openOrdersSorted);
       }
 
+      const acceptedStatus = ["all transactions", "pending", "completed", "cancelled"];
+
       const status = filters?.status?.toLowerCase();
-      const filterStatus = status === "completed" ? "closed" : status;
-      if (filterStatus !== "all transactions") {
+      const filterStatus = status === acceptedStatus[2] ? "closed" : status;
+      if (filterStatus !== acceptedStatus[0]) {
         setUpdatedList(
           list.filter((item) => {
             return item.status.toLowerCase() === filterStatus;
