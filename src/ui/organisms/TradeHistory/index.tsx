@@ -1,5 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 import * as S from "./styles";
 
@@ -15,7 +16,19 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/useSessionProvider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
-export const TradeHistory = ({ filters }) => {
+export type Ifilters = {
+  hiddenPairs: boolean;
+  onlyBuy: boolean;
+  onlySell: boolean;
+  status: string;
+};
+
+type Props = {
+  filters: Ifilters;
+  onHideTransactionDropdown: (v: boolean) => void;
+};
+
+export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
   const {
     priceFixed,
     amountFixed,
@@ -31,6 +44,11 @@ export const TradeHistory = ({ filters }) => {
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);
+
+  useEffect(() => {
+    onHideTransactionDropdown(false);
+    return () => onHideTransactionDropdown(true);
+  }, [onHideTransactionDropdown]);
 
   return (
     <S.Wrapper>
