@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { useReactToPrint } from "react-to-print";
 
+import { Button } from "../Button";
+
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -25,8 +27,7 @@ export const SuccessCreateAccount = ({
 }: Props) => {
   const [state, setState] = useState(false);
   const buttonRef = useRef(null);
-  const mnemonicButtonRef = useRef(null);
-
+  const [mnemonicCopied, setMnemonicCopied] = useState(false);
   useEffect(() => {
     confetti({
       zIndex: 9999,
@@ -62,7 +63,7 @@ export const SuccessCreateAccount = ({
   const copyMnemonic = async () => {
     if (account?.address) {
       await navigator.clipboard.writeText(mnemonic);
-      mnemonicButtonRef.current.innerHTML = "Copied";
+      setMnemonicCopied(true);
     }
   };
   return (
@@ -114,11 +115,17 @@ export const SuccessCreateAccount = ({
                   {mnemonicArr?.map((value, i) => (
                     <div key={i}>{`${i + 1}. ${value}`}</div>
                   ))}
-                  <button ref={mnemonicButtonRef} onClick={copyMnemonic}>
-                    <Icons.Copy />
-                  </button>
                 </S.WordsContainer>
               )}
+              <Button
+                background={mnemonicCopied ? "gradientGreen" : "secondaryBackgroundOpacity"}
+                color="text"
+                hoverColor={mnemonicCopied ? "gradientGreen" : "inverse"}
+                isFull
+                size="large"
+                onClick={copyMnemonic}>
+                {mnemonicCopied ? "Copied" : "Copy"}
+              </Button>
             </S.Words>
             <S.Words>
               <S.WordsWrapper>
