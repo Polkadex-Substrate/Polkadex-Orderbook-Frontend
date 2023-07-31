@@ -90,6 +90,10 @@ export const DepositTemplate = () => {
       errors.amount = ErrorMessages.REMAINING_BALANCE;
     }
 
+    if (!isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < Math.pow(10, -12)) {
+      errors.amount = ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX;
+    }
+
     if (+values.amount > onChainBalance) {
       errors.amount = ErrorMessages.CHECK_BALANCE;
     }
