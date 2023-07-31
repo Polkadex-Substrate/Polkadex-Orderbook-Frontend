@@ -1,3 +1,9 @@
+// TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
+// [x] The platform have a default trading pair for the user's first access.
+// The user can access directly any pair from an URL.
+// [x] The user can access directly any pair from a market component.
+// If the user was on PDEXDOT, then the default pair should be PDEXDOT (You can observe the same behavior on Kucoin and Binance).
+
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
@@ -26,6 +32,7 @@ import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
@@ -70,13 +77,24 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
-
           dispatch(A.marketsData(markets));
           if (markets.length) {
-            dispatch(A.setCurrentMarketIfUnset(markets[0]));
-            router.push(`${markets[0].base_ticker + markets[0].quote_ticker}`, undefined, {
-              shallow: true,
-            });
+            const defaultMarket = markets?.find((v) =>
+              v.name
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toLowerCase()
+                .includes(defaultConfig.landingPageMarket.toLowerCase())
+            );
+
+            const defaultMarketSelected = defaultMarket ?? markets[0];
+            dispatch(A.setCurrentMarketIfUnset(defaultMarketSelected));
+            router.push(
+              `${defaultMarketSelected.base_ticker + defaultMarketSelected.quote_ticker}`,
+              undefined,
+              {
+                shallow: true,
+              }
+            );
           }
         }
       } catch (error) {
