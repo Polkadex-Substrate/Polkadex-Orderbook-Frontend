@@ -20,4 +20,6 @@ export type DefaultConfig = {
   availableRoutes: string[];
   underMaintenance: string[];
   mainUrl: string;
+  blockedAssets: string[];
+  blockedMarkets: string;
 };

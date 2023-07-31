@@ -25,6 +25,7 @@ import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
@@ -67,9 +68,11 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
-
-          dispatch(A.marketsData(markets));
-          dispatch(A.setCurrentMarketIfUnset(markets[0]));
+          const newMarkets = markets.filter((item) => {
+            return item.name !== defaultConfig.blockedMarkets;
+          });
+          dispatch(A.marketsData(newMarkets));
+          dispatch(A.setCurrentMarketIfUnset(newMarkets[0]));
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -133,6 +136,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     try {
       const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
       const tickers = await Promise.all(tickersPromises);
+
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error?.errors);
