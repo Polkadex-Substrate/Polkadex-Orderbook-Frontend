@@ -21,6 +21,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
@@ -45,8 +46,11 @@ export const BalancesTemplate = () => {
         const matchesNameOrTicker =
           e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
           e.symbol.toLowerCase().includes(filters.search.toLowerCase());
-
-        return matchesNameOrTicker && !hasZeroAmount && e.symbol !== "CUSDT";
+        return (
+          matchesNameOrTicker &&
+          !hasZeroAmount &&
+          !defaultConfig.blockedAssets.some((value) => e.symbol.toLowerCase() === value)
+        );
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
@@ -147,8 +151,7 @@ export const BalancesTemplate = () => {
                                       </S.TokenIcon>
                                       <S.Cell>
                                         <span>
-                                          {toCapitalize(item.name)}{" "}
-                                          <small> {item.symbol}</small>
+                                          {item.name} <small> {item.symbol}</small>
                                         </span>
                                       </S.Cell>
                                     </S.CellFlex>
@@ -161,18 +164,22 @@ export const BalancesTemplate = () => {
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                      </span>
-                                    </S.Cell>
+                                    {item.symbol !== "PDEX" && (
+                                      <S.Cell>
+                                        <span>
+                                          {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                        </span>
+                                      </S.Cell>
+                                    )}
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                      </span>
-                                    </S.Cell>
+                                    {item.symbol !== "PDEX" && (
+                                      <S.Cell>
+                                        <span>
+                                          {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                        </span>
+                                      </S.Cell>
+                                    )}
                                   </Table.Cell>
                                   <Table.Cell>
                                     {item.symbol !== "PDEX" && (
