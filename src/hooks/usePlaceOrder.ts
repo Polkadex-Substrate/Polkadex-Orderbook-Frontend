@@ -1,7 +1,12 @@
 // TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
 
-import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
+import {
+  cleanPositiveFloatInput,
+  decimalPlaces,
+  getDigitsAfterDecimal,
+  precisionRegExp,
+} from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
@@ -142,7 +147,11 @@ export function usePlaceOrder(
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
+      const digitAfterDecimal = getDigitsAfterDecimal(price?.toString());
+      if (
+        convertedValue?.match(precisionRegExp(pricePrecision || 0)) &&
+        digitAfterDecimal <= 2
+      ) {
         setForm({
           ...form,
           price: convertedValue,
@@ -164,7 +173,8 @@ export function usePlaceOrder(
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-      if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
+      const digitAfterDecimal = getDigitsAfterDecimal(value?.toString());
+      if (convertedValue.match(precisionRegExp(qtyPrecision || 0)) && digitAfterDecimal <= 2) {
         if (isSell) {
           setForm({
             ...form,
