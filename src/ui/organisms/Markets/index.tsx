@@ -49,11 +49,7 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
         changeMarket={handleChangeMarket}
       />
       <Footer
-        tickers={marketTickers.filter((ticker) => {
-          return !defaultConfig.blockedAssets.some(
-            (value) => ticker.toLowerCase() === value.toLowerCase()
-          );
-        })}
+        tickers={marketTickers}
         changeMarket={handleMarketsTabsSelected}
         tabField={fieldValue.marketsTabsSelected}
       />
@@ -132,25 +128,20 @@ const Content: FC<{
   <S.Content>
     <S.ContainerWrapper>
       {tokens.length ? (
-        tokens.map(
-          (token) =>
-            !defaultConfig.blockedMarkets.some(
-              (value) => token.name.toLowerCase() === value.toLowerCase()
-            ) && (
-              <Card
-                key={token.id}
-                id={token.id}
-                pair={token.name}
-                tokenTicker={token.tokenTickerName}
-                vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
-                price={Decimal.format(Number(token.last), token.quote_precision, ",")}
-                change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
-                changeMarket={() => changeMarket(token.name)}
-                handleSelectedFavorite={handleSelectedFavorite}
-                isFavourite={token.isFavourite}
-              />
-            )
-        )
+        tokens.map((token) => (
+          <Card
+            key={token.id}
+            id={token.id}
+            pair={token.name}
+            tokenTicker={token.tokenTickerName}
+            vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
+            price={Decimal.format(Number(token.last), token.quote_precision, ",")}
+            change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
+            changeMarket={() => changeMarket(token.name)}
+            handleSelectedFavorite={handleSelectedFavorite}
+            isFavourite={token.isFavourite}
+          />
+        ))
       ) : (
         <ResultFound />
       )}
