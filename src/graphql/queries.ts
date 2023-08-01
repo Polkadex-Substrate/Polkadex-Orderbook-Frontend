@@ -114,7 +114,11 @@ export const getAllMarkets = /* GraphQL */ `
 export const findUserByProxyAccount = /* GraphQL */ `
   query FindUserByProxyAccount($proxy_account: String!) {
     findUserByProxyAccount(proxy_account: $proxy_account) {
-      items
+      items {
+        hash_key
+        range_key
+        stid
+      }
       nextToken
     }
   }

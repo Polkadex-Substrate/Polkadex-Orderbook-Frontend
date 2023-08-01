@@ -165,7 +165,6 @@ const Card = ({
   tokenTicker,
   vol,
   price,
-  fiat,
   change,
   changeMarket,
   isFavourite,
@@ -198,7 +197,6 @@ const Card = ({
         </S.CardInfoContent>
         <S.CardPricing>
           <span>{price}</span>
-          <p>{fiat}</p>
         </S.CardPricing>
         <S.CardChange isNegative={isNegative(change.toString())}>
           <span>{change}</span>
