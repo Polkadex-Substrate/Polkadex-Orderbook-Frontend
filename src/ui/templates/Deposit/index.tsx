@@ -35,6 +35,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
@@ -204,13 +205,20 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {list.map((asset) => (
-                                <Dropdown.Item
-                                  key={asset.assetId}
-                                  onAction={() => setSelectedAsset(asset)}>
-                                  {asset.name}
-                                </Dropdown.Item>
-                              ))}
+                              {list
+                                .filter(
+                                  (item) =>
+                                    !defaultConfig.blockedAssets?.some(
+                                      (value) => item.assetId === value
+                                    ) && item.assetId !== POLKADEX_ASSET.assetId
+                                )
+                                .map((asset) => (
+                                  <Dropdown.Item
+                                    key={asset.assetId}
+                                    onAction={() => setSelectedAsset(asset)}>
+                                    {asset.name}
+                                  </Dropdown.Item>
+                                ))}
                             </Dropdown.Menu>
                           </Dropdown>
                         </S.SelectInputContainer>
