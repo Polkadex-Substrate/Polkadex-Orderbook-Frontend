@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -7,12 +6,10 @@ import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const Progress = () => {
-  const { t } = useTranslation("migration");
-
   return (
     <S.Wrapper>
       <Head>
-        <title>{t("title")}</title>
+        <title>Polkadex Orderbook</title>
       </Head>
       <S.Container>
         <S.Header>
@@ -28,11 +25,11 @@ export const Progress = () => {
                 <h3>Test trading?</h3>
                 <p>
                   If you’d like to check it out and start trading, please visit{" "}
-                  <a href="/" target="_blank">
+                  <a href="https://discord.gg/h876ChKaNZ" target="_blank" rel="noreferrer">
                     the ambassador
                   </a>{" "}
                   or{" "}
-                  <a href="/" target="_blank">
+                  <a href="https://discord.gg/HRx8ZzbtQy" target="_blank" rel="noreferrer">
                     validator channels on Discord
                   </a>
                   .
