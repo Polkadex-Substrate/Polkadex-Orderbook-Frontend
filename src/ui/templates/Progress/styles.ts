@@ -88,8 +88,13 @@ export const HeroContent = styled.div`
 `;
 
 export const HeroInteraction = styled.div`
+  perspective: 800px;
+
   img {
     width: 100%;
+    transform-style: preserve-3d;
+    transform: scale3d(1.2, 1, 2) rotate3d(1, 0, 0, 40deg);
+    transition: transform 1s;
   }
 `;
 

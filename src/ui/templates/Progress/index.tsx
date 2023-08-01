@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useEffect, useRef } from "react";
 
 import * as S from "./styles";
 
@@ -6,6 +7,15 @@ import { OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 export const Progress = () => {
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const clear = setTimeout(() => {
+      imageRef.current.style.transform = "rotateX(0deg) rotateZ(0deg)";
+    }, 1000);
+    return () => clearTimeout(clear);
+  });
+
   return (
     <S.Wrapper>
       <Head>
@@ -37,7 +47,12 @@ export const Progress = () => {
               </S.HeroContent>
             </S.HeroHeader>
             <S.HeroInteraction>
-              <img src="/img/orderbookTesting.svg" alt="" />
+              <img
+                ref={imageRef}
+                draggable={false}
+                src="/img/orderbookImage.svg"
+                alt="Orderbook App screenshot"
+              />
             </S.HeroInteraction>
           </S.Hero>
           <S.Footer>
