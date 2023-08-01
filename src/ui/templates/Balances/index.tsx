@@ -16,7 +16,6 @@ import {
   Search,
   Table,
 } from "@polkadex/orderbook-ui/molecules";
-import { toCapitalize } from "@polkadex/web-helpers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
@@ -49,15 +48,19 @@ export const BalancesTemplate = () => {
         return (
           matchesNameOrTicker &&
           !hasZeroAmount &&
-          !defaultConfig.blockedAssets.some((value) => e.symbol.toLowerCase() === value)
+          !defaultConfig.blockedAssets.some(
+            (value) => e.symbol.toLowerCase() === value.toLowerCase()
+          )
         );
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
-  console.log(allAssets, "all s");
-  const pdexIndex = allAssets.findIndex((obj) => obj.symbol === "PDEX");
-  const pdexObj = allAssets.splice(pdexIndex, 1)[0];
+  const pdexIndex = allAssets.findIndex(
+    (obj) => obj.symbol.toUpperCase() === "PDEX" || obj.name.toUpperCase() === "POLKADEX"
+  );
+  const pdexObj = pdexIndex >= 0 && allAssets.splice(pdexIndex, 1)[0];
   allAssets.sort((a, b) => a.name.localeCompare(b.name));
+
   if (pdexObj) {
     allAssets.unshift(pdexObj);
   }

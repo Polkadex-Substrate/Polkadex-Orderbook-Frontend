@@ -10,6 +10,7 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
 import { InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 import { useMiniGraph } from "@polkadex/orderbook/hooks/useMiniGraph";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
@@ -25,6 +26,7 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
     handleShowFavourite,
     id,
   } = useMarkets(onClose);
+
   return (
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
@@ -47,7 +49,11 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
         changeMarket={handleChangeMarket}
       />
       <Footer
-        tickers={marketTickers}
+        tickers={marketTickers.filter((ticker) => {
+          return !defaultConfig.blockedAssets.some(
+            (value) => ticker.toLowerCase() === value.toLowerCase()
+          );
+        })}
         changeMarket={handleMarketsTabsSelected}
         tabField={fieldValue.marketsTabsSelected}
       />
@@ -128,7 +134,9 @@ const Content: FC<{
       {tokens.length ? (
         tokens.map(
           (token) =>
-            token.name !== "TDEX/TBRI" && (
+            !defaultConfig.blockedMarkets.some(
+              (value) => token.name.toLowerCase() === value.toLowerCase()
+            ) && (
               <Card
                 key={token.id}
                 id={token.id}

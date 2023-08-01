@@ -44,7 +44,6 @@ export const DepositTemplate = () => {
   const { selectedAccount: currentAccount } = useProfile();
 
   const { list, selectGetAsset } = useAssetsProvider();
-  console.log(list, "all assets");
 
   const extensionWalletState = useExtensionWallet();
 
