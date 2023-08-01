@@ -150,7 +150,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       close: _.round(Number(item.c), precision),
       high: _.round(Number(item.h), precision),
       low: _.round(Number(item.l), precision),
-      volumeBase24hr: _.round(Number(item.vb), precision),
+      volumeBase24hr: _.round(isNaN(Number(item.vb)) ? 0 : Number(item.vb), precision),
       volumeQuote24Hr: _.round(Number(item.vq), precision),
     };
   }, []);

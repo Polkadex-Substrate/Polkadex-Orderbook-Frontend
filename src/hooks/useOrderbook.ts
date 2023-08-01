@@ -18,7 +18,7 @@ export function useOrderbook() {
   const [isPriceUp, setIsPriceUp] = useState(true);
   const [prevTradePrice, setPrevTradePrice] = useState(0);
   const [filterState, setFilterState] = useState("Order");
-  const [sizeState, setSizeState] = useState(initialState[4]);
+  const [sizeState, setSizeState] = useState(initialState[1]);
   const orderBookState = useOrderBook();
 
   const handleChange = (select: string) => setFilterState(select);
