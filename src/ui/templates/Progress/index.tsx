@@ -16,7 +16,7 @@ export const Progress = () => {
       </Head>
       <S.Container>
         <S.Header>
-          <OrderbookLogo />
+          <OrderbookLogo light />
         </S.Header>
         <S.Content>
           <S.Hero>

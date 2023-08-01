@@ -66,6 +66,10 @@ export const HeroContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    h3,
+    p {
+      color: ${theme.colors.white};
+    }
     h3 {
       font-size: 2rem;
       font-weight: 550;
@@ -111,27 +115,36 @@ export const FooterWrapper = styled.div`
 `;
 
 export const FooterTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  h1 {
-    font-size: 3rem;
-    font-weight: 550;
-  }
-  p {
-    font-size: 1.4rem;
-    line-height: 1.4;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    h1,
+    p {
+      color: ${theme.colors.white};
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 550;
+    }
+    p {
+      font-size: 1.4rem;
+      line-height: 1.4;
+    }
+  `}
 `;
 
 export const FooterContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  span {
-    font-size: 1.6rem;
-    font-weight: 600;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    span {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: ${theme.colors.white};
+    }
+  `}
 `;
 
 export const FooterFlex = styled.div`
@@ -151,7 +164,7 @@ export const FooterCard = styled.div<{ checked?: boolean }>`
 
     p {
       line-height: 1.4;
-      color: ${checked ? theme.colors.text : theme.colors.tertiaryText};
+      color: ${checked ? theme.colors.white : theme.colors.tertiaryText};
     }
     div {
       width: 2rem;
