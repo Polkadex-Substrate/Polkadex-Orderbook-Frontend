@@ -110,10 +110,8 @@ export function useMarkets(onClose: () => void) {
     );
     const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
       const id = cv.id.split("-");
-      let includeMarket = true;
-      for (let i = 0; i < id.length; i++) {
-        if (defaultConfig.blockedAssets.includes(id[i])) includeMarket = false;
-      }
+      const includeMarket = id.some((value) => !defaultConfig.blockedAssets.includes(value));
+
       const [_, quote] = cv.name.toLowerCase().split("/");
       if (
         cv.name.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
@@ -139,10 +137,9 @@ export function useMarkets(onClose: () => void) {
   const marketTickers = markets.reduce(
     (pv: string[], cv: Market) => {
       const id = cv.id.split("-");
-      let includeTicker = true;
-      for (let i = 0; i < id.length; i++) {
-        if (defaultConfig.blockedAssets.includes(id[i])) includeTicker = false;
-      }
+
+      const includeTicker = id.some((value) => !defaultConfig.blockedAssets.includes(value));
+
       const [, quote] = cv.name.split("/");
       if (pv.indexOf(quote) === -1 && includeTicker) {
         pv.push(quote);
