@@ -144,7 +144,6 @@ const Content: FC<{
                 tokenTicker={token.tokenTickerName}
                 vol={Decimal.format(Number(token.volume), token.quote_precision, ",")}
                 price={Decimal.format(Number(token.last), token.quote_precision, ",")}
-                fiat={Decimal.format(Number(token.last), token.quote_precision, ",")}
                 change={Decimal.format(Number(token.price_change_percent), 2, ",") + "%"}
                 changeMarket={() => changeMarket(token.name)}
                 handleSelectedFavorite={handleSelectedFavorite}
