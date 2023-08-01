@@ -25,6 +25,7 @@ export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined
     handleShowFavourite,
     id,
   } = useMarkets(onClose);
+
   return (
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>

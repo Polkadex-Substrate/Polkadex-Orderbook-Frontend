@@ -77,6 +77,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
+
           dispatch(A.marketsData(markets));
           if (markets.length) {
             const defaultMarket = markets?.find((v) =>
@@ -96,6 +97,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
               }
             );
           }
+
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -159,6 +161,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     try {
       const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
       const tickers = await Promise.all(tickersPromises);
+
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error?.errors);

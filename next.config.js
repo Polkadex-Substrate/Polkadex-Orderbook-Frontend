@@ -78,6 +78,7 @@ module.exports = withPlugins([
       SHOW_SHUTDOWN_POPUP: process.env.SHOW_SHUTDOWN_POPUP,
       UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
       MAIN_URL: process.env.MAIN_URL,
+      BLOCKED_ASSETS: process.env.BLOCKED_ASSETS,
     },
   },
 ]);
