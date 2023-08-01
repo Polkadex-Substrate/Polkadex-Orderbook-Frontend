@@ -77,7 +77,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   inputInfo={quoteTicker}
                   fullWidth={true}
                   type="text"
-                  placeholder="0.000000000"
+                  placeholder="0.00"
                   id="order-price"
                   value={price}
                   autoComplete="off"
@@ -91,7 +91,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 inputInfo={isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}
                 fullWidth={true}
                 type="text"
-                placeholder="0.000000000"
+                placeholder="0.00"
                 id="order-amount"
                 value={amount}
                 autoComplete="off"
