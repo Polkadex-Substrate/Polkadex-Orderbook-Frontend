@@ -49,7 +49,7 @@ export const BalancesTemplate = () => {
         return (
           matchesNameOrTicker &&
           !hasZeroAmount &&
-          !defaultConfig.blockedAssets.some((value) => e.assetId === value)
+          !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
         );
       }),
     [filters.search, list, userBalances, filters.hideZero]
