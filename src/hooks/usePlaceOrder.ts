@@ -86,14 +86,8 @@ export function usePlaceOrder(
     ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
     : [-1, -1];
 
-  const pricePrecision = Math.max(
-    decimalPlaces(currentMarket?.price_tick_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
-  const qtyPrecision = Math.max(
-    decimalPlaces(currentMarket?.qty_step_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
+  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
+  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
 
@@ -147,11 +141,7 @@ export function usePlaceOrder(
   const handlePriceChange = useCallback(
     (price: string): void => {
       const convertedValue = cleanPositiveFloatInput(price?.toString());
-      const digitAfterDecimal = getDigitsAfterDecimal(price?.toString());
-      if (
-        convertedValue?.match(precisionRegExp(pricePrecision || 0)) &&
-        digitAfterDecimal <= 2
-      ) {
+      if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         setForm({
           ...form,
           price: convertedValue,
@@ -173,8 +163,7 @@ export function usePlaceOrder(
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-      const digitAfterDecimal = getDigitsAfterDecimal(value?.toString());
-      if (convertedValue.match(precisionRegExp(qtyPrecision || 0)) && digitAfterDecimal <= 2) {
+      if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         if (isSell) {
           setForm({
             ...form,
