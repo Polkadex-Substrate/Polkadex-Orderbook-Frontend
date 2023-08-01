@@ -1,16 +1,10 @@
 // TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
 
-import {
-  cleanPositiveFloatInput,
-  decimalPlaces,
-  getDigitsAfterDecimal,
-  precisionRegExp,
-} from "../helpers";
+import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/orderbook/constants";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
