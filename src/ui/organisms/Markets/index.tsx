@@ -10,7 +10,6 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@polkadex/orderbook/helpers";
 import { InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 import { useMiniGraph } from "@polkadex/orderbook/hooks/useMiniGraph";
-import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
   const {
