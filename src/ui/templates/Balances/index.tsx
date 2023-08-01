@@ -48,13 +48,12 @@ export const BalancesTemplate = () => {
         return (
           matchesNameOrTicker &&
           !hasZeroAmount &&
-          !defaultConfig.blockedAssets.some(
-            (value) => e.symbol.toLowerCase() === value.toLowerCase()
-          )
+          !defaultConfig.blockedAssets.split(",").some((value) => e.assetId === value)
         );
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
+
   const pdexIndex = allAssets.findIndex(
     (obj) => obj.symbol.toUpperCase() === "PDEX" || obj.name.toUpperCase() === "POLKADEX"
   );

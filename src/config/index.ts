@@ -55,6 +55,6 @@ export const defaultConfig: DefaultConfig = {
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(","),
   mainUrl: process.env.MAIN_URL || "/trading",
-  blockedAssets: ["tdex", "tbri", "cusdt"],
+  blockedAssets: "123,456,188197390862117588552302061289480388608",
   blockedMarkets: ["TDEX/TBRI"],
 };
