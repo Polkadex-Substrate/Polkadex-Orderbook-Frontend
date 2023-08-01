@@ -110,7 +110,7 @@ export function useMarkets(onClose: () => void) {
     );
     const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
       const id = cv.id.split("-");
-      const includeMarket = id.some((value) => !defaultConfig.blockedAssets.includes(value));
+      const includeMarket = id.some((value) => !defaultConfig.blockedAssets?.includes(value));
 
       const [_, quote] = cv.name.toLowerCase().split("/");
       if (
@@ -138,7 +138,7 @@ export function useMarkets(onClose: () => void) {
     (pv: string[], cv: Market) => {
       const id = cv.id.split("-");
 
-      const includeTicker = id.some((value) => !defaultConfig.blockedAssets.includes(value));
+      const includeTicker = id.some((value) => !defaultConfig.blockedAssets?.includes(value));
 
       const [, quote] = cv.name.split("/");
       if (pv.indexOf(quote) === -1 && includeTicker) {
