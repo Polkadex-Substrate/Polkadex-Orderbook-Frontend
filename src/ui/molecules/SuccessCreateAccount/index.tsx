@@ -2,8 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { useReactToPrint } from "react-to-print";
 
-import { Button } from "../Button";
-
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -27,7 +25,8 @@ export const SuccessCreateAccount = ({
 }: Props) => {
   const [state, setState] = useState(false);
   const buttonRef = useRef(null);
-  const [mnemonicCopied, setMnemonicCopied] = useState(false);
+  const mnemonicRef = useRef(null);
+
   useEffect(() => {
     confetti({
       zIndex: 9999,
@@ -60,12 +59,18 @@ export const SuccessCreateAccount = ({
       buttonRef.current.innerHTML = "Copied";
     }
   };
+
   const copyMnemonic = async () => {
-    if (account?.address) {
-      await navigator.clipboard.writeText(mnemonic);
-      setMnemonicCopied(true);
-    }
+    await navigator.clipboard.writeText(mnemonic);
+    mnemonicRef.current.innerHTML = "Copied";
+    mnemonicRef?.current.classList.add("active");
   };
+
+  const handleOnMouseOut = () => {
+    mnemonicRef.current.innerHTML = "Copy";
+    mnemonicRef?.current.classList.remove("active");
+  };
+
   return (
     <S.Wrapper>
       {!!mnemonic && (
@@ -86,7 +91,7 @@ export const SuccessCreateAccount = ({
         <S.Wallet>
           <p>{account?.name}</p>
           <S.WalletContent>
-            <button ref={buttonRef} onClick={copyAddress}>
+            <button disabled={!account?.address?.length} ref={buttonRef} onClick={copyAddress}>
               <Icons.Copy />
             </button>
             <span>{account?.address}</span>
@@ -111,21 +116,21 @@ export const SuccessCreateAccount = ({
                 </S.WordsTitle>
               </S.WordsWrapper>
               {state && (
-                <S.WordsContainer>
-                  {mnemonicArr?.map((value, i) => (
-                    <div key={i}>{`${i + 1}. ${value}`}</div>
-                  ))}
-                </S.WordsContainer>
+                <S.MnemonicFlex>
+                  <S.WordsContainer>
+                    {mnemonicArr?.map((value, i) => (
+                      <div key={i}>{`${i + 1}. ${value}`}</div>
+                    ))}
+                  </S.WordsContainer>
+                  <S.CopyButton
+                    type="button"
+                    onClick={copyMnemonic}
+                    onMouseOut={handleOnMouseOut}
+                    ref={mnemonicRef}>
+                    Copy
+                  </S.CopyButton>
+                </S.MnemonicFlex>
               )}
-              <Button
-                background={mnemonicCopied ? "gradientGreen" : "secondaryBackgroundOpacity"}
-                color="text"
-                hoverColor={mnemonicCopied ? "gradientGreen" : "inverse"}
-                isFull
-                size="large"
-                onClick={copyMnemonic}>
-                {mnemonicCopied ? "Copied" : "Copy"}
-              </Button>
             </S.Words>
             <S.Words>
               <S.WordsWrapper>

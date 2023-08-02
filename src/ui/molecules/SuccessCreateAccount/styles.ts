@@ -28,6 +28,31 @@ export const Title = styled.div`
     font-weight: 500;
   }
 `;
+export const CopyButton = styled.button`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color ease 0.5s;
+    width: 100%;
+    text-align: center;
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+    &.active {
+      background: ${theme.colors.green};
+    }
+    :disabled {
+      cursor: not-allowed;
+      background: ${theme.colors.primaryBackgroundOpacity};
+    }
+  `}
+`;
+export const MnemonicFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
 
 export const Content = styled.div`
   display: flex;
