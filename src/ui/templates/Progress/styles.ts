@@ -40,9 +40,12 @@ export const Hero = styled.div`
 export const HeroHeader = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 1rem;
   padding: 3rem 0 2rem;
+  @media screen and (max-width: 470px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 export const HeroTitle = styled.div`
@@ -159,23 +162,28 @@ export const FooterFlex = styled.div`
   flex-wrap: wrap;
 `;
 
-export const FooterCard = styled.div<{ checked?: boolean }>`
-  ${({ checked, theme }) => css`
+export const FooterCard = styled.div<{ checked?: boolean; pending?: boolean }>`
+  ${({ checked, pending, theme }) => css`
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     min-width: 20rem;
-
     p {
       line-height: 1.4;
-      color: ${checked ? theme.colors.white : theme.colors.tertiaryText};
+      color: ${checked || pending ? theme.colors.white : theme.colors.tertiaryText};
     }
     div {
       width: 2rem;
       height: 2rem;
       border-radius: 10rem;
-      background: ${checked ? theme.colors.green : theme.colors.secondaryBackground};
+      ${checked || pending
+        ? css`
+            background: ${checked ? theme.colors.green : theme.colors.orange};
+          `
+        : css`
+            background: ${theme.colors.secondaryBackground};
+          `}
       svg {
         max-width: 1.1rem;
         fill: ${theme.colors.text};

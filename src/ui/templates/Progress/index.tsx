@@ -34,15 +34,16 @@ export const Progress = () => {
               <S.HeroContent>
                 <h3>Test trading?</h3>
                 <p>
-                  If you’d like to check it out and start trading, please visit{" "}
+                  If you want to be one of the first people to check Polkadex Orderbook and
+                  THEA out and start trading, stay tuned in{" "}
                   <a href="https://discord.gg/h876ChKaNZ" target="_blank" rel="noreferrer">
                     the ambassador
                   </a>{" "}
-                  or{" "}
+                  and{" "}
                   <a href="https://discord.gg/HRx8ZzbtQy" target="_blank" rel="noreferrer">
-                    validator channels on Discord
-                  </a>
-                  .
+                    validator channels
+                  </a>{" "}
+                  on Discord.
                 </p>
               </S.HeroContent>
             </S.HeroHeader>
@@ -70,11 +71,11 @@ export const Progress = () => {
                   <Card checked>
                     <strong>Orderbook and THEA are live</strong> on the Polkadex network.
                   </Card>
-                  <Card checked>
+                  <Card pending>
                     DOT and USDT from the Relay Chain and AssetHub can now be deposited to
                     Polkadex via the Polkadex parachain and traded on Polkadex Orderbook.
                   </Card>
-                  <Card checked>
+                  <Card pending>
                     Polkadex validators and ambassadors can now start making trades with real
                     assets.
                   </Card>
@@ -93,8 +94,8 @@ export const Progress = () => {
   );
 };
 
-const Card = ({ checked = false, children }) => (
-  <S.FooterCard checked={checked}>
+const Card = ({ checked = false, pending = false, children }) => (
+  <S.FooterCard pending={pending} checked={checked}>
     <div>{checked && <Icons.Checked />}</div>
     <p> {children}</p>
   </S.FooterCard>
