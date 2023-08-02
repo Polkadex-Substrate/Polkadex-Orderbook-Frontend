@@ -56,6 +56,7 @@ export const Progress = () => {
             <S.HeroInteraction>
               <Image
                 src={orderbookImage}
+                placeholder="blur"
                 alt="Orderbook App screenshot"
                 ref={imageRef}
                 priority
