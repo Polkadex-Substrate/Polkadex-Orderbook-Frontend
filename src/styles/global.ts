@@ -263,100 +263,102 @@ Super Form Reset
     @media screen and (max-width: 836px) {
       flex-direction: column;
     }
-    .rdrCalendarWrapper {
-      color: ${theme.colors.text};
-      font-family: ${theme.font.family};
-      }
-    .rdrDateDisplayWrapper {
-      background: ${theme.colors.primaryBackground};
+  }
+  .rdrCalendarWrapper {
+    color: ${theme.colors.text};
+    font-family: ${theme.font.family};
+  }
+  .rdrDateDisplayWrapper {
+    background: ${theme.colors.primaryBackground};
+  }
+  .rdrDateDisplayWrapper {
+    background: ${theme.colors.primaryBackground};
+  }
+  .rdrDateDisplayItem {
+    background: ${theme.colors.secondaryBackgroundOpacity};
+  }
+  .rdrDateDisplayItemActive {
+    border-color: ${theme.colors.primary};
+  }
+  .rdrDefinedRangesWrapper {
+    border-right-color: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.tertiaryBackground};
+    width: 100%;
+  }
+  .rdrStaticRange {
+    border-bottom-color: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 0;
+    background: ${theme.colors.tertiaryBackground};
+  }
+  .rdrDateRangeWrapper {
+    background: ${theme.colors.tertiaryBackground};
+  }
+  .rdrDay span,
+  .rdrDayNumber span {
+    color: ${theme.colors.text};
+  }
+
+  .rdrDayPassive span {
+    opacity: 0.5;
+  }
+  .rdrDay span,
+  .rdrDayPassive .rdrDayNumber span {
+    font-family: ${theme.font.family};
+    font-weight: 500;
+  }
+
+  .rdrStaticRangeLabel {
+    @media screen and (min-width: 1144px) {
+      white-space: nowrap;
     }
-    .rdrDateDisplayWrapper {
-      background: ${theme.colors.primaryBackground};
-    }
-    .rdrDateDisplayItem {
+  }
+  .rdrStaticRange:hover .rdrStaticRangeLabel,
+  .rdrStaticRange:focus .rdrStaticRangeLabel {
+    background: ${theme.colors.secondaryBackgroundOpacity};
+  }
+
+  .rdrMonthPicker,
+  .rdrYearPicker {
+    background: ${theme.colors.primaryBackgroundOpacity};
+    border-radius: 0.5rem;
+  }
+  .rdrNextPrevButton {
+    background: ${theme.colors.secondaryBackground};
+    transition: background 0.5s ease-in-out;
+    :hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
     }
-    .rdrDateDisplayItemActive {
+    :first-child i {
+      border-color: transparent ${theme.colors.text} transparent transparent;
+    }
+    :last-child i {
+      border-color: transparent transparent transparent ${theme.colors.text};
+    }
+  }
+  .rdrDayToday .rdrDayNumber span::after {
+    border: none;
+    height: 0;
+  }
+
+  .rdrInRange,
+  .rdrStartEdge,
+  .rdrEndEdge {
+    background: ${theme.colors.primary};
+  }
+
+  .rdrDay {
+    span {
       border-color: ${theme.colors.primary};
     }
-    .rdrDefinedRangesWrapper {
-      border-right-color: ${theme.colors.secondaryBackgroundOpacity};
-      background: ${theme.colors.tertiaryBackground};
-      width: 100%;
-    }
-    .rdrStaticRange {
-      border-bottom-color: ${theme.colors.secondaryBackgroundOpacity};
-      padding: 0;
-      background: ${theme.colors.tertiaryBackground};
-    }
-    .rdrDateRangeWrapper {
-      background: ${theme.colors.tertiaryBackground};
-    }
-    .rdrDay span,
-    .rdrDayNumber span {
-      color: ${theme.colors.text};
-    }
-    
-    .rdrDayPassive span {
-      opacity: 0.5;
-    }
-    .rdrDay span,
-    .rdrDayPassive .rdrDayNumber span {
-      font-family: ${theme.font.family};
-      font-weight: 500;
-    }
-    
-    .rdrStaticRangeLabel {
-      @media screen and (min-width: 1144px) {
-        white-space: nowrap;
-      }
-    }
-    .rdrStaticRange:hover .rdrStaticRangeLabel,
-    .rdrStaticRange:focus .rdrStaticRangeLabel {
-      background: ${theme.colors.secondaryBackgroundOpacity};
-    }
-
-    .rdrMonthPicker,
-    .rdrYearPicker {
-      background: ${theme.colors.primaryBackgroundOpacity};
-      border-radius: 0.5rem;
-    }
-    .rdrNextPrevButton {
-      background: ${theme.colors.secondaryBackground};
-      transition: background 0.5s ease-in-out;
-      :hover {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-      }
-      :first-child i {
-        border-color: transparent ${theme.colors.text} transparent transparent;
-      }
-      :last-child i {
-        border-color: transparent transparent transparent ${theme.colors.text};
-      }
-    }
-    .rdrDayToday .rdrDayNumber span::after {
-      border: none;
-      height: 0;
-    }
-    
-    .rdrInRange , .rdrStartEdge, .rdrEndEdge{
-      background: ${theme.colors.primary};
-    }
-
-    .rdrDay {
-      span {
-        border-color: ${theme.colors.primary};
-      }
-    }
-    
-    .rdrMonthAndYearPickers select {
-      option {
-        background: ${theme.colors.inverse};
-      }
-      color: ${theme.colors.text}99;
-      font-family: ${theme.font.family};
-      ${iconThemingModifier[theme.colors.text === "#ffffff" ? "dark" : "light"]()};
-      
   }
-    `}
+
+  .rdrMonthAndYearPickers select {
+    option {
+      background: ${theme.colors.inverse};
+    }
+    color: ${theme.colors.text}99;
+    font-family: ${theme.font.family};
+    ${iconThemingModifier[theme.colors.text === "#ffffff" ? "dark" : "light"]()};
+  }
+`}
     `;
