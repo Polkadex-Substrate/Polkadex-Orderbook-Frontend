@@ -1,5 +1,9 @@
 import Head from "next/head";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+import orderbookImage from "../../../../public/img/orderbookImage.webp";
 
 import * as S from "./styles";
 
@@ -23,7 +27,9 @@ export const Progress = () => {
       </Head>
       <S.Container>
         <S.Header>
-          <OrderbookLogo light />
+          <Link href="/">
+            <OrderbookLogo light />
+          </Link>
         </S.Header>
         <S.Content>
           <S.Hero>
@@ -48,11 +54,16 @@ export const Progress = () => {
               </S.HeroContent>
             </S.HeroHeader>
             <S.HeroInteraction>
-              <img
-                ref={imageRef}
-                draggable={false}
-                src="/img/orderbookImage.svg"
+              <Image
+                src={orderbookImage}
                 alt="Orderbook App screenshot"
+                ref={imageRef}
+                priority
+                draggable={false}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
               />
             </S.HeroInteraction>
           </S.Hero>
