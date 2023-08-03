@@ -55,8 +55,8 @@ export const WithdrawTemplate = () => {
   const extensionWalletState = useExtensionWallet();
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
-  const { list: assets } = useAssetsProvider();
-  const { allWithdrawals, readyWithdrawals: readyToClaim } = useTransactionsProvider();
+  const { list: assets, selectGetAsset } = useAssetsProvider();
+  const { allWithdrawals, readyWithdrawals: totalReadyToClaim } = useTransactionsProvider();
   const { onFetchClaimWithdraw, loading } = useWithdrawsProvider();
 
   const currMainAcc =
@@ -128,11 +128,40 @@ export const WithdrawTemplate = () => {
       },
     });
 
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
+
+  const handleCheckBox = () => setShowSelectedCoins((prev) => !prev);
+
   const selectedWithdraw = useCallback(
-    (status: Transaction["status"]) =>
-      allWithdrawals?.filter((txn) => txn.status === status)?.flat(),
-    [allWithdrawals]
+    (status: Transaction["status"]) => {
+      let filteredWithdrawls = allWithdrawals?.filter((txn) => txn.status === status)?.flat();
+      if (showSelectedCoins) {
+        filteredWithdrawls = filteredWithdrawls.filter((withdrawl) => {
+          const assetName = selectGetAsset(withdrawl.asset)?.name;
+          return assetName === selectedAsset?.name && withdrawl;
+        });
+      }
+      return filteredWithdrawls;
+    },
+    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name]
   );
+
+  const readyToClaim = useMemo(() => {
+    return totalReadyToClaim.filter(({ items, id, sid }) => {
+      const filteredItems = items.filter((item) => {
+        const assetName = selectGetAsset(item.asset)?.name;
+        return assetName === selectedAsset?.name && item;
+      });
+
+      return (
+        filteredItems.length && {
+          id,
+          sid,
+          items: filteredItems,
+        }
+      );
+    });
+  }, [totalReadyToClaim, selectGetAsset, selectedAsset?.name]);
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
@@ -148,10 +177,6 @@ export const WithdrawTemplate = () => {
 
   const { t } = useTranslation("withdraw");
   const { t: tc } = useTranslation("common");
-
-  const handleCheckBox = (e) => {
-    console.info(e);
-  };
 
   const handleUnlockClose = () => setShowPassword(false);
   const formRef = useRef(null);
@@ -293,7 +318,10 @@ export const WithdrawTemplate = () => {
                         </TabHeader>
                       </S.HistoryTabs>
                       <S.HistoryHeaderAside>
-                        <Checkbox name="hide" onChange={handleCheckBox}>
+                        <Checkbox
+                          name="hide"
+                          checked={showSelectedCoins}
+                          onChange={handleCheckBox}>
                           {t("showSelectedCoin")}
                         </Checkbox>
                       </S.HistoryHeaderAside>
