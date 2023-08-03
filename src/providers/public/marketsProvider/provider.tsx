@@ -97,7 +97,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
               }
             );
           }
-
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -131,7 +130,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     const to = new Date().toISOString();
     // tickers are fetched for the last 24 hours
     const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
-    const res: any = await sendQueryToAppSync({
+    const res = await sendQueryToAppSync({
       query: queries.getMarketTickers,
       variables: { market, from, to },
     });
@@ -186,7 +185,15 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         );
 
         const tickerData: Ticker = convertToTicker(dataParsed, state.currentMarket.m);
-        dispatch(A.marketsTickersChannelData(tickerData));
+
+        dispatch(
+          A.marketsTickersChannelData({
+            ...tickerData,
+            volumeBase24hr: isNaN(Number(tickerData.volumeBase24hr))
+              ? 0
+              : Number(tickerData.volumeBase24hr),
+          })
+        );
       },
       error: (err) => {
         console.warn(err);
