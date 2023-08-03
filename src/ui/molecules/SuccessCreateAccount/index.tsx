@@ -24,6 +24,9 @@ export const SuccessCreateAccount = ({
   account,
 }: Props) => {
   const [state, setState] = useState(false);
+  const buttonRef = useRef(null);
+  const mnemonicRef = useRef(null);
+
   useEffect(() => {
     confetti({
       zIndex: 9999,
@@ -50,6 +53,23 @@ export const SuccessCreateAccount = ({
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+  const copyAddress = async () => {
+    if (account?.address) {
+      await navigator.clipboard.writeText(account?.address);
+      buttonRef.current.innerHTML = "Copied";
+    }
+  };
+
+  const copyMnemonic = async () => {
+    await navigator.clipboard.writeText(mnemonic);
+    mnemonicRef.current.innerHTML = "Copied";
+    mnemonicRef?.current.classList.add("active");
+  };
+
+  const handleOnMouseOut = () => {
+    mnemonicRef.current.innerHTML = "Copy";
+    mnemonicRef?.current.classList.remove("active");
+  };
 
   return (
     <S.Wrapper>
@@ -71,7 +91,7 @@ export const SuccessCreateAccount = ({
         <S.Wallet>
           <p>{account?.name}</p>
           <S.WalletContent>
-            <button type="button">
+            <button disabled={!account?.address?.length} ref={buttonRef} onClick={copyAddress}>
               <Icons.Copy />
             </button>
             <span>{account?.address}</span>
@@ -96,11 +116,20 @@ export const SuccessCreateAccount = ({
                 </S.WordsTitle>
               </S.WordsWrapper>
               {state && (
-                <S.WordsContainer>
-                  {mnemonicArr?.map((value, i) => (
-                    <div key={i}>{`${i + 1}. ${value}`}</div>
-                  ))}
-                </S.WordsContainer>
+                <S.MnemonicFlex>
+                  <S.WordsContainer>
+                    {mnemonicArr?.map((value, i) => (
+                      <div key={i}>{`${i + 1}. ${value}`}</div>
+                    ))}
+                  </S.WordsContainer>
+                  <S.CopyButton
+                    type="button"
+                    onClick={copyMnemonic}
+                    onMouseOut={handleOnMouseOut}
+                    ref={mnemonicRef}>
+                    Copy
+                  </S.CopyButton>
+                </S.MnemonicFlex>
               )}
             </S.Words>
             <S.Words>
