@@ -253,8 +253,6 @@ export const OrderHistoryProvider = ({ children }) => {
         });
       }
 
-      console.log(orderHistoryList, openOrdersList, "data goes here");
-
       setUpdatedList(orderHistoryList);
       setUpdatedOpenOrdersSorted(openOrdersList);
     },
