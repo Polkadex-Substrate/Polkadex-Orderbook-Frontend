@@ -62,6 +62,7 @@
     "space-before-function-paren": "off",
     "camelcase": "warn",
     "@typescript-eslint/ban-type": "off",
-    "@typescript-eslint/no-empty-function": "off"
+    "@typescript-eslint/no-empty-function": "off",
+    "react/no-unknown-property": "off"
   }
 }
