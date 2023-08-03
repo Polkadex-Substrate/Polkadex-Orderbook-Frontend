@@ -149,6 +149,10 @@ export const WithdrawTemplate = () => {
   const { t } = useTranslation("withdraw");
   const { t: tc } = useTranslation("common");
 
+  const handleCheckBox = (e) => {
+    console.info(e);
+  };
+
   const handleUnlockClose = () => setShowPassword(false);
   const formRef = useRef(null);
   return (
@@ -253,7 +257,7 @@ export const WithdrawTemplate = () => {
                           name="amount"
                           label={t("inputLabel")}
                           placeholder="0.00"
-                          error={errors.amount && touched.amount && errors.amount}
+                          error={touched.amount && errors.amount}
                           {...getFieldProps("amount")}
                         />
                         <Button
@@ -289,7 +293,9 @@ export const WithdrawTemplate = () => {
                         </TabHeader>
                       </S.HistoryTabs>
                       <S.HistoryHeaderAside>
-                        <Checkbox name="hide">{t("showSelectedCoin")}</Checkbox>
+                        <Checkbox name="hide" onChange={handleCheckBox}>
+                          {t("showSelectedCoin")}
+                        </Checkbox>
                       </S.HistoryHeaderAside>
                     </S.HistoryHeader>
                     <S.HistoryWrapper>
