@@ -1,0 +1,26 @@
+{
+  "title": "Polkadex Orderbook",
+  "hero": {
+    "title": "Test trading?",
+    "description": {
+      "firstline": "If you want to be one of the first people to check Polkadex Orderbook and THEA out and start trading, stay tuned in the {{ambassador}} and {{validator}} channels on Discord.",
+      "ambassador":"ambassador",
+      "validator":"validator"
+    }
+  },
+  "footer":{
+    "title":"Test trading?",
+    "description":"Polkadex Orderbook is now running on the Polkadex mainnet in private beta mode.",
+    "subHeading": "What this means",
+    "cards": {
+      "firstCard": {
+        "highlight": "Orderbook and THEA are live",
+        "firstline": "on the Polkadex network."
+      },
+      "secondCard": "DOT and USDT from the Relay Chain and AssetHub can now be deposited to Polkadex via the Polkadex parachain and traded on Polkadex Orderbook.",
+      "thirdCard": "Polkadex validators and ambassadors can now start making trades with real assets.",
+      "fourthCard": "Market making has not yet gone live.",
+      "fifthCard": "Trade orders are currently only placed and filled by Polkadex ambassadors and validators (aka individual traders)."
+    }
+  }
+}

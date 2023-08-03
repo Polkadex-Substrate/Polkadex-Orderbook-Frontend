@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
@@ -9,10 +10,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+// eslint-disable-next-line camelcase
+import { Work_Sans } from "next/font/google";
 
 import { useInit } from "../hooks/useInit";
 
-import { defaultThemes, GlobalStyles, FontStyles } from "src/styles";
+import { defaultThemes, GlobalStyles } from "src/styles";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import {
   AuthProvider,
@@ -24,6 +27,10 @@ import {
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import "@polkadex/orderbook/i18n";
+const workSans = Work_Sans({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+});
 
 const Maintenance = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Maintenance").then((mod) => mod.Maintenance),
@@ -63,8 +70,6 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <FontStyles />
-
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
@@ -87,6 +92,12 @@ function App({ Component, pageProps }: AppProps) {
           )}
         </OverlayProvider>
       </SettingProvider>
+      {/* @ts-ignore */}
+      <style jsx global>{`
+        body {
+          font-family: ${workSans.style.fontFamily}, ${defaultThemes.dark.font.family};
+        }
+      `}</style>
     </>
   );
 }
