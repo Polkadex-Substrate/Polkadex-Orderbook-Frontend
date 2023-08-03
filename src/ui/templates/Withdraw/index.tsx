@@ -410,7 +410,7 @@ const HistoryTable = ({ items }) => {
                 <S.Cell>
                   <span>
                     {intlFormat(
-                      new Date(item.time),
+                      new Date(item.time ?? item.date),
                       {
                         year: "2-digit",
                         month: "2-digit",
