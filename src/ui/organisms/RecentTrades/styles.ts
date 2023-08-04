@@ -128,7 +128,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 0.5rem 0 1rem;
+    padding: 0 0.6rem 0 1rem;
     font-weight: 500;
     :not(:last-child) {
       margin-bottom: 0.1rem;
