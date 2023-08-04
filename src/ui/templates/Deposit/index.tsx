@@ -82,7 +82,7 @@ export const DepositTemplate = () => {
 
   // TODO: Try to move these validations in Yup
   const validate = (values) => {
-    const errors = {} as any;
+    const errors: Record<string, string> = {};
     if (values?.amount?.toString().includes("e") || values?.amount?.toString().includes("o")) {
       errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
     }
@@ -116,7 +116,6 @@ export const DepositTemplate = () => {
     useFormik({
       initialValues: {
         amount: 0.0,
-        asset: selectedAsset,
       },
       // TODO: re-add the validations
       validationSchema: withdrawValidations(onChainBalance),
@@ -133,6 +132,10 @@ export const DepositTemplate = () => {
         });
       },
     });
+
+  useEffect(() => {
+    touched?.amount && validateForm();
+  }, [selectedAsset, validateForm, touched?.amount]);
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -225,7 +228,7 @@ export const DepositTemplate = () => {
                         name="amount"
                         label={t("inputLabel")}
                         placeholder="0.00"
-                        error={errors.amount && touched.amount && errors.amount}
+                        error={errors.amount?.toString()}
                         {...getFieldProps("amount")}
                       />
                       <Button

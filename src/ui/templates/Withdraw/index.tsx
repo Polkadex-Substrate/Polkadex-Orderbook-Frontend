@@ -137,7 +137,7 @@ export const WithdrawTemplate = () => {
   });
 
   useEffect(() => {
-    touched.amount && validateForm();
+    touched?.amount && validateForm();
   }, [selectedAsset, validateForm, touched?.amount]);
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
