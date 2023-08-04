@@ -105,7 +105,7 @@ export const WithdrawTemplate = () => {
   };
 
   const validate = (values) => {
-    const errors = {} as any;
+    const errors: Record<string, string> = {};
     if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
       errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
     if (/\s/.test(String(values.amount))) {
@@ -114,19 +114,31 @@ export const WithdrawTemplate = () => {
     return errors;
   };
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
-    useFormik({
-      initialValues,
-      validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
-      validate,
-      onSubmit: ({ amount }) => {
-        if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
-        else {
-          /* Calling the handleSubmitWithdraw function with the amount parameter. */
-          handleSubmitWithdraw(amount);
-        }
-      },
-    });
+  const {
+    handleSubmit,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    resetForm,
+    validateForm,
+    touched,
+  } = useFormik({
+    initialValues,
+    validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
+    validate,
+    onSubmit: ({ amount }) => {
+      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+      else {
+        /* Calling the handleSubmitWithdraw function with the amount parameter. */
+        handleSubmitWithdraw(amount);
+      }
+    },
+  });
+
+  useEffect(() => {
+    touched.amount && validateForm();
+  }, [selectedAsset, validateForm, touched?.amount]);
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
@@ -147,6 +159,8 @@ export const WithdrawTemplate = () => {
   );
 
   const readyToClaim = useMemo(() => {
+    if (!showSelectedCoins) return totalReadyToClaim;
+
     return totalReadyToClaim.filter(({ items, id, sid }) => {
       const filteredItems = items.filter((item) => {
         const assetName = selectGetAsset(item.asset)?.name;
@@ -161,7 +175,7 @@ export const WithdrawTemplate = () => {
         }
       );
     });
-  }, [totalReadyToClaim, selectGetAsset, selectedAsset?.name]);
+  }, [totalReadyToClaim, selectGetAsset, selectedAsset?.name, showSelectedCoins]);
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
@@ -282,7 +296,7 @@ export const WithdrawTemplate = () => {
                           name="amount"
                           label={t("inputLabel")}
                           placeholder="0.00"
-                          error={touched.amount && errors.amount}
+                          error={errors.amount?.toString()}
                           {...getFieldProps("amount")}
                         />
                         <Button
