@@ -59,11 +59,12 @@ export const initialState: ProfileState = {
 
 export const profileReducer = (state: ProfileState, action: ProfileAction) => {
   switch (action.type) {
-    case PROFILE_USER_AUTH_FETCH:
+    case PROFILE_USER_AUTH_FETCH: {
       return {
         ...state,
         auth: { ...state.auth, isLoading: true },
       };
+    }
     case PROFILE_USER_AUTH_DATA: {
       return {
         ...state,

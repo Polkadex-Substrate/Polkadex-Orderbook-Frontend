@@ -238,7 +238,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     if (logoutIsSuccess) onUserLogout();
   }, [logoutIsSuccess]);
 
-  // user event listener
   return (
     <Provider
       value={{
