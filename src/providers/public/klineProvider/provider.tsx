@@ -50,8 +50,8 @@ export const KlineProvider: KlineComponent = ({ children }) => {
       close: Number(data.c),
       high: Number(data.h),
       low: Number(data.l),
-      timestamp: Number(data.t.secs_since_epoch) * 1000,
-      volume: Number(data.v_base),
+      timestamp: new Date(data.t).getTime(),
+      volume: Number(data.v),
     };
     const close = kline.close;
     const resolution = getResolutionInMilliSeconds(interval);
