@@ -253,6 +253,20 @@ export const OrderHistoryProvider = ({ children }) => {
     }
   }, [onOrderUpdates, tradeAddress]);
 
+  // for markets order errors the event type is error
+  useEffect(() => {
+    if (tradeAddress?.length) {
+      const subscription = eventHandler({
+        cb: () => onHandleError(`Cannot fully fill market order: not enough liquidity`),
+        name: tradeAddress,
+        eventType: "error",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [onHandleError, tradeAddress]);
+
   return (
     <Provider
       value={{
