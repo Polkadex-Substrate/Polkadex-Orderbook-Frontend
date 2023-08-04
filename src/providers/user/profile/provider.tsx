@@ -148,9 +148,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userChangeInitBanner(payload));
   };
 
-  const onUserAuthFetch = () => {
+  const onUserAuthFetch = useCallback(() => {
     dispatch(A.userAuthFetch());
-  };
+  }, []);
 
   const onUserProfileMainAccountPush = (payload: string) => {
     dispatch(A.userProfileMainAccountPush(payload));
@@ -188,6 +188,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   const fetchDataOnUserAuth = useCallback(async () => {
     try {
+      onUserAuthFetch();
       const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
       onUserAuth({
@@ -227,7 +228,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         }
       }
     }
-  }, [onUserAuth, onUserAuthentication, onHandleError]);
+  }, [onUserAuth, onHandleError, onUserAuthFetch, onUserAuthentication]);
 
   useEffect(() => {
     // When User logout, do not fetch the data
