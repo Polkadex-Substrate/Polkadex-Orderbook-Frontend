@@ -164,34 +164,44 @@ export const BalancesTemplate = () => {
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    {item.symbol !== POLKADEX_ASSET.symbol && (
-                                      <S.Cell>
-                                        <span>
-                                          {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                        </span>
-                                      </S.Cell>
-                                    )}
+                                    <S.Cell
+                                      className={
+                                        item.symbol === POLKADEX_ASSET.symbol && "pdexCell"
+                                      }>
+                                      <span>
+                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                      </span>
+                                    </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    {item.symbol !== POLKADEX_ASSET.symbol && (
-                                      <S.Cell>
-                                        <span>
-                                          {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                        </span>
-                                      </S.Cell>
-                                    )}
+                                    <S.Cell
+                                      className={
+                                        item.symbol === POLKADEX_ASSET.symbol && "pdexCell"
+                                      }>
+                                      <span>
+                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                      </span>
+                                    </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    {item.symbol !== POLKADEX_ASSET.symbol && (
-                                      <S.Actions>
-                                        <Link href={`/deposit/${item.symbol}`}>
-                                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                                        </Link>
-                                        <Link href={`/withdraw/${item.symbol}`}>
-                                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
-                                        </Link>
-                                      </S.Actions>
-                                    )}
+                                    <S.Actions>
+                                      <Link href={`/deposit/${item.symbol}`}>
+                                        <S.DepositLink
+                                          className={
+                                            item.symbol === POLKADEX_ASSET.symbol && "disabled"
+                                          }>
+                                          {tc("deposit")}
+                                        </S.DepositLink>
+                                      </Link>
+                                      <Link href={`/withdraw/${item.symbol}`}>
+                                        <S.WithdrawLink
+                                          className={
+                                            item.symbol === POLKADEX_ASSET.symbol && "disabled"
+                                          }>
+                                          {tc("withdraw")}
+                                        </S.WithdrawLink>
+                                      </Link>
+                                    </S.Actions>
                                   </Table.Cell>
                                 </Table.Row>
                               );
