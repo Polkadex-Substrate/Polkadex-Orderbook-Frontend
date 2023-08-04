@@ -7,10 +7,16 @@ import * as S from "./styles";
 import { useFunds } from "@polkadex/orderbook/hooks";
 import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
 import { toCapitalize } from "@polkadex/web-helpers";
+import { defaultConfig } from "@polkadex/orderbook-config";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 
 export const Funds = ({ onHideFilters }) => {
   const { balances } = useFunds();
-
+  const allBalances = balances.filter(
+    (item) =>
+      !defaultConfig.blockedAssets?.some((value) => item.assetId === value) &&
+      item.assetId !== POLKADEX_ASSET.assetId
+  );
   useEffect(() => {
     onHideFilters(false);
     return () => onHideFilters(true);
@@ -22,7 +28,7 @@ export const Funds = ({ onHideFilters }) => {
 
   return (
     <S.Wrapper>
-      {balances.length ? (
+      {allBalances.length ? (
         <Table aria-label="Polkadex assets" style={{ width: "100%" }}>
           <Table.Header fill="none">
             <Table.Column>
@@ -42,7 +48,7 @@ export const Funds = ({ onHideFilters }) => {
             </Table.Column>
           </Table.Header>
           <Table.Body striped>
-            {balances.map((item) => (
+            {allBalances.map((item) => (
               <Table.Row key={item.assetId}>
                 <Table.Cell>
                   <S.CellFlex>
@@ -87,7 +93,7 @@ export const Funds = ({ onHideFilters }) => {
         </Table>
       ) : (
         <S.EmptyWrapper>
-          <EmptyData />
+          <EmptyData title="You do not have any funds in your trading account" />
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
