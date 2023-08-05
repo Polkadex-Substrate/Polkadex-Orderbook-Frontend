@@ -40,7 +40,7 @@ export const USER_EVENTS = {
   // send to trade address
   TradeFormat: "TradeFormat",
   // Errors from server
-  Error: "error",
+  error: "error",
 };
 
 export type UserEvents = keyof typeof USER_EVENTS;
