@@ -20,11 +20,12 @@ const Balances = () => {
 
   const {
     authInfo: { isAuthenticated: hasUser },
+    auth: { isLoading },
   } = useProfile();
 
   useEffect(() => {
-    if (!hasUser) router?.push("/trading/");
-  }, [hasUser, router]);
+    if (!isLoading && !hasUser) router?.push("/trading/");
+  }, [hasUser, router, isLoading]);
 
   if (!hasUser || disabled) return <div />;
   return (

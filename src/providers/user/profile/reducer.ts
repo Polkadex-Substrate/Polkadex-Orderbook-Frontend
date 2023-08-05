@@ -24,7 +24,7 @@ import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/ran
 const defaultAvatar = randomAvatars[1].id;
 
 const initialTemplate = {
-  isLoading: false,
+  isLoading: true,
   message: null,
   isError: false,
   isSuccess: false,

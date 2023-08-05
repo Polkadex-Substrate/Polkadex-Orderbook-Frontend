@@ -86,11 +86,14 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     return accounts;
   };
 
+  const onSetUserAuthData = ({ isAuthenticated, userExists, jwt }: T.UserAuth) => {
+    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
+  };
+
   // TODO: Refactor this function
   const onUserAuthentication = useCallback(
     async (payload: T.UserAuth) => {
-      const { email, isConfirmed, isAuthenticated, userExists, jwt } = payload;
-      dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
+      const { email, isConfirmed, userExists } = payload;
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
         LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
@@ -191,34 +194,49 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onUserAuthFetch();
       const { attributes, signInUserSession } = await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
-      onUserAuth({
-        email: attributes?.email,
-        userConfirmed: attributes?.email_verified,
-      });
-      onUserAuthentication({
+      const payload = {
         email: attributes?.email,
         isAuthenticated: true,
         userExists: true,
         isConfirmed: attributes?.email_verified,
         jwt: signInUserSession?.accessToken?.jwtToken,
+      };
+      onUserAuth({
+        email: payload.email,
+        userConfirmed: payload.isConfirmed,
       });
+      onSetUserAuthData(payload);
+      onUserAuthentication(payload);
     } catch (error) {
       console.log("User error", error);
       switch (error) {
         case "User is not confirmed.": {
-          onUserAuth({
-            email: "",
-            userConfirmed: false,
-          });
-          onUserAuthentication({
+          const payload = {
             email: "",
             isAuthenticated: false,
             userExists: true,
             isConfirmed: false,
+          };
+          onUserAuth({
+            email: payload.email,
+            userConfirmed: payload.isConfirmed,
           });
+          onSetUserAuthData(payload);
+          onUserAuthentication(payload);
           break;
         }
         case "The user is not authenticated": {
+          const payload = {
+            email: "",
+            isAuthenticated: false,
+            userExists: false,
+            isConfirmed: false,
+          };
+          onUserAuth({
+            email: payload.email,
+            userConfirmed: payload.isConfirmed,
+          });
+          onSetUserAuthData(payload);
           break;
         }
         default: {
