@@ -88,6 +88,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
               interval,
             })
           );
+          return kline;
         },
         error: (err) => {
           console.warn("error in onCandleStickEvents channel", err);

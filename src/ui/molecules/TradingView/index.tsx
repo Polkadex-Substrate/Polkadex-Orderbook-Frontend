@@ -37,7 +37,7 @@ const configurationData: DatafeedConfiguration = {
 export const TradingView = () => {
   const [isReady, setIsReady] = useState(false);
 
-  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
+  const { onHandleKlineFetch, onFetchKlineChannel, last: lastKline } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
   const { theme } = useSettingsProvider();
 
@@ -80,7 +80,8 @@ export const TradingView = () => {
           return [];
         }
 
-        const bars = klines.map((bar) => {
+        const klinesLength = klines.length;
+        const bars = klines.map((bar, index) => {
           return {
             time: bar.timestamp,
             low: bar.low,
@@ -88,8 +89,8 @@ export const TradingView = () => {
             open: bar.open,
             close: bar.close,
             volume: bar.volume,
-            isBarClosed: true,
-            isLastBar: false,
+            isBarClosed: index !== klinesLength - 1,
+            isLastBar: index === klinesLength - 1,
           };
         });
         if (bars.length < 1) {
@@ -174,7 +175,21 @@ export const TradingView = () => {
           listenerGuid,
           onResetCacheNeededCallback
         ) {
-          onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
+          const bar = {
+            time: 1691494565024,
+            low: lastKline?.kline?.low,
+            high: lastKline?.kline?.high,
+            open: lastKline?.kline?.open,
+            close: lastKline?.kline?.close,
+            volume: lastKline?.kline?.volume,
+          };
+          console.log(bar, "latest bar");
+          onTick(bar);
+          const kline = onFetchKlineChannel({
+            market: currentMarket?.m,
+            interval: resolution,
+          });
+          console.log(kline, "kline bar from event");
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
@@ -203,7 +218,14 @@ export const TradingView = () => {
         foregroundColor: "transparent",
       },
     };
-  }, [currentMarket?.m, getAllSymbols, getData, currentMarket?.name, onFetchKlineChannel]);
+  }, [
+    currentMarket?.m,
+    getAllSymbols,
+    getData,
+    currentMarket?.name,
+    onFetchKlineChannel,
+    lastKline,
+  ]);
 
   useEffect(() => {
     if (!currentMarket?.m) return;
