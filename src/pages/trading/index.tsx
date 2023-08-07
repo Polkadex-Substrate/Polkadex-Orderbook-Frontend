@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
-import { AssetsProvider, MarketsProvider } from "@polkadex/orderbook/providers";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 function Home() {
@@ -46,15 +45,8 @@ function Home() {
     allMarkets,
   ]);
 
+  // Note: This could be used as masking page
   return <div />;
 }
 
 export default Home;
-
-Home.getLayout = function getLayout(page) {
-  return (
-    <AssetsProvider>
-      <MarketsProvider>{page}</MarketsProvider>
-    </AssetsProvider>
-  );
-};

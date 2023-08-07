@@ -126,7 +126,6 @@ export type MarketsProviderProps = PropsWithChildren<{
 export interface MarketsProps {
   onError?: (value: string) => void;
   onNotification?: (value: string) => void;
-  defaultMarket?: string;
 }
 
 export type MarketsComponent = FC<PropsWithChildren<MarketsProps>>;

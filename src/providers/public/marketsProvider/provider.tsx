@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -28,10 +29,12 @@ import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
-export const MarketsProvider: MarketsComponent = ({ children, defaultMarket }) => {
+export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
+
+  const router = useRouter();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res = await sendQueryToAppSync({ query: getAllMarkets });
@@ -193,6 +196,7 @@ export const MarketsProvider: MarketsComponent = ({ children, defaultMarket }) =
     dispatch(setCurrentTicker(state.currentMarket.m));
   }, [state?.currentMarket?.m, state?.tickers]);
 
+  const defaultMarket = router.query.id as string;
   useEffect(() => {
     if (state.list.length && defaultMarket) {
       const findMarket = state.list?.find((v) =>
@@ -204,7 +208,7 @@ export const MarketsProvider: MarketsComponent = ({ children, defaultMarket }) =
       const defaultMarketSelected = findMarket ?? state.list[0];
       onSetCurrentMarketIfUnset(defaultMarketSelected);
     }
-  }, [defaultMarket, state.list]);
+  }, [state.list, router, defaultMarket]);
 
   return (
     <Provider
