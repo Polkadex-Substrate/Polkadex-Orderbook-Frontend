@@ -40,6 +40,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 
 const initialValues = {
   amount: 0.0,
@@ -87,7 +88,7 @@ export const WithdrawTemplate = () => {
 
   useEffect(() => {
     const initialAsset = assets.find(
-      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+      (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
     if (initialAsset) {
       setSelectedAsset(initialAsset);
@@ -231,7 +232,7 @@ export const WithdrawTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {assets.map((asset) => (
+                              {filterAssets(assets).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>

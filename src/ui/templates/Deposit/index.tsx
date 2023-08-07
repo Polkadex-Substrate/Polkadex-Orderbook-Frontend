@@ -35,6 +35,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
@@ -204,7 +205,7 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {list.map((asset) => (
+                              {filterAssets(list).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>
