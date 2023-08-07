@@ -20,6 +20,7 @@ export const Wrapper = styled.button<{
     :disabled {
       background: ${theme.colors.primaryBackground};
       color: ${theme.colors.text};
+      cursor: not-allowed;
       span svg:nth-child(1) {
         stroke: transparent;
       }
