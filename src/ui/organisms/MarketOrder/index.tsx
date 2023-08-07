@@ -23,11 +23,13 @@ export const MarketOrder = () => {
     priceMarket?: any;
     amountSell: string;
     amountBuy: string;
+    erorr: string | null;
   }>({
     orderType: isLimit ? "Limit" : "Market",
     price: "",
     amountSell: "",
     amountBuy: "",
+    erorr: null,
   });
 
   const { t: translation } = useTranslation("organisms");

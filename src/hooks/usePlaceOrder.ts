@@ -19,6 +19,7 @@ interface FormType {
   priceMarket?: any;
   amountSell: string;
   amountBuy: string;
+  error: string | null;
 }
 
 export function usePlaceOrder(
@@ -157,15 +158,22 @@ export function usePlaceOrder(
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
+
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         if (isSell) {
           setForm({
             ...form,
             amountSell: convertedValue,
+            error:
+              Number(convertedValue) < currentMarket.min_amount &&
+              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
           });
         } else {
           setForm({
             ...form,
+            error:
+              Number(convertedValue) < currentMarket.min_amount &&
+              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
             amountBuy: convertedValue,
           });
         }
@@ -179,7 +187,15 @@ export function usePlaceOrder(
         };
       });
     },
-    [qtyPrecision, form, setForm, isSell, bestBidPrice, bestAskPrice]
+    [
+      form,
+      qtyPrecision,
+      isSell,
+      setForm,
+      currentMarket?.min_amount,
+      bestBidPrice,
+      bestAskPrice,
+    ]
   );
 
   /**
@@ -337,6 +353,7 @@ export function usePlaceOrder(
       setRangeValue(data.values);
       setChangeType(true);
       // limit and sell
+
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
           const amount = `${
@@ -345,6 +362,9 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
+            error:
+              Number(amount) < currentMarket?.min_amount &&
+              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
           });
         }
       }
@@ -355,9 +375,13 @@ export function usePlaceOrder(
             (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
             Number(form.price)
           }`;
+
           setForm({
             ...form,
             amountBuy: Decimal.format(amount, qtyPrecision),
+            error:
+              Number(amount) < currentMarket?.min_amount &&
+              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
           });
         }
       }
@@ -367,6 +391,7 @@ export function usePlaceOrder(
           const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
           }`;
+
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
@@ -387,15 +412,16 @@ export function usePlaceOrder(
       }
     },
     [
-      isSell,
       isLimit,
+      isSell,
       availableBaseAmount,
-      availableQuoteAmount,
-      bestAskPrice,
-      bestBidPrice,
       form,
       setForm,
       qtyPrecision,
+      currentMarket?.min_amount,
+      availableQuoteAmount,
+      bestBidPrice,
+      bestAskPrice,
     ]
   );
 
@@ -435,6 +461,8 @@ export function usePlaceOrder(
     percentageNum: number;
     isActive: boolean;
   }) => {
+    console.log(data, "data");
+
     const newSlider = [...slider].map((slides) => {
       slides.percentageNum === data.percentageNum
         ? (slides.isActive = true)
