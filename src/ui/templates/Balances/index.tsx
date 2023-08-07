@@ -47,9 +47,10 @@ export const BalancesTemplate = () => {
           e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
           e.symbol.toLowerCase().includes(filters.search.toLowerCase());
         return (
-          matchesNameOrTicker &&
-          !hasZeroAmount &&
-          !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
+          (matchesNameOrTicker &&
+            !hasZeroAmount &&
+            !defaultConfig.blockedAssets?.some((value) => e.assetId === value)) ||
+          e.assetId === POLKADEX_ASSET.assetId
         );
       }),
     [filters.search, list, userBalances, filters.hideZero]

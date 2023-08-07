@@ -97,7 +97,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
               }
             );
           }
-
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
