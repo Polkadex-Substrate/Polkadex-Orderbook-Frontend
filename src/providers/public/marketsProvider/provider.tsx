@@ -1,13 +1,8 @@
 // TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
-// [x] The platform have a default trading pair for the user's first access.
-// The user can access directly any pair from an URL.
-// [x] The user can access directly any pair from a market component.
-// If the user was on PDEXDOT, then the default pair should be PDEXDOT (You can observe the same behavior on Kucoin and Binance).
 
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
-import { useRouter } from "next/router";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -32,14 +27,11 @@ import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
-import { defaultConfig } from "@polkadex/orderbook-config";
 
-export const MarketsProvider: MarketsComponent = ({ children }) => {
+export const MarketsProvider: MarketsComponent = ({ children, defaultMarket }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
-
-  const router = useRouter();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res = await sendQueryToAppSync({ query: getAllMarkets });
@@ -79,24 +71,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
           const markets = await fetchMarkets(allAssets);
 
           dispatch(A.marketsData(markets));
-          if (markets.length) {
-            const defaultMarket = markets?.find((v) =>
-              v.name
-                .replace(/[^a-zA-Z0-9]/g, "")
-                .toLowerCase()
-                .includes(defaultConfig.landingPageMarket.toLowerCase())
-            );
-
-            const defaultMarketSelected = defaultMarket ?? markets[0];
-            dispatch(A.setCurrentMarketIfUnset(defaultMarketSelected));
-            router.push(
-              `${defaultMarketSelected.base_ticker + defaultMarketSelected.quote_ticker}`,
-              undefined,
-              {
-                shallow: true,
-              }
-            );
-          }
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -104,7 +78,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         dispatch(A.marketsError(error));
       }
     },
-    [fetchMarkets, onHandleError, router]
+    [fetchMarkets, onHandleError]
   );
 
   const findAsset = (
@@ -130,7 +104,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     const to = new Date().toISOString();
     // tickers are fetched for the last 24 hours
     const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
-    const res: any = await sendQueryToAppSync({
+    const res = await sendQueryToAppSync({
       query: queries.getMarketTickers,
       variables: { market, from, to },
     });
@@ -200,6 +174,10 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(A.setCurrentMarket(market));
   };
 
+  const onSetCurrentMarketIfUnset = (market: Market) => {
+    dispatch(A.setCurrentMarketIfUnset(market));
+  };
+
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
@@ -215,6 +193,19 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(setCurrentTicker(state.currentMarket.m));
   }, [state?.currentMarket?.m, state?.tickers]);
 
+  useEffect(() => {
+    if (state.list.length && defaultMarket) {
+      const findMarket = state.list?.find((v) =>
+        v.name
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase()
+          .includes(defaultMarket.toLowerCase())
+      );
+      const defaultMarketSelected = findMarket ?? state.list[0];
+      onSetCurrentMarketIfUnset(defaultMarketSelected);
+    }
+  }, [defaultMarket, state.list]);
+
   return (
     <Provider
       value={{
@@ -222,6 +213,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         onMarketsFetch,
         onMarketTickersFetch,
         setCurrentMarket,
+        onSetCurrentMarketIfUnset,
       }}>
       {children}
     </Provider>

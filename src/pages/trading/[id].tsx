@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import { RecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
@@ -19,11 +20,15 @@ const TradingTemplate = dynamic(
 
 const Trading = () => {
   const { disabled } = useDisabledPages();
+
+  const router = useRouter();
+  const market = router.query.id as string;
+
   if (disabled) return <div />;
 
   return (
     <AssetsProvider>
-      <MarketsProvider>
+      <MarketsProvider defaultMarket={market}>
         <BalancesProvider>
           <OrderBookProvider>
             <OrdersProvider>
