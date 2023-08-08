@@ -26,11 +26,17 @@ export const depositValidations = (chainBalance: number, assetId: string) => {
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         (value) => !/\s/.test(value)
       )
-      .test("Must be a number", "Must be a number", (value) => /^\d+(\.\d+)?$/.test(value))
-      .test("Minimum value", "Too Small!", (value) => Number(value) > 0.0001)
+      .test(ErrorMessages.MUST_BE_A_NUMBER, ErrorMessages.MUST_BE_A_NUMBER, (value) =>
+        /^\d+(\.\d+)?$/.test(value)
+      )
       .test(
-        "Test Value greater than balance",
-        "The amount you entered exceeds your balance",
+        ErrorMessages.TOO_SMALL,
+        ErrorMessages.TOO_SMALL,
+        (value) => Number(value) > 0.0001
+      )
+      .test(
+        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages.CHECK_BALANCE,
         (value) => Number(value) <= Number(chainBalance)
       )
       .test(
@@ -58,11 +64,6 @@ export const depositValidations = (chainBalance: number, assetId: string) => {
             balanceAfterDeposit < Math.pow(10, -12)
           );
         }
-      )
-      .test(
-        ErrorMessages.CHECK_BALANCE,
-        ErrorMessages.CHECK_BALANCE,
-        (value) => +value <= chainBalance
       ),
   });
 };
@@ -106,11 +107,17 @@ export const withdrawValidations = (balance: string) => {
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         (value) => !/\s/.test(value)
       )
-      .test("Must be a number", "Must be a number", (value) => /^\d+(\.\d+)?$/.test(value))
-      .test("Minimum value", "Too Small!", (value) => Number(value) > 0.0001)
+      .test(ErrorMessages.MUST_BE_A_NUMBER, ErrorMessages.MUST_BE_A_NUMBER, (value) =>
+        /^\d+(\.\d+)?$/.test(value)
+      )
       .test(
-        "Test Value greater than balance",
-        "The amount you entered exceeds your balance",
+        ErrorMessages.TOO_SMALL,
+        ErrorMessages.TOO_SMALL,
+        (value) => Number(value) > 0.0001
+      )
+      .test(
+        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages.CHECK_BALANCE,
         (value) => Number(value) <= Number(balance)
       )
       .test(
