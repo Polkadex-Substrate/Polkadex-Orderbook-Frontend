@@ -14,6 +14,7 @@ import { getAbsoluteResolution } from "./helper";
 import { getResolutionInMilliSeconds } from "@polkadex/orderbook/helpers/klineIntervalHelpers";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { fetchKlineAsync } from "@polkadex/orderbook/helpers/fetchKlineAsync";
+import { getCorrectTimestamp } from "@polkadex/orderbook/helpers/processKlineData";
 
 export const KlineProvider: KlineComponent = ({ children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);
@@ -27,7 +28,9 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         const resolution = getAbsoluteResolution(currentResolution);
         const data = await fetchKlineAsync(market, resolution, from, to);
         dispatch(A.klineData({ list: data, market, interval: resolution }));
-        return reverse(data);
+        const klineData = reverse(data);
+        klineData.pop();
+        return klineData;
       } catch (error) {
         console.log("Kline fetch error", error);
         onHandleError("Kline fetch error");
@@ -50,8 +53,8 @@ export const KlineProvider: KlineComponent = ({ children }) => {
       close: Number(data.c),
       high: Number(data.h),
       low: Number(data.l),
-      timestamp: new Date(data.t).getTime(),
-      volume: Number(data.v),
+      timestamp: getCorrectTimestamp(data.t),
+      volume: Number(data.vb),
     };
     const close = kline.close;
     const resolution = getResolutionInMilliSeconds(interval);
@@ -70,7 +73,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const onFetchKlineChannel = useCallback(
     (payload: A.KlineSubscribe["payload"]) => {
       dispatch(A.klineSubscribe(payload));
-      const { market, interval } = payload;
+      const { market, interval, onUpdateTradingViewRealTime } = payload;
       const subscription = API.graphql({
         query: subscriptions.websocket_streams,
         variables: { name: `${market}_${interval.toLowerCase()}` },
@@ -88,6 +91,14 @@ export const KlineProvider: KlineComponent = ({ children }) => {
               interval,
             })
           );
+          onUpdateTradingViewRealTime({
+            time: kline.timestamp,
+            low: kline.low,
+            high: kline.high,
+            open: kline.open,
+            close: kline.close,
+            volume: kline.volume,
+          });
         },
         error: (err) => {
           console.warn("error in onCandleStickEvents channel", err);
