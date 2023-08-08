@@ -50,9 +50,7 @@ export function useTradeHistory(filters: Ifilters) {
 
   useEffect(() => {
     let tradeHistoryList = list;
-    if (filters?.onlyBuy && filters?.onlySell) {
-      tradeHistoryList = list;
-    } else if (filters?.onlyBuy) {
+    if (filters?.onlyBuy) {
       tradeHistoryList = list.filter((data) => data.side?.toUpperCase() === "BID");
     } else if (filters?.onlySell) {
       tradeHistoryList = list.filter((data) => data.side.toUpperCase() === "ASK");

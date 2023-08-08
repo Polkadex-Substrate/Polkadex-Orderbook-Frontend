@@ -211,10 +211,7 @@ export const OrderHistoryProvider = ({ children }) => {
       let orderHistoryList = list;
       let openOrdersList = openOrdersSorted;
 
-      if (filters?.onlyBuy && filters.onlySell) {
-        orderHistoryList = list;
-        openOrdersList = openOrdersSorted;
-      } else if (filters?.onlyBuy) {
+      if (filters?.onlyBuy) {
         orderHistoryList = orderHistoryList.filter(
           (data) => data.side?.toUpperCase() === "BID"
         );
