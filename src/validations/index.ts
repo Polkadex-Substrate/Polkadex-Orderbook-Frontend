@@ -131,3 +131,7 @@ export const importValiations = () => {
       .required("Required"),
   });
 };
+
+export const buySellValidation = Yup.object().shape({
+  password: Yup.string().matches(/^[0-9]+$/, "Must be only digits"),
+});
