@@ -24,7 +24,7 @@ const Balances = () => {
 
   if (!isLoading && !hasUser) router?.push("/trading/");
 
-  if (!hasUser || disabled) return <div />;
+  if (!hasUser || disabled || isLoading) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>

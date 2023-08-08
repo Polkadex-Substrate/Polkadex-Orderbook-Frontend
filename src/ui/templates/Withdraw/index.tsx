@@ -100,18 +100,10 @@ export const WithdrawTemplate = () => {
     }
   };
 
-  const {
-    handleSubmit,
-    errors,
-    getFieldProps,
-    isValid,
-    dirty,
-    resetForm,
-    validateForm,
-    touched,
-  } = useFormik({
+  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } = useFormik({
     initialValues,
     validationSchema: withdrawValidations(availableAmount?.free_balance),
+    validateOnChange: true,
     onSubmit: ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
       else {
@@ -120,10 +112,6 @@ export const WithdrawTemplate = () => {
       }
     },
   });
-
-  useEffect(() => {
-    touched?.amount && validateForm();
-  }, [selectedAsset, validateForm, touched?.amount]);
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 

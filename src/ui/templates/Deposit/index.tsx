@@ -73,28 +73,24 @@ export const DepositTemplate = () => {
     }
   }, [list, routedAsset]);
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } =
-    useFormik({
-      initialValues: {
-        amount: 0.0,
-      },
-      validationSchema: depositValidations(onChainBalance, selectedAsset?.assetId),
-      onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.assetId)
-          ? { polkadex: null }
-          : { asset: selectedAsset.assetId };
+  const { handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+    initialValues: {
+      amount: 0.0,
+    },
+    validationSchema: depositValidations(onChainBalance, selectedAsset?.assetId),
+    validateOnChange: true,
+    onSubmit: (values) => {
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
 
-        onFetchDeposit({
-          asset: asset,
-          amount: values.amount,
-          mainAccount: currMainAcc,
-        });
-      },
-    });
-
-  useEffect(() => {
-    touched?.amount && validateForm();
-  }, [selectedAsset, validateForm, touched?.amount]);
+      onFetchDeposit({
+        asset: asset,
+        amount: values.amount,
+        mainAccount: currMainAcc,
+      });
+    },
+  });
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
