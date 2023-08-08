@@ -70,7 +70,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const onFetchKlineChannel = useCallback(
     (payload: A.KlineSubscribe["payload"]) => {
       dispatch(A.klineSubscribe(payload));
-      const { market, interval } = payload;
+      const { market, interval, onUpdateTradingViewRealTime } = payload;
       const subscription = API.graphql({
         query: subscriptions.websocket_streams,
         variables: { name: `${market}_${interval.toLowerCase()}` },
@@ -88,7 +88,14 @@ export const KlineProvider: KlineComponent = ({ children }) => {
               interval,
             })
           );
-          return kline;
+          onUpdateTradingViewRealTime({
+            time: kline.timestamp,
+            low: kline.low,
+            high: kline.high,
+            open: kline.open,
+            close: kline.close,
+            volume: kline.volume,
+          });
         },
         error: (err) => {
           console.warn("error in onCandleStickEvents channel", err);

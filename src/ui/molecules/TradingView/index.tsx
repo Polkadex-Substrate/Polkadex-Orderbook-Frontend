@@ -71,10 +71,6 @@ export const TradingView = () => {
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
-        onFetchKlineChannel({
-          market: currentMarket?.m,
-          interval: resolution,
-        });
 
         if (klines.length === 0) {
           return [];
@@ -93,6 +89,7 @@ export const TradingView = () => {
             isLastBar: index === klinesLength - 1,
           };
         });
+
         if (bars.length < 1) {
           return [];
         } else {
@@ -102,7 +99,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
+    [currentMarket, onHandleKlineFetch]
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
@@ -175,21 +172,11 @@ export const TradingView = () => {
           listenerGuid,
           onResetCacheNeededCallback
         ) {
-          const bar = {
-            time: 1691494565024,
-            low: lastKline?.kline?.low,
-            high: lastKline?.kline?.high,
-            open: lastKline?.kline?.open,
-            close: lastKline?.kline?.close,
-            volume: lastKline?.kline?.volume,
-          };
-          console.log(bar, "latest bar");
-          onTick(bar);
-          const kline = onFetchKlineChannel({
+          onFetchKlineChannel({
             market: currentMarket?.m,
             interval: resolution,
+            onUpdateTradingViewRealTime: onTick,
           });
-          console.log(kline, "kline bar from event");
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
@@ -218,14 +205,7 @@ export const TradingView = () => {
         foregroundColor: "transparent",
       },
     };
-  }, [
-    currentMarket?.m,
-    getAllSymbols,
-    getData,
-    currentMarket?.name,
-    onFetchKlineChannel,
-    lastKline,
-  ]);
+  }, [currentMarket?.m, getAllSymbols, getData, currentMarket?.name, onFetchKlineChannel]);
 
   useEffect(() => {
     if (!currentMarket?.m) return;
