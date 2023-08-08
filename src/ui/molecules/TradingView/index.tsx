@@ -71,16 +71,13 @@ export const TradingView = () => {
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
-        onFetchKlineChannel({
-          market: currentMarket?.m,
-          interval: resolution,
-        });
 
         if (klines.length === 0) {
           return [];
         }
 
-        const bars = klines.map((bar) => {
+        const klinesLength = klines.length;
+        const bars = klines.map((bar, index) => {
           return {
             time: bar.timestamp,
             low: bar.low,
@@ -88,10 +85,11 @@ export const TradingView = () => {
             open: bar.open,
             close: bar.close,
             volume: bar.volume,
-            isBarClosed: true,
-            isLastBar: false,
+            isBarClosed: index !== klinesLength - 1,
+            isLastBar: index === klinesLength - 1,
           };
         });
+
         if (bars.length < 1) {
           return [];
         } else {
@@ -101,7 +99,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
+    [currentMarket, onHandleKlineFetch]
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
@@ -174,7 +172,11 @@ export const TradingView = () => {
           listenerGuid,
           onResetCacheNeededCallback
         ) {
-          onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
+          onFetchKlineChannel({
+            market: currentMarket?.m,
+            interval: resolution,
+            onUpdateTradingViewRealTime: onTick,
+          });
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
