@@ -8,6 +8,7 @@ export const Context = createContext<MarketsContextProps>({
   onMarketsFetch: () => {},
   onMarketTickersFetch: () => {},
   setCurrentMarket: () => {},
+  onSetCurrentMarketIfUnset: () => {},
 });
 
 export const Provider = ({ value, children }: MarketsProviderProps) => {

@@ -139,7 +139,7 @@ export const SelectInputContainer = styled.div`
     padding-bottom: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-
+    cursor: pointer;
     input {
       width: 100%;
       display: block;

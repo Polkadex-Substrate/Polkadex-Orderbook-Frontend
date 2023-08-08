@@ -1,4 +1,4 @@
-import { DateRangePicker, defaultStaticRanges } from "react-date-range";
+import { DateRangePicker, RangeKeyDict, defaultStaticRanges } from "react-date-range";
 import { useCallback, useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -30,7 +30,7 @@ export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
-  status: string;
+  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
 };
 
 const initialFilters: Ifilters = {
@@ -60,13 +60,16 @@ export const Transactions = () => {
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") => {
     setFilters({ ...filters, [type]: !filters[type] });
   };
+  const handleActionDropdown = (status: string) => {
+    setFilters({ ...filters, status: status as Ifilters["status"] });
+  };
 
   useEffect(() => {
     filterOrders(filters);
   }, [filterOrders, filters]);
 
   const handleSelect = useCallback(
-    ({ selection: { startDate, endDate } }) => {
+    ({ selection: { startDate, endDate } }: RangeKeyDict) => {
       dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
     },
     [dispatchUserSessionData]
@@ -81,10 +84,6 @@ export const Transactions = () => {
       },
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
-
-  const handleActionDropdown = (status: string) => {
-    setFilters({ ...filters, status });
-  };
 
   return (
     <S.Section>
