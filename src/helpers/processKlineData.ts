@@ -1,8 +1,21 @@
 import { KlineDbData } from "../providers/public/klineProvider";
 
+// This function aims to provide a timestamp that represents the same point in time as the input ISO date string
+// but without accounting for any time zone offset.
+// This is useful for us because we want to work with timestamps that should be consistent across different time zones.
+export const getCorrectTimestamp = (ISOdate: string) => {
+  const date = new Date(ISOdate);
+
+  const timestampWithOffset = date.getTime();
+
+  const offset = date.getTimezoneOffset() * 60 * 1000;
+  const timestampWithoutOffset = timestampWithOffset - offset;
+  return timestampWithoutOffset;
+};
+
 export const processKlineData = (data: KlineDbData[]) => {
   const klinesData = data.map((x) => ({
-    timestamp: new Date(x.t).getTime(),
+    timestamp: getCorrectTimestamp(x.t),
     open: Number(x.o),
     high: Number(x.h),
     low: Number(x.l),

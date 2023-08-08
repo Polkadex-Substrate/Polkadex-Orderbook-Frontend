@@ -37,7 +37,7 @@ const configurationData: DatafeedConfiguration = {
 export const TradingView = () => {
   const [isReady, setIsReady] = useState(false);
 
-  const { onHandleKlineFetch, onFetchKlineChannel, last: lastKline } = useKlineProvider();
+  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
   const { currentMarket } = useMarketsProvider();
   const { theme } = useSettingsProvider();
 
