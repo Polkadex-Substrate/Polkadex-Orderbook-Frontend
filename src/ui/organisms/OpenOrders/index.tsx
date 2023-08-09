@@ -51,7 +51,6 @@ export const OpenOrders = ({ orderHistory }) => {
                     orderId={order.id}
                     base={base}
                     quote={quote}
-                    orderSide={order.side}
                     orderType={order.order_type}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}

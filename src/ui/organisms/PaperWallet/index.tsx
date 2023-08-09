@@ -12,7 +12,7 @@ const PaperWallet = forwardRef(
     }: PropsWithChildren<{
       mnemoicString: string;
       mnemonic: string[];
-      controllerAddress: string;
+      controllerAddress?: string;
     }>,
     ref: Ref<HTMLDivElement>
   ) => {

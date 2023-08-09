@@ -1,8 +1,9 @@
+import { FormikErrors } from "formik";
 import { MutableRefObject, Ref, RefObject, ReactNode, InputHTMLAttributes } from "react";
 
 export type Props = {
   label?: string | JSX.Element;
-  error?: string;
+  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   children?: ReactNode;
   labelRight?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
