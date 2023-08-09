@@ -78,7 +78,7 @@
     "signIntoPlaceOrder": "Sign In to Place Order",
     "waiting": "Waiting",
     "orderCreated": "Order Created",
-    "errorMessage": "Amount cannot be lesser than minimum amout "
+    "errorMessage": "Amount cannot be lesser than minimum amout {{minAmount}} "
   },
   "mnemonic": {
     "placeholder": "Type mnemonic to restore your proxy account in this browser",

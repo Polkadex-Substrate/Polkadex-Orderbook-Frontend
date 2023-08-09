@@ -35,7 +35,10 @@ export function usePlaceOrder(
   const ordersState = useOrders();
   const settingsState = useSettingsProvider();
   const { t: translation } = useTranslation("molecules");
-  const t = (key: string) => translation(`marketOrderAction.${key}`);
+  const t = useCallback(
+    (key: string, args = {}) => translation(`marketOrderAction.${key}`, args),
+    [translation]
+  );
 
   const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
@@ -167,12 +170,12 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountSell: convertedValue,
-            error: Number(convertedValue) < minAmount && t("errorMessage"),
+            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         } else {
           setForm({
             ...form,
-            error: Number(convertedValue) < minAmount && t("errorMessage"),
+            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
             amountBuy: convertedValue,
           });
         }
@@ -353,7 +356,7 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
-            error: Number(amount) < minAmount && t("errorMessage"),
+            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
@@ -368,7 +371,7 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountBuy: Decimal.format(amount, qtyPrecision),
-            error: Number(amount) < minAmount && t("errorMessage"),
+            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
