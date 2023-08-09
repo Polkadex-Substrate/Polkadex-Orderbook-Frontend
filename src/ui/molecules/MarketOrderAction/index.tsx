@@ -18,6 +18,7 @@ import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
+import { buySellValidation } from "@polkadex/orderbook/validations";
 
 export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) => {
   const {
@@ -75,7 +76,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   inputInfo={quoteTicker}
                   fullWidth={true}
                   type="text"
-                  placeholder="0.000000000"
+                  placeholder="0.00"
                   id="order-price"
                   value={price}
                   autoComplete="off"
@@ -89,7 +90,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 inputInfo={isLimit ? baseTicker : isSell ? baseTicker : quoteTicker}
                 fullWidth={true}
                 type="text"
-                placeholder="0.000000000"
+                placeholder="0.00"
                 id="order-amount"
                 value={amount}
                 autoComplete="off"
@@ -154,11 +155,12 @@ const ProtectPassword = () => {
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);
 
-  const { values, setFieldValue, handleSubmit } = useFormik({
+  const { values, setFieldValue, handleSubmit, errors } = useFormik({
     initialValues: {
       showPassword: false,
       password: "",
     },
+    validationSchema: buySellValidation,
     onSubmit: (values) => {
       isValidSize &&
         tradeAccount.isLocked &&
@@ -170,7 +172,6 @@ const ProtectPassword = () => {
   });
 
   const isLoading = false;
-  const error = "";
 
   const isValidSize = useMemo(() => values?.password?.length === 5, [values.password]);
 
@@ -195,7 +196,7 @@ const ProtectPassword = () => {
               onChange={(e) => setFieldValue("password", e)}
               value={values.password}
               name="password"
-              error={error.length && error}
+              error={errors.password}
               type={values.showPassword ? "password" : "tel"}
             />
           </S.ProtectPasswordContent>

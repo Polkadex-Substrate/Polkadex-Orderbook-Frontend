@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
@@ -23,6 +23,7 @@ const Withdraw = () => {
 
   const {
     authInfo: { isAuthenticated: hasUser },
+    auth: { isLoading },
     selectedAccount: { mainAddress },
   } = useProfile();
   const profileState = useProfile();
@@ -41,9 +42,7 @@ const Withdraw = () => {
     [hasUser, isRegistered, hasSelectedAccount]
   );
 
-  useEffect(() => {
-    if (shouldRedirect) router.push("/settings");
-  }, [router, shouldRedirect]);
+  if (!isLoading && !hasUser) router?.push("/trading/");
 
   if (shouldRedirect || disabled) return <div />;
   return (

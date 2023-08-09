@@ -5,7 +5,6 @@ import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../help
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/orderbook/constants";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -81,14 +80,8 @@ export function usePlaceOrder(
     ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
     : [-1, -1];
 
-  const pricePrecision = Math.max(
-    decimalPlaces(currentMarket?.price_tick_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
-  const qtyPrecision = Math.max(
-    decimalPlaces(currentMarket?.qty_step_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
+  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
+  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
 

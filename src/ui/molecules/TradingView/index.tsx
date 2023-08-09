@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   ChartingLibraryWidgetOptions,
@@ -10,7 +10,7 @@ import {
 } from "../../../../public/static/charting_library";
 
 import * as S from "./styles";
-import { options } from "./options";
+import { customFontFamily, options } from "./options";
 
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
@@ -57,9 +57,6 @@ export const TradingView = () => {
     return allSymbols;
   }, [currentMarket?.name]);
 
-  const chartContainerRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-
   const tvWidget = useRef<IChartingLibraryWidget>();
 
   const getData = useCallback(
@@ -71,16 +68,13 @@ export const TradingView = () => {
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
-        onFetchKlineChannel({
-          market: currentMarket?.m,
-          interval: resolution,
-        });
 
         if (klines.length === 0) {
           return [];
         }
 
-        const bars = klines.map((bar) => {
+        const klinesLength = klines.length;
+        const bars = klines.map((bar, index) => {
           return {
             time: bar.timestamp,
             low: bar.low,
@@ -88,10 +82,11 @@ export const TradingView = () => {
             open: bar.open,
             close: bar.close,
             volume: bar.volume,
-            isBarClosed: true,
-            isLastBar: false,
+            isBarClosed: index !== klinesLength - 1,
+            isLastBar: index === klinesLength - 1,
           };
         });
+
         if (bars.length < 1) {
           return [];
         } else {
@@ -101,12 +96,11 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
+    [currentMarket, onHandleKlineFetch]
   );
-  useEffect(() => {
-    if (!currentMarket?.m) return;
 
-    const widgetOptions: ChartingLibraryWidgetOptions = {
+  const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
+    return {
       datafeed: {
         onReady(callback) {
           setTimeout(() => callback(configurationData), 0);
@@ -168,14 +162,17 @@ export const TradingView = () => {
             onError(error);
           }
         },
-        subscribeBars(symbolInfo, resolution) {
-          onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
+        subscribeBars(symbolInfo, resolution, onTick) {
+          onFetchKlineChannel({
+            market: currentMarket?.m,
+            interval: resolution,
+            onUpdateTradingViewRealTime: onTick,
+          });
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
         },
       },
-      theme: isDarkTheme ? "Dark" : "Light",
       interval: "1D" as ResolutionString,
       library_path: "/static/charting_library/",
       locale: "en",
@@ -185,7 +182,7 @@ export const TradingView = () => {
       user_id: "public_user_id",
       fullscreen: false,
       autosize: true,
-      container: chartContainerRef.current,
+      container: "tv_chart_container",
       disabled_features: [
         "use_localstorage_for_settings",
         "volume_force_overlay",
@@ -193,33 +190,46 @@ export const TradingView = () => {
       ],
       enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
-      overrides: { ...options(isDarkTheme).overrides },
-      studies_overrides: { ...options(isDarkTheme).studies_overrides },
-      custom_font_family: options(isDarkTheme).custom_font_family,
+      custom_font_family: customFontFamily,
       custom_css_url: "/static/style.css/",
       loading_screen: {
         foregroundColor: "transparent",
       },
     };
+  }, [currentMarket?.m, getAllSymbols, getData, currentMarket?.name, onFetchKlineChannel]);
+
+  useEffect(() => {
+    if (!currentMarket?.m) return;
+
+    setIsReady(false);
     tvWidget.current = new Widget(widgetOptions);
-    tvWidget?.current?.onChartReady && tvWidget?.current?.onChartReady(() => setIsReady(true));
+
+    tvWidget?.current?.onChartReady &&
+      tvWidget?.current?.onChartReady(() => {
+        setIsReady(true);
+      });
 
     return () => {
-      tvWidget.current.remove();
+      tvWidget?.current?.remove();
     };
-  }, [
-    currentMarket?.m,
-    onHandleKlineFetch,
-    getData,
-    onFetchKlineChannel,
-    getAllSymbols,
-    currentMarket?.name,
-    isDarkTheme,
-  ]);
+  }, [currentMarket?.m, widgetOptions]);
+
+  useEffect(() => {
+    isReady &&
+      tvWidget?.current?.onChartReady &&
+      tvWidget?.current?.onChartReady(() => {
+        tvWidget?.current?.changeTheme(isDarkTheme ? "Dark" : "Light").then(() => {
+          tvWidget?.current.applyOverrides({ ...options(isDarkTheme).overrides });
+        });
+      });
+    tvWidget?.current?.applyStudiesOverrides({
+      ...options(isDarkTheme).studies_overrides,
+    });
+  }, [isDarkTheme, isReady]);
 
   return (
     <S.Wrapper>
-      <S.Container isVisible={isReady} ref={chartContainerRef} />
+      <S.Container isVisible={isReady} id="tv_chart_container" />
       {!isReady && (
         <S.LoadingWrapper>
           <Keyboard color="primary" />

@@ -81,6 +81,7 @@ export const ContainerTransactions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const Icon = styled.div`

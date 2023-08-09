@@ -1,5 +1,9 @@
 import * as Yup from "yup";
 
+import { ErrorMessages, MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/web-constants";
+import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
+import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
+
 export const signInValidations = Yup.object().shape({
   password: Yup.string().required("Required").min(2, "Too Short!").max(20, "Too Long!"),
   accountName: Yup.string().required("Required").min(5, "Too Short!").max(15, "Too Long!"),
@@ -13,22 +17,56 @@ export const loginValidations = Yup.object().shape({
   address: Yup.string().required("Required"),
 });
 
-export const depositValidations = Yup.object().shape({
-  amount: Yup.number()
-    .required("Required")
-    .min(0.0000000001, "Too Short!")
-    .typeError("Must be a number"),
-  asset: Yup.object({
-    assetId: Yup.string(),
-    name: Yup.string(),
-    symbol: Yup.string(),
-    decimals: Yup.string(),
-    isFrozen: Yup.bool(),
-  })
-    .required("Required")
-    .nullable(),
-  address: Yup.string().required("Required"),
-});
+export const depositValidations = (chainBalance: number, assetId: string) => {
+  return Yup.object().shape({
+    amount: Yup.string()
+      .required("Required")
+      .test(
+        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        (value) => !/\s/.test(value)
+      )
+      .test(ErrorMessages.MUST_BE_A_NUMBER, ErrorMessages.MUST_BE_A_NUMBER, (value) =>
+        /^\d+(\.\d+)?$/.test(value)
+      )
+      .test(
+        ErrorMessages.TOO_SMALL,
+        ErrorMessages.TOO_SMALL,
+        (value) => Number(value) > 0.0001
+      )
+      .test(
+        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages.CHECK_BALANCE,
+        (value) => Number(value) <= Number(chainBalance)
+      )
+      .test(
+        ErrorMessages.CHECK_VALID_AMOUNT,
+        ErrorMessages.CHECK_VALID_AMOUNT,
+        (value) => !(value?.toString().includes("e") || value?.toString().includes("o"))
+      )
+      .test(
+        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        (value) => getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
+      )
+      .test(ErrorMessages.REMAINING_BALANCE, ErrorMessages.REMAINING_BALANCE, (value) => {
+        const balanceAfterDeposit = chainBalance - Number(value);
+        return !(isAssetPDEX(assetId) && balanceAfterDeposit < 1);
+      })
+      .test(
+        ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
+        ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
+        (value) => {
+          const balanceAfterDeposit = chainBalance - Number(value);
+          return !(
+            !isAssetPDEX(assetId) &&
+            Number(value) &&
+            balanceAfterDeposit < Math.pow(10, -12)
+          );
+        }
+      ),
+  });
+};
 
 export const signUpValidations = Yup.object().shape({
   password: Yup.string().required("Required").min(8, "Too Short!").max(20, "Too Long!"),
@@ -60,16 +98,32 @@ export const resetPasswordValidations = Yup.object().shape({
   email: Yup.string().email("Must be a valid email").required("Required"),
 });
 
-export const withdrawValidations = (balance: number) => {
+export const withdrawValidations = (balance: string) => {
   return Yup.object().shape({
-    amount: Yup.number()
+    amount: Yup.string()
       .required("Required")
-      .min(0.0001, "Too Small!")
-      .typeError("Must be a number")
       .test(
-        "Test Value greater than balance",
-        "The amount you entered exceeds your balance",
-        (value) => value <= Number(balance)
+        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        (value) => !/\s/.test(value)
+      )
+      .test(ErrorMessages.MUST_BE_A_NUMBER, ErrorMessages.MUST_BE_A_NUMBER, (value) =>
+        /^\d+(\.\d+)?$/.test(value)
+      )
+      .test(
+        ErrorMessages.TOO_SMALL,
+        ErrorMessages.TOO_SMALL,
+        (value) => Number(value) > 0.0001
+      )
+      .test(
+        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages.CHECK_BALANCE,
+        (value) => Number(value) <= Number(balance)
+      )
+      .test(
+        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        (value) => getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
       ),
   });
 };
@@ -131,3 +185,7 @@ export const importValiations = () => {
       .required("Required"),
   });
 };
+
+export const buySellValidation = Yup.object().shape({
+  password: Yup.string().matches(/^[0-9]+$/, "Must be only digits"),
+});

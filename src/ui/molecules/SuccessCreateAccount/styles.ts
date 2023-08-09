@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   gap: 2rem;
 `;
+
 export const Card = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
@@ -16,6 +17,7 @@ export const Card = styled.div`
     }
   `}
 `;
+
 export const Title = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,6 +28,32 @@ export const Title = styled.div`
     font-weight: 500;
   }
 `;
+export const CopyButton = styled.button`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color ease 0.5s;
+    width: 100%;
+    text-align: center;
+    :hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+    &.active {
+      background: ${theme.colors.green};
+    }
+    :disabled {
+      cursor: not-allowed;
+      background: ${theme.colors.primaryBackgroundOpacity};
+    }
+  `}
+`;
+export const MnemonicFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -44,6 +72,7 @@ export const WordsWrapper = styled.div`
   justify-content: space-between;
   gap: 2rem;
 `;
+
 export const WordsInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,6 +112,10 @@ export const WordsContainer = styled.div`
     }
     input {
       color: ${theme.colors.text};
+    }
+    svg {
+      stroke: ${theme.colors.tertiaryText};
+      fill: ${theme.colors.tertiaryText};
     }
   `}
 `;
@@ -144,9 +177,6 @@ export const WalletContent = styled.div`
     align-items: center;
     gap: 0.5rem;
     button {
-      width: 1.2rem;
-      height: 1.2rem;
-
       svg {
         stroke: ${theme.colors.tertiaryText};
         fill: ${theme.colors.tertiaryText};
@@ -154,6 +184,7 @@ export const WalletContent = styled.div`
     }
   `}
 `;
+
 export const Actions = styled.div`
   ${({ theme }) => css`
     text-align: center;

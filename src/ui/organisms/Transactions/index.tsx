@@ -1,4 +1,4 @@
-import { DateRangePicker, defaultStaticRanges } from "react-date-range";
+import { DateRangePicker, RangeKeyDict, defaultStaticRanges } from "react-date-range";
 import { useCallback, useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -30,7 +30,7 @@ export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
-  status: string;
+  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
 };
 
 const initialFilters: Ifilters = {
@@ -44,11 +44,12 @@ export const Transactions = () => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
-  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("canceled")];
+  const initialState = [t("allTransactions"), t("pending"), t("completed"), t("cancelled")];
 
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isTransactionDropdownVisible, setTransactionDropdownVisible] = useState(true);
 
   const orderHistory = useOrderHistoryProvider();
   const { filterOrders } = orderHistory;
@@ -59,13 +60,16 @@ export const Transactions = () => {
   const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") => {
     setFilters({ ...filters, [type]: !filters[type] });
   };
+  const handleActionDropdown = (status: string) => {
+    setFilters({ ...filters, status: status as Ifilters["status"] });
+  };
 
   useEffect(() => {
     filterOrders(filters);
   }, [filterOrders, filters]);
 
   const handleSelect = useCallback(
-    ({ selection: { startDate, endDate } }) => {
+    ({ selection: { startDate, endDate } }: RangeKeyDict) => {
       dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
     },
     [dispatchUserSessionData]
@@ -123,21 +127,27 @@ export const Transactions = () => {
                   </Checkbox>
                 </S.ContainerActions>
                 <S.ContainerTransactions>
-                  <Dropdown>
-                    <Dropdown.Trigger>
-                      <S.Icon>
-                        {filters.status}
-                        <div>
-                          <Icons.ArrowBottom />
-                        </div>
-                      </S.Icon>
-                    </Dropdown.Trigger>
-                    <Dropdown.Menu fill="secondaryBackgroundSolid">
-                      {initialState.map((status) => (
-                        <Dropdown.Item key={status}>{status}</Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  {isTransactionDropdownVisible && (
+                    <Dropdown>
+                      <Dropdown.Trigger>
+                        <S.Icon>
+                          {filters.status}
+                          <div>
+                            <Icons.ArrowBottom />
+                          </div>
+                        </S.Icon>
+                      </Dropdown.Trigger>
+                      <Dropdown.Menu fill="secondaryBackgroundSolid">
+                        {initialState.map((status) => (
+                          <Dropdown.Item
+                            key={status}
+                            onAction={() => handleActionDropdown(status)}>
+                            {status}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
                   <Popover>
                     <Popover.Trigger>
                       <div>
@@ -175,7 +185,10 @@ export const Transactions = () => {
             <OrderHistory orderHistory={orderHistory} />
           </TabContent>
           <TabContent>
-            <TradeHistory filters={filters} />
+            <TradeHistory
+              onHideTransactionDropdown={(v: boolean) => setTransactionDropdownVisible(v)}
+              filters={filters}
+            />
           </TabContent>
           <TabContent>
             <Funds onHideFilters={(v: boolean) => setIsVisible(v)} />

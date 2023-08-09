@@ -50,7 +50,7 @@ export const useSettings = () => {
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
   const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
-  const isRegisterMainAccountSuccess = extensionWalletState.registerMainAccountSuccess;
+  const isRegisterMainAccountSuccess = extensionWalletState?.registerMainAccountSuccess;
   const defaultTradeAddress = profileState.defaultTradeAccount;
   const defaultFundingAddress =
     defaultTradeAddress &&

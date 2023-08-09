@@ -1,16 +1,33 @@
 import * as S from "./styles";
 import * as T from "./types";
 export const Rating = ({ onClick, value }: T.Props) => {
-  const stars = [0, 1, 2, 3, 4];
+  const stars = {
+    worst: 0,
+    average: 1,
+    good: 2,
+    best: 3,
+  };
+
+  const getNumber = (value) => {
+    return stars[value];
+  };
   return (
-    <S.Container>
-      {stars.map((item, index) => {
-        return (
-          <S.Image key={item} onClick={() => onClick(index + 1)}>
-            <img src={value >= index + 1 ? "/img/pinkStar.svg" : "/img/greyStar.svg"} alt="" />
-          </S.Image>
-        );
-      })}
-    </S.Container>
+    <S.RatingWrapper>
+      <S.Container>
+        {Object.keys(stars).map((item) => {
+          return (
+            <S.Image key={item} onClick={() => onClick(item)}>
+              <img
+                src={
+                  getNumber(value) >= stars[item] ? "/img/pinkStar.svg" : "/img/greyStar.svg"
+                }
+                alt="star for rating"
+              />
+            </S.Image>
+          );
+        })}
+      </S.Container>
+      <S.RatingText value={value}>{value}</S.RatingText>
+    </S.RatingWrapper>
   );
 };

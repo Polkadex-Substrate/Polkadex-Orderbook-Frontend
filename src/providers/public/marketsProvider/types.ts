@@ -116,6 +116,7 @@ export type MarketsContextProps = MarketsState & {
   onMarketsFetch: (allAssets: IPublicAsset[]) => void;
   onMarketTickersFetch: () => void;
   setCurrentMarket: (market: Market) => void;
+  onSetCurrentMarketIfUnset: (market: Market) => void;
 };
 
 export type MarketsProviderProps = PropsWithChildren<{

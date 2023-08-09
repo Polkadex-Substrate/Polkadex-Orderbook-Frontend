@@ -202,7 +202,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
       const api: ApiPromise = nativeApiState.api;
-      const { allAccounts } = payload;
+      const { address: tradeAddress, allAccounts } = payload;
       const linkedMainAddress =
         tradeAddress &&
         userData?.userAccounts?.find(({ tradeAddress: addr }) => addr === tradeAddress)
@@ -230,7 +230,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
           dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          onUserProfileTradeAccountDelete(tradeAddress);
+          onUserProfileTradeAccountDelete({ address: tradeAddress });
         } else {
           throw new Error(res.message);
         }
@@ -252,6 +252,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onRemoveTradeAccountFromBrowser = (address: string) => {
     dispatch(A.removeTradeAccountFromBrowser({ address }));
+    onUserProfileTradeAccountDelete({ address, deleteFromBrowser: true });
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {

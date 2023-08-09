@@ -55,4 +55,5 @@ export const defaultConfig: DefaultConfig = {
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(","),
   mainUrl: process.env.MAIN_URL || "/trading",
+  blockedAssets: process.env.BLOCKED_ASSETS?.split(","),
 };

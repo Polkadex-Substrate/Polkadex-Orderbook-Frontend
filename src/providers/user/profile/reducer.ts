@@ -24,7 +24,7 @@ import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/ran
 const defaultAvatar = randomAvatars[1].id;
 
 const initialTemplate = {
-  isLoading: false,
+  isLoading: true,
   message: null,
   isError: false,
   isSuccess: false,
@@ -59,11 +59,12 @@ export const initialState: ProfileState = {
 
 export const profileReducer = (state: ProfileState, action: ProfileAction) => {
   switch (action.type) {
-    case PROFILE_USER_AUTH_FETCH:
+    case PROFILE_USER_AUTH_FETCH: {
       return {
         ...state,
         auth: { ...state.auth, isLoading: true },
       };
+    }
     case PROFILE_USER_AUTH_DATA: {
       return {
         ...state,
@@ -188,16 +189,18 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       };
     }
     case PROFILE_USER_TRADE_ACCOUNT_DELETE: {
-      const address = action.payload;
+      const { address, deleteFromBrowser } = action.payload;
       const userAccounts = [...state.userData?.userAccounts];
       const updateState = _.cloneDeep(state);
-      const filtered = userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
+      const filtered = deleteFromBrowser
+        ? userAccounts
+        : userAccounts.filter(({ tradeAddress }) => tradeAddress !== address);
       if (state.defaultTradeAccount === address) {
         updateState.defaultTradeAccount = "";
         window.localStorage.setItem(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, "");
       }
       if (state.selectedAccount.tradeAddress === address) {
-        updateState.selectedAccount = null;
+        updateState.selectedAccount = { tradeAddress: "", mainAddress: "" };
       }
       updateState.userData.userAccounts = filtered;
       return updateState;

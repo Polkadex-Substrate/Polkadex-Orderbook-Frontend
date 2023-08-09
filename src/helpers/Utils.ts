@@ -46,7 +46,7 @@ export const eraseCookie = (name: string) => {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 };
 
-export const getDigitsAfterDecimal = (value: number) => {
+export const getDigitsAfterDecimal = (value: number | string) => {
   const amountStr = String(value);
   return amountStr.includes(".") ? amountStr.split(".")[1].length : 0;
 };

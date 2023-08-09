@@ -19,7 +19,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     flex-flow: column;
     flex: 1;
     border-radius: 0 2rem 2rem 0rem;
-    min-width: 29rem;
+    min-width: 28rem;
     width: 100%;
     height: 100%;
     min-height: 48rem;
@@ -128,7 +128,7 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 0.5rem 0 1rem;
+    padding: 0 0.6rem 0 1rem;
     font-weight: 500;
     :not(:last-child) {
       margin-bottom: 0.1rem;
