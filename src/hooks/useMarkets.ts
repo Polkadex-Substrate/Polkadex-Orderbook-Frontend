@@ -107,11 +107,11 @@ export function useMarkets(onClose: () => void) {
       fieldValue.showFavourite ? value.isFavourite === fieldValue.showFavourite : value
     );
     const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
-      const [_, quote] = cv.name.toLowerCase().split("/");
+      const names = cv.name.toLowerCase().split("/");
       if (
         cv.name.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
-          fieldValue.marketsTabsSelected.toLowerCase() === quote ||
+          fieldValue.marketsTabsSelected.toLowerCase() === names[1] ||
           fieldValue.marketsTabsSelected.toLowerCase() === "all")
       ) {
         pv.push(cv);

@@ -19,7 +19,6 @@ export const fetchOnChainBalance = async (
   } else {
     const res = await api.query.assets.account(assetId, address);
     const balanceJson: any = res.toJSON();
-    console.log(balanceJson, "res from fetchOnChainBalance ");
 
     const freeBalance = new BigNumber(balanceJson?.balance || "0")
       .dividedBy(UNIT_BN)
