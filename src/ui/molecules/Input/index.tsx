@@ -226,7 +226,7 @@ type TextInputProps = {
   focus?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const TextInput = ({ focus, ...props }: TextInputProps) => {
+const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
   const ref = useRef(null);
   const { crossOrigin, ...restProps } = props;
   useEffect(() => {

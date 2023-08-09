@@ -1,7 +1,7 @@
 import { useFocusRing } from "@react-aria/focus";
 import { useTableColumnHeader } from "@react-aria/table";
 import { mergeProps } from "@react-aria/utils";
-import { forwardRef, PropsWithChildren, useRef } from "react";
+import { forwardRef, PropsWithChildren, Ref, useRef } from "react";
 import { useTableSelectAllCheckbox, VisuallyHidden } from "react-aria";
 import { TableState } from "react-stately";
 
@@ -11,7 +11,10 @@ import * as S from "./styles";
 import * as T from "./types";
 
 const CheckboxColumn = forwardRef(
-  ({ state, column }: PropsWithChildren<T.ColumnForwardProps>) => {
+  (
+    { state, column }: PropsWithChildren<T.ColumnForwardProps>,
+    ref: Ref<HTMLTableRowElement>
+  ) => {
     const componentRef = useRef();
 
     const isSingleSelectionMode = state.selectionManager.selectionMode === "single";

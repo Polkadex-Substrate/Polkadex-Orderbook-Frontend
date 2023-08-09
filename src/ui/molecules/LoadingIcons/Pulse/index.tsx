@@ -1,8 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, Ref } from "react";
 
 import * as S from "../styles";
 import * as T from "../types";
-const Pulse = forwardRef(({ ...props }: T.Props) => {
+const Pulse = forwardRef(({ ...props }: T.Props, ref: Ref<HTMLButtonElement | null>) => {
   return (
     <S.Wrapper
       xmlns="http://www.w3.org/2000/svg"
