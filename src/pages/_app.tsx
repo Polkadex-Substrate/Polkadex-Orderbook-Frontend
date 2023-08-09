@@ -24,6 +24,8 @@ import {
   NativeApiProvider,
   ExtensionWalletProvider,
   SettingProvider,
+  AssetsProvider,
+  MarketsProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 import "@polkadex/orderbook/i18n";
@@ -50,6 +52,18 @@ const Providers = ({ children }) => {
         </NativeApiProvider>
       </ProfileProvider>
     </AuthProvider>
+  );
+};
+
+const TradingPageProvider = ({ children }) => {
+  const router = useRouter();
+  const isTradingPage = router.pathname.startsWith("/trading");
+  return isTradingPage ? (
+    <AssetsProvider>
+      <MarketsProvider>{children}</MarketsProvider>
+    </AssetsProvider>
+  ) : (
+    <>{children}</>
   );
 };
 
@@ -84,9 +98,11 @@ function App({ Component, pageProps }: AppProps) {
         }}>
         <OverlayProvider>
           {isActive ? (
-            <Providers>
-              <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
-            </Providers>
+            <TradingPageProvider>
+              <Providers>
+                <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+              </Providers>
+            </TradingPageProvider>
           ) : (
             <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
           )}

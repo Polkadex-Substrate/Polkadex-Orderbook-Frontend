@@ -6,8 +6,10 @@ import { useSessionProvider } from "../providers/user/sessionProvider/useSession
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTrades } from "@polkadex/orderbook/providers/user/trades";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 export function useTradeHistory(filters: Ifilters) {
+  const { selectGetAsset } = useAssetsProvider();
   const profileState = useProfile();
   const { selectedAccount } = profileState;
   const tradesState = useTrades();
@@ -27,7 +29,7 @@ export function useTradeHistory(filters: Ifilters) {
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
   useEffect(() => {
-    if (tradesState.data.length) return;
+    if (tradesState.data.length || tradesState.tradeHistoryNextToken) return;
     if (userLoggedIn && currentMarket && selectedAccount.tradeAddress)
       onFetchTrades({
         dateFrom,
@@ -43,25 +45,29 @@ export function useTradeHistory(filters: Ifilters) {
     dateTo,
     selectedAccount.tradeAddress,
     tradesState.data.length,
+    tradesState.tradeHistoryNextToken,
   ]);
 
   useEffect(() => {
-    if (filters?.onlyBuy && filters?.onlySell) {
-      setUpdatedTradeList(list);
-    } else if (filters?.onlyBuy) {
-      setUpdatedTradeList(list.filter((data) => data.side?.toUpperCase() === "BID"));
+    let tradeHistoryList = list;
+    if (filters?.onlyBuy) {
+      tradeHistoryList = list.filter((data) => data.side?.toUpperCase() === "BID");
     } else if (filters?.onlySell) {
-      setUpdatedTradeList(list.filter((data) => data.side.toUpperCase() === "ASK"));
-    } else if (filters?.hiddenPairs) {
-      setUpdatedTradeList(
-        list.filter((data) => {
-          return data.side.toUpperCase() !== "ASK" || data.side.toUpperCase() !== "BID";
-        })
-      );
-    } else {
-      setUpdatedTradeList(list);
+      tradeHistoryList = list.filter((data) => data.side.toUpperCase() === "ASK");
     }
-  }, [filters, list]);
+
+    if (filters?.hiddenPairs) {
+      tradeHistoryList = tradeHistoryList.filter((trade) => {
+        const baseUnit = selectGetAsset(trade.baseAsset).symbol;
+        const quoteUnit = selectGetAsset(trade.quoteAsset).symbol;
+        const market = currentMarket?.name;
+        const marketForTrade = `${baseUnit}/${quoteUnit}`;
+        return market === marketForTrade && trade;
+      });
+    }
+
+    setUpdatedTradeList(tradeHistoryList);
+  }, [filters, list, currentMarket?.name, selectGetAsset]);
 
   return {
     trades: updatedTradeList,

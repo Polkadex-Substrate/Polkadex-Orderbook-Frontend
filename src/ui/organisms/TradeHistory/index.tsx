@@ -12,16 +12,10 @@ import {
   LoadingSpinner,
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
+import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useSessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/useSessionProvider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
-
-export type Ifilters = {
-  hiddenPairs: boolean;
-  onlyBuy: boolean;
-  onlySell: boolean;
-  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
-};
 
 type Props = {
   filters: Ifilters;

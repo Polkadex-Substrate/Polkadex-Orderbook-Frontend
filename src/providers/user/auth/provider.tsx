@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import router from "next/router";
@@ -187,30 +187,15 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
     []
   );
 
+  // Note : getIsAuthenticated function is same as fetchDataOnUserAuth in profile provider. We can remove it.
+
   // For SignIn Purposes
   const signinIsSuccess = state.signin.isSuccess;
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const getIsAuthenticated = async () => {
-    try {
-      const { attributes } = await Auth.currentAuthenticatedUser();
-      if (attributes.email) {
-        setIsAuthenticated(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    getIsAuthenticated();
-  }, []);
-
-  useEffect(() => {
-    if (signinIsSuccess || isAuthenticated) {
+    if (signinIsSuccess) {
       router.push("/trading/" + defaultConfig.landingPageMarket);
     }
-  }, [isAuthenticated, signinIsSuccess]);
+  }, [signinIsSuccess]);
 
   // For SignUp Purposes
   const signupIsSuccess = state.signup.isSuccess;

@@ -57,9 +57,6 @@ export const TradingView = () => {
     return allSymbols;
   }, [currentMarket?.name]);
 
-  const chartContainerRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-
   const tvWidget = useRef<IChartingLibraryWidget>();
 
   const getData = useCallback(
@@ -191,7 +188,7 @@ export const TradingView = () => {
       user_id: "public_user_id",
       fullscreen: false,
       autosize: true,
-      container: chartContainerRef.current,
+      container: "tv_chart_container",
       disabled_features: [
         "use_localstorage_for_settings",
         "volume_force_overlay",
@@ -238,7 +235,7 @@ export const TradingView = () => {
 
   return (
     <S.Wrapper>
-      <S.Container isVisible={isReady} ref={chartContainerRef} />
+      <S.Container isVisible={isReady} id="tv_chart_container" />
       {!isReady && (
         <S.LoadingWrapper>
           <Keyboard color="primary" />
