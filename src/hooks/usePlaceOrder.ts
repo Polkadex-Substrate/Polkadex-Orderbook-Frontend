@@ -1,5 +1,6 @@
 // TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
@@ -33,9 +34,12 @@ export function usePlaceOrder(
   const profileState = useProfile();
   const ordersState = useOrders();
   const settingsState = useSettingsProvider();
+  const { t: translation } = useTranslation("molecules");
+  const t = (key: string) => translation(`marketOrderAction.${key}`);
 
   const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
+  const minAmount = currentMarket?.min_amount;
 
   const asks = orderBookState.depth.asks;
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
@@ -158,22 +162,17 @@ export function usePlaceOrder(
   const handleAmountChange = useCallback(
     (value: string): void => {
       const convertedValue = cleanPositiveFloatInput(value.toString());
-
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         if (isSell) {
           setForm({
             ...form,
             amountSell: convertedValue,
-            error:
-              Number(convertedValue) < currentMarket.min_amount &&
-              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
+            error: Number(convertedValue) < minAmount && t("errorMessage"),
           });
         } else {
           setForm({
             ...form,
-            error:
-              Number(convertedValue) < currentMarket.min_amount &&
-              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
+            error: Number(convertedValue) < minAmount && t("errorMessage"),
             amountBuy: convertedValue,
           });
         }
@@ -187,15 +186,7 @@ export function usePlaceOrder(
         };
       });
     },
-    [
-      form,
-      qtyPrecision,
-      isSell,
-      setForm,
-      currentMarket?.min_amount,
-      bestBidPrice,
-      bestAskPrice,
-    ]
+    [qtyPrecision, isSell, setForm, form, minAmount, t, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -362,9 +353,7 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
-            error:
-              Number(amount) < currentMarket?.min_amount &&
-              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
+            error: Number(amount) < minAmount && t("errorMessage"),
           });
         }
       }
@@ -379,9 +368,7 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountBuy: Decimal.format(amount, qtyPrecision),
-            error:
-              Number(amount) < currentMarket?.min_amount &&
-              `amount cannot be lesser than minimum amout ${currentMarket.min_amount}`,
+            error: Number(amount) < minAmount && t("errorMessage"),
           });
         }
       }
@@ -418,7 +405,8 @@ export function usePlaceOrder(
       form,
       setForm,
       qtyPrecision,
-      currentMarket?.min_amount,
+      minAmount,
+      t,
       availableQuoteAmount,
       bestBidPrice,
       bestAskPrice,
@@ -461,8 +449,6 @@ export function usePlaceOrder(
     percentageNum: number;
     isActive: boolean;
   }) => {
-    console.log(data, "data");
-
     const newSlider = [...slider].map((slides) => {
       slides.percentageNum === data.percentageNum
         ? (slides.isActive = true)
