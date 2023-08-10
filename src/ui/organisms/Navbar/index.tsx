@@ -48,7 +48,7 @@ export const Navbar = ({ onOpenMarkets }) => {
 
           <NavbarItem
             label={t("price%24h")}
-            info={priceChangePerCent}
+            info={parseFloat(priceChangePerCent).toFixed(2) + "%"}
             color={isPriceChangeNegative ? "primary" : "green"}
           />
           <NavbarItem
