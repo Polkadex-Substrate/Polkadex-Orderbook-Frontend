@@ -15,7 +15,7 @@ export type Props = {
   theme?: DefaultTheme;
   fill?: T.Colors;
 };
-export const bgStyleVariants = ({ theme, fill }: Props) =>
+export const bgStyleVariants = ({ theme, fill }) =>
   variant({
     prop: "bgStyle",
     variants: {

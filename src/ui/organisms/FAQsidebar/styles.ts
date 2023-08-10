@@ -60,26 +60,22 @@ export const SocialWrapper = styled.div`
 `;
 
 export const Social = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    cursor: pointer;
-    &:hover {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    &:hover svg {
-      fill: white;
-    }
-    transition: 0.2s;
-  `}
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  &:hover svg {
+    fill: white;
+  }
+  transition: 0.2s;
 `;
 
 export const OnlyIcons = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 1rem;
-  `}
+  display: flex;
+  gap: 1rem;
 `;
 
 export const IconWrapper = styled.div`

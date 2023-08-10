@@ -233,7 +233,7 @@ export function Trading() {
   );
 }
 
-const Profile = ({
+export const Profile = ({
   hasTradeAccount,
   hasMainAccount,
   currentMainAccount,

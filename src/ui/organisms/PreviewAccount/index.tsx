@@ -93,7 +93,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
       : onExportTradeAccount({ address: selected?.address });
-  }, [selected, tradingAccountInBrowser]);
+  }, [
+    onExportTradeAccount,
+    onExportTradeAccountActive,
+    selected?.address,
+    tradingAccountInBrowser?.isLocked,
+  ]);
   const handleClose = () =>
     setRemove({
       ...remove,
@@ -253,8 +258,7 @@ const WalletName = ({ label = "", information = "" }) => {
     initialValues: {
       name: information,
     },
-    onSubmit: (values) => {
-      // console.log(values);
+    onSubmit: () => {
       setState(!state);
     },
   });

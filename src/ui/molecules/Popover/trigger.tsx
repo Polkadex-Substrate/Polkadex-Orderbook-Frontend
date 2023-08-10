@@ -14,7 +14,7 @@ import * as T from "./types";
 import { validateChild } from "@polkadex/orderbook/helpers/validateChild";
 import { Button } from "@polkadex/orderbook-ui/molecules";
 
-export const Trigger: T.PopoverComponent<{}, HTMLElement> = forwardRef(
+export const Trigger: T.PopoverComponent<object, HTMLElement> = forwardRef(
   ({ children, ...props }, ref) => {
     const { triggerRef, overlayTriggerProps, onOpen } = usePopoverContext();
 

@@ -7,15 +7,11 @@ import { intlFormat } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "../Switcher";
-import { AvailableMessage } from "../AvailableMessage";
 
 import * as S from "./styles";
 
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  importAccountJsonValidations,
-  importAccountValidations,
-} from "@polkadex/orderbook/validations";
+import { importAccountJsonValidations } from "@polkadex/orderbook/validations";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 
 const informationData = [

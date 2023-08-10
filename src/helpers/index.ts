@@ -4,7 +4,6 @@ export * from "./filterPrice";
 export * from "./getCurrentDate";
 export * from "./filterPriceCustomStep";
 export * from "./filterPriceSignificantDigit";
-export * from "./handleIncrementalUpdate";
 export * from "./localeDate";
 export * from "./formatPayload";
 export * from "./sortByDate";

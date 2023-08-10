@@ -5,7 +5,7 @@ import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 
 type Props = {
   query: string;
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
   token?: string;
   authMode?: keyof typeof GRAPHQL_AUTH_MODE;
   API?: APIClass;
@@ -38,7 +38,7 @@ export const sendQueryToAppSync = async ({
 
 export const fetchAllFromAppSync = async (
   query: string,
-  variables: Record<string, any>,
+  variables: Record<string, unknown>,
   key: string
 ) => {
   let fullResponse = [];
@@ -56,7 +56,7 @@ export const fetchAllFromAppSync = async (
 
 export const fetchFromAppSync = async (
   query: string,
-  variables: Record<string, any>,
+  variables: Record<string, unknown>,
   key: string
 ) => {
   const res = await sendQueryToAppSync({

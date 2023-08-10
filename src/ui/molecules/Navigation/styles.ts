@@ -12,17 +12,15 @@ export const Main = styled.div<{ isFull?: boolean }>`
 `;
 
 export const Header = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    span {
-      display: block;
-      font-size: 1.6rem;
-      font-weight: 550;
-      margin-left: 1rem;
-    }
-  `}
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  span {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 550;
+    margin-left: 1rem;
+  }
 `;
 
 export const Action = styled.div`

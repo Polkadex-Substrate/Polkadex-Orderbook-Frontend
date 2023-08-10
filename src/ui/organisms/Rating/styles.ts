@@ -19,10 +19,8 @@ export const Image = styled.div`
   cursor: pointer;
 `;
 export const RatingWrapper = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-  `}
+  display: flex;
+  align-items: center;
 `;
 export const RatingText = styled.div<{ value: string }>`
   ${({ theme, value }) => css`

@@ -260,6 +260,5 @@ export const InfoButton = styled.button`
     @media screen and (max-width: 455px) {
       font-size: ${theme.font.sizes.medium};
     }
-
   `}
 `;

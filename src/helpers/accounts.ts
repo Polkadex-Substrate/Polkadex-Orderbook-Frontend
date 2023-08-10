@@ -7,15 +7,10 @@ const fileReader = new FileReader();
 const createBlob = (fileBytes: Uint8Array): Blob =>
   new Blob([fileBytes], { type: "text/plain;charset=utf-8" });
 
-
 export const downloadAccount = (pair: KeyringPair, password: string, address: string) => {
-  try {
-    const pairToJson = keyring.backupAccount(pair, password);
-    const blob = new Blob([JSON.stringify(pairToJson)], { type: "text/plain;charset=utf-8" });
-    FileSaver.saveAs(blob, `${address}.json`);
-  } catch (error) {
-    throw error;
-  }
+  const pairToJson = keyring.backupAccount(pair, password);
+  const blob = new Blob([JSON.stringify(pairToJson)], { type: "text/plain;charset=utf-8" });
+  FileSaver.saveAs(blob, `${address}.json`);
 };
 
 export const uploadAccount = (fileBytes: Uint8Array, password: string = null) => {
@@ -31,7 +26,8 @@ export const uploadAccount = (fileBytes: Uint8Array, password: string = null) =>
       if (!isUndefined(event) && event.target !== null) {
         // Cast to type 'any' since property 'result' does exist on type 'EventTarget'
         // Reference: https://stackoverflow.com/a/45017155/3208553
-        const uploadedFileKeyringPair = JSON.parse((event.target as any).result);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const uploadedFileKeyringPair = JSON.parse((event.target as any)?.result);
         const pair = keyring.restoreAccount(uploadedFileKeyringPair, password);
         return pair;
       }
