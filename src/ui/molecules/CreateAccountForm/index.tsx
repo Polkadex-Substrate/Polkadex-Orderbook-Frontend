@@ -60,6 +60,7 @@ export const CreateAccountForm = ({
       },
     },
     validationSchema: createAccountValidations,
+    validateOnChange: true,
     onSubmit: ({ name, passcode, controllerWallet }) => {
       // TODO: Move to hook
       if (hasData) {
@@ -193,7 +194,7 @@ export const CreateAccountForm = ({
               </S.PasswordFooter>
             )}
           </S.PasswordWrapper>
-          <S.Error> {errors.passcode && touched.passcode && errors.passcode}</S.Error>
+          <S.Error>{errors.passcode}</S.Error>
         </S.Password>
         <S.Footer>
           <button type="button" onClick={onCancel}>
