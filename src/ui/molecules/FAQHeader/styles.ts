@@ -3,7 +3,7 @@ import media from "styled-media-query";
 import Link from "next/link";
 
 export const Header = styled.div<{ noBorder: boolean }>`
-  ${({ noBorder }) => css`
+  ${({ noBorder, theme }) => css`
     padding: 3rem;
     ${!noBorder && `border-bottom: 1px solid ${theme.colors.secondaryBackground}`};
     width: 100%;
