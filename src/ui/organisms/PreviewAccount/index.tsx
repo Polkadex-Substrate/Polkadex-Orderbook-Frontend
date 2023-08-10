@@ -258,8 +258,7 @@ const WalletName = ({ label = "", information = "" }) => {
     initialValues: {
       name: information,
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: () => {
       setState(!state);
     },
   });
