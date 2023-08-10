@@ -6,7 +6,7 @@ import { Popover } from "../Popover";
 import { useDropdownContext } from "./context";
 import * as T from "./types";
 
-export const Trigger: T.DropdownComponent<{}, HTMLElement> = forwardRef(
+export const Trigger: T.DropdownComponent<object, HTMLElement> = forwardRef(
   ({ children, ...props }, ref) => {
     const { triggerProps, menuTriggerRef } = useDropdownContext();
 
