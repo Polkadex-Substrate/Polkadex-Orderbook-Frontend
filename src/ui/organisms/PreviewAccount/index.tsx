@@ -66,6 +66,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
+
   const { selectedAccount: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
 
@@ -93,7 +94,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
       : onExportTradeAccount({ address: selected?.address });
-  }, [selected, tradingAccountInBrowser]);
+  }, [selected, tradingAccountInBrowser, onExportTradeAccount, onExportTradeAccountActive]);
   const handleClose = () =>
     setRemove({
       ...remove,
