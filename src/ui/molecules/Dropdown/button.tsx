@@ -4,7 +4,7 @@ import { forwardRef, useRef } from "react";
 import { Trigger } from "./trigger";
 import * as T from "./types";
 
-export const Button: T.DropdownComponent<{}, HTMLButtonElement> = forwardRef(
+export const Button: T.DropdownComponent<object, HTMLButtonElement> = forwardRef(
   ({ children, ...props }, ref) => {
     const componentRef = useRef(null);
     return (

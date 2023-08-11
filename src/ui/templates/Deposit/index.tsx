@@ -287,7 +287,7 @@ export const DepositTemplate = () => {
   );
 };
 
-const Copy = ({ copyData }) => {
+export const Copy = ({ copyData }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
 

@@ -24,7 +24,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   const fetchbalancesAsync = useCallback(
     async (account: string): Promise<T.IBalanceFromDb[]> => {
-      const res: any = await sendQueryToAppSync({
+      const res = await sendQueryToAppSync({
         query: queries.getAllBalancesByMainAccount,
         variables: {
           main_account: account,

@@ -33,7 +33,7 @@ export type UsePopoverProps = {
 
 export type UsePopoverReturn = ReturnType<typeof usePopover>;
 
-export type PopoverComponent<T = {}, P = HTMLDivElement> = ForwardRefExoticComponent<
+export type PopoverComponent<T = object, P = HTMLDivElement> = ForwardRefExoticComponent<
   PropsWithChildren<T> & RefAttributes<P>
 >;
 

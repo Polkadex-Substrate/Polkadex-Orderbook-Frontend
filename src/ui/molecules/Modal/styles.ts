@@ -97,7 +97,7 @@ export const Overlay = styled("div")<{
   placement: Direction;
   isFull?: boolean;
 }>(
-  ({ isFull }) =>
+  () =>
     css({
       position: "fixed",
       zIndex: 100,

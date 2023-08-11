@@ -88,13 +88,11 @@ export const ProtectPasswordTitle = styled.div`
   }
 `;
 export const ProtectPasswordContent = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  `}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
 
 export const Show = styled.button`
@@ -110,5 +108,13 @@ export const Show = styled.button`
     svg {
       stroke: ${theme.colors.text};
     }
+  `}
+`;
+
+export const Error = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.colors.primary} !important;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
   `}
 `;
