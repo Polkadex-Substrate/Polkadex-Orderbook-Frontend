@@ -45,10 +45,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     );
 
     try {
-      const pairToJson = keyring.backupAccount(selectedAccount, password);
-      selectedAccount.lock();
+      selectedAccount?.isLocked && selectedAccount.unlock(password);
 
-      const blob = new Blob([JSON.stringify(pairToJson)], {
+      const blob = new Blob([JSON.stringify(selectedAccount.toJson())], {
         type: "text/plain;charset=utf-8",
       });
       FileSaver.saveAs(
@@ -173,6 +172,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
         onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
+          onUserSelectAccount({ tradeAddress });
           dispatch(
             A.registerTradeAccountData({
               mnemonic,

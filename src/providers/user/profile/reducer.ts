@@ -135,6 +135,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       const isPresent = userAccounts.find(
         ({ tradeAddress }) => tradeAddress === newAccount.tradeAddress
       );
+      console.log("Came in reducer", action.payload, userAccounts, isPresent);
       if (!isPresent) {
         return {
           ...state,
