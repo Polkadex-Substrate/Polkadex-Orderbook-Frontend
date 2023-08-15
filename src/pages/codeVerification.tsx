@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import { useDisabledPages } from "../hooks/useDisabledPages";
+import { useAuth } from "../providers/user/auth";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
@@ -17,16 +18,18 @@ const CodeVerificationTemplate = dynamic(
 const CodeVerification = () => {
   const { disabled } = useDisabledPages();
   const router = useRouter();
-
+  const email = router?.query?.email as string;
   const {
     authInfo: { isAuthenticated: hasUser },
   } = useProfile();
 
-  if (hasUser) router.push("/trading");
+  const { userConfirmed } = useAuth();
 
-  if (disabled) return <div />;
+  if ((hasUser && userConfirmed) || !email) router.push("/trading");
 
-  return <CodeVerificationTemplate />;
+  if (disabled || !email) return <div />;
+
+  return <CodeVerificationTemplate email={email} />;
 };
 
 export default CodeVerification;

@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import { useDisabledPages } from "../hooks/useDisabledPages";
+import { useAuth } from "../providers/user/auth";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 
@@ -19,7 +20,9 @@ const Sign = () => {
     authInfo: { isAuthenticated: hasUser },
   } = useProfile();
 
-  if (hasUser) router.push("/trading");
+  const { userConfirmed } = useAuth();
+
+  if (hasUser && userConfirmed) router.push("/trading");
 
   if (disabled) return <div />;
 
