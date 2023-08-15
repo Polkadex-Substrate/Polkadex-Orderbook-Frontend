@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
+import { GetServerSideProps } from "next";
 
 import { useDisabledPages } from "../hooks/useDisabledPages";
 import { useAuth } from "../providers/user/auth";
@@ -15,21 +17,44 @@ const CodeVerificationTemplate = dynamic(
     ssr: false,
   }
 );
-const CodeVerification = () => {
+const CodeVerification = ({ email }: { email?: string }) => {
   const { disabled } = useDisabledPages();
   const router = useRouter();
-  const email = router?.query?.email as string;
   const {
     authInfo: { isAuthenticated: hasUser },
   } = useProfile();
 
   const { userConfirmed } = useAuth();
 
-  if ((hasUser && userConfirmed) || !email) router.push("/trading");
+  const shouldRedirect = useMemo(
+    () => (hasUser && userConfirmed) || !email,
+    [hasUser, userConfirmed, email]
+  );
+
+  useEffect(() => {
+    if (shouldRedirect) router.push("/trading");
+  }, [shouldRedirect, router]);
 
   if (disabled || !email) return <div />;
 
   return <CodeVerificationTemplate email={email} />;
 };
 
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const email = query?.email;
+  if (!email)
+    return {
+      redirect: {
+        destination: "/trading",
+        permanent: true,
+      },
+      props: {},
+    };
+
+  return {
+    props: {
+      email,
+    },
+  };
+};
 export default CodeVerification;
