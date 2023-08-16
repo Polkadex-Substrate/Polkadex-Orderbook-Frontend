@@ -24,10 +24,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       const mainAddress = state.userData?.userAccounts?.find(
         ({ tradeAddress }) => _tradeAddress === tradeAddress
       )?.mainAddress;
-      console.log("Came here 1", mainAddress);
       if (mainAddress) {
         const data = { tradeAddress: _tradeAddress, mainAddress };
-        console.log("Came here 2", data);
         dispatch(A.userSetDefaultTradeAccount(_tradeAddress));
         dispatch(A.userAccountSelectData(data));
       }
