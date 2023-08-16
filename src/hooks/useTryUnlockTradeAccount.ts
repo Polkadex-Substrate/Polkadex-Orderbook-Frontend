@@ -6,7 +6,8 @@ export function useTryUnlockTradeAccount(account: TradeAccount) {
       account.unlock("");
     }
   } catch (e) {
-    console.log("error unlocking", e);
+    // We don't need to handle this error, because we are just trying to unlock it
+    console.log(e);
   }
   return {};
 }
