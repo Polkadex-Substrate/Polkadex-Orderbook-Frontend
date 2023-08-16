@@ -280,9 +280,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.previewAccountModalCancel());
   };
 
-  const onExportTradeAccountActive = () => {
+  const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
-  };
+  }, []);
   const { mainAddress, tradeAddress } = selectedAccount;
 
   // subscribe to user account updates notifications

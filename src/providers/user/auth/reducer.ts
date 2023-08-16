@@ -67,7 +67,12 @@ export const authReducer = (state: AuthState, action: AuthAction) => {
     case AUTH_SIGN_IN_ERROR:
       return {
         ...state,
-        signin: { ...state.signin, isLoading: false, isError: true, message: action.error.message },
+        signin: {
+          ...state.signin,
+          isLoading: false,
+          isError: true,
+          message: action.error.message,
+        },
       };
     case AUTH_SIGN_UP_DATA: {
       const { email, userConfirmed } = action.payload;
@@ -85,14 +90,22 @@ export const authReducer = (state: AuthState, action: AuthAction) => {
     case AUTH_SIGN_UP_ERROR:
       return {
         ...state,
-        signup: { ...state.signup, isLoading: false, isError: true, message: action.error.message },
+        signup: {
+          ...state.signup,
+          isLoading: false,
+          isError: true,
+          message: action.error.message,
+        },
       };
     case AUTH_LOGOUT_FETCH:
       return { ...state };
     case AUTH_LOGOUT_DATA:
       return { ...state, ...initialState, logout: { ...state.logout, isSuccess: true } };
     case AUTH_LOGOUT_FAILURE:
-      return { ...state, logout: { ...state.logout, isError: true, message: action.error.message } };
+      return {
+        ...state,
+        logout: { ...state.logout, isError: true, message: action.error.message },
+      };
     case AUTH_FORGOT_PASSWORD_FETCH:
       return { ...state, forgotPassword: { ...state.forgotPassword, isLoading: true } };
     case AUTH_FORGOT_PASSWORD_DATA:

@@ -217,10 +217,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
             userExists: true,
             isConfirmed: false,
           };
-          onUserAuth({
-            email: payload.email,
-            userConfirmed: payload.isConfirmed,
-          });
           onSetUserAuthData(payload);
           onUserAuthentication(payload);
           break;
@@ -232,10 +228,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
             userExists: false,
             isConfirmed: false,
           };
-          onUserAuth({
-            email: payload.email,
-            userConfirmed: payload.isConfirmed,
-          });
           onSetUserAuthData(payload);
           break;
         }

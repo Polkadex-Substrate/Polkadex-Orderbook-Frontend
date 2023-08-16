@@ -1,4 +1,3 @@
-import { theme } from "@bigheads/core";
 import styled, { css } from "styled-components";
 
 export const Label = styled.label`
@@ -49,7 +48,7 @@ export const Input = styled.input`
 `;
 
 export const Text = styled.div<{ checked: boolean }>`
-  ${({ theme, checked }) => css`
+  ${({ checked }) => css`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

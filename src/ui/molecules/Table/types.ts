@@ -31,7 +31,7 @@ export type UseTableAriaProps = {
 };
 export type TableForwardProps = TableProps & TableAttrProps;
 
-export type TableComponent<T, P = {}> = ForwardRefExoticComponent<
+export type TableComponent<T, P = object> = ForwardRefExoticComponent<
   PropsWithoutRef<P> & RefAttributes<T>
 > & {
   Cell: typeof Base.TableCellBase;

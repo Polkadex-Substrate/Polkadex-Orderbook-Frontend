@@ -4,4 +4,4 @@ export const serializeBigInt = (data: Record<string, unknown>) => {
       typeof value === "bigint" ? value.toString() : value
     )
   );
-}
+};

@@ -80,7 +80,7 @@
   "navbar": {
     "price": "Price {{price}}",
     "volume24hr": "Volume 24h {{volume}}",
-    "price%24h": "Price % 24h",
+    "price%24h": "24h Change",
     "24hrhigh": "24h High",
     "24hrlow": "24h Low"
   },

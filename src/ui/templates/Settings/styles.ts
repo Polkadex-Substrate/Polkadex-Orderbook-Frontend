@@ -336,15 +336,13 @@ export const Header = styled.div`
 `;
 
 export const AccountHeaderTrigger = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    div {
-      width: 0.8rem;
-    }
-  `}
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  div {
+    width: 0.8rem;
+  }
 `;
 
 export const AccountHeaderContent = styled.div`
@@ -410,11 +408,9 @@ export const WalletCardWrapper = styled.div`
 `;
 
 export const WalletCardAside = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  `}
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
 
 export const WalletCardContent = styled.div`

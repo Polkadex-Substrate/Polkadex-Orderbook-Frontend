@@ -1,4 +1,5 @@
 import { ordersHistoryReducer } from "../../../../src/providers/user/orderHistoryProvider/reducer";
+
 import { OrdersHistoryState } from "@polkadex/orderbook/providers/user/orderHistoryProvider/types";
 import { OrdersHistoryAction } from "@polkadex/orderbook/providers/user/orderHistoryProvider/actions";
 
@@ -33,6 +34,7 @@ const cases: testCases[] = [
       loading: false,
       pageIndex: 0,
       success: false,
+      orderHistoryNextToken: "",
     },
     action: {
       type: "ordersHistory/DATA",
@@ -55,6 +57,7 @@ const cases: testCases[] = [
             time: "2023-03-16T09:52:35.000Z",
           },
         ],
+        nextToken: "",
       },
     },
     output: {
@@ -98,6 +101,7 @@ const cases: testCases[] = [
       ],
       pageIndex: 0,
       success: true,
+      orderHistoryNextToken: "",
     },
   },
   {
@@ -107,6 +111,7 @@ const cases: testCases[] = [
       loading: false,
       pageIndex: 0,
       success: true,
+      orderHistoryNextToken: "",
     },
     action: {
       type: "ordersHistory/openOrders/DATA",
@@ -154,6 +159,7 @@ const cases: testCases[] = [
       ],
       pageIndex: 0,
       success: true,
+      orderHistoryNextToken: "",
     },
   },
 ];

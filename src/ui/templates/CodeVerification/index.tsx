@@ -11,8 +11,8 @@ import { useTimer } from "@polkadex/orderbook/hooks";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useAuth } from "@polkadex/orderbook/providers/user/auth";
 
-export const CodeVerificationTemplate = () => {
-  const { onCodeVerification, onResendCode, email } = useAuth();
+export const CodeVerificationTemplate = ({ email }: { email: string }) => {
+  const { onCodeVerification, onResendCode } = useAuth();
   const { touched, handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
     initialValues: {
       code: "",

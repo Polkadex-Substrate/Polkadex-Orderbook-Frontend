@@ -11,7 +11,7 @@ import { isNegative } from "@polkadex/orderbook/helpers";
 import { InitialMarkets, useMarkets } from "@polkadex/orderbook-hooks";
 import { useMiniGraph } from "@polkadex/orderbook/hooks/useMiniGraph";
 
-export const Markets = ({ isFull = false, hasMargin = false, onClose = undefined }) => {
+export const Markets = ({ hasMargin = false, onClose = undefined }) => {
   const {
     marketTokens,
     marketTickers,

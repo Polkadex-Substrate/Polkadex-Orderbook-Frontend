@@ -113,7 +113,6 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                       id={shortId}
                       isSell={isSell}
                       status={status}
-                      orderSide={order.side}
                       orderType={order.order_type}
                       baseUnit={baseUnit}
                       quoteUnit={quoteUnit}

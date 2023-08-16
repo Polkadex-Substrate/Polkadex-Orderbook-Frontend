@@ -50,14 +50,12 @@ export const EmptyWrapper = styled.div`
 `;
 
 export const Loader = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-weight: 500;
-    padding-top: 5px;
-  `}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 500;
+  padding-top: 5px;
 `;
 
 export const ErrorWrapper = styled.div`

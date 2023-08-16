@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export const ContentMain = styled.div`
-  ${({ theme }) => css`
+  ${() => css`
     &.enter ${ContentWrapper} {
       opacity: 0;
       transform: scale(0.95);

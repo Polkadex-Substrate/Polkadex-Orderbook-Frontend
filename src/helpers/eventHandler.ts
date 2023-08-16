@@ -15,7 +15,7 @@ export const createEventsObservable = (name: string): Observable<any> =>
 interface eventHandlerParams {
   name: string;
   eventType: UserEvents;
-  cb: (value: any) => void;
+  cb: (value: unknown) => void;
 }
 export const eventHandler = ({ cb, name, eventType }: eventHandlerParams) => {
   console.log(name, "address");

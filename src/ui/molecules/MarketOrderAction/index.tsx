@@ -24,9 +24,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
   const {
     changeAmount,
     changePrice,
-    updateRange,
     handleSliderClick,
-    rangeValue,
     price,
     total,
     amount,
@@ -41,6 +39,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
     isOrderExecuted,
     showProtectedPassword,
     slider,
+    buttonDisabled,
   } = usePlaceOrder(isSell, isLimit, form, setForm);
 
   const { t: translation } = useTranslation("molecules");
@@ -99,6 +98,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 onChange={(e) => changeAmount(e.currentTarget.value)}
                 disabled={isOrderLoading}
               />
+              <S.Error>{form.error && form.error}</S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (
                   <SliderPercentage
@@ -134,7 +134,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   isLoading={isOrderLoading}
                   isSuccess={isOrderExecuted}
                   type="submit"
-                  disabled={!hasUser || !isSignedIn}
+                  disabled={!hasUser || !isSignedIn || buttonDisabled}
                 />
               ) : (
                 <Link href="/settings">

@@ -3,12 +3,12 @@ import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 
 export const getNewClientId = () => {
   // 32 byte Uint8Array of random string with "webapp-" prefix
-  const client_order_id = new Uint8Array(32);
-  client_order_id.set(new TextEncoder().encode("webapp-"));
+  const clientOrderId = new Uint8Array(32);
+  clientOrderId.set(new TextEncoder().encode("webapp-"));
   for (let i = 9; i < 32; i++) {
-    client_order_id[i] = Math.floor(Math.random() * 256);
+    clientOrderId[i] = Math.floor(Math.random() * 256);
   }
-  return client_order_id;
+  return clientOrderId;
 };
 
 export const executePlaceOrder = async (orderPayload: any[], proxyAddress: string) => {
@@ -22,7 +22,7 @@ export const executePlaceOrder = async (orderPayload: any[], proxyAddress: strin
   return res;
 };
 
-export const parseError = (msg: any) => {
+export const parseError = (msg: unknown) => {
   if (typeof msg === "string") {
     return msg;
   } else {
