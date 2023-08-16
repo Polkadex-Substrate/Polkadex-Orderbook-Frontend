@@ -35,7 +35,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
     },
-    [onHandleError, state?.userData?.userAccounts]
+    [onHandleError, state.userData?.userAccounts]
   );
 
   const getAllMainLinkedAccounts = useCallback(
