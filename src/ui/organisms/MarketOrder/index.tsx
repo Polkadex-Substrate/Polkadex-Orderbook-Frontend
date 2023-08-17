@@ -20,7 +20,7 @@ export const MarketOrder = () => {
   const [form, setForm] = useState<{
     orderType: string;
     price: string;
-    priceMarket?: any;
+    priceMarket?: unknown;
     amountSell: string;
     amountBuy: string;
     erorr: string | null;

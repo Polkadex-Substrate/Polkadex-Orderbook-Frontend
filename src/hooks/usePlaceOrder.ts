@@ -17,7 +17,7 @@ import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settin
 interface FormType {
   orderType: string;
   price: string;
-  priceMarket?: any;
+  priceMarket?: unknown;
   amountSell: string;
   amountBuy: string;
   error: string | null;
