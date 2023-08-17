@@ -1,8 +1,3 @@
-export const getTimeFromResolution = (resolution: string, date: Date) => {
-  const resolutionMilliSeconds = getResolutionInMilliSeconds(resolution);
-  const bucketTime = Math.floor(date.getTime() / resolutionMilliSeconds);
-  return new Date(bucketTime * resolutionMilliSeconds);
-};
 export const getResolutionInMilliSeconds = (resolution: string): number => {
   const msPerMin = 60000;
   switch (resolution) {
