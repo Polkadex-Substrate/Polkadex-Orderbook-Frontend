@@ -40,7 +40,7 @@ export const USER_EVENTS = {
   // send to trade address
   TradeFormat: "TradeFormat",
   // Errors from server
-  Error: "error",
+  error: "error",
 };
 
 export type UserEvents = keyof typeof USER_EVENTS;
@@ -49,12 +49,14 @@ export const ErrorMessages = {
   OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered: ",
 
   CHECK_VALID_AMOUNT: "Use a valid amount instead",
-  CHECK_BALANCE: "Amount can not be greater than balance",
+  CHECK_BALANCE: "The amount you entered exceeds your balance",
   REMAINING_BALANCE: "You need atleast 1 PDEX in your funding account to keep it alive",
   REMAINING_BALANCE_IF_NOT_PDEX:
     "You need atleast 0.000000000001 units of an asset in your funding account to keep it alive.",
   MAX_EIGHT_DIGIT_AFTER_DECIMAL: "Maximum 8 digits are allowed after decimal",
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
+  MUST_BE_A_NUMBER: "Must be a number",
+  TOO_SMALL: "Too Small!",
 };
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;

@@ -7,7 +7,6 @@ import {
   TRANSACTIONS_UPDATE_EVENT,
   TRANSACTIONS_UPDATE_EVENT_DATA,
 } from "./constants";
-
 import { Transaction, TransactionUpdatePayload } from "./types";
 
 export interface TransactionsFetch {

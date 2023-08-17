@@ -6,7 +6,6 @@ export const OrderHistoryCard = ({
   id,
   isSell,
   status,
-  orderSide,
   orderType,
   baseUnit,
   quoteUnit,

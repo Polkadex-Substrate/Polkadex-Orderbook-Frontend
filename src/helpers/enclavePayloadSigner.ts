@@ -13,9 +13,9 @@ export const signPayload = (
 ): SignedOrderPayload => {
   const signatureU8 = userKeyring.sign(payload.toU8a(), { withType: true });
   const signature = u8aToHex(signatureU8);
-  const multi_signature: any = api.createType("MultiSignature", signature);
+  const multiSignature: any = api.createType("MultiSignature", signature);
   const multisignature = {
-    Sr25519: multi_signature.toJSON().sr25519.slice(2),
+    Sr25519: multiSignature.toJSON().sr25519.slice(2),
   };
   return multisignature;
 };

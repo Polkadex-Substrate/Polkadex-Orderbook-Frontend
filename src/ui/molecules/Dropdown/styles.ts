@@ -44,7 +44,7 @@ export const Item = styled("li")<{
       },
     },
   }),
-  ({ theme }) =>
+  () =>
     variant({
       prop: "isFocused",
       variants: {
@@ -96,7 +96,7 @@ export const Command = styled("div")(({ theme }) =>
   })
 );
 
-export const SectionContainer = styled("ul")(({ theme }) => css({}));
+export const SectionContainer = styled("ul")(() => css({}));
 
 export const Menu = styled("ul")<T.DropdownMenuProps>(
   ({ theme, fill, itemFill }) => css`

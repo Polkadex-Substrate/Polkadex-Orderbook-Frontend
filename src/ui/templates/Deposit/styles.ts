@@ -139,7 +139,7 @@ export const SelectInputContainer = styled.div`
     padding-bottom: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-
+    cursor: pointer;
     input {
       width: 100%;
       display: block;
@@ -289,11 +289,9 @@ export const Status = styled.span<{ color: string }>`
 `;
 
 export const Cell = styled.div`
-  ${({ theme }) => css`
-    display: inline-block;
-    vertical-align: middle;
-    font-weight: 500;
-  `}
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 500;
 `;
 
 export const CellName = styled(Cell)`

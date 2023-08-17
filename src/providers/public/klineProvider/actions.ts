@@ -12,6 +12,8 @@ import {
 } from "./constants";
 import { KlineEvent } from "./types";
 
+import { SubscribeBarsCallback } from "public/static/charting_library/charting_library";
+
 export interface KlinePush {
   type: typeof KLINE_PUSH;
   payload: {
@@ -59,6 +61,7 @@ export interface KlineSubscribe {
   payload: {
     market: string;
     interval: string;
+    onUpdateTradingViewRealTime: SubscribeBarsCallback;
   };
 }
 

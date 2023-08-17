@@ -120,6 +120,9 @@ export const Cell = styled.div`
     span {
       white-space: nowrap;
     }
+    &.pdexCell {
+      color: ${theme.colors.tertiaryText};
+    }
   `}
 `;
 
@@ -158,13 +161,25 @@ export const Link = styled.div`
   `}
 `;
 
-export const WithdrawLink = styled(Link)``;
+export const WithdrawLink = styled(Link)`
+  ${({ theme }) => css`
+    &.disabled {
+      color: ${theme.colors.tertiaryText};
+      cursor: not-allowed;
+    }
+  `}
+`;
+
 export const DepositLink = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.green};
     color: ${theme.colors.white};
     :hover {
       background-color: ${theme.colors.green}33;
+    }
+    &.disabled {
+      background-color: ${theme.colors.green}33;
+      cursor: not-allowed;
     }
   `}
 `;

@@ -98,7 +98,7 @@ export const PassCode = styled.div`
 `;
 
 export const LinePassCode = styled.div<{ error?: boolean }>`
-  ${({ theme, error }) => css`
+  ${({ theme }) => css`
     display: flex;
     input {
       width: 100%;

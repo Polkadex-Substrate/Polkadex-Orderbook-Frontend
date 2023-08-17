@@ -18,14 +18,9 @@ import {
   EmptyData,
   Loading,
 } from "@polkadex/orderbook-ui/molecules";
-import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
-import { withdrawValidations } from "@polkadex/orderbook/validations";
+import { depositValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import {
-  MAX_DIGITS_AFTER_DECIMAL,
-  POLKADEX_ASSET,
-  ErrorMessages,
-} from "@polkadex/web-constants";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -35,6 +30,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
@@ -77,62 +73,24 @@ export const DepositTemplate = () => {
     }
   }, [list, routedAsset]);
 
-  // A custom validation function. This must return an object
-  // which keys are symmetrical to our values/initialValues
+  const { handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+    initialValues: {
+      amount: 0.0,
+    },
+    validationSchema: depositValidations(onChainBalance, selectedAsset?.assetId),
+    validateOnChange: true,
+    onSubmit: (values) => {
+      const asset = isAssetPDEX(selectedAsset.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset.assetId };
 
-  // TODO: Try to move these validations in Yup
-  const validate = (values) => {
-    const errors = {} as any;
-    if (values?.amount?.toString().includes("e") || values?.amount?.toString().includes("o")) {
-      errors.amount = ErrorMessages.CHECK_VALID_AMOUNT;
-    }
-    if (/\s/.test(String(values.amount))) {
-      errors.amount = ErrorMessages.WHITESPACE_NOT_ALLOWED;
-    }
-    const balanceAfterDeposit = Number(onChainBalance) - Number(values.amount);
-    if (isAssetPDEX(selectedAsset?.assetId) && balanceAfterDeposit < 1) {
-      errors.amount = ErrorMessages.REMAINING_BALANCE;
-    }
-
-    if (
-      !isAssetPDEX(selectedAsset?.assetId) &&
-      Number(values.amount) &&
-      balanceAfterDeposit < Math.pow(10, -12)
-    ) {
-      errors.amount = ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX;
-    }
-
-    if (+values.amount > onChainBalance) {
-      errors.amount = ErrorMessages.CHECK_BALANCE;
-    }
-
-    if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
-      errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
-
-    return errors;
-  };
-
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, validateForm } =
-    useFormik({
-      initialValues: {
-        amount: 0.0,
-        asset: selectedAsset,
-      },
-      // TODO: re-add the validations
-      validationSchema: withdrawValidations(onChainBalance),
-      validate,
-      onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.assetId)
-          ? { polkadex: null }
-          : { asset: selectedAsset.assetId };
-
-        onFetchDeposit({
-          asset: asset,
-          amount: values.amount,
-          mainAccount: currMainAcc,
-        });
-      },
-    });
+      onFetchDeposit({
+        asset: asset,
+        amount: values.amount,
+        mainAccount: currMainAcc,
+      });
+    },
+  });
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -204,7 +162,7 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {list.map((asset) => (
+                              {filterAssets(list).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>
@@ -225,7 +183,7 @@ export const DepositTemplate = () => {
                         name="amount"
                         label={t("inputLabel")}
                         placeholder="0.00"
-                        error={errors.amount && touched.amount && errors.amount}
+                        error={errors.amount?.toString()}
                         {...getFieldProps("amount")}
                       />
                       <Button
@@ -329,7 +287,7 @@ export const DepositTemplate = () => {
   );
 };
 
-const Copy = ({ copyData }) => {
+export const Copy = ({ copyData }) => {
   const buttonRef = useRef(null);
   const handleOnMouseOut = () => (buttonRef.current.innerHTML = "Copy to clipboard");
 

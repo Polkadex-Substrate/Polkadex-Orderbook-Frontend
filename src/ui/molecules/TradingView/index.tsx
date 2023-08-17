@@ -57,9 +57,6 @@ export const TradingView = () => {
     return allSymbols;
   }, [currentMarket?.name]);
 
-  const chartContainerRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-
   const tvWidget = useRef<IChartingLibraryWidget>();
 
   const getData = useCallback(
@@ -71,16 +68,13 @@ export const TradingView = () => {
           from: new Date(from * 1000),
           to: new Date(to * 1000),
         });
-        onFetchKlineChannel({
-          market: currentMarket?.m,
-          interval: resolution,
-        });
 
         if (klines.length === 0) {
           return [];
         }
 
-        const bars = klines.map((bar) => {
+        const klinesLength = klines.length;
+        const bars = klines.map((bar, index) => {
           return {
             time: bar.timestamp,
             low: bar.low,
@@ -88,10 +82,11 @@ export const TradingView = () => {
             open: bar.open,
             close: bar.close,
             volume: bar.volume,
-            isBarClosed: true,
-            isLastBar: false,
+            isBarClosed: index !== klinesLength - 1,
+            isLastBar: index === klinesLength - 1,
           };
         });
+
         if (bars.length < 1) {
           return [];
         } else {
@@ -101,7 +96,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch, onFetchKlineChannel]
+    [currentMarket, onHandleKlineFetch]
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
@@ -122,7 +117,7 @@ export const TradingView = () => {
             onResult(newSymbols);
           }, 0);
         },
-        async resolveSymbol(symbolName, onResolve, onError, extension) {
+        async resolveSymbol(symbolName, onResolve, onError) {
           const symbols = getAllSymbols();
           const symbolItem = symbols.find(
             ({ full_name: fullName }) => fullName === symbolName
@@ -167,14 +162,12 @@ export const TradingView = () => {
             onError(error);
           }
         },
-        subscribeBars(
-          symbolInfo,
-          resolution,
-          onTick,
-          listenerGuid,
-          onResetCacheNeededCallback
-        ) {
-          onFetchKlineChannel({ market: currentMarket?.m, interval: resolution });
+        subscribeBars(symbolInfo, resolution, onTick) {
+          onFetchKlineChannel({
+            market: currentMarket?.m,
+            interval: resolution,
+            onUpdateTradingViewRealTime: onTick,
+          });
         },
         unsubscribeBars(listenerGuid) {
           console.log("[unsubscribeBars]: Method call with subscriberUID:", listenerGuid);
@@ -189,7 +182,7 @@ export const TradingView = () => {
       user_id: "public_user_id",
       fullscreen: false,
       autosize: true,
-      container: chartContainerRef.current,
+      container: "tv_chart_container",
       disabled_features: [
         "use_localstorage_for_settings",
         "volume_force_overlay",
@@ -236,7 +229,7 @@ export const TradingView = () => {
 
   return (
     <S.Wrapper>
-      <S.Container isVisible={isReady} ref={chartContainerRef} />
+      <S.Container isVisible={isReady} id="tv_chart_container" />
       {!isReady && (
         <S.LoadingWrapper>
           <Keyboard color="primary" />

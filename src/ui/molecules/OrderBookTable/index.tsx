@@ -1,5 +1,3 @@
-import { Skeleton } from "../Skeleton";
-
 import * as S from "./styles";
 
 import { OrderbookPricing, OrderbookTable } from "@polkadex/orderbook-ui/organisms";

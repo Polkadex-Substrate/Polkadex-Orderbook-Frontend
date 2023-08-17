@@ -61,7 +61,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
             background="primary"
             type="submit"
             disabled={!isDisabled}>
-            {t("continue")}
+            {t("confirm")}
           </Button>
         </S.Actions>
       </form>

@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
-
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
