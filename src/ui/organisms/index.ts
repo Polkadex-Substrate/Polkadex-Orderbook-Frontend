@@ -1,5 +1,4 @@
 export * from "./HeaderBack";
-export * from "./Tokens";
 export * from "./Mnemonic";
 export * from "./LoadingSpinner";
 export * from "./PaperWallet";
@@ -7,7 +6,6 @@ export * from "./Markets";
 export * from "./Orderbook";
 export * from "./RecentTrades";
 export * from "./UnlockAccount";
-export * from "./QrCode";
 export * from "./Funds";
 export * from "./TradeHistory";
 export * from "./OpenOrders";
