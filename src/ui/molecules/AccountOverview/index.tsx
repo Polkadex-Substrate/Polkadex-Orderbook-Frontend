@@ -51,7 +51,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
       setSelectedTradeAccount(tradeAcc);
       setSelectedMainAccount(mainAcc);
     }
-  }, [currentUsingAccount]);
+  }, [currentUsingAccount, mainAccounts, tradingAccounts]);
 
   useEffect(() => {
     const accountList: KeyringPair[] = [];

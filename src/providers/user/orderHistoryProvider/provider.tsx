@@ -21,11 +21,16 @@ import { Utils } from "@polkadex/web-helpers";
 import { sortOrdersDescendingTime } from "@polkadex/orderbook/helpers/sortOrderDescendingTime";
 import { Ifilters } from "@polkadex/orderbook-ui/organisms";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
+import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider";
+import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ordersHistoryReducer, initialOrdersHistoryState);
   const profileState = useProfile();
   const { onHandleError } = useSettingsProvider();
+
+  const { currentMarket } = useMarketsProvider();
+  const { selectGetAsset } = useAssetsProvider();
 
   const account: UserAccount = profileState.selectedAccount;
 
@@ -83,7 +88,7 @@ export const OrderHistoryProvider = ({ children }) => {
           main_account: tradeAddress,
           from: dateFromStr,
           to: dateToStr,
-          limit: 5,
+          limit: 10,
           nextToken: nextTokenFetch,
         },
         "listOrderHistorybyMainAccount"
@@ -189,38 +194,66 @@ export const OrderHistoryProvider = ({ children }) => {
     if (usingAccount.tradeAddress) dispatch(A.userOrdersHistoryReset());
   }, [usingAccount.tradeAddress]);
 
+  const isMarketMatch = useCallback(
+    (order: OrderCommon) => {
+      const market = currentMarket?.name;
+      const [base, quote] = order.m.split("-");
+      const baseUnit = selectGetAsset(base)?.symbol;
+      const quoteUnit = selectGetAsset(quote)?.symbol;
+      const marketForOrder = `${baseUnit}/${quoteUnit}`;
+      return marketForOrder === market;
+    },
+    [selectGetAsset, currentMarket?.name]
+  );
+
   const filterOrders = useCallback(
     (filters: Ifilters) => {
-      if (filters?.onlyBuy && filters?.onlySell) {
-        setUpdatedList(list);
-        setUpdatedOpenOrdersSorted(openOrdersSorted);
-      } else if (filters?.onlyBuy) {
-        setUpdatedList(list.filter((data) => data.side?.toUpperCase() === "BID"));
-        setUpdatedOpenOrdersSorted(
-          openOrdersSorted.filter((data) => data.side?.toUpperCase() === "BID")
+      let orderHistoryList = list;
+      let openOrdersList = openOrdersSorted;
+
+      if (filters?.onlyBuy) {
+        orderHistoryList = orderHistoryList.filter(
+          (data) => data.side?.toUpperCase() === "BID"
         );
+        openOrdersList = openOrdersList.filter((data) => data.side?.toUpperCase() === "BID");
       } else if (filters?.onlySell) {
-        setUpdatedList(list.filter((data) => data.side.toUpperCase() === "ASK"));
-        setUpdatedOpenOrdersSorted(
-          openOrdersSorted.filter((data) => data.side?.toUpperCase() === "ASK")
+        orderHistoryList = orderHistoryList.filter(
+          (data) => data.side.toUpperCase() === "ASK"
         );
-      } else if (filters?.hiddenPairs) {
-        setUpdatedList(
-          list.filter((data) => {
-            return data.side.toUpperCase() !== "ASK" || data.side.toUpperCase() !== "BID";
-          })
-        );
-        setUpdatedOpenOrdersSorted(
-          openOrdersSorted.filter((data) => {
-            return data.side.toUpperCase() !== "ASK" || data.side.toUpperCase() !== "BID";
-          })
-        );
-      } else {
-        setUpdatedList(list);
-        setUpdatedOpenOrdersSorted(openOrdersSorted);
+        openOrdersList = openOrdersList.filter((data) => data.side?.toUpperCase() === "ASK");
       }
+
+      const acceptedStatus = {
+        "all transactions": "all",
+        pending: "open",
+        completed: "closed",
+      };
+
+      const status = filters?.status?.toLowerCase();
+      const filterStatus = acceptedStatus[status] ?? status;
+
+      if (filterStatus !== Object.values(acceptedStatus)[0]) {
+        orderHistoryList = orderHistoryList.filter((item) => {
+          return item.status.toLowerCase() === filterStatus;
+        });
+        openOrdersList = openOrdersList.filter((item) => {
+          return item.status.toLowerCase() === filterStatus;
+        });
+      }
+
+      if (filters?.hiddenPairs) {
+        orderHistoryList = orderHistoryList.filter((order) => {
+          return isMarketMatch(order) && order;
+        });
+        openOrdersList = openOrdersList.filter((order) => {
+          return isMarketMatch(order) && order;
+        });
+      }
+
+      setUpdatedList(orderHistoryList);
+      setUpdatedOpenOrdersSorted(openOrdersList);
     },
-    [list, openOrdersSorted]
+    [list, openOrdersSorted, isMarketMatch]
   );
 
   useEffect(() => {
@@ -235,6 +268,20 @@ export const OrderHistoryProvider = ({ children }) => {
       };
     }
   }, [onOrderUpdates, tradeAddress]);
+
+  // for markets order errors the event type is error
+  useEffect(() => {
+    if (tradeAddress?.length) {
+      const subscription = eventHandler({
+        cb: () => onHandleError(`Cannot fully fill market order: not enough liquidity`),
+        name: tradeAddress,
+        eventType: "error",
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [onHandleError, tradeAddress]);
 
   return (
     <Provider

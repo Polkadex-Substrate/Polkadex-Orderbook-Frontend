@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import router from "next/router";
@@ -36,14 +36,21 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
             return;
           }
           case AUTH_ERROR_CODES.USER_NOT_CONFIRMED: {
-            dispatch(A.signInData({ email, isConfirmed: false }));
             onHandleNotification({
               message:
                 "Sign in Failed!, it looks like you have not confirmed your email. Please confirm your email and try again.",
               type: "Attention",
             });
             dispatch(A.signInError(error));
-            router.push("/codeVerification");
+            router.push(
+              {
+                pathname: "/codeVerification",
+                query: {
+                  email,
+                },
+              },
+              "/codeVerification"
+            );
             return;
           }
           default: {
@@ -68,13 +75,27 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
           },
         });
         dispatch(A.signUpData({ userConfirmed, email }));
+        onHandleNotification({
+          message:
+            "Account created successfully. Please check your email for a verification code to confirm your email.",
+          type: "Success",
+        });
+        router.push(
+          {
+            pathname: "/codeVerification",
+            query: {
+              email,
+            },
+          },
+          "/codeVerification"
+        );
       } catch (error) {
         console.log("error: ", error);
         onHandleError(error?.message ?? error);
         dispatch(A.signUpError(error));
       }
     },
-    [onHandleError]
+    [onHandleError, onHandleNotification]
   );
 
   const onLogout = useCallback(() => {
@@ -157,6 +178,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
           type: "Success",
           message: "Successfully created a new account!, please sign in with your new account",
         });
+        router.push("/signIn");
       } catch (error) {
         console.log("error:", error);
         onHandleError(error?.message ?? error);
@@ -187,36 +209,10 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
     []
   );
 
-  // For SignIn Purposes
-  const signinIsSuccess = state.signin.isSuccess;
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const getIsAuthenticated = async () => {
-    try {
-      const { attributes } = await Auth.currentAuthenticatedUser();
-      if (attributes.email) {
-        setIsAuthenticated(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getIsAuthenticated();
-  }, []);
-
-  useEffect(() => {
-    if (signinIsSuccess || isAuthenticated) {
-      router.push("/trading/" + defaultConfig.landingPageMarket);
-    }
-  }, [isAuthenticated, signinIsSuccess]);
+  // Note : getIsAuthenticated function is same as fetchDataOnUserAuth in profile provider. We can remove it.
 
   // For SignUp Purposes
   const signupIsSuccess = state.signup.isSuccess;
-  useEffect(() => {
-    if (signupIsSuccess) router.push("/codeVerification");
-  }, [signupIsSuccess]);
 
   // For Code Verification Purposes
   const isVerificationSuccess = state.userConfirmed;

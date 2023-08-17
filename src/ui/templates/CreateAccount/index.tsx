@@ -23,22 +23,21 @@ export const CreateAccountTemplate = () => {
   const router = useRouter();
   const handleMnemonicUpdate = (value) => setMnemonicString(value);
 
-  const { values, setFieldValue, touched, handleSubmit, errors, getFieldProps, isValid } =
-    useFormik({
-      initialValues: {
-        name: generateUsername({ useRandomNumber: false }),
-        passcode: "",
-      } as Record<string, string>,
-      validationSchema: createAccountValidations,
-      onSubmit: (values) => {
-        tradeWalletState.onRegisterTradeAccount({
-          name: values.name,
-          password: String(values.passcode),
-          address: mnemoicString,
-          allAccounts: extensionWalletState.allAccounts,
-        });
-      },
-    });
+  const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
+    initialValues: {
+      name: generateUsername({ useRandomNumber: false }),
+      passcode: "",
+    } as Record<string, string>,
+    validationSchema: createAccountValidations,
+    onSubmit: (values) => {
+      tradeWalletState.onRegisterTradeAccount({
+        name: values.name,
+        password: String(values.passcode),
+        address: mnemoicString,
+        allAccounts: extensionWalletState.allAccounts,
+      });
+    },
+  });
 
   const { t } = useTranslation("createAccount");
   const { t: tc } = useTranslation("common");

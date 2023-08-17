@@ -386,10 +386,8 @@ export const HistoryTitle = styled.div`
 `;
 
 export const HistoryTabs = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    gap: 2rem;
-  `}
+  display: flex;
+  gap: 2rem;
 `;
 
 export const HistoryHeader = styled.div`

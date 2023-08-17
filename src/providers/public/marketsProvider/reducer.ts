@@ -37,7 +37,7 @@ export const initialMarketsState: MarketsState = {
   currentTicker: defaultTickers,
   tickers: [],
   tickerLoading: false,
-  loading: false,
+  loading: true,
   marketPrice: "0",
 };
 

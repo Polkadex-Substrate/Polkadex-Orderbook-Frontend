@@ -1,6 +1,9 @@
+// TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
+
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -30,6 +33,8 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
+
+  const router = useRouter();
 
   const fetchMarkets = useCallback(async (assets: IPublicAsset[]): Promise<Market[]> => {
     const res = await sendQueryToAppSync({ query: getAllMarkets });
@@ -69,7 +74,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
           const markets = await fetchMarkets(allAssets);
 
           dispatch(A.marketsData(markets));
-          dispatch(A.setCurrentMarketIfUnset(markets[0]));
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -103,7 +107,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     const to = new Date().toISOString();
     // tickers are fetched for the last 24 hours
     const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
-    const res: any = await sendQueryToAppSync({
+    const res = await sendQueryToAppSync({
       query: queries.getMarketTickers,
       variables: { market, from, to },
     });
@@ -114,12 +118,15 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     return {
       m: market,
       priceChange24Hr: _.round(priceChange, precision),
-      priceChangePercent24Hr: _.round(priceChangePercent, precision),
+      priceChangePercent24Hr: _.round(
+        isNaN(priceChangePercent) ? 0 : priceChangePercent,
+        precision
+      ),
       open: _.round(Number(item.o), precision),
       close: _.round(Number(item.c), precision),
       high: _.round(Number(item.h), precision),
       low: _.round(Number(item.l), precision),
-      volumeBase24hr: _.round(Number(item.vb), precision),
+      volumeBase24hr: _.round(isNaN(Number(item.vb)) ? 0 : Number(item.vb), precision),
       volumeQuote24Hr: _.round(Number(item.vq), precision),
     };
   }, []);
@@ -130,6 +137,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     try {
       const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
       const tickers = await Promise.all(tickersPromises);
+
       dispatch(A.marketsTickersData(tickers));
     } catch (error) {
       console.error("Market tickers fetch error", error?.errors);
@@ -169,6 +177,10 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(A.setCurrentMarket(market));
   };
 
+  const onSetCurrentMarketIfUnset = (market: Market) => {
+    dispatch(A.setCurrentMarketIfUnset(market));
+  };
+
   useEffect(() => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
@@ -184,6 +196,20 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(setCurrentTicker(state.currentMarket.m));
   }, [state?.currentMarket?.m, state?.tickers]);
 
+  const defaultMarket = router.query.id as string;
+  useEffect(() => {
+    if (state.list.length && defaultMarket) {
+      const findMarket = state.list?.find((v) =>
+        v.name
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase()
+          .includes(defaultMarket.toLowerCase())
+      );
+      const defaultMarketSelected = findMarket ?? state.list[0];
+      onSetCurrentMarketIfUnset(defaultMarketSelected);
+    }
+  }, [state.list, router, defaultMarket]);
+
   return (
     <Provider
       value={{
@@ -191,6 +217,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         onMarketsFetch,
         onMarketTickersFetch,
         setCurrentMarket,
+        onSetCurrentMarketIfUnset,
       }}>
       {children}
     </Provider>

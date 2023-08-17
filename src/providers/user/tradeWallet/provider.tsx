@@ -45,10 +45,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     );
 
     try {
-      const pairToJson = keyring.backupAccount(selectedAccount, password);
-      selectedAccount.lock();
+      selectedAccount?.isLocked && selectedAccount.unlock(password);
 
-      const blob = new Blob([JSON.stringify(pairToJson)], {
+      const blob = new Blob([JSON.stringify(selectedAccount.toJson())], {
         type: "text/plain;charset=utf-8",
       });
       FileSaver.saveAs(
@@ -173,6 +172,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
         onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
+          onUserSelectAccount({ tradeAddress });
           dispatch(
             A.registerTradeAccountData({
               mnemonic,
@@ -199,7 +199,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
       const api: ApiPromise = nativeApiState.api;
-      const { address: trade_Address, allAccounts } = payload;
+      const { address: tradeAddress, allAccounts } = payload;
       const linkedMainAddress =
         tradeAddress &&
         userData?.userAccounts?.find(({ tradeAddress: addr }) => addr === tradeAddress)
@@ -227,7 +227,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           dispatch(A.previewAccountModalCancel());
           dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
           dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          onUserProfileTradeAccountDelete(tradeAddress);
+          onUserProfileTradeAccountDelete({ address: tradeAddress });
         } else {
           throw new Error(res.message);
         }
@@ -249,6 +249,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onRemoveTradeAccountFromBrowser = (address: string) => {
     dispatch(A.removeTradeAccountFromBrowser({ address }));
+    onUserProfileTradeAccountDelete({ address, deleteFromBrowser: true });
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {
@@ -279,9 +280,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.previewAccountModalCancel());
   };
 
-  const onExportTradeAccountActive = () => {
+  const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
-  };
+  }, []);
   const { mainAddress, tradeAddress } = selectedAccount;
 
   // subscribe to user account updates notifications

@@ -77,7 +77,8 @@
     "connectTradingAccount": "Connect Trading Account",
     "signIntoPlaceOrder": "Sign In to Place Order",
     "waiting": "Waiting",
-    "orderCreated": "Order Created"
+    "orderCreated": "Order Created",
+    "errorMessage": "Amount cannot be lesser than minimum amout {{minAmount}} "
   },
   "mnemonic": {
     "placeholder": "Type mnemonic to restore your proxy account in this browser",
@@ -110,7 +111,7 @@
     "summary": "Don’t worry your funds are safe in your funding account",
     "inputPlaceholder": "Type here",
     "cancel": "Cancel",
-    "continue": "Continue",
+    "confirm": "Confirm",
     "toVerify": "To verify, type ",
     "deleteAccount": "delete {{name}} account",
     "below": "below:"
@@ -119,6 +120,6 @@
     "title": "Remove this account from your browser?",
     "description": "Don’t worry your funds are safe in your funding account",
     "cancel": "Cancel",
-    "continue": "Continue"
+    "confirm": "Confirm"
   }
 }

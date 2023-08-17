@@ -78,11 +78,10 @@ export const ContainerActions = styled.div`
 `;
 
 export const ContainerTransactions = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  `}
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
 `;
 
 export const Icon = styled.div`

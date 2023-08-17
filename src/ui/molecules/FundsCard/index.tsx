@@ -2,16 +2,7 @@ import * as S from "./styles";
 
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
-export const FundsCard = ({
-  id,
-  name,
-  ticker,
-  lockedAmount = 0.0,
-  lockedAmountFiat = 0.0,
-  amount = 0.0,
-  amountFiat = 0.0,
-  locked = true,
-}) => (
+export const FundsCard = ({ name, ticker, lockedAmount = 0.0, amount = 0.0 }) => (
   <S.Tr>
     <S.Td>
       <S.Tag>Pair</S.Tag>

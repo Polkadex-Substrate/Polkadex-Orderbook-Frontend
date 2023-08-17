@@ -1,7 +1,8 @@
 // TODO: Type response
 
 export const getIsDecreasingArray = (recentTrades): [boolean] => {
-  const res: any = new Array(recentTrades.length);
+  const res: [boolean] = new Array(recentTrades.length) as [boolean];
+
   for (let i = recentTrades.length - 1; i >= 0; i--) {
     if (i === recentTrades.length - 1) {
       res[i] = false;

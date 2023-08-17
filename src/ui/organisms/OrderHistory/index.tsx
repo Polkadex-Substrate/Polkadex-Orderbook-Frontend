@@ -23,7 +23,14 @@ type Props = {
 };
 
 export const OrderHistory = ({ orderHistory }: Props) => {
-  const { orders, onOrdersHistoryFetch, orderHistoryNextToken, loading, error } = orderHistory;
+  const {
+    orders: filteredOrderHistory,
+    list: totalOrderHistory,
+    onOrdersHistoryFetch,
+    orderHistoryNextToken,
+    loading,
+    error,
+  } = orderHistory;
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
   const priceFixed = currentMarket?.quote_precision;
@@ -33,7 +40,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
   const { selectedAccount } = useProfile();
 
   useEffect(() => {
-    if (orders.length) return;
+    if (totalOrderHistory.length || orderHistoryNextToken) return;
     if (selectedAccount.tradeAddress) {
       onOrdersHistoryFetch({
         dateFrom,
@@ -42,29 +49,37 @@ export const OrderHistory = ({ orderHistory }: Props) => {
         orderHistoryNextToken: null,
       });
     }
-  }, [selectedAccount.tradeAddress, dateFrom, dateTo, onOrdersHistoryFetch, orders.length]);
+  }, [
+    selectedAccount.tradeAddress,
+    dateFrom,
+    dateTo,
+    onOrdersHistoryFetch,
+    totalOrderHistory.length,
+    orderHistoryNextToken,
+  ]);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`orderHistory.${key}`);
 
   return (
     <S.Wrapper>
-      {orders?.length ? (
+      {filteredOrderHistory?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
-              <S.Th>{t("id")}</S.Th>
-              <S.Th>{t("pair")}</S.Th>
-              <S.Th>{t("date")}</S.Th>
-              <S.Th>{t("type")}</S.Th>
-              <S.Th>{t("price")}</S.Th>
-              <S.Th>{t("total")}</S.Th>
-              <S.Th>{t("filled")}</S.Th>
+              <S.Th>Id</S.Th>
+              <S.Th>Pair</S.Th>
+              <S.Th>Date</S.Th>
+              <S.Th>Type</S.Th>
+              <S.Th>Status</S.Th>
+              <S.Th>Price</S.Th>
+              <S.Th>Total</S.Th>
+              <S.Th>Filled</S.Th>
             </S.Tr>
           </S.Thead>
           <S.Tbody>
             <InfiniteScroll
-              dataLength={orders.length}
+              dataLength={filteredOrderHistory.length}
               next={() => {
                 onOrdersHistoryFetch({
                   dateFrom,
@@ -80,8 +95,8 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                   <LoadingSpinner size="2rem" />
                 </S.Loader>
               }>
-              {orders &&
-                orders.map((order: OrderCommon, i) => {
+              {filteredOrderHistory &&
+                filteredOrderHistory.map((order: OrderCommon, i) => {
                   const [base, quote] = order.m.split("-");
                   const date = new Date(order.time).toLocaleString();
                   const isSell = order.side === "Ask";
@@ -91,13 +106,13 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                   const avgPrice = order.avg_filled_price;
                   const shortId =
                     order.id.slice(0, 4) + "..." + order.id.slice(order.id.length - 4);
-
+                  const status = order.status;
                   return (
                     <OrderHistoryCard
                       key={i}
                       id={shortId}
                       isSell={isSell}
-                      orderSide={order.side}
+                      status={status}
                       orderType={order.order_type}
                       baseUnit={baseUnit}
                       quoteUnit={quoteUnit}

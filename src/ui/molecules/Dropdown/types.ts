@@ -63,7 +63,7 @@ export type DropdownItemWrapperProps = {
 
 export type UseDropdownReturn = ReturnType<typeof useDropdown>;
 
-export type DropdownComponent<T = {}, P = HTMLElement> = ForwardRefExoticComponent<
+export type DropdownComponent<T = object, P = HTMLElement> = ForwardRefExoticComponent<
   PropsWithChildren<T> & RefAttributes<P>
 >;
 

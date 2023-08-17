@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import { DepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/provider";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -23,6 +23,7 @@ const Deposit = () => {
 
   const {
     authInfo: { isAuthenticated: hasUser },
+    auth: { isLoading },
     selectedAccount: { mainAddress },
   } = useProfile();
   const profileState = useProfile();
@@ -41,9 +42,8 @@ const Deposit = () => {
     [hasUser, isRegistered, hasSelectedAccount]
   );
 
-  useEffect(() => {
-    if (!hasUser) router?.push("/accountManager/");
-  }, [hasUser, router]);
+  if (!isLoading && !hasUser) router?.push("/trading/");
+
   if (shouldRedirect || disabled) return <div />;
 
   return (

@@ -1,11 +1,13 @@
 // TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
-import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/orderbook/constants";
+import { useTryUnlockTradeAccount } from "./useTryUnlockTradeAccount";
+
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -20,6 +22,7 @@ interface FormType {
   priceMarket?: any;
   amountSell: string;
   amountBuy: string;
+  error: string | null;
 }
 
 export function usePlaceOrder(
@@ -33,9 +36,15 @@ export function usePlaceOrder(
   const profileState = useProfile();
   const ordersState = useOrders();
   const settingsState = useSettingsProvider();
+  const { t: translation } = useTranslation("molecules");
+  const t = useCallback(
+    (key: string, args = {}) => translation(`marketOrderAction.${key}`, args),
+    [translation]
+  );
 
   const { currentMarket, currentTicker } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
+  const minAmount = currentMarket?.min_amount;
 
   const asks = orderBookState.depth.asks;
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
@@ -50,10 +59,14 @@ export function usePlaceOrder(
   const { getFreeProxyBalance } = useBalancesProvider();
   const usingTradeAddress = profileState.selectedAccount.tradeAddress;
 
-  const showProtectedPassword = selectTradeAccount(
+  const tradeAccount = selectTradeAccount(
     usingTradeAddress,
     tradeWalletState.allBrowserAccounts
-  )?.isLocked;
+  );
+  // if account is not protected by password use default password to unlock account.
+  useTryUnlockTradeAccount(tradeAccount);
+
+  const showProtectedPassword = tradeAccount?.isLocked;
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
@@ -81,14 +94,8 @@ export function usePlaceOrder(
     ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
     : [-1, -1];
 
-  const pricePrecision = Math.max(
-    decimalPlaces(currentMarket?.price_tick_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
-  const qtyPrecision = Math.max(
-    decimalPlaces(currentMarket?.qty_step_size),
-    MAX_DIGITS_AFTER_DECIMAL
-  );
+  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
+  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
 
@@ -169,10 +176,12 @@ export function usePlaceOrder(
           setForm({
             ...form,
             amountSell: convertedValue,
+            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         } else {
           setForm({
             ...form,
+            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
             amountBuy: convertedValue,
           });
         }
@@ -186,7 +195,7 @@ export function usePlaceOrder(
         };
       });
     },
-    [qtyPrecision, form, setForm, isSell, bestBidPrice, bestAskPrice]
+    [qtyPrecision, isSell, setForm, form, minAmount, t, bestBidPrice, bestAskPrice]
   );
 
   /**
@@ -340,18 +349,20 @@ export function usePlaceOrder(
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
-      const range_decimal = 0.01;
+      const rangeDecimal = 0.01;
       setRangeValue(data.values);
       setChangeType(true);
       // limit and sell
+
       if (isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(form.price)) {
           const amount = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
+            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
@@ -359,12 +370,14 @@ export function usePlaceOrder(
       else if (isLimit && !isSell) {
         if (Number(availableQuoteAmount) && Number(form.price)) {
           const amount = `${
-            (Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal) /
+            (Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal) /
             Number(form.price)
           }`;
+
           setForm({
             ...form,
             amountBuy: Decimal.format(amount, qtyPrecision),
+            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
@@ -372,8 +385,9 @@ export function usePlaceOrder(
       else if (!isLimit && isSell) {
         if (Number(availableBaseAmount) && Number(bestBidPrice)) {
           const amount = `${
-            Number(availableBaseAmount) * Number(data.values[0]) * range_decimal
+            Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
+
           setForm({
             ...form,
             amountSell: Decimal.format(amount, qtyPrecision),
@@ -384,7 +398,7 @@ export function usePlaceOrder(
       else {
         if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
           const amount = `${
-            Number(availableQuoteAmount) * Number(data.values[0]) * range_decimal
+            Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           setForm({
             ...form,
@@ -394,15 +408,17 @@ export function usePlaceOrder(
       }
     },
     [
-      isSell,
       isLimit,
+      isSell,
       availableBaseAmount,
-      availableQuoteAmount,
-      bestAskPrice,
-      bestBidPrice,
       form,
       setForm,
       qtyPrecision,
+      minAmount,
+      t,
+      availableQuoteAmount,
+      bestBidPrice,
+      bestAskPrice,
     ]
   );
 

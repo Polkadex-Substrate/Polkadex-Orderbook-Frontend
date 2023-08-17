@@ -1,8 +1,6 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
-import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
-
 export const Tr = styled.tr`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};

@@ -34,8 +34,8 @@
     "thirdQuestion": "Was ,the FAQ Webpage user friendly?",
     "fourthQuestion": "Is there anything you would want us to improve?",
     "fifthQuestion": "How would you rate our service?",
-    "inputPlaceholder": "Enter your comment",
-    "submitRequest": "Submit a request"
+    "inputPlaceholder": "Enter your comments",
+    "submitRequest": "Submit"
   },
   "funds": {
     "token": "Token",
@@ -80,7 +80,7 @@
   "navbar": {
     "price": "Price {{price}}",
     "volume24hr": "Volume 24h {{volume}}",
-    "price%24h": "Price % 24h",
+    "price%24h": "24h Change",
     "24hrhigh": "24h High",
     "24hrlow": "24h Low"
   },
@@ -131,7 +131,7 @@
     "fundingAccountPresent": "Funding Account not present in polkadot.js extension",
     "protectedPassword": "Protected by password",
     "defaultTradeAccount": "Default trade account",
-    "using": "Using",
+    "using": "Account in use",
     "use": "Use",
     "export": "Export",
     "removeAccount": "Remove account",
@@ -168,7 +168,7 @@
     "allTransactions": "All Transactions",
     "pending": "Pending",
     "completed": "Completed",
-    "canceled": "Canceled"
+    "cancelled": "Cancelled"
   },
   "unlockAccount": {
     "title": "Unlock Account",

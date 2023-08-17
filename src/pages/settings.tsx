@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import { useDisabledPages } from "../hooks/useDisabledPages";
 
@@ -19,11 +18,10 @@ const Settings = () => {
 
   const {
     authInfo: { isAuthenticated: hasUser },
+    auth: { isLoading },
   } = useProfile();
 
-  useEffect(() => {
-    if (!hasUser) router?.push("/trading/");
-  }, [hasUser, router]);
+  if (!isLoading && !hasUser) router?.push("/trading/");
 
   if (!hasUser || disabled) return <div />;
   return <SettingsTemplate />;

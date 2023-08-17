@@ -20,16 +20,11 @@ import {
   Checkbox,
   Modal,
 } from "@polkadex/orderbook-ui/molecules";
-import { getDigitsAfterDecimal } from "@polkadex/orderbook/helpers";
 import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Header, Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import {
-  ErrorMessages,
-  MAX_DIGITS_AFTER_DECIMAL,
-  POLKADEX_ASSET,
-} from "@polkadex/web-constants";
+import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
@@ -40,6 +35,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
+import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 
 const initialValues = {
   amount: 0.0,
@@ -55,8 +51,8 @@ export const WithdrawTemplate = () => {
   const extensionWalletState = useExtensionWallet();
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
-  const { list: assets } = useAssetsProvider();
-  const { allWithdrawals, readyWithdrawals: readyToClaim } = useTransactionsProvider();
+  const { list: assets, selectGetAsset } = useAssetsProvider();
+  const { allWithdrawals, readyWithdrawals: totalReadyToClaim } = useTransactionsProvider();
   const { onFetchClaimWithdraw, loading } = useWithdrawsProvider();
 
   const currMainAcc =
@@ -87,7 +83,7 @@ export const WithdrawTemplate = () => {
 
   useEffect(() => {
     const initialAsset = assets.find(
-      (asset) => asset.name.includes(routedAsset) || asset.symbol.includes(routedAsset)
+      (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
     if (initialAsset) {
       setSelectedAsset(initialAsset);
@@ -104,35 +100,55 @@ export const WithdrawTemplate = () => {
     }
   };
 
-  const validate = (values) => {
-    const errors = {} as any;
-    if (getDigitsAfterDecimal(values.amount) > MAX_DIGITS_AFTER_DECIMAL)
-      errors.amount = ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL;
-    if (/\s/.test(String(values.amount))) {
-      errors.amount = ErrorMessages.WHITESPACE_NOT_ALLOWED;
-    }
-    return errors;
-  };
+  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } = useFormik({
+    initialValues,
+    validationSchema: withdrawValidations(availableAmount?.free_balance),
+    validateOnChange: true,
+    onSubmit: ({ amount }) => {
+      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+      else {
+        /* Calling the handleSubmitWithdraw function with the amount parameter. */
+        handleSubmitWithdraw(amount);
+      }
+    },
+  });
 
-  const { touched, handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } =
-    useFormik({
-      initialValues,
-      validationSchema: withdrawValidations(Number(availableAmount?.free_balance)),
-      validate,
-      onSubmit: ({ amount }) => {
-        if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
-        else {
-          /* Calling the handleSubmitWithdraw function with the amount parameter. */
-          handleSubmitWithdraw(amount);
-        }
-      },
-    });
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
+
+  const handleCheckBox = () => setShowSelectedCoins((prev) => !prev);
 
   const selectedWithdraw = useCallback(
-    (status: Transaction["status"]) =>
-      allWithdrawals?.filter((txn) => txn.status === status)?.flat(),
-    [allWithdrawals]
+    (status: Transaction["status"]) => {
+      let filteredWithdrawls = allWithdrawals?.filter((txn) => txn.status === status)?.flat();
+      if (showSelectedCoins) {
+        filteredWithdrawls = filteredWithdrawls.filter((withdrawl) => {
+          const assetName = selectGetAsset(withdrawl.asset)?.name;
+          return assetName === selectedAsset?.name && withdrawl;
+        });
+      }
+      return filteredWithdrawls;
+    },
+    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name]
   );
+
+  const readyToClaim = useMemo(() => {
+    if (!showSelectedCoins) return totalReadyToClaim;
+
+    return totalReadyToClaim.filter(({ items, id, sid }) => {
+      const filteredItems = items.filter((item) => {
+        const assetName = selectGetAsset(item.asset)?.name;
+        return assetName === selectedAsset?.name && item;
+      });
+
+      return (
+        filteredItems.length && {
+          id,
+          sid,
+          items: filteredItems,
+        }
+      );
+    });
+  }, [totalReadyToClaim, selectGetAsset, selectedAsset?.name, showSelectedCoins]);
 
   const pendingWithdraws = useMemo(() => selectedWithdraw("PENDING"), [selectedWithdraw]);
   const claimedWithdraws = useMemo(() => selectedWithdraw("CONFIRMED"), [selectedWithdraw]);
@@ -231,7 +247,7 @@ export const WithdrawTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {assets.map((asset) => (
+                              {filterAssets(assets).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>
@@ -253,7 +269,7 @@ export const WithdrawTemplate = () => {
                           name="amount"
                           label={t("inputLabel")}
                           placeholder="0.00"
-                          error={errors.amount && touched.amount && errors.amount}
+                          error={errors.amount?.toString()}
                           {...getFieldProps("amount")}
                         />
                         <Button
@@ -289,7 +305,12 @@ export const WithdrawTemplate = () => {
                         </TabHeader>
                       </S.HistoryTabs>
                       <S.HistoryHeaderAside>
-                        <Checkbox name="hide">{t("showSelectedCoin")}</Checkbox>
+                        <Checkbox
+                          name="hide"
+                          checked={showSelectedCoins}
+                          onChange={handleCheckBox}>
+                          {t("showSelectedCoin")}
+                        </Checkbox>
                       </S.HistoryHeaderAside>
                     </S.HistoryHeader>
                     <S.HistoryWrapper>
@@ -410,7 +431,7 @@ const HistoryTable = ({ items }) => {
                 <S.Cell>
                   <span>
                     {intlFormat(
-                      item.date,
+                      new Date(item.time),
                       {
                         year: "2-digit",
                         month: "2-digit",

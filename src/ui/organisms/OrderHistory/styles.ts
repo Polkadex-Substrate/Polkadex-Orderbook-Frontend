@@ -10,7 +10,7 @@ export const Table = styled.table`
 `;
 const Grid = styled.thead`
   tr {
-    grid-template-columns: 1fr 1fr 1.5fr repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr 1.5fr 1fr repeat(4, 1fr);
   }
 `;
 
@@ -64,14 +64,12 @@ export const EmptyWrapper = styled.div`
 `;
 
 export const Loader = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-weight: 500;
-    padding-top: 5px;
-  `}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 500;
+  padding-top: 5px;
 `;
 
 export const ErrorWrapper = styled.div`

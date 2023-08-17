@@ -45,6 +45,10 @@ export const Title = styled.div`
     }
     width: 90%;
     max-width: 140rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
   `}
 `;
 
@@ -116,6 +120,9 @@ export const Cell = styled.div`
     span {
       white-space: nowrap;
     }
+    &.pdexCell {
+      color: ${theme.colors.tertiaryText};
+    }
   `}
 `;
 
@@ -154,13 +161,41 @@ export const Link = styled.div`
   `}
 `;
 
-export const WithdrawLink = styled(Link)``;
+export const WithdrawLink = styled(Link)`
+  ${({ theme }) => css`
+    &.disabled {
+      color: ${theme.colors.tertiaryText};
+      cursor: not-allowed;
+    }
+  `}
+`;
+
 export const DepositLink = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.green};
     color: ${theme.colors.white};
     :hover {
       background-color: ${theme.colors.green}33;
+    }
+    &.disabled {
+      background-color: ${theme.colors.green}33;
+      cursor: not-allowed;
+    }
+  `}
+`;
+
+export const Back = styled.div`
+  ${({ theme }) => css`
+    display: inline-block;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 100%;
+    border: 1px solid ${theme.colors.secondaryBackground};
+    svg {
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
+      width: 1.5rem;
+      height: 1.5rem;
     }
   `}
 `;

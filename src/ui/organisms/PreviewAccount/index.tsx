@@ -66,6 +66,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
+
   const { selectedAccount: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
 
@@ -93,7 +94,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
       : onExportTradeAccount({ address: selected?.address });
-  }, [selected, tradingAccountInBrowser]);
+  }, [
+    onExportTradeAccount,
+    onExportTradeAccountActive,
+    selected?.address,
+    tradingAccountInBrowser?.isLocked,
+  ]);
   const handleClose = () =>
     setRemove({
       ...remove,
@@ -146,7 +152,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) =>
-                  onExportTradeAccount({ address: selected.address, password })
+                  onExportTradeAccount({ address: selected?.address, password })
                 }
                 handleClose={() => onExportTradeAccountActive()}
               />
@@ -189,10 +195,12 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
                       label={t("protectedPassword")}
                       isActive={tradingAccountInBrowser?.isLocked}
                     />
-                    <DefaultAccount
-                      label={t("defaultTradeAccount")}
-                      tradeAddress={selected?.address}
-                    />
+                    {tradingAccountInBrowser && (
+                      <DefaultAccount
+                        label={t("defaultTradeAccount")}
+                        tradeAddress={selected?.address}
+                      />
+                    )}
                   </S.Box>
                   {tradingAccountInBrowser && (
                     <S.Button
@@ -251,8 +259,7 @@ const WalletName = ({ label = "", information = "" }) => {
     initialValues: {
       name: information,
     },
-    onSubmit: (values) => {
-      // console.log(values);
+    onSubmit: () => {
       setState(!state);
     },
   });

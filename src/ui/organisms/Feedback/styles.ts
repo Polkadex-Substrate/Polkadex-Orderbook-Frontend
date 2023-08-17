@@ -2,9 +2,7 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
 export const Container = styled.div`
-  ${({ theme }) => css`
-    width: 100%;
-  `}
+  width: 100%;
 `;
 
 export const Heading = styled.p`
@@ -45,14 +43,15 @@ export const Input = styled.textarea`
   ${({ theme }) => css`
     width: 100%;
     max-width: 42rem;
-    border: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;
     font-size: small;
-    height: 3.4rem;
+    height: 1.4rem;
     padding-left: 0.8rem;
     padding: 1.5rem;
-    color: white;
+    color: ${theme.colors.text};
+    flex-shrink: 0;
+
     &::placeholder {
       color: ${theme.colors.tertiaryText};
     }
@@ -65,4 +64,55 @@ export const InputError = styled.div`
     color: ${theme.colors.red};
     margin-top: 1rem;
   `}
+`;
+
+export const SwitchWrapper = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  `}
+`;
+
+export const Switch = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    width: 6rem;
+    height: 3rem;
+    background: ${theme.colors.tertiaryBackgroundOpacity};
+    border-radius: 0.4rem;
+    cursor: pointer;
+  `}
+`;
+
+export const SwitchHandle = styled.div<{ active: boolean }>`
+  ${({ theme, active }) => css`
+    width: 2rem;
+    height: 3rem;
+    background-color: ${active
+      ? theme.colors.primary
+      : theme.colors.secondaryBackgroundOpacity};
+    transition: 300ms all;
+    border-radius: 0.4rem;
+    flex-shrink: 0;
+  `}
+`;
+
+export const SwitchText = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  `}
+`;
+
+export const Comment = styled.div<{ maxHeight: number }>`
+  height: ${(p) => `${p.maxHeight}px`};
+  transition: all 0.25s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: column;
+  margin-top: ${(p) => `${p.maxHeight ? "0" : "-1.5rem"}`};
 `;

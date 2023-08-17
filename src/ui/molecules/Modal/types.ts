@@ -5,7 +5,7 @@ import { Footer } from "./footer";
 import { Header } from "./header";
 import { useModal } from "./useModal";
 
-import { BackgroundStyle, BorderStyle, Colors, Direction } from "@polkadex/web-helpers";
+import { BackgroundStyle, BorderStyle, Direction } from "@polkadex/web-helpers";
 
 export type UseModalReturn = ReturnType<typeof useModal>;
 
