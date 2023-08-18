@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 
 import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
@@ -22,6 +22,10 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const { currentMarket } = useMarketsProvider();
   const currentPrice = ordersState.currentPrice;
 
+  // This will be filled in Place Order Component
+  const [amountBuy, setAmountBuy] = useState("");
+  const [amountSell, setAmountSell] = useState("");
+
   /**
    * @description Change market price
    *
@@ -34,6 +38,9 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     const arr = side === "asks" ? asks : bids;
     const priceToSet = arr[index] && Number(arr[index][0]);
     if (currentPrice !== priceToSet) ordersState.onSetCurrentPrice(priceToSet);
+    const amountToSet = arr[index] && Number(arr[index][1]);
+    if (isSell) setAmountSell(String(amountToSet));
+    else setAmountBuy(String(amountToSet));
   };
 
   /**
@@ -64,5 +71,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     priceFixed: currentMarket?.quote_precision || 0,
     amountFixed: currentMarket?.base_precision || 0,
     total: cumulativeVolume,
+    amountBuy,
+    amountSell,
   };
 }
