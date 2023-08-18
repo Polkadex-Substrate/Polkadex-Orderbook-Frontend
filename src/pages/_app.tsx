@@ -4,15 +4,16 @@ import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 // eslint-disable-next-line camelcase
 import { Work_Sans } from "next/font/google";
+import Head from "next/head";
 
+import * as gtag from "../lib/gtag";
 import { useInit } from "../hooks/useInit";
 
 import { defaultThemes, GlobalStyles } from "src/styles";
@@ -28,7 +29,9 @@ import {
   MarketsProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+
 import "@polkadex/orderbook/i18n";
+
 const workSans = Work_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
@@ -82,8 +85,29 @@ function App({ Component, pageProps }: AppProps) {
     return availableRoutes.some((word) => router.pathname.includes(word));
   }, [availableRoutes, router.pathname]);
 
+  useEffect(() => {
+    const handleRouteChange = (url: string) => gtag.pageview(url);
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => router.events.off("routeChangeComplete", handleRouteChange);
+  }, [router.events]);
+
   return (
     <>
+      <Head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', '${gtag.GA_TRACKING_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
+      </Head>
       <ToastContainer transition={Flip} />
       <SettingProvider
         defaultToast={{
@@ -144,7 +168,6 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <GoogleAnalytics trackPageViews />
       <NextNProgress
         color="#E6007A"
         startPosition={0.3}

@@ -23,7 +23,7 @@ console.log("process", process.env.POLKADEX_CHAIN);
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
   polkadexChain: process.env.POLKADEX_CHAIN,
-  gaTrackerKey: process.env.GOOGLE_ANALITYCS_URL,
+  gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
   landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
   withCredentials: false,
   incrementalOrderBook: false,
