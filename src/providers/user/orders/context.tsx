@@ -8,6 +8,7 @@ export const Context = createContext<OrdersContextProps>({
   onPlaceOrders: () => {},
   onCancelOrder: () => {},
   onSetCurrentPrice: () => {},
+  onSetCurrentAmount: () => {},
 });
 
 export const Provider = ({ value, children }: OrdersProviderProps) => {

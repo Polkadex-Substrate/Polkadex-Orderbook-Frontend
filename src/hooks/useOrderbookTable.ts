@@ -15,12 +15,11 @@ export type Props = {
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const orderBookState = useOrderBook();
-  const ordersState = useOrders();
+  const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
   const { currentMarket } = useMarketsProvider();
-  const currentPrice = ordersState.currentPrice;
 
   /**
    * @description Change market price
@@ -34,9 +33,11 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     (index: number, side: "asks" | "bids"): void => {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
-      if (currentPrice !== priceToSet) ordersState.onSetCurrentPrice(priceToSet);
+      if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+      const amountToSet = arr[index] && Number(arr[index][1]);
+      onSetCurrentAmount(amountToSet.toString());
     },
-    [asks, bids, currentPrice, ordersState]
+    [asks, bids, currentPrice, onSetCurrentPrice, onSetCurrentAmount]
   );
 
   /**
