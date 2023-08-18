@@ -64,7 +64,7 @@ module.exports = withPlugins([
     },
     env: {
       POLKADEX_CHAIN: process.env.POLKADEX_CHAIN || "wss://blockchain.polkadex.trade",
-      GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID || "G-PWZK8JEFLX",
+      GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
       ANALYZE: process.env.NEXT_PUBLIC_ANALYZE || "false",
       API_REGION: process.env.API_REGION,
       GRAPHQL_URL: process.env.GRAPHQL_URL,
