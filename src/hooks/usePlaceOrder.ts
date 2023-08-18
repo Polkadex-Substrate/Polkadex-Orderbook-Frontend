@@ -6,6 +6,8 @@ import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../help
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
+import { useTryUnlockTradeAccount } from "./useTryUnlockTradeAccount";
+
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
@@ -57,10 +59,14 @@ export function usePlaceOrder(
   const { getFreeProxyBalance } = useBalancesProvider();
   const usingTradeAddress = profileState.selectedAccount.tradeAddress;
 
-  const showProtectedPassword = selectTradeAccount(
+  const tradeAccount = selectTradeAccount(
     usingTradeAddress,
     tradeWalletState.allBrowserAccounts
-  )?.isLocked;
+  );
+  // if account is not protected by password use default password to unlock account.
+  useTryUnlockTradeAccount(tradeAccount);
+
+  const showProtectedPassword = tradeAccount?.isLocked;
 
   const [tab, setTab] = useState({
     priceLimit: undefined,

@@ -38,32 +38,28 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const { onHandleError, onHandleNotification, hasExtension } = useSettingsProvider();
 
   // Actions
-  const onExportTradeAccount = useCallback(
-    (payload: A.ExportTradeAccountFetch["payload"]) => {
-      const { address, password = "" } = payload;
-      const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
-        (account) => account?.address?.toLowerCase() === address?.toLowerCase()
+  const onExportTradeAccount = (payload: A.ExportTradeAccountFetch["payload"]) => {
+    const { address, password = "" } = payload;
+    const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
+      (account) => account?.address?.toLowerCase() === address?.toLowerCase()
+    );
+
+    try {
+      selectedAccount?.isLocked && selectedAccount.unlock(password);
+
+      const blob = new Blob([JSON.stringify(selectedAccount.toJson())], {
+        type: "text/plain;charset=utf-8",
+      });
+      FileSaver.saveAs(
+        blob,
+        `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
       );
-
-      try {
-        const pairToJson = keyring.backupAccount(selectedAccount, password);
-        selectedAccount.lock();
-
-        const blob = new Blob([JSON.stringify(pairToJson)], {
-          type: "text/plain;charset=utf-8",
-        });
-        FileSaver.saveAs(
-          blob,
-          `${selectedAccount?.meta?.name}-${transformAddress(selectedAccount?.address)}.json`
-        );
-      } catch (error) {
-        onHandleError("Cannot export this account, incorrect password");
-      } finally {
-        dispatch(A.exportTradeAccountData());
-      }
-    },
-    [onHandleError, state.allBrowserAccounts]
-  );
+    } catch (error) {
+      onHandleError("Cannot export this account, incorrect password");
+    } finally {
+      dispatch(A.exportTradeAccountData());
+    }
+  };
 
   const onImportTradeAccountJson = (payload: A.ImportTradeAccountJsonFetch["payload"]) => {
     const { file, password } = payload;
@@ -176,6 +172,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
         onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
+          onUserSelectAccount({ tradeAddress });
           dispatch(
             A.registerTradeAccountData({
               mnemonic,

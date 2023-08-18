@@ -66,6 +66,7 @@ export const PreviewAccount = ({ onClose = undefined, selected, mainAccAddress }
 
   const tradingAccountInBrowser = selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
+
   const { selectedAccount: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading = removesInLoading.includes(selected?.address);
 

@@ -132,6 +132,7 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
 export const Error = styled.p`
   ${({ theme }) => css`
     color: ${theme.colors.red};
+    margin-top: 0.5rem;
   `}
 `;
 
