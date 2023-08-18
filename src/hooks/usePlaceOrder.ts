@@ -1,6 +1,7 @@
 // TODO: Refactor code
-import { useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { FormikHelpers } from "formik";
+// import { useTranslation } from "react-i18next";
 
 import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
@@ -16,20 +17,19 @@ import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWall
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
-interface FormType {
-  orderType: string;
-  price: string;
-  priceMarket?: unknown;
+type FormValues = {
+  priceSell: string;
+  priceBuy: string;
   amountSell: string;
   amountBuy: string;
-  error: string | null;
-}
+};
 
 export function usePlaceOrder(
   isSell: boolean,
   isLimit: boolean,
-  form: FormType,
-  setForm: Dispatch<SetStateAction<FormType>>
+  orderType: "Limit" | "Market",
+  formValues: FormValues,
+  setFormValues: FormikHelpers<FormValues>["setValues"]
 ) {
   const {
     depth: { asks, bids },
@@ -47,21 +47,22 @@ export function usePlaceOrder(
     onSetCurrentPrice,
     onPlaceOrders,
     execute: { isLoading: isOrderLoading, isSuccess: isOrderExecuted },
+    // amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
-  const { currentMarket, currentTicker } = useMarketsProvider();
+  const { currentMarket } = useMarketsProvider();
 
   const { onHandleError } = useSettingsProvider();
 
   const { getFreeProxyBalance } = useBalancesProvider();
 
-  const { t: translation } = useTranslation("molecules");
-  const t = useCallback(
-    (key: string, args = {}) => translation(`marketOrderAction.${key}`, args),
-    [translation]
-  );
+  // const { t: translation } = useTranslation("molecules");
+  // const t = useCallback(
+  //   (key: string, args = {}) => translation(`marketOrderAction.${key}`, args),
+  //   [translation]
+  // );
 
-  const minAmount = currentMarket?.min_amount;
+  // const minAmount = currentMarket?.min_amount;
 
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
 
@@ -80,13 +81,6 @@ export function usePlaceOrder(
   const [tab, setTab] = useState({
     priceLimit: undefined,
   });
-
-  useEffect(() => {
-    setForm((e) => ({
-      ...e,
-      priceMarket: currentTicker || 0,
-    }));
-  }, [currentTicker, setForm]);
 
   const [slider, setSlider] = useState([
     { percentage: "25%", percentageNum: 1, isActive: false },
@@ -157,18 +151,19 @@ export function usePlaceOrder(
    */
   const handlePriceChange = useCallback(
     (price: string): void => {
+      const name = isSell ? "priceSell" : "priceBuy";
       const convertedValue = cleanPositiveFloatInput(price?.toString());
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
-        setForm({
-          ...form,
-          price: convertedValue,
+        setFormValues({
+          ...formValues,
+          [name]: convertedValue,
         });
       }
       setChangeType(false);
       handleCleanPrice && handleCleanPrice();
     },
 
-    [pricePrecision, form, setForm, handleCleanPrice]
+    [pricePrecision, handleCleanPrice, setFormValues, formValues, isSell]
   );
 
   /**
@@ -182,16 +177,16 @@ export function usePlaceOrder(
       const convertedValue = cleanPositiveFloatInput(value.toString());
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         if (isSell) {
-          setForm({
-            ...form,
+          setFormValues({
+            ...formValues,
             amountSell: convertedValue,
-            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
+            // error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         } else {
-          setForm({
-            ...form,
-            error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
+          setFormValues({
+            ...formValues,
             amountBuy: convertedValue,
+            // error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
@@ -204,7 +199,7 @@ export function usePlaceOrder(
         };
       });
     },
-    [qtyPrecision, isSell, setForm, form, minAmount, t, bestBidPrice, bestAskPrice]
+    [qtyPrecision, isSell, bestBidPrice, bestAskPrice, setFormValues, formValues]
   );
 
   /**
@@ -216,20 +211,22 @@ export function usePlaceOrder(
   // TODO: Type form
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
-    const amount = isSell ? form.amountSell : form.amountBuy;
+    const amount = isSell ? formValues.amountSell : formValues.amountBuy;
     const notify = (description: string) => onHandleError(`Order Failed. ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
     if (
       isLimit &&
       ((!isSell && +total > +userAvailableBalance) ||
-        (isSell && +form.amountSell > +userAvailableBalance))
+        (isSell && +formValues.amountSell > +userAvailableBalance))
     ) {
       notify("Balance not enough");
-    } else if (isLimit && +form.price < currentMarket.min_price) {
+    } else if (isLimit && +formPrice < currentMarket.min_price) {
       notify("Price can not be less than min market price");
-    } else if (isLimit && +form.price > currentMarket.max_price) {
+    } else if (isLimit && +formPrice > currentMarket.max_price) {
       notify("Price can not be greater than max market price");
     } else if (+amount < currentMarket.min_amount) {
       notify("Amount can not be less than min market amount");
@@ -241,7 +238,7 @@ export function usePlaceOrder(
         order_type: isLimit ? "LIMIT" : "MARKET",
         symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
         side: isSell ? "Sell" : "Buy",
-        price: isLimit ? Number(form.price) : 0,
+        price: isLimit ? Number(formPrice) : 0,
         market: currentMarket.id,
         amount: Number(amount),
       });
@@ -255,7 +252,9 @@ export function usePlaceOrder(
    */
   // TODO: Check validation
   const isDisabled = useMemo((): boolean => {
-    const amountInput = isSell ? Number(form.amountSell) : Number(form.amountBuy);
+    const amountInput = isSell ? Number(formValues.amountSell) : Number(formValues.amountBuy);
+
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
 
     const amountAvailable = isSell
       ? Number(availableBaseAmount) <= 0
@@ -263,9 +262,9 @@ export function usePlaceOrder(
 
     const amountUnavailable = isSell
       ? Number(availableBaseAmount) >=
-        Number(form.amountSell) * Number(!isLimit ? 1 : form.price)
+        Number(formValues.amountSell) * Number(!isLimit ? 1 : formPrice)
       : Number(availableQuoteAmount) >=
-        Number(form.amountBuy) * Number(!isLimit ? 1 : form.price);
+        Number(formValues.amountBuy) * Number(!isLimit ? 1 : formPrice);
 
     if (!isLimit) {
       return (
@@ -279,7 +278,7 @@ export function usePlaceOrder(
       return (
         isOrderLoading ||
         !amountInput ||
-        !Number(form.price) ||
+        !Number(formPrice) ||
         amountAvailable ||
         !amountUnavailable ||
         !hasTradeAccount
@@ -287,9 +286,7 @@ export function usePlaceOrder(
     }
   }, [
     isOrderLoading,
-    form.amountBuy,
-    form.amountSell,
-    form.price,
+    formValues,
     isSell,
     availableBaseAmount,
     availableQuoteAmount,
@@ -299,8 +296,11 @@ export function usePlaceOrder(
 
   const calculateTotal = useCallback(() => {
     // limit and sell
+
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
     if (isLimit && isSell) {
-      return Number(form.amountSell) * Number(form.price);
+      return Number(formValues.amountSell) * Number(formPrice);
     }
 
     // limit and buy
@@ -308,7 +308,7 @@ export function usePlaceOrder(
       if (changeTypeIsRange) {
         return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
       }
-      return Number(form.amountBuy) * Number(form.price);
+      return Number(formValues.amountBuy) * Number(formPrice);
     }
 
     // market and sell
@@ -338,9 +338,7 @@ export function usePlaceOrder(
     changeTypeIsRange,
     estimatedTotal?.buy,
     estimatedTotal?.sell,
-    form.amountBuy,
-    form.amountSell,
-    form.price,
+    formValues,
     isLimit,
     isSell,
     rangeValue,
@@ -352,40 +350,44 @@ export function usePlaceOrder(
    * @returns {string} total amount result
    */
   const total = useMemo(() => {
-    return form.amountSell || form.amountBuy ? getEstimatedTotal(calculateTotal()) : "";
-  }, [form.amountBuy, form.amountSell, getEstimatedTotal, calculateTotal]);
+    return formValues.amountSell || formValues.amountBuy
+      ? getEstimatedTotal(calculateTotal())
+      : "";
+  }, [formValues.amountBuy, formValues.amountSell, getEstimatedTotal, calculateTotal]);
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
       const rangeDecimal = 0.01;
       setRangeValue(data.values);
       setChangeType(true);
-      // limit and sell
 
+      const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
+      // limit and sell
       if (isLimit && isSell) {
-        if (Number(availableBaseAmount) && Number(form.price)) {
+        if (Number(availableBaseAmount) && Number(formPrice)) {
           const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
-          setForm({
-            ...form,
+          setFormValues({
+            ...formValues,
             amountSell: Decimal.format(amount, qtyPrecision),
-            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
+            // error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
       // limit and buy
       else if (isLimit && !isSell) {
-        if (Number(availableQuoteAmount) && Number(form.price)) {
+        if (Number(availableQuoteAmount) && Number(formPrice)) {
           const amount = `${
             (Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal) /
-            Number(form.price)
+            Number(formPrice)
           }`;
 
-          setForm({
-            ...form,
+          setFormValues({
+            ...formValues,
             amountBuy: Decimal.format(amount, qtyPrecision),
-            error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
+            // error: Number(amount) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
@@ -396,8 +398,8 @@ export function usePlaceOrder(
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
 
-          setForm({
-            ...form,
+          setFormValues({
+            ...formValues,
             amountSell: Decimal.format(amount, qtyPrecision),
           });
         }
@@ -408,8 +410,8 @@ export function usePlaceOrder(
           const amount = `${
             Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal
           }`;
-          setForm({
-            ...form,
+          setFormValues({
+            ...formValues,
             amountBuy: Decimal.format(amount, qtyPrecision),
           });
         }
@@ -419,14 +421,12 @@ export function usePlaceOrder(
       isLimit,
       isSell,
       availableBaseAmount,
-      form,
-      setForm,
+      formValues,
       qtyPrecision,
-      minAmount,
-      t,
       availableQuoteAmount,
       bestBidPrice,
       bestAskPrice,
+      setFormValues,
     ]
   );
 
@@ -438,27 +438,27 @@ export function usePlaceOrder(
   useEffect(() => {
     // Set estimated total price for the current market
     setEstimatedTotal({
-      sell: Number(form.amountSell) * Number(bestBidPrice),
-      buy: Number(form.amountBuy) / Number(bestAskPrice),
+      sell: Number(formValues.amountSell) * Number(bestBidPrice),
+      buy: Number(formValues.amountBuy) / Number(bestAskPrice),
     });
-  }, [bestAskPrice, bestBidPrice, form]);
+  }, [bestAskPrice, bestBidPrice, formValues.amountSell, formValues.amountBuy]);
 
   useEffect(() => {
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
     // Change Price if has price, the price is form is different of selected price, and the form type is Limit
-    if (
-      form.orderType === "Limit" &&
-      tab.priceLimit &&
-      nextPriceLimitTruncated !== form.price
-    ) {
+    if (orderType === "Limit" && tab.priceLimit && nextPriceLimitTruncated !== formPrice) {
       handlePriceChange(nextPriceLimitTruncated);
     }
   }, [
     tab.priceLimit,
-    form.orderType,
-    form.price,
+    orderType,
+    formValues.priceSell,
+    formValues.priceBuy,
     currentMarket?.quote_precision,
     nextPriceLimitTruncated,
     handlePriceChange,
+    isSell,
   ]);
 
   const handleSliderClick = (data: {
@@ -483,8 +483,6 @@ export function usePlaceOrder(
     changePrice: handlePriceChange,
     updateRange,
     rangeValue,
-    price: form.price,
-    amount: isSell ? form.amountSell : form.amountBuy,
     total,
     executeOrder: handleExecuteOrders,
     buttonDisabled: isDisabled,
