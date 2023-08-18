@@ -31,38 +31,47 @@ export function usePlaceOrder(
   form: FormType,
   setForm: Dispatch<SetStateAction<FormType>>
 ) {
-  const orderBookState = useOrderBook();
-  const tradeWalletState = useTradeWallet();
-  const profileState = useProfile();
-  const ordersState = useOrders();
-  const settingsState = useSettingsProvider();
+  const {
+    depth: { asks, bids },
+  } = useOrderBook();
+
+  const { allBrowserAccounts } = useTradeWallet();
+
+  const {
+    selectedAccount: { tradeAddress },
+    authInfo: { isAuthenticated },
+  } = useProfile();
+
+  const {
+    currentPrice,
+    onSetCurrentPrice,
+    onPlaceOrders,
+    execute: { isLoading: isOrderLoading, isSuccess: isOrderExecuted },
+  } = useOrders();
+
+  const { currentMarket, currentTicker } = useMarketsProvider();
+
+  const { onHandleError } = useSettingsProvider();
+
+  const { getFreeProxyBalance } = useBalancesProvider();
+
   const { t: translation } = useTranslation("molecules");
   const t = useCallback(
     (key: string, args = {}) => translation(`marketOrderAction.${key}`, args),
     [translation]
   );
 
-  const { currentMarket, currentTicker } = useMarketsProvider();
-  const currentPrice = ordersState.currentPrice;
   const minAmount = currentMarket?.min_amount;
 
-  const asks = orderBookState.depth.asks;
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
 
-  const bids = orderBookState.depth.bids;
   const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
 
-  const isOrderLoading = ordersState.execute.isLoading;
-  const isOrderExecuted = ordersState.execute.isSuccess;
-  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
-  const isSignedIn = profileState.authInfo.isAuthenticated;
-  const { getFreeProxyBalance } = useBalancesProvider();
-  const usingTradeAddress = profileState.selectedAccount.tradeAddress;
+  const hasTradeAccount = tradeAddress !== "";
+  const usingTradeAddress = tradeAddress;
 
-  const tradeAccount = selectTradeAccount(
-    usingTradeAddress,
-    tradeWalletState.allBrowserAccounts
-  );
+  const tradeAccount = selectTradeAccount(usingTradeAddress, allBrowserAccounts);
+
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);
 
@@ -137,8 +146,8 @@ export function usePlaceOrder(
       ...tab,
       priceLimit: undefined,
     });
-    ordersState.onSetCurrentPrice(0);
-  }, [setTab, tab, ordersState]);
+    onSetCurrentPrice(0);
+  }, [setTab, tab, onSetCurrentPrice]);
 
   /**
    * @description Change Price
@@ -208,8 +217,7 @@ export function usePlaceOrder(
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
     const amount = isSell ? form.amountSell : form.amountBuy;
-    const notify = (description: string) =>
-      settingsState.onHandleError(`Order Failed. ${description}`);
+    const notify = (description: string) => onHandleError(`Order Failed. ${description}`);
 
     const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
 
@@ -229,7 +237,7 @@ export function usePlaceOrder(
       notify("Amount can not be greater than max market amount");
     } else {
       // VALID TRANSACTION
-      ordersState.onPlaceOrders({
+      onPlaceOrders({
         order_type: isLimit ? "LIMIT" : "MARKET",
         symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
         side: isSell ? "Sell" : "Buy",
@@ -484,7 +492,7 @@ export function usePlaceOrder(
     isOrderExecuted,
     quoteTicker,
     baseTicker,
-    isSignedIn,
+    isSignedIn: isAuthenticated,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
     showProtectedPassword: hasTradeAccount && showProtectedPassword,
