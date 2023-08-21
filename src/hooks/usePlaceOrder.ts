@@ -27,15 +27,25 @@ type FormValues = {
   amountBuy: string;
 };
 
-export function usePlaceOrder(
-  isSell: boolean,
-  isLimit: boolean,
-  orderType: "Limit" | "Market",
-  formValues: FormValues,
-  setFormValues: FormikHelpers<FormValues>["setValues"],
-  errors: FormikErrors<FormValues>,
-  setFormErrors: FormikHelpers<FormValues>["setErrors"]
-) {
+type Props = {
+  isSell: boolean;
+  isLimit: boolean;
+  orderType: "Limit" | "Market";
+  formValues: FormValues;
+  setFormValues: FormikHelpers<FormValues>["setValues"];
+  errors: FormikErrors<FormValues>;
+  setFormErrors: FormikHelpers<FormValues>["setErrors"];
+};
+
+export function usePlaceOrder({
+  isSell,
+  isLimit,
+  orderType,
+  formValues,
+  setFormValues,
+  errors,
+  setFormErrors,
+}: Props) {
   const { t: translation } = useTranslation("molecules");
   const t = useCallback(
     (key: string, args = {}) => translation(`marketOrderAction.errors.${key}`, args),

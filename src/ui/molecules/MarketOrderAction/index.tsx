@@ -54,7 +54,15 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     showProtectedPassword,
     slider,
     buttonDisabled,
-  } = usePlaceOrder(isSell, isLimit, orderType, values, setValues, errors, setErrors);
+  } = usePlaceOrder({
+    isSell,
+    isLimit,
+    orderType,
+    formValues: values,
+    setFormValues: setValues,
+    errors,
+    setFormErrors: setErrors,
+  });
 
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
