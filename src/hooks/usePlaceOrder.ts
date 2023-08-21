@@ -49,9 +49,10 @@ export function usePlaceOrder(
   const {
     currentPrice,
     onSetCurrentPrice,
+    onSetCurrentAmount,
     onPlaceOrders,
     execute: { isLoading: isOrderLoading, isSuccess: isOrderExecuted },
-    // amount: selectedAmountFromOrderbookTable,
+    amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
   const { currentMarket } = useMarketsProvider();
@@ -82,6 +83,7 @@ export function usePlaceOrder(
 
   const [tab, setTab] = useState({
     priceLimit: undefined,
+    amountLimit: undefined,
   });
 
   const [slider, setSlider] = useState([
@@ -103,6 +105,7 @@ export function usePlaceOrder(
   const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
+  const nextAmountLimitTruncated = Decimal.format(tab.amountLimit, qtyPrecision || 0);
 
   /**
    * @description Get asset balance for the current market
@@ -146,6 +149,19 @@ export function usePlaceOrder(
   }, [setTab, tab, onSetCurrentPrice]);
 
   /**
+   * @description Clean Amount
+   *
+   * @returns {void} Dispatch setCurrentAmount action
+   */
+  const handleCleanAmount = useCallback((): void => {
+    setTab({
+      ...tab,
+      amountLimit: undefined,
+    });
+    onSetCurrentAmount("0");
+  }, [setTab, tab, onSetCurrentAmount]);
+
+  /**
    * @description Change Price
    *
    * @param {number} price - The price to set
@@ -182,17 +198,16 @@ export function usePlaceOrder(
           setFormValues({
             ...formValues,
             amountSell: convertedValue,
-            // error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         } else {
           setFormValues({
             ...formValues,
             amountBuy: convertedValue,
-            // error: Number(convertedValue) < minAmount && t("errorMessage", { minAmount }),
           });
         }
       }
       setChangeType(false);
+      handleCleanAmount && handleCleanAmount();
       setEstimatedTotal((estimatedTotal) => {
         return {
           ...estimatedTotal,
@@ -201,7 +216,15 @@ export function usePlaceOrder(
         };
       });
     },
-    [qtyPrecision, isSell, bestBidPrice, bestAskPrice, setFormValues, formValues]
+    [
+      qtyPrecision,
+      isSell,
+      bestBidPrice,
+      bestAskPrice,
+      setFormValues,
+      formValues,
+      handleCleanAmount,
+    ]
   );
 
   // Calls the action for placing order
@@ -457,7 +480,11 @@ export function usePlaceOrder(
   useEffect(() => {
     // Check if the currentPrice is different from the price in the form
     if (currentPrice !== tab.priceLimit) setTab({ ...tab, priceLimit: currentPrice });
-  }, [currentPrice, tab]);
+
+    // Check if the currentPrice is different from the price in the form
+    if (selectedAmountFromOrderbookTable !== tab.amountLimit)
+      setTab({ ...tab, amountLimit: selectedAmountFromOrderbookTable });
+  }, [currentPrice, tab, selectedAmountFromOrderbookTable]);
 
   useEffect(() => {
     // Set estimated total price for the current market
@@ -469,20 +496,31 @@ export function usePlaceOrder(
 
   useEffect(() => {
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+    const formAmount = isSell ? formValues.amountSell : formValues.amountBuy;
 
     // Change Price if has price, the price is form is different of selected price, and the form type is Limit
     if (orderType === "Limit" && tab.priceLimit && nextPriceLimitTruncated !== formPrice) {
       handlePriceChange(nextPriceLimitTruncated);
     }
+
+    if (
+      tab.amountLimit &&
+      +nextAmountLimitTruncated &&
+      formAmount !== nextAmountLimitTruncated
+    ) {
+      handleAmountChange(nextAmountLimitTruncated);
+    }
   }, [
-    tab.priceLimit,
+    tab,
     orderType,
-    formValues.priceSell,
-    formValues.priceBuy,
+    formValues,
     currentMarket?.quote_precision,
     nextPriceLimitTruncated,
     handlePriceChange,
+    handleAmountChange,
+    selectedAmountFromOrderbookTable,
     isSell,
+    nextAmountLimitTruncated,
   ]);
 
   const handleSliderClick = (data: {
