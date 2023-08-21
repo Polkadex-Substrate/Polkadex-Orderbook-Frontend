@@ -54,6 +54,7 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     showProtectedPassword,
     slider,
     buttonDisabled,
+    pricePrecision,
   } = usePlaceOrder(isSell, isLimit, orderType, values, setValues, errors, setErrors);
 
   const { t: translation } = useTranslation("molecules");
@@ -82,7 +83,7 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
             <S.WrapperBalance>
               <small>{t("avaliable")}</small>
               <S.Span>
-                <Decimal fixed={8} hasStyle={false}>
+                <Decimal fixed={pricePrecision} hasStyle={false}>
                   {availableAmount}
                 </Decimal>{" "}
                 {isSell ? baseTicker : quoteTicker}

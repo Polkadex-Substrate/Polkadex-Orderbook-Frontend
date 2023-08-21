@@ -426,7 +426,7 @@ export function usePlaceOrder(
       }
       // Market & Buy
       else {
-        if (Number(availableQuoteAmount) && Number(bestAskPrice)) {
+        if (Number(availableQuoteAmount)) {
           const amount = `${
             Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal
           }`;
@@ -445,7 +445,6 @@ export function usePlaceOrder(
       qtyPrecision,
       availableQuoteAmount,
       bestBidPrice,
-      bestAskPrice,
       setFormValues,
       lastPriceValue,
     ]
@@ -531,5 +530,6 @@ export function usePlaceOrder(
     showProtectedPassword: hasTradeAccount && showProtectedPassword,
     slider,
     handleSliderClick,
+    pricePrecision,
   };
 }
