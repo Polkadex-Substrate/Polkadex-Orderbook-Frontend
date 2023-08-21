@@ -19,6 +19,7 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
+import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 
 type FormValues = {
   priceSell: string;
@@ -27,25 +28,15 @@ type FormValues = {
   amountBuy: string;
 };
 
-type Props = {
-  isSell: boolean;
-  isLimit: boolean;
-  orderType: "Limit" | "Market";
-  formValues: FormValues;
-  setFormValues: FormikHelpers<FormValues>["setValues"];
-  errors: FormikErrors<FormValues>;
-  setFormErrors: FormikHelpers<FormValues>["setErrors"];
-};
-
-export function usePlaceOrder({
-  isSell,
-  isLimit,
-  orderType,
-  formValues,
-  setFormValues,
-  errors,
-  setFormErrors,
-}: Props) {
+export function usePlaceOrder(
+  isSell: boolean,
+  isLimit: boolean,
+  orderType: "Limit" | "Market",
+  formValues: FormValues,
+  setFormValues: FormikHelpers<FormValues>["setValues"],
+  errors: FormikErrors<FormValues>,
+  setFormErrors: FormikHelpers<FormValues>["setErrors"]
+) {
   const { t: translation } = useTranslation("molecules");
   const t = useCallback(
     (key: string, args = {}) => translation(`marketOrderAction.errors.${key}`, args),
@@ -55,6 +46,9 @@ export function usePlaceOrder({
   const {
     depth: { asks, bids },
   } = useOrderBook();
+
+  const { getCurrentTradePrice } = useRecentTradesProvider();
+  const lastPriceValue = getCurrentTradePrice();
 
   const { allBrowserAccounts } = useTradeWallet();
 
@@ -386,7 +380,8 @@ export function usePlaceOrder({
       setRangeValue(data.values);
       setChangeType(true);
 
-      const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+      const formPrice =
+        (isSell ? formValues.priceSell : formValues.priceBuy) || lastPriceValue;
 
       // Limit & Sell
       if (isLimit && isSell) {
@@ -396,6 +391,7 @@ export function usePlaceOrder({
           }`;
           setFormValues({
             ...formValues,
+            priceSell: formPrice,
             amountSell: Decimal.format(amount, qtyPrecision),
           });
         }
@@ -410,6 +406,7 @@ export function usePlaceOrder({
 
           setFormValues({
             ...formValues,
+            priceBuy: formPrice,
             amountBuy: Decimal.format(amount, qtyPrecision),
           });
         }
@@ -450,6 +447,7 @@ export function usePlaceOrder({
       bestBidPrice,
       bestAskPrice,
       setFormValues,
+      lastPriceValue,
     ]
   );
 
