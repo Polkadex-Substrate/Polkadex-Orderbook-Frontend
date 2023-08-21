@@ -35,7 +35,7 @@ type Props = {
 };
 
 export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }: Props) => {
-  const { values, isValid, dirty, setValues, setErrors, errors, touched, setTouched } = formik;
+  const { values, isValid, dirty, setValues, setErrors, errors } = formik;
 
   const {
     changeAmount,
@@ -62,7 +62,6 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
   const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setTouched({ ...touched, [name]: true });
     if (name.startsWith("price")) changePrice(value);
     else changeAmount(value);
   };
@@ -110,8 +109,8 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
                   />
                   <S.Error>
                     {isSell
-                      ? touched.priceSell && errors.priceSell
-                      : touched.priceBuy && errors.priceBuy}
+                      ? values.priceSell && errors.priceSell
+                      : values.priceBuy && errors.priceBuy}
                   </S.Error>
                 </>
               )}
@@ -131,8 +130,8 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
               />
               <S.Error>
                 {isSell
-                  ? touched.amountSell && errors.amountSell
-                  : touched.amountBuy && errors.amountBuy}
+                  ? values.amountSell && errors.amountSell
+                  : values.amountBuy && errors.amountBuy}
               </S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (

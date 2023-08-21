@@ -113,8 +113,8 @@ export const Show = styled.button`
 
 export const Error = styled.div`
   ${({ theme }) => css`
-    color: ${theme.colors.primary} !important;
-    font-size: 1.2rem;
+    color: #ff0087;
+    font-size: 1.25rem;
     margin-bottom: 2rem;
   `}
 `;

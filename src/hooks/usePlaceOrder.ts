@@ -280,6 +280,7 @@ export function usePlaceOrder(
       : "";
   }, [formValues.amountBuy, formValues.amountSell, getEstimatedTotal, calculateTotal]);
 
+  // Handles the form error for entered amount and price
   const onHandleFormError = useCallback(() => {
     const amount = isSell ? formValues.amountSell : formValues.amountBuy;
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
