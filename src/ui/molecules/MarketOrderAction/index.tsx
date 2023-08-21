@@ -35,7 +35,7 @@ type Props = {
 };
 
 export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }: Props) => {
-  const { values, isValid, dirty, setValues } = formik;
+  const { values, isValid, dirty, setValues, setErrors, errors, touched, setTouched } = formik;
 
   const {
     changeAmount,
@@ -54,7 +54,7 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     showProtectedPassword,
     slider,
     buttonDisabled,
-  } = usePlaceOrder(isSell, isLimit, orderType, values, setValues);
+  } = usePlaceOrder(isSell, isLimit, orderType, values, setValues, errors, setErrors);
 
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
@@ -62,11 +62,9 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
   const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (name === "priceBuy" || name === "priceSell") {
-      changePrice(value);
-    } else {
-      changeAmount(value);
-    }
+    setTouched({ ...touched, [name]: true });
+    if (name.startsWith("price")) changePrice(value);
+    else changeAmount(value);
   };
 
   return (
@@ -95,20 +93,27 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
           <S.ContainerForm>
             <form onSubmit={executeOrder}>
               {isLimit && (
-                <MarketInput
-                  label={t("priceLabel")}
-                  icon="Price"
-                  inputInfo={quoteTicker}
-                  fullWidth={true}
-                  type="text"
-                  placeholder="0.00"
-                  id="order-price"
-                  name={isSell ? "priceSell" : "priceBuy"}
-                  value={isSell ? values.priceSell : values.priceBuy}
-                  onChange={(e) => handleCustomChange(e)}
-                  autoComplete="off"
-                  disabled={isOrderLoading}
-                />
+                <>
+                  <MarketInput
+                    label={t("priceLabel")}
+                    icon="Price"
+                    inputInfo={quoteTicker}
+                    fullWidth={true}
+                    type="text"
+                    placeholder="0.00"
+                    id="order-price"
+                    name={isSell ? "priceSell" : "priceBuy"}
+                    value={isSell ? values.priceSell : values.priceBuy}
+                    onChange={(e) => handleCustomChange(e)}
+                    autoComplete="off"
+                    disabled={isOrderLoading}
+                  />
+                  <S.Error>
+                    {isSell
+                      ? touched.priceSell && errors.priceSell
+                      : touched.priceBuy && errors.priceBuy}
+                  </S.Error>
+                </>
               )}
               <MarketInput
                 label={t("amountLabel")}
@@ -124,7 +129,11 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
                 onChange={(e) => handleCustomChange(e)}
                 disabled={isOrderLoading}
               />
-              {/* <S.Error>{form.error && form.error}</S.Error> */}
+              <S.Error>
+                {isSell
+                  ? touched.amountSell && errors.amountSell
+                  : touched.amountBuy && errors.amountBuy}
+              </S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (
                   <SliderPercentage
@@ -135,7 +144,6 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
                   />
                 ))}
               </S.SliderWrapper>
-
               {isLimit && (
                 <MarketInput
                   label={t("totalLabel")}

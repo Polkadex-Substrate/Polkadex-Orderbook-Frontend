@@ -1,9 +1,12 @@
-// TODO: Refactor code
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { FormikHelpers } from "formik";
-// import { useTranslation } from "react-i18next";
+import { FormikErrors, FormikHelpers } from "formik";
 
-import { cleanPositiveFloatInput, decimalPlaces, precisionRegExp } from "../helpers";
+import {
+  cleanPositiveFloatInput,
+  decimalPlaces,
+  precisionRegExp,
+  getAbsoluteNumber,
+} from "../helpers";
 import { useBalancesProvider } from "../providers/user/balancesProvider/useBalancesProvider";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
 
@@ -15,7 +18,6 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { useOrders } from "@polkadex/orderbook/providers/user/orders";
-import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
 type FormValues = {
   priceSell: string;
@@ -29,7 +31,9 @@ export function usePlaceOrder(
   isLimit: boolean,
   orderType: "Limit" | "Market",
   formValues: FormValues,
-  setFormValues: FormikHelpers<FormValues>["setValues"]
+  setFormValues: FormikHelpers<FormValues>["setValues"],
+  errors: FormikErrors<FormValues>,
+  setFormErrors: FormikHelpers<FormValues>["setErrors"]
 ) {
   const {
     depth: { asks, bids },
@@ -51,8 +55,6 @@ export function usePlaceOrder(
   } = useOrders();
 
   const { currentMarket } = useMarketsProvider();
-
-  const { onHandleError } = useSettingsProvider();
 
   const { getFreeProxyBalance } = useBalancesProvider();
 
@@ -202,103 +204,26 @@ export function usePlaceOrder(
     [qtyPrecision, isSell, bestBidPrice, bestAskPrice, setFormValues, formValues]
   );
 
-  /**
-   * @description Execute Order
-   *
-   * @param {FormHandelr<T>} e - The onChange event
-   * @returns {void} Dispatch setCuorderExecuteFetch action
-   */
-  // TODO: Type form
+  // Calls the action for placing order
   const handleExecuteOrders = (e): void => {
     e.preventDefault();
     const amount = isSell ? formValues.amountSell : formValues.amountBuy;
-    const notify = (description: string) => onHandleError(`Order Failed. ${description}`);
-
-    const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
-
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
 
-    if (
-      isLimit &&
-      ((!isSell && +total > +userAvailableBalance) ||
-        (isSell && +formValues.amountSell > +userAvailableBalance))
-    ) {
-      notify("Balance not enough");
-    } else if (isLimit && +formPrice < currentMarket.min_price) {
-      notify("Price can not be less than min market price");
-    } else if (isLimit && +formPrice > currentMarket.max_price) {
-      notify("Price can not be greater than max market price");
-    } else if (+amount < currentMarket.min_amount) {
-      notify("Amount can not be less than min market amount");
-    } else if (+amount > currentMarket.max_amount) {
-      notify("Amount can not be greater than max market amount");
-    } else {
-      // VALID TRANSACTION
-      onPlaceOrders({
-        order_type: isLimit ? "LIMIT" : "MARKET",
-        symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
-        side: isSell ? "Sell" : "Buy",
-        price: isLimit ? Number(formPrice) : 0,
-        market: currentMarket.id,
-        amount: Number(amount),
-      });
-    }
+    onPlaceOrders({
+      order_type: isLimit ? "LIMIT" : "MARKET",
+      symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
+      side: isSell ? "Sell" : "Buy",
+      price: isLimit ? Number(formPrice) : 0,
+      market: currentMarket.id,
+      amount: Number(amount),
+    });
   };
 
-  /**
-   * @description Verify is the button should be disabled
-   *
-   * @returns {boolean}
-   */
-  // TODO: Check validation
-  const isDisabled = useMemo((): boolean => {
-    const amountInput = isSell ? Number(formValues.amountSell) : Number(formValues.amountBuy);
-
-    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
-
-    const amountAvailable = isSell
-      ? Number(availableBaseAmount) <= 0
-      : Number(availableQuoteAmount) <= 0;
-
-    const amountUnavailable = isSell
-      ? Number(availableBaseAmount) >=
-        Number(formValues.amountSell) * Number(!isLimit ? 1 : formPrice)
-      : Number(availableQuoteAmount) >=
-        Number(formValues.amountBuy) * Number(!isLimit ? 1 : formPrice);
-
-    if (!isLimit) {
-      return (
-        isOrderLoading ||
-        !amountInput ||
-        amountAvailable ||
-        !amountUnavailable ||
-        !hasTradeAccount
-      );
-    } else {
-      return (
-        isOrderLoading ||
-        !amountInput ||
-        !Number(formPrice) ||
-        amountAvailable ||
-        !amountUnavailable ||
-        !hasTradeAccount
-      );
-    }
-  }, [
-    isOrderLoading,
-    formValues,
-    isSell,
-    availableBaseAmount,
-    availableQuoteAmount,
-    isLimit,
-    hasTradeAccount,
-  ]);
-
   const calculateTotal = useCallback(() => {
-    // limit and sell
-
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
 
+    // limit and sell
     if (isLimit && isSell) {
       return Number(formValues.amountSell) * Number(formPrice);
     }
@@ -354,6 +279,104 @@ export function usePlaceOrder(
       ? getEstimatedTotal(calculateTotal())
       : "";
   }, [formValues.amountBuy, formValues.amountSell, getEstimatedTotal, calculateTotal]);
+
+  const onHandleFormError = useCallback(() => {
+    const amount = isSell ? formValues.amountSell : formValues.amountBuy;
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
+    const userAvailableBalance = isSell ? availableBaseAmount : availableQuoteAmount;
+
+    const amountType = isSell ? "amountSell" : "amountBuy";
+    const priceType = isSell ? "priceSell" : "priceBuy";
+
+    const absoluteTotal = getAbsoluteNumber(total);
+
+    if (
+      isLimit &&
+      ((!isSell && +absoluteTotal > +userAvailableBalance) ||
+        (isSell && +formValues.amountSell > +userAvailableBalance))
+    ) {
+      setFormErrors({ ...errors, [amountType]: "Balance not enough" });
+    } else if (isLimit && +formPrice < currentMarket?.min_price) {
+      setFormErrors({
+        ...errors,
+        [priceType]: `Price cannot go below the minimum market price of ${currentMarket?.min_price}`,
+      });
+    } else if (isLimit && +formPrice > currentMarket?.max_price) {
+      setFormErrors({
+        ...errors,
+        [priceType]: `Price cannot exceed the maximum market price of ${currentMarket?.max_price}`,
+      });
+    } else if (+amount < currentMarket?.min_amount) {
+      setFormErrors({
+        ...errors,
+        [amountType]: `Amount cannot go below the minimum market amount of ${currentMarket?.min_amount}`,
+      });
+    } else if (+amount > currentMarket?.max_amount) {
+      setFormErrors({
+        ...errors,
+        [amountType]: `Amount cannot exceed the maximum market amount of ${currentMarket?.max_amount}`,
+      });
+    }
+  }, [
+    availableBaseAmount,
+    availableQuoteAmount,
+    currentMarket?.max_amount,
+    currentMarket?.max_price,
+    currentMarket?.min_amount,
+    currentMarket?.min_price,
+    formValues,
+    isLimit,
+    isSell,
+    total,
+    setFormErrors,
+    errors,
+  ]);
+
+  // Verify is the button should be disabled : boolean
+  const isDisabled = useMemo((): boolean => {
+    const amountInput = isSell ? Number(formValues.amountSell) : Number(formValues.amountBuy);
+    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
+    onHandleFormError();
+
+    const amountAvailable = isSell
+      ? Number(availableBaseAmount) <= 0
+      : Number(availableQuoteAmount) <= 0;
+
+    const amountUnavailable = isSell
+      ? Number(availableBaseAmount) >= Number(formValues.amountSell)
+      : Number(availableQuoteAmount) >=
+        Number(formValues.amountBuy) * Number(!isLimit ? 1 : formPrice);
+
+    if (!isLimit) {
+      return (
+        isOrderLoading ||
+        !amountInput ||
+        amountAvailable ||
+        !amountUnavailable ||
+        !hasTradeAccount
+      );
+    } else {
+      return (
+        isOrderLoading ||
+        !amountInput ||
+        !Number(formPrice) ||
+        amountAvailable ||
+        !amountUnavailable ||
+        !hasTradeAccount
+      );
+    }
+  }, [
+    isOrderLoading,
+    formValues,
+    isSell,
+    availableBaseAmount,
+    availableQuoteAmount,
+    isLimit,
+    hasTradeAccount,
+    onHandleFormError,
+  ]);
 
   const updateRange = useCallback(
     (data: { values: Array<number> }) => {
