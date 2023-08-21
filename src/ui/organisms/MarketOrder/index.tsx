@@ -40,9 +40,7 @@ export const MarketOrder = () => {
 
   const formik = useFormik<FormValues>({
     initialValues,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: () => {},
   });
 
   return (
