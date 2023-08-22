@@ -26,6 +26,8 @@ type FormValues = {
   priceBuy: string;
   amountSell: string;
   amountBuy: string;
+  totalBuy: string;
+  totalSell: string;
 };
 
 export function usePlaceOrder(
@@ -106,6 +108,7 @@ export function usePlaceOrder(
 
   const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
   const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
+  const totalPrecision = Math.max(pricePrecision, qtyPrecision);
 
   const nextPriceLimitTruncated = Decimal.format(tab.priceLimit, pricePrecision || 0);
   const nextAmountLimitTruncated = Decimal.format(tab.amountLimit, qtyPrecision || 0);
@@ -146,40 +149,111 @@ export function usePlaceOrder(
     onSetCurrentAmount("0");
   }, [setTab, tab, onSetCurrentAmount]);
 
+  // Calculates total by providing price and amount
+  const calculateTotal = useCallback(
+    (formPrice: string, formAmount: string) => {
+      // Limit & Sell
+      if (isLimit && isSell) {
+        return Number(formAmount) * Number(formPrice);
+      }
+
+      // Limit & Buy
+      else if (isLimit && !isSell) {
+        if (changeTypeIsRange) {
+          return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
+        }
+        return Number(formAmount) * Number(formPrice);
+      }
+
+      // Market & Sell
+      else if (!isLimit && isSell) {
+        if (changeTypeIsRange && Number(availableBaseAmount) && Number(bestBidPrice)) {
+          return (
+            Number(availableBaseAmount) * Number(rangeValue[0]) * 0.01 * Number(bestBidPrice)
+          );
+        }
+        return Number(estimatedTotal.sell) || 0;
+      }
+
+      // Market & Buy
+      else {
+        if (changeTypeIsRange && Number(availableQuoteAmount) && Number(bestAskPrice)) {
+          return (
+            (Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01) /
+            Number(bestAskPrice)
+          );
+        }
+        return Number(estimatedTotal.buy) || 0;
+      }
+    },
+    [
+      availableBaseAmount,
+      availableQuoteAmount,
+      bestAskPrice,
+      bestBidPrice,
+      changeTypeIsRange,
+      estimatedTotal?.buy,
+      estimatedTotal?.sell,
+      isLimit,
+      isSell,
+      rangeValue,
+    ]
+  );
+
   // Handle change price value in form
   const handlePriceChange = useCallback(
     (price: string): void => {
-      const name = isSell ? "priceSell" : "priceBuy";
+      const priceType = isSell ? "priceSell" : "priceBuy";
+      const totalType = isSell ? "totalSell" : "totalBuy";
+      const formAmount = isSell ? formValues.amountSell : formValues.amountBuy;
+
       const convertedValue = cleanPositiveFloatInput(price?.toString());
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
+        const total =
+          formValues.amountSell || formValues.amountBuy
+            ? getEstimatedTotal(calculateTotal(convertedValue, formAmount))
+            : "";
+
         setFormValues({
           ...formValues,
-          [name]: convertedValue,
+          [priceType]: convertedValue,
+          [totalType]: Decimal.format(total, totalPrecision),
         });
       }
       setChangeType(false);
       handleCleanPrice && handleCleanPrice();
     },
 
-    [pricePrecision, handleCleanPrice, setFormValues, formValues, isSell]
+    [
+      pricePrecision,
+      handleCleanPrice,
+      setFormValues,
+      formValues,
+      isSell,
+      calculateTotal,
+      getEstimatedTotal,
+      totalPrecision,
+    ]
   );
 
   // Handle change in amount value in form
   const handleAmountChange = useCallback(
     (value: string): void => {
+      const totalType = isSell ? "totalSell" : "totalBuy";
+      const amountType = isSell ? "amountSell" : "amountBuy";
+      const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
+
       const convertedValue = cleanPositiveFloatInput(value.toString());
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
-        if (isSell) {
-          setFormValues({
-            ...formValues,
-            amountSell: convertedValue,
-          });
-        } else {
-          setFormValues({
-            ...formValues,
-            amountBuy: convertedValue,
-          });
-        }
+        const total = convertedValue
+          ? getEstimatedTotal(calculateTotal(formPrice, convertedValue))
+          : "";
+
+        setFormValues({
+          ...formValues,
+          [amountType]: convertedValue,
+          [totalType]: Decimal.format(total, totalPrecision),
+        });
       }
       setChangeType(false);
       handleCleanAmount && handleCleanAmount();
@@ -199,6 +273,43 @@ export function usePlaceOrder(
       setFormValues,
       formValues,
       handleCleanAmount,
+      calculateTotal,
+      getEstimatedTotal,
+      totalPrecision,
+    ]
+  );
+
+  // Handle change in total value in form (Applicable for Limit orders only)
+  const handleTotalChange = useCallback(
+    (value: string): void => {
+      const totalType = isSell ? "totalSell" : "totalBuy";
+      const priceType = isSell ? "priceSell" : "priceBuy";
+      const amountType = isSell ? "amountSell" : "amountBuy";
+
+      const convertedValue = cleanPositiveFloatInput(value);
+      if (convertedValue.match(precisionRegExp(totalPrecision || 0))) {
+        const formPrice =
+          (isSell ? formValues.priceSell : formValues.priceBuy) || lastPriceValue;
+
+        const estimatedAmount = isSell
+          ? `${Number(value)}`
+          : `${Number(value) / Number(formPrice)}`;
+        setFormValues({
+          ...formValues,
+          [totalType]: value,
+          [priceType]: Decimal.format(formPrice, pricePrecision),
+          [amountType]: Decimal.format(estimatedAmount, qtyPrecision),
+        });
+      }
+    },
+    [
+      formValues,
+      setFormValues,
+      isSell,
+      lastPriceValue,
+      pricePrecision,
+      qtyPrecision,
+      totalPrecision,
     ]
   );
 
@@ -218,62 +329,6 @@ export function usePlaceOrder(
     });
   };
 
-  const calculateTotal = useCallback(() => {
-    const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
-
-    // Limit & Sell
-    if (isLimit && isSell) {
-      return Number(formValues.amountSell) * Number(formPrice);
-    }
-
-    // Limit & Buy
-    else if (isLimit && !isSell) {
-      if (changeTypeIsRange) {
-        return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
-      }
-      return Number(formValues.amountBuy) * Number(formPrice);
-    }
-
-    // Market & Sell
-    else if (!isLimit && isSell) {
-      if (changeTypeIsRange && Number(availableBaseAmount) && Number(bestBidPrice)) {
-        return (
-          Number(availableBaseAmount) * Number(rangeValue[0]) * 0.01 * Number(bestBidPrice)
-        );
-      }
-      return Number(estimatedTotal.sell) || 0;
-    }
-
-    // Market & Buy
-    else {
-      if (changeTypeIsRange && Number(availableQuoteAmount) && Number(bestAskPrice)) {
-        return (
-          (Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01) / Number(bestAskPrice)
-        );
-      }
-      return Number(estimatedTotal.buy) || 0;
-    }
-  }, [
-    availableBaseAmount,
-    availableQuoteAmount,
-    bestAskPrice,
-    bestBidPrice,
-    changeTypeIsRange,
-    estimatedTotal?.buy,
-    estimatedTotal?.sell,
-    formValues,
-    isLimit,
-    isSell,
-    rangeValue,
-  ]);
-
-  // Memoize the total amount to buy/sell based on the amount and price
-  const total = useMemo(() => {
-    return formValues.amountSell || formValues.amountBuy
-      ? getEstimatedTotal(calculateTotal())
-      : "";
-  }, [formValues.amountBuy, formValues.amountSell, getEstimatedTotal, calculateTotal]);
-
   // Handles the form error for entered amount and price
   const onHandleFormError = useCallback(() => {
     const amount = isSell ? formValues.amountSell : formValues.amountBuy;
@@ -284,6 +339,7 @@ export function usePlaceOrder(
     const amountType = isSell ? "amountSell" : "amountBuy";
     const priceType = isSell ? "priceSell" : "priceBuy";
 
+    const total = isSell ? formValues.totalSell : formValues.totalBuy;
     const absoluteTotal = getAbsoluteNumber(total);
 
     if (
@@ -323,7 +379,6 @@ export function usePlaceOrder(
     formValues,
     isLimit,
     isSell,
-    total,
     setFormErrors,
     errors,
     t,
@@ -389,10 +444,12 @@ export function usePlaceOrder(
           const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
+          const total = getEstimatedTotal(calculateTotal(formPrice, amount));
           setFormValues({
             ...formValues,
             priceSell: formPrice,
             amountSell: Decimal.format(amount, qtyPrecision),
+            totalSell: Decimal.format(total, totalPrecision),
           });
         }
       }
@@ -403,11 +460,13 @@ export function usePlaceOrder(
             (Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal) /
             Number(formPrice)
           }`;
+          const total = getEstimatedTotal(calculateTotal(formPrice, amount));
 
           setFormValues({
             ...formValues,
             priceBuy: formPrice,
             amountBuy: Decimal.format(amount, qtyPrecision),
+            totalBuy: Decimal.format(total, totalPrecision),
           });
         }
       }
@@ -447,6 +506,9 @@ export function usePlaceOrder(
       bestBidPrice,
       setFormValues,
       lastPriceValue,
+      totalPrecision,
+      calculateTotal,
+      getEstimatedTotal,
     ]
   );
 
@@ -513,11 +575,11 @@ export function usePlaceOrder(
 
   return {
     availableAmount: isSell ? availableBaseAmount : availableQuoteAmount,
+    changeTotal: handleTotalChange,
     changeAmount: handleAmountChange,
     changePrice: handlePriceChange,
     updateRange,
     rangeValue,
-    total,
     executeOrder: handleExecuteOrders,
     buttonDisabled: isDisabled,
     isOrderLoading,

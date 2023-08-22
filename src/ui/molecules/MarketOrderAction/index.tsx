@@ -25,6 +25,8 @@ type FormValues = {
   priceBuy: string;
   amountSell: string;
   amountBuy: string;
+  totalBuy: string;
+  totalSell: string;
 };
 
 type Props = {
@@ -41,7 +43,7 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     changeAmount,
     changePrice,
     handleSliderClick,
-    total,
+    changeTotal,
     executeOrder,
     isOrderLoading,
     availableAmount,
@@ -64,7 +66,8 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     const name = e.target.name;
     const value = e.target.value;
     if (name.startsWith("price")) changePrice(value);
-    else changeAmount(value);
+    else if (name.startsWith("amount")) changeAmount(value);
+    else changeTotal(value);
   };
 
   return (
@@ -150,11 +153,12 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
                   inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
                   fullWidth={true}
                   type="text"
-                  value={total}
+                  value={isSell ? values.totalSell : values.totalBuy}
+                  name={isSell ? "totalSell" : "totalBuy"}
+                  onChange={(e) => handleCustomChange(e)}
                   placeholder={isLimit ? t("totalLabel") : t("estimatedAmount")}
                   autoComplete="off"
                   disabled={isOrderLoading}
-                  readOnly
                 />
               )}
               {hasUser ? (

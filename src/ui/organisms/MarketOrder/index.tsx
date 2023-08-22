@@ -19,6 +19,8 @@ type FormValues = {
   priceBuy: string;
   amountSell: string;
   amountBuy: string;
+  totalBuy: string;
+  totalSell: string;
 };
 
 export const MarketOrder = () => {
@@ -35,6 +37,8 @@ export const MarketOrder = () => {
       priceBuy: "",
       amountSell: "",
       amountBuy: "",
+      totalBuy: "",
+      totalSell: "",
     };
   }, []);
 
