@@ -28,7 +28,6 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
    * @param {string} side - Market side (asks/bids)
    * @returns {void} Dispatch setCurrentPrice action
    */
-  // TODO: Create unbounding
   const changeMarketPrice = useCallback(
     (index: number, side: "asks" | "bids"): void => {
       const arr = side === "asks" ? asks : bids;
