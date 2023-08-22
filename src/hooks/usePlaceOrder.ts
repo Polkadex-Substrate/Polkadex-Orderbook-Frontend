@@ -342,13 +342,7 @@ export function usePlaceOrder(
     const total = isSell ? formValues.totalSell : formValues.totalBuy;
     const absoluteTotal = getAbsoluteNumber(total);
 
-    if (
-      isLimit &&
-      ((!isSell && +absoluteTotal > +userAvailableBalance) ||
-        (isSell && +formValues.amountSell > +userAvailableBalance))
-    ) {
-      setFormErrors({ ...errors, [amountType]: t("notEnoughBalance") });
-    } else if (isLimit && +formPrice < currentMarket?.min_price) {
+    if (isLimit && +formPrice < currentMarket?.min_price) {
       setFormErrors({
         ...errors,
         [priceType]: t("minMarketPrice", { minMarketPrice: currentMarket?.min_price }),
@@ -368,6 +362,14 @@ export function usePlaceOrder(
         ...errors,
         [amountType]: t("maxMarketAmount", { maxMarketAmount: currentMarket?.max_amount }),
       });
+    } else if (
+      isLimit &&
+      ((!isSell && +absoluteTotal > +userAvailableBalance) ||
+        (isSell && +formValues.amountSell > +userAvailableBalance))
+    ) {
+      setFormErrors({ ...errors, [amountType]: t("notEnoughBalance") });
+    } else if (!isLimit && +amount > +userAvailableBalance) {
+      setFormErrors({ ...errors, [amountType]: t("notEnoughBalance") });
     }
   }, [
     availableBaseAmount,
