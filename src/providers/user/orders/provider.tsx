@@ -32,7 +32,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   // Actions
   const onPlaceOrders = async (payload: A.OrderExecuteFetch["payload"]) => {
     try {
-      const { side, price, order_type, amount, symbol } = payload;
+      const { side, price, order_type: orderType, amount, symbol } = payload;
       const account: UserAccount = profileState.selectedAccount;
       const address = account.tradeAddress;
       const mainAddress = account.mainAddress;
@@ -48,7 +48,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         const order = createOrderPayload(
           api,
           address,
-          order_type,
+          orderType,
           side,
           symbol[0],
           symbol[1],
@@ -137,6 +137,10 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
     dispatch(A.setCurrentPrice(payload));
   };
 
+  const onSetCurrentAmount = (payload: A.SetAmount["payload"]) => {
+    dispatch(A.setAmount(payload));
+  };
+
   return (
     <Provider
       value={{
@@ -144,6 +148,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         onPlaceOrders,
         onCancelOrder,
         onSetCurrentPrice,
+        onSetCurrentAmount,
       }}>
       {children}
     </Provider>

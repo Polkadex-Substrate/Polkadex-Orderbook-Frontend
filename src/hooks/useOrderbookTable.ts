@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect } from "react";
+import { MutableRefObject, useCallback, useEffect } from "react";
 
 import { mapValues, accumulateVolume, calcMaxVolume } from "../helpers";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
@@ -15,12 +15,11 @@ export type Props = {
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const orderBookState = useOrderBook();
-  const ordersState = useOrders();
+  const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
   const { currentMarket } = useMarketsProvider();
-  const currentPrice = ordersState.currentPrice;
 
   /**
    * @description Change market price
@@ -29,12 +28,16 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
    * @param {string} side - Market side (asks/bids)
    * @returns {void} Dispatch setCurrentPrice action
    */
-  // TODO: Create unbounding
-  const changeMarketPrice = (index: number, side: "asks" | "bids"): void => {
-    const arr = side === "asks" ? asks : bids;
-    const priceToSet = arr[index] && Number(arr[index][0]);
-    if (currentPrice !== priceToSet) ordersState.onSetCurrentPrice(priceToSet);
-  };
+  const changeMarketPrice = useCallback(
+    (index: number, side: "asks" | "bids"): void => {
+      const arr = side === "asks" ? asks : bids;
+      const priceToSet = arr[index] && Number(arr[index][0]);
+      if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+      const amountToSet = arr[index] && Number(arr[index][1]);
+      onSetCurrentAmount(amountToSet.toString());
+    },
+    [asks, bids, currentPrice, onSetCurrentPrice, onSetCurrentAmount]
+  );
 
   /**
    * @description Get max volume based on bids and asks
