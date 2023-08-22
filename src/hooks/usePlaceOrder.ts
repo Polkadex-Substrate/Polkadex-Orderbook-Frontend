@@ -211,7 +211,7 @@ export function usePlaceOrder(
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         const total =
           formValues.amountSell || formValues.amountBuy
-            ? getEstimatedTotal(calculateTotal(convertedValue, formAmount))
+            ? getAbsoluteNumber(getEstimatedTotal(calculateTotal(convertedValue, formAmount)))
             : "";
 
         setFormValues({
@@ -246,7 +246,7 @@ export function usePlaceOrder(
       const convertedValue = cleanPositiveFloatInput(value.toString());
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         const total = convertedValue
-          ? getEstimatedTotal(calculateTotal(formPrice, convertedValue))
+          ? getAbsoluteNumber(getEstimatedTotal(calculateTotal(formPrice, convertedValue)))
           : "";
 
         setFormValues({
@@ -526,6 +526,7 @@ export function usePlaceOrder(
     setSlider(newSlider);
     const percentage = data.percentage.split("%")[0];
     updateRange({ values: [+percentage] });
+    setChangeType(false);
   };
 
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
