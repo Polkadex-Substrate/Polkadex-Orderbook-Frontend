@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo } from "react";
+import { ChangeEvent, useMemo } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 
@@ -20,14 +20,30 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { buySellValidation } from "@polkadex/orderbook/validations";
 
-export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) => {
+type FormValues = {
+  priceSell: string;
+  priceBuy: string;
+  amountSell: string;
+  amountBuy: string;
+  totalBuy: string;
+  totalSell: string;
+};
+
+type Props = {
+  isSell?: boolean;
+  orderType: "Limit" | "Market";
+  isLimit: boolean;
+  formik: ReturnType<typeof useFormik<FormValues>>;
+};
+
+export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }: Props) => {
+  const { values, isValid, dirty, setValues, setErrors, errors } = formik;
+
   const {
     changeAmount,
     changePrice,
     handleSliderClick,
-    price,
-    total,
-    amount,
+    changeTotal,
     executeOrder,
     isOrderLoading,
     availableAmount,
@@ -40,10 +56,19 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
     showProtectedPassword,
     slider,
     buttonDisabled,
-  } = usePlaceOrder(isSell, isLimit, form, setForm);
+    pricePrecision,
+  } = usePlaceOrder(isSell, isLimit, orderType, values, setValues, errors, setErrors);
 
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
+
+  const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    if (name.startsWith("price")) changePrice(value);
+    else if (name.startsWith("amount")) changeAmount(value);
+    else changeTotal(value);
+  };
 
   return (
     <S.WrapperOrder>
@@ -61,7 +86,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
             <S.WrapperBalance>
               <small>{t("avaliable")}</small>
               <S.Span>
-                <Decimal fixed={8} hasStyle={false}>
+                <Decimal fixed={pricePrecision} hasStyle={false}>
                   {availableAmount}
                 </Decimal>{" "}
                 {isSell ? baseTicker : quoteTicker}
@@ -71,19 +96,27 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
           <S.ContainerForm>
             <form onSubmit={executeOrder}>
               {isLimit && (
-                <MarketInput
-                  label={t("priceLabel")}
-                  icon="Price"
-                  inputInfo={quoteTicker}
-                  fullWidth={true}
-                  type="text"
-                  placeholder="0.00"
-                  id="order-price"
-                  value={price}
-                  autoComplete="off"
-                  onChange={(e) => changePrice(e.currentTarget.value)}
-                  disabled={isOrderLoading}
-                />
+                <>
+                  <MarketInput
+                    label={t("priceLabel")}
+                    icon="Price"
+                    inputInfo={quoteTicker}
+                    fullWidth={true}
+                    type="text"
+                    placeholder="0.00"
+                    id="order-price"
+                    name={isSell ? "priceSell" : "priceBuy"}
+                    value={isSell ? values.priceSell : values.priceBuy}
+                    onChange={(e) => handleCustomChange(e)}
+                    autoComplete="off"
+                    disabled={isOrderLoading}
+                  />
+                  <S.Error>
+                    {isSell
+                      ? values.priceSell && errors.priceSell
+                      : values.priceBuy && errors.priceBuy}
+                  </S.Error>
+                </>
               )}
               <MarketInput
                 label={t("amountLabel")}
@@ -93,12 +126,17 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                 type="text"
                 placeholder="0.00"
                 id="order-amount"
-                value={amount}
+                name={isSell ? "amountSell" : "amountBuy"}
+                value={isSell ? values.amountSell : values.amountBuy}
                 autoComplete="off"
-                onChange={(e) => changeAmount(e.currentTarget.value)}
+                onChange={(e) => handleCustomChange(e)}
                 disabled={isOrderLoading}
               />
-              <S.Error>{form.error && form.error}</S.Error>
+              <S.Error>
+                {isSell
+                  ? values.amountSell && errors.amountSell
+                  : values.amountBuy && errors.amountBuy}
+              </S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (
                   <SliderPercentage
@@ -109,18 +147,18 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   />
                 ))}
               </S.SliderWrapper>
-
               {isLimit && (
                 <MarketInput
                   label={t("totalLabel")}
                   inputInfo={isLimit ? quoteTicker : isSell ? quoteTicker : baseTicker}
                   fullWidth={true}
                   type="text"
-                  value={total}
+                  value={isSell ? values.totalSell : values.totalBuy}
+                  name={isSell ? "totalSell" : "totalBuy"}
+                  onChange={(e) => handleCustomChange(e)}
                   placeholder={isLimit ? t("totalLabel") : t("estimatedAmount")}
                   autoComplete="off"
                   disabled={isOrderLoading}
-                  readOnly
                 />
               )}
               {hasUser ? (
@@ -134,7 +172,7 @@ export const MarketOrderAction = ({ isSell = false, isLimit, form, setForm }) =>
                   isLoading={isOrderLoading}
                   isSuccess={isOrderExecuted}
                   type="submit"
-                  disabled={!hasUser || !isSignedIn || buttonDisabled}
+                  disabled={!hasUser || !isSignedIn || buttonDisabled || !(isValid && dirty)}
                 />
               ) : (
                 <Link href="/settings">
