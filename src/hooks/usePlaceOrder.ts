@@ -444,7 +444,9 @@ export function usePlaceOrder(
           const amount = `${
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
-          const total = getEstimatedTotal(calculateTotal(formPrice, amount));
+          const total = getAbsoluteNumber(
+            getEstimatedTotal(calculateTotal(formPrice, amount))
+          );
           setFormValues({
             ...formValues,
             priceSell: formPrice,
@@ -460,7 +462,9 @@ export function usePlaceOrder(
             (Number(availableQuoteAmount) * Number(data.values[0]) * rangeDecimal) /
             Number(formPrice)
           }`;
-          const total = getEstimatedTotal(calculateTotal(formPrice, amount));
+          const total = getAbsoluteNumber(
+            getEstimatedTotal(calculateTotal(formPrice, amount))
+          );
 
           setFormValues({
             ...formValues,
