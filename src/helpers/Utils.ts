@@ -23,6 +23,12 @@ export function decimalPlaces(num: number | string) {
   );
 }
 
+// Removes the commas from a number
+export const getAbsoluteNumber = (value: string | number) => {
+  const valueStr = value.toString();
+  return parseFloat(valueStr.replace(/,/g, ""));
+};
+
 export const getDigitsAfterDecimal = (value: number | string) => {
   const amountStr = String(value);
   return amountStr.includes(".") ? amountStr.split(".")[1].length : 0;

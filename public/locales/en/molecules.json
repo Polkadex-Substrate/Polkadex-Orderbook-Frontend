@@ -78,7 +78,13 @@
     "signIntoPlaceOrder": "Sign In to Place Order",
     "waiting": "Waiting",
     "orderCreated": "Order Created",
-    "errorMessage": "Amount cannot be lesser than minimum amout {{minAmount}} "
+    "errors": {
+      "notEnoughBalance": "Balance not enough",
+      "minMarketPrice": "Price cannot go below the minimum market price of {{minMarketPrice}}",
+      "maxMarketPrice": "Price cannot exceed the maximum market price of {{maxMarketPrice}}",
+      "minMarketAmount": "Amount cannot go below the minimum market amount of {{minMarketAmount}}",
+      "maxMarketAmount": "Amount cannot exceed the maximum market amount of {{maxMarketAmount}}"
+    }
   },
   "mnemonic": {
     "placeholder": "Type mnemonic to restore your proxy account in this browser",
