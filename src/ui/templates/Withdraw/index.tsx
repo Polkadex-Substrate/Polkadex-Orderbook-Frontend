@@ -100,18 +100,19 @@ export const WithdrawTemplate = () => {
     }
   };
 
-  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } = useFormik({
-    initialValues,
-    validationSchema: withdrawValidations(availableAmount?.free_balance),
-    validateOnChange: true,
-    onSubmit: ({ amount }) => {
-      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
-      else {
-        /* Calling the handleSubmitWithdraw function with the amount parameter. */
-        handleSubmitWithdraw(amount);
-      }
-    },
-  });
+  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm, setFieldValue } =
+    useFormik({
+      initialValues,
+      validationSchema: withdrawValidations(availableAmount?.free_balance),
+      validateOnChange: true,
+      onSubmit: ({ amount }) => {
+        if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+        else {
+          /* Calling the handleSubmitWithdraw function with the amount parameter. */
+          handleSubmitWithdraw(amount);
+        }
+      },
+    });
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
@@ -161,6 +162,14 @@ export const WithdrawTemplate = () => {
       ),
     [readyToClaim]
   );
+
+  const handleMax = (e) => {
+    e.preventDefault();
+    if (availableAmount && availableAmount.free_balance) {
+      const balance = Number(availableAmount?.free_balance || 0).toString();
+      setFieldValue("amount", balance);
+    }
+  };
 
   const { t } = useTranslation("withdraw");
   const { t: tc } = useTranslation("common");
@@ -270,8 +279,9 @@ export const WithdrawTemplate = () => {
                           label={t("inputLabel")}
                           placeholder="0.00"
                           error={errors.amount?.toString()}
-                          {...getFieldProps("amount")}
-                        />
+                          {...getFieldProps("amount")}>
+                          <S.MAXButton onClick={handleMax}>{tc("max")}</S.MAXButton>
+                        </InputLine>
                         <Button
                           type="submit"
                           size="extraLarge"
