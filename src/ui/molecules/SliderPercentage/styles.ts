@@ -5,7 +5,7 @@ export const Wrapper = styled.div<{ isActive: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0.2rem;
+    padding: 0.2rem 0.2rem 0.5rem 0.2rem;
     border-radius: 0.5rem;
     color: ${isActive && theme.colors.white};
     background-color: ${isActive ? theme.colors.primary : theme.colors.secondaryBackground};
