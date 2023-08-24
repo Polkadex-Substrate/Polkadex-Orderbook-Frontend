@@ -74,7 +74,7 @@ export const DepositTemplate = () => {
     }
   }, [list, routedAsset]);
 
-  const existentialBalance = Math.pow(10, -12);
+  const existentialBalance = isAssetPDEX(selectedAsset.assetId) ? 1 : Math.pow(10, -12);
   const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } = useFormik({
     initialValues: {
       amount: 0.0,

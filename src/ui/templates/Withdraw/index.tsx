@@ -36,6 +36,7 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { trimFloat } from "@polkadex/web-helpers";
 
 const initialValues = {
   amount: 0.0,
@@ -167,7 +168,8 @@ export const WithdrawTemplate = () => {
     e.preventDefault();
     if (availableAmount && availableAmount.free_balance) {
       const balance = Number(availableAmount?.free_balance || 0).toString();
-      setFieldValue("amount", balance);
+      const trimmedBalance = trimFloat({ value: balance });
+      setFieldValue("amount", trimmedBalance);
     }
   };
 

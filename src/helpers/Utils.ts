@@ -43,6 +43,15 @@ export const hasOnlyZeros = (floatString: string): boolean => {
   return floatValue === integerValue;
 };
 
+export const formatNumber = (value: number | string) => {
+  const convertedValue = typeof value === "string" ? value : value.toString();
+  return Number(
+    convertedValue
+      .replace(/(\.\d*?)0+$/, "$1") // Remove trailing zeros after the decimal
+      .replace(/\.$/, "") // Remove the deciaml point if there are no decimal places)
+  );
+};
+
 type TrimFloatProps = {
   value: string | number;
   digitsAfterDecimal?: number;
@@ -57,8 +66,8 @@ export const trimFloat = ({
 
   if (decimalIndex !== -1) {
     const numberPart = valueString.substr(0, decimalIndex + digitsAfterDecimal + 1);
-    return parseFloat(numberPart).toFixed(digitsAfterDecimal).toString();
+    return formatNumber(parseFloat(numberPart).toFixed(digitsAfterDecimal)).toString();
   }
 
-  return valueString;
+  return formatNumber(valueString).toString();
 };
