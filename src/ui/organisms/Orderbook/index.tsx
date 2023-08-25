@@ -133,8 +133,7 @@ export const OrderbookTable = ({
     }
     // If Total field is clicked
     else if (field === allowedFields[2]) {
-      const amount = total[selectedIndex];
-      changeMarketAmountSumClick(amount.toString());
+      changeMarketAmountSumClick(selectedIndex);
     }
     // Clicked anywhere else (not exactly on any value)
     else if (field === allowedFields[3]) {
