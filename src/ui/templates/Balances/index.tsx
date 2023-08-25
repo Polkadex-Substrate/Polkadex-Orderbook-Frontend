@@ -126,10 +126,10 @@ export const BalancesTemplate = () => {
                               <S.Column style={{ paddingLeft: 10 }}>{t("name")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>{t("Trading Account")}</S.Column>
+                              <S.Column>{t("tradingAccount")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>{t("Funding Account")}</S.Column>
+                              <S.Column>{t("fundingAccount")}</S.Column>
                             </Table.Column>
                             <Table.Column>
                               <S.Column>{t("inOrders")}</S.Column>
