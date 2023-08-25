@@ -33,10 +33,32 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
       if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+    },
+    [asks, bids, currentPrice, onSetCurrentPrice]
+  );
+
+  /**
+   * @description Change market amount
+   *
+   * @param {number} index - Market ask/bid index
+   * @param {string} side - Market side (asks/bids)
+   * @returns {void} Dispatch setCurrentAmount action
+   */
+  const changeMarketAmount = useCallback(
+    (index: number, side: "asks" | "bids") => {
+      const arr = side === "asks" ? asks : bids;
       const amountToSet = arr[index] && Number(arr[index][1]);
       onSetCurrentAmount(amountToSet.toString());
     },
-    [asks, bids, currentPrice, onSetCurrentPrice, onSetCurrentAmount]
+    [onSetCurrentAmount, asks, bids]
+  );
+
+  // Change market amount on click on total/sum field
+  const changeMarketAmountSumClick = useCallback(
+    (value: string) => {
+      onSetCurrentAmount(value.toString());
+    },
+    [onSetCurrentAmount]
   );
 
   /**
@@ -64,6 +86,8 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     baseUnit: currentMarket?.base_ticker,
     valumeData,
     changeMarketPrice,
+    changeMarketAmount,
+    changeMarketAmountSumClick,
     priceFixed: currentMarket?.quote_precision || 0,
     amountFixed: currentMarket?.base_precision || 0,
     total: cumulativeVolume,
