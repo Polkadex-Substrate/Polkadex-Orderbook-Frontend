@@ -9,6 +9,8 @@ import {
 } from "./constants";
 import { Balance, BalanceUpdatePayload } from "./types";
 
+import * as T from "@polkadex/orderbook/providers/user/balancesProvider/types";
+
 export interface BalancesFetch {
   type: typeof BALANCES_FETCH;
 }
@@ -29,7 +31,7 @@ export interface BalancesUpdateEvent {
 }
 export interface BalanceUpdateEventData {
   type: typeof BALANCES_UPDATE_EVENT_DATA;
-  payload: Balance;
+  payload: Omit<T.Balance, "onChainBalance">;
 }
 export type BalancesAction =
   | BalancesFetch

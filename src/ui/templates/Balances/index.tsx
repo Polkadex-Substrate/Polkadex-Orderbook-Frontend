@@ -126,10 +126,10 @@ export const BalancesTemplate = () => {
                               <S.Column style={{ paddingLeft: 10 }}>{t("name")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>{t("available")}</S.Column>
+                              <S.Column>{t("tradingAccount")}</S.Column>
                             </Table.Column>
                             <Table.Column>
-                              <S.Column>{t("locked")}</S.Column>
+                              <S.Column>{t("fundingAccount")}</S.Column>
                             </Table.Column>
                             <Table.Column>
                               <S.Column>{t("inOrders")}</S.Column>
@@ -170,7 +170,7 @@ export const BalancesTemplate = () => {
                                         item.symbol === POLKADEX_ASSET.symbol && "pdexCell"
                                       }>
                                       <span>
-                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
+                                        {Number(balance?.onChainBalance || 0).toFixed(8)}{" "}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>

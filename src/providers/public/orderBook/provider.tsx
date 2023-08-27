@@ -33,7 +33,6 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
             { market: market.m },
             "getOrderbook"
           );
-
           const data = formatOrderBookData(dataRaw);
           const { asks, bids } = getDepthFromOrderbook(data);
           dispatch(A.depthData({ asks, bids }));
