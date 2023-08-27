@@ -5,8 +5,8 @@
   "searchPlaceholder": "Search",
   "hideSmallBalances": "Hide small balances",
   "name": "Name",
-  "available": "Available",
-  "locked": "Locked",
+  "tradingAccount": "Trading Account",
+  "fundingAccount": "Funding Account",
   "inOrders": "In Orders",
   "actions": "Actions"
 }
