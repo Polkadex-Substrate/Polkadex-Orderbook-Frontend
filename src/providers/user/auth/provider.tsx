@@ -39,7 +39,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
             onHandleNotification({
               message:
                 "Sign in Failed!, it looks like you have not confirmed your email. Please confirm your email and try again.",
-              type: "Attention",
+              type: "Error",
             });
             dispatch(A.signInError(error));
             router.push(

@@ -13,6 +13,8 @@ import * as T from "./types";
 
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
+import { fetchOnChainBalance } from "@polkadex/orderbook/helpers/fetchOnChainBalance";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
@@ -20,6 +22,8 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
+  const { api } = useNativeApi();
+
   const { onHandleError } = useSettingsProvider();
 
   const fetchbalancesAsync = useCallback(
@@ -42,10 +46,12 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     },
     []
   );
+
   const onBalancesFetch = useCallback(async () => {
     dispatch(A.balancesFetch());
     try {
-      if (mainAddress && isAssetData) {
+      if (mainAddress && isAssetData && api?.isConnected) {
+        await api.isReady;
         const assetMap = assetsList?.reduce((acc, asset) => {
           acc[asset.assetId] = asset;
           return acc;
@@ -53,24 +59,30 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
         const balances = await fetchbalancesAsync(mainAddress);
 
-        const list = balances?.map((balance: T.IBalanceFromDb) => {
+        const list = balances?.map(async (balance: T.IBalanceFromDb) => {
           const asset = assetMap[balance.asset_type];
-
+          const chainBalance = await fetchOnChainBalance(api, asset.assetId, mainAddress);
           return {
             assetId: asset.assetId.toString(),
             name: asset.name,
             symbol: asset.symbol,
             reserved_balance: balance.reserved_balance,
             free_balance: balance.free_balance,
+            onChainBalance: chainBalance.toFixed(2),
           };
         });
-        dispatch(A.balancesData({ balances: list, timestamp: new Date().getTime() }));
+        dispatch(
+          A.balancesData({
+            balances: await Promise.all(list),
+            timestamp: new Date().getTime(),
+          })
+        );
       }
     } catch (error) {
       console.error(error);
       onHandleError(`Balances fetch error: ${error?.message ?? error}`);
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError]);
+  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError, api]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
@@ -81,7 +93,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   };
 
   const updateBalanceFromEvent = useCallback(
-    (msg: T.BalanceUpdatePayload): T.Balance => {
+    (msg: T.BalanceUpdatePayload): Omit<T.Balance, "onChainBalance"> => {
       const assetId = msg.asset.asset;
       return {
         name: selectGetAsset(assetId).name,
