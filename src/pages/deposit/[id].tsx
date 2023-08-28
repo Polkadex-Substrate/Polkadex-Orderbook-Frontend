@@ -14,6 +14,9 @@ const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
   {
     ssr: false,
+    loading: () => (
+      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading deposit page.....</h1>
+    ),
   }
 );
 
