@@ -1,10 +1,7 @@
 import * as T from "./types";
 import * as C from "./constants";
 
-const defaultTheme =
-  process.browser && window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+const defaultTheme = "dark";
 
 const defaultLanguage = process.browser && navigator.language.substring(0, 2);
 

@@ -25,6 +25,7 @@ export interface BalanceBase {
 export interface Balance extends BalanceBase {
   name: string;
   symbol: string;
+  onChainBalance: string;
 }
 export type FreeOrUsedOrTotal = Record<string, number>;
 
