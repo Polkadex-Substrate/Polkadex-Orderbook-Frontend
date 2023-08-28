@@ -12,11 +12,7 @@ import {
 import { OrderBookState } from "./types";
 import { OrderBookActions, DepthActions } from "./actions";
 
-import { deleteFromBook, replaceOrAddToBook, sliceArray } from "@polkadex/web-helpers";
-import { defaultConfig } from "@polkadex/orderbook-config";
-
-const { orderBookSideLimit } = defaultConfig;
-
+import { deleteFromBook, replaceOrAddToBook } from "@polkadex/web-helpers";
 export const initialOrderBook: OrderBookState = {
   orderbook: { asks: [], bids: [], loading: true },
   depth: { asks: [], bids: [], loading: true },
@@ -42,8 +38,8 @@ export const orderBookReducer = (
       return {
         ...state,
         orderbook: {
-          asks: sliceArray(asks, orderBookSideLimit),
-          bids: sliceArray(bids, orderBookSideLimit),
+          asks: asks,
+          bids: bids,
           loading: false,
           error: undefined,
         },
@@ -72,8 +68,8 @@ export const orderBookReducer = (
       return {
         ...state,
         depth: {
-          asks: sliceArray(asks, orderBookSideLimit),
-          bids: sliceArray(bids, orderBookSideLimit),
+          asks: asks,
+          bids: bids,
           loading: false,
           error: undefined,
         },

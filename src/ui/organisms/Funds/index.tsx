@@ -33,9 +33,6 @@ export const Funds = ({ onHideFilters }) => {
               <S.Column>{t("available")}</S.Column>
             </Table.Column>
             <Table.Column>
-              <S.Column>{t("locked")}</S.Column>
-            </Table.Column>
-            <Table.Column>
               <S.Column>{t("reserved")}</S.Column>
             </Table.Column>
             <Table.Column>
@@ -60,11 +57,6 @@ export const Funds = ({ onHideFilters }) => {
                 <Table.Cell>
                   <S.Cell>
                     <span>{Number(item?.free_balance || 0).toFixed(8)} </span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{Number(item?.reserved_balance || 0).toFixed(8)} </span>
                   </S.Cell>
                 </Table.Cell>
                 <Table.Cell>
