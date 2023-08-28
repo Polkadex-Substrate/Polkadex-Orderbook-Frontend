@@ -8,7 +8,7 @@ import {
 import { BalancesState } from "./types";
 
 export const initialState: BalancesState = {
-  loading: false,
+  loading: true,
   success: false,
   balances: [],
 };

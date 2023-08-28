@@ -199,3 +199,16 @@ export const Back = styled.div`
     }
   `}
 `;
+
+export const LoadingWrapper = styled.div`
+  ${({ theme }) => css`
+    width: 100%;
+    z-index: 20;
+    height: 30rem;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.colors.tertiaryBackgroundOpacity};
+  `}
+`;

@@ -11,6 +11,9 @@ const BalancesTemplate = dynamic(
     import("@polkadex/orderbook-ui/templates/Balances").then((mod) => mod.BalancesTemplate),
   {
     ssr: false,
+    loading: () => (
+      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading balances page.....</h1>
+    ),
   }
 );
 const Balances = () => {
