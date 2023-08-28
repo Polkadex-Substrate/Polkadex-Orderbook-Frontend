@@ -15,6 +15,9 @@ const WithdrawTemplate = dynamic(
     import("@polkadex/orderbook-ui/templates/Withdraw").then((mod) => mod.WithdrawTemplate),
   {
     ssr: false,
+    loading: () => (
+      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading withdraw page.....</h1>
+    ),
   }
 );
 const Withdraw = () => {
