@@ -19,5 +19,6 @@
   "termsOfUse": "Terms of Use",
   "disclaimer": "Disclaimer",
   "dataRetentionPolicy": "Data Retention Policy",
-  "excludedJurisdictions": "Excluded Jurisdictions"
+  "excludedJurisdictions": "Excluded Jurisdictions",
+  "max": "MAX"
 }
