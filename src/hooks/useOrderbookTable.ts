@@ -22,7 +22,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const { currentMarket } = useMarketsProvider();
 
   /**
-   * @description -Get Volume of ther orders
+   * @description -Get Volume of the orders
    */
   const cumulativeVolume = isSell
     ? accumulateVolume(orders.slice(0).reverse()).slice(0).reverse()
