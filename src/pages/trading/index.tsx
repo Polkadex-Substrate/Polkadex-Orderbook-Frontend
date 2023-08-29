@@ -5,6 +5,7 @@ import { defaultConfig } from "@polkadex/orderbook-config";
 import { LOCAL_STORAGE_ID } from "@polkadex/web-constants";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 function Home() {
   const router = useRouter();
@@ -46,7 +47,7 @@ function Home() {
   ]);
 
   // Note: This could be used as masking page
-  return <div />;
+  return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)
 }
 
 export default Home;
