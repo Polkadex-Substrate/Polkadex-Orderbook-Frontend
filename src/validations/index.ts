@@ -17,7 +17,11 @@ export const loginValidations = Yup.object().shape({
   address: Yup.string().required("Required"),
 });
 
-export const depositValidations = (chainBalance: number, assetId: string) => {
+export const depositValidations = (
+  chainBalance: number,
+  assetId: string,
+  existentialBalance: number
+) => {
   return Yup.object().shape({
     amount: Yup.string()
       .required("Required")
@@ -61,7 +65,7 @@ export const depositValidations = (chainBalance: number, assetId: string) => {
           return !(
             !isAssetPDEX(assetId) &&
             Number(value) &&
-            balanceAfterDeposit < Math.pow(10, -12)
+            balanceAfterDeposit < existentialBalance
           );
         }
       ),
