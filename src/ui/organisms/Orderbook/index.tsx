@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
@@ -87,6 +87,9 @@ export const OrderBook = () => {
   );
 };
 
+const allowedFields = ["Price", "Amount", "Sum", "Row"] as const;
+type TableField = (typeof allowedFields)[number];
+
 export const OrderbookTable = ({
   isSell = false,
   orders = [],
@@ -96,7 +99,15 @@ export const OrderbookTable = ({
 }: T.Props) => {
   const contentRef = useRef(null);
 
-  const { quoteUnit, baseUnit, valumeData, changeMarketPrice, total } = useOrderbookTable({
+  const {
+    quoteUnit,
+    baseUnit,
+    valumeData,
+    changeMarketPrice,
+    changeMarketAmount,
+    changeMarketAmountSumClick,
+    total,
+  } = useOrderbookTable({
     isSell,
     orders: [...orders],
     contentRef,
@@ -104,6 +115,32 @@ export const OrderbookTable = ({
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) => translation(`orderBook.table.${key}`, args);
+
+  const handleRowClick = (
+    field: TableField,
+    e: MouseEvent<HTMLElement>,
+    selectedIndex: number
+  ) => {
+    if (field !== allowedFields[3]) e.stopPropagation();
+
+    // If Price field is clicked
+    if (field === allowedFields[0]) {
+      changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
+    }
+    // If Amount field is clicked
+    else if (field === allowedFields[1]) {
+      changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
+    }
+    // If Total field is clicked
+    else if (field === allowedFields[2]) {
+      changeMarketAmountSumClick(selectedIndex);
+    }
+    // Clicked anywhere else (not exactly on any value)
+    else if (field === allowedFields[3]) {
+      changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
+      changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
+    }
+  };
 
   return (
     <>
@@ -127,26 +164,32 @@ export const OrderbookTable = ({
               return (
                 <S.Card
                   key={i}
-                  onClick={() => changeMarketPrice(i, isSell ? "asks" : "bids")}
+                  onClick={(e) => handleRowClick(allowedFields[3], e, i)}
                   isSell={isSell}>
                   <S.CardCell>
-                    <Decimal
-                      key={i}
-                      fixed={precision}
-                      thousSep=","
-                      prevValue={orders[i + 1] ? orders[i + 1][0] : 0}>
-                      {price}
-                    </Decimal>
+                    <span onClick={(e) => handleRowClick(allowedFields[0], e, i)}>
+                      <Decimal
+                        key={i}
+                        fixed={precision}
+                        thousSep=","
+                        prevValue={orders[i + 1] ? orders[i + 1][0] : 0}>
+                        {price}
+                      </Decimal>
+                    </span>
                   </S.CardCell>
                   <S.CardCell>
-                    <Decimal key={i} fixed={precision} thousSep=",">
-                      {volume}
-                    </Decimal>
+                    <span onClick={(e) => handleRowClick(allowedFields[1], e, i)}>
+                      <Decimal key={i} fixed={precision} thousSep=",">
+                        {volume}
+                      </Decimal>
+                    </span>
                   </S.CardCell>
                   <S.CardCell>
-                    <Decimal key={i} fixed={precision} thousSep=",">
-                      {total[i]}
-                    </Decimal>
+                    <span onClick={(e) => handleRowClick(allowedFields[2], e, i)}>
+                      <Decimal key={i} fixed={precision} thousSep=",">
+                        {total[i]}
+                      </Decimal>
+                    </span>
                   </S.CardCell>
                   <S.CardVolume isSell={isSell} style={{ width: getRowWidth(i) }} />
                 </S.Card>

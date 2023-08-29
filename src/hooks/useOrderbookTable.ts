@@ -22,6 +22,13 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
   const { currentMarket } = useMarketsProvider();
 
   /**
+   * @description -Get Volume of the orders
+   */
+  const cumulativeVolume = isSell
+    ? accumulateVolume(orders.slice(0).reverse()).slice(0).reverse()
+    : accumulateVolume(orders);
+
+  /**
    * @description Change market price
    *
    * @param {number} index - Market ask/bid index
@@ -33,10 +40,32 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
       if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+    },
+    [asks, bids, currentPrice, onSetCurrentPrice]
+  );
+
+  /**
+   * @description Change market amount
+   *
+   * @param {number} index - Market ask/bid index
+   * @param {string} side - Market side (asks/bids)
+   * @returns {void} Dispatch setCurrentAmount action
+   */
+  const changeMarketAmount = useCallback(
+    (index: number, side: "asks" | "bids") => {
+      const arr = side === "asks" ? asks : bids;
       const amountToSet = arr[index] && Number(arr[index][1]);
       onSetCurrentAmount(amountToSet.toString());
     },
-    [asks, bids, currentPrice, onSetCurrentPrice, onSetCurrentAmount]
+    [onSetCurrentAmount, asks, bids]
+  );
+
+  // Change market amount on click on total/sum field
+  const changeMarketAmountSumClick = useCallback(
+    (index: number) => {
+      onSetCurrentAmount(cumulativeVolume[index].toString());
+    },
+    [onSetCurrentAmount, cumulativeVolume]
   );
 
   /**
@@ -46,12 +75,6 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
    */
   const maxVolume = calcMaxVolume(bids, asks);
 
-  /**
-   * @description -Get Volume of ther orders
-   */
-  const cumulativeVolume = isSell
-    ? accumulateVolume(orders.slice(0).reverse()).slice(0).reverse()
-    : accumulateVolume(orders);
   const valumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
     // Make sure the scroll is always down
@@ -64,6 +87,8 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     baseUnit: currentMarket?.base_ticker,
     valumeData,
     changeMarketPrice,
+    changeMarketAmount,
+    changeMarketAmountSumClick,
     priceFixed: currentMarket?.quote_precision || 0,
     amountFixed: currentMarket?.base_precision || 0,
     total: cumulativeVolume,

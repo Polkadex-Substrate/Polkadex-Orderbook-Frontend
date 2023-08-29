@@ -158,6 +158,25 @@ export const Available = styled.span`
     }
   `}
 `;
+
+export const MAXButton = styled.button`
+  ${({ theme }) => css`
+    display: block;
+    align-self: flex-end;
+    font-size: 1.2rem;
+    margin-top: 1.2rem;
+    color: white;
+    background: ${theme.colors.green};
+    border-radius: 0.3rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+    margin-bottom: -0.5rem;
+    transition: background 0.2s ease-in;
+    :hover {
+      background: ${theme.colors.green}88;
+    }
+  `}
+`;
+
 export const SelectAccountAvatar = styled.div``;
 export const Success = styled.div`
   h3 {
