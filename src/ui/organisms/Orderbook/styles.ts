@@ -194,6 +194,7 @@ export const CardVolume = styled.div<{ isSell?: boolean }>`
     position: absolute;
     height: 100%;
     background: ${isSell ? theme.colors.primary : theme.colors.green}10;
+    z-index: -1;
   `}
 `;
 
