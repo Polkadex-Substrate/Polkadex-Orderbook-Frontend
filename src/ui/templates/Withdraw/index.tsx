@@ -36,6 +36,7 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { trimFloat } from "@polkadex/web-helpers";
 
 const initialValues = {
   amount: 0.0,
@@ -100,18 +101,19 @@ export const WithdrawTemplate = () => {
     }
   };
 
-  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm } = useFormik({
-    initialValues,
-    validationSchema: withdrawValidations(availableAmount?.free_balance),
-    validateOnChange: true,
-    onSubmit: ({ amount }) => {
-      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
-      else {
-        /* Calling the handleSubmitWithdraw function with the amount parameter. */
-        handleSubmitWithdraw(amount);
-      }
-    },
-  });
+  const { handleSubmit, errors, getFieldProps, isValid, dirty, resetForm, setFieldValue } =
+    useFormik({
+      initialValues,
+      validationSchema: withdrawValidations(availableAmount?.free_balance),
+      validateOnChange: true,
+      onSubmit: ({ amount }) => {
+        if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+        else {
+          /* Calling the handleSubmitWithdraw function with the amount parameter. */
+          handleSubmitWithdraw(amount);
+        }
+      },
+    });
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
@@ -161,6 +163,15 @@ export const WithdrawTemplate = () => {
       ),
     [readyToClaim]
   );
+
+  const handleMax = (e) => {
+    e.preventDefault();
+    if (availableAmount && availableAmount.free_balance) {
+      const balance = Number(availableAmount?.free_balance || 0).toString();
+      const trimmedBalance = trimFloat({ value: balance });
+      setFieldValue("amount", trimmedBalance);
+    }
+  };
 
   const { t } = useTranslation("withdraw");
   const { t: tc } = useTranslation("common");
@@ -270,8 +281,9 @@ export const WithdrawTemplate = () => {
                           label={t("inputLabel")}
                           placeholder="0.00"
                           error={errors.amount?.toString()}
-                          {...getFieldProps("amount")}
-                        />
+                          {...getFieldProps("amount")}>
+                          <S.MAXButton onClick={handleMax}>{tc("max")}</S.MAXButton>
+                        </InputLine>
                         <Button
                           type="submit"
                           size="extraLarge"
