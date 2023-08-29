@@ -5,15 +5,14 @@ import { useDisabledPages } from "../hooks/useDisabledPages";
 
 import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const BalancesTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Balances").then((mod) => mod.BalancesTemplate),
   {
     ssr: false,
-    loading: () => (
-      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading balances page.....</h1>
-    ),
+    loading: () => <LoadingScreen />,
   }
 );
 const Balances = () => {

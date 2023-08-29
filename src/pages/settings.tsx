@@ -4,15 +4,14 @@ import { useRouter } from "next/router";
 import { useDisabledPages } from "../hooks/useDisabledPages";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const SettingsTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Settings").then((mod) => mod.SettingsTemplate),
   {
     ssr: false,
-    loading: () => (
-      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading accounts page.....</h1>
-    ),
+    loading: () => <LoadingScreen />,
   }
 );
 const Settings = () => {
