@@ -27,6 +27,7 @@ import {
   TooltipHeader,
   Dropdown,
 } from "@polkadex/orderbook-ui/molecules";
+import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSettings } from "@polkadex/orderbook-hooks";
 import { ExtensionAccount } from "@polkadex/orderbook/providers/types";
@@ -70,8 +71,13 @@ export const SettingsTemplate = () => {
     hasRegisteredMainAccount,
   } = useSettings();
 
-  const { onUserSelectAccount } = useProfile();
+  const {
+    onUserSelectAccount,
+    auth: { isLoading: isProfileFetching },
+  } = useProfile();
   const tradeWalletState = useTradeWallet();
+
+  const showLoader = tradeWalletState.isFetching || isProfileFetching;
 
   const { t } = useTranslation("settings");
 
@@ -150,7 +156,11 @@ export const SettingsTemplate = () => {
                     )}
                   </S.WalletTitle>
                   <S.WalletContainer>
-                    {!tradeAccounts?.length ? (
+                    {showLoader ? (
+                      <S.LoadingWrapper>
+                        <Keyboard color="primary" />
+                      </S.LoadingWrapper>
+                    ) : !tradeAccounts?.length ? (
                       <div style={{ padding: "4rem 2rem" }}>
                         <Empty
                           title={t("noTradingAccountTitle")}

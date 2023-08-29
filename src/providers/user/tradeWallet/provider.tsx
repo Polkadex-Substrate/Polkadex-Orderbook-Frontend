@@ -123,11 +123,13 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onLoadTradeAccounts = useCallback(async () => {
     try {
+      dispatch(A.tradeAccountsFetch());
       await loadKeyring();
       const allBrowserAccounts: TradeAccount[] = await getAllTradeAccountsInBrowser();
       dispatch(A.tradeAccountsData({ allAccounts: allBrowserAccounts }));
     } catch (error) {
       onHandleError(error?.message ?? error);
+      dispatch(A.tradeAccountsError(error));
     }
   }, [onHandleError]);
 

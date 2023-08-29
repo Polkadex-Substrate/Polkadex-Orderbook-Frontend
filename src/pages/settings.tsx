@@ -10,6 +10,9 @@ const SettingsTemplate = dynamic(
     import("@polkadex/orderbook-ui/templates/Settings").then((mod) => mod.SettingsTemplate),
   {
     ssr: false,
+    loading: () => (
+      <h1 style={{ textAlign: "center", marginTop: 10 }}>Loading accounts page.....</h1>
+    ),
   }
 );
 const Settings = () => {

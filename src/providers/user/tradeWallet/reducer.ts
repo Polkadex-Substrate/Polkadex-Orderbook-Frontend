@@ -55,24 +55,26 @@ export const tradeWalletReducer = (
         registerAccountLoading: false,
       };
 
-    case USER_TRADE_ACCOUNTS_DATA:
+    case USER_TRADE_ACCOUNTS_DATA: {
       return {
         ...state,
         isFetching: false,
         allBrowserAccounts: action.payload.allAccounts,
       };
-
-    case USER_TRADE_ACCOUNTS_FETCH:
+    }
+    case USER_TRADE_ACCOUNTS_FETCH: {
       return {
         ...state,
-        isFetching: false,
+        isFetching: true,
       };
-    case USER_TRADE_ACCOUNTS_ERROR:
+    }
+    case USER_TRADE_ACCOUNTS_ERROR: {
       return {
         ...state,
         registerAccountLoading: false,
         isFetching: false,
       };
+    }
     case USER_TRADE_ACCOUNT_IMPORT_JSON:
     case USER_TRADE_ACCOUNT_IMPORT_FETCH:
     case USER_REGISTER_TRADE_ACCOUNT_FETCH:
