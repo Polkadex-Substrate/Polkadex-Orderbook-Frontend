@@ -28,7 +28,7 @@ export const MarketOrder = () => {
   const handleChangeType = (value: boolean) => setIsLimit(value);
   const orderType = isLimit ? "Limit" : "Market";
 
-  const { t: translation } = useTranslation("organisms");
+  const { t: translation, "2": isReady } = useTranslation("organisms");
   const t = (key: string) => translation(`marketOrder.${key}`);
 
   const initialValues: FormValues = useMemo(() => {
@@ -49,40 +49,49 @@ export const MarketOrder = () => {
 
   return (
     <S.Section>
-      <Tabs>
-        <S.Header>
-          <S.HeaderWrapper>
-            <TabHeader>
-              <S.ActionItem isActive>{t("buy")}</S.ActionItem>
-            </TabHeader>
-            <TabHeader>
-              <S.ActionItem>{t("sell")}</S.ActionItem>
-            </TabHeader>
-          </S.HeaderWrapper>
-          <Dropdown>
-            <Dropdown.Trigger>
-              <S.DropdownTrigger>
-                {isLimit ? t("limitOrder") : t("marketOrder")} <Icons.ArrowBottom />
-              </S.DropdownTrigger>
-            </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid">
-              <Dropdown.Item key="limit" onAction={() => handleChangeType(true)}>
-                {t("limitOrder")}
-              </Dropdown.Item>
-              <Dropdown.Item key="market" onAction={() => handleChangeType(false)}>
-                {t("marketOrder")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </S.Header>
-        <TabContent>
-          <MarketOrderAction isLimit={isLimit} orderType={orderType} formik={formik} />
-        </TabContent>
-        <TabContent>
-          <MarketOrderAction isSell isLimit={isLimit} orderType={orderType} formik={formik} />
-        </TabContent>
-      </Tabs>
+      {!isReady ? (
+        <MarketSkeleton />
+      ) : (
+        <Tabs>
+          <S.Header>
+            <S.HeaderWrapper>
+              <TabHeader>
+                <S.ActionItem isActive>{t("buy")}</S.ActionItem>
+              </TabHeader>
+              <TabHeader>
+                <S.ActionItem>{t("sell")}</S.ActionItem>
+              </TabHeader>
+            </S.HeaderWrapper>
+            <Dropdown>
+              <Dropdown.Trigger>
+                <S.DropdownTrigger>
+                  {isLimit ? t("limitOrder") : t("marketOrder")} <Icons.ArrowBottom />
+                </S.DropdownTrigger>
+              </Dropdown.Trigger>
+              <Dropdown.Menu fill="secondaryBackgroundSolid">
+                <Dropdown.Item key="limit" onAction={() => handleChangeType(true)}>
+                  {t("limitOrder")}
+                </Dropdown.Item>
+                <Dropdown.Item key="market" onAction={() => handleChangeType(false)}>
+                  {t("marketOrder")}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </S.Header>
+          <TabContent>
+            <MarketOrderAction isLimit={isLimit} orderType={orderType} formik={formik} />
+          </TabContent>
+          <TabContent>
+            <MarketOrderAction
+              isSell
+              isLimit={isLimit}
+              orderType={orderType}
+              formik={formik}
+            />
+          </TabContent>
+        </Tabs>
+      )}
     </S.Section>
   );
 };
-export const MarketSkeleton = () => <Skeleton height="100%" width="100%" minWidth="350px" />;
+export const MarketSkeleton = () => <Skeleton height="40rem" width="100%" minWidth="350px" />;
