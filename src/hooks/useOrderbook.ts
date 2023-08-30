@@ -4,6 +4,7 @@ import { useMarketsProvider } from "../providers/public/marketsProvider/useMarke
 import { useRecentTradesProvider } from "../providers/public/recentTradesProvider";
 
 import { useOrderBook } from "@polkadex/orderbook/providers/public/orderBook";
+import { decimalPlaces } from "@polkadex/orderbook/helpers/Utils";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -29,6 +30,7 @@ export function useOrderbook() {
   const loading = orderBookState.depth.loading;
 
   const { currentMarket } = useMarketsProvider();
+  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
 
   const { getCurrentTradePrice, getLastTradePrice } = useRecentTradesProvider();
   const currentTrade = getCurrentTradePrice();
@@ -45,6 +47,11 @@ export function useOrderbook() {
     setIsPriceUp(isPriceUpValue);
     setPrevTradePrice(lastPrice);
   }, [currentPrice, isPriceUpValue, lastPrice, currentMarket]);
+
+  useEffect(() => {
+    const precision = Math.min(initialState.length - 1, Math.max(1, pricePrecision - 1));
+    setSizeState(initialState[precision - 1]);
+  }, [pricePrecision, setSizeState]);
 
   return {
     isPriceUp,
