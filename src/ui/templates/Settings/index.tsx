@@ -74,12 +74,15 @@ export const SettingsTemplate = () => {
   const {
     onUserSelectAccount,
     auth: { isLoading: isProfileFetching },
+    data: { isLoading: isAccountsFetching },
   } = useProfile();
   const tradeWalletState = useTradeWallet();
 
-  const showLoader = tradeWalletState.isFetching || isProfileFetching;
+  const showLoader = tradeWalletState.isFetching || isProfileFetching || isAccountsFetching;
 
-  const { t } = useTranslation("settings");
+  const { t, "2": isTranslationReady } = useTranslation("settings");
+
+  if (!isTranslationReady) return <></>;
 
   return (
     <>

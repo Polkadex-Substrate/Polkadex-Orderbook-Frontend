@@ -85,13 +85,13 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
     case PROFILE_USER_ERROR: {
       return {
         ...state,
-        data: { ...state.data, isLaoding: false, isError: true },
+        data: { ...state.data, isLoading: false, isError: true },
       };
     }
     case PROFILE_USER_DATA: {
       return {
         ...state,
-        data: { ...state.data, isLaoding: false, isSuccess: true },
+        data: { ...state.data, isLoading: false, isSuccess: true },
         userData: {
           ...state.userData,
           ...action.payload,
