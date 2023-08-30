@@ -327,7 +327,11 @@ export const SettingsTemplate = () => {
                     </S.WalletTitleWrapper>
                   </S.WalletTitle>
                   <S.WalletContainer>
-                    {!controllerWallets?.length ? (
+                    {showLoader ? (
+                      <S.LoadingWrapper>
+                        <Keyboard color="primary" />
+                      </S.LoadingWrapper>
+                    ) : !controllerWallets?.length ? (
                       <div style={{ padding: "4rem 2rem" }}>
                         <Empty
                           title={t("noWalletFoundTitle")}
