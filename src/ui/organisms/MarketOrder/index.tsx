@@ -94,4 +94,6 @@ export const MarketOrder = () => {
     </S.Section>
   );
 };
-export const MarketSkeleton = () => <Skeleton height="40rem" width="100%" minWidth="350px" />;
+export const MarketSkeleton = () => (
+  <Skeleton style={{ marginTop: 10 }} height="40rem" width="100%" minWidth="350px" />
+);
