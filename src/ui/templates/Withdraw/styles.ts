@@ -176,10 +176,28 @@ export const Available = styled.span`
     display: block;
     align-self: flex-end;
     font-size: 1.3rem;
-    margin-top: 0.2rem;
+    margin-top: 1.2rem;
     strong {
       color: ${theme.colors.text};
       font-weight: 500;
+    }
+  `}
+`;
+
+export const MAXButton = styled.button`
+  ${({ theme }) => css`
+    display: block;
+    align-self: flex-end;
+    font-size: 1.2rem;
+    margin-top: 1.2rem;
+    color: white;
+    background: ${theme.colors.primary};
+    border-radius: 0.3rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+    margin-bottom: -0.5rem;
+    transition: background 0.2s ease-in;
+    :hover {
+      background: ${theme.colors.primaryHover};
     }
   `}
 `;

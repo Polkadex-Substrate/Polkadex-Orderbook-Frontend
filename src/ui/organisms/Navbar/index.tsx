@@ -9,6 +9,7 @@ import { useMarketsProvider } from "@polkadex/orderbook/providers/public/markets
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { hasOnlyZeros } from "@polkadex/web-helpers";
 import { defaultTickers } from "@polkadex/orderbook/providers/public/marketsProvider";
+import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 export const Navbar = ({ onOpenMarkets }) => {
   const { getCurrentTradePrice, loading: isRecentTradeFetching } = useRecentTradesProvider();
@@ -27,6 +28,9 @@ export const Navbar = ({ onOpenMarkets }) => {
   const volume = currentTicker?.volumeBase24hr;
   const high = currentTicker?.high;
   const low = currentTicker?.low;
+
+  const quotePrecision = currMarket?.quote_precision || 0;
+  const formattedVolume = Decimal.format(Number(volume), quotePrecision, ",");
 
   const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
 
@@ -84,7 +88,7 @@ export const Navbar = ({ onOpenMarkets }) => {
               label={t("volume24hr", {
                 volume: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
               })}
-              info={volume}
+              info={formattedVolume}
             />
           )}
 

@@ -32,6 +32,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
+import { trimFloat } from "@polkadex/web-helpers";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
@@ -74,11 +75,16 @@ export const DepositTemplate = () => {
     }
   }, [list, routedAsset]);
 
-  const { handleSubmit, errors, getFieldProps, isValid, dirty } = useFormik({
+  const existentialBalance = isAssetPDEX(selectedAsset.assetId) ? 1 : Math.pow(10, -12);
+  const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } = useFormik({
     initialValues: {
       amount: 0.0,
     },
-    validationSchema: depositValidations(onChainBalance, selectedAsset?.assetId),
+    validationSchema: depositValidations(
+      onChainBalance,
+      selectedAsset?.assetId,
+      existentialBalance
+    ),
     validateOnChange: true,
     onSubmit: (values) => {
       const asset = isAssetPDEX(selectedAsset.assetId)
@@ -92,6 +98,16 @@ export const DepositTemplate = () => {
       });
     },
   });
+
+  const handleMax = (e) => {
+    e.preventDefault();
+    if (onChainBalance > existentialBalance) {
+      const balance = onChainBalance - existentialBalance;
+      // Fixed it to maximum 8 digits
+      const trimmedBalance = trimFloat({ value: balance });
+      setFieldValue("amount", trimmedBalance);
+    }
+  };
 
   const getColor = (status: Transaction["status"]) => {
     switch (status) {
@@ -185,8 +201,9 @@ export const DepositTemplate = () => {
                         label={t("inputLabel")}
                         placeholder="0.00"
                         error={errors.amount?.toString()}
-                        {...getFieldProps("amount")}
-                      />
+                        {...getFieldProps("amount")}>
+                        <S.MAXButton onClick={handleMax}>{tc("max")}</S.MAXButton>
+                      </InputLine>
                       <Button
                         type="submit"
                         size="extraLarge"
