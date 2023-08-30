@@ -82,7 +82,7 @@ export const Navbar = ({ onOpenMarkets }) => {
           )}
 
           {isLoading ? (
-            <InfoSkeleton />
+            <InfoSkeleton width="12rem" />
           ) : (
             <NavbarItem
               label={t("volume24hr", {
