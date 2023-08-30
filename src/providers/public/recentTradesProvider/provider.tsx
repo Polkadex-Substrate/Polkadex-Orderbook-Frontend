@@ -15,7 +15,7 @@ import { PublicTrade } from "./types";
 import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
 import { fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
-import { getIsDecreasingArray } from "@polkadex/web-helpers";
+import { decimalPlaces, getIsDecreasingArray } from "@polkadex/web-helpers";
 
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);
@@ -118,8 +118,8 @@ export const RecentTradesProvider = ({ children }) => {
         isDecreasing,
         quoteUnit: currentMarket?.quote_ticker,
         baseUnit: currentMarket?.base_ticker,
-        pricePrecision: currentMarket?.quote_precision,
-        amountPrecision: currentMarket?.base_precision,
+        pricePrecision: decimalPlaces(currentMarket?.price_tick_size),
+        amountPrecision: decimalPlaces(currentMarket?.qty_step_size),
         getCurrentTradePrice,
         getLastTradePrice,
       }}>
