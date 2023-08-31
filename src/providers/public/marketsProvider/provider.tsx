@@ -107,7 +107,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         ticker: asset.symbol,
         assetId: asset.assetId,
       };
-    else throw new Error("cannot find asset id");
+    else throw new Error(`cannot find asset id: ${id}`);
   };
 
   const fetchMarketTickers = useCallback(
