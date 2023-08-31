@@ -42,7 +42,6 @@ export const DepositTemplate = () => {
   const { selectedAccount: currentAccount } = useProfile();
 
   const { list, selectGetAsset } = useAssetsProvider();
-
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
@@ -66,16 +65,15 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
-    const initialAsset = list.find(
+    const initialAsset = filterBlockedAssets(list).find(
       (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
-
     if (initialAsset) {
       setSelectedAsset(initialAsset);
     }
   }, [list, routedAsset]);
 
-  const existentialBalance = isAssetPDEX(selectedAsset.assetId) ? 1 : Math.pow(10, -12);
+  const existentialBalance = isAssetPDEX(selectedAsset?.assetId) ? 1 : Math.pow(10, -12);
   const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } = useFormik({
     initialValues: {
       amount: 0.0,
