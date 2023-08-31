@@ -33,15 +33,17 @@ import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProv
 import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
+import { IPublicAsset } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
   const { t: tc } = useTranslation("common");
 
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
-  const { list, selectGetAsset } = useAssetsProvider();
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const list = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState<IPublicAsset | undefined>(list?.[0]);
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
@@ -65,7 +67,7 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(currMainAcc?.account?.address?.length - 15);
 
   useEffect(() => {
-    const initialAsset = filterBlockedAssets(list).find(
+    const initialAsset = list.find(
       (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
     if (initialAsset) {

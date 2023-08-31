@@ -44,7 +44,6 @@ const initialValues = {
 };
 
 export const WithdrawTemplate = () => {
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
@@ -53,7 +52,9 @@ export const WithdrawTemplate = () => {
   const extensionWalletState = useExtensionWallet();
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
-  const { list: assets, selectGetAsset } = useAssetsProvider();
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const assets = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0]);
   const {
     allWithdrawals,
     readyWithdrawals: totalReadyToClaim,
