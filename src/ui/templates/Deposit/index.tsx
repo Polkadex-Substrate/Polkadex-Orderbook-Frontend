@@ -30,7 +30,7 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
-import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
 
@@ -179,7 +179,7 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {filterAssets(list).map((asset) => (
+                              {filterBlockedAssets(list).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>
