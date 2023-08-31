@@ -36,6 +36,7 @@ import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
 
 const initialValues = {
@@ -53,7 +54,11 @@ export const WithdrawTemplate = () => {
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
   const { list: assets, selectGetAsset } = useAssetsProvider();
-  const { allWithdrawals, readyWithdrawals: totalReadyToClaim } = useTransactionsProvider();
+  const {
+    allWithdrawals,
+    readyWithdrawals: totalReadyToClaim,
+    loading: isTransactionsFetching,
+  } = useTransactionsProvider();
   const { onFetchClaimWithdraw, loading } = useWithdrawsProvider();
 
   const currMainAcc =
@@ -301,69 +306,79 @@ export const WithdrawTemplate = () => {
                 <S.History>
                   <Tabs>
                     <h2>{t("history")}</h2>
-                    <S.HistoryHeader>
-                      <S.HistoryTabs>
-                        <TabHeader>
-                          <S.HistoryTab>{t("pending")}</S.HistoryTab>
-                        </TabHeader>
-                        <TabHeader>
-                          <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
-                            {t("readyToClaim")}
-                            <span>{hasPendingClaims}</span>
-                          </S.HistoryTab>
-                        </TabHeader>
-                        <TabHeader>
-                          <S.HistoryTab>{t("claimed")}</S.HistoryTab>
-                        </TabHeader>
-                      </S.HistoryTabs>
-                      <S.HistoryHeaderAside>
-                        <Checkbox
-                          name="hide"
-                          checked={showSelectedCoins}
-                          onChange={handleCheckBox}>
-                          {t("showSelectedCoin")}
-                        </Checkbox>
-                      </S.HistoryHeaderAside>
-                    </S.HistoryHeader>
-                    <S.HistoryWrapper>
-                      <TabContent>
-                        {pendingWithdraws?.length ? (
-                          <HistoryTable items={pendingWithdraws} />
-                        ) : (
-                          <div style={{ padding: "2rem" }}>
-                            <EmptyData />
-                          </div>
-                        )}
-                      </TabContent>
-                      <TabContent>
-                        {readyToClaim?.length ? (
-                          readyToClaim.map(({ id, sid, items }) => (
-                            <HistoryCard
-                              key={id}
-                              sid={sid}
-                              hasPendingWithdraws={items?.filter((v) => v.status === "READY")}
-                              handleClaimWithdraws={async () =>
-                                await onFetchClaimWithdraw({ sid })
-                              }
-                              items={items?.filter((v) => v.status === "READY")}
-                            />
-                          ))
-                        ) : (
-                          <div style={{ padding: "2rem" }}>
-                            <EmptyData />
-                          </div>
-                        )}
-                      </TabContent>
-                      <TabContent>
-                        {claimedWithdraws?.length ? (
-                          <HistoryTable items={claimedWithdraws} />
-                        ) : (
-                          <div style={{ padding: "2rem" }}>
-                            <EmptyData />
-                          </div>
-                        )}
-                      </TabContent>
-                    </S.HistoryWrapper>
+                    {isTransactionsFetching ? (
+                      <S.LoadingWrapper>
+                        <Keyboard color="primary" />
+                      </S.LoadingWrapper>
+                    ) : (
+                      <>
+                        <S.HistoryHeader>
+                          <S.HistoryTabs>
+                            <TabHeader>
+                              <S.HistoryTab>{t("pending")}</S.HistoryTab>
+                            </TabHeader>
+                            <TabHeader>
+                              <S.HistoryTab hasPendingClaims={hasPendingClaims > 0}>
+                                {t("readyToClaim")}
+                                <span>{hasPendingClaims}</span>
+                              </S.HistoryTab>
+                            </TabHeader>
+                            <TabHeader>
+                              <S.HistoryTab>{t("claimed")}</S.HistoryTab>
+                            </TabHeader>
+                          </S.HistoryTabs>
+                          <S.HistoryHeaderAside>
+                            <Checkbox
+                              name="hide"
+                              checked={showSelectedCoins}
+                              onChange={handleCheckBox}>
+                              {t("showSelectedCoin")}
+                            </Checkbox>
+                          </S.HistoryHeaderAside>
+                        </S.HistoryHeader>
+                        <S.HistoryWrapper>
+                          <TabContent>
+                            {pendingWithdraws?.length ? (
+                              <HistoryTable items={pendingWithdraws} />
+                            ) : (
+                              <div style={{ padding: "2rem" }}>
+                                <EmptyData />
+                              </div>
+                            )}
+                          </TabContent>
+                          <TabContent>
+                            {readyToClaim?.length ? (
+                              readyToClaim.map(({ id, sid, items }) => (
+                                <HistoryCard
+                                  key={id}
+                                  sid={sid}
+                                  hasPendingWithdraws={items?.filter(
+                                    (v) => v.status === "READY"
+                                  )}
+                                  handleClaimWithdraws={async () =>
+                                    await onFetchClaimWithdraw({ sid })
+                                  }
+                                  items={items?.filter((v) => v.status === "READY")}
+                                />
+                              ))
+                            ) : (
+                              <div style={{ padding: "2rem" }}>
+                                <EmptyData />
+                              </div>
+                            )}
+                          </TabContent>
+                          <TabContent>
+                            {claimedWithdraws?.length ? (
+                              <HistoryTable items={claimedWithdraws} />
+                            ) : (
+                              <div style={{ padding: "2rem" }}>
+                                <EmptyData />
+                              </div>
+                            )}
+                          </TabContent>
+                        </S.HistoryWrapper>
+                      </>
+                    )}
                   </Tabs>
                 </S.History>
               </S.Box>

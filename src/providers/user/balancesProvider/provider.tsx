@@ -20,9 +20,15 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
+    auth: { isLoading: isProfileFetching },
   } = useProfile();
-  const { list: assetsList, success: isAssetData, selectGetAsset } = useAssetsProvider();
-  const { api } = useNativeApi();
+  const {
+    list: assetsList,
+    success: isAssetData,
+    selectGetAsset,
+    loading: isAssetFetching,
+  } = useAssetsProvider();
+  const { api, connected } = useNativeApi();
 
   const { onHandleError } = useSettingsProvider();
 
@@ -81,6 +87,16 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     } catch (error) {
       console.error(error);
       onHandleError(`Balances fetch error: ${error?.message ?? error}`);
+      dispatch(A.balancesError(error));
+    } finally {
+      if (!mainAddress) {
+        const error = {
+          code: -1,
+          message: ["No main address detected"],
+        };
+
+        dispatch(A.balancesError(error));
+      }
     }
   }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError, api]);
 
@@ -118,10 +134,9 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     [onHandleError, updateBalanceFromEvent]
   );
 
-  // TODO: Add conditions..
   useEffect(() => {
-    onBalancesFetch();
-  }, [onBalancesFetch, mainAddress, isAssetData]);
+    if (!isProfileFetching && !isAssetFetching && connected) onBalancesFetch();
+  }, [onBalancesFetch, isProfileFetching, isAssetFetching, connected]);
 
   // balance updates are give to main address
   useEffect(() => {

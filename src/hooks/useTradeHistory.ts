@@ -48,7 +48,10 @@ export function useTradeHistory(filters: Ifilters) {
     tradesState.tradeHistoryNextToken,
   ]);
 
+  // TODO: Refactor filter process. Should do it on server rather than client
   useEffect(() => {
+    const { dateFrom, dateTo } = filters;
+
     let tradeHistoryList = list;
     if (filters?.onlyBuy) {
       tradeHistoryList = list.filter((data) => data.side?.toUpperCase() === "BID");
@@ -63,6 +66,13 @@ export function useTradeHistory(filters: Ifilters) {
         const market = currentMarket?.name;
         const marketForTrade = `${baseUnit}/${quoteUnit}`;
         return market === marketForTrade && trade;
+      });
+    }
+
+    // Filter by range
+    if (dateFrom && dateTo) {
+      tradeHistoryList = tradeHistoryList.filter((order) => {
+        return new Date(order.timestamp) >= dateFrom && new Date(order.timestamp) <= dateTo;
       });
     }
 

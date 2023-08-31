@@ -206,10 +206,13 @@ export const OrderHistoryProvider = ({ children }) => {
     [selectGetAsset, currentMarket?.name]
   );
 
+  // TODO: Refactor filter process. Should do it on server rather than client
   const filterOrders = useCallback(
     (filters: Ifilters) => {
       let orderHistoryList = list;
       let openOrdersList = openOrdersSorted;
+
+      const { dateFrom, dateTo } = filters;
 
       if (filters?.onlyBuy) {
         orderHistoryList = orderHistoryList.filter(
@@ -247,6 +250,16 @@ export const OrderHistoryProvider = ({ children }) => {
         });
         openOrdersList = openOrdersList.filter((order) => {
           return isMarketMatch(order) && order;
+        });
+      }
+
+      // Filter by range
+      if (dateFrom && dateTo) {
+        orderHistoryList = orderHistoryList.filter((order) => {
+          return new Date(order.time) >= dateFrom && new Date(order.time) <= dateTo;
+        });
+        openOrdersList = openOrdersList.filter((order) => {
+          return new Date(order.time) >= dateFrom && new Date(order.time) <= dateTo;
         });
       }
 

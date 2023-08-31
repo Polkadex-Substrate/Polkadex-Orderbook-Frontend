@@ -2,19 +2,25 @@ import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
-import { NavbarItem } from "@polkadex/orderbook-ui/molecules";
+import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { hasOnlyZeros } from "@polkadex/web-helpers";
+import { defaultTickers } from "@polkadex/orderbook/providers/public/marketsProvider";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 export const Navbar = ({ onOpenMarkets }) => {
-  const { getCurrentTradePrice } = useRecentTradesProvider();
+  const { getCurrentTradePrice, loading: isRecentTradeFetching } = useRecentTradesProvider();
   const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsProvider();
-  const { currentMarket: currMarket, currentTicker } = useMarketsProvider();
+  const {
+    currentMarket: currMarket,
+    currentTicker,
+    tickerLoading,
+    loading: isMarketFetching,
+  } = useMarketsProvider();
   const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
   const currPrice = currentTicker?.close;
   const priceChangePerCent = (currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
@@ -26,10 +32,20 @@ export const Navbar = ({ onOpenMarkets }) => {
   const quotePrecision = currMarket?.quote_precision || 0;
   const formattedVolume = Decimal.format(Number(volume), quotePrecision, ",");
 
-  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
+  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice;
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) => translation(`navbar.${key}`, args);
+
+  const isPriceLoading =
+    isRecentTradeFetching ||
+    tickerLoading ||
+    isMarketFetching ||
+    !currMarket ||
+    currentTicker.m === defaultTickers.m;
+
+  const isLoading =
+    tickerLoading || isMarketFetching || !currMarket || currentTicker.m === defaultTickers.m;
 
   return (
     <S.Wrapper>
@@ -40,38 +56,58 @@ export const Navbar = ({ onOpenMarkets }) => {
             pair={currMarket?.name}
             pairTicker={currMarket?.base_ticker}
             onOpenMarkets={onOpenMarkets}
+            isLoading={isLoading}
           />
         </S.ContainerPair>
         <S.ContainerInfo>
-          <NavbarItem
-            label={t("price", {
-              price: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
-            })}
-            info={price}
-          />
+          {isPriceLoading ? (
+            <InfoSkeleton />
+          ) : (
+            <NavbarItem
+              label={t("price", {
+                price: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
+              })}
+              info={price}
+            />
+          )}
 
-          <NavbarItem
-            label={t("price%24h")}
-            info={priceChangePerCent}
-            color={isPriceChangeNegative ? "primary" : "green"}
-          />
-          <NavbarItem
-            label={t("volume24hr", {
-              volume: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
-            })}
-            info={formattedVolume}
-          />
+          {isLoading ? (
+            <InfoSkeleton />
+          ) : (
+            <NavbarItem
+              label={t("price%24h")}
+              info={priceChangePerCent}
+              color={isPriceChangeNegative ? "primary" : "green"}
+            />
+          )}
+
+          {isLoading ? (
+            <InfoSkeleton width="12rem" />
+          ) : (
+            <NavbarItem
+              label={t("volume24hr", {
+                volume: quoteAsset?.symbol?.length ? `(${quoteAsset?.symbol})` : "",
+              })}
+              info={formattedVolume}
+            />
+          )}
 
           <S.WrapperVolume>
             <S.ContainerVolume>
-              <S.VolumeHigh>
-                <span>{t("24hrhigh")}</span>
-                <p>{high}</p>
-              </S.VolumeHigh>
-              <S.VolumeLow>
-                <span>{t("24hrlow")}</span>
-                <p>{low}</p>
-              </S.VolumeLow>
+              {isLoading ? (
+                <InfoSkeleton width="12rem" />
+              ) : (
+                <>
+                  <S.VolumeHigh>
+                    <span>{t("24hrhigh")}</span>
+                    <p>{high}</p>{" "}
+                  </S.VolumeHigh>
+                  <S.VolumeLow>
+                    <span>{t("24hrlow")}</span>
+                    <p>{low}</p>
+                  </S.VolumeLow>
+                </>
+              )}
             </S.ContainerVolume>
           </S.WrapperVolume>
         </S.ContainerInfo>
@@ -79,3 +115,12 @@ export const Navbar = ({ onOpenMarkets }) => {
     </S.Wrapper>
   );
 };
+
+type SkeletonProps = {
+  height?: string;
+  width?: string;
+};
+
+export const InfoSkeleton = ({ height = "4rem", width = "8rem" }: SkeletonProps) => (
+  <Skeleton height={height} width={width} />
+);
