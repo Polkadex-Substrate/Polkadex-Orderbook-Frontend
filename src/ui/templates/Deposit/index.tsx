@@ -20,7 +20,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { MAX_DIGITS_AFTER_DECIMAL, POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -32,7 +32,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
-import { trimFloat } from "@polkadex/web-helpers";
+import { formatNumber, trimFloat } from "@polkadex/web-helpers";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
@@ -57,6 +57,9 @@ export const DepositTemplate = () => {
   const { deposits, loading: isTransactionsFetching } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+  const formattedOnChainBalance = formatNumber(
+    onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL)
+  );
 
   const routedAsset = router.query.id as string;
 
@@ -192,7 +195,7 @@ export const DepositTemplate = () => {
                         <S.Available>
                           {tc("available")}{" "}
                           <strong>
-                            {onChainBalanceLoading ? t("loading") : onChainBalance}
+                            {onChainBalanceLoading ? t("loading") : formattedOnChainBalance}
                           </strong>
                         </S.Available>
                       </S.SelectInput>
