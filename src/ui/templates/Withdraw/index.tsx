@@ -24,7 +24,6 @@ import { withdrawValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useTryUnlockTradeAccount } from "@polkadex/orderbook-hooks";
 import { Header, Menu, UnlockAccount } from "@polkadex/orderbook-ui/organisms";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { isAssetPDEX } from "@polkadex/orderbook/helpers/isAssetPDEX";
@@ -35,7 +34,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
-import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
 
@@ -44,7 +43,6 @@ const initialValues = {
 };
 
 export const WithdrawTemplate = () => {
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
@@ -53,7 +51,9 @@ export const WithdrawTemplate = () => {
   const extensionWalletState = useExtensionWallet();
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
-  const { list: assets, selectGetAsset } = useAssetsProvider();
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const assets = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0]);
   const {
     allWithdrawals,
     readyWithdrawals: totalReadyToClaim,
@@ -91,10 +91,10 @@ export const WithdrawTemplate = () => {
     const initialAsset = assets.find(
       (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
-    if (initialAsset) {
+    if (initialAsset && !selectedAsset) {
       setSelectedAsset(initialAsset);
     }
-  }, [assets, routedAsset]);
+  }, [assets, selectedAsset, routedAsset]);
 
   const handleSubmitWithdraw = async (amount: string | number) => {
     try {
@@ -263,7 +263,7 @@ export const WithdrawTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {filterAssets(assets).map((asset) => (
+                              {filterBlockedAssets(assets).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>

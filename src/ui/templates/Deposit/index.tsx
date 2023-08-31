@@ -20,7 +20,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { MAX_DIGITS_AFTER_DECIMAL, POLKADEX_ASSET } from "@polkadex/web-constants";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -30,19 +30,21 @@ import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsPr
 import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extensionWallet";
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
-import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { formatNumber, trimFloat } from "@polkadex/web-helpers";
+import { trimFloat } from "@polkadex/web-helpers";
+import { IPublicAsset } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
   const { t: tc } = useTranslation("common");
 
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
-  const { list, selectGetAsset } = useAssetsProvider();
-
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const list = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState<IPublicAsset | undefined>(list?.[0]);
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
@@ -73,13 +75,13 @@ export const DepositTemplate = () => {
     const initialAsset = list.find(
       (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
-
-    if (initialAsset) {
+    if (initialAsset && !selectedAsset) {
+      console.log("here!");
       setSelectedAsset(initialAsset);
     }
-  }, [list, routedAsset]);
+  }, [list, selectedAsset, routedAsset]);
 
-  const existentialBalance = isAssetPDEX(selectedAsset.assetId) ? 1 : Math.pow(10, -12);
+  const existentialBalance = isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1; // there should be a config for this from backend.;
   const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } = useFormik({
     initialValues: {
       amount: 0.0,
@@ -183,7 +185,7 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {filterAssets(list).map((asset) => (
+                              {filterBlockedAssets(list).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>

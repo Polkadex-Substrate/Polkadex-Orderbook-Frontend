@@ -7,11 +7,11 @@ import * as S from "./styles";
 import { useFunds } from "@polkadex/orderbook/hooks";
 import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
 import { toCapitalize } from "@polkadex/web-helpers";
-import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 
 export const Funds = ({ onHideFilters }) => {
   const { balances } = useFunds();
-  const allBalances = filterAssets(balances);
+  const allBalances = filterBlockedAssets(balances);
   useEffect(() => {
     onHideFilters(false);
     return () => onHideFilters(true);
