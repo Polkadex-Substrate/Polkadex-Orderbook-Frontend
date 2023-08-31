@@ -3,9 +3,7 @@ import { useRouter } from "next/router";
 
 import { useProfile } from "../providers/user/profile";
 import { useMarketsProvider } from "../providers/public/marketsProvider/useMarketsProvider";
-import { Market, defaultTickers } from "../providers/public/marketsProvider";
-
-import { defaultConfig } from "@polkadex/orderbook-config";
+import { defaultTickers, Market } from "../providers/public/marketsProvider";
 
 export type InitialMarkets = {
   last: string | number;
@@ -108,24 +106,18 @@ export function useMarkets(onClose: () => void) {
     const allFavoriteFilters = allTickets.filter((value) =>
       fieldValue.showFavourite ? value.isFavourite === fieldValue.showFavourite : value
     );
-    const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
-      const id = cv.id.split("-");
-      const includeMarket = id.some((value) => !defaultConfig.blockedAssets?.includes(value));
-
+    return allFavoriteFilters.reduce((pv, cv) => {
       const names = cv.name.toLowerCase().split("/");
       if (
         cv.name.toLowerCase().includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
           fieldValue.marketsTabsSelected.toLowerCase() === names[1] ||
-          fieldValue.marketsTabsSelected.toLowerCase() === "all") &&
-        includeMarket
+          fieldValue.marketsTabsSelected.toLowerCase() === "all")
       ) {
         pv.push(cv);
       }
       return pv;
     }, initialMarkets);
-
-    return allTicketsFilters;
   };
 
   /**
@@ -136,12 +128,8 @@ export function useMarkets(onClose: () => void) {
   // TODO: Add ticker types, ex. Fiat, Zones, Alts
   const marketTickers = markets.reduce(
     (pv: string[], cv: Market) => {
-      const id = cv.id.split("-");
-
-      const includeTicker = id.some((value) => !defaultConfig.blockedAssets?.includes(value));
-
       const [, quote] = cv.name.split("/");
-      if (pv.indexOf(quote) === -1 && includeTicker) {
+      if (pv.indexOf(quote) === -1) {
         pv.push(quote);
       }
       return pv;

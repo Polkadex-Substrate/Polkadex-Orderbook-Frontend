@@ -4,6 +4,7 @@ import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
 import { useRouter } from "next/router";
+import { GraphQLSubscription } from "@aws-amplify/api";
 
 import * as queries from "../../../graphql/queries";
 import * as subscriptions from "../../../graphql/subscriptions";
@@ -29,6 +30,8 @@ import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { decimalPlaces } from "@polkadex/web-helpers";
+import { Websocket_streamsSubscription } from "@polkadex/orderbook/API";
+import { defaultConfig } from "@polkadex/orderbook-config";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
@@ -73,8 +76,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
-
-          dispatch(A.marketsData(markets));
+          const validMarkets = markets.filter(
+            (market) =>
+              !defaultConfig.blockedAssets.some((item) => item === market.baseAssetId) &&
+              !defaultConfig.blockedAssets.some((item) => item === market.quoteAssetId)
+          );
+          dispatch(A.marketsData(validMarkets));
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -160,12 +167,10 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     if (!state?.currentMarket?.m) {
       return;
     }
-    const subscription = API.graphql({
+    const subscription = API.graphql<GraphQLSubscription<Websocket_streamsSubscription>>({
       query: subscriptions.websocket_streams,
       variables: { name: state.currentMarket.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
     }).subscribe({
       next: (data) => {
         const dataParsed: TickerQueryResult = JSON.parse(
