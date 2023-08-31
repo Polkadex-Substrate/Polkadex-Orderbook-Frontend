@@ -33,7 +33,6 @@ export type OrderBookProviderProps = PropsWithChildren<{
 
 export type OrderBookContextProps = OrderBookState & {
   onOrderBook: (value: Market) => void;
-  onOrderBookChanel: (value: Market) => void;
 };
 
 export interface OrderBookProps {

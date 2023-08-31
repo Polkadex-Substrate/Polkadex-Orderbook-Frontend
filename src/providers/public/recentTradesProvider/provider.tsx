@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
+import { GraphQLSubscription } from "@aws-amplify/api";
 
 import * as subscriptions from "../../../graphql/subscriptions";
 import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
@@ -16,6 +17,7 @@ import { getRecentTrades } from "@polkadex/orderbook/graphql/queries";
 import { fetchFromAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { decimalPlaces, getIsDecreasingArray } from "@polkadex/web-helpers";
+import { Websocket_streamsSubscription } from "@polkadex/orderbook/API";
 
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);
@@ -49,12 +51,10 @@ export const RecentTradesProvider = ({ children }) => {
   const { currentMarket } = useMarketsProvider();
 
   useEffect(() => {
-    const subscription = API.graphql({
+    const subscription = API.graphql<GraphQLSubscription<Websocket_streamsSubscription>>({
       query: subscriptions.websocket_streams,
       variables: { name: `${currentMarket?.m}-recent-trades` },
       authToken: READ_ONLY_TOKEN,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
     }).subscribe({
       next: (data) => {
         const val: RawTradeEvent = JSON.parse(data.value.data.websocket_streams.data);
@@ -64,14 +64,13 @@ export const RecentTradesProvider = ({ children }) => {
           market_id: val.m,
           timestamp: Number(val.t),
         };
-
         dispatch(A.recentTradesPush(trade));
       },
       error: (err) => console.warn(err),
     });
 
     return () => {
-      return subscription.unsubscribe;
+      return subscription.unsubscribe();
     };
   }, [currentMarket?.m]);
 
