@@ -30,6 +30,7 @@ export const Span = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
   word-break: break-word;
+  margin-top: 0.3rem;
 `;
 export const ContainerForm = styled.div``;
 export const WrapperActions = styled.div`
@@ -115,4 +116,10 @@ export const Error = styled.div`
   color: #ff0087;
   font-size: 1.25rem;
   margin-bottom: 2rem;
+`;
+
+export const ButtonSkeletonWrapper = styled.div`
+  border-radius: 1rem;
+  margin-inline: 0.3rem;
+  overflow: hidden;
 `;

@@ -9,11 +9,13 @@ import { selectIsAddressInExtension } from "@polkadex/orderbook/providers/user/e
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useDisabledPages } from "@polkadex/orderbook-hooks";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const DepositTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Deposit").then((mod) => mod.DepositTemplate),
   {
     ssr: false,
+    loading: () => <LoadingScreen />,
   }
 );
 

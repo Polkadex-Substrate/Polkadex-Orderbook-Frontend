@@ -12,6 +12,7 @@ import {
   MarketInput,
   PassCode,
   SliderPercentage,
+  Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder, useTryUnlockTradeAccount } from "@polkadex/orderbook/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
@@ -46,6 +47,8 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
     changeTotal,
     executeOrder,
     isOrderLoading,
+    isMarketFetching,
+    isBalanceFetching,
     availableAmount,
     quoteTicker,
     baseTicker,
@@ -86,10 +89,16 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
             <S.WrapperBalance>
               <small>{t("avaliable")}</small>
               <S.Span>
-                <Decimal fixed={pricePrecision} hasStyle={false}>
-                  {availableAmount}
-                </Decimal>{" "}
-                {isSell ? baseTicker : quoteTicker}
+                {isMarketFetching || isBalanceFetching ? (
+                  <AvaliableBalanceSkeleton />
+                ) : (
+                  <>
+                    <Decimal fixed={pricePrecision} hasStyle={false}>
+                      {availableAmount}
+                    </Decimal>{" "}
+                    {isSell ? baseTicker : quoteTicker}
+                  </>
+                )}
               </S.Span>
             </S.WrapperBalance>
           </S.ContainerWallet>
@@ -161,7 +170,9 @@ export const MarketOrderAction = ({ isSell = false, orderType, isLimit, formik }
                   disabled={isOrderLoading}
                 />
               )}
-              {hasUser ? (
+              {isMarketFetching || !baseTicker ? (
+                <ButtonSkeleton />
+              ) : hasUser ? (
                 <ButtonStatus
                   isSell={isSell}
                   heading={{
@@ -245,3 +256,10 @@ const ProtectPassword = () => {
     </LoadingSection>
   );
 };
+
+export const AvaliableBalanceSkeleton = () => <Skeleton height="2rem" width="10rem" />;
+export const ButtonSkeleton = () => (
+  <S.ButtonSkeletonWrapper>
+    <Skeleton height="4rem" width="100%" />
+  </S.ButtonSkeletonWrapper>
+);

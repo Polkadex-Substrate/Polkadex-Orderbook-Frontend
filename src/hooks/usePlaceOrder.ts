@@ -68,9 +68,9 @@ export function usePlaceOrder(
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket, loading: isMarketFetching } = useMarketsProvider();
 
-  const { getFreeProxyBalance } = useBalancesProvider();
+  const { getFreeProxyBalance, loading: isBalanceFetching } = useBalancesProvider();
 
   const bestAskPrice = asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;
 
@@ -581,6 +581,8 @@ export function usePlaceOrder(
   ]);
 
   return {
+    isMarketFetching,
+    isBalanceFetching,
     availableAmount: isSell ? availableBaseAmount : availableQuoteAmount,
     changeTotal: handleTotalChange,
     changeAmount: handleAmountChange,

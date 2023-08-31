@@ -56,13 +56,23 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
   );
 };
 
+type HeaderMarketProps = {
+  id: string;
+  pair: string;
+  pairSymbol?: string;
+  pairTicker: string;
+  onOpenMarkets?: () => void;
+  isLoading?: boolean;
+};
+
 export const HeaderMarket = ({
   id = "",
   pair = "Empty  Token",
   pairSymbol = "Polkadex",
   pairTicker,
   onOpenMarkets = undefined,
-}) => {
+  isLoading = false,
+}: HeaderMarketProps) => {
   const now = new Date();
   const from = subDays(now, 7);
   const to = endOfDay(now);
@@ -70,22 +80,28 @@ export const HeaderMarket = ({
 
   return (
     <S.Header onClick={onOpenMarkets}>
-      <S.HeaderAsideLeft>
-        <S.HeaderToken>
-          <Icon isToken name={pairTicker} size="extraMedium" color="text" />
-        </S.HeaderToken>
-        <S.HeaderInfo>
-          <S.HeaderInfoContainer>
-            <span>{pair}</span>
-          </S.HeaderInfoContainer>
-          <p>{pairSymbol}</p>
-        </S.HeaderInfo>
-      </S.HeaderAsideLeft>
-      <S.HeaderAsideCenter>
-        <Sparklines data={graphPoints}>
-          <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
-        </Sparklines>
-      </S.HeaderAsideCenter>
+      {isLoading ? (
+        <MarketsSkeleton />
+      ) : (
+        <>
+          <S.HeaderAsideLeft>
+            <S.HeaderToken>
+              <Icon isToken name={pairTicker} size="extraMedium" color="text" />
+            </S.HeaderToken>
+            <S.HeaderInfo>
+              <S.HeaderInfoContainer>
+                <span>{pair}</span>
+              </S.HeaderInfoContainer>
+              <p>{pairSymbol}</p>
+            </S.HeaderInfo>
+          </S.HeaderAsideLeft>
+          <S.HeaderAsideCenter>
+            <Sparklines data={graphPoints}>
+              <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
+            </Sparklines>
+          </S.HeaderAsideCenter>
+        </>
+      )}
     </S.Header>
   );
 };
@@ -212,4 +228,12 @@ const Footer: FC<{
       ))}
   </S.Footer>
 );
-export const MarketsSkeleton = () => <Skeleton height="100%" width="100%" />;
+
+type SkeletonProps = {
+  height?: string;
+  width?: string;
+};
+
+export const MarketsSkeleton = ({ height = "4rem", width = "23rem" }: SkeletonProps) => (
+  <Skeleton height={height} width={width} />
+);

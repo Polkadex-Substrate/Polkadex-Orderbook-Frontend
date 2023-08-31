@@ -5,11 +5,13 @@ import { useDisabledPages } from "../hooks/useDisabledPages";
 import { useAuth } from "../providers/user/auth";
 
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const SignTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Sign").then((mod) => mod.SignTemplate),
   {
     ssr: false,
+    loading: () => <LoadingScreen />,
   }
 );
 const Sign = () => {

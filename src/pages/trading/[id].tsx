@@ -5,11 +5,13 @@ import { OrderBookProvider } from "@polkadex/orderbook/providers/public/orderBoo
 import { OrdersProvider } from "@polkadex/orderbook/providers/user/orders";
 import { BalancesProvider } from "@polkadex/orderbook/providers";
 import { useDisabledPages } from "@polkadex/orderbook-hooks";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const TradingTemplate = dynamic(
   () => import("@polkadex/orderbook-ui/templates/Trading").then((mod) => mod.Trading),
   {
     ssr: false,
+    loading: () => <LoadingScreen />,
   }
 );
 
