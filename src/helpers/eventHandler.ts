@@ -1,16 +1,17 @@
 import { API } from "aws-amplify";
-import Observable from "zen-observable-ts";
+import { GraphQLSubscription } from "@aws-amplify/api";
 
 import * as subscriptions from "../graphql/subscriptions";
 
 import { READ_ONLY_TOKEN, UserEvents } from "@polkadex/web-constants";
+import { Websocket_streamsSubscription } from "@polkadex/orderbook/API";
 
-export const createEventsObservable = (name: string): Observable<any> =>
-  API.graphql({
+export const createEventsObservable = (name: string) =>
+  API.graphql<GraphQLSubscription<Websocket_streamsSubscription>>({
     query: subscriptions.websocket_streams,
     variables: { name },
     authToken: READ_ONLY_TOKEN,
-  }) as Observable<any>;
+  });
 
 interface eventHandlerParams {
   name: string;
