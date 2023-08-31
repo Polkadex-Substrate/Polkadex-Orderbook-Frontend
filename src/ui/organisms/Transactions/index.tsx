@@ -31,6 +31,8 @@ export type Ifilters = {
   onlyBuy: boolean;
   onlySell: boolean;
   status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
+  dateFrom?: Date;
+  dateTo?: Date;
 };
 
 const initialFilters: Ifilters = {
@@ -63,6 +65,12 @@ export const Transactions = () => {
   const handleActionDropdown = (status: string) => {
     setFilters({ ...filters, status: status as Ifilters["status"] });
   };
+  const handleRangeChange = useCallback(
+    (dateFrom: Date, dateTo: Date) => {
+      setFilters((prevFilters) => ({ ...prevFilters, dateFrom, dateTo }));
+    },
+    [setFilters]
+  );
 
   useEffect(() => {
     filterOrders(filters);
@@ -70,9 +78,10 @@ export const Transactions = () => {
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }: RangeKeyDict) => {
+      handleRangeChange(startDate, endDate);
       dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
     },
-    [dispatchUserSessionData]
+    [dispatchUserSessionData, handleRangeChange]
   );
 
   const ranges = useMemo(() => {
