@@ -64,7 +64,6 @@ export const RecentTradesProvider = ({ children }) => {
           market_id: val.m,
           timestamp: Number(val.t),
         };
-        console.log("got recent trade: ", trade);
         dispatch(A.recentTradesPush(trade));
       },
       error: (err) => console.warn(err),
