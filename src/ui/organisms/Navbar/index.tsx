@@ -32,7 +32,7 @@ export const Navbar = ({ onOpenMarkets }) => {
   const quotePrecision = currMarket?.quote_precision || 0;
   const formattedVolume = Decimal.format(Number(volume), quotePrecision, ",");
 
-  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice.toPrecision(2);
+  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice;
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) => translation(`navbar.${key}`, args);

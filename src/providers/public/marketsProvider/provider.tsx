@@ -28,6 +28,7 @@ import { convertToTicker } from "@polkadex/orderbook/helpers/convertToTicker";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import { getAllMarkets } from "@polkadex/orderbook/graphql/queries";
 import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
+import { decimalPlaces } from "@polkadex/web-helpers";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
@@ -102,40 +103,50 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     else throw new Error("cannot find asset id");
   };
 
-  const fetchMarketTickers = useCallback(async (market: string): Promise<Ticker> => {
-    // TODO: check sendQueryToAppSync market variable
-    const to = new Date().toISOString();
-    // tickers are fetched for the last 24 hours
-    const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
-    const res = await sendQueryToAppSync({
-      query: queries.getMarketTickers,
-      variables: { market, from, to },
-    });
-    const item: TickerQueryResult = res.data.getMarketTickers.items;
-    const priceChange = Number(item.c) - Number(item.o);
-    const priceChangePercent = (priceChange / Number(item.o)) * 100;
-    const precision = 2; // TOOD: should be added to market config.
-    return {
+  const fetchMarketTickers = useCallback(
+    async ({
       m: market,
-      priceChange24Hr: _.round(priceChange, precision),
-      priceChangePercent24Hr: _.round(
-        isNaN(priceChangePercent) ? 0 : priceChangePercent,
-        precision
-      ),
-      open: _.round(Number(item.o), precision),
-      close: _.round(Number(item.c), precision),
-      high: _.round(Number(item.h), precision),
-      low: _.round(Number(item.l), precision),
-      volumeBase24hr: _.round(isNaN(Number(item.vb)) ? 0 : Number(item.vb), precision),
-      volumeQuote24Hr: _.round(Number(item.vq), precision),
-    };
-  }, []);
+      price_tick_size: priceTickSize,
+      qty_step_size: qtyStepSize,
+    }: Market): Promise<Ticker> => {
+      // TODO: check sendQueryToAppSync market variable
+      const to = new Date().toISOString();
+      // tickers are fetched for the last 24 hours
+      const from = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString();
+      const res = await sendQueryToAppSync({
+        query: queries.getMarketTickers,
+        variables: { market, from, to },
+      });
+      const item: TickerQueryResult = res.data.getMarketTickers.items;
+      const priceChange = Number(item.c) - Number(item.o);
+      const priceChangePercent = (priceChange / Number(item.o)) * 100;
+
+      const pricePrecision = decimalPlaces(priceTickSize);
+      const quotePrecision = decimalPlaces(qtyStepSize);
+
+      return {
+        m: market,
+        priceChange24Hr: _.round(priceChange, pricePrecision),
+        priceChangePercent24Hr: _.round(
+          isNaN(priceChangePercent) ? 0 : priceChangePercent,
+          pricePrecision
+        ),
+        open: _.round(Number(item.o), pricePrecision),
+        close: _.round(Number(item.c), pricePrecision),
+        high: _.round(Number(item.h), pricePrecision),
+        low: _.round(Number(item.l), pricePrecision),
+        volumeBase24hr: _.round(isNaN(Number(item.vb)) ? 0 : Number(item.vb), quotePrecision),
+        volumeQuote24Hr: _.round(Number(item.vq), quotePrecision),
+      };
+    },
+    []
+  );
 
   const onMarketTickersFetch = useCallback(async () => {
     dispatch(A.marketsTickersFetch());
     const markets = state.list;
     try {
-      const tickersPromises = markets.map((m) => fetchMarketTickers(m.m));
+      const tickersPromises = markets.map((m) => fetchMarketTickers(m));
       const tickers = await Promise.all(tickersPromises);
 
       dispatch(A.marketsTickersData(tickers));
