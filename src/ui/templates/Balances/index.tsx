@@ -19,9 +19,11 @@ import {
 import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balancesProvider/useBalancesProvider";
+import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { defaultConfig } from "@polkadex/orderbook-config";
 import { POLKADEX_ASSET } from "@polkadex/web-constants";
+import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
@@ -29,8 +31,9 @@ export const BalancesTemplate = () => {
 
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
-  const { list } = useAssetsProvider();
-  const { balances: userBalances } = useBalancesProvider();
+  const { list, loading: isAssetsFetching } = useAssetsProvider();
+  const { balances: userBalances, loading: isBalanceFetching } = useBalancesProvider();
+  const { connecting } = useNativeApi();
   const profileState = useProfile();
 
   const userHasSelectedAccount = profileState?.selectedAccount?.mainAddress?.length > 0;
@@ -79,6 +82,9 @@ export const BalancesTemplate = () => {
   };
   const router = useRouter();
 
+  const showLoader =
+    isAssetsFetching || isBalanceFetching || profileState.auth.isLoading || connecting;
+
   return (
     <>
       <Head>
@@ -98,7 +104,11 @@ export const BalancesTemplate = () => {
                 <h1>{t("heading")}</h1>
               </S.Title>
               <S.Container>
-                {userHasSelectedAccount ? (
+                {showLoader ? (
+                  <S.LoadingWrapper>
+                    <Keyboard color="primary" />
+                  </S.LoadingWrapper>
+                ) : userHasSelectedAccount ? (
                   <>
                     <S.Header>
                       <h2>{t("overview")}</h2>

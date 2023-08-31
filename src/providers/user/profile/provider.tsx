@@ -59,32 +59,32 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     [onHandleError]
   );
 
-  const getAllProxyAccounts = async (
-    mainAccounts: [string],
-    Api = API
-  ): Promise<T.UserAccount[]> => {
-    const promises = mainAccounts?.map(async (mainAccount) => {
-      try {
-        const res = await sendQueryToAppSync({
-          query: queries.findUserByMainAccount,
-          variables: { main_account: mainAccount },
-          API: Api,
-        });
-        const proxies = res?.data?.findUserByMainAccount?.proxies ?? [];
-        return { main_account: mainAccount, proxies };
-      } catch (error) {
-        return { main_account: mainAccount, proxies: [] };
-      }
-    });
-    const list = await Promise.all(promises);
-    const accounts: T.UserAccount[] = [];
-    list.forEach((item) => {
-      item.proxies.forEach((proxy) => {
-        accounts.push({ mainAddress: item.main_account, tradeAddress: proxy });
+  const getAllProxyAccounts = useCallback(
+    async (mainAccounts: [string], Api = API): Promise<T.UserAccount[]> => {
+      const promises = mainAccounts?.map(async (mainAccount) => {
+        try {
+          const res = await sendQueryToAppSync({
+            query: queries.findUserByMainAccount,
+            variables: { main_account: mainAccount },
+            API: Api,
+          });
+          const proxies = res?.data?.findUserByMainAccount?.proxies ?? [];
+          return { main_account: mainAccount, proxies };
+        } catch (error) {
+          return { main_account: mainAccount, proxies: [] };
+        }
       });
-    });
-    return accounts;
-  };
+      const list = await Promise.all(promises);
+      const accounts: T.UserAccount[] = [];
+      list.forEach((item) => {
+        item.proxies.forEach((proxy) => {
+          accounts.push({ mainAddress: item.main_account, tradeAddress: proxy });
+        });
+      });
+      return accounts;
+    },
+    []
+  );
 
   const onSetUserAuthData = ({ isAuthenticated, userExists, jwt }: T.UserAuth) => {
     dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
@@ -93,6 +93,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   // TODO: Refactor this function
   const onUserAuthentication = useCallback(
     async (payload: T.UserAuth) => {
+      dispatch(A.userFetch({ email: payload.email }));
       const { email, isConfirmed, userExists } = payload;
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
@@ -117,7 +118,10 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
               })
             );
           if (accounts?.length) dispatch(A.userData({ mainAccounts: accounts }));
+          else dispatch(A.userError({ code: -1, message: ["No mainAccounts present"] })); // Need to do it to set isLoading to false
+
           if (userAccounts?.length) dispatch(A.userData({ userAccounts: userAccounts }));
+          else dispatch(A.userError({ code: -1, message: ["No userAccounts present"] })); // Need to do it to set isLoading to false
         }
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
@@ -133,12 +137,14 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       } catch (error) {
         onHandleError(`User auth error:${error?.message ?? error}`);
         dispatch(A.userAuthError(error));
+        dispatch(A.userError(error));
       }
     },
     [
       onHandleError,
       onHandleNotification,
       getAllMainLinkedAccounts,
+      getAllProxyAccounts,
       state?.userData?.userAccounts,
     ]
   );
@@ -206,7 +212,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         userConfirmed: payload.isConfirmed,
       });
       onSetUserAuthData(payload);
-      onUserAuthentication(payload);
+      await onUserAuthentication(payload);
     } catch (error) {
       console.log("User error", error);
       switch (error) {
@@ -218,7 +224,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
             isConfirmed: false,
           };
           onSetUserAuthData(payload);
-          onUserAuthentication(payload);
+          await onUserAuthentication(payload);
           break;
         }
         case "The user is not authenticated": {

@@ -31,6 +31,7 @@ import { useExtensionWallet } from "@polkadex/orderbook/providers/user/extension
 import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/useTransactionProvider";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
 
 export const DepositTemplate = () => {
@@ -53,7 +54,7 @@ export const DepositTemplate = () => {
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
-  const { deposits } = useTransactionsProvider();
+  const { deposits, loading: isTransactionsFetching } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
 
@@ -220,7 +221,11 @@ export const DepositTemplate = () => {
 
                 <S.History>
                   <h2>{t("history")}</h2>
-                  {deposits.length ? (
+                  {isTransactionsFetching ? (
+                    <S.LoadingWrapper>
+                      <Keyboard color="primary" />
+                    </S.LoadingWrapper>
+                  ) : deposits.length ? (
                     <S.HistoryContent>
                       <Table
                         aria-label="Polkadex Deposit History Table"

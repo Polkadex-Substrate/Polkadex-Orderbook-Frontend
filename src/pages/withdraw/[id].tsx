@@ -9,12 +9,14 @@ import { WithdrawsProvider } from "@polkadex/orderbook/providers/user/withdrawsP
 import { TransactionsProvider } from "@polkadex/orderbook/providers/user/transactionsProvider/provider";
 import { AssetsProvider, BalancesProvider } from "@polkadex/orderbook/providers";
 import { useDisabledPages } from "@polkadex/orderbook-hooks";
+import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 const WithdrawTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Withdraw").then((mod) => mod.WithdrawTemplate),
   {
     ssr: false,
+    loading: () => <LoadingScreen />,
   }
 );
 const Withdraw = () => {

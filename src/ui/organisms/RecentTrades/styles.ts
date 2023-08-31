@@ -117,8 +117,9 @@ export const Head = styled.div`
 
 export const CellHead = styled.span`
   font-size: 1.2rem;
-  :not(:first-child) {
-    justify-self: flex-end;
+  justify-self: flex-end;
+  :not(:last-child) {
+    justify-self: flex-start;
   }
 `;
 
@@ -146,6 +147,9 @@ export const CardCell = styled.span`
   font-size: 1.2rem;
   :not(:first-child) {
     justify-self: flex-end;
+  }
+  :nth-child(2) {
+    justify-self: flex-start;
   }
 `;
 

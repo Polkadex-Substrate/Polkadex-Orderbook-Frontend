@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
+import { GraphQLSubscription } from "@aws-amplify/api";
 
 import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
 import { Market } from "../marketsProvider";
@@ -16,6 +17,7 @@ import * as queries from "@polkadex/orderbook/graphql/queries";
 import { READ_ONLY_TOKEN } from "@polkadex/web-constants";
 import * as subscriptions from "@polkadex/orderbook/graphql/subscriptions";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { Websocket_streamsSubscription } from "@polkadex/orderbook/API";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
@@ -45,26 +47,24 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
     [onHandleError]
   );
 
-  const onOrderBookChanel = useCallback((market: Market) => {
-    const subscription = API.graphql({
-      query: subscriptions.websocket_streams,
-      variables: { name: `${market.m}-ob-inc` },
-      authToken: READ_ONLY_TOKEN,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    }).subscribe({
-      next: (resp) => {
-        const msg = resp.value.data.websocket_streams.data;
-        const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
-        dispatch(A.depthDataIncrement(data));
-      },
-      error: (err) => console.log(err),
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+  useEffect(() => {
+    if (currentMarket?.m) {
+      const subscription = API.graphql<GraphQLSubscription<Websocket_streamsSubscription>>({
+        query: subscriptions.websocket_streams,
+        variables: { name: `${currentMarket.m}-ob-inc` },
+        authToken: READ_ONLY_TOKEN,
+      }).subscribe({
+        next: (resp) => {
+          const msg = resp.value.data.websocket_streams.data;
+          const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
+          console.log("got orderbook event: ", msg, currentMarket.m);
+          dispatch(A.depthDataIncrement(data));
+        },
+        error: (err) => console.log(err),
+      });
+      return () => subscription.unsubscribe();
+    }
+  }, [currentMarket?.m]);
 
   const formatOrderBookData = (data: T.OrderBookDbState[]): T.OrderBookDbState[] => {
     return data.map((item) => ({
@@ -99,16 +99,14 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   useEffect(() => {
     if (currentMarket?.m) {
       onOrderBook(currentMarket);
-      onOrderBookChanel(currentMarket);
     }
-  }, [currentMarket, dispatch, onOrderBook, onOrderBookChanel]);
+  }, [currentMarket, dispatch, onOrderBook]);
 
   return (
     <Provider
       value={{
         ...state,
         onOrderBook,
-        onOrderBookChanel,
       }}>
       {children}
     </Provider>

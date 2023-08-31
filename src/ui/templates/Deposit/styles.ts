@@ -352,3 +352,13 @@ export const HistoryTitle = styled.div`
     }
   `}
 `;
+
+export const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 10rem;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #8ba1be1;
+`;

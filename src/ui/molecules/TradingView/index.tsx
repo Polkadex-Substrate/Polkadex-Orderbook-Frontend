@@ -16,6 +16,7 @@ import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/useKlineProvider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
+import { decimalPlaces } from "@polkadex/web-helpers";
 
 const configurationData: DatafeedConfiguration = {
   supported_resolutions: ["1", "5", "15", "30", "60", "360", "1D", "1W"] as ResolutionString[],
@@ -126,6 +127,10 @@ export const TradingView = () => {
             onError("cannot resolve symbol");
             return;
           }
+
+          const pricePrecision = decimalPlaces(currentMarket?.price_tick_size) || 1;
+          const pricescale = Math.pow(10, pricePrecision);
+
           const symbolInfo = {
             ticker: symbolItem.full_name,
             name: symbolItem.symbol,
@@ -135,7 +140,7 @@ export const TradingView = () => {
             timezone: "Etc/UTC",
             exchange: symbolItem.exchange,
             minmov: 1,
-            pricescale: 100,
+            pricescale,
             has_intraday: true,
             visible_plots_set: "ohlcv",
             has_daily: true,
@@ -196,7 +201,14 @@ export const TradingView = () => {
         foregroundColor: "transparent",
       },
     };
-  }, [currentMarket?.m, getAllSymbols, getData, currentMarket?.name, onFetchKlineChannel]);
+  }, [
+    currentMarket?.m,
+    getAllSymbols,
+    getData,
+    currentMarket?.name,
+    onFetchKlineChannel,
+    currentMarket?.price_tick_size,
+  ]);
 
   useEffect(() => {
     if (!currentMarket?.m) return;
