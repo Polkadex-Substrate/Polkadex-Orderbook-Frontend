@@ -35,7 +35,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { useTradeWallet } from "@polkadex/orderbook/providers/user/tradeWallet";
 import { selectTradeAccount } from "@polkadex/orderbook/providers/user/tradeWallet/helper";
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
-import { filterAssets } from "@polkadex/orderbook/helpers/filterAssets";
+import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { trimFloat } from "@polkadex/web-helpers";
 
@@ -44,7 +44,6 @@ const initialValues = {
 };
 
 export const WithdrawTemplate = () => {
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
@@ -53,7 +52,9 @@ export const WithdrawTemplate = () => {
   const extensionWalletState = useExtensionWallet();
   const { onFetchWithdraws } = useWithdrawsProvider();
   const tradeWalletState = useTradeWallet();
-  const { list: assets, selectGetAsset } = useAssetsProvider();
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const assets = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0]);
   const {
     allWithdrawals,
     readyWithdrawals: totalReadyToClaim,
@@ -263,7 +264,7 @@ export const WithdrawTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {filterAssets(assets).map((asset) => (
+                              {filterBlockedAssets(assets).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}>
