@@ -20,7 +20,6 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -70,12 +69,13 @@ export const DepositTemplate = () => {
     const initialAsset = list.find(
       (asset) => asset.name.startsWith(routedAsset) || asset.symbol.startsWith(routedAsset)
     );
-    if (initialAsset) {
+    if (initialAsset && !selectedAsset) {
+      console.log("here!");
       setSelectedAsset(initialAsset);
     }
-  }, [list, routedAsset]);
+  }, [list, selectedAsset, routedAsset]);
 
-  const existentialBalance = isAssetPDEX(selectedAsset?.assetId) ? 1 : Math.pow(10, -12);
+  const existentialBalance = isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1; // there should be a config for this from backend.;
   const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } = useFormik({
     initialValues: {
       amount: 0.0,
