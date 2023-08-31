@@ -57,6 +57,7 @@ export const DepositTemplate = () => {
   const { deposits, loading: isTransactionsFetching } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+
   const formattedOnChainBalance = formatNumber(
     onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL)
   );
