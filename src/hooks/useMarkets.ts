@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 
 import { useProfile } from "../providers/user/profile";
@@ -72,16 +72,19 @@ export function useMarkets(onClose: () => void) {
    * @param {string} e -  Search field value
    * @returns {void} dispatch setCurrentMarket action
    */
-  const handleChangeMarket = (e: string): void => {
-    const marketToSet = markets.find((el) => el.name === e);
-    if (marketToSet) {
-      router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, {
-        shallow: true,
-      });
-      setCurrentMarket(marketToSet);
-      onClose();
-    }
-  };
+  const handleChangeMarket = useCallback(
+    (e: string): void => {
+      const marketToSet = markets.find((el) => el.name === e);
+      if (marketToSet) {
+        router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, {
+          shallow: true,
+        });
+        setCurrentMarket(marketToSet);
+        onClose();
+      }
+    },
+    [markets, onClose, router, setCurrentMarket]
+  );
 
   /**
    * @description Return the tickers based on the current market id
@@ -96,7 +99,7 @@ export function useMarkets(onClose: () => void) {
         ...item,
         last: (ticker || defaultTickers).close,
         volume: (ticker || defaultTickers).volumeBase24hr,
-        price_change_percent: (ticker || defaultTickers).priceChangePercent24Hr,
+        price_change_percent: (ticker || defaultTickers).priceChangePercent24Hr?.toString(),
         price_change_percent_num: Number.parseFloat(
           String((ticker || defaultTickers).priceChangePercent24Hr)
         ),

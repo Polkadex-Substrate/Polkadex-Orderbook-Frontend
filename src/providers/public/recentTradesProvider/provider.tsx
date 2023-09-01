@@ -76,6 +76,7 @@ export const RecentTradesProvider = ({ children }) => {
 
   const recentTradesFetch = useCallback(
     async (market: Market) => {
+      dispatch(A.recentTradesFetch(market));
       try {
         if (market) {
           const res = await fetchRecentTrade(market.m);

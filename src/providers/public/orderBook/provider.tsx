@@ -27,6 +27,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   // Actions
   const onOrderBook = useCallback(
     async (payload: Market) => {
+      dispatch(A.depthFetch(payload));
       try {
         const market = payload;
         if (market?.m) {
@@ -40,8 +41,8 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
           dispatch(A.depthData({ asks, bids }));
         }
       } catch (error) {
-        console.log(error);
         onHandleError(`Orderbook fetch error:${error.message}`);
+        dispatch(A.depthError(error));
       }
     },
     [onHandleError]
