@@ -33,7 +33,6 @@ import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProv
 import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { formatNumber, trimFloat } from "@polkadex/web-helpers";
-import { trimFloat } from "@polkadex/web-helpers";
 import { IPublicAsset } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 export const DepositTemplate = () => {
