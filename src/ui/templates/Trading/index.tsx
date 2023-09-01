@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import Head from "next/head";
@@ -30,7 +30,6 @@ import { useProfile } from "@polkadex/orderbook/providers/user/profile";
 import { useRecentTradesProvider } from "@polkadex/orderbook/providers/public/recentTradesProvider";
 import { OrderHistoryProvider } from "@polkadex/orderbook/providers/user/orderHistoryProvider/provider";
 import { useMarketsProvider } from "@polkadex/orderbook/providers/public/marketsProvider/useMarketsProvider";
-import { useAssetsProvider } from "@polkadex/orderbook/providers/public/assetsProvider/useAssetsProvider";
 import { SessionProvider } from "@polkadex/orderbook/providers/user/sessionProvider/provider";
 import { KlineProvider } from "@polkadex/orderbook/providers/public/klineProvider/provider";
 import { TradesProvider } from "@polkadex/orderbook/providers/user/trades/provider";
@@ -57,46 +56,7 @@ export function Trading() {
   const router = useRouter();
   const { id } = router?.query;
 
-  const {
-    loading: isMarketLoading,
-    timestamp,
-    onMarketsFetch,
-    list: markets,
-    setCurrentMarket,
-    currentMarket: market,
-    tickersTimestamp,
-    onMarketTickersFetch,
-  } = useMarketsProvider();
-
-  const shouldDispatchMarketsFetch = useCallback(() => {
-    return !isMarketLoading && !timestamp;
-  }, [isMarketLoading, timestamp]);
-
-  const selectMarket = markets.find(
-    (item) => `${item.base_ticker}${item.quote_ticker}` === id
-  );
-
-  const { list: allAssets } = useAssetsProvider();
-
-  useEffect(() => {
-    if (shouldDispatchMarketsFetch()) {
-      onMarketsFetch(allAssets);
-    } else if (!shouldDispatchMarketsFetch && markets && selectMarket?.id)
-      setCurrentMarket(selectMarket);
-  }, [
-    shouldDispatchMarketsFetch,
-    markets,
-    selectMarket,
-    allAssets,
-    onMarketsFetch,
-    setCurrentMarket,
-  ]);
-
-  useEffect(() => {
-    if (!market?.id && !tickersTimestamp) {
-      onMarketTickersFetch();
-    }
-  }, [market, onMarketTickersFetch, tickersTimestamp]);
+  const { currentMarket: market } = useMarketsProvider();
 
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
