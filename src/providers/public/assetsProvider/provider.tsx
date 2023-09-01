@@ -39,6 +39,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     } catch (error) {
       console.warn("something has gone wrong with fetchassets");
       onHandleError(`Something has gone wrong, could not fetch assets ${error}`);
+      dispatch(A.assetsError(error));
     }
   }, [onHandleError]);
 
@@ -58,8 +59,8 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   );
 
   useEffect(() => {
-    fetchAssets();
-  }, [fetchAssets]);
+    if (state.list?.length === 0) fetchAssets();
+  }, [fetchAssets, state.list]);
 
   return (
     <Provider
