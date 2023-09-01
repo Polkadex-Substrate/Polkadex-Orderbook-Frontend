@@ -46,7 +46,7 @@ export const balancesReducer = (
       );
       const newBalance = {
         ...update,
-        onChainBalance: old.onChainBalance,
+        onChainBalance: old?.onChainBalance,
       };
       // filter out old balances from the balance state
       const balanceFiltered = state.balances?.filter(
