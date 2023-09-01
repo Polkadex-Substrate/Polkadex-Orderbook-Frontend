@@ -50,26 +50,15 @@ export const BalancesTemplate = () => {
           e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
           e.symbol.toLowerCase().includes(filters.search.toLowerCase());
         return (
-          (matchesNameOrTicker &&
-            !hasZeroAmount &&
-            !defaultConfig.blockedAssets?.some((value) => e.assetId === value)) ||
-          e.assetId === POLKADEX_ASSET.assetId
+          matchesNameOrTicker &&
+          !hasZeroAmount &&
+          !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
         );
       }),
     [filters.search, list, userBalances, filters.hideZero]
   );
 
-  const pdexIndex = allAssets.findIndex(
-    (obj) =>
-      obj.symbol.toUpperCase() === POLKADEX_ASSET.symbol ||
-      obj.name.toUpperCase() === POLKADEX_ASSET.name
-  );
-  const pdexObj = pdexIndex >= 0 && allAssets.splice(pdexIndex, 1)[0];
   allAssets.sort((a, b) => a.name.localeCompare(b.name));
-
-  if (pdexObj) {
-    allAssets.unshift(pdexObj);
-  }
 
   const connectWalletData = {
     image: "emptyWallet",
@@ -175,20 +164,14 @@ export const BalancesTemplate = () => {
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell
-                                      className={
-                                        item.symbol === POLKADEX_ASSET.symbol && "pdexCell"
-                                      }>
+                                    <S.Cell>
                                       <span>
                                         {Number(balance?.onChainBalance || 0).toFixed(8)}{" "}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell
-                                      className={
-                                        item.symbol === POLKADEX_ASSET.symbol && "pdexCell"
-                                      }>
+                                    <S.Cell>
                                       <span>
                                         {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
                                       </span>
@@ -197,20 +180,10 @@ export const BalancesTemplate = () => {
                                   <Table.Cell>
                                     <S.Actions>
                                       <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink
-                                          className={
-                                            item.symbol === POLKADEX_ASSET.symbol && "disabled"
-                                          }>
-                                          {tc("deposit")}
-                                        </S.DepositLink>
+                                        <S.DepositLink>{tc("deposit")}</S.DepositLink>
                                       </Link>
                                       <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink
-                                          className={
-                                            item.symbol === POLKADEX_ASSET.symbol && "disabled"
-                                          }>
-                                          {tc("withdraw")}
-                                        </S.WithdrawLink>
+                                        <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
                                       </Link>
                                     </S.Actions>
                                   </Table.Cell>
