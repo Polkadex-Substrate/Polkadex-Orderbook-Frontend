@@ -39,24 +39,22 @@ export const TradingView = () => {
   const [isReady, setIsReady] = useState(false);
 
   const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket, list: allMarkets } = useMarketsProvider();
   const { theme } = useSettingsProvider();
 
   const isDarkTheme = theme === "dark";
 
   const getAllSymbols = useCallback(() => {
-    const allSymbols = [
-      {
-        description: currentMarket?.name,
-        exchange: "Polkadex",
-        full_name: `Polkadex:${currentMarket?.name}`,
-        symbol: currentMarket?.name,
-        type: "crypto",
-      },
-    ];
+    const allSymbols = allMarkets.map((market) => ({
+      description: market?.name,
+      exchange: "Polkadex",
+      full_name: `Polkadex:${market?.name}`,
+      symbol: market?.name,
+      type: "crypto",
+    }));
 
     return allSymbols;
-  }, [currentMarket?.name]);
+  }, [allMarkets]);
 
   const tvWidget = useRef<IChartingLibraryWidget>();
 
