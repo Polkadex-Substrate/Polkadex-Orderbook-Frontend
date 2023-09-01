@@ -51,6 +51,7 @@ export const DepositTemplate = () => {
       ({ account }) =>
         account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
     );
+
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
