@@ -201,8 +201,17 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
     }
-    if (state.tickers.length === 0) onMarketTickersFetch();
-  }, [allAssets, state.list, onMarketsFetch, onMarketTickersFetch, state.tickers]);
+    if (state.list.length > 0 && state.tickers.length === 0 && !state.tickerLoading) {
+      onMarketTickersFetch();
+    }
+  }, [
+    allAssets,
+    state.list,
+    onMarketsFetch,
+    onMarketTickersFetch,
+    state.tickers,
+    state.tickerLoading,
+  ]);
 
   // set current ticker on market change
   useEffect(() => {
