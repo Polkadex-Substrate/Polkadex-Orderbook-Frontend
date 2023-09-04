@@ -45,7 +45,7 @@ export const TradingView = () => {
   const isDarkTheme = theme === "dark";
 
   const getAllSymbols = useCallback(() => {
-    const allSymbols = allMarkets.map((market) => ({
+    const allSymbols = allMarkets?.map((market) => ({
       description: market?.name,
       exchange: "Polkadex",
       full_name: `Polkadex:${market?.name}`,

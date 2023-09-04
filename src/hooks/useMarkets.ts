@@ -74,7 +74,7 @@ export function useMarkets(onClose: () => void) {
    */
   const handleChangeMarket = useCallback(
     (e: string): void => {
-      const marketToSet = markets.find((el) => el.name === e);
+      const marketToSet = markets?.find((el) => el.name === e);
       if (marketToSet) {
         router.push(`${marketToSet.base_ticker + marketToSet.quote_ticker}`, undefined, {
           shallow: true,
