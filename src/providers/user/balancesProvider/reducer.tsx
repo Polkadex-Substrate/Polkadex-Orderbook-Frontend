@@ -44,6 +44,9 @@ export const balancesReducer = (
       const old = state.balances.find(
         (i) => i.assetId.toString() === update.assetId.toString()
       );
+      if(!old) {
+        return state
+      }
       const newBalance: Balance = {
         ...old,
         ...update,
