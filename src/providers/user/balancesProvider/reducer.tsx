@@ -5,7 +5,7 @@ import {
   BALANCES_FETCH,
   BALANCES_UPDATE_EVENT_DATA,
 } from "./constants";
-import { BalancesState } from "./types";
+import { Balance, BalancesState } from "./types";
 
 export const initialState: BalancesState = {
   loading: true,
@@ -44,9 +44,12 @@ export const balancesReducer = (
       const old = state.balances.find(
         (i) => i.assetId.toString() === update.assetId.toString()
       );
-      const newBalance = {
+      if(!old) {
+        return state
+      }
+      const newBalance: Balance = {
+        ...old,
         ...update,
-        onChainBalance: old?.onChainBalance,
       };
       // filter out old balances from the balance state
       const balanceFiltered = state.balances?.filter(
