@@ -58,6 +58,7 @@ export const orderBookReducer = (
       return {
         ...state,
         depth: {
+          ...state.depth,
           loading: true,
           error: undefined,
         },
