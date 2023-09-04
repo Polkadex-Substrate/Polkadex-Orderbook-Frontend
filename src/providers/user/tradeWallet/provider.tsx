@@ -255,7 +255,18 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {
-    dispatch(A.unlockTradeAccount(payload));
+    const { address, password } = payload;
+    try {
+      const _allAccounts = [...state.allBrowserAccounts];
+      const pair = _allAccounts?.find((account) => account?.address === address);
+      if (!pair) {
+        onHandleError("No such address exists");
+      }
+      pair.unlock(password.toString());
+      dispatch(A.unlockTradeAccount(payload));
+    } catch (e) {
+      onHandleError("Invalid Password");
+    }
   };
 
   const onTradeAccountPush = (payload: A.TradeAccountPush["payload"]) => {

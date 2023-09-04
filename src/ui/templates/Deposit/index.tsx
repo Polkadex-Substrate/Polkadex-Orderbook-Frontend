@@ -20,6 +20,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { depositValidations } from "@polkadex/orderbook/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@polkadex/web-constants";
 import { useOnChainBalance } from "@polkadex/orderbook/hooks/useOnChainBalance";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@polkadex/orderbook/providers/user/depositProvider/useDepositProvider";
@@ -31,7 +32,7 @@ import { useTransactionsProvider } from "@polkadex/orderbook/providers/user/tran
 import { Transaction } from "@polkadex/orderbook/providers/user/transactionsProvider";
 import { filterBlockedAssets } from "@polkadex/orderbook/helpers/filterBlockedAssets";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
-import { trimFloat } from "@polkadex/web-helpers";
+import { formatNumber, trimFloat } from "@polkadex/web-helpers";
 import { IPublicAsset } from "@polkadex/orderbook/providers/public/assetsProvider";
 
 export const DepositTemplate = () => {
@@ -51,12 +52,17 @@ export const DepositTemplate = () => {
       ({ account }) =>
         account?.address?.toLowerCase() === currentAccount.mainAddress?.toLowerCase()
     );
+
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
   const { deposits, loading: isTransactionsFetching } = useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(selectedAsset?.assetId);
+
+  const formattedOnChainBalance = formatNumber(
+    onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL)
+  );
 
   const routedAsset = router.query.id as string;
 
@@ -192,7 +198,7 @@ export const DepositTemplate = () => {
                         <S.Available>
                           {tc("available")}{" "}
                           <strong>
-                            {onChainBalanceLoading ? t("loading") : onChainBalance}
+                            {onChainBalanceLoading ? t("loading") : formattedOnChainBalance}
                           </strong>
                         </S.Available>
                       </S.SelectInput>
