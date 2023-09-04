@@ -22,7 +22,6 @@ import { useBalancesProvider } from "@polkadex/orderbook/providers/user/balances
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { defaultConfig } from "@polkadex/orderbook-config";
-import { POLKADEX_ASSET } from "@polkadex/web-constants";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 export const BalancesTemplate = () => {
@@ -158,23 +157,17 @@ export const BalancesTemplate = () => {
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Cell>
-                                      <span>
-                                        {Number(balance?.free_balance || 0).toFixed(8)}{" "}
-                                      </span>
+                                      <span>{Number(balance?.free_balance || 0)} </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Cell>
-                                      <span>
-                                        {Number(balance?.onChainBalance || 0).toFixed(8)}{" "}
-                                      </span>
+                                      <span>{Number(balance?.onChainBalance || 0)} </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Cell>
-                                      <span>
-                                        {Number(balance?.reserved_balance || 0).toFixed(8)}{" "}
-                                      </span>
+                                      <span>{Number(balance?.reserved_balance || 0)} </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
