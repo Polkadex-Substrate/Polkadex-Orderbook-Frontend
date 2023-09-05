@@ -4,14 +4,14 @@ import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
-import { ReactNode, useEffect, useMemo } from "react";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
 // eslint-disable-next-line camelcase
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import * as gtag from "../lib/gtag";
 import { useInit } from "../hooks/useInit";
@@ -25,8 +25,8 @@ import {
   NativeApiProvider,
   ExtensionWalletProvider,
   SettingProvider,
-  AssetsProvider,
   MarketsProvider,
+  AssetsProvider,
 } from "@polkadex/orderbook/providers";
 import { useSettingsProvider } from "@polkadex/orderbook/providers/public/settings";
 
@@ -43,7 +43,6 @@ const Maintenance = dynamic(
     ssr: false,
   }
 );
-const queryClient = new QueryClient();
 const Providers = ({ children }) => {
   return (
     <AuthProvider>
@@ -84,6 +83,7 @@ function App({ Component, pageProps }: AppProps) {
   const isActive = useMemo(() => {
     return availableRoutes.some((word) => router.pathname.includes(word));
   }, [availableRoutes, router.pathname]);
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     const handleRouteChange = (url: string) => gtag.pageview(url);
@@ -109,29 +109,31 @@ function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <ToastContainer transition={Flip} />
-      <SettingProvider
-        defaultToast={{
-          onError: (e) => toast(e, { type: "error", theme: "colored" }),
-          onSuccess: (e) =>
-            toast(e, {
-              type: "success",
-              theme: "colored",
-              className: "toastBg",
-              pauseOnFocusLoss: false,
-            }),
-        }}>
-        <OverlayProvider>
-          {isActive ? (
-            <TradingPageProvider>
-              <Providers>
-                <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
-              </Providers>
-            </TradingPageProvider>
-          ) : (
-            <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
-          )}
-        </OverlayProvider>
-      </SettingProvider>
+      <QueryClientProvider client={queryClient}>
+        <SettingProvider
+          defaultToast={{
+            onError: (e) => toast(e, { type: "error", theme: "colored" }),
+            onSuccess: (e) =>
+              toast(e, {
+                type: "success",
+                theme: "colored",
+                className: "toastBg",
+                pauseOnFocusLoss: false,
+              }),
+          }}>
+          <OverlayProvider>
+            {isActive ? (
+              <TradingPageProvider>
+                <Providers>
+                  <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+                </Providers>
+              </TradingPageProvider>
+            ) : (
+              <ModifiedThemeProvider Component={Component} pageProps={pageProps} />
+            )}
+          </OverlayProvider>
+        </SettingProvider>
+      </QueryClientProvider>
       {/* @ts-ignore */}
       <style jsx global>{`
         body {
@@ -151,11 +153,9 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
         {defaultConfig.maintenanceMode ? (
           <Maintenance />
         ) : (
-          <QueryClientProvider client={queryClient}>
-            <ThemeWrapper>
-              <Layout Component={Component} pageProps={pageProps} />
-            </ThemeWrapper>
-          </QueryClientProvider>
+          <ThemeWrapper>
+            <Layout Component={Component} pageProps={pageProps} />
+          </ThemeWrapper>
         )}
         <GlobalStyles />
       </ThemeProvider>

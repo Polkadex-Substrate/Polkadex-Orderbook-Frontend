@@ -31,7 +31,11 @@ export const BalancesTemplate = () => {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list, loading: isAssetsFetching } = useAssetsProvider();
-  const { balances: userBalances, loading: isBalanceFetching } = useBalancesProvider();
+  const {
+    balances: userBalances,
+    loading: isBalanceFetching,
+    onChainBalances,
+  } = useBalancesProvider();
   const { connecting } = useNativeApi();
   const profileState = useProfile();
 
@@ -137,52 +141,56 @@ export const BalancesTemplate = () => {
                             </Table.Column>
                           </Table.Header>
                           <Table.Body striped border="squared">
-                            {allAssets?.map((item) => {
-                              const balance = userBalances?.find(
-                                (value) => value.assetId === item.assetId
-                              );
-                              return (
-                                <Table.Row key={item.assetId}>
-                                  <Table.Cell>
-                                    <S.CellFlex>
-                                      <S.TokenIcon>
-                                        <Icon isToken name={item.symbol} size="extraSmall" />
-                                      </S.TokenIcon>
+                            {onChainBalances.isSuccess &&
+                              allAssets?.map((item) => {
+                                const balance = userBalances?.find(
+                                  (value) => value.assetId === item.assetId
+                                );
+                                const onChainBalance =
+                                  onChainBalances.data.get(item.assetId) || 0;
+                                if (!balance) return null;
+                                return (
+                                  <Table.Row key={item.assetId}>
+                                    <Table.Cell>
+                                      <S.CellFlex>
+                                        <S.TokenIcon>
+                                          <Icon isToken name={item.symbol} size="extraSmall" />
+                                        </S.TokenIcon>
+                                        <S.Cell>
+                                          <span>
+                                            {item.name} <small> {item.symbol}</small>
+                                          </span>
+                                        </S.Cell>
+                                      </S.CellFlex>
+                                    </Table.Cell>
+                                    <Table.Cell>
                                       <S.Cell>
-                                        <span>
-                                          {item.name} <small> {item.symbol}</small>
-                                        </span>
+                                        <span>{Number(balance.free_balance || 0)} </span>
                                       </S.Cell>
-                                    </S.CellFlex>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{Number(balance?.free_balance || 0)} </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{Number(balance?.onChainBalance || 0)} </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>{Number(balance?.reserved_balance || 0)} </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Actions>
-                                      <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                                      </Link>
-                                      <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
-                                      </Link>
-                                    </S.Actions>
-                                  </Table.Cell>
-                                </Table.Row>
-                              );
-                            })}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>{onChainBalance} </span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Cell>
+                                        <span>{Number(balance.reserved_balance || 0)} </span>
+                                      </S.Cell>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      <S.Actions>
+                                        <Link href={`/deposit/${item.symbol}`}>
+                                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
+                                        </Link>
+                                        <Link href={`/withdraw/${item.symbol}`}>
+                                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                                        </Link>
+                                      </S.Actions>
+                                    </Table.Cell>
+                                  </Table.Row>
+                                );
+                              })}
                           </Table.Body>
                         </Table>
                       ) : (

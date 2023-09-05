@@ -16,7 +16,6 @@ export interface AssetsState {
 }
 
 export type AssetsContextProps = AssetsState & {
-  fetchAssets: () => void;
   selectGetAsset: (assetId: string | number | Record<string, string>) => IPublicAsset;
 };
 

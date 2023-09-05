@@ -1,9 +1,9 @@
 // TODO: Check useCalback
-import { useReducer, useEffect, useCallback } from "react";
+import { useReducer, useEffect, useCallback, useMemo } from "react";
+import { useQuery } from "react-query";
 
 import { useProfile } from "../profile/useProfile";
 import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
-import * as queries from "../../../graphql/queries";
 import { useSettingsProvider } from "../../public/settings";
 
 import * as A from "./actions";
@@ -11,94 +11,60 @@ import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 
-import { sendQueryToAppSync } from "@polkadex/orderbook/helpers/appsync";
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
 import { useNativeApi } from "@polkadex/orderbook/providers/public/nativeApi";
-import { fetchOnChainBalance } from "@polkadex/orderbook/helpers/fetchOnChainBalance";
+import { fetchOnChainBalances } from "@polkadex/orderbook/helpers/fetchOnChainBalance";
+import { fetchTradingBalancesAsync } from "@polkadex/orderbook/providers/user/balancesProvider/helpers";
+import { QUERY_KEYS } from "@polkadex/orderbook/utils/queryKeys";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
-    auth: { isLoading: isProfileFetching },
   } = useProfile();
-  const {
-    list: assetsList,
-    success: isAssetData,
-    selectGetAsset,
-    loading: isAssetFetching,
-  } = useAssetsProvider();
+  const { list: assetsList, success: isAssetsFetched, selectGetAsset } = useAssetsProvider();
   const { api, connected } = useNativeApi();
 
   const { onHandleError } = useSettingsProvider();
-
-  const fetchbalancesAsync = useCallback(
-    async (account: string): Promise<T.IBalanceFromDb[]> => {
-      const res = await sendQueryToAppSync({
-        query: queries.getAllBalancesByMainAccount,
-        variables: {
-          main_account: account,
-        },
-      });
-      const balancesRaw: T.BalanceQueryResult[] = res.data.getAllBalancesByMainAccount.items;
-      return balancesRaw?.map((val) => {
-        return {
-          asset_type: val.a,
-          reserved_balance: val.r,
-          free_balance: val.f,
-          pending_withdrawal: val.p,
-        };
-      });
-    },
-    []
+  const assets = isAssetsFetched ? assetsList.map((a) => a.assetId) : [];
+  const {
+    isLoading,
+    isSuccess,
+    data: tradingBalances,
+  } = useQuery(
+    QUERY_KEYS.tradingBalances(mainAddress),
+    () => fetchTradingBalancesAsync(mainAddress),
+    {
+      enabled: Boolean(isAssetsFetched && mainAddress && mainAddress?.length > 0),
+      onError: onHandleError,
+      initialData: [],
+    }
   );
 
-  const onBalancesFetch = useCallback(async () => {
-    dispatch(A.balancesFetch());
-    try {
-      if (mainAddress && isAssetData && api?.isConnected) {
-        await api.isReady;
-        const assetMap = assetsList?.reduce((acc, asset) => {
-          acc[asset.assetId] = asset;
-          return acc;
-        }, {});
-
-        const balances = await fetchbalancesAsync(mainAddress);
-
-        const list = balances?.map(async (balance: T.IBalanceFromDb) => {
-          const asset = assetMap[balance.asset_type];
-          const chainBalance = await fetchOnChainBalance(api, asset.assetId, mainAddress);
-          return {
-            assetId: asset.assetId.toString(),
-            name: asset.name,
-            symbol: asset.symbol,
-            reserved_balance: balance.reserved_balance,
-            free_balance: balance.free_balance,
-            onChainBalance: chainBalance.toFixed(2),
-          };
-        });
-        dispatch(
-          A.balancesData({
-            balances: await Promise.all(list),
-            timestamp: new Date().getTime(),
-          })
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      onHandleError(`Balances fetch error: ${error?.message ?? error}`);
-      dispatch(A.balancesError(error));
-    } finally {
-      if (!mainAddress) {
-        const error = {
-          code: -1,
-          message: ["No main address detected"],
-        };
-
-        dispatch(A.balancesError(error));
-      }
+  const balances = useMemo(() => {
+    if (!isAssetsFetched) {
+      return [];
     }
-  }, [mainAddress, isAssetData, assetsList, fetchbalancesAsync, onHandleError, api]);
+    return tradingBalances?.map((balance): T.Balance => {
+      const asset = selectGetAsset(balance.asset_type);
+      return {
+        ...balance,
+        assetId: balance.asset_type,
+        name: asset.name,
+        symbol: asset.symbol,
+      };
+    });
+  }, [isAssetsFetched, tradingBalances, selectGetAsset]);
+
+  const onChainBalanceQuery = useQuery(
+    QUERY_KEYS.onChainBalances(mainAddress, assets),
+    () => fetchOnChainBalances(api, assets, mainAddress),
+    {
+      enabled: Boolean(mainAddress && mainAddress?.length > 0 && connected && isAssetsFetched),
+      onError: onHandleError,
+      initialData: new Map(),
+    }
+  );
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
@@ -109,7 +75,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   };
 
   const updateBalanceFromEvent = useCallback(
-    (msg: T.BalanceUpdatePayload): Omit<T.Balance, "onChainBalance"> => {
+    (msg: T.BalanceUpdatePayload): T.Balance => {
       const assetId = msg.asset.asset;
       return {
         name: selectGetAsset(assetId).name,
@@ -134,11 +100,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     [onHandleError, updateBalanceFromEvent]
   );
 
-  useEffect(() => {
-    if (!isProfileFetching && !isAssetFetching && connected && state.balances?.length === 0)
-      onBalancesFetch();
-  }, [onBalancesFetch, isProfileFetching, isAssetFetching, connected, state.balances]);
-
   // balance updates are give to main address
   useEffect(() => {
     if (mainAddress) {
@@ -156,10 +117,15 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        ...state,
+        loading: isLoading,
+        success: isSuccess,
+        balances,
         getFreeProxyBalance,
-        onBalanceUpdate,
-        onBalancesFetch,
+        onChainBalances: {
+          data: onChainBalanceQuery.data,
+          isLoading: onChainBalanceQuery.isLoading,
+          isSuccess: onChainBalanceQuery.isSuccess,
+        },
       }}>
       {children}
     </Provider>

@@ -9,7 +9,7 @@ export type BalanceQueryResult = {
   p: string;
 };
 
-export type IBalanceFromDb = {
+export type ITradingBalance = {
   asset_type: string;
   reserved_balance: string;
   free_balance: string;
@@ -25,7 +25,6 @@ export interface BalanceBase {
 export interface Balance extends BalanceBase {
   name: string;
   symbol: string;
-  onChainBalance: string;
 }
 export type FreeOrUsedOrTotal = Record<string, number>;
 
@@ -43,13 +42,17 @@ export interface BalancesState {
   loading: boolean;
   success: boolean;
   balances: Balance[];
-  timestamp?: number;
 }
+
+type OnChainBalances = Map<string, number>;
 
 export type BalancesContextProps = BalancesState & {
   getFreeProxyBalance: (value: string) => string;
-  onBalanceUpdate: (value: BalanceUpdatePayload) => void;
-  onBalancesFetch: () => void;
+  onChainBalances: {
+    isLoading: boolean;
+    isSuccess: boolean;
+    data: OnChainBalances;
+  };
 };
 
 export type BalancesProviderProps = PropsWithChildren<{
