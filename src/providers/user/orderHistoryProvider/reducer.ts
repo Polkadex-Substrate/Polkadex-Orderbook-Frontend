@@ -55,7 +55,7 @@ export const ordersHistoryReducer = (
       const openOrders = [...state.openOrders];
       const allOrders = [...state.list];
       const newOrder = action.payload;
-      // add to orderhistory for all cases
+      // add to order history for all cases
       const updatedOrderHistory = replaceOrPushOrder(allOrders, newOrder);
       let updatedOpenOrders = [];
       if (newOrder.status === "OPEN") {

@@ -1,14 +1,12 @@
 // TODO: Check useCalback
-import { useReducer, useEffect, useCallback, useMemo } from "react";
-import { useQuery } from "react-query";
+import { useCallback, useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "react-query";
 
 import { useProfile } from "../profile/useProfile";
 import { useAssetsProvider } from "../../public/assetsProvider/useAssetsProvider";
 import { useSettingsProvider } from "../../public/settings";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 
 import { eventHandler } from "@polkadex/orderbook/helpers/eventHandler";
@@ -18,12 +16,12 @@ import { fetchTradingBalancesAsync } from "@polkadex/orderbook/providers/user/ba
 import { QUERY_KEYS } from "@polkadex/orderbook/utils/queryKeys";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(balancesReducer, initialState);
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
   const { list: assetsList, success: isAssetsFetched, selectGetAsset } = useAssetsProvider();
   const { api, connected } = useNativeApi();
+  const queryClient = useQueryClient();
 
   const { onHandleError } = useSettingsProvider();
   const assets = isAssetsFetched ? assetsList.map((a) => a.assetId) : [];
@@ -67,9 +65,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   );
 
   const getFreeProxyBalance = (assetId: string) => {
-    const balance = state.balances?.find(
-      (balance) => balance?.assetId?.toString() === assetId
-    );
+    const balance = balances?.find((balance) => balance?.assetId?.toString() === assetId);
     if (!balance?.assetId) return "0";
     return balance.free_balance;
   };
@@ -90,14 +86,24 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   const onBalanceUpdate = useCallback(
     (payload: T.BalanceUpdatePayload) => {
-      try {
-        const updateBalance = updateBalanceFromEvent(payload);
-        dispatch(A.balanceUpdateEventData(updateBalance));
-      } catch (error) {
-        onHandleError("Something has gone wrong while updating balance");
-      }
+      const updateBalance = updateBalanceFromEvent(payload);
+      queryClient.setQueryData(QUERY_KEYS.tradingBalances(mainAddress), (old) => {
+        const oldBalances = old as T.Balance[];
+        const isPresent = oldBalances.find((b) => b.assetId === updateBalance.assetId);
+        // if the balance is not present in the state, add it
+        if (!isPresent) {
+          return [...oldBalances, updateBalance];
+        }
+        // replace the old balance with the new one
+        return oldBalances.map((balance) => {
+          if (balance.assetId === updateBalance.assetId) {
+            return updateBalance;
+          }
+          return balance;
+        });
+      });
     },
-    [onHandleError, updateBalanceFromEvent]
+    [mainAddress, queryClient, updateBalanceFromEvent]
   );
 
   // balance updates are give to main address
