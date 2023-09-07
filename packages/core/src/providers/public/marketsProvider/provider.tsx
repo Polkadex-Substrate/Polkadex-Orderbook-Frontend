@@ -4,8 +4,10 @@ import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import _ from "lodash";
 import { useRouter } from "next/router";
+import { GraphQLSubscription } from "@aws-amplify/api";
 
-import { IPublicAsset, useAssetsProvider } from "../assetsProvider";
+import { IPublicAsset } from "../assetsProvider";
+import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
 import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
@@ -20,15 +22,13 @@ import {
 } from "./types";
 import { setCurrentTicker } from "./actions";
 
-import { getAllMarkets } from "@/graphql";
-import * as queries from "@/graphql/queries";
 import * as subscriptions from "@/graphql/subscriptions";
-import {
-  decimalPlaces,
-  sendQueryToAppSync,
-  convertToTicker,
-  isAssetPDEX,
-} from "@/helpers";
+import * as queries from "@/graphql/queries";
+import { defaultConfig } from "@/config";
+import { Websocket_streamsSubscription } from "@/API";
+import { decimalPlaces, convertToTicker, isAssetPDEX } from "@/helpers";
+import { sendQueryToAppSync } from "@/helpers/appsync";
+import { getAllMarkets } from "@/graphql/queries";
 import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@/constants";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
@@ -79,8 +79,16 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       try {
         if (allAssets.length > 0) {
           const markets = await fetchMarkets(allAssets);
-
-          dispatch(A.marketsData(markets));
+          const validMarkets = markets.filter(
+            (market) =>
+              !defaultConfig.blockedAssets.some(
+                (item) => item === market.baseAssetId,
+              ) &&
+              !defaultConfig.blockedAssets.some(
+                (item) => item === market.quoteAssetId,
+              ),
+          );
+          dispatch(A.marketsData(validMarkets));
         }
       } catch (error) {
         console.log(error, "error in fetching markets");
@@ -106,7 +114,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         ticker: asset.symbol,
         assetId: asset.assetId,
       };
-    else throw new Error("cannot find asset id");
+    else throw new Error(`cannot find asset id: ${id}`);
   };
 
   const fetchMarketTickers = useCallback(
@@ -171,12 +179,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     if (!state?.currentMarket?.m) {
       return;
     }
-    const subscription = API.graphql({
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
       query: subscriptions.websocket_streams,
       variables: { name: state.currentMarket.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
     }).subscribe({
       next: (data) => {
         const dataParsed: TickerQueryResult = JSON.parse(
@@ -210,8 +218,21 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     if (allAssets.length > 0 && state.list.length === 0) {
       onMarketsFetch(allAssets);
     }
-    onMarketTickersFetch();
-  }, [allAssets, state.list, onMarketsFetch, onMarketTickersFetch]);
+    if (
+      state.list.length > 0 &&
+      state.tickers.length === 0 &&
+      !state.tickerLoading
+    ) {
+      onMarketTickersFetch();
+    }
+  }, [
+    allAssets,
+    state.list,
+    onMarketsFetch,
+    onMarketTickersFetch,
+    state.tickers,
+    state.tickerLoading,
+  ]);
 
   // set current ticker on market change
   useEffect(() => {

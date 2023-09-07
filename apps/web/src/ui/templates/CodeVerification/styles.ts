@@ -111,7 +111,7 @@ export const ResendButton = styled.button`
     background: ${theme.colors.primary}22;
     color: ${theme.colors.primary};
     white-space: nowrap;
-    :disabled {
+    &:disabled {
       background: ${theme.colors.secondaryBackground};
       color: ${theme.colors.text};
       opacity: 0.5;

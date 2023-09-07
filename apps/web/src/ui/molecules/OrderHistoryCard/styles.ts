@@ -8,7 +8,7 @@ export const Tr = styled.tr`
     padding: 1.2rem;
     margin-bottom: 1.2rem;
     border-radius: 0 1rem 1rem 1rem;
-    :nth-child(even) {
+    &:nth-child(even) {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
   `}
@@ -47,7 +47,7 @@ export const ContainerActions = styled.div`
       padding: 0.5rem;
       border-radius: 10rem;
       transition: background 0.5s ease;
-      :hover {
+      &:hover {
         background: ${theme.colors.secondaryBackground};
       }
     }

@@ -11,7 +11,7 @@ export * from "./enclavePayloadSigner";
 export * from "./eventHandler";
 export * from "./fetchKlineAsync";
 export * from "./fetchOnChainBalance";
-export * from "./filterAssets";
+export * from "./filterBlockedAssets";
 export * from "./filterPrice";
 export * from "./filterPriceCustomStep";
 export * from "./filterPriceSignificantDigit";

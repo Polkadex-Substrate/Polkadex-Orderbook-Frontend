@@ -17,18 +17,26 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { depositValidations } from "@orderbook/core/validations";
 import { Decimal, Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
-import { POLKADEX_ASSET } from "@orderbook/core/constants";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { useOnChainBalance } from "@orderbook/core/hooks";
 import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
-import { isAssetPDEX, filterAssets, trimFloat } from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import {
+  useAssetsProvider,
+  IPublicAsset,
+} from "@orderbook/core/providers/public/assetsProvider";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import {
   useTransactionsProvider,
   Transaction,
 } from "@orderbook/core/providers/user/transactionsProvider";
+import {
+  filterBlockedAssets,
+  isAssetPDEX,
+  formatNumber,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 import * as S from "./styles";
@@ -37,11 +45,13 @@ export const DepositTemplate = () => {
   const { t } = useTranslation("deposit");
   const { t: tc } = useTranslation("common");
 
-  const [selectedAsset, setSelectedAsset] = useState(POLKADEX_ASSET);
   const { selectedAccount: currentAccount } = useProfile();
 
-  const { list, selectGetAsset } = useAssetsProvider();
-
+  const { list: allTokens, selectGetAsset } = useAssetsProvider();
+  const list = filterBlockedAssets(allTokens);
+  const [selectedAsset, setSelectedAsset] = useState<IPublicAsset | undefined>(
+    list?.[0],
+  );
   const extensionWalletState = useExtensionWallet();
 
   const currMainAcc =
@@ -51,6 +61,7 @@ export const DepositTemplate = () => {
         account?.address?.toLowerCase() ===
         currentAccount.mainAddress?.toLowerCase(),
     );
+
   const { loading, onFetchDeposit } = useDepositProvider();
 
   const router = useRouter();
@@ -59,6 +70,10 @@ export const DepositTemplate = () => {
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(
     selectedAsset?.assetId,
+  );
+
+  const formattedOnChainBalance = formatNumber(
+    onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL),
   );
 
   const routedAsset = router.query.id as string;
@@ -76,15 +91,13 @@ export const DepositTemplate = () => {
         asset.name.startsWith(routedAsset) ||
         asset.symbol.startsWith(routedAsset),
     );
-
-    if (initialAsset) {
+    if (initialAsset && !selectedAsset) {
+      console.log("here!");
       setSelectedAsset(initialAsset);
     }
-  }, [list, routedAsset]);
+  }, [list, selectedAsset, routedAsset]);
 
-  const existentialBalance = isAssetPDEX(selectedAsset.assetId)
-    ? 1
-    : Math.pow(10, -12);
+  const existentialBalance = isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1; // there should be a config for this from backend.;
   const { handleSubmit, errors, getFieldProps, isValid, dirty, setFieldValue } =
     useFormik({
       initialValues: {
@@ -193,7 +206,7 @@ export const DepositTemplate = () => {
                               </S.DropdownHeader>
                             </Dropdown.Trigger>
                             <Dropdown.Menu fill="secondaryBackgroundSolid">
-                              {filterAssets(list).map((asset) => (
+                              {filterBlockedAssets(list).map((asset) => (
                                 <Dropdown.Item
                                   key={asset.assetId}
                                   onAction={() => setSelectedAsset(asset)}
@@ -209,7 +222,7 @@ export const DepositTemplate = () => {
                           <strong>
                             {onChainBalanceLoading
                               ? t("loading")
-                              : onChainBalance}
+                              : formattedOnChainBalance}
                           </strong>
                         </S.Available>
                       </S.SelectInput>

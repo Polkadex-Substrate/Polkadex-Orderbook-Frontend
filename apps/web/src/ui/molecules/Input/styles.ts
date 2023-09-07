@@ -117,14 +117,14 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
       &[type="number"] {
         -moz-appearance: textfield !important;
       }
-      :disabled {
+      &:disabled {
         background: gray;
         opacity: 0.6;
       }
-      ::placeholder {
+      &::placeholder {
         opacity: 0.1;
       }
-      :focus {
+      &:focus {
         border: solid ${theme.colors.text}33;
       }
     }

@@ -3,13 +3,13 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useFunds } from "@orderbook/core/hooks";
 import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
-import { toCapitalize, filterAssets } from "@orderbook/core/helpers";
+import { toCapitalize, filterBlockedAssets } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
 export const Funds = ({ onHideFilters }) => {
   const { balances } = useFunds();
-  const allBalances = filterAssets(balances);
+  const allBalances = filterBlockedAssets(balances);
   useEffect(() => {
     onHideFilters(false);
     return () => onHideFilters(true);

@@ -52,7 +52,7 @@ ${({ theme }) => css`
   }
 
   .infinite-scroll-component {
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
       display: none;
     }
   }
@@ -179,7 +179,7 @@ Super Form Reset
   }
 
   /* Turn off the recent search for webkit. It adds about 15px padding on the left */
-  ::-webkit-search-decoration {
+  &::-webkit-search-decoration {
     display: none;
   }
 
@@ -198,7 +198,7 @@ Super Form Reset
   }
 
   /* IE8 and FF freak out if this rule is within another selector */
-  ::-webkit-file-upload-button {
+  &::-webkit-file-upload-button {
     padding: 0;
     border: 0;
     background: none;

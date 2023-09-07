@@ -19,7 +19,6 @@ import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProv
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { defaultConfig } from "@orderbook/core/config";
-import { POLKADEX_ASSET } from "@orderbook/core/constants";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 import * as S from "./styles";
@@ -53,28 +52,15 @@ export const BalancesTemplate = () => {
           e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
           e.symbol.toLowerCase().includes(filters.search.toLowerCase());
         return (
-          (matchesNameOrTicker &&
-            !hasZeroAmount &&
-            !defaultConfig.blockedAssets?.some(
-              (value) => e.assetId === value,
-            )) ||
-          e.assetId === POLKADEX_ASSET.assetId
+          matchesNameOrTicker &&
+          !hasZeroAmount &&
+          !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
         );
       }),
     [filters.search, list, userBalances, filters.hideZero],
   );
 
-  const pdexIndex = allAssets.findIndex(
-    (obj) =>
-      obj.symbol.toUpperCase() === POLKADEX_ASSET.symbol ||
-      obj.name.toUpperCase() === POLKADEX_ASSET.name,
-  );
-  const pdexObj = pdexIndex >= 0 && allAssets.splice(pdexIndex, 1)[0];
   allAssets.sort((a, b) => a.name.localeCompare(b.name));
-
-  if (pdexObj) {
-    allAssets.unshift(pdexObj);
-  }
 
   const connectWalletData = {
     image: "emptyWallet",
@@ -194,61 +180,33 @@ export const BalancesTemplate = () => {
                                   <Table.Cell>
                                     <S.Cell>
                                       <span>
-                                        {Number(
-                                          balance?.free_balance || 0,
-                                        ).toFixed(8)}{" "}
+                                        {Number(balance?.free_balance || 0)}{" "}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell
-                                      className={
-                                        item.symbol === POLKADEX_ASSET.symbol &&
-                                        "pdexCell"
-                                      }
-                                    >
+                                    <S.Cell>
                                       <span>
-                                        {Number(
-                                          balance?.onChainBalance || 0,
-                                        ).toFixed(8)}{" "}
+                                        {Number(balance?.onChainBalance || 0)}{" "}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <S.Cell
-                                      className={
-                                        item.symbol === POLKADEX_ASSET.symbol &&
-                                        "pdexCell"
-                                      }
-                                    >
+                                    <S.Cell>
                                       <span>
-                                        {Number(
-                                          balance?.reserved_balance || 0,
-                                        ).toFixed(8)}{" "}
+                                        {Number(balance?.reserved_balance || 0)}{" "}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Actions>
                                       <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink
-                                          className={
-                                            item.symbol ===
-                                              POLKADEX_ASSET.symbol &&
-                                            "disabled"
-                                          }
-                                        >
+                                        <S.DepositLink>
                                           {tc("deposit")}
                                         </S.DepositLink>
                                       </Link>
                                       <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink
-                                          className={
-                                            item.symbol ===
-                                              POLKADEX_ASSET.symbol &&
-                                            "disabled"
-                                          }
-                                        >
+                                        <S.WithdrawLink>
                                           {tc("withdraw")}
                                         </S.WithdrawLink>
                                       </Link>

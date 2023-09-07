@@ -2,8 +2,8 @@ import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 
-import { useMarketsProvider, Market } from "../marketsProvider";
-import { useSettingsProvider } from "../settings";
+import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
+import { Market } from "../marketsProvider";
 
 import { Provider } from "./context";
 import { initialOrderBook, orderBookReducer } from "./reducer";
@@ -12,12 +12,12 @@ import * as T from "./types";
 import * as A from "./actions";
 import { OBIncrementData, OrderbookRawUpdate } from "./types";
 
-// eslint-disable-next-line camelcase
-import { Websocket_streamsSubscription } from "@/API";
-import * as subscriptions from "@/graphql/subscriptions";
-import * as queries from "@/graphql/queries";
 import { fetchAllFromAppSync } from "@/helpers";
+import * as queries from "@/graphql/queries";
 import { READ_ONLY_TOKEN } from "@/constants";
+import * as subscriptions from "@/graphql/subscriptions";
+import { useSettingsProvider } from "@/providers/public/settings";
+import { Websocket_streamsSubscription } from "@/API";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
@@ -27,6 +27,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   // Actions
   const onOrderBook = useCallback(
     async (payload: Market) => {
+      dispatch(A.depthFetch(payload));
       try {
         const market = payload;
         if (market?.m) {
@@ -40,8 +41,8 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
           dispatch(A.depthData({ asks, bids }));
         }
       } catch (error) {
-        console.log(error);
         onHandleError(`Orderbook fetch error:${error.message}`);
+        dispatch(A.depthError(error));
       }
     },
     [onHandleError],

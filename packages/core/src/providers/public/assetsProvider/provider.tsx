@@ -7,8 +7,8 @@ import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
 
+import { sendQueryToAppSync, isAssetPDEX } from "@/helpers";
 import { getAllAssets } from "@/graphql/queries";
-import { isAssetPDEX, sendQueryToAppSync } from "@/helpers";
 import { POLKADEX_ASSET } from "@/constants";
 
 export const AssetsProvider: T.AssetsComponent = ({ children }) => {
@@ -40,6 +40,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
       onHandleError(
         `Something has gone wrong, could not fetch assets ${error}`,
       );
+      dispatch(A.assetsError(error));
     }
   }, [onHandleError]);
 
@@ -61,8 +62,8 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   );
 
   useEffect(() => {
-    fetchAssets();
-  }, [fetchAssets]);
+    if (state.list?.length === 0) fetchAssets();
+  }, [fetchAssets, state.list]);
 
   return (
     <Provider

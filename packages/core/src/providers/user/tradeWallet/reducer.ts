@@ -178,25 +178,11 @@ export const tradeWalletReducer = (
         ),
       };
     case USER_TRADE_ACCOUNT_UNLOCK: {
-      const { address, password } = action.payload;
-      try {
-        const _allAccounts = [...state.allBrowserAccounts];
-        const pair = _allAccounts?.find(
-          (account) => account?.address === address,
-        );
-        if (!pair) {
-          return state;
-        }
-        pair.unlock(password.toString());
-        return {
-          ...state,
-          allBrowserAccounts: _allAccounts,
-        };
-      } catch (e) {
-        console.log("password error", e);
-        alert("invalid password");
-        return state;
-      }
+      const _allAccounts = [...state.allBrowserAccounts];
+      return {
+        ...state,
+        allBrowserAccounts: _allAccounts,
+      };
     }
     case USER_TRADE_ACCOUNT_PUSH: {
       const { pair } = action.payload;

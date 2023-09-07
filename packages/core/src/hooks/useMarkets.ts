@@ -1,12 +1,11 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 
-import { defaultConfig } from "@/config";
 import { useProfile } from "@/providers/user/profile";
 import {
   useMarketsProvider,
-  Market,
   defaultTickers,
+  Market,
 } from "@/providers/public/marketsProvider";
 
 export type InitialMarkets = {
@@ -76,20 +75,23 @@ export function useMarkets(onClose: () => void) {
    * @param {string} e -  Search field value
    * @returns {void} dispatch setCurrentMarket action
    */
-  const handleChangeMarket = (e: string): void => {
-    const marketToSet = markets.find((el) => el.name === e);
-    if (marketToSet) {
-      router.push(
-        `${marketToSet.base_ticker + marketToSet.quote_ticker}`,
-        undefined,
-        {
-          shallow: true,
-        },
-      );
-      setCurrentMarket(marketToSet);
-      onClose();
-    }
-  };
+  const handleChangeMarket = useCallback(
+    (e: string): void => {
+      const marketToSet = markets?.find((el) => el.name === e);
+      if (marketToSet) {
+        router.push(
+          `${marketToSet.base_ticker + marketToSet.quote_ticker}`,
+          undefined,
+          {
+            shallow: true,
+          },
+        );
+        setCurrentMarket(marketToSet);
+        onClose();
+      }
+    },
+    [markets, onClose, router, setCurrentMarket],
+  );
 
   /**
    * @description Return the tickers based on the current market id
@@ -104,7 +106,9 @@ export function useMarkets(onClose: () => void) {
         ...item,
         last: (ticker || defaultTickers).close,
         volume: (ticker || defaultTickers).volumeBase24hr,
-        price_change_percent: (ticker || defaultTickers).priceChangePercent24Hr,
+        price_change_percent: (
+          ticker || defaultTickers
+        ).priceChangePercent24Hr?.toString(),
         price_change_percent_num: Number.parseFloat(
           String((ticker || defaultTickers).priceChangePercent24Hr),
         ),
@@ -116,12 +120,7 @@ export function useMarkets(onClose: () => void) {
         ? value.isFavourite === fieldValue.showFavourite
         : value,
     );
-    const allTicketsFilters = allFavoriteFilters.reduce((pv, cv) => {
-      const id = cv.id.split("-");
-      const includeMarket = id.some(
-        (value) => !defaultConfig.blockedAssets?.includes(value),
-      );
-
+    return allFavoriteFilters.reduce((pv, cv) => {
       const names = cv.name.toLowerCase().split("/");
       if (
         cv.name
@@ -129,15 +128,12 @@ export function useMarkets(onClose: () => void) {
           .includes(fieldValue.searchFieldValue.toLowerCase()) &&
         (fieldValue.marketsTabsSelected === "" ||
           fieldValue.marketsTabsSelected.toLowerCase() === names[1] ||
-          fieldValue.marketsTabsSelected.toLowerCase() === "all") &&
-        includeMarket
+          fieldValue.marketsTabsSelected.toLowerCase() === "all")
       ) {
         pv.push(cv);
       }
       return pv;
     }, initialMarkets);
-
-    return allTicketsFilters;
   };
 
   /**
@@ -148,14 +144,8 @@ export function useMarkets(onClose: () => void) {
   // TODO: Add ticker types, ex. Fiat, Zones, Alts
   const marketTickers = markets.reduce(
     (pv: string[], cv: Market) => {
-      const id = cv.id.split("-");
-
-      const includeTicker = id.some(
-        (value) => !defaultConfig.blockedAssets?.includes(value),
-      );
-
       const [, quote] = cv.name.split("/");
-      if (pv.indexOf(quote) === -1 && includeTicker) {
+      if (pv.indexOf(quote) === -1) {
         pv.push(quote);
       }
       return pv;

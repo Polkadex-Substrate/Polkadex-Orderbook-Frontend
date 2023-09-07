@@ -1,24 +1,24 @@
 module.exports = {
   env: {
-    node: true
+    node: true,
   },
   settings: {
     react: {
-      version: "detect"
+      version: "detect",
     },
   },
   extends: [
     "plugin:react/recommended",
     "standard",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
   ],
   parser: "@typescript-eslint/parser",
   plugins: [
     "@typescript-eslint",
     "simple-import-sort",
     "prettier",
-    "react-hooks"
+    "react-hooks",
   ],
   rules: {
     "prettier/prettier": "error",
@@ -26,8 +26,8 @@ module.exports = {
     "import/order": [
       "error",
       {
-        "newlines-between": "always"
-      }
+        "newlines-between": "always",
+      },
     ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
@@ -38,9 +38,9 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "space-before-function-paren": "off",
-    camelcase: "warn",
+    camelcase: "off",
     "@typescript-eslint/ban-type": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "react/no-unknown-property": "off"
-  }
+    "react/no-unknown-property": "off",
+  },
 };

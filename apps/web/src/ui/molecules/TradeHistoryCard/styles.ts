@@ -6,7 +6,7 @@ export const Tr = styled.tr`
     padding: 1.2rem;
     margin-bottom: 1.2rem;
     border-radius: 0 1rem 1rem 1rem;
-    :nth-child(even) {
+    &:nth-child(even) {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
   `}

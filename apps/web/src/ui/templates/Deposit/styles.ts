@@ -54,7 +54,7 @@ export const Title = styled.button`
         stroke: ${theme.colors.text};
       }
     }
-    :hover {
+    &:hover {
       color: ${theme.colors.text};
       div {
         border-color: ${theme.colors.text};

@@ -11,15 +11,14 @@ import { recentTradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { PublicTrade } from "./types";
 
-import { getRecentTrades } from "@/graphql";
 import * as subscriptions from "@/graphql/subscriptions";
+import { getRecentTrades } from "@/graphql/queries";
 import {
+  fetchFromAppSync,
   decimalPlaces,
   getIsDecreasingArray,
-  fetchFromAppSync,
 } from "@/helpers";
 import { READ_ONLY_TOKEN } from "@/constants";
-// eslint-disable-next-line camelcase
 import { Websocket_streamsSubscription } from "@/API";
 
 export const RecentTradesProvider = ({ children }) => {
@@ -83,6 +82,7 @@ export const RecentTradesProvider = ({ children }) => {
 
   const recentTradesFetch = useCallback(
     async (market: Market) => {
+      dispatch(A.recentTradesFetch(market));
       try {
         if (market) {
           const res = await fetchRecentTrade(market.m);

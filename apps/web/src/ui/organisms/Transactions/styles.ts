@@ -43,7 +43,7 @@ export const TabHeader = styled.li<{ isActive?: boolean }>`
 
     font-weight: ${isActive ? 550 : 500};
     transition: opacity 0.5s ease-in-out;
-    :hover {
+    &:hover {
       opacity: 1;
     }
   `}

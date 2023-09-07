@@ -1,21 +1,21 @@
 // TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
 
-import { useProfile } from "../profile/useProfile";
+import { useProfile } from "../profile";
 
 import * as A from "./actions";
 import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 
-import {
-  sendQueryToAppSync,
-  eventHandler,
-  fetchOnChainBalance,
-} from "@/helpers";
 import { useSettingsProvider } from "@/providers/public/settings";
 import * as queries from "@/graphql/queries";
 import { useAssetsProvider } from "@/providers/public/assetsProvider";
+import {
+  sendQueryToAppSync,
+  fetchOnChainBalance,
+  eventHandler,
+} from "@/helpers";
 import { useNativeApi } from "@/providers/public/nativeApi";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
@@ -149,8 +149,20 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   );
 
   useEffect(() => {
-    if (!isProfileFetching && !isAssetFetching && connected) onBalancesFetch();
-  }, [onBalancesFetch, isProfileFetching, isAssetFetching, connected]);
+    if (
+      !isProfileFetching &&
+      !isAssetFetching &&
+      connected &&
+      state.balances?.length === 0
+    )
+      onBalancesFetch();
+  }, [
+    onBalancesFetch,
+    isProfileFetching,
+    isAssetFetching,
+    connected,
+    state.balances,
+  ]);
 
   // balance updates are give to main address
   useEffect(() => {

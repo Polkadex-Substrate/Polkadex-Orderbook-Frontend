@@ -110,7 +110,7 @@ export const Social = styled.div`
         width: 2rem;
         height: 2rem;
       }
-      :hover {
+      &:hover {
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
     }

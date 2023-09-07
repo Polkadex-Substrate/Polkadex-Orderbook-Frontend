@@ -13,7 +13,6 @@ import { OrderBookState } from "./types";
 import { OrderBookActions, DepthActions } from "./actions";
 
 import { deleteFromBook, replaceOrAddToBook } from "@/helpers";
-
 export const initialOrderBook: OrderBookState = {
   orderbook: { asks: [], bids: [], loading: true },
   depth: { asks: [], bids: [], loading: true },
@@ -59,6 +58,7 @@ export const orderBookReducer = (
       return {
         ...state,
         depth: {
+          ...state.depth,
           loading: true,
           error: undefined,
         },

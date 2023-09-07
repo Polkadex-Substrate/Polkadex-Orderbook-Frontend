@@ -1,7 +1,6 @@
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 
-// eslint-disable-next-line camelcase
 import { Websocket_streamsSubscription } from "@/API";
 import * as subscriptions from "@/graphql/subscriptions";
 import { READ_ONLY_TOKEN, UserEvents } from "@/constants";
