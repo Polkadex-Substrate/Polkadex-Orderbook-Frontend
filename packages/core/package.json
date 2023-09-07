@@ -1,0 +1,72 @@
+{
+  "name": "@orderbook/core",
+  "license": "MIT",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./graphql": "./src/graphql/index.ts",
+    "./helpers": "./src/helpers/index.ts",
+    "./providers": "./src/providers/index.ts",
+    "./providers/*": "./src/providers/*",
+    "./hooks": "./src/hooks/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./validations": "./src/validations/index.ts",
+    "./api": "./src/API.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "./*": ["./src/index.ts"],
+      "config": ["./src/config/index.ts"],
+      "constants": ["./src/constants/index.ts"],
+      "graphql": ["./src/graphql/index.ts"],
+      "helpers": ["./src/helpers/index.ts"],
+      "hooks": ["./src/hooks/index.ts"],
+      "providers/*": ["./src/providers/*"],
+      "providers": ["./src/providers/index.ts"],
+      "utils": ["./src/utils/index.ts"],
+      "validations": ["./src/validations/index.ts"],
+      "api": ["./src/API.ts"]
+    }
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@polkadot/api": "^10.4.1",
+    "@polkadot/extension-dapp": "^0.46.1",
+    "@polkadot/ui-keyring": "^3.2.1",
+    "@polkadot/util-crypto": "^12.0.1",
+    "aws-amplify": "^5.3.6",
+    "bignumber.js": "^9.1.1",
+    "d3-array": "^3.2.4",
+    "d3-time-format": "^4.1.0",
+    "file-saver": "^2.0.5",
+    "formik": "^2.2.9",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.35",
+    "react": "^18.2.0",
+    "react-query": "^3.39.2",
+    "styled-components": "^5.3.1",
+    "styled-system": "^5.1.5",
+    "yup": "^0.32.9",
+    "date-fns": "^2.28.0",
+    "i18next": "^23.2.8",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-http-backend": "^2.2.1",
+    "react-i18next": "^13.0.1"
+  },
+  "devDependencies": {
+    "@orderbook/eslint-config": "*",
+    "@orderbook/tsconfig": "*",
+    "@types/d3-array": "^3.0.7",
+    "@types/file-saver": "^2.0.5",
+    "@types/react": "18.0.1",
+    "@types/styled-components": "^5.1.14",
+    "@types/styled-system": "^5.1.17",
+    "typescript": "^5.0.4"
+  }
+}
