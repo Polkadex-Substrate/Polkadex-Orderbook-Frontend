@@ -48,5 +48,6 @@ export * from "./RemoveFromDevice";
 export * from "./SliderPercentage";
 export * from "./TradingView";
 export * from "./SwitchFAQ";
+export * from "./CheckboxCustom";
 
 export * as LoadingIcons from "./LoadingIcons";
