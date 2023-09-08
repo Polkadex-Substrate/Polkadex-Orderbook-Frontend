@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3003",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,7 +26,7 @@
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.1",
-    "next": "^13.4.19",
+    "next": "^13.3.0",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2.0",
     "react-aria": "^3.18.0",
@@ -66,5 +66,15 @@
     "ts-jest": "^29.0.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
+  },
+  "resolutions": {
+    "ansi-regex": "^5.0.1 ",
+    "node-fetch": "^2.6.7 ",
+    "simple-get": "^4.0.1",
+    "glob-parent": "^5.1.2",
+    "trim": "^0.0.3",
+    "postcss": "^8.2.13",
+    "prismjs": "^1.27.0",
+    "file-type": "^16.5.4"
   }
 }
