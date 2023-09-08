@@ -39,7 +39,7 @@ import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import * as T from "./types";
 import * as S from "./styles";
 
-export const SettingsTemplate = () => {
+export const WalletsTemplate = () => {
   const router = useRouter();
   const {
     allFilteredTradeAccounts,

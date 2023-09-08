@@ -1,7 +1,7 @@
 {
-  "title": "Accounts | Polkadex Orderbook",
-  "heading": "Accounts.",
-  "subHeading": "General account settings.",
+  "title": "Wallets | Polkadex Orderbook",
+  "heading": "Wallets.",
+  "subHeading": "General wallet settings.",
   "tradingAccountToolTip": "Trading account info",
   "tradingAccounts": "Trading accounts",
   "newAccount": "New Account",
