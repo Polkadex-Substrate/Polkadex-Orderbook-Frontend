@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+build
 
 #code editor
 .idea
@@ -34,6 +35,9 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+# turbo
+.turbo
 
 # vercel
 .vercel
