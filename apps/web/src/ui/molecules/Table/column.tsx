@@ -11,7 +11,7 @@ const Column = forwardRef(
     { state, column }: PropsWithChildren<T.ColumnForwardProps>,
     ref: Ref<HTMLTableRowElement>,
   ) => {
-    const componentRef = useRef();
+    const componentRef = useRef(null);
 
     const { columnHeaderProps } = useTableColumnHeader(
       { node: column },
@@ -27,7 +27,7 @@ const Column = forwardRef(
     return (
       <S.Column
         {...mergeProps(columnHeaderProps, focusProps)}
-        textAlign={column.colspan > 1}
+        textAlign={column?.colspan ? column.colspan > 1 : false}
         outline={isFocusVisible}
         iconVisibility={state.sortDescriptor?.column === column.key}
         ref={componentRef}

@@ -11,9 +11,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   staticPageGenerationTimeout: 120,
   webpack(config, { _, isServer }) {
     config.resolve.alias = {
