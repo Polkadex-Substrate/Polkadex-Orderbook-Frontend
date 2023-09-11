@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
@@ -8,7 +8,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
 
-export const Menu = () => {
+export const Menu = ({ open = false }) => {
   const router = useRouter();
 
   const profileState = useProfile();
@@ -22,47 +22,44 @@ export const Menu = () => {
   const t = (key: string) => translation(`menu.${key}`);
 
   return (
-    <S.Wrapper>
+    <S.Wrapper open={open}>
       <S.WrapperLinks>
-        <S.WrapperIcon>
-          {router.pathname === "/trading/[id]" && <S.LineBorder />}
-          <Link href="/trading">
-            <div>
-              <Icon
-                name="Exchange"
-                background="none"
-                stroke="text"
-                size="large"
-              />
-            </div>
-            <S.Span>{t("exchange")}</S.Span>
-          </Link>
-        </S.WrapperIcon>
-        <S.WrapperIcon isDisabled={!isAuthenticated}>
-          {router.pathname === "/balances" && <S.LineBorder />}
-          <Link href="/balances">
-            <div>
-              <Icon name="Coins" background="none" stroke="text" size="large" />
-            </div>
-            <S.Span>{t("balances")}</S.Span>
-          </Link>
-        </S.WrapperIcon>
-        <S.WrapperIcon isDisabled={!isAuthenticated}>
-          {router.pathname === "/settings" && <S.LineBorder />}
-          <Link href="/settings">
-            <div>
-              <Icon
-                name="Wallet"
-                background="none"
-                stroke="text"
-                size="large"
-              />
-            </div>
-            <S.Span>{t("accounts")}</S.Span>
-          </Link>
-        </S.WrapperIcon>
-        <Terms />
-        <Help />
+        <Card
+          active={router.pathname === "/trading/[id]"}
+          icon="Exchange"
+          href="/trading"
+          open={open}
+        >
+          {t("exchange")}
+        </Card>
+        <Card
+          active={router.pathname === "/balances"}
+          icon="Coins"
+          href="/balances"
+          disable={!isAuthenticated}
+          open={open}
+        >
+          {t("balances")}
+        </Card>
+        <Card
+          active={router.pathname === "/settings"}
+          icon="Wallet"
+          href="/settings"
+          disable={!isAuthenticated}
+          open={open}
+        >
+          {t("accounts")}
+        </Card>
+        <Terms open={open} />
+        <Card
+          icon="Question"
+          open={open}
+          href="https://discord.gg/G4KMw2sGGe"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t("help")}
+        </Card>
       </S.WrapperLinks>
       <S.BottomContainer>
         <S.WrapperIcon onClick={changeTheme} as="button">
@@ -78,14 +75,24 @@ export const Menu = () => {
   );
 };
 
-const Terms = () => {
+const Terms = ({ open }) => {
   const { t: tc } = useTranslation("common");
   return (
-    <S.Terms>
+    <S.Terms open={open}>
       <S.WrapperIcon>
-        <div>
-          <Icon name="Book" background="none" stroke="text" size="large" />
-        </div>
+        <S.Flex>
+          <div>
+            <Icon name="Book" background="none" stroke="text" size="large" />
+          </div>
+          {open && (
+            <S.Text>
+              <p>Legal links</p>
+              <div>
+                <Icon name="ArrowBottom" />
+              </div>
+            </S.Text>
+          )}
+        </S.Flex>
         <S.TermsLinks>
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
@@ -138,55 +145,35 @@ const Terms = () => {
   );
 };
 
-const Help = () => {
-  const { t: translation } = useTranslation("organisms");
-  const t = (key: string) => translation(`menu.${key}`);
-  const [state, setState] = useState(false);
-  return (
-    <S.Terms>
-      <span role="button" onClick={() => setState(!state)}>
-        <S.WrapperIcon>
-          <div>
-            <Icon
-              name="Question"
-              background="none"
-              stroke="text"
-              size="large"
-            />
-          </div>
-          <div>
-            <S.Span>{t("help")}</S.Span>
-          </div>
-        </S.WrapperIcon>
-      </span>
-      {state && (
-        <S.TermsLinks>
-          <a
-            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Orderbook_FAQ.pdf"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <S.WrapperIcon>
-              <div>
-                <S.Span>{t("faq")}</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </a>
-          <a
-            href="https://discord.gg/G4KMw2sGGe"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <S.WrapperIcon>
-              <div>
-                <S.Span>{t("discord")}</S.Span>
-              </div>
-            </S.WrapperIcon>
-          </a>
-        </S.TermsLinks>
-      )}
-    </S.Terms>
-  );
-};
+interface Props
+  extends Pick<
+    AnchorHTMLAttributes<HTMLAreaElement>,
+    "href" | "target" | "rel"
+  > {
+  active?: boolean;
+  icon: "Exchange" | "Coins" | "Wallet" | "Help" | "Question";
+  disable?: boolean;
+  open?: boolean;
+}
+
+const Card = ({
+  active,
+  href,
+  icon,
+  disable,
+  open,
+  children,
+  ...props
+}: PropsWithChildren<Props>) => (
+  <S.WrapperIcon isDisabled={disable} open={open}>
+    {active && <S.LineBorder />}
+    <Link href={href as string} {...props}>
+      <div>
+        <Icon name={icon} background="none" stroke="text" size="large" />
+      </div>
+      <S.Span>{children}</S.Span>
+    </Link>
+  </S.WrapperIcon>
+);
 
 export default Menu;

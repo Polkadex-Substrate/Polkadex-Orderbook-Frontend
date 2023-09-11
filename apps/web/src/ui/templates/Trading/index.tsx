@@ -165,7 +165,7 @@ export function Trading() {
         <S.Wrapper>
           <Header />
           <S.Flex>
-            <Menu />
+            <Menu open={false} />
             <S.WrapperMain>
               <S.ContainerMain>
                 <S.Content>

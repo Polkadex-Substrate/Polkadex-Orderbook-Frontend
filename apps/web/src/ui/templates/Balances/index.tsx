@@ -88,7 +88,7 @@ export const BalancesTemplate = () => {
       <S.Main>
         <Header />
         <S.Flex>
-          <Menu />
+          <Menu open />
           <S.Wrapper>
             <S.ContainerMain>
               <S.Title>
