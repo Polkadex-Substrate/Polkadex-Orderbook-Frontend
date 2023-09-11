@@ -15,3 +15,4 @@ export * from "./Sign";
 export * from "./SignIn";
 export * from "./Trading";
 export * from "./Withdraw";
+export * from "./Deposit";
