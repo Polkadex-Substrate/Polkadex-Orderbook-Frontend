@@ -64,8 +64,8 @@ export function useTradeHistory(filters: Ifilters) {
 
     if (filters?.hiddenPairs) {
       tradeHistoryList = tradeHistoryList.filter((trade) => {
-        const baseUnit = selectGetAsset(trade.baseAsset).symbol;
-        const quoteUnit = selectGetAsset(trade.quoteAsset).symbol;
+        const baseUnit = selectGetAsset(trade.baseAsset)?.symbol || "";
+        const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol || "";
         const market = currentMarket?.name;
         const marketForTrade = `${baseUnit}/${quoteUnit}`;
         return market === marketForTrade && trade;

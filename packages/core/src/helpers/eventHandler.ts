@@ -23,6 +23,7 @@ export const eventHandler = ({ cb, name, eventType }: eventHandlerParams) => {
   return createEventsObservable(name).subscribe({
     next: (data) => {
       console.log("got raw event", data);
+      if (!data?.value?.data?.websocket_streams) return;
       const eventData = JSON.parse(data.value.data.websocket_streams.data);
       console.info("User Event: ", eventData, "event type", eventData.type);
 
@@ -48,6 +49,7 @@ export const eventHandlerCallback = ({
 
   const sub = createEventsObservable(name).subscribe({
     next(value) {
+      if (!value?.value?.data?.websocket_streams) return;
       const eventData = JSON.parse(value.value.data.websocket_streams.data);
       if (eventType === eventData.type) {
         cb(eventData);

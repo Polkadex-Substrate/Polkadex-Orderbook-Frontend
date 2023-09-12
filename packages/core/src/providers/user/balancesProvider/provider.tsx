@@ -126,8 +126,8 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     (msg: T.BalanceUpdatePayload): Omit<T.Balance, "onChainBalance"> => {
       const assetId = msg.asset.asset;
       return {
-        name: selectGetAsset(assetId).name,
-        symbol: selectGetAsset(assetId).symbol,
+        name: selectGetAsset(assetId)?.name || "",
+        symbol: selectGetAsset(assetId)?.symbol || "",
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,

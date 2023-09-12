@@ -26,8 +26,8 @@ export const selectIsAddressInExtension = (
   address: string,
   allAccounts: T.ExtensionWalletState["allAccounts"],
 ): boolean => {
-  return (
-    address && allAccounts?.some(({ account }) => account?.address === address)
+  return Boolean(
+    address && allAccounts?.some(({ account }) => account?.address === address),
   );
 };
 
@@ -42,7 +42,6 @@ export const executeRegisterEmail = async (
       variables: {
         input: { payload: payloadStr },
       },
-      token: null,
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
   } catch (error) {

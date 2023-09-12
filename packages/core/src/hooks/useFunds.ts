@@ -12,9 +12,9 @@ export function useFunds() {
 
   const { balances: userBalances } = useBalancesProvider();
 
-  const balances: Balance[] = useMemo(
+  const balances = useMemo(
     () =>
-      userBalances.reduce((pv, cv) => {
+      userBalances.reduce((pv: Balance[], cv) => {
         if (
           cv.name.toLowerCase().includes(state.toLowerCase()) ||
           cv.symbol.toLowerCase().includes(state.toLowerCase())

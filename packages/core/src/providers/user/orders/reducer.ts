@@ -16,7 +16,6 @@ import {
 
 const initialTemplate = {
   isLoading: false,
-  message: null,
   isError: false,
   isSuccess: false,
 };

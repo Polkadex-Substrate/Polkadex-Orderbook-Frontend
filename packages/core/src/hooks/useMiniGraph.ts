@@ -5,7 +5,7 @@ import { fetchKlineAsync } from "@/helpers";
 import { KlineEvent } from "@/providers/public/klineProvider";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
-  const [points, setPoints] = useState([]);
+  const [points, setPoints] = useState<number[]>([]);
   const len = points?.length;
   const isIncreasing = !!len ?? points[len - 2] < points[len - 1];
   const dailyKline: UseQueryResult<KlineEvent[], Error> = useQuery(
@@ -16,8 +16,8 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
     },
   );
   useEffect(() => {
-    if (dailyKline.isFetched) {
-      const points: number[] = dailyKline?.data?.map((i) => Number(i.close));
+    if (dailyKline?.data && dailyKline.isFetched) {
+      const points = dailyKline.data.map((i) => Number(i.close));
       setPoints(points);
     }
   }, [dailyKline?.data, dailyKline.isFetched]);

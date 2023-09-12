@@ -71,7 +71,7 @@ export const removeProxyFromAccount = async (
 export const selectTradeAccount = (
   address: string,
   allBrowserAccounts: T.TradeWalletState["allBrowserAccounts"],
-): TradeAccount =>
+): TradeAccount | undefined =>
   allBrowserAccounts?.find(
     (account) => account?.address?.toLowerCase() === address?.toLowerCase(),
   );
