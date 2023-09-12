@@ -1,4 +1,4 @@
-import { KlineDbData } from "@/providers/public/klineProvider";
+import { KlineDbData } from "@orderbook/core/providers/public/klineProvider";
 
 // This function aims to provide a timestamp that represents the same point in time as the input ISO date string
 // but without accounting for any time zone offset.

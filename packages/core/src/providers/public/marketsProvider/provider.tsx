@@ -5,13 +5,24 @@ import { API } from "aws-amplify";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { GraphQLSubscription } from "@aws-amplify/api";
+import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import * as queries from "@orderbook/core/graphql/queries";
+import { defaultConfig } from "@orderbook/core/config";
+import { Websocket_streamsSubscription } from "@orderbook/core/API";
+import {
+  decimalPlaces,
+  convertToTicker,
+  isAssetPDEX,
+} from "@orderbook/core/helpers";
+import { sendQueryToAppSync } from "@orderbook/core/helpers/appsync";
+import { getAllMarkets } from "@orderbook/core/graphql/queries";
+import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@orderbook/core/constants";
 
-import { IPublicAsset } from "../assetsProvider";
 import { useSettingsProvider } from "../settings";
+import { IPublicAsset } from "../assetsProvider";
 
-import * as A from "./actions";
-import { Provider } from "./context";
-import { initialMarketsState, marketsReducer } from "./reducer";
+import { setCurrentTicker } from "./actions";
 import {
   Market,
   MarketQueryResult,
@@ -19,17 +30,9 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
-import { setCurrentTicker } from "./actions";
-
-import { useAssetsProvider } from "@/providers/public/assetsProvider";
-import * as subscriptions from "@/graphql/subscriptions";
-import * as queries from "@/graphql/queries";
-import { defaultConfig } from "@/config";
-import { Websocket_streamsSubscription } from "@/API";
-import { decimalPlaces, convertToTicker, isAssetPDEX } from "@/helpers";
-import { sendQueryToAppSync } from "@/helpers/appsync";
-import { getAllMarkets } from "@/graphql/queries";
-import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@/constants";
+import { initialMarketsState, marketsReducer } from "./reducer";
+import * as A from "./actions";
+import { Provider } from "./context";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);

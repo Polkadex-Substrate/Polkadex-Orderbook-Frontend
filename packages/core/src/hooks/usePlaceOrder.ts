@@ -1,24 +1,23 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "react-i18next";
-
-import { Decimal } from "@/utils";
-import { useOrderBook } from "@/providers/public/orderBook";
-import { useProfile } from "@/providers/user/profile";
+import { Decimal } from "@orderbook/core/utils";
+import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   useTradeWallet,
   selectTradeAccount,
-} from "@/providers/user/tradeWallet";
-import { useOrders } from "@/providers/user/orders";
-import { useRecentTradesProvider } from "@/providers/public/recentTradesProvider";
+} from "@orderbook/core/providers/user/tradeWallet";
+import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
   precisionRegExp,
   getAbsoluteNumber,
-} from "@/helpers";
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import { useBalancesProvider } from "@/providers/user/balancesProvider";
+} from "@orderbook/core/helpers";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 type FormValues = {
   priceSell: string;

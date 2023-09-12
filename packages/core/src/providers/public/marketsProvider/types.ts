@@ -1,9 +1,8 @@
 import { FC, PropsWithChildren } from "react";
+import { FilterPrice } from "@orderbook/core/helpers";
 
 import { IPublicAsset } from "../assetsProvider";
 import { CommonState } from "../../types";
-
-import { FilterPrice } from "@/helpers";
 
 export type MarketId = string;
 

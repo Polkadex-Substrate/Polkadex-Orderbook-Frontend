@@ -1,9 +1,8 @@
 import { ChangeEvent, useMemo, useState } from "react";
-
 import {
   useBalancesProvider,
   Balance,
-} from "@/providers/user/balancesProvider";
+} from "@orderbook/core/providers/user/balancesProvider";
 
 export function useFunds() {
   const [state, setState] = useState("");

@@ -1,9 +1,15 @@
 import { MutableRefObject, useCallback, useEffect } from "react";
-
-import { mapValues, accumulateVolume, calcMaxVolume } from "@/helpers";
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import { OrderBookState, useOrderBook } from "@/providers/public/orderBook";
-import { useOrders } from "@/providers/user/orders";
+import {
+  mapValues,
+  accumulateVolume,
+  calcMaxVolume,
+} from "@orderbook/core/helpers";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import {
+  OrderBookState,
+  useOrderBook,
+} from "@orderbook/core/providers/public/orderBook";
+import { useOrders } from "@orderbook/core/providers/user/orders";
 
 export type Props = {
   isSell?: boolean;

@@ -1,10 +1,9 @@
 import { FC, PropsWithChildren } from "react";
+import { IUserTradeAccount } from "@orderbook/core/hooks";
 
 import { TradeAccount } from "../../types";
 
 import * as A from "./actions";
-
-import { IUserTradeAccount } from "@/hooks";
 
 export interface TradeWalletState {
   isFetching: boolean;

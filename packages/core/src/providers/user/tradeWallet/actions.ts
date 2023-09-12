@@ -1,3 +1,5 @@
+import { USER_EVENTS } from "@orderbook/core";
+
 import { CommonError, TradeAccount, ExtensionAccount } from "../../types";
 
 import {
@@ -27,8 +29,6 @@ import {
   USER_TRADE_ACCOUNTS_FETCH,
 } from "./constants";
 import { PreviewAccountModal } from "./types";
-
-import { USER_EVENTS } from "@/constants";
 
 export interface PolkadotWalletFetchPayload {
   allAccounts: TradeAccount[];

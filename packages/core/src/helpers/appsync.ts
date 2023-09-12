@@ -1,7 +1,6 @@
 import { APIClass, API as ampliyfyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
-
-import { READ_ONLY_TOKEN } from "@/constants";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 
 type Props = {
   query: string;

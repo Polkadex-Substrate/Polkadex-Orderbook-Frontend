@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 
 import { ProfileState } from "./types";
 import { ProfileAction } from "./actions";
@@ -18,8 +19,6 @@ import {
   PROFILE_SET_PROFILE_AVATAR,
   PROFILE_USER_FAVORITE_MARKET_PUSH,
 } from "./constants";
-
-import { LOCAL_STORAGE_ID } from "@/constants";
 
 const initialTemplate = {
   isLoading: true,

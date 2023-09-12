@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -15,10 +18,6 @@ import {
   executeRegisterEmail,
   registerMainAccount,
 } from "./helper";
-
-import { eventHandler, eventHandlerCallback } from "@/helpers";
-import { useSettingsProvider } from "@/providers/public/settings";
-import { useNativeApi } from "@/providers/public/nativeApi";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   children,

@@ -1,6 +1,13 @@
 import { useCallback, useReducer } from "react";
 import { API } from "aws-amplify";
 import { reverse } from "d3-array";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import {
+  getCorrectTimestamp,
+  fetchKlineAsync,
+  getResolutionInMilliSeconds,
+} from "@orderbook/core/helpers";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 
@@ -9,14 +16,6 @@ import { Provider } from "./context";
 import { KlineComponent, KlineEvent } from "./types";
 import { initialKlineState, klineReducer } from "./reducer";
 import { getAbsoluteResolution } from "./helper";
-
-import * as subscriptions from "@/graphql/subscriptions";
-import {
-  getCorrectTimestamp,
-  fetchKlineAsync,
-  getResolutionInMilliSeconds,
-} from "@/helpers";
-import { READ_ONLY_TOKEN } from "@/constants";
 
 export const KlineProvider: KlineComponent = ({ children }) => {
   const [state, dispatch] = useReducer(klineReducer, initialKlineState);

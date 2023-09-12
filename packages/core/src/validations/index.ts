@@ -1,7 +1,9 @@
 import * as Yup from "yup";
-
-import { isAssetPDEX, getDigitsAfterDecimal } from "@/helpers";
-import { ErrorMessages, MAX_DIGITS_AFTER_DECIMAL } from "@/constants";
+import { isAssetPDEX, getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import {
+  ErrorMessages,
+  MAX_DIGITS_AFTER_DECIMAL,
+} from "@orderbook/core/constants";
 
 export const signInValidations = Yup.object().shape({
   password: Yup.string()

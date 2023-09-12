@@ -1,13 +1,12 @@
 // TODO: Refactor hook
 import { useMemo, useState } from "react";
+import { useAuth } from "@orderbook/core/providers/user/auth";
+import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
+import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { ExtensionAccount } from "@orderbook/core/providers/types";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { IUserTradeAccount } from "../";
-
-import { useAuth } from "@/providers/user/auth";
-import { useExtensionWallet } from "@/providers/user/extensionWallet";
-import { useTradeWallet } from "@/providers/user/tradeWallet";
-import { ExtensionAccount } from "@/providers/types";
-import { useProfile } from "@/providers/user/profile";
 
 export const useSettings = () => {
   const [showRegistered, setShowRegistered] = useState(false);

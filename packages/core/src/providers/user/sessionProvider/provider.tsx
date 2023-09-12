@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useCallback } from "react";
 import { endOfDay, startOfMonth } from "date-fns";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { useProfile } from "../profile";
 
@@ -7,8 +8,6 @@ import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, sessionReducer } from "./reducer";
-
-import { useSettingsProvider } from "@/providers/public/settings";
 
 export const SessionProvider: T.SessionComponent = ({ children }) => {
   const [state, dispatch] = useReducer(sessionReducer, initialState);

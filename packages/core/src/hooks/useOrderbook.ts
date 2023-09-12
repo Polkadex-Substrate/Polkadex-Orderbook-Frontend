@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import { useRecentTradesProvider } from "@/providers/public/recentTradesProvider";
-import { useOrderBook } from "@/providers/public/orderBook";
-import { decimalPlaces } from "@/helpers";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
+import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
+import { decimalPlaces } from "@orderbook/core/helpers";
 
 const initialState = [
   { size: 0.1, length: 1 },

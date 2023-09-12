@@ -2,6 +2,9 @@ import { useCallback, useEffect, useReducer } from "react";
 import keyring from "@polkadot/ui-keyring";
 import FileSaver from "file-saver";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { eventHandler } from "@orderbook/core/helpers";
 
 import { transformAddress, useProfile } from "../profile";
 import { TradeAccount } from "../../types";
@@ -16,10 +19,6 @@ import {
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
-
-import { useSettingsProvider } from "@/providers/public/settings";
-import { useNativeApi } from "@/providers/public/nativeApi";
-import { eventHandler } from "@/helpers";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);

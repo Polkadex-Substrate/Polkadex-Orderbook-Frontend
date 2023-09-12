@@ -1,17 +1,17 @@
 import { stringToHex } from "@polkadot/util";
 import { Signer } from "@polkadot/types/types";
 import { ApiPromise } from "@polkadot/api";
-
-import { ExtensionAccount } from "../../types";
-
-import * as T from "./types";
-
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 import {
   sendQueryToAppSync,
   ExtrinsicResult,
   signAndSendExtrinsic,
-} from "@/helpers";
-import * as mutations from "@/graphql/mutations";
+} from "@orderbook/core/helpers";
+import * as mutations from "@orderbook/core/graphql/mutations";
+
+import { ExtensionAccount } from "../../types";
+
+import * as T from "./types";
 
 export const userMainAccountDetails = (
   userMainAccount: string,
@@ -42,7 +42,7 @@ export const executeRegisterEmail = async (
       variables: {
         input: { payload: payloadStr },
       },
-      authMode: "AMAZON_COGNITO_USER_POOLS",
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
     });
   } catch (error) {
     throw new Error("Registration failed. Please try again or contact us.");

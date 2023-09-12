@@ -1,8 +1,7 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { useEffect, useState } from "react";
-
-import { fetchKlineAsync } from "@/helpers";
-import { KlineEvent } from "@/providers/public/klineProvider";
+import { fetchKlineAsync } from "@orderbook/core/helpers";
+import { KlineEvent } from "@orderbook/core/providers/public/klineProvider";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const [points, setPoints] = useState<number[]>([]);

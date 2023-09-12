@@ -15,27 +15,7 @@ const nextConfig = {
   webpack(config, { _, isServer }) {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@/config": path.resolve(__dirname, "../../packages/core/src/config"),
-      "@/constants": path.resolve(
-        __dirname,
-        "../../packages/core/src/constants",
-      ),
-      "@/graphql": path.resolve(__dirname, "../../packages/core/src/graphql"),
-      "@/helpers": path.resolve(__dirname, "../../packages/core/src/helpers"),
-      "@/providers": path.resolve(
-        __dirname,
-        "../../packages/core/src/providers",
-      ),
-      "@/providers/*": path.resolve(
-        __dirname,
-        "../../packages/core/src/providers/*",
-      ),
-      "@/hooks": path.resolve(__dirname, "../../packages/core/src/hooks"),
-      "@/utils": path.resolve(__dirname, "../../packages/core/src/utils"),
-      "@/validations": path.resolve(
-        __dirname,
-        "../../packages/core/src/validations",
-      ),
+      "@orderbook/core/*": path.resolve(__dirname, "../../packages/core/src/*"),
     };
     if (isServer) {
       config.externals.push("_http_common");

@@ -1,4 +1,4 @@
-import { Transaction } from "@/providers/user/transactionsProvider";
+import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
 
 export type WithdrawGroup = {
   id: number;

@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import { getRecentTrades } from "@orderbook/core/graphql/queries";
+import {
+  fetchFromAppSync,
+  decimalPlaces,
+  getIsDecreasingArray,
+} from "@orderbook/core/helpers";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import { Websocket_streamsSubscription } from "@orderbook/core/API";
 
 import { useMarketsProvider, Market } from "../marketsProvider";
 import { useSettingsProvider } from "../settings";
@@ -10,16 +19,6 @@ import { Provider } from "./context";
 import { recentTradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { PublicTrade } from "./types";
-
-import * as subscriptions from "@/graphql/subscriptions";
-import { getRecentTrades } from "@/graphql/queries";
-import {
-  fetchFromAppSync,
-  decimalPlaces,
-  getIsDecreasingArray,
-} from "@/helpers";
-import { READ_ONLY_TOKEN } from "@/constants";
-import { Websocket_streamsSubscription } from "@/API";
 
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);

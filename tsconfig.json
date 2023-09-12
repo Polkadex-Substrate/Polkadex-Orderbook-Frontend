@@ -1,3 +1,3 @@
 {
-  "extends": "@orderbook/tsconfig/base.json"
+  "extends": "@orderbook/tsconfig/ base.json"
 }

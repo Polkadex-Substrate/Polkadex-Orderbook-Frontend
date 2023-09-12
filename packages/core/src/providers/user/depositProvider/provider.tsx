@@ -1,6 +1,10 @@
 import { useReducer } from "react";
 import BigNumber from "bignumber.js";
 import { ApiPromise } from "@polkadot/api";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@orderbook/core/helpers";
+import { UNIT_BN } from "@orderbook/core/constants";
 
 import { ExtensionAccount } from "../../types";
 
@@ -8,11 +12,6 @@ import * as A from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { depositsReducer, initialState } from "./reducer";
-
-import { useSettingsProvider } from "@/providers/public/settings";
-import { useNativeApi } from "@/providers/public/nativeApi";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@/helpers";
-import { UNIT_BN } from "@/constants";
 
 export const DepositProvider: T.DepositsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);

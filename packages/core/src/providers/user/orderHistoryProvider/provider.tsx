@@ -1,4 +1,15 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import {
+  fetchAllFromAppSync,
+  fetchFromAppSync,
+  Utils,
+  sortOrdersDescendingTime,
+  eventHandler,
+} from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import * as queries from "@orderbook/core/graphql/queries";
 
 import { Ifilters, OrderCommon } from "../../types";
 import { UserAccount, useProfile } from "../profile";
@@ -12,18 +23,6 @@ import {
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
-
-import { useAssetsProvider } from "@/providers/public/assetsProvider";
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import {
-  fetchAllFromAppSync,
-  fetchFromAppSync,
-  Utils,
-  sortOrdersDescendingTime,
-  eventHandler,
-} from "@/helpers";
-import { useSettingsProvider } from "@/providers/public/settings";
-import * as queries from "@/graphql/queries";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(

@@ -1,5 +1,14 @@
 // TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import * as queries from "@orderbook/core/graphql/queries";
+import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import {
+  sendQueryToAppSync,
+  fetchOnChainBalance,
+  eventHandler,
+} from "@orderbook/core/helpers";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useProfile } from "../profile";
 
@@ -7,16 +16,6 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
-
-import { useSettingsProvider } from "@/providers/public/settings";
-import * as queries from "@/graphql/queries";
-import { useAssetsProvider } from "@/providers/public/assetsProvider";
-import {
-  sendQueryToAppSync,
-  fetchOnChainBalance,
-  eventHandler,
-} from "@/helpers";
-import { useNativeApi } from "@/providers/public/nativeApi";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);

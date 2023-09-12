@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { sendQueryToAppSync, isAssetPDEX } from "@orderbook/core/helpers";
+import { getAllAssets } from "@orderbook/core/graphql/queries";
+import { POLKADEX_ASSET } from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 
@@ -6,10 +9,6 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
-
-import { sendQueryToAppSync, isAssetPDEX } from "@/helpers";
-import { getAllAssets } from "@/graphql/queries";
-import { POLKADEX_ASSET } from "@/constants";
 
 export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);

@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import { fetchAllFromAppSync } from "@orderbook/core/helpers";
+import * as queries from "@orderbook/core/graphql/queries";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { Websocket_streamsSubscription } from "@orderbook/core/API";
 
 import { Market } from "../marketsProvider";
 
@@ -10,14 +17,6 @@ import { getDepthFromOrderbook } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
 import { OBIncrementData, OrderbookRawUpdate } from "./types";
-
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import { fetchAllFromAppSync } from "@/helpers";
-import * as queries from "@/graphql/queries";
-import { READ_ONLY_TOKEN } from "@/constants";
-import * as subscriptions from "@/graphql/subscriptions";
-import { useSettingsProvider } from "@/providers/public/settings";
-import { Websocket_streamsSubscription } from "@/API";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
   const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);

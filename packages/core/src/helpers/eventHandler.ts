@@ -1,9 +1,8 @@
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
-
-import { Websocket_streamsSubscription } from "@/API";
-import * as subscriptions from "@/graphql/subscriptions";
-import { READ_ONLY_TOKEN, UserEvents } from "@/constants";
+import { Websocket_streamsSubscription } from "@orderbook/core/API";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import { READ_ONLY_TOKEN, UserEvents } from "@orderbook/core/constants";
 
 export const createEventsObservable = (name: string) =>
   API.graphql<GraphQLSubscription<Websocket_streamsSubscription>>({
