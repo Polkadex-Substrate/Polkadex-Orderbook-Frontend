@@ -103,7 +103,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch],
+    [currentMarket, onHandleKlineFetch]
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
@@ -130,7 +130,7 @@ export const TradingView = () => {
         async resolveSymbol(symbolName, onResolve, onError) {
           const symbols = getAllSymbols();
           const symbolItem = symbols.find(
-            ({ full_name: fullName }) => fullName === symbolName,
+            ({ full_name: fullName }) => fullName === symbolName
           );
           if (!symbolItem) {
             onError("cannot resolve symbol");
@@ -187,7 +187,7 @@ export const TradingView = () => {
         unsubscribeBars(listenerGuid) {
           console.log(
             "[unsubscribeBars]: Method call with subscriberUID:",
-            listenerGuid,
+            listenerGuid
           );
         },
       },
@@ -201,12 +201,11 @@ export const TradingView = () => {
       fullscreen: false,
       autosize: true,
       container: "tv_chart_container",
-      disabled_features: [
+      disabled_features: ["volume_force_overlay", "header_symbol_search"],
+      enabled_features: [
         "use_localstorage_for_settings",
-        "volume_force_overlay",
-        "header_symbol_search",
+        "side_toolbar_in_fullscreen_mode",
       ],
-      enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
       custom_font_family: customFontFamily,
       custom_css_url: "/static/style.css/",
