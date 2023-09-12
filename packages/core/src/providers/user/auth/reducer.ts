@@ -25,14 +25,11 @@ import {
 
 const initialTemplate = {
   isLoading: false,
-  message: null,
   isError: false,
   isSuccess: false,
 };
 
 export const initialState: AuthState = {
-  user: null,
-  email: "",
   userConfirmed: false,
   signin: { ...initialTemplate },
   signup: { ...initialTemplate },
@@ -100,14 +97,25 @@ export const authReducer = (state: AuthState, action: AuthAction) => {
     case AUTH_LOGOUT_FETCH:
       return { ...state };
     case AUTH_LOGOUT_DATA:
-      return { ...state, ...initialState, logout: { ...state.logout, isSuccess: true } };
+      return {
+        ...state,
+        ...initialState,
+        logout: { ...state.logout, isSuccess: true },
+      };
     case AUTH_LOGOUT_FAILURE:
       return {
         ...state,
-        logout: { ...state.logout, isError: true, message: action.error.message },
+        logout: {
+          ...state.logout,
+          isError: true,
+          message: action.error.message,
+        },
       };
     case AUTH_FORGOT_PASSWORD_FETCH:
-      return { ...state, forgotPassword: { ...state.forgotPassword, isLoading: true } };
+      return {
+        ...state,
+        forgotPassword: { ...state.forgotPassword, isLoading: true },
+      };
     case AUTH_FORGOT_PASSWORD_DATA:
       return {
         ...state,
@@ -148,11 +156,18 @@ export const authReducer = (state: AuthState, action: AuthAction) => {
         },
       };
     case AUTH_CHANGE_PASSWORD_FETCH:
-      return { ...state, changePassword: { ...state.changePassword, isLoading: true } };
+      return {
+        ...state,
+        changePassword: { ...state.changePassword, isLoading: true },
+      };
     case AUTH_CHANGE_PASSWORD_DATA:
       return {
         ...state,
-        changePassword: { ...state.changePassword, isLoading: false, isSuccess: true },
+        changePassword: {
+          ...state.changePassword,
+          isLoading: false,
+          isSuccess: true,
+        },
       };
     case AUTH_CHANGE_PASSWORD_ERROR:
       return {

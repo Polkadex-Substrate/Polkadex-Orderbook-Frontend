@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { KeyringPair } from "@polkadot/keyring/types";
 import keyring from "@polkadot/ui-keyring";
 import FileSaver from "file-saver";
-import { ApiPromise } from "@polkadot/api";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 import { transformAddress, useProfile } from "../profile";
@@ -42,12 +40,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     payload: A.ExportTradeAccountFetch["payload"],
   ) => {
     const { address, password = "" } = payload;
-    const selectedAccount: KeyringPair = state.allBrowserAccounts?.find(
+    const selectedAccount = state.allBrowserAccounts?.find(
       (account) => account?.address?.toLowerCase() === address?.toLowerCase(),
     );
-
+    if (!selectedAccount) return;
     try {
-      selectedAccount?.isLocked && selectedAccount.unlock(password);
+      selectedAccount.isLocked && selectedAccount.unlock(password);
 
       const blob = new Blob([JSON.stringify(selectedAccount.toJson())], {
         type: "text/plain;charset=utf-8",
@@ -71,12 +69,14 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     const { file, password } = payload;
     let tradeAddress = "";
     try {
-      if (state.registerAccountModal.selectedAddress.address !== file.address) {
+      if (
+        state?.registerAccountModal?.selectedAddress?.address !== file.address
+      ) {
         onHandleError("Incorrect JSON File");
         return;
       }
       const modifiedFile = file;
-      const pair = keyring.restoreAccount(modifiedFile, password);
+      const pair = keyring.restoreAccount(modifiedFile, password || "");
       tradeAddress = pair?.address;
       dispatch(A.tradeAccountPush({ pair }));
       dispatch(
@@ -103,13 +103,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     const { mnemonic, name, password } = payload;
     let tradeAddress = "";
     try {
-      const { pair } = keyring.addUri(
-        mnemonic,
-        password?.length > 0 ? password : null,
-        {
-          name: name,
-        },
-      );
+      const { pair } = keyring.addUri(mnemonic, password || "", {
+        name: name,
+      });
       tradeAddress = pair?.address;
       dispatch(A.tradeAccountPush({ pair }));
       setTimeout(() => {
@@ -180,22 +176,22 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         allAccounts: controllerWallets,
       } = payload;
       const mnemonic = mnemonicGenerate();
-      const { account, signer } = controllerWallets?.find(
+      const controllerWallet = controllerWallets?.find(
         ({ account }) => account.address === address,
       );
-      const { pair } = keyring.addUri(
-        mnemonic,
-        password?.length > 0 ? password : null,
-        {
-          name,
-        },
-      );
+      if (!controllerWallet || !api) {
+        console.error("controllerWallet or api not found");
+        return;
+      }
+      const { pair } = keyring.addUri(mnemonic, password, {
+        name,
+      });
       tradeAddress = pair.address;
       const res = await addProxyToAccount(
         api,
         tradeAddress,
-        signer,
-        account?.address,
+        controllerWallet.signer,
+        controllerWallet.account.address,
       );
 
       if (res.isSuccess) {
@@ -218,7 +214,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         throw new Error(res.message);
       }
     } catch (error) {
-      dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
+      // trade address is assigned in the try block
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      tradeAddress &&
+        dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       onHandleError(error?.message ?? error);
       dispatch(A.registerTradeAccountError(error));
     }
@@ -229,7 +229,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   ) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
-      const api: ApiPromise = nativeApiState.api;
+      const api = nativeApiState.api;
       const { address: tradeAddress, allAccounts } = payload;
       const linkedMainAddress =
         tradeAddress &&
@@ -237,26 +237,26 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           ({ tradeAddress: addr }) => addr === tradeAddress,
         )?.mainAddress;
 
-      if (!linkedMainAddress) {
-        throw new Error("Invalid trade address.");
+      if (!linkedMainAddress || !api) {
+        throw new Error("Invalid trade address or undefined api");
       }
-      const { account, signer } =
-        linkedMainAddress &&
-        allAccounts?.find(
-          ({ account }) =>
-            account?.address?.toLowerCase() ===
-            linkedMainAddress?.toLowerCase(),
-        );
+      const account = linkedMainAddress
+        ? allAccounts?.find(
+            ({ account }) =>
+              account?.address?.toLowerCase() ===
+              linkedMainAddress?.toLowerCase(),
+          )
+        : undefined;
 
-      if (!account?.address) {
+      if (!account?.account.address) {
         throw new Error("Please select a funding account!");
       }
-      if (api.isConnected && account?.address) {
+      if (api.isConnected && account?.account.address) {
         const res = await removeProxyFromAccount(
           api,
           tradeAddress,
-          signer,
-          account.address,
+          account.signer,
+          account.account.address,
         );
         if (res.isSuccess) {
           onHandleNotification({
@@ -285,7 +285,9 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     dispatch(A.registerTradeAccountReset());
   };
 
-  const onRegisterTradeAccountData = (payload: T.RegisterTradeAccountData) => {
+  const onRegisterTradeAccountData = (
+    payload: T.OnRegisterTradeAccountData,
+  ) => {
     dispatch(A.registerTradeAccountData(payload));
   };
 
@@ -303,6 +305,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       );
       if (!pair) {
         onHandleError("No such address exists");
+        return;
       }
       pair.unlock(password.toString());
       dispatch(A.unlockTradeAccount(payload));

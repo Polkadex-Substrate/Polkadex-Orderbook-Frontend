@@ -61,6 +61,7 @@ export const RecentTradesProvider = ({ children }) => {
       authToken: READ_ONLY_TOKEN,
     }).subscribe({
       next: (data) => {
+        if (!data?.value?.data?.websocket_streams?.data) return;
         const val: RawTradeEvent = JSON.parse(
           data.value.data.websocket_streams.data,
         );
@@ -103,7 +104,7 @@ export const RecentTradesProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    recentTradesFetch(currentMarket);
+    if (currentMarket?.m) recentTradesFetch(currentMarket);
   }, [currentMarket?.m, recentTradesFetch, currentMarket]);
 
   const isDecreasing = getIsDecreasingArray(state.list);
@@ -124,8 +125,12 @@ export const RecentTradesProvider = ({ children }) => {
         isDecreasing,
         quoteUnit: currentMarket?.quote_ticker,
         baseUnit: currentMarket?.base_ticker,
-        pricePrecision: decimalPlaces(currentMarket?.price_tick_size),
-        amountPrecision: decimalPlaces(currentMarket?.qty_step_size),
+        pricePrecision: currentMarket
+          ? decimalPlaces(currentMarket.price_tick_size)
+          : undefined,
+        amountPrecision: currentMarket
+          ? decimalPlaces(currentMarket.qty_step_size)
+          : undefined,
         getCurrentTradePrice,
         getLastTradePrice,
       }}

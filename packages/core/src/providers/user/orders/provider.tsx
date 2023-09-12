@@ -110,7 +110,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       );
       if (keyringPair.isLocked)
         throw new Error("Please unlock your account with password");
-      if (tradeAddress !== "" && keyringPair) {
+      if (tradeAddress !== "" && keyringPair && api) {
         const { pair, signature } = createCancelOrderPayloadSigned(
           api,
           keyringPair,

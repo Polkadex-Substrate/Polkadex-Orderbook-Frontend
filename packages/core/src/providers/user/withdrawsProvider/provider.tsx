@@ -85,9 +85,14 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     try {
       const api = nativeApiState.api;
       const currentAccount: UserAccount = profileState.selectedAccount;
-      const { account, signer } = selectMainAccount(currentAccount.mainAddress);
+      const extensionAccount = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
-      if (isApiReady && account?.address !== "") {
+      if (
+        api &&
+        isApiReady &&
+        extensionAccount?.account?.address !== "" &&
+        extensionAccount?.signer
+      ) {
         // TODO: Move this toast as callback to signAndSendExtrinsic,
         settingsState.onHandleNotification({
           type: "Information",
@@ -96,7 +101,12 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         });
         dispatch(A.withdrawsClaimFetch({ sid }));
 
-        const res = await claimWithdrawal(api, signer, account?.address, sid);
+        const res = await claimWithdrawal(
+          api,
+          extensionAccount.signer,
+          extensionAccount.account.address,
+          sid,
+        );
         if (res.isSuccess) {
           dispatch(A.withdrawsClaimData({ sid }));
           // TODO?: Check delay

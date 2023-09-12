@@ -2,7 +2,6 @@ import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 
-import { useMarketsProvider } from "../marketsProvider/useMarketsProvider";
 import { Market } from "../marketsProvider";
 
 import { Provider } from "./context";
@@ -12,6 +11,7 @@ import * as T from "./types";
 import * as A from "./actions";
 import { OBIncrementData, OrderbookRawUpdate } from "./types";
 
+import { useMarketsProvider } from "@/providers/public/marketsProvider";
 import { fetchAllFromAppSync } from "@/helpers";
 import * as queries from "@/graphql/queries";
 import { READ_ONLY_TOKEN } from "@/constants";
@@ -58,6 +58,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
         authToken: READ_ONLY_TOKEN,
       }).subscribe({
         next: (resp) => {
+          if (!resp?.value?.data?.websocket_streams) return;
           const msg = resp.value.data.websocket_streams.data;
           const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
           console.log("got orderbook event: ", msg, currentMarket.m);

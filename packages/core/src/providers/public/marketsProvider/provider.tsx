@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { GraphQLSubscription } from "@aws-amplify/api";
 
 import { IPublicAsset } from "../assetsProvider";
-import { useAssetsProvider } from "../assetsProvider/useAssetsProvider";
 import { useSettingsProvider } from "../settings";
 
 import * as A from "./actions";
@@ -22,6 +21,7 @@ import {
 } from "./types";
 import { setCurrentTicker } from "./actions";
 
+import { useAssetsProvider } from "@/providers/public/assetsProvider";
 import * as subscriptions from "@/graphql/subscriptions";
 import * as queries from "@/graphql/queries";
 import { defaultConfig } from "@/config";
@@ -187,15 +187,20 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       authToken: READ_ONLY_TOKEN,
     }).subscribe({
       next: (data) => {
-        const dataParsed: TickerQueryResult = JSON.parse(
-          data.value.data.websocket_streams.data,
-        );
+        if (
+          data?.value?.data?.websocket_streams?.data &&
+          state?.currentMarket?.m
+        ) {
+          const dataParsed: TickerQueryResult = JSON.parse(
+            data.value.data.websocket_streams.data,
+          );
 
-        const tickerData: Ticker = convertToTicker(
-          dataParsed,
-          state.currentMarket.m,
-        );
-        dispatch(A.marketsTickersChannelData(tickerData));
+          const tickerData: Ticker = convertToTicker(
+            dataParsed,
+            state.currentMarket.m,
+          );
+          dispatch(A.marketsTickersChannelData(tickerData));
+        }
       },
       error: (err) => {
         console.warn(err);

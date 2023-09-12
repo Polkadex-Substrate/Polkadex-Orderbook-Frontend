@@ -6,7 +6,7 @@ import { AssetsContextProps, AssetsProviderProps, IPublicAsset } from "./types";
 export const Context = createContext<AssetsContextProps>({
   ...initialState,
   fetchAssets: () => {},
-  selectGetAsset: (): IPublicAsset => null,
+  selectGetAsset: () => undefined,
 });
 
 export const Provider = ({ value, children }: AssetsProviderProps) => (

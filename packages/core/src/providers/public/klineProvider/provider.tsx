@@ -23,7 +23,9 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const { onHandleError } = useSettingsProvider();
 
   const onHandleKlineFetch = useCallback(
-    async (payload: A.KlineFetch["payload"]): Promise<KlineEvent[]> => {
+    async (
+      payload: A.KlineFetch["payload"],
+    ): Promise<KlineEvent[] | undefined> => {
       dispatch(A.klineFetch(payload));
       try {
         const { market, resolution: currentResolution, from, to } = payload;

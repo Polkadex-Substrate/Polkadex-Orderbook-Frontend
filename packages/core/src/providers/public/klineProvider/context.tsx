@@ -5,7 +5,7 @@ import { KlineContextProps, KlineProviderProps, KlineEvent } from "./types";
 
 export const Context = createContext<KlineContextProps>({
   ...initialKlineState,
-  onHandleKlineFetch: (): Promise<KlineEvent[]> => null,
+  onHandleKlineFetch: (): Promise<KlineEvent[]> => Promise.resolve([]),
   onFetchKlineChannel: () => {},
 });
 

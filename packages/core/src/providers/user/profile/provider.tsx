@@ -46,7 +46,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           variables: {
             email,
           },
-          token: null,
           authMode: "AMAZON_COGNITO_USER_POOLS",
           API: Api,
         });

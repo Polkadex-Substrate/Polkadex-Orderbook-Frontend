@@ -86,19 +86,23 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     const transactionsBydate = state.transactions?.sort(
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
     );
-    const transactions = transactionsBydate?.reduce((pv, cv) => {
-      if (
-        cv.main_account
-          .toLowerCase()
-          .includes(filterBy.fieldValue.toLowerCase()) &&
-        (filterBy.type === "" ||
-          filterBy.type === cv.txn_type.toLowerCase() ||
-          filterBy.type === "all")
-      ) {
-        pv.push(cv);
-      }
-      return pv;
-    }, []);
+    const transactions = transactionsBydate?.reduce(
+      (pv: T.Transaction[], cv) => {
+        if (
+          cv.main_account &&
+          cv.main_account
+            .toLowerCase()
+            .includes(filterBy.fieldValue.toLowerCase()) &&
+          (filterBy.type === "" ||
+            filterBy.type === cv.txn_type.toLowerCase() ||
+            filterBy.type === "all")
+        ) {
+          pv.push(cv);
+        }
+        return pv;
+      },
+      [],
+    );
     return transactions;
   }, [filterBy, state.transactions]);
 

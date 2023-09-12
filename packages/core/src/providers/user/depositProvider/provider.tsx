@@ -22,7 +22,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
 
   const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
     try {
-      if (isApiReady && mainAccount?.account?.address !== "") {
+      if (api && isApiReady && mainAccount?.account?.address !== "") {
         onHandleNotification({
           type: "Information",
           message: "Processing Deposit...",

@@ -23,7 +23,6 @@ import { LOCAL_STORAGE_ID } from "@/constants";
 
 const initialTemplate = {
   isLoading: true,
-  message: null,
   isError: false,
   isSuccess: false,
 };
@@ -47,7 +46,6 @@ export const initialState: ProfileState = {
     tradeAddress: "",
     mainAddress: "",
   },
-  defaultTradeAccount: "",
   userMarket: {
     favoriteMarkets: [],
   },
@@ -165,10 +163,11 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
     }
     case PROFILE_SET_DEFAULT_TRADE_ACCOUNT: {
       const tradeAddress = action.payload;
-      window.localStorage.setItem(
-        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT,
-        tradeAddress,
-      );
+      tradeAddress &&
+        window.localStorage.setItem(
+          LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT,
+          tradeAddress,
+        );
       return {
         ...state,
         defaultTradeAccount: tradeAddress,

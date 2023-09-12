@@ -62,7 +62,7 @@ export interface RegisterTradeAccountData {
   payload: {
     mnemonic?: string;
     account: {
-      name: string;
+      name?: string;
       address: string;
     };
   };
@@ -329,13 +329,6 @@ export const previewAccountModalCancel =
   (): PreviewTradeAccountModalCancel => ({
     type: USER_PREVIEW_ACCOUNT_MODAL_CANCEL,
   });
-
-export const exportTradeAccountFetch = (
-  payload?: ExportTradeAccountFetch["payload"],
-): ExportTradeAccountFetch => ({
-  type: USER_TRADE_ACCOUNT_EXPORT_FETCH,
-  payload,
-});
 
 export const exportTradeAccountData = (): ExportTradeAccountData => ({
   type: USER_TRADE_ACCOUNT_EXPORT_DATA,
