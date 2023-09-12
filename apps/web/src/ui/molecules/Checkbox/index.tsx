@@ -19,7 +19,7 @@ export const Checkbox = forwardRef(
     const componentRef = useRef();
     const state = useToggleState(props);
     const { inputProps } = useCheckbox(props, state, componentRef);
-    const { crossOrigin, ...restProps } = inputProps;
+    const { ...restProps } = inputProps;
     const hasChild =
       isValidChildren(children)?.length || children?.toString()?.length;
 
