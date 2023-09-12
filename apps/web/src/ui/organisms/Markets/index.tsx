@@ -18,6 +18,8 @@ import {
 
 import * as S from "./styles";
 
+import { ArrowBottom } from "@/ui/atoms/Icons";
+
 export const Markets = ({ hasMargin = false, onClose = undefined }) => {
   const {
     marketTokens,
@@ -40,6 +42,7 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
           id={id}
           pair={currentTickerName}
           pairTicker={currentTickerImg}
+          showArrow={false}
         />
         <S.Favorite>
           <button type="button" onClick={onClose}>
@@ -74,6 +77,7 @@ type HeaderMarketProps = {
   pairTicker: string;
   onOpenMarkets?: () => void;
   isLoading?: boolean;
+  showArrow?: boolean;
 };
 
 export const HeaderMarket = ({
@@ -83,6 +87,7 @@ export const HeaderMarket = ({
   pairTicker,
   onOpenMarkets = undefined,
   isLoading = false,
+  showArrow = true,
 }: HeaderMarketProps) => {
   const now = new Date();
   const from = subDays(now, 7);
@@ -105,6 +110,11 @@ export const HeaderMarket = ({
               </S.HeaderInfoContainer>
               <p>{pairSymbol}</p>
             </S.HeaderInfo>
+            {showArrow && (
+              <S.ArrowBottom>
+                <ArrowBottom />
+              </S.ArrowBottom>
+            )}
           </S.HeaderAsideLeft>
           <S.HeaderAsideCenter>
             <Sparklines data={graphPoints}>

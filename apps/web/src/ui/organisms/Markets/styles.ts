@@ -50,6 +50,14 @@ export const HeaderAsideLeft = styled.div`
   align-items: center;
 `;
 
+export const ArrowBottom = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  margin-inline: 0.8rem;
+  width: 1.2rem;
+  height: 1.2rem;
+`;
+
 export const HeaderToken = styled.div`
   ${({ theme }) => css`
     width: 4.5rem;
