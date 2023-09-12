@@ -23,13 +23,11 @@ export const Main = styled.div<{ hasData?: boolean }>`
     border-radius: 0 2rem 2rem 0rem;
     min-width: 28rem;
     width: 100%;
-    height: 100%;
-    min-height: 48rem;
-    max-height: 54vh;
+    max-height: 530px;
+    height: 50vh;
 
     @media screen and (min-height: 1200px) {
-      max-height: 879px;
-      height: 50vh;
+      max-height: 660px;
     }
   `}
 `;
@@ -79,7 +77,7 @@ export const DropdownMenuItem = styled.div`
 `;
 export const Content = styled.div`
   ${({ theme }) => css`
-    padding-bottom: 2rem;
+    padding-bottom: 0.5rem;
     flex: 1;
     height: 100%;
     overflow: auto;

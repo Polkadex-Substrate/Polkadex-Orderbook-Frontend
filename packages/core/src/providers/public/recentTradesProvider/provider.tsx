@@ -39,7 +39,7 @@ export const RecentTradesProvider = ({ children }) => {
     t: number;
   };
   const fetchRecentTrade = useCallback(
-    async (market: string, limit = 20): Promise<RawTrades[]> => {
+    async (market: string, limit = 30): Promise<RawTrades[]> => {
       const { response: res } = await fetchFromAppSync(
         getRecentTrades,
         { m: market, limit },
