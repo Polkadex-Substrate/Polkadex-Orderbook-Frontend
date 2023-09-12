@@ -30,7 +30,9 @@ export function useOrderbook() {
   const loading = orderBookState.depth.loading;
 
   const { currentMarket } = useMarketsProvider();
-  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
+  const pricePrecision = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : 8;
 
   const { getCurrentTradePrice, getLastTradePrice } = useRecentTradesProvider();
   const currentTrade = getCurrentTradePrice();

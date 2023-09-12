@@ -21,13 +21,13 @@ export interface TradeWalletState {
 export type RegisterTradeAccount = {
   isActive?: boolean;
   selectedAddress?: {
-    name: string;
+    name?: string;
     address: string;
   };
   defaultImportActive?: boolean;
   mnemonic?: string;
   account?: {
-    name: string;
+    name?: string;
     address: string;
   };
 };

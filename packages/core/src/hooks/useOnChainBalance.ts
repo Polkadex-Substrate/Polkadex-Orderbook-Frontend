@@ -19,7 +19,7 @@ export const useOnChainBalance = (assetId: string) => {
 
   // only update if the user balance changes
   useEffect(() => {
-    if (isApiConnected && mainAddress) {
+    if (api && isApiConnected && mainAddress) {
       fetchOnChainBalance(api, assetId, mainAddress)
         .then((balance) => {
           setBalance(balance);
