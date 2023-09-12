@@ -7,6 +7,7 @@ import {
   Skeleton,
   ResultFound,
   Search,
+  Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@orderbook/core/helpers";
@@ -112,7 +113,9 @@ export const HeaderMarket = ({
             </S.HeaderInfo>
             {showArrow && (
               <S.ArrowBottom>
-                <ArrowBottom />
+                <Button size="small" background="secondaryBackgroundOpacity">
+                  <ArrowBottom />
+                </Button>
               </S.ArrowBottom>
             )}
           </S.HeaderAsideLeft>
@@ -178,12 +181,12 @@ const Content: FC<{
             vol={Decimal.format(
               Number(token.volume),
               token.quote_precision,
-              ",",
+              ","
             )}
             price={Decimal.format(
               Number(token.last),
               token.quote_precision,
-              ",",
+              ","
             )}
             change={
               Decimal.format(Number(token.price_change_percent), 2, ",") + "%"

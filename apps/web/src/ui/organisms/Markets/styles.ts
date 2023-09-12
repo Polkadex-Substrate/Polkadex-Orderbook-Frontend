@@ -50,12 +50,25 @@ export const HeaderAsideLeft = styled.div`
   align-items: center;
 `;
 
-export const ArrowBottom = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  margin-inline: 0.8rem;
-  width: 1.2rem;
-  height: 1.2rem;
+export const ArrowBottom = styled.button`
+  ${({ theme }) => css`
+    vertical-align: middle;
+    margin-left: 0.8rem;
+    :hover {
+      background-color: ${theme.colors.secondaryBackgroundOpacity};
+    }
+    svg {
+      width: 1.1rem;
+    }
+    button {
+      border-radius: 50%;
+      padding: 0.4rem;
+      border: 2px solid ${theme.colors.secondaryBackgroundOpacity};
+      :hover {
+        background: transparent;
+      }
+    }
+  `}
 `;
 
 export const HeaderToken = styled.div`
