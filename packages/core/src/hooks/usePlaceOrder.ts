@@ -2,8 +2,6 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "react-i18next";
 
-import { useTryUnlockTradeAccount } from "./useTryUnlockTradeAccount";
-
 import { Decimal } from "@/utils";
 import { useOrderBook } from "@/providers/public/orderBook";
 import { useProfile } from "@/providers/user/profile";
@@ -89,13 +87,20 @@ export function usePlaceOrder(
   );
 
   // if account is not protected by password use default password to unlock account.
-  useTryUnlockTradeAccount(tradeAccount);
+  try {
+    if (tradeAccount && tradeAccount.isLocked) {
+      tradeAccount.unlock("");
+    }
+  } catch (e) {
+    // We don't need to handle this error, because we are just trying to unlock it
+    console.log(e);
+  }
 
-  const showProtectedPassword = tradeAccount?.isLocked;
+  const showProtectedPassword = Boolean(tradeAccount?.isLocked);
 
   const [tab, setTab] = useState({
-    priceLimit: undefined,
-    amountLimit: undefined,
+    priceLimit: 0,
+    amountLimit: 0,
   });
 
   const [slider, setSlider] = useState([
@@ -113,8 +118,14 @@ export function usePlaceOrder(
     ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
     : [-1, -1];
 
-  const pricePrecision = decimalPlaces(currentMarket?.price_tick_size);
-  const qtyPrecision = decimalPlaces(currentMarket?.qty_step_size);
+  const basePrecision = currentMarket?.base_precision || 0;
+  const quotePrecision = currentMarket?.quote_precision || 0;
+  const pricePrecision = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : 0;
+  const qtyPrecision = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : 0;
   const totalPrecision = Math.max(pricePrecision, qtyPrecision);
 
   const nextPriceLimitTruncated = Decimal.format(
@@ -130,27 +141,21 @@ export function usePlaceOrder(
   const availableBaseAmount = getFreeProxyBalance(baseAssetId?.toString());
   const availableQuoteAmount = getFreeProxyBalance(quoteAssetId?.toString());
 
-  const quoteTicker = currentMarket?.quote_ticker;
-  const baseTicker = currentMarket?.base_ticker;
+  const quoteTicker = currentMarket?.quote_ticker || "";
+  const baseTicker = currentMarket?.base_ticker || "";
 
   // Get estimated total amount
   const getEstimatedTotal = useCallback(
     (total: number): string =>
-      Decimal.format(
-        total,
-        currentMarket?.base_precision ||
-          0 + currentMarket?.quote_precision ||
-          0,
-        ",",
-      ),
-    [currentMarket?.base_precision, currentMarket?.quote_precision],
+      Decimal.format(total, basePrecision || quotePrecision || 0, ","),
+    [basePrecision, quotePrecision],
   );
 
   // Reset the current price
   const handleCleanPrice = useCallback((): void => {
     setTab({
       ...tab,
-      priceLimit: undefined,
+      priceLimit: 0,
     });
     onSetCurrentPrice(0);
   }, [setTab, tab, onSetCurrentPrice]);
@@ -159,7 +164,7 @@ export function usePlaceOrder(
   const handleCleanAmount = useCallback((): void => {
     setTab({
       ...tab,
-      amountLimit: undefined,
+      amountLimit: 0,
     });
     onSetCurrentAmount("0");
   }, [setTab, tab, onSetCurrentAmount]);
@@ -350,10 +355,13 @@ export function usePlaceOrder(
     e.preventDefault();
     const amount = isSell ? formValues.amountSell : formValues.amountBuy;
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;
-
+    if (!currentMarket) {
+      console.error("currentMarket is not defined for placing order");
+      return;
+    }
     onPlaceOrders({
       order_type: isLimit ? "LIMIT" : "MARKET",
-      symbol: [currentMarket?.baseAssetId, currentMarket?.quoteAssetId],
+      symbol: [currentMarket.baseAssetId, currentMarket.quoteAssetId],
       side: isSell ? "Sell" : "Buy",
       price: isLimit ? Number(formPrice) : 0,
       market: currentMarket.id,
@@ -376,28 +384,28 @@ export function usePlaceOrder(
     const total = isSell ? formValues.totalSell : formValues.totalBuy;
     const absoluteTotal = getAbsoluteNumber(total);
 
-    if (isLimit && +formPrice < currentMarket?.min_price) {
+    if (isLimit && +formPrice < Number(currentMarket?.min_price)) {
       setFormErrors({
         ...errors,
         [priceType]: t("minMarketPrice", {
           minMarketPrice: currentMarket?.min_price,
         }),
       });
-    } else if (isLimit && +formPrice > currentMarket?.max_price) {
+    } else if (isLimit && +formPrice > Number(currentMarket?.max_price)) {
       setFormErrors({
         ...errors,
         [priceType]: t("maxMarketPrice", {
           maxMarketPrice: currentMarket?.max_price,
         }),
       });
-    } else if (+amount < currentMarket?.min_amount) {
+    } else if (+amount < Number(currentMarket?.min_amount)) {
       setFormErrors({
         ...errors,
         [amountType]: t("minMarketAmount", {
           minMarketAmount: currentMarket?.min_amount,
         }),
       });
-    } else if (+amount > currentMarket?.max_amount) {
+    } else if (+amount > Number(currentMarket?.max_amount)) {
       setFormErrors({
         ...errors,
         [amountType]: t("maxMarketAmount", {
@@ -584,10 +592,10 @@ export function usePlaceOrder(
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
   useEffect(() => {
     if (currentPrice !== tab.priceLimit)
-      setTab({ ...tab, priceLimit: currentPrice });
+      setTab({ ...tab, priceLimit: Number(currentPrice) });
 
-    if (selectedAmountFromOrderbookTable !== tab.amountLimit)
-      setTab({ ...tab, amountLimit: selectedAmountFromOrderbookTable });
+    if (Number(selectedAmountFromOrderbookTable) !== tab.amountLimit)
+      setTab({ ...tab, amountLimit: Number(selectedAmountFromOrderbookTable) });
   }, [currentPrice, tab, selectedAmountFromOrderbookTable]);
 
   // Set estimated total price for the current market

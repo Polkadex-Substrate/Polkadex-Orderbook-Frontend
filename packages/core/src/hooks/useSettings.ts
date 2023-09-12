@@ -91,14 +91,14 @@ export const useSettings = () => {
 
   const allFilteredTradeAccounts = useMemo(
     () =>
-      tradeAccounts?.reduce((pv, cv) => {
+      tradeAccounts?.reduce((pv: IUserTradeAccount[], cv) => {
         const { account } = cv;
         const checker = filterTradeAccounts?.toLowerCase();
         const address = account?.address?.toLowerCase();
         const name = String(account?.meta?.name)?.toLowerCase();
         const filterByController =
           filterTradeAccountsByControllerAccount?.toLowerCase();
-        const isLinkedAccount = !!userAccounts.some(
+        const isLinkedAccount = !!userAccounts?.some(
           (v) =>
             v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
             filterByController === v.mainAddress?.toLowerCase(),
@@ -110,7 +110,7 @@ export const useSettings = () => {
           pv.push(cv);
         }
         return pv;
-      }, []),
+      }, []) || [],
     [
       filterTradeAccounts,
       tradeAccounts,
@@ -139,7 +139,7 @@ export const useSettings = () => {
             ? linkedMainAddress?.includes(value.account.address)
             : value,
         )
-        ?.reduce((pv, cv) => {
+        ?.reduce((pv: ExtensionAccount[], cv) => {
           const { account } = cv;
           const checker = filterControllerWallets?.toLowerCase();
           const address = account?.address?.toLowerCase();
@@ -159,7 +159,7 @@ export const useSettings = () => {
   );
 
   const hasRegisteredMainAccount = useMemo(
-    () => linkedMainAddress?.length > 0,
+    () => linkedMainAddress && linkedMainAddress?.length > 0,
     [linkedMainAddress],
   );
 
