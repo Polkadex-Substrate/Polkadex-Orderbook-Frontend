@@ -24,12 +24,12 @@ export const Container = styled.div<{ color?: string }>`
     gap: 0.5rem;
     span {
       font-size: 1.2rem;
-      color: ${theme.colors[color]};
+      color: ${color && theme.colors[color]};
     }
     svg {
       width: 1rem;
-      fill: ${theme.colors[color]};
-      stroke: ${theme.colors[color]};
+      fill: ${color && theme.colors[color]};
+      stroke: ${color && theme.colors[color]};
     }
   `}
 `;

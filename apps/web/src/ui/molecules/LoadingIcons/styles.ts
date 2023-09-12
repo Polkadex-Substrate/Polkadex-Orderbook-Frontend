@@ -6,8 +6,8 @@ import * as T from "./types";
 export const Wrapper = styled("svg")<T.Props>(
   ({ theme, color }) =>
     css({
-      fill: color ? theme.colors[color] : theme.colors[0],
-      stroke: color ? theme.colors[color] : theme.colors[0],
+      fill: color && theme.colors[color],
+      stroke: color && theme.colors[color],
     }),
   variant({
     prop: "size",
