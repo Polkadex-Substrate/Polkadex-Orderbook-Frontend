@@ -1,4 +1,5 @@
 import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { noop } from "@orderbook/core/helpers/noop";
 
 import * as S from "./styles";
 
@@ -7,7 +8,7 @@ export const Switcher = ({
   description = "Description",
   icon = "Appearance",
   isActive = false,
-  onChange = undefined,
+  onChange = noop,
 }) => {
   return (
     <S.Main>
@@ -23,7 +24,7 @@ export const Switcher = ({
   );
 };
 
-export const Switch = ({ isActive = false, onChange = undefined }) => {
+export const Switch = ({ isActive = false, onChange = noop }) => {
   return (
     <S.Switch isActive={isActive} onClick={onChange}>
       <div />

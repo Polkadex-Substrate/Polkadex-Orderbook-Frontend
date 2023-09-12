@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { detect } from "detect-browser";
 import { useTranslation } from "react-i18next";
+import { noop } from "@orderbook/core/helpers/noop";
 
 import * as S from "./styles";
-import { MnemonicExportProps, MnemonicProps } from "./types";
+import { MnemonicProps } from "./types";
 
 // Transform component to tags
 export const MnemonicImport = ({
@@ -12,11 +13,11 @@ export const MnemonicImport = ({
   handleChange,
   ...props
 }: MnemonicProps) => {
-  const inputRef = useRef(null);
-  const buttonRef = useRef(null);
-  const { name } = detect();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLInputElement>(null);
+  const browser = detect();
   const isBrowserSupported =
-    ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
+    browser && ["chrome", "opera", "edge", "safari"].indexOf(browser.name) > 0;
 
   const handleOnMouseOut = async () => {
     const phrase = await navigator.clipboard.readText();
@@ -31,7 +32,7 @@ export const MnemonicImport = ({
       val.length + state.tags.length <= 12
     ) {
       handleChange({ tags: [...state.tags, ...val] });
-      inputRef.current.value = null;
+      inputRef?.current ? (inputRef.current.value = "") : noop();
     }
   };
 
@@ -48,7 +49,7 @@ export const MnemonicImport = ({
       e.key === "Enter"
     ) {
       handleChange({ tags: [...state.tags, ...val] });
-      inputRef.current.value = null;
+      inputRef?.current ? (inputRef.current.value = "") : noop();
     } else if (e.key === "Backspace" && e.target.value.length === 0) {
       handleRemove(state.tags.length - 1);
     }
@@ -98,39 +99,6 @@ export const MnemonicImport = ({
           </span>
         </S.MnemonicAction>
       </S.MnemonicImport>
-    </S.Wrapper>
-  );
-};
-
-export const MnemonicExport = ({ label, phrases }: MnemonicExportProps) => {
-  const { t: translation } = useTranslation("molecules");
-  const t = (key: string) => translation(`mnemonic.${key}`);
-
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () =>
-    (buttonRef.current.innerHTML = t("copyToClipboard"));
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(phrases.join(" "));
-    buttonRef.current.innerHTML = t("copied");
-  };
-  return (
-    <S.Wrapper>
-      <S.MnemonicContainer>
-        <label htmlFor={label}>{label}</label>
-      </S.MnemonicContainer>
-      <S.TagsContainer>
-        {phrases &&
-          phrases.map((item, index) => <S.Tag key={index}>{item}</S.Tag>)}
-      </S.TagsContainer>
-      <S.MnemonicAction
-        type="button"
-        ref={buttonRef}
-        onMouseOut={handleOnMouseOut}
-        onClick={handleCopy}
-      >
-        <span>{t("copyToClipboard")}</span>
-      </S.MnemonicAction>
     </S.Wrapper>
   );
 };
