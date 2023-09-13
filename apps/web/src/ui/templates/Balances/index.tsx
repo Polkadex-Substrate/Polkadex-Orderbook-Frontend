@@ -200,12 +200,12 @@ export const BalancesTemplate = () => {
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Actions>
-                                      <Link href={`/deposit/${item.symbol}`}>
+                                      <Link href="/transfer">
                                         <S.DepositLink>
                                           {tc("deposit")}
                                         </S.DepositLink>
                                       </Link>
-                                      <Link href={`/withdraw/${item.symbol}`}>
+                                      <Link href="/transfer">
                                         <S.WithdrawLink>
                                           {tc("withdraw")}
                                         </S.WithdrawLink>

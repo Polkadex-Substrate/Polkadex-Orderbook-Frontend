@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
     flex: 1;
     width: 100%;
     background: ${theme.colors.tertiaryBackgroundOpacity};
@@ -12,8 +14,12 @@ export const Wrapper = styled.div`
 
 export const Table = styled.div`
   ${({ theme }) => css`
-    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
     width: 100%;
+    max-height: 40rem;
     &::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -92,7 +98,12 @@ export const Token = styled.div`
         flex-direction: column;
         gap: 0.1rem;
         span {
+          display: block;
           opacity: 0.5;
+          text-transform: lowercase;
+          &::first-letter {
+            text-transform: uppercase;
+          }
         }
       }
     }
@@ -159,4 +170,16 @@ export const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+`;
+
+export const EmptyData = styled.div`
+  flex: 1;
+  padding: 50;
+`;
+
+export const SkeletonComponent = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  padding: 2rem;
 `;

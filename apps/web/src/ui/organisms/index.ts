@@ -24,6 +24,6 @@ export * from "./Rating";
 export { default as Feedback } from "./Feedback";
 export * from "./Header";
 export * from "./TransferForm";
-export * from "./WithdrawHistory";
+export * from "./DepositHistory";
 export * from "./AssetsInteraction";
 export * from "./AssetsTable";

@@ -5,7 +5,7 @@ import {
   Header,
   Menu,
   TransferForm,
-  WithdrawHistory,
+  DepositHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer } from "@polkadex/orderbook-ui/molecules";
 import { useState } from "react";
@@ -51,7 +51,7 @@ export const TransferTemplate = () => {
                   />
                 </S.Form>
                 <S.History>
-                  <WithdrawHistory />
+                  <DepositHistory />
                 </S.History>
               </S.Content>
             </S.ContainerMain>
