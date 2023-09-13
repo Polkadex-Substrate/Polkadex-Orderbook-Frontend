@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--max_old_space_size=8192 next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@bigheads/core": "^0.3.3",
+    "@floating-ui/react": "^0.25.4",
+    "@headlessui/react": "^1.7.17",
     "@orderbook/core": "*",
     "@polkadot/api": "^10.4.1",
     "@polkadot/extension-dapp": "^0.46.1",
@@ -20,13 +22,14 @@
     "@react-aria/table": "^3.4.0",
     "@react-aria/utils": "^3.13.2",
     "canvas-confetti": "^1.6.0",
+    "classnames": "^2.3.2",
     "detect-browser": "^5.3.0",
     "formik": "^2.2.9",
     "friendly-username-generator": "^2.0.4",
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.1",
-    "next": "^13.4.19",
+    "next": "13.4.4",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2.0",
     "react-aria": "^3.18.0",
@@ -66,5 +69,15 @@
     "ts-jest": "^29.0.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
+  },
+  "resolutions": {
+    "ansi-regex": "^5.0.1 ",
+    "node-fetch": "^2.6.7 ",
+    "simple-get": "^4.0.1",
+    "glob-parent": "^5.1.2",
+    "trim": "^0.0.3",
+    "postcss": "^8.2.13",
+    "prismjs": "^1.27.0",
+    "file-type": "^16.5.4"
   }
 }

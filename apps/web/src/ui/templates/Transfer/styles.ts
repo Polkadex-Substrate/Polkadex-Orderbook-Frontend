@@ -26,7 +26,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 1rem;
-  margin-left: 1rem;
+  margin-left: 2rem;
 `;
 
 export const ContainerMain = styled.div`
@@ -35,13 +35,42 @@ export const ContainerMain = styled.div`
     flex-direction: column;
     flex: 1;
     width: 100%;
-    padding-top: 4rem;
     max-width: 100vw;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 
-export const Header = styled.div``;
+export const Header = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 4rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: ${theme.font.sizes.small};
+      font-weight: normal;
+      opacity: 0.5;
+    }
+  `}
+`;
 export const Content = styled.div``;
 export const Form = styled.div``;
-export const History = styled.div``;
+
+export const History = styled.div`
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 550;
+    padding: 0 4rem 2rem 4rem;
+  }
+`;
+
+export const HistoryWrapper = styled.div`
+  ${({ theme }) => css`
+    border-top: 1px solid ${theme.colors.secondaryBackground};
+  `}
+`;

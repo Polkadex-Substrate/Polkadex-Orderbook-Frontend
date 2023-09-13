@@ -23,7 +23,7 @@ export const Switcher = ({
   );
 };
 
-export const Switch = ({ isActive = false, onChange = undefined }) => {
+export const Switch = ({ isActive = false, onChange }) => {
   return (
     <S.Switch isActive={isActive} onClick={onChange}>
       <div />

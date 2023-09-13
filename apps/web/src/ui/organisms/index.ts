@@ -23,3 +23,5 @@ export * from "./FAQsidebar";
 export * from "./Rating";
 export { default as Feedback } from "./Feedback";
 export * from "./Header";
+export * from "./TransferForm";
+export * from "./WithdrawHistory";

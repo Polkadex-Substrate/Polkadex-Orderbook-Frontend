@@ -1,6 +1,11 @@
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
-import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
+import {
+  Header,
+  Menu,
+  TransferForm,
+  WithdrawHistory,
+} from "@polkadex/orderbook-ui/organisms";
 import { Footer } from "@polkadex/orderbook-ui/molecules";
 
 import * as S from "./styles";
@@ -27,8 +32,15 @@ export const TransferTemplate = () => {
                 </h2>
               </S.Header>
               <S.Content>
-                <S.Form></S.Form>
-                <S.History></S.History>
+                <S.Form>
+                  <TransferForm />
+                </S.Form>
+                <S.History>
+                  <h3>History</h3>
+                  <S.HistoryWrapper>
+                    <WithdrawHistory />
+                  </S.HistoryWrapper>
+                </S.History>
               </S.Content>
             </S.ContainerMain>
             <Footer />
