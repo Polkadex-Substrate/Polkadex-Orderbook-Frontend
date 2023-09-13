@@ -1,20 +1,24 @@
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
 import {
+  AssetsInteraction,
   Header,
   Menu,
   TransferForm,
   WithdrawHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer } from "@polkadex/orderbook-ui/molecules";
+import { useState } from "react";
 
 import * as S from "./styles";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
+  const [state, setState] = useState(true);
 
   return (
     <>
+      <AssetsInteraction open={state} handleClose={() => setState(false)} />
       <Head>
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
@@ -33,7 +37,7 @@ export const TransferTemplate = () => {
               </S.Header>
               <S.Content>
                 <S.Form>
-                  <TransferForm />
+                  <TransferForm openAssets={() => setState(true)} />
                 </S.Form>
                 <S.History>
                   <WithdrawHistory />

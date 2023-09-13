@@ -6,14 +6,16 @@ export const TokenCard = ({
   tokenTicker,
   tokenIcon,
   availableAmount = "0.00",
+  onAction,
 }: {
   tokenTicker: string;
   tokenIcon: keyof typeof Tokens;
   availableAmount: string;
+  onAction: () => void;
 }) => {
   const Token = Tokens[tokenIcon] ?? Tokens.UNKN;
   return (
-    <S.Wrapper>
+    <S.Wrapper role="button" onClick={onAction}>
       <S.AsideLeft>
         <S.TokenWrapper>
           <Token />

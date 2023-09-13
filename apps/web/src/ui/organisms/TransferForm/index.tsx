@@ -5,7 +5,7 @@ import * as S from "./styles";
 import { Switch, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons } from "@/ui/atoms";
 
-export const TransferForm = () => {
+export const TransferForm = ({ openAssets }) => {
   const [state, setState] = useState(false);
   const amountRef = useRef<HTMLInputElement | null>(null);
   return (
@@ -42,6 +42,7 @@ export const TransferForm = () => {
             tokenIcon="USDT"
             tokenTicker="USDT"
             availableAmount="0.00"
+            onAction={openAssets}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>

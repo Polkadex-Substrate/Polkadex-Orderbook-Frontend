@@ -3,14 +3,11 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     flex: 1;
-    width: 100%;
-    background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     table {
       /* table-layout: fixed; */
-      padding: 1rem 3rem;
-      empty-cells: 10px;
+      border-collapse: collapse;
+      border-radius: 1rem;
+
       width: 100%;
       td {
         padding: 1.5rem 1rem 1.5rem 1rem;
@@ -19,12 +16,27 @@ export const Wrapper = styled.div`
           border-bottom: none;
         }
       }
+
+      tr:hover {
+        td {
+          transition: background-color ease 0.4s;
+          background: ${theme.colors.secondaryBackgroundOpacity};
+          &:first-child {
+            border-top-left-radius: 1rem;
+            border-bottom-left-radius: 1rem;
+          }
+          &:last-child {
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+          }
+        }
+      }
+
       th {
         opacity: 0.5;
         font-weight: normal;
         text-align: left;
         padding: 0 1rem 1.5rem 1rem;
-
         div {
           margin-left: 0.4rem;
           display: inline-block;
@@ -73,57 +85,4 @@ export const Token = styled.div`
       }
     }
   `}
-`;
-
-export const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  span {
-    opacity: 0.5;
-  }
-`;
-
-export const Wallet = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    div {
-      &:first-child {
-        background: ${theme.colors.secondaryBackgroundOpacity};
-        border-radius: 50rem;
-        width: 3rem;
-        height: 3rem;
-        padding: 0.8rem;
-      }
-      &:last-child {
-        display: flex;
-        flex-direction: column;
-        gap: 0.1rem;
-        span {
-          opacity: 0.5;
-        }
-      }
-    }
-  `}
-`;
-
-export const Title = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 4rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    h3 {
-      font-size: 1.8rem;
-      font-weight: 550;
-    }
-  `}
-`;
-
-export const TitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 `;
