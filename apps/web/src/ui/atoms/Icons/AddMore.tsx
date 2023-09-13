@@ -7,7 +7,8 @@ export function AddMore(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 16 16"
-      {...props}>
+      {...props}
+    >
       <path
         d="M7.11719 11.3548V8.99811C7.11719 8.74673 7.15098 8.53856 7.21857 8.37359C7.29367 8.20862 7.41382 8.09864 7.57903 8.04365L7.11719 7.66659V3.42456H8.52525V11.3548H7.11719ZM4.21094 8.04365V6.67678H11.4202V8.04365H4.21094Z"
         stroke="none"

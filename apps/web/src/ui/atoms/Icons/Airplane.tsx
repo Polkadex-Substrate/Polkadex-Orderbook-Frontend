@@ -7,7 +7,8 @@ function SvgAirplane(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 15 16"
-      {...props}>
+      {...props}
+    >
       <path
         stroke="none"
         opacity="0.5"

@@ -7,7 +7,8 @@ function SvgAlert(props: React.SVGProps<SVGSVGElement>) {
       width="0.6em"
       height="0.6em"
       viewBox="0 0 20 20"
-      {...props}>
+      {...props}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
