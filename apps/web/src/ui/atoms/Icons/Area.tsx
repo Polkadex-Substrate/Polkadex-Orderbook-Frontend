@@ -7,8 +7,7 @@ export function Area(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 29 29"
-      {...props}
-    >
+      {...props}>
       <path
         d="M1 1.79999V27.8C1 27.9104 1.08954 28 1.2 28H27.2"
         strokeWidth="2"
