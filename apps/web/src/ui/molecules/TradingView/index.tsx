@@ -112,7 +112,7 @@ export const TradingView = () => {
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
     const interval = (localStorage.getItem(
       TradingViewConstants.lastResolution
-    ) || "1D") as ResolutionString;
+    ) || "60") as ResolutionString;
 
     return {
       datafeed: {
