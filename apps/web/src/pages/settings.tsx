@@ -8,12 +8,12 @@ import { useDisabledPages } from "@/hooks";
 const SettingsTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Settings").then(
-      (mod) => mod.SettingsTemplate,
+      (mod) => mod.SettingsTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 const Settings = () => {
   const router = useRouter();

@@ -5,7 +5,7 @@ import { defaultConfig } from "@orderbook/core/config";
 export function useDisabledPages() {
   const router = useRouter();
   const disabled = defaultConfig.underMaintenance?.some((word) =>
-    router.pathname.includes(word),
+    router.pathname.includes(word)
   );
 
   useEffect(() => {

@@ -19,12 +19,12 @@ import { useDisabledPages } from "@/hooks";
 const WithdrawTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Withdraw").then(
-      (mod) => mod.WithdrawTemplate,
+      (mod) => mod.WithdrawTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 const Withdraw = () => {
   const router = useRouter();
@@ -43,12 +43,12 @@ const Withdraw = () => {
 
   const hasSelectedAccount = selectIsAddressInExtension(
     mainAddress,
-    extensionWalletState.allAccounts,
+    extensionWalletState.allAccounts
   );
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
-    [hasUser, isRegistered, hasSelectedAccount],
+    [hasUser, isRegistered, hasSelectedAccount]
   );
 
   if (!isLoading && !hasUser) router?.push("/trading/");
