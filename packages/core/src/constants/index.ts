@@ -61,3 +61,7 @@ export const ErrorMessages = {
 };
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
+
+export const TradingView = {
+  lastResolution: "tradingview.chart.lastUsedTimeBasedResolution",
+};
