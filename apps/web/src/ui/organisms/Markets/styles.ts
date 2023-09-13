@@ -45,30 +45,29 @@ export const Header = styled.div`
   width: 100%;
 `;
 
+export const HeaderAsideContainer = styled.div<{ background: boolean }>`
+  ${({ theme, background }) => css`
+    display: flex;
+    align-items: center;
+    background: ${background
+      ? theme.colors.secondaryBackgroundOpacity
+      : theme.colors.transparent};
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    margin-block: 0.6rem;
+  `}
+`;
 export const HeaderAsideLeft = styled.div`
   display: flex;
   align-items: center;
 `;
 
 export const ArrowBottom = styled.button`
-  ${({ theme }) => css`
-    vertical-align: middle;
-    margin-left: 0.8rem;
-    :hover {
-      background-color: ${theme.colors.secondaryBackgroundOpacity};
-    }
-    svg {
-      width: 1.1rem;
-    }
-    button {
-      border-radius: 50%;
-      padding: 0.4rem;
-      border: 2px solid ${theme.colors.secondaryBackgroundOpacity};
-      :hover {
-        background: transparent;
-      }
-    }
-  `}
+  vertical-align: middle;
+  margin-inline: 1.2rem 0.5rem;
+  svg {
+    width: 1rem;
+  }
 `;
 
 export const HeaderToken = styled.div`
@@ -84,17 +83,18 @@ export const HeaderToken = styled.div`
 `;
 
 export const HeaderAsideCenter = styled.div`
-  max-height: 4rem;
-  max-width: 10rem;
   height: 100%;
   width: 100%;
+  max-width: 10rem;
+  height: 4rem;
   min-width: 10rem;
+  margin-left: 1rem;
   @media screen and (max-width: 850px) {
     display: none;
   }
 `;
 export const HeaderInfo = styled.div`
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   p {
     opacity: 0.5;
   }

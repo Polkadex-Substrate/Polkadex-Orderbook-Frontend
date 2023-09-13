@@ -7,7 +7,6 @@ import {
   Skeleton,
   ResultFound,
   Search,
-  Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { isNegative } from "@orderbook/core/helpers";
@@ -43,7 +42,7 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
           id={id}
           pair={currentTickerName}
           pairTicker={currentTickerImg}
-          showArrow={false}
+          format={false}
         />
         <S.Favorite>
           <button type="button" onClick={onClose}>
@@ -78,7 +77,7 @@ type HeaderMarketProps = {
   pairTicker: string;
   onOpenMarkets?: () => void;
   isLoading?: boolean;
-  showArrow?: boolean;
+  format?: boolean;
 };
 
 export const HeaderMarket = ({
@@ -88,7 +87,7 @@ export const HeaderMarket = ({
   pairTicker,
   onOpenMarkets = undefined,
   isLoading = false,
-  showArrow = true,
+  format = true,
 }: HeaderMarketProps) => {
   const now = new Date();
   const from = subDays(now, 7);
@@ -100,7 +99,7 @@ export const HeaderMarket = ({
       {isLoading ? (
         <MarketsSkeleton />
       ) : (
-        <>
+        <S.HeaderAsideContainer background={format}>
           <S.HeaderAsideLeft>
             <S.HeaderToken>
               <Icon isToken name={pairTicker} size="extraMedium" color="text" />
@@ -111,20 +110,18 @@ export const HeaderMarket = ({
               </S.HeaderInfoContainer>
               <p>{pairSymbol}</p>
             </S.HeaderInfo>
-            {showArrow && (
-              <S.ArrowBottom>
-                <Button size="small" background="secondaryBackgroundOpacity">
-                  <ArrowBottom />
-                </Button>
-              </S.ArrowBottom>
-            )}
           </S.HeaderAsideLeft>
           <S.HeaderAsideCenter>
             <Sparklines data={graphPoints}>
               <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
             </Sparklines>
           </S.HeaderAsideCenter>
-        </>
+          {format && (
+            <S.ArrowBottom>
+              <ArrowBottom />
+            </S.ArrowBottom>
+          )}
+        </S.HeaderAsideContainer>
       )}
     </S.Header>
   );
