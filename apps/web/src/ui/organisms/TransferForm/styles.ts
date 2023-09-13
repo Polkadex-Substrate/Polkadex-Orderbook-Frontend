@@ -5,7 +5,10 @@ export const Main = styled.section`
   flex-direction: column;
   gap: 2rem;
   max-width: 100rem;
-  padding: 4rem;
+  padding: 2rem;
+  @media screen and (min-width: 1110px) {
+    padding: 4rem;
+  }
 `;
 
 export const Header = styled.div`
@@ -30,20 +33,27 @@ export const Content = styled.div`
 export const Wallets = styled.div`
   ${({ theme }) => css`
     display: flex;
+    transition: flex-direction ease 0.2s;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 0.5rem;
     padding: 0.5rem;
+    flex-direction: row;
+    @media screen and (max-width: 880px) {
+      flex-direction: column;
+    }
   `}
 `;
 
-export const WalletsButton = styled.button`
-  ${({ theme }) => css`
+export const WalletsButton = styled.button<{ isDeposit: boolean }>`
+  ${({ theme, isDeposit }) => css`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background: ${theme.colors.primary};
+    transition: transform ease 0.2s;
+    background: ${isDeposit ? theme.colors.green : theme.colors.primary};
+    transform: ${isDeposit ? "rotate(360deg)" : "rotate(0)"};
     padding: 0.8rem;
     border-radius: 0.4rem;
     svg {
@@ -60,9 +70,13 @@ export const WalletsButton = styled.button`
 export const Form = styled.div`
   ${({ theme }) => css`
     display: flex;
-    align-items: center;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: 0.5rem;
+    flex-direction: column;
+    @media screen and (min-width: 640px) {
+      flex-direction: row;
+      align-items: center;
+    }
   `}
 `;
 
@@ -75,16 +89,21 @@ export const Amount = styled.div`
     align-items: center;
     justify-content: space-between;
     flex: 1;
-    border-left: 1px solid ${theme.colors.secondaryBackground};
+    @media screen and (max-width: 640px) {
+      border-top: 1px solid ${theme.colors.secondaryBackground};
+    }
+    @media screen and (min-width: 640px) {
+      border-left: 1px solid ${theme.colors.secondaryBackground};
+    }
     div {
       display: flex;
       flex-direction: column;
       flex: 1;
+      gap: 0.4rem;
       span {
         opacity: 0.5;
       }
       input {
-        padding: 0.5rem;
         width: 100%;
         font-size: 1.6rem;
         font-weight: 550;

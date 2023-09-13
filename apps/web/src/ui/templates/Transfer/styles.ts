@@ -44,7 +44,7 @@ export const Header = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    padding: 4rem;
+    padding: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     h1 {
       font-size: 2.5rem;
@@ -54,6 +54,9 @@ export const Header = styled.div`
       font-size: ${theme.font.sizes.small};
       font-weight: normal;
       opacity: 0.5;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 4rem;
     }
   `}
 `;

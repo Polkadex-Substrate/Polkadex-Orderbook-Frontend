@@ -8,12 +8,18 @@ import * as S from "./styles";
 import { Icons } from "@/ui/atoms";
 import { Checkbox, Search } from "@/ui/molecules";
 
-export const AssetsInteraction = ({ open, handleClose }) => {
+export const AssetsInteraction = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: (e: boolean) => void;
+}) => {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         style={{ position: "relative", zIndex: 100 }}
       >
         <Transition.Child

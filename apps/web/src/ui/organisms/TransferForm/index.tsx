@@ -5,7 +5,15 @@ import * as S from "./styles";
 import { Switch, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons } from "@/ui/atoms";
 
-export const TransferForm = ({ openAssets }) => {
+export const TransferForm = ({
+  isDeposit,
+  onTransferInteraction,
+  onOpenAssets,
+}: {
+  isDeposit: boolean;
+  onTransferInteraction: () => void;
+  onOpenAssets: () => void;
+}) => {
   const [state, setState] = useState(false);
   const amountRef = useRef<HTMLInputElement | null>(null);
   return (
@@ -23,7 +31,11 @@ export const TransferForm = ({ openAssets }) => {
             walletName="Orderbook Testing"
             walletAddress="esqd7ZhqxP8...T1pUf1vRw"
           />
-          <S.WalletsButton type="button" onClick={() => window.alert("Invert")}>
+          <S.WalletsButton
+            isDeposit={isDeposit}
+            type="button"
+            onClick={onTransferInteraction}
+          >
             <div>
               <Icons.Trading />
             </div>
@@ -42,7 +54,7 @@ export const TransferForm = ({ openAssets }) => {
             tokenIcon="USDT"
             tokenTicker="USDT"
             availableAmount="0.00"
-            onAction={openAssets}
+            onAction={onOpenAssets}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>

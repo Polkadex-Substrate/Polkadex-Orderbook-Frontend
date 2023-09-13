@@ -14,11 +14,18 @@ import * as S from "./styles";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
-  const [state, setState] = useState(true);
+  const [assetsInteraction, setAssetsInteraction] = useState(false);
+  const [isDeposit, setIsDeposit] = useState(false);
+
+  const onAssetsInteraction = (value = false) => setAssetsInteraction(value);
+  const onTransferInteraction = () => setIsDeposit(!isDeposit);
 
   return (
     <>
-      <AssetsInteraction open={state} handleClose={() => setState(false)} />
+      <AssetsInteraction
+        open={assetsInteraction}
+        onClose={onAssetsInteraction}
+      />
       <Head>
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
@@ -37,7 +44,11 @@ export const TransferTemplate = () => {
               </S.Header>
               <S.Content>
                 <S.Form>
-                  <TransferForm openAssets={() => setState(true)} />
+                  <TransferForm
+                    isDeposit={isDeposit}
+                    onTransferInteraction={onTransferInteraction}
+                    onOpenAssets={() => onAssetsInteraction(true)}
+                  />
                 </S.Form>
                 <S.History>
                   <WithdrawHistory />

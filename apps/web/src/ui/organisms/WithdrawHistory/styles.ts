@@ -7,11 +7,35 @@ export const Wrapper = styled.div`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+
+export const Table = styled.div`
+  ${({ theme }) => css`
+    overflow-x: auto;
+    width: 100%;
+    &::-webkit-scrollbar-thumb {
+      background: none;
+    }
+    &::-webkit-scrollbar-track {
+      background: none;
+    }
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background: ${theme.colors.secondaryBackground};
+      }
+
+      &::-webkit-scrollbar-track {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
     table {
-      /* table-layout: fixed; */
-      padding: 1rem 3rem;
-      empty-cells: 10px;
+      table-layout: auto;
+      padding: 1rem 1rem;
       width: 100%;
+      @media screen and (min-width: 1110px) {
+        padding: 1rem 3rem;
+      }
       td {
         padding: 1.5rem 1rem 1.5rem 1rem;
         border-bottom: 1px solid ${theme.colors.tertiaryBackgroundOpacity};
@@ -113,11 +137,20 @@ export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    padding: 1rem 4rem;
+    gap: 1rem;
+    padding: 1rem 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    flex-direction: column;
+    @media screen and (min-width: 550px) {
+      flex-direction: row;
+      align-items: center;
+    }
     h3 {
       font-size: 1.8rem;
       font-weight: 550;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 1rem 4rem;
     }
   `}
 `;
