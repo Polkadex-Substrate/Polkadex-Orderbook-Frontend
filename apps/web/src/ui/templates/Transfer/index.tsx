@@ -36,10 +36,7 @@ export const TransferTemplate = () => {
                   <TransferForm />
                 </S.Form>
                 <S.History>
-                  <h3>History</h3>
-                  <S.HistoryWrapper>
-                    <WithdrawHistory />
-                  </S.HistoryWrapper>
+                  <WithdrawHistory />
                 </S.History>
               </S.Content>
             </S.ContainerMain>

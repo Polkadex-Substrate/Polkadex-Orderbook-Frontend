@@ -12,6 +12,7 @@ export const Checkbox = forwardRef(
     {
       children,
       name = `polkadexui${String(Math.random())}`,
+      labelProps,
       ...props
     }: T.Props,
     ref: Ref<HTMLInputElement>,
@@ -31,7 +32,11 @@ export const Checkbox = forwardRef(
           {...restProps}
           ref={mergeRefs(componentRef, ref)}
         />
-        {hasChild && <label htmlFor={name}>{children}</label>}
+        {hasChild && (
+          <label {...labelProps} htmlFor={name}>
+            {children}
+          </label>
+        )}
       </S.Wrapper>
     );
   },

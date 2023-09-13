@@ -4,7 +4,6 @@ export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.colors.primaryBackground};
-    min-width: 100vw;
     min-height: 100vh;
     display: flex;
     max-width: 160rem;
@@ -58,15 +57,17 @@ export const Header = styled.div`
     }
   `}
 `;
-export const Content = styled.div``;
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
 export const Form = styled.div``;
 
 export const History = styled.div`
-  h3 {
-    font-size: 1.8rem;
-    font-weight: 550;
-    padding: 0 4rem 2rem 4rem;
-  }
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 export const HistoryWrapper = styled.div`
