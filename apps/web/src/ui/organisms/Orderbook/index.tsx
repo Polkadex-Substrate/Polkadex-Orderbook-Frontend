@@ -95,11 +95,11 @@ type TableField = (typeof allowedFields)[number];
 export const OrderbookTable = ({
   isSell = false,
   orders = [],
-  precision,
+  precision = 4,
   lightMode,
   loading,
 }: T.Props) => {
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const {
     quoteUnit,
@@ -122,7 +122,7 @@ export const OrderbookTable = ({
   const handleRowClick = (
     field: TableField,
     e: MouseEvent<HTMLElement>,
-    selectedIndex: number,
+    selectedIndex: number
   ) => {
     if (field !== allowedFields[3]) e.stopPropagation();
 

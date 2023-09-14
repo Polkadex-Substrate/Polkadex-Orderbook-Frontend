@@ -45,7 +45,7 @@ export const useTabState = () => {
       isActive: activeIndex === tabIndex,
       onClick,
     }),
-    [activeIndex, onClick, tabIndex],
+    [activeIndex, onClick, tabIndex]
   );
 
   return state;

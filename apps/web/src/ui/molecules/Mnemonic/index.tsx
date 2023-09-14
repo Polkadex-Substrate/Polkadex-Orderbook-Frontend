@@ -14,7 +14,7 @@ export const MnemonicImport = ({
   ...props
 }: MnemonicProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const buttonRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const browser = detect();
   const isBrowserSupported =
     browser && ["chrome", "opera", "edge", "safari"].indexOf(browser.name) > 0;

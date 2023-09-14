@@ -20,10 +20,10 @@ const PaperWallet = forwardRef(
       mnemonic: string[];
       controllerAddress?: string;
     }>,
-    ref: Ref<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>
   ) => {
     const pharses = divideArray(mnemonic);
-    const componentRef = useRef<HTMLInputElement>(null);
+    const componentRef = useRef<SVGGElement>(null);
 
     useEffect(() => {
       if (!componentRef?.current) return;
@@ -37,7 +37,7 @@ const PaperWallet = forwardRef(
 
     const shortAddress = useMemo(
       () => controllerAddress && transformAddress(controllerAddress, 10),
-      [controllerAddress],
+      [controllerAddress]
     );
     return (
       <S.Wrapper ref={ref}>
@@ -1113,7 +1113,7 @@ const PaperWallet = forwardRef(
         </S.Container>
       </S.Wrapper>
     );
-  },
+  }
 );
 PaperWallet.displayName = "PaperWallet";
 
