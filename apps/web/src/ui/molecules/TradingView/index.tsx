@@ -4,6 +4,7 @@ import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { decimalPlaces } from "@orderbook/core/helpers";
+import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
 
 import {
   ChartingLibraryWidgetOptions,
@@ -110,6 +111,10 @@ export const TradingView = () => {
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
+    const interval = (localStorage.getItem(
+      TradingViewConstants.lastResolution
+    ) || "60") as ResolutionString;
+
     return {
       datafeed: {
         onReady(callback) {
@@ -197,7 +202,7 @@ export const TradingView = () => {
           );
         },
       },
-      interval: "1D" as ResolutionString,
+      interval,
       library_path: "/static/charting_library/",
       locale: "en",
       timezone: "Asia/Kolkata",
@@ -207,18 +212,20 @@ export const TradingView = () => {
       fullscreen: false,
       autosize: true,
       container: "tv_chart_container",
-      disabled_features: [
+      disabled_features: ["volume_force_overlay", "header_symbol_search"],
+      enabled_features: [
         "use_localstorage_for_settings",
-        "volume_force_overlay",
-        "header_symbol_search",
+        "side_toolbar_in_fullscreen_mode",
+        "save_chart_properties_to_local_storage",
       ],
-      enabled_features: [],
       symbol: `Polkadex:${currentMarket?.name}`,
       custom_font_family: customFontFamily,
       custom_css_url: "/static/style.css/",
       loading_screen: {
         foregroundColor: "transparent",
       },
+      auto_save_delay: 5,
+      load_last_chart: true,
     };
   }, [
     currentMarket?.m,

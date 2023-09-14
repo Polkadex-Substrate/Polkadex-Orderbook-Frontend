@@ -68,6 +68,14 @@
     "typescript": "^5.0.4"
   },
   "resolutions": {
-    "@types/react": "^18.0.22"
+    "@types/react": "^18.0.22",
+    "ansi-regex": "^5.0.1 ",
+    "node-fetch": "^2.6.7 ",
+    "simple-get": "^4.0.1",
+    "glob-parent": "^5.1.2",
+    "trim": "^0.0.3",
+    "postcss": "^8.2.13",
+    "prismjs": "^1.27.0",
+    "file-type": "^16.5.4"
   }
 }

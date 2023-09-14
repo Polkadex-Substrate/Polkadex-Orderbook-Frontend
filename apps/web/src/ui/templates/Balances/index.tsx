@@ -68,7 +68,7 @@ export const BalancesTemplate = () => {
     description: tc("connectTradingAccount.description"),
     primaryLink: "/createAccount",
     primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-    secondaryLink: "/settings",
+    secondaryLink: "/wallets",
     secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
   const router = useRouter();

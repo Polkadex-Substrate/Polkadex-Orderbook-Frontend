@@ -64,7 +64,7 @@
     "@orderbook/tsconfig": "*",
     "@types/d3-array": "^3.0.7",
     "@types/file-saver": "^2.0.5",
-    "@types/react": "18.0.1",
+    "@types/react": "^18.0.22",
     "@types/styled-components": "^5.1.14",
     "@types/styled-system": "^5.1.17",
     "typescript": "^5.0.4"

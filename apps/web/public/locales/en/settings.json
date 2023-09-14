@@ -1,7 +1,7 @@
 {
-  "title": "Accounts | Polkadex Orderbook",
-  "heading": "Accounts.",
-  "subHeading": "General account settings.",
+  "title": "Wallets | Polkadex Orderbook",
+  "heading": "Wallets.",
+  "subHeading": "General wallet settings.",
   "tradingAccountToolTip": "Trading account info",
   "tradingAccounts": "Trading accounts",
   "newAccount": "New Account",
@@ -20,6 +20,7 @@
   "noWalletFoundTitle": "No wallet found",
   "noWalletFoundDescription": "Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet.",
   "onlyRegisteredAccounts": "Only registered accounts",
+  "onlySelectedAccount": "Only active accounts",
   "profile": "Profile",
   "profileCardLabel": "Email",
   "availableMessage": "Soon",

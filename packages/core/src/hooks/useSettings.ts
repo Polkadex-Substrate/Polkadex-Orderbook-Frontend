@@ -10,6 +10,8 @@ import { IUserTradeAccount } from "../";
 
 export const useSettings = () => {
   const [showRegistered, setShowRegistered] = useState(false);
+  const [showPresent, setShowPresent] = useState(true);
+
   const [filterControllerWallets, setFilterControllerWallets] = useState("");
   const [filterTradeAccounts, setFilterTradeAccounts] = useState("");
   const [
@@ -90,43 +92,46 @@ export const useSettings = () => {
 
   const allFilteredTradeAccounts = useMemo(
     () =>
-      tradeAccounts?.reduce((pv: IUserTradeAccount[], cv) => {
-        const { account } = cv;
-        const checker = filterTradeAccounts?.toLowerCase();
-        const address = account?.address?.toLowerCase();
-        const name = String(account?.meta?.name)?.toLowerCase();
-        const filterByController =
-          filterTradeAccountsByControllerAccount?.toLowerCase();
-        const isLinkedAccount = !!userAccounts?.some(
-          (v) =>
-            v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
-            filterByController === v.mainAddress?.toLowerCase(),
-        );
-        if (
-          (isLinkedAccount || filterByController?.includes("all")) &&
-          (address?.includes(checker) || name?.includes(checker))
-        ) {
-          pv.push(cv);
-        }
-        return pv;
-      }, []) || [],
+      tradeAccounts
+        ?.reduce((pv, cv) => {
+          const { account } = cv;
+          const checker = filterTradeAccounts?.toLowerCase();
+          const address = account?.address?.toLowerCase();
+          const name = String(account?.meta?.name)?.toLowerCase();
+          const filterByController =
+            filterTradeAccountsByControllerAccount?.toLowerCase();
+          const isLinkedAccount = !!userAccounts?.some(
+            (v) =>
+              v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
+              filterByController === v.mainAddress?.toLowerCase(),
+          );
+          if (
+            (isLinkedAccount || filterByController?.includes("all")) &&
+            (address?.includes(checker) || name?.includes(checker))
+          ) {
+            pv.push(cv);
+          }
+          return pv;
+        }, [])
+        // sorting the accounts on the basis of their presence in the browser
+        .sort((a, b) => {
+          if (a.isPresentInBrowser && !b.isPresentInBrowser) {
+            return -1;
+          } else if (!a.isPresentInBrowser && b.isPresentInBrowser) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        .filter((v) => (showPresent ? v.isPresentInBrowser : v)),
     [
       filterTradeAccounts,
       tradeAccounts,
       userAccounts,
       filterTradeAccountsByControllerAccount,
+      showPresent,
     ],
   );
-  // sorting the accounts on the basis of their presence in the browser
-  allFilteredTradeAccounts.sort((a, b) => {
-    if (a.isPresentInBrowser && !b.isPresentInBrowser) {
-      return -1;
-    } else if (!a.isPresentInBrowser && b.isPresentInBrowser) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
 
   /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
   const allFilteredControllerWallets = useMemo(
@@ -222,6 +227,8 @@ export const useSettings = () => {
     handleChangeCurrentControllerWallet,
     showRegistered,
     handleChangeShowRegistered: () => setShowRegistered(!showRegistered),
+    showPresent,
+    handleChangeShowPresent: () => setShowPresent(!showPresent),
     filterTradeAccountsByControllerAccount:
       filterTradeAccountsByControllerAccountHeader,
     handleFilterTradeAccountByController:

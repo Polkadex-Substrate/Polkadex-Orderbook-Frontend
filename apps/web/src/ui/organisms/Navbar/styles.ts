@@ -46,6 +46,7 @@ export const WrapperInfo = styled.div`
   justify-content: space-between;
   @media screen and (max-width: 780px) {
     flex-direction: column;
+    margin-top: 1rem;
   }
 `;
 

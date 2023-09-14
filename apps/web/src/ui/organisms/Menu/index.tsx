@@ -48,8 +48,8 @@ export const Menu = () => {
           </Link>
         </S.WrapperIcon>
         <S.WrapperIcon isDisabled={!isAuthenticated}>
-          {router.pathname === "/settings" && <S.LineBorder />}
-          <Link href="/settings">
+          {router.pathname === "/wallets" && <S.LineBorder />}
+          <Link href="/wallets">
             <div>
               <Icon
                 name="Wallet"
@@ -58,7 +58,7 @@ export const Menu = () => {
                 size="large"
               />
             </div>
-            <S.Span>{t("accounts")}</S.Span>
+            <S.Span>{t("wallets")}</S.Span>
           </Link>
         </S.WrapperIcon>
         <Terms />
