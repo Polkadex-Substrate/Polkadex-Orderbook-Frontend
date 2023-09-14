@@ -7,8 +7,8 @@ import { useDisabledPages } from "@/hooks";
 
 const WalletsTemplate = dynamic(
   () =>
-    import("@polkadex/orderbook-ui/templates/Settings").then(
-      (mod) => mod.SettingsTemplate,
+    import("@polkadex/orderbook-ui/templates/Wallets").then(
+      (mod) => mod.WalletsTemplate
     ),
   {
     ssr: false,

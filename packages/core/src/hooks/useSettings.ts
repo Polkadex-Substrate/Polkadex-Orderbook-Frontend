@@ -24,7 +24,7 @@ export const useSettings = () => {
     useState<ExtensionAccount | null>(null);
 
   const handleChangeCurrentControllerWallet = (
-    account: ExtensionAccount | null,
+    account: ExtensionAccount | null
   ) => setCurrentControllerWallet(account);
 
   const profileState = useProfile();
@@ -61,7 +61,7 @@ export const useSettings = () => {
   const defaultFundingAddress =
     defaultTradeAddress &&
     profileState.userData?.userAccounts?.find(
-      ({ tradeAddress }) => tradeAddress === defaultTradeAddress,
+      ({ tradeAddress }) => tradeAddress === defaultTradeAddress
     )?.mainAddress;
 
   const isPreviewActive = tradeWalletState.previewAccountModal.isActive;
@@ -72,7 +72,7 @@ export const useSettings = () => {
     () =>
       allAccounts?.map(({ tradeAddress }): IUserTradeAccount => {
         const account = browserTradeAccounts.find(
-          ({ address }) => address === tradeAddress,
+          ({ address }) => address === tradeAddress
         );
         if (account) {
           return {
@@ -87,13 +87,13 @@ export const useSettings = () => {
           };
         }
       }),
-    [allAccounts, browserTradeAccounts],
+    [allAccounts, browserTradeAccounts]
   );
 
   const allFilteredTradeAccounts = useMemo(
     () =>
       tradeAccounts
-        ?.reduce((pv, cv) => {
+        ?.reduce((pv: IUserTradeAccount[], cv) => {
           const { account } = cv;
           const checker = filterTradeAccounts?.toLowerCase();
           const address = account?.address?.toLowerCase();
@@ -103,7 +103,7 @@ export const useSettings = () => {
           const isLinkedAccount = !!userAccounts?.some(
             (v) =>
               v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
-              filterByController === v.mainAddress?.toLowerCase(),
+              filterByController === v.mainAddress?.toLowerCase()
           );
           if (
             (isLinkedAccount || filterByController?.includes("all")) &&
@@ -123,14 +123,14 @@ export const useSettings = () => {
             return 0;
           }
         })
-        .filter((v) => (showPresent ? v.isPresentInBrowser : v)),
+        .filter((v) => (showPresent ? v.isPresentInBrowser : v)) || [],
     [
       filterTradeAccounts,
       tradeAccounts,
       userAccounts,
       filterTradeAccountsByControllerAccount,
       showPresent,
-    ],
+    ]
   );
 
   /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
@@ -141,7 +141,7 @@ export const useSettings = () => {
         ?.filter((value) =>
           showRegistered
             ? linkedMainAddress?.includes(value.account.address)
-            : value,
+            : value
         )
         ?.reduce((pv: ExtensionAccount[], cv) => {
           const { account } = cv;
@@ -159,12 +159,12 @@ export const useSettings = () => {
       controllerWallets,
       showRegistered,
       linkedMainAddress,
-    ],
+    ]
   );
 
   const hasRegisteredMainAccount = useMemo(
     () => linkedMainAddress && linkedMainAddress?.length > 0,
-    [linkedMainAddress],
+    [linkedMainAddress]
   );
 
   const { onRegisterMainAccountReset } = useExtensionWallet();
@@ -195,9 +195,9 @@ export const useSettings = () => {
       controllerWallets?.find(
         (value) =>
           value?.account?.address?.toLowerCase() ===
-          filterTradeAccountsByControllerAccount?.toLowerCase(),
+          filterTradeAccountsByControllerAccount?.toLowerCase()
       )?.account?.meta?.name || "All",
-    [controllerWallets, filterTradeAccountsByControllerAccount],
+    [controllerWallets, filterTradeAccountsByControllerAccount]
   );
 
   return {
