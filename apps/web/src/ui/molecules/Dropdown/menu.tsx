@@ -9,7 +9,7 @@ import { Section } from "./section";
 import * as S from "./styles";
 import * as T from "./types";
 
-export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLDivElement> =
+export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLUListElement> =
   forwardRef(({ fill, border, bgStyle, itemFill, ...props }, ref) => {
     const context = useDropdownContext();
 

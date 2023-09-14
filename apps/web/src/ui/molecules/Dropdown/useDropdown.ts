@@ -16,7 +16,7 @@ export function useDropdown(props: T.UseDropdownProps) {
   const menuPopoverRef = useRef<HTMLDivElement>(null);
   const menuScrollRef = useRef<HTMLUListElement>(null);
   const menuTriggerRef = useRef<HTMLElement>(null);
-  const menuContentRef = useRef(null);
+  const menuContentRef = useRef<HTMLUListElement | null>(null);
   const menuItemRef = useRef<HTMLDivElement>(null);
 
   // Create state based on the incoming props
@@ -26,7 +26,7 @@ export function useDropdown(props: T.UseDropdownProps) {
   const { menuTriggerProps, menuProps } = useMenuTrigger(
     { type, trigger, isDisabled },
     state,
-    menuTriggerRef,
+    menuTriggerRef
   );
 
   return {

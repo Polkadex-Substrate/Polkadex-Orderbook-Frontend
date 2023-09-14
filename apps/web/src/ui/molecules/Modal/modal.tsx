@@ -16,7 +16,7 @@ const Modal: T.ModalComponent = ({
   border,
   isFull,
   isBlur,
-  placement,
+  placement = "start right",
   isFullWidth,
   isFullHeight,
   ...props
@@ -38,13 +38,7 @@ const Modal: T.ModalComponent = ({
         <OverlayContainer>
           <Content>
             <FocusScope contain restoreFocus autoFocus>
-              <S.Overlay
-                isBlur={isBlur}
-                placement={placement}
-                isFull={isFull}
-                ref={overlayRef}
-                {...context.underlayProps}
-              >
+              <S.Overlay isBlur={isBlur} placement={placement} isFull={isFull}>
                 <S.Container
                   bgStyle={bgStyle}
                   border={border}
