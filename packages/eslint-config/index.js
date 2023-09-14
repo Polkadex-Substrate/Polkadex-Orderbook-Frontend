@@ -21,12 +21,18 @@ module.exports = {
     "react-hooks",
   ],
   rules: {
-    "prettier/prettier": "error",
     "import/first": "error",
     "import/order": [
       "error",
       {
         "newlines-between": "always",
+      },
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+        trailingComma: "es5",
       },
     ],
     "no-use-before-define": "off",
