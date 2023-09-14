@@ -52,7 +52,7 @@ export const HeaderAsideContainer = styled.div<{ background: boolean }>`
     background: ${background
       ? theme.colors.secondaryBackgroundOpacity
       : theme.colors.transparent};
-    border-radius: 6px;
+    border-radius: 0px 6px 6px 6px;
     margin-block: 0.6rem;
   `}
 `;
