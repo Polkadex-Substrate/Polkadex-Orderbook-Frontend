@@ -25,6 +25,7 @@ export const Content: T.PopoverComponent = forwardRef(
     return (
       <FocusScope restoreFocus>
         <CSSTransition
+          key={S.ContentMain.toString()}
           in={isOpen}
           timeout={120}
           unmountOnExit

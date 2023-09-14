@@ -90,11 +90,13 @@ export const Container: any = styled("div")<T.ModalStyleProps>(
   color
 );
 
-export const Overlay = styled("div")<{
-  isBlur?: boolean;
-  placement: Direction;
-  isFull?: boolean;
-}>(
+export const Overlay = styled("div")<
+  {
+    isBlur?: boolean;
+    placement: Direction;
+    isFull?: boolean;
+  } & T.ModalProps
+>(
   () =>
     css({
       position: "fixed",

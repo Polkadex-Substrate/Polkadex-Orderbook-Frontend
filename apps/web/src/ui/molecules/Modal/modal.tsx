@@ -23,7 +23,7 @@ const Modal: T.ModalComponent = ({
 }) => {
   const context = useModal(props);
   const [Header, Body, Footer] = Children.toArray(children);
-  const overlayRef = useRef();
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   return (
     <ModalProvider value={context}>
       <CSSTransition
@@ -38,7 +38,13 @@ const Modal: T.ModalComponent = ({
         <OverlayContainer>
           <Content>
             <FocusScope contain restoreFocus autoFocus>
-              <S.Overlay isBlur={isBlur} placement={placement} isFull={isFull}>
+              <S.Overlay
+                isBlur={isBlur}
+                placement={placement}
+                isFull={isFull}
+                ref={overlayRef}
+                {...context.underlayProps}
+              >
                 <S.Container
                   bgStyle={bgStyle}
                   border={border}

@@ -52,7 +52,7 @@ export const Wrapper = styled.div`
 export const Container = styled.div<Partial<Props>>`
   ${({
     theme,
-    background = "none",
+    background = "",
     color = "white",
     stroke = "none",
     size = "small",

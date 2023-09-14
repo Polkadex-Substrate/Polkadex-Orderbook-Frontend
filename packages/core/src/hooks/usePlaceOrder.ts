@@ -591,11 +591,19 @@ export function usePlaceOrder(
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
   useEffect(() => {
     if (currentPrice !== tab.priceLimit)
-      setTab({ ...tab, priceLimit: Number(currentPrice) });
+      setTab((prev) => ({ ...prev, priceLimit: Number(currentPrice) }));
 
     if (Number(selectedAmountFromOrderbookTable) !== tab.amountLimit)
-      setTab({ ...tab, amountLimit: Number(selectedAmountFromOrderbookTable) });
-  }, [currentPrice, tab, selectedAmountFromOrderbookTable]);
+      setTab((prev) => ({
+        ...prev,
+        amountLimit: Number(selectedAmountFromOrderbookTable),
+      }));
+  }, [
+    currentPrice,
+    selectedAmountFromOrderbookTable,
+    tab.amountLimit,
+    tab.priceLimit,
+  ]);
 
   // Set estimated total price for the current market
   useEffect(() => {
