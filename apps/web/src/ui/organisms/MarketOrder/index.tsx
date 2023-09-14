@@ -84,21 +84,23 @@ export const MarketOrder = () => {
               </Dropdown.Menu>
             </Dropdown>
           </S.Header>
-          <TabContent>
-            <MarketOrderAction
-              isLimit={isLimit}
-              orderType={orderType}
-              formik={formik}
-            />
-          </TabContent>
-          <TabContent>
-            <MarketOrderAction
-              isSell
-              isLimit={isLimit}
-              orderType={orderType}
-              formik={formik}
-            />
-          </TabContent>
+          <S.Content>
+            <TabContent>
+              <MarketOrderAction
+                isLimit={isLimit}
+                orderType={orderType}
+                formik={formik}
+              />
+            </TabContent>
+            <TabContent>
+              <MarketOrderAction
+                isSell
+                isLimit={isLimit}
+                orderType={orderType}
+                formik={formik}
+              />
+            </TabContent>
+          </S.Content>
         </Tabs>
       )}
     </S.Section>

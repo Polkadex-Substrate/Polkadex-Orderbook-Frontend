@@ -8,9 +8,9 @@ import * as T from "./types";
 const Group = forwardRef(
   (
     { children, ...props }: PropsWithChildren<T.GroupProps>,
-    ref: Ref<HTMLTableRowElement>,
+    ref: Ref<HTMLTableSectionElement>
   ) => {
-    const componentRef = useRef();
+    const componentRef = useRef<HTMLTableSectionElement>(null);
 
     const { rowGroupProps } = useTableRowGroup();
 
@@ -22,7 +22,7 @@ const Group = forwardRef(
         {children}
       </S.Group>
     );
-  },
+  }
 );
 
 Group.displayName = "Group";

@@ -8,11 +8,11 @@ import { useDisabledPages } from "@/hooks";
 const ResetPasswordFormTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/ResetPasswordForm").then(
-      (mod) => mod.ResetPasswordFormTemplate,
+      (mod) => mod.ResetPasswordFormTemplate
     ),
   {
     ssr: false,
-  },
+  }
 );
 const ResetPasswordForm = () => {
   const router = useRouter();

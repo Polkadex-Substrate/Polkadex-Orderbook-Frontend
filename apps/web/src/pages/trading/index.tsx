@@ -12,7 +12,7 @@ function Home() {
     () =>
       process.browser &&
       window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_MARKET),
-    [],
+    []
   );
 
   const {
@@ -30,14 +30,12 @@ function Home() {
     if (!marketLoading && !assetLoading) {
       if (findMarket) {
         router.push(
-          `/trading/${findMarket.base_ticker + findMarket.quote_ticker}`,
+          `/trading/${findMarket.base_ticker + findMarket.quote_ticker}`
         );
       } else {
         if (currentMarket)
           router.push(
-            `/trading/${
-              currentMarket.base_ticker + currentMarket.quote_ticker
-            }`,
+            `/trading/${currentMarket.base_ticker + currentMarket.quote_ticker}`
           );
         else router.push(`/trading/${defaultConfig.landingPageMarket}`);
       }

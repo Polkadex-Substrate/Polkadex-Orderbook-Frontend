@@ -5,11 +5,11 @@ import { useDisabledPages } from "@/hooks";
 const MigrationTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Migration").then(
-      (mod) => mod.Migration,
+      (mod) => mod.Migration
     ),
   {
     ssr: false,
-  },
+  }
 );
 
 const Migration = () => {

@@ -85,7 +85,7 @@ export const Switch = styled.div`
   `}
 `;
 
-export const SwitchHandle = styled.div<{ active: boolean }>`
+export const SwitchHandle = styled.div<{ active: boolean | null }>`
   ${({ theme, active }) => css`
     width: 2rem;
     height: 3rem;
@@ -107,7 +107,7 @@ export const SwitchText = styled.div`
   `}
 `;
 
-export const Comment = styled.div<{ maxHeight: number }>`
+export const Comment = styled.div<{ maxHeight: number | undefined }>`
   height: ${(p) => `${p.maxHeight}px`};
   transition: all 0.25s ease-in-out;
   overflow: hidden;

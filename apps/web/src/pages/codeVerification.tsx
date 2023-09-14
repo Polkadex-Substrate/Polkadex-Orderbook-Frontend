@@ -10,11 +10,11 @@ import { useDisabledPages } from "@/hooks/useDisabledPages";
 const CodeVerificationTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/CodeVerification").then(
-      (mod) => mod.CodeVerificationTemplate,
+      (mod) => mod.CodeVerificationTemplate
     ),
   {
     ssr: false,
-  },
+  }
 );
 const CodeVerification = ({ email }: { email?: string }) => {
   const { disabled } = useDisabledPages();
@@ -27,7 +27,7 @@ const CodeVerification = ({ email }: { email?: string }) => {
 
   const shouldRedirect = useMemo(
     () => (hasUser && userConfirmed) || !email,
-    [hasUser, userConfirmed, email],
+    [hasUser, userConfirmed, email]
   );
 
   useEffect(() => {

@@ -56,10 +56,9 @@ export const CodeVerificationTemplate = ({ email }: { email: string }) => {
                   <h1>{t("heading")}</h1>
                   <form onSubmit={handleSubmit}>
                     <InputLine
-                      name="code"
                       label={t("inputLabel")}
                       placeholder="000000"
-                      error={errors.code && touched.code && errors.code}
+                      error={touched.code ? errors.code : ""}
                       {...getFieldProps("code")}
                     >
                       <Resend onResend={() => onResendCode(email)} />

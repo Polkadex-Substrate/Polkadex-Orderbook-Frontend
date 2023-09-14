@@ -35,13 +35,13 @@ export function usePlaceOrder(
   formValues: FormValues,
   setFormValues: FormikHelpers<FormValues>["setValues"],
   errors: FormikErrors<FormValues>,
-  setFormErrors: FormikHelpers<FormValues>["setErrors"],
+  setFormErrors: FormikHelpers<FormValues>["setErrors"]
 ) {
   const { t: translation } = useTranslation("molecules");
   const t = useCallback(
     (key: string, args = {}) =>
       translation(`marketOrderAction.errors.${key}`, args),
-    [translation],
+    [translation]
   );
 
   const {
@@ -82,7 +82,7 @@ export function usePlaceOrder(
 
   const tradeAccount = selectTradeAccount(
     usingTradeAddress,
-    allBrowserAccounts,
+    allBrowserAccounts
   );
 
   // if account is not protected by password use default password to unlock account.
@@ -129,11 +129,11 @@ export function usePlaceOrder(
 
   const nextPriceLimitTruncated = Decimal.format(
     tab.priceLimit,
-    pricePrecision || 0,
+    pricePrecision || 0
   );
   const nextAmountLimitTruncated = Decimal.format(
     tab.amountLimit,
-    qtyPrecision || 0,
+    qtyPrecision || 0
   );
 
   // Get asset balance for the current market
@@ -147,7 +147,7 @@ export function usePlaceOrder(
   const getEstimatedTotal = useCallback(
     (total: number): string =>
       Decimal.format(total, basePrecision || quotePrecision || 0, ","),
-    [basePrecision, quotePrecision],
+    [basePrecision, quotePrecision]
   );
 
   // Reset the current price
@@ -227,7 +227,7 @@ export function usePlaceOrder(
       isLimit,
       isSell,
       rangeValue,
-    ],
+    ]
   );
 
   // Handle change price value in form
@@ -242,7 +242,7 @@ export function usePlaceOrder(
         const total =
           formValues.amountSell || formValues.amountBuy
             ? getAbsoluteNumber(
-                getEstimatedTotal(calculateTotal(convertedValue, formAmount)),
+                getEstimatedTotal(calculateTotal(convertedValue, formAmount))
               )
             : "";
 
@@ -265,7 +265,7 @@ export function usePlaceOrder(
       calculateTotal,
       getEstimatedTotal,
       totalPrecision,
-    ],
+    ]
   );
 
   // Handle change in amount value in form
@@ -279,7 +279,7 @@ export function usePlaceOrder(
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         const total = convertedValue
           ? getAbsoluteNumber(
-              getEstimatedTotal(calculateTotal(formPrice, convertedValue)),
+              getEstimatedTotal(calculateTotal(formPrice, convertedValue))
             )
           : "";
 
@@ -311,7 +311,7 @@ export function usePlaceOrder(
       calculateTotal,
       getEstimatedTotal,
       totalPrecision,
-    ],
+    ]
   );
 
   // Handle change in total value in form (Applicable for Limit orders only)
@@ -346,7 +346,7 @@ export function usePlaceOrder(
       pricePrecision,
       qtyPrecision,
       totalPrecision,
-    ],
+    ]
   );
 
   // Calls the action for placing order
@@ -498,7 +498,7 @@ export function usePlaceOrder(
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           const total = getAbsoluteNumber(
-            getEstimatedTotal(calculateTotal(formPrice, amount)),
+            getEstimatedTotal(calculateTotal(formPrice, amount))
           );
           setFormValues({
             ...formValues,
@@ -518,7 +518,7 @@ export function usePlaceOrder(
             Number(formPrice)
           }`;
           const total = getAbsoluteNumber(
-            getEstimatedTotal(calculateTotal(formPrice, amount)),
+            getEstimatedTotal(calculateTotal(formPrice, amount))
           );
 
           setFormValues({
@@ -568,7 +568,7 @@ export function usePlaceOrder(
       totalPrecision,
       calculateTotal,
       getEstimatedTotal,
-    ],
+    ]
   );
 
   const handleSliderClick = (data: {
@@ -591,11 +591,19 @@ export function usePlaceOrder(
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
   useEffect(() => {
     if (currentPrice !== tab.priceLimit)
-      setTab({ ...tab, priceLimit: Number(currentPrice) });
+      setTab((prev) => ({ ...prev, priceLimit: Number(currentPrice) }));
 
     if (Number(selectedAmountFromOrderbookTable) !== tab.amountLimit)
-      setTab({ ...tab, amountLimit: Number(selectedAmountFromOrderbookTable) });
-  }, [currentPrice, tab, selectedAmountFromOrderbookTable]);
+      setTab((prev) => ({
+        ...prev,
+        amountLimit: Number(selectedAmountFromOrderbookTable),
+      }));
+  }, [
+    currentPrice,
+    selectedAmountFromOrderbookTable,
+    tab.amountLimit,
+    tab.priceLimit,
+  ]);
 
   // Set estimated total price for the current market
   useEffect(() => {
@@ -629,11 +637,9 @@ export function usePlaceOrder(
     tab,
     orderType,
     formValues,
-    currentMarket?.quote_precision,
     nextPriceLimitTruncated,
     handlePriceChange,
     handleAmountChange,
-    selectedAmountFromOrderbookTable,
     isSell,
     nextAmountLimitTruncated,
   ]);

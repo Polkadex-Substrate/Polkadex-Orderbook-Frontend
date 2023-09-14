@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 import Link from "next/link";
 
-export const Header = styled.div<{ noBorder: boolean }>`
+export const Header = styled.div<{ noBorder?: boolean }>`
   ${({ noBorder, theme }) => css`
     padding: 3rem;
     ${!noBorder &&

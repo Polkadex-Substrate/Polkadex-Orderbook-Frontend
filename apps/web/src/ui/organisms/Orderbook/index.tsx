@@ -1,4 +1,4 @@
-import { useRef, MouseEvent } from "react";
+import { useRef, MouseEvent, MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Icon,
@@ -95,11 +95,11 @@ type TableField = (typeof allowedFields)[number];
 export const OrderbookTable = ({
   isSell = false,
   orders = [],
-  precision,
+  precision = 4,
   lightMode,
   loading,
 }: T.Props) => {
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const {
     quoteUnit,
@@ -112,7 +112,7 @@ export const OrderbookTable = ({
   } = useOrderbookTable({
     isSell,
     orders: [...orders],
-    contentRef,
+    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
   });
 
   const { t: translation } = useTranslation("organisms");
@@ -122,7 +122,7 @@ export const OrderbookTable = ({
   const handleRowClick = (
     field: TableField,
     e: MouseEvent<HTMLElement>,
-    selectedIndex: number,
+    selectedIndex: number
   ) => {
     if (field !== allowedFields[3]) e.stopPropagation();
 

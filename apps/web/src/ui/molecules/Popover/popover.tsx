@@ -11,11 +11,11 @@ const Popover: T.PopoverComponent<T.PopoverProps> = forwardRef(
     const [Trigger, Content] = Children.toArray(children);
     return (
       <PopoverProvider value={context}>
-        {Trigger}
-        {Content}
+        <>{Trigger}</>
+        <> {Content}</>
       </PopoverProvider>
     );
-  },
+  }
 );
 
 Popover.displayName = "Popover";

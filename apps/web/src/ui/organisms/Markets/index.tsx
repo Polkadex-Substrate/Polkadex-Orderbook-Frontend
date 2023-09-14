@@ -18,7 +18,7 @@ import {
 
 import * as S from "./styles";
 
-export const Markets = ({ hasMargin = false, onClose = undefined }) => {
+export const Markets = ({ hasMargin = false, onClose }) => {
   const {
     marketTokens,
     marketTickers,
@@ -37,9 +37,9 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket
-          id={id}
-          pair={currentTickerName}
-          pairTicker={currentTickerImg}
+          id={id as string}
+          pair={currentTickerName as string}
+          pairTicker={currentTickerImg as string}
         />
         <S.Favorite>
           <button type="button" onClick={onClose}>
@@ -168,12 +168,12 @@ const Content: FC<{
             vol={Decimal.format(
               Number(token.volume),
               token.quote_precision,
-              ",",
+              ","
             )}
             price={Decimal.format(
               Number(token.last),
               token.quote_precision,
-              ",",
+              ","
             )}
             change={
               Decimal.format(Number(token.price_change_percent), 2, ",") + "%"

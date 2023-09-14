@@ -26,7 +26,7 @@ import { useTable } from "./useTable";
 const Table = forwardRef(
   (
     props: PropsWithChildren<T.TableForwardProps>,
-    ref: Ref<HTMLTableElement>,
+    ref: Ref<HTMLTableElement>
   ) => {
     const {
       selectionMode,
@@ -44,7 +44,7 @@ const Table = forwardRef(
     });
 
     const tableRef = useRef<HTMLTableElement>(null);
-    const scrollRef = useRef<HTMLTableRowElement>(null);
+    const scrollRef = useRef<HTMLTableSectionElement | null>(null);
 
     const state = useTableState({
       ...props,
@@ -56,14 +56,18 @@ const Table = forwardRef(
     const { gridProps } = useTableAria(
       { ...tableProps, onRowAction, scrollRef },
       state,
-      tableRef,
+      tableRef
     );
 
     const [Header, Body] = Children.toArray(props.children);
 
-    const headerProps = isValidElement(Header) && cloneElement(Header);
+    const headerProps = isValidElement(Header)
+      ? cloneElement(Header)
+      : ({ props: {} } as any);
 
-    const bodyProps = isValidElement(Body) && cloneElement(Body);
+    const bodyProps = isValidElement(Body)
+      ? cloneElement(Body)
+      : ({ props: {} } as any);
 
     const { collection } = state;
 
@@ -76,10 +80,12 @@ const Table = forwardRef(
                 key={headerRow.key}
                 item={headerRow}
                 state={state}
-                fill={headerProps.props.fill}
-                border={headerProps.props.border}
-                bgStyle={headerProps.props.bgStyle}
+                fill={headerProps?.props?.fill}
+                border={headerProps?.props?.border}
+                bgStyle={headerProps?.props?.bgStyle}
               >
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
                 {[...headerRow.childNodes].map((column) =>
                   column.props.isSelectionCell ? (
                     <CheckboxColumn
@@ -89,27 +95,29 @@ const Table = forwardRef(
                     />
                   ) : (
                     <Column key={column.key} column={column} state={state} />
-                  ),
+                  )
                 )}
               </HeaderComponent>
             ))}
           </Group>
           <Group as="tbody" ref={scrollRef}>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
             {[...collection.body.childNodes].map((row) => (
               <BodyComponent
                 key={row.key}
                 item={row}
                 state={state}
-                striped={bodyProps.props.striped}
-                fill={bodyProps.props.fill}
-                border={bodyProps.props.border}
+                striped={bodyProps?.props?.striped}
+                fill={bodyProps?.props?.fill}
+                border={bodyProps?.props?.border}
               >
                 {[...row.childNodes].map((cell) =>
                   cell.props.isSelectionCell ? (
                     <CheckboxCell key={cell.key} cell={cell} state={state} />
                   ) : (
                     <Cell key={cell.key} cell={cell} state={state} />
-                  ),
+                  )
                 )}
               </BodyComponent>
             ))}
@@ -117,7 +125,7 @@ const Table = forwardRef(
         </S.Table>
       </TableProvider>
     );
-  },
+  }
 );
 
 Table.displayName = "Table";

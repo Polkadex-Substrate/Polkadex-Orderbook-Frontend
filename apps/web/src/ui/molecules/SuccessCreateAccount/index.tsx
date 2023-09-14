@@ -12,19 +12,19 @@ type Props = {
   description: string;
   mnemonic?: string;
   account?: {
-    name: string;
-    address: string;
+    name?: string;
+    address?: string;
   };
 };
 export const SuccessCreateAccount = ({
   title = "",
   description = "",
-  mnemonic,
+  mnemonic = "",
   account,
 }: Props) => {
   const [state, setState] = useState(false);
-  const buttonRef = useRef(null);
-  const mnemonicRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const mnemonicRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     confetti({
@@ -36,8 +36,11 @@ export const SuccessCreateAccount = ({
     });
   }, []);
   const IconComponent = Icons[state ? "Show" : "Hidden"];
-  const componentRef = useRef();
-  const mnemonicArr = useMemo(() => mnemonic?.split(" "), [mnemonic]);
+  const componentRef = useRef<HTMLDivElement | null>(null);
+  const mnemonicArr = useMemo(() => {
+    if (mnemonic) mnemonic?.split(" ");
+    return [];
+  }, [mnemonic]);
   const {
     userData: { userAccounts },
   } = useProfile();
@@ -46,29 +49,33 @@ export const SuccessCreateAccount = ({
     () =>
       userAccounts?.find(
         ({ tradeAddress }) =>
-          tradeAddress?.toLowerCase() === account?.address?.toLowerCase(),
+          tradeAddress?.toLowerCase() === account?.address?.toLowerCase()
       ),
-    [userAccounts, account?.address],
+    [userAccounts, account?.address]
   );
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => componentRef?.current,
   });
   const copyAddress = async () => {
     if (account?.address) {
       await navigator.clipboard.writeText(account?.address);
-      buttonRef.current.innerHTML = "Copied";
+      if (buttonRef.current) buttonRef.current.innerHTML = "Copied";
     }
   };
 
   const copyMnemonic = async () => {
     await navigator.clipboard.writeText(mnemonic);
-    mnemonicRef.current.innerHTML = "Copied";
-    mnemonicRef?.current.classList.add("active");
+    if (mnemonicRef.current) {
+      mnemonicRef.current.innerHTML = "Copied";
+      mnemonicRef.current.classList.add("active");
+    }
   };
 
   const handleOnMouseOut = () => {
-    mnemonicRef.current.innerHTML = "Copy";
-    mnemonicRef?.current.classList.remove("active");
+    if (mnemonicRef.current) {
+      mnemonicRef.current.innerHTML = "Copy";
+      mnemonicRef?.current.classList.remove("active");
+    }
   };
 
   return (

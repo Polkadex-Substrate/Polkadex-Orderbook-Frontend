@@ -9,12 +9,12 @@ import { useDisabledPages } from "@/hooks";
 const SignTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Sign").then(
-      (mod) => mod.SignTemplate,
+      (mod) => mod.SignTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 const Sign = () => {
   const { disabled } = useDisabledPages();
