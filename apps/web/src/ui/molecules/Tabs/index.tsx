@@ -70,13 +70,15 @@ type Props = {
   isActive?: boolean;
   onClick?: () => void;
 };
-export const TabHeader: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const TabHeader: React.FC<{ children: ReactElement<Props> }> = ({
+  children,
+}) => {
   const state = useTabState();
 
   return (
     <Fragment>
       {isValidElement(children)
-        ? cloneElement<Props>(children as ReactElement<Props>, state)
+        ? cloneElement<Props>(children, state)
         : children}
     </Fragment>
   );
