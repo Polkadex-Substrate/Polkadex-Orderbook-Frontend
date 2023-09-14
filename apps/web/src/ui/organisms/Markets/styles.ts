@@ -53,18 +53,18 @@ export const HeaderAsideContainer = styled.div<{ background: boolean }>`
       ? theme.colors.secondaryBackgroundOpacity
       : theme.colors.transparent};
     border-radius: 6px;
-    padding: 0.5rem 1rem;
     margin-block: 0.6rem;
   `}
 `;
 export const HeaderAsideLeft = styled.div`
   display: flex;
   align-items: center;
+  padding: 0.5rem 0.6rem;
 `;
 
 export const ArrowBottom = styled.button`
   vertical-align: middle;
-  margin-inline: 1.2rem 0.5rem;
+  margin-inline: 1.2rem 0.9rem;
   svg {
     width: 1rem;
   }
