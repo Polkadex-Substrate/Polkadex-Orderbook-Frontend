@@ -185,7 +185,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
         ) : (
           <S.DropdownEmpty>
             <p>{t("noTradingAccount")}</p>
-            <Link href="/settings">{t("importOrCreateOne")}</Link>
+            <Link href="/wallets">{t("importOrCreateOne")}</Link>
           </S.DropdownEmpty>
         )}
         {selectedTradeAccount && (
@@ -244,7 +244,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
         <Card
           title={t("accounts")}
           icon="Wallet"
-          onClick={() => router.push("/settings")}
+          onClick={() => router.push("/wallets")}
         />
         <Card
           title={t("appearance")}

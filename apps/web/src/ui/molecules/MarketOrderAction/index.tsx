@@ -211,7 +211,7 @@ export const MarketOrderAction = ({
                   }
                 />
               ) : (
-                <Link href="/settings">
+                <Link href="/wallets">
                   <S.Connect>{t("connectTradingAccount")}</S.Connect>
                 </Link>
               )}
