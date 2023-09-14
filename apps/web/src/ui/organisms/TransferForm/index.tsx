@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, useMemo, useRef } from "react";
+import { MouseEvent, useMemo, useRef } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -18,7 +18,13 @@ import { useDepositProvider } from "@orderbook/core/providers/user/depositProvid
 
 import * as S from "./styles";
 
-import { Popover, Switch, TokenCard, WalletCard } from "@/ui/molecules";
+import {
+  LoadingSpinner,
+  Popover,
+  Switch,
+  TokenCard,
+  WalletCard,
+} from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -80,7 +86,7 @@ export const TransferForm = ({
     setFieldValue,
   } = useFormik({
     initialValues: {
-      amount: "0.0",
+      amount: "",
       isDeposit: true,
     },
     validationSchema: depositValidationsTest,
@@ -92,7 +98,9 @@ export const TransferForm = ({
       const asset = isAssetPDEX(selectedAsset?.assetId)
         ? { polkadex: null }
         : { asset: selectedAsset?.assetId };
-
+      console.table([
+        { asset: asset, amount: values.amount, mainAccount: fundingWallet },
+      ]);
       if (isDeposit) {
         onFetchDeposit({
           // TODO: Fix asset types
@@ -161,7 +169,7 @@ export const TransferForm = ({
                     <div>
                       <Icons.Alert />
                     </div>
-                    {touched.amount && errors.amount && <p>{errors.amount}</p>}
+                    {errors.amount && <p>{errors.amount}</p>}
                   </S.Errors>
                 </Popover.Content>
               </Popover>
@@ -178,9 +186,15 @@ export const TransferForm = ({
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer>
+        <S.Footer isDeposit={isDeposit}>
           <button disabled={!(isValid && dirty) || loading} type="submit">
-            Transfer
+            <LoadingSpinner
+              loading={loading}
+              color="white"
+              style={{ marginRight: "0.5rem" }}
+            >
+              Transfer
+            </LoadingSpinner>
           </button>
         </S.Footer>
       </S.Content>

@@ -5,4 +5,9 @@ export interface Props extends Omit<Transaction, "asset"> {
     name: string;
     ticker: string;
   };
+  wallets: {
+    fromWalletName: string;
+    fromWalletAddress: string;
+    toWalletType: string;
+  };
 }

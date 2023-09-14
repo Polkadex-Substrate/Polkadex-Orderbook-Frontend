@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import { transformAddress } from "@orderbook/core/providers/user/profile";
 
 import { Date, Token, Box, Wallet } from "./styles";
 import * as T from "./types";
@@ -59,21 +60,25 @@ export const columns = [
     header: () => <span>Fees</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
-    id: "from",
-    cell: (e) => (
-      <Wallet>
-        <div>
-          <Icons.SingleArrowBottom />
-        </div>
-        <div>
-          <p>
-            From address name<span> • 0x0000000</span>
-          </p>
-          <p>To address name</p>
-        </div>
-      </Wallet>
-    ),
+  columnHelper.accessor((row) => row.wallets, {
+    id: "wallets",
+    cell: (e) => {
+      const address = transformAddress(e.getValue().fromWalletAddress ?? "");
+      return (
+        <Wallet>
+          <div>
+            <Icons.SingleArrowBottom />
+          </div>
+          <div>
+            <p>
+              {e.getValue().fromWalletName}
+              <span> • {address}</span>
+            </p>
+            <p>{e.getValue().toWalletType}</p>
+          </div>
+        </Wallet>
+      );
+    },
     header: () => <span>From/To</span>,
     footer: (e) => e.column.id,
   }),

@@ -151,11 +151,11 @@ export const Amount = styled.div`
   `}
 `;
 
-export const Footer = styled.div`
-  ${({ theme }) => css`
+export const Footer = styled.div<{ isDeposit?: boolean }>`
+  ${({ theme, isDeposit }) => css`
     flex: 1;
     button {
-      background: ${theme.colors.secondaryBackgroundOpacity};
+      background: ${isDeposit ? theme.colors.green : theme.colors.primary};
       padding: 1.4rem;
       border-radius: 0.5rem;
       width: 100%;
@@ -165,10 +165,7 @@ export const Footer = styled.div`
         cursor: not-allowed;
       }
       &:hover:not(:disabled) {
-        background: ${theme.colors.secondaryBackground};
-      }
-      &:active:not(:disabled) {
-        background: ${theme.colors.primary};
+        background: ${theme.colors.primaryHover};
       }
     }
   `}

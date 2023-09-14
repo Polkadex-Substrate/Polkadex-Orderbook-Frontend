@@ -22,7 +22,7 @@ export const TransferTemplate = () => {
 
   const { t } = useTranslation("transfer");
   const [assetsInteraction, setAssetsInteraction] = useState(false);
-  const [isDeposit, setIsDeposit] = useState(false);
+  const [isDeposit, setIsDeposit] = useState(true);
 
   const filteredNonBlockedAssets = useMemo(
     () =>

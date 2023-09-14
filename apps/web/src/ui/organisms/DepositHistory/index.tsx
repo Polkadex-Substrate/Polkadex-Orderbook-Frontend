@@ -8,9 +8,15 @@ import classNames from "classnames";
 import { useTransactionsProvider } from "@orderbook/core/providers/user/transactionsProvider";
 import { intlFormat } from "date-fns";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  useExtensionWallet,
+  userMainAccountDetails,
+} from "@orderbook/core/providers/user/extensionWallet";
 
 import { columns } from "./columns";
 import * as S from "./styles";
+import * as T from "./types";
 import { DepositHistorySkeleton } from "./skeleton";
 
 import { Checkbox, EmptyData, Search } from "@/ui/molecules";
@@ -20,7 +26,16 @@ export const DepositHistory = () => {
   const { deposits, loading: isTransactionsFetching } =
     useTransactionsProvider();
 
+  const { selectedAccount } = useProfile();
+  const { allAccounts } = useExtensionWallet();
+
+  const { mainAddress } = selectedAccount;
   const { selectGetAsset } = useAssetsProvider();
+
+  const fundingWallet = useMemo(
+    () => userMainAccountDetails(mainAddress, allAccounts),
+    [allAccounts, mainAddress],
+  );
 
   const data = useMemo(
     () =>
@@ -49,9 +64,19 @@ export const DepositHistory = () => {
             ticker: token?.symbol,
             name: token?.name,
           },
-        };
+          wallets: {
+            fromWalletName: fundingWallet?.account?.meta?.name ?? "",
+            fromWalletAddress: fundingWallet?.account?.address ?? "",
+            toWalletType: "Trading Account",
+          },
+        } as T.Props;
       }),
-    [deposits, selectGetAsset],
+    [
+      deposits,
+      selectGetAsset,
+      fundingWallet?.account?.meta?.name,
+      fundingWallet?.account?.address,
+    ],
   );
   const table = useReactTable({
     data,
