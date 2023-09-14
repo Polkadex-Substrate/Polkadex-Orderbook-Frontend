@@ -10,11 +10,12 @@ import orderbookImage from "../../../../public/img/orderbookImage.webp";
 import * as S from "./styles";
 
 export const Progress = () => {
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const clear = setTimeout(() => {
-      imageRef.current.style.transform = "rotateX(0deg) rotateZ(0deg)";
+      if (imageRef.current)
+        imageRef.current.style.transform = "rotateX(0deg) rotateZ(0deg)";
     }, 1000);
     return () => clearTimeout(clear);
   });

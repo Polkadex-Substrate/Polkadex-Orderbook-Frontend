@@ -42,7 +42,7 @@ export const BalancesTemplate = () => {
     () =>
       list?.filter((e) => {
         const tokenBalance = userBalances?.find(
-          (value) => value.assetId === e.assetId,
+          (value) => value.assetId === e.assetId
         );
         // TODO: Define small amount based on the decimals of the token.
         const hasZeroAmount =
@@ -57,7 +57,7 @@ export const BalancesTemplate = () => {
           !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
         );
       }),
-    [filters.search, list, userBalances, filters.hideZero],
+    [filters.search, list, userBalances, filters.hideZero]
   );
 
   allAssets.sort((a, b) => a.name.localeCompare(b.name));
@@ -156,7 +156,7 @@ export const BalancesTemplate = () => {
                           <Table.Body striped border="squared">
                             {allAssets?.map((item) => {
                               const balance = userBalances?.find(
-                                (value) => value.assetId === item.assetId,
+                                (value) => value.assetId === item.assetId
                               );
                               return (
                                 <Table.Row key={item.assetId}>

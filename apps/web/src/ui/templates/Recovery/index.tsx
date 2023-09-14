@@ -21,7 +21,7 @@ const defaultValues = {
 };
 
 export const RecoveryTemplate = () => {
-  const [state, setState] = useState({ tags: [] });
+  const [state, setState] = useState<{ tags: string[] }>({ tags: [] });
   const { onImportTradeAccount } = useTradeWallet();
 
   const { t } = useTranslation("recovery");
@@ -70,11 +70,7 @@ export const RecoveryTemplate = () => {
                           placeholder={t("inputPlaceholder")}
                           type="accountName"
                           name="accountName"
-                          error={
-                            errors.accountName &&
-                            touched.accountName &&
-                            errors.accountName
-                          }
+                          error={touched.accountName ? errors.accountName : ""}
                         />
                         <Button
                           size="extraLarge"

@@ -30,10 +30,10 @@ export const AccessDeniedTemplate = () => {
               dangerouslySetInnerHTML={{
                 __html: t("primaryDescription", {
                   restrictedJurisdictionLink: `<a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf" target="_blank" rel="noreferrer">${t(
-                    "restrictedJurisdiction",
+                    "restrictedJurisdiction"
                   )}</a>`,
                   termOfUseLink: `<a href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf" target="_blank" rel="noreferrer">${t(
-                    "termOfUse",
+                    "termOfUse"
                   )}</a>`,
                 }),
               }}

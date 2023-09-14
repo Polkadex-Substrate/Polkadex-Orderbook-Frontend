@@ -34,7 +34,7 @@ export const ResetPasswordFormTemplate = () => {
       },
       validationSchema: newPasswordValidations,
       onSubmit: ({ code, password }) => {
-        onForgotPassword({ email, code, newPassword: password });
+        if (email) onForgotPassword({ email, code, newPassword: password });
       },
     });
 
@@ -68,22 +68,18 @@ export const ResetPasswordFormTemplate = () => {
                     </S.BoxTitle>
                     <form onSubmit={handleSubmit}>
                       <InputLine
-                        name="code"
                         label={t("card.inputEmailLabel")}
                         placeholder="000000"
-                        error={errors.code && touched.code && errors.code}
+                        error={touched.code ? errors.code : ""}
                         disabled={isLoading}
                         {...getFieldProps("code")}
                       />
                       <InputLine
-                        name="password"
                         type={view.password ? "text" : "password"}
                         label={t("card.inputPasswordLabel")}
                         placeholder={t("card.inputPasswordPlaceHolder")}
                         disabled={isLoading}
-                        error={
-                          errors.password && touched.password && errors.password
-                        }
+                        error={touched.password ? errors.password : ""}
                         {...getFieldProps("password")}
                       >
                         <S.Show
@@ -96,15 +92,12 @@ export const ResetPasswordFormTemplate = () => {
                         </S.Show>
                       </InputLine>
                       <InputLine
-                        name="repeatPassword"
                         type={view.repeatPassword ? "text" : "password"}
                         label={t("card.inputRepeatPasswordLabel")}
                         placeholder={t("card.inputRepeatPasswordPlaceHolder")}
                         disabled={isLoading}
                         error={
-                          errors.repeatPassword &&
-                          touched.repeatPassword &&
-                          errors.repeatPassword
+                          touched.repeatPassword ? errors.repeatPassword : ""
                         }
                         {...getFieldProps("repeatPassword")}
                       >
