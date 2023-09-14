@@ -1,5 +1,4 @@
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -9,45 +8,18 @@ import classNames from "classnames";
 import { AssetsProps } from "../AssetsInteraction/types";
 
 import * as S from "./styles";
+import { columns } from "./columns";
 
-import { Icons, Tokens } from "@/ui/atoms";
-const columnHelper = createColumnHelper<AssetsProps>();
+import { Icons } from "@/ui/atoms";
+import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
-const columns = [
-  columnHelper.accessor((row) => row, {
-    id: "token",
-    cell: (e) => {
-      const TokenComponent = Tokens[e.getValue().symbol] || Tokens.UNKN;
-      return (
-        <S.Token>
-          <div>
-            <TokenComponent />
-          </div>
-          <div>
-            <span>{e.getValue().symbol}</span>
-            <p> {e.getValue().name}</p>
-          </div>
-        </S.Token>
-      );
-    },
-    header: () => <span>Token</span>,
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.free_balance, {
-    id: "fundingAccount",
-    cell: (e) => <span>{e.getValue()}</span>,
-    header: () => <span>Funding Account</span>,
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.onChainBalance, {
-    id: "tradingAccount",
-    cell: (e) => <span>{e.getValue()}</span>,
-    header: () => <span>Trading Account</span>,
-    footer: (e) => e.column.id,
-  }),
-];
-
-export const AssetsTable = ({ assets }: { assets: AssetsProps[] }) => {
+export const AssetsTable = ({
+  assets,
+  onChangeAsset,
+}: {
+  assets: AssetsProps[];
+  onChangeAsset: (e: FilteredAssetProps) => void;
+}) => {
   const table = useReactTable({
     data: assets,
     columns,
@@ -79,7 +51,17 @@ export const AssetsTable = ({ assets }: { assets: AssetsProps[] }) => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row, ti) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              onClick={() =>
+                onChangeAsset({
+                  onChainBalance: row.original.onChainBalance,
+                  assetId: row.original.assetId,
+                  name: row.original.name,
+                  symbol: row.original.symbol,
+                })
+              }
+            >
               {row.getVisibleCells().map((cell) => {
                 const lastCell = table.getRowModel().rows.length === ti + 1;
                 const tdClassName = classNames({ last: lastCell });

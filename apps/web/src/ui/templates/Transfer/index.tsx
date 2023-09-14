@@ -8,23 +8,54 @@ import {
   DepositHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer } from "@polkadex/orderbook-ui/molecules";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { filterBlockedAssets } from "@orderbook/core/helpers";
+import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import * as S from "./styles";
+import * as T from "./types";
 
 export const TransferTemplate = () => {
+  const { list } = useAssetsProvider();
+  const { balances } = useBalancesProvider();
+
   const { t } = useTranslation("transfer");
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [isDeposit, setIsDeposit] = useState(false);
 
+  const filteredNonBlockedAssets = useMemo(
+    () =>
+      filterBlockedAssets(list)?.map((e) => {
+        const tokenBalance = balances?.find(
+          (value) => value.assetId === e.assetId,
+        );
+        return {
+          ...e,
+          availableBalance: tokenBalance?.onChainBalance,
+        } as T.FilteredAssetProps;
+      }),
+    [list, balances],
+  );
+
+  const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>(
+    filteredNonBlockedAssets?.[0],
+  );
+
   const onAssetsInteraction = () => setAssetsInteraction(!assetsInteraction);
   const onTransferInteraction = () => setIsDeposit(!isDeposit);
+
+  const onChangeAsset = (asset: T.FilteredAssetProps) => {
+    setSelectedAsset(asset);
+    onAssetsInteraction();
+  };
 
   return (
     <>
       <AssetsInteraction
         open={assetsInteraction}
         onClose={onAssetsInteraction}
+        onChangeAsset={onChangeAsset}
       />
       <Head>
         <title>{t("title")}</title>
@@ -48,6 +79,7 @@ export const TransferTemplate = () => {
                     isDeposit={isDeposit}
                     onTransferInteraction={onTransferInteraction}
                     onOpenAssets={onAssetsInteraction}
+                    selectedAsset={selectedAsset}
                   />
                 </S.Form>
                 <S.History>

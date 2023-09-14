@@ -42,9 +42,6 @@ export const Footer = styled.div`
         stroke: ${theme.colors.tertiaryText};
       }
     }
-    p {
-      font-size: 1.2rem;
-    }
     span {
       color: ${theme.colors.tertiaryText};
     }

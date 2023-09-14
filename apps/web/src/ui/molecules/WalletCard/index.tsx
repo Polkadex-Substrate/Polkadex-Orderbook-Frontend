@@ -1,5 +1,7 @@
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
+import { Skeleton } from "../Skeleton";
+
 import * as S from "./styles";
 
 export const WalletCard = ({
@@ -27,9 +29,13 @@ export const WalletCard = ({
         <div>
           <Icons.Wallet />
         </div>
-        <p>
-          {walletName} <span>{walletAddress}</span>
-        </p>
+        {walletAddress ? (
+          <p>
+            {walletName} <span>{walletAddress}</span>
+          </p>
+        ) : (
+          <Skeleton height="4px" width="5rem" />
+        )}
       </S.Footer>
     </S.Wrapper>
   );

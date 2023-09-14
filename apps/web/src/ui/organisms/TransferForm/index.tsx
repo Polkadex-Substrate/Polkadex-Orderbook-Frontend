@@ -1,20 +1,54 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import {
+  useExtensionWallet,
+  userMainAccountDetails,
+} from "@orderbook/core/providers/user/extensionWallet";
+import {
+  getTradeAccount,
+  useTradeWallet,
+} from "@orderbook/core/providers/user/tradeWallet";
+import {
+  transformAddress,
+  useProfile,
+} from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
 
 import { Switch, TokenCard, WalletCard } from "@/ui/molecules";
-import { Icons } from "@/ui/atoms";
+import { Icons, Tokens } from "@/ui/atoms";
+import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const TransferForm = ({
   isDeposit,
   onTransferInteraction,
   onOpenAssets,
+  selectedAsset,
 }: {
   isDeposit: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: () => void;
+  selectedAsset: FilteredAssetProps;
 }) => {
   const [state, setState] = useState(false);
+
+  const { allAccounts } = useExtensionWallet();
+  const { allBrowserAccounts } = useTradeWallet();
+
+  const { selectedAccount, userData } = useProfile();
+
+  const { tradeAddress, mainAddress } = selectedAccount;
+  const { userAccounts } = userData;
+
+  const tradingWallet = useMemo(
+    () => getTradeAccount(tradeAddress, allBrowserAccounts),
+    [allBrowserAccounts, tradeAddress],
+  );
+
+  const fundingWallet = useMemo(
+    () => userMainAccountDetails(mainAddress, allAccounts),
+    [allAccounts, mainAddress],
+  );
+
   const amountRef = useRef<HTMLInputElement | null>(null);
   return (
     <S.Main>
@@ -26,10 +60,12 @@ export const TransferForm = ({
         <S.Wallets>
           <WalletCard
             label="From"
-            walletTypeLabel="Your wallet"
+            walletTypeLabel="Extension wallet"
             walletType="Funding account"
-            walletName="Orderbook Testing"
-            walletAddress="esqd7ZhqxP8...T1pUf1vRw"
+            walletName={fundingWallet?.account?.meta.name ?? ""}
+            walletAddress={transformAddress(
+              fundingWallet?.account?.address ?? "",
+            )}
           />
           <S.WalletsButton
             isDeposit={isDeposit}
@@ -43,17 +79,17 @@ export const TransferForm = ({
           </S.WalletsButton>
           <WalletCard
             label="To"
-            walletTypeLabel="Orderbook"
+            walletTypeLabel="Orderbook wallet"
             walletType="Trading account"
-            walletName="Orderbook Testing"
-            walletAddress="esqd7ZhqxP8...T1pUf1vRw"
+            walletName={tradingWallet?.meta.name ?? ""}
+            walletAddress={transformAddress(tradingWallet?.address ?? "")}
           />
         </S.Wallets>
         <S.Form>
           <TokenCard
-            tokenIcon="USDT"
-            tokenTicker="USDT"
-            availableAmount="0.00"
+            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.symbol ?? ""}
+            availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={onOpenAssets}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>

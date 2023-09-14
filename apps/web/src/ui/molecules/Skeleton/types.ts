@@ -6,4 +6,5 @@ export type Props = {
   minHeight?: string;
   minWidth?: string;
   isLight?: boolean;
+  loading?: boolean;
 } & StyleHTMLAttributes<HTMLDivElement>;

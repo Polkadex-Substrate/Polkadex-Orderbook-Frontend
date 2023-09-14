@@ -1,5 +1,7 @@
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
 
+import { Skeleton } from "../Skeleton";
+
 import * as S from "./styles";
 
 export const TokenCard = ({
@@ -17,14 +19,24 @@ export const TokenCard = ({
   return (
     <S.Wrapper role="button" onClick={onAction}>
       <S.AsideLeft>
-        <S.TokenWrapper>
-          <Token />
-        </S.TokenWrapper>
+        <Skeleton width="4rem" height="4rem" loading={!tokenIcon}>
+          <S.TokenWrapper>
+            <Token />
+          </S.TokenWrapper>
+        </Skeleton>
         <S.TokenInfo>
-          <p>{tokenTicker}</p>
-          <span>
-            Avlb: {availableAmount} {tokenTicker}
-          </span>
+          <Skeleton width="5rem" height="1.5rem" loading={!tokenTicker}>
+            <p>{tokenTicker}</p>
+          </Skeleton>
+          <Skeleton
+            width="8rem"
+            height="1.5rem"
+            loading={!availableAmount && !tokenTicker}
+          >
+            <span>
+              Avlb: {availableAmount} {tokenTicker}
+            </span>
+          </Skeleton>
         </S.TokenInfo>
       </S.AsideLeft>
       <S.AsideRight>

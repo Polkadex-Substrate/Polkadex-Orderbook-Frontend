@@ -1,10 +1,18 @@
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5rem;
-  padding: 1.5rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    padding: 2rem;
+    cursor: pointer;
+    transition: background-color ease-in 0.2s;
+    border-radius: 0.5rem;
+    &:hover {
+      background: ${theme.colors.tertiaryBackgroundOpacity};
+    }
+  `}
 `;
 
 export const AsideLeft = styled.div`

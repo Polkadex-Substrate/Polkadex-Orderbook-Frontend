@@ -12,13 +12,16 @@ import * as T from "./types";
 
 import { Icons } from "@/ui/atoms";
 import { Checkbox, Search } from "@/ui/molecules";
+import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const AssetsInteraction = ({
   open,
   onClose,
+  onChangeAsset,
 }: {
   open: boolean;
   onClose: (e: boolean) => void;
+  onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
@@ -128,7 +131,10 @@ export const AssetsInteraction = ({
                     <AssetsTableSkeleton />
                   ) : (
                     <S.ModalContentTable>
-                      <AssetsTable assets={assets} />
+                      <AssetsTable
+                        assets={assets}
+                        onChangeAsset={onChangeAsset}
+                      />
                     </S.ModalContentTable>
                   )}
                 </S.ModalContent>
