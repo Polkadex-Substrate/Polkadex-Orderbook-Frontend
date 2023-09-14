@@ -29,12 +29,14 @@ export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLDivElement> =
         ref={mergeRefs(context.menuContentRef, ref)}
         {...menuProps}
       >
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {[...state.collection].map((value) =>
           value.type === "section" ? (
             <Section key={value.key} item={value} state={state} />
           ) : (
             <ItemComponent key={value.key} item={value} state={state} />
-          ),
+          )
         )}
       </S.Menu>
     );

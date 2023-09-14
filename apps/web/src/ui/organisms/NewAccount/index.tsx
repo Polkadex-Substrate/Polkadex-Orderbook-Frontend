@@ -161,7 +161,9 @@ export const NewAccount = ({
                       {state.status && !state.isImport && (
                         <ImportAccountForm
                           onCancel={() => handleCancel(!state.status, true)}
-                          defaultImportJson={tradeInfo.defaultImportActive}
+                          defaultImportJson={
+                            tradeInfo.defaultImportActive ?? false
+                          }
                         />
                       )}
                     </Card>

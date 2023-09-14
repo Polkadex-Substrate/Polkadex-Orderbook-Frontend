@@ -1,4 +1,4 @@
-import { useRef, MouseEvent } from "react";
+import { useRef, MouseEvent, MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Icon,
@@ -99,7 +99,7 @@ export const OrderbookTable = ({
   lightMode,
   loading,
 }: T.Props) => {
-  const contentRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const {
     quoteUnit,
@@ -112,7 +112,7 @@ export const OrderbookTable = ({
   } = useOrderbookTable({
     isSell,
     orders: [...orders],
-    contentRef,
+    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
   });
 
   const { t: translation } = useTranslation("organisms");

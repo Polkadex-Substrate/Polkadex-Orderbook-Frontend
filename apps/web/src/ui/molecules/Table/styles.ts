@@ -125,7 +125,7 @@ const bgStyleVariants = ({ theme, fill }: bgVariants<T.HeaderCustomProps>) =>
       },
       ghost: {
         "& th": {
-          backgroundColor: `${theme.colors[fill]}33`,
+          backgroundColor: `${theme.colors[fill ?? "primary"]}33`,
         },
       },
       outline: {

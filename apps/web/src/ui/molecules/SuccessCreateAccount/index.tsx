@@ -12,8 +12,8 @@ type Props = {
   description: string;
   mnemonic?: string;
   account?: {
-    name: string;
-    address: string;
+    name?: string;
+    address?: string;
   };
 };
 export const SuccessCreateAccount = ({

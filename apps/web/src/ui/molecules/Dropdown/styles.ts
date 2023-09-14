@@ -137,8 +137,10 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
       },
     },
   }),
-  color
-  bgStyleVariants,
+  color,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  bgStyleVariants
 );
 
 export const Selected = styled("path")(({ theme }) =>

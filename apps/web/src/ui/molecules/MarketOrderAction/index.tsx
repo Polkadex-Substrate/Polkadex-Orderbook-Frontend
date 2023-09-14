@@ -242,7 +242,7 @@ const ProtectPassword = () => {
     validationSchema: buySellValidation,
     onSubmit: (values) => {
       isValidSize &&
-        tradeAccount.isLocked &&
+        tradeAccount?.isLocked &&
         tradeWalletState.onUnlockTradeAccount({
           address: currTradeAddr,
           password: values.password,

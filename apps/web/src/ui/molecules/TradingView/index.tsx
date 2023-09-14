@@ -69,12 +69,15 @@ export const TradingView = () => {
   const getData = useCallback(
     async (resolution: ResolutionString, from: number, to: number) => {
       try {
-        const klines = await onHandleKlineFetch({
-          market: currentMarket?.m,
-          resolution: resolution,
-          from: new Date(from * 1000),
-          to: new Date(to * 1000),
-        });
+        if (!currentMarket?.m) return [];
+
+        const klines =
+          (await onHandleKlineFetch({
+            market: currentMarket?.m,
+            resolution: resolution,
+            from: new Date(from * 1000),
+            to: new Date(to * 1000),
+          })) ?? [];
 
         if (klines.length === 0) {
           return [];
@@ -103,7 +106,7 @@ export const TradingView = () => {
         return error;
       }
     },
-    [currentMarket, onHandleKlineFetch],
+    [currentMarket, onHandleKlineFetch]
   );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
@@ -130,15 +133,16 @@ export const TradingView = () => {
         async resolveSymbol(symbolName, onResolve, onError) {
           const symbols = getAllSymbols();
           const symbolItem = symbols.find(
-            ({ full_name: fullName }) => fullName === symbolName,
+            ({ full_name: fullName }) => fullName === symbolName
           );
           if (!symbolItem) {
             onError("cannot resolve symbol");
             return;
           }
 
-          const pricePrecision =
-            decimalPlaces(currentMarket?.price_tick_size) || 1;
+          const pricePrecision = decimalPlaces(
+            currentMarket?.price_tick_size ?? 1
+          );
           const pricescale = Math.pow(10, pricePrecision);
 
           const symbolInfo = {
@@ -178,16 +182,18 @@ export const TradingView = () => {
           }
         },
         subscribeBars(symbolInfo, resolution, onTick) {
-          onFetchKlineChannel({
-            market: currentMarket?.m,
-            interval: resolution,
-            onUpdateTradingViewRealTime: onTick,
-          });
+          if (currentMarket?.m) {
+            onFetchKlineChannel({
+              market: currentMarket?.m,
+              interval: resolution,
+              onUpdateTradingViewRealTime: onTick,
+            });
+          }
         },
         unsubscribeBars(listenerGuid) {
           console.log(
             "[unsubscribeBars]: Method call with subscriberUID:",
-            listenerGuid,
+            listenerGuid
           );
         },
       },
@@ -246,7 +252,7 @@ export const TradingView = () => {
         tvWidget?.current
           ?.changeTheme(isDarkTheme ? "Dark" : "Light")
           .then(() => {
-            tvWidget?.current.applyOverrides({
+            tvWidget?.current?.applyOverrides({
               ...options(isDarkTheme).overrides,
             });
           });

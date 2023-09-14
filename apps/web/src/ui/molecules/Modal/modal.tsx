@@ -27,7 +27,7 @@ const Modal: T.ModalComponent = ({
   return (
     <ModalProvider value={context}>
       <CSSTransition
-        key={S.Overlay}
+        key={S.Overlay.toString()}
         in={context.state.isOpen}
         timeout={120}
         unmountOnExit
@@ -42,8 +42,8 @@ const Modal: T.ModalComponent = ({
                 isBlur={isBlur}
                 placement={placement}
                 isFull={isFull}
-                {...context.underlayProps}
                 ref={overlayRef}
+                {...context.underlayProps}
               >
                 <S.Container
                   bgStyle={bgStyle}
