@@ -17,7 +17,7 @@ export const TransferTemplate = () => {
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [isDeposit, setIsDeposit] = useState(false);
 
-  const onAssetsInteraction = (value = false) => setAssetsInteraction(value);
+  const onAssetsInteraction = () => setAssetsInteraction(!assetsInteraction);
   const onTransferInteraction = () => setIsDeposit(!isDeposit);
 
   return (
@@ -47,7 +47,7 @@ export const TransferTemplate = () => {
                   <TransferForm
                     isDeposit={isDeposit}
                     onTransferInteraction={onTransferInteraction}
-                    onOpenAssets={() => onAssetsInteraction(true)}
+                    onOpenAssets={onAssetsInteraction}
                   />
                 </S.Form>
                 <S.History>

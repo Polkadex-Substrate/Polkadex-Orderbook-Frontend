@@ -46,8 +46,8 @@ export const DepositHistory = () => {
           status: e.status,
           txn_type: e.txn_type,
           token: {
-            ticker: token.symbol,
-            name: token.name,
+            ticker: token?.symbol,
+            name: token?.name,
           },
         };
       }),

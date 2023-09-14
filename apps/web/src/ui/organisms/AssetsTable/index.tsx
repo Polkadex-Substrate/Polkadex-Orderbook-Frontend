@@ -24,8 +24,8 @@ const columns = [
             <TokenComponent />
           </div>
           <div>
-            <p> {e.getValue().name}</p>
             <span>{e.getValue().symbol}</span>
+            <p> {e.getValue().name}</p>
           </div>
         </S.Token>
       );
@@ -33,15 +33,15 @@ const columns = [
     header: () => <span>Token</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.reserved_balance, {
+  columnHelper.accessor((row) => row.free_balance, {
     id: "fundingAccount",
-    cell: (e) => <span>$ {e.getValue()}</span>,
+    cell: (e) => <span>{e.getValue()}</span>,
     header: () => <span>Funding Account</span>,
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.onChainBalance, {
     id: "tradingAccount",
-    cell: (e) => <span>$ {e.getValue()}</span>,
+    cell: (e) => <span>{e.getValue()}</span>,
     header: () => <span>Trading Account</span>,
     footer: (e) => e.column.id,
   }),
@@ -61,15 +61,17 @@ export const AssetsTable = ({ assets }: { assets: AssetsProps[] }) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                  <div>
-                    <Icons.IncreaseFilter />
-                  </div>
+                  <S.Thead>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                    <div>
+                      <Icons.IncreaseFilter />
+                    </div>
+                  </S.Thead>
                 </th>
               ))}
             </tr>

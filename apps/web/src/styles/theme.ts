@@ -69,7 +69,7 @@ const defaultTheme = {
     orange: "#F2994A",
     purple: "#6745D2",
     blue: "#0090E1",
-    overlayOpacity: "#00000030",
+    overlayOpacity: "#0000007F",
     light: "rgba(0, 0, 0, 0.08)",
     red: "#F31260",
   },

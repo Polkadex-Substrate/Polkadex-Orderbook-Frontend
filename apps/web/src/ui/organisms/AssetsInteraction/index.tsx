@@ -6,6 +6,7 @@ import { defaultConfig } from "@orderbook/core/config";
 
 import { AssetsTable } from "../AssetsTable";
 
+import { AssetsTableSkeleton } from "./skeleton";
 import * as S from "./styles";
 import * as T from "./types";
 
@@ -21,22 +22,30 @@ export const AssetsInteraction = ({
 }) => {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
-  const { list, loading: isAssetsFetching } = useAssetsProvider();
-  const { balances: userBalances, loading: isBalanceFetching } =
-    useBalancesProvider();
+  const { list, loading } = useAssetsProvider();
+  const { balances } = useBalancesProvider();
 
   const assets = useMemo(
     () =>
       list
         ?.map((e: T.AssetsProps) => {
-          const tokenBalance = userBalances?.find(
+          const tokenBalance = balances?.find(
             (value) => value.assetId === e.assetId,
           );
+          const free_balance =
+            tokenBalance?.free_balance === "0"
+              ? "0.00"
+              : tokenBalance?.free_balance || "0.00";
+
+          const onChainBalance =
+            tokenBalance?.onChainBalance === "0"
+              ? "0.00"
+              : tokenBalance?.onChainBalance || "0.00";
+
           return {
             ...e,
-            free_balance: tokenBalance?.free_balance ?? "0",
-            onChainBalance: tokenBalance?.onChainBalance ?? "0",
-            reserved_balance: tokenBalance?.reserved_balance ?? "0",
+            free_balance,
+            onChainBalance,
           };
         })
         ?.filter((e: T.AssetsProps) => {
@@ -54,24 +63,25 @@ export const AssetsInteraction = ({
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, userBalances, filters.hideZero],
+    [filters.search, list, balances, filters.hideZero],
   );
 
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
+        as="div"
         open={open}
         onClose={onClose}
         style={{ position: "relative", zIndex: 100 }}
       >
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+          enter="enter"
+          enterFrom="fadeEnterFrom"
+          enterTo="fadEenterTo"
+          leave="leave"
+          leaveFrom="fadeLeaveFrom"
+          leaveTo="fadeLeaveTo"
         >
           <S.Overlay />
         </Transition.Child>
@@ -79,15 +89,15 @@ export const AssetsInteraction = ({
           <S.ModalWrapper>
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              enter="enter"
+              enterFrom="transformEnterFrom"
+              enterTo="transformEnterTo"
+              leave="leave"
+              leaveFrom="transformLeaveFrom"
+              leaveTo="transformLeaveTo"
             >
               <S.ModalPanel>
-                <S.ModalTitle>
+                <S.ModalTitle onClick={onClose}>
                   <Icons.SingleArrowLeft />
                 </S.ModalTitle>
                 <S.ModalContent>
@@ -114,9 +124,13 @@ export const AssetsInteraction = ({
                       placeholder="Search"
                     />
                   </S.ModalContentHeader>
-                  <S.ModalContentTable>
-                    <AssetsTable assets={assets} />
-                  </S.ModalContentTable>
+                  {loading ? (
+                    <AssetsTableSkeleton />
+                  ) : (
+                    <S.ModalContentTable>
+                      <AssetsTable assets={assets} />
+                    </S.ModalContentTable>
+                  )}
                 </S.ModalContent>
               </S.ModalPanel>
             </Transition.Child>

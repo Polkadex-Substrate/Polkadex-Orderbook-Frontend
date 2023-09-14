@@ -4,24 +4,21 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     flex: 1;
     table {
-      /* table-layout: fixed; */
-      border-collapse: collapse;
-      border-radius: 1rem;
-      text-align: left;
-
+      border-spacing: 0 0.5rem;
+      table-layout: fixed;
+      /* border-collapse: collapse; */
       width: 100%;
       td {
-        padding: 1.5rem 1rem 1.5rem 1rem;
-        border-bottom: 1px solid ${theme.colors.tertiaryBackgroundOpacity};
-        &.last {
-          border-bottom: none;
-        }
+        padding: 1rem;
       }
-
-      tr:hover {
-        td {
-          transition: background-color ease 0.4s;
+      tr {
+        &:nth-child(even) td {
           background: ${theme.colors.secondaryBackgroundOpacity};
+        }
+        td {
+          text-align: right;
+          cursor: pointer;
+
           &:first-child {
             border-top-left-radius: 1rem;
             border-bottom-left-radius: 1rem;
@@ -30,6 +27,12 @@ export const Wrapper = styled.div`
             border-top-right-radius: 1rem;
             border-bottom-right-radius: 1rem;
           }
+        }
+      }
+      tr:hover {
+        td {
+          transition: background-color ease 0.4s;
+          background: ${theme.colors.secondaryBackground};
         }
       }
 
@@ -46,6 +49,9 @@ export const Wrapper = styled.div`
       }
     }
   `}
+`;
+export const Thead = styled.div`
+  white-space: nowrap;
 `;
 
 export const Date = styled.div`
@@ -68,6 +74,7 @@ export const Token = styled.div`
   ${({ theme }) => css`
     display: flex;
     gap: 0.5rem;
+    text-align: left;
     div {
       &:first-child {
         width: 3.5rem;
@@ -82,7 +89,14 @@ export const Token = styled.div`
         flex-direction: column;
         gap: 0.1rem;
         span {
+          font-weight:;
+        }
+        p {
           opacity: 0.5;
+          &::first-letter {
+            text-transform: uppercase;
+          }
+          text-transform: lowercase;
         }
       }
     }
