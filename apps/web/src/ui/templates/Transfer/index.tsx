@@ -8,7 +8,7 @@ import {
   DepositHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer } from "@polkadex/orderbook-ui/molecules";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
@@ -38,9 +38,7 @@ export const TransferTemplate = () => {
     [list, balances],
   );
 
-  const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>(
-    filteredNonBlockedAssets?.[0],
-  );
+  const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
 
   const onAssetsInteraction = () => setAssetsInteraction(!assetsInteraction);
   const onTransferInteraction = () => setIsDeposit(!isDeposit);
@@ -50,10 +48,15 @@ export const TransferTemplate = () => {
     onAssetsInteraction();
   };
 
+  useEffect(() => {
+    if (!selectedAsset) setSelectedAsset(filteredNonBlockedAssets?.[0]);
+  }, [selectedAsset, filteredNonBlockedAssets]);
+
   return (
     <>
       <AssetsInteraction
         open={assetsInteraction}
+        selectedAssetId={selectedAsset?.assetId}
         onClose={onAssetsInteraction}
         onChangeAsset={onChangeAsset}
       />

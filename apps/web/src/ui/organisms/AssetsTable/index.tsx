@@ -16,8 +16,10 @@ import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 export const AssetsTable = ({
   assets,
   onChangeAsset,
+  selectedAssetId,
 }: {
   assets: AssetsProps[];
+  selectedAssetId?: string;
   onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
   const table = useReactTable({
@@ -50,29 +52,39 @@ export const AssetsTable = ({
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row, ti) => (
-            <tr
-              key={row.id}
-              onClick={() =>
-                onChangeAsset({
-                  onChainBalance: row.original.onChainBalance,
-                  assetId: row.original.assetId,
-                  name: row.original.name,
-                  symbol: row.original.symbol,
-                })
-              }
-            >
-              {row.getVisibleCells().map((cell) => {
-                const lastCell = table.getRowModel().rows.length === ti + 1;
-                const tdClassName = classNames({ last: lastCell });
-                return (
-                  <td className={tdClassName} key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+          {table.getRowModel().rows.map((row, ti) => {
+            const tdClassName = classNames({
+              active: row.original.assetId === selectedAssetId,
+            });
+
+            return (
+              <tr
+                className={tdClassName}
+                key={row.id}
+                onClick={() =>
+                  onChangeAsset({
+                    onChainBalance: row.original.onChainBalance,
+                    assetId: row.original.assetId,
+                    name: row.original.name,
+                    symbol: row.original.symbol,
+                  })
+                }
+              >
+                {row.getVisibleCells().map((cell) => {
+                  const lastCell = table.getRowModel().rows.length === ti + 1;
+                  const tdClassName = classNames({ last: lastCell });
+                  return (
+                    <td className={tdClassName} key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </S.Wrapper>

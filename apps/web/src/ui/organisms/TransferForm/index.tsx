@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { Fragment, MouseEvent, useMemo, useRef } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -11,10 +11,14 @@ import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
+import { useFormik } from "formik";
+import { depositValidationsTest } from "@orderbook/core/validations";
+import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
+import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 
 import * as S from "./styles";
 
-import { Switch, TokenCard, WalletCard } from "@/ui/molecules";
+import { Popover, Switch, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -27,12 +31,11 @@ export const TransferForm = ({
   isDeposit: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: () => void;
-  selectedAsset: FilteredAssetProps;
+  selectedAsset?: FilteredAssetProps;
 }) => {
-  const [state, setState] = useState(false);
-
   const { allAccounts } = useExtensionWallet();
   const { allBrowserAccounts } = useTradeWallet();
+  const { loading, onFetchDeposit } = useDepositProvider();
 
   const { selectedAccount, userData } = useProfile();
 
@@ -50,13 +53,68 @@ export const TransferForm = ({
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
+
+  const existentialBalance = useMemo(
+    () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
+    [selectedAsset?.assetId],
+  );
+
+  const handleMax = (e: MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    const onChainBalance = Number(selectedAsset?.onChainBalance);
+    if (onChainBalance > existentialBalance) {
+      const balance = onChainBalance - existentialBalance;
+      const trimmedBalance = trimFloat({ value: balance });
+      setFieldValue("amount", trimmedBalance);
+    }
+    // TODO?: Handle Error...
+  };
+  const {
+    touched,
+    handleSubmit,
+    errors,
+    getFieldProps,
+    values,
+    isValid,
+    dirty,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      amount: "0.0",
+      isDeposit: true,
+    },
+    validationSchema: depositValidationsTest,
+    validateOnBlur: true,
+    onSubmit: ({ amount, isDeposit }) => {
+      if (!fundingWallet) return;
+      // TODO?: Handle Error...
+
+      const asset = isAssetPDEX(selectedAsset?.assetId)
+        ? { polkadex: null }
+        : { asset: selectedAsset?.assetId };
+
+      if (isDeposit) {
+        onFetchDeposit({
+          // TODO: Fix asset types
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          asset,
+          amount: amount,
+          mainAccount: fundingWallet,
+        });
+      }
+    },
+  });
   return (
     <S.Main>
       <S.Header>
-        <Switch isActive={state} onChange={() => setState(!state)} />
+        <Switch
+          isActive={values.isDeposit}
+          onChange={() => setFieldValue("isDeposit", !values.isDeposit)}
+        />
         <span>Transfer for other Polkadex accounts</span>
       </S.Header>
-      <S.Content>
+      <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
             label="From"
@@ -94,16 +152,36 @@ export const TransferForm = ({
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>
-              <input ref={amountRef} placeholder="Enter an amount" />
+              <Popover placement="top left" isOpen={!!errors.amount}>
+                <Popover.Trigger>
+                  <div />
+                </Popover.Trigger>
+                <Popover.Content>
+                  <S.Errors>
+                    <div>
+                      <Icons.Alert />
+                    </div>
+                    {touched.amount && errors.amount && <p>{errors.amount}</p>}
+                  </S.Errors>
+                </Popover.Content>
+              </Popover>
+              <input
+                ref={amountRef}
+                placeholder="Enter an amount"
+                {...getFieldProps("amount")}
+              />
               <span>$0.00</span>
             </div>
-            <button type="button" onClick={() => window.alert("MAX")}>
+
+            <button type="button" onClick={handleMax}>
               MAX
             </button>
           </S.Amount>
         </S.Form>
         <S.Footer>
-          <button type="submit">Transfer</button>
+          <button disabled={!(isValid && dirty) || loading} type="submit">
+            Transfer
+          </button>
         </S.Footer>
       </S.Content>
     </S.Main>

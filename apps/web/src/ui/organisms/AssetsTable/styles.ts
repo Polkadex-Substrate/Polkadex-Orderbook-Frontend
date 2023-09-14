@@ -12,8 +12,18 @@ export const Wrapper = styled.div`
         padding: 1rem;
       }
       tr {
+        &.active td {
+          border-top: 1px solid ${theme.colors.primary};
+          border-bottom: 1px solid ${theme.colors.primary};
+          &:last-child {
+            border-right: 1px solid ${theme.colors.primary};
+          }
+          &:first-child {
+            border-left: 1px solid ${theme.colors.primary};
+          }
+        }
         &:nth-child(even) td {
-          background: ${theme.colors.secondaryBackgroundOpacity};
+          background: ${theme.colors.tertiaryBackgroundOpacity};
         }
         td {
           text-align: right;

@@ -27,13 +27,13 @@ export const columns = [
     header: () => <span>Token</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.free_balance, {
+  columnHelper.accessor((row) => row.onChainBalance, {
     id: "fundingAccount",
     cell: (e) => <span>{e.getValue()}</span>,
     header: () => <span>Funding Account</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.onChainBalance, {
+  columnHelper.accessor((row) => row.free_balance, {
     id: "tradingAccount",
     cell: (e) => <span>{e.getValue()}</span>,
     header: () => <span>Trading Account</span>,

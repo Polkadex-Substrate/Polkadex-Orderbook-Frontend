@@ -18,8 +18,10 @@ export const AssetsInteraction = ({
   open,
   onClose,
   onChangeAsset,
+  selectedAssetId,
 }: {
   open: boolean;
+  selectedAssetId?: string;
   onClose: (e: boolean) => void;
   onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
@@ -133,6 +135,7 @@ export const AssetsInteraction = ({
                     <S.ModalContentTable>
                       <AssetsTable
                         assets={assets}
+                        selectedAssetId={selectedAssetId}
                         onChangeAsset={onChangeAsset}
                       />
                     </S.ModalContentTable>

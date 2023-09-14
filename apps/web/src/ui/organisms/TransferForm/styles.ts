@@ -23,7 +23,7 @@ export const Header = styled.div`
   }
 `;
 
-export const Content = styled.div`
+export const Content = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -76,6 +76,27 @@ export const Form = styled.div`
     @media screen and (min-width: 640px) {
       flex-direction: row;
       align-items: center;
+    }
+  `}
+`;
+
+export const Errors = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    div {
+      width: 1.3rem;
+      height: 1.3rem;
+      svg {
+        fill: ${theme.colors.primary};
+      }
+    }
+    background: ${theme.colors.white};
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    p {
+      color: ${theme.colors.inverse};
     }
   `}
 `;
