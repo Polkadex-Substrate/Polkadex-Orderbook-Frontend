@@ -7,6 +7,7 @@ export const Wrapper = styled.div`
       /* table-layout: fixed; */
       border-collapse: collapse;
       border-radius: 1rem;
+      text-align: left;
 
       width: 100%;
       td {
@@ -77,6 +78,7 @@ export const Token = styled.div`
       }
       &:last-child {
         display: flex;
+        text-align: left;
         flex-direction: column;
         gap: 0.1rem;
         span {

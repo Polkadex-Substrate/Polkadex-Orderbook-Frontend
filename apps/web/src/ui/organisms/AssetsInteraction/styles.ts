@@ -71,6 +71,4 @@ export const ModalContentHeader = styled.div`
   `}
 `;
 
-export const ModalContentTable = styled.div`
-  ${({ theme }) => css``}
-`;
+export const ModalContentTable = styled.div``;

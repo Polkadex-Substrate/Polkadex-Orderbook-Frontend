@@ -4,20 +4,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
 import classNames from "classnames";
 
+import { AssetsProps } from "../AssetsInteraction/types";
+
 import * as S from "./styles";
-import { Data, defaultData } from "./fakeData";
 
 import { Icons, Tokens } from "@/ui/atoms";
-const columnHelper = createColumnHelper<Data>();
+const columnHelper = createColumnHelper<AssetsProps>();
 
 const columns = [
-  columnHelper.accessor((row) => row.token, {
+  columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const TokenComponent = Tokens[e.getValue().icon] || Tokens.UNKN;
+      const TokenComponent = Tokens[e.getValue().symbol] || Tokens.UNKN;
       return (
         <S.Token>
           <div>
@@ -25,7 +25,7 @@ const columns = [
           </div>
           <div>
             <p> {e.getValue().name}</p>
-            <span>{e.getValue().ticker}</span>
+            <span>{e.getValue().symbol}</span>
           </div>
         </S.Token>
       );
@@ -33,13 +33,13 @@ const columns = [
     header: () => <span>Token</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.fundingAccount, {
+  columnHelper.accessor((row) => row.reserved_balance, {
     id: "fundingAccount",
     cell: (e) => <span>$ {e.getValue()}</span>,
     header: () => <span>Funding Account</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.tradingAccount, {
+  columnHelper.accessor((row) => row.onChainBalance, {
     id: "tradingAccount",
     cell: (e) => <span>$ {e.getValue()}</span>,
     header: () => <span>Trading Account</span>,
@@ -47,10 +47,9 @@ const columns = [
   }),
 ];
 
-export const AssetsTable = () => {
-  const [state] = useState<Data[]>([...defaultData]);
+export const AssetsTable = ({ assets }: { assets: AssetsProps[] }) => {
   const table = useReactTable({
-    data: state,
+    data: assets,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
