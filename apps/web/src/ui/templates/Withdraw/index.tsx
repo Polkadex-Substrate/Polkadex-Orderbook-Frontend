@@ -78,7 +78,8 @@ export const WithdrawTemplate = () => {
   );
 
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const { balances: userBalances } = useBalancesProvider();
+  const { balances: userBalances, loading: fetchingAvailaleBalance } =
+    useBalancesProvider();
 
   const routedAsset = router.query.id as string;
   const shortAddress =
@@ -315,8 +316,14 @@ export const WithdrawTemplate = () => {
                         <S.Available>
                           {tc("available")}{" "}
                           <strong>
-                            {availableAmount?.free_balance || 0}{" "}
-                            {selectedAsset?.symbol}
+                            {fetchingAvailaleBalance ? (
+                              t("loading")
+                            ) : (
+                              <>
+                                {availableAmount?.free_balance || 0}{" "}
+                                {selectedAsset?.symbol}
+                              </>
+                            )}
                           </strong>
                         </S.Available>
                       </S.SelectInput>

@@ -29,7 +29,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     selectGetAsset,
     loading: isAssetFetching,
   } = useAssetsProvider();
-  const { api, connected } = useNativeApi();
+  const { api } = useNativeApi();
 
   const { onHandleError } = useSettingsProvider();
 
@@ -52,7 +52,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         };
       });
     },
-    [],
+    []
   );
 
   const onBalancesFetch = useCallback(async () => {
@@ -72,7 +72,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
           const chainBalance = await fetchOnChainBalance(
             api,
             asset.assetId,
-            mainAddress,
+            mainAddress
           );
           return {
             assetId: asset.assetId.toString(),
@@ -87,7 +87,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
           A.balancesData({
             balances: await Promise.all(list),
             timestamp: new Date().getTime(),
-          }),
+          })
         );
       }
     } catch (error) {
@@ -115,7 +115,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
-      (balance) => balance?.assetId?.toString() === assetId,
+      (balance) => balance?.assetId?.toString() === assetId
     );
     if (!balance?.assetId) return "0";
     return balance.free_balance;
@@ -132,7 +132,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         reserved_balance: msg.reserved,
       };
     },
-    [selectGetAsset],
+    [selectGetAsset]
   );
 
   const onBalanceUpdate = useCallback(
@@ -144,24 +144,13 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [onHandleError, updateBalanceFromEvent],
+    [onHandleError, updateBalanceFromEvent]
   );
 
   useEffect(() => {
-    if (
-      !isProfileFetching &&
-      !isAssetFetching &&
-      connected &&
-      state.balances?.length === 0
-    )
+    if (!isProfileFetching && !isAssetFetching && state.balances?.length === 0)
       onBalancesFetch();
-  }, [
-    onBalancesFetch,
-    isProfileFetching,
-    isAssetFetching,
-    connected,
-    state.balances,
-  ]);
+  }, [onBalancesFetch, isProfileFetching, isAssetFetching, state.balances]);
 
   // balance updates are give to main address
   useEffect(() => {
