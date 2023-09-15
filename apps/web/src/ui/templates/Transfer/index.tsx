@@ -7,8 +7,9 @@ import {
   DepositHistory,
   TransferFormDeposit,
   TransferFormWithdraw,
+  WithdrawHistory,
 } from "@polkadex/orderbook-ui/organisms";
-import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
+import { Footer, Loading, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
@@ -16,12 +17,17 @@ import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProv
 
 import * as S from "./styles";
 import * as T from "./types";
+import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 
 export const TransferTemplate = () => {
   const { list } = useAssetsProvider();
   const { balances } = useBalancesProvider();
+  const { loading: depositLoading } = useDepositProvider();
+  const { loading: withdrawLoading } = useWithdrawsProvider();
 
   const { t } = useTranslation("transfer");
+
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [isDeposit, setIsDeposit] = useState(true);
 
@@ -29,14 +35,14 @@ export const TransferTemplate = () => {
     () =>
       filterBlockedAssets(list)?.map((e) => {
         const tokenBalance = balances?.find(
-          (value) => value.assetId === e.assetId,
+          (value) => value.assetId === e.assetId
         );
         return {
           ...e,
           availableBalance: tokenBalance?.onChainBalance,
         } as T.FilteredAssetProps;
       }),
-    [list, balances],
+    [list, balances]
   );
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
@@ -78,29 +84,38 @@ export const TransferTemplate = () => {
                 </h2>
               </S.Header>
               <S.Content>
-                <S.Form>
-                  <S.Title>
-                    <Switch onChange={() => window.alert("Chaing..")} />
-                    <span>Transfer for other Polkadex accounts</span>
-                  </S.Title>
-                  <S.Container>
-                    {isDeposit ? (
-                      <TransferFormDeposit
-                        onTransferInteraction={onTransferInteraction}
-                        onOpenAssets={onAssetsInteraction}
-                        selectedAsset={selectedAsset}
-                      />
-                    ) : (
-                      <TransferFormWithdraw
-                        onTransferInteraction={onTransferInteraction}
-                        onOpenAssets={onAssetsInteraction}
-                        selectedAsset={selectedAsset}
-                      />
-                    )}
-                  </S.Container>
-                </S.Form>
+                <Loading
+                  style={{ maxWidth: "100rem" }}
+                  isVisible={depositLoading || withdrawLoading}
+                  hasBg={false}
+                  message=""
+                  spinner="Keyboard"
+                >
+                  <S.Form>
+                    <S.Title>
+                      <Switch onChange={() => window.alert("Chaing..")} />
+                      <span>Transfer for other Polkadex accounts</span>
+                    </S.Title>
+                    <S.Container>
+                      {isDeposit ? (
+                        <TransferFormDeposit
+                          onTransferInteraction={onTransferInteraction}
+                          onOpenAssets={onAssetsInteraction}
+                          selectedAsset={selectedAsset}
+                        />
+                      ) : (
+                        <TransferFormWithdraw
+                          onTransferInteraction={onTransferInteraction}
+                          onOpenAssets={onAssetsInteraction}
+                          selectedAsset={selectedAsset}
+                        />
+                      )}
+                    </S.Container>
+                  </S.Form>
+                </Loading>
+
                 <S.History>
-                  <DepositHistory />
+                  {isDeposit ? <DepositHistory /> : <WithdrawHistory />}
                 </S.History>
               </S.Content>
             </S.ContainerMain>

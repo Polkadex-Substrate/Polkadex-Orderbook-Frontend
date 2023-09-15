@@ -26,6 +26,7 @@ export * from "./Header";
 export * from "./TransferFormWithdraw";
 export * from "./TransferFormDeposit";
 export * from "./DepositHistory";
+export * from "./WithdrawHistory";
 export * from "./AssetsInteraction";
 export * from "./AssetsTable";
 export * from "./UnlockModal";

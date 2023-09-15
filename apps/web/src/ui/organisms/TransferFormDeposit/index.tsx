@@ -14,7 +14,7 @@ import { useDepositProvider } from "@orderbook/core/providers/user/depositProvid
 
 import * as S from "./styles";
 
-import { LoadingSpinner, Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import { Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -39,14 +39,14 @@ export const TransferFormDeposit = ({
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress],
+    [allAccounts, mainAddress]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const existentialBalance = useMemo(
     () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
-    [selectedAsset?.assetId],
+    [selectedAsset?.assetId]
   );
 
   const handleMax = (e: MouseEvent<HTMLElement>) => {
@@ -102,7 +102,7 @@ export const TransferFormDeposit = ({
           walletType="Funding account"
           walletName={fundingWallet?.account?.meta.name ?? ""}
           walletAddress={transformAddress(
-            fundingWallet?.account?.address ?? "",
+            fundingWallet?.account?.address ?? ""
           )}
         />
         <S.WalletsButton type="button" onClick={onTransferInteraction}>
@@ -154,13 +154,7 @@ export const TransferFormDeposit = ({
       </S.Form>
       <S.Footer>
         <button disabled={!(isValid && dirty) || loading} type="submit">
-          <LoadingSpinner
-            loading={loading}
-            color="white"
-            style={{ marginRight: "0.5rem" }}
-          >
-            Transfer
-          </LoadingSpinner>
+          Transfer
         </button>
       </S.Footer>
     </S.Content>
