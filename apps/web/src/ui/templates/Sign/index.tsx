@@ -86,22 +86,18 @@ export const SignTemplate = () => {
                   {!defaultConfig.signUpDisabled ? (
                     <form onSubmit={handleSubmit}>
                       <InputLine
-                        name="email"
                         label={t("card.input.email.label")}
                         placeholder={t("card.input.email.placeHolder")}
-                        error={errors.email && touched.email && errors.email}
+                        error={touched.email ? errors.email : ""}
                         disabled={loading}
                         {...getFieldProps("email")}
                       />
                       <InputLine
-                        name="password"
                         type={view.password ? "text" : "password"}
                         label={t("card.input.password.label")}
                         placeholder={t("card.input.password.placeHolder")}
                         disabled={loading}
-                        error={
-                          errors.password && touched.password && errors.password
-                        }
+                        error={touched.password ? errors.password : ""}
                         {...getFieldProps("password")}
                       >
                         <S.Show
@@ -114,15 +110,12 @@ export const SignTemplate = () => {
                         </S.Show>
                       </InputLine>
                       <InputLine
-                        name="repeatPassword"
                         type={view.repeatPassword ? "text" : "password"}
                         label={t("card.input.repeatPassword.label")}
                         placeholder={t("card.input.repeatPassword.placeHolder")}
                         disabled={loading}
                         error={
-                          errors.repeatPassword &&
-                          touched.repeatPassword &&
-                          errors.repeatPassword
+                          touched.repeatPassword ? errors.repeatPassword : ""
                         }
                         {...getFieldProps("repeatPassword")}
                       >
@@ -148,7 +141,7 @@ export const SignTemplate = () => {
                           onChange={() =>
                             setFieldValue(
                               "termsAccepted",
-                              !values.termsAccepted,
+                              !values.termsAccepted
                             )
                           }
                         >

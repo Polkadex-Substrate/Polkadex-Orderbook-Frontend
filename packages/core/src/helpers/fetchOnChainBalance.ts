@@ -1,9 +1,8 @@
 import { ApiPromise } from "@polkadot/api";
 import BigNumber from "bignumber.js";
+import { UNIT_BN } from "@orderbook/core/constants";
 
 import { isAssetPDEX } from "./isAssetPDEX";
-
-import { UNIT_BN } from "@/constants";
 
 export const fetchOnChainBalance = async (
   api: ApiPromise,

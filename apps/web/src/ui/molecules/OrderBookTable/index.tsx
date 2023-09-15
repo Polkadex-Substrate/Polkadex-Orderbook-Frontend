@@ -31,7 +31,7 @@ export const OrderBookTable = ({
         isPriceUp={isPriceUp}
         hasFilter={false}
         precision={precision}
-        loading={!hasMarket}
+        loading={!hasMarket || loading}
       />
 
       <OrderbookTable

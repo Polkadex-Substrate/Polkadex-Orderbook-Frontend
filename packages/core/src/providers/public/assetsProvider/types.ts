@@ -19,7 +19,7 @@ export type AssetsContextProps = AssetsState & {
   fetchAssets: () => void;
   selectGetAsset: (
     assetId: string | number | Record<string, string>,
-  ) => IPublicAsset;
+  ) => IPublicAsset | undefined;
 };
 
 export type AssetsProviderProps = PropsWithChildren<{

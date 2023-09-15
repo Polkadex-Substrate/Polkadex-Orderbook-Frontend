@@ -44,10 +44,12 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   } = useProfile();
 
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
-  const [selectedTradeAccount, setSelectedTradeAccount] =
-    useState<KeyringPair>(null);
-  const [selectedMainAccount, setSelectedMainAccount] =
-    useState<ExtensionAccount>(null);
+  const [selectedTradeAccount, setSelectedTradeAccount] = useState<
+    KeyringPair | undefined
+  >();
+  const [selectedMainAccount, setSelectedMainAccount] = useState<
+    ExtensionAccount | undefined
+  >();
   const { onUserSelectAccount } = useProfile();
 
   // TODO: Missing dependencies
@@ -79,10 +81,11 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   const handleClick = (addr: string) => {
     const acc = getTradeAccount(addr, tradingAccounts);
-    const userAcc = allUserAccounts.find(
+    const userAcc = allUserAccounts?.find(
       (acc) => acc.tradeAddress?.toLowerCase() === addr?.toLowerCase(),
     );
-    const mainAcc = userMainAccountDetails(userAcc.mainAddress, mainAccounts);
+    const mainAcc =
+      userAcc && userMainAccountDetails(userAcc.mainAddress, mainAccounts);
     setSelectedTradeAccount(acc);
     setSelectedMainAccount(mainAcc);
     onUserSelectAccount({ tradeAddress: addr });
@@ -98,15 +101,18 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
       selectedTradeAccount ? transformAddress(selectedTradeAccount.address) : ""
     }`;
 
-  const handleOnMouseOut = (ref: MutableRefObject<HTMLElement>) =>
-    (ref.current.innerHTML = t("copyToClipboard"));
+  const handleOnMouseOut = (ref: MutableRefObject<HTMLElement | null>) => {
+    if (ref.current) ref.current.innerHTML = t("copyToClipboard");
+  };
 
   const handleCopy = async (
     data: string,
-    ref: MutableRefObject<HTMLElement>,
+    ref: MutableRefObject<HTMLElement | null>,
   ) => {
     await navigator.clipboard.writeText(data);
-    ref.current.innerHTML = t("copied");
+    if (ref.current) {
+      ref.current.innerHTML = t("copied");
+    }
   };
 
   const tradeButton = useRef(null);
@@ -202,12 +208,13 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                   <TooltipHeader>
                     <button
                       type="button"
-                      onClick={() =>
-                        handleCopy(
-                          selectedMainAccount.account.address,
-                          controllerButton,
-                        )
-                      }
+                      onClick={() => {
+                        if (selectedMainAccount?.account?.address)
+                          handleCopy(
+                            selectedMainAccount.account.address,
+                            controllerButton,
+                          );
+                      }}
                       onMouseOut={() => handleOnMouseOut(controllerButton)}
                     >
                       <Icons.Copy />
@@ -242,7 +249,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           onClick={() => router.push("/balances")}
         />
         <Card
-          title={t("accounts")}
+          title={t("wallets")}
           icon="Wallet"
           onClick={() => router.push("/wallets")}
         />

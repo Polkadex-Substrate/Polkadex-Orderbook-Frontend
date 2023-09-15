@@ -1,7 +1,6 @@
 import { APIClass, API as ampliyfyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
-
-import { READ_ONLY_TOKEN } from "@/constants";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 
 type Props = {
   query: string;
@@ -41,7 +40,7 @@ export const fetchAllFromAppSync = async (
   variables: Record<string, unknown>,
   key: string,
 ) => {
-  let fullResponse = [];
+  let fullResponse: any[] = [];
   let nextToken = null;
   do {
     const res = await sendQueryToAppSync({

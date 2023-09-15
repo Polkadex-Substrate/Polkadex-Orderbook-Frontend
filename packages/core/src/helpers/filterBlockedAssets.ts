@@ -1,4 +1,4 @@
-import { defaultConfig } from "@/config";
+import { defaultConfig } from "@orderbook/core/config";
 
 export function filterBlockedAssets<T extends { assetId: string }>(
   list: T[],

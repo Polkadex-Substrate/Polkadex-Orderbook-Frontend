@@ -12,12 +12,12 @@ import { useDisabledPages } from "@/hooks";
 const TradingTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Trading").then(
-      (mod) => mod.Trading,
+      (mod) => mod.Trading
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 
 const Trading = () => {

@@ -8,12 +8,12 @@ import { useDisabledPages } from "@/hooks";
 const WalletsTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Wallets").then(
-      (mod) => mod.WalletsTemplate,
+      (mod) => mod.WalletsTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 const Wallets = () => {
   const router = useRouter();

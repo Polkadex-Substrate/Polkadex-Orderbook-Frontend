@@ -13,8 +13,8 @@ import * as T from "./types";
 export const Tooltip = ({ children }: Pick<T.Props, "children">) => {
   const tooltipRef = useRef(null);
   const [state, setState] = useState(false);
-  let HeaderComponent = null;
-  let ContentComponent = null;
+  let HeaderComponent;
+  let ContentComponent;
   Children.forEach(children, (child) => {
     if ((child as any).type.displayName === "TooltipHeader") {
       HeaderComponent = cloneElement(child as any, {

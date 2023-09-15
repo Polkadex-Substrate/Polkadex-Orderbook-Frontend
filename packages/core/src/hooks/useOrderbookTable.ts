@@ -1,14 +1,20 @@
 import { MutableRefObject, useCallback, useEffect } from "react";
-
-import { mapValues, accumulateVolume, calcMaxVolume } from "@/helpers";
-import { useMarketsProvider } from "@/providers/public/marketsProvider";
-import { OrderBookState, useOrderBook } from "@/providers/public/orderBook";
-import { useOrders } from "@/providers/user/orders";
+import {
+  mapValues,
+  accumulateVolume,
+  calcMaxVolume,
+} from "@orderbook/core/helpers";
+import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import {
+  OrderBookState,
+  useOrderBook,
+} from "@orderbook/core/providers/public/orderBook";
+import { useOrders } from "@orderbook/core/providers/user/orders";
 
 export type Props = {
   isSell?: boolean;
   orders: OrderBookState["depth"]["bids"];
-  contentRef?: MutableRefObject<HTMLDivElement>;
+  contentRef?: MutableRefObject<HTMLDivElement> | null;
 };
 
 export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
@@ -39,7 +45,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
       const priceToSet = arr[index] && Number(arr[index][0]);
       if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
     },
-    [asks, bids, currentPrice, onSetCurrentPrice],
+    [asks, bids, currentPrice, onSetCurrentPrice]
   );
 
   /**
@@ -55,7 +61,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
       const amountToSet = arr[index] && Number(arr[index][1]);
       onSetCurrentAmount(amountToSet.toString());
     },
-    [onSetCurrentAmount, asks, bids],
+    [onSetCurrentAmount, asks, bids]
   );
 
   // Change market amount on click on total/sum field
@@ -63,7 +69,7 @@ export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
     (index: number) => {
       onSetCurrentAmount(cumulativeVolume[index].toString());
     },
-    [onSetCurrentAmount, cumulativeVolume],
+    [onSetCurrentAmount, cumulativeVolume]
   );
 
   /**

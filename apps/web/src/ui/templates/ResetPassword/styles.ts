@@ -104,7 +104,12 @@ export const Box = styled.div`
   }
 `;
 
-export const BoxTitle = styled.div``;
+export const BoxTitle = styled.div`
+  p {
+    margin-top: 1rem;
+  }
+`;
+
 export const Success = styled.div`
   ${({ theme }) => css`
     display: flex;

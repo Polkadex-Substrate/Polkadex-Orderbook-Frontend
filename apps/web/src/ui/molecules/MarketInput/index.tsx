@@ -17,11 +17,13 @@ export const MarketInput = ({
   icon,
   ...props
 }: InputProps) => {
-  const IconComponent = Icons[icon];
+  const IconComponent = icon?.length ? Icons[icon] : <div />;
   return (
     <S.Wrapper>
       <S.ContainerInput>
         <S.Label>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           {icon?.length && <IconComponent />}
           {label}
         </S.Label>

@@ -23,7 +23,9 @@ export const Navbar = ({ onOpenMarkets }) => {
     tickerLoading,
     loading: isMarketFetching,
   } = useMarketsProvider();
-  const quoteAsset = selectGetAsset(currMarket?.quoteAssetId);
+  const quoteAsset = currMarket
+    ? selectGetAsset(currMarket.quoteAssetId)
+    : undefined;
   const currPrice = currentTicker?.close;
   const priceChangePerCent =
     (currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
@@ -58,9 +60,9 @@ export const Navbar = ({ onOpenMarkets }) => {
       <S.WrapperInfo>
         <S.ContainerPair>
           <HeaderMarket
-            id={currMarket?.id}
-            pair={currMarket?.name}
-            pairTicker={currMarket?.base_ticker}
+            id={currMarket?.id || ""}
+            pair={currMarket?.name || ""}
+            pairTicker={currMarket?.base_ticker || ""}
             onOpenMarkets={onOpenMarkets}
             isLoading={isLoading}
           />

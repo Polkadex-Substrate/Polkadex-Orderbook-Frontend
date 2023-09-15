@@ -73,7 +73,7 @@ export const MarketOrderAction = ({
     values,
     setValues,
     errors,
-    setErrors,
+    setErrors
   );
 
   const { t: translation } = useTranslation("molecules");
@@ -229,7 +229,7 @@ const ProtectPassword = () => {
   const currTradeAddr = profileState.selectedAccount.tradeAddress;
   const tradeAccount = selectTradeAccount(
     currTradeAddr,
-    tradeWalletState.allBrowserAccounts,
+    tradeWalletState.allBrowserAccounts
   );
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);
@@ -242,7 +242,7 @@ const ProtectPassword = () => {
     validationSchema: buySellValidation,
     onSubmit: (values) => {
       isValidSize &&
-        tradeAccount.isLocked &&
+        tradeAccount?.isLocked &&
         tradeWalletState.onUnlockTradeAccount({
           address: currTradeAddr,
           password: values.password,
@@ -254,7 +254,7 @@ const ProtectPassword = () => {
 
   const isValidSize = useMemo(
     () => values?.password?.length === 5,
-    [values.password],
+    [values.password]
   );
 
   const { t: translation } = useTranslation("molecules");

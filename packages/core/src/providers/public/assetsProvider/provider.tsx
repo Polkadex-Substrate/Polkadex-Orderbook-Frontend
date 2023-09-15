@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { sendQueryToAppSync, isAssetPDEX } from "@orderbook/core/helpers";
+import { getAllAssets } from "@orderbook/core/graphql/queries";
+import { POLKADEX_ASSET } from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 
@@ -7,17 +10,15 @@ import { Provider } from "./context";
 import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
 
-import { sendQueryToAppSync, isAssetPDEX } from "@/helpers";
-import { getAllAssets } from "@/graphql/queries";
-import { POLKADEX_ASSET } from "@/constants";
-
 export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(assetsReducer, initialState);
   const { onHandleError } = useSettingsProvider();
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
-    const assetEntries: any = await sendQueryToAppSync({ query: getAllAssets });
-
+    const assetEntries = await sendQueryToAppSync({
+      query: getAllAssets,
+    });
+    if (!assetEntries?.data?.getAllAssets) return [];
     const assets = assetEntries.data.getAllAssets.items;
     return assets.map((asset) => {
       return {
@@ -47,9 +48,9 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
   const selectGetAsset = useCallback(
     (
       assetId: string | number | Record<string, string>,
-    ): T.IPublicAsset | null => {
+    ): T.IPublicAsset | undefined => {
       if (!assetId) {
-        return null;
+        return;
       }
       if (typeof assetId === "object" && "asset" in assetId) {
         assetId = assetId.asset;

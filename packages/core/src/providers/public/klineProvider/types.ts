@@ -43,7 +43,9 @@ export interface KlineEvent {
 }
 
 export type KlineContextProps = KlineState & {
-  onHandleKlineFetch: (value: KlineFetch["payload"]) => Promise<KlineEvent[]>;
+  onHandleKlineFetch: (
+    value: KlineFetch["payload"],
+  ) => Promise<KlineEvent[] | undefined>;
   onFetchKlineChannel: (value: KlineSubscribe["payload"]) => void;
 };
 

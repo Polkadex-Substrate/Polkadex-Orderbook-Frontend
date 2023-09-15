@@ -9,7 +9,7 @@ import * as S from "./styles";
 
 export const Profile = () => {
   const [activeMenu, setActiveMenu] = useState("Main");
-  const [menuHeight, setMenuHeight] = useState(null);
+  const [menuHeight, setMenuHeight] = useState("100%");
   const currentTradeAddr = "";
   const { onLogout } = useAuth();
 

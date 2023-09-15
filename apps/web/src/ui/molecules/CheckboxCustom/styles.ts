@@ -22,7 +22,7 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       appearance: "none",
       width: "1.7rem",
       height: "1.7rem",
-      background: theme.colors[fill],
+      background: fill ? theme.colors[fill] : theme.colors.primaryBackground,
       borderRadius: "0.5rem",
       outline: "none",
       cursor: disabled ? "not-allowed" : "pointer",
@@ -69,7 +69,7 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
     "& input:checked:before": {
       opacity: 1,
     },
-  }),
+  })
 );
 Wrapper.defaultProps = {
   fill: "secondaryBackground",

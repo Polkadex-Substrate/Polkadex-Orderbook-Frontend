@@ -8,7 +8,6 @@ import {
   InputHTMLAttributes,
   useMemo,
 } from "react";
-import { Skeleton } from "@polkadex/orderbook-ui/molecules";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -19,7 +18,7 @@ export const Input = ({ label, error, ...props }: T.Props) => (
       {label || ""}
       <Field {...props} />
     </label>
-    {error && <span>{error}</span>}
+    {error && <span>{`${error}`}</span>}
   </S.Wrapper>
 );
 
@@ -31,32 +30,9 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
         <Field {...props} />
       </label>
     </S.Box>
-    {error && <S.Error>{error}</S.Error>}
+    {error && <S.Error>{`${error}`}</S.Error>}
   </S.Primary>
 );
-
-export const SecondaryInput = ({
-  label,
-  children,
-  ...props
-}: T.SecondaryInputProps) => {
-  const { crossOrigin, ...restProps } = props;
-
-  return (
-    <S.SecondaryWrapper hasLabel={!!label}>
-      {label && <label htmlFor={props.name}>{label}</label>}
-      <div>
-        <input type="text" {...restProps} />
-        {children || (
-          <Skeleton
-            height="10px"
-            style={{ display: "inline-block", width: "2rem" }}
-          />
-        )}
-      </div>
-    </S.SecondaryWrapper>
-  );
-};
 
 export const InputLine = forwardRef(
   (
@@ -64,7 +40,7 @@ export const InputLine = forwardRef(
     ref: T.ReactRef<HTMLInputElement>,
   ) => {
     const inputRef = useRef(null);
-    const { crossOrigin, ...restProps } = props;
+    const { ...restProps } = props;
     return (
       <S.InputLineWrapper>
         <S.LineBox error={!!error?.length}>
@@ -79,7 +55,7 @@ export const InputLine = forwardRef(
             </S.LineContainer>
           </label>
         </S.LineBox>
-        {error && <S.Error hasMargin={false}>{error}</S.Error>}
+        {error && <S.Error hasMargin={false}>{`${error}`}</S.Error>}
       </S.InputLineWrapper>
     );
   },
@@ -145,6 +121,7 @@ export const PassCode = ({
   // Change value at focused input
   const changeCodeAtFocus = (inputValue: string) => {
     const currentVal = currentValue;
+    if (!currentVal) return;
     currentVal[state] = inputValue;
     handleChange(currentVal);
   };
@@ -161,7 +138,9 @@ export const PassCode = ({
   const handleOnPaste = (e) => {
     e.preventDefault();
     const otp = currentValue;
-
+    if (!otp) {
+      return;
+    }
     // Get pastedData in an array of max size (num of inputs - current position)
     const pastedData = e.clipboardData
       .getData("text/plain")
@@ -229,14 +208,15 @@ export const PassCode = ({
 
 type TextInputProps = {
   shouldAutoFocus?: boolean;
+  crossOrigin?: any;
   focus?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const TextInput = ({ focus, shouldAutoFocus, ...props }: TextInputProps) => {
-  const ref = useRef(null);
-  const { crossOrigin, ...restProps } = props;
+const TextInput = ({ focus, ...props }: TextInputProps) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const { ...restProps } = props;
   useEffect(() => {
-    if (focus) ref.current.focus();
+    if (focus) ref?.current?.focus();
   }, [focus]);
 
   return (

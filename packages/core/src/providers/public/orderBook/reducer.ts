@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { deleteFromBook, replaceOrAddToBook } from "@orderbook/core/helpers";
 
 import {
   DEPTH_DATA,
@@ -12,7 +13,6 @@ import {
 import { OrderBookState } from "./types";
 import { OrderBookActions, DepthActions } from "./actions";
 
-import { deleteFromBook, replaceOrAddToBook } from "@/helpers";
 export const initialOrderBook: OrderBookState = {
   orderbook: { asks: [], bids: [], loading: true },
   depth: { asks: [], bids: [], loading: true },

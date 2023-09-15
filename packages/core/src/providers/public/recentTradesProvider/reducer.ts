@@ -1,3 +1,6 @@
+import { defaultConfig } from "@orderbook/core/config";
+import { sliceArray } from "@orderbook/core/helpers";
+
 import { RecentTradesActions } from "./actions";
 import {
   RECENT_TRADES_DATA,
@@ -6,9 +9,6 @@ import {
   RECENT_TRADES_PUSH,
 } from "./constants";
 import { RecentTradesState } from "./types";
-
-import { defaultConfig } from "@/config";
-import { sliceArray } from "@/helpers";
 
 const { defaultStorageLimit } = defaultConfig;
 

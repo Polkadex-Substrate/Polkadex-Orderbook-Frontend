@@ -6,7 +6,9 @@ export const Wrapper = styled.div<{ filterBy?: string }>`
   ${({ filterBy }) => css`
     flex: 1;
     display: flex;
-    flex-flow: ${["OrderDesc"].includes(filterBy) ? "column-reverse" : "column"}
+    flex-flow: ${filterBy && ["OrderDesc"].includes(filterBy)
+        ? "column-reverse"
+        : "column"}
       nowrap;
     height: 100%;
     overflow: hidden;
@@ -16,15 +18,19 @@ export const Wrapper = styled.div<{ filterBy?: string }>`
       }
     }
     ${Table}:first-child {
-      display: ${["OrderDesc", "Order"].includes(filterBy) ? "flex" : "none"};
+      display: ${filterBy && ["OrderDesc", "Order"].includes(filterBy)
+        ? "flex"
+        : "none"};
       ${Body} {
-        justify-content: ${["Order"].includes(filterBy)
+        justify-content: ${filterBy && ["Order"].includes(filterBy)
           ? "flex-end"
           : "flex-start"};
       }
     }
     ${Table}:last-child {
-      display: ${["OrderAsc", "Order"].includes(filterBy) ? "flex" : "none"};
+      display: ${filterBy && ["OrderAsc", "Order"].includes(filterBy)
+        ? "flex"
+        : "none"};
     }
   `}
 `;

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
-import { fetchOnChainBalance } from "@/helpers";
-import { useBalancesProvider } from "@/providers/user/balancesProvider";
-import { useProfile } from "@/providers/user/profile";
-import { useNativeApi } from "@/providers/public/nativeApi";
+import { fetchOnChainBalance } from "@orderbook/core/helpers";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 export const useOnChainBalance = (assetId: string) => {
   const profileState = useProfile();
@@ -19,7 +18,7 @@ export const useOnChainBalance = (assetId: string) => {
 
   // only update if the user balance changes
   useEffect(() => {
-    if (isApiConnected && mainAddress) {
+    if (api && isApiConnected && mainAddress) {
       fetchOnChainBalance(api, assetId, mainAddress)
         .then((balance) => {
           setBalance(balance);

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { ApiPromise } from "@polkadot/api";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -16,10 +18,6 @@ import {
   executeRegisterEmail,
   registerMainAccount,
 } from "./helper";
-
-import { eventHandler, eventHandlerCallback } from "@/helpers";
-import { useSettingsProvider } from "@/providers/public/settings";
-import { useNativeApi } from "@/providers/public/nativeApi";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   children,
@@ -53,7 +51,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       );
 
       const hasAddressAndEmail =
-        !!selectedControllerAccount.account?.address?.length && !!email?.length;
+        !!selectedControllerAccount?.account?.address?.length &&
+        !!email?.length;
 
       if (hasAddressAndEmail) {
         const signedData = await createSignedData(
@@ -124,7 +123,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
           account?.address?.toLowerCase() === mainAccount?.toLowerCase(),
       );
       const email = authState.email;
-      const api: ApiPromise = nativeApiState.api;
+      const api = nativeApiState.api;
 
       // listen for events in this new registered main address
       eventHandlerCallback({
@@ -134,9 +133,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       });
 
       const hasAddressAndEmail =
-        !!selectedControllerAccount.account?.address?.length && !!email?.length;
+        !!selectedControllerAccount?.account?.address?.length &&
+        !!email?.length;
 
-      if (hasAddressAndEmail) {
+      if (hasAddressAndEmail && api) {
         const res = await registerMainAccount(
           api,
           tradeAddress,
@@ -148,7 +148,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
           tradeWalletState.onRegisterTradeAccountData({
             mnemonic,
             account: {
-              name: selectedControllerAccount.account.meta.name,
+              name: selectedControllerAccount.account.meta.name || "",
               address: selectedControllerAccount.account.address,
             },
           });
@@ -192,13 +192,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     return () => unsubscribe();
   }, []);
 
-  const selectMainAccount = (address: string) => {
-    return (
-      address &&
-      state.allAccounts?.find(
-        ({ account }) =>
-          account?.address?.toLowerCase() === address?.toLowerCase(),
-      )
+  const selectMainAccount = (address: string): ExtensionAccount | undefined => {
+    return state.allAccounts?.find(
+      ({ account }) =>
+        account?.address?.toLowerCase() === address?.toLowerCase(),
     );
   };
   useEffect(() => {

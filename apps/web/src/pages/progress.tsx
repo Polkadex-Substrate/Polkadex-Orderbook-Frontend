@@ -5,11 +5,11 @@ import { useDisabledPages } from "@/hooks";
 const ProgressTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Progress").then(
-      (mod) => mod.Progress,
+      (mod) => mod.Progress
     ),
   {
     ssr: false,
-  },
+  }
 );
 
 const Progress = () => {

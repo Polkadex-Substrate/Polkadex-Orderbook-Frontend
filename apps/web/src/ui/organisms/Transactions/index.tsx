@@ -78,7 +78,7 @@ export const Transactions = () => {
     (dateFrom: Date, dateTo: Date) => {
       setFilters((prevFilters) => ({ ...prevFilters, dateFrom, dateTo }));
     },
-    [setFilters],
+    [setFilters]
   );
 
   useEffect(() => {
@@ -87,10 +87,12 @@ export const Transactions = () => {
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }: RangeKeyDict) => {
-      handleRangeChange(startDate, endDate);
-      dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
+      if (startDate && endDate) {
+        handleRangeChange(startDate, endDate);
+        dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
+      }
     },
-    [dispatchUserSessionData, handleRangeChange],
+    [dispatchUserSessionData, handleRangeChange]
   );
 
   const ranges = useMemo(() => {

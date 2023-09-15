@@ -1,7 +1,7 @@
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 import * as S from "./styles";
-
+type RowData = { value: string };
 export const OrderHistoryCard = ({
   id,
   isSell,
@@ -9,7 +9,7 @@ export const OrderHistoryCard = ({
   orderType,
   baseUnit,
   quoteUnit,
-  data = [],
+  data = [] as RowData[],
 }) => (
   <S.Tr>
     <S.Td>

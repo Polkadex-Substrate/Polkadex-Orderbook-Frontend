@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const SecondaryWrapper = styled.div<{ color?: string; size?: string }>`
+export const SecondaryWrapper = styled.div<{ color: string; size: string }>`
   ${({ theme, color, size }) => css`
     width: ${size};
     height: ${size};
@@ -20,7 +20,7 @@ export const SecondaryWrapper = styled.div<{ color?: string; size?: string }>`
 `;
 
 export const Container = styled.div<Props>`
-  ${({ theme, size, color }) => css`
+  ${({ theme, size = "1rem", color = "primary" }) => css`
     margin-left: -2rem;
 
     &,

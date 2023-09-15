@@ -18,7 +18,7 @@ export const HeaderContent = styled("div")<{ isString?: boolean }>(
         textAlign: "center",
       },
     },
-  }),
+  })
 );
 
 export const HeaderClose = styled("button")(({ theme }) =>
@@ -36,17 +36,17 @@ export const HeaderClose = styled("button")(({ theme }) =>
     "&:hover": {
       background: `${theme.colors.text}11`,
     },
-  }),
+  })
 );
 
 export const ClosePath = styled("path")(({ theme }) =>
   css({
     stroke: theme.colors.text,
     opacity: 0.5,
-  }),
+  })
 );
 
-export const Container = styled("div")<T.ModalStyleProps>(
+export const Container: any = styled("div")<T.ModalStyleProps>(
   variant({
     prop: "border",
     variants: {
@@ -87,14 +87,16 @@ export const Container = styled("div")<T.ModalStyleProps>(
     },
   }),
   bgStyleVariants,
-  color,
+  color
 );
 
-export const Overlay = styled("div")<{
-  isBlur?: boolean;
-  placement: Direction;
-  isFull?: boolean;
-}>(
+export const Overlay = styled("div")<
+  {
+    isBlur?: boolean;
+    placement: Direction;
+    isFull?: boolean;
+  } & T.ModalProps
+>(
   () =>
     css({
       position: "fixed",
@@ -216,7 +218,7 @@ export const Overlay = styled("div")<{
         justifyContent: "center",
       },
     },
-  }),
+  })
 );
 
 Overlay.defaultProps = {

@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
+import * as subscriptions from "@orderbook/core/graphql/subscriptions";
+import { getRecentTrades } from "@orderbook/core/graphql/queries";
+import {
+  fetchFromAppSync,
+  decimalPlaces,
+  getIsDecreasingArray,
+} from "@orderbook/core/helpers";
+import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import { Websocket_streamsSubscription } from "@orderbook/core/API";
 
 import { useMarketsProvider, Market } from "../marketsProvider";
 import { useSettingsProvider } from "../settings";
@@ -10,16 +19,6 @@ import { Provider } from "./context";
 import { recentTradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { PublicTrade } from "./types";
-
-import * as subscriptions from "@/graphql/subscriptions";
-import { getRecentTrades } from "@/graphql/queries";
-import {
-  fetchFromAppSync,
-  decimalPlaces,
-  getIsDecreasingArray,
-} from "@/helpers";
-import { READ_ONLY_TOKEN } from "@/constants";
-import { Websocket_streamsSubscription } from "@/API";
 
 export const RecentTradesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(recentTradesReducer, initialState);
@@ -61,6 +60,7 @@ export const RecentTradesProvider = ({ children }) => {
       authToken: READ_ONLY_TOKEN,
     }).subscribe({
       next: (data) => {
+        if (!data?.value?.data?.websocket_streams?.data) return;
         const val: RawTradeEvent = JSON.parse(
           data.value.data.websocket_streams.data,
         );
@@ -103,7 +103,7 @@ export const RecentTradesProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    recentTradesFetch(currentMarket);
+    if (currentMarket?.m) recentTradesFetch(currentMarket);
   }, [currentMarket?.m, recentTradesFetch, currentMarket]);
 
   const isDecreasing = getIsDecreasingArray(state.list);
@@ -124,8 +124,12 @@ export const RecentTradesProvider = ({ children }) => {
         isDecreasing,
         quoteUnit: currentMarket?.quote_ticker,
         baseUnit: currentMarket?.base_ticker,
-        pricePrecision: decimalPlaces(currentMarket?.price_tick_size),
-        amountPrecision: decimalPlaces(currentMarket?.qty_step_size),
+        pricePrecision: currentMarket
+          ? decimalPlaces(currentMarket.price_tick_size)
+          : undefined,
+        amountPrecision: currentMarket
+          ? decimalPlaces(currentMarket.qty_step_size)
+          : undefined,
         getCurrentTradePrice,
         getLastTradePrice,
       }}

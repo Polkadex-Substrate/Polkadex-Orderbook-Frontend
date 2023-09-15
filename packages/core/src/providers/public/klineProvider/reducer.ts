@@ -13,8 +13,8 @@ import { KlineState } from "./types";
 
 export const initialKlineState: KlineState = {
   last: undefined,
-  market: undefined,
-  interval: undefined,
+  market: "",
+  interval: "30m",
   message: undefined,
   loading: false,
   data: [],

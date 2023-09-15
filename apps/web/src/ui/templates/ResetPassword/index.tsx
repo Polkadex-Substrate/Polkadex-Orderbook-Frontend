@@ -63,11 +63,10 @@ export const ResetPasswordTemplate = () => {
                     </S.BoxTitle>
                     <form onSubmit={handleSubmit}>
                       <InputLine
-                        name="email"
                         label={t("card.input.label")}
                         placeholder={t("card.input.placeHolder")}
                         disabled={isLoading}
-                        error={errors.email && touched.email && errors.email}
+                        error={touched.email ? errors.email : ""}
                         {...getFieldProps("email")}
                       />
                       <Button

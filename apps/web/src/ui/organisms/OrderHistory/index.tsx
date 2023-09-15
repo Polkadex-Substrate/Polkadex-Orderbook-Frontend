@@ -125,18 +125,32 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                         {
                           value: isMarket
                             ? "-"
-                            : Decimal.format(order.price, priceFixed, ","),
+                            : Decimal.format(
+                                order.price,
+                                Number(priceFixed),
+                                ",",
+                              ),
                         },
-                        { value: Decimal.format(order.qty, amountFixed, ",") },
                         {
                           value: Decimal.format(
-                            order.filled_quantity,
-                            amountFixed,
+                            order.qty,
+                            Number(amountFixed),
                             ",",
                           ),
                         },
                         {
-                          value: Decimal.format(avgPrice, priceFixed, ","),
+                          value: Decimal.format(
+                            order.filled_quantity,
+                            Number(amountFixed),
+                            ",",
+                          ),
+                        },
+                        {
+                          value: Decimal.format(
+                            avgPrice,
+                            Number(priceFixed),
+                            ",",
+                          ),
                         },
                       ]}
                     />

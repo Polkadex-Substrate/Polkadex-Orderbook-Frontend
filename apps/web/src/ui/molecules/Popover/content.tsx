@@ -21,11 +21,11 @@ export const Content: T.PopoverComponent = forwardRef(
       onOpen,
     } = usePopoverContext();
 
-    const componentRef = useRef();
+    const componentRef = useRef<HTMLDivElement | null>(null);
     return (
       <FocusScope restoreFocus>
         <CSSTransition
-          key={S.ContentMain}
+          key={S.ContentMain.toString()}
           in={isOpen}
           timeout={120}
           unmountOnExit
@@ -47,7 +47,7 @@ export const Content: T.PopoverComponent = forwardRef(
         </CSSTransition>
       </FocusScope>
     );
-  },
+  }
 );
 
 Content.displayName = "Content";

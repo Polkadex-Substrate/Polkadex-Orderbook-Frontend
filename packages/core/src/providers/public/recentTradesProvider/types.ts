@@ -21,10 +21,10 @@ export interface RecentTradesState {
 export type RecentTradesContextProps = RecentTradesState & {
   recentTradesFetch: (value: Market) => void;
   isDecreasing: boolean[];
-  quoteUnit: string;
-  baseUnit: string;
-  pricePrecision: number;
-  amountPrecision: number;
+  quoteUnit?: string;
+  baseUnit?: string;
+  pricePrecision?: number;
+  amountPrecision?: number;
   getLastTradePrice: () => string;
   getCurrentTradePrice: () => string;
 };

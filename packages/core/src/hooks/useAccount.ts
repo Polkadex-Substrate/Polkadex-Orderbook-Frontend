@@ -1,5 +1,5 @@
-import { useProfile } from "@/providers/user/profile";
-import { useAuth } from "@/providers/user/auth";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useAuth } from "@orderbook/core/providers/user/auth";
 
 export function useAccount() {
   const { email, userConfirmed, onLogout } = useAuth();

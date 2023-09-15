@@ -9,12 +9,12 @@ import { useDisabledPages } from "@/hooks";
 const BalancesTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Balances").then(
-      (mod) => mod.BalancesTemplate,
+      (mod) => mod.BalancesTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 const Balances = () => {
   const router = useRouter();

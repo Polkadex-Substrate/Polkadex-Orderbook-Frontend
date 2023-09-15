@@ -71,15 +71,13 @@ export const SignInTemplate = () => {
                   <h1>{t("card.secondaryTitle")}</h1>
                   <form onSubmit={handleSubmit}>
                     <InputLine
-                      name="email"
                       label={t("card.input.email.label")}
                       placeholder={t("card.input.email.placeHolder")}
-                      error={errors.email && touched.email && errors.email}
+                      error={touched.email ? errors.email : ""}
                       disabled={isLoading}
                       {...getFieldProps("email")}
                     />
                     <InputLine
-                      name="password"
                       type={view ? "text" : "password"}
                       label={t("card.input.password.label")}
                       labelRight={
@@ -90,9 +88,7 @@ export const SignInTemplate = () => {
                         </S.InputLineLink>
                       }
                       placeholder={t("card.input.password.placeHolder")}
-                      error={
-                        errors.password && touched.password && errors.password
-                      }
+                      error={touched.password ? errors.password : []}
                       disabled={isLoading}
                       {...getFieldProps("password")}
                     >

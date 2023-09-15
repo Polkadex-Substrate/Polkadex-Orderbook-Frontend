@@ -1,7 +1,9 @@
 import * as Yup from "yup";
-
-import { isAssetPDEX, getDigitsAfterDecimal } from "@/helpers";
-import { ErrorMessages, MAX_DIGITS_AFTER_DECIMAL } from "@/constants";
+import { isAssetPDEX, getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import {
+  ErrorMessages,
+  MAX_DIGITS_AFTER_DECIMAL,
+} from "@orderbook/core/constants";
 
 export const signInValidations = Yup.object().shape({
   password: Yup.string()
@@ -33,12 +35,12 @@ export const depositValidations = (
       .test(
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        (value) => !/\s/.test(value),
+        (value) => !/\s/.test(value || ""),
       )
       .test(
         ErrorMessages.MUST_BE_A_NUMBER,
         ErrorMessages.MUST_BE_A_NUMBER,
-        (value) => /^\d+(\.\d+)?$/.test(value),
+        (value) => /^\d+(\.\d+)?$/.test(value || ""),
       )
       .test(
         ErrorMessages.TOO_SMALL,
@@ -59,7 +61,10 @@ export const depositValidations = (
       .test(
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        (value) => getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL,
+        (value) =>
+          value
+            ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
+            : false,
       )
       .test(
         ErrorMessages.REMAINING_BALANCE,
@@ -127,12 +132,12 @@ export const withdrawValidations = (balance: string) => {
       .test(
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        (value) => !/\s/.test(value),
+        (value) => (value ? !/\s/.test(value) : false),
       )
       .test(
         ErrorMessages.MUST_BE_A_NUMBER,
         ErrorMessages.MUST_BE_A_NUMBER,
-        (value) => /^\d+(\.\d+)?$/.test(value),
+        (value) => (value ? /^\d+(\.\d+)?$/.test(value) : false),
       )
       .test(
         ErrorMessages.TOO_SMALL,
@@ -147,7 +152,10 @@ export const withdrawValidations = (balance: string) => {
       .test(
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        (value) => getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL,
+        (value) =>
+          value
+            ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
+            : false,
       ),
   });
 };

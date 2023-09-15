@@ -6,6 +6,14 @@ import {
   useReducer,
   useState,
 } from "react";
+import * as queries from "@orderbook/core/graphql/queries";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import {
+  fetchAllFromAppSync,
+  subtractMonthsFromDateOrNow,
+  groupWithdrawsBySnapShotIds,
+  eventHandler,
+} from "@orderbook/core/helpers";
 
 import { useProfile } from "../profile";
 
@@ -14,15 +22,6 @@ import { Provider } from "./context";
 import { initialState, transactionsReducer } from "./reducer";
 import * as T from "./types";
 import { DEPOSIT } from "./constants";
-
-import * as queries from "@/graphql/queries";
-import { useSettingsProvider } from "@/providers/public/settings";
-import {
-  fetchAllFromAppSync,
-  subtractMonthsFromDateOrNow,
-  groupWithdrawsBySnapShotIds,
-  eventHandler,
-} from "@/helpers";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
@@ -86,19 +85,23 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     const transactionsBydate = state.transactions?.sort(
       (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
     );
-    const transactions = transactionsBydate?.reduce((pv, cv) => {
-      if (
-        cv.main_account
-          .toLowerCase()
-          .includes(filterBy.fieldValue.toLowerCase()) &&
-        (filterBy.type === "" ||
-          filterBy.type === cv.txn_type.toLowerCase() ||
-          filterBy.type === "all")
-      ) {
-        pv.push(cv);
-      }
-      return pv;
-    }, []);
+    const transactions = transactionsBydate?.reduce(
+      (pv: T.Transaction[], cv) => {
+        if (
+          cv.main_account &&
+          cv.main_account
+            .toLowerCase()
+            .includes(filterBy.fieldValue.toLowerCase()) &&
+          (filterBy.type === "" ||
+            filterBy.type === cv.txn_type.toLowerCase() ||
+            filterBy.type === "all")
+        ) {
+          pv.push(cv);
+        }
+        return pv;
+      },
+      [],
+    );
     return transactions;
   }, [filterBy, state.transactions]);
 

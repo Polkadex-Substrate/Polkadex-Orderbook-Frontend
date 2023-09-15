@@ -9,7 +9,7 @@ import { Section } from "./section";
 import * as S from "./styles";
 import * as T from "./types";
 
-export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLDivElement> =
+export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLUListElement> =
   forwardRef(({ fill, border, bgStyle, itemFill, ...props }, ref) => {
     const context = useDropdownContext();
 
@@ -29,12 +29,14 @@ export const Menu: T.DropdownComponent<T.DropdownMenuProps, HTMLDivElement> =
         ref={mergeRefs(context.menuContentRef, ref)}
         {...menuProps}
       >
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {[...state.collection].map((value) =>
           value.type === "section" ? (
             <Section key={value.key} item={value} state={state} />
           ) : (
             <ItemComponent key={value.key} item={value} state={state} />
-          ),
+          )
         )}
       </S.Menu>
     );

@@ -134,7 +134,7 @@ export const tradeWalletReducer = (
         ...state,
         previewAccountModal: {
           isActive: false,
-          selected: null,
+          selected: undefined,
         },
       };
     case USER_REGISTER_TRADE_ACCOUNT_RESET:
