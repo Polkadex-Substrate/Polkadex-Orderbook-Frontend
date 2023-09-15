@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { intlFormat } from "date-fns";
 import {
   useTransactionsProvider,
   Transaction,
@@ -10,11 +11,13 @@ import {
   useExtensionWallet,
   userMainAccountDetails,
 } from "@orderbook/core/providers/user/extensionWallet";
+import { WithdrawGroupItem } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
 import { ReadyToClaimTable } from "./readyToClaimTable";
 import { ClaimedTable } from "./claimedTable";
+import { ReadyToClaimDataProps } from "./types";
 
 import { Checkbox, Search } from "@/ui/molecules";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
@@ -76,15 +79,56 @@ export const WithdrawHistory = ({
     ],
   );
 
-  const readyToClaim = useMemo(() => {
-    if (!showSelectedCoins) return readyWithdrawals;
+  const readyWithdrawalsData = useMemo(
+    () =>
+      readyWithdrawals.map((e) => {
+        const items = e.items?.map((e: WithdrawGroupItem) => {
+          const token = selectGetAsset(e.asset);
+          return {
+            ...e,
+            time: intlFormat(
+              new Date(e.time),
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              },
+              { locale: "EN" },
+            ),
+            token: {
+              ticker: token?.symbol,
+              name: token?.name,
+            },
+            wallets: {
+              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
+              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              toWalletType: "Funding Account",
+            },
+          };
+        });
+        return {
+          ...e,
+          items,
+        } as ReadyToClaimDataProps;
+      }),
+    [
+      readyWithdrawals,
+      fundingWallet?.account?.meta?.name,
+      fundingWallet?.account?.address,
+      selectGetAsset,
+    ],
+  );
 
-    return readyWithdrawals.filter(({ items, id, sid }) => {
+  const readyToClaim = useMemo(() => {
+    if (!showSelectedCoins) return readyWithdrawalsData;
+
+    return readyWithdrawalsData.filter(({ items, id, sid }) => {
       const filteredItems = items.filter((item) => {
         const assetName = selectGetAsset(item.asset)?.name;
         return assetName === selectedAsset?.name && item;
       });
-
       return (
         filteredItems.length && {
           id,
@@ -94,7 +138,7 @@ export const WithdrawHistory = ({
       );
     });
   }, [
-    readyWithdrawals,
+    readyWithdrawalsData,
     selectGetAsset,
     selectedAsset?.name,
     showSelectedCoins,
@@ -110,7 +154,7 @@ export const WithdrawHistory = ({
     [selectedWithdraw],
   );
 
-  const hasPendingClaims = useMemo(
+  const pendingClaims: number = useMemo(
     () =>
       readyToClaim.reduce(
         (acc, value) =>
@@ -120,7 +164,6 @@ export const WithdrawHistory = ({
     [readyToClaim],
   );
 
-  console.log("readyToClaim", readyToClaim);
   return (
     <S.Wrapper>
       <S.Header>
@@ -131,7 +174,10 @@ export const WithdrawHistory = ({
           <S.Title>
             <S.TabList>
               <S.TabItem>Pending</S.TabItem>
-              <S.TabItem>Ready to claim</S.TabItem>
+              <S.TabItemPending>
+                {pendingClaims && <div>{pendingClaims}</div>}
+                Ready to claim
+              </S.TabItemPending>
               <S.TabItem>Claimed</S.TabItem>
             </S.TabList>
             <S.TitleWrapper>

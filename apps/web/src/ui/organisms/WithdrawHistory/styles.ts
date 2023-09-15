@@ -2,35 +2,93 @@ import { Tab } from "@headlessui/react";
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+export const TableWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  padding: 2rem 4rem;
+`;
+export const TableAside = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    flex: 1;
+    gap: 1rem;
+    button {
+      padding: 1rem 4rem;
+      border-radius: 0.4rem;
+      background: ${theme.colors.primary};
+      transition: background-color ease 0.4s;
+      white-space: nowrap;
+      :hover {
+        background: ${theme.colors.primaryHover};
+      }
+    }
+    h4 {
+      font-weight: 500;
+      font-size: 1.4rem;
+    }
   `}
 `;
 
 export const Header = styled.div`
-  padding: 2rem 4rem;
+  padding: 1rem 4rem;
   h3 {
     font-size: 1.8rem;
     font-weight: 550;
   }
 `;
 
-export const TabList = styled(Tab.List)`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  font-weight: 550;
+export const TabItem = styled(Tab)`
+  padding: 1rem 8rem 1rem 0;
+  opacity: 0.6;
+  &[data-headlessui-state="selected"] {
+    opacity: 1;
+  }
 `;
 
-export const TabItem = styled(Tab)`
+export const TabList = styled(Tab.List)`
   ${({ theme }) => css`
-    padding: 1rem 0;
-    opacity: 0.6;
-    &[data-headlessui-state="selected"] {
-      opacity: 1;
-      border-bottom: 2px solid ${theme.colors.primary};
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-weight: 550;
+    ${TabItem}:nth-child(1) {
+      &[data-headlessui-state="selected"] {
+        border-bottom: 2px solid ${theme.colors.orange};
+      }
+    }
+    ${TabItem}:nth-child(2) {
+      &[data-headlessui-state="selected"] {
+        border-bottom: 2px solid ${theme.colors.primary};
+      }
+    }
+    ${TabItem}:nth-child(3) {
+      &[data-headlessui-state="selected"] {
+        border-bottom: 2px solid ${theme.colors.green};
+      }
+    }
+  `}
+`;
+
+export const TabItemPending = styled(TabItem)`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    div {
+      display: grid;
+      place-items: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      background: ${theme.colors.primary};
+      border-radius: 0.3rem;
+      padding: 0;
+      font-size: 1.1rem;
+      font-weight: 550;
     }
   `}
 `;

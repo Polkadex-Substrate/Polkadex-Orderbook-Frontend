@@ -1,8 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { transformAddress } from "@orderbook/core/providers/user/profile";
+import { WithdrawGroupItem } from "@orderbook/core/helpers";
 
 import { Date, Token, Box, Wallet } from "./styles";
-import { Props } from "./types";
+import { Props, ReadyToClaimProps } from "./types";
 
 import { Icons, Tokens } from "@/ui/atoms";
 const pendingColumnHelper = createColumnHelper<Props>();
@@ -143,15 +144,15 @@ export const claimedColumns = [
   }),
 ];
 
-const readyToClaimColumnHelper = createColumnHelper<Props>();
+const readyToClaimColumnHelper = createColumnHelper<ReadyToClaimProps>();
 
 export const readyToClaimColumns = [
   readyToClaimColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
       <Date>
-        {/* <span>{e.getValue().status}</span>
-        <p>{e.getValue().time}</p> */}
+        <span>{e.getValue().status}</span>
+        <p>{e.getValue().time.toString()}</p>
       </Date>
     ),
     header: () => <span>Status/Date</span>,
@@ -160,13 +161,15 @@ export const readyToClaimColumns = [
   readyToClaimColumnHelper.accessor((row) => row.token, {
     id: "token",
     cell: (e) => {
-      // const TokenComponent = Tokens[e.getValue().ticker] ?? Tokens.UNKN;
+      const TokenComponent = Tokens[e.getValue().ticker] ?? Tokens.UNKN;
       return (
         <Token>
-          <div>{/* <TokenComponent /> */}</div>
           <div>
-            {/* <p> {e.getValue().ticker}</p>
-            <span>{e.getValue().name}</span> */}
+            <TokenComponent />
+          </div>
+          <div>
+            <p> {e.getValue().ticker}</p>
+            <span>{e.getValue().name}</span>
           </div>
         </Token>
       );
@@ -178,7 +181,7 @@ export const readyToClaimColumns = [
     id: "amount",
     cell: (e) => (
       <Box>
-        {/* <p>{e.getValue()}</p> */}
+        <p>{e.getValue()}</p>
         <span>$0.00</span>
       </Box>
     ),
@@ -189,18 +192,18 @@ export const readyToClaimColumns = [
   readyToClaimColumnHelper.accessor((row) => row.wallets, {
     id: "wallets",
     cell: (e) => {
-      // const address = transformAddress(e.getValue().fromWalletAddress ?? "");
+      const address = transformAddress(e.getValue().fromWalletAddress ?? "");
       return (
         <Wallet>
           <div>
             <Icons.SingleArrowBottom />
           </div>
           <div>
-            {/* <p>{e.getValue().toWalletType}</p>
+            <p>{e.getValue().toWalletType}</p>
             <p>
               {e.getValue().fromWalletName}
               <span> • {address}</span>
-            </p> */}
+            </p>
           </div>
         </Wallet>
       );
