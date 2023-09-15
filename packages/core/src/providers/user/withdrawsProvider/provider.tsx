@@ -13,7 +13,6 @@ import {
   signPayload,
 } from "@orderbook/core/helpers";
 
-import { useTrades } from "../trades";
 import { useProfile, UserAccount } from "../profile";
 import { useExtensionWallet } from "../extensionWallet";
 import { selectTradeAccount } from "../tradeWallet/helper";
@@ -34,8 +33,11 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { mainAddress, tradeAddress } = currentAccount;
   const { allBrowserAccounts } = useTradeWallet();
   const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
-  const { onUserTradesError } = useTrades();
 
+  type UserActionLambdaResp = {
+    is_success: boolean;
+    body: string;
+  };
   const onFetchWithdraws = async ({ asset, amount }) => {
     dispatch(A.withdrawsFetch({ asset, amount }));
     try {
@@ -47,13 +49,21 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           api,
           asset,
           amount,
-          nonce,
+          nonce
         );
         const signature = signPayload(api, keyringPair, signingPayload);
         const res = await executeWithdraw(
           [mainAddress, tradeAddress, payload, signature],
-          tradeAddress,
+          tradeAddress
         );
+        if (res.data.withdraw) {
+          const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw.body);
+          if (!res.is_success) {
+            dispatch(A.withdrawsData());
+            settingsState.onHandleError(resp.body);
+            return;
+          }
+        }
         console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({
@@ -65,7 +75,6 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     } catch (error) {
       dispatch(A.withdrawsData());
       settingsState.onHandleError(error?.message ?? error);
-      onUserTradesError(error);
     }
   };
 
@@ -134,7 +143,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     api: ApiPromise,
     signer: Signer,
     account: string,
-    sid: number,
+    sid: number
   ): Promise<ExtrinsicResult> {
     const ext = api.tx.ocex.claimWithdraw(sid, account);
     return await signAndSendExtrinsic(api, ext, { signer }, account, true);
