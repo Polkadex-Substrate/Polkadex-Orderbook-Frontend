@@ -16,12 +16,14 @@ import { useFormik } from "formik";
 import { depositValidationsTest } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { ExtensionAccount } from "@orderbook/core/providers/types";
 
 import { UnlockModal } from "../UnlockModal";
 
 import * as S from "./styles";
+import { CustomAddress } from "./types";
 
-import { Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import { AccountSelect, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -31,10 +33,12 @@ export const TransferFormWithdraw = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  otherPolkadexAccount,
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: () => void;
+  otherPolkadexAccount: boolean;
   selectedAsset?: FilteredAssetProps;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -83,6 +87,8 @@ export const TransferFormWithdraw = ({
     validationSchema: depositValidationsTest,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
+      if (otherPolkadexAccount) return;
+
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
       else {
         const asset = isAssetPDEX(selectedAsset?.assetId)
@@ -100,7 +106,36 @@ export const TransferFormWithdraw = ({
   });
 
   const formRef = useRef<HTMLFormElement | null>(null);
+  const [selectedPerson, setSelectedPerson] = useState<
+    ExtensionAccount | CustomAddress
+  >();
+  const [query, setQuery] = useState("");
 
+  const filteredExtensionAccounts: ExtensionAccount[] | CustomAddress[] =
+    useMemo(() => {
+      if (query === "") return allAccounts;
+
+      const filteredAccounts = allAccounts?.filter((e) => {
+        const { address, meta } = e.account;
+        const queryRes = query.toLowerCase();
+        return (
+          address.toLowerCase().includes(queryRes) ||
+          meta?.name?.toLowerCase().includes(queryRes)
+        );
+      });
+
+      if (filteredAccounts.length) return filteredAccounts;
+      else {
+        const customAddress = {
+          account: {
+            address: query,
+          },
+        };
+
+        setSelectedPerson(customAddress);
+        return [...allAccounts, customAddress];
+      }
+    }, [query, allAccounts]);
   return (
     <>
       <UnlockModal
@@ -116,6 +151,7 @@ export const TransferFormWithdraw = ({
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
+            searchable={otherPolkadexAccount}
             label="From"
             walletTypeLabel="Orderbook wallet"
             walletType="Trading account"
@@ -129,6 +165,7 @@ export const TransferFormWithdraw = ({
             <span>Switch</span>
           </S.WalletsButton>
           <WalletCard
+            searchable={otherPolkadexAccount}
             label="To"
             walletTypeLabel="Extension wallet"
             walletType="Funding account"
@@ -136,7 +173,17 @@ export const TransferFormWithdraw = ({
             walletAddress={transformAddress(
               fundingWallet?.account?.address ?? ""
             )}
-          />
+          >
+            {otherPolkadexAccount && (
+              <AccountSelect
+                selectedAccount={selectedPerson}
+                onQuery={(e) => setQuery(e)}
+                onSelectAccount={setSelectedPerson}
+                data={filteredExtensionAccounts}
+                loading={false}
+              />
+            )}
+          </WalletCard>
         </S.Wallets>
         <S.Form>
           <TokenCard

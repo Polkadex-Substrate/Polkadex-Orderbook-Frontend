@@ -27,7 +27,7 @@ export const TransferTemplate = () => {
   const { loading: withdrawLoading } = useWithdrawsProvider();
 
   const { t } = useTranslation("transfer");
-
+  const [otherPolkadexAccount, setOtherPolkadexAccount] = useState(false);
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [isDeposit, setIsDeposit] = useState(true);
 
@@ -93,11 +93,16 @@ export const TransferTemplate = () => {
                 >
                   <S.Form>
                     <S.Title>
-                      <Switch onChange={() => window.alert("Chaing..")} />
+                      <Switch
+                        isActive={otherPolkadexAccount}
+                        onChange={() =>
+                          setOtherPolkadexAccount(!otherPolkadexAccount)
+                        }
+                      />
                       <span>Transfer for other Polkadex accounts</span>
                     </S.Title>
                     <S.Container>
-                      {isDeposit ? (
+                      {isDeposit && !otherPolkadexAccount ? (
                         <TransferFormDeposit
                           onTransferInteraction={onTransferInteraction}
                           onOpenAssets={onAssetsInteraction}
@@ -108,6 +113,7 @@ export const TransferTemplate = () => {
                           onTransferInteraction={onTransferInteraction}
                           onOpenAssets={onAssetsInteraction}
                           selectedAsset={selectedAsset}
+                          otherPolkadexAccount={otherPolkadexAccount}
                         />
                       )}
                     </S.Container>
@@ -115,7 +121,7 @@ export const TransferTemplate = () => {
                 </Loading>
 
                 <S.History>
-                  {isDeposit ? (
+                  {!isDeposit && !otherPolkadexAccount ? (
                     <DepositHistory />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />

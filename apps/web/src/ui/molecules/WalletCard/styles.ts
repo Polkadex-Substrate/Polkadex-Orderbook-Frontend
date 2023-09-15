@@ -12,21 +12,22 @@ export const Header = styled.div`
     flex-direction: column;
     gap: 1rem;
     padding: 2rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     small {
       font-size: 1.2rem;
       opacity: 0.5;
     }
-    p {
-      white-space: nowrap;
-      font-size: 1.9rem;
-      font-weight: 500;
-      span {
-        opacity: 0.5;
-      }
-    }
   `}
 `;
+
+export const Paragraph = styled.p`
+  white-space: nowrap;
+  font-size: 1.9rem;
+  font-weight: 500;
+  span {
+    opacity: 0.5;
+  }
+`;
+
 export const Icon = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
@@ -42,6 +43,8 @@ export const Icon = styled.div`
 
 export const Footer = styled.div`
   ${({ theme }) => css`
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+
     display: flex;
     flex: 1;
     align-items: center;

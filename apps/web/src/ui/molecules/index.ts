@@ -51,5 +51,5 @@ export * from "./SwitchFAQ";
 export * from "./TokenCard";
 export * from "./WalletCard";
 export * from "./CheckboxCustom";
-
+export * from "./AccountSelect";
 export * as LoadingIcons from "./LoadingIcons";

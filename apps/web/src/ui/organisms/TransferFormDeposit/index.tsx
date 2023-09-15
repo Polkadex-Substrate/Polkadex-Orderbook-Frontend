@@ -19,7 +19,6 @@ import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 const initialValues = { amount: 0.0 };
-
 export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
@@ -39,14 +38,14 @@ export const TransferFormDeposit = ({
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress],
+    [allAccounts, mainAddress]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const existentialBalance = useMemo(
     () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
-    [selectedAsset?.assetId],
+    [selectedAsset?.assetId]
   );
 
   const handleMax = (e: MouseEvent<HTMLElement>) => {
@@ -93,6 +92,13 @@ export const TransferFormDeposit = ({
       }
     },
   });
+
+  const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
+  const fundingWalletAddress = useMemo(
+    () => transformAddress(fundingWallet?.account?.address ?? ""),
+    [fundingWallet?.account?.address]
+  );
+
   return (
     <S.Content onSubmit={handleSubmit}>
       <S.Wallets>
@@ -100,11 +106,10 @@ export const TransferFormDeposit = ({
           label="From"
           walletTypeLabel="Extension wallet"
           walletType="Funding account"
-          walletName={fundingWallet?.account?.meta.name ?? ""}
-          walletAddress={transformAddress(
-            fundingWallet?.account?.address ?? "",
-          )}
+          walletName={fundingWalletName}
+          walletAddress={fundingWalletAddress}
         />
+
         <S.WalletsButton type="button" onClick={onTransferInteraction}>
           <div>
             <Icons.Trading />
