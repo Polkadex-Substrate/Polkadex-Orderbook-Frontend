@@ -1,4 +1,3 @@
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
 import {
   flexRender,
   getCoreRowModel,
@@ -6,6 +5,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 
+import { Props } from "./types";
 import * as S from "./styles";
 import { pendingColumns } from "./columns";
 import { WithdrawHistorySkeleton } from "./skeleton";
@@ -18,13 +18,13 @@ export const PendingTable = ({
   loading,
   hasData,
 }: {
-  data: Transaction[];
+  data: Props[];
   loading: boolean;
   hasData: boolean;
 }) => {
   const table = useReactTable({
     data,
-    columns: [],
+    columns: pendingColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 

@@ -1,19 +1,12 @@
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useMemo } from "react";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
 
 import * as S from "./styles";
+import { Props } from "./types";
 import { pendingColumns } from "./columns";
 import { WithdrawHistorySkeleton } from "./skeleton";
 
@@ -25,48 +18,12 @@ export const ClaimedTable = ({
   loading,
   hasData,
 }: {
-  data: Transaction[];
+  data: Props[];
   loading: boolean;
   hasData: boolean;
 }) => {
-  const { selectedAccount } = useProfile();
-  const { allAccounts } = useExtensionWallet();
-
-  const { mainAddress } = selectedAccount;
-  const { selectGetAsset } = useAssetsProvider();
-
-  const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress],
-  );
-
-  const allData = useMemo(
-    () =>
-      data.map((e) => {
-        const token = selectGetAsset(e.asset);
-
-        return {
-          ...e,
-          token: {
-            ticker: token?.symbol,
-            name: token?.name,
-          },
-          wallets: {
-            fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-            fromWalletAddress: fundingWallet?.account?.address ?? "",
-            toWalletType: "Trading Account",
-          },
-        };
-      }),
-    [
-      data,
-      fundingWallet?.account?.address,
-      fundingWallet?.account?.meta?.name,
-      selectGetAsset,
-    ],
-  );
   const table = useReactTable({
-    data: allData,
+    data,
     columns: pendingColumns,
     getCoreRowModel: getCoreRowModel(),
   });

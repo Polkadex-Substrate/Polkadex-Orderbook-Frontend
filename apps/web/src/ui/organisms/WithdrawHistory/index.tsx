@@ -5,6 +5,11 @@ import {
 } from "@orderbook/core/providers/user/transactionsProvider";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { Tab } from "@headlessui/react";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  useExtensionWallet,
+  userMainAccountDetails,
+} from "@orderbook/core/providers/user/extensionWallet";
 
 import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
@@ -22,14 +27,37 @@ export const WithdrawHistory = ({
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
   const { selectGetAsset } = useAssetsProvider();
-
   const { allWithdrawals, readyWithdrawals, loading } =
     useTransactionsProvider();
+  const { selectedAccount } = useProfile();
+  const { allAccounts } = useExtensionWallet();
+
+  const { mainAddress } = selectedAccount;
+
+  const fundingWallet = useMemo(
+    () => userMainAccountDetails(mainAddress, allAccounts),
+    [allAccounts, mainAddress],
+  );
 
   const selectedWithdraw = useCallback(
     (status: Transaction["status"]) =>
       allWithdrawals
         ?.filter((txn) => txn.status === status)
+        ?.map((e) => {
+          const token = selectGetAsset(e.asset);
+          return {
+            ...e,
+            token: {
+              ticker: token?.symbol,
+              name: token?.name,
+            },
+            wallets: {
+              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
+              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              toWalletType: "Trading Account",
+            },
+          };
+        })
         ?.flatMap((withdrawal) => {
           if (showSelectedCoins) {
             const assetName = selectGetAsset(withdrawal.asset)?.name;
@@ -38,7 +66,14 @@ export const WithdrawHistory = ({
             return [withdrawal];
           }
         }),
-    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name],
+    [
+      allWithdrawals,
+      showSelectedCoins,
+      selectGetAsset,
+      selectedAsset?.name,
+      fundingWallet?.account?.address,
+      fundingWallet?.account?.meta?.name,
+    ],
   );
 
   const readyToClaim = useMemo(() => {
