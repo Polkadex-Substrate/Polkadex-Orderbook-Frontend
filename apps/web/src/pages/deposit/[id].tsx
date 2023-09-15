@@ -19,12 +19,12 @@ import { useDisabledPages } from "@/hooks";
 const DepositTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Deposit").then(
-      (mod) => mod.DepositTemplate,
+      (mod) => mod.DepositTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 
 const Deposit = () => {
@@ -44,12 +44,12 @@ const Deposit = () => {
 
   const hasSelectedAccount = selectIsAddressInExtension(
     mainAddress,
-    extensionWalletState.allAccounts,
+    extensionWalletState.allAccounts
   );
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
-    [hasUser, isRegistered, hasSelectedAccount],
+    [hasUser, isRegistered, hasSelectedAccount]
   );
 
   if (!isLoading && !hasUser) router?.push("/trading/");

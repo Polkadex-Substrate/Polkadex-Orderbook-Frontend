@@ -10,6 +10,7 @@ import {
   BalancesProvider,
   TransactionsProvider,
   DepositProvider,
+  WithdrawsProvider,
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -18,12 +19,12 @@ import { useDisabledPages } from "@/hooks";
 const TransferTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Transfer").then(
-      (mod) => mod.TransferTemplate,
+      (mod) => mod.TransferTemplate
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
-  },
+  }
 );
 
 const Transfer = () => {
@@ -43,12 +44,12 @@ const Transfer = () => {
 
   const hasSelectedAccount = selectIsAddressInExtension(
     mainAddress,
-    extensionWalletState.allAccounts,
+    extensionWalletState.allAccounts
   );
 
   const shouldRedirect = useMemo(
     () => !hasUser || !isRegistered || !hasSelectedAccount,
-    [hasUser, isRegistered, hasSelectedAccount],
+    [hasUser, isRegistered, hasSelectedAccount]
   );
 
   if (!isLoading && !hasUser) router?.push("/trading");
@@ -59,7 +60,9 @@ const Transfer = () => {
       <BalancesProvider>
         <TransactionsProvider>
           <DepositProvider>
-            <TransferTemplate />;
+            <WithdrawsProvider>
+              <TransferTemplate />
+            </WithdrawsProvider>
           </DepositProvider>
         </TransactionsProvider>
       </BalancesProvider>

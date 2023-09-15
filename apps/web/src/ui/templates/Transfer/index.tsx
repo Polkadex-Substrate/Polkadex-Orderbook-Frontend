@@ -35,14 +35,14 @@ export const TransferTemplate = () => {
     () =>
       filterBlockedAssets(list)?.map((e) => {
         const tokenBalance = balances?.find(
-          (value) => value.assetId === e.assetId,
+          (value) => value.assetId === e.assetId
         );
         return {
           ...e,
           availableBalance: tokenBalance?.onChainBalance,
         } as T.FilteredAssetProps;
       }),
-    [list, balances],
+    [list, balances]
   );
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
