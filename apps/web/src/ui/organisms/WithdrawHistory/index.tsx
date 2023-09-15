@@ -19,7 +19,7 @@ import { ReadyToClaimTable } from "./readyToClaimTable";
 import { ClaimedTable } from "./claimedTable";
 import { ReadyToClaimDataProps } from "./types";
 
-import { Checkbox, Search } from "@/ui/molecules";
+import { CheckboxCustom, Search } from "@/ui/molecules";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const WithdrawHistory = ({
@@ -27,7 +27,7 @@ export const WithdrawHistory = ({
 }: {
   selectedAsset?: FilteredAssetProps;
 }) => {
-  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
 
   const { selectGetAsset } = useAssetsProvider();
   const { allWithdrawals, readyWithdrawals, loading } =
@@ -39,7 +39,7 @@ export const WithdrawHistory = ({
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress],
+    [allAccounts, mainAddress]
   );
 
   const selectedWithdraw = useCallback(
@@ -76,7 +76,7 @@ export const WithdrawHistory = ({
       selectedAsset?.name,
       fundingWallet?.account?.address,
       fundingWallet?.account?.meta?.name,
-    ],
+    ]
   );
 
   const readyWithdrawalsData = useMemo(
@@ -95,7 +95,7 @@ export const WithdrawHistory = ({
                 hour: "2-digit",
                 minute: "2-digit",
               },
-              { locale: "EN" },
+              { locale: "EN" }
             ),
             token: {
               ticker: token?.symbol,
@@ -118,7 +118,7 @@ export const WithdrawHistory = ({
       fundingWallet?.account?.meta?.name,
       fundingWallet?.account?.address,
       selectGetAsset,
-    ],
+    ]
   );
 
   const readyToClaim = useMemo(() => {
@@ -146,12 +146,12 @@ export const WithdrawHistory = ({
 
   const pendingWithdraws = useMemo(
     () => selectedWithdraw("PENDING"),
-    [selectedWithdraw],
+    [selectedWithdraw]
   );
 
   const claimedWithdraws = useMemo(
     () => selectedWithdraw("CONFIRMED"),
-    [selectedWithdraw],
+    [selectedWithdraw]
   );
 
   const pendingClaims: number = useMemo(
@@ -159,9 +159,9 @@ export const WithdrawHistory = ({
       readyToClaim.reduce(
         (acc, value) =>
           acc + value.items.filter((v) => v.status === "READY").length,
-        0,
+        0
       ),
-    [readyToClaim],
+    [readyToClaim]
   );
 
   return (
@@ -173,22 +173,22 @@ export const WithdrawHistory = ({
         <S.Container>
           <S.Title>
             <S.TabList>
-              <S.TabItem>Pending</S.TabItem>
+              <S.TabItem>Pending({pendingWithdraws?.length})</S.TabItem>
               <S.TabItemPending>
-                {pendingClaims && <div>{pendingClaims}</div>}
+                {pendingClaims > 0 && <div>{pendingClaims}</div>}
                 Ready to claim
               </S.TabItemPending>
-              <S.TabItem>Claimed</S.TabItem>
+              <S.TabItem>Claimed({claimedWithdraws?.length})</S.TabItem>
             </S.TabList>
             <S.TitleWrapper>
               <Search isFull placeholder="Search" />
-              <Checkbox
+              <CheckboxCustom
                 checked={showSelectedCoins}
                 onChange={() => setShowSelectedCoins(!showSelectedCoins)}
                 labelProps={{ style: { whiteSpace: "nowrap" } }}
               >
                 Show only selected token
-              </Checkbox>
+              </CheckboxCustom>
             </S.TitleWrapper>
           </S.Title>
           <Tab.Panels className="flex-1">
