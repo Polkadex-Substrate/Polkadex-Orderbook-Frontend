@@ -4,6 +4,10 @@ import { CommonActionState } from "../../types";
 
 import * as A from "./actions";
 
+export type UserActionLambdaResp = {
+  is_success: boolean;
+  body: string;
+};
 export interface OrdersState {
   execute: CommonActionState;
   currentPrice: number | undefined;

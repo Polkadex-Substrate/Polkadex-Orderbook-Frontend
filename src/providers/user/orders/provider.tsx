@@ -8,6 +8,7 @@ import { Provider } from "./context";
 import { initialState, ordersReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
+import { UserActionLambdaResp } from "./types";
 
 import { UserAccount } from "@polkadex/orderbook/providers/user/profile/types";
 import {
@@ -61,6 +62,15 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         const signature = signPayload(api, keyringPair, order);
         const res = await executePlaceOrder([order, signature], address);
         if (res.data.place_order) {
+          const resp: UserActionLambdaResp = JSON.parse(res.data.place_order);
+          if (!resp.is_success) {
+            dispatch(A.orderExecuteDataDelete());
+            settingsState.onHandleNotification({
+              type: "Error",
+              message: `Order failed: ${resp.body}`,
+            });
+            return;
+          }
           settingsState.onHandleNotification({
             type: "Success",
             message: "Order Placed",
