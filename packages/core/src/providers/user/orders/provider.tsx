@@ -23,6 +23,11 @@ import {
 } from "./helper";
 import { Provider } from "./context";
 
+type UserActionLambdaResp = {
+  is_success: boolean;
+  body: string;
+};
+
 export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
   const profileState = useProfile();
@@ -39,7 +44,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const mainAddress = account.mainAddress;
       const keyringPair = selectTradeAccount(
         address,
-        tradeWalletState.allBrowserAccounts,
+        tradeWalletState.allBrowserAccounts
       );
       const timestamp = getNonce();
       const isApiConnected = nativeApiState.connected;
@@ -57,11 +62,20 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
           price,
           timestamp,
           clientOrderId,
-          mainAddress,
+          mainAddress
         );
         const signature = signPayload(api, keyringPair, order);
         const res = await executePlaceOrder([order, signature], address);
         if (res.data.place_order) {
+          const resp: UserActionLambdaResp = JSON.parse(res.data.place_order);
+          if (!resp.is_success) {
+            dispatch(A.orderExecuteDataDelete());
+            settingsState.onHandleNotification({
+              type: "Error",
+              message: `Order failed: ${resp.body}`,
+            });
+            return;
+          }
           settingsState.onHandleNotification({
             type: "Success",
             message: "Order Placed",
@@ -104,7 +118,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const { tradeAddress, mainAddress } = account;
       const keyringPair = selectTradeAccount(
         tradeAddress,
-        tradeWalletState.allBrowserAccounts,
+        tradeWalletState.allBrowserAccounts
       );
       if (keyringPair?.isLocked)
         throw new Error("Please unlock your account with password");
@@ -114,11 +128,11 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
           keyringPair,
           orderId,
           baseAsset,
-          quoteAsset,
+          quoteAsset
         );
         await executeCancelOrder(
           [orderId, mainAddress, tradeAddress, pair, signature],
-          tradeAddress,
+          tradeAddress
         );
         dispatch(A.orderCancelData());
 
