@@ -29,7 +29,7 @@ export const defaultConfig: DefaultConfig = {
     "/recovery",
     "/resetPassword",
     "/resetPasswordForm",
-    "/settings",
+    "/wallets",
     "/sign",
     "/signIn",
     "/withdraw",

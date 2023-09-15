@@ -50,4 +50,6 @@ export * from "./TradingView";
 export * from "./SwitchFAQ";
 export * from "./TokenCard";
 export * from "./WalletCard";
+export * from "./CheckboxCustom";
+
 export * as LoadingIcons from "./LoadingIcons";

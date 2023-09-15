@@ -9,7 +9,7 @@ export * from "./Migration";
 export * from "./Recovery";
 export * from "./ResetPassword";
 export * from "./ResetPasswordForm";
-export * from "./Settings";
+export * from "./Wallets";
 export * from "./ShutdownInteraction";
 export * from "./Sign";
 export * from "./SignIn";

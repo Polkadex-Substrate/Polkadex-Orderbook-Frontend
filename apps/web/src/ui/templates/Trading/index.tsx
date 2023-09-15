@@ -89,7 +89,7 @@ export function Trading() {
       description: tc("connectTradingAccount.description"),
       primaryLink: "/createAccount",
       primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-      secondaryLink: "/settings",
+      secondaryLink: "/wallets",
       secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
     };
 
@@ -147,7 +147,7 @@ export function Trading() {
           closeButtonTitle={t("accountBanner.closeButtonText")}
           onClose={closeBanner}
           linkText={t("accountBanner.linkText")}
-          link="/settings"
+          link="/wallets"
           heroAlt="Man in tie with open arms welcoming"
           heroImage="welcomeBack.svg"
         />

@@ -18,6 +18,8 @@ import {
 
 import * as S from "./styles";
 
+import { ArrowBottom } from "@/ui/atoms/Icons";
+
 export const Markets = ({ hasMargin = false, onClose = undefined }) => {
   const {
     marketTokens,
@@ -40,6 +42,7 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
           id={id}
           pair={currentTickerName}
           pairTicker={currentTickerImg}
+          format={false}
         />
         <S.Favorite>
           <button type="button" onClick={onClose}>
@@ -74,6 +77,7 @@ type HeaderMarketProps = {
   pairTicker: string;
   onOpenMarkets?: () => void;
   isLoading?: boolean;
+  format?: boolean;
 };
 
 export const HeaderMarket = ({
@@ -83,6 +87,7 @@ export const HeaderMarket = ({
   pairTicker,
   onOpenMarkets = undefined,
   isLoading = false,
+  format = true,
 }: HeaderMarketProps) => {
   const now = new Date();
   const from = subDays(now, 7);
@@ -94,7 +99,7 @@ export const HeaderMarket = ({
       {isLoading ? (
         <MarketsSkeleton />
       ) : (
-        <>
+        <S.HeaderAsideContainer background={format}>
           <S.HeaderAsideLeft>
             <S.HeaderToken>
               <Icon isToken name={pairTicker} size="extraMedium" color="text" />
@@ -111,7 +116,12 @@ export const HeaderMarket = ({
               <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
             </Sparklines>
           </S.HeaderAsideCenter>
-        </>
+          {format && (
+            <S.ArrowBottom>
+              <ArrowBottom />
+            </S.ArrowBottom>
+          )}
+        </S.HeaderAsideContainer>
       )}
     </S.Header>
   );
@@ -165,16 +175,8 @@ const Content: FC<{
             id={token.id}
             pair={token.name}
             tokenTicker={token.tokenTickerName}
-            vol={Decimal.format(
-              Number(token.volume),
-              token.quote_precision,
-              ",",
-            )}
-            price={Decimal.format(
-              Number(token.last),
-              token.quote_precision,
-              ",",
-            )}
+            vol={Decimal.format(Number(token.volume), token.quote_precision)}
+            price={Decimal.format(Number(token.last), token.quote_precision)}
             change={
               Decimal.format(Number(token.price_change_percent), 2, ",") + "%"
             }

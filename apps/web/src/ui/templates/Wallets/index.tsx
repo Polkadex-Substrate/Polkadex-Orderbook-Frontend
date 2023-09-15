@@ -22,6 +22,7 @@ import {
   TooltipContent,
   TooltipHeader,
   Dropdown,
+  CheckboxCustom,
 } from "@polkadex/orderbook-ui/molecules";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -39,7 +40,7 @@ import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import * as T from "./types";
 import * as S from "./styles";
 
-export const SettingsTemplate = () => {
+export const WalletsTemplate = () => {
   const router = useRouter();
   const {
     allFilteredTradeAccounts,
@@ -59,6 +60,8 @@ export const SettingsTemplate = () => {
     usingAccount,
     showRegistered,
     handleChangeShowRegistered,
+    showPresent,
+    handleChangeShowPresent,
     handleCloseNewAccount,
     handleClosePreviewModal,
     filterTradeAccountsByControllerAccount,
@@ -186,51 +189,61 @@ export const SettingsTemplate = () => {
                             handleFilterTradeAccounts(e.target.value)
                           }
                         >
-                          <S.AccountHeaderContent>
-                            {/* don't show all section if no linked address */}
-                            {controllerWallets?.length ? (
-                              <Dropdown>
-                                <Dropdown.Trigger>
-                                  <S.AccountHeaderTrigger>
-                                    <span>
-                                      {filterTradeAccountsByControllerAccount}
-                                    </span>
-                                    <div>
-                                      <Icons.ArrowBottom />
-                                    </div>
-                                  </S.AccountHeaderTrigger>
-                                </Dropdown.Trigger>
-                                <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                  {[
-                                    {
-                                      account: {
-                                        meta: { name: "All" },
-                                        address: "all",
+                          <S.AccountHeaderFlex>
+                            <S.AccountHeaderContent>
+                              <CheckboxCustom
+                                checked={showPresent}
+                                onChange={handleChangeShowPresent}
+                              >
+                                {t("onlySelectedAccount")}
+                              </CheckboxCustom>
+                            </S.AccountHeaderContent>
+                            <S.AccountHeaderContent>
+                              {/* don't show all section if no linked address */}
+                              {controllerWallets?.length ? (
+                                <Dropdown>
+                                  <Dropdown.Trigger>
+                                    <S.AccountHeaderTrigger>
+                                      <span>
+                                        {filterTradeAccountsByControllerAccount}
+                                      </span>
+                                      <div>
+                                        <Icons.ArrowBottom />
+                                      </div>
+                                    </S.AccountHeaderTrigger>
+                                  </Dropdown.Trigger>
+                                  <Dropdown.Menu fill="secondaryBackgroundSolid">
+                                    {[
+                                      {
+                                        account: {
+                                          meta: { name: "All" },
+                                          address: "all",
+                                        },
                                       },
-                                    },
-                                    ...controllerWallets,
-                                  ]?.map(({ account }, i) => {
-                                    const name = account?.meta?.name?.length
-                                      ? account?.meta?.name
-                                      : transformAddress(account.address, 5);
+                                      ...controllerWallets,
+                                    ]?.map(({ account }, i) => {
+                                      const name = account?.meta?.name?.length
+                                        ? account?.meta?.name
+                                        : transformAddress(account.address, 5);
 
-                                    return (
-                                      <Dropdown.Item
-                                        key={i}
-                                        onAction={() =>
-                                          handleFilterTradeAccountByController(
-                                            account.address,
-                                          )
-                                        }
-                                      >
-                                        <S.Dropdown>{name}</S.Dropdown>
-                                      </Dropdown.Item>
-                                    );
-                                  })}
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            ) : null}
-                          </S.AccountHeaderContent>
+                                      return (
+                                        <Dropdown.Item
+                                          key={i}
+                                          onAction={() =>
+                                            handleFilterTradeAccountByController(
+                                              account.address,
+                                            )
+                                          }
+                                        >
+                                          <S.Dropdown>{name}</S.Dropdown>
+                                        </Dropdown.Item>
+                                      );
+                                    })}
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              ) : null}
+                            </S.AccountHeaderContent>
+                          </S.AccountHeaderFlex>
                         </AccountHeader>
                         <S.WalletContent>
                           {allFilteredTradeAccounts?.length ? (

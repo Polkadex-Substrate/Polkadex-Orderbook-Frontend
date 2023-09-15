@@ -115,6 +115,11 @@ export const WalletContent = styled.div`
 `;
 
 export const WalletWrapper = styled.div``;
+export const AccountHeaderFlex = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
 
 export const ButtonWallet = styled.button`
   ${({ theme }) => css`

@@ -5,17 +5,17 @@ import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 import { useDisabledPages } from "@/hooks";
 
-const SettingsTemplate = dynamic(
+const WalletsTemplate = dynamic(
   () =>
-    import("@polkadex/orderbook-ui/templates/Settings").then(
-      (mod) => mod.SettingsTemplate,
+    import("@polkadex/orderbook-ui/templates/Wallets").then(
+      (mod) => mod.WalletsTemplate,
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
   },
 );
-const Settings = () => {
+const Wallets = () => {
   const router = useRouter();
   const { disabled } = useDisabledPages();
 
@@ -27,7 +27,7 @@ const Settings = () => {
   if (!isLoading && !hasUser) router?.push("/trading/");
 
   if (!hasUser || disabled) return <div />;
-  return <SettingsTemplate />;
+  return <WalletsTemplate />;
 };
 
-export default Settings;
+export default Wallets;

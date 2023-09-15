@@ -42,13 +42,13 @@ export const Menu = ({ open = false }) => {
           {t("balances")}
         </Card>
         <Card
-          active={router.pathname === "/settings"}
+          active={router.pathname === "/wallets"}
           icon="Wallet"
-          href="/settings"
+          href="/wallets"
           disable={!isAuthenticated}
           open={open}
         >
-          {t("accounts")}
+          {t("wallets")}
         </Card>
         <Terms open={open} />
         <Card
@@ -97,7 +97,7 @@ const Terms = ({ open }) => {
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             <div>
               <span>{tc("termsOfUse")}</span>
@@ -106,7 +106,7 @@ const Terms = ({ open }) => {
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             <div>
               <span>{tc("privacyPolicy")}</span>
@@ -115,7 +115,7 @@ const Terms = ({ open }) => {
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             <div>
               <span>{tc("disclaimer")}</span>
@@ -124,7 +124,7 @@ const Terms = ({ open }) => {
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             <div>
               <span>{tc("excludedJurisdictions")}</span>
@@ -133,7 +133,7 @@ const Terms = ({ open }) => {
           <a
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             <div>
               <span>{tc("dataRetentionPolicy")}</span>
