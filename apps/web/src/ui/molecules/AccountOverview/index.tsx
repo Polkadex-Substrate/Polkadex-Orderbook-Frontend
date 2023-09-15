@@ -249,7 +249,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           onClick={() => router.push("/balances")}
         />
         <Card
-          title={t("accounts")}
+          title={t("wallets")}
           icon="Wallet"
           onClick={() => router.push("/wallets")}
         />
