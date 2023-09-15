@@ -49,6 +49,7 @@ export const ResetPasswordFormTemplate = () => {
       <S.Main>
         <Header />
         <S.Flex>
+          <Menu />
           <S.Wrapper>
             <S.Container>
               <S.Title>
@@ -135,7 +136,6 @@ export const ResetPasswordFormTemplate = () => {
             </S.Container>
           </S.Wrapper>
         </S.Flex>
-        <Menu />
       </S.Main>
     </>
   );
