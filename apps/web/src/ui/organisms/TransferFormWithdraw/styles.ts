@@ -1,33 +1,11 @@
 import styled, { css } from "styled-components";
 
-export const Main = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 100rem;
-  padding: 2rem;
-  @media screen and (min-width: 1110px) {
-    padding: 4rem;
-  }
-`;
-
-export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  align-self: flex-end;
-
-  span {
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-`;
-
 export const Content = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   flex: 1;
+  backface-visibility: hidden;
 `;
 
 export const Wallets = styled.div`
@@ -44,16 +22,14 @@ export const Wallets = styled.div`
   `}
 `;
 
-export const WalletsButton = styled.button<{ isDeposit: boolean }>`
-  ${({ theme, isDeposit }) => css`
+export const WalletsButton = styled.button`
+  ${({ theme }) => css`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    transition: transform ease 0.2s;
-    background: ${isDeposit ? theme.colors.green : theme.colors.primary};
-    transform: ${isDeposit ? "rotate(360deg)" : "rotate(0)"};
+    background: ${theme.colors.primary};
     padding: 0.8rem;
     border-radius: 0.4rem;
     svg {
@@ -151,11 +127,11 @@ export const Amount = styled.div`
   `}
 `;
 
-export const Footer = styled.div<{ isDeposit?: boolean }>`
-  ${({ theme, isDeposit }) => css`
+export const Footer = styled.div`
+  ${({ theme }) => css`
     flex: 1;
     button {
-      background: ${isDeposit ? theme.colors.green : theme.colors.primary};
+      background: ${theme.colors.primary};
       padding: 1.4rem;
       border-radius: 0.5rem;
       width: 100%;

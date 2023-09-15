@@ -1,10 +1,11 @@
-import { MouseEvent, useMemo, useRef } from "react";
+import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
 } from "@orderbook/core/providers/user/extensionWallet";
 import {
   getTradeAccount,
+  selectTradeAccount,
   useTradeWallet,
 } from "@orderbook/core/providers/user/tradeWallet";
 import {
@@ -15,38 +16,36 @@ import { useFormik } from "formik";
 import { depositValidationsTest } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+
+import { UnlockModal } from "../UnlockModal";
 
 import * as S from "./styles";
 
-import {
-  LoadingSpinner,
-  Popover,
-  Switch,
-  TokenCard,
-  WalletCard,
-} from "@/ui/molecules";
+import { LoadingSpinner, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
-export const TransferForm = ({
-  isDeposit,
+const initialValues = { amount: 0.0 };
+
+export const TransferFormWithdraw = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
 }: {
-  isDeposit: boolean;
+  isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { allAccounts } = useExtensionWallet();
   const { allBrowserAccounts } = useTradeWallet();
-  const { loading, onFetchDeposit } = useDepositProvider();
-
-  const { selectedAccount, userData } = useProfile();
+  const { onFetchWithdraws, loading } = useWithdrawsProvider();
+  const { selectedAccount } = useProfile();
 
   const { tradeAddress, mainAddress } = selectedAccount;
-  const { userAccounts } = userData;
 
   const tradingWallet = useMemo(
     () => getTradeAccount(tradeAddress, allBrowserAccounts),
@@ -60,84 +59,72 @@ export const TransferForm = ({
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
-  const existentialBalance = useMemo(
-    () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
-    [selectedAsset?.assetId],
-  );
-
   const handleMax = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const onChainBalance = Number(selectedAsset?.onChainBalance);
-    if (onChainBalance > existentialBalance) {
-      const balance = onChainBalance - existentialBalance;
-      const trimmedBalance = trimFloat({ value: balance });
-      setFieldValue("amount", trimmedBalance);
-    }
-    // TODO?: Handle Error...
+    const availableAmount = Number(selectedAsset?.free_balance);
+    const trimmedBalance = trimFloat({ value: availableAmount });
+    setFieldValue("amount", trimmedBalance);
   };
+
+  const tradingAccountInBrowser = useMemo(
+    () => selectTradeAccount(selectedAccount?.tradeAddress, allBrowserAccounts),
+    [allBrowserAccounts, selectedAccount?.tradeAddress],
+  );
+
   const {
-    touched,
+    resetForm,
     handleSubmit,
     errors,
     getFieldProps,
-    values,
     isValid,
     dirty,
     setFieldValue,
   } = useFormik({
-    initialValues: {
-      amount: "",
-      isDeposit: true,
-    },
+    initialValues,
     validationSchema: depositValidationsTest,
     validateOnBlur: true,
-    onSubmit: ({ amount, isDeposit }) => {
-      if (!fundingWallet) return;
-      // TODO?: Handle Error...
+    onSubmit: async ({ amount }) => {
+      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+      else {
+        const asset = isAssetPDEX(selectedAsset?.assetId)
+          ? "PDEX"
+          : selectedAsset?.assetId;
+        if (!asset) return;
+        // TODO: Handle Error...
 
-      const asset = isAssetPDEX(selectedAsset?.assetId)
-        ? { polkadex: null }
-        : { asset: selectedAsset?.assetId };
-      console.table([
-        { asset: asset, amount: values.amount, mainAccount: fundingWallet },
-      ]);
-      if (isDeposit) {
-        onFetchDeposit({
-          // TODO: Fix asset types
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          asset,
-          amount: amount,
-          mainAccount: fundingWallet,
-        });
+        try {
+          await onFetchWithdraws({ asset, amount });
+        } finally {
+          resetForm({ values: initialValues });
+        }
       }
     },
   });
+
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   return (
-    <S.Main>
-      <S.Header>
-        <Switch
-          isActive={values.isDeposit}
-          onChange={() => setFieldValue("isDeposit", !values.isDeposit)}
-        />
-        <span>Transfer for other Polkadex accounts</span>
-      </S.Header>
+    <>
+      <UnlockModal
+        open={showPassword}
+        onClose={() => setShowPassword(false)}
+        tradingAccountInBrowser={tradingAccountInBrowser}
+        dispatchAction={() =>
+          formRef?.current?.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true }),
+          )
+        }
+      />
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
             label="From"
-            walletTypeLabel="Extension wallet"
-            walletType="Funding account"
-            walletName={fundingWallet?.account?.meta.name ?? ""}
-            walletAddress={transformAddress(
-              fundingWallet?.account?.address ?? "",
-            )}
+            walletTypeLabel="Orderbook wallet"
+            walletType="Trading account"
+            walletName={tradingWallet?.meta.name ?? ""}
+            walletAddress={transformAddress(tradingWallet?.address ?? "")}
           />
-          <S.WalletsButton
-            isDeposit={isDeposit}
-            type="button"
-            onClick={onTransferInteraction}
-          >
+          <S.WalletsButton type="button" onClick={onTransferInteraction}>
             <div>
               <Icons.Trading />
             </div>
@@ -145,17 +132,19 @@ export const TransferForm = ({
           </S.WalletsButton>
           <WalletCard
             label="To"
-            walletTypeLabel="Orderbook wallet"
-            walletType="Trading account"
-            walletName={tradingWallet?.meta.name ?? ""}
-            walletAddress={transformAddress(tradingWallet?.address ?? "")}
+            walletTypeLabel="Extension wallet"
+            walletType="Funding account"
+            walletName={fundingWallet?.account?.meta.name ?? ""}
+            walletAddress={transformAddress(
+              fundingWallet?.account?.address ?? "",
+            )}
           />
         </S.Wallets>
         <S.Form>
           <TokenCard
             tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
             tokenTicker={selectedAsset?.symbol ?? ""}
-            availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
+            availableAmount={selectedAsset?.free_balance ?? "0.00"}
             onAction={onOpenAssets}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
@@ -180,13 +169,12 @@ export const TransferForm = ({
               />
               <span>$0.00</span>
             </div>
-
             <button type="button" onClick={handleMax}>
               MAX
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer isDeposit={isDeposit}>
+        <S.Footer>
           <button disabled={!(isValid && dirty) || loading} type="submit">
             <LoadingSpinner
               loading={loading}
@@ -198,6 +186,6 @@ export const TransferForm = ({
           </button>
         </S.Footer>
       </S.Content>
-    </S.Main>
+    </>
   );
 };

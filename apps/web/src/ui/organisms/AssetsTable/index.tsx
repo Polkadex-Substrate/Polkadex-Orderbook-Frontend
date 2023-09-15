@@ -64,6 +64,7 @@ export const AssetsTable = ({
                 onClick={() =>
                   onChangeAsset({
                     onChainBalance: row.original.onChainBalance,
+                    free_balance: row.original.free_balance,
                     assetId: row.original.assetId,
                     name: row.original.name,
                     symbol: row.original.symbol,

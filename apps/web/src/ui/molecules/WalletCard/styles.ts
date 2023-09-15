@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Header = styled.div`
@@ -25,25 +27,39 @@ export const Header = styled.div`
     }
   `}
 `;
+export const Icon = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.5rem;
+    width: 2.3rem;
+    height: 2.3rem;
+    padding: 0.5rem;
+    svg {
+      stroke: ${theme.colors.tertiaryText};
+    }
+  `}
+`;
 
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
+    flex: 1;
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 2rem;
-    div {
-      background: ${theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.5rem;
-      width: 2.3rem;
-      height: 2.3rem;
-      padding: 0.5rem;
-      svg {
-        stroke: ${theme.colors.tertiaryText};
-      }
-    }
     span {
       color: ${theme.colors.tertiaryText};
     }
   `}
+`;
+
+export const Message = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  div {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 `;

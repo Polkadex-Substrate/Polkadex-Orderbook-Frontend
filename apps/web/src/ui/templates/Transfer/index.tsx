@@ -4,10 +4,11 @@ import {
   AssetsInteraction,
   Header,
   Menu,
-  TransferForm,
   DepositHistory,
+  TransferFormDeposit,
+  TransferFormWithdraw,
 } from "@polkadex/orderbook-ui/organisms";
-import { Footer } from "@polkadex/orderbook-ui/molecules";
+import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
@@ -78,12 +79,25 @@ export const TransferTemplate = () => {
               </S.Header>
               <S.Content>
                 <S.Form>
-                  <TransferForm
-                    isDeposit={isDeposit}
-                    onTransferInteraction={onTransferInteraction}
-                    onOpenAssets={onAssetsInteraction}
-                    selectedAsset={selectedAsset}
-                  />
+                  <S.Title>
+                    <Switch onChange={() => window.alert("Chaing..")} />
+                    <span>Transfer for other Polkadex accounts</span>
+                  </S.Title>
+                  <S.Container>
+                    {isDeposit ? (
+                      <TransferFormDeposit
+                        onTransferInteraction={onTransferInteraction}
+                        onOpenAssets={onAssetsInteraction}
+                        selectedAsset={selectedAsset}
+                      />
+                    ) : (
+                      <TransferFormWithdraw
+                        onTransferInteraction={onTransferInteraction}
+                        onOpenAssets={onAssetsInteraction}
+                        selectedAsset={selectedAsset}
+                      />
+                    )}
+                  </S.Container>
                 </S.Form>
                 <S.History>
                   <DepositHistory />

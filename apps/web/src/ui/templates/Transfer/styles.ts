@@ -65,7 +65,16 @@ export const Content = styled.div`
   flex-direction: column;
   flex: 1;
 `;
-export const Form = styled.div``;
+export const Form = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 100rem;
+  padding: 2rem;
+  @media screen and (min-width: 1110px) {
+    padding: 4rem;
+  }
+`;
 
 export const History = styled.div`
   display: flex;
@@ -78,3 +87,16 @@ export const HistoryWrapper = styled.div`
     border-top: 1px solid ${theme.colors.secondaryBackground};
   `}
 `;
+
+export const Title = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  align-self: flex-end;
+  span {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+`;
+
+export const Container = styled.div``;

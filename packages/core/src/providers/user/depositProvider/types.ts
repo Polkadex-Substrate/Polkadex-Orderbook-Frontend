@@ -16,7 +16,7 @@ export interface onFetchDeposit {
 }
 
 export type DepositContextProps = DepositsState & {
-  onFetchDeposit: (value: onFetchDeposit) => void;
+  onFetchDeposit: (value: onFetchDeposit) => Promise<void>;
 };
 
 export type DepositProviderProps = PropsWithChildren<{
