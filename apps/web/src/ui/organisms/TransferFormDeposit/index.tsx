@@ -39,14 +39,14 @@ export const TransferFormDeposit = ({
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+    [allAccounts, mainAddress],
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const existentialBalance = useMemo(
     () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
-    [selectedAsset?.assetId]
+    [selectedAsset?.assetId],
   );
 
   const handleMax = (e: MouseEvent<HTMLElement>) => {
@@ -102,7 +102,7 @@ export const TransferFormDeposit = ({
           walletType="Funding account"
           walletName={fundingWallet?.account?.meta.name ?? ""}
           walletAddress={transformAddress(
-            fundingWallet?.account?.address ?? ""
+            fundingWallet?.account?.address ?? "",
           )}
         />
         <S.WalletsButton type="button" onClick={onTransferInteraction}>

@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
 export const Header = styled.div`
   padding: 2rem 4rem;
   h3 {
+    font-size: 1.8rem;
     font-weight: 550;
   }
 `;
@@ -188,10 +189,6 @@ export const Title = styled.div`
     @media screen and (min-width: 550px) {
       flex-direction: row;
       align-items: center;
-    }
-    h3 {
-      font-size: 1.8rem;
-      font-weight: 550;
     }
     @media screen and (min-width: 1110px) {
       padding: 0 4rem;

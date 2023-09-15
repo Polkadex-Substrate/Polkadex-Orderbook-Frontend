@@ -1,90 +1,91 @@
+import { useCallback, useMemo, useState } from "react";
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useMemo } from "react";
-import classNames from "classnames";
-import { useTransactionsProvider } from "@orderbook/core/providers/user/transactionsProvider";
-import { intlFormat } from "date-fns";
+  useTransactionsProvider,
+  Transaction,
+} from "@orderbook/core/providers/user/transactionsProvider";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
 import { Tab } from "@headlessui/react";
 
-import { columns } from "./columns";
 import * as S from "./styles";
-import * as T from "./types";
-import { WithdrawHistorySkeleton } from "./skeleton";
+import { PendingTable } from "./pendingTable";
+import { ReadyToClaimTable } from "./readyToClaimTable";
+import { ClaimedTable } from "./claimedTable";
 
-import { Checkbox, EmptyData, Search } from "@/ui/molecules";
-import { Icons } from "@/ui/atoms";
+import { Checkbox, Search } from "@/ui/molecules";
+import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
-export const WithdrawHistory = () => {
-  const { deposits, loading: isTransactionsFetching } =
-    useTransactionsProvider();
+export const WithdrawHistory = ({
+  selectedAsset,
+}: {
+  selectedAsset?: FilteredAssetProps;
+}) => {
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
-  const { selectedAccount } = useProfile();
-  const { allAccounts } = useExtensionWallet();
-
-  const { mainAddress } = selectedAccount;
   const { selectGetAsset } = useAssetsProvider();
 
-  const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+  const { allWithdrawals, readyWithdrawals, loading } =
+    useTransactionsProvider();
+
+  const selectedWithdraw = useCallback(
+    (status: Transaction["status"]) =>
+      allWithdrawals
+        ?.filter((txn) => txn.status === status)
+        ?.flatMap((withdrawal) => {
+          if (showSelectedCoins) {
+            const assetName = selectGetAsset(withdrawal.asset)?.name;
+            return assetName === selectedAsset?.name ? [withdrawal] : [];
+          } else {
+            return [withdrawal];
+          }
+        }),
+    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name],
   );
 
-  const data = useMemo(
+  const readyToClaim = useMemo(() => {
+    if (!showSelectedCoins) return readyWithdrawals;
+
+    return readyWithdrawals.filter(({ items, id, sid }) => {
+      const filteredItems = items.filter((item) => {
+        const assetName = selectGetAsset(item.asset)?.name;
+        return assetName === selectedAsset?.name && item;
+      });
+
+      return (
+        filteredItems.length && {
+          id,
+          sid,
+          items: filteredItems,
+        }
+      );
+    });
+  }, [
+    readyWithdrawals,
+    selectGetAsset,
+    selectedAsset?.name,
+    showSelectedCoins,
+  ]);
+
+  const pendingWithdraws = useMemo(
+    () => selectedWithdraw("PENDING"),
+    [selectedWithdraw],
+  );
+
+  const claimedWithdraws = useMemo(
+    () => selectedWithdraw("CONFIRMED"),
+    [selectedWithdraw],
+  );
+
+  const hasPendingClaims = useMemo(
     () =>
-      deposits.map((e) => {
-        const token = selectGetAsset(e.asset);
-        return {
-          stid: e.stid,
-          snapshot_id: e.snapshot_id,
-          amount: e.amount,
-          fee: e.fee,
-          main_account: e.main_account,
-          time: intlFormat(
-            new Date(e.time),
-            {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            },
-            { locale: "EN" }
-          ),
-          status: e.status,
-          txn_type: e.txn_type,
-          token: {
-            ticker: token?.symbol,
-            name: token?.name,
-          },
-          wallets: {
-            fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-            fromWalletAddress: fundingWallet?.account?.address ?? "",
-            toWalletType: "Trading Account",
-          },
-        } as T.Props;
-      }),
-    [
-      deposits,
-      selectGetAsset,
-      fundingWallet?.account?.meta?.name,
-      fundingWallet?.account?.address,
-    ]
+      readyToClaim.reduce(
+        (acc, value) =>
+          acc + value.items.filter((v) => v.status === "READY").length,
+        0,
+      ),
+    [readyToClaim],
   );
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
+  console.log("readyToClaim", readyToClaim);
   return (
     <S.Wrapper>
       <S.Header>
@@ -100,22 +101,42 @@ export const WithdrawHistory = () => {
             </S.TabList>
             <S.TitleWrapper>
               <Search isFull placeholder="Search" />
-              <Checkbox labelProps={{ style: { whiteSpace: "nowrap" } }}>
+              <Checkbox
+                checked={showSelectedCoins}
+                onChange={() => setShowSelectedCoins(!showSelectedCoins)}
+                labelProps={{ style: { whiteSpace: "nowrap" } }}
+              >
                 Show only selected token
               </Checkbox>
             </S.TitleWrapper>
           </S.Title>
-          <Tab.Panels>
-            <Tab.Panel>
+          <Tab.Panels className="flex-1">
+            <Tab.Panel className="flex-1">
               <S.Table>
-                <div />
+                <PendingTable
+                  data={pendingWithdraws}
+                  loading={loading}
+                  hasData={!!pendingWithdraws?.length}
+                />
               </S.Table>
             </Tab.Panel>
-            <Tab.Panel>
-              <div />
+            <Tab.Panel className="flex-1">
+              <S.Table>
+                <ReadyToClaimTable
+                  data={readyToClaim}
+                  loading={loading}
+                  hasData={!!readyToClaim?.length}
+                />
+              </S.Table>
             </Tab.Panel>
-            <Tab.Panel>
-              <div />
+            <Tab.Panel className="flex-1">
+              <S.Table>
+                <ClaimedTable
+                  data={claimedWithdraws}
+                  loading={loading}
+                  hasData={!!claimedWithdraws?.length}
+                />
+              </S.Table>
             </Tab.Panel>
           </Tab.Panels>
         </S.Container>

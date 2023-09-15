@@ -48,12 +48,12 @@ export const TransferFormWithdraw = ({
 
   const tradingWallet = useMemo(
     () => getTradeAccount(tradeAddress, allBrowserAccounts),
-    [allBrowserAccounts, tradeAddress]
+    [allBrowserAccounts, tradeAddress],
   );
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+    [allAccounts, mainAddress],
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -67,7 +67,7 @@ export const TransferFormWithdraw = ({
 
   const tradingAccountInBrowser = useMemo(
     () => selectTradeAccount(selectedAccount?.tradeAddress, allBrowserAccounts),
-    [allBrowserAccounts, selectedAccount?.tradeAddress]
+    [allBrowserAccounts, selectedAccount?.tradeAddress],
   );
 
   const {
@@ -110,7 +110,7 @@ export const TransferFormWithdraw = ({
         tradingAccountInBrowser={tradingAccountInBrowser}
         dispatchAction={() =>
           formRef?.current?.dispatchEvent(
-            new Event("submit", { cancelable: true, bubbles: true })
+            new Event("submit", { cancelable: true, bubbles: true }),
           )
         }
       />
@@ -135,7 +135,7 @@ export const TransferFormWithdraw = ({
             walletType="Funding account"
             walletName={fundingWallet?.account?.meta.name ?? ""}
             walletAddress={transformAddress(
-              fundingWallet?.account?.address ?? ""
+              fundingWallet?.account?.address ?? "",
             )}
           />
         </S.Wallets>

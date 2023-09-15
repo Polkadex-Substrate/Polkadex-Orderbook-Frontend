@@ -14,11 +14,11 @@ import { useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 
 import * as S from "./styles";
 import * as T from "./types";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
-import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 
 export const TransferTemplate = () => {
   const { list } = useAssetsProvider();
@@ -35,14 +35,14 @@ export const TransferTemplate = () => {
     () =>
       filterBlockedAssets(list)?.map((e) => {
         const tokenBalance = balances?.find(
-          (value) => value.assetId === e.assetId
+          (value) => value.assetId === e.assetId,
         );
         return {
           ...e,
           availableBalance: tokenBalance?.onChainBalance,
         } as T.FilteredAssetProps;
       }),
-    [list, balances]
+    [list, balances],
   );
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
@@ -115,7 +115,11 @@ export const TransferTemplate = () => {
                 </Loading>
 
                 <S.History>
-                  {isDeposit ? <DepositHistory /> : <WithdrawHistory />}
+                  {isDeposit ? (
+                    <DepositHistory />
+                  ) : (
+                    <WithdrawHistory selectedAsset={selectedAsset} />
+                  )}
                 </S.History>
               </S.Content>
             </S.ContainerMain>
