@@ -175,7 +175,11 @@ export const TransferFormDeposit = ({
           )}
         </WalletCard>
 
-        <S.WalletsButton type="button" onClick={onTransferInteraction}>
+        <S.WalletsButton
+          disabled={otherPolkadexAccount}
+          type="button"
+          onClick={onTransferInteraction}
+        >
           <div>
             <Icons.Trading />
           </div>

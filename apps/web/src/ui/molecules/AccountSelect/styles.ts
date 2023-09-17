@@ -1,6 +1,12 @@
 import { Combobox } from "@headlessui/react";
 import styled, { css } from "styled-components";
 
+export const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -86,16 +92,18 @@ export const Icon = styled.div`
 `;
 
 export const OptionsWrapper = styled(Combobox.Options)`
-  position: relative;
-  z-index: 2;
-  height: 0;
-  background: red;
+  position: absolute;
+  margin-top: 5px;
+  max-height: 24rem;
+  max-width: 40rem;
+  width: 100%;
+  overflow: auto;
+  top: 100%;
 `;
 
 export const OptionsContainer = styled.div`
   ${({ theme }) => css`
     list-style: none;
-    position: absolute;
     top: 100%;
     width: 100%;
     border-top: 1px solid ${theme.colors.secondaryBackground};

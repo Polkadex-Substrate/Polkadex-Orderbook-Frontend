@@ -42,6 +42,14 @@ export const WalletsButton = styled.button`
       font-size: 1.1rem;
       font-weight: 500;
     }
+    &:disabled {
+      background: gray;
+      cursor: not-allowed;
+      padding: 0.8rem 1.7rem;
+      span {
+        display: none;
+      }
+    }
   `}
 `;
 

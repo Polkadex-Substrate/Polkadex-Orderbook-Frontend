@@ -34,71 +34,73 @@ export const AccountSelect = ({
 
   return (
     <Combobox nullable value={selectedAccount} onChange={onSelectAccount}>
-      <Combobox.Button>
-        {({ open }) => (
-          <S.Wrapper>
-            <Skeleton height="4px" width="5rem" loading={loading}>
-              <S.Container>
-                <S.Icon>
-                  <Icons.Wallet />
-                </S.Icon>
-                <Skeleton height="4px" width="5rem" loading={loading}>
-                  <Combobox.Input
-                    displayValue={(e: ExtensionAccount | CustomAddress) => {
-                      const addressName = e?.account?.meta?.name;
-                      const address = addressName
-                        ? transformAddress(e?.account?.address)
-                        : e?.account?.address;
+      <S.Main style={{ position: "relative" }}>
+        <Combobox.Button>
+          {({ open }) => (
+            <S.Wrapper>
+              <Skeleton height="4px" width="5rem" loading={loading}>
+                <S.Container>
+                  <S.Icon>
+                    <Icons.Wallet />
+                  </S.Icon>
+                  <Skeleton height="4px" width="5rem" loading={loading}>
+                    <Combobox.Input
+                      displayValue={(e: ExtensionAccount | CustomAddress) => {
+                        const addressName = e?.account?.meta?.name;
+                        const address = addressName
+                          ? transformAddress(e?.account?.address)
+                          : e?.account?.address;
 
-                      return addressName && address
-                        ? `${addressName} • (${address})`
-                        : address;
-                    }}
-                    placeholder={placeholder}
-                    onChange={(event) => onQuery(event.target.value)}
-                  />
-                </Skeleton>
-              </S.Container>
-              <S.Actions>
-                {pasteable && (
-                  <button type="button" onClick={handleOnPaste}>
-                    Paste
-                  </button>
-                )}
-                <S.Arrow open={open}>
-                  <Icons.ArrowBottom />
-                </S.Arrow>
-              </S.Actions>
-            </Skeleton>
-          </S.Wrapper>
-        )}
-      </Combobox.Button>
-      <S.OptionsWrapper>
-        <S.OptionsContainer>
-          <small>Accounts</small>
-          <S.OptionsItemsWrapper>
-            {data?.length ? (
-              data.map((e) => {
-                const name = e?.account?.meta?.name;
-                const address = transformAddress(e?.account?.address ?? "");
+                        return addressName && address
+                          ? `${addressName} • (${address})`
+                          : address;
+                      }}
+                      placeholder={placeholder}
+                      onChange={(event) => onQuery(event.target.value)}
+                    />
+                  </Skeleton>
+                </S.Container>
+                <S.Actions>
+                  {pasteable && (
+                    <button type="button" onClick={handleOnPaste}>
+                      Paste
+                    </button>
+                  )}
+                  <S.Arrow open={open}>
+                    <Icons.ArrowBottom />
+                  </S.Arrow>
+                </S.Actions>
+              </Skeleton>
+            </S.Wrapper>
+          )}
+        </Combobox.Button>
+        <S.OptionsWrapper>
+          <S.OptionsContainer>
+            <small>Accounts</small>
+            <S.OptionsItemsWrapper>
+              {data?.length ? (
+                data.map((e) => {
+                  const name = e?.account?.meta?.name;
+                  const address = transformAddress(e?.account?.address ?? "");
 
-                return (
-                  <S.OptionsItem key={e.account.address} value={e}>
-                    <div>
-                      <Icons.Avatar />
-                    </div>
-                    <p>
-                      {name ?? "Custom Address"} <span>{address}</span>
-                    </p>
-                  </S.OptionsItem>
-                );
-              })
-            ) : (
-              <ResultFound />
-            )}
-          </S.OptionsItemsWrapper>
-        </S.OptionsContainer>
-      </S.OptionsWrapper>
+                  return (
+                    <S.OptionsItem key={e.account.address} value={e}>
+                      <div>
+                        <Icons.Avatar />
+                      </div>
+                      <p>
+                        {name ?? "Custom Address"} <span>{address}</span>
+                      </p>
+                    </S.OptionsItem>
+                  );
+                })
+              ) : (
+                <ResultFound />
+              )}
+            </S.OptionsItemsWrapper>
+          </S.OptionsContainer>
+        </S.OptionsWrapper>
+      </S.Main>
     </Combobox>
   );
 };
