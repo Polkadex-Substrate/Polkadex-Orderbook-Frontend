@@ -53,7 +53,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         };
       });
     },
-    [],
+    []
   );
 
   const onBalancesFetch = useCallback(async () => {
@@ -73,7 +73,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
           const chainBalance = await fetchOnChainBalance(
             api,
             asset.assetId,
-            mainAddress,
+            mainAddress
           );
           return {
             assetId: asset.assetId.toString(),
@@ -88,7 +88,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
           A.balancesData({
             balances: await Promise.all(list),
             timestamp: new Date().getTime(),
-          }),
+          })
         );
       }
     } catch (error) {
@@ -116,7 +116,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
-      (balance) => balance?.assetId?.toString() === assetId,
+      (balance) => balance?.assetId?.toString() === assetId
     );
     if (!balance?.assetId) return "0";
     return balance.free_balance;
@@ -133,7 +133,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         reserved_balance: msg.reserved,
       };
     },
-    [selectGetAsset],
+    [selectGetAsset]
   );
 
   const onBalanceUpdate = useCallback(
@@ -145,7 +145,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [onHandleError, updateBalanceFromEvent],
+    [onHandleError, updateBalanceFromEvent]
   );
 
   useEffect(() => {
@@ -161,7 +161,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     isProfileFetching,
     isAssetFetching,
     connected,
-    state.balances,
+    state.balances?.length,
   ]);
 
   // balance updates are give to main address
