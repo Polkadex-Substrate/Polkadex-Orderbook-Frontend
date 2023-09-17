@@ -1,6 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { transformAddress } from "@orderbook/core/providers/user/profile";
-import { WithdrawGroupItem } from "@orderbook/core/helpers";
 
 import { Date, Token, Box, Wallet } from "./styles";
 import { Props, ReadyToClaimProps } from "./types";

@@ -91,7 +91,7 @@ export const TransferTemplate = () => {
 
                 <S.History>
                   {otherPolkadexAccountSelected ? (
-                    <DepositHistory />
+                    <DepositHistory selectedAsset={selectedAsset} />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />
                   )}

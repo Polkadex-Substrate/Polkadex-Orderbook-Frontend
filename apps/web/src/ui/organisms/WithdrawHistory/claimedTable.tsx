@@ -43,7 +43,7 @@ export const ClaimedTable = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                     <div>
                       <Icons.IncreaseFilter />
@@ -63,7 +63,7 @@ export const ClaimedTable = ({
                     <td className={tdClassName} key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </td>
                   );

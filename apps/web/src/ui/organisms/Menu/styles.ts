@@ -156,7 +156,7 @@ export const Wrapper = styled.nav<{ open?: boolean }>`
     left: 0;
     display: flex;
     padding: 1rem;
-    background: ${theme.colors.primaryBackground};
+    /* background: ${theme.colors.primaryBackground}; */
     z-index: 2;
     @media screen and (max-width: 590px) {
       border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};

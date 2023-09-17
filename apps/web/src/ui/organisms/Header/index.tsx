@@ -43,7 +43,7 @@ export const Header = ({ children }: { children?: ReactNode }) => {
 
   const tradeAccountInfo = useMemo(
     () => getTradeAccount(selectedAccount.tradeAddress, tradingAccounts),
-    [selectedAccount.tradeAddress, tradingAccounts],
+    [selectedAccount.tradeAddress, tradingAccounts]
   );
 
   const walletName = tradeAccountInfo?.meta?.name as string;

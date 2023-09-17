@@ -14,7 +14,7 @@ import { useDepositProvider } from "@orderbook/core/providers/user/depositProvid
 import { ExtensionAccount } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
-import { CustomAddress } from "./types";
+import { CustomAddress } from "../TransferFormWithdraw/types";
 
 import { AccountSelect, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";

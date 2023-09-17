@@ -8,7 +8,7 @@ import { ResultFound } from "../ResultFound";
 
 import * as S from "./styles";
 
-import { CustomAddress } from "@/ui/organisms/TransferFormDeposit/types";
+import { CustomAddress } from "@/ui/organisms/TransferFormWithdraw/types";
 
 export const AccountSelect = ({
   selectedAccount,
