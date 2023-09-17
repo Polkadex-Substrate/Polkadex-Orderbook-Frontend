@@ -12,7 +12,6 @@ import { WithdrawHistorySkeleton } from "./skeleton";
 import { ReadyToClaimDataProps, ReadyToClaimProps } from "./types";
 
 import { EmptyData } from "@/ui/molecules";
-import { Icons } from "@/ui/atoms";
 
 export const ReadyToClaimTable = ({
   data,

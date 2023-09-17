@@ -113,7 +113,7 @@ export const TransferFormWithdraw = ({
           )
         }
       />
-      <S.Content onSubmit={handleSubmit}>
+      <S.Content ref={formRef} onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
             label="From"
