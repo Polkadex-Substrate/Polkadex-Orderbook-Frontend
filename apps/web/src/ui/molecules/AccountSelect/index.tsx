@@ -8,20 +8,24 @@ import { ResultFound } from "../ResultFound";
 
 import * as S from "./styles";
 
-import { CustomAddress } from "@/ui/organisms/TransferFormWithdraw/types";
+import { CustomAddress } from "@/ui/organisms/TransferFormDeposit/types";
 
 export const AccountSelect = ({
   selectedAccount,
   onQuery,
   onSelectAccount,
-  loading,
+  loading = false,
+  pasteable = true,
+  placeholder = "Enter or select a Polkadex address",
   data,
 }: {
-  selectedAccount?: ExtensionAccount | CustomAddress;
+  selectedAccount?: ExtensionAccount | CustomAddress | null;
   onSelectAccount: (e: ExtensionAccount) => void;
   onQuery: (e: string) => void;
-  loading: boolean;
+  loading?: boolean;
+  pasteable?: boolean;
   data: ExtensionAccount[] | CustomAddress[];
+  placeholder?: string;
 }) => {
   const handleOnPaste = async () => {
     const pastedData = await navigator.clipboard.readText();
@@ -33,7 +37,7 @@ export const AccountSelect = ({
       <Combobox.Button>
         {({ open }) => (
           <S.Wrapper>
-            <Skeleton height="4px" width="5rem" loading={false}>
+            <Skeleton height="4px" width="5rem" loading={loading}>
               <S.Container>
                 <S.Icon>
                   <Icons.Wallet />
@@ -50,15 +54,17 @@ export const AccountSelect = ({
                         ? `${addressName} • (${address})`
                         : address;
                     }}
-                    placeholder="Enter or select a Polkadex address"
+                    placeholder={placeholder}
                     onChange={(event) => onQuery(event.target.value)}
                   />
                 </Skeleton>
               </S.Container>
               <S.Actions>
-                <button type="button" onClick={handleOnPaste}>
-                  Paste
-                </button>
+                {pasteable && (
+                  <button type="button" onClick={handleOnPaste}>
+                    Paste
+                  </button>
+                )}
                 <S.Arrow open={open}>
                   <Icons.ArrowBottom />
                 </S.Arrow>

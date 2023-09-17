@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef } from "react";
+import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -11,10 +11,12 @@ import { useFormik } from "formik";
 import { depositValidationsTest } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { ExtensionAccount } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
+import { CustomAddress } from "./types";
 
-import { Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import { AccountSelect, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -23,11 +25,13 @@ export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  otherPolkadexAccount,
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
+  otherPolkadexAccount: boolean;
 }) => {
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
@@ -71,6 +75,8 @@ export const TransferFormDeposit = ({
     validationSchema: depositValidationsTest,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
+      if (otherPolkadexAccount) return;
+
       if (!fundingWallet) return;
       // TODO: Handle Error...
 
@@ -99,16 +105,75 @@ export const TransferFormDeposit = ({
     [fundingWallet?.account?.address]
   );
 
+  const [selectedWallet, setSelectedWallet] = useState<
+    ExtensionAccount | CustomAddress
+  >();
+
+  const [toQuery, setToQuery] = useState("");
+
+  const filteredWallets: ExtensionAccount[] | CustomAddress[] = useMemo(() => {
+    if (toQuery === "") return allAccounts;
+
+    const filteredAccounts = allAccounts?.filter((e) => {
+      const { address, meta } = e.account;
+      const queryRes = toQuery.toLowerCase();
+      return (
+        address.toLowerCase().includes(queryRes) ||
+        meta?.name?.toLowerCase().includes(queryRes)
+      );
+    });
+
+    if (filteredAccounts.length) return filteredAccounts;
+
+    const customAddress = {
+      account: {
+        address: toQuery,
+      },
+    };
+
+    setSelectedWallet(customAddress);
+    return [...allAccounts, customAddress];
+  }, [toQuery, allAccounts]);
+
+  const [selectedFundingWallet, setSelectedFundingWallet] =
+    useState<ExtensionAccount | null>(fundingWallet ?? null);
+
+  const [fromQuery, setFromQuery] = useState("");
+  const filteredFundingWallets: ExtensionAccount[] = useMemo(() => {
+    const queryRes = allAccounts?.filter((e) => {
+      const { address, meta } = e.account;
+      return (
+        address?.toLowerCase().includes(fromQuery) ||
+        meta?.name?.toLowerCase().includes(fromQuery)
+      );
+    });
+
+    if (fromQuery === "" || !queryRes?.length) return allAccounts;
+    return queryRes;
+  }, [fromQuery, allAccounts]);
+
   return (
     <S.Content onSubmit={handleSubmit}>
       <S.Wallets>
         <WalletCard
+          searchable={otherPolkadexAccount}
           label="From"
           walletTypeLabel="Extension wallet"
           walletType="Funding account"
           walletName={fundingWalletName}
           walletAddress={fundingWalletAddress}
-        />
+        >
+          {otherPolkadexAccount && (
+            <AccountSelect
+              pasteable={false}
+              selectedAccount={selectedFundingWallet}
+              onQuery={(e) => setFromQuery(e)}
+              onSelectAccount={setSelectedFundingWallet}
+              data={filteredFundingWallets}
+              placeholder="Select your Polkadex address"
+            />
+          )}
+        </WalletCard>
 
         <S.WalletsButton type="button" onClick={onTransferInteraction}>
           <div>
@@ -117,11 +182,21 @@ export const TransferFormDeposit = ({
           <span>Switch</span>
         </S.WalletsButton>
         <WalletCard
+          searchable={otherPolkadexAccount}
           label="To"
           walletTypeLabel="Orderbook wallet"
           walletType="Trading account"
           walletName="Balance available across all trading accounts."
-        />
+        >
+          {otherPolkadexAccount && (
+            <AccountSelect
+              selectedAccount={selectedWallet}
+              onQuery={(e) => setToQuery(e)}
+              onSelectAccount={setSelectedWallet}
+              data={filteredWallets}
+            />
+          )}
+        </WalletCard>
       </S.Wallets>
       <S.Form>
         <TokenCard

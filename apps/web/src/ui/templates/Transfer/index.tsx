@@ -102,8 +102,9 @@ export const TransferTemplate = () => {
                       <span>Transfer for other Polkadex accounts</span>
                     </S.Title>
                     <S.Container>
-                      {isDeposit && !otherPolkadexAccount ? (
+                      {isDeposit || otherPolkadexAccount ? (
                         <TransferFormDeposit
+                          otherPolkadexAccount={otherPolkadexAccount}
                           onTransferInteraction={onTransferInteraction}
                           onOpenAssets={onAssetsInteraction}
                           selectedAsset={selectedAsset}
@@ -113,7 +114,6 @@ export const TransferTemplate = () => {
                           onTransferInteraction={onTransferInteraction}
                           onOpenAssets={onAssetsInteraction}
                           selectedAsset={selectedAsset}
-                          otherPolkadexAccount={otherPolkadexAccount}
                         />
                       )}
                     </S.Container>
@@ -121,7 +121,7 @@ export const TransferTemplate = () => {
                 </Loading>
 
                 <S.History>
-                  {!isDeposit && !otherPolkadexAccount ? (
+                  {isDeposit || otherPolkadexAccount ? (
                     <DepositHistory />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />
