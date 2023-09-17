@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -13,26 +13,22 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
 
-import * as S from "./styles";
 import { CustomAddress } from "../TransferFormWithdraw/types";
+
+import * as S from "./styles";
+import * as T from "./types";
 
 import { AccountSelect, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
-import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 const initialValues = { amount: 0.0 };
+
 export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
   otherPolkadexAccount,
-}: {
-  isDeposit?: boolean;
-  onTransferInteraction: () => void;
-  onOpenAssets: () => void;
-  selectedAsset?: FilteredAssetProps;
-  otherPolkadexAccount: boolean;
-}) => {
+}: T.Props) => {
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
 
@@ -62,42 +58,6 @@ export const TransferFormDeposit = ({
     }
     // TODO: Handle Error...
   };
-  const {
-    handleSubmit,
-    resetForm,
-    errors,
-    getFieldProps,
-    isValid,
-    dirty,
-    setFieldValue,
-  } = useFormik({
-    initialValues,
-    validationSchema: depositValidationsTest,
-    validateOnBlur: true,
-    onSubmit: async ({ amount }) => {
-      if (otherPolkadexAccount) return;
-
-      if (!fundingWallet) return;
-      // TODO: Handle Error...
-
-      try {
-        const asset = isAssetPDEX(selectedAsset?.assetId)
-          ? { polkadex: null }
-          : { asset: selectedAsset?.assetId };
-        // TODO: Fix asset types
-
-        await onFetchDeposit({
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          asset,
-          amount: amount,
-          mainAccount: fundingWallet,
-        });
-      } finally {
-        resetForm({ values: initialValues });
-      }
-    },
-  });
 
   const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
   const fundingWalletAddress = useMemo(
@@ -151,6 +111,53 @@ export const TransferFormDeposit = ({
     if (fromQuery === "" || !queryRes?.length) return allAccounts;
     return queryRes;
   }, [fromQuery, allAccounts]);
+
+  const {
+    handleSubmit,
+    resetForm,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    setFieldValue,
+  } = useFormik({
+    initialValues,
+    validationSchema: depositValidationsTest,
+    validateOnBlur: true,
+    onSubmit: async ({ amount }) => {
+      if (!fundingWallet) return;
+      // TODO: Handle Error...
+
+      try {
+        const address = otherPolkadexAccount
+          ? selectedWallet?.account.address
+          : fundingWallet.account.address;
+        const account = otherPolkadexAccount
+          ? selectedFundingWallet
+          : fundingWallet;
+
+        const asset: T.GenericAsset = isAssetPDEX(selectedAsset?.assetId)
+          ? { polkadex: null }
+          : { asset: selectedAsset?.assetId || null };
+
+        // TODO: Fix types or Handle Error
+        if (!address || !account) return;
+
+        await onFetchDeposit({
+          asset,
+          amount,
+          account,
+          address,
+        });
+      } finally {
+        resetForm({ values: initialValues });
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (otherPolkadexAccount) resetForm();
+  }, [otherPolkadexAccount, resetForm]);
 
   return (
     <S.Content onSubmit={handleSubmit}>

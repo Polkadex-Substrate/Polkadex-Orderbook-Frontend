@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+import { ApiPromise } from "@polkadot/api";
 
 import { CommonError, ExtensionAccount } from "../../types";
 // todo: replace when providers are ready
@@ -10,9 +11,13 @@ export interface DepositsState {
 }
 
 export interface onFetchDeposit {
-  asset: Record<string, string | null>;
   amount: string | number;
-  mainAccount: ExtensionAccount;
+  asset: Record<string, string | null>;
+  account: ExtensionAccount;
+  address: string;
+}
+export interface DepositToEnclave extends onFetchDeposit {
+  api: ApiPromise;
 }
 
 export type DepositContextProps = DepositsState & {

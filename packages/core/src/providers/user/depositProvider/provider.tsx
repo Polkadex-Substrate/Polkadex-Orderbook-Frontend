@@ -1,8 +1,5 @@
 import { useReducer } from "react";
 import BigNumber from "bignumber.js";
-import { ApiPromise } from "@polkadot/api";
-
-import { ExtensionAccount } from "../../types";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -20,16 +17,30 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
   const { connected: isApiReady, api } = useNativeApi();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
 
-  const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
+  const onFetchDeposit = async ({
+    asset,
+    amount,
+    account,
+    address,
+  }: T.onFetchDeposit) => {
     try {
-      if (isApiReady && mainAccount?.account?.address !== "") {
+      // TODO:Improve type or handle Error
+      if (!api) return;
+
+      if (isApiReady && account?.account?.address !== "") {
         onHandleNotification({
           type: "Information",
           message: "Processing Deposit...",
         });
         dispatch(A.depositsFetch());
 
-        const res = await depositToEnclave(api, mainAccount, asset, amount);
+        const res = await depositToEnclave({
+          api,
+          account,
+          asset,
+          amount,
+          address,
+        });
 
         if (res.isSuccess) {
           dispatch(A.depositsData());
@@ -51,20 +62,21 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     }
   };
 
-  async function depositToEnclave(
-    api: ApiPromise,
-    account: ExtensionAccount,
-    asset: Record<string, string | null>,
-    amount: string | number,
-  ): Promise<ExtrinsicResult> {
+  async function depositToEnclave({
+    api,
+    account,
+    asset,
+    amount,
+    address,
+  }: T.DepositToEnclave): Promise<ExtrinsicResult> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset, amountStr);
     const res = await signAndSendExtrinsic(
       api,
       ext,
       { signer: account.signer },
-      account?.account.address,
-      true,
+      address,
+      true
     );
     return res;
   }

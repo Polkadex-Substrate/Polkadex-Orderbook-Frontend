@@ -151,7 +151,7 @@ export const Footer = styled.div`
         cursor: not-allowed;
       }
       &:hover:not(:disabled) {
-        background: ${theme.colors.primaryHover};
+        background: ${theme.colors.gradientGreen};
       }
     }
   `}
