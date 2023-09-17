@@ -157,6 +157,26 @@ export const Table = styled.div`
   `}
 `;
 
+export const Thead = styled.th`
+  ${({ theme }) => css`
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    svg {
+      fill: ${theme.colors.text};
+      path {
+        opacity: 0.5;
+      }
+    }
+    &.desc svg path:first-child {
+      opacity: 1;
+    }
+    &.asc svg path:last-child {
+      opacity: 1;
+    }
+  `}
+`;
+
 export const Date = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -261,6 +281,8 @@ export const TitleWrapper = styled.div`
 `;
 
 export const EmptyData = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   padding: 50;
 `;

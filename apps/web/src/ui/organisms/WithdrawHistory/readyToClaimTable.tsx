@@ -75,9 +75,6 @@ const BatchTable = ({
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                  <div>
-                    <Icons.IncreaseFilter />
-                  </div>
                 </th>
               ))}
             </tr>

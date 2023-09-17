@@ -1,6 +1,8 @@
 import {
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
@@ -19,7 +21,7 @@ import * as S from "./styles";
 import * as T from "./types";
 import { DepositHistorySkeleton } from "./skeleton";
 
-import { CheckboxCustom, EmptyData, ResultFound, Search } from "@/ui/molecules";
+import { CheckboxCustom, ResultFound, Search } from "@/ui/molecules";
 import { Icons } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -29,6 +31,7 @@ export const DepositHistory = ({
   selectedAsset?: FilteredAssetProps;
 }) => {
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const { deposits, loading: isTransactionsFetching } =
     useTransactionsProvider();
@@ -100,6 +103,11 @@ export const DepositHistory = ({
   );
   const table = useReactTable({
     data,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -127,19 +135,33 @@ export const DepositHistory = ({
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                      <div>
-                        <Icons.IncreaseFilter />
-                      </div>
-                    </th>
-                  ))}
+                  {headerGroup.headers.map((header) => {
+                    const getSorted = header.column.getIsSorted();
+                    const trClassName = classNames({
+                      asc: getSorted === "asc",
+                      desc: getSorted === "desc",
+                    });
+                    return (
+                      <S.Thead
+                        key={header.id}
+                        className={trClassName}
+                        onClick={() => {
+                          const isDesc = getSorted === "desc";
+                          header.column.toggleSorting(!isDesc);
+                        }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        <div>
+                          <Icons.IncreaseFilter />
+                        </div>
+                      </S.Thead>
+                    );
+                  })}
                 </tr>
               ))}
             </thead>

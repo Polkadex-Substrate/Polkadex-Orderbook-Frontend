@@ -63,7 +63,8 @@ export const WithdrawHistory = ({
         })
         ?.flatMap((withdrawal) => {
           if (showSelectedCoins) {
-            return withdrawal.asset === selectedAsset?.name ? [withdrawal] : [];
+            const assetName = selectGetAsset(withdrawal.asset)?.name;
+            return assetName === selectedAsset?.name ? [withdrawal] : [];
           }
           return [withdrawal];
         }),
