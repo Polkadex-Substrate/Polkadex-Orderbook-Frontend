@@ -99,6 +99,7 @@ export const OptionsWrapper = styled(Combobox.Options)`
   width: 100%;
   overflow: auto;
   top: 100%;
+  z-index: 2;
 `;
 
 export const OptionsContainer = styled.div`

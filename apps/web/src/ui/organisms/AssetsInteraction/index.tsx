@@ -35,7 +35,7 @@ export const AssetsInteraction = ({
       list
         ?.map((e: T.AssetsProps) => {
           const tokenBalance = balances?.find(
-            (value) => value.assetId === e.assetId,
+            (value) => value.assetId === e.assetId
           );
           const free_balance =
             tokenBalance?.free_balance === "0"
@@ -68,7 +68,7 @@ export const AssetsInteraction = ({
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, balances, filters.hideZero],
+    [filters.search, list, balances, filters.hideZero]
   );
 
   return (

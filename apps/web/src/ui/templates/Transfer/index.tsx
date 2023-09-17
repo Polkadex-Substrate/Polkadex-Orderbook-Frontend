@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useTranslation } from "react-i18next";
 import {
   AssetsInteraction,
   Header,
@@ -10,54 +9,26 @@ import {
   WithdrawHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer, Loading, Switch } from "@polkadex/orderbook-ui/molecules";
-import { useEffect, useMemo, useState } from "react";
-import { filterBlockedAssets } from "@orderbook/core/helpers";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
-import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
-import * as T from "./types";
+import { useTransfer } from "./useTransfer";
 
 export const TransferTemplate = () => {
-  const { list } = useAssetsProvider();
-  const { balances } = useBalancesProvider();
-  const { loading: depositLoading } = useDepositProvider();
-  const { loading: withdrawLoading } = useWithdrawsProvider();
-
   const { t } = useTranslation("transfer");
-  const [otherPolkadexAccount, setOtherPolkadexAccount] = useState(false);
-  const [assetsInteraction, setAssetsInteraction] = useState(false);
-  const [isDeposit, setIsDeposit] = useState(true);
 
-  const filteredNonBlockedAssets = useMemo(
-    () =>
-      filterBlockedAssets(list)?.map((e) => {
-        const tokenBalance = balances?.find(
-          (value) => value.assetId === e.assetId
-        );
-        return {
-          ...e,
-          availableBalance: tokenBalance?.onChainBalance,
-        } as T.FilteredAssetProps;
-      }),
-    [list, balances]
-  );
-
-  const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
-
-  const onAssetsInteraction = () => setAssetsInteraction(!assetsInteraction);
-  const onTransferInteraction = () => setIsDeposit(!isDeposit);
-
-  const onChangeAsset = (asset: T.FilteredAssetProps) => {
-    setSelectedAsset(asset);
-    onAssetsInteraction();
-  };
-
-  useEffect(() => {
-    if (!selectedAsset) setSelectedAsset(filteredNonBlockedAssets?.[0]);
-  }, [selectedAsset, filteredNonBlockedAssets]);
+  const {
+    depositLoading,
+    withdrawLoading,
+    assetsInteraction,
+    onAssetsInteraction,
+    onChangeAsset,
+    selectedAsset,
+    onChangeIsDeposit,
+    otherPolkadexAccount,
+    onChangeOtherPolkadexAccount,
+    otherPolkadexAccountSelected,
+  } = useTransfer();
 
   return (
     <>
@@ -95,23 +66,21 @@ export const TransferTemplate = () => {
                     <S.Title>
                       <Switch
                         isActive={otherPolkadexAccount}
-                        onChange={() =>
-                          setOtherPolkadexAccount(!otherPolkadexAccount)
-                        }
+                        onChange={onChangeOtherPolkadexAccount}
                       />
                       <span>Transfer for other Polkadex accounts</span>
                     </S.Title>
                     <S.Container>
-                      {isDeposit || otherPolkadexAccount ? (
+                      {otherPolkadexAccountSelected ? (
                         <TransferFormDeposit
                           otherPolkadexAccount={otherPolkadexAccount}
-                          onTransferInteraction={onTransferInteraction}
+                          onTransferInteraction={onChangeIsDeposit}
                           onOpenAssets={onAssetsInteraction}
                           selectedAsset={selectedAsset}
                         />
                       ) : (
                         <TransferFormWithdraw
-                          onTransferInteraction={onTransferInteraction}
+                          onTransferInteraction={onChangeIsDeposit}
                           onOpenAssets={onAssetsInteraction}
                           selectedAsset={selectedAsset}
                         />
@@ -121,7 +90,7 @@ export const TransferTemplate = () => {
                 </Loading>
 
                 <S.History>
-                  {isDeposit || otherPolkadexAccount ? (
+                  {otherPolkadexAccountSelected ? (
                     <DepositHistory />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />
