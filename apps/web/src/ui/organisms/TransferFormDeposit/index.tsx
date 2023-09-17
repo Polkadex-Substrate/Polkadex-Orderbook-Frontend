@@ -125,6 +125,7 @@ export const TransferFormDeposit = ({
     validationSchema: depositValidationsTest,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
+      if (otherPolkadexAccount) return;
       if (!fundingWallet) return;
       // TODO: Handle Error...
 
@@ -132,6 +133,7 @@ export const TransferFormDeposit = ({
         const address = otherPolkadexAccount
           ? selectedWallet?.account.address
           : fundingWallet.account.address;
+
         const account = otherPolkadexAccount
           ? selectedFundingWallet
           : fundingWallet;
