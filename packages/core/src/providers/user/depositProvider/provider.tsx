@@ -20,7 +20,6 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     asset,
     amount,
     account,
-    address,
   }: T.onFetchDeposit) => {
     try {
       if (api && isApiReady && account?.account?.address !== "") {
@@ -35,7 +34,6 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
           account,
           asset,
           amount,
-          address,
         });
 
         if (res.isSuccess) {
@@ -63,7 +61,6 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     account,
     asset,
     amount,
-    address,
   }: T.DepositToEnclave): Promise<ExtrinsicResult> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset, amountStr);
@@ -71,7 +68,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       api,
       ext,
       { signer: account.signer },
-      address,
+      account?.account.address,
       true
     );
     return res;

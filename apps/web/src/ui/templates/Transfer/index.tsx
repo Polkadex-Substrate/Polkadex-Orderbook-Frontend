@@ -18,8 +18,7 @@ export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
 
   const {
-    depositLoading,
-    withdrawLoading,
+    loading,
     assetsInteraction,
     onAssetsInteraction,
     onChangeAsset,
@@ -57,7 +56,7 @@ export const TransferTemplate = () => {
               <S.Content>
                 <Loading
                   style={{ maxWidth: "100rem" }}
-                  isVisible={depositLoading || withdrawLoading}
+                  isVisible={loading}
                   hasBg={false}
                   message=""
                   spinner="Keyboard"

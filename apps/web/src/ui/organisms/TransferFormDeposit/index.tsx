@@ -12,6 +12,7 @@ import { depositValidationsTest } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
+import { useAssetTransfer } from "@orderbook/core/index";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -31,9 +32,9 @@ export const TransferFormDeposit = ({
 }: T.Props) => {
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
-
   const { selectedAccount } = useProfile();
 
+  const { mutate } = useAssetTransfer();
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -125,7 +126,6 @@ export const TransferFormDeposit = ({
     validationSchema: depositValidationsTest,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
-      if (otherPolkadexAccount) return;
       if (!fundingWallet) return;
       // TODO: Handle Error...
 
@@ -145,12 +145,20 @@ export const TransferFormDeposit = ({
         // TODO: Fix types or Handle Error
         if (!address || !account) return;
 
-        await onFetchDeposit({
-          asset,
-          amount,
-          account,
-          address,
-        });
+        if (otherPolkadexAccount) {
+          mutate({
+            asset,
+            dest: address,
+            amount: amount.toString(),
+            account,
+          });
+        } else {
+          await onFetchDeposit({
+            asset,
+            amount,
+            account,
+          });
+        }
       } finally {
         resetForm({ values: initialValues });
       }

@@ -1,37 +1,40 @@
 import { useMutation } from "react-query";
-import { Signer } from "@polkadot/types/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { isAssetPDEX, signAndSendExtrinsic } from "@orderbook/core/helpers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
+import { signAndSendExtrinsic } from "@orderbook/core/helpers";
+
+import { ExtensionAccount } from "../providers/types";
+import { useSettingsProvider } from "../providers/public/settings";
 
 interface AssetTransferParams {
-  asset: string;
+  asset: Record<string, string | null>;
   dest: string;
   amount: string;
-  signer: Signer;
+  account: ExtensionAccount;
 }
 
 export const useAssetTransfer = () => {
-  const apiState = useNativeApi();
-  const { selectMainAccount } = useExtensionWallet();
-  const wallet = useProfile();
-  return useMutation(async ({ asset, dest, amount }: AssetTransferParams) => {
-    if (apiState.api && wallet.selectedAccount) {
-      const mainAccount = selectMainAccount(wallet.selectedAccount.mainAddress);
-      const tx = isAssetPDEX(asset)
-        ? apiState.api.tx.balances.transfer(dest, amount)
-        : apiState.api.tx.assets.transfer(asset, dest, amount);
+  const { api } = useNativeApi();
+  const { onHandleError } = useSettingsProvider();
 
-      // TODO: Fix types or Handle Error...
-      if (!mainAccount?.signer || mainAccount?.account) return;
-
-      return await signAndSendExtrinsic(
-        apiState.api,
-        tx,
-        mainAccount.signer,
-        mainAccount.account.address
-      );
+  return useMutation(
+    async ({ asset, dest, amount, account }: AssetTransferParams) => {
+      try {
+        // TODO: Fix types or Handle Error...
+        if (api) {
+          const tx = asset?.polkadex
+            ? api.tx.balances.transfer(dest, amount)
+            : api.tx.assets.transfer(asset.asset, dest, amount);
+          return await signAndSendExtrinsic(
+            api,
+            tx,
+            account.signer,
+            account.account.address
+          );
+        }
+      } catch (error) {
+        console.log("Error", error);
+        onHandleError(error?.message ?? error);
+      }
     }
-  });
+  );
 };

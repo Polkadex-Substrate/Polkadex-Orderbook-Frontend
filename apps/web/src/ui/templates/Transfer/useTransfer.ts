@@ -56,7 +56,7 @@ export function useTransfer() {
   }, [selectedAsset, filteredNonBlockedAssets]);
 
   return {
-    depositLoading,
+    loading: depositLoading || withdrawLoading,
     withdrawLoading,
     assetsInteraction,
     onAssetsInteraction,

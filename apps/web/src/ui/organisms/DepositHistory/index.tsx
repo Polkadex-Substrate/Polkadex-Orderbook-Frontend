@@ -53,14 +53,11 @@ export const DepositHistory = ({
         ?.filter((e) => {
           if (showSelectedCoins) {
             const assetName = selectGetAsset(e.asset)?.name;
-
-            console.log(assetName, selectedAsset?.name);
             return assetName === selectedAsset?.name;
           }
           return e;
         })
         ?.map((e) => {
-          console.log(e);
           const token = selectGetAsset(e.asset);
           return {
             stid: e.stid,

@@ -14,7 +14,6 @@ export interface onFetchDeposit {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-  address: string;
 }
 export interface DepositToEnclave extends onFetchDeposit {
   api: ApiPromise;
