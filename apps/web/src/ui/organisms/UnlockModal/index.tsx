@@ -18,7 +18,7 @@ export const UnlockModal = ({
   tradingAccountInBrowser?: KeyringPair;
 }) => {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal isBlur placement="start" open={open} onClose={onClose}>
       <Modal.Body>
         <S.UnlockAccount>
           <S.UnlockButton type="button" onClick={onClose}>

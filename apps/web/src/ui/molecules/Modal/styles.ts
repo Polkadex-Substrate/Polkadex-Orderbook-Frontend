@@ -152,7 +152,7 @@ export const Overlay = styled("div")<
     prop: "isBlur",
     variants: {
       true: {
-        backdropFilter: "saturate(180%) blur(5px)",
+        backdropFilter: "blur(5px)",
       },
     },
   }),
