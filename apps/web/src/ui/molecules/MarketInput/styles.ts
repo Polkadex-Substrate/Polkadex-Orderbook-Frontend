@@ -41,7 +41,7 @@ export const Box = styled.div<Partial<InputProps>>`
     }
     ${hasError &&
     css`
-      border-bottom-color: ${theme.colors.primary};
+      border-bottom-color: ${theme.colors.primary} !important;
     `}
   `}
 `;
