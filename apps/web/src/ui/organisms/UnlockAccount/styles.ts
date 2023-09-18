@@ -68,7 +68,7 @@ export const Span = styled.span<{ color?: string }>`
     display: block;
     padding: 1.2rem;
     border-radius: 0.8rem;
-    background: ${theme.colors[color]};
+    background: ${color ? theme.colors[color] : "transparent"};
     flex: 1;
   `}
 `;

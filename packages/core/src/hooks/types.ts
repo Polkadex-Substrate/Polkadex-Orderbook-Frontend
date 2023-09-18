@@ -1,4 +1,4 @@
-import { TradeAccount } from "@/providers/types";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 export type IUserTradeAccount = {
   address: string;

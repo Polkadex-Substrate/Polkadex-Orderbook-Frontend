@@ -1,3 +1,5 @@
+import { SubscribeBarsCallback } from "@orderbook/core/utils/charting_library";
+
 import { CommonError } from "../../types";
 
 import {
@@ -11,8 +13,6 @@ import {
   KLINE_UPDATE_TIME_RANGE,
 } from "./constants";
 import { KlineEvent } from "./types";
-
-import { SubscribeBarsCallback } from "@/utils/charting_library";
 
 export interface KlinePush {
   type: typeof KLINE_PUSH;

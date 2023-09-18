@@ -1,8 +1,8 @@
+import * as queries from "@orderbook/core/graphql/queries";
+import { fetchFromAppSync, Utils } from "@orderbook/core/helpers";
+
 import * as T from "./types";
 import * as A from "./actions";
-
-import * as queries from "@/graphql/queries";
-import { fetchFromAppSync, Utils } from "@/helpers";
 
 const LIMIT = 15;
 

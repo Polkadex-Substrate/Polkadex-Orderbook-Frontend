@@ -38,12 +38,12 @@ export interface ChangePassword {
 }
 export interface AuthState {
   user?: CognitoUser;
-  email: string;
+  email?: string;
   userConfirmed?: boolean;
   signin: CommonActionState;
   signup: CommonActionState;
   logout: CommonActionState;
-  forgotPassword: { email: string } & CommonActionState;
+  forgotPassword: { email?: string } & CommonActionState;
   changePassword: CommonActionState;
 }
 

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Fragment, useRef } from "react";
+import React, { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
@@ -98,10 +98,14 @@ export const WalletsTemplate = () => {
         <PreviewAccount
           onClose={handleClosePreviewModal}
           selected={previewAccountSelected}
-          mainAccAddress={getMainAddresssLinkedToTradingAccount(
-            previewAccountSelected?.address,
-            userAccounts,
-          )}
+          mainAccAddress={
+            previewAccountSelected?.address && userAccounts
+              ? getMainAddresssLinkedToTradingAccount(
+                  previewAccountSelected?.address,
+                  userAccounts
+                )
+              : ""
+          }
         />
       </Modal>
       <Modal
@@ -113,8 +117,8 @@ export const WalletsTemplate = () => {
         <NewAccount
           onClose={handleCloseNewAccount}
           selected={{
-            address: currentControllerWallet?.account.address,
-            name: currentControllerWallet?.account?.meta?.name,
+            address: currentControllerWallet?.account.address as string,
+            name: currentControllerWallet?.account?.meta?.name as string,
           }}
           isLoading={isLoading}
         />
@@ -231,7 +235,7 @@ export const WalletsTemplate = () => {
                                           key={i}
                                           onAction={() =>
                                             handleFilterTradeAccountByController(
-                                              account.address,
+                                              account.address
                                             )
                                           }
                                         >
@@ -248,14 +252,15 @@ export const WalletsTemplate = () => {
                         <S.WalletContent>
                           {allFilteredTradeAccounts?.length ? (
                             allFilteredTradeAccounts?.map((account, i) => {
-                              const linkedMainAddress =
-                                getMainAddresssLinkedToTradingAccount(
-                                  account.address,
-                                  userAccounts,
-                                );
+                              const linkedMainAddress = userAccounts
+                                ? getMainAddresssLinkedToTradingAccount(
+                                    account.address,
+                                    userAccounts
+                                  )
+                                : "";
                               const acc = controllerWallets?.find(
                                 ({ account }) =>
-                                  account?.address === linkedMainAddress,
+                                  account?.address === linkedMainAddress
                               );
                               const hasLinkedAccount =
                                 !!linkedMainAddress?.length ||
@@ -275,16 +280,17 @@ export const WalletsTemplate = () => {
                                   isPresentInBrowser={isPresentInBrowser}
                                   name={String(
                                     account?.account?.meta?.name ||
-                                      t("accountNotPresentInBrowser"),
+                                      t("accountNotPresentInBrowser")
                                   )}
                                   address={account.address}
                                   additionalInfo={
-                                    hasLinkedAccount &&
-                                    t("linkedTo", {
-                                      address:
-                                        acc?.account?.meta?.name ||
-                                        transformAddress(linkedMainAddress),
-                                    })
+                                    hasLinkedAccount
+                                      ? t("linkedTo", {
+                                          address:
+                                            acc?.account?.meta?.name ||
+                                            transformAddress(linkedMainAddress),
+                                        })
+                                      : ""
                                   }
                                 >
                                   <S.WalletActions>
@@ -321,10 +327,11 @@ export const WalletsTemplate = () => {
                                             {
                                               defaultImportActive: true,
                                               data: {
-                                                name: account.name,
+                                                name: account.account?.meta
+                                                  .name as string,
                                                 address: account.address,
                                               },
-                                            },
+                                            }
                                           )
                                         }
                                       >
@@ -335,7 +342,7 @@ export const WalletsTemplate = () => {
                                       type="button"
                                       onClick={() => {
                                         tradeWalletState.onPreviewAccountModalActive(
-                                          account,
+                                          account
                                         );
                                       }}
                                     >
@@ -415,24 +422,25 @@ export const WalletsTemplate = () => {
                                 <ControllerWallets
                                   key={i}
                                   address={account.address}
-                                  name={account.meta.name}
+                                  name={account.meta.name as string}
                                   isUsing={isUsing}
                                   isDefault={
                                     defaultFundingAddress === account.address
                                   }
                                   handleRegister={(
-                                    account: ExtensionAccount,
+                                    account: ExtensionAccount
                                   ) => {
                                     handleChangeCurrentControllerWallet(
-                                      account,
+                                      account
                                     );
                                     tradeWalletState.onRegisterAccountModalActive(
                                       {
                                         data: {
-                                          name: account.account.meta.name,
+                                          name: account.account?.meta
+                                            ?.name as string,
                                           address: account.account.address,
                                         },
-                                      },
+                                      }
                                     );
                                   }}
                                 />
@@ -498,16 +506,13 @@ const ControllerWallets = ({
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter(
-    (account) => account.mainAddress === address,
+    (account) => account.mainAddress === address
   );
   const linkedTradeAccounts = accounts?.map((account) => account.tradeAddress);
 
-  const extensionAccount =
-    address &&
-    extensionWalletState.allAccounts?.find(
-      ({ account }) =>
-        account?.address?.toLowerCase() === address?.toLowerCase(),
-    );
+  const extensionAccount = extensionWalletState.allAccounts?.find(
+    ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
+  );
 
   const { onLinkEmail } = useExtensionWallet();
 
@@ -528,12 +533,13 @@ const ControllerWallets = ({
       name={name || "--"}
       address={address}
       additionalInfo={
-        isRegistered &&
-        t("additionalInfo", { accounts: linkedTradeAccounts?.length ?? 0 })
+        isRegistered
+          ? t("additionalInfo", { accounts: linkedTradeAccounts?.length ?? 0 })
+          : ""
       }
     >
       <S.WalletActions>
-        {isRegistered && linkedTradeAccounts?.length > 0 ? (
+        {isRegistered && linkedTradeAccounts!.length > 0 ? (
           <Badge isRegistered={true}>{t("registeredBadge")}</Badge>
         ) : (
           <Fragment>
@@ -541,7 +547,9 @@ const ControllerWallets = ({
               <S.Button
                 type="button"
                 onClick={() => {
-                  handleLinkEmail(extensionAccount);
+                  if (extensionAccount) {
+                    handleLinkEmail(extensionAccount);
+                  }
                 }}
               >
                 {t("useInOrderbook")}
@@ -551,7 +559,12 @@ const ControllerWallets = ({
               <S.Button
                 type="button"
                 onClick={() => {
-                  handleRegister(extensionAccount);
+                  if (
+                    extensionAccount &&
+                    typeof handleRegister === "function"
+                  ) {
+                    handleRegister(extensionAccount);
+                  }
                 }}
               >
                 {t("registerNow")}
@@ -576,7 +589,7 @@ const Card = ({
 }: T.Props) => {
   const profileState = useProfile();
   const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar),
+    (v) => v.id === Number(profileState.userProfile?.avatar)
   );
 
   const { t } = useTranslation("settings");
@@ -586,7 +599,7 @@ const Card = ({
       <S.AccountCardWrapper>
         {isAvatar && (
           <S.AccountCardAvatar>
-            <BigHead {...avatarOptions.data} />
+            <BigHead {...avatarOptions?.data} />
           </S.AccountCardAvatar>
         )}
         <S.AccountCardContent>
@@ -643,7 +656,12 @@ const Empty = ({
   </S.Empty>
 );
 
-const AccountHeader = ({ handleFilter = undefined, children }) => {
+type AccountHeaderProps = {
+  handleFilter: (e) => void;
+  children: React.ReactNode;
+};
+
+const AccountHeader = ({ handleFilter, children }: AccountHeaderProps) => {
   const { t } = useTranslation("settings");
 
   return (
@@ -669,13 +687,18 @@ const WalletCard = ({
   children,
 }) => {
   const { t } = useTranslation("settings");
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () =>
-    (buttonRef.current.innerHTML = t("copyToClipBoard"));
+  const buttonRef = useRef<HTMLSpanElement | null>(null);
+  const handleOnMouseOut = () => {
+    if (buttonRef.current) {
+      buttonRef.current.innerHTML = t("copyToClipBoard");
+    }
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(address);
-    buttonRef.current.innerHTML = t("copied");
+    if (buttonRef.current) {
+      buttonRef.current.innerHTML = t("copied");
+    }
   };
 
   const shortAddress = transformAddress(address, 18);

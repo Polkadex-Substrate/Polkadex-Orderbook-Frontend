@@ -2,16 +2,15 @@ import { useCallback, useEffect, useReducer } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import router from "next/router";
+import { defaultConfig } from "@orderbook/core/config";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { Provider } from "./context";
 import { authReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { AUTH_ERROR_CODES } from "./constants";
 import * as A from "./actions";
-
-import { defaultConfig } from "@orderbook/core/config";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 export const AuthProvider: T.AuthComponent = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -49,7 +48,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
                   email,
                 },
               },
-              "/codeVerification"
+              "/codeVerification",
             );
             return;
           }
@@ -60,7 +59,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         }
       }
     },
-    [profileState, onHandleError, onHandleNotification]
+    [profileState, onHandleError, onHandleNotification],
   );
 
   const onSignUp = useCallback(
@@ -87,7 +86,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
               email,
             },
           },
-          "/codeVerification"
+          "/codeVerification",
         );
       } catch (error) {
         console.log("error: ", error);
@@ -95,7 +94,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.signUpError(error));
       }
     },
-    [onHandleError, onHandleNotification]
+    [onHandleError, onHandleNotification],
   );
 
   const onLogout = useCallback(() => {
@@ -134,7 +133,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.forgotPasswordError(error));
       }
     },
-    [onHandleError]
+    [onHandleError],
   );
 
   const onForgotPasswordCode = useCallback(
@@ -152,7 +151,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.forgotPasswordError(error));
       }
     },
-    [onHandleError]
+    [onHandleError],
   );
 
   const onResendCode = useCallback(
@@ -166,7 +165,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.resendCodeError(error));
       }
     },
-    [onHandleError]
+    [onHandleError],
   );
 
   const onCodeVerification = useCallback(
@@ -176,7 +175,8 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.codeVerifyData());
         onHandleNotification({
           type: "Success",
-          message: "Successfully created a new account!, please sign in with your new account",
+          message:
+            "Successfully created a new account!, please sign in with your new account",
         });
         router.push("/signIn");
       } catch (error) {
@@ -185,7 +185,7 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.codeVerifyError(error));
       }
     },
-    [onHandleError, onHandleNotification]
+    [onHandleError, onHandleNotification],
   );
 
   const onChangePassword = useCallback(
@@ -201,12 +201,12 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         dispatch(A.changePasswordError(error));
       }
     },
-    [onHandleError]
+    [onHandleError],
   );
 
   const onUserAuth = useCallback(
     async (payload: T.UserAuth) => dispatch(A.authUserData(payload)),
-    []
+    [],
   );
 
   // Note : getIsAuthenticated function is same as fetchDataOnUserAuth in profile provider. We can remove it.
@@ -254,7 +254,8 @@ export const AuthProvider: T.AuthComponent = ({ children }) => {
         onCodeVerification,
         onChangePassword,
         onUserAuth,
-      }}>
+      }}
+    >
       {children}
     </Provider>
   );

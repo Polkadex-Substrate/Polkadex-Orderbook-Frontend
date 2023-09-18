@@ -9,28 +9,29 @@ type Props = {
 };
 
 const getDefaultTime = ({ startTime, endTime, direction }: Partial<Props>) => {
-  const suppliedProps = typeof (startTime && endTime) !== undefined;
-
+  if (!startTime || !endTime) {
+    return [0, 60];
+  }
   switch (direction) {
     case "down":
-      if (suppliedProps && startTime >= endTime) {
+      if (startTime >= endTime) {
         return [startTime, endTime];
-      } else if (suppliedProps && startTime < endTime) {
+      } else if (startTime < endTime) {
         return [startTime, startTime];
       }
       return [startTime || 60, endTime || 0];
 
     default:
-      if (suppliedProps && startTime <= endTime) {
+      if (startTime <= endTime) {
         return [startTime, endTime];
-      } else if (suppliedProps && startTime > endTime) {
+      } else if (startTime > endTime) {
         return [startTime, startTime];
       }
       return [startTime || 0, endTime || 60];
   }
 };
 
-const handleTime = (time, direction, start, end, multiplier) => {
+const handleTime = (time, direction, start, end, multiplier): number => {
   const reverseCase = direction === "down";
   if (reverseCase) {
     multiplier =
@@ -55,7 +56,7 @@ export const useTimer = ({
 }: Props) => {
   const [start, end] = getDefaultTime({ startTime, endTime, direction });
   const [time, setTime] = useState(start);
-  const [ticker, setTicker] = useState(null);
+  const [ticker, setTicker] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!ticker) {

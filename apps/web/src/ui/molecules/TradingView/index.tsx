@@ -72,12 +72,13 @@ export const TradingView = () => {
       try {
         if (!currentMarket?.m) return [];
 
-        const klines = await onHandleKlineFetch({
-          market: currentMarket?.m,
-          resolution: resolution,
-          from: new Date(from * 1000),
-          to: new Date(to * 1000),
-        });
+        const klines =
+          (await onHandleKlineFetch({
+            market: currentMarket?.m,
+            resolution: resolution,
+            from: new Date(from * 1000),
+            to: new Date(to * 1000),
+          })) ?? [];
 
         if (klines.length === 0) {
           return [];
@@ -145,7 +146,7 @@ export const TradingView = () => {
           }
 
           const pricePrecision = decimalPlaces(
-            currentMarket?.price_tick_size || 1
+            currentMarket?.price_tick_size ?? 1
           );
           const pricescale = Math.pow(10, pricePrecision);
 

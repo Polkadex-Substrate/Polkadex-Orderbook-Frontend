@@ -2,23 +2,22 @@ import * as T from "./types";
 import * as C from "./constants";
 
 const defaultTheme = "dark";
+// @eslint-ignore
+const isBrowser = (process as any).browser;
+const defaultLanguage = isBrowser && navigator.language.substring(0, 2);
 
-const defaultLanguage = process.browser && navigator.language.substring(0, 2);
-
-const theme = ((process.browser && localStorage.getItem(C.DEFAULTTHEMENAME)) ??
+const theme = ((isBrowser && localStorage.getItem(C.DEFAULTTHEMENAME)) ??
   defaultTheme) as T.SettingState["theme"];
 
-const language = ((process.browser &&
-  localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
+const language = ((isBrowser && localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
   defaultLanguage) as T.SettingState["language"];
 
-const currency = ((process.browser &&
-  localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
+const currency = ((isBrowser && localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
   "USD") as T.SettingState["currency"];
 
 const notifications =
   JSON.parse(
-    process.browser &&
+    isBrowser &&
       (window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string),
   ) || [];
 
@@ -36,7 +35,7 @@ export const initialState: T.SettingState = {
 export const settingReducer = (state: T.SettingState, action) => {
   switch (action.type) {
     case C.SETTINGS_CHANGE_THEME: {
-      process.browser &&
+      isBrowser &&
         window.localStorage.setItem(C.DEFAULTTHEMENAME, action.payload);
       return {
         ...state,
@@ -44,7 +43,7 @@ export const settingReducer = (state: T.SettingState, action) => {
       };
     }
     case C.SETTINGS_CHANGE_LANGUAGE: {
-      process.browser &&
+      isBrowser &&
         window.localStorage.setItem(C.DEFAULTLANGUAGENAME, action.payload);
       return {
         ...state,
@@ -53,7 +52,7 @@ export const settingReducer = (state: T.SettingState, action) => {
     }
 
     case C.SETTINGS_CHANGE_CURRENCY: {
-      process.browser &&
+      isBrowser &&
         window.localStorage.setItem(C.DEFAULTCURRENCYNAME, action.payload);
       return {
         ...state,
@@ -82,8 +81,7 @@ export const settingReducer = (state: T.SettingState, action) => {
 
     case C.NOTIFICATION_PUSH: {
       const localData =
-        process.browser &&
-        window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
+        isBrowser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
       const prevObj: T.Notification[] =
         JSON.parse(localData as string)?.sort(
           (a: T.Notification, b: T.Notification) => a.date - b.date,
@@ -107,8 +105,7 @@ export const settingReducer = (state: T.SettingState, action) => {
     }
 
     case C.NOTIFICATION_DELETE_ALL:
-      process.browser &&
-        window.localStorage.removeItem(C.DEFAULTNOTIFICATIONNAME);
+      isBrowser && window.localStorage.removeItem(C.DEFAULTNOTIFICATIONNAME);
       return {
         ...state,
         notifications: [],
@@ -123,7 +120,7 @@ export const settingReducer = (state: T.SettingState, action) => {
 
       const newObj = prevObj?.filter((item) => item.id !== action.payload);
 
-      process.browser &&
+      isBrowser &&
         window.localStorage.setItem(
           C.DEFAULTNOTIFICATIONNAME,
           JSON.stringify([...newObj]),
@@ -139,8 +136,7 @@ export const settingReducer = (state: T.SettingState, action) => {
 
     case C.NOTIFICATION_MARK_AS_READ: {
       const localNotifications =
-        process.browser &&
-        window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
+        isBrowser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
       const prevObj: T.Notification[] =
         JSON.parse(localNotifications as string) || [];
 
@@ -154,7 +150,7 @@ export const settingReducer = (state: T.SettingState, action) => {
         return item;
       });
 
-      process.browser &&
+      isBrowser &&
         window.localStorage.setItem(
           C.DEFAULTNOTIFICATIONNAME,
           JSON.stringify([...newObj]),

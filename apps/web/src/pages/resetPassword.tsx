@@ -5,11 +5,11 @@ import { useDisabledPages } from "@/hooks";
 const ResetPasswordTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/ResetPassword").then(
-      (mod) => mod.ResetPasswordTemplate,
+      (mod) => mod.ResetPasswordTemplate
     ),
   {
     ssr: false,
-  },
+  }
 );
 const ResetPassword = () => {
   const { disabled } = useDisabledPages();

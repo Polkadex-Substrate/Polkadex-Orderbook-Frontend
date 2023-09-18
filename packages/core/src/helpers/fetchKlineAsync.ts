@@ -1,8 +1,11 @@
+import { getKlinesbyMarketInterval } from "@orderbook/core/graphql/queries";
+import {
+  KlineDbData,
+  KlineEvent,
+} from "@orderbook/core/providers/public/klineProvider";
+
 import { sendQueryToAppSync } from "./appsync";
 import { processKlineData } from "./processKlineData";
-
-import { getKlinesbyMarketInterval } from "@/graphql/queries";
-import { KlineDbData, KlineEvent } from "@/providers/public/klineProvider";
 
 export const fetchKlineAsync = async (
   market: string,

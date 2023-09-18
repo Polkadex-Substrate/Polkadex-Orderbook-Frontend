@@ -97,7 +97,7 @@ export interface UserProfileTradeAccountDelete {
 }
 export interface UserSetDefaultTradeAccount {
   type: typeof PROFILE_SET_DEFAULT_TRADE_ACCOUNT;
-  payload: string | null;
+  payload: string;
 }
 export interface UserSetAvatar {
   type: typeof PROFILE_SET_PROFILE_AVATAR;

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
     "paths": {
+      "@orderbook/core/*": ["../../packages/core/src/*"],
       "@/*": ["./src/*"],
       "@polkadex/orderbook-ui/templates":[
         "./src/ui/templates"
@@ -27,11 +28,11 @@
      ],
      "@polkadex/orderbook-ui/molecules/*":[
         "./src/ui/molecules/*"
-     ],
+     ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "public"],
   "files":["src/styles/styled.d.ts"]
 }
 

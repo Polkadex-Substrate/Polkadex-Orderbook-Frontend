@@ -1,10 +1,9 @@
 import { FC, PropsWithChildren } from "react";
+import { IUserTradeAccount } from "@orderbook/core/hooks";
 
 import { TradeAccount } from "../../types";
 
 import * as A from "./actions";
-
-import { IUserTradeAccount } from "@/hooks";
 
 export interface TradeWalletState {
   isFetching: boolean;
@@ -21,13 +20,13 @@ export interface TradeWalletState {
 export type RegisterTradeAccount = {
   isActive?: boolean;
   selectedAddress?: {
-    name: string;
+    name?: string;
     address: string;
   };
   defaultImportActive?: boolean;
   mnemonic?: string;
   account?: {
-    name: string;
+    name?: string;
     address: string;
   };
 };

@@ -91,10 +91,9 @@ export const CreateAccountTemplate = () => {
                   <form onSubmit={handleSubmit}>
                     <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
                     <InputLine
-                      name="name"
                       label={t("inputLabel")}
                       placeholder={t("inputPlaceholder")}
-                      error={errors.name && touched.name && errors.name}
+                      error={touched.name ? errors.name : ""}
                       {...getFieldProps("name")}
                     />
                     {/* <PassCode */}

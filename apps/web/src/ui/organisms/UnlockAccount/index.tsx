@@ -7,7 +7,12 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 import * as S from "./styles";
 
-export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
+type Props = {
+  handleClose?: (() => void) | undefined;
+  onSubmit: (value) => void;
+};
+
+export const UnlockAccount = ({ handleClose = undefined, onSubmit }: Props) => {
   const { setFieldValue, values, handleSubmit, isValid, dirty } = useFormik({
     initialValues: {
       password: "",
@@ -17,7 +22,7 @@ export const UnlockAccount = ({ handleClose = undefined, onSubmit }) => {
   });
   const digitsLeft = useMemo(
     () => 5 - Array.from(String(values.password), (v) => Number(v)).length,
-    [values],
+    [values]
   );
 
   const message =

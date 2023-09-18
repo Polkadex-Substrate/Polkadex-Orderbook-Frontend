@@ -65,3 +65,5 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
     }
   `}
 `;
+
+export const Content = styled.div``;

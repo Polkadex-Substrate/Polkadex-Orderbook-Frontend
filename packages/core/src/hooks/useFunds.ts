@@ -1,9 +1,8 @@
 import { ChangeEvent, useMemo, useState } from "react";
-
 import {
   useBalancesProvider,
   Balance,
-} from "@/providers/user/balancesProvider";
+} from "@orderbook/core/providers/user/balancesProvider";
 
 export function useFunds() {
   const [state, setState] = useState("");
@@ -12,9 +11,9 @@ export function useFunds() {
 
   const { balances: userBalances } = useBalancesProvider();
 
-  const balances: Balance[] = useMemo(
+  const balances = useMemo(
     () =>
-      userBalances.reduce((pv, cv) => {
+      userBalances.reduce((pv: Balance[], cv) => {
         if (
           cv.name.toLowerCase().includes(state.toLowerCase()) ||
           cv.symbol.toLowerCase().includes(state.toLowerCase())

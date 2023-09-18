@@ -1,3 +1,6 @@
+import { sliceArray } from "@orderbook/core/helpers";
+import { defaultConfig } from "@orderbook/core/config";
+
 import { OrderCommon } from "../../types";
 
 import { OrdersHistoryAction } from "./actions";
@@ -12,9 +15,6 @@ import {
   ORDER_UPDATE_EVENT_ERROR,
 } from "./constants";
 import { OrdersHistoryState } from "./types";
-
-import { sliceArray } from "@/helpers";
-import { defaultConfig } from "@/config";
 
 const { defaultStorageLimit } = defaultConfig;
 
@@ -69,7 +69,7 @@ export const ordersHistoryReducer = (
       const newOrder = action.payload;
       // add to orderhistory for all cases
       const updatedOrderHistory = replaceOrPushOrder(allOrders, newOrder);
-      let updatedOpenOrders = [];
+      let updatedOpenOrders: OrderCommon[] = [];
       if (newOrder.status === "OPEN") {
         updatedOpenOrders = replaceOrPushOrder(openOrders, newOrder);
       } else {

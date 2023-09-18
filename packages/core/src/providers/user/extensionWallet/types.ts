@@ -27,7 +27,7 @@ export type ExtensionWalletContextProps = ExtensionWalletState & {
   ) => void;
   onRegisterMainAccount: (value: A.RegisterMainAccountFetch["payload"]) => void;
   onPolkadotExtensionWallet: () => void;
-  selectMainAccount: (value: string) => ExtensionAccount;
+  selectMainAccount: (value: string) => ExtensionAccount | undefined;
 };
 
 export interface ExtensionWalletProps {

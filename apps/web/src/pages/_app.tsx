@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
@@ -54,11 +53,11 @@ const workSans = Work_Sans({
 const Maintenance = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Maintenance").then(
-      (mod) => mod.Maintenance,
+      (mod) => mod.Maintenance
     ),
   {
     ssr: false,
-  },
+  }
 );
 const queryClient = new QueryClient();
 const Providers = ({ children }) => {
@@ -156,7 +155,7 @@ function App({ Component, pageProps }: AppProps) {
           )}
         </OverlayProvider>
       </SettingProvider>
-      {/* @ts-ignore */}
+      {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       <style jsx global>{`
         body {
           font-family: ${workSans.style.fontFamily},

@@ -1,4 +1,7 @@
-import { Ticker, TickerQueryResult } from "@/providers/public/marketsProvider";
+import {
+  Ticker,
+  TickerQueryResult,
+} from "@orderbook/core/providers/public/marketsProvider";
 
 export const convertToTicker = (
   elem: TickerQueryResult,

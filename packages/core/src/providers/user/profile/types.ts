@@ -44,7 +44,7 @@ export interface ProfileState {
     favoriteMarkets: string[];
   };
   selectedAccount: UserAccount;
-  defaultTradeAccount: string;
+  defaultTradeAccount?: string;
 }
 
 export type ProfileProviderProps = PropsWithChildren<{

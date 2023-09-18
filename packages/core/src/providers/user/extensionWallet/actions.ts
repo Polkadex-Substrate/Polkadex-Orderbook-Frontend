@@ -1,3 +1,5 @@
+import { USER_EVENTS } from "@orderbook/core";
+
 import { CommonError, ExtensionAccount } from "../../types";
 
 import {
@@ -12,8 +14,6 @@ import {
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
   REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
 } from "./constants";
-
-import { USER_EVENTS } from "@/constants";
 
 export interface ExtensionWalletFetch {
   type: typeof POLKADOT_EXTENSION_WALLET_FETCH;

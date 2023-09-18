@@ -18,7 +18,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
   const isDisabled = useMemo(
     () =>
       values.account === `delete ${name} account`.replace(/\s+/g, " ").trim(),
-    [values, name],
+    [values, name]
   );
 
   const { t: translation } = useTranslation("molecules");
@@ -37,7 +37,6 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
       </S.Title>
       <form onSubmit={handleSubmit}>
         <InputLine
-          name="account"
           label={
             <>
               {t("toVerify")}{" "}
@@ -45,7 +44,7 @@ export const RemoveFromBlockchain = ({ onClose, onAction, name }) => {
             </>
           }
           placeholder={t("inputPlaceholder")}
-          error={errors.account && touched.account && errors.account}
+          error={touched.account ? errors.account : ""}
           {...getFieldProps("account")}
         />
         <S.Actions>

@@ -1,17 +1,16 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
-
-import { isAssetPDEX } from "./isAssetPDEX";
-import { signPayload } from "./enclavePayloadSigner";
-
 import {
   OrderKindEnum,
   OrderSide,
   OrderSideEnum,
   OrderType,
   OrderTypeEnum,
-} from "@/providers/types";
+} from "@orderbook/core/providers/types";
+
+import { isAssetPDEX } from "./isAssetPDEX";
+import { signPayload } from "./enclavePayloadSigner";
 
 export const createOrderPayload = (
   api: ApiPromise,

@@ -32,8 +32,8 @@ import { UnlockAccount } from "../UnlockAccount";
 import * as S from "./styles";
 
 type Props = {
-  onClose: () => void;
-  selected: IUserTradeAccount;
+  onClose: (() => void) | undefined;
+  selected: IUserTradeAccount | undefined;
   mainAccAddress: string;
 };
 
@@ -71,26 +71,23 @@ export const PreviewAccount = ({
     mainAccAddress &&
     extensionWalletState.allAccounts?.find(
       ({ account }) =>
-        account?.address?.toLowerCase() === mainAccAddress?.toLowerCase(),
+        account?.address?.toLowerCase() === mainAccAddress?.toLowerCase()
     );
 
-  const tradingAccountInBrowser = selectTradeAccount(
-    selected?.address,
-    allBrowserAccounts,
-  );
+  const tradingAccountInBrowser =
+    selected && selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
 
   const { selectedAccount: usingAccount } = useProfile();
-  const isRemoveFromBlockchainLoading = removesInLoading.includes(
-    selected?.address,
-  );
+  const isRemoveFromBlockchainLoading =
+    selected && removesInLoading.includes(selected?.address);
 
   const showProtectedPassword = exportAccountLoading;
   const using = usingAccount.tradeAddress === selected?.address;
   const { onUserSelectAccount } = useProfile();
 
   const menuDisableKeys = () => {
-    const disableKeysList = [];
+    const disableKeysList: string[] = [];
     if (!mainAccountDetails)
       disableKeysList.push(`${menuDisableKeysEnum.REMOVE_FROM_BLOCKCHAIN}`);
 
@@ -102,13 +99,14 @@ export const PreviewAccount = ({
 
   const shouldShowProtectedPassword = useMemo(
     () => tradingAccountInBrowser?.isLocked && showProtectedPassword,
-    [tradingAccountInBrowser, showProtectedPassword],
+    [tradingAccountInBrowser, showProtectedPassword]
   );
 
   const handleExportAccount = useCallback(() => {
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
-      : onExportTradeAccount({ address: selected?.address });
+      : selected?.address &&
+        onExportTradeAccount({ address: selected?.address });
   }, [
     onExportTradeAccount,
     onExportTradeAccountActive,
@@ -138,8 +136,10 @@ export const PreviewAccount = ({
           {remove.isRemoveDevice ? (
             <RemoveFromDevice
               onAction={() => {
-                onRemoveTradeAccountFromBrowser(selected?.address);
-                handleClose();
+                if (selected?.address) {
+                  onRemoveTradeAccountFromBrowser(selected?.address);
+                  handleClose();
+                }
               }}
               onClose={handleClose}
             />
@@ -148,18 +148,20 @@ export const PreviewAccount = ({
               name={remove?.name}
               onClose={handleClose}
               onAction={() => {
-                onRemoveProxyAccountFromChain({
-                  address: selected?.address,
-                  allAccounts: extensionWalletState.allAccounts,
-                });
-                handleClose();
+                if (selected) {
+                  onRemoveProxyAccountFromChain({
+                    address: selected?.address,
+                    allAccounts: extensionWalletState.allAccounts,
+                  });
+                  handleClose();
+                }
               }}
             />
           )}
         </Modal.Body>
       </Modal>
       <Loading
-        isVisible={isRemoveFromBlockchainLoading}
+        isVisible={isRemoveFromBlockchainLoading || false}
         message={tc("blockFinalizationMessage")}
         spinner="Keyboard"
       >
@@ -167,9 +169,13 @@ export const PreviewAccount = ({
           {shouldShowProtectedPassword ? (
             <S.UnlockAccount>
               <UnlockAccount
-                onSubmit={({ password }) =>
-                  onExportTradeAccount({ address: selected?.address, password })
-                }
+                onSubmit={({ password }) => {
+                  if (selected?.address)
+                    onExportTradeAccount({
+                      address: selected?.address,
+                      password,
+                    });
+                }}
                 handleClose={() => onExportTradeAccountActive()}
               />
             </S.UnlockAccount>
@@ -188,7 +194,7 @@ export const PreviewAccount = ({
                     <WalletName
                       label={t("walletLabel")}
                       information={String(
-                        selected?.account?.meta?.name || t("accountNotPresent"),
+                        selected?.account?.meta?.name || t("accountNotPresent")
                       )}
                     />
                     <WalletAddress
@@ -260,7 +266,7 @@ export const PreviewAccount = ({
                       onAction={() =>
                         handleOpenRemove(
                           false,
-                          selected?.account?.meta?.name as string,
+                          selected?.account?.meta?.name as string
                         )
                       }
                     >
@@ -340,13 +346,14 @@ const WalletAddress = ({
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`previewWallet.${key}`);
 
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () =>
-    (buttonRef.current.innerHTML = t("copyToClipBoard"));
+  const buttonRef = useRef<HTMLSpanElement | null>(null);
+  const handleOnMouseOut = () => {
+    if (buttonRef.current) buttonRef.current.innerHTML = t("copyToClipBoard");
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(information);
-    buttonRef.current.innerHTML = t("copied");
+    if (buttonRef.current) buttonRef.current.innerHTML = t("copied");
   };
 
   return (
@@ -416,9 +423,7 @@ const DefaultAccount = ({ label = "", tradeAddress }) => {
   const isActive = tradeAddress === defaultTradeAddress;
 
   const handleChange = () =>
-    !isActive
-      ? profileState.onUserSetDefaultTradeAccount(tradeAddress)
-      : profileState.onUserSetDefaultTradeAccount(null);
+    !isActive && profileState.onUserSetDefaultTradeAccount(tradeAddress);
 
   return (
     <S.CardWrapper>

@@ -1,5 +1,5 @@
-import * as mutation from "@/graphql/mutations";
-import { sendQueryToAppSync } from "@/helpers";
+import * as mutation from "@orderbook/core/graphql/mutations";
+import { sendQueryToAppSync } from "@orderbook/core/helpers";
 
 export const getNewClientId = () => {
   // 32 byte Uint8Array of random string with "webapp-" prefix
