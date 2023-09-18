@@ -1,5 +1,5 @@
 import { FocusableProviderProps } from "@react-aria/focus";
-import { MenuTriggerAriaProps } from "@react-aria/menu";
+import { AriaMenuTriggerProps } from "@react-aria/menu";
 import { TreeState } from "@react-stately/tree";
 import { AriaMenuProps } from "@react-types/menu";
 import type { Node } from "@react-types/shared";
@@ -50,7 +50,7 @@ export type SectionProps<T = object> = {
 };
 
 export type UseDropdownProps = { closeOnSelect?: boolean } & UsePopoverProps &
-  MenuTriggerAriaProps;
+  AriaMenuTriggerProps;
 
 export type DropdownItemWrapperProps = {
   isSelected?: boolean;

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { eventHandler } from "@orderbook/core/helpers";
 
 import { useProfile } from "../profile";
 
@@ -7,9 +9,6 @@ import { tradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
-
-import { useSettingsProvider } from "@/providers/public/settings";
-import { eventHandler } from "@/helpers";
 
 export const TradesProvider: T.TradesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradesReducer, initialState);

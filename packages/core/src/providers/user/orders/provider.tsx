@@ -1,8 +1,16 @@
 import { useReducer } from "react";
+import {
+  signPayload,
+  isAssetPDEX,
+  createCancelOrderPayloadSigned,
+  createOrderPayload,
+  getNonce,
+} from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useProfile, UserAccount } from "../profile";
 import { useTradeWallet, selectTradeAccount } from "../tradeWallet";
-import { TradeAccount } from "../../types";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -15,20 +23,11 @@ import {
 } from "./helper";
 import { Provider } from "./context";
 
-import {
-  signPayload,
-  isAssetPDEX,
-  createCancelOrderPayloadSigned,
-  createOrderPayload,
-  getNonce,
-} from "@/helpers";
-import { useSettingsProvider } from "@/providers/public/settings";
-import { useNativeApi } from "@/providers/public/nativeApi";
-
 type UserActionLambdaResp = {
   is_success: boolean;
   body: string;
 };
+
 export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
   const profileState = useProfile();
@@ -43,7 +42,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const account: UserAccount = profileState.selectedAccount;
       const address = account.tradeAddress;
       const mainAddress = account.mainAddress;
-      const keyringPair: TradeAccount = selectTradeAccount(
+      const keyringPair = selectTradeAccount(
         address,
         tradeWalletState.allBrowserAccounts
       );
@@ -117,13 +116,13 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const api = nativeApiState.api;
       const account: UserAccount = profileState.selectedAccount;
       const { tradeAddress, mainAddress } = account;
-      const keyringPair: TradeAccount = selectTradeAccount(
+      const keyringPair = selectTradeAccount(
         tradeAddress,
         tradeWalletState.allBrowserAccounts
       );
-      if (keyringPair.isLocked)
+      if (keyringPair?.isLocked)
         throw new Error("Please unlock your account with password");
-      if (tradeAddress !== "" && keyringPair) {
+      if (tradeAddress !== "" && keyringPair && api) {
         const { pair, signature } = createCancelOrderPayloadSigned(
           api,
           keyringPair,

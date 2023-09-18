@@ -20,12 +20,13 @@ const PaperWallet = forwardRef(
       mnemonic: string[];
       controllerAddress?: string;
     }>,
-    ref: Ref<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>
   ) => {
     const pharses = divideArray(mnemonic);
-    const componentRef = useRef(null);
+    const componentRef = useRef<SVGGElement>(null);
 
     useEffect(() => {
+      if (!componentRef?.current) return;
       const blob = new Blob([componentRef.current.innerHTML], {
         type: "image/svg+xml",
       });
@@ -35,8 +36,8 @@ const PaperWallet = forwardRef(
     }, []);
 
     const shortAddress = useMemo(
-      () => transformAddress(controllerAddress, 10),
-      [controllerAddress],
+      () => controllerAddress && transformAddress(controllerAddress, 10),
+      [controllerAddress]
     );
     return (
       <S.Wrapper ref={ref}>
@@ -1112,13 +1113,14 @@ const PaperWallet = forwardRef(
         </S.Container>
       </S.Wrapper>
     );
-  },
+  }
 );
 PaperWallet.displayName = "PaperWallet";
-const divideArray = (mnemonic: string[]) => {
+
+const divideArray = (mnemonic: string[]): any[][] => {
   const values = mnemonic.map((v, i) => ({ value: v, id: i + 1 }));
   const n = 2;
-  const result = [[], [], []];
+  const result = [[], [], []] as any[][];
   const wordsPerLine = Math.ceil(values?.length / n);
   for (let line = 0; line < n; line++) {
     for (let i = 0; i < wordsPerLine; i++) {

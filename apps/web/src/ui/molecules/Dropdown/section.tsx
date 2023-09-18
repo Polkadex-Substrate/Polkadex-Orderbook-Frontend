@@ -19,6 +19,8 @@ export const Section = ({ state, item }: T.SectionProps) => {
           <S.SectionTitle {...headingProps}>{item.rendered}</S.SectionTitle>
         )}
         <S.SectionContainer {...groupProps}>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           {[...item.childNodes].map((value) => (
             <ItemComponent key={value.key} item={value} state={state} />
           ))}

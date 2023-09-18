@@ -1,3 +1,6 @@
+import { buildFilterPrice, setToStorage } from "@orderbook/core/helpers";
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
+
 import { MarketsAction } from "./actions";
 import {
   MARKET_TICKER_CHANNEL_DATA,
@@ -11,9 +14,6 @@ import {
   MARKETS_TICKERS_FETCH,
 } from "./constants";
 import { Market, MarketsState, Ticker } from "./types";
-
-import { buildFilterPrice, setToStorage } from "@/helpers";
-import { LOCAL_STORAGE_ID } from "@/constants";
 
 export const defaultTickers: Ticker = {
   m: "0-0",

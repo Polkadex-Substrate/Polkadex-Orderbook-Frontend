@@ -4,7 +4,7 @@ import { bgStyleVariants } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
-export const Item = styled("li")<{
+export const Item: any = styled("li")<{
   isCloseOnSelect?: boolean;
   isFlex?: boolean;
   isFocused?: boolean;
@@ -62,7 +62,7 @@ export const Item = styled("li")<{
           },
         },
       },
-    }),
+    })
 );
 
 export const Section = styled("li")({});
@@ -84,7 +84,7 @@ export const Icon = styled("div")({
   alignItems: "center",
 });
 
-export const Command = styled("div")(({ theme }) =>
+export const Command: any = styled("div")(({ theme }) =>
   css({
     padding: "0.4rem",
     border: "1px solid",
@@ -92,20 +92,20 @@ export const Command = styled("div")(({ theme }) =>
     fontSize: "1rem",
     textTransform: "uppercase",
     opacity: 0.5,
-  }),
+  })
 );
 
 export const SectionContainer = styled("ul")(() => css({}));
 
 export const Menu = styled("ul")<T.DropdownMenuProps>(
   ({ theme, fill, itemFill }) => css`
-    background: ${theme.colors[fill]};
+    background: ${fill && theme.colors[fill]};
     min-width: 20rem;
     border: 1px solid ${theme.colors.text}11;
     ${Item} {
       transition: background-color 0.2s ease-in-out;
       &:hover {
-        background-color: ${theme.colors[itemFill]}11;
+        background-color: ${itemFill && theme.colors[itemFill]}11;
       }
     }
   `,
@@ -138,13 +138,15 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
     },
   }),
   color,
-  bgStyleVariants,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  bgStyleVariants
 );
 
 export const Selected = styled("path")(({ theme }) =>
   css({
     stroke: theme.colors.text,
-  }),
+  })
 );
 
 export const Divider = styled("div")(({ theme }) =>
@@ -152,7 +154,7 @@ export const Divider = styled("div")(({ theme }) =>
     borderTop: "1px solid",
     borderTopColor: `${theme.colors.text}11`,
     margin: "0.8rem 0",
-  }),
+  })
 );
 
 Menu.defaultProps = {

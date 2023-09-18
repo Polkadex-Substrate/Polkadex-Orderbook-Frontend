@@ -1,4 +1,4 @@
-import { MAX_DIGITS_AFTER_DECIMAL } from "@/constants";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 export const Utils = {
   date: {

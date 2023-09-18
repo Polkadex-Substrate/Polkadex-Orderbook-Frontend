@@ -8,7 +8,7 @@ import * as S from "./styles";
 import { randomAvatars } from "./randomAvatars";
 
 type Props = {
-  onClose: () => void;
+  onClose?: () => void;
 };
 export const ChangeAvatar = ({ onClose = undefined }: Props) => {
   const profileState = useProfile();
@@ -18,7 +18,7 @@ export const ChangeAvatar = ({ onClose = undefined }: Props) => {
   const handleChange = (id: number) => setState(id);
   const handleSubmit = () => {
     profileState.onUserSetAvatar(state.toString());
-    onClose();
+    onClose?.();
   };
 
   const { t: translation } = useTranslation("organisms");

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { ApiPromise, WsProvider } from "@polkadot/api";
+import { defaultConfig } from "@orderbook/core/config";
 
 import { useSettingsProvider } from "../settings";
 
@@ -8,8 +9,6 @@ import { nativeApiReducer, initialState } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
 import { RECONNECT_TIME_MS } from "./constants";
-
-import { defaultConfig } from "@/config";
 
 const convertMillisecondsToSeconds = Math.floor(RECONNECT_TIME_MS / 1000);
 

@@ -27,10 +27,16 @@ const informationData = [
     title: "Ledger device",
   },
 ];
+
+type ImportAccountFormProps = {
+  onCancel: (() => void) | undefined;
+  defaultImportJson: boolean;
+};
+
 export const ImportAccountForm = ({
   onCancel = undefined,
   defaultImportJson = false,
-}) => {
+}: ImportAccountFormProps) => {
   const [state, setState] = useState(defaultImportJson ? "json" : "");
 
   const SelectedComponent = useMemo(() => {
@@ -75,9 +81,15 @@ export const ImportAccountForm = ({
   );
 };
 
-const ImportAccountMnemonic = ({ onCancel = undefined }) => {
+type ImportAccountMnemonicProps = {
+  onCancel: (() => void) | undefined;
+};
+
+const ImportAccountMnemonic = ({
+  onCancel = undefined,
+}: ImportAccountMnemonicProps) => {
   const { onImportTradeAccount } = useTradeWallet();
-  const mnemonicInputRef = useRef(null);
+  const mnemonicInputRef = useRef<HTMLInputElement | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -106,7 +118,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
     dirty,
   } = formik;
 
-  const { name } = detect();
+  const { name }: any = detect();
   const isBrowserSupported =
     ["chrome", "opera", "edge", "safari"].indexOf(name) > 0;
 
@@ -138,7 +150,8 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                 if (shouldPush) {
                   e.preventDefault();
                   val.forEach((item) => push(item));
-                  mnemonicInputRef.current.value = null;
+                  if (mnemonicInputRef.current)
+                    mnemonicInputRef.current.value = "";
                 } else if (
                   e.key === "Backspace" &&
                   e.currentTarget?.value?.length === 0
@@ -159,7 +172,8 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                   val.length + values.mnemonic?.length <= 12
                 ) {
                   setFieldValue("mnemonic", val);
-                  mnemonicInputRef.current.value = null;
+                  if (mnemonicInputRef.current)
+                    mnemonicInputRef.current.value = "";
                 }
               };
               return (
@@ -214,7 +228,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
               onClick={() =>
                 setFieldValue(
                   "name",
-                  generateUsername({ useRandomNumber: false }),
+                  generateUsername({ useRandomNumber: false })
                 )
               }
             >
@@ -256,7 +270,7 @@ const ImportAccountMnemonic = ({ onCancel = undefined }) => {
                   onClick={() =>
                     setFieldValue(
                       "isPasscodeVisible",
-                      !values.isPasscodeVisible,
+                      !values.isPasscodeVisible
                     )
                   }
                 >
@@ -289,7 +303,12 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
     translation(`importAccountForm.importAccountJSON.${key}`);
 
   const { onImportTradeAccountJson } = useTradeWallet();
-  const formik = useFormik({
+  const formik = useFormik<{
+    hasPasscode: boolean;
+    passcode: string;
+    isPasscodeVisible: boolean;
+    file: any;
+  }>({
     initialValues: {
       hasPasscode: false,
       passcode: "",
@@ -319,7 +338,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
             const decodedFile = JSON.parse(String(reader.result));
             setFieldValue(
               "file",
-              decodedFile?.address?.length ? decodedFile : "",
+              decodedFile?.address?.length ? decodedFile : ""
             );
           }
         };
@@ -340,7 +359,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
 
   const hasDataFile = useMemo(
     () => !!values.file?.address?.length,
-    [values.file?.address?.length],
+    [values.file?.address?.length]
   );
   return (
     <form onSubmit={handleSubmit}>
@@ -373,7 +392,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
                     month: "short",
                     day: "numeric",
                   },
-                  { locale: "EN" },
+                  { locale: "EN" }
                 )}
               </span>
             </div>
@@ -406,7 +425,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
                   onClick={() =>
                     setFieldValue(
                       "isPasscodeVisible",
-                      !values.isPasscodeVisible,
+                      !values.isPasscodeVisible
                     )
                   }
                 >

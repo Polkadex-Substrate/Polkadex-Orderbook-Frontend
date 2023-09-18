@@ -1,4 +1,4 @@
-export const getFromStorage = (key: string): string => {
+export const getFromStorage = (key: string): string | null | undefined => {
   if (typeof window !== "undefined") {
     return window.localStorage.getItem(key);
   }

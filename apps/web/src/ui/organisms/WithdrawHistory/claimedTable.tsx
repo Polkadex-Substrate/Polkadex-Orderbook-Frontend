@@ -9,7 +9,7 @@ import classNames from "classnames";
 import { useState } from "react";
 
 import * as S from "./styles";
-import { Props } from "./types";
+import { WithdrawTableProps } from "./types";
 import { pendingColumns } from "./columns";
 import { WithdrawHistorySkeleton } from "./skeleton";
 
@@ -21,7 +21,7 @@ export const ClaimedTable = ({
   loading,
   hasData,
 }: {
-  data: Props[];
+  data: WithdrawTableProps[];
   loading: boolean;
   hasData: boolean;
 }) => {

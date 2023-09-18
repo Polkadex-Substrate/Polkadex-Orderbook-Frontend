@@ -66,40 +66,39 @@ export const WithdrawTemplate = () => {
   } = useTransactionsProvider();
   const { onFetchClaimWithdraw, loading } = useWithdrawsProvider();
 
-  const currMainAcc =
-    currentAccount.mainAddress &&
-    extensionWalletState.allAccounts?.find(
-      ({ account }) =>
-        account?.address?.toLowerCase() ===
-        currentAccount.mainAddress?.toLowerCase(),
-    );
+  const currMainAcc = extensionWalletState.allAccounts?.find(
+    ({ account }) =>
+      account?.address?.toLowerCase() ===
+      currentAccount?.mainAddress?.toLowerCase()
+  );
 
   const tradingAccountInBrowser = selectTradeAccount(
     currentAccount?.tradeAddress,
-    tradeWalletState.allBrowserAccounts,
+    tradeWalletState.allBrowserAccounts
   );
 
   useTryUnlockTradeAccount(tradingAccountInBrowser);
-  const { balances: userBalances } = useBalancesProvider();
+  const { balances: userBalances, loading: fetchingAvailaleBalance } =
+    useBalancesProvider();
 
   const routedAsset = router.query.id as string;
   const shortAddress =
     currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
     currMainAcc?.account?.address?.slice(
-      currMainAcc?.account?.address?.length - 15,
+      currMainAcc?.account?.address?.length - 15
     );
 
   const availableAmount = useMemo(
     () => userBalances?.find((item) => item.assetId === selectedAsset?.assetId),
-    [userBalances, selectedAsset],
+    [userBalances, selectedAsset]
   );
 
   useEffect(() => {
     const initialAsset = assets.find(
       (asset) =>
         asset.name.startsWith(routedAsset) ||
-        asset.symbol.startsWith(routedAsset),
+        asset.symbol.startsWith(routedAsset)
     );
     if (initialAsset && !selectedAsset) {
       setSelectedAsset(initialAsset);
@@ -128,7 +127,9 @@ export const WithdrawTemplate = () => {
     setFieldValue,
   } = useFormik({
     initialValues,
-    validationSchema: withdrawValidations(availableAmount?.free_balance),
+    validationSchema: withdrawValidations(
+      availableAmount?.free_balance as string
+    ),
     validateOnChange: true,
     onSubmit: ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
@@ -156,7 +157,7 @@ export const WithdrawTemplate = () => {
       }
       return filteredWithdrawls;
     },
-    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name],
+    [allWithdrawals, showSelectedCoins, selectGetAsset, selectedAsset?.name]
   );
 
   const readyToClaim = useMemo(() => {
@@ -185,11 +186,11 @@ export const WithdrawTemplate = () => {
 
   const pendingWithdraws = useMemo(
     () => selectedWithdraw("PENDING"),
-    [selectedWithdraw],
+    [selectedWithdraw]
   );
   const claimedWithdraws = useMemo(
     () => selectedWithdraw("CONFIRMED"),
-    [selectedWithdraw],
+    [selectedWithdraw]
   );
 
   const hasPendingClaims = useMemo(
@@ -197,9 +198,9 @@ export const WithdrawTemplate = () => {
       readyToClaim.reduce(
         (acc, value) =>
           acc + value.items.filter((v) => v.status === "READY").length,
-        0,
+        0
       ),
-    [readyToClaim],
+    [readyToClaim]
   );
 
   const handleMax = (e) => {
@@ -215,7 +216,7 @@ export const WithdrawTemplate = () => {
   const { t: tc } = useTranslation("common");
 
   const handleUnlockClose = () => setShowPassword(false);
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
   return (
     <>
       <Modal
@@ -230,10 +231,10 @@ export const WithdrawTemplate = () => {
             <UnlockAccount
               onSubmit={({ password }) => {
                 try {
-                  tradingAccountInBrowser.unlock(password);
+                  tradingAccountInBrowser?.unlock(password);
                   if (!tradingAccountInBrowser?.isLocked)
                     formRef?.current?.dispatchEvent(
-                      new Event("submit", { cancelable: true, bubbles: true }),
+                      new Event("submit", { cancelable: true, bubbles: true })
                     );
                 } catch (error) {
                   alert(error);
@@ -315,14 +316,19 @@ export const WithdrawTemplate = () => {
                         <S.Available>
                           {tc("available")}{" "}
                           <strong>
-                            {availableAmount?.free_balance || 0}{" "}
-                            {selectedAsset?.symbol}
+                            {fetchingAvailaleBalance ? (
+                              t("loading")
+                            ) : (
+                              <>
+                                {availableAmount?.free_balance || 0}{" "}
+                                {selectedAsset?.symbol}
+                              </>
+                            )}
                           </strong>
                         </S.Available>
                       </S.SelectInput>
                       <S.Flex>
                         <InputLine
-                          name="amount"
                           label={t("inputLabel")}
                           placeholder="0.00"
                           error={errors.amount?.toString()}
@@ -400,13 +406,13 @@ export const WithdrawTemplate = () => {
                                   key={id}
                                   sid={sid}
                                   hasPendingWithdraws={items?.filter(
-                                    (v) => v.status === "READY",
+                                    (v) => v.status === "READY"
                                   )}
                                   handleClaimWithdraws={async () =>
                                     await onFetchClaimWithdraw({ sid })
                                   }
                                   items={items?.filter(
-                                    (v) => v.status === "READY",
+                                    (v) => v.status === "READY"
                                   )}
                                 />
                               ))
@@ -448,7 +454,7 @@ const HistoryCard = ({
   const { claimsInLoading: claimWithdrawsInLoading } = useWithdrawsProvider();
   const claimIsLoading = useMemo(
     () => claimWithdrawsInLoading.includes(sid),
-    [claimWithdrawsInLoading, sid],
+    [claimWithdrawsInLoading, sid]
   );
 
   const { t } = useTranslation("withdraw");
@@ -524,7 +530,7 @@ const HistoryTable = ({ items }) => {
                         hour: "2-digit",
                         minute: "2-digit",
                       },
-                      { locale: "EN" },
+                      { locale: "EN" }
                     )}
                   </span>
                 </S.Cell>

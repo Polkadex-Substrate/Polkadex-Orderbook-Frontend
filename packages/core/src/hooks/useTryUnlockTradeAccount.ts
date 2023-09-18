@@ -1,6 +1,6 @@
-import { TradeAccount } from "@/providers/types";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
-export function useTryUnlockTradeAccount(account: TradeAccount) {
+export function useTryUnlockTradeAccount(account: TradeAccount | undefined) {
   try {
     if (account && account.isLocked) {
       account.unlock("");

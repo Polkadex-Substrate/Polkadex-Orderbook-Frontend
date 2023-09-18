@@ -2,13 +2,12 @@ import { isReady } from "@polkadot/wasm-crypto";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import keyring from "@polkadot/ui-keyring";
+import { ExtrinsicResult, signAndSendExtrinsic } from "@orderbook/core/helpers";
 
 import { ProfileState } from "../profile";
 import { TradeAccount } from "../../types";
 
 import * as T from "./types";
-
-import { ExtrinsicResult, signAndSendExtrinsic } from "@/helpers";
 
 // This is needed as the selector one can not be used inside a function.
 export const getTradeAccount = (
@@ -71,7 +70,7 @@ export const removeProxyFromAccount = async (
 export const selectTradeAccount = (
   address: string,
   allBrowserAccounts: T.TradeWalletState["allBrowserAccounts"],
-): TradeAccount =>
+): TradeAccount | undefined =>
   allBrowserAccounts?.find(
     (account) => account?.address?.toLowerCase() === address?.toLowerCase(),
   );

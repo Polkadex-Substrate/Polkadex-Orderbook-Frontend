@@ -11,7 +11,7 @@ const Cell = forwardRef(
     { cell, state }: PropsWithChildren<T.CellForwardProps>,
     ref: Ref<HTMLElement>,
   ) => {
-    const componentRef = useRef();
+    const componentRef = useRef(null);
 
     const { gridCellProps } = useTableCell({ node: cell }, state, componentRef);
     const { isFocusVisible, focusProps } = useFocusRing();

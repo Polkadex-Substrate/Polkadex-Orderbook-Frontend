@@ -16,7 +16,7 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
     [handleMnemonicUpdate, mnemoicString],
   );
 
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLInputElement>(null);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -58,11 +58,13 @@ export const Mnemonic = ({ handleMnemonicUpdate }) => {
     <S.Wrapper isActive={state}>
       {!!mnemonic?.length && (
         <div style={{ display: "none" }}>
-          <PaperWallet
-            ref={componentRef}
-            mnemonic={mnemonic}
-            mnemoicString={mnemoicString}
-          />
+          {mnemoicString && (
+            <PaperWallet
+              ref={componentRef}
+              mnemonic={mnemonic}
+              mnemoicString={mnemoicString}
+            />
+          )}
         </div>
       )}
       <S.Title>

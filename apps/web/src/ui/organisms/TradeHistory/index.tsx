@@ -76,8 +76,8 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
             >
               {trades?.map((trade, i) => {
                 const date = new Date(trade.timestamp).toLocaleString();
-                const baseUnit = selectGetAsset(trade.baseAsset).symbol;
-                const quoteUnit = selectGetAsset(trade.quoteAsset).symbol;
+                const baseUnit = selectGetAsset(trade.baseAsset)?.symbol;
+                const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol;
                 return (
                   <TradeHistoryCard
                     key={i}
@@ -86,8 +86,20 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                     quoteUnit={quoteUnit}
                     data={[
                       { value: date },
-                      { value: Decimal.format(trade.price, priceFixed, ",") },
-                      { value: Decimal.format(trade.qty, amountFixed, ",") },
+                      {
+                        value: Decimal.format(
+                          trade.price,
+                          Number(priceFixed),
+                          ",",
+                        ),
+                      },
+                      {
+                        value: Decimal.format(
+                          trade.qty,
+                          Number(amountFixed),
+                          ",",
+                        ),
+                      },
                     ]}
                   />
                 );

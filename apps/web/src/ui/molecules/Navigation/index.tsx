@@ -1,10 +1,11 @@
 import { Icon } from "@polkadex/orderbook-ui/molecules";
+import { noop } from "@orderbook/core/helpers/noop";
 
 import * as S from "./styles";
 
 export const Navigation = ({
   title = "Title",
-  onBack = undefined,
+  onBack = noop,
   isFull = false,
   children,
 }) => {

@@ -20,7 +20,7 @@ import * as S from "./styles";
 
 import { ArrowBottom } from "@/ui/atoms/Icons";
 
-export const Markets = ({ hasMargin = false, onClose = undefined }) => {
+export const Markets = ({ hasMargin = false, onClose }) => {
   const {
     marketTokens,
     marketTickers,
@@ -39,9 +39,9 @@ export const Markets = ({ hasMargin = false, onClose = undefined }) => {
     <S.Main hasMargin={hasMargin}>
       <S.HeaderWrapper>
         <HeaderMarket
-          id={id}
-          pair={currentTickerName}
-          pairTicker={currentTickerImg}
+          id={id as string}
+          pair={currentTickerName as string}
+          pairTicker={currentTickerImg as string}
           format={false}
         />
         <S.Favorite>

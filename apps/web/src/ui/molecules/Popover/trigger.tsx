@@ -26,14 +26,15 @@ export const Trigger: T.PopoverComponent<object, HTMLElement> = forwardRef(
         elementType: "div",
         ...props,
       },
-      triggerRef,
+      triggerRef
     );
 
     const childrenComponent =
       typeof children === "string" ? <div>{children}</div> : children;
 
     const [child] = Children.toArray(childrenComponent);
-    const hasChildren = !!validateChild(children, Button)[1]?.length;
+    const hasChildren = !!validateChild(children?.toString(), Button)[1]
+      ?.length;
 
     return cloneElement(
       child as ReactElement<any, string | JSXElementConstructor<any>>,
@@ -45,14 +46,14 @@ export const Trigger: T.PopoverComponent<object, HTMLElement> = forwardRef(
                 ...props,
               }
             : buttonProps,
-          overlayTriggerProps,
+          overlayTriggerProps
         ),
         ref: mergeRefs(triggerRef, ref),
         as: "div",
         style: { outline: "none" },
-      },
+      }
     );
-  },
+  }
 );
 
 Trigger.displayName = "Trigger";

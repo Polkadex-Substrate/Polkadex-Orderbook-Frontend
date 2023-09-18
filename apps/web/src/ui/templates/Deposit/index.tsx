@@ -50,17 +50,15 @@ export const DepositTemplate = () => {
   const { list: allTokens, selectGetAsset } = useAssetsProvider();
   const list = filterBlockedAssets(allTokens);
   const [selectedAsset, setSelectedAsset] = useState<IPublicAsset | undefined>(
-    list?.[0],
+    list?.[0]
   );
   const extensionWalletState = useExtensionWallet();
 
-  const currMainAcc =
-    currentAccount.mainAddress &&
-    extensionWalletState.allAccounts?.find(
-      ({ account }) =>
-        account?.address?.toLowerCase() ===
-        currentAccount.mainAddress?.toLowerCase(),
-    );
+  const currMainAcc = extensionWalletState.allAccounts?.find(
+    ({ account }) =>
+      account?.address?.toLowerCase() ===
+      currentAccount.mainAddress?.toLowerCase()
+  );
 
   const { loading, onFetchDeposit } = useDepositProvider();
 
@@ -69,11 +67,11 @@ export const DepositTemplate = () => {
     useTransactionsProvider();
 
   const { onChainBalance, onChainBalanceLoading } = useOnChainBalance(
-    selectedAsset?.assetId,
+    selectedAsset?.assetId as string
   );
 
   const formattedOnChainBalance = formatNumber(
-    onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL),
+    onChainBalance.toFixed(MAX_DIGITS_AFTER_DECIMAL)
   );
 
   const routedAsset = router.query.id as string;
@@ -82,14 +80,14 @@ export const DepositTemplate = () => {
     currMainAcc?.account?.address?.slice(0, 15) +
     "..." +
     currMainAcc?.account?.address?.slice(
-      currMainAcc?.account?.address?.length - 15,
+      currMainAcc?.account?.address?.length - 15
     );
 
   useEffect(() => {
     const initialAsset = list.find(
       (asset) =>
         asset.name.startsWith(routedAsset) ||
-        asset.symbol.startsWith(routedAsset),
+        asset.symbol.startsWith(routedAsset)
     );
     if (initialAsset && !selectedAsset) {
       console.log("here!");
@@ -105,20 +103,25 @@ export const DepositTemplate = () => {
       },
       validationSchema: depositValidations(
         onChainBalance,
-        selectedAsset?.assetId,
-        existentialBalance,
+        selectedAsset?.assetId as string,
+        existentialBalance
       ),
       validateOnChange: true,
       onSubmit: (values) => {
-        const asset = isAssetPDEX(selectedAsset.assetId)
-          ? { polkadex: null }
-          : { asset: selectedAsset.assetId };
+        const asset = (
+          isAssetPDEX(selectedAsset?.assetId)
+            ? { polkadex: null }
+            : { asset: selectedAsset?.assetId }
+        ) as Record<string, string | null>;
 
-        onFetchDeposit({
-          asset: asset,
-          amount: values.amount,
-          mainAccount: currMainAcc,
-        });
+        if (currMainAcc) {
+          onFetchDeposit({
+            asset: asset,
+            amount: values.amount,
+            account: currMainAcc,
+            address: currMainAcc.account.address,
+          });
+        }
       },
     });
 
@@ -227,7 +230,6 @@ export const DepositTemplate = () => {
                         </S.Available>
                       </S.SelectInput>
                       <InputLine
-                        name="amount"
                         label={t("inputLabel")}
                         placeholder="0.00"
                         error={errors.amount?.toString()}
@@ -308,7 +310,7 @@ export const DepositTemplate = () => {
                                         hour: "2-digit",
                                         minute: "2-digit",
                                       },
-                                      { locale: "EN" },
+                                      { locale: "EN" }
                                     )}
                                   </span>
                                 </S.Cell>
@@ -349,14 +351,16 @@ export const DepositTemplate = () => {
 };
 
 export const Copy = ({ copyData }) => {
-  const buttonRef = useRef(null);
-  const handleOnMouseOut = () =>
-    (buttonRef.current.innerHTML = "Copy to clipboard");
+  const buttonRef = useRef<HTMLParagraphElement | null>(null);
+  const handleOnMouseOut = () => {
+    if (buttonRef.current) buttonRef.current.innerHTML = "Copy to clipboard";
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(copyData);
-    buttonRef.current.innerHTML = "Copied";
+    if (buttonRef.current) buttonRef.current.innerHTML = "Copied";
   };
+
   return (
     <S.Cell>
       <Tooltip>

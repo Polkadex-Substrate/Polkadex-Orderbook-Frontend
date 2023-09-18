@@ -1,12 +1,11 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
-
-import { useProfile } from "@/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   useMarketsProvider,
   defaultTickers,
   Market,
-} from "@/providers/public/marketsProvider";
+} from "@orderbook/core/providers/public/marketsProvider";
 
 export type InitialMarkets = {
   last: string | number;

@@ -15,7 +15,7 @@ import {
 
 import { BodyCustomProps, HeaderCustomProps } from "./types";
 
-const TableRowBase = TableRow as (props: RowProps) => JSX.Element;
+const TableRowBase = TableRow as (props: RowProps<any>) => JSX.Element;
 const TableCellBase = TableCell as (props: CellProps) => JSX.Element;
 
 const TableColumnBase = TableColumn as <T>(

@@ -16,18 +16,18 @@ const Modal: T.ModalComponent = ({
   border,
   isFull,
   isBlur,
-  placement,
+  placement = "start right",
   isFullWidth,
   isFullHeight,
   ...props
 }) => {
   const context = useModal(props);
   const [Header, Body, Footer] = Children.toArray(children);
-  const overlayRef = useRef();
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   return (
     <ModalProvider value={context}>
       <CSSTransition
-        key={S.Overlay}
+        key={S.Overlay.toString()}
         in={context.state.isOpen}
         timeout={120}
         unmountOnExit
@@ -42,8 +42,8 @@ const Modal: T.ModalComponent = ({
                 isBlur={isBlur}
                 placement={placement}
                 isFull={isFull}
-                {...context.underlayProps}
                 ref={overlayRef}
+                {...context.underlayProps}
               >
                 <S.Container
                   bgStyle={bgStyle}

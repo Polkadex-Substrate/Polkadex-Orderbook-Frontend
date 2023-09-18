@@ -9,13 +9,14 @@ import { createAccountValidations } from "@orderbook/core/validations";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { noop } from "@orderbook/core/helpers/noop";
 
 import { Switch } from "../Switcher";
 
 import * as S from "./styles";
 
 export const CreateAccountForm = ({
-  onCancel = undefined,
+  onCancel = noop,
   selectedAccountName = "",
   selectedAccountAddress = "",
   buttonTitle = "",
@@ -67,7 +68,7 @@ export const CreateAccountForm = ({
         const mnemonic = mnemonicGenerate();
         const { pair } = keyring.addUri(
           mnemonic,
-          passcode.length > 0 ? passcode : null,
+          passcode.length > 0 ? passcode : undefined,
           {
             name,
           },

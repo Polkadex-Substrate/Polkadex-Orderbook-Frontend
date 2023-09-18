@@ -16,14 +16,15 @@ export const Checkbox = forwardRef(
       labelProps,
       ...props
     }: T.Props,
-    ref: Ref<HTMLInputElement>,
+    ref: Ref<HTMLInputElement>
   ) => {
-    const componentRef = useRef();
+    const componentRef = useRef<HTMLInputElement>(null);
     const state = useToggleState(props);
     const { inputProps } = useCheckbox(props, state, componentRef);
-    const { crossOrigin, ...restProps } = inputProps;
+    const { ...restProps } = inputProps;
     const hasChild =
-      isValidChildren(children)?.length || children?.toString()?.length;
+      isValidChildren(children?.toString())?.length ||
+      children?.toString()?.length;
 
     return (
       <S.Wrapper disabled={props.disabled}>
@@ -40,7 +41,7 @@ export const Checkbox = forwardRef(
         )}
       </S.Wrapper>
     );
-  },
+  }
 );
 Checkbox.displayName = "Checkbox";
 

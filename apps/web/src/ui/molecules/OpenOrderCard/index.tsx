@@ -5,6 +5,7 @@ import { useOrders } from "@orderbook/core/providers/user/orders";
 
 import * as S from "./styles";
 
+type RowData = { value: string };
 export const OpenOrderCard = ({
   isSell,
   orderType,
@@ -13,7 +14,7 @@ export const OpenOrderCard = ({
   quote,
   baseUnit,
   quoteUnit,
-  data = [],
+  data = [] as RowData[],
 }) => {
   const ordersState = useOrders();
   const [isCancelClicked, setIsCancleClicked] = useState(false);

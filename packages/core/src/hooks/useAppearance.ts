@@ -1,4 +1,4 @@
-import { useSettingsProvider } from "@/providers/public/settings";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 export function useAppearance() {
   const { onChangeTheme, theme } = useSettingsProvider();

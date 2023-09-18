@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { API, Auth } from "aws-amplify";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
+import { sendQueryToAppSync } from "@orderbook/core/helpers";
+import * as queries from "@orderbook/core/graphql/queries";
 
 import { useAuth } from "../auth";
 
@@ -7,11 +11,6 @@ import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
 import * as A from "./actions";
-
-import { useSettingsProvider } from "@/providers/public/settings";
-import { LOCAL_STORAGE_ID } from "@/constants";
-import { sendQueryToAppSync } from "@/helpers";
-import * as queries from "@/graphql/queries";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
@@ -46,7 +45,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           variables: {
             email,
           },
-          token: null,
           authMode: "AMAZON_COGNITO_USER_POOLS",
           API: Api,
         });

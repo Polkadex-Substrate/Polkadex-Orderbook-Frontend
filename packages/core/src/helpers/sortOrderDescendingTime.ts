@@ -1,4 +1,4 @@
-import { OrderCommon } from "@/providers/types";
+import { OrderCommon } from "@orderbook/core/providers/types";
 
 export const sortOrdersDescendingTime = (orders: OrderCommon[]) =>
   orders.sort((a, b) => {

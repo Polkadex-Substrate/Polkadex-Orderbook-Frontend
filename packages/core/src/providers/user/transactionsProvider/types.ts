@@ -1,8 +1,7 @@
 import { ChangeEvent, FC, PropsWithChildren } from "react";
+import { WithdrawGroup } from "@orderbook/core/helpers";
 
 import { CommonError } from "../../types";
-
-import { WithdrawGroup } from "@/helpers";
 
 export interface Transaction {
   stid: number;

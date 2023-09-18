@@ -8,6 +8,7 @@
   "inputLabel": "Token Amount",
   "accountNotFound": "Funding account not found in polkadot.js extension",
   "history": "History",
+  "loading": "Loading...",
 
   "pending": "Pending",
   "readyToClaim": "Ready to Claim",
