@@ -1,6 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-
-import { AssetsProps } from "../AssetsInteraction/types";
+import { AssetsProps } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 

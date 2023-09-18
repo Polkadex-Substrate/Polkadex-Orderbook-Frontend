@@ -11,6 +11,7 @@ export const Main = styled.main`
     flex-direction: column;
   `}
 `;
+
 export const Flex = styled.div`
   display: flex;
   flex: 1;
@@ -65,6 +66,7 @@ export const Header = styled.div`
     }
   `}
 `;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;

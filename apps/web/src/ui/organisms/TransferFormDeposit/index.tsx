@@ -12,7 +12,7 @@ import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
-import { useAssetTransfer } from "@orderbook/core/index";
+import { useAssetTransfer } from "@orderbook/core/hooks";
 import { useTranslation } from "react-i18next";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";

@@ -4,65 +4,62 @@ export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.colors.primaryBackground};
-    min-width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
 `;
+
 export const Flex = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column-reverse;
+  max-height: 95vh;
+  overflow: hidden;
   @media screen and (min-width: 590px) {
     flex-direction: row;
   }
 `;
+
 export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 1rem;
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-left: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (min-width: 590px) {
+      margin-left: 2rem;
+    }
+  `}
 `;
 
 export const ContainerMain = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  align-items: center;
   width: 100%;
-  padding-top: 4rem;
   max-width: 100vw;
-`;
-
-export const Title = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 3rem;
-    p {
-      color: ${theme.colors.tertiaryText};
-    }
-    width: 90%;
-    max-width: 140rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-  `}
 `;
 
 export const Container = styled.div`
   ${({ theme }) => css`
+    flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 1rem;
-    width: 90%;
-    max-width: 140rem;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.clearBackgroundOpacity};
   `}
 `;
+
 export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   overflow-x: hidden;
   &:is(:hover) {
     overflow-x: auto;
@@ -75,21 +72,43 @@ export const Content = styled.div`
 
 export const Header = styled.div`
   ${({ theme }) => css`
-    padding: 1.5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 2rem;
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
     h2 {
-      font-size: 1.6rem;
-      font-weight: 550;
+      font-size: ${theme.font.sizes.small};
+      font-weight: normal;
+      opacity: 0.5;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 4rem;
     }
   `}
 `;
 
-export const HeaderBox = styled.div`
+export const Title = styled.div`
+  ${({ theme }) => css`
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    h2 {
+      font-size: 1.7rem;
+      font-weight: 550;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 1.5rem 4rem;
+    }
+  `}
+`;
+
+export const Filters = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -144,11 +163,13 @@ export const TokenIcon = styled.div`
     background: ${theme.colors.primaryBackground};
   `}
 `;
+
 export const Actions = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
 `;
+
 export const Link = styled.div`
   ${({ theme }) => css`
     border-radius: 0.4rem;
@@ -183,22 +204,6 @@ export const DepositLink = styled(Link)`
   `}
 `;
 
-export const Back = styled.div`
-  ${({ theme }) => css`
-    display: inline-block;
-    cursor: pointer;
-    padding: 1rem;
-    border-radius: 100%;
-    border: 1px solid ${theme.colors.secondaryBackground};
-    svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  `}
-`;
-
 export const LoadingWrapper = styled.div`
   ${({ theme }) => css`
     width: 100%;
@@ -210,4 +215,82 @@ export const LoadingWrapper = styled.div`
     justify-content: center;
     background: ${theme.colors.tertiaryBackgroundOpacity};
   `}
+`;
+
+export const Support = styled.div`
+  display: flex;
+  @media screen and (max-width: 850px) {
+    flex-direction: column;
+  }
+`;
+
+export const SupportCard = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 4rem;
+    p {
+      opacity: 0.6;
+    }
+    h4 {
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
+    a {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.5s ease;
+      white-space: nowrap;
+      &:disabled {
+        background: gray;
+        cursor: not-allowed;
+      }
+      &:hover:not(:disabled) {
+        background: ${theme.colors.secondaryBackground};
+      }
+      &:active:not(:disabled) {
+        background: ${theme.colors.primary};
+      }
+    }
+
+    &:first-child {
+      @media screen and (max-width: 850px) {
+        border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      }
+      @media screen and (min-width: 850px) {
+        border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
+`;
+
+export const SupportCardContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    div {
+      width: 3rem;
+      height: 3rem;
+      padding: 0.6rem;
+      border-radius: 50rem;
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      margin-bottom: 1rem;
+    }
+  `}
+`;
+
+export const SkeletonComponent = styled.div`
+  display: flex;
+  flex: 1;
+  width: 100%;
+  gap: 1rem;
+  flex-direction: column;
+  @media screen and (min-width: 1110px) {
+    padding: 4rem;
+  }
 `;

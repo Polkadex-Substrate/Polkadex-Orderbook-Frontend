@@ -30,3 +30,4 @@ export * from "./WithdrawHistory";
 export * from "./AssetsInteraction";
 export * from "./AssetsTable";
 export * from "./UnlockModal";
+export * from "./BalancesTable";

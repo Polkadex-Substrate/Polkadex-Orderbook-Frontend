@@ -1,12 +1,12 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
+import { useAssets } from "@orderbook/core/hooks";
 
 import { AssetsTable } from "../AssetsTable";
 
 import { AssetsTableSkeleton } from "./skeleton";
 import * as S from "./styles";
-import { useAssetsInteraction } from "./useAssetsInteraction";
 
 import { Icons } from "@/ui/atoms";
 import { Checkbox, Search } from "@/ui/molecules";
@@ -26,7 +26,7 @@ export const AssetsInteraction = ({
   const { t } = useTranslation("transfer");
 
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
-    useAssetsInteraction();
+    useAssets();
 
   return (
     <Transition appear show={open} as={Fragment}>

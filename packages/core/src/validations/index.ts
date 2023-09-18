@@ -160,10 +160,6 @@ export const withdrawValidations = (balance: string) => {
   });
 };
 
-export const depositValidationsTest = Yup.object().shape({
-  amount: Yup.string().required("Required"),
-});
-
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),
 });

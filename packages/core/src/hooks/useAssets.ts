@@ -1,11 +1,18 @@
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import {
+  useAssetsProvider,
+  IPublicAsset,
+} from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { ChangeEvent, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 
-import * as T from "./types";
+export interface AssetsProps extends IPublicAsset {
+  free_balance: string;
+  onChainBalance: string;
+  inOrdersBalance: string;
+}
 
-export function useAssetsInteraction() {
+export function useAssets() {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list, loading } = useAssetsProvider();
@@ -14,7 +21,7 @@ export function useAssetsInteraction() {
   const assets = useMemo(
     () =>
       list
-        ?.map((e: T.AssetsProps) => {
+        ?.map((e: AssetsProps) => {
           const tokenBalance = balances?.find(
             (value) => value.assetId === e.assetId
           );
@@ -28,13 +35,19 @@ export function useAssetsInteraction() {
               ? "0.00"
               : tokenBalance?.onChainBalance || "0.00";
 
+          const inOrdersBalance =
+            tokenBalance?.reserved_balance === "0"
+              ? "0.00"
+              : tokenBalance?.reserved_balance || "0.00";
+
           return {
             ...e,
             free_balance,
             onChainBalance,
+            inOrdersBalance,
           };
         })
-        ?.filter((e: T.AssetsProps) => {
+        ?.filter((e: AssetsProps) => {
           const hasZeroAmount =
             filters.hideZero && Number(e?.free_balance || 0) < 0.001;
 
