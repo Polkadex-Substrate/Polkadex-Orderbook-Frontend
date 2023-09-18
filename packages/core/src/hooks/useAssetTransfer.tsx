@@ -26,9 +26,9 @@ export const useAssetTransfer = () => {
           .multipliedBy(UNIT_BN)
           .toString();
         if (api) {
-          const tx = asset?.polkadex
-            ? api.tx.balances.transfer(dest, amountFormatted)
-            : api.tx.assets.transfer(asset.asset, dest, amountFormatted);
+          const tx = asset?.asset
+            ? api.tx.assets.transfer(asset.asset, dest, amountFormatted)
+            : api.tx.balances.transfer(dest, amountFormatted);
           return await signAndSendExtrinsic(
             api,
             tx,
