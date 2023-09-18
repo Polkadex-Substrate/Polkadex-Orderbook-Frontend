@@ -13,6 +13,7 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
 import { useAssetTransfer } from "@orderbook/core/index";
+import { useTranslation } from "react-i18next";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -36,6 +37,8 @@ export const TransferFormDeposit = ({
   selectedAsset,
   otherPolkadexAccount,
 }: T.Props) => {
+  const { t } = useTranslation("transfer");
+
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
@@ -125,6 +128,8 @@ export const TransferFormDeposit = ({
   }, [fromQuery, allAccounts]);
 
   const {
+    touched,
+    values,
     handleSubmit,
     resetForm,
     errors,
@@ -198,9 +203,9 @@ export const TransferFormDeposit = ({
         <S.Wallets>
           <WalletCard
             searchable={otherPolkadexAccount}
-            label="From"
-            walletTypeLabel="Extension wallet"
-            walletType="Funding account"
+            label={t("from")}
+            walletTypeLabel={t("funding.name")}
+            walletType={t("funding.type")}
             walletName={fundingWalletName}
             walletAddress={fundingWalletAddress}
           >
@@ -211,7 +216,7 @@ export const TransferFormDeposit = ({
                 onQuery={(e) => setFromQuery(e)}
                 onSelectAccount={setSelectedFundingWallet}
                 data={filteredFundingWallets}
-                placeholder="Select your Polkadex address"
+                placeholder={t("funding.betweenPlaceholder")}
               />
             )}
           </WalletCard>
@@ -224,14 +229,14 @@ export const TransferFormDeposit = ({
             <div>
               <Icons.Trading />
             </div>
-            <span>Switch</span>
+            <span>{t("switch")}</span>
           </S.WalletsButton>
           <WalletCard
             searchable={otherPolkadexAccount}
-            label="To"
-            walletTypeLabel="Orderbook"
-            walletType="Trading account"
-            walletName="Balance available across all trading accounts."
+            label={t("to")}
+            walletTypeLabel={t("trading.name")}
+            walletType={t("trading.type")}
+            walletName={t("trading.message")}
           >
             {otherPolkadexAccount && (
               <AccountSelect
@@ -252,7 +257,10 @@ export const TransferFormDeposit = ({
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>
-              <Popover placement="top left" isOpen={!!errors.amount}>
+              <Popover
+                placement="top left"
+                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+              >
                 <Popover.Trigger>
                   <div />
                 </Popover.Trigger>
@@ -268,19 +276,19 @@ export const TransferFormDeposit = ({
               <input
                 ref={amountRef}
                 autoComplete="off"
-                placeholder="Enter an amount"
+                placeholder={t("amountPlaceholder")}
                 {...getFieldProps("amount")}
               />
               <span>$0.00</span>
             </div>
             <button type="button" onClick={handleMax}>
-              MAX
+              {t("maxButton")}
             </button>
           </S.Amount>
         </S.Form>
         <S.Footer>
           <button disabled={!(isValid && dirty) || inProgres} type="submit">
-            Transfer
+            {t("transferButton")}
           </button>
         </S.Footer>
       </S.Content>

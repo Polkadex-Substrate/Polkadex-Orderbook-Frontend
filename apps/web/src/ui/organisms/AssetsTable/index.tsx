@@ -33,8 +33,8 @@ export const AssetsTable = ({
     () =>
       getColumns([
         t("assetsInteraction.tableHeaderToken"),
-        t("assetsInteraction.tableHeaderFunding"),
-        t("assetsInteraction.tableHeaderTrading"),
+        t("funding.type"),
+        t("trading.type"),
       ]),
     [t]
   );

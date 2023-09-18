@@ -76,7 +76,7 @@ export const AssetsInteraction = ({
                       value={filters.search}
                       onChange={onSearchToken}
                       hasBorder={false}
-                      placeholder={t("assetsInteraction.searchPlaceholder")}
+                      placeholder={t("searchPlaceholder")}
                     />
                   </S.ModalContentHeader>
                   {loading ? (

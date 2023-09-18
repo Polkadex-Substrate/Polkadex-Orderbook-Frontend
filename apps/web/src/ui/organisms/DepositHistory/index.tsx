@@ -15,8 +15,9 @@ import {
   useExtensionWallet,
   userMainAccountDetails,
 } from "@orderbook/core/providers/user/extensionWallet";
+import { useTranslation } from "react-i18next";
 
-import { columns } from "./columns";
+import { columns as getColumns } from "./columns";
 import * as S from "./styles";
 import * as T from "./types";
 import { DepositHistorySkeleton } from "./skeleton";
@@ -30,6 +31,20 @@ export const DepositHistory = ({
 }: {
   selectedAsset?: FilteredAssetProps;
 }) => {
+  const { t } = useTranslation("transfer");
+
+  const columns = useMemo(
+    () =>
+      getColumns([
+        t("tableHeader.date"),
+        t("tableHeader.name"),
+        t("tableHeader.amount"),
+        t("tableHeader.fees"),
+        t("tableHeader.transfer"),
+      ]),
+    [t]
+  );
+
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -85,7 +100,7 @@ export const DepositHistory = ({
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",
               fromWalletAddress: fundingWallet?.account?.address ?? "",
-              toWalletType: "Trading Account",
+              toWalletType: t("trading.type"),
             },
           } as T.Props;
         }),
@@ -96,6 +111,7 @@ export const DepositHistory = ({
       fundingWallet?.account?.address,
       selectedAsset?.name,
       showSelectedCoins,
+      t,
     ]
   );
   const table = useReactTable({
@@ -112,7 +128,7 @@ export const DepositHistory = ({
   return (
     <S.Wrapper>
       <S.Title>
-        <h3>History</h3>
+        <h3>{t("historyTitle")}</h3>
         <S.TitleWrapper>
           <Search isFull placeholder="Search" />
           <CheckboxCustom
@@ -120,7 +136,7 @@ export const DepositHistory = ({
             checked={showSelectedCoins}
             onChange={() => setShowSelectedCoins(!showSelectedCoins)}
           >
-            Show only selected token
+            {t("historyFilterByToken")}
           </CheckboxCustom>
         </S.TitleWrapper>
       </S.Title>
@@ -183,7 +199,7 @@ export const DepositHistory = ({
           </table>
         ) : (
           <S.EmptyData>
-            <ResultFound />
+            <ResultFound>{t("resultEmpty")}</ResultFound>
           </S.EmptyData>
         )}
       </S.Table>

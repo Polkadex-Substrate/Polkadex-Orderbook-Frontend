@@ -6,7 +6,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { WithdrawTableProps } from "./types";
@@ -25,8 +26,20 @@ export const ClaimedTable = ({
   loading: boolean;
   hasData: boolean;
 }) => {
+  const { t } = useTranslation("transfer");
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  const columns = useMemo(
+    () =>
+      pendingColumns([
+        t("tableHeader.date"),
+        t("tableHeader.name"),
+        t("tableHeader.amount"),
+        t("tableHeader.transfer"),
+      ]),
+    [t]
+  );
   const table = useReactTable({
     data,
     state: {
@@ -34,7 +47,7 @@ export const ClaimedTable = ({
     },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    columns: pendingColumns,
+    columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -98,7 +111,7 @@ export const ClaimedTable = ({
         </table>
       ) : (
         <S.EmptyData>
-          <ResultFound />
+          <ResultFound>{t("resultEmpty")}</ResultFound>
         </S.EmptyData>
       )}
     </>

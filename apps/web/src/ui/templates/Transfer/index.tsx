@@ -59,7 +59,7 @@ export const TransferTemplate = () => {
                       isActive={otherPolkadexAccount}
                       onChange={onChangeOtherPolkadexAccount}
                     />
-                    <span>Transfer for other Polkadex accounts</span>
+                    <span>{t("switcher")}</span>
                   </S.Title>
                   <S.Container>
                     {otherPolkadexAccountSelected ? (
@@ -78,7 +78,6 @@ export const TransferTemplate = () => {
                     )}
                   </S.Container>
                 </S.Form>
-
                 <S.History>
                   {otherPolkadexAccountSelected ? (
                     <DepositHistory selectedAsset={selectedAsset} />

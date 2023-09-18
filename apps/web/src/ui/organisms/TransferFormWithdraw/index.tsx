@@ -17,6 +17,7 @@ import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useTryUnlockTradeAccount } from "@orderbook/core/index";
+import { useTranslation } from "react-i18next";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -38,6 +39,8 @@ export const TransferFormWithdraw = ({
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
 }) => {
+  const { t } = useTranslation("transfer");
+
   const [showPassword, setShowPassword] = useState(false);
 
   const { allAccounts } = useExtensionWallet();
@@ -72,6 +75,8 @@ export const TransferFormWithdraw = ({
   );
 
   const {
+    values,
+    touched,
     resetForm,
     handleSubmit,
     errors,
@@ -125,9 +130,9 @@ export const TransferFormWithdraw = ({
         <S.Content ref={formRef} onSubmit={handleSubmit}>
           <S.Wallets>
             <WalletCard
-              label="From"
-              walletTypeLabel="Orderbook"
-              walletType="Trading account"
+              label={t("from")}
+              walletTypeLabel={t("trading.name")}
+              walletType={t("trading.type")}
               walletName={tradingWallet?.meta.name ?? ""}
               walletAddress={transformAddress(tradingWallet?.address ?? "")}
             />
@@ -135,12 +140,12 @@ export const TransferFormWithdraw = ({
               <div>
                 <Icons.Trading />
               </div>
-              <span>Switch</span>
+              <span>{t("switch")}</span>
             </S.WalletsButton>
             <WalletCard
-              label="To"
-              walletTypeLabel="Extension wallet"
-              walletType="Funding account"
+              label={t("to")}
+              walletTypeLabel={t("funding.name")}
+              walletType={t("funding.type")}
               walletName={fundingWallet?.account?.meta.name ?? ""}
               walletAddress={transformAddress(
                 fundingWallet?.account?.address ?? ""
@@ -156,7 +161,12 @@ export const TransferFormWithdraw = ({
             />
             <S.Amount onClick={() => amountRef.current?.focus()}>
               <div>
-                <Popover placement="top left" isOpen={!!errors.amount}>
+                <Popover
+                  placement="top left"
+                  isOpen={
+                    !!touched.amount && !!errors.amount && !!values.amount
+                  }
+                >
                   <Popover.Trigger>
                     <div />
                   </Popover.Trigger>
@@ -171,20 +181,20 @@ export const TransferFormWithdraw = ({
                 </Popover>
                 <input
                   ref={amountRef}
-                  placeholder="Enter an amount"
+                  placeholder={t("amountPlaceholder")}
                   autoComplete="off"
                   {...getFieldProps("amount")}
                 />
                 <span>$0.00</span>
               </div>
               <button type="button" onClick={handleMax}>
-                MAX
+                {t("maxButton")}
               </button>
             </S.Amount>
           </S.Form>
           <S.Footer>
             <button disabled={!(isValid && dirty) || loading} type="submit">
-              Transfer
+              {t("transferButton")}
             </button>
           </S.Footer>
         </S.Content>
