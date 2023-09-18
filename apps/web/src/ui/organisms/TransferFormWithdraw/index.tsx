@@ -117,7 +117,7 @@ export const TransferFormWithdraw = ({
         <S.Wallets>
           <WalletCard
             label="From"
-            walletTypeLabel="Orderbook wallet"
+            walletTypeLabel="Orderbook"
             walletType="Trading account"
             walletName={tradingWallet?.meta.name ?? ""}
             walletAddress={transformAddress(tradingWallet?.address ?? "")}
