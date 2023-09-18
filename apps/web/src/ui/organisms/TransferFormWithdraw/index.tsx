@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { useTryUnlockTradeAccount } from "@orderbook/core/index";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -100,6 +101,7 @@ export const TransferFormWithdraw = ({
   });
 
   const formRef = useRef<HTMLFormElement | null>(null);
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
 
   return (
     <>
