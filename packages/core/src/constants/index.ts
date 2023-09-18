@@ -65,3 +65,5 @@ export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const TradingView = {
   lastResolution: "tradingview.chart.lastUsedTimeBasedResolution",
 };
+
+export const SUBSCAN_PER_PAGE_LIMIT = 10;
