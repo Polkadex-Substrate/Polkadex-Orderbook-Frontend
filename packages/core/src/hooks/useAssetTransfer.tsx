@@ -1,6 +1,8 @@
 import { useMutation } from "react-query";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { signAndSendExtrinsic } from "@orderbook/core/helpers";
+import BigNumber from "bignumber.js";
+import { UNIT_BN } from "@orderbook/core/constants";
 
 import { ExtensionAccount } from "../providers/types";
 import { useSettingsProvider } from "../providers/public/settings";
@@ -20,14 +22,17 @@ export const useAssetTransfer = () => {
     async ({ asset, dest, amount, account }: AssetTransferParams) => {
       try {
         // TODO: Fix types or Handle Error...
+        const amountFormatted = new BigNumber(amount)
+          .multipliedBy(UNIT_BN)
+          .toString();
         if (api) {
           const tx = asset?.polkadex
-            ? api.tx.balances.transfer(dest, amount)
-            : api.tx.assets.transfer(asset.asset, dest, amount);
+            ? api.tx.balances.transfer(dest, amountFormatted)
+            : api.tx.assets.transfer(asset.asset, dest, amountFormatted);
           return await signAndSendExtrinsic(
             api,
             tx,
-            account.signer,
+            account,
             account.account.address
           );
         }
