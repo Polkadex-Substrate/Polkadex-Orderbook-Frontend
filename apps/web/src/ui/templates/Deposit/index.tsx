@@ -119,7 +119,6 @@ export const DepositTemplate = () => {
             asset: asset,
             amount: values.amount,
             account: currMainAcc,
-            address: currMainAcc.account.address,
           });
         }
       },
