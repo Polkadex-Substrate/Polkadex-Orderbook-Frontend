@@ -1,5 +1,5 @@
 import { SubscanResult, TransferHistory } from "@orderbook/core/helpers/types";
-import {SUBSCAN_PER_PAGE_LIMIT} from "@orderbook/core/constants";
+import { SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 export const SUBSCAN_GETTERS = {
   fetchTransfers: async (
