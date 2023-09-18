@@ -27,7 +27,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 1rem;
-  /* background: orange; */
   @media screen and (min-width: 590px) {
     margin-left: 2rem;
   }
@@ -78,7 +77,7 @@ export const Form = styled.div`
   max-width: 100rem;
   padding: 2rem;
   @media screen and (min-width: 1110px) {
-    padding: 4rem;
+    padding: 2rem 4rem 4rem 4rem;
   }
 `;
 
