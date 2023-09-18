@@ -6,12 +6,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AssetsProps } from "../AssetsInteraction/types";
 
 import * as S from "./styles";
-import { columns } from "./columns";
+import { columns as getColumns } from "./columns";
 
 import { Icons } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
@@ -25,7 +26,19 @@ export const AssetsTable = ({
   selectedAssetId?: string;
   onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
+  const { t } = useTranslation("transfer");
+
   const [sorting, setSorting] = useState<SortingState>([]);
+  const columns = useMemo(
+    () =>
+      getColumns([
+        t("assetsInteraction.tableHeaderToken"),
+        t("assetsInteraction.tableHeaderFunding"),
+        t("assetsInteraction.tableHeaderTrading"),
+      ]),
+    [t]
+  );
+
   const table = useReactTable({
     data: assets,
     state: {
@@ -36,6 +49,7 @@ export const AssetsTable = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <S.Wrapper>
       <table>

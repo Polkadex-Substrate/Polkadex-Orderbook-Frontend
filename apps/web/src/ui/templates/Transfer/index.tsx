@@ -48,10 +48,8 @@ export const TransferTemplate = () => {
           <S.Wrapper>
             <S.ContainerMain>
               <S.Header>
-                <h1>Transfer</h1>
-                <h2>
-                  Simply dummy text of the printing and typesetting industry.
-                </h2>
+                <h1>{t("heading")}</h1>
+                <h2>{t("subheading")}</h2>
               </S.Header>
               <S.Content>
                 <S.Form>

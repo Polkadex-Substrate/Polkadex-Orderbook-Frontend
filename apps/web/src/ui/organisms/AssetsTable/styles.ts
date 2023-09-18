@@ -56,6 +56,9 @@ export const Wrapper = styled.div`
           display: inline-block;
           width: 0.8rem;
         }
+        &:not(:first-child) {
+          text-align: right;
+        }
       }
     }
   `}
@@ -66,6 +69,7 @@ export const Thead = styled.th`
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
+    text-align: right;
     svg {
       fill: ${theme.colors.text};
       path {
