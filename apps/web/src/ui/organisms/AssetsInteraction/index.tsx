@@ -77,7 +77,7 @@ export const AssetsInteraction = ({
         as="div"
         open={open}
         onClose={onClose}
-        style={{ position: "relative", zIndex: 100 }}
+        style={{ position: "relative", zIndex: 1000000 }}
       >
         <Transition.Child
           as={Fragment}

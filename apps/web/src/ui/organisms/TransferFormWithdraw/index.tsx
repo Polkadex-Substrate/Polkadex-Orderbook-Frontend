@@ -13,9 +13,13 @@ import {
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useFormik } from "formik";
-import { depositValidationsTest } from "@orderbook/core/validations";
+import {
+  depositValidationsTest,
+  withdrawValidations,
+} from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { zIndex } from "styled-system";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -70,6 +74,7 @@ export const TransferFormWithdraw = ({
     [allBrowserAccounts, selectedAccount?.tradeAddress]
   );
 
+  console.log("selectedAsset?.free_balance", selectedAsset?.free_balance);
   const {
     resetForm,
     handleSubmit,
@@ -80,7 +85,7 @@ export const TransferFormWithdraw = ({
     setFieldValue,
   } = useFormik({
     initialValues,
-    validationSchema: depositValidationsTest,
+    validationSchema: withdrawValidations(selectedAsset?.free_balance ?? "0"),
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
@@ -170,6 +175,7 @@ export const TransferFormWithdraw = ({
                 <input
                   ref={amountRef}
                   placeholder="Enter an amount"
+                  autoComplete="off"
                   {...getFieldProps("amount")}
                 />
                 <span>$0.00</span>
