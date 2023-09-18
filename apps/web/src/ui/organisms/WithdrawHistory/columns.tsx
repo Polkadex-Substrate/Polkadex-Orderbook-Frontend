@@ -2,10 +2,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { transformAddress } from "@orderbook/core/providers/user/profile";
 
 import { Date, Token, Box, Wallet } from "./styles";
-import { Props, ReadyToClaimProps } from "./types";
+import { WithdrawTableProps, ReadyToClaimProps } from "./types";
 
 import { Icons, Tokens } from "@/ui/atoms";
-const pendingColumnHelper = createColumnHelper<Props>();
+const pendingColumnHelper = createColumnHelper<WithdrawTableProps>();
 
 export const pendingColumns = [
   pendingColumnHelper.accessor((row) => row, {
@@ -74,7 +74,7 @@ export const pendingColumns = [
   }),
 ];
 
-const claimedColumnHelper = createColumnHelper<Props>();
+const claimedColumnHelper = createColumnHelper<WithdrawTableProps>();
 
 export const claimedColumns = [
   claimedColumnHelper.accessor((row) => row, {

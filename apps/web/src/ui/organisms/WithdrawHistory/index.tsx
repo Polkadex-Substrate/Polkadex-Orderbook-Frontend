@@ -17,7 +17,7 @@ import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
 import { ReadyToClaimTable } from "./readyToClaimTable";
 import { ClaimedTable } from "./claimedTable";
-import { ReadyToClaimDataProps } from "./types";
+import { ReadyToClaimDataProps, WithdrawTableProps } from "./types";
 
 import { CheckboxCustom, Search } from "@/ui/molecules";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
@@ -194,7 +194,7 @@ export const WithdrawHistory = ({
             <Tab.Panel className="flex-1">
               <S.Table>
                 <PendingTable
-                  data={pendingWithdraws}
+                  data={pendingWithdraws as WithdrawTableProps[]}
                   loading={loading}
                   hasData={!!pendingWithdraws?.length}
                 />
@@ -212,7 +212,7 @@ export const WithdrawHistory = ({
             <Tab.Panel className="flex-1">
               <S.Table>
                 <ClaimedTable
-                  data={claimedWithdraws}
+                  data={claimedWithdraws as WithdrawTableProps[]}
                   loading={loading}
                   hasData={!!claimedWithdraws?.length}
                 />

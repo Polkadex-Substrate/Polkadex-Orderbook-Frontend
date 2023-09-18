@@ -118,7 +118,8 @@ export const DepositTemplate = () => {
           onFetchDeposit({
             asset: asset,
             amount: values.amount,
-            mainAccount: currMainAcc,
+            account: currMainAcc,
+            address: currMainAcc.account.address,
           });
         }
       },

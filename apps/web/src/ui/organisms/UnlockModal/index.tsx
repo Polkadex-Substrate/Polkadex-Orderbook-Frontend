@@ -15,7 +15,7 @@ export const UnlockModal = ({
   open: boolean;
   onClose: () => void;
   dispatchAction: () => void;
-  tradingAccountInBrowser: KeyringPair;
+  tradingAccountInBrowser?: KeyringPair;
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
@@ -26,6 +26,8 @@ export const UnlockModal = ({
           </S.UnlockButton>
           <UnlockAccount
             onSubmit={({ password }) => {
+              // TODO: Fix types or Handle Error
+              if (!tradingAccountInBrowser) return;
               try {
                 tradingAccountInBrowser.unlock(password);
                 if (!tradingAccountInBrowser?.isLocked) dispatchAction();

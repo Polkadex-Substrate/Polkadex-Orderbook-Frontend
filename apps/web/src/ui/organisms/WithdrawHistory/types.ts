@@ -1,7 +1,7 @@
 import { WithdrawGroup, WithdrawGroupItem } from "@orderbook/core/helpers";
 import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
 
-export interface Props extends Omit<Transaction, "asset"> {
+export interface WithdrawTableProps extends Omit<Transaction, "asset"> {
   token: {
     name: string;
     ticker: string;
