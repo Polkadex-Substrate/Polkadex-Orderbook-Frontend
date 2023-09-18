@@ -322,3 +322,5 @@ export type TokensName =
 export type BackgroundStyle = "flat" | "ghost" | "outline" | "transparent";
 
 export type BorderStyle = "rounded" | "semiRounded" | "squared";
+
+export type Maybe<T> = T | null | undefined;

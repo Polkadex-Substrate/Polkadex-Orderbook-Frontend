@@ -197,7 +197,7 @@ export const TransferFormDeposit = ({
         <WalletCard
           searchable={otherPolkadexAccount}
           label="To"
-          walletTypeLabel="Orderbook wallet"
+          walletTypeLabel="Orderbook"
           walletType="Trading account"
           walletName="Balance available across all trading accounts."
         >
