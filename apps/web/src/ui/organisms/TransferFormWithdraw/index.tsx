@@ -21,7 +21,7 @@ import { UnlockModal } from "../UnlockModal";
 
 import * as S from "./styles";
 
-import { Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
@@ -113,71 +113,79 @@ export const TransferFormWithdraw = ({
           )
         }
       />
-      <S.Content ref={formRef} onSubmit={handleSubmit}>
-        <S.Wallets>
-          <WalletCard
-            label="From"
-            walletTypeLabel="Orderbook"
-            walletType="Trading account"
-            walletName={tradingWallet?.meta.name ?? ""}
-            walletAddress={transformAddress(tradingWallet?.address ?? "")}
-          />
-          <S.WalletsButton type="button" onClick={onTransferInteraction}>
-            <div>
-              <Icons.Trading />
-            </div>
-            <span>Switch</span>
-          </S.WalletsButton>
-          <WalletCard
-            label="To"
-            walletTypeLabel="Extension wallet"
-            walletType="Funding account"
-            walletName={fundingWallet?.account?.meta.name ?? ""}
-            walletAddress={transformAddress(
-              fundingWallet?.account?.address ?? ""
-            )}
-          />
-        </S.Wallets>
-        <S.Form>
-          <TokenCard
-            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-            tokenTicker={selectedAsset?.symbol ?? ""}
-            availableAmount={selectedAsset?.free_balance ?? "0.00"}
-            onAction={onOpenAssets}
-          />
-          <S.Amount onClick={() => amountRef.current?.focus()}>
-            <div>
-              <Popover placement="top left" isOpen={!!errors.amount}>
-                <Popover.Trigger>
-                  <div />
-                </Popover.Trigger>
-                <Popover.Content>
-                  <S.Errors>
-                    <div>
-                      <Icons.Alert />
-                    </div>
-                    {errors.amount && <p>{errors.amount}</p>}
-                  </S.Errors>
-                </Popover.Content>
-              </Popover>
-              <input
-                ref={amountRef}
-                placeholder="Enter an amount"
-                {...getFieldProps("amount")}
-              />
-              <span>$0.00</span>
-            </div>
-            <button type="button" onClick={handleMax}>
-              MAX
+      <Loading
+        style={{ maxWidth: "100rem" }}
+        isVisible={loading}
+        hasBg={false}
+        message=""
+        spinner="Keyboard"
+      >
+        <S.Content ref={formRef} onSubmit={handleSubmit}>
+          <S.Wallets>
+            <WalletCard
+              label="From"
+              walletTypeLabel="Orderbook"
+              walletType="Trading account"
+              walletName={tradingWallet?.meta.name ?? ""}
+              walletAddress={transformAddress(tradingWallet?.address ?? "")}
+            />
+            <S.WalletsButton type="button" onClick={onTransferInteraction}>
+              <div>
+                <Icons.Trading />
+              </div>
+              <span>Switch</span>
+            </S.WalletsButton>
+            <WalletCard
+              label="To"
+              walletTypeLabel="Extension wallet"
+              walletType="Funding account"
+              walletName={fundingWallet?.account?.meta.name ?? ""}
+              walletAddress={transformAddress(
+                fundingWallet?.account?.address ?? ""
+              )}
+            />
+          </S.Wallets>
+          <S.Form>
+            <TokenCard
+              tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
+              tokenTicker={selectedAsset?.symbol ?? ""}
+              availableAmount={selectedAsset?.free_balance ?? "0.00"}
+              onAction={onOpenAssets}
+            />
+            <S.Amount onClick={() => amountRef.current?.focus()}>
+              <div>
+                <Popover placement="top left" isOpen={!!errors.amount}>
+                  <Popover.Trigger>
+                    <div />
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <S.Errors>
+                      <div>
+                        <Icons.Alert />
+                      </div>
+                      {errors.amount && <p>{errors.amount}</p>}
+                    </S.Errors>
+                  </Popover.Content>
+                </Popover>
+                <input
+                  ref={amountRef}
+                  placeholder="Enter an amount"
+                  {...getFieldProps("amount")}
+                />
+                <span>$0.00</span>
+              </div>
+              <button type="button" onClick={handleMax}>
+                MAX
+              </button>
+            </S.Amount>
+          </S.Form>
+          <S.Footer>
+            <button disabled={!(isValid && dirty) || loading} type="submit">
+              Transfer
             </button>
-          </S.Amount>
-        </S.Form>
-        <S.Footer>
-          <button disabled={!(isValid && dirty) || loading} type="submit">
-            Transfer
-          </button>
-        </S.Footer>
-      </S.Content>
+          </S.Footer>
+        </S.Content>
+      </Loading>
     </>
   );
 };

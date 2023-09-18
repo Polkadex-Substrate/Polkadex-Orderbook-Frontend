@@ -57,7 +57,6 @@ export function useTransfer() {
 
   return {
     loading: depositLoading || withdrawLoading,
-    withdrawLoading,
     assetsInteraction,
     onAssetsInteraction,
     onChangeAsset,

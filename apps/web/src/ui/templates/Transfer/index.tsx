@@ -8,7 +8,7 @@ import {
   TransferFormWithdraw,
   WithdrawHistory,
 } from "@polkadex/orderbook-ui/organisms";
-import { Footer, Loading, Switch } from "@polkadex/orderbook-ui/molecules";
+import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
@@ -54,39 +54,32 @@ export const TransferTemplate = () => {
                 </h2>
               </S.Header>
               <S.Content>
-                <Loading
-                  style={{ maxWidth: "100rem" }}
-                  isVisible={loading}
-                  hasBg={false}
-                  message=""
-                  spinner="Keyboard"
-                >
-                  <S.Form>
-                    <S.Title>
-                      <Switch
-                        isActive={otherPolkadexAccount}
-                        onChange={onChangeOtherPolkadexAccount}
+                <S.Form>
+                  <S.Title>
+                    <Switch
+                      disable={loading}
+                      isActive={otherPolkadexAccount}
+                      onChange={onChangeOtherPolkadexAccount}
+                    />
+                    <span>Transfer for other Polkadex accounts</span>
+                  </S.Title>
+                  <S.Container>
+                    {otherPolkadexAccountSelected ? (
+                      <TransferFormDeposit
+                        otherPolkadexAccount={otherPolkadexAccount}
+                        onTransferInteraction={onChangeIsDeposit}
+                        onOpenAssets={onAssetsInteraction}
+                        selectedAsset={selectedAsset}
                       />
-                      <span>Transfer for other Polkadex accounts</span>
-                    </S.Title>
-                    <S.Container>
-                      {otherPolkadexAccountSelected ? (
-                        <TransferFormDeposit
-                          otherPolkadexAccount={otherPolkadexAccount}
-                          onTransferInteraction={onChangeIsDeposit}
-                          onOpenAssets={onAssetsInteraction}
-                          selectedAsset={selectedAsset}
-                        />
-                      ) : (
-                        <TransferFormWithdraw
-                          onTransferInteraction={onChangeIsDeposit}
-                          onOpenAssets={onAssetsInteraction}
-                          selectedAsset={selectedAsset}
-                        />
-                      )}
-                    </S.Container>
-                  </S.Form>
-                </Loading>
+                    ) : (
+                      <TransferFormWithdraw
+                        onTransferInteraction={onChangeIsDeposit}
+                        onOpenAssets={onAssetsInteraction}
+                        selectedAsset={selectedAsset}
+                      />
+                    )}
+                  </S.Container>
+                </S.Form>
 
                 <S.History>
                   {otherPolkadexAccountSelected ? (

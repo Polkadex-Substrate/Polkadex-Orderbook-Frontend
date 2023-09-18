@@ -29,12 +29,7 @@ export const useAssetTransfer = () => {
           const tx = asset?.polkadex
             ? api.tx.balances.transfer(dest, amountFormatted)
             : api.tx.assets.transfer(asset.asset, dest, amountFormatted);
-          return await signAndSendExtrinsic(
-            api,
-            tx,
-            account,
-            account.account.address
-          );
+          await signAndSendExtrinsic(api, tx, account, account.account.address);
         }
       } catch (error) {
         console.log("Error", error);

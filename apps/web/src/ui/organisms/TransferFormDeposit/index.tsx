@@ -19,7 +19,13 @@ import { CustomAddress } from "../TransferFormWithdraw/types";
 import * as S from "./styles";
 import * as T from "./types";
 
-import { AccountSelect, Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import {
+  AccountSelect,
+  Loading,
+  Popover,
+  TokenCard,
+  WalletCard,
+} from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 
 const initialValues = { amount: 0.0 };
@@ -34,7 +40,7 @@ export const TransferFormDeposit = ({
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
 
-  const { mutate } = useAssetTransfer();
+  const { mutate, isLoading } = useAssetTransfer();
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -169,95 +175,105 @@ export const TransferFormDeposit = ({
     if (otherPolkadexAccount) resetForm();
   }, [otherPolkadexAccount, resetForm]);
 
-  return (
-    <S.Content onSubmit={handleSubmit}>
-      <S.Wallets>
-        <WalletCard
-          searchable={otherPolkadexAccount}
-          label="From"
-          walletTypeLabel="Extension wallet"
-          walletType="Funding account"
-          walletName={fundingWalletName}
-          walletAddress={fundingWalletAddress}
-        >
-          {otherPolkadexAccount && (
-            <AccountSelect
-              pasteable={false}
-              selectedAccount={selectedFundingWallet}
-              onQuery={(e) => setFromQuery(e)}
-              onSelectAccount={setSelectedFundingWallet}
-              data={filteredFundingWallets}
-              placeholder="Select your Polkadex address"
-            />
-          )}
-        </WalletCard>
+  const inProgres = loading || isLoading;
 
-        <S.WalletsButton
-          disabled={otherPolkadexAccount}
-          type="button"
-          onClick={onTransferInteraction}
-        >
-          <div>
-            <Icons.Trading />
-          </div>
-          <span>Switch</span>
-        </S.WalletsButton>
-        <WalletCard
-          searchable={otherPolkadexAccount}
-          label="To"
-          walletTypeLabel="Orderbook"
-          walletType="Trading account"
-          walletName="Balance available across all trading accounts."
-        >
-          {otherPolkadexAccount && (
-            <AccountSelect
-              selectedAccount={selectedWallet}
-              onQuery={(e) => setToQuery(e)}
-              onSelectAccount={setSelectedWallet}
-              data={filteredWallets}
-            />
-          )}
-        </WalletCard>
-      </S.Wallets>
-      <S.Form>
-        <TokenCard
-          tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-          tokenTicker={selectedAsset?.symbol ?? ""}
-          availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
-          onAction={onOpenAssets}
-        />
-        <S.Amount onClick={() => amountRef.current?.focus()}>
-          <div>
-            <Popover placement="top left" isOpen={!!errors.amount}>
-              <Popover.Trigger>
-                <div />
-              </Popover.Trigger>
-              <Popover.Content>
-                <S.Errors>
-                  <div>
-                    <Icons.Alert />
-                  </div>
-                  {errors.amount && <p>{errors.amount}</p>}
-                </S.Errors>
-              </Popover.Content>
-            </Popover>
-            <input
-              ref={amountRef}
-              placeholder="Enter an amount"
-              {...getFieldProps("amount")}
-            />
-            <span>$0.00</span>
-          </div>
-          <button type="button" onClick={handleMax}>
-            MAX
+  return (
+    <Loading
+      style={{ maxWidth: "100rem" }}
+      isVisible={inProgres}
+      hasBg={false}
+      message=""
+      spinner="Keyboard"
+    >
+      <S.Content onSubmit={handleSubmit}>
+        <S.Wallets>
+          <WalletCard
+            searchable={otherPolkadexAccount}
+            label="From"
+            walletTypeLabel="Extension wallet"
+            walletType="Funding account"
+            walletName={fundingWalletName}
+            walletAddress={fundingWalletAddress}
+          >
+            {otherPolkadexAccount && (
+              <AccountSelect
+                pasteable={false}
+                selectedAccount={selectedFundingWallet}
+                onQuery={(e) => setFromQuery(e)}
+                onSelectAccount={setSelectedFundingWallet}
+                data={filteredFundingWallets}
+                placeholder="Select your Polkadex address"
+              />
+            )}
+          </WalletCard>
+
+          <S.WalletsButton
+            disabled={otherPolkadexAccount}
+            type="button"
+            onClick={onTransferInteraction}
+          >
+            <div>
+              <Icons.Trading />
+            </div>
+            <span>Switch</span>
+          </S.WalletsButton>
+          <WalletCard
+            searchable={otherPolkadexAccount}
+            label="To"
+            walletTypeLabel="Orderbook"
+            walletType="Trading account"
+            walletName="Balance available across all trading accounts."
+          >
+            {otherPolkadexAccount && (
+              <AccountSelect
+                selectedAccount={selectedWallet}
+                onQuery={(e) => setToQuery(e)}
+                onSelectAccount={setSelectedWallet}
+                data={filteredWallets}
+              />
+            )}
+          </WalletCard>
+        </S.Wallets>
+        <S.Form>
+          <TokenCard
+            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.symbol ?? ""}
+            availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
+            onAction={onOpenAssets}
+          />
+          <S.Amount onClick={() => amountRef.current?.focus()}>
+            <div>
+              <Popover placement="top left" isOpen={!!errors.amount}>
+                <Popover.Trigger>
+                  <div />
+                </Popover.Trigger>
+                <Popover.Content>
+                  <S.Errors>
+                    <div>
+                      <Icons.Alert />
+                    </div>
+                    {errors.amount && <p>{errors.amount}</p>}
+                  </S.Errors>
+                </Popover.Content>
+              </Popover>
+              <input
+                ref={amountRef}
+                placeholder="Enter an amount"
+                {...getFieldProps("amount")}
+              />
+              <span>$0.00</span>
+            </div>
+            <button type="button" onClick={handleMax}>
+              MAX
+            </button>
+          </S.Amount>
+        </S.Form>
+        <S.Footer>
+          <button disabled={!(isValid && dirty) || inProgres} type="submit">
+            Transfer
           </button>
-        </S.Amount>
-      </S.Form>
-      <S.Footer>
-        <button disabled={!(isValid && dirty) || loading} type="submit">
-          Transfer
-        </button>
-      </S.Footer>
-    </S.Content>
+        </S.Footer>
+      </S.Content>
+    </Loading>
   );
 };
