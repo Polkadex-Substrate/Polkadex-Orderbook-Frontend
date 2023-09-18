@@ -57,7 +57,7 @@ export const TransferTemplate = () => {
                 <S.Form>
                   <S.Title>
                     <Switch
-                      disable={loading}
+                      disable={loading} // TODO: Check otherPollkadexAccountSelected loading
                       isActive={otherPolkadexAccount}
                       onChange={onChangeOtherPolkadexAccount}
                     />

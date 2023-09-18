@@ -8,7 +8,7 @@ import {
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useFormik } from "formik";
-import { depositValidationsTest } from "@orderbook/core/validations";
+import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
@@ -50,9 +50,14 @@ export const TransferFormDeposit = ({
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
-  const existentialBalance = useMemo(
-    () => (isAssetPDEX(selectedAsset?.assetId) ? 1 : 0.1),
+  const isPolkadexToken = useMemo(
+    () => isAssetPDEX(selectedAsset?.assetId),
     [selectedAsset?.assetId]
+  );
+
+  const existentialBalance = useMemo(
+    () => (isPolkadexToken ? 1 : 0.1),
+    [isPolkadexToken]
   );
 
   const handleMax = (e: MouseEvent<HTMLElement>) => {
@@ -129,7 +134,11 @@ export const TransferFormDeposit = ({
     setFieldValue,
   } = useFormik({
     initialValues,
-    validationSchema: depositValidationsTest,
+    validationSchema: depositValidations(
+      Number(selectedAsset?.onChainBalance) ?? 0,
+      isPolkadexToken,
+      existentialBalance
+    ),
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (!fundingWallet) return;
@@ -144,7 +153,7 @@ export const TransferFormDeposit = ({
           ? selectedFundingWallet
           : fundingWallet;
 
-        const asset: T.GenericAsset = isAssetPDEX(selectedAsset?.assetId)
+        const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
           : { asset: selectedAsset?.assetId || null };
 
@@ -258,6 +267,7 @@ export const TransferFormDeposit = ({
               </Popover>
               <input
                 ref={amountRef}
+                autoComplete="off"
                 placeholder="Enter an amount"
                 {...getFieldProps("amount")}
               />

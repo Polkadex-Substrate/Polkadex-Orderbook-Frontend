@@ -74,7 +74,6 @@ export const TransferFormWithdraw = ({
     [allBrowserAccounts, selectedAccount?.tradeAddress]
   );
 
-  console.log("selectedAsset?.free_balance", selectedAsset?.free_balance);
   const {
     resetForm,
     handleSubmit,
