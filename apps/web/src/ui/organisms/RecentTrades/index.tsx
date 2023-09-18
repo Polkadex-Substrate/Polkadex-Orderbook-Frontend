@@ -6,7 +6,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
-import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -28,8 +28,8 @@ export const RecentTrades = () => {
   } = useRecentTradesProvider();
 
   const precision = Math.max(
-    pricePrecision || MAX_DIGITS_AFTER_DECIMAL,
-    amountPrecision || MAX_DIGITS_AFTER_DECIMAL
+    pricePrecision || MIN_DIGITS_AFTER_DECIMAL,
+    amountPrecision || MIN_DIGITS_AFTER_DECIMAL
   );
 
   return (
