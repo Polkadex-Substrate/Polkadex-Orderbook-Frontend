@@ -6,6 +6,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -25,6 +26,11 @@ export const RecentTrades = () => {
     pricePrecision,
     amountPrecision,
   } = useRecentTradesProvider();
+
+  const precision = Math.max(
+    pricePrecision || MAX_DIGITS_AFTER_DECIMAL,
+    amountPrecision || MAX_DIGITS_AFTER_DECIMAL
+  );
 
   return (
     <S.MainContainer>
@@ -49,16 +55,8 @@ export const RecentTrades = () => {
                 return (
                   <Card
                     key={i}
-                    price={Decimal.format(
-                      order.price,
-                      pricePrecision || 7,
-                      ",",
-                    )}
-                    amount={Decimal.format(
-                      order.amount,
-                      amountPrecision || 7,
-                      ",",
-                    )}
+                    price={Decimal.format(order.price, precision, ",")}
+                    amount={Decimal.format(order.amount, precision, ",")}
                     date={date}
                     isSell={isDecreasing[i]}
                   />
