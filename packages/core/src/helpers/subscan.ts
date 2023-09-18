@@ -1,4 +1,5 @@
 import { SubscanResult, TransferHistory } from "@orderbook/core/helpers/types";
+import {SUBSCAN_PER_PAGE_LIMIT} from "@orderbook/core/constants";
 
 export const SUBSCAN_GETTERS = {
   fetchTransfers: async (
@@ -14,7 +15,7 @@ export const SUBSCAN_GETTERS = {
           "x-api-key": apiKey,
         },
         body: JSON.stringify({
-          row: 25,
+          row: SUBSCAN_PER_PAGE_LIMIT,
           page,
           address,
         }),
