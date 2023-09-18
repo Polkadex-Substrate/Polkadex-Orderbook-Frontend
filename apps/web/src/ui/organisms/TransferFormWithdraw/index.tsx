@@ -13,13 +13,9 @@ import {
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useFormik } from "formik";
-import {
-  depositValidationsTest,
-  withdrawValidations,
-} from "@orderbook/core/validations";
+import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { zIndex } from "styled-system";
 
 import { UnlockModal } from "../UnlockModal";
 

@@ -18,28 +18,30 @@ export const useAssetTransfer = () => {
   const { api } = useNativeApi();
   const { onHandleError } = useSettingsProvider();
 
-  return useMutation(
-    async ({ asset, dest, amount, account }: AssetTransferParams) => {
-      try {
-        // TODO: Fix types or Handle Error...
-        const amountFormatted = new BigNumber(amount)
-          .multipliedBy(UNIT_BN)
-          .toString();
-        if (api) {
-          const tx = asset?.asset
-            ? api.tx.assets.transfer(asset.asset, dest, amountFormatted)
-            : api.tx.balances.transfer(dest, amountFormatted);
-          return await signAndSendExtrinsic(
-            api,
-            tx,
-            account,
-            account.account.address
-          );
-        }
-      } catch (error) {
-        console.log("Error", error);
-        onHandleError(error?.message ?? error);
+  return useMutation({
+    mutationFn: async ({
+      asset,
+      dest,
+      amount,
+      account,
+    }: AssetTransferParams) => {
+      // TODO: Fix types or Handle Error...
+      const amountFormatted = new BigNumber(amount)
+        .multipliedBy(UNIT_BN)
+        .toString();
+      if (api) {
+        const tx = asset?.asset
+          ? api.tx.assets.transfer(asset.asset, dest, amountFormatted)
+          : api.tx.balances.transfer(dest, amountFormatted);
+        return await signAndSendExtrinsic(
+          api,
+          tx,
+          account,
+          account.account.address
+        );
       }
-    }
-  );
+    },
+    onError: (error: { message: string }) =>
+      onHandleError(error?.message ?? error),
+  });
 };
