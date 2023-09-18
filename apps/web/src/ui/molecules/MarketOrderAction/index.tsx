@@ -87,6 +87,18 @@ export const MarketOrderAction = ({
     else changeTotal(value);
   };
 
+  const showPriceError = Boolean(
+    isSell
+      ? values.priceSell && errors.priceSell && errors.priceSell.length > 0
+      : values.priceBuy && errors.priceBuy && errors.priceBuy.length > 0
+  );
+
+  const showAmountError = Boolean(
+    isSell
+      ? values.amountSell && errors.amountSell && errors.amountSell.length > 0
+      : values.amountBuy && errors.amountBuy && errors.amountBuy.length > 0
+  );
+
   return (
     <S.WrapperOrder>
       {showProtectedPassword ? (
@@ -133,6 +145,7 @@ export const MarketOrderAction = ({
                     onChange={(e) => handleCustomChange(e)}
                     autoComplete="off"
                     disabled={isOrderLoading}
+                    hasError={showPriceError}
                   />
                   <S.Error>
                     {isSell
@@ -156,6 +169,7 @@ export const MarketOrderAction = ({
                 autoComplete="off"
                 onChange={(e) => handleCustomChange(e)}
                 disabled={isOrderLoading}
+                hasError={showAmountError}
               />
               <S.Error>
                 {isSell
