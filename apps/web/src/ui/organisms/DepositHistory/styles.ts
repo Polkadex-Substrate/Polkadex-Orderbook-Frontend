@@ -39,6 +39,7 @@ export const Table = styled.div`
       table-layout: auto;
       padding: 1rem 1rem;
       width: 100%;
+      border-collapse: separate;
       @media screen and (min-width: 1110px) {
         padding: 1rem 3rem;
       }
@@ -90,6 +91,7 @@ export const Date = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
+    white-space: nowrap;
     span {
       background: ${theme.colors.green}22;
       color: ${theme.colors.green};
@@ -144,6 +146,7 @@ export const Wallet = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
     div {
       &:first-child {
         background: ${theme.colors.secondaryBackgroundOpacity};
@@ -188,8 +191,12 @@ export const Title = styled.div`
 
 export const TitleWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 1rem;
+  flex-direction: column;
+  @media screen and (min-width: 480px) {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 export const EmptyData = styled.div`

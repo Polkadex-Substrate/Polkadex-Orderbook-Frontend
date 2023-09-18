@@ -10,7 +10,14 @@ export const Wrapper = styled.div`
 export const TableWrapper = styled.div`
   display: flex;
   align-items: flex-start;
-  padding: 2rem 4rem;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  @media screen and (max-width: 890px) {
+    flex-direction: column;
+  }
+  @media screen and (min-width: 1110px) {
+    padding: 1rem 4rem;
+  }
 `;
 export const TableAside = styled.div`
   ${({ theme }) => css`
@@ -31,11 +38,17 @@ export const TableAside = styled.div`
       font-weight: 500;
       font-size: 1.4rem;
     }
+    @media screen and (max-width: 890px) {
+      width: 100%;
+    }
   `}
 `;
 
 export const Header = styled.div`
-  padding: 1rem 4rem;
+  padding: 1rem 2rem;
+  @media screen and (min-width: 1110px) {
+    padding: 1rem 4rem;
+  }
   h3 {
     font-size: 1.8rem;
     font-weight: 550;
@@ -43,8 +56,11 @@ export const Header = styled.div`
 `;
 
 export const TabItem = styled(Tab)`
-  padding: 1rem 8rem 1rem 0;
+  flex: 1;
+  padding: 1rem 0;
+  text-align: left;
   opacity: 0.6;
+  white-space: nowrap;
   &[data-headlessui-state="selected"] {
     opacity: 1;
   }
@@ -52,6 +68,7 @@ export const TabItem = styled(Tab)`
 
 export const TabList = styled(Tab.List)`
   ${({ theme }) => css`
+    flex: 2;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -128,7 +145,7 @@ export const Table = styled.div`
       }
     }
     table {
-      table-layout: auto;
+      border-collapse: separate;
       padding: 1rem 1rem;
       width: 100%;
       @media screen and (min-width: 1110px) {
@@ -182,6 +199,7 @@ export const Date = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
+    white-space: nowrap;
     span {
       background: ${theme.colors.green}22;
       color: ${theme.colors.green};
@@ -236,6 +254,8 @@ export const Wallet = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
+
     div {
       &:first-child {
         background: ${theme.colors.secondaryBackgroundOpacity};
@@ -263,8 +283,8 @@ export const Title = styled.div`
     gap: 1rem;
     padding: 0 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    flex-direction: column;
-    @media screen and (min-width: 550px) {
+    flex-direction: column-reverse;
+    @media screen and (min-width: 700px) {
       flex-direction: row;
       align-items: center;
     }
@@ -275,9 +295,13 @@ export const Title = styled.div`
 `;
 
 export const TitleWrapper = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 1rem;
+  @media screen and (max-width: 700px) {
+    padding-top: 1rem;
+  }
 `;
 
 export const EmptyData = styled.div`

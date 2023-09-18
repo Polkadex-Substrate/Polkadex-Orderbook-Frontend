@@ -3,10 +3,10 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     flex: 1;
+    overflow: auto;
     table {
       border-spacing: 0 0.5rem;
-      table-layout: fixed;
-      /* border-collapse: collapse; */
+      border-collapse: separate;
       width: 100%;
       td {
         padding: 1rem;
