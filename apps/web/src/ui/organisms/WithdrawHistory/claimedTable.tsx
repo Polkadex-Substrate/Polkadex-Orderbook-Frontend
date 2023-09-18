@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { WithdrawTableProps } from "./types";
-import { pendingColumns } from "./columns";
+import { claimedColumns } from "./columns";
 import { WithdrawHistorySkeleton } from "./skeleton";
 
 import { ResultFound } from "@/ui/molecules";
@@ -32,7 +32,7 @@ export const ClaimedTable = ({
 
   const columns = useMemo(
     () =>
-      pendingColumns([
+      claimedColumns([
         t("tableHeader.date"),
         t("tableHeader.name"),
         t("tableHeader.amount"),
