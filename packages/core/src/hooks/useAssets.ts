@@ -16,7 +16,7 @@ export function useAssets() {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list, loading } = useAssetsProvider();
-  const { balances } = useBalancesProvider();
+  const { balances, loading: balancesLoading } = useBalancesProvider();
 
   const assets = useMemo(
     () =>
@@ -68,7 +68,7 @@ export function useAssets() {
   return {
     assets,
     filters,
-    loading,
+    loading: loading || balancesLoading,
     onHideZeroBalance: () =>
       setFilters({
         ...filters,
