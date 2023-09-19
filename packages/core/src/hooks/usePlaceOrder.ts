@@ -330,20 +330,12 @@ export function usePlaceOrder(
         setFormValues({
           ...formValues,
           [totalType]: value,
-          [priceType]: Decimal.format(formPrice, pricePrecision),
-          [amountType]: Decimal.format(estimatedAmount, qtyPrecision),
+          [priceType]: formPrice,
+          [amountType]: estimatedAmount,
         });
       }
     },
-    [
-      formValues,
-      setFormValues,
-      isSell,
-      lastPriceValue,
-      pricePrecision,
-      qtyPrecision,
-      totalPrecision,
-    ]
+    [formValues, setFormValues, isSell, lastPriceValue, totalPrecision]
   );
 
   // Calls the action for placing order

@@ -82,7 +82,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
               <S.Th>Type</S.Th>
               <S.Th>Status</S.Th>
               <S.Th>Price</S.Th>
-              <S.Th>Total</S.Th>
+              <S.Th>Amount</S.Th>
               <S.Th>Filled</S.Th>
             </S.Tr>
           </S.Thead>
