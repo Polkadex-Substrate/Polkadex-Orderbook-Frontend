@@ -7,41 +7,30 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { AssetsProps } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
-import { WithdrawTableProps } from "./types";
-import { claimedColumns } from "./columns";
-import { WithdrawHistorySkeleton } from "./skeleton";
+import { columns as getColumns } from "./columns";
 
-import { ResultFound } from "@/ui/molecules";
 import { Icons } from "@/ui/atoms";
+import { ResultFound } from "@/ui/molecules";
 
-export const ClaimedTable = ({
-  data,
-  loading,
-  hasData,
-}: {
-  data: WithdrawTableProps[];
-  loading: boolean;
-  hasData: boolean;
-}) => {
-  const { t } = useTranslation("transfer");
-
+export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
-
   const columns = useMemo(
     () =>
-      claimedColumns([
-        t("tableHeader.date"),
-        t("tableHeader.name"),
-        t("tableHeader.amount"),
-        t("tableHeader.transfer"),
+      getColumns([
+        "Name",
+        "Trading Account",
+        "Funding Account",
+        "In Orders",
+        "Actions",
       ]),
-    [t]
+    []
   );
+
   const table = useReactTable({
-    data,
+    data: assets,
     state: {
       sorting,
     },
@@ -52,10 +41,8 @@ export const ClaimedTable = ({
   });
 
   return (
-    <>
-      {loading ? (
-        <WithdrawHistorySkeleton />
-      ) : hasData ? (
+    <S.Wrapper>
+      {assets.length ? (
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -91,29 +78,35 @@ export const ClaimedTable = ({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row, ti) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  const lastCell = table.getRowModel().rows.length === ti + 1;
-                  const tdClassName = classNames({ last: lastCell });
-                  return (
-                    <td className={tdClassName} key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+            {table
+              .getRowModel()
+              .rows.slice(0, 10)
+              .map((row, ti) => {
+                return (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      const lastCell =
+                        table.getRowModel().rows.length === ti + 1;
+                      const tdClassName = classNames({ last: lastCell });
+                      return (
+                        <td className={tdClassName} key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       ) : (
         <S.EmptyData>
-          <ResultFound>{t("resultEmpty")}</ResultFound>
+          <ResultFound />
         </S.EmptyData>
       )}
-    </>
+    </S.Wrapper>
   );
 };

@@ -73,7 +73,12 @@ export const ModalContentHeader = styled.div`
   `}
 `;
 
-export const ModalContentTable = styled.div``;
+export const ModalContentTable = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: auto;
+`;
 
 export const SkeletonComponent = styled.div`
   display: flex;

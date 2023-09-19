@@ -52,6 +52,7 @@ const defaultTheme = {
     secondaryBackgroundDark: "#ABB2BC",
     secondaryBackgroundOpacity: "rgba(139,161,190,0.1)",
     tertiaryBackgroundOpacity: "rgba(139,161,190,0.05)",
+    clearBackgroundOpacity: "rgba(139,161,190,0.02)",
     gradient: "linear-gradient(47.94deg, #e6007a 0%, #6745d2 98.88%)",
     gradientGreen:
       "linear-gradient(90deg, #0CA564 0.04%, rgba(2, 192, 118, 0.3) 99.92%)",

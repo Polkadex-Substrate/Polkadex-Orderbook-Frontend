@@ -1,14 +1,12 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { defaultConfig } from "@orderbook/core/config";
+import { useTranslation } from "react-i18next";
+import { useAssets } from "@orderbook/core/hooks";
 
 import { AssetsTable } from "../AssetsTable";
 
 import { AssetsTableSkeleton } from "./skeleton";
 import * as S from "./styles";
-import * as T from "./types";
 
 import { Icons } from "@/ui/atoms";
 import { Checkbox, Search } from "@/ui/molecules";
@@ -25,51 +23,10 @@ export const AssetsInteraction = ({
   onClose: (e: boolean) => void;
   onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
-  const [filters, setFilters] = useState({ search: "", hideZero: false });
+  const { t } = useTranslation("transfer");
 
-  const { list, loading } = useAssetsProvider();
-  const { balances } = useBalancesProvider();
-
-  const assets = useMemo(
-    () =>
-      list
-        ?.map((e: T.AssetsProps) => {
-          const tokenBalance = balances?.find(
-            (value) => value.assetId === e.assetId
-          );
-          const free_balance =
-            tokenBalance?.free_balance === "0"
-              ? "0.00"
-              : tokenBalance?.free_balance || "0.00";
-
-          const onChainBalance =
-            tokenBalance?.onChainBalance === "0"
-              ? "0.00"
-              : tokenBalance?.onChainBalance || "0.00";
-
-          return {
-            ...e,
-            free_balance,
-            onChainBalance,
-          };
-        })
-        ?.filter((e: T.AssetsProps) => {
-          const hasZeroAmount =
-            filters.hideZero && Number(e?.free_balance || 0) < 0.001;
-
-          const matchesNameOrTicker =
-            e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            e.symbol.toLowerCase().includes(filters.search.toLowerCase());
-
-          return (
-            matchesNameOrTicker &&
-            !hasZeroAmount &&
-            !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
-          );
-        })
-        ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, balances, filters.hideZero]
-  );
+  const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
+    useAssets();
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -77,7 +34,7 @@ export const AssetsInteraction = ({
         as="div"
         open={open}
         onClose={onClose}
-        style={{ position: "relative", zIndex: 100 }}
+        style={{ position: "relative", zIndex: 1000000 }}
       >
         <Transition.Child
           as={Fragment}
@@ -106,27 +63,20 @@ export const AssetsInteraction = ({
                   <Icons.SingleArrowLeft />
                 </S.ModalTitle>
                 <S.ModalContent>
-                  <h3>Assets</h3>
+                  <h3>{t("assetsInteraction.heading")}</h3>
                   <S.ModalContentHeader>
                     <Checkbox
                       checked={filters.hideZero}
-                      onChange={() =>
-                        setFilters({
-                          ...filters,
-                          hideZero: !filters.hideZero,
-                        })
-                      }
+                      onChange={onHideZeroBalance}
                       labelProps={{ style: { whiteSpace: "nowrap" } }}
                     >
-                      Hide 0 balances
+                      {t("assetsInteraction.filterBalance")}
                     </Checkbox>
                     <Search
                       value={filters.search}
-                      onChange={(e) =>
-                        setFilters({ ...filters, search: e.target.value })
-                      }
+                      onChange={onSearchToken}
                       hasBorder={false}
-                      placeholder="Search"
+                      placeholder={t("searchPlaceholder")}
                     />
                   </S.ModalContentHeader>
                   {loading ? (

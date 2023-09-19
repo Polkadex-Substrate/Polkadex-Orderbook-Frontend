@@ -11,6 +11,7 @@ export const Main = styled.main`
     flex-direction: column;
   `}
 `;
+
 export const Flex = styled.div`
   display: flex;
   flex: 1;
@@ -27,7 +28,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 1rem;
-  /* background: orange; */
   @media screen and (min-width: 590px) {
     margin-left: 2rem;
   }
@@ -66,6 +66,7 @@ export const Header = styled.div`
     }
   `}
 `;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,7 +79,7 @@ export const Form = styled.div`
   max-width: 100rem;
   padding: 2rem;
   @media screen and (min-width: 1110px) {
-    padding: 4rem;
+    padding: 2rem 4rem 4rem 4rem;
   }
 `;
 

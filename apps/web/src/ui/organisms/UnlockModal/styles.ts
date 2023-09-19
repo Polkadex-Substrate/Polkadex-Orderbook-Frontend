@@ -4,6 +4,7 @@ export const UnlockAccount = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
     position: relative;
+    border-radius: 1.5rem;
   `}
 `;
 

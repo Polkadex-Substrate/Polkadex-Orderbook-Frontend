@@ -2,5 +2,48 @@
   "title": "Transfer | Polkadex Orderbook",
   "description": "The DEX for the Interoperable Future",
   "heading": "Transfer",
-  "overview": "Overview"
+  "subheading": "Move tokens between Orderbook and your funding account.",
+  "switcher": "Transfer to other Polkadex accounts",
+  "searchPlaceholder": "Search",
+  "assetsInteraction": {
+    "heading": "Assets",
+    "filterBalance": "Hide 0 balances",
+    "tableHeaderToken": "Token"
+  },
+  "from": "From",
+  "to": "To",
+  "funding": {
+    "label": "From",
+    "name": "Extension wallet",
+    "type": " Funding account",
+    "betweenPlaceholder": "Select your Polkadex address"
+  },
+  "switch": "Switch",
+  "trading": {
+    "label": "To",
+    "name": "Orderbook",
+    "type": "Trading account",
+    "message": "Balance available across all trading accounts."
+  },
+  "amountPlaceholder": "Enter an amount",
+  "maxButton": "MAX",
+  "transferButton": "Transfer",
+  "historyTitle": "History",
+  "historyFilterByToken": "Show only selected token",
+  "resultEmpty": "No result found",
+  "tableHeader": {
+    "date": "Status/Date",
+    "name": "Token",
+    "amount": "Amount",
+    "fees": "Fees",
+    "transfer": "From/To"
+  },
+  "claimButton": "Claim Now",
+  "claimLoading": "Loading",
+  "batch": "Batch",
+  "tabs": {
+    "pending": "Pending",
+    "readyToClaim": "Ready to claim",
+    "claimed": "Claimed"
+  }
 }

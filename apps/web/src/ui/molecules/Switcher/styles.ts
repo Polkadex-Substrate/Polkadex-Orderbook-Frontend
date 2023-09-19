@@ -27,8 +27,8 @@ export const Header = styled.div`
   }
 `;
 
-export const Switch = styled.div<{ isActive?: boolean }>`
-  ${({ theme, isActive }) => css`
+export const Switch = styled.div<{ isActive?: boolean; disable: boolean }>`
+  ${({ theme, isActive, disable }) => css`
     background: ${isActive
       ? theme.colors.primary
       : theme.colors.secondaryBackground};
@@ -37,11 +37,12 @@ export const Switch = styled.div<{ isActive?: boolean }>`
     min-width: 3.5rem;
     height: 2rem;
     position: relative;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
+    cursor: ${disable ? "not-allowed" : "pointer"};
+    transition: background-color 0.2s ease-in-out;
     span {
       user-select: none;
     }
+    user-select: ${disable ? "none" : "auto"};
     div {
       position: absolute;
       bottom: 50%;
