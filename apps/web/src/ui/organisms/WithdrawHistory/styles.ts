@@ -26,6 +26,7 @@ export const TableAside = styled.div`
     gap: 1rem;
     button {
       padding: 1rem 4rem;
+      max-width: 14.5rem;
       border-radius: 0.4rem;
       background: ${theme.colors.primary};
       transition: background-color ease 0.4s;

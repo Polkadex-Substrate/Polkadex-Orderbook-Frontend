@@ -39,6 +39,7 @@
     "transfer": "From/To"
   },
   "claimButton": "Claim Now",
+  "claimLoading": "Loading",
   "batch": "Batch",
   "tabs": {
     "pending": "Pending",

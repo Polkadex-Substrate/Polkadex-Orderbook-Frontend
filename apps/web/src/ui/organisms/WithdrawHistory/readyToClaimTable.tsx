@@ -6,13 +6,14 @@ import {
 import classNames from "classnames";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 
 import * as S from "./styles";
 import { readyToClaimColumns } from "./columns";
 import { WithdrawHistorySkeleton } from "./skeleton";
 import { ReadyToClaimDataProps, ReadyToClaimProps } from "./types";
 
-import { ResultFound } from "@/ui/molecules";
+import { LoadingSpinner, ResultFound } from "@/ui/molecules";
 
 export const ReadyToClaimTable = ({
   data,
@@ -53,6 +54,15 @@ const BatchTable = ({
 }) => {
   const { t } = useTranslation("transfer");
 
+  const { onFetchClaimWithdraw } = useWithdrawsProvider();
+
+  const { claimsInLoading } = useWithdrawsProvider();
+
+  const loading = useMemo(
+    () => claimsInLoading.includes(batch),
+    [claimsInLoading, batch]
+  );
+
   const columns = useMemo(
     () =>
       readyToClaimColumns([
@@ -75,8 +85,19 @@ const BatchTable = ({
         <h4>
           {t("batch")} {batch}
         </h4>
-        <button type="button" onClick={() => window.alert("Claim")}>
-          {t("claimButton")}
+        <button
+          type="button"
+          disabled={loading}
+          onClick={async () => await onFetchClaimWithdraw({ sid: batch })}
+        >
+          {loading ? (
+            <>
+              <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />{" "}
+              {t("claimLoading")}
+            </>
+          ) : (
+            t("claimButton")
+          )}
         </button>
       </S.TableAside>
 
