@@ -29,7 +29,7 @@ export const columns = (headers: string[]) => [
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.onChainBalance, {
-    id: "fundingAccount",
+    id: "tradingAccount",
     cell: (e) => (
       <S.Box>
         <span>{e.getValue()}</span>
@@ -40,7 +40,7 @@ export const columns = (headers: string[]) => [
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.free_balance, {
-    id: "tradingAccount",
+    id: "fundingAccount",
     cell: (e) => (
       <S.Box>
         <span>{e.getValue()}</span>

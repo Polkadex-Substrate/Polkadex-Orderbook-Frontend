@@ -21,8 +21,8 @@ export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
     () =>
       getColumns([
         "Name",
-        "Trading Account",
         "Funding Account",
+        "Trading Account",
         "In Orders",
         "Actions",
       ]),
