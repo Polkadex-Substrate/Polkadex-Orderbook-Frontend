@@ -21,7 +21,7 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 
 export function useTransfer() {
   const { list } = useAssetsProvider();
-  const { balances } = useBalancesProvider();
+  const { balances, loading } = useBalancesProvider();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
 
@@ -42,9 +42,20 @@ export function useTransfer() {
         const tokenBalance = balances?.find(
           (value) => value.assetId === e.assetId
         );
+        const free_balance =
+          tokenBalance?.free_balance === "0"
+            ? "0.00"
+            : tokenBalance?.free_balance || "0.00";
+
+        const onChainBalance =
+          tokenBalance?.onChainBalance === "0"
+            ? "0.00"
+            : tokenBalance?.onChainBalance || "0.00";
+
         return {
           ...e,
-          availableBalance: tokenBalance?.onChainBalance,
+          onChainBalance,
+          free_balance,
         } as T.FilteredAssetProps;
       }),
     [list, balances]
@@ -52,8 +63,10 @@ export function useTransfer() {
 
   /* Select default asset */
   useEffect(() => {
-    if (!selectedAsset) setSelectedAsset(filteredNonBlockedAssets?.[0]);
-  }, [selectedAsset, filteredNonBlockedAssets]);
+    if (!selectedAsset && !loading) {
+      setSelectedAsset(filteredNonBlockedAssets?.[0]);
+    }
+  }, [selectedAsset, filteredNonBlockedAssets, loading]);
 
   return {
     loading: depositLoading || withdrawLoading,
