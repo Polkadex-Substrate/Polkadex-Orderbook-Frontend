@@ -130,6 +130,9 @@ export const ButtonGroup = styled.div`
     button {
       &:nth-child(1) {
         background: ${theme.colors.secondaryBackground} !important;
+        &:hover {
+          background: ${theme.colors.secondaryBackgroundOpacity} !important;
+        }
       }
     }
   `}
