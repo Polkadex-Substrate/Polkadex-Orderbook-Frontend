@@ -244,7 +244,7 @@ export function usePlaceOrder(
       const convertedValue = cleanPositiveFloatInput(price?.toString());
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         const total =
-          formValues.amountSell || formValues.amountBuy
+          formAmount && convertedValue
             ? calculateTotal(convertedValue, formAmount)
             : "";
 
