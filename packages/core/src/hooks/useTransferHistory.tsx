@@ -1,8 +1,7 @@
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useInfiniteQuery } from "react-query";
-import { QUERY_KEYS } from "@orderbook/core/constants/queryKeys";
+import { QUERY_KEYS, SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 import { SUBSCAN_GETTERS } from "@orderbook/core/helpers/subscan";
-import { SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 export const useTransferHistory = (apiKey: string) => {
   const { selectedAccount } = useProfile();
@@ -18,6 +17,7 @@ export const useTransferHistory = (apiKey: string) => {
       );
       return data.data;
     },
+    // refetchInterval: loading ? 15000 : undefined, // TODO: refetch only if deposit isSuscces..
     enabled: mainAddress?.length > 0,
     getNextPageParam: (lastPage, pages) => {
       // If the last page contains less than required results, don't fetch the next page

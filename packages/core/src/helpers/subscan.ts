@@ -6,7 +6,7 @@ export const SUBSCAN_GETTERS = {
     apiKey: string,
     address: string,
     page: number
-  ): Promise<SubscanResult<TransferHistory[], "transfers">> => {
+  ): Promise<SubscanResult<TransferHistory, "transfers">> => {
     return await fetch(
       "https://polkadex.webapi.subscan.io/api/v2/scan/transfers",
       {
@@ -14,6 +14,7 @@ export const SUBSCAN_GETTERS = {
           "content-type": "application/json",
           "x-api-key": apiKey,
         },
+        method: "POST",
         body: JSON.stringify({
           row: SUBSCAN_PER_PAGE_LIMIT,
           page,
@@ -22,7 +23,7 @@ export const SUBSCAN_GETTERS = {
       }
     ).then(
       (resp) =>
-        resp.json() as unknown as SubscanResult<TransferHistory[], "transfers">
+        resp.json() as unknown as SubscanResult<TransferHistory, "transfers">
     );
   },
 };

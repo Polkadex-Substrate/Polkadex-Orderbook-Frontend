@@ -14,6 +14,8 @@ import { useTranslation } from "react-i18next";
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
 
+import { TransferHistory } from "@/ui/organisms/TransferHistory";
+
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
 
@@ -26,7 +28,7 @@ export const TransferTemplate = () => {
     onChangeIsDeposit,
     otherPolkadexAccount,
     onChangeOtherPolkadexAccount,
-    otherPolkadexAccountSelected,
+    isDeposit,
   } = useTransfer();
 
   return (
@@ -62,7 +64,7 @@ export const TransferTemplate = () => {
                     <span>{t("switcher")}</span>
                   </S.Title>
                   <S.Container>
-                    {otherPolkadexAccountSelected ? (
+                    {isDeposit || otherPolkadexAccount ? (
                       <TransferFormDeposit
                         otherPolkadexAccount={otherPolkadexAccount}
                         onTransferInteraction={onChangeIsDeposit}
@@ -79,7 +81,9 @@ export const TransferTemplate = () => {
                   </S.Container>
                 </S.Form>
                 <S.History>
-                  {otherPolkadexAccountSelected ? (
+                  {otherPolkadexAccount ? (
+                    <TransferHistory selectedAsset={selectedAsset} />
+                  ) : isDeposit ? (
                     <DepositHistory selectedAsset={selectedAsset} />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />
