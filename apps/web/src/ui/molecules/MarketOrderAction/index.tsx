@@ -138,7 +138,7 @@ export const MarketOrderAction = ({
                     inputInfo={quoteTicker}
                     fullWidth={true}
                     type="text"
-                    placeholder="0.00"
+                    placeholder="0.0000"
                     id="order-price"
                     name={isSell ? "priceSell" : "priceBuy"}
                     value={isSell ? values.priceSell : values.priceBuy}
@@ -164,7 +164,7 @@ export const MarketOrderAction = ({
                 }
                 fullWidth={true}
                 type="text"
-                placeholder="0.00"
+                placeholder="0.0000"
                 id="order-amount"
                 name={isSell ? "amountSell" : "amountBuy"}
                 value={isSell ? values.amountSell : values.amountBuy}
