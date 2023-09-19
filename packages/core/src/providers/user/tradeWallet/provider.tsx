@@ -63,20 +63,23 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onImportTradeAccountJson = (
-    payload: A.ImportTradeAccountJsonFetch["payload"],
+    payload: A.ImportTradeAccountJsonFetch["payload"]
   ) => {
+    const accounts = userData.userAccounts;
     const { file, password } = payload;
     let tradeAddress = "";
     try {
-      if (
-        state?.registerAccountModal?.selectedAddress?.address !== file.address
-      ) {
-        onHandleError("Incorrect JSON File");
-        return;
-      }
       const modifiedFile = file;
       const pair = keyring.restoreAccount(modifiedFile, password || "");
       tradeAddress = pair?.address;
+
+      // Check if file exists in userAccounts
+      const accountExists = accounts?.find(
+        (account) => account.tradeAddress === tradeAddress
+      );
+
+      if (!accountExists) throw new Error("Account does not exists");
+
       dispatch(A.tradeAccountPush({ pair }));
       dispatch(
         A.registerTradeAccountData({
@@ -84,15 +87,19 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
             name: String(pair.meta?.name),
             address: tradeAddress,
           },
-        }),
+        })
       );
       dispatch(A.importTradeAccountData());
       onUserSelectAccount({ tradeAddress });
     } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Can't Import Account, Invalid password or file";
       if (tradeAddress?.length)
         dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
       dispatch(A.registerTradeAccountError(error));
-      onHandleError("Can't Import Account, Invalid password or file");
+      onHandleError(errorMessage);
     }
   };
 
