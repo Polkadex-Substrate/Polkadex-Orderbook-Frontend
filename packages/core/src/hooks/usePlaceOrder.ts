@@ -18,6 +18,7 @@ import {
 } from "@orderbook/core/helpers";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import BigNumber from "bignumber.js";
 
 type FormValues = {
   priceSell: string;
@@ -145,7 +146,7 @@ export function usePlaceOrder(
 
   // Get estimated total amount
   const getEstimatedTotal = useCallback(
-    (total: number): string =>
+    (total: number | string): string =>
       Decimal.format(total, basePrecision || quotePrecision || 0, ","),
     [basePrecision, quotePrecision]
   );
@@ -171,9 +172,12 @@ export function usePlaceOrder(
   // Calculates total by providing price and amount
   const calculateTotal = useCallback(
     (formPrice: string, formAmount: string) => {
+      const bigPrice = new BigNumber(formPrice);
+      const bigAmount = new BigNumber(formAmount);
+
       // Limit & Sell
       if (isLimit && isSell) {
-        return Number(formAmount) * Number(formPrice);
+        return bigPrice.multipliedBy(bigAmount).toFixed();
       }
 
       // Limit & Buy
@@ -181,7 +185,7 @@ export function usePlaceOrder(
         if (changeTypeIsRange) {
           return Number(availableQuoteAmount) * Number(rangeValue[0]) * 0.01;
         }
-        return Number(formAmount) * Number(formPrice);
+        return bigPrice.multipliedBy(bigAmount).toFixed();
       }
 
       // Market & Sell
@@ -241,15 +245,13 @@ export function usePlaceOrder(
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         const total =
           formValues.amountSell || formValues.amountBuy
-            ? getAbsoluteNumber(
-                getEstimatedTotal(calculateTotal(convertedValue, formAmount))
-              )
+            ? calculateTotal(convertedValue, formAmount)
             : "";
 
         setFormValues({
           ...formValues,
           [priceType]: convertedValue,
-          [totalType]: Decimal.format(total, totalPrecision),
+          [totalType]: total,
         });
       }
       setChangeType(false);
@@ -263,8 +265,6 @@ export function usePlaceOrder(
       formValues,
       isSell,
       calculateTotal,
-      getEstimatedTotal,
-      totalPrecision,
     ]
   );
 
@@ -278,15 +278,13 @@ export function usePlaceOrder(
       const convertedValue = cleanPositiveFloatInput(value.toString());
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         const total = convertedValue
-          ? getAbsoluteNumber(
-              getEstimatedTotal(calculateTotal(formPrice, convertedValue))
-            )
+          ? calculateTotal(formPrice, convertedValue)
           : "";
 
         setFormValues({
           ...formValues,
           [amountType]: convertedValue,
-          [totalType]: Decimal.format(total, totalPrecision),
+          [totalType]: total,
         });
       }
       setChangeType(false);
@@ -309,8 +307,6 @@ export function usePlaceOrder(
       formValues,
       handleCleanAmount,
       calculateTotal,
-      getEstimatedTotal,
-      totalPrecision,
     ]
   );
 
