@@ -112,10 +112,42 @@ export const Show = styled.button`
   `}
 `;
 
-export const Error = styled.div`
-  color: #ff0087;
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
+export const Error = styled.div<{ hasError: boolean }>`
+  ${({ hasError }) => css`
+    position: relative;
+    display: ${hasError ? "inline-block" : "none"};
+    border-bottom: 1px dotted black;
+    top: -2.2rem;
+    left: 15%;
+    font-weight: 500;
+  `}
+`;
+
+export const ErrorText = styled.span`
+  ${({ theme }) => css`
+    visibility: visible;
+    width: max-content;
+    background-color: ${theme.colors.primaryBackground};
+    color: ${theme.colors.text};
+    text-align: center;
+    border-radius: 8px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    left: 50%;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent transparent ${theme.colors.primaryBackground}
+        transparent;
+    }
+  `}
 `;
 
 export const ButtonSkeletonWrapper = styled.div`

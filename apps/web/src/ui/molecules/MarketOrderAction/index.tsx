@@ -147,10 +147,12 @@ export const MarketOrderAction = ({
                     disabled={isOrderLoading}
                     hasError={showPriceError}
                   />
-                  <S.Error>
-                    {isSell
-                      ? values.priceSell && errors.priceSell
-                      : values.priceBuy && errors.priceBuy}
+                  <S.Error hasError={showPriceError}>
+                    <S.ErrorText>
+                      {isSell
+                        ? values.priceSell && errors.priceSell
+                        : values.priceBuy && errors.priceBuy}
+                    </S.ErrorText>
                   </S.Error>
                 </>
               )}
@@ -171,10 +173,12 @@ export const MarketOrderAction = ({
                 disabled={isOrderLoading}
                 hasError={showAmountError}
               />
-              <S.Error>
-                {isSell
-                  ? values.amountSell && errors.amountSell
-                  : values.amountBuy && errors.amountBuy}
+              <S.Error hasError={showAmountError}>
+                <S.ErrorText>
+                  {isSell
+                    ? values.amountSell && errors.amountSell
+                    : values.amountBuy && errors.amountBuy}
+                </S.ErrorText>
               </S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (
