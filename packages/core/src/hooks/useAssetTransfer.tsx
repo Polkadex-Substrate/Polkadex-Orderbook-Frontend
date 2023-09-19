@@ -16,7 +16,7 @@ interface AssetTransferParams {
 
 export const useAssetTransfer = () => {
   const { api } = useNativeApi();
-  const { onHandleError } = useSettingsProvider();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
 
   return useMutation({
     mutationFn: async ({
@@ -43,5 +43,11 @@ export const useAssetTransfer = () => {
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
+    onSuccess: () =>
+      onHandleNotification({
+        type: "Success",
+        message:
+          "Deposit sent successfully. Please wait a few seconds to see the transaction in the history.",
+      }),
   });
 };

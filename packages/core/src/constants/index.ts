@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-
+export * from "./queryKeys";
 export const UNIT = BigInt(1000_000_000_000);
 export const UNIT_BN = new BigNumber(UNIT.toString());
 export const DEFAULT_TRADING_VIEW_INTERVAL = "5";
@@ -65,3 +65,5 @@ export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const TradingView = {
   lastResolution: "tradingview.chart.lastUsedTimeBasedResolution",
 };
+
+export const SUBSCAN_PER_PAGE_LIMIT = 10;

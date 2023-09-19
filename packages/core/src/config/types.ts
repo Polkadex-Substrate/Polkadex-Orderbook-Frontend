@@ -21,4 +21,5 @@ export type DefaultConfig = {
   underMaintenance: string[];
   mainUrl: string;
   blockedAssets: string[];
+  subscanApi: string;
 };

@@ -77,6 +77,6 @@ export function useTransfer() {
     otherPolkadexAccount,
     onChangeOtherPolkadexAccount: () => onChangeState(setOtherPolkadexAccount),
     selectedAsset,
-    otherPolkadexAccountSelected: isDeposit || otherPolkadexAccount,
+    isDeposit,
   };
 }
