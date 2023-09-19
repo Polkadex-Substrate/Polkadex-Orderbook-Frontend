@@ -7,7 +7,7 @@ import * as T from "./types";
 import { Icons, Tokens } from "@/ui/atoms";
 const columnHelper = createColumnHelper<T.Props>();
 
-export const columns = [
+export const columns = (header: string[]) => [
   columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
@@ -16,7 +16,7 @@ export const columns = [
         <p>{e.getValue().time}</p>
       </Date>
     ),
-    header: () => <span>Status/Date</span>,
+    header: () => <span>{header[0]}</span>,
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.token, {
@@ -35,7 +35,7 @@ export const columns = [
         </Token>
       );
     },
-    header: () => <span>Token</span>,
+    header: () => <span>{header[1]}</span>,
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.amount, {
@@ -46,7 +46,7 @@ export const columns = [
         <span>$0.00</span>
       </Box>
     ),
-    header: () => <span>Amount</span>,
+    header: () => <span>{header[2]}</span>,
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.fee, {
@@ -57,7 +57,7 @@ export const columns = [
         <span>$0.00</span>
       </Box>
     ),
-    header: () => <span>Fees</span>,
+    header: () => <span>{header[3]}</span>,
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.wallets, {
@@ -79,7 +79,7 @@ export const columns = [
         </Wallet>
       );
     },
-    header: () => <span>From/To</span>,
+    header: () => <span>{header[4]}</span>,
     footer: (e) => e.column.id,
   }),
 ];

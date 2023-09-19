@@ -7,20 +7,18 @@ export const Wrapper = styled.div`
 `;
 
 export const Header = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
-    small {
-      font-size: 1.2rem;
-      opacity: 0.5;
-    }
-  `}
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  small {
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
 `;
 
 export const Paragraph = styled.p`
-  white-space: nowrap;
+  white-space: break-spaces;
   font-size: 1.9rem;
   font-weight: 500;
   span {

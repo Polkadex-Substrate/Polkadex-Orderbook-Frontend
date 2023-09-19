@@ -1,6 +1,8 @@
 {
   "title": "Balances | Polkadex Orderbook",
-  "heading": "Balances.",
+  "description": "The DEX for the Interoperable Future",
+  "heading": "Balances",
+  "subheading": "Available balance in your funding and trading account.",
   "overview": "Overview",
   "searchPlaceholder": "Search",
   "hideSmallBalances": "Hide small balances",

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { isAssetPDEX, getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import { getDigitsAfterDecimal } from "@orderbook/core/helpers";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -26,8 +26,8 @@ export const loginValidations = Yup.object().shape({
 
 export const depositValidations = (
   chainBalance: number,
-  assetId: string,
-  existentialBalance: number,
+  isPolkadexToken: boolean,
+  existentialBalance: number
 ) => {
   return Yup.object().shape({
     amount: Yup.string()
@@ -35,28 +35,28 @@ export const depositValidations = (
       .test(
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        (value) => !/\s/.test(value || ""),
+        (value) => !/\s/.test(value || "")
       )
       .test(
         ErrorMessages.MUST_BE_A_NUMBER,
         ErrorMessages.MUST_BE_A_NUMBER,
-        (value) => /^\d+(\.\d+)?$/.test(value || ""),
+        (value) => /^\d+(\.\d+)?$/.test(value || "")
       )
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) > 0.0001,
+        (value) => Number(value) > 0.0001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,
         ErrorMessages.CHECK_BALANCE,
-        (value) => Number(value) <= Number(chainBalance),
+        (value) => Number(value) <= Number(chainBalance)
       )
       .test(
         ErrorMessages.CHECK_VALID_AMOUNT,
         ErrorMessages.CHECK_VALID_AMOUNT,
         (value) =>
-          !(value?.toString().includes("e") || value?.toString().includes("o")),
+          !(value?.toString().includes("e") || value?.toString().includes("o"))
       )
       .test(
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
@@ -64,15 +64,15 @@ export const depositValidations = (
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
-            : false,
+            : false
       )
       .test(
         ErrorMessages.REMAINING_BALANCE,
         ErrorMessages.REMAINING_BALANCE,
         (value) => {
           const balanceAfterDeposit = chainBalance - Number(value);
-          return !(isAssetPDEX(assetId) && balanceAfterDeposit < 1);
-        },
+          return !(isPolkadexToken && balanceAfterDeposit < 1);
+        }
       )
       .test(
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
@@ -80,11 +80,11 @@ export const depositValidations = (
         (value) => {
           const balanceAfterDeposit = chainBalance - Number(value);
           return !(
-            !isAssetPDEX(assetId) &&
+            !isPolkadexToken &&
             Number(value) &&
             balanceAfterDeposit < existentialBalance
           );
-        },
+        }
       ),
   });
 };
@@ -132,22 +132,22 @@ export const withdrawValidations = (balance: string) => {
       .test(
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
         ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        (value) => (value ? !/\s/.test(value) : false),
+        (value) => (value ? !/\s/.test(value) : false)
       )
       .test(
         ErrorMessages.MUST_BE_A_NUMBER,
         ErrorMessages.MUST_BE_A_NUMBER,
-        (value) => (value ? /^\d+(\.\d+)?$/.test(value) : false),
+        (value) => (value ? /^\d+(\.\d+)?$/.test(value) : false)
       )
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) > 0.0001,
+        (value) => Number(value) > 0.0001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,
         ErrorMessages.CHECK_BALANCE,
-        (value) => Number(value) <= Number(balance),
+        (value) => Number(value) <= Number(balance)
       )
       .test(
         ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
@@ -155,14 +155,10 @@ export const withdrawValidations = (balance: string) => {
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
-            : false,
+            : false
       ),
   });
 };
-
-export const depositValidationsTest = Yup.object().shape({
-  amount: Yup.string().required("Required"),
-});
 
 export const typeValidations = Yup.object().shape({
   account: Yup.string().required("Required"),

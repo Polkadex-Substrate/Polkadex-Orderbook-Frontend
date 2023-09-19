@@ -7,7 +7,7 @@ import { WithdrawTableProps, ReadyToClaimProps } from "./types";
 import { Icons, Tokens } from "@/ui/atoms";
 const pendingColumnHelper = createColumnHelper<WithdrawTableProps>();
 
-export const pendingColumns = [
+export const pendingColumns = (header: string[]) => [
   pendingColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
@@ -16,7 +16,7 @@ export const pendingColumns = [
         <p>{e.getValue().time}</p>
       </Date>
     ),
-    header: () => <span>Status/Date</span>,
+    header: () => <span>{header[0]}</span>,
     footer: (e) => e.column.id,
   }),
   pendingColumnHelper.accessor((row) => row.token, {
@@ -35,7 +35,7 @@ export const pendingColumns = [
         </Token>
       );
     },
-    header: () => <span>Token</span>,
+    header: () => <span>{header[1]}</span>,
     footer: (e) => e.column.id,
   }),
   pendingColumnHelper.accessor((row) => row.amount, {
@@ -46,7 +46,7 @@ export const pendingColumns = [
         <span>$0.00</span>
       </Box>
     ),
-    header: () => <span>Amount</span>,
+    header: () => <span>{header[2]}</span>,
     footer: (e) => e.column.id,
   }),
 
@@ -69,14 +69,14 @@ export const pendingColumns = [
         </Wallet>
       );
     },
-    header: () => <span>From/To</span>,
+    header: () => <span>{header[3]}</span>,
     footer: (e) => e.column.id,
   }),
 ];
 
 const claimedColumnHelper = createColumnHelper<WithdrawTableProps>();
 
-export const claimedColumns = [
+export const claimedColumns = (header: string[]) => [
   claimedColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
@@ -85,7 +85,7 @@ export const claimedColumns = [
         <p>{e.getValue().time}</p>
       </Date>
     ),
-    header: () => <span>Status/Date</span>,
+    header: () => <span>{header[0]}</span>,
     footer: (e) => e.column.id,
   }),
   claimedColumnHelper.accessor((row) => row.token, {
@@ -104,7 +104,7 @@ export const claimedColumns = [
         </Token>
       );
     },
-    header: () => <span>Token</span>,
+    header: () => <span>{header[1]}</span>,
     footer: (e) => e.column.id,
   }),
   claimedColumnHelper.accessor((row) => row.amount, {
@@ -115,7 +115,7 @@ export const claimedColumns = [
         <span>$0.00</span>
       </Box>
     ),
-    header: () => <span>Amount</span>,
+    header: () => <span>{header[2]}</span>,
     footer: (e) => e.column.id,
   }),
 
@@ -138,14 +138,14 @@ export const claimedColumns = [
         </Wallet>
       );
     },
-    header: () => <span>From/To</span>,
+    header: () => <span>{header[3]}</span>,
     footer: (e) => e.column.id,
   }),
 ];
 
 const readyToClaimColumnHelper = createColumnHelper<ReadyToClaimProps>();
 
-export const readyToClaimColumns = [
+export const readyToClaimColumns = (header: string[]) => [
   readyToClaimColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
@@ -154,7 +154,7 @@ export const readyToClaimColumns = [
         <p>{e.getValue().time.toString()}</p>
       </Date>
     ),
-    header: () => <span>Status/Date</span>,
+    header: () => <span>{header[0]}</span>,
     footer: (e) => e.column.id,
   }),
   readyToClaimColumnHelper.accessor((row) => row.token, {
@@ -173,7 +173,7 @@ export const readyToClaimColumns = [
         </Token>
       );
     },
-    header: () => <span>Token</span>,
+    header: () => <span>{header[1]}</span>,
     footer: (e) => e.column.id,
   }),
   readyToClaimColumnHelper.accessor((row) => row.amount, {
@@ -184,7 +184,7 @@ export const readyToClaimColumns = [
         <span>$0.00</span>
       </Box>
     ),
-    header: () => <span>Amount</span>,
+    header: () => <span>{header[2]}</span>,
     footer: (e) => e.column.id,
   }),
 
@@ -207,7 +207,7 @@ export const readyToClaimColumns = [
         </Wallet>
       );
     },
-    header: () => <span>From/To</span>,
+    header: () => <span>{header[3]}</span>,
     footer: (e) => e.column.id,
   }),
 ];

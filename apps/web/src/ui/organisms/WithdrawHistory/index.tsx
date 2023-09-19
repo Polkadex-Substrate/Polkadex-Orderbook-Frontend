@@ -12,6 +12,7 @@ import {
   userMainAccountDetails,
 } from "@orderbook/core/providers/user/extensionWallet";
 import { WithdrawGroupItem } from "@orderbook/core/helpers";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
@@ -27,6 +28,8 @@ export const WithdrawHistory = ({
 }: {
   selectedAsset?: FilteredAssetProps;
 }) => {
+  const { t } = useTranslation("transfer");
+
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
 
   const { selectGetAsset } = useAssetsProvider();
@@ -57,7 +60,7 @@ export const WithdrawHistory = ({
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",
               fromWalletAddress: fundingWallet?.account?.address ?? "",
-              toWalletType: "Trading Account",
+              toWalletType: t("trading.type"),
             },
           };
         })
@@ -75,6 +78,7 @@ export const WithdrawHistory = ({
       selectedAsset?.name,
       fundingWallet?.account?.address,
       fundingWallet?.account?.meta?.name,
+      t,
     ]
   );
 
@@ -103,7 +107,7 @@ export const WithdrawHistory = ({
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",
               fromWalletAddress: fundingWallet?.account?.address ?? "",
-              toWalletType: "Funding Account",
+              toWalletType: t("trading.type"),
             },
           };
         });
@@ -117,6 +121,7 @@ export const WithdrawHistory = ({
       fundingWallet?.account?.meta?.name,
       fundingWallet?.account?.address,
       selectGetAsset,
+      t,
     ]
   );
 
@@ -166,27 +171,31 @@ export const WithdrawHistory = ({
   return (
     <S.Wrapper>
       <S.Header>
-        <h3>History</h3>
+        <h3>{t("historyTitle")}</h3>
       </S.Header>
       <Tab.Group>
         <S.Container>
           <S.Title>
             <S.TabList>
-              <S.TabItem>Pending({pendingWithdraws?.length})</S.TabItem>
+              <S.TabItem>
+                {t("tabs.pending")}({pendingWithdraws?.length})
+              </S.TabItem>
               <S.TabItemPending>
                 {pendingClaims > 0 && <div>{pendingClaims}</div>}
-                Ready to claim
+                {t("tabs.readyToClaim")}
               </S.TabItemPending>
-              <S.TabItem>Claimed({claimedWithdraws?.length})</S.TabItem>
+              <S.TabItem>
+                {t("tabs.claimed")}({claimedWithdraws?.length})
+              </S.TabItem>
             </S.TabList>
             <S.TitleWrapper>
-              <Search isFull placeholder="Search" />
+              <Search isFull placeholder={t("searchPlaceholder")} />
               <CheckboxCustom
                 checked={showSelectedCoins}
                 onChange={() => setShowSelectedCoins(!showSelectedCoins)}
                 labelProps={{ style: { whiteSpace: "nowrap" } }}
               >
-                Show only selected token
+                {t("historyFilterByToken")}
               </CheckboxCustom>
             </S.TitleWrapper>
           </S.Title>
