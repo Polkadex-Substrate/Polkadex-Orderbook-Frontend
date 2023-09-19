@@ -8,6 +8,7 @@ export type InputProps = {
   inputInfo?: string;
   fullWidth?: boolean;
   icon?: "Price" | "Amount";
+  hasError?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const MarketInput = ({
@@ -15,6 +16,7 @@ export const MarketInput = ({
   inputInfo,
   fullWidth = false,
   icon,
+  hasError = false,
   ...props
 }: InputProps) => {
   const IconComponent = icon?.length ? Icons[icon] : <div />;
@@ -27,7 +29,7 @@ export const MarketInput = ({
           {icon?.length && <IconComponent />}
           {label}
         </S.Label>
-        <S.Box inputInfo={inputInfo} fullWidth={fullWidth}>
+        <S.Box hasError={hasError} inputInfo={inputInfo} fullWidth={fullWidth}>
           <S.Input {...props} />
           {inputInfo && <S.Span>{inputInfo}</S.Span>}
         </S.Box>

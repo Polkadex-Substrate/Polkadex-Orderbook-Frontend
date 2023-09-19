@@ -20,6 +20,7 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { defaultConfig } from "@orderbook/core/config";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
+import { formatBalances } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
@@ -180,21 +181,27 @@ export const BalancesTemplate = () => {
                                   <Table.Cell>
                                     <S.Cell>
                                       <span>
-                                        {Number(balance?.free_balance || 0)}{" "}
+                                        {formatBalances(
+                                          balance?.free_balance || "0"
+                                        )}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Cell>
                                       <span>
-                                        {Number(balance?.onChainBalance || 0)}{" "}
+                                        {formatBalances(
+                                          balance?.onChainBalance || "0"
+                                        )}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>
                                   <Table.Cell>
                                     <S.Cell>
                                       <span>
-                                        {Number(balance?.reserved_balance || 0)}{" "}
+                                        {formatBalances(
+                                          balance?.reserved_balance || "0"
+                                        )}
                                       </span>
                                     </S.Cell>
                                   </Table.Cell>

@@ -30,15 +30,19 @@ export const Label = styled.label`
   `}
 `;
 export const Box = styled.div<Partial<InputProps>>`
-  ${({ theme, inputInfo, fullWidth }) => css`
+  ${({ theme, inputInfo, fullWidth, hasError }) => css`
     padding: 1rem;
     border-bottom: 0.1rem solid ${theme.colors.secondaryBackground};
     width: ${fullWidth ? "100%" : "20rem"};
-    transition: border 0.5s ease-in-out;
+    transition: border 0.3s ease-in-out;
     ${inputInfo && inputModifier.Flex()}
     &:hover {
       border-bottom-color: ${theme.colors.text};
     }
+    ${hasError &&
+    css`
+      border-bottom-color: ${theme.colors.primary} !important;
+    `}
   `}
 `;
 export const Span = styled.span`

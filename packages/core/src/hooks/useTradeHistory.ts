@@ -6,6 +6,9 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useTrades } from "@orderbook/core/providers/user/trades";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 
+import { decimalPlaces } from "../helpers";
+import { MIN_DIGITS_AFTER_DECIMAL } from "../constants";
+
 export function useTradeHistory(filters: Ifilters) {
   const { selectGetAsset } = useAssetsProvider();
   const profileState = useProfile();
@@ -53,11 +56,11 @@ export function useTradeHistory(filters: Ifilters) {
     let tradeHistoryList = list;
     if (filters?.onlyBuy) {
       tradeHistoryList = list.filter(
-        (data) => data.side?.toUpperCase() === "BID",
+        (data) => data.side?.toUpperCase() === "BID"
       );
     } else if (filters?.onlySell) {
       tradeHistoryList = list.filter(
-        (data) => data.side.toUpperCase() === "ASK",
+        (data) => data.side.toUpperCase() === "ASK"
       );
     }
 
@@ -84,10 +87,18 @@ export function useTradeHistory(filters: Ifilters) {
     setUpdatedTradeList(tradeHistoryList);
   }, [filters, list, currentMarket?.name, selectGetAsset]);
 
+  const priceFixed = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : MIN_DIGITS_AFTER_DECIMAL;
+
+  const amountFixed = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : MIN_DIGITS_AFTER_DECIMAL;
+
   return {
     trades: updatedTradeList,
-    priceFixed: currentMarket?.quote_precision,
-    amountFixed: currentMarket?.base_precision,
+    priceFixed,
+    amountFixed,
     userLoggedIn,
     isLoading: fetching,
     tradeHistoryNextToken: tradesState.tradeHistoryNextToken,
