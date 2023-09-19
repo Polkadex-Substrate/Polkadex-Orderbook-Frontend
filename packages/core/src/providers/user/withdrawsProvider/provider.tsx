@@ -43,6 +43,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     try {
       const nonce = getNonce();
       const api = nativeApiState.api;
+
+      // TODO: Handle error or fix types
       if (tradeAddress !== "" && keyringPair && api) {
         const payload = { asset_id: { asset }, amount, timestamp: nonce };
         const signingPayload = createWithdrawSigningPayload(
@@ -57,14 +59,13 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           tradeAddress
         );
         if (res.data.withdraw) {
-          const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw.body);
-          if (!res.is_success) {
+          const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw);
+          if (!resp.is_success) {
             dispatch(A.withdrawsData());
             settingsState.onHandleError(resp.body);
             return;
           }
         }
-        console.info("withdraw res: ", res);
         dispatch(A.withdrawsData());
         settingsState.onHandleNotification({
           type: "Success",
@@ -113,7 +114,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           api,
           extensionAccount.signer,
           extensionAccount.account.address,
-          sid,
+          sid
         );
         if (res.isSuccess) {
           dispatch(A.withdrawsClaimData({ sid }));
