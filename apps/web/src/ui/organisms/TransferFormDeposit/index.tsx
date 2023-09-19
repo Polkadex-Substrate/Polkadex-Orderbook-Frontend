@@ -234,8 +234,8 @@ export const TransferFormDeposit = ({
           <WalletCard
             searchable={otherPolkadexAccount}
             label={t("to")}
-            walletTypeLabel={t("trading.name")}
-            walletType={t("trading.type")}
+            walletTypeLabel={t("trading.type")}
+            walletType={t("trading.name")}
             walletName={t("trading.message")}
           >
             {otherPolkadexAccount && (
