@@ -277,9 +277,10 @@ export function usePlaceOrder(
 
       const convertedValue = cleanPositiveFloatInput(value.toString());
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
-        const total = convertedValue
-          ? calculateTotal(formPrice, convertedValue)
-          : "";
+        const total =
+          convertedValue && formPrice
+            ? calculateTotal(formPrice, convertedValue)
+            : "";
 
         setFormValues({
           ...formValues,
