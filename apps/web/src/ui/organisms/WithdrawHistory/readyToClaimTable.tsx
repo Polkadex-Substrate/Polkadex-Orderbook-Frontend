@@ -81,7 +81,7 @@ const BatchTable = ({
   });
   return (
     <S.TableWrapper>
-      <S.TableAside>
+      <S.TableAside loading={loading}>
         <h4>
           {t("batch")} {batch}
         </h4>

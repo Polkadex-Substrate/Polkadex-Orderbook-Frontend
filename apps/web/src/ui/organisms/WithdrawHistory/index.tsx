@@ -107,7 +107,7 @@ export const WithdrawHistory = ({
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",
               fromWalletAddress: fundingWallet?.account?.address ?? "",
-              toWalletType: t("funding.type"),
+              toWalletType: t("trading.type"),
             },
           };
         });

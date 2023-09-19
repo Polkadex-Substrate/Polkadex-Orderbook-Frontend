@@ -19,8 +19,8 @@ export const TableWrapper = styled.div`
     padding: 1rem 4rem;
   }
 `;
-export const TableAside = styled.div`
-  ${({ theme }) => css`
+export const TableAside = styled.div<{ loading: boolean }>`
+  ${({ theme, loading }) => css`
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -28,10 +28,12 @@ export const TableAside = styled.div`
       padding: 1rem 4rem;
       max-width: 14.5rem;
       border-radius: 0.4rem;
-      background: ${theme.colors.primary};
+      background: ${loading
+        ? theme.colors.primary
+        : theme.colors.secondaryBackground};
       transition: background-color ease 0.4s;
       white-space: nowrap;
-      :hover {
+      &:hover {
         background: ${theme.colors.primaryHover};
       }
     }

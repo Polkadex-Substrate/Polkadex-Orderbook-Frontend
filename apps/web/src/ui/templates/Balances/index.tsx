@@ -91,8 +91,8 @@ export const BalancesTemplate = () => {
               </S.Container>
               <S.Support>
                 <SupportCard
-                  title="Having trouble"
-                  description="We're available through Discord, so feel free to get in touch."
+                  title="Having Trouble?"
+                  description="Feel free to get in touch."
                   href="https://discord.com/invite/Uvua83QAzk"
                   buttonTitle="Contact us"
                   icon="Trouble"

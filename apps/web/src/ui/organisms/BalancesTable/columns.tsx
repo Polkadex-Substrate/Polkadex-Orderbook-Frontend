@@ -96,7 +96,7 @@ export const columns = (headers: string[]) => [
           <S.Icon>
             <Icons.Trading />
           </S.Icon>
-          Withdraw
+          Transfer
         </Link>
       </S.Actions>
     ),
