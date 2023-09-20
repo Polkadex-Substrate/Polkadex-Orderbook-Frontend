@@ -3,19 +3,15 @@ import {
   AssetsInteraction,
   Header,
   Menu,
-  DepositHistory,
-  TransferFormDeposit,
-  TransferFormWithdraw,
-  WithdrawHistory,
-  TransferForm,
+  CustomDeposit,
+  CustomWithdraw,
+  CustomTransfer,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
-
-import { TransferHistory } from "@/ui/organisms/TransferHistory";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
@@ -32,43 +28,36 @@ export const TransferTemplate = () => {
     onDisableSwitch,
   } = useTransfer();
 
-  const formComponent = {
-    withdraw: (
-      <TransferFormWithdraw
-        onTransferInteraction={() =>
-          onChangeType(type === "withdraw" ? "deposit" : "withdraw")
-        }
-        onOpenAssets={onAssetsInteraction}
-        selectedAsset={selectedAsset}
-      />
-    ),
+  const customComponent = {
     deposit: (
-      <TransferFormDeposit
-        onTransferInteraction={() =>
+      <CustomDeposit
+        selectedAsset={selectedAsset}
+        onOpenAssets={onAssetsInteraction}
+        onChangeType={() =>
           onChangeType(type === "deposit" ? "withdraw" : "deposit")
         }
-        onOpenAssets={onAssetsInteraction}
+      />
+    ),
+    withdraw: (
+      <CustomWithdraw
         selectedAsset={selectedAsset}
+        onOpenAssets={onAssetsInteraction}
+        onChangeType={() =>
+          onChangeType(type === "withdraw" ? "deposit" : "withdraw")
+        }
       />
     ),
     transfer: (
-      <TransferForm
-        onOpenAssets={onAssetsInteraction}
+      <CustomTransfer
         selectedAsset={selectedAsset}
+        onOpenAssets={onAssetsInteraction}
         onDisableSwitch={onDisableSwitch}
         switchEnable={switchEnable}
       />
     ),
   };
 
-  const historyComponent = {
-    withdraw: <WithdrawHistory selectedAsset={selectedAsset} />,
-    deposit: <DepositHistory selectedAsset={selectedAsset} />,
-    transfer: <TransferHistory selectedAsset={selectedAsset} />,
-  };
-
-  const FormComponent = () => formComponent[type];
-  const HistoryComponent = () => historyComponent[type];
+  const RenderComponent = () => customComponent[type];
 
   return (
     <>
@@ -104,16 +93,7 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              <S.Content>
-                <S.Form>
-                  <S.Container>
-                    <FormComponent />
-                  </S.Container>
-                </S.Form>
-                <S.History>
-                  <HistoryComponent />
-                </S.History>
-              </S.Content>
+              <RenderComponent />
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>

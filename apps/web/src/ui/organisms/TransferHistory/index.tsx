@@ -25,15 +25,18 @@ import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const TransferHistory = ({
   selectedAsset,
+  address,
 }: {
   selectedAsset?: FilteredAssetProps;
+  address: string;
 }) => {
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const { t } = useTranslation("transfer");
   const { data, isLoading, refetch } = useTransferHistory(
-    defaultConfig.subscanApi
+    defaultConfig.subscanApi,
+    address
   );
   const { selectGetAsset } = useAssetsProvider();
   const { allAccounts } = useExtensionWallet();

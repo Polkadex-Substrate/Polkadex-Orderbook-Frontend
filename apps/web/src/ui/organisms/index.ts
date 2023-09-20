@@ -32,3 +32,6 @@ export * from "./AssetsInteraction";
 export * from "./AssetsTable";
 export * from "./UnlockModal";
 export * from "./BalancesTable";
+export * from "./CustomDeposit";
+export * from "./CustomTransfer";
+export * from "./CustomWithdraw";

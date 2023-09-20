@@ -35,6 +35,8 @@ export const TransferForm = ({
   selectedAsset,
   switchEnable,
   onDisableSwitch,
+  selectedTransferWallet,
+  onSelectedTransferWallet,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
@@ -110,9 +112,6 @@ export const TransferForm = ({
     [selectedWallet?.account?.address]
   );
 
-  const [selectedFundingWallet, setSelectedFundingWallet] =
-    useState<ExtensionAccount | null>(fundingWallet ?? null);
-
   const [fromQuery, setFromQuery] = useState("");
   const filteredFundingWallets: ExtensionAccount[] = useMemo(() => {
     const queryRes = allAccounts?.filter((e) => {
@@ -128,8 +127,8 @@ export const TransferForm = ({
   }, [fromQuery, allAccounts]);
 
   const fromAccountAddress = useMemo(
-    () => transformAddress(selectedFundingWallet?.account?.address ?? "", 20),
-    [selectedFundingWallet?.account?.address]
+    () => transformAddress(selectedTransferWallet?.account?.address ?? "", 20),
+    [selectedTransferWallet?.account?.address]
   );
 
   const {
@@ -155,20 +154,20 @@ export const TransferForm = ({
       // TODO: Handle Error...
 
       try {
-        const address = selectedWallet?.account.address;
+        const address = selectedWallet?.account?.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
           : { asset: selectedAsset?.assetId || null };
 
         // TODO: Fix types or Handle Error
-        if (!address || !selectedFundingWallet) return;
-        onDisableSwitch();
+        if (!address || !selectedTransferWallet) return;
+        onDisableSwitch(true);
         await mutateAsync({
           asset,
           dest: address,
           amount: amount.toString(),
-          account: selectedFundingWallet,
+          account: selectedTransferWallet,
         });
       } finally {
         resetForm({ values: initialValues });
@@ -199,9 +198,9 @@ export const TransferForm = ({
           >
             <AccountSelect
               pasteable={false}
-              selectedAccount={selectedFundingWallet}
+              selectedAccount={selectedTransferWallet}
               onQuery={(e) => setFromQuery(e)}
-              onSelectAccount={setSelectedFundingWallet}
+              onSelectAccount={onSelectedTransferWallet}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}
             />
@@ -268,7 +267,12 @@ export const TransferForm = ({
         </S.Form>
         <S.Footer>
           <button
-            disabled={!(isValid && dirty) || isLoading || switchEnable}
+            disabled={
+              !(isValid && dirty) ||
+              isLoading ||
+              switchEnable ||
+              !selectedWallet?.account?.address
+            }
             type="submit"
           >
             {t("transferButton")}

@@ -78,8 +78,6 @@ export function useTransfer() {
     type,
     selectedAsset,
     switchEnable,
-    onDisableSwitch: () => {
-      setSwitchEnable((v) => !v);
-    },
+    onDisableSwitch: (v = false) => setSwitchEnable(v),
   };
 }

@@ -1,31 +1,27 @@
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useInfiniteQuery } from "react-query";
 import { QUERY_KEYS, SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 import { SUBSCAN_GETTERS } from "@orderbook/core/helpers/subscan";
 
-export const useTransferHistory = (apiKey: string) => {
-  const { selectedAccount } = useProfile();
-  const mainAddress = selectedAccount?.mainAddress;
-
+export const useTransferHistory = (apiKey: string, address: string) => {
   return useInfiniteQuery({
-    queryKey: QUERY_KEYS.blockchainTransfers(mainAddress),
+    queryKey: QUERY_KEYS.blockchainTransfers(address),
     queryFn: async ({ pageParam = 0 }) => {
       const data = await SUBSCAN_GETTERS.fetchTransfers(
         apiKey,
-        mainAddress,
+        address,
         pageParam
       );
       return data.data;
     },
     refetchInterval: 15000,
-    enabled: mainAddress?.length > 0,
+    enabled: address?.length > 0,
     getNextPageParam: (lastPage, pages) => {
       // If the last page contains less than required results, don't fetch the next page
-      if (lastPage.transfers.length < SUBSCAN_PER_PAGE_LIMIT) {
+      if (lastPage?.transfers?.length < SUBSCAN_PER_PAGE_LIMIT) {
         return false;
       }
       // Otherwise, determine the next page number based on the length of allPages
-      return pages.length;
+      return pages?.length;
     },
   });
 };
