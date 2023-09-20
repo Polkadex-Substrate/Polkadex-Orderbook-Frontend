@@ -5102,6 +5102,11 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
+"@talismn/connect-wallets@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@talismn/connect-wallets/-/connect-wallets-1.2.3.tgz#4aa91f2c554d692e9f49472f74dcc96fca319df5"
+  integrity sha512-6hLYeDnMjrlsNLF6a9e7ngxKMkKW3uTC2IbBjtTPq9fxA1VvApmxR8egboPzU7sgFQEuUFP36KN1hFAtfRIVhw==
+
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.3.0.tgz#fe98a93fe789247e998c75e74e9c7c63217aa276"
