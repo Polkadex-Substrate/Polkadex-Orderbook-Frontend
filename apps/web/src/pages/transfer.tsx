@@ -1,10 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
-import {
-  useExtensionWallet,
-  selectIsAddressInExtension,
-} from "@orderbook/core/providers/user/extensionWallet";
+import { useEffect } from "react";
 import {
   AssetsProvider,
   BalancesProvider,
@@ -32,29 +28,15 @@ const Transfer = () => {
   const { disabled } = useDisabledPages();
 
   const {
-    authInfo: { isAuthenticated: hasUser },
+    authInfo: { isAuthenticated },
     auth: { isLoading },
-    selectedAccount: { mainAddress },
   } = useProfile();
-  const profileState = useProfile();
-  const extensionWalletState = useExtensionWallet();
 
-  const isRegistered =
-    mainAddress && profileState.userData?.mainAccounts?.includes(mainAddress);
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) router?.push("/trading/");
+  }, [isLoading, isAuthenticated, router]);
 
-  const hasSelectedAccount = selectIsAddressInExtension(
-    mainAddress,
-    extensionWalletState.allAccounts
-  );
-
-  const shouldRedirect = useMemo(
-    () => !hasUser || !isRegistered || !hasSelectedAccount,
-    [hasUser, isRegistered, hasSelectedAccount]
-  );
-
-  if (!isLoading && !hasUser) router?.push("/trading");
-
-  if (shouldRedirect || disabled) return <div />;
+  if (!isAuthenticated || disabled || isLoading) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>

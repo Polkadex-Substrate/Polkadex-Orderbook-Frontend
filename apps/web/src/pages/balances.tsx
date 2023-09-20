@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { AssetsProvider, BalancesProvider } from "@orderbook/core/providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { useEffect } from "react";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -21,13 +22,15 @@ const Balances = () => {
   const { disabled } = useDisabledPages();
 
   const {
-    authInfo: { isAuthenticated: hasUser },
+    authInfo: { isAuthenticated },
     auth: { isLoading },
   } = useProfile();
 
-  if (!isLoading && !hasUser) router?.push("/trading/");
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) router?.push("/trading/");
+  }, [isLoading, isAuthenticated, router]);
 
-  if (!hasUser || disabled || isLoading) return <div />;
+  if (!isAuthenticated || disabled || isLoading) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>
