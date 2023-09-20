@@ -32,7 +32,7 @@ export const ModalPanel = styled(Dialog.Panel)`
     flex-direction: column;
     justify-content: space-between;
     gap: 8rem;
-    max-width: 45rem;
+    max-width: 46rem;
     width: 100%;
     background: ${theme.colors.primaryBackground};
     padding: 2rem;
