@@ -1,26 +1,15 @@
 import {
-  SortingState,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
 import classNames from "classnames";
-import { useTransactionsProvider } from "@orderbook/core/providers/user/transactionsProvider";
-import { intlFormat } from "date-fns";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
 import { useTranslation } from "react-i18next";
 
-import { columns as getColumns } from "./columns";
 import * as S from "./styles";
-import * as T from "./types";
 import { DepositHistorySkeleton } from "./skeleton";
+import { useDepositHistory } from "./useDepositHistory";
 
 import { CheckboxCustom, ResultFound, Search } from "@/ui/molecules";
 import { Icons } from "@/ui/atoms";
@@ -32,88 +21,16 @@ export const DepositHistory = ({
   selectedAsset?: FilteredAssetProps;
 }) => {
   const { t } = useTranslation("transfer");
+  const {
+    showSelectedCoins,
+    onShowSelectedCoins,
+    sorting,
+    setSorting,
+    data,
+    columns,
+    loading,
+  } = useDepositHistory({ selectedAsset });
 
-  const columns = useMemo(
-    () =>
-      getColumns([
-        t("tableHeader.date"),
-        t("tableHeader.name"),
-        t("tableHeader.amount"),
-        t("tableHeader.fees"),
-        t("tableHeader.transfer"),
-      ]),
-    [t]
-  );
-
-  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
-  const [sorting, setSorting] = useState<SortingState>([]);
-
-  const { deposits, loading: isTransactionsFetching } =
-    useTransactionsProvider();
-
-  const { selectedAccount } = useProfile();
-  const { allAccounts } = useExtensionWallet();
-
-  const { mainAddress } = selectedAccount;
-  const { selectGetAsset } = useAssetsProvider();
-
-  const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
-  );
-
-  const data = useMemo(
-    () =>
-      deposits
-        ?.filter((e) => {
-          if (showSelectedCoins) {
-            const assetName = selectGetAsset(e.asset)?.name;
-            return assetName === selectedAsset?.name;
-          }
-          return e;
-        })
-        ?.map((e) => {
-          const token = selectGetAsset(e.asset);
-          return {
-            stid: e.stid,
-            snapshot_id: e.snapshot_id,
-            amount: e.amount,
-            fee: e.fee,
-            main_account: e.main_account,
-            time: intlFormat(
-              new Date(e.time),
-              {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              },
-              { locale: "EN" }
-            ),
-            status: e.status,
-            txn_type: e.txn_type,
-            token: {
-              ticker: token?.symbol,
-              name: token?.name,
-            },
-            wallets: {
-              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-              fromWalletAddress: fundingWallet?.account?.address ?? "",
-              toWalletType: t("trading.type"),
-            },
-          } as T.Props;
-        }),
-    [
-      deposits,
-      selectGetAsset,
-      fundingWallet?.account?.meta?.name,
-      fundingWallet?.account?.address,
-      selectedAsset?.name,
-      showSelectedCoins,
-      t,
-    ]
-  );
   const table = useReactTable({
     data,
     state: {
@@ -134,14 +51,14 @@ export const DepositHistory = ({
           <CheckboxCustom
             labelProps={{ style: { whiteSpace: "nowrap" } }}
             checked={showSelectedCoins}
-            onChange={() => setShowSelectedCoins(!showSelectedCoins)}
+            onChange={onShowSelectedCoins}
           >
             {t("historyFilterByToken")}
           </CheckboxCustom>
         </S.TitleWrapper>
       </S.Title>
       <S.Table>
-        {isTransactionsFetching ? (
+        {loading ? (
           <DepositHistorySkeleton />
         ) : data?.length ? (
           <table>
@@ -179,22 +96,25 @@ export const DepositHistory = ({
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row, ti) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
-                    const lastCell = table.getRowModel().rows.length === ti + 1;
-                    const tdClassName = classNames({ last: lastCell });
-                    return (
-                      <td className={tdClassName} key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+              {table.getRowModel().rows.map((row, ti) => {
+                return (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      const lastCell =
+                        table.getRowModel().rows.length === ti + 1;
+                      const tdClassName = classNames({ last: lastCell });
+                      return (
+                        <td className={tdClassName} key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (
