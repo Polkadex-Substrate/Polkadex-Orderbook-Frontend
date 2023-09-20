@@ -8,6 +8,7 @@ import {
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 import { AssetsProps } from "@orderbook/core/hooks";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 import { columns as getColumns } from "./columns";
@@ -16,17 +17,20 @@ import { Icons } from "@/ui/atoms";
 import { ResultFound } from "@/ui/molecules";
 
 export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
+  const { t } = useTranslation("balances");
+
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const columns = useMemo(
     () =>
       getColumns([
-        "Name",
-        "Funding Account",
-        "Trading Account",
-        "In Orders",
-        "Actions",
+        t("tableHeaderName"),
+        t("fundingAccount"),
+        t("tradingAccount"),
+        t("tableHeaderInOrders"),
+        t("tableHeaderActions"),
       ]),
-    []
+    [t]
   );
 
   const table = useReactTable({

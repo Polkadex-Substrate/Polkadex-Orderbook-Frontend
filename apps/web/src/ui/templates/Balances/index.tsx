@@ -91,17 +91,17 @@ export const BalancesTemplate = () => {
               </S.Container>
               <S.Support>
                 <SupportCard
-                  title="Having Trouble?"
-                  description="Feel free to get in touch."
+                  title={t("troubleTitle")}
+                  description={t("troubleDescription")}
                   href="https://discord.com/channels/859180272335323166/1034160372954964089"
-                  buttonTitle="Contact us"
+                  buttonTitle={t("troubleButton")}
                   icon="Trouble"
                 />
                 <SupportCard
-                  title="Contribute to Orderbook's growth!"
-                  description="Share with us which tokens you'd like to see."
+                  title={t("contributeTitle")}
+                  description={t("contributeDescription")}
                   href="https://t.me/Polkadex"
-                  buttonTitle="Send feedback"
+                  buttonTitle={t("contributeButton")}
                   icon="TokenListing"
                 />
               </S.Support>

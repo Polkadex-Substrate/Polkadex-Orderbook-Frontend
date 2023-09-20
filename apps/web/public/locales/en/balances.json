@@ -10,5 +10,14 @@
   "tradingAccount": "Trading Account",
   "fundingAccount": "Funding Account",
   "inOrders": "In Orders",
-  "actions": "Actions"
+  "actions": "Actions",
+  "troubleTitle": "Having Trouble?",
+  "troubleDescription": "Feel free to get in touch.",
+  "troubleButton":"Contact us",
+  "contributeTitle": "Contribute to Orderbook's growth!",
+  "contributeDescription": "Share with us which tokens you'd like to see.",
+  "contributeButton":"Send feedback",
+  "tableHeaderName":"Name",
+  "tableHeaderInOrders":"In Orders",
+  "tableHeaderActions":"Actions"
 }
