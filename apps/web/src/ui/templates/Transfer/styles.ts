@@ -27,7 +27,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 1rem;
   @media screen and (min-width: 590px) {
     margin-left: 2rem;
   }
@@ -44,14 +43,34 @@ export const ContainerMain = styled.div`
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
-
 export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 100rem;
+  @media screen and (min-width: 1110px) {
+    padding: 4rem;
+  }
+`;
+
+export const Title = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  align-self: flex-end;
+  span {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+`;
+
+export const Heading = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    padding: 2rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+
     h1 {
       font-size: 2.5rem;
       font-weight: 500;
@@ -61,17 +80,18 @@ export const Header = styled.div`
       font-weight: normal;
       opacity: 0.5;
     }
-    @media screen and (min-width: 1110px) {
-      padding: 4rem;
-    }
   `}
 `;
 
 export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
 `;
+
 export const Form = styled.div`
   display: flex;
   flex-direction: column;
@@ -93,17 +113,6 @@ export const HistoryWrapper = styled.div`
   ${({ theme }) => css`
     border-top: 1px solid ${theme.colors.secondaryBackground};
   `}
-`;
-
-export const Title = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  align-self: flex-end;
-  span {
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
 `;
 
 export const Container = styled.div``;

@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
     p {
       color: ${theme.colors.text};
       white-space: nowrap;
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-weight: 500;
       span {
         opacity: 0.5;
@@ -32,16 +32,7 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
   flex: 1;
-  p {
-    white-space: nowrap;
-    font-size: 1.5rem;
-    font-weight: 500;
-    span {
-      opacity: 0.5;
-    }
-  }
 `;
 
 export const Actions = styled.div`

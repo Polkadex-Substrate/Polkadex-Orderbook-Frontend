@@ -195,5 +195,5 @@ export const EmptyData = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 50;
+  padding: 2rem;
 `;

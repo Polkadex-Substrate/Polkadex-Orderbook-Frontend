@@ -33,31 +33,34 @@ export const WalletCard = ({
           </S.Paragraph>
         )}
       </S.Header>
-      {!searchable && (
-        <S.Footer>
-          <Skeleton height="4px" width="5rem" loading={!walletName}>
-            {walletAddress ? (
-              <>
-                <S.Icon>
-                  <Icons.Wallet />
-                </S.Icon>
-                <Skeleton height="4px" width="5rem" loading={!walletAddress}>
+      <S.Footer>
+        <Skeleton height="4px" width="5rem" loading={!walletName}>
+          {walletAddress && (
+            <>
+              <S.Icon>
+                <Icons.Wallet />
+              </S.Icon>
+              <Skeleton height="4px" width="5rem" loading={!walletAddress}>
+                {searchable ? (
+                  <span>{walletAddress}</span>
+                ) : (
                   <p>
                     {walletName} <span>• {walletAddress}</span>
                   </p>
-                </Skeleton>
-              </>
-            ) : (
-              <S.Message>
-                <div>
-                  <Icons.InformationAlert />
-                </div>
-                <p>{walletName}</p>
-              </S.Message>
-            )}
-          </Skeleton>
-        </S.Footer>
-      )}
+                )}
+              </Skeleton>
+            </>
+          )}
+          {!searchable && !walletAddress && (
+            <S.Message>
+              <div>
+                <Icons.InformationAlert />
+              </div>
+              <p>{walletName}</p>
+            </S.Message>
+          )}
+        </Skeleton>
+      </S.Footer>
     </S.Wrapper>
   );
 };

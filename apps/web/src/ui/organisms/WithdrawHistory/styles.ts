@@ -8,16 +8,21 @@ export const Wrapper = styled.div`
 `;
 
 export const TableWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  padding: 1rem 2rem;
-  gap: 2rem;
-  @media screen and (max-width: 890px) {
-    flex-direction: column;
-  }
-  @media screen and (min-width: 1110px) {
-    padding: 1rem 4rem;
-  }
+  ${({ theme }) => css`
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem 2rem;
+    gap: 2rem;
+    &:not(:last-child) {
+      border-bottom: 1px solid ${theme.colors.tertiaryBackgroundOpacity};
+    }
+    @media screen and (max-width: 890px) {
+      flex-direction: column;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 1rem 4rem;
+    }
+  `}
 `;
 export const TableAside = styled.div<{ loading: boolean }>`
   ${({ theme, loading }) => css`
@@ -121,7 +126,6 @@ export const Container = styled.div`
     width: 100%;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 export const Table = styled.div`
@@ -311,7 +315,7 @@ export const EmptyData = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 50;
+  padding: 2rem;
 `;
 
 export const SkeletonComponent = styled.div`

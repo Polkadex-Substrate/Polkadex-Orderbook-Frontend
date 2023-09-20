@@ -26,9 +26,9 @@ export function useTransfer() {
   const { loading: withdrawLoading } = useWithdrawsProvider();
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
-  const [otherPolkadexAccount, setOtherPolkadexAccount] = useState(false);
   const [assetsInteraction, setAssetsInteraction] = useState(false);
-  const [isDeposit, setIsDeposit] = useState(true);
+
+  const [type, setType] = useState<T.SwitchType>("deposit");
 
   const onAssetsInteraction = () => onChangeState(setAssetsInteraction);
   const onChangeAsset = (asset: T.FilteredAssetProps) => {
@@ -73,10 +73,8 @@ export function useTransfer() {
     assetsInteraction,
     onAssetsInteraction,
     onChangeAsset,
-    onChangeIsDeposit: () => onChangeState(setIsDeposit),
-    otherPolkadexAccount,
-    onChangeOtherPolkadexAccount: () => onChangeState(setOtherPolkadexAccount),
+    onChangeType: (v: T.SwitchType) => setType(v),
+    type,
     selectedAsset,
-    isDeposit,
   };
 }

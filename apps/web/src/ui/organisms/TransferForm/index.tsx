@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -10,28 +10,33 @@ import {
 import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { ExtensionAccount } from "@orderbook/core/providers/types";
+import { useAssetTransfer } from "@orderbook/core/hooks";
 import { useTranslation } from "react-i18next";
+
+import { CustomAddress } from "../TransferFormWithdraw/types";
 
 import * as S from "./styles";
 import * as T from "./types";
 
-import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
+import {
+  AccountSelect,
+  Loading,
+  Popover,
+  TokenCard,
+  WalletCard,
+} from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 
 const initialValues = { amount: 0.0 };
 
-export const TransferFormDeposit = ({
-  onTransferInteraction,
-  onOpenAssets,
-  selectedAsset,
-}: T.Props) => {
+export const TransferForm = ({ onOpenAssets, selectedAsset }: T.Props) => {
   const { t } = useTranslation("transfer");
 
   const { allAccounts } = useExtensionWallet();
-  const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
 
+  const { mutate, isLoading } = useAssetTransfer();
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -63,9 +68,62 @@ export const TransferFormDeposit = ({
   };
 
   const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
-  const fundingWalletAddress = useMemo(
-    () => transformAddress(fundingWallet?.account?.address ?? ""),
-    [fundingWallet?.account?.address]
+
+  const [selectedWallet, setSelectedWallet] = useState<
+    ExtensionAccount | CustomAddress
+  >();
+
+  const [toQuery, setToQuery] = useState("");
+
+  const filteredWallets: ExtensionAccount[] | CustomAddress[] = useMemo(() => {
+    if (toQuery === "") return allAccounts;
+
+    const filteredAccounts = allAccounts?.filter((e) => {
+      const { address, meta } = e.account;
+      const queryRes = toQuery.toLowerCase();
+      return (
+        address.toLowerCase().includes(queryRes) ||
+        meta?.name?.toLowerCase().includes(queryRes)
+      );
+    });
+
+    if (filteredAccounts.length) return filteredAccounts;
+
+    const customAddress = {
+      account: {
+        address: toQuery,
+      },
+    };
+
+    setSelectedWallet(customAddress);
+    return [...allAccounts, customAddress];
+  }, [toQuery, allAccounts]);
+
+  const toAccountAddress = useMemo(
+    () => transformAddress(selectedWallet?.account?.address ?? "", 20),
+    [selectedWallet?.account?.address]
+  );
+
+  const [selectedFundingWallet, setSelectedFundingWallet] =
+    useState<ExtensionAccount | null>(fundingWallet ?? null);
+
+  const [fromQuery, setFromQuery] = useState("");
+  const filteredFundingWallets: ExtensionAccount[] = useMemo(() => {
+    const queryRes = allAccounts?.filter((e) => {
+      const { address, meta } = e.account;
+      return (
+        address?.toLowerCase().includes(fromQuery) ||
+        meta?.name?.toLowerCase().includes(fromQuery)
+      );
+    });
+
+    if (fromQuery === "" || !queryRes?.length) return allAccounts;
+    return queryRes;
+  }, [fromQuery, allAccounts]);
+
+  const fromAccountAddress = useMemo(
+    () => transformAddress(selectedFundingWallet?.account?.address ?? "", 20),
+    [selectedFundingWallet?.account?.address]
   );
 
   const {
@@ -91,19 +149,20 @@ export const TransferFormDeposit = ({
       // TODO: Handle Error...
 
       try {
-        const address = fundingWallet.account.address;
+        const address = selectedWallet?.account.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
           : { asset: selectedAsset?.assetId || null };
 
         // TODO: Fix types or Handle Error
-        if (!address || !fundingWallet) return;
+        if (!address || !selectedFundingWallet) return;
 
-        await onFetchDeposit({
+        mutate({
           asset,
-          amount,
-          account: fundingWallet,
+          dest: address,
+          amount: amount.toString(),
+          account: selectedFundingWallet,
         });
       } finally {
         resetForm({ values: initialValues });
@@ -111,10 +170,12 @@ export const TransferFormDeposit = ({
     },
   });
 
+  useEffect(() => resetForm(), [resetForm]);
+
   return (
     <Loading
       style={{ maxWidth: "100rem" }}
-      isVisible={loading}
+      isVisible={isLoading}
       hasBg={false}
       message=""
       spinner="Keyboard"
@@ -122,24 +183,43 @@ export const TransferFormDeposit = ({
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
+            searchable
             label={t("from")}
             walletTypeLabel={t("funding.name")}
             walletType={t("funding.type")}
             walletName={fundingWalletName}
-            walletAddress={fundingWalletAddress}
-          />
-          <S.WalletsButton type="button" onClick={onTransferInteraction}>
+            walletAddress={fromAccountAddress}
+          >
+            <AccountSelect
+              pasteable={false}
+              selectedAccount={selectedFundingWallet}
+              onQuery={(e) => setFromQuery(e)}
+              onSelectAccount={setSelectedFundingWallet}
+              data={filteredFundingWallets}
+              placeholder={t("funding.betweenPlaceholder")}
+            />
+          </WalletCard>
+          <S.WalletsButton disabled type="button">
             <div>
               <Icons.Trading />
             </div>
             <span>{t("switch")}</span>
           </S.WalletsButton>
           <WalletCard
+            searchable
             label={t("to")}
             walletTypeLabel={t("trading.type")}
             walletType={t("trading.name")}
             walletName={t("trading.message")}
-          />
+            walletAddress={toAccountAddress}
+          >
+            <AccountSelect
+              selectedAccount={selectedWallet}
+              onQuery={(e) => setToQuery(e)}
+              onSelectAccount={setSelectedWallet}
+              data={filteredWallets}
+            />
+          </WalletCard>
         </S.Wallets>
         <S.Form>
           <TokenCard
@@ -180,7 +260,7 @@ export const TransferFormDeposit = ({
           </S.Amount>
         </S.Form>
         <S.Footer>
-          <button disabled={!(isValid && dirty) || loading} type="submit">
+          <button disabled={!(isValid && dirty) || isLoading} type="submit">
             {t("transferButton")}
           </button>
         </S.Footer>

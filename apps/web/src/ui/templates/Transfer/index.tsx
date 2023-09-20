@@ -7,6 +7,7 @@ import {
   TransferFormDeposit,
   TransferFormWithdraw,
   WithdrawHistory,
+  TransferForm,
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "react-i18next";
@@ -25,10 +26,8 @@ export const TransferTemplate = () => {
     onAssetsInteraction,
     onChangeAsset,
     selectedAsset,
-    onChangeIsDeposit,
-    otherPolkadexAccount,
-    onChangeOtherPolkadexAccount,
-    isDeposit,
+    type,
+    onChangeType,
   } = useTransfer();
 
   return (
@@ -50,30 +49,46 @@ export const TransferTemplate = () => {
           <S.Wrapper>
             <S.ContainerMain>
               <S.Header>
-                <h1>{t("heading")}</h1>
-                <h2>{t("subheading")}</h2>
+                <S.Heading>
+                  <h1>{t("heading")}</h1>
+                  <h2>{t("subheading")}</h2>
+                </S.Heading>
+                <S.Title>
+                  <Switch
+                    disable={loading}
+                    isActive={type === "transfer"}
+                    onChange={() =>
+                      onChangeType(type === "transfer" ? "deposit" : "transfer")
+                    }
+                  />
+                  <span>{t("switcher")}</span>
+                </S.Title>
               </S.Header>
               <S.Content>
                 <S.Form>
-                  <S.Title>
-                    <Switch
-                      disable={loading} // TODO: Check otherPollkadexAccountSelected loading
-                      isActive={otherPolkadexAccount}
-                      onChange={onChangeOtherPolkadexAccount}
-                    />
-                    <span>{t("switcher")}</span>
-                  </S.Title>
                   <S.Container>
-                    {isDeposit || otherPolkadexAccount ? (
+                    {type === "transfer" ? (
+                      <TransferForm
+                        onOpenAssets={onAssetsInteraction}
+                        selectedAsset={selectedAsset}
+                      />
+                    ) : type === "deposit" ? (
                       <TransferFormDeposit
-                        otherPolkadexAccount={otherPolkadexAccount}
-                        onTransferInteraction={onChangeIsDeposit}
+                        onTransferInteraction={() =>
+                          onChangeType(
+                            type === "deposit" ? "withdraw" : "deposit"
+                          )
+                        }
                         onOpenAssets={onAssetsInteraction}
                         selectedAsset={selectedAsset}
                       />
                     ) : (
                       <TransferFormWithdraw
-                        onTransferInteraction={onChangeIsDeposit}
+                        onTransferInteraction={() =>
+                          onChangeType(
+                            type === "withdraw" ? "deposit" : "withdraw"
+                          )
+                        }
                         onOpenAssets={onAssetsInteraction}
                         selectedAsset={selectedAsset}
                       />
@@ -81,9 +96,9 @@ export const TransferTemplate = () => {
                   </S.Container>
                 </S.Form>
                 <S.History>
-                  {otherPolkadexAccount ? (
+                  {type === "transfer" ? (
                     <TransferHistory selectedAsset={selectedAsset} />
-                  ) : isDeposit ? (
+                  ) : type === "deposit" ? (
                     <DepositHistory selectedAsset={selectedAsset} />
                   ) : (
                     <WithdrawHistory selectedAsset={selectedAsset} />

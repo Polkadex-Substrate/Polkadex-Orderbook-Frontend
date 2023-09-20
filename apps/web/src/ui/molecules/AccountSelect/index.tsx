@@ -40,9 +40,6 @@ export const AccountSelect = ({
             <S.Wrapper>
               <Skeleton height="4px" width="5rem" loading={loading}>
                 <S.Container>
-                  <S.Icon>
-                    <Icons.Wallet />
-                  </S.Icon>
                   <Skeleton height="4px" width="5rem" loading={loading}>
                     <Combobox.Input
                       displayValue={(e: ExtensionAccount | CustomAddress) => {
@@ -51,9 +48,7 @@ export const AccountSelect = ({
                           ? transformAddress(e?.account?.address)
                           : e?.account?.address;
 
-                        return addressName && address
-                          ? `${addressName} • (${address})`
-                          : address;
+                        return addressName ?? address;
                       }}
                       placeholder={placeholder}
                       onChange={(event) => onQuery(event.target.value)}

@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
     width: 100%;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 
@@ -203,7 +202,7 @@ export const EmptyData = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 50;
+  padding: 2rem;
 `;
 
 export const SkeletonComponent = styled.div`

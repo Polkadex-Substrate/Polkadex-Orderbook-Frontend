@@ -15,7 +15,7 @@
   "funding": {
     "label": "From",
     "name": "Extension wallet",
-    "type": " Funding account",
+    "type": "Funding account",
     "betweenPlaceholder": "Select your Polkadex address"
   },
   "switch": "Switch",

@@ -17,7 +17,7 @@ export const useTransferHistory = (apiKey: string) => {
       );
       return data.data;
     },
-    // refetchInterval: loading ? 15000 : undefined, // TODO: refetch only if deposit isSuscces..
+    refetchInterval: 15000,
     enabled: mainAddress?.length > 0,
     getNextPageParam: (lastPage, pages) => {
       // If the last page contains less than required results, don't fetch the next page

@@ -125,7 +125,7 @@ export const TransferHistory = ({
             {t("historyFilterByToken")}
           </CheckboxCustom>
           <S.Button type="button" onClick={() => refetch()}>
-            Refetch
+            Refresh
           </S.Button>
         </S.TitleWrapper>
       </S.Title>
