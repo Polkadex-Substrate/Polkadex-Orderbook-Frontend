@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { getWallets } from "@talismn/connect-wallets";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
@@ -31,39 +32,39 @@ export const SettingProvider: T.SettingComponent = ({
     (value: A.ChangeThemeSettings["payload"]) => {
       dispatch(A.onChangeThemeSettings(value));
     },
-    [],
+    []
   );
 
   const onChangeLanguage = useCallback(
     (value: A.ChangeLanguageSettings["payload"]) =>
       dispatch(A.onChangeLanguageSettings(value)),
-    [],
+    []
   );
 
   const onChangeCurrency = useCallback(
     (value: A.ChangeCurrencySettings["payload"]) =>
       dispatch(A.onChangeCurrencySettings(value)),
-    [],
+    []
   );
 
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
-    [],
+    []
   );
 
   const onRemoveNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationDeleteById(value)),
-    [],
+    []
   );
 
   const onReadNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
-    [],
+    []
   );
 
   const onClearNotifications = useCallback(
     () => dispatch(A.notificationDeleteAll()),
-    [],
+    []
   );
 
   const onHandleNotification = useCallback(
@@ -72,7 +73,7 @@ export const SettingProvider: T.SettingComponent = ({
       else defaultToast.onSuccess(payload.message);
       dispatch(A.notificationPush(payload));
     },
-    [defaultToast],
+    [defaultToast]
   );
 
   const onCheckExtension = useCallback(async () => {
@@ -85,6 +86,34 @@ export const SettingProvider: T.SettingComponent = ({
   useEffect(() => {
     onCheckExtension();
   }, [onCheckExtension]);
+
+  // useEffect(() => {
+  //   const installedWallets = getWallets();
+  //   console.log(installedWallets, "extensions list is here");
+
+  //   // get talisman from the array of installed wallets
+  //   const talismanWallet = installedWallets.find(
+  //     (wallet) => wallet.extensionName === "polkadot-js"
+  //   );
+  //   console.log(talismanWallet, "talismanWallet list is here");
+
+  //   // enable the wallet
+  //   if (talismanWallet) {
+  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //     // @ts-ignore
+  //     talismanWallet
+  //       .enable("@polkadot/extension-dapp")
+  //       .then(() => {
+  //         talismanWallet.subscribeAccounts((accounts) => {
+  //           // do anything you want with the accounts provided by the wallet
+  //           console.log("got accounts", accounts);
+  //         });
+  //       })
+  //       .catch((e) => {
+  //         console.log(e, "error is here");
+  //       });
+  //   }
+  // }, []);
 
   return (
     <Provider
