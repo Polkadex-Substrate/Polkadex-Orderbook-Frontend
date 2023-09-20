@@ -28,6 +28,8 @@ export const TransferTemplate = () => {
     selectedAsset,
     type,
     onChangeType,
+    switchEnable,
+    onDisableSwitch,
   } = useTransfer();
 
   return (
@@ -55,7 +57,7 @@ export const TransferTemplate = () => {
                 </S.Heading>
                 <S.Title>
                   <Switch
-                    disable={loading}
+                    disable={loading || switchEnable}
                     isActive={type === "transfer"}
                     onChange={() =>
                       onChangeType(type === "transfer" ? "deposit" : "transfer")
@@ -71,6 +73,7 @@ export const TransferTemplate = () => {
                       <TransferForm
                         onOpenAssets={onAssetsInteraction}
                         selectedAsset={selectedAsset}
+                        onDisableSwitch={onDisableSwitch}
                       />
                     ) : type === "deposit" ? (
                       <TransferFormDeposit

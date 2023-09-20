@@ -27,6 +27,7 @@ export function useTransfer() {
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
   const [assetsInteraction, setAssetsInteraction] = useState(false);
+  const [switchEnable, setSwitchEnable] = useState(false);
 
   const [type, setType] = useState<T.SwitchType>("deposit");
 
@@ -76,5 +77,9 @@ export function useTransfer() {
     onChangeType: (v: T.SwitchType) => setType(v),
     type,
     selectedAsset,
+    switchEnable,
+    onDisableSwitch: () => {
+      setSwitchEnable((v) => !v);
+    },
   };
 }

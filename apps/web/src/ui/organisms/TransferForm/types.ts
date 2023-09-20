@@ -5,4 +5,5 @@ export type GenericAsset = Record<string, string | null>;
 export type Props = {
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
+  onDisableSwitch: () => void;
 };

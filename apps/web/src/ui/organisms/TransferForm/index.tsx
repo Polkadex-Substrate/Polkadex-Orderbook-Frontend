@@ -30,13 +30,17 @@ import { Icons, Tokens } from "@/ui/atoms";
 
 const initialValues = { amount: 0.0 };
 
-export const TransferForm = ({ onOpenAssets, selectedAsset }: T.Props) => {
+export const TransferForm = ({
+  onOpenAssets,
+  selectedAsset,
+  onDisableSwitch,
+}: T.Props) => {
   const { t } = useTranslation("transfer");
 
   const { allAccounts } = useExtensionWallet();
   const { selectedAccount } = useProfile();
 
-  const { mutate, isLoading } = useAssetTransfer();
+  const { mutateAsync, isLoading } = useAssetTransfer();
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -157,8 +161,8 @@ export const TransferForm = ({ onOpenAssets, selectedAsset }: T.Props) => {
 
         // TODO: Fix types or Handle Error
         if (!address || !selectedFundingWallet) return;
-
-        mutate({
+        onDisableSwitch();
+        await mutateAsync({
           asset,
           dest: address,
           amount: amount.toString(),
@@ -166,6 +170,7 @@ export const TransferForm = ({ onOpenAssets, selectedAsset }: T.Props) => {
         });
       } finally {
         resetForm({ values: initialValues });
+        onDisableSwitch();
       }
     },
   });
