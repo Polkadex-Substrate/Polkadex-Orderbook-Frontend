@@ -6,4 +6,5 @@ export type Props = {
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
   onDisableSwitch: () => void;
+  switchEnable: boolean;
 };

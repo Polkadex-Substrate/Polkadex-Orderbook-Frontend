@@ -32,6 +32,44 @@ export const TransferTemplate = () => {
     onDisableSwitch,
   } = useTransfer();
 
+  const formComponent = {
+    withdraw: (
+      <TransferFormWithdraw
+        onTransferInteraction={() =>
+          onChangeType(type === "withdraw" ? "deposit" : "withdraw")
+        }
+        onOpenAssets={onAssetsInteraction}
+        selectedAsset={selectedAsset}
+      />
+    ),
+    deposit: (
+      <TransferFormDeposit
+        onTransferInteraction={() =>
+          onChangeType(type === "deposit" ? "withdraw" : "deposit")
+        }
+        onOpenAssets={onAssetsInteraction}
+        selectedAsset={selectedAsset}
+      />
+    ),
+    transfer: (
+      <TransferForm
+        onOpenAssets={onAssetsInteraction}
+        selectedAsset={selectedAsset}
+        onDisableSwitch={onDisableSwitch}
+        switchEnable={switchEnable}
+      />
+    ),
+  };
+
+  const historyComponent = {
+    withdraw: <WithdrawHistory selectedAsset={selectedAsset} />,
+    deposit: <DepositHistory selectedAsset={selectedAsset} />,
+    transfer: <TransferHistory selectedAsset={selectedAsset} />,
+  };
+
+  const FormComponent = () => formComponent[type];
+  const HistoryComponent = () => historyComponent[type];
+
   return (
     <>
       <AssetsInteraction
@@ -69,43 +107,11 @@ export const TransferTemplate = () => {
               <S.Content>
                 <S.Form>
                   <S.Container>
-                    {type === "transfer" ? (
-                      <TransferForm
-                        onOpenAssets={onAssetsInteraction}
-                        selectedAsset={selectedAsset}
-                        onDisableSwitch={onDisableSwitch}
-                      />
-                    ) : type === "deposit" ? (
-                      <TransferFormDeposit
-                        onTransferInteraction={() =>
-                          onChangeType(
-                            type === "deposit" ? "withdraw" : "deposit"
-                          )
-                        }
-                        onOpenAssets={onAssetsInteraction}
-                        selectedAsset={selectedAsset}
-                      />
-                    ) : (
-                      <TransferFormWithdraw
-                        onTransferInteraction={() =>
-                          onChangeType(
-                            type === "withdraw" ? "deposit" : "withdraw"
-                          )
-                        }
-                        onOpenAssets={onAssetsInteraction}
-                        selectedAsset={selectedAsset}
-                      />
-                    )}
+                    <FormComponent />
                   </S.Container>
                 </S.Form>
                 <S.History>
-                  {type === "transfer" ? (
-                    <TransferHistory selectedAsset={selectedAsset} />
-                  ) : type === "deposit" ? (
-                    <DepositHistory selectedAsset={selectedAsset} />
-                  ) : (
-                    <WithdrawHistory selectedAsset={selectedAsset} />
-                  )}
+                  <HistoryComponent />
                 </S.History>
               </S.Content>
             </S.ContainerMain>

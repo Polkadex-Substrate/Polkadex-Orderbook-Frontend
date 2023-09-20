@@ -33,6 +33,7 @@ const initialValues = { amount: 0.0 };
 export const TransferForm = ({
   onOpenAssets,
   selectedAsset,
+  switchEnable,
   onDisableSwitch,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
@@ -40,6 +41,7 @@ export const TransferForm = ({
   const { allAccounts } = useExtensionWallet();
   const { selectedAccount } = useProfile();
 
+  // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer();
   const { mainAddress } = selectedAccount;
 
@@ -180,7 +182,7 @@ export const TransferForm = ({
   return (
     <Loading
       style={{ maxWidth: "100rem" }}
-      isVisible={isLoading}
+      isVisible={isLoading || switchEnable}
       hasBg={false}
       message=""
       spinner="Keyboard"
@@ -265,7 +267,10 @@ export const TransferForm = ({
           </S.Amount>
         </S.Form>
         <S.Footer>
-          <button disabled={!(isValid && dirty) || isLoading} type="submit">
+          <button
+            disabled={!(isValid && dirty) || isLoading || switchEnable}
+            type="submit"
+          >
             {t("transferButton")}
           </button>
         </S.Footer>
