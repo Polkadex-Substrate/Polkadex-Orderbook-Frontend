@@ -53,14 +53,18 @@ export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
                     asc: getSorted === "asc",
                     desc: getSorted === "desc",
                   });
+                  const isActionTab = header.id === "actions";
+                  const handleSort = () => {
+                    const isDesc = getSorted === "desc";
+                    header.column.toggleSorting(!isDesc);
+                  };
+                  const theadProps = isActionTab ? {} : { onClick: handleSort };
                   return (
                     <S.Thead
                       key={header.id}
+                      isActionTab={isActionTab}
                       className={trClassName}
-                      onClick={() => {
-                        const isDesc = getSorted === "desc";
-                        header.column.toggleSorting(!isDesc);
-                      }}
+                      {...theadProps}
                     >
                       {header.isPlaceholder
                         ? null
@@ -68,9 +72,11 @@ export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                      <div>
-                        <Icons.IncreaseFilter />
-                      </div>
+                      {!isActionTab && (
+                        <div>
+                          <Icons.IncreaseFilter />
+                        </div>
+                      )}
                     </S.Thead>
                   );
                 })}

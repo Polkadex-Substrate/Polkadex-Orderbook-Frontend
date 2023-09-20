@@ -58,10 +58,10 @@ export const Wrapper = styled.div`
   `}
 `;
 
-export const Thead = styled.th`
-  ${({ theme }) => css`
+export const Thead = styled.th<{ isActionTab?: boolean }>`
+  ${({ theme, isActionTab }) => css`
     white-space: nowrap;
-    cursor: pointer;
+    cursor: ${isActionTab ? "default" : "pointer"};
     user-select: none;
     text-align: right;
     svg {

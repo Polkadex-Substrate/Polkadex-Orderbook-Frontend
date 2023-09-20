@@ -93,7 +93,7 @@ export const BalancesTemplate = () => {
                 <SupportCard
                   title="Having Trouble?"
                   description="Feel free to get in touch."
-                  href="https://discord.com/invite/Uvua83QAzk"
+                  href="https://discord.com/channels/859180272335323166/1034160372954964089"
                   buttonTitle="Contact us"
                   icon="Trouble"
                 />
