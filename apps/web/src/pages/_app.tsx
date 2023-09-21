@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { ReactNode, useEffect, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Flip, toast, ToastContainer } from "react-toastify";
+import { Flip, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { Amplify, Analytics } from "aws-amplify";
@@ -31,6 +31,13 @@ import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
 
 import "../../i18n";
+
+const ToastContainer = dynamic(
+  () => import("react-toastify").then((module) => module.ToastContainer),
+  {
+    ssr: false,
+  }
+);
 
 const analyticsConfig = {
   AWSPinpoint: {

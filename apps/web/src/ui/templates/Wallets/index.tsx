@@ -404,6 +404,19 @@ export const WalletsTemplate = () => {
                             >
                               {t("onlyRegisteredAccounts")}
                             </Checkbox>
+                            {/* Extension dropdown */}
+                            <Dropdown>
+                              <Dropdown.Trigger>
+                                <S.DropdownTrigger>
+                                  PolkadotJS
+                                  <Icons.ArrowBottom />
+                                </S.DropdownTrigger>
+                              </Dropdown.Trigger>
+                              <Dropdown.Menu fill="secondaryBackgroundSolid">
+                                <Dropdown.Item>Talismn</Dropdown.Item>
+                                <Dropdown.Item>Subwallet</Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
                           </S.AccountHeaderContent>
                         </AccountHeader>
                         <S.WalletContent>
@@ -633,21 +646,34 @@ const Empty = ({
   actionTitle = "",
   onClick = undefined,
   children,
-}: T.EmptyProps) => (
-  <S.Empty>
-    <S.EmptyBox>
-      <div>
-        <Icons.Clean />
-      </div>
-      <span>{title}</span>
-      <p>{description}</p>
-    </S.EmptyBox>
-    {!!actionTitle?.length && (
-      <S.Button onClick={onClick}>{actionTitle}</S.Button>
-    )}
-    {children}
-  </S.Empty>
-);
+}: T.EmptyProps) => {
+  const { t } = useTranslation("common");
+
+  return (
+    <S.Empty>
+      <S.EmptyBox>
+        {/* Extension dropdown/Connect wallet */}
+        <Dropdown>
+          <Dropdown.Trigger>
+            <S.DropdownTrigger>
+              Connect Wallet
+              <Icons.ArrowBottom />
+            </S.DropdownTrigger>
+          </Dropdown.Trigger>
+          <Dropdown.Menu fill="secondaryBackgroundSolid">
+            <Dropdown.Item key="limit">{t("limitOrder")}</Dropdown.Item>
+            <Dropdown.Item key="market">{t("marketOrder")}</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <p>{description}</p>
+      </S.EmptyBox>
+      {!!actionTitle?.length && (
+        <S.Button onClick={onClick}>{actionTitle}</S.Button>
+      )}
+      {children}
+    </S.Empty>
+  );
+};
 
 type AccountHeaderProps = {
   handleFilter: (e) => void;

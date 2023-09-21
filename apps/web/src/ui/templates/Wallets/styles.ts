@@ -186,6 +186,34 @@ export const Empty = styled.div`
   gap: 2rem;
 `;
 
+export const DropdownTrigger = styled.div`
+  ${({ theme }) => css`
+    cursor: pointer;
+    background: ${theme.colors.secondaryBackgroundOpacity};
+    border-radius: 0.7rem;
+    padding: 0.6rem 0.8rem;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 30rem !important;
+    width: max-content !important;
+    gap: 1rem;
+    transition:
+      background 0.4s ease-in-out,
+      opacity 0.4s ease-in-out;
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    &:hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+  `}
+`;
+
 export const EmptyBox = styled.div`
   ${({ theme }) => css`
     display: flex;
