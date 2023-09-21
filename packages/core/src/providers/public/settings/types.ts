@@ -1,3 +1,4 @@
+import { Wallet } from "@talismn/connect-wallets";
 import { FC, PropsWithChildren } from "react";
 
 export type NotificationPayload = {
@@ -19,6 +20,7 @@ export interface SettingState {
   currency: "USD" | "EUR" | "CNY" | "INR";
   notifications: Notification[];
   hasExtension?: boolean;
+  extensions: Wallet[];
 }
 
 export type SettingProviderProps = PropsWithChildren<{

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Head from "next/head";
 import React, { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
@@ -36,6 +37,7 @@ import {
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as T from "./types";
 import * as S from "./styles";
@@ -72,6 +74,8 @@ export const WalletsTemplate = () => {
     handleCloseAvatarModal,
     hasRegisteredMainAccount,
   } = useSettings();
+
+  const { extensions } = useSettingsProvider();
 
   const {
     onUserSelectAccount,
@@ -385,7 +389,7 @@ export const WalletsTemplate = () => {
                       </S.LoadingWrapper>
                     ) : !controllerWallets?.length ? (
                       <div style={{ padding: "4rem 2rem" }}>
-                        <Empty
+                        <EmptyFundingWallet
                           title={t("noWalletFoundTitle")}
                           description={t("noWalletFoundDescription")}
                         />
@@ -413,8 +417,17 @@ export const WalletsTemplate = () => {
                                 </S.DropdownTrigger>
                               </Dropdown.Trigger>
                               <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                <Dropdown.Item>Talismn</Dropdown.Item>
-                                <Dropdown.Item>Subwallet</Dropdown.Item>
+                                {extensions.slice(0, 3).map((extension) => (
+                                  <Dropdown.Item key={extension.extensionName}>
+                                    <Image
+                                      src={extension.logo.src}
+                                      alt={extension.logo.alt}
+                                      width={20}
+                                      height={20}
+                                    />
+                                    {extension.title}
+                                  </Dropdown.Item>
+                                ))}
                               </Dropdown.Menu>
                             </Dropdown>
                           </S.AccountHeaderContent>
@@ -646,8 +659,29 @@ const Empty = ({
   actionTitle = "",
   onClick = undefined,
   children,
+}: T.EmptyProps) => (
+  <S.Empty>
+    <S.EmptyBox>
+      <div>
+        <Icons.Clean />
+      </div>
+      <span>{title}</span>
+      <p>{description}</p>
+    </S.EmptyBox>
+    {!!actionTitle?.length && (
+      <S.Button onClick={onClick}>{actionTitle}</S.Button>
+    )}
+    {children}
+  </S.Empty>
+);
+
+const EmptyFundingWallet = ({
+  description = "",
+  actionTitle = "",
+  onClick = undefined,
+  children,
 }: T.EmptyProps) => {
-  const { t } = useTranslation("common");
+  const { extensions } = useSettingsProvider();
 
   return (
     <S.Empty>
@@ -661,8 +695,17 @@ const Empty = ({
             </S.DropdownTrigger>
           </Dropdown.Trigger>
           <Dropdown.Menu fill="secondaryBackgroundSolid">
-            <Dropdown.Item key="limit">{t("limitOrder")}</Dropdown.Item>
-            <Dropdown.Item key="market">{t("marketOrder")}</Dropdown.Item>
+            {extensions.slice(0, 3).map((extension) => (
+              <Dropdown.Item key={extension.extensionName}>
+                <Image
+                  src={extension.logo.src}
+                  alt={extension.logo.alt}
+                  width={20}
+                  height={20}
+                />
+                {extension.title}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
         <p>{description}</p>
