@@ -8,14 +8,14 @@ import {
 import { Balance, BalancesState } from "./types";
 
 export const initialState: BalancesState = {
-  loading: true,
+  loading: false,
   success: false,
   balances: [],
 };
 
 export const balancesReducer = (
   state = initialState,
-  action: BalancesAction,
+  action: BalancesAction
 ): BalancesState => {
   switch (action.type) {
     case BALANCES_FETCH:
@@ -42,7 +42,7 @@ export const balancesReducer = (
     case BALANCES_UPDATE_EVENT_DATA: {
       const update = action.payload;
       const old = state.balances.find(
-        (i) => i.assetId.toString() === update.assetId.toString(),
+        (i) => i.assetId.toString() === update.assetId.toString()
       );
       if (!old) {
         return state;
@@ -53,7 +53,7 @@ export const balancesReducer = (
       };
       // filter out old balances from the balance state
       const balanceFiltered = state.balances?.filter(
-        (balance) => balance.assetId.toString() !== update.assetId.toString(),
+        (balance) => balance.assetId.toString() !== update.assetId.toString()
       );
       // apply updates to the balances in the state
       const newBalances = [...balanceFiltered, newBalance];
