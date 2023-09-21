@@ -298,6 +298,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     if (
       authInfo.isAuthenticated &&
       defaultExtension &&
+      typeof defaultExtension === "string" &&
       extensions?.some((e) => e.extensionName === defaultExtension)
     ) {
       onUseAsDefault(defaultExtension);
