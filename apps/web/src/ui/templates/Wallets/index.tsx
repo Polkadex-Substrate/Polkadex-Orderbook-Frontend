@@ -412,23 +412,17 @@ export const WalletsTemplate = () => {
                             <Dropdown>
                               <Dropdown.Trigger>
                                 <S.DropdownTrigger>
-                                  PolkadotJS
+                                  <Image
+                                    src={extensions[2].logo.src}
+                                    alt={extensions[2].logo.alt}
+                                    width={20}
+                                    height={20}
+                                  />
+                                  {extensions[2].title}
                                   <Icons.ArrowBottom />
                                 </S.DropdownTrigger>
                               </Dropdown.Trigger>
-                              <Dropdown.Menu fill="secondaryBackgroundSolid">
-                                {extensions.slice(0, 3).map((extension) => (
-                                  <Dropdown.Item key={extension.extensionName}>
-                                    <Image
-                                      src={extension.logo.src}
-                                      alt={extension.logo.alt}
-                                      width={20}
-                                      height={20}
-                                    />
-                                    {extension.title}
-                                  </Dropdown.Item>
-                                ))}
-                              </Dropdown.Menu>
+                              <AvailableExtensionsDropDown />
                             </Dropdown>
                           </S.AccountHeaderContent>
                         </AccountHeader>
@@ -681,8 +675,6 @@ const EmptyFundingWallet = ({
   onClick = undefined,
   children,
 }: T.EmptyProps) => {
-  const { extensions } = useSettingsProvider();
-
   return (
     <S.Empty>
       <S.EmptyBox>
@@ -694,19 +686,7 @@ const EmptyFundingWallet = ({
               <Icons.ArrowBottom />
             </S.DropdownTrigger>
           </Dropdown.Trigger>
-          <Dropdown.Menu fill="secondaryBackgroundSolid">
-            {extensions.slice(0, 3).map((extension) => (
-              <Dropdown.Item key={extension.extensionName}>
-                <Image
-                  src={extension.logo.src}
-                  alt={extension.logo.alt}
-                  width={20}
-                  height={20}
-                />
-                {extension.title}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
+          <AvailableExtensionsDropDown />
         </Dropdown>
         <p>{description}</p>
       </S.EmptyBox>
@@ -715,6 +695,25 @@ const EmptyFundingWallet = ({
       )}
       {children}
     </S.Empty>
+  );
+};
+
+const AvailableExtensionsDropDown = () => {
+  const { extensions } = useSettingsProvider();
+  return (
+    <Dropdown.Menu fill="secondaryBackgroundSolid">
+      {extensions.slice(0, 3).map((extension) => (
+        <Dropdown.Item key={extension.extensionName}>
+          <Image
+            src={extension.logo.src}
+            alt={extension.logo.alt}
+            width={20}
+            height={20}
+          />
+          {extension.title}
+        </Dropdown.Item>
+      ))}
+    </Dropdown.Menu>
   );
 };
 

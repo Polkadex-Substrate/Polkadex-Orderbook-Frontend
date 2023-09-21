@@ -198,7 +198,7 @@ export const DropdownTrigger = styled.div`
     justify-content: center;
     max-width: 30rem !important;
     width: max-content !important;
-    gap: 1rem;
+    gap: 0.6rem;
     transition:
       background 0.4s ease-in-out,
       opacity 0.4s ease-in-out;
