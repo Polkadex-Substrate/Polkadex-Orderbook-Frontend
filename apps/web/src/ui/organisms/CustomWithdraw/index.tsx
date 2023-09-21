@@ -28,7 +28,7 @@ export const CustomWithdraw = ({
         </S.Container>
       </S.Form>
       <S.History>
-        <WithdrawHistory selectedAsset={selectedAsset} />,
+        <WithdrawHistory selectedAsset={selectedAsset} />
       </S.History>
     </S.Content>
   );

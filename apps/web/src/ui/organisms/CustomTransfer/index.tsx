@@ -56,7 +56,6 @@ export const CustomTransfer = ({
           selectedAsset={selectedAsset}
           address={selectedAddress ?? ""} // TODO: Fix types
         />
-        ,
       </S.History>
     </S.Content>
   );

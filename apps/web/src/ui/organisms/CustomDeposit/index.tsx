@@ -28,7 +28,7 @@ export const CustomDeposit = ({
         </S.Container>
       </S.Form>
       <S.History>
-        <DepositHistory selectedAsset={selectedAsset} />,
+        <DepositHistory selectedAsset={selectedAsset} />
       </S.History>
     </S.Content>
   );
