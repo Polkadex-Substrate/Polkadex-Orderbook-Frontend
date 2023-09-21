@@ -18,6 +18,7 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useTryUnlockTradeAccount } from "@orderbook/core/index";
 import { useTranslation } from "react-i18next";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -47,6 +48,7 @@ export const TransferFormWithdraw = ({
   const { allBrowserAccounts } = useTradeWallet();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
+  const { loading: balancesLoading } = useBalancesProvider();
 
   const { tradeAddress, mainAddress } = selectedAccount;
 
@@ -156,6 +158,7 @@ export const TransferFormWithdraw = ({
               tokenTicker={selectedAsset?.symbol ?? ""}
               availableAmount={selectedAsset?.free_balance ?? "0.00"}
               onAction={onOpenAssets}
+              loading={balancesLoading}
             />
             <S.Amount onClick={() => amountRef.current?.focus()}>
               <div>

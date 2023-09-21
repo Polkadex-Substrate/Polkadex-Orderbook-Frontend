@@ -64,7 +64,7 @@ export function useTransfer() {
 
   /* Select default asset */
   useEffect(() => {
-    if (!selectedAsset && !loading) {
+    if (!selectedAsset || !loading) {
       setSelectedAsset(filteredNonBlockedAssets?.[0]);
     }
   }, [selectedAsset, filteredNonBlockedAssets, loading]);

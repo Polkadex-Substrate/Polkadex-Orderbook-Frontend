@@ -10,11 +10,13 @@ export const TokenCard = ({
   tokenIcon,
   availableAmount = "0.00",
   onAction,
+  loading = false,
 }: {
   tokenTicker: string;
   tokenIcon: keyof typeof Tokens;
   availableAmount: string;
   onAction: () => void;
+  loading?: boolean;
 }) => {
   const { t } = useTranslation("transfer");
 
@@ -32,9 +34,9 @@ export const TokenCard = ({
             <p>{tokenTicker}</p>
           </Skeleton>
           <Skeleton
-            width="8rem"
+            width="12rem"
             height="1.5rem"
-            loading={!availableAmount && !tokenTicker}
+            loading={(!availableAmount && !tokenTicker) || loading}
           >
             <span>
               {t("balance")}: {availableAmount} {tokenTicker}

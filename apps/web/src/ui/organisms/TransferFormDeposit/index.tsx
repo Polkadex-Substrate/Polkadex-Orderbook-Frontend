@@ -12,6 +12,7 @@ import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "react-i18next";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -31,6 +32,7 @@ export const TransferFormDeposit = ({
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
+  const { loading: balancesLoading } = useBalancesProvider();
 
   const { mainAddress } = selectedAccount;
 
@@ -145,6 +147,7 @@ export const TransferFormDeposit = ({
             tokenTicker={selectedAsset?.symbol ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={onOpenAssets}
+            loading={balancesLoading}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>

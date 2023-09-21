@@ -15,6 +15,7 @@ import { useAssetTransfer } from "@orderbook/core/hooks";
 import { useTranslation } from "react-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
+import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -37,13 +38,12 @@ export const TransferForm = ({
   selectedAsset,
   switchEnable,
   onDisableSwitch,
-  selectedTransferWallet,
-  onSelectedTransferWallet,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
   const { allAccounts } = useExtensionWallet();
-  const { selectedAccount } = useProfile();
+  const { selectedAccount, onUserSelectAccount, userData } = useProfile();
+  const { loading } = useBalancesProvider();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer();
@@ -52,6 +52,15 @@ export const TransferForm = ({
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
     [allAccounts, mainAddress]
+  );
+
+  const allFilteresAccounts = useMemo(
+    () =>
+      allAccounts.filter(
+        ({ account }) =>
+          userData?.userAccounts?.find((v) => v.mainAddress === account.address)
+      ),
+    [allAccounts, userData?.userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -116,7 +125,7 @@ export const TransferForm = ({
 
   const [fromQuery, setFromQuery] = useState("");
   const filteredFundingWallets: ExtensionAccount[] = useMemo(() => {
-    const queryRes = allAccounts?.filter((e) => {
+    const queryRes = allFilteresAccounts?.filter((e) => {
       const { address, meta } = e.account;
       return (
         address?.toLowerCase().includes(fromQuery) ||
@@ -124,15 +133,16 @@ export const TransferForm = ({
       );
     });
 
-    if (fromQuery === "" || !queryRes?.length) return allAccounts;
+    if (fromQuery === "" || !queryRes?.length) return allFilteresAccounts;
     return queryRes;
-  }, [fromQuery, allAccounts]);
+  }, [fromQuery, allFilteresAccounts]);
 
   const fromAccountAddress = useMemo(
-    () => transformAddress(selectedTransferWallet?.account?.address ?? "", 20),
-    [selectedTransferWallet?.account?.address]
+    () => transformAddress(fundingWallet?.account?.address ?? "", 20),
+    [fundingWallet?.account?.address]
   );
 
+  console.log("Loading", loading);
   const isValidAddress = useMemo(() => {
     const address = selectedWallet?.account?.address;
     try {
@@ -177,13 +187,13 @@ export const TransferForm = ({
           : { asset: selectedAsset?.assetId || null };
 
         // TODO: Fix types or Handle Error
-        if (!address || !selectedTransferWallet) return;
+        if (!address || !fundingWallet) return;
         onDisableSwitch(true);
         await mutateAsync({
           asset,
           dest: address,
           amount: amount.toString(),
-          account: selectedTransferWallet,
+          account: fundingWallet,
         });
       } finally {
         resetForm({ values: initialValues });
@@ -211,9 +221,15 @@ export const TransferForm = ({
           >
             <AccountSelect
               pasteable={false}
-              selectedAccount={selectedTransferWallet}
+              selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
-              onSelectAccount={onSelectedTransferWallet}
+              onSelectAccount={(e) => {
+                const tradeAddress = userData?.userAccounts?.find(
+                  (v) => v.mainAddress === e.account.address
+                );
+                // TODO: Fix types
+                if (tradeAddress) onUserSelectAccount(tradeAddress);
+              }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}
             />
@@ -246,6 +262,7 @@ export const TransferForm = ({
             tokenTicker={selectedAsset?.symbol ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={onOpenAssets}
+            loading={loading}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>
