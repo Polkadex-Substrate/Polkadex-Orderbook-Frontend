@@ -1,5 +1,4 @@
 import { TransferForm } from "@polkadex/orderbook-ui/organisms";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
 
@@ -17,8 +16,6 @@ export const CustomTransfer = ({
   onDisableSwitch: () => void;
   switchEnable: boolean;
 }) => {
-  const { selectedAccount } = useProfile();
-
   return (
     <S.Content>
       <S.Form>
@@ -32,10 +29,7 @@ export const CustomTransfer = ({
         </S.Container>
       </S.Form>
       <S.History>
-        <TransferHistory
-          selectedAsset={selectedAsset}
-          address={selectedAccount?.mainAddress ?? ""} // TODO: Fix types
-        />
+        <TransferHistory selectedAsset={selectedAsset} />
       </S.History>
     </S.Content>
   );

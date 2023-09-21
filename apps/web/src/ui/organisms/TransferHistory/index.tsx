@@ -13,6 +13,7 @@ import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWall
 import { useTranslation } from "react-i18next";
 import { useTransferHistory } from "@orderbook/core/index";
 import { defaultConfig } from "@orderbook/core/config";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { columns as getColumns } from "./columns";
 import * as S from "./styles";
@@ -25,18 +26,18 @@ import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const TransferHistory = ({
   selectedAsset,
-  address,
 }: {
   selectedAsset?: FilteredAssetProps;
-  address: string;
 }) => {
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const { selectedAccount } = useProfile();
+  const { mainAddress } = selectedAccount;
 
   const { t } = useTranslation("transfer");
   const { data, isLoading, refetch } = useTransferHistory(
     defaultConfig.subscanApi,
-    address
+    mainAddress
   );
   const { selectGetAsset } = useAssetsProvider();
   const { allAccounts } = useExtensionWallet();

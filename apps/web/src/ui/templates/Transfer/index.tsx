@@ -57,7 +57,7 @@ export const TransferTemplate = () => {
     ),
   };
 
-  const RenderComponent = () => customComponent[type];
+  const RenderComponent = customComponent[type];
 
   return (
     <>
@@ -93,7 +93,7 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              <RenderComponent />
+              {RenderComponent}
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>
