@@ -12,6 +12,7 @@ import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvid
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import * as T from "./types";
 
@@ -21,9 +22,10 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 
 export function useTransfer() {
   const { list } = useAssetsProvider();
-  const { balances, loading } = useBalancesProvider();
+  const { balances } = useBalancesProvider();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
+  const { selectedAccount } = useProfile();
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
   const [assetsInteraction, setAssetsInteraction] = useState(false);
@@ -64,10 +66,16 @@ export function useTransfer() {
 
   /* Select default asset */
   useEffect(() => {
-    if (!selectedAsset || !loading) {
+    if (!selectedAsset) {
       setSelectedAsset(filteredNonBlockedAssets?.[0]);
-    }
-  }, [selectedAsset, filteredNonBlockedAssets, loading]);
+    } else if (selectedAccount && !!selectedAsset)
+      setSelectedAsset((prev) => {
+        const foundAsset = filteredNonBlockedAssets?.find(
+          ({ assetId }) => assetId === prev?.assetId
+        );
+        return foundAsset || prev;
+      });
+  }, [selectedAsset, filteredNonBlockedAssets, selectedAccount]);
 
   return {
     loading: depositLoading || withdrawLoading,
