@@ -13,6 +13,7 @@ import {
   REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
   REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
+  SET_DEFAULT_EXTENSION_WALLET,
 } from "./constants";
 
 export interface ExtensionWalletFetch {
@@ -57,6 +58,11 @@ export interface RegisterMainAccountReset {
   type: typeof REGISTER_MAIN_ACCOUNT_RESET;
 }
 
+export interface SetDefaultExtensionWallet {
+  type: typeof SET_DEFAULT_EXTENSION_WALLET;
+  payload: string;
+}
+
 export interface RegisterMainAccountError {
   type: typeof REGISTER_MAIN_ACCOUNT_ERROR;
 }
@@ -86,17 +92,18 @@ export type GetExtensionWalletAction =
   | RegisterMainAccountError
   | RegisterMainAccountUpdateEvent
   | RegisterMainAccountReset
-  | RegisterMainAccountUpdateData;
+  | RegisterMainAccountUpdateData
+  | SetDefaultExtensionWallet;
 
 export const extensionWalletData = (
-  payload: ExtensionWalletData["payload"],
+  payload: ExtensionWalletData["payload"]
 ): ExtensionWalletData => ({
   type: POLKADOT_EXTENSION_WALLET_DATA,
   payload,
 });
 
 export const extensionWalletError = (
-  error: CommonError,
+  error: CommonError
 ): ExtensionWalletError => ({
   type: POLKADOT_EXTENSION_WALLET_ERROR,
   error,
@@ -107,14 +114,14 @@ export const extensionWalletFetch = (): ExtensionWalletFetch => ({
 });
 
 export const registerMainAccountFetch = (
-  payload: RegisterMainAccountFetch["payload"],
+  payload: RegisterMainAccountFetch["payload"]
 ): RegisterMainAccountFetch => ({
   type: REGISTER_MAIN_ACCOUNT_FETCH,
   payload,
 });
 
 export const registerMainAccountLinkEmail = (
-  payload: RegisterMainAccountLinkEmailFetch["payload"],
+  payload: RegisterMainAccountLinkEmailFetch["payload"]
 ) => ({
   type: REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
   payload,
@@ -129,14 +136,14 @@ export const registerMainAccountError = (): RegisterMainAccountError => ({
 });
 
 export const registerMainAccountUpdateEvent = (
-  payload: RegisterMainAccountUpdateEvent["payload"],
+  payload: RegisterMainAccountUpdateEvent["payload"]
 ) => ({
   type: REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
   payload,
 });
 
 export const registerMainAccountUpdateData = (
-  payload: RegisterMainAccountUpdateData["payload"],
+  payload: RegisterMainAccountUpdateData["payload"]
 ) => ({
   type: REGISTER_MAIN_ACCOUNT_UPDATE_DATA,
   payload,
@@ -144,4 +151,11 @@ export const registerMainAccountUpdateData = (
 
 export const registerMainAccountReset = (): RegisterMainAccountReset => ({
   type: REGISTER_MAIN_ACCOUNT_RESET,
+});
+
+export const setDefaultExtensionWallet = (
+  payload: string
+): SetDefaultExtensionWallet => ({
+  type: SET_DEFAULT_EXTENSION_WALLET,
+  payload,
 });

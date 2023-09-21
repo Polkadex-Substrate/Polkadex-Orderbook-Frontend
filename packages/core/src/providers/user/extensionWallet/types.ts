@@ -19,7 +19,10 @@ export type ExtensionWalletProviderProps = PropsWithChildren<{
   value: ExtensionWalletContextProps;
 }>;
 
-export type onGetExtensionWallet = { extensionName: string };
+export type onGetExtensionWallet = {
+  extensionName: string;
+  saveInLocalStorage?: boolean;
+};
 
 export type ExtensionWalletContextProps = ExtensionWalletState & {
   onLinkEmail: (value: A.RegisterMainAccountLinkEmailFetch["payload"]) => void;

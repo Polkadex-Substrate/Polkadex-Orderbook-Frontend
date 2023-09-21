@@ -1,3 +1,5 @@
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
+
 import { GetExtensionWalletAction } from "./actions";
 import {
   REGISTER_MAIN_ACCOUNT_RESET,
@@ -7,6 +9,7 @@ import {
   REGISTER_MAIN_ACCOUNT_DATA,
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_FETCH,
+  SET_DEFAULT_EXTENSION_WALLET,
 } from "./constants";
 import * as T from "./types";
 
@@ -42,6 +45,14 @@ export const extensionWalletReducer = (
         success: false,
         isFetching: true,
       };
+    case SET_DEFAULT_EXTENSION_WALLET: {
+      const extensionName = action.payload;
+      window.localStorage.setItem(
+        LOCAL_STORAGE_ID.DEFAULT_EXTENSION,
+        extensionName
+      );
+      return { ...state };
+    }
     case REGISTER_MAIN_ACCOUNT_RESET:
       return {
         ...state,

@@ -17,6 +17,7 @@ export const LOCAL_STORAGE_ID = {
   DEFAULT_MARKET: "default_market",
   DEFAULT_AVATAR: "default_avatar",
   DEFAULT_DISCLAIMER: "default_disclaimer",
+  DEFAULT_EXTENSION: "default_extension",
 };
 
 export const USER_EVENTS = {

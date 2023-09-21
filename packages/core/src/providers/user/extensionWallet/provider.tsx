@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Signer } from "@polkadot/types/types";
 import { encodeAddress } from "@polkadot/util-crypto";
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -32,12 +33,20 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
-  const { onHandleError, onHandleNotification, hasExtension, extensions } =
+  const { onHandleError, onHandleNotification, extensions } =
     useSettingsProvider();
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
+
+  const isClientSide = typeof window !== "undefined";
+
+  const defaultExtension = useMemo(
+    () =>
+      isClientSide && localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_EXTENSION),
+    [isClientSide]
+  );
 
   // Actions
   const onLinkEmail = async (
@@ -173,7 +182,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   };
 
   const onConnectExtensionWallet = useCallback(
-    async ({ extensionName }: T.onGetExtensionWallet) => {
+    async ({
+      extensionName,
+      saveInLocalStorage = true,
+    }: T.onGetExtensionWallet) => {
       dispatch(A.extensionWalletFetch());
 
       try {
@@ -188,6 +200,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         await wallet.enable("@polkadot/extension-dapp");
         await wallet.subscribeAccounts(async (accounts) => {
           if (!accounts?.length) {
+            saveInLocalStorage &&
+              dispatch(A.setDefaultExtensionWallet(extensionName));
             dispatch(
               A.extensionWalletData({
                 allAccounts: [],
@@ -224,19 +238,26 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
             (promiseResult): promiseResult is ExtensionAccount =>
               promiseResult !== null
           );
-          dispatch(
-            A.extensionWalletData({
-              allAccounts: validPromises,
-            })
-          );
+
+          setTimeout(() => {
+            saveInLocalStorage &&
+              dispatch(A.setDefaultExtensionWallet(extensionName));
+            dispatch(
+              A.extensionWalletData({
+                allAccounts: validPromises,
+              })
+            );
+          }, 1000);
         });
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
             : `Couldn't fetch funding accounts`;
-        onHandleError(errorMessage);
-        dispatch(A.extensionWalletError(error));
+        setTimeout(() => {
+          onHandleError(errorMessage);
+          dispatch(A.extensionWalletError(error));
+        }, 1000);
       }
 
       // const { web3AccountsSubscribe, web3FromAddress } = await import(
@@ -269,9 +290,22 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         account?.address?.toLowerCase() === address?.toLowerCase()
     );
   };
-  // useEffect(() => {
-  //   if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
-  // }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
+  useEffect(() => {
+    if (
+      authInfo.isAuthenticated &&
+      defaultExtension &&
+      extensions?.some((e) => e.extensionName === defaultExtension)
+    )
+      onConnectExtensionWallet({
+        extensionName: defaultExtension,
+        saveInLocalStorage: false,
+      });
+  }, [
+    onConnectExtensionWallet,
+    authInfo.isAuthenticated,
+    defaultExtension,
+    extensions,
+  ]);
 
   useEffect(() => {
     if (mainAddress) {
