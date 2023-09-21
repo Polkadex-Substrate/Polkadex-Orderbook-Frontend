@@ -76,45 +76,6 @@ export const SettingProvider: T.SettingComponent = ({
     [defaultToast]
   );
 
-  const onCheckExtension = useCallback(async () => {
-    const { web3Enable } = await import("@polkadot/extension-dapp");
-
-    const extensions = await web3Enable(APP_NAME);
-    if (extensions?.length > 0) dispatch(A.checkHasExtension());
-  }, []);
-
-  // useEffect(() => {
-  //   onCheckExtension();
-  // }, [onCheckExtension]);
-
-  // useEffect(() => {
-  //   const installedWallets = getWallets();
-  //   console.log(installedWallets, "extensions list is here");
-
-  //   // get talisman from the array of installed wallets
-  //   const talismanWallet = installedWallets.find(
-  //     (wallet) => wallet.extensionName === "polkadot-js"
-  //   );
-  //   console.log(talismanWallet, "talismanWallet list is here");
-
-  //   // enable the wallet
-  //   if (talismanWallet) {
-  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //     // @ts-ignore
-  //     talismanWallet
-  //       .enable("@polkadot/extension-dapp")
-  //       .then(() => {
-  //         talismanWallet.subscribeAccounts((accounts) => {
-  //           // do anything you want with the accounts provided by the wallet
-  //           console.log("got accounts", accounts);
-  //         });
-  //       })
-  //       .catch((e) => {
-  //         console.log(e, "error is here");
-  //       });
-  //   }
-  // }, []);
-
   return (
     <Provider
       value={{
@@ -132,7 +93,6 @@ export const SettingProvider: T.SettingComponent = ({
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
-        onCheckExtension,
       }}
     >
       {children}

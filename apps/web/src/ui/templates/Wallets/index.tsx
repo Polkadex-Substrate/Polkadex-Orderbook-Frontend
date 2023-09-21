@@ -419,7 +419,6 @@ export const WalletsTemplate = () => {
                             >
                               {t("onlyRegisteredAccounts")}
                             </Checkbox>
-                            {/* Extension dropdown */}
                             <Dropdown>
                               <Dropdown.Trigger>
                                 <S.DropdownTrigger>
@@ -693,7 +692,6 @@ const EmptyFundingWallet = ({
   return (
     <S.Empty>
       <S.EmptyBox>
-        {/* Extension dropdown/Connect wallet */}
         <Dropdown>
           <Dropdown.Trigger>
             <S.DropdownTrigger showBackground>

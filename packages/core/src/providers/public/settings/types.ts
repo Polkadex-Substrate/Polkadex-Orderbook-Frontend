@@ -46,7 +46,6 @@ export type SettingContextProps = SettingState & {
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];
   onHandleNotification: (value: NotificationPayload) => void;
-  onCheckExtension: (extension: boolean) => void;
 };
 
 export type SettingsProps = {
