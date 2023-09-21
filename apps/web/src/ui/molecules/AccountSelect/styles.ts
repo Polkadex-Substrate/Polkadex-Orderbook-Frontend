@@ -138,3 +138,24 @@ export const OptionsItem = styled(Combobox.Option)`
     }
   `}
 `;
+
+export const Errors = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    div {
+      width: 1.3rem;
+      height: 1.3rem;
+      svg {
+        fill: ${theme.colors.primary};
+      }
+    }
+    background: ${theme.colors.white};
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    p {
+      color: ${theme.colors.inverse};
+    }
+  `}
+`;

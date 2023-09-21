@@ -90,7 +90,7 @@ export const Token = styled.div``;
 
 export const Amount = styled.div`
   ${({ theme }) => css`
-    padding: 2rem;
+    padding: 2.8rem;
     display: flex;
     align-items: center;
     justify-content: space-between;

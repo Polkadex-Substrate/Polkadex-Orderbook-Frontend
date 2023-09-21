@@ -5,6 +5,7 @@
   "subheading": "Move tokens between Orderbook and your funding account.",
   "switcher": "Transfer to other Polkadex accounts",
   "searchPlaceholder": "Search",
+  "balance": "Balance",
   "assetsInteraction": {
     "heading": "Assets",
     "filterBalance": "Hide 0 balances",

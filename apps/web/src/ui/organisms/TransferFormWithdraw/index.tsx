@@ -131,8 +131,7 @@ export const TransferFormWithdraw = ({
           <S.Wallets>
             <WalletCard
               label={t("from")}
-              walletTypeLabel={t("trading.type")}
-              walletType={t("trading.name")}
+              walletType={t("trading.type")}
               walletName={tradingWallet?.meta.name ?? ""}
               walletAddress={transformAddress(tradingWallet?.address ?? "")}
             />
@@ -144,7 +143,6 @@ export const TransferFormWithdraw = ({
             </S.WalletsButton>
             <WalletCard
               label={t("to")}
-              walletTypeLabel={t("funding.name")}
               walletType={t("funding.type")}
               walletName={fundingWallet?.account?.meta.name ?? ""}
               walletAddress={transformAddress(
@@ -185,7 +183,6 @@ export const TransferFormWithdraw = ({
                   autoComplete="off"
                   {...getFieldProps("amount")}
                 />
-                <span>$0.00</span>
               </div>
               <button type="button" onClick={handleMax}>
                 {t("maxButton")}

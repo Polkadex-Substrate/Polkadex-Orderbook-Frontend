@@ -43,7 +43,6 @@ export const pendingColumns = (header: string[]) => [
     cell: (e) => (
       <Box>
         <p>{e.getValue()}</p>
-        <span>$0.00</span>
       </Box>
     ),
     header: () => <span>{header[2]}</span>,
@@ -112,7 +111,6 @@ export const claimedColumns = (header: string[]) => [
     cell: (e) => (
       <Box>
         <p>{e.getValue()}</p>
-        <span>$0.00</span>
       </Box>
     ),
     header: () => <span>{header[2]}</span>,
@@ -181,7 +179,6 @@ export const readyToClaimColumns = (header: string[]) => [
     cell: (e) => (
       <Box>
         <p>{e.getValue()}</p>
-        <span>$0.00</span>
       </Box>
     ),
     header: () => <span>{header[2]}</span>,

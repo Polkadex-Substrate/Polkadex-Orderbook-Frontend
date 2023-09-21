@@ -7,7 +7,6 @@ import * as S from "./styles";
 
 export const WalletCard = ({
   label,
-  walletTypeLabel,
   walletType,
   walletName,
   walletAddress,
@@ -15,7 +14,6 @@ export const WalletCard = ({
   children,
 }: PropsWithChildren<{
   label: string;
-  walletTypeLabel: string;
   walletType: string;
   walletName: string;
   searchable?: boolean;
@@ -28,9 +26,7 @@ export const WalletCard = ({
         {searchable && children ? (
           children
         ) : (
-          <S.Paragraph>
-            {walletType} <span>({walletTypeLabel})</span>
-          </S.Paragraph>
+          <S.Paragraph>{walletType}</S.Paragraph>
         )}
       </S.Header>
       <S.Footer>

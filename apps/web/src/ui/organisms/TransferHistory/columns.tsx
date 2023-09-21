@@ -42,7 +42,6 @@ export const columns = (header: string[]) => [
     cell: (e) => (
       <Box>
         <p>{e.getValue()}</p>
-        <span>$0.00</span>
       </Box>
     ),
     header: () => <span>{header[2]}</span>,

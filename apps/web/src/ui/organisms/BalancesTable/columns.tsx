@@ -33,7 +33,6 @@ export const columns = (headers: string[]) => [
     cell: (e) => (
       <S.Box>
         <span>{e.getValue()}</span>
-        <p>$0.00</p>
       </S.Box>
     ),
     header: () => <span>{headers[1]}</span>,
@@ -44,7 +43,6 @@ export const columns = (headers: string[]) => [
     cell: (e) => (
       <S.Box>
         <span>{e.getValue()}</span>
-        <p>$0.00</p>
       </S.Box>
     ),
     header: () => <span>{headers[2]}</span>,
@@ -55,7 +53,6 @@ export const columns = (headers: string[]) => [
     cell: (e) => (
       <S.Box>
         <span>{e.getValue()}</span>
-        <p>$0.00</p>
       </S.Box>
     ),
     header: () => <span>{headers[3]}</span>,

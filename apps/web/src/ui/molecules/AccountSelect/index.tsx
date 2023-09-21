@@ -5,6 +5,7 @@ import { transformAddress } from "@orderbook/core/providers/user/profile";
 
 import { Skeleton } from "../Skeleton";
 import { ResultFound } from "../ResultFound";
+import { Popover } from "../Popover";
 
 import * as S from "./styles";
 
@@ -17,6 +18,8 @@ export const AccountSelect = ({
   loading = false,
   pasteable = true,
   placeholder = "Enter or select a Polkadex address",
+  inValidMessage = "Invalid address",
+  isValidAddress = true,
   data,
 }: {
   selectedAccount?: ExtensionAccount | CustomAddress | null;
@@ -26,6 +29,8 @@ export const AccountSelect = ({
   pasteable?: boolean;
   data: ExtensionAccount[] | CustomAddress[];
   placeholder?: string;
+  inValidMessage?: string;
+  isValidAddress?: boolean;
 }) => {
   const handleOnPaste = async () => {
     const pastedData = await navigator.clipboard.readText();
@@ -41,6 +46,22 @@ export const AccountSelect = ({
               <Skeleton height="4px" width="5rem" loading={loading}>
                 <S.Container>
                   <Skeleton height="4px" width="5rem" loading={loading}>
+                    <Popover
+                      placement="top left"
+                      isOpen={!!selectedAccount && !isValidAddress}
+                    >
+                      <Popover.Trigger>
+                        <div />
+                      </Popover.Trigger>
+                      <Popover.Content>
+                        <S.Errors>
+                          <div>
+                            <Icons.Alert />
+                          </div>
+                          <p>{inValidMessage}</p>
+                        </S.Errors>
+                      </Popover.Content>
+                    </Popover>
                     <Combobox.Input
                       displayValue={(e: ExtensionAccount | CustomAddress) => {
                         const addressName = e?.account?.meta?.name;

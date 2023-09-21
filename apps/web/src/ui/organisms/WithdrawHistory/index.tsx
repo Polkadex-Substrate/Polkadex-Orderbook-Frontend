@@ -181,12 +181,9 @@ export const WithdrawHistory = ({
                 {t("tabs.pending")}({pendingWithdraws?.length})
               </S.TabItem>
               <S.TabItemPending>
-                {pendingClaims > 0 && <div>{pendingClaims}</div>}
-                {t("tabs.readyToClaim")}
+                {t("tabs.readyToClaim")} ({pendingClaims})
               </S.TabItemPending>
-              <S.TabItem>
-                {t("tabs.claimed")}({claimedWithdraws?.length})
-              </S.TabItem>
+              <S.TabItem>{t("tabs.claimed")}</S.TabItem>
             </S.TabList>
             <S.TitleWrapper>
               <Search isFull placeholder={t("searchPlaceholder")} />

@@ -123,7 +123,6 @@ export const TransferFormDeposit = ({
         <S.Wallets>
           <WalletCard
             label={t("from")}
-            walletTypeLabel={t("funding.name")}
             walletType={t("funding.type")}
             walletName={fundingWalletName}
             walletAddress={fundingWalletAddress}
@@ -136,8 +135,7 @@ export const TransferFormDeposit = ({
           </S.WalletsButton>
           <WalletCard
             label={t("to")}
-            walletTypeLabel={t("trading.type")}
-            walletType={t("trading.name")}
+            walletType={t("trading.type")}
             walletName={t("trading.message")}
           />
         </S.Wallets>
@@ -172,7 +170,6 @@ export const TransferFormDeposit = ({
                 placeholder={t("amountPlaceholder")}
                 {...getFieldProps("amount")}
               />
-              <span>$0.00</span>
             </div>
             <button type="button" onClick={handleMax}>
               {t("maxButton")}

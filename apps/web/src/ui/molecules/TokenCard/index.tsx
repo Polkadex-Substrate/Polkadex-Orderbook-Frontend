@@ -1,4 +1,5 @@
 import { Icons, Tokens } from "@polkadex/orderbook-ui/atoms";
+import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "../Skeleton";
 
@@ -15,6 +16,8 @@ export const TokenCard = ({
   availableAmount: string;
   onAction: () => void;
 }) => {
+  const { t } = useTranslation("transfer");
+
   const Token = Tokens[tokenIcon] ?? Tokens.UNKN;
   return (
     <S.Wrapper role="button" onClick={onAction}>
@@ -34,7 +37,7 @@ export const TokenCard = ({
             loading={!availableAmount && !tokenTicker}
           >
             <span>
-              Avlb: {availableAmount} {tokenTicker}
+              {t("balance")}: {availableAmount} {tokenTicker}
             </span>
           </Skeleton>
         </S.TokenInfo>

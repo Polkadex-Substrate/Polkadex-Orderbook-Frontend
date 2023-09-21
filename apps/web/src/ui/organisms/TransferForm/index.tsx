@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
+import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -13,6 +13,8 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
 import { useAssetTransfer } from "@orderbook/core/hooks";
 import { useTranslation } from "react-i18next";
+import { decodeAddress, encodeAddress } from "@polkadot/keyring";
+import { hexToU8a, isHex } from "@polkadot/util";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -131,6 +133,20 @@ export const TransferForm = ({
     [selectedTransferWallet?.account?.address]
   );
 
+  const isValidAddress = useMemo(() => {
+    const address = selectedWallet?.account?.address;
+    try {
+      encodeAddress(
+        isHex(selectedWallet?.account?.address)
+          ? hexToU8a(address)
+          : decodeAddress(address)
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  }, [selectedWallet?.account?.address]);
+
   const {
     touched,
     values,
@@ -176,8 +192,6 @@ export const TransferForm = ({
     },
   });
 
-  useEffect(() => resetForm(), [resetForm]);
-
   return (
     <Loading
       style={{ maxWidth: "100rem" }}
@@ -191,7 +205,6 @@ export const TransferForm = ({
           <WalletCard
             searchable
             label={t("from")}
-            walletTypeLabel={t("funding.name")}
             walletType={t("funding.type")}
             walletName={fundingWalletName}
             walletAddress={fromAccountAddress}
@@ -214,8 +227,7 @@ export const TransferForm = ({
           <WalletCard
             searchable
             label={t("to")}
-            walletTypeLabel={t("trading.type")}
-            walletType={t("trading.name")}
+            walletType={t("trading.type")}
             walletName={t("trading.message")}
             walletAddress={toAccountAddress}
           >
@@ -224,6 +236,7 @@ export const TransferForm = ({
               onQuery={(e) => setToQuery(e)}
               onSelectAccount={setSelectedWallet}
               data={filteredWallets}
+              isValidAddress={isValidAddress}
             />
           </WalletCard>
         </S.Wallets>
@@ -258,7 +271,6 @@ export const TransferForm = ({
                 placeholder={t("amountPlaceholder")}
                 {...getFieldProps("amount")}
               />
-              <span>$0.00</span>
             </div>
             <button type="button" onClick={handleMax}>
               {t("maxButton")}
@@ -271,7 +283,7 @@ export const TransferForm = ({
               !(isValid && dirty) ||
               isLoading ||
               switchEnable ||
-              !selectedWallet?.account?.address
+              !isValidAddress
             }
             type="submit"
           >
