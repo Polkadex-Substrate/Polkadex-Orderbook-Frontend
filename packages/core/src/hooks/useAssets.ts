@@ -5,6 +5,7 @@ import {
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { ChangeEvent, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
+import { formatBalances } from "@orderbook/core/helpers";
 
 export interface AssetsProps extends IPublicAsset {
   free_balance: string;
@@ -42,9 +43,9 @@ export function useAssets() {
 
           return {
             ...e,
-            free_balance,
-            onChainBalance,
-            inOrdersBalance,
+            free_balance: formatBalances(free_balance),
+            onChainBalance: formatBalances(onChainBalance),
+            inOrdersBalance: formatBalances(inOrdersBalance),
           };
         })
         ?.filter((e: AssetsProps) => {

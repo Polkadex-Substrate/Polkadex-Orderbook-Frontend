@@ -7,7 +7,7 @@
  */
 
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { filterBlockedAssets } from "@orderbook/core/helpers";
+import { filterBlockedAssets, formatBalances } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
@@ -55,8 +55,8 @@ export function useTransfer() {
 
         return {
           ...e,
-          onChainBalance,
-          free_balance,
+          free_balance: formatBalances(free_balance),
+          onChainBalance: formatBalances(onChainBalance),
         } as T.FilteredAssetProps;
       }),
     [list, balances]
