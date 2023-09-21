@@ -20,7 +20,7 @@ export const initialState: T.ExtensionWalletState = {
 
 export const extensionWalletReducer = (
   state = initialState,
-  action: GetExtensionWalletAction,
+  action: GetExtensionWalletAction
 ): T.ExtensionWalletState => {
   switch (action.type) {
     case POLKADOT_EXTENSION_WALLET_DATA:

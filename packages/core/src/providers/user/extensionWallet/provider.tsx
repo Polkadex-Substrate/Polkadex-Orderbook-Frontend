@@ -231,50 +231,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
           );
         });
       } catch (error) {
-        console.log(error, "Wallet connection error");
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : `Couldn't fetch funding accounts`;
+        onHandleError(errorMessage);
         dispatch(A.extensionWalletError(error));
       }
-
-      // const wallet = extensions.find(
-      //   (wallet) => wallet.extensionName === extensionName
-      // );
-
-      // if (wallet) {
-      //   dispatch(A.extensionWalletFetch());
-      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //   // @ts-ignore
-      //   wallet
-      //     .enable("@polkadot/extension-dapp")
-      //     .then(() => {
-      //       wallet.subscribeAccounts((accounts) => {
-      //         const allAccounts: ExtensionAccount[] =
-      //           accounts?.map((account) => ({
-      //             account: {
-      //               address: account.address,
-      //               meta: {
-      //                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //                 // @ts-ignore
-      //                 genesisHash: account.genesisHash ?? "",
-      //                 name: account.name,
-      //                 source: account.source,
-      //               },
-      //               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //               // @ts-ignore
-      //               type: account.type ?? "sr25519",
-      //             },
-      //             signer: account.signer as Signer,
-      //           })) ?? [];
-
-      //         dispatch(
-      //           A.extensionWalletData({ allAccounts: allAccounts ?? [] })
-      //         );
-      //       });
-      //     })
-      //     .catch((error) => {
-      //       console.log(error, "Wallet connection error");
-      //       dispatch(A.extensionWalletError(error));
-      //     });
-      // }
 
       // const { web3AccountsSubscribe, web3FromAddress } = await import(
       //   "@polkadot/extension-dapp"
@@ -297,7 +260,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       // );
       // return () => unsubscribe();
     },
-    [extensions]
+    [extensions, onHandleError]
   );
 
   const selectMainAccount = (address: string): ExtensionAccount | undefined => {
