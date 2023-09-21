@@ -121,6 +121,23 @@ export const AccountHeaderFlex = styled.div`
   gap: 1rem;
 `;
 
+export const ButtonGroup = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    button {
+      &:nth-child(1) {
+        background: ${theme.colors.secondaryBackground} !important;
+        &:hover {
+          background: ${theme.colors.secondaryBackgroundOpacity} !important;
+        }
+      }
+    }
+  `}
+`;
+
 export const ButtonWallet = styled.button`
   ${({ theme }) => css`
     border-radius: 0.8rem;

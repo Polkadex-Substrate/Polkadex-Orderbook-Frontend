@@ -160,19 +160,31 @@ export const WalletsTemplate = () => {
                       </Tooltip>
                       <h2>{t("tradingAccounts")}</h2>
                     </S.WalletTitleWrapper>
-                    {hasRegisteredMainAccount && (
+                    <S.ButtonGroup>
                       <ButtonWallet
                         type="button"
-                        onClick={() => {
-                          handleChangeCurrentControllerWallet(null);
-                          tradeWalletState.onRegisterAccountModalActive();
-                        }}
+                        onClick={() =>
+                          tradeWalletState.onRegisterAccountModalActive({
+                            defaultImportActive: true,
+                          })
+                        }
                       >
-                        {controllerWallets?.length > 0
-                          ? t("newAccount")
-                          : t("importAccount")}
+                        {t("importAccount")}
                       </ButtonWallet>
-                    )}
+                      {hasRegisteredMainAccount && (
+                        <ButtonWallet
+                          type="button"
+                          onClick={() => {
+                            handleChangeCurrentControllerWallet(null);
+                            tradeWalletState.onRegisterAccountModalActive();
+                          }}
+                        >
+                          {controllerWallets?.length > 0
+                            ? t("newAccount")
+                            : t("importAccount")}
+                        </ButtonWallet>
+                      )}
+                    </S.ButtonGroup>
                   </S.WalletTitle>
                   <S.WalletContainer>
                     {showLoader ? (
@@ -317,25 +329,6 @@ export const WalletsTemplate = () => {
                                         }}
                                       >
                                         {t("use")}
-                                      </S.Button>
-                                    )}
-                                    {!isPresentInBrowser && (
-                                      <S.Button
-                                        type="button"
-                                        onClick={() =>
-                                          tradeWalletState.onRegisterAccountModalActive(
-                                            {
-                                              defaultImportActive: true,
-                                              data: {
-                                                name: account.account?.meta
-                                                  .name as string,
-                                                address: account.address,
-                                              },
-                                            }
-                                          )
-                                        }
-                                      >
-                                        {t("import")}
                                       </S.Button>
                                     )}
                                     <S.Preview

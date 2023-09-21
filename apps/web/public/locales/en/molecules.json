@@ -80,10 +80,10 @@
     "orderCreated": "Order Created",
     "errors": {
       "notEnoughBalance": "Balance not enough",
-      "minMarketPrice": "Price cannot go below the minimum market price of {{minMarketPrice}}",
-      "maxMarketPrice": "Price cannot exceed the maximum market price of {{maxMarketPrice}}",
-      "minMarketAmount": "Amount cannot go below the minimum market amount of {{minMarketAmount}}",
-      "maxMarketAmount": "Amount cannot exceed the maximum market amount of {{maxMarketAmount}}"
+      "minMarketPrice": "Minimum price: {{minMarketPrice}}",
+      "maxMarketPrice": "Maximum price: {{maxMarketPrice}}",
+      "minMarketAmount": "Minimum amount: {{minMarketAmount}}",
+      "maxMarketAmount": "Maximum amount: {{maxMarketAmount}}"
     }
   },
   "mnemonic": {

@@ -14,6 +14,8 @@ import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvid
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { decimalPlaces } from "@orderbook/core/helpers";
+import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -32,8 +34,16 @@ export const OrderHistory = ({ orderHistory }: Props) => {
   } = orderHistory;
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
-  const priceFixed = currentMarket?.quote_precision;
-  const amountFixed = currentMarket?.base_precision;
+
+  const priceFixed = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : MIN_DIGITS_AFTER_DECIMAL;
+
+  const amountFixed = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : MIN_DIGITS_AFTER_DECIMAL;
+
+  const filledQtyPrecision = Math.max(priceFixed, amountFixed);
 
   const { dateTo, dateFrom } = useSessionProvider();
   const { selectedAccount } = useProfile();
@@ -72,7 +82,7 @@ export const OrderHistory = ({ orderHistory }: Props) => {
               <S.Th>Type</S.Th>
               <S.Th>Status</S.Th>
               <S.Th>Price</S.Th>
-              <S.Th>Total</S.Th>
+              <S.Th>Amount</S.Th>
               <S.Th>Filled</S.Th>
             </S.Tr>
           </S.Thead>
@@ -125,31 +135,23 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                         {
                           value: isMarket
                             ? "-"
-                            : Decimal.format(
-                                order.price,
-                                Number(priceFixed),
-                                ",",
-                              ),
+                            : Decimal.format(order.price, priceFixed, ","),
                         },
                         {
-                          value: Decimal.format(
-                            order.qty,
-                            Number(amountFixed),
-                            ",",
-                          ),
+                          value: Decimal.format(order.qty, amountFixed, ","),
                         },
                         {
                           value: Decimal.format(
                             order.filled_quantity,
-                            Number(amountFixed),
-                            ",",
+                            filledQtyPrecision,
+                            ","
                           ),
                         },
                         {
                           value: Decimal.format(
                             avgPrice,
                             Number(priceFixed),
-                            ",",
+                            ","
                           ),
                         },
                       ]}

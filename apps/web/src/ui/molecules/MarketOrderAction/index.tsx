@@ -87,6 +87,18 @@ export const MarketOrderAction = ({
     else changeTotal(value);
   };
 
+  const showPriceError = Boolean(
+    isSell
+      ? values.priceSell && errors.priceSell && errors.priceSell.length > 0
+      : values.priceBuy && errors.priceBuy && errors.priceBuy.length > 0
+  );
+
+  const showAmountError = Boolean(
+    isSell
+      ? values.amountSell && errors.amountSell && errors.amountSell.length > 0
+      : values.amountBuy && errors.amountBuy && errors.amountBuy.length > 0
+  );
+
   return (
     <S.WrapperOrder>
       {showProtectedPassword ? (
@@ -126,18 +138,21 @@ export const MarketOrderAction = ({
                     inputInfo={quoteTicker}
                     fullWidth={true}
                     type="text"
-                    placeholder="0.00"
+                    placeholder="0.0000"
                     id="order-price"
                     name={isSell ? "priceSell" : "priceBuy"}
                     value={isSell ? values.priceSell : values.priceBuy}
                     onChange={(e) => handleCustomChange(e)}
                     autoComplete="off"
                     disabled={isOrderLoading}
+                    hasError={showPriceError}
                   />
-                  <S.Error>
-                    {isSell
-                      ? values.priceSell && errors.priceSell
-                      : values.priceBuy && errors.priceBuy}
+                  <S.Error hasError={showPriceError}>
+                    <S.ErrorText>
+                      {isSell
+                        ? values.priceSell && errors.priceSell
+                        : values.priceBuy && errors.priceBuy}
+                    </S.ErrorText>
                   </S.Error>
                 </>
               )}
@@ -149,18 +164,21 @@ export const MarketOrderAction = ({
                 }
                 fullWidth={true}
                 type="text"
-                placeholder="0.00"
+                placeholder="0.0000"
                 id="order-amount"
                 name={isSell ? "amountSell" : "amountBuy"}
                 value={isSell ? values.amountSell : values.amountBuy}
                 autoComplete="off"
                 onChange={(e) => handleCustomChange(e)}
                 disabled={isOrderLoading}
+                hasError={showAmountError}
               />
-              <S.Error>
-                {isSell
-                  ? values.amountSell && errors.amountSell
-                  : values.amountBuy && errors.amountBuy}
+              <S.Error hasError={showAmountError}>
+                <S.ErrorText>
+                  {isSell
+                    ? values.amountSell && errors.amountSell
+                    : values.amountBuy && errors.amountBuy}
+                </S.ErrorText>
               </S.Error>
               <S.SliderWrapper>
                 {slider.map((data, index) => (
