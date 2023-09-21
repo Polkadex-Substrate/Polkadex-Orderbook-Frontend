@@ -83,9 +83,13 @@ export const WalletsTemplate = () => {
     data: { isLoading: isAccountsFetching },
   } = useProfile();
   const tradeWalletState = useTradeWallet();
+  const { isFetching: isFetchingExtensionAccounts } = useExtensionWallet();
 
-  const showLoader =
+  const showTradingAccountLoader =
     tradeWalletState.isFetching || isProfileFetching || isAccountsFetching;
+
+  const showFundingAccountLoader =
+    showTradingAccountLoader || isFetchingExtensionAccounts;
 
   const { t, "2": isTranslationReady } = useTranslation("settings");
 
@@ -191,7 +195,7 @@ export const WalletsTemplate = () => {
                     </S.ButtonGroup>
                   </S.WalletTitle>
                   <S.WalletContainer>
-                    {showLoader ? (
+                    {showTradingAccountLoader ? (
                       <S.LoadingWrapper>
                         <Keyboard color="primary" />
                       </S.LoadingWrapper>
@@ -383,7 +387,7 @@ export const WalletsTemplate = () => {
                     </S.WalletTitleWrapper>
                   </S.WalletTitle>
                   <S.WalletContainer>
-                    {showLoader ? (
+                    {showFundingAccountLoader ? (
                       <S.LoadingWrapper>
                         <Keyboard color="primary" />
                       </S.LoadingWrapper>

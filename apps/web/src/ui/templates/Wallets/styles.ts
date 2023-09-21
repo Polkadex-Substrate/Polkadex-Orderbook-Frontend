@@ -184,6 +184,7 @@ export const Empty = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  padding: 4rem;
 `;
 
 export const DropdownTrigger = styled.div<{ showBackground?: boolean }>`

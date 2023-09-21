@@ -4,6 +4,7 @@ import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Signer } from "@polkadot/types/types";
+import { encodeAddress } from "@polkadot/util-crypto";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -173,46 +174,107 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
   const onConnectExtensionWallet = useCallback(
     async ({ extensionName }: T.onGetExtensionWallet) => {
-      const wallet = extensions.find(
-        (wallet) => wallet.extensionName === extensionName
-      );
+      dispatch(A.extensionWalletFetch());
 
-      if (wallet) {
-        dispatch(A.extensionWalletFetch());
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        wallet
-          .enable("@polkadot/extension-dapp")
-          .then(() => {
-            wallet.subscribeAccounts((accounts) => {
-              const allAccounts: ExtensionAccount[] =
-                accounts?.map((account) => ({
-                  account: {
-                    address: account.address,
-                    meta: {
-                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                      // @ts-ignore
-                      genesisHash: account.genesisHash ?? "",
-                      name: account.name,
-                      source: account.source,
-                    },
+      try {
+        const wallet = extensions?.find(
+          (e) => e.extensionName === extensionName
+        );
+
+        if (!wallet?.installed) {
+          throw new Error("Wallet not installed");
+        }
+
+        await wallet.enable("@polkadot/extension-dapp");
+        await wallet.subscribeAccounts(async (accounts) => {
+          if (!accounts?.length) {
+            dispatch(
+              A.extensionWalletData({
+                allAccounts: [],
+              })
+            );
+            return;
+          }
+
+          const promises = await Promise.all(
+            accounts.map(async (account): Promise<ExtensionAccount | null> => {
+              if (account.address.startsWith("0x")) return null;
+              const address = encodeAddress(account.address, 88);
+              const signer = (await account.signer) as Signer;
+              return {
+                account: {
+                  address,
+                  meta: {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    type: account.type ?? "sr25519",
+                    genesisHash: account.genesisHash ?? "",
+                    name: account.name,
+                    source: account.source,
                   },
-                  signer: account.signer as Signer,
-                })) ?? [];
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  type: account.type ?? "sr25519",
+                },
+                signer,
+              };
+            })
+          );
 
-              dispatch(
-                A.extensionWalletData({ allAccounts: allAccounts ?? [] })
-              );
-            });
-          })
-          .catch((error) => {
-            console.log(error, "Wallet connection error");
-            dispatch(A.extensionWalletError(error));
-          });
+          const validPromises = promises.filter(
+            (promiseResult): promiseResult is ExtensionAccount =>
+              promiseResult !== null
+          );
+          dispatch(
+            A.extensionWalletData({
+              allAccounts: validPromises,
+            })
+          );
+        });
+      } catch (error) {
+        console.log(error, "Wallet connection error");
+        dispatch(A.extensionWalletError(error));
       }
+
+      // const wallet = extensions.find(
+      //   (wallet) => wallet.extensionName === extensionName
+      // );
+
+      // if (wallet) {
+      //   dispatch(A.extensionWalletFetch());
+      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //   // @ts-ignore
+      //   wallet
+      //     .enable("@polkadot/extension-dapp")
+      //     .then(() => {
+      //       wallet.subscribeAccounts((accounts) => {
+      //         const allAccounts: ExtensionAccount[] =
+      //           accounts?.map((account) => ({
+      //             account: {
+      //               address: account.address,
+      //               meta: {
+      //                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //                 // @ts-ignore
+      //                 genesisHash: account.genesisHash ?? "",
+      //                 name: account.name,
+      //                 source: account.source,
+      //               },
+      //               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //               // @ts-ignore
+      //               type: account.type ?? "sr25519",
+      //             },
+      //             signer: account.signer as Signer,
+      //           })) ?? [];
+
+      //         dispatch(
+      //           A.extensionWalletData({ allAccounts: allAccounts ?? [] })
+      //         );
+      //       });
+      //     })
+      //     .catch((error) => {
+      //       console.log(error, "Wallet connection error");
+      //       dispatch(A.extensionWalletError(error));
+      //     });
+      // }
 
       // const { web3AccountsSubscribe, web3FromAddress } = await import(
       //   "@polkadot/extension-dapp"
