@@ -681,7 +681,7 @@ const EmptyFundingWallet = ({
         {/* Extension dropdown/Connect wallet */}
         <Dropdown>
           <Dropdown.Trigger>
-            <S.DropdownTrigger>
+            <S.DropdownTrigger showBackground>
               Connect Wallet
               <Icons.ArrowBottom />
             </S.DropdownTrigger>
@@ -700,10 +700,19 @@ const EmptyFundingWallet = ({
 
 const AvailableExtensionsDropDown = () => {
   const { extensions } = useSettingsProvider();
+  const { onConnectExtensionWallet } = useExtensionWallet();
+
   return (
     <Dropdown.Menu fill="secondaryBackgroundSolid">
       {extensions.slice(0, 3).map((extension) => (
-        <Dropdown.Item key={extension.extensionName}>
+        <Dropdown.Item
+          key={extension.extensionName}
+          onAction={() => {
+            onConnectExtensionWallet({
+              extensionName: extension.extensionName,
+            });
+          }}
+        >
           <Image
             src={extension.logo.src}
             alt={extension.logo.alt}

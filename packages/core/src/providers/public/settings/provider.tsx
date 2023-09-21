@@ -83,9 +83,9 @@ export const SettingProvider: T.SettingComponent = ({
     if (extensions?.length > 0) dispatch(A.checkHasExtension());
   }, []);
 
-  useEffect(() => {
-    onCheckExtension();
-  }, [onCheckExtension]);
+  // useEffect(() => {
+  //   onCheckExtension();
+  // }, [onCheckExtension]);
 
   // useEffect(() => {
   //   const installedWallets = getWallets();

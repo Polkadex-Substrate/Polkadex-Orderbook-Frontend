@@ -12,7 +12,7 @@ export const Context = createContext<ExtensionWalletContextProps>({
   onRegisterMainAccountReset: () => {},
   onRegisterMainAccountUpdate: () => {},
   onRegisterMainAccount: () => {},
-  onPolkadotExtensionWallet: () => {},
+  onConnectExtensionWallet: () => {},
   selectMainAccount: () => undefined,
 });
 

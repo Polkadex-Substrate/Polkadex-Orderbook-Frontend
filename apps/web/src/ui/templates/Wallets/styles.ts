@@ -186,10 +186,12 @@ export const Empty = styled.div`
   gap: 2rem;
 `;
 
-export const DropdownTrigger = styled.div`
-  ${({ theme }) => css`
+export const DropdownTrigger = styled.div<{ showBackground?: boolean }>`
+  ${({ theme, showBackground = false }) => css`
     cursor: pointer;
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${showBackground
+      ? theme.colors.primary
+      : theme.colors.secondaryBackgroundOpacity} !important;
     border-radius: 0.7rem;
     padding: 0.6rem 0.8rem;
     user-select: none;

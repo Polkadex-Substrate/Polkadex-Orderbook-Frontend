@@ -3,6 +3,7 @@ import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { Signer } from "@polkadot/types/types";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -30,7 +31,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
-  const { onHandleError, onHandleNotification, hasExtension } =
+  const { onHandleError, onHandleNotification, hasExtension, extensions } =
     useSettingsProvider();
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
@@ -39,7 +40,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
   // Actions
   const onLinkEmail = async (
-    payload: A.RegisterMainAccountLinkEmailFetch["payload"],
+    payload: A.RegisterMainAccountLinkEmailFetch["payload"]
   ) => {
     const { mainAccount } = payload;
     try {
@@ -47,7 +48,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) =>
-          account?.address?.toLowerCase() === mainAccount?.toLowerCase(),
+          account?.address?.toLowerCase() === mainAccount?.toLowerCase()
       );
 
       const hasAddressAndEmail =
@@ -57,7 +58,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       if (hasAddressAndEmail) {
         const signedData = await createSignedData(
           selectedControllerAccount,
-          email,
+          email
         );
         const data = signedData.data;
         const signature: string = signedData.signature;
@@ -108,11 +109,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       onUserAccountSelectFetch,
       onUserProfileMainAccountPush,
       onUserProfileAccountPush,
-    ],
+    ]
   );
 
   const onRegisterMainAccount = async (
-    payload: A.RegisterMainAccountFetch["payload"],
+    payload: A.RegisterMainAccountFetch["payload"]
   ) => {
     const { mainAccount, tradeAddress, mnemonic } = payload;
     dispatch(A.registerMainAccountFetch(payload));
@@ -120,7 +121,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     try {
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) =>
-          account?.address?.toLowerCase() === mainAccount?.toLowerCase(),
+          account?.address?.toLowerCase() === mainAccount?.toLowerCase()
       );
       const email = authState.email;
       const api = nativeApiState.api;
@@ -141,7 +142,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
           api,
           tradeAddress,
           selectedControllerAccount.signer,
-          selectedControllerAccount.account?.address,
+          selectedControllerAccount.account?.address
         );
 
         if (res.isSuccess) {
@@ -170,37 +171,82 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     }
   };
 
-  const onPolkadotExtensionWallet = useCallback(async () => {
-    const { web3AccountsSubscribe, web3FromAddress } = await import(
-      "@polkadot/extension-dapp"
-    );
-    const unsubscribe = await web3AccountsSubscribe(
-      async (injectedAccounts: InjectedAccountWithMeta[]) => {
-        const allAccounts = await Promise.all(
-          injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
-            const { signer } = await web3FromAddress(account.address);
-            return {
-              account,
-              signer,
-            };
-          }),
-        );
-        dispatch(A.extensionWalletData({ allAccounts }));
-      },
-      { ss58Format: 88 },
-    );
-    return () => unsubscribe();
-  }, []);
+  const onConnectExtensionWallet = useCallback(
+    async ({ extensionName }: T.onGetExtensionWallet) => {
+      const wallet = extensions.find(
+        (wallet) => wallet.extensionName === extensionName
+      );
+
+      if (wallet) {
+        dispatch(A.extensionWalletFetch());
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        wallet
+          .enable("@polkadot/extension-dapp")
+          .then(() => {
+            wallet.subscribeAccounts((accounts) => {
+              const allAccounts: ExtensionAccount[] =
+                accounts?.map((account) => ({
+                  account: {
+                    address: account.address,
+                    meta: {
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      genesisHash: account.genesisHash ?? "",
+                      name: account.name,
+                      source: account.source,
+                    },
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    type: account.type ?? "sr25519",
+                  },
+                  signer: account.signer as Signer,
+                })) ?? [];
+
+              dispatch(
+                A.extensionWalletData({ allAccounts: allAccounts ?? [] })
+              );
+            });
+          })
+          .catch((error) => {
+            console.log(error, "Wallet connection error");
+            dispatch(A.extensionWalletError(error));
+          });
+      }
+
+      // const { web3AccountsSubscribe, web3FromAddress } = await import(
+      //   "@polkadot/extension-dapp"
+      // );
+      // const unsubscribe = await web3AccountsSubscribe(
+      //   async (injectedAccounts: InjectedAccountWithMeta[]) => {
+      //     const allAccounts = await Promise.all(
+      //       injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
+      //         const { signer } = await web3FromAddress(account.address);
+      //         return {
+      //           account,
+      //           signer,
+      //         };
+      //       })
+      //     );
+      //     console.log(allAccounts, "all accounts");
+      //     dispatch(A.extensionWalletData({ allAccounts }));
+      //   },
+      //   { ss58Format: 88 }
+      // );
+      // return () => unsubscribe();
+    },
+    [extensions]
+  );
 
   const selectMainAccount = (address: string): ExtensionAccount | undefined => {
     return state.allAccounts?.find(
       ({ account }) =>
-        account?.address?.toLowerCase() === address?.toLowerCase(),
+        account?.address?.toLowerCase() === address?.toLowerCase()
     );
   };
-  useEffect(() => {
-    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
+  // useEffect(() => {
+  //   if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
+  // }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
 
   useEffect(() => {
     if (mainAddress) {
@@ -223,7 +269,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         onRegisterMainAccountReset,
         onRegisterMainAccountUpdate,
         onRegisterMainAccount,
-        onPolkadotExtensionWallet,
+        onConnectExtensionWallet,
         selectMainAccount,
       }}
     >

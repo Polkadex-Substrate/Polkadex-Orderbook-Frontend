@@ -19,14 +19,16 @@ export type ExtensionWalletProviderProps = PropsWithChildren<{
   value: ExtensionWalletContextProps;
 }>;
 
+export type onGetExtensionWallet = { extensionName: string };
+
 export type ExtensionWalletContextProps = ExtensionWalletState & {
   onLinkEmail: (value: A.RegisterMainAccountLinkEmailFetch["payload"]) => void;
   onRegisterMainAccountReset: () => void;
   onRegisterMainAccountUpdate: (
-    value: A.RegisterMainAccountUpdateEvent["payload"],
+    value: A.RegisterMainAccountUpdateEvent["payload"]
   ) => void;
   onRegisterMainAccount: (value: A.RegisterMainAccountFetch["payload"]) => void;
-  onPolkadotExtensionWallet: () => void;
+  onConnectExtensionWallet: (value: onGetExtensionWallet) => void;
   selectMainAccount: (value: string) => ExtensionAccount | undefined;
 };
 
