@@ -284,7 +284,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     [extensions, onHandleError]
   );
 
-  const onGetDefaultWallet = (extensionName: string) => {
+  const onUseAsDefault = (extensionName: string) => {
     dispatch(A.getDefaultExtensionWallet(extensionName));
   };
 
@@ -300,7 +300,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       defaultExtension &&
       extensions?.some((e) => e.extensionName === defaultExtension)
     ) {
-      onGetDefaultWallet(defaultExtension);
+      onUseAsDefault(defaultExtension);
       onConnectExtensionWallet({
         extensionName: defaultExtension,
         saveInLocalStorage: false,
