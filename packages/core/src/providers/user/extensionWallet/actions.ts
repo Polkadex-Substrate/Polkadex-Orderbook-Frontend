@@ -14,6 +14,7 @@ import {
   REGISTER_MAIN_ACCOUNT_UPDATE_FETCH,
   REGISTER_MAIN_ACCOUNT_LINK_EMAIL,
   SET_DEFAULT_EXTENSION_WALLET,
+  GET_DEFAULT_EXTENSION_WALLET,
 } from "./constants";
 
 export interface ExtensionWalletFetch {
@@ -63,6 +64,11 @@ export interface SetDefaultExtensionWallet {
   payload: string;
 }
 
+export interface GetDefaultExtensionWallet {
+  type: typeof GET_DEFAULT_EXTENSION_WALLET;
+  payload: string;
+}
+
 export interface RegisterMainAccountError {
   type: typeof REGISTER_MAIN_ACCOUNT_ERROR;
 }
@@ -93,7 +99,8 @@ export type GetExtensionWalletAction =
   | RegisterMainAccountUpdateEvent
   | RegisterMainAccountReset
   | RegisterMainAccountUpdateData
-  | SetDefaultExtensionWallet;
+  | SetDefaultExtensionWallet
+  | GetDefaultExtensionWallet;
 
 export const extensionWalletData = (
   payload: ExtensionWalletData["payload"]
@@ -157,5 +164,12 @@ export const setDefaultExtensionWallet = (
   payload: string
 ): SetDefaultExtensionWallet => ({
   type: SET_DEFAULT_EXTENSION_WALLET,
+  payload,
+});
+
+export const getDefaultExtensionWallet = (
+  payload: string
+): GetDefaultExtensionWallet => ({
+  type: GET_DEFAULT_EXTENSION_WALLET,
   payload,
 });

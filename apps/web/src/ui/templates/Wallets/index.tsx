@@ -83,7 +83,14 @@ export const WalletsTemplate = () => {
     data: { isLoading: isAccountsFetching },
   } = useProfile();
   const tradeWalletState = useTradeWallet();
-  const { isFetching: isFetchingExtensionAccounts } = useExtensionWallet();
+  const {
+    isFetching: isFetchingExtensionAccounts,
+    defaultExtension: defaultExtensionName,
+  } = useExtensionWallet();
+
+  const defaultExtension = extensions.find(
+    (extension) => extension.extensionName === defaultExtensionName
+  );
 
   const showTradingAccountLoader =
     tradeWalletState.isFetching || isProfileFetching || isAccountsFetching;
@@ -416,14 +423,18 @@ export const WalletsTemplate = () => {
                             <Dropdown>
                               <Dropdown.Trigger>
                                 <S.DropdownTrigger>
-                                  <Image
-                                    src={extensions[2].logo.src}
-                                    alt={extensions[2].logo.alt}
-                                    width={20}
-                                    height={20}
-                                  />
-                                  {extensions[2].title}
-                                  <Icons.ArrowBottom />
+                                  {defaultExtension && (
+                                    <>
+                                      <Image
+                                        src={defaultExtension.logo.src}
+                                        alt={defaultExtension.logo.alt}
+                                        width={20}
+                                        height={20}
+                                      />
+                                      {defaultExtension.title}
+                                      <Icons.ArrowBottom />
+                                    </>
+                                  )}
                                 </S.DropdownTrigger>
                               </Dropdown.Trigger>
                               <AvailableExtensionsDropDown />

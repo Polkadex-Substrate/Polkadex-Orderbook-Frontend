@@ -13,6 +13,7 @@ export interface ExtensionWalletState {
   allAccounts: ExtensionAccount[];
   registerMainAccountLoading: boolean;
   registerMainAccountSuccess: boolean;
+  defaultExtension?: string;
 }
 
 export type ExtensionWalletProviderProps = PropsWithChildren<{

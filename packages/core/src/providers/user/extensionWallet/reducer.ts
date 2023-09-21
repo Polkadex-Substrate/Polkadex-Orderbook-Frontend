@@ -10,6 +10,7 @@ import {
   REGISTER_MAIN_ACCOUNT_ERROR,
   REGISTER_MAIN_ACCOUNT_FETCH,
   SET_DEFAULT_EXTENSION_WALLET,
+  GET_DEFAULT_EXTENSION_WALLET,
 } from "./constants";
 import * as T from "./types";
 
@@ -51,7 +52,11 @@ export const extensionWalletReducer = (
         LOCAL_STORAGE_ID.DEFAULT_EXTENSION,
         extensionName
       );
-      return { ...state };
+      return { ...state, defaultExtension: extensionName };
+    }
+    case GET_DEFAULT_EXTENSION_WALLET: {
+      const extensionName = action.payload;
+      return { ...state, defaultExtension: extensionName };
     }
     case REGISTER_MAIN_ACCOUNT_RESET:
       return {

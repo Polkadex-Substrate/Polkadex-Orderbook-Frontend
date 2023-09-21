@@ -284,6 +284,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     [extensions, onHandleError]
   );
 
+  const onGetDefaultWallet = (extensionName: string) => {
+    dispatch(A.getDefaultExtensionWallet(extensionName));
+  };
+
   const selectMainAccount = (address: string): ExtensionAccount | undefined => {
     return state.allAccounts?.find(
       ({ account }) =>
@@ -295,11 +299,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       authInfo.isAuthenticated &&
       defaultExtension &&
       extensions?.some((e) => e.extensionName === defaultExtension)
-    )
+    ) {
+      onGetDefaultWallet(defaultExtension);
       onConnectExtensionWallet({
         extensionName: defaultExtension,
         saveInLocalStorage: false,
       });
+    }
   }, [
     onConnectExtensionWallet,
     authInfo.isAuthenticated,
