@@ -177,11 +177,15 @@ export const WithdrawHistory = ({
         <S.Container>
           <S.Title>
             <S.TabList>
-              <S.TabItem>
-                {t("tabs.pending")}({pendingWithdraws?.length})
-              </S.TabItem>
               <S.TabItemPending>
-                {t("tabs.readyToClaim")} ({pendingClaims})
+                {pendingWithdraws?.length > 0 && (
+                  <div>{pendingWithdraws.length}</div>
+                )}
+                {t("tabs.pending")}
+              </S.TabItemPending>
+              <S.TabItemPending>
+                {pendingClaims > 0 && <div>{pendingClaims}</div>}
+                {t("tabs.readyToClaim")}
               </S.TabItemPending>
               <S.TabItem>{t("tabs.claimed")}</S.TabItem>
             </S.TabList>
