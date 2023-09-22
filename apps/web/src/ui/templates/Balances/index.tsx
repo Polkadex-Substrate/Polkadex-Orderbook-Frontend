@@ -1,67 +1,30 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
-import { Header, Menu } from "@polkadex/orderbook-ui/organisms";
+import { BalancesTable, Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
   EmptyMyAccount,
   Footer,
-  Icon,
-  ResultFound,
   Search,
-  Table,
 } from "@polkadex/orderbook-ui/molecules";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { defaultConfig } from "@orderbook/core/config";
-import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
-import { formatBalances } from "@orderbook/core/helpers";
+import { useMemo } from "react";
+import { useAssets } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
+import { TableSkeleton } from "./skeleton";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
   const { t: tc } = useTranslation("common");
 
-  const [filters, setFilters] = useState({ search: "", hideZero: false });
-
-  const { list, loading: isAssetsFetching } = useAssetsProvider();
-  const { balances: userBalances, loading: isBalanceFetching } =
-    useBalancesProvider();
   const { connecting } = useNativeApi();
-  const profileState = useProfile();
+  const { auth, selectedAccount } = useProfile();
 
-  const userHasSelectedAccount =
-    profileState?.selectedAccount?.mainAddress?.length > 0;
-
-  const allAssets = useMemo(
-    () =>
-      list?.filter((e) => {
-        const tokenBalance = userBalances?.find(
-          (value) => value.assetId === e.assetId
-        );
-        // TODO: Define small amount based on the decimals of the token.
-        const hasZeroAmount =
-          filters.hideZero && Number(tokenBalance?.free_balance || 0) < 0.001;
-
-        const matchesNameOrTicker =
-          e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-          e.symbol.toLowerCase().includes(filters.search.toLowerCase());
-        return (
-          matchesNameOrTicker &&
-          !hasZeroAmount &&
-          !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
-        );
-      }),
-    [filters.search, list, userBalances, filters.hideZero]
-  );
-
-  allAssets.sort((a, b) => a.name.localeCompare(b.name));
+  const userHasSelectedAccount = selectedAccount?.mainAddress?.length > 0;
 
   const connectWalletData = {
     image: "emptyWallet",
@@ -72,172 +35,111 @@ export const BalancesTemplate = () => {
     secondaryLink: "/wallets",
     secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
-  const router = useRouter();
 
-  const showLoader =
-    isAssetsFetching ||
-    isBalanceFetching ||
-    profileState.auth.isLoading ||
-    connecting;
+  const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
+    useAssets();
+
+  const showLoader = useMemo(
+    () => auth.isLoading || connecting || loading,
+    [connecting, loading, auth?.isLoading]
+  );
 
   return (
     <>
       <Head>
         <title>{t("title")}</title>
-        <meta name="description" content="A new era in DeFi" />
+        <meta name="description" content={t("description")} />
       </Head>
       <S.Main>
         <Header />
         <S.Flex>
-          <Menu />
+          <Menu open />
           <S.Wrapper>
             <S.ContainerMain>
-              <S.Title>
-                <S.Back onClick={() => router.back()}>
-                  <Icons.SingleArrowLeft />
-                </S.Back>
+              <S.Header>
                 <h1>{t("heading")}</h1>
-              </S.Title>
+                <h2>{t("subheading")}</h2>
+              </S.Header>
               <S.Container>
-                {showLoader ? (
-                  <S.LoadingWrapper>
-                    <Keyboard color="primary" />
-                  </S.LoadingWrapper>
-                ) : userHasSelectedAccount ? (
-                  <>
-                    <S.Header>
-                      <h2>{t("overview")}</h2>
-                      <S.HeaderBox>
-                        <Search
-                          value={filters.search}
-                          onChange={(e) =>
-                            setFilters({ ...filters, search: e.target.value })
-                          }
-                          isFull
-                          placeholder={t("searchPlaceholder")}
-                        />
-                        <Checkbox
-                          checked={filters.hideZero}
-                          onChange={() =>
-                            setFilters({
-                              ...filters,
-                              hideZero: !filters.hideZero,
-                            })
-                          }
-                        >
-                          {t("hideSmallBalances")}
-                        </Checkbox>
-                      </S.HeaderBox>
-                    </S.Header>
-                    <S.Content>
-                      {allAssets?.length ? (
-                        <Table
-                          aria-label="Polkadex assets"
-                          style={{ width: "100%" }}
-                        >
-                          <Table.Header fill="none">
-                            <Table.Column>
-                              <S.Column style={{ paddingLeft: 10 }}>
-                                {t("name")}
-                              </S.Column>
-                            </Table.Column>
-                            <Table.Column>
-                              <S.Column>{t("tradingAccount")}</S.Column>
-                            </Table.Column>
-                            <Table.Column>
-                              <S.Column>{t("fundingAccount")}</S.Column>
-                            </Table.Column>
-                            <Table.Column>
-                              <S.Column>{t("inOrders")}</S.Column>
-                            </Table.Column>
-                            <Table.Column>
-                              <S.Column>{t("actions")}</S.Column>
-                            </Table.Column>
-                          </Table.Header>
-                          <Table.Body striped border="squared">
-                            {allAssets?.map((item) => {
-                              const balance = userBalances?.find(
-                                (value) => value.assetId === item.assetId
-                              );
-                              return (
-                                <Table.Row key={item.assetId}>
-                                  <Table.Cell>
-                                    <S.CellFlex>
-                                      <S.TokenIcon>
-                                        <Icon
-                                          isToken
-                                          name={item.symbol}
-                                          size="extraSmall"
-                                        />
-                                      </S.TokenIcon>
-                                      <S.Cell>
-                                        <span>
-                                          {item.name}{" "}
-                                          <small> {item.symbol}</small>
-                                        </span>
-                                      </S.Cell>
-                                    </S.CellFlex>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {formatBalances(
-                                          balance?.free_balance || "0"
-                                        )}
-                                      </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {formatBalances(
-                                          balance?.onChainBalance || "0"
-                                        )}
-                                      </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Cell>
-                                      <span>
-                                        {formatBalances(
-                                          balance?.reserved_balance || "0"
-                                        )}
-                                      </span>
-                                    </S.Cell>
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <S.Actions>
-                                      <Link href={`/deposit/${item.symbol}`}>
-                                        <S.DepositLink>
-                                          {tc("deposit")}
-                                        </S.DepositLink>
-                                      </Link>
-                                      <Link href={`/withdraw/${item.symbol}`}>
-                                        <S.WithdrawLink>
-                                          {tc("withdraw")}
-                                        </S.WithdrawLink>
-                                      </Link>
-                                    </S.Actions>
-                                  </Table.Cell>
-                                </Table.Row>
-                              );
-                            })}
-                          </Table.Body>
-                        </Table>
-                      ) : (
-                        <ResultFound />
-                      )}
-                    </S.Content>
-                  </>
-                ) : (
-                  <EmptyMyAccount balances hasLimit {...connectWalletData} />
-                )}
+                <S.Title>
+                  <h2>{t("overview")}</h2>
+                  <S.Filters>
+                    <Search
+                      value={filters.search}
+                      onChange={onSearchToken}
+                      isFull
+                      placeholder={t("searchPlaceholder")}
+                    />
+                    <Checkbox
+                      checked={filters.hideZero}
+                      onChange={onHideZeroBalance}
+                      labelProps={{ style: { whiteSpace: "nowrap" } }}
+                    >
+                      {t("hideSmallBalances")}
+                    </Checkbox>
+                  </S.Filters>
+                </S.Title>
+                <S.Content>
+                  {showLoader ? (
+                    <TableSkeleton />
+                  ) : userHasSelectedAccount ? (
+                    <BalancesTable assets={assets} />
+                  ) : (
+                    <EmptyMyAccount balances hasLimit {...connectWalletData} />
+                  )}
+                </S.Content>
               </S.Container>
+              <S.Support>
+                <SupportCard
+                  title={t("troubleTitle")}
+                  description={t("troubleDescription")}
+                  href="https://discord.com/channels/859180272335323166/1034160372954964089"
+                  buttonTitle={t("troubleButton")}
+                  icon="Trouble"
+                />
+                <SupportCard
+                  title={t("contributeTitle")}
+                  description={t("contributeDescription")}
+                  href="https://t.me/Polkadex"
+                  buttonTitle={t("contributeButton")}
+                  icon="TokenListing"
+                />
+              </S.Support>
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>
         </S.Flex>
       </S.Main>
     </>
+  );
+};
+
+const SupportCard = ({
+  title,
+  description,
+  href,
+  buttonTitle,
+  icon,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  buttonTitle: string;
+  icon: "Trouble" | "TokenListing";
+}) => {
+  const IconComponent = Icons[icon];
+  return (
+    <S.SupportCard>
+      <S.SupportCardContainer>
+        <div>
+          <IconComponent />
+        </div>
+        <h4>{title}</h4>
+        <p>{description}</p>
+      </S.SupportCardContainer>
+      <Link href={href} target="_blank">
+        {buttonTitle}
+      </Link>
+    </S.SupportCard>
   );
 };

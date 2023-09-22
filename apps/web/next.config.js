@@ -71,6 +71,7 @@ const nextConfig = {
     UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
     MAIN_URL: process.env.MAIN_URL,
     BLOCKED_ASSETS: process.env.BLOCKED_ASSETS,
+    SUBSCAN_API: process.env.SUBSCAN_API,
   },
 };
 

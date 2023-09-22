@@ -103,7 +103,7 @@ export const DepositTemplate = () => {
       },
       validationSchema: depositValidations(
         onChainBalance,
-        selectedAsset?.assetId as string,
+        isAssetPDEX(selectedAsset?.assetId),
         existentialBalance
       ),
       validateOnChange: true,
@@ -118,7 +118,7 @@ export const DepositTemplate = () => {
           onFetchDeposit({
             asset: asset,
             amount: values.amount,
-            mainAccount: currMainAcc,
+            account: currMainAcc,
           });
         }
       },

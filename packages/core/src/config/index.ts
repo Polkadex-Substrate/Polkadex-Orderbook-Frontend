@@ -33,8 +33,10 @@ export const defaultConfig: DefaultConfig = {
     "/sign",
     "/signIn",
     "/withdraw",
+    "/transfer",
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(",") ?? [],
   mainUrl: process.env.MAIN_URL || "/trading",
   blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],
+  subscanApi: process.env.SUBSCAN_API || "",
 };

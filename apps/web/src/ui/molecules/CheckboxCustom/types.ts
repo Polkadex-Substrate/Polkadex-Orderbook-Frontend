@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import { InputHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
 import { Colors, Sizes } from "@orderbook/core/helpers";
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,4 +8,5 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   checboxSize?: Sizes;
   backgroundStyle?: "flat" | "ghost" | "outline" | "none";
   borderStyle?: "rounded" | "squared" | "semiRounded";
+  labelProps?: LabelHTMLAttributes<HTMLLabelElement>;
 }

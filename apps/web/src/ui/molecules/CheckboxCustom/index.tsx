@@ -7,6 +7,7 @@ import * as T from "./types";
 export const CheckboxCustom = ({
   children,
   name = `polkadexui${String(Math.random())}`,
+  labelProps,
   ...props
 }: PropsWithChildren<T.Props>) => {
   const hasChild =
@@ -15,7 +16,11 @@ export const CheckboxCustom = ({
   return (
     <S.Wrapper disabled={props.disabled}>
       <input type="checkbox" id={name} {...props} />
-      {hasChild && <label htmlFor={name}>{children}</label>}
+      {hasChild && (
+        <label {...labelProps} htmlFor={name}>
+          {children}
+        </label>
+      )}
     </S.Wrapper>
   );
 };

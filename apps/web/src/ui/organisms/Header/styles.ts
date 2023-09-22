@@ -36,11 +36,11 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 15rem;
-    svg {
-      width: 100%;
-      height: 100%;
-    }
+    max-width: 121px;
+    min-height: 24px;
+    /* 121,
+    24 */
+
     ${borderActive &&
     css`
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
