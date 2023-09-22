@@ -34,8 +34,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
-  const { onHandleError, onHandleNotification, extensions } =
-    useSettingsProvider();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
@@ -191,9 +190,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       dispatch(A.extensionWalletFetch());
 
       try {
-        const wallet = extensions?.find(
-          (e) => e.extensionName === extensionName
-        );
+        const wallet = getWalletBySource(extensionName);
 
         if (!wallet?.installed) {
           throw new Error("Wallet not installed");
@@ -283,7 +280,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       // );
       // return () => unsubscribe();
     },
-    [extensions, onHandleError]
+    [onHandleError]
   );
 
   const onUseAsDefault = (extensionName: string) => {
@@ -318,8 +315,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   }, [onConnectExtensionWallet, defaultExtension]);
 
   useEffect(() => {
-    if (authInfo.isAuthenticated) onRestoreExtensionWallet();
-  }, [onRestoreExtensionWallet, authInfo.isAuthenticated]);
+    if (authInfo.isAuthenticated && isClientSide) onRestoreExtensionWallet();
+  }, [onRestoreExtensionWallet, authInfo.isAuthenticated, isClientSide]);
 
   useEffect(() => {
     if (mainAddress) {
