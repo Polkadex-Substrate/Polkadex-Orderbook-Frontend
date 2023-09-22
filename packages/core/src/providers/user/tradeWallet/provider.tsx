@@ -31,8 +31,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     selectedAccount,
   } = useProfile();
   const nativeApiState = useNativeApi();
-  const { onHandleError, onHandleNotification, hasExtension } =
-    useSettingsProvider();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
 
   // Actions
   const onExportTradeAccount = (
@@ -377,8 +376,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {
-    if (authInfo.isAuthenticated && hasExtension) onLoadTradeAccounts();
-  }, [onLoadTradeAccounts, authInfo.isAuthenticated, hasExtension]);
+    if (authInfo.isAuthenticated) onLoadTradeAccounts();
+  }, [onLoadTradeAccounts, authInfo.isAuthenticated]);
 
   return (
     <Provider
