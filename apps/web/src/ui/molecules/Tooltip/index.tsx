@@ -54,6 +54,7 @@ export const TooltipContent = ({
   onDismiss,
   children,
   priority = "low",
+  ...props
 }: T.TooltipContentProps) => {
   useEffect(() => {
     // called when mounted
@@ -71,6 +72,7 @@ export const TooltipContent = ({
       priority={priority}
       role="tooltip"
       data-id="tooltip-content"
+      {...props}
     >
       {children}
     </S.Content>

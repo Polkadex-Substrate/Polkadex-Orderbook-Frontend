@@ -1,12 +1,9 @@
 import { useReducer } from "react";
 import BigNumber from "bignumber.js";
-import { ApiPromise } from "@polkadot/api";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@orderbook/core/helpers";
 import { UNIT_BN } from "@orderbook/core/constants";
-
-import { ExtensionAccount } from "../../types";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -19,16 +16,25 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
   const { connected: isApiReady, api } = useNativeApi();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
 
-  const onFetchDeposit = async ({ asset, amount, mainAccount }) => {
+  const onFetchDeposit = async ({
+    asset,
+    amount,
+    account,
+  }: T.onFetchDeposit) => {
     try {
-      if (api && isApiReady && mainAccount?.account?.address !== "") {
+      if (api && isApiReady && account?.account?.address !== "") {
         onHandleNotification({
           type: "Information",
           message: "Processing Deposit...",
         });
         dispatch(A.depositsFetch());
 
-        const res = await depositToEnclave(api, mainAccount, asset, amount);
+        const res = await depositToEnclave({
+          api,
+          account,
+          asset,
+          amount,
+        });
 
         if (res.isSuccess) {
           dispatch(A.depositsData());
@@ -50,12 +56,12 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     }
   };
 
-  async function depositToEnclave(
-    api: ApiPromise,
-    account: ExtensionAccount,
-    asset: Record<string, string | null>,
-    amount: string | number,
-  ): Promise<ExtrinsicResult> {
+  async function depositToEnclave({
+    api,
+    account,
+    asset,
+    amount,
+  }: T.DepositToEnclave): Promise<ExtrinsicResult> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset, amountStr);
     const res = await signAndSendExtrinsic(
@@ -63,7 +69,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       ext,
       { signer: account.signer },
       account?.account.address,
-      true,
+      true
     );
     return res;
   }

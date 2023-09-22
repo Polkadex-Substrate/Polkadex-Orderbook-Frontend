@@ -82,6 +82,74 @@ ${({ theme }) => css`
     height: 100%;
   }
 
+  .flex-1 {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  /* ----------------------------------------------------------------------------------------------------
+Transition
+----------------------------------------------------------------------------------------------------*/
+
+  &.enter {
+    transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &.fadeEnterFrom,
+  &.fadeLeaveFrom {
+    transition: opacity 150ms ease-out;
+  }
+  &.fadeEnterFrom {
+    opacity: 0;
+  }
+  &.fadeEnterTo,
+  &.fadeLeaveTo {
+    transition: opacity 150ms ease-out;
+  }
+  &.fadeEnterTo {
+    opacity: 1;
+    transition: opacity 150ms ease-in;
+  }
+  &.leave {
+    transition: 100ms cubic-bezier(0.4, 0, 1, 1);
+  }
+  &.fadeLeaveFrom {
+    opacity: 1;
+  }
+  &.fadeLeaveTo {
+    opacity: 0;
+  }
+
+  &.transformEnterFrom {
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+  }
+
+  &.transformEnterTo {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+  }
+
+  &.transformLeaveFrom {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 150ms ease-in,
+      transform 150ms ease-in;
+  }
+  &.transformLeaveTo {
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+      opacity 150ms ease-in,
+      transform 150ms ease-in;
+  }
+
   /* ----------------------------------------------------------------------------------------------------
 Reset Link
 ----------------------------------------------------------------------------------------------------*/

@@ -1,6 +1,8 @@
 {
   "title": "Balances | Polkadex Orderbook",
-  "heading": "Balances.",
+  "description": "The DEX for the Interoperable Future",
+  "heading": "Balances",
+  "subheading": "Available balance in your funding and trading account.",
   "overview": "Overview",
   "searchPlaceholder": "Search",
   "hideSmallBalances": "Hide small balances",
@@ -8,5 +10,14 @@
   "tradingAccount": "Trading Account",
   "fundingAccount": "Funding Account",
   "inOrders": "In Orders",
-  "actions": "Actions"
+  "actions": "Actions",
+  "troubleTitle": "Having Trouble?",
+  "troubleDescription": "Feel free to get in touch.",
+  "troubleButton":"Contact us",
+  "contributeTitle": "Contribute to Orderbook's growth!",
+  "contributeDescription": "Share with us which tokens you'd like to see.",
+  "contributeButton":"Send feedback",
+  "tableHeaderName":"Name",
+  "tableHeaderInOrders":"In Orders",
+  "tableHeaderActions":"Actions"
 }
