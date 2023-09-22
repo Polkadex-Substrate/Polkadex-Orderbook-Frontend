@@ -150,7 +150,12 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   useEffect(() => {
     if (!isProfileFetching && !isAssetFetching && state.balances?.length === 0)
       onBalancesFetch();
-  }, [onBalancesFetch, isProfileFetching, isAssetFetching, state.balances]);
+  }, [
+    onBalancesFetch,
+    isProfileFetching,
+    isAssetFetching,
+    state.balances?.length,
+  ]);
 
   // balance updates are give to main address
   useEffect(() => {
