@@ -239,7 +239,8 @@ export const SupportCard = styled.div`
       font-size: 1.7rem;
       font-weight: 500;
     }
-    a {
+    a,
+    button {
       background: ${theme.colors.secondaryBackgroundOpacity};
       padding: 1rem 2rem;
       border-radius: 0.5rem;
@@ -293,4 +294,68 @@ export const SkeletonComponent = styled.div`
   @media screen and (min-width: 1110px) {
     padding: 4rem;
   }
+`;
+
+export const Intro = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: ${theme.colors.primaryBackgroundSolid};
+    padding: 2rem;
+    border-radius: 1rem;
+  `}
+`;
+
+export const IntroCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  span {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+  p {
+    line-height: 1.4;
+    opacity: 0.7;
+    font-size: 1.4rem;
+  }
+`;
+
+export const IntroActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+export const IntroButtons = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    button {
+      transition: background-color 0.5s ease;
+      padding: 1rem;
+      border-radius: 0.4rem;
+      &:last-child {
+        background: ${theme.colors.secondaryBackgroundOpacity};
+      }
+      &:hover {
+        background: ${theme.colors.secondaryBackground};
+      }
+    }
+  `}
+`;
+
+export const IntroSwitch = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
