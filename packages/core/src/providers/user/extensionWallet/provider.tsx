@@ -43,12 +43,9 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
   const isClientSide = typeof window !== "undefined";
 
-  const defaultExtension = useMemo(
-    () =>
-      isClientSide &&
-      window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_EXTENSION),
-    [isClientSide]
-  );
+  const defaultExtension =
+    isClientSide &&
+    window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_EXTENSION);
 
   // Actions
   const onLinkEmail = async (
@@ -200,9 +197,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
         await wallet.enable("@polkadot/extension-dapp");
         await wallet.subscribeAccounts(async (accounts) => {
+          saveInLocalStorage &&
+            dispatch(A.setDefaultExtensionWallet(extensionName));
+          onUseAsDefault(extensionName);
           if (!accounts?.length) {
-            saveInLocalStorage &&
-              dispatch(A.setDefaultExtensionWallet(extensionName));
             dispatch(
               A.extensionWalletData({
                 allAccounts: [],
@@ -240,9 +238,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
               promiseResult !== null
           );
 
+          saveInLocalStorage &&
+            dispatch(A.setDefaultExtensionWallet(extensionName));
+          onUseAsDefault(extensionName);
           setTimeout(() => {
-            saveInLocalStorage &&
-              dispatch(A.setDefaultExtensionWallet(extensionName));
             dispatch(
               A.extensionWalletData({
                 allAccounts: validPromises,
