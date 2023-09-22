@@ -47,7 +47,7 @@ export const useAssetTransfer = (onRefetch: () => void) => {
       onHandleNotification({
         type: "Success",
         message:
-          "Deposit sent successfully. Please wait a few seconds to see the transaction in the history.",
+          "Deposit sent successfully. Please wait approximately 1 minute to see the transaction in the history.",
       });
       onRefetch();
     },
