@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { getWallets } from "@talismn/connect-wallets";
+import { useCallback, useReducer } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
 import * as A from "./actions";
 import * as T from "./types";
-import { APP_NAME } from "./constants";
 
 export const SettingProvider: T.SettingComponent = ({
   defaultToast,
@@ -76,6 +74,10 @@ export const SettingProvider: T.SettingComponent = ({
     [defaultToast]
   );
 
+  const onCheckExtension = useCallback(() => {
+    dispatch(A.checkHasExtension());
+  }, []);
+
   return (
     <Provider
       value={{
@@ -93,6 +95,7 @@ export const SettingProvider: T.SettingComponent = ({
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
+        onCheckExtension,
       }}
     >
       {children}

@@ -34,7 +34,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  const { onHandleError, onHandleNotification, onCheckExtension } =
+    useSettingsProvider();
   const profileState = useProfile();
   const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
@@ -195,6 +196,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         if (!wallet?.installed) {
           throw new Error("Wallet not installed");
         }
+        onCheckExtension();
 
         await wallet.enable("@polkadot/extension-dapp");
         await wallet.subscribeAccounts(async (accounts) => {
@@ -280,7 +282,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       // );
       // return () => unsubscribe();
     },
-    [onHandleError]
+    [onHandleError, onCheckExtension]
   );
 
   const onUseAsDefault = (extensionName: string) => {
