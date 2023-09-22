@@ -6,6 +6,7 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Signer } from "@polkadot/types/types";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
+import { getWalletBySource } from "@talismn/connect-wallets";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
@@ -44,7 +45,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 
   const defaultExtension = useMemo(
     () =>
-      isClientSide && localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_EXTENSION),
+      isClientSide &&
+      window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_EXTENSION),
     [isClientSide]
   );
 
@@ -294,25 +296,30 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         account?.address?.toLowerCase() === address?.toLowerCase()
     );
   };
-  useEffect(() => {
-    if (
-      authInfo.isAuthenticated &&
-      defaultExtension &&
-      typeof defaultExtension === "string" &&
-      extensions?.some((e) => e.extensionName === defaultExtension)
-    ) {
-      onUseAsDefault(defaultExtension);
-      onConnectExtensionWallet({
-        extensionName: defaultExtension,
-        saveInLocalStorage: false,
-      });
+
+  const onRestoreExtensionWallet = useCallback(async () => {
+    const wallet = getWalletBySource(defaultExtension);
+    if (wallet === null) return;
+
+    try {
+      await wallet?.enable("@polkadot/extension-dapp");
+
+      if (defaultExtension) {
+        onUseAsDefault(defaultExtension);
+        onConnectExtensionWallet({
+          extensionName: defaultExtension,
+          saveInLocalStorage: false,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      return null;
     }
-  }, [
-    onConnectExtensionWallet,
-    authInfo.isAuthenticated,
-    defaultExtension,
-    extensions,
-  ]);
+  }, [onConnectExtensionWallet, defaultExtension]);
+
+  useEffect(() => {
+    if (authInfo.isAuthenticated) onRestoreExtensionWallet();
+  }, [onRestoreExtensionWallet, authInfo.isAuthenticated]);
 
   useEffect(() => {
     if (mainAddress) {
