@@ -38,6 +38,7 @@ export const TransferForm = ({
   selectedAsset,
   switchEnable,
   onDisableSwitch,
+  onRefetch,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
@@ -46,7 +47,7 @@ export const TransferForm = ({
   const { loading } = useBalancesProvider();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
-  const { mutateAsync, isLoading } = useAssetTransfer();
+  const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -142,7 +143,6 @@ export const TransferForm = ({
     [fundingWallet?.account?.address]
   );
 
-  console.log("Loading", loading);
   const isValidAddress = useMemo(() => {
     const address = selectedWallet?.account?.address;
     try {

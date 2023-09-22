@@ -14,7 +14,7 @@ interface AssetTransferParams {
   account: ExtensionAccount;
 }
 
-export const useAssetTransfer = () => {
+export const useAssetTransfer = (onRefetch: () => void) => {
   const { api } = useNativeApi();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
 
@@ -43,11 +43,13 @@ export const useAssetTransfer = () => {
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
-    onSuccess: () =>
+    onSuccess: () => {
       onHandleNotification({
         type: "Success",
         message:
           "Deposit sent successfully. Please wait a few seconds to see the transaction in the history.",
-      }),
+      });
+      onRefetch();
+    },
   });
 };
