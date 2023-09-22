@@ -4,13 +4,17 @@ export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 5rem;
+    justify-content: space-between;
     padding: 2rem;
     cursor: pointer;
     transition: background-color ease-in 0.2s;
     border-radius: 0.5rem;
+    width: 100%;
     &:hover {
       background: ${theme.colors.tertiaryBackgroundOpacity};
+    }
+    @media screen and (min-width: 640px) {
+      max-width: 27rem;
     }
   `}
 `;
