@@ -8,6 +8,9 @@ import * as S from "./styles";
 import { TransferHistory } from "@/ui/organisms/TransferHistory";
 import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
+const sleep = async (ms: number) =>
+  await new Promise((resolve) => setTimeout(resolve, ms));
+
 export const CustomTransfer = ({
   onOpenAssets,
   selectedAsset,
@@ -38,7 +41,10 @@ export const CustomTransfer = ({
             selectedAsset={selectedAsset}
             onDisableSwitch={onDisableSwitch}
             switchEnable={switchEnable}
-            onRefetch={() => setTimeout(refetch, 70000)}
+            onRefetch={async () => {
+              await sleep(55000);
+              await refetch();
+            }}
           />
         </S.Container>
       </S.Form>

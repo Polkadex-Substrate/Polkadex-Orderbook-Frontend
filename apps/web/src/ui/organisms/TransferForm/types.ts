@@ -7,5 +7,5 @@ export type Props = {
   selectedAsset?: FilteredAssetProps;
   onDisableSwitch: (v?: boolean) => void;
   switchEnable: boolean;
-  onRefetch: () => void;
+  onRefetch: () => Promise<void>;
 };
