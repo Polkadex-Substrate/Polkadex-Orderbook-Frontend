@@ -80,7 +80,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
             symbol: asset.symbol,
             reserved_balance: balance.reserved_balance,
             free_balance: balance.free_balance,
-            onChainBalance: chainBalance.toFixed(2),
+            onChainBalance: chainBalance.toString(),
           };
         });
         dispatch(
