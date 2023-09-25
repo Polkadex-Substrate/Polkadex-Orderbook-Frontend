@@ -59,6 +59,7 @@ const Maintenance = dynamic(
     ssr: false,
   }
 );
+
 const queryClient = new QueryClient();
 const Providers = ({ children }) => {
   return (
