@@ -18,13 +18,14 @@ import * as S from "./styles";
 import { defaulIntrotStyles } from "@/styles/introStyles";
 import { CheckboxCustom } from "@/ui/molecules";
 const isClientSide = typeof window !== "undefined";
-const initialState =
-  isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
 
 export const Intro = ({
   children,
   active,
 }: PropsWithChildren<{ active: boolean }>) => {
+  const initialState =
+    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
+
   const steps: StepType[] = [
     {
       selector: ".depositButton",
@@ -114,6 +115,8 @@ const Actions = ({
   return <>{children}</>;
 };
 const ContentComponent = (props: PopoverContentProps) => {
+  const initialState =
+    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
   const [state, setState] = useState(!!initialState);
   const content = props.steps[props.currentStep].content;
   const isLastStep = props.currentStep === props.steps.length - 1;
@@ -153,7 +156,6 @@ const ContentComponent = (props: PopoverContentProps) => {
               onClick={() => {
                 props.setCurrentStep(0);
                 props.setIsOpen(false);
-                handleChangeIntroView();
               }}
             >
               {isLastStep ? "Done" : "Skip"}
