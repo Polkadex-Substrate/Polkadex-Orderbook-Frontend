@@ -60,7 +60,7 @@ export const columns = (headers: string[]) => [
   }),
   columnHelper.accessor((row) => row, {
     id: "actions",
-    cell: () => (
+    cell: (e) => (
       <S.Actions>
         <Tooltip>
           <TooltipHeader>
@@ -89,7 +89,12 @@ export const columns = (headers: string[]) => [
             <S.TooltipMessage>Extenal link</S.TooltipMessage>
           </TooltipContent>
         </Tooltip>
-        <Link href="/transfer">
+        <Link
+          href={{
+            pathname: "/transfer",
+            query: { token: e.getValue().name },
+          }}
+        >
           <S.Icon>
             <Icons.Trading />
           </S.Icon>
