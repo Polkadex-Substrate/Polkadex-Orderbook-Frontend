@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { useTour } from "@reactour/tour";
 import { BalancesTable, Header, Menu } from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
@@ -16,6 +17,7 @@ import { useAssets } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 import { TableSkeleton } from "./skeleton";
+import { Intro } from "./intro";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
@@ -45,7 +47,7 @@ export const BalancesTemplate = () => {
   );
 
   return (
-    <>
+    <Intro active={!showLoader && !!userHasSelectedAccount && !!assets.length}>
       <Head>
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
@@ -97,20 +99,14 @@ export const BalancesTemplate = () => {
                   buttonTitle={t("troubleButton")}
                   icon="Trouble"
                 />
-                <SupportCard
-                  title={t("contributeTitle")}
-                  description={t("contributeDescription")}
-                  href="https://t.me/Polkadex"
-                  buttonTitle={t("contributeButton")}
-                  icon="TokenListing"
-                />
+                <IntroCard />
               </S.Support>
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>
         </S.Flex>
       </S.Main>
-    </>
+    </Intro>
   );
 };
 
@@ -120,12 +116,14 @@ const SupportCard = ({
   href,
   buttonTitle,
   icon,
+  onClick,
 }: {
   title: string;
   description: string;
-  href: string;
+  href?: string;
   buttonTitle: string;
   icon: "Trouble" | "TokenListing";
+  onClick?: () => void;
 }) => {
   const IconComponent = Icons[icon];
   return (
@@ -137,9 +135,30 @@ const SupportCard = ({
         <h4>{title}</h4>
         <p>{description}</p>
       </S.SupportCardContainer>
-      <Link href={href} target="_blank">
-        {buttonTitle}
-      </Link>
+      {href ? (
+        <Link href={href} target="_blank">
+          {buttonTitle}
+        </Link>
+      ) : (
+        <button type="button" onClick={onClick}>
+          {buttonTitle}
+        </button>
+      )}
     </S.SupportCard>
+  );
+};
+
+const IntroCard = () => {
+  const { setIsOpen } = useTour();
+  const { t } = useTranslation("balances");
+
+  return (
+    <SupportCard
+      title={t("contributeTitle")}
+      description={t("contributeDescription")}
+      buttonTitle={t("contributeButton")}
+      icon="TokenListing"
+      onClick={() => setIsOpen(true)}
+    />
   );
 };
