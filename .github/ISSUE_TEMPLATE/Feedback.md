@@ -20,5 +20,5 @@ about: Share your feedback with us.
 | Software         | Version(s)                  |
 | ---------------- | --------------------------- |
 | Project/Package  |                             |
-| Browser          | []Chrome []Firefox []Safari |
-| Operating System | []Windows []MacOS []Linux   |
+| Browser          | [] Chrome [] Firefox [] Safari |
+| Operating System | [] Windows [] MacOS [] Linux   |
