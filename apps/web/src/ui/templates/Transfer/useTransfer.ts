@@ -70,7 +70,7 @@ export function useTransfer() {
   useEffect(() => {
     if (!selectedAsset) {
       const foundAsset = filteredNonBlockedAssets?.find(
-        ({ name }) => name === query?.token
+        ({ symbol }) => symbol === query?.token
       );
       setSelectedAsset(foundAsset ?? filteredNonBlockedAssets?.[0]);
     } else if (selectedAccount && !!selectedAsset)

@@ -108,7 +108,7 @@ export const columns = (headers: string[]) => [
           <Link
             href={{
               pathname: "/transfer",
-              query: { token: e.getValue().name },
+              query: { token: e.getValue().symbol },
             }}
             className={tdClassName.transfer}
           >
