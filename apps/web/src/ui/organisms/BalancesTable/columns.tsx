@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Link from "next/link";
 import { AssetsProps } from "@orderbook/core/hooks";
+import classNames from "classnames";
 
 import * as S from "./styles";
 
@@ -60,43 +61,59 @@ export const columns = (headers: string[]) => [
   }),
   columnHelper.accessor((row) => row, {
     id: "actions",
-    cell: () => (
-      <S.Actions>
-        <Tooltip>
-          <TooltipHeader>
-            <Link href="https://thea.polkadex.trade/" target="_blank">
-              Deposit
-            </Link>
-          </TooltipHeader>
-          <TooltipContent
-            style={{ transform: "translateY(-0.8rem)" }}
-            background="text"
-          >
-            <S.TooltipMessage>Extenal link</S.TooltipMessage>
-          </TooltipContent>
-        </Tooltip>
+    cell: (e) => {
+      const tdClassName = {
+        deposit: classNames({ depositButton: e.row.index === 0 }),
+        withdraw: classNames({ withdrawButton: e.row.index === 0 }),
+        transfer: classNames({ transferButton: e.row.index === 0 }),
+      };
 
-        <Tooltip>
-          <TooltipHeader>
-            <Link href="https://thea.polkadex.trade/withdraw" target="_blank">
-              Withdraw
-            </Link>
-          </TooltipHeader>
-          <TooltipContent
-            style={{ transform: "translateY(-0.8rem)" }}
-            background="text"
-          >
-            <S.TooltipMessage>Extenal link</S.TooltipMessage>
-          </TooltipContent>
-        </Tooltip>
-        <Link href="/transfer">
-          <S.Icon>
-            <Icons.Trading />
-          </S.Icon>
-          Transfer
-        </Link>
-      </S.Actions>
-    ),
+      return (
+        <S.Actions>
+          <Tooltip>
+            <TooltipHeader>
+              <Link
+                href="https://thea.polkadex.trade/"
+                target="_blank"
+                className={tdClassName.deposit}
+              >
+                Deposit
+              </Link>
+            </TooltipHeader>
+            <TooltipContent
+              style={{ transform: "translateY(-0.8rem)" }}
+              background="text"
+            >
+              <S.TooltipMessage>Extenal link</S.TooltipMessage>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipHeader>
+              <Link
+                href="https://thea.polkadex.trade/withdraw"
+                target="_blank"
+                className={tdClassName.withdraw}
+              >
+                Withdraw
+              </Link>
+            </TooltipHeader>
+            <TooltipContent
+              style={{ transform: "translateY(-0.8rem)" }}
+              background="text"
+            >
+              <S.TooltipMessage>Extenal link</S.TooltipMessage>
+            </TooltipContent>
+          </Tooltip>
+          <Link href="/transfer" className={tdClassName.transfer}>
+            <S.Icon>
+              <Icons.Trading />
+            </S.Icon>
+            Transfer
+          </Link>
+        </S.Actions>
+      );
+    },
     header: () => <span>{headers[4]}</span>,
     footer: (e) => e.column.id,
   }),
