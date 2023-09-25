@@ -58,7 +58,10 @@ export const TransferFormDeposit = ({
     const onChainBalance = Number(selectedAsset?.onChainBalance);
     if (onChainBalance > existentialBalance) {
       const balance = onChainBalance - existentialBalance;
-      const trimmedBalance = trimFloat({ value: balance });
+      const trimmedBalance = trimFloat({
+        value: balance,
+        digitsAfterDecimal: 4,
+      });
       setFieldValue("amount", trimmedBalance);
     }
     // TODO: Handle Error...

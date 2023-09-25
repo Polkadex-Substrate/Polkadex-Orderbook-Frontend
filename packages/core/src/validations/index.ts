@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import { getDigitsAfterDecimal, trimFloat } from "@orderbook/core/helpers";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -78,7 +78,12 @@ export const depositValidations = (
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         (value) => {
-          const balanceAfterDeposit = chainBalance - Number(value);
+          const balanceAfterDeposit = Number(
+            trimFloat({
+              value: chainBalance - Number(value),
+              digitsAfterDecimal: 4,
+            })
+          );
           return !(
             !isPolkadexToken &&
             Number(value) &&
