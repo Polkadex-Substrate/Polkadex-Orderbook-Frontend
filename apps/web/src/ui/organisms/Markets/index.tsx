@@ -264,6 +264,6 @@ type SkeletonProps = {
 };
 
 export const MarketsSkeleton = ({
-  height = "4rem",
-  width = "23rem",
+  height = "5.2rem",
+  width = "27rem",
 }: SkeletonProps) => <Skeleton height={height} width={width} />;
