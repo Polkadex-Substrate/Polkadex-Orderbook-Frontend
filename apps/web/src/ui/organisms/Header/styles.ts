@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
+export const Wrapper = styled.div<{ dark?: boolean }>`
+  ${({ theme, dark }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,7 +11,10 @@ export const Wrapper = styled.div`
     flex: 1;
     max-height: 5.5rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background: ${theme.colors.primaryBackground};
+    ${!dark &&
+    css`
+      background: ${theme.colors.primaryBackground};
+    `}
     z-index: 9;
   `}
 `;

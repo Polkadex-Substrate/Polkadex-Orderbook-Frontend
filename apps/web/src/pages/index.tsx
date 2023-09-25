@@ -1,15 +1,13 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { defaultConfig } from "@orderbook/core/config";
-
-function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push(defaultConfig.mainUrl);
-  }, [router]);
-
-  return <div />;
-}
+import dynamic from "next/dynamic";
+const LandingTemplate = dynamic(
+  () =>
+    import("@polkadex/orderbook-ui/templates/Landing").then(
+      (mod) => mod.LandingTemplate
+    ),
+  {
+    ssr: false,
+  }
+);
+const Home = () => <LandingTemplate />;
 
 export default Home;

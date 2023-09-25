@@ -154,6 +154,7 @@ const light = {
 const dark = {
   title: "dark",
   colors: {
+    darkBackground: "#06070A",
     primaryBackground: "#1C1C26",
     primaryBackgroundOpacity: "#1C1C2699",
     primaryBackgroundSolid: "#22232E",
