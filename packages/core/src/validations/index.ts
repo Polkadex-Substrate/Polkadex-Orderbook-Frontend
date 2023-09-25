@@ -59,8 +59,8 @@ export const depositValidations = (
           !(value?.toString().includes("e") || value?.toString().includes("o"))
       )
       .test(
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
@@ -150,8 +150,8 @@ export const withdrawValidations = (balance: string) => {
         (value) => Number(value) <= Number(balance)
       )
       .test(
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL

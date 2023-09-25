@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef } from "react";
+import { MouseEvent, useEffect, useMemo, useRef } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -71,7 +71,6 @@ export const TransferFormDeposit = ({
   );
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -87,6 +86,7 @@ export const TransferFormDeposit = ({
       isPolkadexToken,
       existentialBalance
     ),
+    validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (!fundingWallet) return;
@@ -112,6 +112,11 @@ export const TransferFormDeposit = ({
       }
     },
   });
+
+  // Reset form when asset changes
+  useEffect(() => {
+    if (selectedAsset) resetForm();
+  }, [selectedAsset, resetForm]);
 
   return (
     <Loading
@@ -153,7 +158,7 @@ export const TransferFormDeposit = ({
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />
