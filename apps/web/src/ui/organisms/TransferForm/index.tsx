@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
+import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -199,11 +199,6 @@ export const TransferForm = ({
       }
     },
   });
-
-  // Reset form when asset changes
-  useEffect(() => {
-    if (selectedAsset) resetForm();
-  }, [selectedAsset, resetForm]);
 
   return (
     <Loading
