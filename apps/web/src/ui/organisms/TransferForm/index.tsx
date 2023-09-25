@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   useExtensionWallet,
   userMainAccountDetails,
@@ -142,7 +142,6 @@ export const TransferForm = ({
     [fundingWallet?.account?.address]
   );
 
-  console.log("Loading", loading);
   const isValidAddress = useMemo(() => {
     const address = selectedWallet?.account?.address;
     try {
@@ -158,7 +157,6 @@ export const TransferForm = ({
   }, [selectedWallet?.account?.address]);
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -201,6 +199,11 @@ export const TransferForm = ({
       }
     },
   });
+
+  // Reset form when asset changes
+  useEffect(() => {
+    if (selectedAsset) resetForm();
+  }, [selectedAsset, resetForm]);
 
   return (
     <Loading
@@ -268,7 +271,7 @@ export const TransferForm = ({
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />
