@@ -20,6 +20,7 @@
     "@react-aria/menu": "^3.6.0",
     "@react-aria/table": "^3.4.0",
     "@react-aria/utils": "^3.13.2",
+    "@reactour/tour": "^3.6.1",
     "@tanstack/react-table": "^8.9.8",
     "canvas-confetti": "^1.6.0",
     "classnames": "^2.3.2",
