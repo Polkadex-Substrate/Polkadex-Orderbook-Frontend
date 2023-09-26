@@ -53,6 +53,17 @@ export const WithdrawHistory = ({
           const token = selectGetAsset(e.asset);
           return {
             ...e,
+            time: intlFormat(
+              new Date(e.time),
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              },
+              { locale: "EN" }
+            ),
             token: {
               ticker: token?.symbol,
               name: token?.name,

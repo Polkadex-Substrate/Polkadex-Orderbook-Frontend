@@ -71,14 +71,20 @@ export const DepositHistory = ({
                       asc: getSorted === "asc",
                       desc: getSorted === "desc",
                     });
+                    const handleSort = () => {
+                      const isDesc = getSorted === "desc";
+                      header.column.toggleSorting(!isDesc);
+                    };
+                    const isActionTab = header.id === "date";
+                    const theadProps = isActionTab
+                      ? { onClick: handleSort }
+                      : {};
+
                     return (
                       <S.Thead
                         key={header.id}
                         className={trClassName}
-                        onClick={() => {
-                          const isDesc = getSorted === "desc";
-                          header.column.toggleSorting(!isDesc);
-                        }}
+                        {...theadProps}
                       >
                         {header.isPlaceholder
                           ? null
@@ -86,9 +92,11 @@ export const DepositHistory = ({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                        <div>
-                          <Icons.IncreaseFilter />
-                        </div>
+                        {isActionTab && (
+                          <div>
+                            <Icons.IncreaseFilter />
+                          </div>
+                        )}
                       </S.Thead>
                     );
                   })}

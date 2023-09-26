@@ -20,7 +20,7 @@ export const AssetsInteraction = ({
 }: {
   open: boolean;
   selectedAssetId?: string;
-  onClose: (e: boolean) => void;
+  onClose: () => void;
   onChangeAsset: (e: FilteredAssetProps) => void;
 }) => {
   const { t } = useTranslation("transfer");
