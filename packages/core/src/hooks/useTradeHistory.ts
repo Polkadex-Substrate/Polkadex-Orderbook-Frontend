@@ -60,11 +60,11 @@ export function useTradeHistory(filters: Ifilters) {
     }
 
     if (filters?.onlyBuy) {
-      tradeHistoryList = list.filter(
+      tradeHistoryList = tradeHistoryList.filter(
         (data) => data.side?.toUpperCase() === "BID"
       );
     } else if (filters?.onlySell) {
-      tradeHistoryList = list.filter(
+      tradeHistoryList = tradeHistoryList.filter(
         (data) => data.side.toUpperCase() === "ASK"
       );
     }
