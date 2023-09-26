@@ -108,7 +108,7 @@ export const StartHeader = styled.div`
     }
     span {
       font-size: 5rem;
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: 992px) {
         font-size: 8rem;
         &:nth-child(2) {
           margin-top: 4rem;
