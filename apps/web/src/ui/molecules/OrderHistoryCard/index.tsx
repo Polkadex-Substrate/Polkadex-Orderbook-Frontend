@@ -9,10 +9,9 @@ export const OrderHistoryCard = ({
   orderType,
   baseUnit,
   quoteUnit,
-  isReverted,
   data = [] as RowData[],
 }) => (
-  <S.Tr isReverted={isReverted}>
+  <S.Tr>
     <S.Td>
       <S.Tag>Id</S.Tag>
       <S.ContainerFlex>

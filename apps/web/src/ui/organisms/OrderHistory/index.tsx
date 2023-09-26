@@ -128,7 +128,6 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                       orderType={order.order_type}
                       baseUnit={baseUnit}
                       quoteUnit={quoteUnit}
-                      isReverted={order.isReverted}
                       data={[
                         { value: date },
                         { value: order.order_type },

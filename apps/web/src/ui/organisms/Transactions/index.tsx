@@ -33,7 +33,12 @@ export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
-  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
+  status:
+    | "All Transactions"
+    | "Pending"
+    | "Completed"
+    | "Cancelled"
+    | "Show Reverted";
   dateFrom?: Date;
   dateTo?: Date;
 };
@@ -54,6 +59,7 @@ export const Transactions = () => {
     t("pending"),
     t("completed"),
     t("cancelled"),
+    t("showReverted"),
   ];
 
   const [filters, setFilters] = useState(initialFilters);
