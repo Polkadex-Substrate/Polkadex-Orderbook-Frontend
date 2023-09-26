@@ -39,7 +39,6 @@ export const Hero = styled.section`
     background-repeat: no-repeat;
     background-position: bottom right;
     background-size: contain;
-
     padding: 1rem 3rem;
     @media screen and (max-width: 900px) {
       background-size: 50%;
@@ -63,9 +62,6 @@ export const HeroAside = styled.div`
     h1 {
       font-size: 5rem;
       font-weight: 500;
-      @media screen and (min-width: 600px) {
-        font-size: 7rem;
-      }
     }
     p {
       line-height: 0.8;
