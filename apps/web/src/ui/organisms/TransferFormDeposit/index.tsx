@@ -146,7 +146,7 @@ export const TransferFormDeposit = ({
             tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
             tokenTicker={selectedAsset?.symbol ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
-            onAction={onOpenAssets}
+            onAction={() => onOpenAssets(resetForm)}
             loading={balancesLoading}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>

@@ -37,7 +37,7 @@ export const TransferFormWithdraw = ({
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
-  onOpenAssets: () => void;
+  onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
 }) => {
   const { t } = useTranslation("transfer");
@@ -157,7 +157,7 @@ export const TransferFormWithdraw = ({
               tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
               tokenTicker={selectedAsset?.symbol ?? ""}
               availableAmount={selectedAsset?.free_balance ?? "0.00"}
-              onAction={onOpenAssets}
+              onAction={() => onOpenAssets(resetForm)}
               loading={balancesLoading}
             />
             <S.Amount onClick={() => amountRef.current?.focus()}>

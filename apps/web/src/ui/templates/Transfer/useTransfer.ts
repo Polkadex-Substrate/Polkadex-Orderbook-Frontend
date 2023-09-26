@@ -35,7 +35,10 @@ export function useTransfer() {
 
   const [type, setType] = useState<T.SwitchType>("deposit");
 
-  const onAssetsInteraction = () => onChangeState(setAssetsInteraction);
+  const onAssetsInteraction = (callback?: () => void) => {
+    if (typeof callback === "function" && callback) callback();
+    onChangeState(setAssetsInteraction);
+  };
   const onChangeAsset = (asset: T.FilteredAssetProps) => {
     setSelectedAsset(asset);
     onAssetsInteraction();

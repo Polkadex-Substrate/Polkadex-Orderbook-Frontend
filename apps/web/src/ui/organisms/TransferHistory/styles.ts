@@ -200,25 +200,6 @@ export const TitleWrapper = styled.div`
   }
 `;
 
-export const Button = styled.button`
-  ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.5s ease;
-    &:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-    &:hover:not(:disabled) {
-      background: ${theme.colors.secondaryBackground};
-    }
-    &:active:not(:disabled) {
-      background: ${theme.colors.primary};
-    }
-  `}
-`;
-
 export const EmptyData = styled.div`
   display: flex;
   flex-direction: column;
