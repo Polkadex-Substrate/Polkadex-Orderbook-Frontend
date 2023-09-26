@@ -84,7 +84,6 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                     isSell={trade.side === "Ask"}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
-                    isReverted={trade.isReverted}
                     data={[
                       { value: date },
                       {

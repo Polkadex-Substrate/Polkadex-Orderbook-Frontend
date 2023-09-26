@@ -53,7 +53,12 @@ export function useTradeHistory(filters: Ifilters) {
   useEffect(() => {
     const { dateFrom, dateTo } = filters;
 
-    let tradeHistoryList = list;
+    let tradeHistoryList = list.filter((item) => !item.isReverted);
+
+    if (filters.showReverted) {
+      tradeHistoryList = list.filter((item) => item.isReverted);
+    }
+
     if (filters?.onlyBuy) {
       tradeHistoryList = list.filter(
         (data) => data.side?.toUpperCase() === "BID"
