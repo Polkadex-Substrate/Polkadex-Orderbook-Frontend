@@ -100,13 +100,10 @@ export const DepositHistory = ({
                 return (
                   <tr key={row.id}>
                     {row.getVisibleCells().map((cell) => {
-                      const isReverted =
-                        cell.getContext().row.original.isReverted;
                       const lastCell =
                         table.getRowModel().rows.length === ti + 1;
                       const tdClassName = classNames({
                         last: lastCell,
-                        isReverted,
                       });
                       return (
                         <td className={tdClassName} key={cell.id}>
