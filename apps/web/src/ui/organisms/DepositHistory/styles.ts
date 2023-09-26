@@ -48,6 +48,9 @@ export const Table = styled.div`
         &.last {
           border-bottom: none;
         }
+        &.isReverted {
+          opacity: 0.5;
+        }
       }
       th {
         opacity: 0.5;
@@ -85,15 +88,15 @@ export const Thead = styled.th`
   `}
 `;
 
-export const Date = styled.div`
-  ${({ theme }) => css`
+export const Date = styled.div<{ isReverted: boolean | null }>`
+  ${({ theme, isReverted }) => css`
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
     white-space: nowrap;
     span {
-      background: ${theme.colors.green}22;
-      color: ${theme.colors.green};
+      background: ${isReverted ? "#ffeb3b55" : `${theme.colors.green}22`};
+      color: ${isReverted ? "#ffeb3b" : theme.colors.green};
       width: fit-content;
       padding: 0.1rem 0.2rem;
       border-radius: 0.2rem;

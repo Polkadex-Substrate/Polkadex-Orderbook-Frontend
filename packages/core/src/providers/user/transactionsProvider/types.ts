@@ -13,6 +13,7 @@ export interface Transaction {
   time: string;
   status: "PENDING" | "READY" | "CONFIRMED" | "FAILED";
   txn_type: "DEPOSIT" | "WITHDRAWAL";
+  isReverted: boolean | null;
 }
 
 export interface TransactionsState {
@@ -33,6 +34,7 @@ export type TransactionUpdatePayload = {
   t: number;
   // only withdrawals with READY state will have snapshot_id
   snapshot_id?: number;
+  isReverted: boolean | null;
 };
 
 export type TransactionQueryResult = {
@@ -45,6 +47,7 @@ export type TransactionQueryResult = {
   stid: number;
   // only withdrawals with READY state will have snapshot_id
   snapshot_id?: number;
+  isReverted: boolean | null;
 };
 
 export type TransactionsContextProps = TransactionsState & {

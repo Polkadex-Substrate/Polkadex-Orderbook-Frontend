@@ -78,6 +78,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
       time: new Date(Number(item.t)).toISOString(),
       status: item.st as T.Transaction["status"],
       txn_type: item.tt as T.Transaction["txn_type"],
+      isReverted: item.isReverted,
     }));
   };
 
@@ -146,6 +147,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         amount: data.amount.toString(),
         asset: data.asset,
         time: new Date().toISOString(),
+        isReverted: data.isReverted,
       };
     } else {
       return {
@@ -158,6 +160,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         amount: data.amount.toString(),
         asset: data.asset,
         time: new Date().toISOString(),
+        isReverted: data.isReverted,
       };
     }
   };

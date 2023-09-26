@@ -17,7 +17,7 @@ export const initialState: TransactionsState = {
 
 export const transactionsReducer = (
   state = initialState,
-  action: TransactionsAction,
+  action: TransactionsAction
 ) => {
   switch (action.type) {
     case TRANSACTIONS_FETCH:
@@ -44,7 +44,7 @@ export const transactionsReducer = (
       const { payload } = action;
       const transactions = _.cloneDeep(state.transactions);
       const index = transactions.findIndex(
-        ({ stid }) => Number(stid) === Number(payload.stid),
+        ({ stid }) => Number(stid) === Number(payload.stid)
       );
       if (index !== -1) {
         transactions[index] = payload;
