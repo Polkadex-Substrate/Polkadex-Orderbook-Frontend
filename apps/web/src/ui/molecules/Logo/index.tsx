@@ -116,13 +116,7 @@ export const OrderbookLogo = ({ light = false }) => (
 );
 
 export const PolkadexIcon = () => (
-  <svg
-    width="1em"
-    height="1em"
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M39.2003 35.1685V29.5685L29.6337 20.0018H24.0337L39.2003 35.1685Z" />
     <path d="M4.66723 39.3659H10.2L19.6005 30.0346L28.9338 39.3659H34.594L19.6005 24.4346L4.66723 39.3659Z" />
     <path d="M0 4.83154L0 10.4315L9.56665 19.9982H15.1666L0 4.83154Z" />

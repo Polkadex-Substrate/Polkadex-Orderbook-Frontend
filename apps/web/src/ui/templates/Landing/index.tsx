@@ -50,28 +50,34 @@ export function LandingTemplate() {
           </S.StartHeader>
           <S.StartContent>
             <S.StartCard>
-              <div></div>
-              <h3>1.Create an account</h3>
-              <p>
-                Sign up on Orderbook. Rest assured, we prioritize your security
-                and use any data solely for security and marketing.
-              </p>
+              <span />
+              <div>
+                <h3>1.Create an account</h3>
+                <p>
+                  Sign up on Orderbook. Rest assured, we prioritize your
+                  security and use any data solely for security and marketing.
+                </p>
+              </div>
             </S.StartCard>
             <S.StartCard>
-              <div />
-              <h3>2.Connect your wallet</h3>
-              <p>
-                Choose your wallet from a variety of Polkadot-based wallets, and
-                register it for use within Orderbook.
-              </p>
+              <span />
+              <div>
+                <h3>2.Connect your wallet</h3>
+                <p>
+                  Choose your wallet from a variety of Polkadot-based wallets,
+                  and register it for use within Orderbook.
+                </p>
+              </div>
             </S.StartCard>
             <S.StartCard>
-              <div></div>
-              <h3>3.Add funds & start trading</h3>
-              <p>
-                Transfer funds into your Orderbook wallet. Now, you&lsquo;re all
-                set to start trading.
-              </p>
+              <span />
+              <div>
+                <h3>3.Add funds & start trading</h3>
+                <p>
+                  Transfer funds into your Orderbook wallet. Now, you&lsquo;re
+                  all set to start trading.
+                </p>
+              </div>
             </S.StartCard>
           </S.StartContent>
           <S.StartFooter>
@@ -84,18 +90,21 @@ export function LandingTemplate() {
         </S.Start>
         <S.Features>
           <S.FeaturesHeader>
-            <div>
-              <span className={outrun.className}>Your</span>
-              <p className={outrun.className}>Keys</p>
-            </div>
-            <div>
-              <span className={outrun.className}>Your</span>
-              <p className={outrun.className}>Crypto</p>
-            </div>
-            <div>
-              <span className={outrun.className}>Secure</span>
-              <p className={outrun.className}>Exchange</p>
-            </div>
+            <S.FeatureShadow />
+            <S.FeaturesHeaderCard>
+              <div>
+                <span className={outrun.className}>Your</span>
+                <p className={outrun.className}>Keys</p>
+              </div>
+              <div>
+                <span className={outrun.className}>Your</span>
+                <p className={outrun.className}>Crypto</p>
+              </div>
+              <div>
+                <span className={outrun.className}>Your</span>
+                <p className={outrun.className}>Exchange</p>
+              </div>
+            </S.FeaturesHeaderCard>
           </S.FeaturesHeader>
           <S.FeaturesContent>
             <S.FeaturesHighlight>
@@ -120,19 +129,23 @@ export function LandingTemplate() {
                 <img src="/img/fees.png" />
               </S.FeaturesCard>
               <S.FeaturesCard>
-                <h3>Limit & market orders</h3>
-                <p>
-                  Control price with limit orders, achieve instant execution
-                  with market orders.
-                </p>
+                <div>
+                  <h3>Limit & market orders</h3>
+                  <p>
+                    Control price with limit orders, achieve instant execution
+                    with market orders.
+                  </p>
+                </div>
                 <img src="/img/market.png" />
               </S.FeaturesCard>
               <S.FeaturesCard>
-                <h3>Non-custodial</h3>
-                <p>
-                  You control your own liquidity, which means it is safe, and
-                  you can pull it out whenever.
-                </p>
+                <div>
+                  <h3>Non-custodial</h3>
+                  <p>
+                    You control your own liquidity, which means it is safe, and
+                    you can pull it out whenever.
+                  </p>
+                </div>
                 <img src="/img/nonCustodial.png" />
               </S.FeaturesCard>
             </S.FeaturesWrapper>
@@ -282,6 +295,11 @@ export function LandingTemplate() {
           </S.FooterBottom>
         </S.Footer>
       </S.Main>
+      <style jsx global>{`
+        body {
+          background: #06070a;
+        }
+      `}</style>
     </>
   );
 }

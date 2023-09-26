@@ -11,6 +11,7 @@ export const Wrapper = styled.div<{ dark?: boolean }>`
     flex: 1;
     max-height: 5.5rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    backdrop-filter: blur(5px);
     ${!dark &&
     css`
       background: ${theme.colors.primaryBackground};
@@ -40,14 +41,15 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     align-items: center;
     justify-content: center;
     max-width: 121px;
-    min-height: 24px;
-    /* 121,
-    24 */
 
     ${borderActive &&
     css`
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     `}
+    svg {
+      width: 11rem;
+      height: auto;
+    }
   `}
 `;
 

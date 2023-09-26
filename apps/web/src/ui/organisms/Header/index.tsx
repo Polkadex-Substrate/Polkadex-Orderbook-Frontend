@@ -73,7 +73,7 @@ export const Header = ({
     <S.Wrapper dark={dark}>
       <S.Content>
         <S.Logo borderActive={isValidChild} hideLogo>
-          <Link href={"/trading"}>
+          <Link href="/">
             <PolkadexLogo />
           </Link>
         </S.Logo>
