@@ -11,9 +11,7 @@ import { intlFormat } from "date-fns";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTranslation } from "react-i18next";
-import { useTransferHistory } from "@orderbook/core/index";
-import { defaultConfig } from "@orderbook/core/config";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
 
 import { columns as getColumns } from "./columns";
 import * as S from "./styles";
@@ -26,22 +24,20 @@ import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const TransferHistory = ({
   selectedAsset,
+  transactions,
+  isLoading,
 }: {
   selectedAsset?: FilteredAssetProps;
+  isLoading: boolean;
+  transactions: TransferHistoryProps[];
 }) => {
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const { selectedAccount } = useProfile();
-  const { mainAddress } = selectedAccount;
 
   const { t } = useTranslation("transfer");
-  const { data, isLoading, refetch } = useTransferHistory(
-    defaultConfig.subscanApi,
-    mainAddress
-  );
+
   const { selectGetAsset } = useAssetsProvider();
   const { allAccounts } = useExtensionWallet();
-  const allTransactios = data?.pages?.[0].transfers;
   const columns = useMemo(
     () => getColumns(["Date", "Token", "Amount", "From/To", "Hash"]),
     []
@@ -49,7 +45,7 @@ export const TransferHistory = ({
 
   const allData = useMemo(
     () =>
-      allTransactios
+      transactions
         ?.filter((e) => {
           if (showSelectedCoins) {
             const tokenId = e.asset_unique_id
@@ -101,7 +97,7 @@ export const TransferHistory = ({
       selectedAsset?.assetId,
       showSelectedCoins,
       allAccounts,
-      allTransactios,
+      transactions,
     ]
   );
   const table = useReactTable({
@@ -128,9 +124,6 @@ export const TransferHistory = ({
           >
             {t("historyFilterByToken")}
           </CheckboxCustom>
-          <S.Button type="button" onClick={() => refetch()}>
-            Refresh
-          </S.Button>
         </S.TitleWrapper>
       </S.Title>
       <S.Table>
@@ -147,14 +140,19 @@ export const TransferHistory = ({
                       asc: getSorted === "asc",
                       desc: getSorted === "desc",
                     });
+                    const handleSort = () => {
+                      const isDesc = getSorted === "desc";
+                      header.column.toggleSorting(!isDesc);
+                    };
+                    const isActionTab = header.id === "date";
+                    const theadProps = isActionTab
+                      ? { onClick: handleSort }
+                      : {};
                     return (
                       <S.Thead
                         key={header.id}
                         className={trClassName}
-                        onClick={() => {
-                          const isDesc = getSorted === "desc";
-                          header.column.toggleSorting(!isDesc);
-                        }}
+                        {...theadProps}
                       >
                         {header.isPlaceholder
                           ? null
@@ -162,9 +160,11 @@ export const TransferHistory = ({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                        <div>
-                          <Icons.IncreaseFilter />
-                        </div>
+                        {isActionTab && (
+                          <div>
+                            <Icons.IncreaseFilter />
+                          </div>
+                        )}
                       </S.Thead>
                     );
                   })}
