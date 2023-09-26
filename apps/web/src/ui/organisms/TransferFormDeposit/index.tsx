@@ -71,7 +71,6 @@ export const TransferFormDeposit = ({
   );
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -87,6 +86,7 @@ export const TransferFormDeposit = ({
       isPolkadexToken,
       existentialBalance
     ),
+    validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (!fundingWallet) return;
@@ -153,7 +153,7 @@ export const TransferFormDeposit = ({
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />

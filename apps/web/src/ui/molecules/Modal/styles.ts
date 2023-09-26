@@ -116,10 +116,10 @@ export const Overlay = styled("div")<
         },
       },
       "&.enter-active": {
-        opacity: 0.5,
+        opacity: 1,
         transition: "opacity 100ms linear",
         [Container]: {
-          opacity: 0.75,
+          opacity: 1,
           transform: " scale(1.05)",
         },
       },

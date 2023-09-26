@@ -39,7 +39,7 @@ export function Trading() {
     () =>
       process.browser &&
       window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_DISCLAIMER),
-    [],
+    []
   );
 
   const handleAcceptDisclaimer = () => {
@@ -50,7 +50,7 @@ export function Trading() {
 
   const [state, setState] = useState(false);
   const [shutdownBanner, setShutdownBanner] = useState(
-    defaultConfig.showShutdownPopup,
+    defaultConfig.showShutdownPopup
   );
 
   const [banner, setBanner] = useState(false);
@@ -74,7 +74,7 @@ export function Trading() {
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter(
-    (account) => account.mainAddress === mainAddress,
+    (account) => account.mainAddress === mainAddress
   );
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)
     ?.length;
@@ -158,6 +158,7 @@ export function Trading() {
         onOpen={() => setState(true)}
         placement="start left"
         isFullHeight
+        isBlur
       >
         <Markets onClose={() => setState(false)} />
       </Modal>
