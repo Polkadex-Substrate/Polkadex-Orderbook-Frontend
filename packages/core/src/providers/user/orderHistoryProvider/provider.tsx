@@ -227,27 +227,8 @@ export const OrderHistoryProvider = ({ children }) => {
       let orderHistoryList = list.filter((item) => !item.isReverted);
       let openOrdersList = openOrdersSorted;
 
-      const acceptedStatus = {
-        "all transactions": "all",
-        pending: "open",
-        completed: "closed",
-        "show reverted": "showReverted",
-      };
-
-      const status = filters?.status?.toLowerCase();
-      const filterStatus = acceptedStatus[status] ?? status;
-
-      if (filterStatus !== Object.values(acceptedStatus)[0]) {
-        if (filterStatus === Object.values(acceptedStatus)[3]) {
-          orderHistoryList = list.filter((item) => item.isReverted);
-        } else {
-          orderHistoryList = orderHistoryList.filter((item) => {
-            return item.status.toLowerCase() === filterStatus;
-          });
-        }
-        openOrdersList = openOrdersList.filter((item) => {
-          return item.status.toLowerCase() === filterStatus;
-        });
+      if (filters.showReverted) {
+        orderHistoryList = list.filter((item) => item.isReverted);
       }
 
       if (filters?.hiddenPairs) {
@@ -275,6 +256,24 @@ export const OrderHistoryProvider = ({ children }) => {
         openOrdersList = openOrdersList.filter(
           (data) => data.side?.toUpperCase() === "ASK"
         );
+      }
+
+      const acceptedStatus = {
+        "all transactions": "all",
+        pending: "open",
+        completed: "closed",
+      };
+
+      const status = filters?.status?.toLowerCase();
+      const filterStatus = acceptedStatus[status] ?? status;
+
+      if (filterStatus !== Object.values(acceptedStatus)[0]) {
+        orderHistoryList = orderHistoryList.filter((item) => {
+          return item.status.toLowerCase() === filterStatus;
+        });
+        openOrdersList = openOrdersList.filter((item) => {
+          return item.status.toLowerCase() === filterStatus;
+        });
       }
 
       // Filter by range

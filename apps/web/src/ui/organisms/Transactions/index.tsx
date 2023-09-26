@@ -33,12 +33,8 @@ export type Ifilters = {
   hiddenPairs: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
-  status:
-    | "All Transactions"
-    | "Pending"
-    | "Completed"
-    | "Cancelled"
-    | "Show Reverted";
+  showReverted: boolean;
+  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
   dateFrom?: Date;
   dateTo?: Date;
 };
@@ -47,6 +43,7 @@ const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
   onlySell: false,
+  showReverted: false,
   status: "All Transactions",
 };
 
@@ -59,7 +56,6 @@ export const Transactions = () => {
     t("pending"),
     t("completed"),
     t("cancelled"),
-    t("showReverted"),
   ];
 
   const [filters, setFilters] = useState(initialFilters);
@@ -74,7 +70,9 @@ export const Transactions = () => {
   const { dispatchUserSessionData } = userSession;
 
   // Filters Actions
-  const handleChangeHidden = (type: "hiddenPairs" | "onlyBuy" | "onlySell") => {
+  const handleChangeHidden = (
+    type: "hiddenPairs" | "onlyBuy" | "onlySell" | "showReverted"
+  ) => {
     setFilters({ ...filters, [type]: !filters[type] });
   };
   const handleActionDropdown = (status: string) => {
@@ -135,6 +133,12 @@ export const Transactions = () => {
           </S.HeaderContent>
           {isVisible && (
             <S.WrapperActions>
+              <Checkbox
+                checked={filters.showReverted}
+                onChange={() => handleChangeHidden("showReverted")}
+              >
+                {t("showReverted")}
+              </Checkbox>
               <Checkbox
                 checked={filters.hiddenPairs}
                 onChange={() => handleChangeHidden("hiddenPairs")}
