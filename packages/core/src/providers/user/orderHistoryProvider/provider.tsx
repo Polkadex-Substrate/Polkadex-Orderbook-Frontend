@@ -27,7 +27,7 @@ import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
     ordersHistoryReducer,
-    initialOrdersHistoryState,
+    initialOrdersHistoryState
   );
   const profileState = useProfile();
   const { onHandleError } = useSettingsProvider();
@@ -45,7 +45,7 @@ export const OrderHistoryProvider = ({ children }) => {
           main_account: tradeAccount,
           limit: 100,
         },
-        "listOpenOrdersByMainAccount",
+        "listOpenOrdersByMainAccount"
       );
       return ordersRaw.map((order) => ({
         main_account: tradeAccount,
@@ -63,14 +63,14 @@ export const OrderHistoryProvider = ({ children }) => {
         fee: order.fee,
       }));
     },
-    [],
+    []
   );
 
   const onOpenOrdersHistoryFetch = useCallback(async () => {
     try {
       if (account.tradeAddress) {
         const transactions: OrderCommon[] = await fetchOpenOrders(
-          account.tradeAddress,
+          account.tradeAddress
         );
         dispatch(A.userOpenOrderHistoryData({ list: transactions }));
       }
@@ -86,7 +86,7 @@ export const OrderHistoryProvider = ({ children }) => {
       tradeAddress: string,
       dateFrom: Date,
       dateTo: Date,
-      nextTokenFetch: string | null,
+      nextTokenFetch: string | null
     ): Promise<{ orders: OrderCommon[]; nextToken: string | null }> => {
       const dateFromStr = Utils.date.formatDateToISO(dateFrom);
       const dateToStr = Utils.date.formatDateToISO(dateTo);
@@ -100,12 +100,12 @@ export const OrderHistoryProvider = ({ children }) => {
             limit: 10,
             nextToken: nextTokenFetch,
           },
-          "listOrderHistorybyMainAccount",
+          "listOrderHistorybyMainAccount"
         );
 
       return {
         nextToken,
-        orders: ordersRaw.map((order) => ({
+        orders: ordersRaw.map((order, i) => ({
           main_account: tradeAddress,
           id: order.id,
           client_order_id: order.cid,
@@ -119,10 +119,12 @@ export const OrderHistoryProvider = ({ children }) => {
           avg_filled_price: order.afp,
           filled_quantity: order.fq,
           fee: order.fee,
+          isReverted: order.isReverted,
+          // isReverted: i % 2 === 0,
         })),
       };
     },
-    [],
+    []
   );
 
   const onOrdersHistoryFetch = useCallback(
@@ -135,7 +137,7 @@ export const OrderHistoryProvider = ({ children }) => {
               tradeAddress,
               dateFrom,
               dateTo,
-              orderHistoryNextToken,
+              orderHistoryNextToken
             );
 
           dispatch(A.userOrdersHistoryData({ list: orders, nextToken }));
@@ -145,7 +147,7 @@ export const OrderHistoryProvider = ({ children }) => {
         dispatch(A.userOrdersHistoryError(error));
       }
     },
-    [fetchOrders, onHandleError],
+    [fetchOrders, onHandleError]
   );
 
   function processOrderData(eventData: SetOrder): OrderCommon {
@@ -179,13 +181,13 @@ export const OrderHistoryProvider = ({ children }) => {
       } catch (error) {
         console.log(
           error,
-          "Something has gone wrong (order updates channel)...",
+          "Something has gone wrong (order updates channel)..."
         );
         onHandleError(`Order updates channel ${error?.message ?? error}`);
         dispatch(A.orderUpdateEventError(error));
       }
     },
-    [onHandleError],
+    [onHandleError]
   );
 
   const usingAccount = profileState.selectedAccount;
@@ -217,7 +219,7 @@ export const OrderHistoryProvider = ({ children }) => {
       const marketForOrder = `${baseUnit}/${quoteUnit}`;
       return marketForOrder === market;
     },
-    [selectGetAsset, currentMarket?.name],
+    [selectGetAsset, currentMarket?.name]
   );
 
   // TODO: Refactor filter process. Should do it on server rather than client
@@ -230,17 +232,17 @@ export const OrderHistoryProvider = ({ children }) => {
 
       if (filters?.onlyBuy) {
         orderHistoryList = orderHistoryList.filter(
-          (data) => data.side?.toUpperCase() === "BID",
+          (data) => data.side?.toUpperCase() === "BID"
         );
         openOrdersList = openOrdersList.filter(
-          (data) => data.side?.toUpperCase() === "BID",
+          (data) => data.side?.toUpperCase() === "BID"
         );
       } else if (filters?.onlySell) {
         orderHistoryList = orderHistoryList.filter(
-          (data) => data.side.toUpperCase() === "ASK",
+          (data) => data.side.toUpperCase() === "ASK"
         );
         openOrdersList = openOrdersList.filter(
-          (data) => data.side?.toUpperCase() === "ASK",
+          (data) => data.side?.toUpperCase() === "ASK"
         );
       }
 
@@ -288,7 +290,7 @@ export const OrderHistoryProvider = ({ children }) => {
       setUpdatedList(orderHistoryList);
       setUpdatedOpenOrdersSorted(openOrdersList);
     },
-    [list, openOrdersSorted, isMarketMatch],
+    [list, openOrdersSorted, isMarketMatch]
   );
 
   useEffect(() => {

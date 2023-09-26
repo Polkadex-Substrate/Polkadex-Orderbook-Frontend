@@ -16,6 +16,7 @@ export type orderHistoryQueryResult = {
   afp: string;
   fq: string;
   fee: string;
+  isReverted: boolean | null;
 };
 
 export type OrderHistoryResult = {

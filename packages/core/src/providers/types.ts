@@ -58,6 +58,7 @@ export interface OrderCommon {
   avg_filled_price: string;
   filled_quantity: string;
   fee: string;
+  isReverted?: boolean | null;
 }
 
 export type CommonState = {
