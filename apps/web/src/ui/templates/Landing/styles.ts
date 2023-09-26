@@ -183,7 +183,7 @@ export const StartCard = styled.div`
     }
     p {
       opacity: 0.7;
-      line-height: 1.5;
+      line-height: 1.4;
     }
   `}
 `;
@@ -231,7 +231,7 @@ export const FeaturesContent = styled.section`
 
   p {
     opacity: 0.7;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 `;
 
@@ -315,4 +315,158 @@ export const FeaturesFooter = styled.div`
       }
     }
   `}
+`;
+
+export const Support = styled.section`
+  ${({ theme }) => css`
+    display: flex;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+
+export const SupportCard = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: space-between;
+    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    padding: 5rem;
+    &:first-child a {
+      color: ${theme.colors.blue};
+      transition: opacity ease 0.5s;
+      &:hover {
+        opacity: 0.5;
+      }
+      svg {
+        width: 1rem;
+        height: 1rem;
+        display: inline;
+        margin-left: 0.5rem;
+        fill: ${theme.colors.blue};
+      }
+    }
+  `}
+`;
+
+export const SupportCardHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h3 {
+    font-size: 2rem;
+    font-weight: 550;
+  }
+  p {
+    opacity: 0.5;
+    line-height: 1.4;
+  }
+`;
+
+export const SupportCardFooter = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    a {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      border-radius: 0.5rem;
+      padding: 1rem;
+      transition: background-color ease 0.4s;
+      &:hover {
+        background: ${theme.colors.secondaryBackground};
+      }
+      svg {
+        display: inline;
+        vertical-align: middle;
+        &:first-child {
+          width: 1.2rem;
+          height: 1.2rem;
+          margin-right: 0.8rem;
+        }
+        &:last-child {
+          width: 1rem;
+          height: 1rem;
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  `}
+`;
+
+export const Footer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 5rem;
+  a {
+    transition: opacity ease 0.5s;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+  }
+`;
+
+export const FooterTop = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 4rem 0;
+  span {
+    width: 4rem;
+    height: 4rem;
+  }
+  div {
+    flex: 1;
+    min-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2rem;
+    strong {
+      font-size: 1.5rem;
+      font-weight: 550;
+    }
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      list-style: none;
+    }
+  }
+`;
+
+export const FooterBottom = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 0;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+
+export const FooterCopyright = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  div {
+    display: flex;
+    gap: 1rem;
+  }
+`;
+
+export const FooterSocial = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  a {
+    svg {
+      width: 1.6rem;
+    }
+  }
 `;

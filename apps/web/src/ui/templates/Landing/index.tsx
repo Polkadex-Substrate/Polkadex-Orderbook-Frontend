@@ -145,6 +145,142 @@ export function LandingTemplate() {
             </S.FeaturesFooter>
           </S.FeaturesContent>
         </S.Features>
+        <S.Support>
+          <S.SupportCard>
+            <S.SupportCardHeader>
+              <h3>FAQs</h3>
+              <p>
+                Explore our Frequently Asked Questions section for in-depth
+                guidance on specific features.
+              </p>
+            </S.SupportCardHeader>
+            <Link href="/">
+              Explore FAQ
+              <Icons.SingleArrowRight />
+            </Link>
+          </S.SupportCard>
+          <S.SupportCard>
+            <S.SupportCardHeader>
+              <h3>Join Our Community</h3>
+              <p>
+                Polkadex Community connects users from 100+ countries and
+                supporting 5+ languages.
+              </p>
+            </S.SupportCardHeader>
+            <S.SupportCardFooter>
+              <Link href="/">
+                <Icons.Discord />
+                Discover
+                <Icons.ArrowBottom />
+              </Link>
+              <Link href="/">
+                <Icons.Telegram />
+                Telegram
+                <Icons.ArrowBottom />
+              </Link>
+            </S.SupportCardFooter>
+          </S.SupportCard>
+        </S.Support>
+        <S.Footer>
+          <S.FooterTop>
+            <div>
+              <span>
+                <Icons.PolkadexLogo />
+              </span>
+            </div>
+            <div>
+              <strong>About us</strong>
+              <ul>
+                <li>
+                  <Link href="/">Overview</Link>
+                </li>
+                <li>
+                  <Link href="/">Features</Link>
+                </li>
+                <li>
+                  <Link href="/">Roadmap</Link>
+                </li>
+                <li>
+                  <Link href="/">Team</Link>
+                </li>
+                <li>
+                  <Link href="/">Token economics</Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong>Products</strong>
+              <ul>
+                <li>
+                  <Link href="/">Orderbook</Link>
+                </li>
+                <li>
+                  <Link href="/">THEA Crosschain</Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong>Resources</strong>
+              <ul>
+                <li>
+                  <Link href="/">Docs</Link>
+                </li>
+                <li>
+                  <Link href="/">Github repository</Link>
+                </li>
+                <li>
+                  <Link href="/">Tutorials</Link>
+                </li>
+                <li>
+                  <Link href="/">Substrate</Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong>Support</strong>
+              <ul>
+                <li>
+                  <Link href="/">Help center</Link>
+                </li>
+                <li>
+                  <Link href="/">Report issues</Link>
+                </li>
+                <li>
+                  <Link href="/">Beginner&rsquo;s guide</Link>
+                </li>
+              </ul>
+            </div>
+          </S.FooterTop>
+          <S.FooterBottom>
+            <S.FooterCopyright>
+              <p>Copyright ©2023 Polkadex Inc.</p>
+              <div>
+                <Link href="/">Terms & conditions</Link>
+                <Link href="/">Privacy policy</Link>
+              </div>
+            </S.FooterCopyright>
+            <S.FooterSocial>
+              <Link href="/">
+                <Icons.Linkedin />
+              </Link>
+              <Link href="/">
+                <Icons.Discord />
+              </Link>
+              <Link href="/">
+                <Icons.Youtube />
+              </Link>
+              <Link href="/">
+                <Icons.Reddit />
+              </Link>
+              <Link href="/">
+                <Icons.Telegram />
+              </Link>
+              <Link href="/">
+                <Icons.Twitter />
+              </Link>
+            </S.FooterSocial>
+          </S.FooterBottom>
+        </S.Footer>
       </S.Main>
     </>
   );

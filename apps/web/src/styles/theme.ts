@@ -109,6 +109,7 @@ const defaultTheme = {
 const light = {
   title: "light",
   colors: {
+    darkBackground: "#F9FBFF",
     primaryBackground: "#F9FBFC",
     primaryBackgroundOpacity: "#F9FBFC99",
     primaryBackgroundSolid: "#F9FBFC",
