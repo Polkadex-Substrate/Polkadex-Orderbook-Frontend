@@ -105,7 +105,7 @@ export const OrderHistoryProvider = ({ children }) => {
 
       return {
         nextToken,
-        orders: ordersRaw.map((order, i) => ({
+        orders: ordersRaw.map((order) => ({
           main_account: tradeAddress,
           id: order.id,
           client_order_id: order.cid,
@@ -120,7 +120,6 @@ export const OrderHistoryProvider = ({ children }) => {
           filled_quantity: order.fq,
           fee: order.fee,
           isReverted: order.isReverted,
-          // isReverted: i % 2 === 0,
         })),
       };
     },

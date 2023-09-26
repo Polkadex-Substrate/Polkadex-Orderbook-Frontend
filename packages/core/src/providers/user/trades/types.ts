@@ -18,6 +18,7 @@ export type TradesQueryResult = {
   q: string;
   s: string;
   t: string;
+  isReverted: boolean | null;
 };
 
 export type FetchUserTradesResult = {

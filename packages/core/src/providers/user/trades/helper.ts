@@ -23,7 +23,7 @@ export const fetchUserTrades = async (
   proxyAccount: string,
   dateFrom: Date,
   dateTo: Date,
-  tradeHistoryFetchToken: string | null,
+  tradeHistoryFetchToken: string | null
 ): Promise<{ trades: A.UserTrade[]; nextToken: string | null }> => {
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
   const dateToStr = Utils.date.formatDateToISO(dateTo);
@@ -38,8 +38,9 @@ export const fetchUserTrades = async (
         limit: LIMIT,
         nextToken: tradeHistoryFetchToken,
       },
-      "listTradesByMainAccount",
+      "listTradesByMainAccount"
     );
+
   const trades: A.UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
     price: trade.p,
@@ -48,6 +49,7 @@ export const fetchUserTrades = async (
     timestamp: Number(trade.t),
     baseAsset: trade.m.split("-")[0],
     quoteAsset: trade.m.split("-")[1],
+    isReverted: trade.isReverted,
   }));
   return { nextToken, trades };
 };

@@ -84,20 +84,21 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                     isSell={trade.side === "Ask"}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
+                    isReverted={trade.isReverted}
                     data={[
                       { value: date },
                       {
                         value: Decimal.format(
                           trade.price,
                           Number(priceFixed),
-                          ",",
+                          ","
                         ),
                       },
                       {
                         value: Decimal.format(
                           trade.qty,
                           Number(amountFixed),
-                          ",",
+                          ","
                         ),
                       },
                     ]}

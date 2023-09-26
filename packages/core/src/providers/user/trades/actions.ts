@@ -17,6 +17,7 @@ export interface UserTrade {
   timestamp: number;
   baseAsset: string;
   quoteAsset: string;
+  isReverted?: boolean | null;
 }
 
 export interface UserTradeEvent {
@@ -70,7 +71,7 @@ export const userTradesFetch = (): UserTradesFetch => ({
 });
 
 export const userTradesData = (
-  payload: UserTradesData["payload"],
+  payload: UserTradesData["payload"]
 ): UserTradesData => ({
   type: TRADES_DATA,
   payload,
@@ -86,14 +87,14 @@ export const userTradesError = (error: CommonError): UserTradesError => ({
 });
 
 export const userTradesUpdateEvent = (
-  payload: UserTradesUpdateEvent["payload"],
+  payload: UserTradesUpdateEvent["payload"]
 ): UserTradesUpdateEvent => ({
   type: USER_TRADES_UPDATE_EVENT,
   payload,
 });
 
 export const userTradesUpdateData = (
-  payload: UserTradesUpdateData["payload"],
+  payload: UserTradesUpdateData["payload"]
 ): UserTradesUpdateData => ({
   type: USER_TRADES_UPDATE_DATA,
   payload,

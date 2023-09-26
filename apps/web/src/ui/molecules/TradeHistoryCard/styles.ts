@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
-export const Tr = styled.tr`
-  ${({ theme }) => css`
+export const Tr = styled.tr<{ isReverted: boolean | null }>`
+  ${({ theme, isReverted }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: 1.2rem;
     margin-bottom: 1.2rem;
@@ -9,6 +9,7 @@ export const Tr = styled.tr`
     &:nth-child(even) {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
+    opacity: ${isReverted ? 0.5 : 1};
   `}
 `;
 export const Td = styled.td``;

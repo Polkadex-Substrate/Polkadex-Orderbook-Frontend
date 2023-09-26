@@ -6,9 +6,10 @@ export const TradeHistoryCard = ({
   isSell,
   baseUnit,
   quoteUnit,
+  isReverted,
   data = [] as { value: string }[],
 }) => (
-  <S.Tr>
+  <S.Tr isReverted={isReverted}>
     <S.Td>
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
