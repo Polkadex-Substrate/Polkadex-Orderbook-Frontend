@@ -158,7 +158,6 @@ export const TransferForm = ({
   }, [selectedWallet?.account?.address]);
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -268,7 +267,7 @@ export const TransferForm = ({
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />

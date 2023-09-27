@@ -105,7 +105,13 @@ export const columns = (headers: string[]) => [
               <S.TooltipMessage>Extenal link</S.TooltipMessage>
             </TooltipContent>
           </Tooltip>
-          <Link href="/transfer" className={tdClassName.transfer}>
+          <Link
+            href={{
+              pathname: "/transfer",
+              query: { token: e.getValue().symbol },
+            }}
+            className={tdClassName.transfer}
+          >
             <S.Icon>
               <Icons.Trading />
             </S.Icon>
