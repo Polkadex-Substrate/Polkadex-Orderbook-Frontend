@@ -35,7 +35,7 @@ export const Hero = styled.section`
     justify-content: space-between;
     min-height: 60rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background-image: url("/img/heroBg.png");
+    background-image: url("/img/heroBg.webp");
     background-repeat: no-repeat;
     background-position: bottom right;
     background-size: contain;

@@ -1,6 +1,11 @@
 import localFont from "next/font/local";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
+
+import SpeedImage from "../../../../public/img/speed.webp";
+import FeesImage from "../../../../public/img/fees.webp";
+import MarketImage from "../../../../public/img/market.webp";
 
 import * as S from "./styles";
 
@@ -115,7 +120,17 @@ export function LandingTemplate() {
                   fast as CEXs.
                 </p>
               </div>
-              <img src="/img/speed.png" />
+              <Image
+                src={SpeedImage}
+                placeholder="blur"
+                alt="Speed illustration"
+                priority
+                draggable={false}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
+              />
             </S.FeaturesHighlight>
             <S.FeaturesWrapper>
               <S.FeaturesCard>
@@ -126,7 +141,15 @@ export function LandingTemplate() {
                     security and use any data solely for security and marketing.
                   </p>
                 </div>
-                <img src="/img/fees.png" />
+                <Image
+                  src={FeesImage}
+                  placeholder="blur"
+                  alt="Fees illustration"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
               </S.FeaturesCard>
               <S.FeaturesCard>
                 <div>
@@ -136,7 +159,15 @@ export function LandingTemplate() {
                     with market orders.
                   </p>
                 </div>
-                <img src="/img/market.png" />
+                <Image
+                  src={MarketImage}
+                  placeholder="blur"
+                  alt="Market illustration"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
               </S.FeaturesCard>
               <S.FeaturesCard>
                 <div>
