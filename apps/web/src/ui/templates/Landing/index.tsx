@@ -150,7 +150,7 @@ export function LandingTemplate() {
               </S.FeaturesCard>
             </S.FeaturesWrapper>
             <S.FeaturesFooter>
-              <Link href="/">
+              <Link href="https://polkadex.trade/orderbook" target="_blank">
                 Read more about Polkadex Orderbook
                 <Icons.SingleArrowRight />
               </Link>
@@ -181,15 +181,16 @@ export function LandingTemplate() {
               </p>
             </S.SupportCardHeader>
             <S.SupportCardFooter>
-              <Link href="/">
+              <Link
+                href="https://discord.com/invite/Uvua83QAzk"
+                target="_blank"
+              >
                 <Icons.Discord />
                 Discover
-                <Icons.ArrowBottom />
               </Link>
-              <Link href="/">
+              <Link href="https://t.me/Polkadex" target="_blank">
                 <Icons.Telegram />
                 Telegram
-                <Icons.ArrowBottom />
               </Link>
             </S.SupportCardFooter>
           </S.SupportCard>
@@ -205,19 +206,35 @@ export function LandingTemplate() {
               <strong>About us</strong>
               <ul>
                 <li>
-                  <Link href="/">Overview</Link>
+                  <Link href="https://docs.polkadex.trade/" target="_blank">
+                    Overview
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Features</Link>
+                  <Link
+                    href="https://docs.polkadex.trade/whatispolkadex"
+                    target="_blank"
+                  >
+                    Features
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Roadmap</Link>
+                  <Link href="https://polkadex.trade/roadmap" target="_blank">
+                    Roadmap
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Team</Link>
+                  <Link href="https://polkadex.trade/team" target="_blank">
+                    Team
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Token economics</Link>
+                  <Link
+                    href="https://polkadex.trade/tokeneconomics"
+                    target="_blank"
+                  >
+                    Token economics
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -225,10 +242,17 @@ export function LandingTemplate() {
               <strong>Products</strong>
               <ul>
                 <li>
-                  <Link href="/">Orderbook</Link>
+                  <Link href="https://polkadex.trade/orderbook" target="_blank">
+                    Orderbook
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">THEA Crosschain</Link>
+                  <Link
+                    href="https://polkadex.medium.com/thea-a-better-decentralized-token-bridge-ac2e362a2a2b"
+                    target="_blank"
+                  >
+                    THEA Crosschain
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -236,16 +260,30 @@ export function LandingTemplate() {
               <strong>Resources</strong>
               <ul>
                 <li>
-                  <Link href="/">Docs</Link>
+                  <Link href="https://docs.polkadex.trade/" target="_blank">
+                    Docs
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Github repository</Link>
+                  <Link
+                    href="https://github.com/Polkadex-Substrate"
+                    target="_blank"
+                  >
+                    Github repository
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Tutorials</Link>
+                  <Link
+                    href="https://www.youtube.com/channel/UC6fXRDT4lLKlXG3gP0PP06Q"
+                    target="_blank"
+                  >
+                    Tutorials
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Substrate</Link>
+                  <Link href="https://www.substrate.io/" target="_blank">
+                    Substrate
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -253,13 +291,22 @@ export function LandingTemplate() {
               <strong>Support</strong>
               <ul>
                 <li>
-                  <Link href="/">Help center</Link>
+                  <Link
+                    href="https://discord.com/invite/Uvua83QAzk"
+                    target="_blank"
+                  >
+                    Help center
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Report issues</Link>
+                  <Link href="https://t.me/Polkadex" target="_blank">
+                    Report issues
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/">Beginner&rsquo;s guide</Link>
+                  <Link href="https://t.me/Polkadex" target="_blank">
+                    Beginner&rsquo;s guide
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -268,27 +315,43 @@ export function LandingTemplate() {
             <S.FooterCopyright>
               <p>Copyright ©2023 Polkadex Inc.</p>
               <div>
-                <Link href="/">Terms & conditions</Link>
-                <Link href="/">Privacy policy</Link>
+                <Link
+                  href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
+                  target="_blank"
+                >
+                  Terms & conditions
+                </Link>
+                <Link
+                  href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
+                  target="_blank"
+                >
+                  Privacy policy
+                </Link>
               </div>
             </S.FooterCopyright>
             <S.FooterSocial>
-              <Link href="/">
+              <Link
+                href="https://www.linkedin.com/company/69690544"
+                target="_blank"
+              >
                 <Icons.Linkedin />
               </Link>
-              <Link href="/">
+              <Link
+                href="https://discord.com/invite/Uvua83QAzk/"
+                target="_blank"
+              >
                 <Icons.Discord />
               </Link>
-              <Link href="/">
-                <Icons.Youtube />
+              <Link href="https://polkadex.medium.com/" target="_blank">
+                <Icons.Medium />
               </Link>
-              <Link href="/">
+              <Link href="https://www.reddit.com/r/polkadex" target="_blank">
                 <Icons.Reddit />
               </Link>
-              <Link href="/">
+              <Link href="https://t.me/Polkadex" target="_blank">
                 <Icons.Telegram />
               </Link>
-              <Link href="/">
+              <Link href="https://twitter.com/polkadex" target="_blank">
                 <Icons.Twitter />
               </Link>
             </S.FooterSocial>
