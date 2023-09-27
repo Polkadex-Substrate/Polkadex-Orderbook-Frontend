@@ -43,7 +43,7 @@ export const OrderHistoryProvider = ({ children }) => {
         queries.listOpenOrdersByMainAccount,
         {
           main_account: tradeAccount,
-          limit: 100,
+          limit: 25,
         },
         "listOpenOrdersByMainAccount",
       );
