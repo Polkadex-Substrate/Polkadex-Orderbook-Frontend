@@ -55,7 +55,7 @@ export function useTradeHistory(filters: Ifilters) {
 
     let tradeHistoryList = list.filter((item) => !item.isReverted);
 
-    if (filters.showReverted) {
+    if (filters?.showReverted) {
       tradeHistoryList = list.filter((item) => item.isReverted);
     }
 

@@ -227,7 +227,7 @@ export const OrderHistoryProvider = ({ children }) => {
       let orderHistoryList = list.filter((item) => !item.isReverted);
       let openOrdersList = openOrdersSorted;
 
-      if (filters.showReverted) {
+      if (filters?.showReverted) {
         orderHistoryList = list.filter((item) => item.isReverted);
       }
 
