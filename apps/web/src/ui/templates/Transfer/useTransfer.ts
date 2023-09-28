@@ -13,6 +13,7 @@ import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProv
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useRouter } from "next/router";
 
 import * as T from "./types";
 
@@ -26,6 +27,7 @@ export function useTransfer() {
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
+  const { query } = useRouter();
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
   const [assetsInteraction, setAssetsInteraction] = useState(false);
@@ -33,7 +35,10 @@ export function useTransfer() {
 
   const [type, setType] = useState<T.SwitchType>("deposit");
 
-  const onAssetsInteraction = () => onChangeState(setAssetsInteraction);
+  const onAssetsInteraction = (callback?: () => void) => {
+    if (typeof callback === "function" && callback) callback();
+    onChangeState(setAssetsInteraction);
+  };
   const onChangeAsset = (asset: T.FilteredAssetProps) => {
     setSelectedAsset(asset);
     onAssetsInteraction();
@@ -67,7 +72,10 @@ export function useTransfer() {
   /* Select default asset */
   useEffect(() => {
     if (!selectedAsset) {
-      setSelectedAsset(filteredNonBlockedAssets?.[0]);
+      const foundAsset = filteredNonBlockedAssets?.find(
+        ({ symbol }) => symbol === query?.token
+      );
+      setSelectedAsset(foundAsset ?? filteredNonBlockedAssets?.[0]);
     } else if (selectedAccount && !!selectedAsset)
       setSelectedAsset((prev) => {
         const foundAsset = filteredNonBlockedAssets?.find(
@@ -75,7 +83,7 @@ export function useTransfer() {
         );
         return foundAsset || prev;
       });
-  }, [selectedAsset, filteredNonBlockedAssets, selectedAccount]);
+  }, [selectedAsset, filteredNonBlockedAssets, selectedAccount, query]);
 
   return {
     loading: depositLoading || withdrawLoading,

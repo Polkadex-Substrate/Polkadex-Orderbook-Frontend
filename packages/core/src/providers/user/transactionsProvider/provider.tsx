@@ -48,13 +48,13 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         onHandleError(`Could not fetch transaction history`);
       }
     },
-    [onHandleError],
+    [onHandleError]
   );
 
   const fetchTransactions = async (
     address: string,
     monthsBefore: number,
-    limit = 100000,
+    limit = 100000
   ): Promise<T.Transaction[]> => {
     const fromDate = subtractMonthsFromDateOrNow(monthsBefore);
     const txs: T.TransactionQueryResult[] = await fetchAllFromAppSync(
@@ -65,7 +65,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         to: new Date().toISOString(),
         limit,
       },
-      "listTransactionsByMainAccount",
+      "listTransactionsByMainAccount"
     );
 
     return txs?.map((item) => ({
@@ -78,12 +78,13 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
       time: new Date(Number(item.t)).toISOString(),
       status: item.st as T.Transaction["status"],
       txn_type: item.tt as T.Transaction["txn_type"],
+      isReverted: item.isReverted,
     }));
   };
 
   const transactionHistory: T.Transaction[] = useMemo(() => {
     const transactionsBydate = state.transactions?.sort(
-      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
     );
     const transactions = transactionsBydate?.reduce(
       (pv: T.Transaction[], cv) => {
@@ -100,24 +101,24 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         }
         return pv;
       },
-      [],
+      []
     );
     return transactions;
   }, [filterBy, state.transactions]);
 
   const withdrawalsList = useMemo(
     () => transactionHistory?.filter((txn) => txn.txn_type !== DEPOSIT),
-    [transactionHistory],
+    [transactionHistory]
   );
 
   const deposits = useMemo(
     () => transactionHistory?.filter((txn) => txn.txn_type === DEPOSIT),
-    [transactionHistory],
+    [transactionHistory]
   );
 
   const readyWithdrawals = useMemo(
     () => groupWithdrawsBySnapShotIds(withdrawalsList),
-    [withdrawalsList],
+    [withdrawalsList]
   );
 
   useEffect(() => {
@@ -135,7 +136,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   ]);
 
   const formatTransactionData = (
-    data: T.TransactionUpdatePayload,
+    data: T.TransactionUpdatePayload
   ): T.Transaction => {
     if (data.txn_type === "DEPOSIT") {
       return {
@@ -146,6 +147,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         amount: data.amount.toString(),
         asset: data.asset,
         time: new Date().toISOString(),
+        isReverted: data.isReverted,
       };
     } else {
       return {
@@ -158,6 +160,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         amount: data.amount.toString(),
         asset: data.asset,
         time: new Date().toISOString(),
+        isReverted: data.isReverted,
       };
     }
   };
@@ -174,7 +177,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
         onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [onHandleError],
+    [onHandleError]
   );
   useEffect(() => {
     if (mainAddress) {

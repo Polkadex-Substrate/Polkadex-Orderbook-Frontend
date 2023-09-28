@@ -168,7 +168,8 @@
     "allTransactions": "All Transactions",
     "pending": "Pending",
     "completed": "Completed",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "showReverted": "Show Reverted"
   },
   "unlockAccount": {
     "title": "Unlock Account",

@@ -59,8 +59,8 @@ export const depositValidations = (
           !(value?.toString().includes("e") || value?.toString().includes("o"))
       )
       .test(
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
@@ -78,11 +78,14 @@ export const depositValidations = (
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         (value) => {
-          const balanceAfterDeposit = chainBalance - Number(value);
+          const balanceAfterDeposit = Number(
+            chainBalance - Number(value)
+          ).toFixed(MAX_DIGITS_AFTER_DECIMAL);
+
           return !(
             !isPolkadexToken &&
             Number(value) &&
-            balanceAfterDeposit < existentialBalance
+            Number(balanceAfterDeposit) < existentialBalance
           );
         }
       ),
@@ -150,8 +153,8 @@ export const withdrawValidations = (balance: string) => {
         (value) => Number(value) <= Number(balance)
       )
       .test(
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_EIGHT_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL

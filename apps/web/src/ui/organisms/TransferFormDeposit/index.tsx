@@ -71,7 +71,6 @@ export const TransferFormDeposit = ({
   );
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -87,6 +86,7 @@ export const TransferFormDeposit = ({
       isPolkadexToken,
       existentialBalance
     ),
+    validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (!fundingWallet) return;
@@ -146,14 +146,14 @@ export const TransferFormDeposit = ({
             tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
             tokenTicker={selectedAsset?.symbol ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
-            onAction={onOpenAssets}
+            onAction={() => onOpenAssets(resetForm)}
             loading={balancesLoading}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />

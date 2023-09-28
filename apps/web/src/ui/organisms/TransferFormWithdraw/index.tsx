@@ -37,7 +37,7 @@ export const TransferFormWithdraw = ({
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
-  onOpenAssets: () => void;
+  onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
 }) => {
   const { t } = useTranslation("transfer");
@@ -78,7 +78,6 @@ export const TransferFormWithdraw = ({
 
   const {
     values,
-    touched,
     resetForm,
     handleSubmit,
     errors,
@@ -89,6 +88,7 @@ export const TransferFormWithdraw = ({
   } = useFormik({
     initialValues,
     validationSchema: withdrawValidations(selectedAsset?.free_balance ?? "0"),
+    validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
@@ -157,16 +157,14 @@ export const TransferFormWithdraw = ({
               tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
               tokenTicker={selectedAsset?.symbol ?? ""}
               availableAmount={selectedAsset?.free_balance ?? "0.00"}
-              onAction={onOpenAssets}
+              onAction={() => onOpenAssets(resetForm)}
               loading={balancesLoading}
             />
             <S.Amount onClick={() => amountRef.current?.focus()}>
               <div>
                 <Popover
                   placement="top left"
-                  isOpen={
-                    !!touched.amount && !!errors.amount && !!values.amount
-                  }
+                  isOpen={!!errors.amount && !!values.amount}
                 >
                   <Popover.Trigger>
                     <div />

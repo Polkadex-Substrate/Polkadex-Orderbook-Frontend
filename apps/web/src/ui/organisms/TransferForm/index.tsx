@@ -38,6 +38,7 @@ export const TransferForm = ({
   selectedAsset,
   switchEnable,
   onDisableSwitch,
+  onRefetch,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
@@ -46,7 +47,7 @@ export const TransferForm = ({
   const { loading } = useBalancesProvider();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
-  const { mutateAsync, isLoading } = useAssetTransfer();
+  const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
   const { mainAddress } = selectedAccount;
 
   const fundingWallet = useMemo(
@@ -142,7 +143,6 @@ export const TransferForm = ({
     [fundingWallet?.account?.address]
   );
 
-  console.log("Loading", loading);
   const isValidAddress = useMemo(() => {
     const address = selectedWallet?.account?.address;
     try {
@@ -158,7 +158,6 @@ export const TransferForm = ({
   }, [selectedWallet?.account?.address]);
 
   const {
-    touched,
     values,
     handleSubmit,
     resetForm,
@@ -261,14 +260,14 @@ export const TransferForm = ({
             tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
             tokenTicker={selectedAsset?.symbol ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
-            onAction={onOpenAssets}
+            onAction={() => onOpenAssets(resetForm)}
             loading={loading}
           />
           <S.Amount onClick={() => amountRef.current?.focus()}>
             <div>
               <Popover
                 placement="top left"
-                isOpen={!!touched.amount && !!errors.amount && !!values.amount}
+                isOpen={!!errors.amount && !!values.amount}
               >
                 <Popover.Trigger>
                   <div />
