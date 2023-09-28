@@ -30,7 +30,7 @@ export const Navbar = ({ onOpenMarkets }) => {
   const priceChangePerCent =
     (currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = currentTicker?.priceChange24Hr < 0;
-  const volume = currentTicker?.volumeBase24hr;
+  const volume = currentTicker?.volumeQuote24Hr;
   const high = currentTicker?.high;
   const low = currentTicker?.low;
 
