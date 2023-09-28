@@ -110,7 +110,9 @@ export const DepositHistory = ({
                     {row.getVisibleCells().map((cell) => {
                       const lastCell =
                         table.getRowModel().rows.length === ti + 1;
-                      const tdClassName = classNames({ last: lastCell });
+                      const tdClassName = classNames({
+                        last: lastCell,
+                      });
                       return (
                         <td className={tdClassName} key={cell.id}>
                           {flexRender(

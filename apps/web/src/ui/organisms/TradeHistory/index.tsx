@@ -90,14 +90,14 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                         value: Decimal.format(
                           trade.price,
                           Number(priceFixed),
-                          ",",
+                          ","
                         ),
                       },
                       {
                         value: Decimal.format(
                           trade.qty,
                           Number(amountFixed),
-                          ",",
+                          ","
                         ),
                       },
                     ]}

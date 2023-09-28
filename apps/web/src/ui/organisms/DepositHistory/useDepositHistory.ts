@@ -75,6 +75,7 @@ export function useDepositHistory({
             ),
             status: e.status,
             txn_type: e.txn_type,
+            isReverted: e.isReverted,
             token: {
               ticker: token?.symbol,
               name: token?.name,
