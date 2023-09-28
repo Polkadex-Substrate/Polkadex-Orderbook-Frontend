@@ -11,8 +11,10 @@ export const columns = (header: string[]) => [
   columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => (
-      <Date>
-        <span>{e.getValue().status}</span>
+      <Date isReverted={e.getValue().isReverted}>
+        <span>
+          {e.getValue().isReverted ? <>REVERTED</> : e.getValue().status}
+        </span>
         <p>{e.getValue().time}</p>
       </Date>
     ),
