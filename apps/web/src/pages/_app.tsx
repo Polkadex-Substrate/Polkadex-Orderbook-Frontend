@@ -96,10 +96,11 @@ function App({ Component, pageProps }: AppProps) {
     console.error = () => {};
   }
   const router = useRouter();
-  const availableRoutes = defaultConfig.availableRoutes;
   const isActive = useMemo(() => {
-    return availableRoutes.some((word) => router.pathname.includes(word));
-  }, [availableRoutes, router.pathname]);
+    return defaultConfig.availableRoutes.some((word) =>
+      router.pathname.includes(word)
+    );
+  }, [router.pathname]);
 
   useEffect(() => {
     const handleRouteChange = (url: string) => gtag.pageview(url);
