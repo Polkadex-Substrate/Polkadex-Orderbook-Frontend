@@ -14,7 +14,7 @@
   "use": "Use",
   "import": "Import",
   "actions": "Actions",
-  "disclaimerMessage": "Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one.",
+  "disclaimerMessage": "Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one. Do not transfer funds directly to your Trading address.",
   "fundingAccountToolTip": "Funding account info",
   "fundingAccounts": "Funding Accounts",
   "noWalletFoundTitle": "No wallet found",
