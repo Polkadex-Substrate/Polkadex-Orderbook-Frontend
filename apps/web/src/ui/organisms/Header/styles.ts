@@ -12,10 +12,17 @@ export const Wrapper = styled.div<{ dark?: boolean }>`
     max-height: 5.5rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     backdrop-filter: blur(5px);
-    ${!dark &&
-    css`
-      background: ${theme.colors.primaryBackground};
-    `}
+
+    ${!dark
+      ? css`
+          background: ${theme.colors.primaryBackground};
+        `
+      : css`
+          svg {
+            fill: ${theme.colors.white};
+          }
+        `}
+
     z-index: 9;
   `}
 `;

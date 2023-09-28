@@ -47,6 +47,7 @@ const defaultTheme = {
   colors: {
     primary: "#E6007A",
     primaryHover: "rgba(230,0,122,0.7)",
+    darkBackground: "#06070A",
     secondary: "#6745D2",
     secondaryBackground: "rgba(139,161,190,0.2)",
     secondaryBackgroundDark: "#ABB2BC",
@@ -109,7 +110,6 @@ const defaultTheme = {
 const light = {
   title: "light",
   colors: {
-    darkBackground: "#F9FBFF",
     primaryBackground: "#F9FBFC",
     primaryBackgroundOpacity: "#F9FBFC99",
     primaryBackgroundSolid: "#F9FBFC",
@@ -155,7 +155,6 @@ const light = {
 const dark = {
   title: "dark",
   colors: {
-    darkBackground: "#06070A",
     primaryBackground: "#1C1C26",
     primaryBackgroundOpacity: "#1C1C2699",
     primaryBackgroundSolid: "#22232E",

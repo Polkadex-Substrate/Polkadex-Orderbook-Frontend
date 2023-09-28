@@ -5,6 +5,7 @@ export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.colors.darkBackground};
+    color: ${theme.colors.white};
     display: flex;
     max-width: 130rem;
     min-height: 100vh;
@@ -478,14 +479,13 @@ export const SupportCardFooter = styled.div`
       svg {
         display: inline;
         vertical-align: middle;
+        fill: ${theme.colors.white};
+        width: 1.2rem;
+        height: 1.2rem;
         &:first-child {
-          width: 1.2rem;
-          height: 1.2rem;
           margin-right: 0.8rem;
         }
         &:last-child {
-          width: 1rem;
-          height: 1rem;
           margin-left: 0.5rem;
         }
       }
@@ -564,12 +564,15 @@ export const FooterCopyright = styled.div`
 `;
 
 export const FooterSocial = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  a {
-    svg {
-      width: 1.6rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    a {
+      svg {
+        width: 1.6rem;
+        fill: ${theme.colors.white};
+      }
     }
-  }
+  `}
 `;
