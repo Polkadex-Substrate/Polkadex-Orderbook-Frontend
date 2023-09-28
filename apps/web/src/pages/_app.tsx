@@ -96,11 +96,10 @@ function App({ Component, pageProps }: AppProps) {
     console.error = () => {};
   }
   const router = useRouter();
+  const availableRoutes = defaultConfig.availableRoutes;
   const isActive = useMemo(() => {
-    return defaultConfig.availableRoutes.some((word) =>
-      router.pathname.includes(word)
-    );
-  }, [router.pathname]);
+    return availableRoutes.some((word) => router.pathname.includes(word));
+  }, [availableRoutes, router.pathname]);
 
   useEffect(() => {
     const handleRouteChange = (url: string) => gtag.pageview(url);
@@ -139,7 +138,7 @@ function App({ Component, pageProps }: AppProps) {
         }}
       >
         <OverlayProvider>
-          {isActive ? (
+          {isActive || router.pathname !== "/" ? (
             <TradingPageProvider>
               <Providers>
                 <ModifiedThemeProvider

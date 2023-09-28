@@ -90,7 +90,7 @@ export function LandingTemplate() {
                 <div>
                   <h3>3.Add funds & start trading</h3>
                   <p>
-                    Transfer funds into your Orderbook wallet. Now, you&lsquo;re
+                    Transfer funds into your trading account. Now, you&lsquo;re
                     all set to start trading.
                   </p>
                 </div>
