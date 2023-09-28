@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { Fade, Slide } from "react-reveal";
+import { useTranslation } from "react-i18next";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import FeesImage from "../../../../public/img/fees.webp";
@@ -18,11 +19,12 @@ const outrun = localFont({
 });
 
 export function LandingTemplate() {
+  const { t } = useTranslation("landing");
   return (
     <>
       <Head>
-        <title>Landing Page</title>
-        <meta name="description" content="Description" />
+        <title>{t("title")}</title>
+        <meta name="description" content={t("description")} />
       </Head>
       <S.Main>
         <Header dark />
@@ -32,35 +34,36 @@ export function LandingTemplate() {
               <S.HeroHeader>
                 <span>
                   <Icons.Checked />
-                  Non-custodial
+                  {t("hero.nonCustodial")}
                 </span>
                 <span>
                   <Icons.Checked />
-                  Zero gas fees
+                  {t("hero.gasFees")}
                 </span>
                 <span>
                   <Icons.Checked />
-                  500k TPS performance
+                  {t("hero.performance")}
                 </span>
               </S.HeroHeader>
-              <h1>Trade on the CEXiest decentralized</h1>
+              <h1>{t("hero.title")}</h1>
               <p className={outrun.className}>
-                Exchange <strong>.</strong>
+                {t("hero.highlight")}
+                <strong>.</strong>
               </p>
-              <S.Button href="/trading">Start trading</S.Button>
+              <S.Button href="/trading">{t("button")}</S.Button>
             </S.HeroAside>
           </S.Hero>
         </Fade>
         <S.Start>
           <S.StartHeader>
             <Slide bottom>
-              <span className={outrun.className}>Fast</span>
+              <span className={outrun.className}>{t("features.fast")}</span>
             </Slide>
             <Slide bottom>
-              <span className={outrun.className}>Simple</span>
+              <span className={outrun.className}>{t("features.simple")}</span>
             </Slide>
             <Slide bottom>
-              <span className={outrun.className}>Secure</span>
+              <span className={outrun.className}>{t("features.secure")}</span>
             </Slide>
           </S.StartHeader>
           <Slide bottom>
@@ -68,31 +71,22 @@ export function LandingTemplate() {
               <S.StartCard>
                 <span />
                 <div>
-                  <h3>1.Create an account</h3>
-                  <p>
-                    Sign up on Orderbook. Rest assured, we prioritize your
-                    security and use any data solely for security and marketing.
-                  </p>
+                  <h3>{t("features.stepOneTitle")}</h3>
+                  <p>{t("features.stepOneDescription")}</p>
                 </div>
               </S.StartCard>
               <S.StartCard>
                 <span />
                 <div>
-                  <h3>2.Connect your wallet</h3>
-                  <p>
-                    Choose your wallet from a variety of Polkadot-based wallets,
-                    and register it for use within Orderbook.
-                  </p>
+                  <h3>{t("features.stepTwoTitle")}</h3>
+                  <p>{t("features.stepTwoDescription")}</p>
                 </div>
               </S.StartCard>
               <S.StartCard>
                 <span />
                 <div>
-                  <h3>3.Add funds & start trading</h3>
-                  <p>
-                    Transfer funds into your trading account. Now, you&lsquo;re
-                    all set to start trading.
-                  </p>
+                  <h3>{t("features.stepThreeTitle")}</h3>
+                  <p>{t("features.stepThreeDescription")}</p>
                 </div>
               </S.StartCard>
             </S.StartContent>
@@ -100,10 +94,10 @@ export function LandingTemplate() {
           <Slide bottom>
             <S.StartFooter>
               <span>
-                Click this small button to begin trading
+                {t("features.ctaTitle")}
                 <Icons.SingleArrowRight />
               </span>
-              <S.Button href="/trading">Start trading</S.Button>
+              <S.Button href="/trading">{t("button")}</S.Button>
             </S.StartFooter>
           </Slide>
         </S.Start>
@@ -113,20 +107,26 @@ export function LandingTemplate() {
             <S.FeaturesHeaderCard>
               <Slide bottom>
                 <div>
-                  <span className={outrun.className}>Your</span>
-                  <p className={outrun.className}>Keys</p>
+                  <span className={outrun.className}>
+                    {t("benefits.highlight")}
+                  </span>
+                  <p className={outrun.className}>{t("benefits.keys")}</p>
                 </div>
               </Slide>
               <Slide bottom>
                 <div>
-                  <span className={outrun.className}>Your</span>
-                  <p className={outrun.className}>Crypto</p>
+                  <span className={outrun.className}>
+                    {t("benefits.highlight")}
+                  </span>
+                  <p className={outrun.className}>{t("benefits.crypto")}</p>
                 </div>
               </Slide>
               <Slide bottom>
                 <div>
-                  <span className={outrun.className}>Your</span>
-                  <p className={outrun.className}>Exchange</p>
+                  <span className={outrun.className}>
+                    {t("benefits.highlight")}
+                  </span>
+                  <p className={outrun.className}>{t("benefits.exchange")}</p>
                 </div>
               </Slide>
             </S.FeaturesHeaderCard>
@@ -135,11 +135,8 @@ export function LandingTemplate() {
             <Slide bottom>
               <S.FeaturesHighlight>
                 <div>
-                  <h3>500k trades/sec</h3>
-                  <p>
-                    Trade crypto with sub-milisecond latency on a DEX that’s as
-                    fast as CEXs.
-                  </p>
+                  <h3>{t("benefits.oneTitle")}</h3>
+                  <p>{t("benefits.oneDescription")}</p>
                 </div>
                 <Image
                   src={SpeedImage}
@@ -158,12 +155,8 @@ export function LandingTemplate() {
               <S.FeaturesCard>
                 <Slide bottom>
                   <div>
-                    <h3>Ø Trading fees</h3>
-                    <p>
-                      Sign up on Orderbook. Rest assured, we prioritize your
-                      security and use any data solely for security and
-                      marketing.
-                    </p>
+                    <h3>{t("benefits.twoTitle")}</h3>
+                    <p>{t("benefits.twoDescription")}</p>
                   </div>
                   <Image
                     src={FeesImage}
@@ -179,11 +172,8 @@ export function LandingTemplate() {
               <S.FeaturesCard>
                 <Slide bottom>
                   <div>
-                    <h3>Limit & market orders</h3>
-                    <p>
-                      Control price with limit orders, achieve instant execution
-                      with market orders.
-                    </p>
+                    <h3>{t("benefits.threeTitle")}</h3>
+                    <p>{t("benefits.threeDescription")}</p>
                   </div>
                   <Image
                     src={MarketImage}
@@ -199,11 +189,8 @@ export function LandingTemplate() {
               <S.FeaturesCard>
                 <Slide bottom>
                   <div>
-                    <h3>Non-custodial</h3>
-                    <p>
-                      You control your own liquidity, which means it is safe,
-                      and you can pull it out whenever.
-                    </p>
+                    <h3>{t("benefits.fourTitle")}</h3>
+                    <p>{t("benefits.fourDescription")}</p>
                   </div>
                   <Image
                     src={NonCustodial}
@@ -220,10 +207,10 @@ export function LandingTemplate() {
             <Slide bottom>
               <S.FeaturesFooter>
                 <Link href="https://polkadex.trade/orderbook" target="_blank">
-                  Read more about Polkadex Orderbook
+                  {t("benefits.ctaTitle")}
                   <Icons.SingleArrowRight />
                 </Link>
-                <S.Button href="/trading">Start trading</S.Button>
+                <S.Button href="/trading">{t("button")}</S.Button>
               </S.FeaturesFooter>
             </Slide>
           </S.FeaturesContent>
@@ -232,14 +219,11 @@ export function LandingTemplate() {
           <S.SupportCard>
             <Slide bottom>
               <S.SupportCardHeader>
-                <h3>FAQs</h3>
-                <p>
-                  Explore our Frequently Asked Questions section for in-depth
-                  guidance on specific features.
-                </p>
+                <h3>{t("help.faqTitle")}</h3>
+                <p>{t("help.faqDescription")}</p>
               </S.SupportCardHeader>
               <Link href="/">
-                Explore FAQ
+                {t("help.faqButton")}
                 <Icons.SingleArrowRight />
               </Link>
             </Slide>
@@ -247,11 +231,8 @@ export function LandingTemplate() {
           <S.SupportCard>
             <Slide bottom>
               <S.SupportCardHeader>
-                <h3>Join Our Community</h3>
-                <p>
-                  Polkadex Community connects users from 100+ countries and
-                  supporting 5+ languages.
-                </p>
+                <h3>{t("help.socialTitle")}</h3>
+                <p>{t("help.socialDescription")}</p>
               </S.SupportCardHeader>
               <S.SupportCardFooter>
                 <Link
@@ -259,7 +240,7 @@ export function LandingTemplate() {
                   target="_blank"
                 >
                   <Icons.Discord />
-                  Discover
+                  Discord
                 </Link>
                 <Link href="https://t.me/Polkadex" target="_blank">
                   <Icons.Telegram />
