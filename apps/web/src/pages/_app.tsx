@@ -138,7 +138,7 @@ function App({ Component, pageProps }: AppProps) {
         }}
       >
         <OverlayProvider>
-          {isActive || router.pathname !== "/" ? (
+          {isActive ? (
             <TradingPageProvider>
               <Providers>
                 <ModifiedThemeProvider
