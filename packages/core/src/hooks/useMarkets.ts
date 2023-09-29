@@ -104,7 +104,7 @@ export function useMarkets(onClose: () => void) {
       return {
         ...item,
         last: (ticker || defaultTickers).close,
-        volume: (ticker || defaultTickers).volumeBase24hr,
+        volume: (ticker || defaultTickers).volumeQuote24Hr,
         price_change_percent: (
           ticker || defaultTickers
         ).priceChangePercent24Hr?.toString(),
