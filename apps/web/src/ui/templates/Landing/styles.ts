@@ -7,13 +7,11 @@ export const Main = styled.main`
     background: ${theme.colors.darkBackground};
     color: ${theme.colors.white};
     display: flex;
-    max-width: 130rem;
+    max-width: 150rem;
     min-height: 100vh;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
     margin: 0 auto;
-    border-left: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
 
@@ -30,36 +28,38 @@ export const Button = styled(Link)`
 `;
 
 export const Hero = styled.section`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 60rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background-image: url("/img/heroBg.webp");
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-size: contain;
-    padding: 1rem 3rem;
-    @media screen and (max-width: 900px) {
-      background-size: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 3rem 1rem 0;
+  @media screen and (min-width: 600px) {
+    padding: 8rem 8rem 0 8rem;
+  }
+  a {
+    width: fit-content;
+  }
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .spline {
+    margin-top: -10rem;
+    @media screen and (min-width: 1000px) and (max-width: 1500px) {
+      margin-top: -20rem;
     }
-    @media screen and (min-width: 600px) {
-      padding: 8rem;
+    @media screen and (min-width: 1500px) {
+      margin-top: -22rem;
     }
-    a {
-      width: fit-content;
-    }
-  `}
+  }
 `;
 
 export const HeroAside = styled.div`
   ${({ theme }) => css`
+    z-index: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
-    max-width: 60rem;
-
+    text-align: center;
     h1 {
       font-size: 5rem;
       font-weight: 500;
@@ -94,7 +94,21 @@ export const HeroHeader = styled.div`
   }
 `;
 
-export const Start = styled.section``;
+export const Start = styled.section`
+  ${({ theme }) => css`
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (min-width: 1100px) {
+      margin-top: -10rem;
+    }
+
+    @media screen and (min-width: 700px) {
+      margin-top: -4rem;
+    }
+    @media screen and (min-width: 1100px) {
+      margin-top: -10rem;
+    }
+  `}
+`;
 
 export const StartHeader = styled.div`
   ${({ theme }) => css`
@@ -111,12 +125,6 @@ export const StartHeader = styled.div`
       font-size: 5rem;
       @media screen and (min-width: 992px) {
         font-size: 8rem;
-        &:nth-child(2) {
-          margin-top: 4rem;
-        }
-        &:nth-child(3) {
-          margin-top: 8rem;
-        }
       }
 
       &:nth-child(2) {
@@ -572,6 +580,67 @@ export const FooterSocial = styled.div`
       svg {
         width: 1.6rem;
         fill: ${theme.colors.white};
+      }
+    }
+  `}
+`;
+
+export const Header = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  `}
+`;
+
+export const Logo = styled.div`
+  max-width: 14rem;
+`;
+export const Menu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;
+
+export const Aside = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    .dropdownButton {
+      font-size: 1.4rem;
+      svg {
+        width: 1rem;
+        display: inline-block;
+        vertical-align: middle;
+        opacity: 0.5;
+      }
+    }
+    .dropdownContent {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: absolute;
+      right: 0;
+      top: 3rem;
+      max-width: 50rem;
+      background: ${theme.colors.secondaryBackgroundSolid};
+      border-radius: 1rem;
+      padding: 2rem;
+      a {
+        font-weight: 500;
+        font-size: 1.4rem;
+        white-space: nowrap;
+        transition: opacity 0.5s ease-in-out;
+        &:hover {
+          opacity: 0.7;
+        }
       }
     }
   `}

@@ -2,8 +2,10 @@ import localFont from "next/font/local";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { Fade, Slide } from "react-reveal";
+import { Slide } from "react-reveal";
 import { useTranslation } from "react-i18next";
+import Spline from "@splinetool/react-spline";
+import { Menu } from "@headlessui/react";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import FeesImage from "../../../../public/img/fees.webp";
@@ -12,8 +14,8 @@ import NonCustodial from "../../../../public/img/nonCustodial.webp";
 
 import * as S from "./styles";
 
-import { Header } from "@/ui/organisms";
 import { Icons } from "@/ui/atoms";
+import { OrderbookLogo } from "@/ui/molecules";
 const outrun = localFont({
   src: "../../../../public/fonts/outrun-future-bold.otf",
 });
@@ -27,33 +29,124 @@ export function LandingTemplate() {
         <meta name="description" content={t("description")} />
       </Head>
       <S.Main>
-        <Header dark />
-        <Fade>
-          <S.Hero>
-            <S.HeroAside>
-              <S.HeroHeader>
-                <span>
-                  <Icons.Checked />
-                  {t("hero.nonCustodial")}
-                </span>
-                <span>
-                  <Icons.Checked />
-                  {t("hero.gasFees")}
-                </span>
-                <span>
-                  <Icons.Checked />
-                  {t("hero.performance")}
-                </span>
-              </S.HeroHeader>
-              <h1>{t("hero.title")}</h1>
-              <p className={outrun.className}>
-                {t("hero.highlight")}
-                <strong>.</strong>
-              </p>
-              <S.Button href="/trading">{t("button")}</S.Button>
-            </S.HeroAside>
-          </S.Hero>
-        </Fade>
+        <S.Header>
+          <S.Logo>
+            <OrderbookLogo />
+          </S.Logo>
+          <S.Aside>
+            <S.Menu>
+              <MenuDropdown
+                title="Products"
+                items={[
+                  {
+                    title: "Orderbook",
+                    link: "https://polkadex.trade/orderbook",
+                  },
+                  {
+                    title: "THEA",
+                    link: "http://thea.polkadex.trade",
+                  },
+                ]}
+              />
+              <MenuDropdown
+                title="About"
+                items={[
+                  {
+                    title: "Token Economics",
+                    link: "https://polkadex.trade/tokeneconomics",
+                  },
+                  {
+                    title: "Roadmap",
+                    link: "https://polkadex.trade/roadmap",
+                  },
+                  {
+                    title: "Team",
+                    link: "https://polkadex.trade/team",
+                  },
+                ]}
+              />
+              <MenuDropdown
+                title="Resources"
+                items={[
+                  {
+                    title: "Mainnet Explorer",
+                    link: "https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fmainnet.polkadex.trade#/explorer",
+                  },
+                  {
+                    title: "Github Repository",
+                    link: "https://github.com/Polkadex-Substrate",
+                  },
+                  {
+                    title: "Substrate",
+                    link: "https://www.substrate.io/",
+                  },
+                  {
+                    title: "Ambassadors Hub",
+                    link: "https://polkadex.notion.site/bcac75d5f73c44cf8bf8fc7f75297afb?v=4047f8300ceb431da698b9248612d203",
+                  },
+                ]}
+              />
+              <MenuDropdown
+                title="Community"
+                items={[
+                  {
+                    title: "Twitter",
+                    link: "https://twitter.com/polkadex",
+                  },
+                  {
+                    title: "Telegram",
+                    link: "https://t.me/Polkadex",
+                  },
+                  {
+                    title: "Discord",
+                    link: "https://discord.com/invite/Uvua83QAzk",
+                  },
+                  {
+                    title: "Reddit",
+                    link: "https://www.reddit.com/r/polkadex",
+                  },
+                  {
+                    title: "LinkedIn",
+                    link: "https://www.linkedin.com/company/69690544",
+                  },
+                  {
+                    title: "Medium",
+                    link: "https://polkadex.medium.com/",
+                  },
+                ]}
+              />
+            </S.Menu>
+            <S.Button href="/trading">Start Trading</S.Button>
+          </S.Aside>
+        </S.Header>
+        <S.Hero>
+          <S.HeroAside>
+            <S.HeroHeader>
+              <span>
+                <Icons.Checked />
+                {t("hero.nonCustodial")}
+              </span>
+              <span>
+                <Icons.Checked />
+                {t("hero.gasFees")}
+              </span>
+              <span>
+                <Icons.Checked />
+                {t("hero.performance")}
+              </span>
+            </S.HeroHeader>
+            <h1>{t("hero.title")}</h1>
+            <p className={outrun.className}>
+              {t("hero.highlight")}
+              <strong>.</strong>
+            </p>
+            <S.Button href="/trading">{t("button")}</S.Button>
+          </S.HeroAside>
+          <Spline
+            className="spline"
+            scene="https://prod.spline.design/d9wfWHuFHYgRRRG2/scene.splinecode"
+          />
+        </S.Hero>
         <S.Start>
           <S.StartHeader>
             <Slide bottom>
@@ -421,3 +514,20 @@ export function LandingTemplate() {
     </>
   );
 }
+
+const MenuDropdown = ({ title, items }) => (
+  <Menu as="div" style={{ position: "relative" }}>
+    <Menu.Button className="dropdownButton">
+      {title} <Icons.ArrowBottom />
+    </Menu.Button>
+    <Menu.Items className="dropdownContent">
+      {items?.map((value, i) => (
+        <Menu.Item key={i}>
+          <Link target="_blank" href={value.title}>
+            {value.title}
+          </Link>
+        </Menu.Item>
+      ))}
+    </Menu.Items>
+  </Menu>
+);
