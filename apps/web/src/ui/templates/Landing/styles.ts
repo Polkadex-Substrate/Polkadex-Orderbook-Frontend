@@ -7,7 +7,7 @@ export const Main = styled.main`
     background: ${theme.colors.darkBackground};
     color: ${theme.colors.white};
     display: flex;
-    max-width: 150rem;
+    max-width: 140rem;
     min-height: 100vh;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
