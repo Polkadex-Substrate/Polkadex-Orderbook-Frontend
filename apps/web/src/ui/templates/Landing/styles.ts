@@ -42,7 +42,11 @@ export const Hero = styled.section`
     height: 100% !important;
   }
   .spline {
+    display: none;
     margin-top: -10rem;
+    &.active {
+      display: block;
+    }
     @media screen and (min-width: 1000px) and (max-width: 1500px) {
       margin-top: -20rem;
     }
@@ -94,19 +98,22 @@ export const HeroHeader = styled.div`
   }
 `;
 
-export const Start = styled.section`
-  ${({ theme }) => css`
+export const Start = styled.section<{ open?: boolean }>`
+  ${({ theme, open }) => css`
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    @media screen and (min-width: 1100px) {
-      margin-top: -10rem;
-    }
+    ${open &&
+    css`
+      @media screen and (min-width: 1100px) {
+        margin-top: -10rem;
+      }
 
-    @media screen and (min-width: 700px) {
-      margin-top: -4rem;
-    }
-    @media screen and (min-width: 1100px) {
-      margin-top: -10rem;
-    }
+      @media screen and (min-width: 700px) {
+        margin-top: -4rem;
+      }
+      @media screen and (min-width: 1100px) {
+        margin-top: -10rem;
+      }
+    `}
   `}
 `;
 
@@ -587,6 +594,7 @@ export const FooterSocial = styled.div`
 
 export const Header = styled.div`
   ${({ theme }) => css`
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 2rem;
@@ -602,10 +610,108 @@ export const Header = styled.div`
 export const Logo = styled.div`
   max-width: 14rem;
 `;
+
 export const Menu = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
+  @media screen and (max-width: 750px) {
+    display: none;
+  }
+`;
+
+export const MenuWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+`;
+
+export const MenuContent = styled.div`
+  ${({ theme }) => css`
+    position: relative;
+    width: 96vw;
+    height: 96vh;
+    padding: 2.5rem;
+    overflow: auto;
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    backdrop-filter: blur(5px);
+    background: ${theme.colors.primaryBackground};
+  `}
+`;
+
+export const MenuClose = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    right: 2rem;
+    top: 2rem;
+    z-index: 2;
+    width: 3rem;
+    height: 3rem;
+    padding: 1rem;
+    transition: background-color ease 0.4s;
+    cursor: pointer;
+    border-radius: 30rem;
+    &:hover {
+      background-color: ${theme.colors.secondaryBackground};
+    }
+    svg {
+      stroke: ${theme.colors.white};
+    }
+  `}
+`;
+
+export const MenuItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  span {
+    opacity: 0.5;
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    a {
+      font-size: 1.5rem;
+    }
+  }
+`;
+
+export const MenuButton = styled.button`
+  ${({ theme }) => css`
+    svg {
+      cursor: pointer;
+      .line {
+        fill: none;
+        stroke: ${theme.colors.text};
+        stroke-width: 6;
+        transition:
+          stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+          stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .line1 {
+        stroke-dasharray: 60 207;
+        stroke-width: 6;
+      }
+      .line2 {
+        stroke-dasharray: 60 60;
+        stroke-width: 6;
+      }
+      .line3 {
+        stroke-dasharray: 60 207;
+        stroke-width: 6;
+      }
+      @media screen and (min-width: 750px) {
+        display: none;
+      }
+    }
+  `}
 `;
 
 export const Aside = styled.div`
@@ -644,4 +750,10 @@ export const Aside = styled.div`
       }
     }
   `}
+`;
+
+export const Spline = styled.div`
+  @media screen and (min-width: 1000px) {
+    min-height: 50rem;
+  }
 `;
