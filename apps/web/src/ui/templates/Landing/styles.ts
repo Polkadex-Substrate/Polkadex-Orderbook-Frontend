@@ -730,9 +730,11 @@ export const Aside = styled.div`
         display: inline-block;
         vertical-align: middle;
         opacity: 0.5;
+        fill: ${theme.colors.white};
       }
     }
     .dropdownContent {
+      color: ${theme.colors.black};
       display: flex;
       flex-direction: column;
       gap: 1rem;
