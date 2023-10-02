@@ -332,9 +332,9 @@ export function LandingTemplate() {
                   />
                 </S.FeaturesHighlight>
               </Slide>
-              <Slide bottom>
-                <S.FeaturesWrapper>
-                  <S.FeaturesCard>
+              <S.FeaturesWrapper>
+                <S.FeaturesCard>
+                  <Slide left>
                     <div>
                       <h3>{t("benefits.twoTitle")}</h3>
                       <p>{t("benefits.twoDescription")}</p>
@@ -348,23 +348,25 @@ export function LandingTemplate() {
                         height: "auto",
                       }}
                     />
-                  </S.FeaturesCard>
-                  <S.FeaturesCard>
-                    <div>
-                      <h3>{t("benefits.threeTitle")}</h3>
-                      <p>{t("benefits.threeDescription")}</p>
-                    </div>
-                    <Image
-                      src={MarketImage}
-                      placeholder="blur"
-                      alt="Market illustration"
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                  </S.FeaturesCard>
-                  <S.FeaturesCard>
+                  </Slide>
+                </S.FeaturesCard>
+                <S.FeaturesCard>
+                  <div>
+                    <h3>{t("benefits.threeTitle")}</h3>
+                    <p>{t("benefits.threeDescription")}</p>
+                  </div>
+                  <Image
+                    src={MarketImage}
+                    placeholder="blur"
+                    alt="Market illustration"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                    }}
+                  />
+                </S.FeaturesCard>
+                <S.FeaturesCard>
+                  <Slide right>
                     <div>
                       <h3>{t("benefits.fourTitle")}</h3>
                       <p>{t("benefits.fourDescription")}</p>
@@ -378,9 +380,9 @@ export function LandingTemplate() {
                         height: "auto",
                       }}
                     />
-                  </S.FeaturesCard>
-                </S.FeaturesWrapper>
-              </Slide>
+                  </Slide>
+                </S.FeaturesCard>
+              </S.FeaturesWrapper>
 
               <Slide bottom>
                 <S.FeaturesFooter>
