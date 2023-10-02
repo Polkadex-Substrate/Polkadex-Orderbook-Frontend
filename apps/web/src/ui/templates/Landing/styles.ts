@@ -200,12 +200,18 @@ export const StartCard = styled.div`
       flex-direction: column;
       gap: 1rem;
     }
+    &:first-child span {
+      border: 1px solid ${theme.colors.primary};
+      &::before {
+        background: ${theme.colors.primary};
+      }
+    }
     span {
       position: relative;
       width: 4rem;
       height: 4rem;
       border-radius: 100%;
-      border: 1px solid ${theme.colors.primary};
+      border: 1px solid ${theme.colors.secondaryBackground};
       display: flex;
       align-items: center;
       justify-content: center;
@@ -215,7 +221,7 @@ export const StartCard = styled.div`
         height: 2.5rem;
         border-radius: 100%;
         content: "";
-        background: ${theme.colors.primary};
+        background: ${theme.colors.secondaryBackground};
       }
     }
     p {
