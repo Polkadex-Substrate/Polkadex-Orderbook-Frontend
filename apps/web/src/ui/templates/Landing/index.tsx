@@ -26,69 +26,69 @@ const outrun = localFont({
 const menuItems = {
   products: [
     {
-      title: "Orderbook",
+      title: "orderbook",
       link: "https://polkadex.trade/orderbook",
     },
     {
-      title: "THEA",
+      title: "thea",
       link: "http://thea.polkadex.trade",
     },
   ],
   about: [
     {
-      title: "Token Economics",
+      title: "tokenEconomics",
       link: "https://polkadex.trade/tokeneconomics",
     },
     {
-      title: "Roadmap",
+      title: "roadmap",
       link: "https://polkadex.trade/roadmap",
     },
     {
-      title: "Team",
+      title: "team",
       link: "https://polkadex.trade/team",
     },
   ],
   resources: [
     {
-      title: "Mainnet Explorer",
+      title: "explorer",
       link: "https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fmainnet.polkadex.trade#/explorer",
     },
     {
-      title: "Github Repository",
+      title: "github",
       link: "https://github.com/Polkadex-Substrate",
     },
     {
-      title: "Substrate",
+      title: "substrate",
       link: "https://www.substrate.io/",
     },
     {
-      title: "Ambassadors Hub",
+      title: "ambassadors",
       link: "https://polkadex.notion.site/bcac75d5f73c44cf8bf8fc7f75297afb?v=4047f8300ceb431da698b9248612d203",
     },
   ],
   community: [
     {
-      title: "Twitter",
+      title: "twitter",
       link: "https://twitter.com/polkadex",
     },
     {
-      title: "Telegram",
+      title: "telegram",
       link: "https://t.me/Polkadex",
     },
     {
-      title: "Discord",
+      title: "discord",
       link: "https://discord.com/invite/Uvua83QAzk",
     },
     {
-      title: "Reddit",
+      title: "reddit",
       link: "https://www.reddit.com/r/polkadex",
     },
     {
-      title: "LinkedIn",
+      title: "linkedIn",
       link: "https://www.linkedin.com/company/69690544",
     },
     {
-      title: "Medium",
+      title: "medium",
       link: "https://polkadex.medium.com/",
     },
   ],
@@ -115,48 +115,48 @@ export function LandingTemplate() {
                 </S.MenuClose>
                 <S.MenuItems>
                   <div>
-                    <span>Products</span>
+                    <span>{t("header.products")}</span>
                     <ul>
                       {menuItems.products.map((v) => (
                         <li key={v.title}>
                           <Link href={v.link} target="_blank">
-                            {v.title}
+                            {t(`header.${v.title}`)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <span>About</span>
+                    <span>{t("header.about")}</span>
                     <ul>
                       {menuItems.about.map((v) => (
                         <li key={v.title}>
                           <Link href={v.link} target="_blank">
-                            {v.title}
+                            {t(`header.${v.title}`)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <span>Resources</span>
+                    <span>{t("header.resources")}</span>
                     <ul>
                       {menuItems.resources.map((v) => (
                         <li key={v.title}>
                           <Link href={v.link} target="_blank">
-                            {v.title}
+                            {t(`header.${v.title}`)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <span>Community</span>
+                    <span>{t("header.community")}</span>
                     <ul>
                       {menuItems.community.map((v) => (
                         <li key={v.title}>
                           <Link href={v.link} target="_blank">
-                            {v.title}
+                            {t(`header.${v.title}`)}
                           </Link>
                         </li>
                       ))}
@@ -171,12 +171,21 @@ export function LandingTemplate() {
           </S.Logo>
           <S.Aside>
             <S.Menu>
-              <MenuDropdown title="Products" items={menuItems.products} />
-              <MenuDropdown title="About" items={menuItems.about} />
-              <MenuDropdown title="Resources" items={menuItems.resources} />
-              <MenuDropdown title="Community" items={menuItems.community} />
+              <MenuDropdown
+                title={t("header.products")}
+                items={menuItems.products}
+              />
+              <MenuDropdown title={t("header.about")} items={menuItems.about} />
+              <MenuDropdown
+                title={t("header.resources")}
+                items={menuItems.resources}
+              />
+              <MenuDropdown
+                title={t("header.community")}
+                items={menuItems.community}
+              />
             </S.Menu>
-            <S.Button href="/trading">Start Trading</S.Button>
+            <S.Button href="/trading">{t("button")}</S.Button>
             <S.MenuButton onClick={() => setState(true)}>
               <svg width="26" height="26" viewBox="0 0 100 100">
                 <path
@@ -410,11 +419,11 @@ export function LandingTemplate() {
                   target="_blank"
                 >
                   <Icons.Discord />
-                  Discord
+                  {t("header.discord")}
                 </Link>
                 <Link href="https://t.me/Polkadex" target="_blank">
                   <Icons.Telegram />
-                  Telegram
+                  {t("header.telegram")}
                 </Link>
               </S.SupportCardFooter>
             </Slide>
@@ -432,7 +441,7 @@ export function LandingTemplate() {
               <ul>
                 <li>
                   <Link href="https://docs.polkadex.trade/" target="_blank">
-                    Overview
+                    {t("footer.overview")}
                   </Link>
                 </li>
                 <li>
@@ -440,17 +449,17 @@ export function LandingTemplate() {
                     href="https://docs.polkadex.trade/whatispolkadex"
                     target="_blank"
                   >
-                    Features
+                    {t("footer.features")}
                   </Link>
                 </li>
                 <li>
                   <Link href="https://polkadex.trade/roadmap" target="_blank">
-                    Roadmap
+                    {t("header.roadmap")}
                   </Link>
                 </li>
                 <li>
                   <Link href="https://polkadex.trade/team" target="_blank">
-                    Team
+                    {t("header.team")}
                   </Link>
                 </li>
                 <li>
@@ -458,17 +467,17 @@ export function LandingTemplate() {
                     href="https://polkadex.trade/tokeneconomics"
                     target="_blank"
                   >
-                    Token economics
+                    {t("header.tokenEconomics")}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <strong>Products</strong>
+              <strong>{t("header.products")}</strong>
               <ul>
                 <li>
                   <Link href="https://polkadex.trade/orderbook" target="_blank">
-                    Orderbook
+                    {t("header.orderbook")}
                   </Link>
                 </li>
                 <li>
@@ -476,17 +485,17 @@ export function LandingTemplate() {
                     href="https://polkadex.medium.com/thea-a-better-decentralized-token-bridge-ac2e362a2a2b"
                     target="_blank"
                   >
-                    THEA Crosschain
+                    {t("header.thea")}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <strong>Resources</strong>
+              <strong> {t("header.resources")}</strong>
               <ul>
                 <li>
                   <Link href="https://docs.polkadex.trade/" target="_blank">
-                    Docs
+                    {t("footer.docs")}
                   </Link>
                 </li>
                 <li>
@@ -494,7 +503,7 @@ export function LandingTemplate() {
                     href="https://github.com/Polkadex-Substrate"
                     target="_blank"
                   >
-                    Github repository
+                    {t("header.github")}
                   </Link>
                 </li>
                 <li>
@@ -502,35 +511,35 @@ export function LandingTemplate() {
                     href="https://www.youtube.com/channel/UC6fXRDT4lLKlXG3gP0PP06Q"
                     target="_blank"
                   >
-                    Tutorials
+                    {t("footer.tutorials")}
                   </Link>
                 </li>
                 <li>
                   <Link href="https://www.substrate.io/" target="_blank">
-                    Substrate
+                    {t("header.substrate")}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <strong>Support</strong>
+              <strong>{t("footer.support")}</strong>
               <ul>
                 <li>
                   <Link
                     href="https://discord.com/invite/Uvua83QAzk"
                     target="_blank"
                   >
-                    Help center
+                    {t("footer.help")}
                   </Link>
                 </li>
                 <li>
                   <Link href="https://t.me/Polkadex" target="_blank">
-                    Report issues
+                    {t("footer.report")}
                   </Link>
                 </li>
                 <li>
                   <Link href="https://t.me/Polkadex" target="_blank">
-                    Beginner&rsquo;s guide
+                    {t("footer.guide")}
                   </Link>
                 </li>
               </ul>
@@ -538,19 +547,19 @@ export function LandingTemplate() {
           </S.FooterTop>
           <S.FooterBottom>
             <S.FooterCopyright>
-              <p>Copyright ©2023 Polkadex Inc.</p>
+              <p>{t("footer.copyright")}</p>
               <div>
                 <Link
                   href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
                   target="_blank"
                 >
-                  Terms & conditions
+                  {t("footer.terms")}
                 </Link>
                 <Link
                   href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf"
                   target="_blank"
                 >
-                  Privacy policy
+                  {t("footer.privacy")}
                 </Link>
               </div>
             </S.FooterCopyright>
@@ -594,19 +603,22 @@ export function LandingTemplate() {
   );
 }
 
-const MenuDropdown = ({ title, items }) => (
-  <Menu as="div" style={{ position: "relative" }}>
-    <Menu.Button className="dropdownButton">
-      {title} <Icons.ArrowBottom />
-    </Menu.Button>
-    <Menu.Items className="dropdownContent">
-      {items?.map((value, i) => (
-        <Menu.Item key={i}>
-          <Link target="_blank" href={value.title}>
-            {value.title}
-          </Link>
-        </Menu.Item>
-      ))}
-    </Menu.Items>
-  </Menu>
-);
+const MenuDropdown = ({ title, items }) => {
+  const { t } = useTranslation("landing");
+  return (
+    <Menu as="div" style={{ position: "relative" }}>
+      <Menu.Button className="dropdownButton">
+        {title} <Icons.ArrowBottom />
+      </Menu.Button>
+      <Menu.Items className="dropdownContent">
+        {items?.map((value, i) => (
+          <Menu.Item key={i}>
+            <Link target="_blank" href={value.title}>
+              {t(`header.${value.title}`)}
+            </Link>
+          </Menu.Item>
+        ))}
+      </Menu.Items>
+    </Menu>
+  );
+};
