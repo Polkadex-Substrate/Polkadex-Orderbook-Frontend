@@ -322,7 +322,7 @@ export function LandingTemplate() {
                   <Image
                     src={SpeedImage}
                     placeholder="blur"
-                    alt="Speed illustration"
+                    alt={t("benefits.speedAlt")}
                     priority
                     draggable={false}
                     style={{
@@ -342,7 +342,7 @@ export function LandingTemplate() {
                     <Image
                       src={FeesImage}
                       placeholder="blur"
-                      alt="Fees illustration"
+                      alt={t("benefits.feesAlt")}
                       style={{
                         width: "100%",
                         height: "auto",
@@ -358,7 +358,7 @@ export function LandingTemplate() {
                   <Image
                     src={MarketImage}
                     placeholder="blur"
-                    alt="Market illustration"
+                    alt={t("benefits.marketAlt")}
                     style={{
                       width: "100%",
                       height: "auto",
@@ -374,7 +374,7 @@ export function LandingTemplate() {
                     <Image
                       src={NonCustodial}
                       placeholder="blur"
-                      alt="NonCustodial illustration"
+                      alt={t("benefits.walletAlt")}
                       style={{
                         width: "100%",
                         height: "auto",

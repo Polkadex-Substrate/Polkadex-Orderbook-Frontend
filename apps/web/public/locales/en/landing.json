@@ -68,7 +68,11 @@
     "threeDescription": "Control price with limit orders, achieve instant execution with market orders.",
     "fourTitle":"Non-custodial",
     "fourDescription":"You control your own liquidity, which means it is safe, and you can pull it out whenever.",
-    "ctaTitle":"Read more about Polkadex Orderbook"
+    "ctaTitle":"Read more about Polkadex Orderbook",
+    "speedAlt": "Image of futuristic speed concept: High-speed motion blur with futuristic elements",
+    "feesAlt": "Image of futuristic gas station symbolizing crypto fees: Innovative payment concept blending cryptocurrency, technology, and fuel station metaphor",
+    "marketAlt": "Image of a futuristic man analyzing the crypto market on his smartphone: A person using advanced technology to navigate the cryptocurrency market trends and data",
+    "walletAlt": "Image of a futuristic non-custodial crypto wallet: A sleek and advanced digital wallet representing the concept of secure, decentralized cryptocurrency storage without third-party control"
   },
   "help": {
     "faqTitle": "FAQs",
