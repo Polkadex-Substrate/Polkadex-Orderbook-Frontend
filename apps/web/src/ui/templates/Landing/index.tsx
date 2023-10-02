@@ -17,7 +17,8 @@ import NonCustodial from "../../../../public/img/nonCustodial.webp";
 import * as S from "./styles";
 
 import { Icons } from "@/ui/atoms";
-import { OrderbookLogo, Skeleton } from "@/ui/molecules";
+import { OrderbookLogo } from "@/ui/molecules";
+import LoadingScreen from "@/ui/molecules/LoadingScreen";
 
 const outrun = localFont({
   src: "../../../../public/fonts/outrun-future-bold.otf",
@@ -103,7 +104,8 @@ export function LandingTemplate() {
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
       </Head>
-      <S.Main>
+      {!open && <LoadingScreen light />}
+      <S.Main open={open}>
         <S.Header>
           {state && (
             <S.MenuWrapper>
@@ -165,7 +167,7 @@ export function LandingTemplate() {
             </S.MenuWrapper>
           )}
           <S.Logo>
-            <OrderbookLogo />
+            <OrderbookLogo light />
           </S.Logo>
           <S.Aside>
             <S.Menu>
@@ -221,11 +223,9 @@ export function LandingTemplate() {
               scene="https://prod.spline.design/d9wfWHuFHYgRRRG2/scene.splinecode"
               onLoad={() => setOpen(true)}
             />
-
-            {!open && <Skeleton height="50rem" width="100%" />}
           </S.Spline>
         </S.Hero>
-        <S.Start open={open}>
+        <S.Start>
           <S.StartHeader>
             <Slide bottom>
               <span className={outrun.className}>{t("features.fast")}</span>
@@ -322,9 +322,9 @@ export function LandingTemplate() {
                 />
               </S.FeaturesHighlight>
             </Slide>
-            <S.FeaturesWrapper>
-              <S.FeaturesCard>
-                <Slide bottom>
+            <Slide bottom>
+              <S.FeaturesWrapper>
+                <S.FeaturesCard>
                   <div>
                     <h3>{t("benefits.twoTitle")}</h3>
                     <p>{t("benefits.twoDescription")}</p>
@@ -338,10 +338,8 @@ export function LandingTemplate() {
                       height: "auto",
                     }}
                   />
-                </Slide>
-              </S.FeaturesCard>
-              <S.FeaturesCard>
-                <Slide bottom>
+                </S.FeaturesCard>
+                <S.FeaturesCard>
                   <div>
                     <h3>{t("benefits.threeTitle")}</h3>
                     <p>{t("benefits.threeDescription")}</p>
@@ -355,10 +353,8 @@ export function LandingTemplate() {
                       height: "auto",
                     }}
                   />
-                </Slide>
-              </S.FeaturesCard>
-              <S.FeaturesCard>
-                <Slide bottom>
+                </S.FeaturesCard>
+                <S.FeaturesCard>
                   <div>
                     <h3>{t("benefits.fourTitle")}</h3>
                     <p>{t("benefits.fourDescription")}</p>
@@ -372,9 +368,10 @@ export function LandingTemplate() {
                       height: "auto",
                     }}
                   />
-                </Slide>
-              </S.FeaturesCard>
-            </S.FeaturesWrapper>
+                </S.FeaturesCard>
+              </S.FeaturesWrapper>
+            </Slide>
+
             <Slide bottom>
               <S.FeaturesFooter>
                 <Link href="https://polkadex.trade/orderbook" target="_blank">
@@ -584,6 +581,7 @@ export function LandingTemplate() {
           </S.FooterBottom>
         </S.Footer>
       </S.Main>
+
       <style jsx global>{`
         body {
           background: #06070a;

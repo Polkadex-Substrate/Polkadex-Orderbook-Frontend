@@ -115,8 +115,13 @@ export const OrderbookLogo = ({ light = false }) => (
   </S.OrderbookLogoWrapper>
 );
 
-export const PolkadexIcon = () => (
-  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const PolkadexIcon = ({ light = false }) => (
+  <S.OrderbookLogoWrapper
+    viewBox="0 0 40 40"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    light={light}
+  >
     <path d="M39.2003 35.1685V29.5685L29.6337 20.0018H24.0337L39.2003 35.1685Z" />
     <path d="M4.66723 39.3659H10.2L19.6005 30.0346L28.9338 39.3659H34.594L19.6005 24.4346L4.66723 39.3659Z" />
     <path d="M0 4.83154L0 10.4315L9.56665 19.9982H15.1666L0 4.83154Z" />
@@ -125,7 +130,7 @@ export const PolkadexIcon = () => (
       d="M19.6437 22.5634C21.0859 22.5634 22.255 21.3942 22.255 19.9521C22.255 18.5099 21.0859 17.3408 19.6437 17.3408C18.2016 17.3408 17.0325 18.5099 17.0325 19.9521C17.0325 21.3942 18.2016 22.5634 19.6437 22.5634Z"
       fill="#E6007A"
     />
-  </svg>
+  </S.OrderbookLogoWrapper>
 );
 
 export const PolkadexLogo = () => (

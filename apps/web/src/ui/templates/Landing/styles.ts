@@ -1,8 +1,13 @@
 import Link from "next/link";
 import styled, { css } from "styled-components";
 
-export const Main = styled.main`
-  ${({ theme }) => css`
+export const Main = styled.main<{ open?: boolean }>`
+  ${({ theme, open }) => css`
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.8s ease-in-out,
+      visibility 0.8s ease-in-out;
     position: relative;
     background: ${theme.colors.darkBackground};
     color: ${theme.colors.white};
@@ -12,6 +17,11 @@ export const Main = styled.main`
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
     margin: 0 auto;
+    ${open &&
+    css`
+      visibility: visible;
+      opacity: 100%;
+    `}
   `}
 `;
 
@@ -42,11 +52,7 @@ export const Hero = styled.section`
     height: 100% !important;
   }
   .spline {
-    display: none;
     margin-top: -10rem;
-    &.active {
-      display: block;
-    }
     @media screen and (min-width: 1000px) and (max-width: 1500px) {
       margin-top: -20rem;
     }
@@ -98,22 +104,20 @@ export const HeroHeader = styled.div`
   }
 `;
 
-export const Start = styled.section<{ open?: boolean }>`
-  ${({ theme, open }) => css`
+export const Start = styled.section`
+  ${({ theme }) => css`
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    ${open &&
-    css`
-      @media screen and (min-width: 1100px) {
-        margin-top: -10rem;
-      }
 
-      @media screen and (min-width: 700px) {
-        margin-top: -4rem;
-      }
-      @media screen and (min-width: 1100px) {
-        margin-top: -10rem;
-      }
-    `}
+    @media screen and (min-width: 1100px) {
+      margin-top: -10rem;
+    }
+
+    @media screen and (min-width: 700px) {
+      margin-top: -4rem;
+    }
+    @media screen and (min-width: 1100px) {
+      margin-top: -10rem;
+    }
   `}
 `;
 
