@@ -6,8 +6,8 @@ export const Main = styled.main<{ open?: boolean }>`
     visibility: hidden;
     opacity: 0;
     transition:
-      opacity 0.8s ease-in-out,
-      visibility 0.8s ease-in-out;
+      opacity 1s ease-in-out,
+      visibility 1s ease-in-out;
     position: relative;
     background: ${theme.colors.primaryBackground};
     color: ${theme.colors.white};
