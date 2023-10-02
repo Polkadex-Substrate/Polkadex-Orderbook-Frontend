@@ -166,7 +166,7 @@ export function LandingTemplate() {
               </S.MenuContent>
             </S.MenuWrapper>
           )}
-          <S.Logo>
+          <S.Logo href="/">
             <OrderbookLogo light />
           </S.Logo>
           <S.Aside>
@@ -273,115 +273,117 @@ export function LandingTemplate() {
           </Slide>
         </S.Start>
         <S.Features>
-          <S.FeaturesHeader>
-            <S.FeatureShadow />
-            <S.FeaturesHeaderCard>
-              <Slide bottom>
-                <div>
-                  <span className={outrun.className}>
-                    {t("benefits.highlight")}
-                  </span>
-                  <p className={outrun.className}>{t("benefits.keys")}</p>
-                </div>
-              </Slide>
-              <Slide bottom>
-                <div>
-                  <span className={outrun.className}>
-                    {t("benefits.highlight")}
-                  </span>
-                  <p className={outrun.className}>{t("benefits.crypto")}</p>
-                </div>
-              </Slide>
-              <Slide bottom>
-                <div>
-                  <span className={outrun.className}>
-                    {t("benefits.highlight")}
-                  </span>
-                  <p className={outrun.className}>{t("benefits.exchange")}</p>
-                </div>
-              </Slide>
-            </S.FeaturesHeaderCard>
-          </S.FeaturesHeader>
-          <S.FeaturesContent>
-            <Slide bottom>
-              <S.FeaturesHighlight>
-                <div>
-                  <h3>{t("benefits.oneTitle")}</h3>
-                  <p>{t("benefits.oneDescription")}</p>
-                </div>
-                <Image
-                  src={SpeedImage}
-                  placeholder="blur"
-                  alt="Speed illustration"
-                  priority
-                  draggable={false}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
-                />
-              </S.FeaturesHighlight>
-            </Slide>
-            <Slide bottom>
-              <S.FeaturesWrapper>
-                <S.FeaturesCard>
+          <S.FeaturesContainer>
+            <S.FeaturesHeader>
+              <S.FeatureShadow />
+              <S.FeaturesHeaderCard>
+                <Slide bottom>
                   <div>
-                    <h3>{t("benefits.twoTitle")}</h3>
-                    <p>{t("benefits.twoDescription")}</p>
+                    <span className={outrun.className}>
+                      {t("benefits.highlight")}
+                    </span>
+                    <p className={outrun.className}>{t("benefits.keys")}</p>
+                  </div>
+                </Slide>
+                <Slide bottom>
+                  <div>
+                    <span className={outrun.className}>
+                      {t("benefits.highlight")}
+                    </span>
+                    <p className={outrun.className}>{t("benefits.crypto")}</p>
+                  </div>
+                </Slide>
+                <Slide bottom>
+                  <div>
+                    <span className={outrun.className}>
+                      {t("benefits.highlight")}
+                    </span>
+                    <p className={outrun.className}>{t("benefits.exchange")}</p>
+                  </div>
+                </Slide>
+              </S.FeaturesHeaderCard>
+            </S.FeaturesHeader>
+            <S.FeaturesContent>
+              <Slide bottom>
+                <S.FeaturesHighlight>
+                  <div>
+                    <h3>{t("benefits.oneTitle")}</h3>
+                    <p>{t("benefits.oneDescription")}</p>
                   </div>
                   <Image
-                    src={FeesImage}
+                    src={SpeedImage}
                     placeholder="blur"
-                    alt="Fees illustration"
+                    alt="Speed illustration"
+                    priority
+                    draggable={false}
                     style={{
                       width: "100%",
                       height: "auto",
                     }}
                   />
-                </S.FeaturesCard>
-                <S.FeaturesCard>
-                  <div>
-                    <h3>{t("benefits.threeTitle")}</h3>
-                    <p>{t("benefits.threeDescription")}</p>
-                  </div>
-                  <Image
-                    src={MarketImage}
-                    placeholder="blur"
-                    alt="Market illustration"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </S.FeaturesCard>
-                <S.FeaturesCard>
-                  <div>
-                    <h3>{t("benefits.fourTitle")}</h3>
-                    <p>{t("benefits.fourDescription")}</p>
-                  </div>
-                  <Image
-                    src={NonCustodial}
-                    placeholder="blur"
-                    alt="NonCustodial illustration"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </S.FeaturesCard>
-              </S.FeaturesWrapper>
-            </Slide>
+                </S.FeaturesHighlight>
+              </Slide>
+              <Slide bottom>
+                <S.FeaturesWrapper>
+                  <S.FeaturesCard>
+                    <div>
+                      <h3>{t("benefits.twoTitle")}</h3>
+                      <p>{t("benefits.twoDescription")}</p>
+                    </div>
+                    <Image
+                      src={FeesImage}
+                      placeholder="blur"
+                      alt="Fees illustration"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </S.FeaturesCard>
+                  <S.FeaturesCard>
+                    <div>
+                      <h3>{t("benefits.threeTitle")}</h3>
+                      <p>{t("benefits.threeDescription")}</p>
+                    </div>
+                    <Image
+                      src={MarketImage}
+                      placeholder="blur"
+                      alt="Market illustration"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </S.FeaturesCard>
+                  <S.FeaturesCard>
+                    <div>
+                      <h3>{t("benefits.fourTitle")}</h3>
+                      <p>{t("benefits.fourDescription")}</p>
+                    </div>
+                    <Image
+                      src={NonCustodial}
+                      placeholder="blur"
+                      alt="NonCustodial illustration"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </S.FeaturesCard>
+                </S.FeaturesWrapper>
+              </Slide>
 
-            <Slide bottom>
-              <S.FeaturesFooter>
-                <Link href="https://polkadex.trade/orderbook" target="_blank">
-                  {t("benefits.ctaTitle")}
-                  <Icons.SingleArrowRight />
-                </Link>
-                <S.Button href="/trading">{t("button")}</S.Button>
-              </S.FeaturesFooter>
-            </Slide>
-          </S.FeaturesContent>
+              <Slide bottom>
+                <S.FeaturesFooter>
+                  <Link href="https://polkadex.trade/orderbook" target="_blank">
+                    {t("benefits.ctaTitle")}
+                    <Icons.SingleArrowRight />
+                  </Link>
+                  <S.Button href="/trading">{t("button")}</S.Button>
+                </S.FeaturesFooter>
+              </Slide>
+            </S.FeaturesContent>
+          </S.FeaturesContainer>
         </S.Features>
         <S.Support>
           <S.SupportCard>
@@ -584,7 +586,7 @@ export function LandingTemplate() {
 
       <style jsx global>{`
         body {
-          background: #06070a;
+          background: #1c1c26;
           overflow: ${state ? "hidden" : "auto"};
         }
       `}</style>

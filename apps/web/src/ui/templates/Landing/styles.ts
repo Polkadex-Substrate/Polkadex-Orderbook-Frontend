@@ -9,12 +9,10 @@ export const Main = styled.main<{ open?: boolean }>`
       opacity 0.8s ease-in-out,
       visibility 0.8s ease-in-out;
     position: relative;
-    background: ${theme.colors.darkBackground};
+    background: ${theme.colors.primaryBackground};
     color: ${theme.colors.white};
     display: flex;
-    max-width: 140rem;
     min-height: 100vh;
-    box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
     margin: 0 auto;
     ${open &&
@@ -41,6 +39,9 @@ export const Hero = styled.section`
   display: flex;
   flex-direction: column;
   padding: 1rem 3rem 1rem 0;
+  max-width: 140rem;
+  margin: 0 auto;
+  width: 100%;
   @media screen and (min-width: 600px) {
     padding: 8rem 8rem 0 8rem;
   }
@@ -105,20 +106,16 @@ export const HeroHeader = styled.div`
 `;
 
 export const Start = styled.section`
-  ${({ theme }) => css`
-    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  max-width: 140rem;
+  margin: 0 auto;
+  width: 100%;
 
-    @media screen and (min-width: 1100px) {
-      margin-top: -10rem;
-    }
-
-    @media screen and (min-width: 700px) {
-      margin-top: -4rem;
-    }
-    @media screen and (min-width: 1100px) {
-      margin-top: -10rem;
-    }
-  `}
+  @media screen and (min-width: 700px) {
+    margin-top: -9rem;
+  }
+  @media screen and (min-width: 1100px) {
+    margin-top: -14rem;
+  }
 `;
 
 export const StartHeader = styled.div`
@@ -146,42 +143,32 @@ export const StartHeader = styled.div`
 `;
 
 export const StartFooter = styled.div`
-  ${({ theme }) => css`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 3rem;
-    padding: 3rem 1rem;
-    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    @media screen and (min-width: 600px) {
-      flex-direction: row;
-      align-items: center;
-      padding: 3rem 5rem 8rem 5rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 3rem;
+  padding: 3rem 1rem;
+  @media screen and (min-width: 600px) {
+    flex-direction: row;
+    align-items: center;
+    padding: 3rem 5rem 5rem 5rem;
+  }
+
+  a {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+  }
+  span {
+    font-size: 1.4rem;
+    opacity: 0.5;
+    svg {
+      width: 1rem;
+      display: inline;
+      margin-left: 1rem;
+      vertical-align: middle;
     }
-    &::before {
-      position: absolute;
-      content: "";
-      width: 50%;
-      border-bottom: 4px solid ${theme.colors.primary};
-      left: 0;
-      bottom: 0;
-    }
-    a {
-      flex: 1;
-      width: 100%;
-      text-align: center;
-    }
-    span {
-      opacity: 0.5;
-      svg {
-        width: 1rem;
-        display: inline;
-        margin-left: 1rem;
-        vertical-align: middle;
-      }
-    }
-  `}
+  }
 `;
 
 export const StartContent = styled.div`
@@ -196,9 +183,11 @@ export const StartCard = styled.div`
     flex-direction: column;
     gap: 2rem;
     min-width: 32rem;
-    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     padding: 3rem 1rem;
+    &:not(:last-child) {
+      border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    }
     @media screen and (min-width: 600px) {
       padding: 8rem 5rem;
     }
@@ -232,19 +221,27 @@ export const StartCard = styled.div`
     p {
       opacity: 0.7;
       line-height: 1.4;
+      font-size: 1.4rem;
     }
   `}
 `;
 
-export const Features = styled.section``;
+export const Features = styled.section`
+  ${({ theme }) => css`
+    border-top: 1px solid ${theme.colors.secondaryBackground};
+    background: ${theme.colors.darkBackground};
+  `}
+`;
+export const FeaturesContainer = styled.section`
+  max-width: 140rem;
+  margin: 0 auto;
+  width: 100%;
+`;
 
 export const FeatureShadow = styled.div`
-  ${({ theme }) => css`
-    position: absolute;
-    box-shadow: inset 0px -90px 56px -8px ${theme.colors.darkBackground};
-    width: 100%;
-    height: 100%;
-  `}
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `;
 export const FeaturesHeaderCard = styled.div`
   ${({ theme }) => css`
@@ -304,6 +301,7 @@ export const FeaturesContent = styled.section`
   p {
     opacity: 0.7;
     line-height: 1.4;
+    font-size: 1.4rem;
   }
 `;
 
@@ -430,6 +428,9 @@ export const Support = styled.section`
     display: flex;
     flex-wrap: wrap;
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    max-width: 140rem;
+    margin: 0 auto;
+    width: 100%;
   `}
 `;
 
@@ -479,6 +480,7 @@ export const SupportCardHeader = styled.div`
   p {
     opacity: 0.5;
     line-height: 1.4;
+    font-size: 1.4rem;
   }
 `;
 
@@ -517,6 +519,9 @@ export const Footer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 0 1rem;
+  max-width: 140rem;
+  margin: 0 auto;
+  width: 100%;
   @media screen and (min-width: 600px) {
     padding: 0 5rem;
   }
@@ -608,10 +613,13 @@ export const Header = styled.div`
     position: sticky;
     top: 0;
     z-index: 2;
+    max-width: 140rem;
+    margin: 0 auto;
+    width: 100%;
   `}
 `;
 
-export const Logo = styled.div`
+export const Logo = styled(Link)`
   max-width: 14rem;
 `;
 
@@ -742,7 +750,7 @@ export const Aside = styled.div`
       right: 0;
       top: 3rem;
       max-width: 50rem;
-      background: ${theme.colors.secondaryBackgroundSolid};
+      background: ${theme.colors.white};
       border-radius: 1rem;
       padding: 2rem;
       a {
