@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { sendQueryToAppSync, isAssetPDEX } from "@orderbook/core/helpers";
 import { getAllAssets } from "@orderbook/core/graphql/queries";
 import { POLKADEX_ASSET, QUERY_KEYS } from "@orderbook/core/constants";
@@ -28,14 +28,12 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     });
   }
 
-  const { isLoading, isSuccess, data } = useQuery<T.IPublicAsset[]>(
-    QUERY_KEYS.assets(),
-    fetchAllAssetMetadata,
-    {
-      onError: onHandleError,
-      initialData: [],
-    }
-  );
+  const { isLoading, isSuccess, data } = useQuery<T.IPublicAsset[]>({
+    queryKey: QUERY_KEYS.assets(),
+    queryFn: fetchAllAssetMetadata,
+    onError: onHandleError,
+    initialData: [],
+  });
 
   const selectGetAsset = useCallback(
     (
