@@ -1,11 +1,15 @@
 import { createContext } from "react";
 
-import { initialState } from "./reducer";
-import { AssetsContextProps, AssetsProviderProps, IPublicAsset } from "./types";
+import { AssetsContextProps, AssetsProviderProps, AssetsState } from "./types";
+
+export const initialState: AssetsState = {
+  list: [],
+  loading: false,
+  success: false,
+};
 
 export const Context = createContext<AssetsContextProps>({
   ...initialState,
-  fetchAssets: () => {},
   selectGetAsset: () => undefined,
 });
 

@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback } from "react";
+import { useQuery } from "react-query";
 import { sendQueryToAppSync, isAssetPDEX } from "@orderbook/core/helpers";
 import { getAllAssets } from "@orderbook/core/graphql/queries";
-import { POLKADEX_ASSET } from "@orderbook/core/constants";
+import { POLKADEX_ASSET, QUERY_KEYS } from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { assetsReducer, initialState } from "./reducer";
 import * as T from "./types";
 
 export const AssetsProvider: T.AssetsComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(assetsReducer, initialState);
   const { onHandleError } = useSettingsProvider();
 
   async function fetchAllAssetMetadata(): Promise<T.IPublicAsset[]> {
@@ -30,26 +28,20 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     });
   }
 
-  const fetchAssets = useCallback(async () => {
-    dispatch(A.assetsFetch());
-    try {
-      const assetsList = await fetchAllAssetMetadata();
-
-      dispatch(A.assetsData({ list: assetsList }));
-    } catch (error) {
-      console.warn("something has gone wrong with fetchassets");
-      onHandleError(
-        `Something has gone wrong, could not fetch assets ${error}`,
-      );
-      dispatch(A.assetsError(error));
+  const { isLoading, isSuccess, data } = useQuery<T.IPublicAsset[]>(
+    QUERY_KEYS.assets(),
+    fetchAllAssetMetadata,
+    {
+      onError: onHandleError,
+      initialData: [],
     }
-  }, [onHandleError]);
+  );
 
   const selectGetAsset = useCallback(
     (
-      assetId: string | number | Record<string, string>,
+      assetId: string | number | Record<string, string>
     ): T.IPublicAsset | undefined => {
-      if (!assetId) {
+      if (!assetId || !data) {
         return;
       }
       if (typeof assetId === "object" && "asset" in assetId) {
@@ -57,20 +49,17 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
       }
       return isAssetPDEX(assetId.toString())
         ? POLKADEX_ASSET
-        : state.list.find((asset) => asset.assetId === assetId.toString());
+        : data.find((asset) => asset.assetId === assetId.toString());
     },
-    [state.list],
+    [data]
   );
-
-  useEffect(() => {
-    if (state.list?.length === 0) fetchAssets();
-  }, [fetchAssets, state.list]);
 
   return (
     <Provider
       value={{
-        ...state,
-        fetchAssets,
+        list: data ?? [],
+        loading: isLoading,
+        success: isSuccess,
         selectGetAsset,
       }}
     >

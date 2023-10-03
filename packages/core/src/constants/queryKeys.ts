@@ -7,4 +7,5 @@ export const QUERY_KEYS = {
     "blockchainTransfers",
     id,
   ],
+  assets: () => [PREFIX, "assets"],
 };
