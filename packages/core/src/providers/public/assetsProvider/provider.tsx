@@ -28,12 +28,14 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     });
   }
 
-  const { isLoading, isSuccess, data } = useQuery<T.IPublicAsset[]>({
-    queryKey: QUERY_KEYS.assets(),
-    queryFn: fetchAllAssetMetadata,
-    onError: onHandleError,
-    initialData: [],
-  });
+  const { isLoading, isFetching, isSuccess, data } = useQuery<T.IPublicAsset[]>(
+    {
+      queryKey: QUERY_KEYS.assets(),
+      queryFn: fetchAllAssetMetadata,
+      onError: onHandleError,
+      initialData: [],
+    }
+  );
 
   const selectGetAsset = useCallback(
     (
@@ -56,7 +58,7 @@ export const AssetsProvider: T.AssetsComponent = ({ children }) => {
     <Provider
       value={{
         list: data ?? [],
-        loading: isLoading,
+        loading: isLoading || isFetching,
         success: isSuccess,
         selectGetAsset,
       }}

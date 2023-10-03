@@ -1,11 +1,17 @@
 import { createContext } from "react";
 
-import { initialOrderBook } from "./reducer";
-import { OrderBookContextProps, OrderBookProviderProps } from "./types";
+import {
+  OrderBookContextProps,
+  OrderBookProviderProps,
+  OrderBookState,
+} from "./types";
+
+export const initialOrderBook: OrderBookState = {
+  depth: { asks: [], bids: [], loading: true },
+};
 
 export const Context = createContext<OrderBookContextProps>({
   ...initialOrderBook,
-  onOrderBook: () => {},
 });
 
 export const Provider = ({ value, children }: OrderBookProviderProps) => {

@@ -1,10 +1,16 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { fetchAllFromAppSync } from "@orderbook/core/helpers";
+import {
+  deleteFromBook,
+  fetchAllFromAppSync,
+  replaceOrAddToBook,
+} from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
-import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import { QUERY_KEYS, READ_ONLY_TOKEN } from "@orderbook/core/constants";
 import * as subscriptions from "@orderbook/core/graphql/subscriptions";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { Websocket_streamsSubscription } from "@orderbook/core/API";
@@ -12,39 +18,64 @@ import { Websocket_streamsSubscription } from "@orderbook/core/API";
 import { Market } from "../marketsProvider";
 
 import { Provider } from "./context";
-import { initialOrderBook, orderBookReducer } from "./reducer";
 import { getDepthFromOrderbook } from "./helper";
 import * as T from "./types";
-import * as A from "./actions";
 import { OBIncrementData, OrderbookRawUpdate } from "./types";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(orderBookReducer, initialOrderBook);
   const { currentMarket } = useMarketsProvider();
   const { onHandleError } = useSettingsProvider();
 
-  // Actions
-  const onOrderBook = useCallback(
-    async (payload: Market) => {
-      dispatch(A.depthFetch(payload));
-      try {
-        const market = payload;
-        if (market?.m) {
-          const dataRaw: T.OrderBookDbState[] = await fetchAllFromAppSync(
-            queries.getOrderbook,
-            { market: market.m },
-            "getOrderbook",
+  const onFetchOrderBookData = async (market: Market) => {
+    if (market?.m) {
+      const dataRaw: T.OrderBookDbState[] = await fetchAllFromAppSync(
+        queries.getOrderbook,
+        { market: market.m },
+        "getOrderbook"
+      );
+      const data = formatOrderBookData(dataRaw);
+      return getDepthFromOrderbook(data);
+    }
+  };
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: QUERY_KEYS.orderBook(currentMarket?.m as string),
+    queryFn: async () => await onFetchOrderBookData(currentMarket as Market),
+    enabled: !!currentMarket,
+    onError: onHandleError,
+  });
+
+  const [orderbookData, setOrderbookData] = useState(data);
+
+  useEffect(() => {
+    setOrderbookData(data);
+  }, [data]);
+
+  const onDataIncrement = useCallback(
+    (payload: T.OrderbookRawUpdate[]) => {
+      if (!data || !currentMarket?.m) return;
+      let book = { ask: [...data.asks], bid: [...data.bids] };
+      const incrementalData = payload;
+      incrementalData.forEach((item) => {
+        if (Number(item.qty) === 0) {
+          book = deleteFromBook(book, item.price, item.side.toLowerCase());
+        } else
+          book = replaceOrAddToBook(
+            book,
+            item.price,
+            item.qty,
+            item.side.toLowerCase()
           );
-          const data = formatOrderBookData(dataRaw);
-          const { asks, bids } = getDepthFromOrderbook(data);
-          dispatch(A.depthData({ asks, bids }));
-        }
-      } catch (error) {
-        onHandleError(`Orderbook fetch error:${error.message}`);
-        dispatch(A.depthError(error));
-      }
+      });
+      const newData = {
+        ...data,
+        asks: _.cloneDeep(book.ask),
+        bids: _.cloneDeep(book.bid),
+      };
+
+      setOrderbookData(newData);
     },
-    [onHandleError],
+    [currentMarket?.m, data]
   );
 
   useEffect(() => {
@@ -60,17 +91,16 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
           if (!resp?.value?.data?.websocket_streams) return;
           const msg = resp.value.data.websocket_streams.data;
           const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
-          console.log("got orderbook event: ", msg, currentMarket.m);
-          dispatch(A.depthDataIncrement(data));
+          onDataIncrement(data);
         },
         error: (err) => console.log(err),
       });
       return () => subscription.unsubscribe();
     }
-  }, [currentMarket?.m]);
+  }, [currentMarket?.m, onDataIncrement]);
 
   const formatOrderBookData = (
-    data: T.OrderBookDbState[],
+    data: T.OrderBookDbState[]
   ): T.OrderBookDbState[] => {
     return data.map((item) => ({
       ...item,
@@ -88,7 +118,7 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
         price,
         qty,
         seq: data.i,
-      }),
+      })
     );
     const asks = Object.entries(a).map(
       ([price, qty]): OrderbookRawUpdate => ({
@@ -96,22 +126,19 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
         price,
         qty,
         seq: data.i,
-      }),
+      })
     );
     return [...bids, ...asks];
   };
 
-  useEffect(() => {
-    if (currentMarket?.m) {
-      onOrderBook(currentMarket);
-    }
-  }, [currentMarket, dispatch, onOrderBook]);
-
   return (
     <Provider
       value={{
-        ...state,
-        onOrderBook,
+        depth: {
+          asks: orderbookData?.asks ?? [],
+          bids: orderbookData?.bids ?? [],
+          loading: isLoading || isFetching,
+        },
       }}
     >
       {children}

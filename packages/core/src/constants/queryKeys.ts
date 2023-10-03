@@ -8,5 +8,6 @@ export const QUERY_KEYS = {
     id,
   ],
   assets: () => [PREFIX, "assets"],
+  orderBook: (market: string) => [PREFIX, "orderbook", market],
   miniGraph: (market: string) => [PREFIX, `mini-graph-${market}`],
 };

@@ -1,7 +1,5 @@
 import { FC, PropsWithChildren } from "react";
 
-import { Market } from "../marketsProvider";
-
 export type OrderbookRawUpdate = {
   side: "Bid" | "Ask";
   price: string;
@@ -23,7 +21,6 @@ export interface OrderBookDbState {
 }
 
 export interface OrderBookState {
-  orderbook: { asks: string[][]; bids: string[][]; loading: boolean };
   depth: { asks: string[][]; bids: string[][]; loading?: boolean };
 }
 
@@ -31,9 +28,7 @@ export type OrderBookProviderProps = PropsWithChildren<{
   value: OrderBookContextProps;
 }>;
 
-export type OrderBookContextProps = OrderBookState & {
-  onOrderBook: (value: Market) => void;
-};
+export type OrderBookContextProps = OrderBookState;
 
 export interface OrderBookProps {
   onError?: (value: string) => void;

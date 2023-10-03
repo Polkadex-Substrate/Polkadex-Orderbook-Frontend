@@ -59,7 +59,15 @@ const Maintenance = dynamic(
     ssr: false,
   }
 );
-const queryClient = new QueryClient();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 const Providers = ({ children }) => {
   return (
     <AuthProvider>
