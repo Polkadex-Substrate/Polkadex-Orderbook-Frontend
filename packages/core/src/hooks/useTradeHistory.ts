@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useTrades } from "@orderbook/core/providers/user/trades";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
@@ -12,9 +11,8 @@ import { MIN_DIGITS_AFTER_DECIMAL } from "../constants";
 export function useTradeHistory(filters: Ifilters) {
   const { selectGetAsset } = useAssetsProvider();
   const profileState = useProfile();
-  const { selectedAccount } = profileState;
   const tradesState = useTrades();
-  const { onFetchTrades } = tradesState;
+  const { onFetchNextPage } = tradesState;
 
   const list = tradesState.data;
   const listSorted = useMemo(() => {
@@ -25,34 +23,11 @@ export function useTradeHistory(filters: Ifilters) {
   const fetching = tradesState.loading;
   const { currentMarket } = useMarketsProvider();
   const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
-  const { dateFrom, dateTo } = useSessionProvider();
 
   const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
 
-  useEffect(() => {
-    if (tradesState.data.length || tradesState.tradeHistoryNextToken) return;
-    if (userLoggedIn && currentMarket && selectedAccount.tradeAddress)
-      onFetchTrades({
-        dateFrom,
-        dateTo,
-        tradeAddress: selectedAccount.tradeAddress,
-        tradeHistoryFetchToken: null,
-      });
-  }, [
-    userLoggedIn,
-    currentMarket,
-    onFetchTrades,
-    dateFrom,
-    dateTo,
-    selectedAccount.tradeAddress,
-    tradesState.data.length,
-    tradesState.tradeHistoryNextToken,
-  ]);
-
   // TODO: Refactor filter process. Should do it on server rather than client
   useEffect(() => {
-    const { dateFrom, dateTo } = filters;
-
     let tradeHistoryList = list.filter((item) => !item.isReverted);
 
     if (filters?.showReverted) {
@@ -79,16 +54,6 @@ export function useTradeHistory(filters: Ifilters) {
       });
     }
 
-    // Filter by range
-    if (dateFrom && dateTo) {
-      tradeHistoryList = tradeHistoryList.filter((order) => {
-        return (
-          new Date(order.timestamp) >= dateFrom &&
-          new Date(order.timestamp) <= dateTo
-        );
-      });
-    }
-
     setUpdatedTradeList(tradeHistoryList);
   }, [filters, list, currentMarket?.name, selectGetAsset]);
 
@@ -107,7 +72,7 @@ export function useTradeHistory(filters: Ifilters) {
     userLoggedIn,
     isLoading: fetching,
     tradeHistoryNextToken: tradesState.tradeHistoryNextToken,
-    onFetchTrades,
     error: tradesState.error,
+    onFetchNextPage,
   };
 }

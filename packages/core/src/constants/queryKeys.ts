@@ -11,4 +11,11 @@ export const QUERY_KEYS = {
   recentTrades: (market: string) => [PREFIX, "recentTrades", market],
   orderBook: (market: string) => [PREFIX, "orderbook", market],
   miniGraph: (market: string) => [PREFIX, `mini-graph-${market}`],
+  tradeHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
+    PREFIX,
+    "tradeHistory",
+    dateFrom,
+    dateTo,
+    tradeAddress,
+  ],
 };

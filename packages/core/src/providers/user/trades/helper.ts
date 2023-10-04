@@ -1,10 +1,9 @@
 import * as queries from "@orderbook/core/graphql/queries";
 import { fetchFromAppSync, Utils } from "@orderbook/core/helpers";
+import { TRADE_HISTORY_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 import * as T from "./types";
 import * as A from "./actions";
-
-const LIMIT = 15;
 
 export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
   const [base, quote] = eventData.m.split("-");
@@ -35,7 +34,7 @@ export const fetchUserTrades = async (
         main_account: proxyAccount,
         from: dateFromStr,
         to: dateToStr,
-        limit: LIMIT,
+        limit: TRADE_HISTORY_PER_PAGE_LIMIT,
         nextToken: tradeHistoryFetchToken,
       },
       "listTradesByMainAccount"

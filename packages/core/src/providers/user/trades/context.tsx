@@ -5,7 +5,7 @@ import { TradesContextProps, TradesProviderProps } from "./types";
 
 export const Context = createContext<TradesContextProps>({
   ...initialState,
-  onFetchTrades: () => {},
+  onFetchNextPage: () => {},
   onUserTradeUpdate: () => {},
   onUserTradesError: () => {},
 });
